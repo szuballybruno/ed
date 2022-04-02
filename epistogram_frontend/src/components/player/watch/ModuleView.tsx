@@ -1,11 +1,11 @@
-import { Flex } from "@chakra-ui/layout";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Typography } from "@mui/material";
-import { ModuleDetailedDTO } from "../../../shared/dtos/ModuleDetailedDTO";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoHeader } from "../../EpistoHeader";
+import { Flex } from '@chakra-ui/layout';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Typography } from '@mui/material';
+import { ModuleDetailedDTO } from '../../../shared/dtos/ModuleDetailedDTO';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoHeader } from '../../EpistoHeader';
 
 export const ModuleView = (params: {
     module?: ModuleDetailedDTO,
@@ -17,7 +17,7 @@ export const ModuleView = (params: {
 
     return <Flex
         className="roundBorders mildShadow"
-        display={isVisible ? undefined : "none"}
+        display={isVisible ? undefined : 'none'}
         direction="column"
         background="var(--transparentWhite70)">
 
@@ -33,11 +33,11 @@ align="center">
                 {module?.imageFilePath && <Flex>
                     <img
                         className="roundBorders"
-                        src={module?.imageFilePath ?? ""}
+                        src={module?.imageFilePath ?? ''}
                         style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
+                            width: '100px',
+                            height: '100px',
+                            objectFit: 'cover',
                             margin: 10
                         }} />
                 </Flex>}
@@ -48,7 +48,7 @@ align="center">
                     justify="center">
 
                     <EpistoHeader
-                        text={module?.name ?? ""}
+                        text={module?.name ?? ''}
                         variant="giant" />
 
                     <EpistoFont>
@@ -70,7 +70,7 @@ mx="15px"
 align="center">
                     <EpistoFont
                         isUppercase
-                        style={{ marginRight: "5px" }}
+                        style={{ marginRight: '5px' }}
                         fontSize="fontSmall">
 
                         {translatableTexts.player.moduleView.letsStart}

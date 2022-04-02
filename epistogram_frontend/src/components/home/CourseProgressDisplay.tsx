@@ -1,9 +1,9 @@
-import { Flex, FlexProps } from "@chakra-ui/layout";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { LinearProgress, Typography } from "@mui/material";
-import { useNavigation } from "../../services/core/navigatior";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex, FlexProps } from '@chakra-ui/layout';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { LinearProgress, Typography } from '@mui/material';
+import { useNavigation } from '../../services/core/navigatior';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseProgressDisplay = (props: {
     value: number,
@@ -37,7 +37,7 @@ export const CourseProgressDisplay = (props: {
                 <EpistoButton onClick={continueCourse}>
                     <PlayArrowIcon
                         style={{
-                            color: "var(--epistoTeal)"
+                            color: 'var(--epistoTeal)'
                         }} />
                 </EpistoButton>
             </Flex>
@@ -49,8 +49,8 @@ export const CourseProgressDisplay = (props: {
                     variant="determinate"
                     value={value}
                     style={{
-                        flex: "1",
-                        marginRight: "10px"
+                        flex: '1',
+                        marginRight: '10px'
                     }} />
 
                 {/* progress percentage */}

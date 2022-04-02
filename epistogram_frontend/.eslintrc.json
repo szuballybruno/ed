@@ -19,7 +19,8 @@
     "plugins": [
         "react",
         "@typescript-eslint",
-        "react-hooks"
+        "react-hooks",
+        "prettier"
     ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
@@ -30,6 +31,12 @@
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "react/display-name": "off",
         "@typescript-eslint/ban-ts-comment": "off",
+        "newline-per-chained-call": [
+            "error",
+            {
+                "ignoreChainWithDepth": 1
+            }
+        ],
         "react/jsx-max-props-per-line": [
             "error",
             {
@@ -43,7 +50,7 @@
         ],
         "quotes": [
             "error",
-            "double"
+            "single"
         ],
         "semi": [
             "error",

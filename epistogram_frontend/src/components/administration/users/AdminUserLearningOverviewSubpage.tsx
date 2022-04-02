@@ -1,32 +1,32 @@
-import { Box, Flex, GridItem, Image, Text, Tooltip } from "@chakra-ui/react";
-import { Add, List } from "@mui/icons-material";
-import { LinearProgress } from "@mui/material";
-import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { ButtonType } from "../../../models/types";
-import { useEditUserData } from "../../../services/api/userApiService";
-import { useActiveCourses, useUserProgressData } from "../../../services/api/userProgressApiService";
-import { useUserStats } from "../../../services/api/userStatsApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoGrid } from "../../controls/EpistoGrid";
-import { FlexFloat } from "../../controls/FlexFloat";
-import { NoProgressChartYet } from "../../home/NoProgressChartYet";
-import { UserProgressChart } from "../../home/UserProgressChart";
-import { SmallStat } from "../../learningInsights/LearningCourseStatsTile";
-import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { EditSection } from "../courses/EditSection";
-import { AdminUserList } from "./AdminUserList";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { UserActivityDistributionChart } from "./UserActivityDistributionChart";
-import { useIntParam } from "../../../static/locationHelpers";
+import { Box, Flex, GridItem, Image, Text, Tooltip } from '@chakra-ui/react';
+import { Add, List } from '@mui/icons-material';
+import { LinearProgress } from '@mui/material';
+import { useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../models/types';
+import { useEditUserData } from '../../../services/api/userApiService';
+import { useActiveCourses, useUserProgressData } from '../../../services/api/userProgressApiService';
+import { useUserStats } from '../../../services/api/userStatsApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoGrid } from '../../controls/EpistoGrid';
+import { FlexFloat } from '../../controls/FlexFloat';
+import { NoProgressChartYet } from '../../home/NoProgressChartYet';
+import { UserProgressChart } from '../../home/UserProgressChart';
+import { SmallStat } from '../../learningInsights/LearningCourseStatsTile';
+import StatisticsCard from '../../statisticsCard/StatisticsCard';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { EditSection } from '../courses/EditSection';
+import { AdminUserList } from './AdminUserList';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { UserActivityDistributionChart } from './UserActivityDistributionChart';
+import { useIntParam } from '../../../static/locationHelpers';
 
 const DummyLearningCourseStatsModified = (props: {
     title: string,
@@ -41,7 +41,7 @@ const DummyLearningCourseStatsModified = (props: {
             borderRadius="10px"
             position="relative"
             overflow="hidden"
-            shadow={"0 0 10px 1px #CCC"}
+            shadow={'0 0 10px 1px #CCC'}
             background="var(--transparentWhite70)"
             p="5"
             justifyContent="space-between">
@@ -57,9 +57,9 @@ const DummyLearningCourseStatsModified = (props: {
                 <img
                     className="whall"
                     style={{
-                        objectFit: "cover",
+                        objectFit: 'cover',
                         borderRadius: 10,
-                        position: "absolute"
+                        position: 'absolute'
                     }}
                     src={props.thumbnailImageUrl}
                     alt="" />
@@ -80,7 +80,7 @@ direction="column">
                 {/* title */}
                 <Text
                     as="h6"
-                    fontWeight={"bold"}
+                    fontWeight={'bold'}
                     fontSize="large">
 
                     {props.title}
@@ -92,24 +92,24 @@ justify="space-evenly">
 
                     {/* spent time  */}
                     <SmallStat
-                        iconUrl={getAssetUrl("images/time3D.png")}
-                        text={"2m"} />
+                        iconUrl={getAssetUrl('images/time3D.png')}
+                        text={'2m'} />
 
                     {/* videos  */}
                     <SmallStat
-                        iconUrl={getAssetUrl("images/videos3D.png")}
-                        text={"18/1"} />
+                        iconUrl={getAssetUrl('images/videos3D.png')}
+                        text={'18/1'} />
 
                     {/* video questions */}
                     <SmallStat
-                        iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
-                        text={"2/0"} />
+                        iconUrl={getAssetUrl('images/rightanswerontile3D.png')}
+                        text={'2/0'} />
                 </Flex>
 
                 {/* course progress bar chart */}
                 <Flex
-                    direction={"row"}
-                    alignItems={"center"}
+                    direction={'row'}
+                    alignItems={'center'}
                     mt={7}
                     width="100%"
                     height="10px">
@@ -117,7 +117,7 @@ justify="space-evenly">
                     <LinearProgress
                         variant="determinate"
                         style={{
-                            width: "100%",
+                            width: '100%',
                         }}
                         value={70} />
 
@@ -135,7 +135,7 @@ justify="space-evenly">
                 {/* start course */}
                 <EpistoButton
                     variant="colored"
-                    style={{ flex: "1" }}>
+                    style={{ flex: '1' }}>
 
                     Részletek
                 </EpistoButton>
@@ -158,7 +158,7 @@ const UserStatisticsProgressWithLabel = (props: {
         <EpistoFont style={{
             minWidth: 100
         }}
-fontSize={"fontExtraSmall"}>
+fontSize={'fontExtraSmall'}>
             {props.title}
         </EpistoFont>
 
@@ -166,17 +166,17 @@ fontSize={"fontExtraSmall"}>
             value={props.value}
             variant="determinate"
             style={{
-                width: "80%",
-                color: "red",
-                margin: "0 10px",
-                height: "5px"
+                width: '80%',
+                color: 'red',
+                margin: '0 10px',
+                height: '5px'
             }} />
 
         <EpistoFont
             style={{
                 fontWeight: 600
             }}
-            fontSize={"fontSmall"}>
+            fontSize={'fontSmall'}>
 
             {props.value}
         </EpistoFont>
@@ -191,7 +191,7 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
-    const userId = useIntParam("userId")!;
+    const userId = useIntParam('userId')!;
 
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(usersRoute.addRoute.route);
@@ -216,11 +216,11 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const bulkEditButtons = [
         {
-            title: "Hozzáadás",
+            title: 'Hozzáadás',
             icon: <Add
                 style={{
-                    margin: "0 3px 0 0",
-                    padding: "0 0 1px 0"
+                    margin: '0 3px 0 0',
+                    padding: '0 0 1px 0'
                 }} />,
             action: () => navigateToAddUser()
         }
@@ -270,10 +270,10 @@ export const AdminUserStatisticsSubpage = (props: {
                             h="30px"
                             w="30px"
                             mr="5px"
-                            src={getAssetUrl("/images/tempomatdatechange.png")}
+                            src={getAssetUrl('/images/tempomatdatechange.png')}
                         />
 
-                        <EpistoFont fontSize={"fontLarge"}
+                        <EpistoFont fontSize={'fontLarge'}
 style={{
                             minWidth: 150
                         }}>
@@ -282,7 +282,7 @@ style={{
                         </EpistoFont>
 
 
-                        <Tooltip title={"tiptool"}
+                        <Tooltip title={'tiptool'}
 p="20px">
                             <DatePicker
                                 dateFormat="yyyy-MM-dd"
@@ -326,9 +326,9 @@ p="20px">
                             position="relative">
 
                             <Image
-                                h={"120px"}
-                                w={"120px"}
-                                src={getAssetUrl("/images/happyfacechart.png")} />
+                                h={'120px'}
+                                w={'120px'}
+                                src={getAssetUrl('/images/happyfacechart.png')} />
 
                             <Flex direction="column"
 p="10px">
@@ -336,7 +336,7 @@ p="10px">
                                     style={{
                                         fontWeight: 600
                                     }}
-                                    fontSize={"fontLargePlus"}>
+                                    fontSize={'fontLargePlus'}>
 
                                     80/100 Pont
                                 </EpistoFont>
@@ -345,13 +345,13 @@ p="10px">
                                     style={{
                                         fontWeight: 600
                                     }}
-                                    fontSize={"fontNormal14"}>
+                                    fontSize={'fontNormal14'}>
 
                                     Jól teljesített a hónapban
                                 </EpistoFont>
 
                                 <EpistoFont
-                                    fontSize={"fontNormal14"}>
+                                    fontSize={'fontNormal14'}>
 
                                     A tanfolyamokon jól teljesített, és a kitűzött határidőket is többnyire tartani tudta.
                                 </EpistoFont>
@@ -380,18 +380,18 @@ value={78} />
                         <Flex h="150px">
 
                             <StatisticsCard
-                                iconPath={getAssetUrl("images/learningreport01.png")}
-                                value={"13"}
-                                suffix={"óra"}
+                                iconPath={getAssetUrl('images/learningreport01.png')}
+                                value={'13'}
+                                suffix={'óra'}
                                 style={{
                                     marginRight: 10
                                 }}
-                                title={"Aktívan eltöltött idő a platformon"} />
+                                title={'Aktívan eltöltött idő a platformon'} />
                             <StatisticsCard
-                                iconPath={getAssetUrl("images/learningreport02.png")}
-                                value={"38"}
-                                suffix={"db"}
-                                title={"megtekintett videók a hónapban"} />
+                                iconPath={getAssetUrl('images/learningreport02.png')}
+                                value={'38'}
+                                suffix={'db'}
+                                title={'megtekintett videók a hónapban'} />
                         </Flex>
                         <Flex p="10px">
                             A hallgató elköteleződése 4 mérőszám összeségéből áll össze.
@@ -412,10 +412,10 @@ p="10px 0">
 
                     <DummyLearningCourseStatsModified
                         title="Microsoft Excel Mesterkurzus"
-                        thumbnailImageUrl={getAssetUrl("courseCoverImages/4.png")} />
+                        thumbnailImageUrl={getAssetUrl('courseCoverImages/4.png')} />
                     <DummyLearningCourseStatsModified
                         title="Microsoft PowerPoint Mesterkurzus"
-                        thumbnailImageUrl={getAssetUrl("courseCoverImages/courseCoverImage_22_1639469876995..jpg")} />
+                        thumbnailImageUrl={getAssetUrl('courseCoverImages/courseCoverImage_22_1639469876995..jpg')} />
                 </EpistoGrid>
             </EditSection>
 
@@ -423,46 +423,46 @@ p="10px 0">
                 <Flex p="10px 0">
                     <div
                         style={{
-                            width: "80%",
-                            marginRight: "10px",
-                            display: "grid",
-                            boxSizing: "border-box",
-                            gap: "10px",
-                            gridAutoFlow: "row dense",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                            gridAutoRows: "160px"
+                            width: '80%',
+                            marginRight: '10px',
+                            display: 'grid',
+                            boxSizing: 'border-box',
+                            gap: '10px',
+                            gridAutoFlow: 'row dense',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                            gridAutoRows: '160px'
                         }}>
 
                         {/* total completed video count */}
                         <StatisticsCard
-                            title={"Megválaszolt tudást vizsgáló kérdések száma"}
-                            value={"39"}
-                            suffix={"db"}
-                            iconPath={getAssetUrl("images/learningreport03.png")}
+                            title={'Megválaszolt tudást vizsgáló kérdések száma'}
+                            value={'39'}
+                            suffix={'db'}
+                            iconPath={getAssetUrl('images/learningreport03.png')}
                             isOpenByDefault={false} />
 
                         {/* total playback time */}
                         <StatisticsCard
-                            title={"Helyes válaszok aránya"}
-                            value={"27"}
-                            suffix={"%"}
-                            iconPath={getAssetUrl("images/learningreport04.png")}
+                            title={'Helyes válaszok aránya'}
+                            value={'27'}
+                            suffix={'%'}
+                            iconPath={getAssetUrl('images/learningreport04.png')}
                             isOpenByDefault={false} />
 
                         {/* total given answer count  */}
                         <StatisticsCard
-                            title={"Reakcióidő"}
-                            value={"Átlagos"}
-                            suffix={""}
-                            iconPath={getAssetUrl("images/learningreport05.png")}
+                            title={'Reakcióidő'}
+                            value={'Átlagos'}
+                            suffix={''}
+                            iconPath={getAssetUrl('images/learningreport05.png')}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
                         <StatisticsCard
-                            title={"Átlagos napi megtekintett videók"}
-                            value={"6.5"}
-                            suffix={"db/nap"}
-                            iconPath={getAssetUrl("images/learningreport06.png")}
+                            title={'Átlagos napi megtekintett videók'}
+                            value={'6.5'}
+                            suffix={'db/nap'}
+                            iconPath={getAssetUrl('images/learningreport06.png')}
                             isOpenByDefault={false} />
 
 
@@ -477,8 +477,8 @@ p="10px 0">
                         p="10px"
                         minWidth={250}
                         style={{
-                            gridColumn: "auto / span 2",
-                            gridRow: "auto / span 2"
+                            gridColumn: 'auto / span 2',
+                            gridRow: 'auto / span 2'
                         }}>
 
                         {userProgressData && userProgressData.days.length > 0
@@ -493,15 +493,15 @@ p="10px 0">
             <EditSection title="Aktivitások">
                 <div
                     style={{
-                        width: "100%",
-                        maxWidth: "100%",
-                        display: "grid",
-                        boxSizing: "border-box",
-                        padding: "10px 0",
-                        gap: "10px",
-                        gridAutoFlow: "row dense",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-                        gridAutoRows: "160px"
+                        width: '100%',
+                        maxWidth: '100%',
+                        display: 'grid',
+                        boxSizing: 'border-box',
+                        padding: '10px 0',
+                        gap: '10px',
+                        gridAutoFlow: 'row dense',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                        gridAutoRows: '160px'
                     }}>
 
                     {/* chart item  */}
@@ -512,8 +512,8 @@ p="10px 0">
                         p="10px"
                         minWidth={250}
                         style={{
-                            gridColumn: "auto / span 2",
-                            gridRow: "auto / span 2"
+                            gridColumn: 'auto / span 2',
+                            gridRow: 'auto / span 2'
                         }}>
 
                         <UserActivityDistributionChart />
@@ -527,34 +527,34 @@ p="10px 0">
 
                     {/* total completed video count */}
                     <StatisticsCard
-                        title={"Leggyakoribb aktív idősáv"}
-                        value={"17-19"}
-                        suffix={"óra között"}
-                        iconPath={getAssetUrl("images/learningreport07.png")}
+                        title={'Leggyakoribb aktív idősáv'}
+                        value={'17-19'}
+                        suffix={'óra között'}
+                        iconPath={getAssetUrl('images/learningreport07.png')}
                         isOpenByDefault={false} />
 
                     {/* total playback time */}
                     <StatisticsCard
-                        title={"Teljesített vizsgák száma"}
-                        value={"8"}
-                        suffix={"db"}
-                        iconPath={getAssetUrl("images/learningreport08.png")}
+                        title={'Teljesített vizsgák száma'}
+                        value={'8'}
+                        suffix={'db'}
+                        iconPath={getAssetUrl('images/learningreport08.png')}
                         isOpenByDefault={false} />
 
                     {/* total given answer count  */}
                     <StatisticsCard
-                        title={"Egy belépés átlagos hossza"}
-                        value={"42"}
-                        suffix={"perc"}
-                        iconPath={getAssetUrl("images/learningreport09.png")}
+                        title={'Egy belépés átlagos hossza'}
+                        value={'42'}
+                        suffix={'perc'}
+                        iconPath={getAssetUrl('images/learningreport09.png')}
                         isOpenByDefault={false} />
 
                     {/* correct answer rate  */}
                     <StatisticsCard
-                        title={"Ismétlésre ajánlott videó"}
-                        value={"13"}
-                        suffix={"db"}
-                        iconPath={getAssetUrl("images/learningreport10.png")}
+                        title={'Ismétlésre ajánlott videó'}
+                        value={'13'}
+                        suffix={'db'}
+                        iconPath={getAssetUrl('images/learningreport10.png')}
                         isOpenByDefault={false} />
                 </div>
             </EditSection>

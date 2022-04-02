@@ -1,11 +1,11 @@
-import { Grid, GridProps } from "@chakra-ui/layout";
-import { ReactNode } from "react";
+import { Grid, GridProps } from '@chakra-ui/layout';
+import { ReactNode } from 'react';
 
 export const EpistoGrid = (props: {
     children: ReactNode,
     minColumnWidth: string,
     gap: string,
-    auto: "fit" | "fill"
+    auto: 'fit' | 'fill'
 } & GridProps) => {
 
     const { minColumnWidth, gap, children, auto, ...css } = props;

@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { AnswerSignupQuestionDTO } from "../shared/dtos/AnswerSignupQuestionDTO";
-import { useSignupData, useAnswerSignupQuestion } from "../services/api/signupApiService";
-import { SingupQuestionSlides, useSignupQuestionsState } from "./exam/SingupQuestionSlides";
-import { LoadingFrame } from "./system/LoadingFrame";
+import { useEffect } from 'react';
+import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
+import { useSignupData, useAnswerSignupQuestion } from '../services/api/signupApiService';
+import { SingupQuestionSlides, useSignupQuestionsState } from './exam/SingupQuestionSlides';
+import { LoadingFrame } from './system/LoadingFrame';
 
 export const SignupQuestions = (props: {
     onPrevoiusOverNavigation: () => void,
@@ -35,7 +35,7 @@ export const SignupQuestions = (props: {
     const state = useSignupQuestionsState({
         questions: questions,
         answerQuestionAsync: handleSaveSelectedAnswerAsync,
-        upperTitle: "Személyes tanulási stílus felmérése",
+        upperTitle: 'Személyes tanulási stílus felmérése',
         onPrevoiusOverNavigation: onPrevoiusOverNavigation,
         onNextOverNavigation: onNextOverNavigation,
         allowQuickNext: true

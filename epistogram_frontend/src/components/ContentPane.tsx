@@ -1,5 +1,5 @@
-import { FlexProps, Flex } from "@chakra-ui/react";
-import Navbar from "./navbar/Navbar";
+import { FlexProps, Flex } from '@chakra-ui/react';
+import Navbar from './navbar/Navbar';
 
 export const ContentPane = (props: {
     noPadding?: boolean,
@@ -16,9 +16,9 @@ export const ContentPane = (props: {
     return (
         <Flex
             id="contentPane"
-            p={props.noPadding ? undefined : "0 30px 40px 30px"}
+            p={props.noPadding ? undefined : '0 30px 40px 30px'}
             flex="1"
-            maxWidth={noMaxWidth ? undefined : "1400px"}
+            maxWidth={noMaxWidth ? undefined : '1400px'}
             direction="column"
             margin="auto"
             overflowY="scroll"

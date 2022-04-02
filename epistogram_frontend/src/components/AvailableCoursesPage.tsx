@@ -1,26 +1,26 @@
-import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
-import { Select, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React from "react";
-import { useUserCourses } from "../services/api/courseApiService";
-import { useNavigation } from "../services/core/navigatior";
-import { useShowErrorDialog } from "../services/core/notifications";
-import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
-import { distinct } from "../static/frontendHelpers";
-import { translatableTexts } from "../static/translatableTexts";
-import { ContentPane } from "./ContentPane";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoFont } from "./controls/EpistoFont";
-import { EpistoGrid } from "./controls/EpistoGrid";
-import { LeftPane } from "./LeftPane";
-import { PageRootContainer } from "./PageRootContainer";
-import { LoadingFrame } from "./system/LoadingFrame";
-import CourseTile from "./universal/CourseTile";
-import { EpistoSearch } from "./universal/EpistoSearch";
+import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
+import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import React from 'react';
+import { useUserCourses } from '../services/api/courseApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { useShowErrorDialog } from '../services/core/notifications';
+import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
+import { distinct } from '../static/frontendHelpers';
+import { translatableTexts } from '../static/translatableTexts';
+import { ContentPane } from './ContentPane';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFont } from './controls/EpistoFont';
+import { EpistoGrid } from './controls/EpistoGrid';
+import { LeftPane } from './LeftPane';
+import { PageRootContainer } from './PageRootContainer';
+import { LoadingFrame } from './system/LoadingFrame';
+import CourseTile from './universal/CourseTile';
+import { EpistoSearch } from './universal/EpistoSearch';
 
 const AvailableCoursesPage = () => {
 
-    const [searchText, setSearchText] = React.useState("");
-    const [searchCategory, setSearchCategory] = React.useState("");
+    const [searchText, setSearchText] = React.useState('');
+    const [searchCategory, setSearchCategory] = React.useState('');
     const [isFeatured, setIsFeatured] = React.useState(false);
     const [isRecommended, setIsRecommended] = React.useState(false);
 
@@ -29,11 +29,11 @@ const AvailableCoursesPage = () => {
     const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const clearFilters = () => {
-        setSearchCategory("");
-        setSearchText("");
+        setSearchCategory('');
+        setSearchText('');
         setIsFeatured(false);
         setIsRecommended(false);
     };
@@ -62,7 +62,7 @@ const AvailableCoursesPage = () => {
                 <EpistoFont
                     fontSize="fontExtraSmall"
                     isUppercase
-                    style={{ margin: "10px" }}>
+                    style={{ margin: '10px' }}>
 
                     {translatableTexts.availableCourses.categoriesTitle}
                 </EpistoFont>
@@ -71,21 +71,21 @@ const AvailableCoursesPage = () => {
                 <ToggleButtonGroup
                     style={{
                         flex: 1,
-                        textAlign: "left"
+                        textAlign: 'left'
                     }}
-                    orientation={"vertical"}>
+                    orientation={'vertical'}>
 
                     {categoryOptions
                         .map((categoryOption, index) => {
                             return <ToggleButton
                                 value={categoryOption}
                                 style={{
-                                    textAlign: "left",
-                                    justifyContent: "flex-start",
-                                    alignItems: "center",
+                                    textAlign: 'left',
+                                    justifyContent: 'flex-start',
+                                    alignItems: 'center',
                                     height: 40,
-                                    paddingLeft: "10px",
-                                    border: "none"
+                                    paddingLeft: '10px',
+                                    border: 'none'
                                 }}
                                 onClick={() => {
                                     setSearchCategory(categoryOption);
@@ -113,7 +113,7 @@ const AvailableCoursesPage = () => {
                 direction="column"
                 align="stretch"
                 width="100%"
-                minWidth={isSmallerThan1400 ? "1060px" : undefined}>
+                minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
                 <Flex
@@ -128,24 +128,24 @@ const AvailableCoursesPage = () => {
                     <ToggleButtonGroup
                         className="mildShadow"
                         style={{
-                            background: "var(--transparentWhite70)",
+                            background: 'var(--transparentWhite70)',
                             height: 40,
-                            border: "none",
+                            border: 'none',
                             flex: 2
                         }}
                         sx={{
-                            "& .MuiButtonBase-root": {
-                                border: "none"
+                            '& .MuiButtonBase-root': {
+                                border: 'none'
                             }
                         }}
-                        size={"small"}>
+                        size={'small'}>
 
                         {/* recommended */}
                         <ToggleButton
                             onClick={() => setIsRecommended(!isRecommended)}
                             selected={isRecommended}
                             value="recommended"
-                            style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
                             {translatableTexts.availableCourses.recommendedForYou}
                         </ToggleButton>
@@ -155,7 +155,7 @@ const AvailableCoursesPage = () => {
                             onClick={() => setIsFeatured(!isFeatured)}
                             selected={isFeatured}
                             value="featured"
-                            style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
                             {translatableTexts.availableCourses.highlighted}
                         </ToggleButton>
@@ -165,7 +165,7 @@ const AvailableCoursesPage = () => {
                             onClick={() => clearFilters()}
                             selected={isRecommended && isFeatured}
                             value="showAll"
-                            style={{ width: "100%", whiteSpace: "nowrap", padding: "15px" }}>
+                            style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
                             {translatableTexts.availableCourses.all}
                         </ToggleButton>
@@ -177,22 +177,22 @@ const AvailableCoursesPage = () => {
 
                     <Select
                         native
-                        onChange={() => { throw new Error("Not implemented!"); }}
+                        onChange={() => { throw new Error('Not implemented!'); }}
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
-                            name: "A-Z",
-                            id: "outlined-age-native-simple",
+                            name: 'A-Z',
+                            id: 'outlined-age-native-simple',
                         }}
                         sx={{
-                            "& .MuiOutlinedInput-notchedOutline": {
-                                border: "none"
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none'
                             }
                         }}
                         style={{
-                            background: "var(--transparentWhite70)",
-                            border: "none",
-                            height: "40px",
-                            color: "3F3F3F",
+                            background: 'var(--transparentWhite70)',
+                            border: 'none',
+                            height: '40px',
+                            color: '3F3F3F',
                             flex: 1
                         }}>
                         <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
@@ -230,7 +230,7 @@ const AvailableCoursesPage = () => {
                                                 {/* details */}
                                                 <EpistoButton
                                                     onClick={() => navigateToDetailsPage(course)}
-                                                    style={{ flex: "1" }}>
+                                                    style={{ flex: '1' }}>
                                                     {translatableTexts.availableCourses.courseDataSheet}
                                                 </EpistoButton>
 
@@ -238,7 +238,7 @@ const AvailableCoursesPage = () => {
                                                 <EpistoButton
                                                     onClick={() => handlePlayCourse(course)}
                                                     variant="colored"
-                                                    style={{ flex: "1" }}>
+                                                    style={{ flex: '1' }}>
 
                                                     {translatableTexts.availableCourses.startCourse}
                                                 </EpistoButton>

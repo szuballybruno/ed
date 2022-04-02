@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React from "react";
-import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { ExamLayout } from "./ExamLayout";
-import { ExamResultStats } from "./ExamResultStats";
+import { Flex } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import React from 'react';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { ExamLayout } from './ExamLayout';
+import { ExamResultStats } from './ExamResultStats';
 
 export const ExamGreetSlide = (props: {
     exam: ExamPlayerDataDTO,
@@ -30,12 +30,12 @@ align="center"
 flex="1"
 className="whall">
             <img
-                src={getAssetUrl("/images/examCover.png")}
-                alt={""}
+                src={getAssetUrl('/images/examCover.png')}
+                alt={''}
                 style={{
-                    objectFit: "contain",
+                    objectFit: 'contain',
                     maxHeight: 200,
-                    margin: "30px 0"
+                    margin: '30px 0'
                 }} />
 
             <EpistoFont
@@ -46,8 +46,8 @@ className="whall">
 
             <EpistoFont
                 style={{
-                    padding: "30px",
-                    maxWidth: "400px"
+                    padding: '30px',
+                    maxWidth: '400px'
                 }}>
 
                 {translatableTexts.exam.greetText}

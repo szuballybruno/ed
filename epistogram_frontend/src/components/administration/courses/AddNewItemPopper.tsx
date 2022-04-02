@@ -1,12 +1,12 @@
-import { CourseItemType } from "../../../shared/types/sharedTypes";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoPopper } from "../../controls/EpistoPopper";
+import { CourseItemType } from '../../../shared/types/sharedTypes';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoPopper } from '../../controls/EpistoPopper';
 
 export const AddNewItemPopper = (props: {
     isOpen: boolean,
     targetElement: any,
     onClose: () => void,
-    onAddItem: (type: "video" | "exam") => void
+    onAddItem: (type: 'video' | 'exam') => void
 }) => {
 
     const { isOpen, targetElement, onClose, onAddItem } = props;
@@ -18,7 +18,7 @@ export const AddNewItemPopper = (props: {
             placementX="left"
             style={{
                 width: 200,
-                alignItems: "flex-start"
+                alignItems: 'flex-start'
             }}
             handleClose={onClose}>
 
@@ -26,11 +26,11 @@ export const AddNewItemPopper = (props: {
                 Modul
             </EpistoButton>
 
-            <EpistoButton onClick={() => onAddItem("video")}>
+            <EpistoButton onClick={() => onAddItem('video')}>
                 Videó
             </EpistoButton>
 
-            <EpistoButton onClick={() => onAddItem("exam")}>
+            <EpistoButton onClick={() => onAddItem('exam')}>
                 Vizsga
             </EpistoButton>
 

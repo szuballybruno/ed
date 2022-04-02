@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { EpistoFont } from "./controls/EpistoFont";
-import { EpistoHeader } from "./EpistoHeader";
+import { Flex } from '@chakra-ui/layout';
+import { Typography } from '@mui/material';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { EpistoFont } from './controls/EpistoFont';
+import { EpistoHeader } from './EpistoHeader';
 
 export const UnderMaintanence = () => {
 
@@ -16,10 +16,10 @@ align="center">
             <img
                 alt=""
                 style={{
-                    width: "400px",
-                    objectFit: "contain"
+                    width: '400px',
+                    objectFit: 'contain'
                 }}
-                src={getAssetUrl("images/maintenance3D.png")} />
+                src={getAssetUrl('images/maintenance3D.png')} />
 
             <EpistoHeader
                 mt="20px"
@@ -29,7 +29,7 @@ align="center">
 
             <EpistoFont>
 
-                Ha bármilyen kérdésed lenne, írj bátran a <a style={{color: "blue"}}
+                Ha bármilyen kérdésed lenne, írj bátran a <a style={{color: 'blue'}}
 href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
             </EpistoFont>
         </Flex>

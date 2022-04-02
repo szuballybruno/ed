@@ -1,8 +1,8 @@
-import { Box, css, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LinearProgress } from "@mui/material";
-import React from "react";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
+import { Box, css, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { LinearProgress } from '@mui/material';
+import React from 'react';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
 
 export const ExamTile = (props: {
     className?: string,
@@ -24,7 +24,7 @@ export const ExamTile = (props: {
             borderRadius="0 7px 7px 0">
             <Text
                 fontSize="0.85em"
-                textTransform={"uppercase"}
+                textTransform={'uppercase'}
                 color="var(--epistoTeal)">
                 65%-os eredmény
             </Text>
@@ -47,7 +47,7 @@ export const ExamTile = (props: {
             borderRadius="7px 0 0 7px">
             <Text
                 fontSize="0.85em"
-                textTransform={"uppercase"}
+                textTransform={'uppercase'}
                 color="white">
                 top 30% cégen belül
             </Text>
@@ -61,13 +61,13 @@ export const ExamTile = (props: {
         position="relative"
         overflow="hidden"
         background="var(--transparentWhite70)"
-        boxShadow={"1px 1px 5px 2px rgba(255,100,30,0.1)"}
+        boxShadow={'1px 1px 5px 2px rgba(255,100,30,0.1)'}
         p="5px"
         justifyContent="space-between"
         {...css}>
 
         {/* image  */}
-        <Flex direction={"column"}>
+        <Flex direction={'column'}>
 
             <Box
                 flex="1"
@@ -89,13 +89,13 @@ export const ExamTile = (props: {
 
                         <img
                             style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                backgroundColor: "white",
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                backgroundColor: 'white',
                                 borderRadius: 10
                             }}
-                            src={getAssetUrl("/courseCoverImages/1.png")}
+                            src={getAssetUrl('/courseCoverImages/1.png')}
                             alt="" />
 
                         <Flex position="relative">
@@ -120,108 +120,108 @@ export const ExamTile = (props: {
                         as="text"
                         color="black">
 
-                        {"Irodai alkalmazások"}
+                        {'Irodai alkalmazások'}
                     </Text>
 
                     <Flex direction="column">
 
                         <Text
                             as="h6"
-                            fontWeight={"bold"}
+                            fontWeight={'bold'}
                             fontSize="large">
 
-                            {"Menüszalagok használata az Excelben"}
+                            {'Menüszalagok használata az Excelben'}
                         </Text>
                     </Flex>
 
                     <Flex mt={7}>
 
                         <Flex
-                            direction={"row"}
-                            alignItems={"center"}
+                            direction={'row'}
+                            alignItems={'center'}
                             mr={5}
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_lenght_left.svg")}
-                                alt={""}
+                                src={getAssetUrl('course_exam_tile_icons/tile_lenght_left.svg')}
+                                alt={''}
                                 style={{
                                     width: 15,
                                     height: 15,
-                                    margin: "0 2px 0 2px"
+                                    margin: '0 2px 0 2px'
                                 }}
                             />
 
-                            <Text as={"text"}
-color={"grey"}>{"52 perc"}</Text>
+                            <Text as={'text'}
+color={'grey'}>{'52 perc'}</Text>
                         </Flex>
 
                         <Flex
-                            direction={"row"}
-                            alignItems={"center"}
+                            direction={'row'}
+                            alignItems={'center'}
                             mr={5}
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
-                                alt={""}
+                                src={getAssetUrl('course_exam_tile_icons/tile_videos.svg')}
+                                alt={''}
                                 style={{
                                     width: 15,
                                     height: 15,
-                                    margin: "0 2px 0 4px"
+                                    margin: '0 2px 0 4px'
                                 }}
                             />
-                            <Text as={"text"}
-color={"grey"}>{"65%-os eredmény"}</Text>
+                            <Text as={'text'}
+color={'grey'}>{'65%-os eredmény'}</Text>
                         </Flex>
                     </Flex>
 
                     <Flex
-                        direction={"row"}
-                        alignItems={"center"}
+                        direction={'row'}
+                        alignItems={'center'}
                         mt={7}>
 
                         <Flex
-                            direction={"row"}
-                            alignItems={"center"}
+                            direction={'row'}
+                            alignItems={'center'}
                             mr={5}
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
-                                alt={""}
+                                src={getAssetUrl('course_exam_tile_icons/tile_difficulty.svg')}
+                                alt={''}
                                 style={{
                                     width: 20,
                                     height: 20,
-                                    margin: "0 2px"
+                                    margin: '0 2px'
                                 }} />
 
                             <Text
                                 as="text">
 
-                                {"8.9/10 nehézség"}
+                                {'8.9/10 nehézség'}
                             </Text>
                         </Flex>
 
                         <Flex
-                            direction={"row"}
-                            alignItems={"center"}
+                            direction={'row'}
+                            alignItems={'center'}
                             mr={5}
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
-                                alt={""}
+                                src={getAssetUrl('course_exam_tile_icons/tile_questions.svg')}
+                                alt={''}
                                 style={{
                                     width: 20,
                                     height: 20,
-                                    margin: "0 2px"
+                                    margin: '0 2px'
                                 }} />
 
                             <Text
                                 as="text">
 
-                                {"16/23 helyes válasz"}
+                                {'16/23 helyes válasz'}
                             </Text>
                         </Flex>
                     </Flex>
@@ -245,9 +245,9 @@ color={"grey"}>{"65%-os eredmény"}</Text>
                 <EpistoButton
                     variant="colored"
                     style={{
-                        backgroundColor: "white",
-                        width: "100%",
-                        color: "#98A4CC"
+                        backgroundColor: 'white',
+                        width: '100%',
+                        color: '#98A4CC'
                     }}>
                     Újrapróbálom
                 </EpistoButton>

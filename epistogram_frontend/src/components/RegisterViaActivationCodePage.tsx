@@ -1,19 +1,19 @@
-import { Text } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useState } from "react";
-import { ErrorCodeType } from "../shared/types/sharedTypes";
-import { useRegisterUserViaActivationCode } from "../services/api/registrationApiService";
-import { useNavigation } from "../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../services/core/notifications";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { translatableTexts } from "../static/translatableTexts";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoEntryNew, useEpistoEntryState } from "./controls/EpistoEntryNew";
-import { EpistoFont } from "./controls/EpistoFont";
-import { validateAllEntries } from "./controls/logic/controlsLogic";
-import { PageRootContainer } from "./PageRootContainer";
-import { LoadingFrame } from "./system/LoadingFrame";
+import { Text } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
+import { EpistoFont } from './controls/EpistoFont';
+import { validateAllEntries } from './controls/logic/controlsLogic';
+import { PageRootContainer } from './PageRootContainer';
+import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegisterViaActivationCodePage = () => {
 
@@ -62,12 +62,12 @@ export const RegisterViaActivationCodePage = () => {
 
             const errorCode = e.code as ErrorCodeType;
 
-            if (errorCode === "activation_code_issue") {
+            if (errorCode === 'activation_code_issue') {
 
                 activationCodeEntryState
                     .setError(translatableTexts.registerViaActivationCodePage.wrongActivationCode);
             }
-            else if (errorCode === "email_taken") {
+            else if (errorCode === 'email_taken') {
 
                 emailEntryState
                     .setError(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
@@ -82,16 +82,16 @@ export const RegisterViaActivationCodePage = () => {
     return <PageRootContainer>
 
         <Flex
-            justify={"center"}
+            justify={'center'}
             background="gradientBlueBackground"
             py="60px"
-            overflowY={"scroll"}
+            overflowY={'scroll'}
             height="100%"
             width="100%">
 
             {/* content */}
             <Flex
-                wrap={"wrap"}
+                wrap={'wrap'}
                 background="var(--transparentWhite70)"
                 zIndex="6"
                 width="100%"
@@ -100,7 +100,7 @@ export const RegisterViaActivationCodePage = () => {
                 mx="100px"
                 p="50px 150px"
                 overflow="hidden"
-                position={"relative"}>
+                position={'relative'}>
 
                 <Flex
                     direction="column"
@@ -113,25 +113,25 @@ export const RegisterViaActivationCodePage = () => {
 
                     {/* epi logo */}
                     <img
-                        src={getAssetUrl("/images/logo.svg")}
+                        src={getAssetUrl('/images/logo.svg')}
                         style={{
-                            width: "250px",
-                            maxHeight: "100px",
-                            objectFit: "contain",
-                            marginLeft: "15px",
-                            cursor: "pointer",
+                            width: '250px',
+                            maxHeight: '100px',
+                            objectFit: 'contain',
+                            marginLeft: '15px',
+                            cursor: 'pointer',
                         }}
                         alt="" />
 
                     {/* 3d redeem image */}
                     <img
-                        src={getAssetUrl("/images/redeem3D.png")}
+                        src={getAssetUrl('/images/redeem3D.png')}
                         style={{
-                            width: "100%",
-                            maxHeight: "350px",
-                            objectFit: "contain",
-                            marginLeft: "15px",
-                            cursor: "pointer",
+                            width: '100%',
+                            maxHeight: '350px',
+                            objectFit: 'contain',
+                            marginLeft: '15px',
+                            cursor: 'pointer',
                         }}
                         alt="" />
 
@@ -156,7 +156,7 @@ export const RegisterViaActivationCodePage = () => {
 
                         <EpistoFont
                             style={{
-                                textAlign: "left"
+                                textAlign: 'left'
                             }}
                             fontSize={20}>
 
@@ -209,8 +209,8 @@ export const RegisterViaActivationCodePage = () => {
 
                         <EpistoButton
                             style={{
-                                width: "100%",
-                                backgroundColor: "#324658",
+                                width: '100%',
+                                backgroundColor: '#324658',
                                 height: 60
                             }}
                             onClick={handleRegisterAsync}
@@ -226,16 +226,16 @@ export const RegisterViaActivationCodePage = () => {
                         height={80}>
 
                         <EpistoFont
-                            classes={["fontGrey"]}>
+                            classes={['fontGrey']}>
 
                             {translatableTexts.registerViaActivationCodePage.dontHaveAccount}
                         </EpistoFont>
 
                         <EpistoFont
                             style={{
-                                maxWidth: "250px",
-                                textAlign: "right",
-                                color: "var(--epistoTeal)"
+                                maxWidth: '250px',
+                                textAlign: 'right',
+                                color: 'var(--epistoTeal)'
                             }}>
 
                             <a href="https://pcworld.hu/elofizetes"
@@ -257,7 +257,7 @@ rel="noreferrer">
                         background="var(--transparentWhite70)"
                         top="0"
                         left="0"
-                        display={registrationSuccessful ? undefined : "none"}>
+                        display={registrationSuccessful ? undefined : 'none'}>
 
                         <Flex
                             className="roundBorders mildShadow"
@@ -268,7 +268,7 @@ rel="noreferrer">
                             width="500px"
                             height="250px">
 
-                            <EpistoFont style={{ textAlign: "center" }}>
+                            <EpistoFont style={{ textAlign: 'center' }}>
                                 {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[0]}
                                 {emailEntryState.value}
                                 {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[1]}
@@ -282,39 +282,39 @@ rel="noreferrer">
                 {/* Magic powder top-left */}
                 <img
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         left: 50,
                         top: -80,
                         width: 300,
-                        transform: "rotate(270deg)",
-                        objectFit: "contain",
+                        transform: 'rotate(270deg)',
+                        objectFit: 'contain',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/bg-art-2.png")}
+                    src={getAssetUrl('/images/bg-art-2.png')}
                     alt="" />
 
                 {/* Magic powder bottom-left */}
                 <img
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         left: -55,
                         bottom: -150,
-                        transform: "rotate(-90deg) scale(50%)",
+                        transform: 'rotate(-90deg) scale(50%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/bg-art-5.png")}
+                    src={getAssetUrl('/images/bg-art-5.png')}
                     alt="" />
 
                 {/* Magic powder top-left */}
                 <img
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         right: -20,
                         top: -120,
-                        transform: "rotate(270deg) scale(70%)",
+                        transform: 'rotate(270deg) scale(70%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/bg-art-6.png")}
+                    src={getAssetUrl('/images/bg-art-6.png')}
                     alt="" />
             </Flex>
         </Flex >

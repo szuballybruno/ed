@@ -1,4 +1,4 @@
-import { EpistoFont } from "../../controls/EpistoFont";
+import { EpistoFont } from '../../controls/EpistoFont';
 
 export const ChipSmall = (props: {
     text: string,
@@ -11,14 +11,14 @@ export const ChipSmall = (props: {
 
     return (
         <EpistoFont
-            classes={["roundBorders"]}
+            classes={['roundBorders']}
             fontSize="fontSmall"
             tooltip={tooltip}
             style={{
-                border: "1px solid var(--deepBlue)",
-                color: color ?? "var(--deepBlue)",
-                padding: "0 5px",
-                margin: "0 2px",
+                border: '1px solid var(--deepBlue)',
+                color: color ?? 'var(--deepBlue)',
+                padding: '0 5px',
+                margin: '0 2px',
                 fontWeight: 700,
                 ...style
             }}>

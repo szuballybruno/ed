@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
-import { QuestionDTO } from "../shared/dtos/QuestionDTO";
-import { showNotification } from "../services/core/notifications";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { EpistoFont } from "./controls/EpistoFont";
-import { EpistoText } from "./controls/EpistoText";
-import { LoadingFramePropsType } from "./system/LoadingFrame";
-import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
-import { QuestionnaireLayout } from "./universal/QuestionnaireLayout";
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { QuestionDTO } from '../shared/dtos/QuestionDTO';
+import { showNotification } from '../services/core/notifications';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { EpistoFont } from './controls/EpistoFont';
+import { EpistoText } from './controls/EpistoText';
+import { LoadingFramePropsType } from './system/LoadingFrame';
+import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
+import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
 export const QuesitionView = (props: {
     answerQuesitonAsync: (answerId: number[]) => Promise<void>,
@@ -54,17 +54,17 @@ export const QuesitionView = (props: {
         if (!bonusCoinsAcquired)
             return;
 
-        const streakLength = bonusCoinsAcquired.reason === "answer_streak_5" ? 5 : 10;
+        const streakLength = bonusCoinsAcquired.reason === 'answer_streak_5' ? 5 : 10;
 
         showNotification(
             `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
-            "warning",
+            'warning',
             {
                 style: {
-                    border: "solid 2px gold",
+                    border: 'solid 2px gold',
                 },
                 icon: () => <img
-                    src={getAssetUrl("images/epistoCoin.png")} />
+                    src={getAssetUrl('images/epistoCoin.png')} />
             });
     }, [bonusCoinsAcquired]);
 
@@ -96,7 +96,7 @@ export const QuesitionView = (props: {
                         maxFontSize={15}
                         style={{
                             fontWeight: 400,
-                            width: "100%"
+                            width: '100%'
                         }}>
                         {answer.answerText}
                     </EpistoFont>
@@ -114,9 +114,9 @@ export const QuesitionView = (props: {
             </EpistoFont>
 
             <img
-                src={getAssetUrl("images/epistoCoin.png")}
+                src={getAssetUrl('images/epistoCoin.png')}
                 className="square25"
-                style={{ margin: "0px 0px 4px 4px" }} />
+                style={{ margin: '0px 0px 4px 4px' }} />
         </Flex>}
     </QuestionnaireLayout>;
 };

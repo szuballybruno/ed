@@ -1,12 +1,12 @@
-import { Flex, Grid } from "@chakra-ui/react";
-import DoneIcon from "@mui/icons-material/Done";
-import React from "react";
-import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { defaultCharts } from "../../static/defaultChartOptions";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoHeader } from "../EpistoHeader";
-import { EpistoRadarChart } from "../universal/charts/EpistoRadarChart";
+import { Flex, Grid } from '@chakra-ui/react';
+import DoneIcon from '@mui/icons-material/Done';
+import React from 'react';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { defaultCharts } from '../../static/defaultChartOptions';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
+import { EpistoRadarChart } from '../universal/charts/EpistoRadarChart';
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
@@ -17,8 +17,8 @@ export const CourseDetailsSummarySection = (props: {
     return <Flex
         mt={10}
         width="100%"
-        direction={"column"}
-        alignItems={"flex-start"}>
+        direction={'column'}
+        alignItems={'flex-start'}>
 
         {/* description title */}
         <EpistoHeader
@@ -61,8 +61,8 @@ export const CourseDetailsSummarySection = (props: {
                     <DoneIcon
                         className="square30"
                         style={{
-                            marginRight: "10px",
-                            color: "var(--deepBlue)"
+                            marginRight: '10px',
+                            color: 'var(--deepBlue)'
                         }} />
 
                     {/* text */}
@@ -84,29 +84,29 @@ export const CourseDetailsSummarySection = (props: {
             mb={100}>
 
             {/* human skill benefits description */}
-            <Flex direction={"column"}
-                minWidth={"50%"} >
+            <Flex direction={'column'}
+                minWidth={'50%'} >
                 {courseDetails.humanSkillBenefitsDescription}
             </Flex>
 
             {/* human skill benefits chart  */}
-            <Flex direction={"column"}
-                minWidth={"50%"}>
+            <Flex direction={'column'}
+                minWidth={'50%'}>
                 <EpistoRadarChart
                     title=""
                     areas={[{
-                        name: "Készségek",
+                        name: 'Készségek',
                         value: courseDetails?.humanSkillBenefits.map(x => x.value) ?? []
                     }]}
                     radarIndicators={courseDetails.humanSkillBenefits.map(x => ({
                         name: x.text,
-                        color: "black",
+                        color: 'black',
                         max: 10
                     }))}
                     options={defaultCharts.radar}
                     style={{
-                        width: "400px",
-                        height: "300px"
+                        width: '400px',
+                        height: '300px'
                     }} />
             </Flex>
         </Flex>

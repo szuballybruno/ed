@@ -1,6 +1,6 @@
-import { Box } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Box } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import { EpistoFont } from '../controls/EpistoFont';
 
 interface TabPanelProps {
     children?: React.ReactNode;

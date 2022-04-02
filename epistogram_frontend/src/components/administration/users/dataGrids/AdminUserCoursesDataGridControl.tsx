@@ -1,15 +1,15 @@
-import { Flex, Image } from "@chakra-ui/react";
-import { DataGrid } from "@mui/x-data-grid";
-import { GridColDef, GridRowsProp } from "@mui/x-data-grid-pro";
-import { useParams } from "react-router-dom";
-import { useAdminCourseList } from "../../../../services/api/courseApiService";
-import { useNavigation } from "../../../../services/core/navigatior";
-import { getAssetUrl, getRandomInteger } from "../../../../static/frontendHelpers";
-import { useIntParam } from "../../../../static/locationHelpers";
-import { EpistoButton } from "../../../controls/EpistoButton";
-import { EpistoFont } from "../../../controls/EpistoFont";
-import { CircularProgressWithLabel } from "../../courses/AdminCourseUserProgressSubpage";
-import { ChipSmall } from "../../courses/ChipSmall";
+import { Flex, Image } from '@chakra-ui/react';
+import { DataGrid } from '@mui/x-data-grid';
+import { GridColDef, GridRowsProp } from '@mui/x-data-grid-pro';
+import { useParams } from 'react-router-dom';
+import { useAdminCourseList } from '../../../../services/api/courseApiService';
+import { useNavigation } from '../../../../services/core/navigatior';
+import { getAssetUrl, getRandomInteger } from '../../../../static/frontendHelpers';
+import { useIntParam } from '../../../../static/locationHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
+import { ChipSmall } from '../../courses/ChipSmall';
 
 export const AdminUserCoursesDataGridControl = (props: {
     handleMoreButton: () => void
@@ -17,10 +17,10 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const { handleMoreButton } = props;
 
-    const userId = useIntParam("userId");
-    const courseId = useIntParam("courseId");
+    const userId = useIntParam('userId');
+    const courseId = useIntParam('courseId');
 
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList("");
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList('');
 
     const getRowsFromCourses = () => courses.map((course) => {
         return {
@@ -38,40 +38,40 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const columns: GridColDef[] = [
         {
-            field: "thumbnailImage",
-            headerName: "Thumbnail kép",
+            field: 'thumbnailImage',
+            headerName: 'Thumbnail kép',
             width: 130,
             renderCell: (params) => <img src={params.value} />
         },
         {
-            field: "title",
-            headerName: "Cím",
+            field: 'title',
+            headerName: 'Cím',
             width: 300,
             editable: true,
             resizable: true
         },
         {
-            field: "progress",
-            headerName: "Haladás",
+            field: 'progress',
+            headerName: 'Haladás',
             width: 150,
             resizable: true,
             renderCell: () => <CircularProgressWithLabel value={getRandomInteger(0, 100)} />
         },
         {
-            field: "currentPerformance",
-            headerName: "Jelenlegi teljesítmény",
+            field: 'currentPerformance',
+            headerName: 'Jelenlegi teljesítmény',
             width: 150,
             resizable: true,
             renderCell: () => {
                 const randomNumber = getRandomInteger(0, 100);
                 return <ChipSmall
                     text={`${randomNumber}%`}
-                    color={randomNumber > 40 ? "var(--deepGreen)" : "var(--intenseRed)"} />;
+                    color={randomNumber > 40 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
             }
         },
         {
-            field: "watchedVideos",
-            headerName: "Megtekintett videók",
+            field: 'watchedVideos',
+            headerName: 'Megtekintett videók',
             width: 150,
             resizable: true,
             renderCell: () => {
@@ -82,8 +82,8 @@ export const AdminUserCoursesDataGridControl = (props: {
             }
         },
         {
-            field: "doneExams",
-            headerName: "Elvégzett vizsgák",
+            field: 'doneExams',
+            headerName: 'Elvégzett vizsgák',
             width: 150,
             resizable: true,
             renderCell: () => {
@@ -94,20 +94,20 @@ export const AdminUserCoursesDataGridControl = (props: {
             }
         },
         {
-            field: "isFinalExamDone",
-            headerName: "Kurzuszáró vizsga",
+            field: 'isFinalExamDone',
+            headerName: 'Kurzuszáró vizsga',
             width: 150,
             resizable: true,
             renderCell: () => {
                 const randomNumber = getRandomInteger(0, 100);
                 return <ChipSmall
-                    text={`${randomNumber > 40 ? "Elvégezve" : "Nincs elvégezve"}`}
-                    color={randomNumber > 40 ? "var(--deepGreen)" : "var(--intenseRed)"} />;
+                    text={`${randomNumber > 40 ? 'Elvégezve' : 'Nincs elvégezve'}`}
+                    color={randomNumber > 40 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
             }
         },
         {
-            field: "currentTempomatMode",
-            headerName: "Jelenlegi tempomat mód",
+            field: 'currentTempomatMode',
+            headerName: 'Jelenlegi tempomat mód',
             width: 250,
             resizable: true,
             renderCell: () => {
@@ -118,27 +118,27 @@ export const AdminUserCoursesDataGridControl = (props: {
                         h="30px"
                         w="30px"
                         src={getAssetUrl(`images/${randomNumber < 10
-                            ? "autopilot"
+                            ? 'autopilot'
                             : randomNumber < 20 && randomNumber >= 10
-                                ? "balancedmode"
-                                : "strictmode"}.png`)} />
+                                ? 'balancedmode'
+                                : 'strictmode'}.png`)} />
 
                     <EpistoFont
                         style={{
                             marginLeft: 5
                         }}>
                         {randomNumber < 10
-                            ? "Automata mód"
+                            ? 'Automata mód'
                             : randomNumber < 20 && randomNumber >= 10
-                                ? "Kiegyensúlyozott mód"
-                                : "Szigorú mód"}
+                                ? 'Kiegyensúlyozott mód'
+                                : 'Szigorú mód'}
                     </EpistoFont>
                 </Flex>;
             }
         },
         {
-            field: "recommendedVideosCount",
-            headerName: "Ajánlott videók hetente",
+            field: 'recommendedVideosCount',
+            headerName: 'Ajánlott videók hetente',
             width: 150,
             resizable: true,
             renderCell: () => {
@@ -149,8 +149,8 @@ export const AdminUserCoursesDataGridControl = (props: {
             }
         },
         {
-            field: "moreDetails",
-            headerName: "Részletek",
+            field: 'moreDetails',
+            headerName: 'Részletek',
             width: 150,
             renderCell: (params) =>
 
@@ -184,14 +184,14 @@ export const AdminUserCoursesDataGridControl = (props: {
              }
          }} */
         sx={{
-            "& .MuiDataGrid-columnHeaderTitle": {
-                textOverflow: "clip",
-                whiteSpace: "break-spaces",
+            '& .MuiDataGrid-columnHeaderTitle': {
+                textOverflow: 'clip',
+                whiteSpace: 'break-spaces',
                 lineHeight: 1
             }
         }}
         style={{
-            background: "var(--transparentWhite70)"
+            background: 'var(--transparentWhite70)'
         }} />;
 };
 

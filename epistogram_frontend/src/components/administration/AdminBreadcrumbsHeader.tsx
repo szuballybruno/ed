@@ -1,15 +1,15 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
-import { GridOn, List } from "@mui/icons-material";
-import { FormControlLabel, FormGroup, Switch, styled, FormControl } from "@mui/material";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { ReactNode, useState } from "react";
-import { NavLink, useLocation, useParams } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useCourseBriefData } from "../../services/api/courseApiService";
-import { useShopItemBriefData } from "../../services/api/shopApiService";
-import { useBriefUserData } from "../../services/api/userApiService";
-import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { GridOn, List } from '@mui/icons-material';
+import { FormControlLabel, FormGroup, Switch, styled, FormControl } from '@mui/material';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import { ReactNode, useState } from 'react';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useCourseBriefData } from '../../services/api/courseApiService';
+import { useShopItemBriefData } from '../../services/api/shopApiService';
+import { useBriefUserData } from '../../services/api/userApiService';
+import { objToArray, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const BreadcrumbLink = (props: {
     to?: string,
@@ -21,17 +21,17 @@ export const BreadcrumbLink = (props: {
     const Content = () => <Flex>
         {props.iconComponent && <Flex width={27}
 height="100%"
-m={"2px 10px 2px 2px"}>
+m={'2px 10px 2px 2px'}>
             {props.iconComponent}
         </Flex>}
 
         <EpistoFont
             style={{
-                display: "flex",
-                flexDirection: "row",
-                fontWeight: props.isCurrent ? "bold" : undefined,
-                alignItems: "center",
-                padding: "0 2px 0 5px"
+                display: 'flex',
+                flexDirection: 'row',
+                fontWeight: props.isCurrent ? 'bold' : undefined,
+                alignItems: 'center',
+                padding: '0 2px 0 5px'
             }}>
             {props.title}
         </EpistoFont>
@@ -87,7 +87,7 @@ export const AdminBreadcrumbsHeader = (props: {
     return <Flex
         flex="1"
         mb="20px"
-        direction={"column"}>
+        direction={'column'}>
 
         <Flex
             justify="space-between"
@@ -114,8 +114,8 @@ export const AdminBreadcrumbsHeader = (props: {
             {viewSwitchFunction && <FormGroup>
 
                 <FormControl style={{
-                    flexDirection: "row",
-                    alignItems: "center"
+                    flexDirection: 'row',
+                    alignItems: 'center'
                 }}>
                     <List />
                     <Switch

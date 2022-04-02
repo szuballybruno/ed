@@ -1,7 +1,7 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoHeader } from "../../EpistoHeader";
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoHeader } from '../../EpistoHeader';
 
 export const EditSection = (props: {
     title: string,
@@ -22,7 +22,7 @@ export const EditSection = (props: {
 justify="space-between">
 
             <EpistoFont
-                fontSize={"fontHuge"}
+                fontSize={'fontHuge'}
                 style={{
                     marginTop: isFirst ? 10 : 50,
                     fontWeight: 600

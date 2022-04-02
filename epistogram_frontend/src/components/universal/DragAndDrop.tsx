@@ -1,9 +1,9 @@
-import { Box, Flex } from "@chakra-ui/layout";
-import { BoxProps } from "@chakra-ui/react";
-import { CSSProperties } from "@emotion/serialize";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { ReactNode } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Box, Flex } from '@chakra-ui/layout';
+import { BoxProps } from '@chakra-ui/react';
+import { CSSProperties } from '@emotion/serialize';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import { ReactNode } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 export const DropZone = (params: {
     zoneId: string,
@@ -32,7 +32,7 @@ export const DragItem = (params: {
     itemId: string,
     index: number,
     children: ReactNode,
-    alignHandle?: "top" | "center" | "bottom"
+    alignHandle?: 'top' | 'center' | 'bottom'
 }) => {
 
     const { index, itemId, children, alignHandle } = params;
@@ -49,15 +49,15 @@ export const DragItem = (params: {
 
                 {/* drag handle */}
                 <Box {...provided.dragHandleProps}
-                    alignSelf={alignHandle === "top"
-                        ? "flex-start"
-                        : alignHandle === "bottom"
-                            ? "flex-end"
-                            : "center"}>
+                    alignSelf={alignHandle === 'top'
+                        ? 'flex-start'
+                        : alignHandle === 'bottom'
+                            ? 'flex-end'
+                            : 'center'}>
 
                     <DragHandleIcon
                         className="square40"
-                        style={{ color: "var(--mildGrey)" }}></DragHandleIcon>
+                        style={{ color: 'var(--mildGrey)' }}></DragHandleIcon>
                 </Box>
 
                 {children}

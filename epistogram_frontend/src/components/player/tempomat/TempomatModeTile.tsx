@@ -1,10 +1,10 @@
-import { Flex, Image } from "@chakra-ui/react";
-import { height } from "@mui/system";
-import { ReactNode } from "react";
-import { ClassBuilder } from "../../../helpers/classBuilder";
-import { TempomatModeType } from "../../../shared/types/sharedTypes";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { TempomatModeImage } from "./TempomatModeImage";
+import { Flex, Image } from '@chakra-ui/react';
+import { height } from '@mui/system';
+import { ReactNode } from 'react';
+import { ClassBuilder } from '../../../helpers/classBuilder';
+import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { TempomatModeImage } from './TempomatModeImage';
 
 export const TempomatModeTile = (props: {
     title: string,
@@ -32,14 +32,14 @@ export const TempomatModeTile = (props: {
             isSelected={isSelected}
             mode={tempomatMode}
             customizeFn={builder => builder
-                .custom("roundBorders")} />
+                .custom('roundBorders')} />
 
         <EpistoFont
             fontSize="fontSmall"
             style={{
-                margin: "15px 0 0 0",
-                width: "100%",
-                textAlign: "center",
+                margin: '15px 0 0 0',
+                width: '100%',
+                textAlign: 'center',
                 fontWeight: 600
             }}>
 
@@ -49,8 +49,8 @@ export const TempomatModeTile = (props: {
         <EpistoFont
             fontSize="fontSmall"
             style={{
-                textAlign: "justify",
-                margin: "5px 0 0 0",
+                textAlign: 'justify',
+                margin: '5px 0 0 0',
             }}>
 
             {props.description}

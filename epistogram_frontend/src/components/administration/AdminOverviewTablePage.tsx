@@ -1,14 +1,14 @@
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
-import { useState } from "react";
-import { useAdminCourseList } from "../../services/api/courseApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { AdminBreadcrumbsHeader } from "./AdminBreadcrumbsHeader";
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { useState } from 'react';
+import { useAdminCourseList } from '../../services/api/courseApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { AdminBreadcrumbsHeader } from './AdminBreadcrumbsHeader';
 
 export const AdminOverviewTablePage = () => {
 
     const [searchText, setSearchText] = useState<string | null>(null);
 
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText + "");
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText + '');
 
     const { navigate } = useNavigation();
 
@@ -40,7 +40,7 @@ export const AdminOverviewTablePage = () => {
         <DataGrid rows={courseRows}
 columns={columns}
 style={{
-            background: "var(--transparentWhite70)"
+            background: 'var(--transparentWhite70)'
         }} />
     </AdminBreadcrumbsHeader>;
 };

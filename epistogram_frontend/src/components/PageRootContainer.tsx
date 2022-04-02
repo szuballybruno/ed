@@ -1,7 +1,7 @@
-import { Flex, FlexProps, Image } from "@chakra-ui/react";
-import React, { ReactNode, useEffect } from "react";
-import { gradientBackgroundGenerator } from "../services/core/gradientBackgroundGenerator";
-import { EpistoGrid } from "./controls/EpistoGrid";
+import { Flex, FlexProps, Image } from '@chakra-ui/react';
+import React, { ReactNode, useEffect } from 'react';
+import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
+import { EpistoGrid } from './controls/EpistoGrid';
 
 export const PageRootContainer = (props: {
     children: ReactNode,
@@ -14,14 +14,14 @@ export const PageRootContainer = (props: {
 
     useEffect(() => {
 
-        document.title = "EpistoGram";
+        document.title = 'EpistoGram';
     }, []);
 
     const gradients = gradientBackgroundGenerator();
 
     return <Flex
         id="pageRootContainer"
-        maxWidth={noMaxWidth ? undefined : "1920px"}
+        maxWidth={noMaxWidth ? undefined : '1920px'}
         margin="0 auto"
         position="relative"
         overflow="hidden"
@@ -32,17 +32,17 @@ export const PageRootContainer = (props: {
         {backgoundImageSrc || noBackground
             ? undefined
             : <EpistoGrid
-                bgColor={"white"}
+                bgColor={'white'}
                 position="absolute"
                 top={0}
                 w="100vw"
                 h="100vh"
                 zIndex="-1"
                 filter="blur(50px)"
-                minColumnWidth={"33%"}
-                gap={"0"}
+                minColumnWidth={'33%'}
+                gap={'0'}
                 gridTemplateColumns="repeat(3, 1fr)"
-                auto={"fill"}>
+                auto={'fill'}>
 
                 {gradients
                     .map((gradient, index) => {

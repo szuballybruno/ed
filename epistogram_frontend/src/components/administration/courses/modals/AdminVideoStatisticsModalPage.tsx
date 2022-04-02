@@ -1,16 +1,16 @@
-import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react";
-import { FiberManualRecord } from "@mui/icons-material";
-import { Slider } from "@mui/material";
-import React, { ReactNode, useState } from "react";
-import ReactPlayer from "react-player";
-import { defaultCharts } from "../../../../static/defaultChartOptions";
-import { iterate } from "../../../../static/frontendHelpers";
-import { EpistoFont } from "../../../controls/EpistoFont";
-import { EpistoSelect } from "../../../controls/EpistoSelect";
-import StatisticsCard from "../../../statisticsCard/StatisticsCard";
-import { EpistoLineChart } from "../../../universal/charts/EpistoLineChart";
-import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart";
-import { DashboardSection } from "../../../universal/DashboardSection";
+import { Divider, Flex, Grid, Tooltip } from '@chakra-ui/react';
+import { FiberManualRecord } from '@mui/icons-material';
+import { Slider } from '@mui/material';
+import React, { ReactNode, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { defaultCharts } from '../../../../static/defaultChartOptions';
+import { iterate } from '../../../../static/frontendHelpers';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoSelect } from '../../../controls/EpistoSelect';
+import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { EpistoLineChart } from '../../../universal/charts/EpistoLineChart';
+import { EpistoPieChart } from '../../../universal/charts/EpistoPieChart';
+import { DashboardSection } from '../../../universal/DashboardSection';
 
 export const AdminVideoStatisticsModalPage = () => {
 
@@ -94,10 +94,10 @@ export const AdminVideoStatisticsModalPage = () => {
                     progressInterval={100}
                     style={{
                         borderRadius: 7,
-                        background: "green",
-                        overflow: "hidden"
+                        background: 'green',
+                        overflow: 'hidden'
                     }}
-                    url={"https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4"} />
+                    url={'https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4'} />
 
                 <Flex
                     background="linear-gradient(180deg, rgba(190,190,190,0.55) 0%, rgba(240,240,240,1) 20%, rgba(255,255,255,1) 100%)"
@@ -112,20 +112,20 @@ export const AdminVideoStatisticsModalPage = () => {
 
                     <Slider
                         style={{
-                            overflow: "hidden",
-                            height: "10px",
+                            overflow: 'hidden',
+                            height: '10px',
                             padding: 0,
-                            margin: "0 10px",
+                            margin: '0 10px',
                         }}
                         components={{
                             ValueLabel: ValueLabelComponent,
                         }}
                         valueLabelDisplay="on"
                         sx={{
-                            ".MuiSlider-rail": {
-                                padding: "0",
-                                borderRadius: "7px",
-                                opacity: "100%",
+                            '.MuiSlider-rail': {
+                                padding: '0',
+                                borderRadius: '7px',
+                                opacity: '100%',
                                 backgroundImage:
                                     `linear-gradient(to right, 
                                         rgb(30,255,50),
@@ -146,15 +146,15 @@ export const AdminVideoStatisticsModalPage = () => {
                                         rgb(30,255,50), 
                                         rgb(30,255,50))`
                             },
-                            ".MuiSlider-track": {
-                                display: "none",
-                                background: "transparent"
+                            '.MuiSlider-track': {
+                                display: 'none',
+                                background: 'transparent'
                             },
-                            ".MuiSlider-thumb": {
+                            '.MuiSlider-thumb': {
                                 height: 5,
                                 width: 5,
-                                background: "white",
-                                color: "white"
+                                background: 'white',
+                                color: 'white'
                             }
                         }} />
                 </Flex>
@@ -176,13 +176,13 @@ export const AdminVideoStatisticsModalPage = () => {
                             Videó érthetősége - Ismétlés aránya a videón belül
                         </EpistoFont>
                         <EpistoSelect
-                            items={["Ismétlések aránya"]}
-                            selectedValue={"Ismétlések aránya"}
+                            items={['Ismétlések aránya']}
+                            selectedValue={'Ismétlések aránya'}
                             onSelected={() => {
 
-                                throw new Error("Not implemented!");
+                                throw new Error('Not implemented!');
                             }}
-                            getCompareKey={() => "asd"} />
+                            getCompareKey={() => 'asd'} />
                     </Flex>
                     <Flex flex="1" >
                         <Flex
@@ -221,15 +221,15 @@ export const AdminVideoStatisticsModalPage = () => {
                                     <Flex align="center">
                                         <FiberManualRecord
                                             style={{
-                                                color: "red",
+                                                color: 'red',
                                                 height: 10
                                             }} />
                                         <EpistoFont
                                             style={{
-                                                color: "red",
+                                                color: 'red',
                                                 lineHeight: 1.1,
                                                 fontWeight: 500,
-                                                margin: "3px 0"
+                                                margin: '3px 0'
                                             }}
                                             fontSize="fontSmall">
                                             A legtöbb felhasználónak nehezen érthető
@@ -238,15 +238,15 @@ export const AdminVideoStatisticsModalPage = () => {
                                     <Flex align="center">
                                         <FiberManualRecord
                                             style={{
-                                                color: "orange",
+                                                color: 'orange',
                                                 height: 10
                                             }} />
                                         <EpistoFont
                                             style={{
-                                                color: "orange",
+                                                color: 'orange',
                                                 lineHeight: 1.1,
                                                 fontWeight: 500,
-                                                margin: "3px 0"
+                                                margin: '3px 0'
                                             }}
                                             fontSize="fontSmall">
                                             A felhasználók egy részének nehezen érthető
@@ -255,12 +255,12 @@ export const AdminVideoStatisticsModalPage = () => {
                                     <Flex align="center">
                                         <FiberManualRecord
                                             style={{
-                                                color: "green",
+                                                color: 'green',
                                                 height: 10
                                             }} />
                                         <EpistoFont
                                             style={{
-                                                color: "green",
+                                                color: 'green',
                                                 fontWeight: 500
                                             }}
                                             fontSize="fontSmall">
@@ -310,7 +310,7 @@ export const AdminVideoStatisticsModalPage = () => {
 
         {/* test your knowledge */}
         <DashboardSection
-            title={"Mélypontok"}
+            title={'Mélypontok'}
             background="var(--transparentWhite80)"
             className="mildShadow roundBorders"
             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
@@ -323,7 +323,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 title=""
                 dataset={[
                     {
-                        name: "Dataset",
+                        name: 'Dataset',
                         data: iterate(300, (index) => {
                             return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
                         })
@@ -333,10 +333,10 @@ export const AdminVideoStatisticsModalPage = () => {
                 yAxisLabel="Felhasználók"
                 options={defaultCharts.simpleLineChart}
                 style={{
-                    height: "350px",
+                    height: '350px',
                     minHeight: 350,
                     minWidth: 500,
-                    maxWidth: "100%"
+                    maxWidth: '100%'
                 }} />
         </DashboardSection>
 
@@ -347,7 +347,7 @@ export const AdminVideoStatisticsModalPage = () => {
             gridGap={10}>
             <StatisticsCard
                 style={{
-                    background: "var(--transparentWhite80)",
+                    background: 'var(--transparentWhite80)',
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -356,7 +356,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="" />
             <StatisticsCard
                 style={{
-                    background: "var(--transparentWhite80)",
+                    background: 'var(--transparentWhite80)',
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -365,7 +365,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="db" />
             <StatisticsCard
                 style={{
-                    background: "var(--transparentWhite80)",
+                    background: 'var(--transparentWhite80)',
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -374,7 +374,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="" />
             <StatisticsCard
                 style={{
-                    background: "var(--transparentWhite80)",
+                    background: 'var(--transparentWhite80)',
                     paddingLeft: 20,
                     minWidth: 200
                 }}
@@ -383,7 +383,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 suffix="db" />
 
             <DashboardSection
-                title={"Megtekintési arányok"}
+                title={'Megtekintési arányok'}
                 background="var(--transparentWhite80)"
                 className="mildShadow roundBorders"
                 //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
@@ -395,11 +395,11 @@ export const AdminVideoStatisticsModalPage = () => {
                 <EpistoPieChart
                     title=""
                     segments={[
-                        { value: 33, name: "Végignézi a videót" },
-                        { value: 31, name: "75%-ig nézi meg a videót" },
-                        { value: 27, name: "50%-ig nézi meg a videót" },
-                        { value: 23, name: "25%-ig nézi meg a videót" },
-                        { value: 40, name: "10%-ig nézi meg a videót" }
+                        { value: 33, name: 'Végignézi a videót' },
+                        { value: 31, name: '75%-ig nézi meg a videót' },
+                        { value: 27, name: '50%-ig nézi meg a videót' },
+                        { value: 23, name: '25%-ig nézi meg a videót' },
+                        { value: 40, name: '10%-ig nézi meg a videót' }
                     ]}
                     isSortValues
                     options={defaultCharts.redRadiusPie} />

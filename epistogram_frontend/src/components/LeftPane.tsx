@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useContext } from "react";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { useNavigation } from "../services/core/navigatior";
-import { startUserGuideHelp } from "../services/core/userGuidingService";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { CurrentUserContext } from "./system/AuthenticationFrame";
-import { EpistoButton } from "./controls/EpistoButton";
-import { FlexFloat } from "./controls/FlexFloat";
-import { EpistoFont } from "./controls/EpistoFont";
-import { translatableTexts } from "../static/translatableTexts";
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import React, { useContext } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { useNavigation } from '../services/core/navigatior';
+import { startUserGuideHelp } from '../services/core/userGuidingService';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { CurrentUserContext } from './system/AuthenticationFrame';
+import { EpistoButton } from './controls/EpistoButton';
+import { FlexFloat } from './controls/FlexFloat';
+import { EpistoFont } from './controls/EpistoFont';
+import { translatableTexts } from '../static/translatableTexts';
 
 export const LeftPane = (props: FlexProps) => {
 
@@ -36,16 +36,16 @@ export const LeftPane = (props: FlexProps) => {
 
             {/* logo link */}
             <Flex width="100%"
-alignItems={"center"}
+alignItems={'center'}
 justifyContent="flex-start"
 mb="20px">
                 <img
-                    src={getAssetUrl("/images/logo.svg")}
+                    src={getAssetUrl('/images/logo.svg')}
                     style={{
-                        height: "50px",
-                        objectFit: "cover",
-                        cursor: "pointer",
-                        margin: "10px 10px",
+                        height: '50px',
+                        objectFit: 'cover',
+                        cursor: 'pointer',
+                        margin: '10px 10px',
                         padding: 0
                     }}
                     alt=""
@@ -59,15 +59,15 @@ mb="20px">
             {/* magic powder top right */}
             <img
                 style={{
-                    position: "absolute",
+                    position: 'absolute',
                     right: 23,
                     top: -30,
                     width: 120,
-                    transform: "rotate(270deg)",
-                    objectFit: "contain",
+                    transform: 'rotate(270deg)',
+                    objectFit: 'contain',
                     zIndex: -1,
                 }}
-                src={getAssetUrl("/images/bg-art-6.png")}
+                src={getAssetUrl('/images/bg-art-6.png')}
 alt="" />
 
             {props.children}
@@ -75,15 +75,15 @@ alt="" />
             {/* magic powder top right */}
             <img
                 style={{
-                    position: "absolute",
+                    position: 'absolute',
                     left: -10,
                     bottom: 0,
                     width: 170,
-                    transform: "rotate(0deg) scale(-1,1)",
-                    objectFit: "contain",
+                    transform: 'rotate(0deg) scale(-1,1)',
+                    objectFit: 'contain',
                     zIndex: -1,
                 }}
-                src={getAssetUrl("/images/bela3D.png")}
+                src={getAssetUrl('/images/bela3D.png')}
 alt="" />
 
             {/* tina image */}

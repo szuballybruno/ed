@@ -1,20 +1,20 @@
-import { Box, Flex, Grid } from "@chakra-ui/react";
-import { Slider } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from "../../../services/api/prequizApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
-import { useIntParam } from "../../../static/locationHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { ExamLayout } from "../../exam/ExamLayout";
-import { ExamLayoutContent } from "../../exam/ExamLayoutContent";
-import { QuestionAnswer } from "../../exam/QuestionAnswer";
+import { Box, Flex, Grid } from '@chakra-ui/react';
+import { Slider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from '../../../services/api/prequizApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { ExamLayout } from '../../exam/ExamLayout';
+import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
+import { QuestionAnswer } from '../../exam/QuestionAnswer';
 
 export const PrequizSubpage = () => {
 
-    const courseId = useIntParam("courseId")!;
+    const courseId = useIntParam('courseId')!;
     const showError = useShowErrorDialog();
     const { navigateToWatchPretest } = useNavigation();
     const { questions } = usePrequizQuestions(courseId);
@@ -84,10 +84,10 @@ export const PrequizSubpage = () => {
 
                 <img
                     alt=""
-                    src={getAssetUrl("course_page_icons/curriculum_test.svg")}
+                    src={getAssetUrl('course_page_icons/curriculum_test.svg')}
                     className="square35" />
 
-                <EpistoFont style={{ marginLeft: "10px" }}>
+                <EpistoFont style={{ marginLeft: '10px' }}>
                     {totalQuestionsCount}/{currentQuestionIndex + 1}
                 </EpistoFont>
             </Flex>}
@@ -99,7 +99,7 @@ export const PrequizSubpage = () => {
             handleBack={currentQuestionIndex !== 0 ? handleBackAsync : undefined}>
 
             <ExamLayoutContent
-                title={question?.text ?? ""}>
+                title={question?.text ?? ''}>
 
                 {question?.isNumeric
                     ? <Flex direction="column"
@@ -123,7 +123,7 @@ align="center">
                             valueLabelDisplay="auto"
                             marks={true}
                             style={{
-                                color: "var(--deepBlue)"
+                                color: 'var(--deepBlue)'
                             }}
                             onChange={(_, value) => setNumericValue(value as any)}
                             value={numericValue} />
@@ -131,10 +131,10 @@ align="center">
                         <EpistoFont
                             fontSize="fontHuge"
                             style={{
-                                boxShadow: "-1px 3px 16px 17px white",
-                                background: "white",
-                                borderRadius: "10px",
-                                marginTop: "10px"
+                                boxShadow: '-1px 3px 16px 17px white',
+                                background: 'white',
+                                borderRadius: '10px',
+                                marginTop: '10px'
                             }}>
 
                             {numericValue} {question.valuePostfix ?? undefined}

@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useCourseOverviewData } from "../../../services/api/miscApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { isNullOrUndefined } from "../../../static/frontendHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoGrid } from "../../controls/EpistoGrid";
-import { ExamLayout } from "../../exam/ExamLayout";
-import StatisticsCard from "../../statisticsCard/StatisticsCard";
+import { Flex } from '@chakra-ui/react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useCourseOverviewData } from '../../../services/api/miscApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { isNullOrUndefined } from '../../../static/frontendHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoGrid } from '../../controls/EpistoGrid';
+import { ExamLayout } from '../../exam/ExamLayout';
+import StatisticsCard from '../../statisticsCard/StatisticsCard';
 
 export const CourseOverviewSubpage = () => {
 
@@ -27,38 +27,38 @@ export const CourseOverviewSubpage = () => {
     const courseStatsOverviewData = [
         {
             value: courseOverviewData?.completedVideoCount,
-            title: "Összesen ennyi videót néztél meg",
-            suffix: "db"
+            title: 'Összesen ennyi videót néztél meg',
+            suffix: 'db'
         },
         {
             value: courseOverviewData?.coinsAcquired,
-            title: "Ennyi EpistoCoint szereztél közben",
-            suffix: "db"
+            title: 'Ennyi EpistoCoint szereztél közben',
+            suffix: 'db'
         },
         {
             value: Math.ceil((courseOverviewData?.totalSpentSeconds ?? 0) / 60),
-            title: "Ennyi idő alatt végezted el a kurzust",
-            suffix: "perc"
+            title: 'Ennyi idő alatt végezted el a kurzust',
+            suffix: 'perc'
         },
         {
             value: courseOverviewData?.answeredVideoQuestionCount,
-            title: "Összesen ennyi kérdésre válaszoltál",
-            suffix: "db"
+            title: 'Összesen ennyi kérdésre válaszoltál',
+            suffix: 'db'
         },
         {
             value: courseOverviewData?.questionSuccessRate,
-            title: "A kérdésekre adott válaszaid átlaga",
-            suffix: "%"
+            title: 'A kérdésekre adott válaszaid átlaga',
+            suffix: '%'
         },
         {
             value: courseOverviewData?.examSuccessRateAverage,
-            title: "A témazárók átlaga",
-            suffix: "%"
+            title: 'A témazárók átlaga',
+            suffix: '%'
         },
         {
             value: courseOverviewData?.finalExamSuccessRate,
-            title: "A kurzuszáró vizsgád eredménye",
-            suffix: "%"
+            title: 'A kurzuszáró vizsgád eredménye',
+            suffix: '%'
         }
     ];
 
@@ -66,12 +66,12 @@ export const CourseOverviewSubpage = () => {
 
     return (
         <ExamLayout
-            headerCenterText={"A kurzus során elért eredményed"}
-            handleNext={() => { console.log("TODO"); }}
+            headerCenterText={'A kurzus során elért eredményed'}
+            handleNext={() => { console.log('TODO'); }}
             nextButtonTitle={translatableTexts.exam.continueCourse}
             footerButtons={[
                 {
-                    text: "Vissza a tanfolyamkeresobe",
+                    text: 'Vissza a tanfolyamkeresobe',
                     action: () => {
                         navigate(applicationRoutes.availableCoursesRoute);
                     },
@@ -85,9 +85,9 @@ export const CourseOverviewSubpage = () => {
                 p="20px 0">
 
                 <EpistoGrid
-                    minColumnWidth={"250px"}
-                    gap={"10"}
-                    auto={"fill"}
+                    minColumnWidth={'250px'}
+                    gap={'10'}
+                    auto={'fill'}
 w="100%">
 
                     {courseStatsOverviewData
@@ -96,7 +96,7 @@ w="100%">
                                 key={index}
                                 suffix={item.suffix}
                                 title={item.title}
-                                value={isNullOrUndefined(item.value) ? undefined : item.value + ""}
+                                value={isNullOrUndefined(item.value) ? undefined : item.value + ''}
                                 height={150}
                                 p="10px 10px 10px 30px" />;
                         })}

@@ -1,16 +1,16 @@
-import { Flex } from "@chakra-ui/layout";
-import { Close } from "@mui/icons-material";
-import React, { ReactNode, useState } from "react";
-import { ButtonType, DialogOptions } from "../models/types";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoHeader } from "./EpistoHeader";
-import { useXDialogLogic, XDialog } from "./lib/XDialog/XDialog";
+import { Flex } from '@chakra-ui/layout';
+import { Close } from '@mui/icons-material';
+import React, { ReactNode, useState } from 'react';
+import { ButtonType, DialogOptions } from '../models/types';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoHeader } from './EpistoHeader';
+import { useXDialogLogic, XDialog } from './lib/XDialog/XDialog';
 
 export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions) => {
 
-    const [title, setTitle] = useState(dialogOptions?.title ?? "");
-    const [description, setDescription] = useState(dialogOptions?.description ?? "");
-    const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? "bottom";
+    const [title, setTitle] = useState(dialogOptions?.title ?? '');
+    const [description, setDescription] = useState(dialogOptions?.description ?? '');
+    const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? 'bottom';
     const xlogic = useXDialogLogic(key);
 
     const closeDialog = () => {
@@ -18,10 +18,10 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
         xlogic.setIsOpen(false);
     };
 
-    const defaultButtons = defaultCloseButtonType === "bottom"
+    const defaultButtons = defaultCloseButtonType === 'bottom'
         ? [
             {
-                title: "Bezárás",
+                title: 'Bezárás',
                 action: closeDialog
             }
         ]
@@ -85,8 +85,8 @@ export const EpistoDialog = (props: {
         <Flex
             id="episto_dialog_root"
             direction="column"
-            width={fullScreenX ? "90%" : undefined}
-            height={fullScreenY ? "90%" : undefined}
+            width={fullScreenX ? '90%' : undefined}
+            height={fullScreenY ? '90%' : undefined}
             overflow="hidden"
             position="relative"
             background="rgba(255,255,255,0.8)"
@@ -98,13 +98,13 @@ export const EpistoDialog = (props: {
                 margin="15px"
                 text={title} />}
 
-            {logic.dialogOptions?.defaultCloseButtonType === "top" && <Close
+            {logic.dialogOptions?.defaultCloseButtonType === 'top' && <Close
                 onClick={closeDialog}
                 style={{
-                    color: "black",
-                    margin: "15px",
-                    cursor: "pointer",
-                    position: "absolute",
+                    color: 'black',
+                    margin: '15px',
+                    cursor: 'pointer',
+                    position: 'absolute',
                     zIndex: 9999,
                     right: 0,
                     top: 0
@@ -114,7 +114,7 @@ export const EpistoDialog = (props: {
 
             <Flex
                 id="dialogContentFlex"
-                padding={children ? "0px" : "10px"}
+                padding={children ? '0px' : '10px'}
                 minHeight="70px">
 
                 {/* simple text content */}

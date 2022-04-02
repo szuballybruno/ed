@@ -1,10 +1,10 @@
-import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import React from "react";
-import { useCourseDetails } from "../../services/api/courseApiService";
-import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
-import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { FlexFloat } from "../controls/FlexFloat";
+import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import React from 'react';
+import { useCourseDetails } from '../../services/api/courseApiService';
+import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
+import { formatTimespan, getAssetUrl } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { FlexFloat } from '../controls/FlexFloat';
 
 const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
 
@@ -16,18 +16,18 @@ const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
         {/* icon */}
         <img
             src={props.iconUrl}
-            alt={""}
+            alt={''}
             style={{
                 width: 22,
                 height: 22,
-                margin: "0 2px 0 2px"
+                margin: '0 2px 0 2px'
             }} />
 
         {/* spent time stat */}
         <Text
             fontSize="13px"
-            as={"text"}
-            color={"grey"}>
+            as={'text'}
+            color={'grey'}>
 
             {props.text}
         </Text>
@@ -68,7 +68,7 @@ maxH={150}>
             <img
                 className="whall roundBorders"
                 style={{
-                    objectFit: "cover",
+                    objectFit: 'cover',
                 }}
                 src={thumbnailImageUrl}
                 alt="" />
@@ -90,15 +90,15 @@ maxH={150}>
                     borderRadius="7px 0 0 7px">
 
                     <img
-                        src={getAssetUrl("course_exam_tile_icons/tile_badge_completed.svg")}
-                        alt={""}
+                        src={getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
+                        alt={''}
                         style={{
                             width: 20,
                             height: 20
                         }}
                     />
                     <Text
-                        textTransform={"uppercase"}
+                        textTransform={'uppercase'}
                         color="white">
 
                         {translatableTexts.availableCourses.courseDone}
@@ -109,7 +109,7 @@ maxH={150}>
 
         {/* content  */}
         <Flex p="10px"
-direction={"column"}
+direction={'column'}
 flex="1">
 
             <Flex direction="column"
@@ -124,7 +124,7 @@ color="grey">
 
                 {/* title */}
                 <Flex direction="column">
-                    <Text fontWeight={"600"}
+                    <Text fontWeight={'600'}
 fontSize="15px">{courseTitle}</Text>
                 </Flex>
             </Flex>
@@ -137,37 +137,37 @@ justify="space-between">
                 {/* length */}
                 <SmallStat
                     title="Ennyi idő alatt tudod elvégezni a kurzust"
-                    iconUrl={getAssetUrl("images/time3D.png")}
+                    iconUrl={getAssetUrl('images/time3D.png')}
                     text={formatTimespan(courseDetails?.totalVideoSumLengthSeconds || 0)} />
 
                 {/* videos count */}
                 <SmallStat
                     title="Ennyi videót tartalmaz a kurzus"
-                    iconUrl={getAssetUrl("images/videos3D.png")}
-                    text={courseDetails?.totalVideoCount + "" || "0"} />
+                    iconUrl={getAssetUrl('images/videos3D.png')}
+                    text={courseDetails?.totalVideoCount + '' || '0'} />
 
                 {/* difficulty */}
                 <SmallStat
                     title="A kurzus nehézsége 1-5-ig értékelve"
-                    iconUrl={getAssetUrl("images/difficulty3D.png")}
-                    text={courseDetails?.difficulty + ""} />
+                    iconUrl={getAssetUrl('images/difficulty3D.png')}
+                    text={courseDetails?.difficulty + ''} />
 
                 {/* rating */}
                 <SmallStat
                     title="1-5-ig ennyire érékelték a hallgatók a tanfolyamot"
-                    iconUrl={getAssetUrl("images/star3D.png")}
-                    text={courseDetails?.benchmark + ""} />
+                    iconUrl={getAssetUrl('images/star3D.png')}
+                    text={courseDetails?.benchmark + ''} />
             </Flex>
 
             {/* rating */}
             <Flex
-                alignItems={"center"}
+                alignItems={'center'}
                 mt={7}>
 
                 {/* teacher name */}
                 <SmallStat
                     title="A kurzus nyelve"
-                    iconUrl={getAssetUrl("images/flag3D.png")}
+                    iconUrl={getAssetUrl('images/flag3D.png')}
                     text={courseTeacherName} />
 
             </Flex>

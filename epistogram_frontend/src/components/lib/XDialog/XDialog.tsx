@@ -1,6 +1,6 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { XDialogContext } from "./XDialoContext";
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { XDialogContext } from './XDialoContext';
 
 export const useXDialogLogic = (key: string) => {
 

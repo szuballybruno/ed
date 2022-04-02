@@ -469,7 +469,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
     return result;
 };
 
-export const getAssetUrl = (path: string) => assetCDNStorageUrl + ("/" + path).replace("//", "/");
+export const getAssetUrl = (path: string, assetUrlPath?: string) => (assetUrlPath ? assetUrlPath : assetCDNStorageUrl) + ("/" + path).replace("//", "/");
 
 export const hasValue = (obj: any) => {
 

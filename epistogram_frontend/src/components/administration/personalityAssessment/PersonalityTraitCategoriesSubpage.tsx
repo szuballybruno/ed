@@ -1,15 +1,15 @@
-import { Flex } from "@chakra-ui/react";
-import Edit from "@mui/icons-material/Edit";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { PersonalityTraitCategoryShortDTO } from "../../../shared/dtos/PersonalityTraitCategoryShortDTO";
-import { usePersonalityTraitCategories } from "../../../services/api/personalityAssessmentApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { Flex } from '@chakra-ui/react';
+import Edit from '@mui/icons-material/Edit';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { PersonalityTraitCategoryShortDTO } from '../../../shared/dtos/PersonalityTraitCategoryShortDTO';
+import { usePersonalityTraitCategories } from '../../../services/api/personalityAssessmentApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const PersonalityTraitCategoriesSubpage = () => {
 
@@ -75,7 +75,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
                             )}
                             endContent={<Flex
                                 align="center"
-                                justifyContent={"flex-end"}
+                                justifyContent={'flex-end'}
                                 height="100%"
                                 width={165}
                                 px={10}>
@@ -86,10 +86,10 @@ export const PersonalityTraitCategoriesSubpage = () => {
 
                                 <EpistoFont
                                     style={{
-                                        margin: "5px",
-                                        background: personalityTraitCategory.tipCount > 0 ? "var(--mildGreen)" : "var(--mildRed)",
-                                        padding: "2px 5px 2px 5px",
-                                        borderRadius: "7px"
+                                        margin: '5px',
+                                        background: personalityTraitCategory.tipCount > 0 ? 'var(--mildGreen)' : 'var(--mildRed)',
+                                        padding: '2px 5px 2px 5px',
+                                        borderRadius: '7px'
                                     }}>
 
                                     {personalityTraitCategory.tipCount}
@@ -100,9 +100,9 @@ export const PersonalityTraitCategoriesSubpage = () => {
                                     .map((x, index) => (
                                         <EpistoButton
                                             key={index}
-                                            variant={"colored"}
+                                            variant={'colored'}
                                             onClick={() => x.action(personalityTraitCategory)}
-                                            style={{ width: 20, margin: "3px" }}>
+                                            style={{ width: 20, margin: '3px' }}>
 
                                             {x.icon}
                                         </EpistoButton>

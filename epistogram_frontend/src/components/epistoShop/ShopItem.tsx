@@ -1,15 +1,15 @@
-import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { Done, LocalOffer } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import React from "react";
-import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import StarsIcon from "@mui/icons-material/Stars";
-import { useNavigation } from "../../services/core/navigatior";
-import { EpistoButton } from "../controls/EpistoButton";
-import { FlexFloat } from "../controls/FlexFloat";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { Done, LocalOffer } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+import React from 'react';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import StarsIcon from '@mui/icons-material/Stars';
+import { useNavigation } from '../../services/core/navigatior';
+import { EpistoButton } from '../controls/EpistoButton';
+import { FlexFloat } from '../controls/FlexFloat';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -40,7 +40,7 @@ export const ShopItem = (props: {
         direction="column"
         position="relative"
         overflow="hidden"
-        shadow={"0 0 10px 1px #CCC"}
+        shadow={'0 0 10px 1px #CCC'}
         p="5px"
         background="var(--transparentWhite70)"
         justifyContent="space-between"
@@ -56,10 +56,10 @@ maxH={150}>
             <img
                 className="roundBorders"
                 style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    position: "absolute"
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    position: 'absolute'
                 }}
                 src={coverFilePath}
                 alt="" />
@@ -76,7 +76,7 @@ maxH={150}>
                 right="0">
 
                 <Done style={{
-                    color: "white",
+                    color: 'white',
                     padding: 0,
                     margin: 0,
                     lineHeight: 1
@@ -84,7 +84,7 @@ maxH={150}>
                 }} />
 
                 <EpistoFont
-                    classes={["fontLight"]}
+                    classes={['fontLight']}
                     isUppercase
                     fontSize="fontSmall"
                     style={{
@@ -132,7 +132,7 @@ zIndex={1}>
 p="10px" >
 
                 {/* category  */}
-                <EpistoFont classes={["fontGrey"]}
+                <EpistoFont classes={['fontGrey']}
 fontSize="fontSmall">
                     {shopItemCategoryName}
                 </EpistoFont>
@@ -151,17 +151,17 @@ fontSize="fontSmall">
 
         {/* prices */}
         {!isPurchased &&
-            <Flex alignItems={"center"}
-justifyContent={"center"}
+            <Flex alignItems={'center'}
+justifyContent={'center'}
 mb="5px">
-                <Flex alignItems={"center"}>
+                <Flex alignItems={'center'}>
                     <LocalOffer style={{
                         height: 17,
-                        transform: "scaleX(-1)"
+                        transform: 'scaleX(-1)'
                     }} />
 
                     {/* episto coin price */}
-                    <EpistoFont style={{ color: isSufficientFundsAvailable ? "var(--deepGreen)" : "var(--mildRed)" }}>
+                    <EpistoFont style={{ color: isSufficientFundsAvailable ? 'var(--deepGreen)' : 'var(--mildRed)' }}>
                         {`Ár: ${coinPrice}`}
                     </EpistoFont>
                     <img
@@ -170,8 +170,8 @@ mb="5px">
                             height: 20,
                             margin: 2
                         }}
-                        src={getAssetUrl("/images/epistoCoin.png")}
-alt={""} />
+                        src={getAssetUrl('/images/epistoCoin.png')}
+alt={''} />
 
                     {/* currency price
                 {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}*/}
@@ -185,7 +185,7 @@ margin="5px 5px 5px 5px">
             {/* item details */}
             <EpistoButton
                 onClick={() => handleOpenDetails()}
-                style={{ flex: "1" }}>
+                style={{ flex: '1' }}>
                 {translatableTexts.shop.description}
             </EpistoButton>
 
@@ -194,10 +194,10 @@ margin="5px 5px 5px 5px">
                 onClick={() => handlePurchaseItem(shopItem)}
                 variant="colored"
                 isDisabled={!isSufficientFundsAvailable}
-                style={{ flex: "3", overflowWrap: "break-word" }}>
+                style={{ flex: '3', overflowWrap: 'break-word' }}>
 
                 {shopItem.courseId
-                    ? "Feloldom"
+                    ? 'Feloldom'
                     : isPurchased
                         ? translatableTexts.shop.buyAgain
                         : translatableTexts.shop.buy}

@@ -1,34 +1,34 @@
-import { Flex } from "@chakra-ui/react";
-import { Add, Delete, Edit, Equalizer } from "@mui/icons-material";
-import { useGridApiContext } from "@mui/x-data-grid-pro";
-import React, { ReactNode, useRef, useState } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useCourseContentAdminData, useSaveCourseContentData } from "../../../services/api/courseApiService";
-import { getVirtualId } from "../../../services/core/idService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { CourseContentItemAdminDTO } from "../../../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseContentItemIssueDTO } from "../../../shared/dtos/admin/CourseContentItemIssueDTO";
-import { CourseModuleShortDTO } from "../../../shared/dtos/admin/CourseModuleShortDTO";
-import { OmitProperty } from "../../../shared/types/advancedTypes";
-import { CourseItemType } from "../../../shared/types/sharedTypes";
-import { formatTime } from "../../../static/frontendHelpers";
-import { useIntParam } from "../../../static/locationHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoDataGrid, GridColumnType, UseCommitNewValueType } from "../../controls/EpistoDataGrid";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoSelect } from "../../controls/EpistoSelect";
-import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AddNewItemPopper } from "./AddNewItemPopper";
-import { ChipSmall } from "./ChipSmall";
-import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
-import classses from "./css/AdminCourseContentSubpage.module.css";
-import { ExamEditDialog } from "./ExamEditDialog";
-import { VideoEditDialog } from "./VideoEditDialog";
-import { OnMutationHandlerType, useXListMutator } from "./XMutator";
+import { Flex } from '@chakra-ui/react';
+import { Add, Delete, Edit, Equalizer } from '@mui/icons-material';
+import { useGridApiContext } from '@mui/x-data-grid-pro';
+import React, { ReactNode, useRef, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useCourseContentAdminData, useSaveCourseContentData } from '../../../services/api/courseApiService';
+import { getVirtualId } from '../../../services/core/idService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { CourseContentItemAdminDTO } from '../../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { CourseContentItemIssueDTO } from '../../../shared/dtos/admin/CourseContentItemIssueDTO';
+import { CourseModuleShortDTO } from '../../../shared/dtos/admin/CourseModuleShortDTO';
+import { OmitProperty } from '../../../shared/types/advancedTypes';
+import { CourseItemType } from '../../../shared/types/sharedTypes';
+import { formatTime } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDataGrid, GridColumnType, UseCommitNewValueType } from '../../controls/EpistoDataGrid';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoSelect } from '../../controls/EpistoSelect';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { AddNewItemPopper } from './AddNewItemPopper';
+import { ChipSmall } from './ChipSmall';
+import { CourseAdministartionFrame } from './CourseAdministartionFrame';
+import classses from './css/AdminCourseContentSubpage.module.css';
+import { ExamEditDialog } from './ExamEditDialog';
+import { VideoEditDialog } from './VideoEditDialog';
+import { OnMutationHandlerType, useXListMutator } from './XMutator';
 
 type RowSchema = CourseContentItemAdminDTO & {
     quickMenu: number;
@@ -41,55 +41,55 @@ type EditRowFnType = <TField extends keyof RowSchema, >(key: string, field: TFie
 
 const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
-    openDialog: (type: "video" | "exam") => void,
+    openDialog: (type: 'video' | 'exam') => void,
     removeRow: (key: string) => void,
     editRow: EditRowFnType,
     isModified: (key: string) => (field: keyof RowSchema) => boolean) => {
 
     const getIssueText = (dto: CourseContentItemIssueDTO) => {
 
-        if (dto.code === "ans_miss")
+        if (dto.code === 'ans_miss')
             return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
 
-        if (dto.code === "corr_ans_miss")
+        if (dto.code === 'corr_ans_miss')
             return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
 
-        if (dto.code === "questions_missing")
-            return "Kerdesek hianyoznak";
+        if (dto.code === 'questions_missing')
+            return 'Kerdesek hianyoznak';
 
-        if (dto.code === "video_too_long")
-            return "Video tul hosszu";
+        if (dto.code === 'video_too_long')
+            return 'Video tul hosszu';
 
         return null;
     };
 
     const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
 
-        if (itemType === "exam")
+        if (itemType === 'exam')
             return {
-                color: "var(--deepOrange)",
-                label: "Vizsga"
+                color: 'var(--deepOrange)',
+                label: 'Vizsga'
             };
 
-        if (itemType === "video")
+        if (itemType === 'video')
             return {
-                color: "var(--deepBlue)",
-                label: "Videó"
+                color: 'var(--deepBlue)',
+                label: 'Videó'
             };
 
-        if (itemType === "pretest")
+        if (itemType === 'pretest')
             return {
-                color: "purple",
-                label: "Szintfelmérő"
+                color: 'purple',
+                label: 'Szintfelmérő'
             };
 
-        if (itemType === "final")
+        if (itemType === 'final')
             return {
-                color: "orange",
-                label: "Záróvizsga"
+                color: 'orange',
+                label: 'Záróvizsga'
             };
 
-        throw new Error("Unexpected type: " + itemType);
+        throw new Error('Unexpected type: ' + itemType);
     };
 
     const TextCellRenderer = (props: {
@@ -100,7 +100,7 @@ const useGridColumnDefinitions = (
         const { children, isMutated } = props;
 
         return <div
-            className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ""}`}>
+            className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ''}`}>
 
             <EpistoFont>
 
@@ -119,14 +119,14 @@ const useGridColumnDefinitions = (
         const { field, rowKey, row, useCommitNewValue } = props;
         const apiRef = useGridApiContext();
 
-        const [id, setId] = useState<string>(row.moduleId + "");
+        const [id, setId] = useState<string>(row.moduleId + '');
 
         return <EpistoSelect
             items={modules}
             currentKey={id}
             onSelected={(value) => {
 
-                setId(value.id + "");
+                setId(value.id + '');
 
                 apiRef
                     .current
@@ -136,13 +136,13 @@ const useGridColumnDefinitions = (
                     .current
                     .commitCellChange({ id: rowKey, field: field });
             }}
-            getDisplayValue={x => "" + x?.name}
-            getCompareKey={module => "" + module?.id} />;
+            getDisplayValue={x => '' + x?.name}
+            getCompareKey={module => '' + module?.id} />;
     };
 
     const columnDefGen = <TField extends keyof RowSchema,>(
         field: TField,
-        columnOptions: OmitProperty<GridColumnType<RowSchema, string, TField>, "field">) => {
+        columnOptions: OmitProperty<GridColumnType<RowSchema, string, TField>, 'field'>) => {
 
         return {
             field,
@@ -151,15 +151,15 @@ const useGridColumnDefinitions = (
     };
 
     const gridColumns: GridColumnType<RowSchema, string, any>[] = [
-        columnDefGen("rowNumber", {
-            headerName: "Sorszam",
+        columnDefGen('rowNumber', {
+            headerName: 'Sorszam',
             width: 80
         }),
-        columnDefGen("itemOrderIndex", {
-            headerName: "Elhelyezkedés",
+        columnDefGen('itemOrderIndex', {
+            headerName: 'Elhelyezkedés',
             width: 80,
             editable: true,
-            type: "int",
+            type: 'int',
             renderCell: ({ key, field, value }) => {
 
                 return <TextCellRenderer
@@ -169,8 +169,8 @@ const useGridColumnDefinitions = (
                 </TextCellRenderer>;
             }
         }),
-        columnDefGen("itemTitle", {
-            headerName: "Cím",
+        columnDefGen('itemTitle', {
+            headerName: 'Cím',
             width: 220,
             resizable: true,
             editable: true,
@@ -183,8 +183,8 @@ const useGridColumnDefinitions = (
                 </TextCellRenderer>;
             }
         }),
-        columnDefGen("itemSubtitle", {
-            headerName: "Alcím",
+        columnDefGen('itemSubtitle', {
+            headerName: 'Alcím',
             width: 220,
             resizable: true,
             editable: true,
@@ -197,8 +197,8 @@ const useGridColumnDefinitions = (
                 </TextCellRenderer>;
             }
         }),
-        columnDefGen("moduleId", {
-            headerName: "Modul",
+        columnDefGen('moduleId', {
+            headerName: 'Modul',
             width: 250,
             editable: true,
             renderCell: ({ key, field, row, value }) => {
@@ -206,7 +206,7 @@ const useGridColumnDefinitions = (
                 return <TextCellRenderer
                     isMutated={isModified(key)(field)}>
 
-                    {row.itemType === "pretest" ? "-" : row.moduleName}
+                    {row.itemType === 'pretest' ? '-' : row.moduleName}
                 </TextCellRenderer>;
             },
             renderEditCell: (props) => <SelectEditCellRenderer
@@ -215,13 +215,13 @@ const useGridColumnDefinitions = (
                 row={props.row}
                 useCommitNewValue={props.useCommitNewValue} />
         }),
-        columnDefGen("itemType", {
-            headerName: "Típus",
+        columnDefGen('itemType', {
+            headerName: 'Típus',
             width: 120,
             renderCell: ({ value }) => {
 
                 if (!value)
-                    return "";
+                    return '';
 
                 const { color, label } = getItemTypeValues(value);
 
@@ -230,79 +230,79 @@ const useGridColumnDefinitions = (
                     color={color} />;
             }
         }),
-        columnDefGen("videoLength", {
-            headerName: "Videó hossza",
+        columnDefGen('videoLength', {
+            headerName: 'Videó hossza',
             width: 80,
             renderCell: ({ value, row }) => {
 
-                if (row.itemType === "exam")
-                    return "-";
+                if (row.itemType === 'exam')
+                    return '-';
 
                 if (!row.warnings || !value)
-                    return "";
+                    return '';
 
                 const isLengthWarning = row
                     .warnings
-                    .any(x => x.code === "video_too_long");
+                    .any(x => x.code === 'video_too_long');
 
                 return <ChipSmall
                     text={formatTime(Math.round(value))}
                     color={isLengthWarning
-                        ? "var(--intenseOrange)"
-                        : "gray"} />;
+                        ? 'var(--intenseOrange)'
+                        : 'gray'} />;
             }
         }),
-        columnDefGen("errorsWrapper", {
-            headerName: "Hibak",
+        columnDefGen('errorsWrapper', {
+            headerName: 'Hibak',
             width: 100,
             renderCell: ({ row }) => {
 
                 if (!row.errors)
-                    return "";
+                    return '';
 
                 const hasErrors = row.errors.length > 0;
 
                 return <ChipSmall
                     text={hasErrors
                         ? `${row.errors.length} hiba`
-                        : "Nincs hiba"}
+                        : 'Nincs hiba'}
                     tooltip={row
                         .errors
                         .map(x => getIssueText(x))
-                        .join("\n")}
+                        .join('\n')}
                     color={hasErrors
-                        ? "var(--intenseRed)"
-                        : "var(--intenseGreen)"} />;
+                        ? 'var(--intenseRed)'
+                        : 'var(--intenseGreen)'} />;
             }
         }),
-        columnDefGen("videoFile", {
-            headerName: "Videó fájl",
+        columnDefGen('videoFile', {
+            headerName: 'Videó fájl',
             width: 180,
             renderCell: ({ row }) => {
 
                 return <EpistoButton
                     variant="outlined"
-                    onClick={() => { throw new Error("Not implemented!"); }}>
+                    onClick={() => { throw new Error('Not implemented!'); }}>
 
                     Fájl kiválasztása
                 </EpistoButton >;
             }
         }),
-        columnDefGen("quickMenu", {
-            headerName: "Gyorshivatkozások",
+        columnDefGen('quickMenu', {
+            headerName: 'Gyorshivatkozások',
             width: 150,
             renderCell: ({ key, row }) => {
 
                 return (
                     <Flex>
                         <EpistoButton
-                            onClick={() => openDialog(row.itemType === "video" ? "video" : "exam")}>
+                            onClick={() => openDialog(row.itemType === 'video' ? 'video' : 'exam')}>
 
                             <Edit />
                         </EpistoButton>
 
                         <EpistoButton
-                            onClick={() => { throw new Error("Not implemented!"); }}>
+                            onClick={() => { throw new Error('Not implemented!'); }}>
 
                             <Equalizer />
                         </EpistoButton>
@@ -325,12 +325,12 @@ export const AdminCourseContentSubpage = () => {
 
     // util
     const ref = useRef(null);
-    const courseId = useIntParam("courseId")!;
+    const courseId = useIntParam('courseId')!;
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const deleteWarningDialogLogic = useEpistoDialogLogic("dvd");
-    const videoEditDialogLogic = useEpistoDialogLogic("video_edit_dialog", { defaultCloseButtonType: "top" });
-    const examEditDialogLogic = useEpistoDialogLogic("exam_edit_dialog", { defaultCloseButtonType: "top" });
+    const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
+    const videoEditDialogLogic = useEpistoDialogLogic('video_edit_dialog', { defaultCloseButtonType: 'top' });
+    const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
@@ -357,7 +357,7 @@ export const AdminCourseContentSubpage = () => {
         // addOnMutationHandler,
         mutations,
         resetMutations
-    } = useXListMutator(items, getRowKey, "itemCode", mutHandlersRef);
+    } = useXListMutator(items, getRowKey, 'itemCode', mutHandlersRef);
 
     const gridRows: RowSchema[] = mutatedData
         .map((item, index) => {
@@ -368,7 +368,7 @@ export const AdminCourseContentSubpage = () => {
                 ...rest,
                 quickMenu: index,
                 rowNumber: index,
-                videoFile: "file_" + item.videoId,
+                videoFile: 'file_' + item.videoId,
                 errorsWrapper: index
             };
         })
@@ -381,14 +381,14 @@ export const AdminCourseContentSubpage = () => {
     mutHandlersRef
         .current = [
             {
-                field: "itemOrderIndex",
+                field: 'itemOrderIndex',
                 action: ({ key, field, newValue, item }) => {
 
                     const moduleItems = gridRows
                         .groupBy(x => x.moduleId)
                         .filter(x => x.key === item.moduleId)
                         .flatMap(x => [...x.items])
-                        .filter(x => x.itemType !== "pretest")
+                        .filter(x => x.itemType !== 'pretest')
                         .map(x => getRowKey(x) === key ? { ...x, itemOrderIndex: newValue as number + 1 } : x)
                         .orderBy(x => x.itemOrderIndex);
 
@@ -404,7 +404,7 @@ export const AdminCourseContentSubpage = () => {
                     indices
                         .forEach(x => mutateRow({
                             key: getRowKey(x),
-                            field: "itemOrderIndex",
+                            field: 'itemOrderIndex',
                             newValue: x.itemOrderIndex,
                             noOnMutationCallback: true
                         }));
@@ -420,9 +420,9 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: "video" | "exam") => {
+    const openDialog = (type: 'video' | 'exam') => {
 
-        if (type === "video") {
+        if (type === 'video') {
 
             videoEditDialogLogic.openDialog();
         }
@@ -437,7 +437,7 @@ export const AdminCourseContentSubpage = () => {
         mutateRow({ key, field: field as any, newValue: value });
     };
 
-    const handleAddRow = (type: "video" | "exam") => {
+    const handleAddRow = (type: 'video' | 'exam') => {
 
         const moduleId = modules[0].id;
 
@@ -445,16 +445,16 @@ export const AdminCourseContentSubpage = () => {
             .firstOrNull(x => x.moduleId === moduleId)?.moduleOrderIndex ?? 0;
 
         const itemOrderIndex = gridRows
-            .filter(x => x.moduleId === moduleId && x.itemType !== "pretest")
+            .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
             .length;
 
-        if (type === "exam") {
+        if (type === 'exam') {
 
-            addRow("newcode_" + getVirtualId(), {
-                itemType: "exam",
+            addRow('newcode_' + getVirtualId(), {
+                itemType: 'exam',
                 moduleId,
-                itemSubtitle: "",
-                itemTitle: "",
+                itemSubtitle: '',
+                itemTitle: '',
                 itemOrderIndex,
                 moduleOrderIndex,
                 courseId
@@ -462,11 +462,11 @@ export const AdminCourseContentSubpage = () => {
         }
         else {
 
-            addRow("newcode_" + getVirtualId(), {
-                itemType: "video",
+            addRow('newcode_' + getVirtualId(), {
+                itemType: 'video',
                 moduleId,
-                itemSubtitle: "",
-                itemTitle: "",
+                itemSubtitle: '',
+                itemTitle: '',
                 itemOrderIndex,
                 moduleOrderIndex,
                 courseId
@@ -531,7 +531,7 @@ export const AdminCourseContentSubpage = () => {
                     },
                     {
                         action: handleSaveAsync,
-                        title: "Mentes",
+                        title: 'Mentes',
                         disabled: !isAnyRowsMutated
                     }
                 ]}>
@@ -556,8 +556,8 @@ export const AdminCourseContentSubpage = () => {
                     getKey={getRowKey}
                     initialState={{
                         pinnedColumns: {
-                            left: ["rowNumber", "itemTitle"],
-                            right: ["quickMenu"]
+                            left: ['rowNumber', 'itemTitle'],
+                            right: ['quickMenu']
                         }
                     }} />
             </AdminSubpageHeader>

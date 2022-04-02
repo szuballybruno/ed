@@ -1,13 +1,13 @@
-import { FlexProps } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs } from "@mui/material";
-import React, { ReactNode } from "react";
-import { useParams } from "react-router-dom";
-import { ApplicationRoute, ButtonType } from "../../models/types";
-import { useNavigation } from "../../services/core/navigatior";
-import { useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
+import { FlexProps } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/react';
+import { Tab, Tabs } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { useParams } from 'react-router-dom';
+import { ApplicationRoute, ButtonType } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
+import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute[],
@@ -66,9 +66,9 @@ export const AdminSubpageHeader = (props: {
     };
 
     return <Flex
-        direction={"column"}
+        direction={'column'}
         className="whall roundBorders"
-        background={!isInverseBackground ? "var(--transparentWhite70)" : undefined}
+        background={!isInverseBackground ? 'var(--transparentWhite70)' : undefined}
         px="5px"
         position="relative">
 
@@ -76,10 +76,10 @@ export const AdminSubpageHeader = (props: {
         {(tabMenuItems || onSave) && (
             <Flex
                 className="roundBorders"
-                background={isInverseBackground ? "var(--transparentWhite70)" : undefined}
+                background={isInverseBackground ? 'var(--transparentWhite70)' : undefined}
                 flexDirection="row"
                 alignItems="center"
-                justify={"space-between"}
+                justify={'space-between'}
                 height={60}>
 
                 {/* tabs */}
@@ -90,15 +90,15 @@ export const AdminSubpageHeader = (props: {
                         className="roundBorders"
                         TabIndicatorProps={{
                             style: {
-                                display: "none",
+                                display: 'none',
                             },
                         }}
                         sx={{
-                            "&.MuiTabs-root": {
+                            '&.MuiTabs-root': {
                                 //background: "var(--transparentIntenseBlue85)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                                 height: 45,
                                 minHeight: 0
                             }
@@ -112,25 +112,25 @@ export const AdminSubpageHeader = (props: {
                                 return <Tab
                                     key={index}
                                     sx={{
-                                        "&.MuiTab-root": {
-                                            color: "#444",
-                                            cursor: "pointer",
-                                            backgroundColor: "transparent",
-                                            padding: "6px 16px",
-                                            border: "none",
-                                            borderRadius: "5px",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            height: "41px",
-                                            minHeight: "0px"
+                                        '&.MuiTab-root': {
+                                            color: '#444',
+                                            cursor: 'pointer',
+                                            backgroundColor: 'transparent',
+                                            padding: '6px 16px',
+                                            border: 'none',
+                                            borderRadius: '5px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            height: '41px',
+                                            minHeight: '0px'
                                         },
-                                        "&.MuiTouchRipple-root": {
-                                            lineHeight: "0px"
+                                        '&.MuiTouchRipple-root': {
+                                            lineHeight: '0px'
                                         },
-                                        "&.Mui-selected": {
-                                            color: "#444",
-                                            fontWeight: "bold",
-                                            background: "var(--transparentIntenseTeal)"
+                                        '&.Mui-selected': {
+                                            color: '#444',
+                                            fontWeight: 'bold',
+                                            background: 'var(--transparentIntenseTeal)'
                                         }
                                     }}
                                     label={tabRoute.title}
@@ -144,20 +144,20 @@ export const AdminSubpageHeader = (props: {
 
                     {/* header buttons */}
                     {headerButtons && headerButtons
-                        .map((x, index) => <EpistoButton
+                        .map((button, index) => <EpistoButton
                             key={index}
                             style={{
-                                color: "#555",
-                                marginRight: "10px",
+                                color: '#555',
+                                marginRight: '10px',
                                 //background: "var(--transparentIntenseTeal)",
-                                fontWeight: "bold",
+                                fontWeight: 'bold',
                                 height: 41
                             }}
                             variant="plain"
-                            isDisabled={x.disabled}
-                            onClick={x.action}>
-                            {x.icon}
-                            {x.title}
+                            isDisabled={button.disabled}
+                            onClick={button.action}>
+                            {button.icon}
+                            {button.title}
                         </EpistoButton>)}
 
                     {/* save button */}

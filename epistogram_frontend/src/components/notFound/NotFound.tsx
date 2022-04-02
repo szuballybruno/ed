@@ -1,5 +1,5 @@
-import React from "react";
-import classes from "./notFound.module.scss";
+import React from 'react';
+import classes from './notFound.module.scss';
 
 const NotFound = () => {
     return (

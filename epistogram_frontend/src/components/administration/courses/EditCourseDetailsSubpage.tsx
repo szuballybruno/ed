@@ -1,35 +1,35 @@
-import { Flex, Image } from "@chakra-ui/react";
-import { Button, Slider } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { ButtonType } from "../../../models/types";
-import { useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from "../../../services/api/courseApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { CourseCategoryDTO } from "../../../shared/dtos/CourseCategoryDTO";
-import { CourseDetailsEditDataDTO } from "../../../shared/dtos/CourseDetailsEditDataDTO";
-import { HumanSkillBenefitDTO } from "../../../shared/dtos/HumanSkillBenefitDTO";
-import { CourseVisibilityType } from "../../../shared/types/sharedTypes";
-import { defaultCharts } from "../../../static/defaultChartOptions";
-import { iterate } from "../../../static/frontendHelpers";
-import { useIntParam } from "../../../static/locationHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { EpistoLabel } from "../../controls/EpistoLabel";
-import { EpistoSelect } from "../../controls/EpistoSelect";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoRadarChart } from "../../universal/charts/EpistoRadarChart";
-import { SelectImage } from "../../universal/SelectImage";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { SimpleEditList } from "../SimpleEditList";
-import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
-import { EditSection } from "./EditSection";
+import { Flex, Image } from '@chakra-ui/react';
+import { Button, Slider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../models/types';
+import { useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
+import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
+import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO';
+import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
+import { defaultCharts } from '../../../static/defaultChartOptions';
+import { iterate } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoLabel } from '../../controls/EpistoLabel';
+import { EpistoSelect } from '../../controls/EpistoSelect';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoRadarChart } from '../../universal/charts/EpistoRadarChart';
+import { SelectImage } from '../../universal/SelectImage';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { SimpleEditList } from '../SimpleEditList';
+import { CourseAdministartionFrame } from './CourseAdministartionFrame';
+import { EditSection } from './EditSection';
 
 export const AdminCourseDetailsSubpage = () => {
 
     // util
-    const courseId = useIntParam("courseId")!;
+    const courseId = useIntParam('courseId')!;
     const showError = useShowErrorDialog();
 
     // http
@@ -41,29 +41,29 @@ export const AdminCourseDetailsSubpage = () => {
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
 
-    const [title, setTitle] = useState("");
-    const [thumbnailSrc, setThumbnailSrc] = useState("");
+    const [title, setTitle] = useState('');
+    const [thumbnailSrc, setThumbnailSrc] = useState('');
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
     const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
-    const [shortDescription, setShortDescription] = useState("");
-    const [technicalRequirementsDescription, setTechnicalRequirementsDescription] = useState("");
-    const [description, setDescription] = useState("");
+    const [shortDescription, setShortDescription] = useState('');
+    const [technicalRequirementsDescription, setTechnicalRequirementsDescription] = useState('');
+    const [description, setDescription] = useState('');
     const [difficulty, setDifficulty] = useState(0);
     const [benchmark, setBenchmark] = useState(0);
-    const [prevCompletedCount, setPrevCompletedCount] = useState("");
-    const [language, setLanguage] = useState("");
-    const [visibility, setVisibility] = useState<CourseVisibilityType>("public");
+    const [prevCompletedCount, setPrevCompletedCount] = useState('');
+    const [language, setLanguage] = useState('');
+    const [visibility, setVisibility] = useState<CourseVisibilityType>('public');
     const [teacherId, setTeacherId] = useState(0);
     const [skillBenefits, setSkillBenefits] = useState<string[]>([
-        "Alapvető műveletek elvégzése",
-        "Grafikai elemek használata",
-        "Grafikonok és diagramok létrehozása"
+        'Alapvető műveletek elvégzése',
+        'Grafikai elemek használata',
+        'Grafikonok és diagramok létrehozása'
     ]);
     const [technicalRequirements, setTechnicalRequirements] = useState<string[]>([]);
-    const [humanSkillBenefitsDescription, setHumanSkillBenefitsDescription] = useState("");
+    const [humanSkillBenefitsDescription, setHumanSkillBenefitsDescription] = useState('');
     const [humanSkillBenefits, setHumanSkillBenefits] = useState<HumanSkillBenefitDTO[]>(iterate(10, () => ({
-        text: "",
+        text: '',
         value: 0
     })));
 
@@ -110,7 +110,7 @@ export const AdminCourseDetailsSubpage = () => {
 
             await saveCourseDataAsync(dto);
 
-            showNotification("Kurzus sikeresen mentve!");
+            showNotification('Kurzus sikeresen mentve!');
         }
         catch (e) {
 
@@ -160,8 +160,8 @@ export const AdminCourseDetailsSubpage = () => {
         setSkillBenefits(courseDetailsEditData.skillBenefits);
         setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
         setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
-        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + "");
-        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + "");
+        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + '');
+        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + '');
 
     }, [courseDetailsEditData]);
 
@@ -224,7 +224,7 @@ src={thumbnailSrc} />
 
                             {/* Title */}
                             <EpistoEntry
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 value={title}
                                 label="Név"
@@ -232,7 +232,7 @@ src={thumbnailSrc} />
 
                             {/* Language */}
                             <EpistoEntry
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 value={language}
                                 label="Nyelv"
@@ -244,8 +244,8 @@ src={thumbnailSrc} />
                                 text="Főkategória">
 
                                 <EpistoSelect
-                                    getCompareKey={x => x?.id + ""}
-                                    getDisplayValue={x => x?.name + ""}
+                                    getCompareKey={x => x?.id + ''}
+                                    getDisplayValue={x => x?.name + ''}
                                     items={categories}
                                     selectedValue={category}
                                     onSelected={setCategory} />
@@ -257,8 +257,8 @@ src={thumbnailSrc} />
                                 text="Alkategória">
 
                                 <EpistoSelect
-                                    getCompareKey={x => x?.id + ""}
-                                    getDisplayValue={x => x?.name + ""}
+                                    getCompareKey={x => x?.id + ''}
+                                    getDisplayValue={x => x?.name + ''}
                                     items={category?.childCategories ?? []}
                                     selectedValue={subCategory}
                                     onSelected={setSubCategory} />
@@ -270,8 +270,8 @@ src={thumbnailSrc} />
                                 text="Tanár">
 
                                 <EpistoSelect
-                                    getCompareKey={x => x?.id + ""}
-                                    getDisplayValue={x => x?.fullName + ""}
+                                    getCompareKey={x => x?.id + ''}
+                                    getDisplayValue={x => x?.fullName + ''}
                                     items={teachers}
                                     selectedValue={teachers.filter(x => x.id === teacherId)[0]}
                                     onSelected={x => setTeacherId(x.id)} />
@@ -286,8 +286,8 @@ src={thumbnailSrc} />
 
                                 <EpistoSelect
                                     getCompareKey={x => x}
-                                    getDisplayValue={x => x === "public" ? "Publikus" : "Privat"}
-                                    items={["public", "private"] as CourseVisibilityType[]}
+                                    getDisplayValue={x => x === 'public' ? 'Publikus' : 'Privat'}
+                                    items={['public', 'private'] as CourseVisibilityType[]}
                                     selectedValue={visibility}
                                     onSelected={setVisibility} />
                             </EpistoLabel>
@@ -297,7 +297,7 @@ src={thumbnailSrc} />
 
                             {/* Short description */}
                             <EpistoEntry
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 value={shortDescription}
                                 label="Áttekintés"
@@ -305,7 +305,7 @@ src={thumbnailSrc} />
 
                             {/* Overview description */}
                             <EpistoEntry
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 value={description}
                                 label="Részletes leírás"
@@ -348,7 +348,7 @@ src={thumbnailSrc} />
 
                             {/* previously completed count */}
                             <EpistoEntry
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 type="number"
                                 value={prevCompletedCount}
@@ -373,7 +373,7 @@ ml="5px">
 
                             {/* technical requirtements description */}
                             <EpistoEntry
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 value={technicalRequirementsDescription}
                                 label="Technikai ajánlás"
@@ -404,7 +404,7 @@ ml="5px">
                             {/* skill improvement description */}
                             <EpistoEntry
                                 marginTop="30px"
-                                labelVariant={"top"}
+                                labelVariant={'top'}
                                 isMultiline={true}
                                 value={humanSkillBenefitsDescription}
                                 label="Elsajátítható készségek leírása"
@@ -413,19 +413,19 @@ ml="5px">
                                 mt="10px"
                                 title="Elsajátítható készségek és azok aránya"
                                 items={humanSkillBenefits}
-                                initialValue={{ text: "", value: 0 }}
+                                initialValue={{ text: '', value: 0 }}
                                 setItems={x => setHumanSkillBenefits(x)}
                                 renderChild={(item, onItemChanged) => (
                                     <Flex
-                                        flexDir={"row"}
-                                        alignItems={"center"}
+                                        flexDir={'row'}
+                                        alignItems={'center'}
                                         my={3}
                                         flex="1">
 
                                         <EpistoEntry
                                             flex="4"
-                                            marginTop={"0"}
-                                            labelVariant={"top"}
+                                            marginTop={'0'}
+                                            labelVariant={'top'}
                                             isMultiline={true}
                                             value={item.text}
                                             setValue={(value) => onItemChanged({ ...item, text: value })} />
@@ -436,7 +436,7 @@ ml="5px">
                                             value={item.value}
                                             onChange={(_, targetValue) => onItemChanged({ ...item, value: targetValue as number })}
                                             style={{
-                                                margin: "5px 10px 5px 10px",
+                                                margin: '5px 10px 5px 10px',
                                                 flex: 3
                                             }}
                                             step={1}
@@ -453,18 +453,18 @@ justify="center">
                                 <EpistoRadarChart
                                     title=""
                                     areas={[{
-                                        name: "Készségek",
+                                        name: 'Készségek',
                                         value: humanSkillBenefits.map(x => x.value) ?? []
                                     }]}
                                     radarIndicators={humanSkillBenefits.map(x => ({
                                         name: x.text,
-                                        color: "black",
+                                        color: 'black',
                                         max: 10
                                     }))}
                                     options={defaultCharts.radar}
                                     style={{
-                                        width: "400px",
-                                        height: "300px"
+                                        width: '400px',
+                                        height: '300px'
                                     }} />
                             </Flex>
                         </EditSection>
@@ -473,19 +473,19 @@ justify="center">
                 {/* submit button */}
                 <Button
                     variant="contained"
-                    color={"secondary"}
+                    color={'secondary'}
                     onClick={() => {
                         handleSaveCourseAsync();
                     }}
-                    style={{ margin: "20px 20px 0 20px" }}>
+                    style={{ margin: '20px 20px 0 20px' }}>
 
                     {translatableTexts.misc.save}
                 </Button>
 
                 {/* remove button */}
                 <Button
-                    variant={"outlined"}
-                    color={"error"}
+                    variant={'outlined'}
+                    color={'error'}
                     onClick={() => {
 
                         /* if (showDeleteUserDialog) {
@@ -496,7 +496,7 @@ justify="center">
                             history.goBack()
                         } */
                     }}
-                    style={{ margin: "20px 20px 0 20px" }}>
+                    style={{ margin: '20px 20px 0 20px' }}>
 
                     {translatableTexts.misc.remove}
                 </Button>

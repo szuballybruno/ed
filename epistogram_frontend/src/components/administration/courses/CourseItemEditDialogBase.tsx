@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs } from "@mui/material";
-import React from "react";
-import { usePaging } from "../../../static/frontendHelpers";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog";
-import { EpistoPaging } from "../../universal/EpistoPaging";
-import { SegmentedButton } from "../../controls/SegmentedButton";
-import { ChipSmall } from "./ChipSmall";
+import { Flex } from '@chakra-ui/react';
+import { Tab, Tabs } from '@mui/material';
+import React from 'react';
+import { usePaging } from '../../../static/frontendHelpers';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { EpistoPaging } from '../../universal/EpistoPaging';
+import { SegmentedButton } from '../../controls/SegmentedButton';
+import { ChipSmall } from './ChipSmall';
 
 export const CourseItemEditDialogBase = (props: {
     subpages: ({
@@ -65,11 +65,11 @@ export const CourseItemEditDialogBase = (props: {
                     <Flex align="center">
 
                         <EpistoFont
-                            fontSize={"fontLarge"}
+                            fontSize={'fontLarge'}
                             style={{
-                                display: "flex",
-                                alignItems: "center",
-                                flexDirection: "row",
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexDirection: 'row',
                                 fontWeight: 600
                             }}>
                             Új dia hozzáadása
@@ -84,7 +84,7 @@ export const CourseItemEditDialogBase = (props: {
                     </Flex>
 
                     <EpistoFont
-                        fontSize={"fontMid"}>
+                        fontSize={'fontMid'}>
 
                         Microsoft PowerPoint alapok
                     </EpistoFont>

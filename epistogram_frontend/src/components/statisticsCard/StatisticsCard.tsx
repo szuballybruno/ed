@@ -1,10 +1,10 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
-import { ArrowDropDown, ArrowDropUp, ArrowRight, ArrowUpward, FiberManualRecord, Lock } from "@mui/icons-material";
-import React, { useState } from "react";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
-import { FlexFloat } from "../controls/FlexFloat";
-import { EpistoHeader } from "../EpistoHeader";
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { ArrowDropDown, ArrowDropUp, ArrowRight, ArrowUpward, FiberManualRecord, Lock } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
+import { FlexFloat } from '../controls/FlexFloat';
+import { EpistoHeader } from '../EpistoHeader';
 
 export type StatisticsCardProps = {
     iconPath?: string
@@ -13,56 +13,68 @@ export type StatisticsCardProps = {
     value?: string
     isOpenByDefault?: boolean
     children?: React.ReactNode
-    chartSize?: "normal" | "large",
+    chartSize?: 'normal' | 'large',
     isComingSoon?: boolean,
     additionalFunction?: () => void,
     additionalInfo?: {
         value: string,
         suffix: string,
-        change: "up" | "stagnate" | "down"
+        change: 'up' | 'stagnate' | 'down'
     }
 }
 
 const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
 
-    const { iconPath, isComingSoon, children, additionalFunction, additionalInfo, ...css } = props;
+    const {
+        iconPath,
+        isComingSoon,
+        children,
+        additionalFunction,
+        additionalInfo,
+        isOpenByDefault,
+        chartSize,
+        title,
+        suffix,
+        value,
+        ...css
+    } = props;
 
-    const [isOpen, setIsOpen] = useState(!!props.isOpenByDefault);
+    const [isOpen, setIsOpen] = useState(!!isOpenByDefault);
 
-    const getColorFromChange = (change: "up" | "stagnate" | "down") => {
-        return change === "up"
-            ? "var(--deepGreen)"
-            : change === "stagnate"
-                ? "var(--mildOrange)"
-                : "var(--intenseRed)";
+    const getColorFromChange = (change: 'up' | 'stagnate' | 'down') => {
+        return change === 'up'
+            ? 'var(--deepGreen)'
+            : change === 'stagnate'
+                ? 'var(--mildOrange)'
+                : 'var(--intenseRed)';
     };
 
-    const getIconFromChange = (change: "up" | "stagnate" | "down") => {
-        return change === "up"
+    const getIconFromChange = (change: 'up' | 'stagnate' | 'down') => {
+        return change === 'up'
             ? <ArrowDropUp
                 style={{
-                    margin: "3px 0 0 0",
+                    margin: '3px 0 0 0',
                     padding: 0
                 }} />
-            : change === "stagnate"
+            : change === 'stagnate'
                 ? <FiberManualRecord
                     style={{
                         height: 10,
                         width: 10,
-                        margin: "2px 3px 0 0",
+                        margin: '2px 3px 0 0',
                         padding: 0
                     }} />
                 : <ArrowDropDown
                     style={{
-                        margin: "3px 0 0 0",
+                        margin: '3px 0 0 0',
                         padding: 0
                     }} />;
     };
 
     return <FlexFloat
         background="var(--transparentWhite70)"
-        gridColumn={props.chartSize === "large" ? "1 / -1" : (isOpen ? "span 2" : "unset")} // do not remove!!
-        gridRow={props.chartSize === "large" ? "span 2" : (isOpen ? "span 2" : "unset")} // do not remove!!
+        gridColumn={chartSize === 'large' ? '1 / -1' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
+        gridRow={chartSize === 'large' ? 'span 2' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
         //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
         direction="column"
         minWidth={250}
@@ -72,19 +84,19 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
         {/* locked overlay */}
         {isComingSoon && <Flex
             title="Ez az adat jelenleg nem áll rendelkezésre. Nézz vissza később."
-            flexDir={"column"}
-            alignItems={"flex-end"}
-            justifyContent={"flex-start"}
-            color={"black"}
-            pos={"absolute"}
+            flexDir={'column'}
+            alignItems={'flex-end'}
+            justifyContent={'flex-start'}
+            color={'black'}
+            pos={'absolute'}
             width="100%"
             height="100%"
             borderRadius={5}
-            bgColor={"#33333317"}>
+            bgColor={'#33333317'}>
 
             <Lock style={{
-                width: "20px",
-                height: "20px",
+                width: '20px',
+                height: '20px',
                 margin: 10
             }} />
         </Flex>}
@@ -122,31 +134,31 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             gridColumn="auto / span 2"
             gridRow="auto / span 2">
 
-            {/* <EpistoHeader variant="strongSub" text={props.title} /> */}
+            {/* <EpistoHeader variant="strongSub" text={title} /> */}
 
 
-            {props.children}
+            {children}
 
         </Flex>}
 
         {/* closed state */}
         {!isOpen && <Flex flex="1"
-align="center">
+            align="center">
 
             {/* image */}
             {iconPath && <img
                 style={{
-                    margin: "5px 10px 5px 20px",
+                    margin: '5px 10px 5px 20px',
                     width: 70,
                     height: 70,
-                    objectFit: "contain"
+                    objectFit: 'contain'
                 }}
                 alt=""
                 src={iconPath} />}
 
             {/* texts */}
             <Flex direction="column"
-pr="10px">
+                pr="10px">
 
                 {/* value and suffix */}
                 <Flex align="flex-end">
@@ -158,24 +170,24 @@ pr="10px">
                             lineHeight: 1,
                         }}>
 
-                        {props.value ?? "-"}
+                        {value ?? '-'}
                     </EpistoFont>
 
                     {/* suffix */}
                     <EpistoFont
                         fontSize="fontLargePlus"
                         style={{
-                            fontSize: "20px",
-                            marginLeft: "5px"
+                            fontSize: '20px',
+                            marginLeft: '5px'
                         }}>
 
-                        {props.suffix}
+                        {suffix}
                     </EpistoFont>
                 </Flex>
 
                 {/* title */}
                 <EpistoFont fontSize="fontSmall" >
-                    {props.title}
+                    {title}
                 </EpistoFont>
             </Flex>
         </Flex>}
@@ -183,7 +195,7 @@ pr="10px">
         {additionalFunction && <EpistoButton
             onClick={() => additionalFunction()}
             style={{
-                position: "absolute",
+                position: 'absolute',
                 right: 0,
                 bottom: 0
             }}>

@@ -1,14 +1,14 @@
 
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import VolumeDownIcon from "@mui/icons-material/VolumeDown";
-import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import { Box, Flex } from "@chakra-ui/react";
-import { Fullscreen, Pause, PlayArrow } from "@mui/icons-material";
-import { Slider, Typography } from "@mui/material";
-import { secondsToTime } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeDownIcon from '@mui/icons-material/VolumeDown';
+import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import { Box, Flex } from '@chakra-ui/react';
+import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
+import { Slider, Typography } from '@mui/material';
+import { secondsToTime } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
 
 export const VideoControls = (props: {
     controlsVisible: boolean,
@@ -78,8 +78,8 @@ export const VideoControls = (props: {
         <Slider
             size="small"
             style={{
-                margin: "0 0px 0 15px",
-                color: "white"
+                margin: '0 0px 0 15px',
+                color: 'white'
             }}
             defaultValue={0}
             aria-labelledby="discrete-slider"
@@ -102,9 +102,9 @@ export const VideoControls = (props: {
         {/* volume slider  */}
         <Slider
             style={{
-                color: "white",
-                width: "100px",
-                margin: "0 15px 0 15px"
+                color: 'white',
+                width: '100px',
+                margin: '0 15px 0 15px'
             }}
             step={0.05}
             size="small"
@@ -120,8 +120,8 @@ export const VideoControls = (props: {
         {/* volume */}
         <EpistoButton
             style={{
-                height: "100%",
-                margin: "0 5px 0 0"
+                height: '100%',
+                margin: '0 5px 0 0'
             }}
             onClick={() => {
 
@@ -132,19 +132,19 @@ export const VideoControls = (props: {
 
                 if (isMuted)
                     return <VolumeOffIcon className="square25"
-style={{ color: "white" }}></VolumeOffIcon>;
+style={{ color: 'white' }}></VolumeOffIcon>;
 
                 if (volume > 0.7)
                     return <VolumeUpIcon className="square25"
-style={{ color: "white" }}></VolumeUpIcon>;
+style={{ color: 'white' }}></VolumeUpIcon>;
 
                 if (volume <= 0.7 && volume >= 0.3)
                     return <VolumeDownIcon className="square25"
-style={{ color: "white" }}></VolumeDownIcon>;
+style={{ color: 'white' }}></VolumeDownIcon>;
 
                 if (volume < 0.3)
                     return <VolumeMuteIcon className="square25"
-style={{ color: "white" }}></VolumeMuteIcon>;
+style={{ color: 'white' }}></VolumeMuteIcon>;
             })()}
         </EpistoButton>
 

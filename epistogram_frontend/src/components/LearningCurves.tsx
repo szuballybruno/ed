@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
-import { translatableTexts } from "../static/translatableTexts";
-import { FlexFloat } from "./controls/FlexFloat";
-import { TabPanel } from "./courseDetails/TabPanel";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { EpistoHeader } from "./EpistoHeader";
-import { EpistoFont } from "./controls/EpistoFont";
+import { Flex } from '@chakra-ui/react';
+import { Tab, Tabs } from '@mui/material';
+import React, { useState } from 'react';
+import { translatableTexts } from '../static/translatableTexts';
+import { FlexFloat } from './controls/FlexFloat';
+import { TabPanel } from './courseDetails/TabPanel';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { EpistoHeader } from './EpistoHeader';
+import { EpistoFont } from './controls/EpistoFont';
 
 export const LearningCurves = () => {
 
@@ -19,7 +19,7 @@ export const LearningCurves = () => {
     const a11yProps = (index: number) => {
         return {
             id: `simple-tab-${index}`,
-            "aria-controls": `simple-tabpanel-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
         };
     };
 
@@ -60,15 +60,15 @@ export const LearningCurves = () => {
                         label={translatableTexts.learningOverview.learningCurve}
                         icon={
                             <img
-                                src={getAssetUrl("/icons/learningcurve.svg")}
+                                src={getAssetUrl('/icons/learningcurve.svg')}
                                 alt=""
                                 style={{
                                     width: 25,
-                                    margin: "0 10px 0 0"
+                                    margin: '0 10px 0 0'
                                 }} />
                         }
                         style={{
-                            flexDirection: "row",
+                            flexDirection: 'row',
                         }}
                         {...a11yProps(0)} />
 
@@ -76,15 +76,15 @@ export const LearningCurves = () => {
                         label={translatableTexts.learningOverview.forgettingCurve}
                         icon={
                             <img
-                                src={getAssetUrl("/icons/forgettingcurve.svg")}
+                                src={getAssetUrl('/icons/forgettingcurve.svg')}
                                 alt=""
                                 style={{
                                     width: 25,
-                                    margin: "0 10px 0 0"
+                                    margin: '0 10px 0 0'
                                 }} />
                         }
                         style={{
-                            flexDirection: "row",
+                            flexDirection: 'row',
                         }}
                         {...a11yProps(1)} />
                 </Tabs>
@@ -120,22 +120,22 @@ index={1}>
             flex="1"
             minWidth={250}
             style={{
-                gridColumn: "auto / span 2",
-                gridRow: "auto / span 2"
+                gridColumn: 'auto / span 2',
+                gridRow: 'auto / span 2'
             }} >
 
             {/* learning curve image */}
             <img
-                src={getAssetUrl("/images/learningcurve3D.png")}
+                src={getAssetUrl('/images/learningcurve3D.png')}
                 alt=""
                 style={{
                     maxHeight: 220,
-                    objectFit: "contain",
-                    margin: "0 10px 0 0",
+                    objectFit: 'contain',
+                    margin: '0 10px 0 0',
                 }} />
 
             <EpistoFont style={{
-                textAlign: "center"
+                textAlign: 'center'
             }}>
 
                 {translatableTexts.homePage.noStatsYet}

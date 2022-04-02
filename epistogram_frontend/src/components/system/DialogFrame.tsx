@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { EpistoDialog, EpistoDialogLogicType, useEpistoDialogLogic } from "../EpistoDialog";
+import React, { ReactNode } from 'react';
+import { EpistoDialog, EpistoDialogLogicType, useEpistoDialogLogic } from '../EpistoDialog';
 
 export const ErrorDialogContext = React.createContext<EpistoDialogLogicType | null>(null);
 
@@ -7,7 +7,7 @@ export const ErrorDialogFrame = (props: {
     children: ReactNode
 }) => {
 
-    const dialogLogic = useEpistoDialogLogic("errordialog");
+    const dialogLogic = useEpistoDialogLogic('errordialog');
     const { children } = props;
 
     return <>

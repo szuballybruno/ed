@@ -1,43 +1,43 @@
-import { Box, Divider, Flex } from "@chakra-ui/react";
-import { Button, Checkbox } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useCoinBalanceOfUser, useGiftCoinsToUser } from "../../../services/api/coinTransactionsApiService";
-import { useJobTitles, useOrganizations } from "../../../services/api/miscApiService";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { JobTitleDTO } from "../../../shared/dtos/JobTitleDTO";
-import { OrganizationDTO } from "../../../shared/dtos/OrganizationDTO";
-import { RoleDTO } from "../../../shared/dtos/RoleDTO";
-import { UserDTO } from "../../../shared/dtos/UserDTO";
-import { UserEditDTO } from "../../../shared/dtos/UserEditDTO";
-import { parseIntOrNull } from "../../../static/frontendHelpers";
-import { useIntParam } from "../../../static/locationHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { EpistoEntryNew, useEpistoEntryState } from "../../controls/EpistoEntryNew";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoLabel } from "../../controls/EpistoLabel";
-import { EpistoSelect } from "../../controls/EpistoSelect";
-import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoConinImage } from "../../universal/EpistoCoinImage";
-import { EditSection } from "../courses/EditSection";
+import { Box, Divider, Flex } from '@chakra-ui/react';
+import { Button, Checkbox } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
+import { useJobTitles, useOrganizations } from '../../../services/api/miscApiService';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
+import { OrganizationDTO } from '../../../shared/dtos/OrganizationDTO';
+import { RoleDTO } from '../../../shared/dtos/RoleDTO';
+import { UserDTO } from '../../../shared/dtos/UserDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { parseIntOrNull } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoLabel } from '../../controls/EpistoLabel';
+import { EpistoSelect } from '../../controls/EpistoSelect';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoConinImage } from '../../universal/EpistoCoinImage';
+import { EditSection } from '../courses/EditSection';
 
 export const roles = [
     {
-        name: "admin",
+        name: 'admin',
         id: 1,
         optionText: translatableTexts.roleNames.administrator,
     },
     {
-        name: "supervisor",
+        name: 'supervisor',
         id: 2,
         optionText: translatableTexts.roleNames.supervisor,
     },
     {
-        name: "user",
+        name: 'user',
         id: 3,
         optionText: translatableTexts.roleNames.user
     }
@@ -51,12 +51,12 @@ export const AdminEditUserControl = (props: {
 
     const { editDTO, saveUserAsync, showDeleteUserDialog } = props;
 
-    const editedUserId = useIntParam("userId")!;
+    const editedUserId = useIntParam('userId')!;
 
     // editable fields
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
@@ -92,11 +92,11 @@ export const AdminEditUserControl = (props: {
         isMandatory: true,
         validateFunction: (value) => {
 
-            if (value === "0")
-                return "Nem adhatsz hozzá '0' coin-t.";
+            if (value === '0')
+                return 'Nem adhatsz hozzá \'0\' coin-t.';
 
             if (!parseIntOrNull(value))
-                return "Helytelen formátum";
+                return 'Helytelen formátum';
 
             return null;
         }
@@ -161,7 +161,7 @@ export const AdminEditUserControl = (props: {
                             name="lname"
                             value={lastName}
                             setValue={setLastName}
-                            labelVariant={"top"}
+                            labelVariant={'top'}
                             label={translatableTexts.misc.lastName} />
                         <EpistoEntry
                             style={{
@@ -170,7 +170,7 @@ export const AdminEditUserControl = (props: {
                             value={firstName}
                             name="fname"
                             setValue={setFirstName}
-                            labelVariant={"top"}
+                            labelVariant={'top'}
                             label={translatableTexts.misc.firstName} />
                     </Flex>
 
@@ -179,7 +179,7 @@ export const AdminEditUserControl = (props: {
                         name="email"
                         value={email}
                         setValue={setEmail}
-                        labelVariant={"top"}
+                        labelVariant={'top'}
                         label="Email" />
                 </EditSection>
 
@@ -197,8 +197,8 @@ export const AdminEditUserControl = (props: {
                             isUppercase
                             fontSize="fontExtraSmall"
                             style={{
-                                marginTop: "10px",
-                                letterSpacing: "1.2px"
+                                marginTop: '10px',
+                                letterSpacing: '1.2px'
                             }}>
 
                             {translatableTexts.misc.company}
@@ -208,8 +208,8 @@ export const AdminEditUserControl = (props: {
                             items={organizations}
                             selectedValue={selectedOrganization}
                             onSelected={setSelectedOrganization}
-                            getDisplayValue={x => "" + x?.name}
-                            getCompareKey={organization => "" + organization?.id} />
+                            getDisplayValue={x => '' + x?.name}
+                            getCompareKey={organization => '' + organization?.id} />
                     </Flex>}
 
                     {/* job title */}
@@ -223,8 +223,8 @@ export const AdminEditUserControl = (props: {
                             isUppercase
                             fontSize="fontExtraSmall"
                             style={{
-                                marginTop: "10px",
-                                letterSpacing: "1.2px"
+                                marginTop: '10px',
+                                letterSpacing: '1.2px'
                             }}>
 
                             {translatableTexts.misc.jobTitle}
@@ -234,8 +234,8 @@ export const AdminEditUserControl = (props: {
                             items={jobTitles}
                             selectedValue={selectedJobTitle}
                             onSelected={setSelectedJobTitle}
-                            getDisplayValue={jt => "" + jt?.name}
-                            getCompareKey={jt => "" + jt?.id} />
+                            getDisplayValue={jt => '' + jt?.name}
+                            getCompareKey={jt => '' + jt?.id} />
                     </Flex>}
                 </EditSection>
 
@@ -251,8 +251,8 @@ export const AdminEditUserControl = (props: {
                             isUppercase
                             fontSize="fontExtraSmall"
                             style={{
-                                marginTop: "10px",
-                                letterSpacing: "1.2px"
+                                marginTop: '10px',
+                                letterSpacing: '1.2px'
                             }}>
 
                             {translatableTexts.misc.role}
@@ -262,8 +262,8 @@ export const AdminEditUserControl = (props: {
                             selectedValue={selectedRole}
                             items={roles}
                             onSelected={setSelectedRole}
-                            getDisplayValue={x => "" + (x as any)?.optionText}
-                            getCompareKey={x => "" + x?.id} />
+                            getDisplayValue={x => '' + (x as any)?.optionText}
+                            getCompareKey={x => '' + x?.id} />
                     </Flex>
                 </EditSection>
 
@@ -299,9 +299,9 @@ export const AdminEditUserControl = (props: {
                             <EpistoFont
                                 fontSize="fontLargePlus"
                                 style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
                                     marginLeft: 5,
                                     fontWeight: 600
                                 }}>
@@ -325,7 +325,7 @@ export const AdminEditUserControl = (props: {
                                 <EpistoEntryNew
                                     flex="1"
                                     style={{
-                                        margin: "0 5px 0 0"
+                                        margin: '0 5px 0 0'
                                     }}
                                     type="number"
                                     placeholder='Összeg amelyet hozzá szeretnél adni'
@@ -355,7 +355,7 @@ export const AdminEditUserControl = (props: {
                         fontSize="fontExtraSmall"
                         style={{
                             marginTop: 10,
-                            letterSpacing: "1.2px"
+                            letterSpacing: '1.2px'
                         }}>
                         {translatableTexts.administration.editUserControl.selectAsTeacher}
                     </EpistoFont>
@@ -366,7 +366,7 @@ export const AdminEditUserControl = (props: {
                             onChange={(_, x) => setIsTeacher(x)} />
 
                         <EpistoFont
-                            style={{ flex: "1" }}>
+                            style={{ flex: '1' }}>
 
                             {translatableTexts.administration.editUserControl.selectUserAsTeacher}
                         </EpistoFont>
@@ -378,17 +378,17 @@ export const AdminEditUserControl = (props: {
         {/* submit button */}
         <Button
             variant="contained"
-            color={"secondary"}
+            color={'secondary'}
             onClick={() => handleSaveUserAsync()}
-            style={{ margin: "20px 20px 0 20px" }}>
+            style={{ margin: '20px 20px 0 20px' }}>
 
             {translatableTexts.misc.save}
         </Button>
 
         {/* remove button */}
         <Button
-            variant={"outlined"}
-            color={"error"}
+            variant={'outlined'}
+            color={'error'}
             onClick={() => {
 
                 if (showDeleteUserDialog) {
@@ -396,11 +396,11 @@ export const AdminEditUserControl = (props: {
                     showDeleteUserDialog(editDTO);
                 } else {
 
-                    throw new Error("Not implemented!");
+                    throw new Error('Not implemented!');
                     // history.goBack();
                 }
             }}
-            style={{ margin: "20px 20px 0 20px" }}>
+            style={{ margin: '20px 20px 0 20px' }}>
 
             {translatableTexts.misc.remove}
         </Button>

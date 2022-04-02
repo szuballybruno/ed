@@ -1,40 +1,40 @@
-import { Image } from "@chakra-ui/image";
-import { Divider, Flex, Text } from "@chakra-ui/layout";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { Typography } from "@mui/material";
-import { useContext } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getAssetUrl, getRandomInteger } from "../../static/frontendHelpers";
-import { useNavigation } from "../../services/core/navigatior";
-import { translatableTexts } from "../../static/translatableTexts";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { QuesitionView } from "../QuestionView";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoConinImage } from "../universal/EpistoCoinImage";
-import { useAnswerPractiseQuestion, usePractiseQuestion } from "../../services/api/questionApiService";
-import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Image } from '@chakra-ui/image';
+import { Divider, Flex, Text } from '@chakra-ui/layout';
+import { Player } from '@lottiefiles/react-lottie-player';
+import { Typography } from '@mui/material';
+import { useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { getAssetUrl, getRandomInteger } from '../../static/frontendHelpers';
+import { useNavigation } from '../../services/core/navigatior';
+import { translatableTexts } from '../../static/translatableTexts';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { QuesitionView } from '../QuestionView';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoConinImage } from '../universal/EpistoCoinImage';
+import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
+import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
+import { EpistoFont } from '../controls/EpistoFont';
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation();
     return <Flex pr="20px">
 
-        <Flex direction={"column"}>
+        <Flex direction={'column'}>
 
-            <Text as={"text"}
-                p={"20px 20px 10px 10px"}
+            <Text as={'text'}
+                p={'20px 20px 10px 10px'}
                 fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
             </Text>
 
-            <Text as={"text"}
-                p={"10px 20px 10px 10px"}
+            <Text as={'text'}
+                p={'10px 20px 10px 10px'}
                 fontSize="13px">
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text
                     as="text"
-                    onClick={() => navigate("/courses")}
+                    onClick={() => navigate('/courses')}
                     color="var(--epistoTeal)"
                     fontWeight="bold"
                     cursor="pointer">
@@ -45,10 +45,10 @@ const NoQuestionsAvailable = () => {
         </Flex>
         <Flex>
             <img
-                src={getAssetUrl("/images/welcome3D.png")}
+                src={getAssetUrl('/images/welcome3D.png')}
                 alt=""
                 style={{
-                    objectFit: "contain",
+                    objectFit: 'contain',
                 }} />
         </Flex>
     </Flex>;
@@ -70,21 +70,21 @@ const InitialGreetings = () => {
 
             <EpistoFont
                 classes={[
-                    "fontSmall"
+                    'fontSmall'
                 ]}
                 style={{
-                    padding: "20px 20px 10px 10px"
+                    padding: '20px 20px 10px 10px'
                 }}>
 
-                {translatableTexts.practiseQuestions.initialGreetingsFirst + " " + firstName + ","}
+                {translatableTexts.practiseQuestions.initialGreetingsFirst + ' ' + firstName + ','}
             </EpistoFont>
 
             <EpistoFont
                 classes={[
-                    "fontSmall"
+                    'fontSmall'
                 ]}
                 style={{
-                    padding: "20px 20px 10px 10px"
+                    padding: '20px 20px 10px 10px'
                 }}>
 
                 {translatableTexts.practiseQuestions.initialGreetingsSecond}
@@ -92,10 +92,10 @@ const InitialGreetings = () => {
 
             <EpistoFont
                 classes={[
-                    "fontSmall"
+                    'fontSmall'
                 ]}
                 style={{
-                    padding: "20px 20px 10px 10px"
+                    padding: '20px 20px 10px 10px'
                 }}>
 
                 {translatableTexts.practiseQuestions.initialGreetingsThird}
@@ -108,7 +108,7 @@ const InitialGreetings = () => {
                 mt="10px">
 
                 <EpistoButton
-                    variant={"colored"}
+                    variant={'colored'}
                     onClick={() => {
                         navigate(applicationRoutes.availableCoursesRoute.route);
                     }}>
@@ -122,8 +122,8 @@ const InitialGreetings = () => {
             <Player
                 autoplay
                 loop
-                src={getAssetUrl("lottie_json/initial_greetings.json")}
-                style={{ height: "300px", width: "300px" }}
+                src={getAssetUrl('lottie_json/initial_greetings.json')}
+                style={{ height: '300px', width: '300px' }}
             />
         </Flex>
     </Flex>;
@@ -163,9 +163,9 @@ export const PractiseQuestions = () => {
     const isCorrectAnswer = answerResults?.isCorrect;
     const isAnswered = !!answerResults;
 
-    const gifSource = getAssetUrl("feedback_gifs/" + (isCorrectAnswer
-        ? "correct_" + getRandomInteger(1, 3)
-        : "incorrect_" + getRandomInteger(1, 3)) + ".gif");
+    const gifSource = getAssetUrl('feedback_gifs/' + (isCorrectAnswer
+        ? 'correct_' + getRandomInteger(1, 3)
+        : 'incorrect_' + getRandomInteger(1, 3)) + '.gif');
 
     return <LoadingFrame
         className="whall"
@@ -182,7 +182,7 @@ export const PractiseQuestions = () => {
                         top="-35"
                         right="10"
                         align="center"
-                        display={isCorrectAnswer ? undefined : "none"}>
+                        display={isCorrectAnswer ? undefined : 'none'}>
 
                         <EpistoFont>
                             {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
@@ -204,10 +204,10 @@ export const PractiseQuestions = () => {
 
                         <EpistoFont
                             style={{
-                                display: isAnswered ? undefined : "none",
+                                display: isAnswered ? undefined : 'none',
                                 marginTop: 10,
                                 fontSize: 18,
-                                alignSelf: "center"
+                                alignSelf: 'center'
                             }}>
 
                             {isCorrectAnswer
@@ -226,7 +226,7 @@ export const PractiseQuestions = () => {
 
                         <Flex
                             justifyContent="center"
-                            display={isAnswered ? undefined : "none"}>
+                            display={isAnswered ? undefined : 'none'}>
 
                             <EpistoButton
                                 variant="colored"

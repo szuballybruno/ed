@@ -1,11 +1,11 @@
-import { Flex, Text } from "@chakra-ui/react";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { LinearProgress, Typography } from "@mui/material";
-import React, { ReactNode } from "react";
-import { isString } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex, Text } from '@chakra-ui/react';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import { LinearProgress, Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { isString } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamLayout = (props: {
     children: ReactNode,
@@ -23,11 +23,11 @@ export const ExamLayout = (props: {
     const { exitExamAction, footerButtons, headerCenterText, showNextButton, headerLeftItem, children, progressValue, handleNext, handleBack, nextButtonTitle } = props;
 
     const footerButton = (title: string, action: () => void, icon?: any, iconFront?: any) => <EpistoButton
-        variant={"colored"}
+        variant={'colored'}
         onClick={action}
         style={{
-            height: "40px",
-            marginLeft: "10px"
+            height: '40px',
+            marginLeft: '10px'
         }}>
         {iconFront}
         {title}
@@ -42,8 +42,8 @@ export const ExamLayout = (props: {
 
         {/* header */}
         <Flex
-            direction={"row"}
-            alignItems={"center"}
+            direction={'row'}
+            alignItems={'center'}
             className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
             width="100%"
@@ -64,7 +64,7 @@ export const ExamLayout = (props: {
                 justify="center">
                 <Text
                     as="text"
-                    fontSize={"1.1rem"}>
+                    fontSize={'1.1rem'}>
                     {headerCenterText}
                 </Text>
             </Flex>
@@ -76,7 +76,7 @@ justify="flex-end">
                     style={{
                         minWidth: 170
                     }}
-                    variant={"outlined"}>
+                    variant={'outlined'}>
 
                     {translatableTexts.exam.exitExam}
                 </EpistoButton>}
@@ -106,13 +106,13 @@ justify="flex-end">
             p={20}>
 
             {/* back button */}
-            {handleBack && footerButton("Vissza", handleBack, undefined, <ArrowBack />)}
+            {handleBack && footerButton('Vissza', handleBack, undefined, <ArrowBack />)}
 
             {/* progress line */}
             <Flex
                 flex={1}
                 px={10}
-                alignItems={"center"}>
+                alignItems={'center'}>
 
                 {progressValue !== undefined && <>
                     <LinearProgress
@@ -120,11 +120,11 @@ justify="flex-end">
                         value={progressValue}
 
                         style={{
-                            flex: "1",
-                            marginRight: "10px"
+                            flex: '1',
+                            marginRight: '10px'
                         }} />
 
-                    <EpistoFont fontSize={"fontNormal14"}>
+                    <EpistoFont fontSize={'fontNormal14'}>
                         {`${Math.round(progressValue)}%`}
                     </EpistoFont>
                 </>}

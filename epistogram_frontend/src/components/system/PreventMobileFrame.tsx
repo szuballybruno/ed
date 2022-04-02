@@ -1,9 +1,9 @@
-import { Flex, useMediaQuery } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { isLocalhost } from "../../static/Environemnt";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex, useMediaQuery } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+import { isLocalhost } from '../../static/Environemnt';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
 
 const MobileBlock = () => {
 
@@ -26,8 +26,8 @@ const MobileBlock = () => {
             <EpistoFont
                 fontSize="fontSmall"
                 style={{
-                    width: "100%",
-                    padding: "5px 0"
+                    width: '100%',
+                    padding: '5px 0'
                 }}>
 
                 {translatableTexts.preventMobileFrame.descriptions[2]}

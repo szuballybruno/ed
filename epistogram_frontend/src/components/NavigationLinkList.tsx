@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/layout";
-import { NavLink } from "react-router-dom";
-import { ApplicationRoute } from "../models/types";
-import { isCurrentRoute } from "../static/frontendHelpers";
-import { EpistoFont } from "./controls/EpistoFont";
+import { Flex } from '@chakra-ui/layout';
+import { NavLink } from 'react-router-dom';
+import { ApplicationRoute } from '../models/types';
+import { isCurrentRoute } from '../static/frontendHelpers';
+import { EpistoFont } from './controls/EpistoFont';
 
 export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?: boolean }) => {
 
@@ -29,9 +29,9 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?
                             fontSize="fontNormal14"
                             isUppercase
                             style={{
-                                marginLeft: "10px",
-                                color: "var(--mildDeepBlue)",
-                                fontWeight: isCurrent ? "bold" : 500
+                                marginLeft: '10px',
+                                color: 'var(--mildDeepBlue)',
+                                fontWeight: isCurrent ? 'bold' : 500
                             }}>
                             {menuItem.title}
                         </EpistoFont>}

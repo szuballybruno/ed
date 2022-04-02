@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useDailyTipEditData, useSaveDailyTip } from "../../../services/api/dailyTipApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useBoolParam, useIntParam } from "../../../static/locationHelpers";
-import { EpistoCheckbox } from "../../controls/EpistoCheckbox";
-import { EpistoEntryNew, useEpistoEntryState } from "../../controls/EpistoEntryNew";
-import { EpistoLabel } from "../../controls/EpistoLabel";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { useEffect, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useDailyTipEditData, useSaveDailyTip } from '../../../services/api/dailyTipApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { useBoolParam, useIntParam } from '../../../static/locationHelpers';
+import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
+import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
+import { EpistoLabel } from '../../controls/EpistoLabel';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const EditDailyTipSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const traitCategoryId = useIntParam("traitCategoryId");
-    const isMax = useBoolParam("isMax");
-    const dailyTipId = useIntParam("dailyTipId")!;
+    const traitCategoryId = useIntParam('traitCategoryId');
+    const isMax = useBoolParam('isMax');
+    const dailyTipId = useIntParam('dailyTipId')!;
 
     // http 
     const { dailyTipEditData, dailyTipEditState, dailyTipEditError } = useDailyTipEditData(dailyTipId);
@@ -39,7 +39,7 @@ export const EditDailyTipSubpage = () => {
                 isLive,
                 id: dailyTipEditData!.id
             });
-            showNotification("Tipp sikeresen mentve!");
+            showNotification('Tipp sikeresen mentve!');
         }
         catch (e) {
 
@@ -70,7 +70,7 @@ export const EditDailyTipSubpage = () => {
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips,
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip
                 ]}
-                subRouteLabel={"Tipp " + dailyTipEditData?.id}
+                subRouteLabel={'Tipp ' + dailyTipEditData?.id}
                 onSave={handleSaveAsync}
                 navigationQueryParams={{ traitCategoryId, isMax }}>
 

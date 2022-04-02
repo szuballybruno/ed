@@ -1,22 +1,22 @@
-import { Flex } from "@chakra-ui/react";
-import { useContext } from "react";
-import { useParams } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useNavigation } from "../../../services/core/navigatior";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { useIntParam } from "../../../static/locationHelpers";
-import { EpistoSearch } from "../../controls/EpistoSearch";
-import { ProfileImage } from "../../ProfileImage";
-import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { FlexList } from "../../universal/FlexList";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
+import { Flex } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useNavigation } from '../../../services/core/navigatior';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoSearch } from '../../controls/EpistoSearch';
+import { ProfileImage } from '../../ProfileImage';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { FlexList } from '../../universal/FlexList';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
 export const AdminUserList = (props: {
     users: AdminPageUserDTO[],
     navigationFunction: (userId: number) => void
 }) => {
-    const userId = useIntParam("userId")!;
+    const userId = useIntParam('userId')!;
 
     const user = useContext(CurrentUserContext)!;
     const currentUserId = user.id;

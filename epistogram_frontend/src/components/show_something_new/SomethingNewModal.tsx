@@ -1,5 +1,5 @@
-import React from "react";
-import ModalVideo from "react-modal-video";
+import React from 'react';
+import ModalVideo from 'react-modal-video';
 
 const SomethingNewModal = () => {
     return <div>

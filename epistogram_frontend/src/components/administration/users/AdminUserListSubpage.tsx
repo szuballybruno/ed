@@ -1,31 +1,31 @@
-import { Flex } from "@chakra-ui/layout";
-import { ApartmentTwoTone, Edit, Email, Equalizer, School, WorkTwoTone } from "@mui/icons-material";
-import AccessibilityIcon from "@mui/icons-material/Accessibility";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DesktopAccessDisabledIcon from "@mui/icons-material/DesktopAccessDisabled";
-import React, { ReactNode, useContext, useState } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { deleteUserAsync, useUserListQuery } from "../../../services/api/userApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { ArrayBuilder, dateTimeToString, formatTimespan, getRoleName } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
-import { FloatAddButton } from "../../FloatAddButton";
-import { ProfileImage } from "../../ProfileImage";
-import { CurrentUserContext } from "../../system/AuthenticationFrame";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexList } from "../../universal/FlexList";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { FloatChip } from "../../universal/FloatChip";
-import { AdminListEditHeader } from "../AdminListEditHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import LoginIcon from "@mui/icons-material/Login";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import { Flex } from '@chakra-ui/layout';
+import { ApartmentTwoTone, Edit, Email, Equalizer, School, WorkTwoTone } from '@mui/icons-material';
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
+import React, { ReactNode, useContext, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { deleteUserAsync, useUserListQuery } from '../../../services/api/userApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { ArrayBuilder, dateTimeToString, formatTimespan, getRoleName } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { FloatAddButton } from '../../FloatAddButton';
+import { ProfileImage } from '../../ProfileImage';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexList } from '../../universal/FlexList';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { FloatChip } from '../../universal/FloatChip';
+import { AdminListEditHeader } from '../AdminListEditHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import LoginIcon from '@mui/icons-material/Login';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 export const AdminUserListSubpage = () => {
 
@@ -44,11 +44,11 @@ export const AdminUserListSubpage = () => {
 
     const isAllUsersSelected = !users.some(user => !selectedUserIds.some(uid => uid === user.id));
 
-    const deleteWaningDialogLogic = useEpistoDialogLogic("delwarn2");
+    const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn2');
 
     const handleSearch = (value: string) => {
 
-        if (value === "")
+        if (value === '')
             setSearchText(null);
 
         if (value.length > 2)
@@ -59,11 +59,11 @@ export const AdminUserListSubpage = () => {
 
         deleteWaningDialogLogic
             .openDialog({
-                title: "Biztosan törlöd a felhasználót?",
+                title: 'Biztosan törlöd a felhasználót?',
                 description: `A ${user.name} nevű felhasználó visszavonhatatlanul törölve lesz!`,
                 buttons: [
                     {
-                        title: "Törlés",
+                        title: 'Törlés',
                         action: async () => {
 
                             try {
@@ -106,42 +106,42 @@ export const AdminUserListSubpage = () => {
 
     const headerButtons = [
         {
-            name: "editUserButton",
-            text: "Szerkesztés",
+            name: 'editUserButton',
+            text: 'Szerkesztés',
             onClick: () => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id }),
         },
         {
-            name: "deleteUserButton",
-            text: "Törlés",
+            name: 'deleteUserButton',
+            text: 'Törlés',
             onClick: () => showDeleteUserDialog(users.filter(x => x.id === selectedUserIds[0])[0])
         },
         {
-            name: "viewUserStatsButton",
-            text: "Statisztika megjelenítése",
+            name: 'viewUserStatsButton',
+            text: 'Statisztika megjelenítése',
             onClick: () => navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
         },
         {
-            name: "editTeacherInfo",
-            text: "Oktatói adatok szerkesztése",
+            name: 'editTeacherInfo',
+            text: 'Oktatói adatok szerkesztése',
             onClick: () => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
         }
     ];
 
     const rowButtons = [
         {
-            icon: <Edit style={{ width: "20px", height: "20px" }} />,
+            icon: <Edit style={{ width: '20px', height: '20px' }} />,
             onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
         },
         {
-            icon: <Equalizer style={{ width: "20px", height: "20px" }} />,
+            icon: <Equalizer style={{ width: '20px', height: '20px' }} />,
             onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
         },
         {
-            icon: <School style={{ width: "20px", height: "20px" }} />,
+            icon: <School style={{ width: '20px', height: '20px' }} />,
             onClick: (user: AdminPageUserDTO) => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
         },
         {
-            icon: <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>,
+            icon: <DeleteIcon style={{ width: '20px', height: '20px' }}></DeleteIcon>,
             getIsVisible: (userId: number) => currentUserId !== userId,
             onClick: (user: AdminPageUserDTO) => showDeleteUserDialog(user)
         },
@@ -151,11 +151,11 @@ export const AdminUserListSubpage = () => {
 
         return new ArrayBuilder<{ name: string, icon: ReactNode }>()
             .addIf(!user.canAccessApplication, {
-                name: "Nincs hozzáférése az applikációhoz",
+                name: 'Nincs hozzáférése az applikációhoz',
                 icon: <DesktopAccessDisabledIcon />
             })
             .addIf(!user.isInvitationAccepted, {
-                name: "A meghívás elfogadásra vár",
+                name: 'A meghívás elfogadásra vár',
                 icon: <Email />
             })
             .add({
@@ -183,7 +183,7 @@ export const AdminUserListSubpage = () => {
                 icon: <LoginIcon />
             })
             .add({
-                name: "EpistoCoin egyenleg: " + user.coinBalance,
+                name: 'EpistoCoin egyenleg: ' + user.coinBalance,
                 icon: <MonetizationOnIcon />
             })
             .getArray();
@@ -236,7 +236,7 @@ export const AdminUserListSubpage = () => {
                             />}
                             endContent={<Flex
                                 align="center"
-                                justifyContent={"flex-end"}
+                                justifyContent={'flex-end'}
                                 height="100%"
                                 width={165}
                                 px={10}>
@@ -246,9 +246,9 @@ export const AdminUserListSubpage = () => {
                                     .filter(x => x?.getIsVisible ? x.getIsVisible(user.id) : true)
                                     .map((x, index2) => <EpistoButton
                                         key={index2}
-                                        variant={"colored"}
+                                        variant={'colored'}
                                         onClick={() => x.onClick(user)}
-                                        style={{ width: 20, margin: "3px" }}>
+                                        style={{ width: 20, margin: '3px' }}>
 
                                         {x.icon}
                                     </EpistoButton>)}

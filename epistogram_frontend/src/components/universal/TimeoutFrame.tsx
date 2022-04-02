@@ -1,6 +1,6 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/layout";
-import { useEffect } from "react";
-import { ReactTimerType } from "../../helpers/reactTimer";
+import { Box, Flex, FlexProps } from '@chakra-ui/layout';
+import { useEffect } from 'react';
+import { ReactTimerType } from '../../helpers/reactTimer';
 
 export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) => {
 
@@ -28,10 +28,10 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) 
             className="whall pauseAnimation"
             bg="var(--mildGrey)"
             style={{
-                animationName: reactTimer.isIdle ? "" : "rightSlideAnimation",
+                animationName: reactTimer.isIdle ? '' : 'rightSlideAnimation',
                 animationDuration: `${reactTimer.maxMiliseconds / 1000}s`,
-                animationTimingFunction: "linear",
-                animationPlayState: reactTimer.isRunning ? "running" : "paused"
+                animationTimingFunction: 'linear',
+                animationPlayState: reactTimer.isRunning ? 'running' : 'paused'
             }} />
 
         <Box position="relative">

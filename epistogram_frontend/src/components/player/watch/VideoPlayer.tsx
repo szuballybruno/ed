@@ -1,18 +1,18 @@
-import { Box, BoxProps } from "@chakra-ui/react";
-import FastForwardIcon from "@mui/icons-material/FastForward";
-import FastRewindIcon from "@mui/icons-material/FastRewind";
-import PauseIcon from "@mui/icons-material/Pause";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
-import ReactPlayer from "react-player";
-import useEventListener from "react-use-event-listener";
-import screenfull from "screenfull";
-import { readVolumeSettings, writeVolumeSettings } from "../../../services/core/storageService";
-import { VideoDTO } from "../../../shared/dtos/VideoDTO";
-import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
-import { VideoControls } from "./VideoControls";
+import { Box, BoxProps } from '@chakra-ui/react';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import ReactPlayer from 'react-player';
+import useEventListener from 'react-use-event-listener';
+import screenfull from 'screenfull';
+import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
+import { VideoDTO } from '../../../shared/dtos/VideoDTO';
+import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { VideoControls } from './VideoControls';
 
-type VisualOverlayType = "counter" | "pause" | "start" | "seekRight" | "seekLeft";
+type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
 
 export const useVideoPlayerState = (
     videoItem: VideoDTO,
@@ -28,7 +28,7 @@ export const useVideoPlayerState = (
     const [videoLength, setVideoLength] = React.useState(0);
     const [showControls, setShowControls] = useState(true);
     const [controlOverlayTimer, setControlOverlayTimer] = useState<NodeJS.Timeout | null>(null);
-    const [visualOverlayType, setVisualOverlayType] = useState<VisualOverlayType>("start");
+    const [visualOverlayType, setVisualOverlayType] = useState<VisualOverlayType>('start');
     const [isVisualOverlayVisible, setIsVisualOverlayVisible] = useState(false);
     const [isSeeking, setIsSeeking] = useState(false);
     const [volume, setVolume] = useState(1);
@@ -91,7 +91,7 @@ export const useVideoPlayerState = (
         const targetShouldBePlaying = !shouldBePlaying;
         setShouldBePlaying(targetShouldBePlaying);
         showControlOverlay();
-        flashVisualOverlay(targetShouldBePlaying ? "start" : "pause");
+        flashVisualOverlay(targetShouldBePlaying ? 'start' : 'pause');
     };
 
     const jump = (right?: boolean) => {
@@ -105,7 +105,7 @@ export const useVideoPlayerState = (
             if (seekSeconds > videoLength)
                 return;
 
-            flashVisualOverlay("seekRight");
+            flashVisualOverlay('seekRight');
         }
         else {
 
@@ -113,7 +113,7 @@ export const useVideoPlayerState = (
             if (seekSeconds < 0)
                 return;
 
-            flashVisualOverlay("seekLeft");
+            flashVisualOverlay('seekLeft');
         }
 
         // limit from seeking too far forward
@@ -136,22 +136,22 @@ export const useVideoPlayerState = (
     // effect
     //
 
-    useEventListener("keydown", (e) => {
+    useEventListener('keydown', (e) => {
 
-        if (e.key === " " || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (e.key === ' ' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
 
             e.preventDefault();
 
             if (isShowingOverlay)
                 return;
 
-            if (e.key === " ")
+            if (e.key === ' ')
                 toggleShouldBePlaying();
 
-            if (e.key === "ArrowLeft")
+            if (e.key === 'ArrowLeft')
                 jump();
 
-            if (e.key === "ArrowRight")
+            if (e.key === 'ArrowRight')
                 jump(true);
         }
     });
@@ -238,7 +238,7 @@ export const VideoPlayer = (props: {
         setIsMuted
     } = videoPlayerState;
 
-    const iconStyle = { width: "70px", height: "70px", color: "white" } as CSSProperties;
+    const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
 
     const marks = [maxWatchedSeconds];
 
@@ -252,7 +252,7 @@ export const VideoPlayer = (props: {
             {/* playback */}
             <Box
                 id="playbackWrapper"
-                filter={isShowingOverlay ? "blur(4px)" : "blur(0px)"}
+                filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
                 position="relative"
                 className="whall">
@@ -277,7 +277,7 @@ export const VideoPlayer = (props: {
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
-                            overflow: "hidden"
+                            overflow: 'hidden'
                         }}
                         width="100%"
                         height="100%"
@@ -296,7 +296,7 @@ export const VideoPlayer = (props: {
                         config={{
                             file: {
                                 attributes: {
-                                    crossOrigin: "true",
+                                    crossOrigin: 'true',
                                     onContextMenu: e => e.preventDefault()
                                 },
                                 // tracks: subtileTracks,
@@ -327,10 +327,10 @@ export const VideoPlayer = (props: {
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
-                {visualOverlayType === "pause" && <PauseIcon style={iconStyle} />}
-                {visualOverlayType === "start" && <PlayArrowIcon style={iconStyle} />}
-                {visualOverlayType === "seekRight" && <FastForwardIcon style={iconStyle} />}
-                {visualOverlayType === "seekLeft" && <FastRewindIcon style={iconStyle} />}
+                {visualOverlayType === 'pause' && <PauseIcon style={iconStyle} />}
+                {visualOverlayType === 'start' && <PlayArrowIcon style={iconStyle} />}
+                {visualOverlayType === 'seekRight' && <FastForwardIcon style={iconStyle} />}
+                {visualOverlayType === 'seekLeft' && <FastRewindIcon style={iconStyle} />}
             </AbsoluteFlexOverlay>
 
             {children}

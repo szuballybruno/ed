@@ -1,7 +1,7 @@
-import { Input, InputProps } from "@chakra-ui/input";
-import { InputGroup, InputLeftElement } from "@chakra-ui/react";
-import { Search } from "@mui/icons-material";
-import React from "react";
+import { Input, InputProps } from '@chakra-ui/input';
+import { InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { Search } from '@mui/icons-material';
+import React from 'react';
 
 export const EpistoSearch = (props: {} & InputProps) => {
     const { ...css } = props;
@@ -11,11 +11,11 @@ export const EpistoSearch = (props: {} & InputProps) => {
             className="InputLeft"
             pointerEvents="none"
             style={{
-                height: "100%",
+                height: '100%',
                 width: 41,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end"
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end'
             }}>
             <Search />
         </InputLeftElement>

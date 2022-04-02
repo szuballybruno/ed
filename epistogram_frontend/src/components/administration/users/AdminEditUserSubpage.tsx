@@ -1,19 +1,19 @@
-import { Add } from "@mui/icons-material";
-import React from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { ButtonType } from "../../../models/types";
-import { deleteUserAsync, useEditUserData, useSaveUser } from "../../../services/api/userApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { UserEditDTO } from "../../../shared/dtos/UserEditDTO";
-import { useIntParam } from "../../../static/locationHelpers";
-import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AdminEditUserControl } from "./AdminEditUserControl";
-import { AdminUserList } from "./AdminUserList";
+import { Add } from '@mui/icons-material';
+import React from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../models/types';
+import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { AdminEditUserControl } from './AdminEditUserControl';
+import { AdminUserList } from './AdminUserList';
 
 export const AdminEditUserSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -22,7 +22,7 @@ export const AdminEditUserSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const editedUserId = useIntParam("userId")!;
+    const editedUserId = useIntParam('userId')!;
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
@@ -36,7 +36,7 @@ export const AdminEditUserSubpage = (props: {
         try {
 
             await saveUserAsync(dto);
-            showNotification("A változtatások sikeresen mentésre kerültek.");
+            showNotification('A változtatások sikeresen mentésre kerültek.');
             refetchEditUserData();
         }
         catch (e) {
@@ -45,7 +45,7 @@ export const AdminEditUserSubpage = (props: {
         }
     };
 
-    const deleteWaningDialogLogic = useEpistoDialogLogic("delwarn");
+    const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn');
 
     const showDeleteUserDialog = (user: UserEditDTO | null) => {
         if (!user)
@@ -53,11 +53,11 @@ export const AdminEditUserSubpage = (props: {
 
         deleteWaningDialogLogic
             .openDialog({
-                title: "Biztosan törlöd a felhasználót?",
+                title: 'Biztosan törlöd a felhasználót?',
                 description: `${user.lastName} ${user.firstName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
                 buttons: [
                     {
-                        title: "Törlés",
+                        title: 'Törlés',
                         action: async () => {
 
                             try {
@@ -77,11 +77,11 @@ export const AdminEditUserSubpage = (props: {
 
     const bulkEditButtons = [
         {
-            title: "Hozzáadás",
+            title: 'Hozzáadás',
             icon: <Add
                 style={{
-                    margin: "0 3px 0 0",
-                    padding: "0 0 1px 0"
+                    margin: '0 3px 0 0',
+                    padding: '0 0 1px 0'
                 }} />,
             action: () => navigateToAddUser()
         }
@@ -91,7 +91,7 @@ export const AdminEditUserSubpage = (props: {
         const isUserFound = users.some(user => user.id === editedUserId);
 
         if (!isUserFound && users[0]) {
-            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + users[0].id + "/edit");
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + '/' + users[0].id + '/edit');
         }
     };
     checkIfCurrentUserFromUrl();
@@ -108,10 +108,10 @@ export const AdminEditUserSubpage = (props: {
                 key={1}
                 title="Felhasználók"
                 iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-                to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
+                to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
             <BreadcrumbLink
                 key={2}
-                title={userEditData?.lastName + " " + userEditData?.firstName}
+                title={userEditData?.lastName + ' ' + userEditData?.firstName}
                 isCurrent />
         ]}>
 

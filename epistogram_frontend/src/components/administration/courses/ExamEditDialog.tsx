@@ -1,9 +1,9 @@
-import React from "react";
-import { EpistoDialogLogicType } from "../../EpistoDialog";
-import { CourseItemEditDialogBase } from "./CourseItemEditDialogBase";
-import { AdminExamQuestionsModalPage } from "./modals/AdminExamQuestionsModalPage";
-import { AdminExamStatisticsModalPage } from "./modals/AdminExamStatisticsModalPage";
-import { AdminVideoStatisticsModalPage } from "./modals/AdminVideoStatisticsModalPage";
+import React from 'react';
+import { EpistoDialogLogicType } from '../../EpistoDialog';
+import { CourseItemEditDialogBase } from './CourseItemEditDialogBase';
+import { AdminExamQuestionsModalPage } from './modals/AdminExamQuestionsModalPage';
+import { AdminExamStatisticsModalPage } from './modals/AdminExamStatisticsModalPage';
+import { AdminVideoStatisticsModalPage } from './modals/AdminVideoStatisticsModalPage';
 
 export const ExamEditDialog = (props: {
     logic: EpistoDialogLogicType
@@ -16,11 +16,11 @@ export const ExamEditDialog = (props: {
         subpages={[
             {
                 content: () => <AdminExamQuestionsModalPage />,
-                title: "Kérdések",
+                title: 'Kérdések',
             },
             {
                 content: () => <AdminExamStatisticsModalPage />,
-                title: "Statisztika",
+                title: 'Statisztika',
             }
         ]} />;
 };

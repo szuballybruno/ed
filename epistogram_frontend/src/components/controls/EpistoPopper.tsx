@@ -1,11 +1,11 @@
-import { Popover } from "@mui/material";
-import React, { ReactNode } from "react";
-import { FlexFloat } from "./FlexFloat";
+import { Popover } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { FlexFloat } from './FlexFloat';
 
 export const EpistoPopper = (props: {
     isOpen: boolean,
     target: any,
-    placementX?: "left" | "center" | "right",
+    placementX?: 'left' | 'center' | 'right',
     handleClose: () => void,
     children?: ReactNode,
     style?: React.CSSProperties
@@ -19,8 +19,8 @@ export const EpistoPopper = (props: {
         onClose={handleClose}
         // BackdropComponent={() => <Box></Box>}
         anchorOrigin={{
-            vertical: "bottom",
-            horizontal: placementX ?? "center",
+            vertical: 'bottom',
+            horizontal: placementX ?? 'center',
         }}
         elevation={0}
         className="normalizeChild">

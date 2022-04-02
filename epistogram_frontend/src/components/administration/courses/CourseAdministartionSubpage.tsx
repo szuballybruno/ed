@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { EpistoRoutes } from "../../universal/EpistoRoutes";
-import { AdminCourseContentSubpage } from "./AdminCourseContentSubpage";
-import { AdminCourseUserProgressSubpage } from "./AdminCourseUserProgressSubpage";
-import { AdminInteractiveCourseSubpage } from "./AdminInteractiveCourseSubpage";
-import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
-import { CourseStatisticsSubpage } from "./CourseStatisticsSubpage";
-import { AdminCourseDetailsSubpage } from "./EditCourseDetailsSubpage";
+import { Flex } from '@chakra-ui/react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { EpistoRoutes } from '../../universal/EpistoRoutes';
+import { AdminCourseContentSubpage } from './AdminCourseContentSubpage';
+import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage';
+import { AdminInteractiveCourseSubpage } from './AdminInteractiveCourseSubpage';
+import { CourseAdministartionFrame } from './CourseAdministartionFrame';
+import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
+import { AdminCourseDetailsSubpage } from './EditCourseDetailsSubpage';
 
 export const CourseAdministartionSubpage = () => {
 

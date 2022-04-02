@@ -1,6 +1,6 @@
-import { Box, Flex } from "@chakra-ui/react";
-import Button from "@mui/material/Button";
-import { ReactNode } from "react";
+import { Box, Flex } from '@chakra-ui/react';
+import Button from '@mui/material/Button';
+import { ReactNode } from 'react';
 
 export const OverlayDialog = (props: {
     children: ReactNode,
@@ -21,7 +21,7 @@ export const OverlayDialog = (props: {
         {/* close button */}
         <Flex mt="20px"
 justify="flex-end"
-display={props.showCloseButton ? "flex" : "none"}>
+display={props.showCloseButton ? 'flex' : 'none'}>
             <Button
                 variant="outlined"
                 onClick={() => {

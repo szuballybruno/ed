@@ -1,8 +1,8 @@
-import { Image } from "@chakra-ui/image";
-import { Flex, FlexProps } from "@chakra-ui/layout";
-import { forwardRef, useContext } from "react";
-import { EpistoFont } from "./controls/EpistoFont";
-import { CurrentUserContext } from "./system/AuthenticationFrame";
+import { Image } from '@chakra-ui/image';
+import { Flex, FlexProps } from '@chakra-ui/layout';
+import { forwardRef, useContext } from 'react';
+import { EpistoFont } from './controls/EpistoFont';
+import { CurrentUserContext } from './system/AuthenticationFrame';
 
 type ProfileImageProps = {
     url: string | null,
@@ -21,12 +21,12 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
 
     return <Flex
         p="6px"
-        className={className + " circle"}
+        className={className + ' circle'}
         boxShadow="inset -7px -2px 20px 4px rgba(124,192,194,0.9)"
         {...css}>
 
         <Flex
-            className={"circle"}
+            className={'circle'}
             flex="1"
             ref={ref}
             bg="var(--deepBlue)"
@@ -39,12 +39,12 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
                 border="none"
                 className="whall"
                 objectFit="cover"
-                src={url ?? ""}
-                display={showImage ? undefined : "none"} />
+                src={url ?? ''}
+                display={showImage ? undefined : 'none'} />
 
             <EpistoFont
                 style={{
-                    display: showSingature ? undefined : "none"
+                    display: showSingature ? undefined : 'none'
                 }}>
 
                 {signature.toUpperCase()}

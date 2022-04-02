@@ -1,22 +1,22 @@
-import { Flex } from "@chakra-ui/react";
-import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Flex } from '@chakra-ui/react';
+import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 
 export const AdminExamQuestionsModalPage = () => {
     const questions = [{
-        questionTitle: "asd",
+        questionTitle: 'asd',
         answers: [{
-            title: "Válasz 1",
+            title: 'Válasz 1',
             isCorrect: false
         }, {
-            title: "Válasz 2",
+            title: 'Válasz 2',
             isCorrect: false
         }, {
-            title: "Válasz 3",
+            title: 'Válasz 3',
             isCorrect: true
         }, {
-            title: "Válasz 4",
+            title: 'Válasz 4',
             isCorrect: false
         }]
     }];
@@ -26,14 +26,14 @@ p="20px">
         <TableContainer
             className="roundBorders largeSoftShadow"
             style={{
-                minHeight: "100%",
-                padding: "0 20px",
-                background: "var(--transparentWhite90)"
+                minHeight: '100%',
+                padding: '0 20px',
+                background: 'var(--transparentWhite90)'
             }}>
             <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
-                size={"medium"}
+                size={'medium'}
             >
                 <TableHead>
                     <TableRow>
@@ -42,7 +42,7 @@ p="20px">
                             scope="row"
                             padding="none"
                             style={{
-                                fontWeight: "bold"
+                                fontWeight: 'bold'
                             }}
                         >
                             Kérdés
@@ -50,7 +50,7 @@ p="20px">
                         <TableCell
                             colSpan={4}
                             style={{
-                                fontWeight: "bold"
+                                fontWeight: 'bold'
                             }}>
                             Válaszok
                         </TableCell>
@@ -85,16 +85,16 @@ p="20px">
                                         key={index}
                                         style={{
                                             color: answer.isCorrect
-                                                ? "var(--deepGreen)"
-                                                : "var(--intenseRed)"
+                                                ? 'var(--deepGreen)'
+                                                : 'var(--intenseRed)'
                                         }}>
 
                                         <Checkbox
                                             checked={answer.isCorrect}
                                             style={{
                                                 color: answer.isCorrect
-                                                    ? "var(--deepGreen)"
-                                                    : "var(--intenseRed)"
+                                                    ? 'var(--deepGreen)'
+                                                    : 'var(--intenseRed)'
                                             }} />
 
                                         {answer.title}

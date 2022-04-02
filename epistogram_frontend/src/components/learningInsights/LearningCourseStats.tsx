@@ -1,14 +1,14 @@
-import { Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React from "react";
-import { useUserCourseData } from "../../services/api/courseApiService";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { DashboardSection } from "../universal/DashboardSection";
-import { EpistoGrid } from "../controls/EpistoGrid";
-import { LearningCourseStatsTile } from "./LearningCourseStatsTile";
-import { EpistoFont } from "../controls/EpistoFont";
-import { AdminUserCourseContentModal } from "../administration/users/modals/AdminUserCourseContentModal";
-import { useEpistoDialogLogic } from "../EpistoDialog";
+import { Flex } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import React from 'react';
+import { useUserCourseData } from '../../services/api/courseApiService';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { DashboardSection } from '../universal/DashboardSection';
+import { EpistoGrid } from '../controls/EpistoGrid';
+import { LearningCourseStatsTile } from './LearningCourseStatsTile';
+import { EpistoFont } from '../controls/EpistoFont';
+import { AdminUserCourseContentModal } from '../administration/users/modals/AdminUserCourseContentModal';
+import { useEpistoDialogLogic } from '../EpistoDialog';
 
 export const LearningCourseStats = () => {
 
@@ -18,8 +18,8 @@ export const LearningCourseStats = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    const dialogLogic = useEpistoDialogLogic("sasd", {
-        defaultCloseButtonType: "top"
+    const dialogLogic = useEpistoDialogLogic('sasd', {
+        defaultCloseButtonType: 'top'
     });
 
     return <LoadingFrame
@@ -33,47 +33,47 @@ export const LearningCourseStats = () => {
         <AdminUserCourseContentModal
             userCourseStatsData={{
                 userProgressData: {
-                    startDate: new Date("2022. 04. 10."),
-                    estimatedCompletionDate: new Date("2022. 05. 10."),
+                    startDate: new Date('2022. 04. 10.'),
+                    estimatedCompletionDate: new Date('2022. 05. 10.'),
                     estimatedLengthInDays: 30,
                     days: [
                         {
-                            completionDate: new Date("2022. 05. 10."),
+                            completionDate: new Date('2022. 05. 10.'),
                             completedItemCount: 4,
                             completedPercentage: 5,
                             offsetDaysFromStart: 0,
                             completedPercentageSum: 5
                         },
                         {
-                            completionDate: new Date("2022. 05. 12."),
+                            completionDate: new Date('2022. 05. 12.'),
                             completedItemCount: 4,
                             completedPercentage: 8,
                             offsetDaysFromStart: 0,
                             completedPercentageSum: 13
                         },
                         {
-                            completionDate: new Date("2022. 05. 12."),
+                            completionDate: new Date('2022. 05. 12.'),
                             completedItemCount: 4,
                             completedPercentage: 2,
                             offsetDaysFromStart: 0,
                             completedPercentageSum: 15
                         },
                         {
-                            completionDate: new Date("2022. 05. 12."),
+                            completionDate: new Date('2022. 05. 12.'),
                             completedItemCount: 4,
                             completedPercentage: 2,
                             offsetDaysFromStart: 0,
                             completedPercentageSum: 17
                         },
                         {
-                            completionDate: new Date("2022. 05. 12."),
+                            completionDate: new Date('2022. 05. 12.'),
                             completedItemCount: 4,
                             completedPercentage: 8,
                             offsetDaysFromStart: 0,
                             completedPercentageSum: 25
                         },
                         {
-                            completionDate: new Date("2022. 05. 12."),
+                            completionDate: new Date('2022. 05. 12.'),
                             completedItemCount: 4,
                             completedPercentage: 8,
                             offsetDaysFromStart: 0,

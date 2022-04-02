@@ -1,11 +1,11 @@
-import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LinearProgress } from "@mui/material";
-import React from "react";
-import { CourseLearningDTO } from "../../shared/dtos/CourseLearningDTO";
-import { useNavigation } from "../../services/core/navigatior";
-import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
-import { FlexFloat } from "../controls/FlexFloat";
+import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { LinearProgress } from '@mui/material';
+import React from 'react';
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { useNavigation } from '../../services/core/navigatior';
+import { formatTimespan, getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { FlexFloat } from '../controls/FlexFloat';
 
 export const SmallStat = (props: { iconUrl: string, text: string }) => {
 
@@ -16,17 +16,17 @@ export const SmallStat = (props: { iconUrl: string, text: string }) => {
         {/* icon */}
         <img
             src={props.iconUrl}
-            alt={""}
+            alt={''}
             style={{
                 width: 15,
                 height: 15,
-                margin: "0 2px 0 2px"
+                margin: '0 2px 0 2px'
             }} />
 
         {/* spent time stat */}
         <Text
-            as={"text"}
-            color={"grey"}>
+            as={'text'}
+            color={'grey'}>
 
             {props.text}
         </Text>
@@ -82,7 +82,7 @@ export const LearningCourseStatsTile = (props: {
         borderRadius="10px"
         position="relative"
         overflow="hidden"
-        shadow={"0 0 10px 1px #CCC"}
+        shadow={'0 0 10px 1px #CCC'}
         background="var(--transparentWhite70)"
         p="5"
         justifyContent="space-between"
@@ -99,9 +99,9 @@ export const LearningCourseStatsTile = (props: {
             <img
                 className="whall"
                 style={{
-                    objectFit: "cover",
+                    objectFit: 'cover',
                     borderRadius: 10,
-                    position: "absolute"
+                    position: 'absolute'
                 }}
                 src={thumbnailImageURL}
                 alt="" />
@@ -122,15 +122,15 @@ export const LearningCourseStatsTile = (props: {
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
                     <img
-                        src={getAssetUrl("course_exam_tile_icons/tile_badge_completed.svg")}
-                        alt={""}
+                        src={getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
+                        alt={''}
                         style={{
                             width: 20,
                             height: 20
                         }}
                     />
                     <Text
-                        textTransform={"uppercase"}
+                        textTransform={'uppercase'}
                         color="white">
 
                         Teljesítve!
@@ -154,7 +154,7 @@ direction="column">
             {/* title */}
             <Text
                 as="h6"
-                fontWeight={"bold"}
+                fontWeight={'bold'}
                 fontSize="large">
 
                 {title}
@@ -166,24 +166,24 @@ justify="space-evenly">
 
                 {/* spent time  */}
                 <SmallStat
-                    iconUrl={getAssetUrl("images/time3D.png")}
+                    iconUrl={getAssetUrl('images/time3D.png')}
                     text={formattedSpentTime} />
 
                 {/* videos  */}
                 <SmallStat
-                    iconUrl={getAssetUrl("images/videos3D.png")}
+                    iconUrl={getAssetUrl('images/videos3D.png')}
                     text={`${totalVideoCount}/${completedVideoCount}`} />
 
                 {/* video questions */}
                 <SmallStat
-                    iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
+                    iconUrl={getAssetUrl('images/rightanswerontile3D.png')}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
             </Flex>
 
             {/* course progress bar chart */}
             <Flex
-                direction={"row"}
-                alignItems={"center"}
+                direction={'row'}
+                alignItems={'center'}
                 mt={7}
                 width="100%"
                 height="10px">
@@ -191,7 +191,7 @@ justify="space-evenly">
                 <LinearProgress
                     variant="determinate"
                     style={{
-                        width: "100%",
+                        width: '100%',
                     }}
                     value={progressPercentage} />
 
@@ -208,7 +208,7 @@ justify="space-evenly">
             {/* details */}
             <EpistoButton
                 onClick={() => props.onClickDetails()}
-                style={{ flex: "1" }}>
+                style={{ flex: '1' }}>
 
                 Részletek
             </EpistoButton>
@@ -217,9 +217,9 @@ justify="space-evenly">
             <EpistoButton
                 variant="colored"
                 onClick={handleStartCourse}
-                style={{ flex: "1" }}>
+                style={{ flex: '1' }}>
 
-                {isComplete ? "Újrakezdem" : "Folytatom"}
+                {isComplete ? 'Újrakezdem' : 'Folytatom'}
             </EpistoButton>
         </Flex>
     </FlexFloat>;

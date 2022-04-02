@@ -1,23 +1,23 @@
-import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
-import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import { useContext, useState } from "react";
-import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
-import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
-import { useShopItemCategories, useShopItems } from "../../services/api/shopApiService";
-import { translatableTexts } from "../../static/translatableTexts";
-import { ContentPane } from "../ContentPane";
-import { EpistoFont } from "../controls/EpistoFont";
-import classes from "../css/courseSearchMain.module.scss";
-import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { useEpistoDialogLogic } from "../EpistoDialog";
-import { LeftPane } from "../LeftPane";
-import { PageRootContainer } from "../PageRootContainer";
-import { ProfileImage } from "../ProfileImage";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { EpistoGrid } from "../controls/EpistoGrid";
-import { EpistoSearch } from "../universal/EpistoSearch";
-import { ShopItem } from "./ShopItem";
-import { ShopPurchaseConfirmationDialog } from "./ShopPurchaseConfirmationDialog";
+import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
+import { Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { useContext, useState } from 'react';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
+import { useShopItemCategories, useShopItems } from '../../services/api/shopApiService';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ContentPane } from '../ContentPane';
+import { EpistoFont } from '../controls/EpistoFont';
+import classes from '../css/courseSearchMain.module.scss';
+import { EpistoConinInfo } from '../EpistoCoinInfo';
+import { useEpistoDialogLogic } from '../EpistoDialog';
+import { LeftPane } from '../LeftPane';
+import { PageRootContainer } from '../PageRootContainer';
+import { ProfileImage } from '../ProfileImage';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { EpistoGrid } from '../controls/EpistoGrid';
+import { EpistoSearch } from '../universal/EpistoSearch';
+import { ShopItem } from './ShopItem';
+import { ShopPurchaseConfirmationDialog } from './ShopPurchaseConfirmationDialog';
 
 export const ShopPage = () => {
 
@@ -31,9 +31,9 @@ export const ShopPage = () => {
     const [categoryFilterId, setCategoryFilterId] = useState(-1);
     const [currentShopItem, setCurrentShopItem] = useState<null | ShopItemDTO>(null);
 
-    const confirmationDilaogLogic = useEpistoDialogLogic("confirm", { defaultCloseButtonType: "top" });
+    const confirmationDilaogLogic = useEpistoDialogLogic('confirm', { defaultCloseButtonType: 'top' });
 
-    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const filteredItems = shopItems
         .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === -1);
@@ -67,7 +67,7 @@ export const ShopPage = () => {
                 fontSize="fontExtraSmall"
                 isUppercase
                 style={{
-                    textAlign: "left",
+                    textAlign: 'left',
                     margin: 10
                 }}>
 
@@ -78,11 +78,11 @@ export const ShopPage = () => {
             <ToggleButtonGroup
                 style={{
                     flex: 1,
-                    textAlign: "left"
+                    textAlign: 'left'
                 }}
-                orientation={"vertical"}>
+                orientation={'vertical'}>
 
-                {[{ id: -1, name: "Mutasd mindet" }]
+                {[{ id: -1, name: 'Mutasd mindet' }]
                     .concat(shopItemCategories)
                     .map((category, index) => {
 
@@ -91,14 +91,14 @@ export const ShopPage = () => {
                             selected={categoryFilterId === category.id}
                             value={category}
                             style={{
-                                flexDirection: "row",
-                                textAlign: "left",
-                                width: "100%",
+                                flexDirection: 'row',
+                                textAlign: 'left',
+                                width: '100%',
                                 height: 40,
-                                justifyContent: "flex-start",
-                                alignItems: "center",
-                                paddingLeft: "10px",
-                                border: "none",
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                paddingLeft: '10px',
+                                border: 'none',
                                 fontWeight: 500,
                                 fontSize: 13
                             }}
@@ -127,7 +127,7 @@ export const ShopPage = () => {
                 pb="40px"
                 width="100%"
                 className="whall"
-                minWidth={isSmallerThan1400 ? "1060px" : undefined}>
+                minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
                 <Flex
@@ -150,7 +150,7 @@ export const ShopPage = () => {
                                 minWidth: 50
                             }} />
 
-                        <EpistoFont style={{ margin: "0 0 0 10px" }}
+                        <EpistoFont style={{ margin: '0 0 0 10px' }}
                             fontSize="fontSmall">
                             Aktuális EpistoCoin egyenleged:
                         </EpistoFont>
@@ -166,22 +166,22 @@ export const ShopPage = () => {
                     {/* order settings  */}
                     <Select
                         native
-                        onChange={() => { throw new Error("Not implemented"); }} // TODO
+                        onChange={() => { throw new Error('Not implemented'); }} // TODO
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
-                            name: "A-Z",
-                            id: "outlined-age-native-simple",
+                            name: 'A-Z',
+                            id: 'outlined-age-native-simple',
                         }}
                         sx={{
-                            "& .MuiOutlinedInput-notchedOutline": {
-                                border: "none"
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none'
                             }
                         }}
                         style={{
-                            background: "var(--transparentWhite70)",
-                            border: "none",
-                            height: "40px",
-                            color: "3F3F3F",
+                            background: 'var(--transparentWhite70)',
+                            border: 'none',
+                            height: '40px',
+                            color: '3F3F3F',
                             flex: 1
                         }}>
                         <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>

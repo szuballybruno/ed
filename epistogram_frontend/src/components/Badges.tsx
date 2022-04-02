@@ -1,15 +1,15 @@
-import { Flex } from "@chakra-ui/react";
-import { getAssetUrl } from "../static/frontendHelpers";
+import { Flex } from '@chakra-ui/react';
+import { getAssetUrl } from '../static/frontendHelpers';
 
 export const Badges = () => {
 
     {/* dummy badges */ }
     const badges = [
-        getAssetUrl("/badges/001-badge.svg"),
-        getAssetUrl("/badges/002-rating.svg"),
-        getAssetUrl("/badges/003-flag.svg"),
-        getAssetUrl("/badges/004-certificate.svg"),
-        getAssetUrl("/badges/005-trophy.svg")
+        getAssetUrl('/badges/001-badge.svg'),
+        getAssetUrl('/badges/002-rating.svg'),
+        getAssetUrl('/badges/003-flag.svg'),
+        getAssetUrl('/badges/004-certificate.svg'),
+        getAssetUrl('/badges/005-trophy.svg')
     ];
 
     return (

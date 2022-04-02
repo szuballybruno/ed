@@ -1,8 +1,8 @@
-import { Typography } from "@mui/material";
-import { ToggleButtonGroup, ToggleButton } from "@mui/material";
-import { CSSProperties } from "react";
-import { PagingType } from "../../static/frontendHelpers";
-import { EpistoFont } from "./EpistoFont";
+import { Typography } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { CSSProperties } from 'react';
+import { PagingType } from '../../static/frontendHelpers';
+import { EpistoFont } from './EpistoFont';
 
 export const SegmentedButton = <T,>(props: {
     paging: PagingType<T>,
@@ -16,7 +16,7 @@ export const SegmentedButton = <T,>(props: {
 
     return <>
         <ToggleButtonGroup style={{
-            background: "var(--transparentWhite90)"
+            background: 'var(--transparentWhite90)'
         }}>
 
             {paging
@@ -29,8 +29,8 @@ export const SegmentedButton = <T,>(props: {
                         <ToggleButton
                             selected={isActive}
                             style={{
-                                border: "none",
-                                padding: "15px 25px",
+                                border: 'none',
+                                padding: '15px 25px',
                                 ...buttonStyle
                             }}
                             key={index}

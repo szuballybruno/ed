@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 
 export const EpistoPaging = (props: FlexProps & {
     slides: ((isCurrent: boolean) => JSX.Element)[],
@@ -16,7 +16,7 @@ export const EpistoPaging = (props: FlexProps & {
             return <Box
                 key={xi}
                 className="whall"
-                display={isCurrent ? undefined : "none"}>
+                display={isCurrent ? undefined : 'none'}>
 
                 {x(isCurrent)}
             </Box>;

@@ -1,13 +1,13 @@
-import { Flex } from "@chakra-ui/layout";
-import React from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ContentPane } from "../ContentPane";
-import { LeftPane } from "../LeftPane";
-import { NavigationLinkList } from "../NavigationLinkList";
-import { PageRootContainer } from "../PageRootContainer";
-import { EpistoRoutes } from "../universal/EpistoRoutes";
-import { CoinTransactions } from "./CoinTransactions";
-import { Preferences } from "./Preferences";
+import { Flex } from '@chakra-ui/layout';
+import React from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ContentPane } from '../ContentPane';
+import { LeftPane } from '../LeftPane';
+import { NavigationLinkList } from '../NavigationLinkList';
+import { PageRootContainer } from '../PageRootContainer';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { CoinTransactions } from './CoinTransactions';
+import { Preferences } from './Preferences';
 
 const FeaturePreview = () => {
 

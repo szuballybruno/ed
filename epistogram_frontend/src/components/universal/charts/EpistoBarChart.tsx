@@ -1,7 +1,7 @@
-import ReactECharts from "echarts-for-react";
-import React from "react";
-import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from "./types/EpistoBarChartTypes";
-import { EpistoChartXAxisDataType } from "./types/EpistoChartCommonTypes";
+import ReactECharts from 'echarts-for-react';
+import React from 'react';
+import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from './types/EpistoBarChartTypes';
+import { EpistoChartXAxisDataType } from './types/EpistoChartCommonTypes';
 
 /**
  * Wrapper component for ECharts
@@ -40,8 +40,8 @@ export const EpistoBarChart = (props: {
 
 
     const defaultStyle = {
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
     };
 
     return <ReactECharts
@@ -77,7 +77,7 @@ export const EpistoBarChart = (props: {
                         {
                             name: yAxisLabel,
                             axisLabel: {
-                                formatter: `{value}${yAxisLabelSuffix || ""}`
+                                formatter: `{value}${yAxisLabelSuffix || ''}`
                             }
                         },
                         yAxis)

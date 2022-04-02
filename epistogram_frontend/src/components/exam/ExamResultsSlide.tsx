@@ -1,17 +1,17 @@
-import { Flex, Text } from "@chakra-ui/react";
-import { ExpandMore } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
-import React, { useEffect } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
-import { useExamResults } from "../../services/api/examApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { ArrayBuilder } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { ExamLayout } from "./ExamLayout";
-import { ExamResultStats } from "./ExamResultStats";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { Flex, Text } from '@chakra-ui/react';
+import { ExpandMore } from '@mui/icons-material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { useExamResults } from '../../services/api/examApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { ArrayBuilder } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { ExamLayout } from './ExamLayout';
+import { ExamResultStats } from './ExamResultStats';
+import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
@@ -43,11 +43,11 @@ export const ExamResultsSlide = (props: {
         nextButtonTitle={translatableTexts.exam.continueCourse}
         footerButtons={new ArrayBuilder<any>()
             .addIf(exam.isFinalExam, {
-                text: "Kurzus értékelése",
+                text: 'Kurzus értékelése',
                 action: goToCourseRating
             })
             .addIf(exam.isFinalExam, {
-                text: "Vissza a tanfolyamkeresobe",
+                text: 'Vissza a tanfolyamkeresobe',
                 action: () => {
 
                     navigate(applicationRoutes.availableCoursesRoute);
@@ -65,7 +65,7 @@ className="whall"
                 as="text"
                 className="fontHuge"
                 style={{
-                    padding: "20px 0 20px 0"
+                    padding: '20px 0 20px 0'
                 }}>
                 {translatableTexts.exam.resultsTitle}
             </Text>
@@ -84,9 +84,9 @@ direction="column">
 
                 {/* list header */}
                 <Flex
-                    alignItems={"center"}
+                    alignItems={'center'}
                     mt="20px"
-                    justifyContent={"space-between"}>
+                    justifyContent={'space-between'}>
 
                     <Text
                         as="text"
@@ -94,7 +94,7 @@ direction="column">
                         {translatableTexts.exam.questionsLabel}
                     </Text>
 
-                    <Flex width={"25%"}>
+                    <Flex width={'25%'}>
                         <Text
                             as="text"
                             className="fontHuge">
@@ -106,7 +106,7 @@ direction="column">
                 {/* answers */}
                 <Flex
                     id="answersRoot"
-                    direction={"column"}
+                    direction={'column'}
                     flex={1}
                     mt={10}
                     overflowY="scroll">
@@ -117,9 +117,9 @@ direction="column">
                             const bgColor = (() => {
 
                                 if (question.isCorrect)
-                                    return "var(--mildGreen)";
+                                    return 'var(--mildGreen)';
 
-                                return "var(--mildRed)";
+                                return 'var(--mildRed)';
                             })();
 
                             return <Accordion
@@ -131,17 +131,17 @@ direction="column">
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
 
-                                    <Flex width={"77%"}>
+                                    <Flex width={'77%'}>
                                         <EpistoFont>
                                             {question.text}
                                         </EpistoFont>
                                     </Flex>
 
-                                    <Flex width={"23%"}>
+                                    <Flex width={'23%'}>
                                         <EpistoFont
-                                            classes={["roundBorders"]}
+                                            classes={['roundBorders']}
                                             style={{
-                                                padding: "2px 15px",
+                                                padding: '2px 15px',
                                                 backgroundColor: bgColor
                                             }}>
                                             {question.isCorrect

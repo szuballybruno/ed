@@ -1,14 +1,14 @@
-import { Flex } from "@chakra-ui/layout";
-import { DashboardSection } from "./universal/DashboardSection";
-import { EpistoGrid } from "./controls/EpistoGrid";
-import { ExamTile } from "./universal/ExamTile";
+import { Flex } from '@chakra-ui/layout';
+import { DashboardSection } from './universal/DashboardSection';
+import { EpistoGrid } from './controls/EpistoGrid';
+import { ExamTile } from './universal/ExamTile';
 
 const finisedExams = [
     {
-        title: "Excel bevezető"
+        title: 'Excel bevezető'
     },
     {
-        title: ".Net programozás haladó"
+        title: '.Net programozás haladó'
     }
 ];
 

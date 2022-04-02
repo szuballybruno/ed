@@ -1,7 +1,7 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/layout";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { ReactNode } from "react";
-import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable } from "react-beautiful-dnd";
+import { Box, Flex, FlexProps } from '@chakra-ui/layout';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import { ReactNode } from 'react';
+import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable } from 'react-beautiful-dnd';
 
 export const DragAndDropList = <T,>(props: {
     list: T[],
@@ -31,7 +31,7 @@ export const DragAndDropList = <T,>(props: {
             }}>
 
             {/* drop container */}
-            <Droppable droppableId={"courseItemsDroppableContextId"}>
+            <Droppable droppableId={'courseItemsDroppableContextId'}>
                 {(provided, _) => (
 
                     <div
@@ -49,7 +49,7 @@ export const DragAndDropList = <T,>(props: {
                                 // drag item
                                 return <Draggable
                                     key={key}
-                                    draggableId={"draggableId-" + key}
+                                    draggableId={'draggableId-' + key}
                                     index={listItemIndex}>
                                     {(provided, snapshot) => (
                                         <Flex ref={provided.innerRef}
@@ -62,7 +62,7 @@ align="center">
 
                                                 <DragHandleIcon
                                                     className="square40"
-                                                    style={{ color: "var(--mildGrey)" }}></DragHandleIcon>
+                                                    style={{ color: 'var(--mildGrey)' }}></DragHandleIcon>
                                             </Box>
 
                                             {/* render list item */}

@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { useEventListener } from "../../services/api/eventApiService";
-import { EventCodeType } from "../../shared/types/sharedTypes";
-import { CoinRewardEventHandler } from "../event_handlers/CoinRewardEventHandler";
-import { LagBehindNotificationEventHandler } from "../event_handlers/LagBehindNotificationEventHandler";
+import { ReactNode } from 'react';
+import { useEventListener } from '../../services/api/eventApiService';
+import { EventCodeType } from '../../shared/types/sharedTypes';
+import { CoinRewardEventHandler } from '../event_handlers/CoinRewardEventHandler';
+import { LagBehindNotificationEventHandler } from '../event_handlers/LagBehindNotificationEventHandler';
 
 export type EventHandlerType = {
     eventCode: EventCodeType,
@@ -18,11 +18,11 @@ export const EventListener = (props: {
 
     const handlerComponents = [
         {
-            eventCode: "coin_acquire_session_streak",
+            eventCode: 'coin_acquire_session_streak',
             handlerComponent: CoinRewardEventHandler
         },
         {
-            eventCode: "lag_behind_notification",
+            eventCode: 'lag_behind_notification',
             handlerComponent: LagBehindNotificationEventHandler
         }
     ] as EventHandlerType[];

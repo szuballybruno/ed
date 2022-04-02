@@ -1,9 +1,9 @@
-import React from "react";
-import wrap from "word-wrap";
-import { PersonalityChartDataDTO } from "../../../shared/dtos/PersonalityChartDataDTO";
-import { defaultCharts } from "../../../static/defaultChartOptions";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoRadarChart } from "./EpistoRadarChart";
+import React from 'react';
+import wrap from 'word-wrap';
+import { PersonalityChartDataDTO } from '../../../shared/dtos/PersonalityChartDataDTO';
+import { defaultCharts } from '../../../static/defaultChartOptions';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoRadarChart } from './EpistoRadarChart';
 
 export const PersonalityChart = (props: {
     data: PersonalityChartDataDTO
@@ -33,7 +33,7 @@ export const PersonalityChart = (props: {
         radarIndicators={traitNames
             .map(traitName => ({
                 name: traitName,
-                color: "black",
+                color: 'black',
                 max: 7
             }))
         }

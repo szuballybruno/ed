@@ -1,7 +1,7 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import React from "react";
-import { useNavigation } from "../../services/core/navigatior";
-import { EpistoButton } from "../controls/EpistoButton";
+import { Flex, FlexProps } from '@chakra-ui/react';
+import React from 'react';
+import { useNavigation } from '../../services/core/navigatior';
+import { EpistoButton } from '../controls/EpistoButton';
 
 const NavbarButton = (props: {
     menuName?: string,
@@ -17,7 +17,7 @@ const NavbarButton = (props: {
             ? children
             : <EpistoButton
                 onClick={() => navigate(menuPath)}
-                style={{ flex: "1" }}
+                style={{ flex: '1' }}
                 variant="plain" >
 
                 {menuName}

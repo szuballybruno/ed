@@ -1,31 +1,31 @@
-import { Image } from "@chakra-ui/image";
-import { Flex } from "@chakra-ui/layout";
-import { Equalizer, ShortText, ViewList } from "@mui/icons-material";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import CategoryIcon from "@mui/icons-material/Category";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import React, { ReactNode, useState } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useAdminCourseList, useCreateCourse, useDeleteCourse } from "../../../services/api/courseApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
-import { FloatAddButton } from "../../FloatAddButton";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexList } from "../../universal/FlexList";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { FloatChip } from "../../universal/FloatChip";
-import { AdminListEditHeader } from "../AdminListEditHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { Image } from '@chakra-ui/image';
+import { Flex } from '@chakra-ui/layout';
+import { Equalizer, ShortText, ViewList } from '@mui/icons-material';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CategoryIcon from '@mui/icons-material/Category';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import React, { ReactNode, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useAdminCourseList, useCreateCourse, useDeleteCourse } from '../../../services/api/courseApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { FloatAddButton } from '../../FloatAddButton';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexList } from '../../universal/FlexList';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { FloatChip } from '../../universal/FloatChip';
+import { AdminListEditHeader } from '../AdminListEditHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 // deprecated
 export const AdminCourseListSubpage = () => {
 
-    const [searchText] = React.useState("");
+    const [searchText] = React.useState('');
 
     // http
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList(searchText);
@@ -36,7 +36,7 @@ export const AdminCourseListSubpage = () => {
 
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const warnDialogLogic = useEpistoDialogLogic("warnDialog");
+    const warnDialogLogic = useEpistoDialogLogic('warnDialog');
 
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.coursesRoute.addRoute.route);
 
@@ -70,17 +70,17 @@ export const AdminCourseListSubpage = () => {
 
         warnDialogLogic
             .openDialog({
-                title: "Biztosan törlöd a kurzust?",
-                description: "Az összes benne található adat el fog veszni!",
+                title: 'Biztosan törlöd a kurzust?',
+                description: 'Az összes benne található adat el fog veszni!',
                 buttons: [
                     {
-                        title: "Törlöm a kurzust",
+                        title: 'Törlöm a kurzust',
                         action: async () => {
                             try {
 
                                 await deleteCourseAsync({ id: courseId });
 
-                                showNotification("Kurzus sikeresen törölve!");
+                                showNotification('Kurzus sikeresen törölve!');
 
                                 await refetchCoursesAsync();
                             }
@@ -99,10 +99,10 @@ export const AdminCourseListSubpage = () => {
         try {
 
             await createCourseAsync({
-                title: "Uj kurzus"
+                title: 'Uj kurzus'
             });
 
-            showNotification("Uj kurzus sikeresen letrehozva!");
+            showNotification('Uj kurzus sikeresen letrehozva!');
 
             await refetchCoursesAsync();
         }
@@ -116,23 +116,23 @@ export const AdminCourseListSubpage = () => {
 
     const bulkEditButtons = [
         {
-            name: "editButton",
-            text: "Adatok",
+            name: 'editButton',
+            text: 'Adatok',
             onClick: () => navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: singleSelectedCourse.courseId })
         },
         {
-            name: "editButton",
-            text: "Tartalom",
+            name: 'editButton',
+            text: 'Tartalom',
             onClick: () => navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: singleSelectedCourse.courseId })
         },
         {
-            name: "deleteButton",
-            text: "Törlés",
-            onClick: () => { throw new Error("Not implemented!"); }
+            name: 'deleteButton',
+            text: 'Törlés',
+            onClick: () => { throw new Error('Not implemented!'); }
         },
         {
-            name: "statsButton",
-            text: "Statisztika megjelenítése",
+            name: 'statsButton',
+            text: 'Statisztika megjelenítése',
             onClick: () => navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: singleSelectedCourse.courseId })
         }
     ];
@@ -166,7 +166,7 @@ export const AdminCourseListSubpage = () => {
 
                         chips.push(
                             {
-                                name: course.category.name + " / " + course.subCategory.name,
+                                name: course.category.name + ' / ' + course.subCategory.name,
                                 icon: <CategoryIcon />
                             });
 
@@ -178,13 +178,13 @@ export const AdminCourseListSubpage = () => {
 
                         chips.push(
                             {
-                                name: course.examCount + "",
+                                name: course.examCount + '',
                                 icon: <AssignmentIcon />
                             });
 
                         chips.push(
                             {
-                                name: course.videosCount + "",
+                                name: course.videosCount + '',
                                 icon: <VideocamIcon />
                             });
 
@@ -200,7 +200,7 @@ export const AdminCourseListSubpage = () => {
                                     style={{
                                         height: 100,
                                         width: 180,
-                                        padding: "10px"
+                                        padding: '10px'
                                     }}
                                 />
                             }
@@ -222,26 +222,26 @@ export const AdminCourseListSubpage = () => {
                                 />
                             }
                             endContent={<Flex align="center"
-                                justifyContent={"flex-end"}
+                                justifyContent={'flex-end'}
                                 height="100%"
                                 width={165}
                                 px={10}>
                                 <EpistoButton
-                                    variant={"colored"}
+                                    variant={'colored'}
                                     onClick={() => {
                                         navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20 }}>
-                                    <ShortText style={{ width: "20px", height: "20px" }} />
+                                    <ShortText style={{ width: '20px', height: '20px' }} />
                                 </EpistoButton>
 
                                 <EpistoButton
-                                    variant={"colored"}
+                                    variant={'colored'}
                                     onClick={() => {
                                         navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20, marginLeft: 5 }}>
-                                    <ViewList style={{ width: "20px", height: "20px" }} />
+                                    <ViewList style={{ width: '20px', height: '20px' }} />
                                 </EpistoButton>
 
                                 <EpistoButton
@@ -250,14 +250,14 @@ export const AdminCourseListSubpage = () => {
                                         navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20, marginLeft: 5 }} >
-                                    <Equalizer style={{ width: "20px", height: "20px" }} />
+                                    <Equalizer style={{ width: '20px', height: '20px' }} />
                                 </EpistoButton>
 
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => handleDeleteCourseAsync(course.courseId)}
                                     style={{ width: 20, marginLeft: 5 }}>
-                                    <DeleteIcon style={{ width: "20px", height: "20px" }}></DeleteIcon>
+                                    <DeleteIcon style={{ width: '20px', height: '20px' }}></DeleteIcon>
                                 </EpistoButton>
                             </Flex>}
                         />;

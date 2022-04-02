@@ -1,12 +1,12 @@
-import { Image } from "@chakra-ui/image";
-import { Flex } from "@chakra-ui/layout";
-import React from "react";
-import { CourseAdminListItemDTO } from "../../../shared/dtos/admin/CourseAdminListItemDTO";
-import { useIntParam } from "../../../static/locationHelpers";
-import { EpistoSearch } from "../../controls/EpistoSearch";
-import { FlexList } from "../../universal/FlexList";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
+import { Image } from '@chakra-ui/image';
+import { Flex } from '@chakra-ui/layout';
+import React from 'react';
+import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoSearch } from '../../controls/EpistoSearch';
+import { FlexList } from '../../universal/FlexList';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
 export const AdminCourseList = (props: {
     onCourseClick: (courseId: number) => void,
@@ -17,7 +17,7 @@ export const AdminCourseList = (props: {
     const { courses, onCourseClick } = props;
 
     // util
-    const courseId = useIntParam("courseId");
+    const courseId = useIntParam('courseId');
 
     return <Flex
         className="roundBorders"
@@ -61,7 +61,7 @@ background="var(--transparentWhite70)">
                         midContent={
                             <FlexListTitleSubtitle
                                 title={course.title}
-                                subTitle={""}
+                                subTitle={''}
                                 isSelected={course.courseId === courseId}
                             />
                         }

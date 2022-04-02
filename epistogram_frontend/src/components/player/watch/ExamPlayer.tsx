@@ -1,13 +1,13 @@
-import React from "react";
-import { useStartExam } from "../../../services/api/examApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { ExamPlayerDataDTO } from "../../../shared/dtos/ExamPlayerDataDTO";
-import { usePaging } from "../../../static/frontendHelpers";
-import { ExamGreetSlide } from "../../exam/ExamGreetSlide";
-import { ExamQuestions } from "../../exam/ExamQuestions";
-import { ExamResultsSlide } from "../../exam/ExamResultsSlide";
-import { EpistoPaging } from "../../universal/EpistoPaging";
+import React from 'react';
+import { useStartExam } from '../../../services/api/examApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
+import { usePaging } from '../../../static/frontendHelpers';
+import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
+import { ExamQuestions } from '../../exam/ExamQuestions';
+import { ExamResultsSlide } from '../../exam/ExamResultsSlide';
+import { EpistoPaging } from '../../universal/EpistoPaging';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,

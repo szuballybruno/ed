@@ -1,6 +1,6 @@
-import { Box, BoxProps } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
-import { EpistoButton } from "../controls/EpistoButton";
+import { Box, BoxProps } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
 
 export const QuestionnaierAnswer = (props: {
     children: ReactNode,
@@ -15,18 +15,18 @@ export const QuestionnaierAnswer = (props: {
     const colors = (() => {
 
         if (isIncorrect)
-            return { bg: "#fa6767", fg: "black" };
+            return { bg: '#fa6767', fg: 'black' };
 
         if (isCorrect && isSelected)
-            return { bg: "#7cf25e", fg: "black" };
+            return { bg: '#7cf25e', fg: 'black' };
 
         if (isCorrect)
-            return { bg: "transparent", fg: "black", border: "#7cf25e" };
+            return { bg: 'transparent', fg: 'black', border: '#7cf25e' };
 
         if (isSelected)
-            return { bg: "var(--deepBlue)", fg: "white" };
+            return { bg: 'var(--deepBlue)', fg: 'white' };
 
-        return { bg: "white", fg: "black" };
+        return { bg: 'white', fg: 'black' };
     })();
 
     return <Box {...css}>

@@ -1,6 +1,6 @@
-import React, { ReactNode, useRef, useState } from "react";
-import { XDialogContext } from "./XDialoContext";
-import styles from "./XDialog.module.css";
+import React, { ReactNode, useRef, useState } from 'react';
+import { XDialogContext } from './XDialoContext';
+import styles from './XDialog.module.css';
 
 type ContentPoolItemType = {
     key: string
@@ -28,7 +28,7 @@ export const XDialogHost = (props: {
 
         if (contentPoolRef.current.filter(x => x.key === key).length > 0) {
 
-            console.warn("Mounting dialog content with the same key multiple times! " + key);
+            console.warn('Mounting dialog content with the same key multiple times! ' + key);
             return;
         }
 
@@ -45,7 +45,7 @@ export const XDialogHost = (props: {
 
         if (contentPoolRef.current.filter(x => x.key === key).length === 0) {
 
-            console.warn("Unmounting dialog content with a key that does not exist! " + key);
+            console.warn('Unmounting dialog content with a key that does not exist! ' + key);
             return;
         }
 
@@ -93,22 +93,22 @@ export const XDialogHost = (props: {
                         key={index}
                         id={getId(x.key)}
                         style={{
-                            position: "absolute",
-                            width: "100vw",
-                            height: "100vh",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            position: 'absolute',
+                            width: '100vw',
+                            height: '100vh',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                             zIndex: 100,
-                            background: "#0000000d"
+                            background: '#0000000d'
                         }}
                         className={isVisible ? styles.disp_flex : styles.disp_none}>
 
                         {/* click handler */}
                         <div
                             style={{
-                                position: "absolute",
-                                width: "100%",
-                                height: "100%"
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%'
                             }}
                             onClick={handleOutsideClick} />
                     </div>;

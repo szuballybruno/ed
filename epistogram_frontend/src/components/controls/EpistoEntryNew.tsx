@@ -1,7 +1,7 @@
-import { Flex } from "@chakra-ui/layout";
-import { InputAdornment, TextField, Typography } from "@mui/material";
-import { forwardRef, useEffect, useState } from "react";
-import { EpistoFont } from "./EpistoFont";
+import { Flex } from '@chakra-ui/layout';
+import { InputAdornment, TextField, Typography } from '@mui/material';
+import { forwardRef, useEffect, useState } from 'react';
+import { EpistoFont } from './EpistoFont';
 
 // state
 
@@ -12,7 +12,7 @@ export const useEpistoEntryState = (options?: {
 
     // state 
 
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [initialState, setInitialState] = useState(true);
 
@@ -24,7 +24,7 @@ export const useEpistoEntryState = (options?: {
 
             // is mandatory validation 
             if (options?.isMandatory && !value)
-                return "Ez a mező nem lehet üres!";
+                return 'Ez a mező nem lehet üres!';
 
             // external validation
             if (options?.validateFunction) {
@@ -82,12 +82,12 @@ export type EpistoEntryNewPropsType = {
     isMultiline?: boolean,
     postfix?: string,
     placeholder?: string,
-    labelVariant?: "top" | "normal",
+    labelVariant?: 'top' | 'normal',
     height?: string,
     name?: string,
     marginTop?: string,
     flex?: string,
-    type?: "password" | "number" | "text",
+    type?: 'password' | 'number' | 'text',
     style?: React.CSSProperties
 }
 
@@ -117,15 +117,15 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
     } = state;
 
     return <Flex direction="column"
-mt={marginTop ?? "10px"}
+mt={marginTop ?? '10px'}
 flex={flex}
 style={style}>
 
-        {labelVariant === "top" && <EpistoFont
+        {labelVariant === 'top' && <EpistoFont
             isUppercase
             fontSize="fontExtraSmall"
             style={{
-                margin: "5px 0"
+                margin: '5px 0'
             }}>
 
             {label}
@@ -135,7 +135,7 @@ style={style}>
             inputRef={ref}
             disabled={disabled}
             size="small"
-            label={labelVariant !== "top" ? label : undefined}
+            label={labelVariant !== 'top' ? label : undefined}
             placeholder={placeholder}
             name={name}
             value={value}
@@ -144,12 +144,12 @@ style={style}>
             multiline={isMultiline}
             type={type}
             sx={{
-                "& .MuiOutlinedInput-root": {
+                '& .MuiOutlinedInput-root': {
                     height: height,
-                    background: "var(--transparentWhite90)"
+                    background: 'var(--transparentWhite90)'
                 },
-                "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none"
+                '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none'
                 }
             }}
             InputProps={postfix
@@ -167,7 +167,7 @@ style={style}>
                 setValue(x.currentTarget.value);
             }}
             style={{
-                border: "none"
+                border: 'none'
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />

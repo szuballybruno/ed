@@ -1,22 +1,22 @@
-import { Flex } from "@chakra-ui/react";
-import { Slider } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from "../../../services/api/courseRatingApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { usePaging } from "../../../static/frontendHelpers";
-import { useIntParam } from "../../../static/locationHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { ExamLayout } from "../../exam/ExamLayout";
-import { ExamLayoutContent } from "../../exam/ExamLayoutContent";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { RatingStars } from "../../universal/RatingStars";
+import { Flex } from '@chakra-ui/react';
+import { Slider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from '../../../services/api/courseRatingApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { usePaging } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { ExamLayout } from '../../exam/ExamLayout';
+import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { RatingStars } from '../../universal/RatingStars';
 
 export const CourseRatingSubpage = () => {
 
-    const courseId = useIntParam("courseId")!;
+    const courseId = useIntParam('courseId')!;
     const { navigateToCourseOverview } = useNavigation();
 
     const { courseRatingGroups, courseRatingGroupsError, courseRatingGroupsState, refetchCourseRatingGroupsAsync } = useCourseRatingGroups(courseId);
@@ -28,7 +28,7 @@ export const CourseRatingSubpage = () => {
         undefined,
         () => {
 
-            console.log("asdasdaw");
+            console.log('asdasdaw');
             navigateToCourseOverview(courseId);
         });
 
@@ -100,12 +100,12 @@ export const CourseRatingSubpage = () => {
 
                 <ExamLayoutContent
                     style={{
-                        background: "#ffffffbf",
-                        borderRadius: "5px",
-                        boxShadow: "white 0 0 20px 5px",
-                        width: "95%"
+                        background: '#ffffffbf',
+                        borderRadius: '5px',
+                        boxShadow: 'white 0 0 20px 5px',
+                        width: '95%'
                     }}
-                    title={currentRatingGroup?.name ?? ""}>
+                    title={currentRatingGroup?.name ?? ''}>
 
                     <Flex
                         direction="column"
@@ -142,31 +142,31 @@ export const CourseRatingSubpage = () => {
                                             {question.text}
                                         </EpistoFont>
 
-                                        {question.type === "rating_stars" && <>
+                                        {question.type === 'rating_stars' && <>
                                             <RatingStars
                                                 setSelectedIndex={(index) => setCurrentAnswer(index, null)}
                                                 selectedIndex={currentAnswer?.value ?? null} />
                                         </>}
 
-                                        {question.type === "range_1_10" && <>
+                                        {question.type === 'range_1_10' && <>
                                             <Slider
                                                 max={10}
                                                 valueLabelDisplay="auto"
                                                 marks={true}
                                                 style={{
-                                                    color: "var(--deepBlue)"
+                                                    color: 'var(--deepBlue)'
                                                 }}
                                                 onChange={(_, value) => setCurrentAnswer(value as any, null)}
                                                 value={currentAnswer?.value ?? 0} />
                                         </>}
 
-                                        {question.type === "free_text" && <>
+                                        {question.type === 'free_text' && <>
                                             <EpistoEntry
                                                 isMultiline
                                                 setValue={text => setCurrentAnswer(null, text)}
-                                                value={currentAnswer?.text ?? ""}
+                                                value={currentAnswer?.text ?? ''}
                                                 style={{
-                                                    width: "100%"
+                                                    width: '100%'
                                                 }} />
                                         </>}
                                     </Flex>

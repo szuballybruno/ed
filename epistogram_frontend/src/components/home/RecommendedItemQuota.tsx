@@ -1,7 +1,7 @@
-import { Flex } from "@chakra-ui/react";
-import { LinearProgress } from "@mui/material";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex } from '@chakra-ui/react';
+import { LinearProgress } from '@mui/material';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const RecommendedItemQuota = (props: {
     completedCount: number,
@@ -12,8 +12,8 @@ export const RecommendedItemQuota = (props: {
     const { isDaily, completedCount, recommendedItemCount } = props;
 
     const label = isDaily
-        ? "Napi ajánlott videók"
-        : "Heti ajánlott videók";
+        ? 'Napi ajánlott videók'
+        : 'Heti ajánlott videók';
 
     return (
         <Flex
@@ -28,7 +28,7 @@ export const RecommendedItemQuota = (props: {
                 align="center">
 
                 <img
-                    src={isDaily ? getAssetUrl("/images/dailyquota.png") : getAssetUrl("/images/weeklyquota.png")}
+                    src={isDaily ? getAssetUrl('/images/dailyquota.png') : getAssetUrl('/images/weeklyquota.png')}
                     alt=""
                     className="square25"
                     style={{
@@ -36,7 +36,7 @@ export const RecommendedItemQuota = (props: {
                     }} />
 
                 <EpistoFont
-                    fontSize={"fontLargePlus"}
+                    fontSize={'fontLargePlus'}
                     style={{
                         fontWeight: 500,
                         marginRight: 2
@@ -55,9 +55,9 @@ export const RecommendedItemQuota = (props: {
                 value={Math.min(100, completedCount / recommendedItemCount * 100)}
                 variant="determinate"
                 style={{
-                    width: "80%",
+                    width: '80%',
                     marginTop: 10,
-                    height: "5px"
+                    height: '5px'
                 }} />
         </Flex>
     );

@@ -1,16 +1,16 @@
-import { Grid } from "@chakra-ui/layout";
-import { Flex, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
-import { QuestionTypeEnum } from "../../shared/types/sharedTypes";
-import { useSaveExamAnswer } from "../../services/api/examApiService";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { getAssetUrl, usePaging } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { ExamLayout } from "./ExamLayout";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { Grid } from '@chakra-ui/layout';
+import { Flex, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
+import { useSaveExamAnswer } from '../../services/api/examApiService';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { getAssetUrl, usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { ExamLayout } from './ExamLayout';
+import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -81,8 +81,8 @@ export const ExamQuestions = (props: {
         className="whall"
         loadingState={hideLoading ? undefined : saveExamAnswerState}
         flex="1"
-        direction={"column"}
-        alignItems={"center"}
+        direction={'column'}
+        alignItems={'center'}
         width="100%"
         px={40}>
 
@@ -91,10 +91,10 @@ export const ExamQuestions = (props: {
 
                 <img
                     alt=""
-                    src={getAssetUrl("course_page_icons/curriculum_test.svg")}
+                    src={getAssetUrl('course_page_icons/curriculum_test.svg')}
                     className="square35" />
 
-                <EpistoFont style={{ marginLeft: "10px" }}>
+                <EpistoFont style={{ marginLeft: '10px' }}>
                     {questions.length}/{questionPaging.currentIndex + 1}
                 </EpistoFont>
             </Flex>}
@@ -106,10 +106,10 @@ export const ExamQuestions = (props: {
             progressValue={progressPercentage}>
 
             <Flex
-                direction={"column"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                width={"80%"}
+                direction={'column'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                width={'80%'}
                 flex={1}>
 
                 <Flex
@@ -118,11 +118,11 @@ export const ExamQuestions = (props: {
 
                     <img
                         style={{
-                            borderRadius: "50%",
-                            padding: "8px",
-                            width: "50px",
-                            height: "50px",
-                            marginRight: "30px"
+                            borderRadius: '50%',
+                            padding: '8px',
+                            width: '50px',
+                            height: '50px',
+                            marginRight: '30px'
                         }}
                         alt=""
                         src="https://static.thenounproject.com/png/92068-200.png"
@@ -137,8 +137,8 @@ export const ExamQuestions = (props: {
 
                 {/* answers */}
                 <Flex
-                    direction={"row"}
-                    justifyContent={"center"}
+                    direction={'row'}
+                    justifyContent={'center'}
                     pt={10}
                     width="100%"
                     mx={200}>

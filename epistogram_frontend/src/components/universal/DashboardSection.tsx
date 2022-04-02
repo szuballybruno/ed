@@ -1,8 +1,8 @@
-import { Box, FlexProps } from "@chakra-ui/react";
-import { EpistoHeader } from "../EpistoHeader";
-import { FlexFloat } from "../controls/FlexFloat";
+import { Box, FlexProps } from '@chakra-ui/react';
+import { EpistoHeader } from '../EpistoHeader';
+import { FlexFloat } from '../controls/FlexFloat';
 
-export const DashboardSection = (props: FlexProps & { title: string, variant?: "noShadow" | "normal", showDivider?: boolean }) => {
+export const DashboardSection = (props: FlexProps & { title: string, variant?: 'noShadow' | 'normal', showDivider?: boolean }) => {
 
     const { title, children, variant, showDivider, ...css } = props;
 
@@ -11,7 +11,7 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: "
         background="transparent"
         direction="column"
         p="10px"
-        boxShadow={variant === "noShadow" ? "none" : undefined}
+        boxShadow={variant === 'noShadow' ? 'none' : undefined}
         {...css}>
 
         <EpistoHeader text={title}

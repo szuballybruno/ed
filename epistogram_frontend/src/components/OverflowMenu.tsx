@@ -1,8 +1,8 @@
-import React, { useState, useMemo, ReactNode } from "react";
-import { MoreVert } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import classes from "./css/stylesheet.module.css";
-import { Flex } from "@chakra-ui/react";
+import React, { useState, useMemo, ReactNode } from 'react';
+import { MoreVert } from '@mui/icons-material';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import classes from './css/stylesheet.module.css';
+import { Flex } from '@chakra-ui/react';
 
 export default function OverflowMenu(props: {
   children: any,
@@ -25,7 +25,8 @@ export default function OverflowMenu(props: {
 
   const shouldShowMenu = useMemo(() => {
 
-    return Object.values(visibilityMap).some((v) => v === false);
+    return Object.values(visibilityMap)
+.some((v) => v === false);
   }, [visibilityMap]);
 
   if (!shouldShowMenu)
@@ -34,8 +35,8 @@ export default function OverflowMenu(props: {
   return (
     <Flex minWidth={40}
       width={40}
-      alignItems={"center"}
-      justifyContent={"center"}
+      alignItems={'center'}
+      justifyContent={'center'}
       className={className}>
 
       <IconButton
@@ -55,7 +56,7 @@ export default function OverflowMenu(props: {
         {children
           .map((child: any, index) => {
 
-            if (visibilityMap[child.props["name"]])
+            if (visibilityMap[child.props['name']])
               return null;
 
             return (

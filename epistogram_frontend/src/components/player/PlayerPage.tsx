@@ -1,21 +1,21 @@
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ContentPane } from "../ContentPane";
-import { PageRootContainer } from "../PageRootContainer";
-import { EpistoRoutes } from "../universal/EpistoRoutes";
-import { CourseOverviewSubpage } from "./courseOverview/CourseOverviewSubpage";
-import { CourseRatingSubpage } from "./courseRating/CourseRatingSubpage";
-import { PrequizSubpage } from "./prequiz/PrequizSubpage";
-import { PretestResultsSubpage } from "./pretest/PretestResultsSubpage";
-import { PretestSubpage } from "./pretest/PretestSubpage";
-import { WatchSubpage } from "./watch/WatchSubpage";
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ContentPane } from '../ContentPane';
+import { PageRootContainer } from '../PageRootContainer';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';
+import { CourseRatingSubpage } from './courseRating/CourseRatingSubpage';
+import { PrequizSubpage } from './prequiz/PrequizSubpage';
+import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
+import { PretestSubpage } from './pretest/PretestSubpage';
+import { WatchSubpage } from './watch/WatchSubpage';
 
 export const PlayerPage = () => {
 
     return (
         <PageRootContainer
             style={{
-                "--playerWidth": "min(min(100vw, 180vh), 1700px)",
-                background: "var(--gradientBlueBackground)"
+                '--playerWidth': 'min(min(100vw, 180vh), 1700px)',
+                background: 'var(--gradientBlueBackground)'
             } as any}>
 
             <ContentPane

@@ -1,33 +1,33 @@
-import { Flex, Image } from "@chakra-ui/react";
-import { Checkbox, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { CourseShopItemListDTO } from "../../../shared/dtos/CourseShopItemListDTO";
-import { DiscountCodeDTO } from "../../../shared/dtos/DiscountCodeDTO";
-import { ShopItemCategoryDTO } from "../../../shared/dtos/ShopItemCategoryDTO";
-import { ShopItemEditDTO } from "../../../shared/dtos/ShopItemEditDTO";
-import { usePrivateCourses, useSaveShopItem, useShopItemCategories, useShopItemEditData } from "../../../services/api/shopApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { SelectImage } from "../../universal/SelectImage";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import LockIcon from "@mui/icons-material/Lock";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
-import { EpistoLabel } from "../../controls/EpistoLabel";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoSelect } from "../../controls/EpistoSelect";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { useIntParam } from "../../../static/locationHelpers";
+import { Flex, Image } from '@chakra-ui/react';
+import { Checkbox, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { CourseShopItemListDTO } from '../../../shared/dtos/CourseShopItemListDTO';
+import { DiscountCodeDTO } from '../../../shared/dtos/DiscountCodeDTO';
+import { ShopItemCategoryDTO } from '../../../shared/dtos/ShopItemCategoryDTO';
+import { ShopItemEditDTO } from '../../../shared/dtos/ShopItemEditDTO';
+import { usePrivateCourses, useSaveShopItem, useShopItemCategories, useShopItemEditData } from '../../../services/api/shopApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { SelectImage } from '../../universal/SelectImage';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import LockIcon from '@mui/icons-material/Lock';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import { EpistoLabel } from '../../controls/EpistoLabel';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoSelect } from '../../controls/EpistoSelect';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { useIntParam } from '../../../static/locationHelpers';
 
 export const ShopAdminEditSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
-    const shopItemId = useIntParam("shopItemId")!;
+    const shopItemId = useIntParam('shopItemId')!;
     const showError = useShowErrorDialog();
 
     // http
@@ -36,18 +36,18 @@ export const ShopAdminEditSubpage = () => {
     const { shopItemCategories } = useShopItemCategories();
     const { saveShopItemAsync, saveShopItemState } = useSaveShopItem();
 
-    const [name, setName] = useState("");
-    const [detailsUrl, setDetailsUrl] = useState("");
-    const [purchaseLimit, setPurchaseLimit] = useState("");
-    const [coinPrice, setCoinPrice] = useState("");
-    const [currencyPrice, setCurrencyPrice] = useState("");
+    const [name, setName] = useState('');
+    const [detailsUrl, setDetailsUrl] = useState('');
+    const [purchaseLimit, setPurchaseLimit] = useState('');
+    const [coinPrice, setCoinPrice] = useState('');
+    const [currencyPrice, setCurrencyPrice] = useState('');
     const [shopItemCategory, setShopItemCategory] = useState<ShopItemCategoryDTO | null>(null);
     const [course, setCourse] = useState<CourseShopItemListDTO | null>(null);
     const [isPurchaseLimited, setIsPurchaseLimited] = useState(false);
     const [discountCodes, setDiscountCodes] = useState<DiscountCodeDTO[]>([]);
-    const [addCodesField, setAddCodesField] = useState("");
+    const [addCodesField, setAddCodesField] = useState('');
 
-    const [coverFilePath, setCoverFilePath] = useState("");
+    const [coverFilePath, setCoverFilePath] = useState('');
     const [coverFileImage, setCoverFileImage] = useState<File | null>(null);
 
     const [isCourse, setIsCourse] = useState(false);
@@ -55,15 +55,15 @@ export const ShopAdminEditSubpage = () => {
     // calc 
     const addedCodes = (() => {
 
-        if (!addCodesField || addCodesField === "")
+        if (!addCodesField || addCodesField === '')
             return [];
 
         const lines = addCodesField
-            .split("\n");
+            .split('\n');
 
         const linesProcessed = lines
             .map(x => x.trim())
-            .filter(x => x !== "");
+            .filter(x => x !== '');
 
         return linesProcessed
             .map(x => ({
@@ -137,13 +137,13 @@ export const ShopAdminEditSubpage = () => {
         if (!shopItemEditData || shopItemCategories.length === 0 || privateCourses.length === 0)
             return;
 
-        console.log("asd");
+        console.log('asd');
 
         setName(shopItemEditData.name);
-        setPurchaseLimit(shopItemEditData.purchaseLimit + "");
+        setPurchaseLimit(shopItemEditData.purchaseLimit + '');
         setIsPurchaseLimited(!!shopItemEditData.purchaseLimit);
-        setCoinPrice(shopItemEditData.coinPrice + "");
-        setCurrencyPrice(shopItemEditData.currencyPrice + "");
+        setCoinPrice(shopItemEditData.coinPrice + '');
+        setCurrencyPrice(shopItemEditData.currencyPrice + '');
         setCoverFilePath(shopItemEditData.coverFilePath);
         setIsCourse(!!shopItemEditData.courseId);
         setDiscountCodes(shopItemEditData.discountCodes);
@@ -175,8 +175,8 @@ export const ShopAdminEditSubpage = () => {
             setShopItemCategory(shopItemCategories
                 .filter(x => x.id === 3)[0]);
 
-            setCoverFilePath(shopItemEditData?.coverFilePath ?? "");
-            setName(shopItemEditData?.name ?? "");
+            setCoverFilePath(shopItemEditData?.coverFilePath ?? '');
+            setName(shopItemEditData?.name ?? '');
         }
     }, [isCourse]);
 
@@ -187,7 +187,7 @@ export const ShopAdminEditSubpage = () => {
             return;
 
         setName(course.title);
-        setCoverFilePath(course.coverImagePath ?? "");
+        setCoverFilePath(course.coverImagePath ?? '');
     }, [course, isCourse]);
 
     return (
@@ -214,8 +214,8 @@ export const ShopAdminEditSubpage = () => {
                     </Flex>
 
                     {isCourse && <EpistoSelect
-                        getCompareKey={x => x?.id + ""}
-                        getDisplayValue={x => x?.title + ""}
+                        getCompareKey={x => x?.id + ''}
+                        getDisplayValue={x => x?.title + ''}
                         items={privateCourses}
                         selectedValue={course}
                         onSelected={setCourse} />}
@@ -251,8 +251,8 @@ export const ShopAdminEditSubpage = () => {
 
                 <EpistoLabel text={translatableTexts.misc.category}>
                     <EpistoSelect
-                        getCompareKey={x => x?.id + ""}
-                        getDisplayValue={x => x?.name + ""}
+                        getCompareKey={x => x?.id + ''}
+                        getDisplayValue={x => x?.name + ''}
                         items={shopItemCategories}
                         selectedValue={shopItemCategory}
                         onSelected={setShopItemCategory}
@@ -314,7 +314,7 @@ export const ShopAdminEditSubpage = () => {
 
                                         <DeleteSweepIcon
                                             style={{
-                                                marginLeft: "5px"
+                                                marginLeft: '5px'
                                             }} />
                                     </Flex>
                                 </EpistoButton>
@@ -327,12 +327,12 @@ export const ShopAdminEditSubpage = () => {
                                         m="5px"
                                         justify="space-between">
                                         <EpistoFont>
-                                            {x.id ? "id:" + x.id : "Uj"} - {x.code}
+                                            {x.id ? 'id:' + x.id : 'Uj'} - {x.code}
                                         </EpistoFont>
 
                                         {x.isUsed && <LockIcon
                                             style={{
-                                                margin: "5px 7px 5px 7px"
+                                                margin: '5px 7px 5px 7px'
                                             }} />}
 
                                         {!x.isUsed && <EpistoButton

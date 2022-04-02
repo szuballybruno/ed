@@ -1,15 +1,15 @@
-import { Flex } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { usePurchaseShopItem } from "../../services/api/shopApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
-import { usePaging } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
-import { EpistoPaging } from "../universal/EpistoPaging";
+import { Flex } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { usePurchaseShopItem } from '../../services/api/shopApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoDialog, EpistoDialogLogicType } from '../EpistoDialog';
+import { EpistoPaging } from '../universal/EpistoPaging';
 
 export const ShopPurchaseConfirmationDialog = (props: {
     dialogLogic: EpistoDialogLogicType,
@@ -58,9 +58,9 @@ align="center"
 w="500px">
 
             <EpistoFont
-                classes={["dividerBorderBottom"]}
+                classes={['dividerBorderBottom']}
                 style={{
-                    padding: "10px"
+                    padding: '10px'
                 }}>
 
                 {isCourse
@@ -70,18 +70,18 @@ w="500px">
 
             <img
                 style={{
-                    objectFit: "cover",
+                    objectFit: 'cover',
                     borderRadius: 10,
-                    margin: "10px",
-                    width: "400px"
+                    margin: '10px',
+                    width: '400px'
                 }}
                 src={shopItem?.coverFilePath}
                 alt="" />
 
             <EpistoFont
                 style={{
-                    fontWeight: "bold",
-                    maxWidth: "300px"
+                    fontWeight: 'bold',
+                    maxWidth: '300px'
                 }}>
 
                 {shopItem?.name}
@@ -89,7 +89,7 @@ w="500px">
 
             <EpistoButton
                 style={{
-                    margin: "15px 0"
+                    margin: '15px 0'
                 }}
                 variant="colored"
                 onClick={onConfirmPurchaseAsync}>

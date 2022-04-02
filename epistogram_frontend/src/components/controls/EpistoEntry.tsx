@@ -1,9 +1,9 @@
-import { Flex } from "@chakra-ui/layout";
-import { InputAdornment, TextField } from "@mui/material";
-import { FocusEventHandler, Ref, useEffect, useState } from "react";
-import { ClassBuilder } from "../../helpers/classBuilder";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "./EpistoFont";
+import { Flex } from '@chakra-ui/layout';
+import { InputAdornment, TextField } from '@mui/material';
+import { FocusEventHandler, Ref, useEffect, useState } from 'react';
+import { ClassBuilder } from '../../helpers/classBuilder';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from './EpistoFont';
 
 export type EpistoEntryPropsType<TValue extends number | string | null> = {
     value?: TValue,
@@ -14,12 +14,12 @@ export type EpistoEntryPropsType<TValue extends number | string | null> = {
     isMultiline?: boolean,
     postfix?: string,
     placeholder?: string,
-    labelVariant?: "top" | "normal" | "hidden",
+    labelVariant?: 'top' | 'normal' | 'hidden',
     height?: string,
     name?: string,
     marginTop?: string,
     flex?: string,
-    type?: "password" | "number" | "text",
+    type?: 'password' | 'number' | 'text',
     style?: React.CSSProperties,
     errorText?: string | null,
     setError?: (errorText: string | null) => void,
@@ -52,7 +52,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
         inputRef: ref
     } = props;
 
-    const [currentValue, setCurrentValue] = useState<TValue>(value ? value as any : "");
+    const [currentValue, setCurrentValue] = useState<TValue>(value ? value as any : '');
 
     // set value 
     const onChanged = (value: TValue) => {
@@ -96,7 +96,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
 
     const handleNewValue = (newVal: string): any => {
 
-        if (type === "number")
+        if (type === 'number')
             return parseInt(newVal);
 
         return newVal;
@@ -104,17 +104,17 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
 
     return <Flex
         direction="column"
-        mt={marginTop ?? "10px"}
+        mt={marginTop ?? '10px'}
         flex={flex}
         style={style}
         justify="center">
 
-        {labelVariant === "top" && <EpistoFont
+        {labelVariant === 'top' && <EpistoFont
             isUppercase
             fontSize="fontExtraSmall"
             style={{
-                margin: "5px 0",
-                letterSpacing: "1.2px"
+                margin: '5px 0',
+                letterSpacing: '1.2px'
             }}>
 
             {label}
@@ -123,30 +123,30 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
 
         <TextField
             className={new ClassBuilder()
-                .if(!transparentBackground, "mildShadow")
-                .custom("roundBorders")
-                .custom("fontNormal14")
+                .if(!transparentBackground, 'mildShadow')
+                .custom('roundBorders')
+                .custom('fontNormal14')
                 .build()}
             inputRef={ref}
             disabled={disabled}
             size="small"
-            label={labelVariant === "normal" ? label : undefined}
+            label={labelVariant === 'normal' ? label : undefined}
             placeholder={placeholder}
             name={name}
-            value={currentValue + ""}
+            value={currentValue + ''}
             error={!!errorText}
             helperText={errorText}
             multiline={isMultiline}
             type={type}
             sx={{
-                "& .MuiOutlinedInput-root": {
+                '& .MuiOutlinedInput-root': {
                     height: height,
                     background: transparentBackground
                         ? undefined
-                        : "var(--transparentWhite90)",
+                        : 'var(--transparentWhite90)',
                 },
-                "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none"
+                '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none'
                 }
             }}
             InputProps={{
@@ -159,11 +159,11 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
                     )
                     : undefined,
                 style: {
-                    fontSize: "14px",
+                    fontSize: '14px',
                     padding: 0
                 },
                 sx: {
-                    "& .MuiInputBase-input": {
+                    '& .MuiInputBase-input': {
                         padding: 0
                     }
                 }

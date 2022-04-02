@@ -1,19 +1,19 @@
-import { Box, Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useLogInUser } from "../../services/api/authenticationApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoEntry } from "../controls/EpistoEntry";
-import { EpistoFont } from "../controls/EpistoFont";
-import { useEpistoDialogLogic } from "../EpistoDialog";
-import { PageRootContainer } from "../PageRootContainer";
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
+import { Box, Flex } from '@chakra-ui/layout';
+import { Typography } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useLogInUser } from '../../services/api/authenticationApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { getAssetUrl, useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFont } from '../controls/EpistoFont';
+import { useEpistoDialogLogic } from '../EpistoDialog';
+import { PageRootContainer } from '../PageRootContainer';
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 
 const LoginScreen = () => {
 
@@ -25,14 +25,14 @@ const LoginScreen = () => {
     const user = useContext(CurrentUserContext);
 
     // state
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
     // refs
     const emailRef = React.useRef<HTMLInputElement>(null);
     const pwRef = React.useRef<HTMLInputElement>(null);
 
-    const passwordResetDialogLogic = useEpistoDialogLogic("pwreset", {
-        defaultCloseButtonType: "top"
+    const passwordResetDialogLogic = useEpistoDialogLogic('pwreset', {
+        defaultCloseButtonType: 'top'
     });
 
     const isDesktopView = useIsScreenWiderThan(1200);
@@ -59,9 +59,9 @@ const LoginScreen = () => {
             if (!e)
                 return;
 
-            if (e.errorType === "bad request") {
+            if (e.errorType === 'bad request') {
 
-                setErrorMessage("Hibás adatok!");
+                setErrorMessage('Hibás adatok!');
             }
             else if (e.errorType) {
 
@@ -69,7 +69,7 @@ const LoginScreen = () => {
             }
             else {
 
-                showErrorDialog("" + e);
+                showErrorDialog('' + e);
             }
         }
     };
@@ -83,7 +83,7 @@ const LoginScreen = () => {
     // and navigate to home page if athenticated
     useEffect(() => {
 
-        if (authState === "authenticated") {
+        if (authState === 'authenticated') {
 
             if (user!.userActivity.canAccessApplication) {
 
@@ -103,27 +103,27 @@ const LoginScreen = () => {
 
         const onKeydown = (event) => {
 
-            if (event.code !== "Enter" && event.code !== "NumpadEnter")
+            if (event.code !== 'Enter' && event.code !== 'NumpadEnter')
                 return;
 
             event.preventDefault();
             handleLoginUserAsync();
         };
 
-        document.addEventListener("keydown", onKeydown);
+        document.addEventListener('keydown', onKeydown);
 
         return () => {
-            document.removeEventListener("keydown", onKeydown);
+            document.removeEventListener('keydown', onKeydown);
         };
     }, []);
 
     return <PageRootContainer>
 
         <Flex
-            justify={"center"}
+            justify={'center'}
             background="gradientBlueBackground"
             py="60px"
-            overflowY={"scroll"}
+            overflowY={'scroll'}
             height="100%"
             width="100%">
 
@@ -140,10 +140,10 @@ const LoginScreen = () => {
                 mx="100px"
                 p="50px 150px"
                 overflow="hidden"
-                position={"relative"}>
+                position={'relative'}>
 
                 <Flex
-                    wrap={"wrap"}
+                    wrap={'wrap'}
                     className="whall"
                     maxW="700px">
 
@@ -157,25 +157,25 @@ const LoginScreen = () => {
 
                         {/* epi logo */}
                         <img
-                            src={getAssetUrl("/images/logo.png")}
+                            src={getAssetUrl('/images/logo.png')}
                             style={{
-                                width: "250px",
-                                maxHeight: "100px",
-                                objectFit: "contain",
-                                marginLeft: "15px",
-                                cursor: "pointer",
+                                width: '250px',
+                                maxHeight: '100px',
+                                objectFit: 'contain',
+                                marginLeft: '15px',
+                                cursor: 'pointer',
                             }}
                             alt="" />
 
                         {/* 3d redeem image */}
                         <img
-                            src={getAssetUrl("/images/redeem3D.png")}
+                            src={getAssetUrl('/images/redeem3D.png')}
                             style={{
-                                width: "100%",
-                                maxHeight: "350px",
-                                objectFit: "contain",
-                                marginLeft: "15px",
-                                cursor: "pointer",
+                                width: '100%',
+                                maxHeight: '350px',
+                                objectFit: 'contain',
+                                marginLeft: '15px',
+                                cursor: 'pointer',
                             }}
                             alt="" />
 
@@ -194,7 +194,7 @@ const LoginScreen = () => {
                             width="100%"
                             alignItems="flex-start">
 
-                            <EpistoFont fontSize={"fontLargePlus"}>
+                            <EpistoFont fontSize={'fontLargePlus'}>
 
                                 Örülünk, hogy ismét itt vagy velünk!
                             </EpistoFont>
@@ -227,10 +227,10 @@ const LoginScreen = () => {
 
                                 <EpistoFont
                                     fontSize="fontSmall"
-                                    classes={["fontGrey"]}
+                                    classes={['fontGrey']}
                                     style={{
-                                        textTransform: "none",
-                                        marginTop: "5px",
+                                        textTransform: 'none',
+                                        marginTop: '5px',
                                         fontWeight: 400
                                     }}>
 
@@ -239,7 +239,7 @@ const LoginScreen = () => {
                             </EpistoButton>
 
                             {/* error msg */}
-                            <EpistoFont style={{ color: "var(--mildRed)" }}>
+                            <EpistoFont style={{ color: 'var(--mildRed)' }}>
                                 {errorMessage}
                             </EpistoFont>
                         </Box>
@@ -251,8 +251,8 @@ const LoginScreen = () => {
                             style={{
                                 marginTop: 15,
                                 marginBottom: 15,
-                                width: "100%",
-                                backgroundColor: "var(--deepBlue)"
+                                width: '100%',
+                                backgroundColor: 'var(--deepBlue)'
                             }}
                             onClick={handleLoginUserAsync}>
 
@@ -260,8 +260,8 @@ const LoginScreen = () => {
                         </EpistoButton>
 
                         <Flex
-                            direction={"row"}
-                            justifyContent={"space-between"}
+                            direction={'row'}
+                            justifyContent={'space-between'}
                             width="100%">
 
                             <EpistoFont fontSize="fontSmall">
@@ -269,11 +269,11 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate("/register-via-activation-code")}
+                                onClick={() => navigate('/register-via-activation-code')}
                                 fontSize="fontSmall"
                                 style={{
-                                    color: "--deepBlue",
-                                    textAlign: "right"
+                                    color: '--deepBlue',
+                                    textAlign: 'right'
                                 }}>
 
                                 Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon
@@ -285,39 +285,39 @@ const LoginScreen = () => {
                 {/* Magic powder top-left */}
                 <img
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         left: 50,
                         top: -80,
                         width: 300,
-                        transform: "rotate(270deg)",
-                        objectFit: "contain",
+                        transform: 'rotate(270deg)',
+                        objectFit: 'contain',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/bg-art-2.png")}
+                    src={getAssetUrl('/images/bg-art-2.png')}
                     alt="" />
 
                 {/* Magic powder bottom-left */}
                 <img
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         left: -55,
                         bottom: -150,
-                        transform: "rotate(-90deg) scale(50%)",
+                        transform: 'rotate(-90deg) scale(50%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/bg-art-5.png")}
+                    src={getAssetUrl('/images/bg-art-5.png')}
                     alt="" />
 
                 {/* Magic powder top-left */}
                 <img
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         right: -20,
                         top: -120,
-                        transform: "rotate(270deg) scale(70%)",
+                        transform: 'rotate(270deg) scale(70%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl("/images/bg-art-6.png")}
+                    src={getAssetUrl('/images/bg-art-6.png')}
                     alt="" />
             </LoadingFrame>
         </Flex>

@@ -1,25 +1,25 @@
-import { Flex } from "@chakra-ui/react";
-import React, { useContext } from "react";
-import { Route } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ApplicationRoute } from "../../models/types";
-import { useNavigation } from "../../services/core/navigatior";
-import { ArrayBuilder, getAssetUrl } from "../../static/frontendHelpers";
-import { ContentPane } from "../ContentPane";
-import { NavigationLinkList } from "../NavigationLinkList";
-import { PageRootContainer } from "../PageRootContainer";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { EpistoRoutes } from "../universal/EpistoRoutes";
-import { CourseAdministartionSubpage } from "./courses/CourseAdministartionSubpage";
-import { AdminHomeDetails } from "./home/AdminHomeDetails";
-import { AdminHomeOverview } from "./home/AdminHomeOverview";
-import { EditDailyTipSubpage } from "./personalityAssessment/EditDailyTipSubpage";
-import { EditPersonalityTraitCategorySubpage } from "./personalityAssessment/EditPersonalityTraitCategorySubpage";
-import { PersonalityTraitCategoriesSubpage } from "./personalityAssessment/PersonalityTraitCategoriesSubpage";
-import { ShopAdminEditSubpage } from "./shop/ShopAdminEditSubpage";
-import { ShopAdminSubpage } from "./shop/ShopAdminSubpage";
-import AdminStatistics from "./users/AdminStatisticsSubpage";
-import { AdminUserControl } from "./users/AdminUserControl";
+import { Flex } from '@chakra-ui/react';
+import React, { useContext } from 'react';
+import { Route } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
+import { ArrayBuilder, getAssetUrl } from '../../static/frontendHelpers';
+import { ContentPane } from '../ContentPane';
+import { NavigationLinkList } from '../NavigationLinkList';
+import { PageRootContainer } from '../PageRootContainer';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
+import { AdminHomeDetails } from './home/AdminHomeDetails';
+import { AdminHomeOverview } from './home/AdminHomeOverview';
+import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
+import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
+import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
+import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
+import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
+import AdminStatistics from './users/AdminStatisticsSubpage';
+import { AdminUserControl } from './users/AdminUserControl';
 
 export const AdminPage = () => {
 
@@ -57,16 +57,16 @@ export const AdminPage = () => {
 
             {/* logo link */}
             <Flex width="100%"
-                alignItems={"center"}
+                alignItems={'center'}
                 justifyContent="center"
                 mt="10px"
                 mb="20px">
                 <img
-                    src={getAssetUrl("/images/logo_min.svg")}
+                    src={getAssetUrl('/images/logo_min.svg')}
                     style={{
-                        height: "50px",
-                        objectFit: "cover",
-                        cursor: "pointer",
+                        height: '50px',
+                        objectFit: 'cover',
+                        cursor: 'pointer',
                         padding: 0
                     }}
                     alt=""
@@ -112,7 +112,7 @@ export const AdminPage = () => {
                     {
                         route: administrationRoutes.coursesRoute,
                         element: <CourseAdministartionSubpage />,
-                        protectionLevel: "authorize",
+                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessCourseAdministration
                     },
 
@@ -130,7 +130,7 @@ export const AdminPage = () => {
                                     element: <ShopAdminEditSubpage />
                                 }
                             ]} />,
-                        protectionLevel: "authorize",
+                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     },
 
@@ -152,7 +152,7 @@ export const AdminPage = () => {
                                     element: <EditDailyTipSubpage />
                                 }
                             ]} />,
-                        protectionLevel: "authorize",
+                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     },
 
@@ -160,7 +160,7 @@ export const AdminPage = () => {
                     {
                         route: administrationRoutes.myCompanyRoute,
                         element: <AdminStatistics/>,
-                        protectionLevel: "authorize",
+                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     }
                 ]} />

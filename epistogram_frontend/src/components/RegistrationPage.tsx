@@ -1,29 +1,29 @@
-import { Image } from "@chakra-ui/image";
-import { Flex } from "@chakra-ui/layout";
-import { Checkbox, TextField, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
-import { useNavigation } from "../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../services/core/notifications";
-import { RefetchUserAsyncContext } from "./system/AuthenticationFrame";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { EpistoButton } from "./controls/EpistoButton";
-import { useRegisterInvitedUser, useRegisterUser } from "../services/api/registrationApiService";
-import { translatableTexts } from "../static/translatableTexts";
-import { EpistoFont } from "./controls/EpistoFont";
+import { Image } from '@chakra-ui/image';
+import { Flex } from '@chakra-ui/layout';
+import { Checkbox, TextField, Typography } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { getAssetUrl, getQueryParam, usePasswordEntryState } from '../static/frontendHelpers';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
+import { LoadingFrame } from './system/LoadingFrame';
+import { EpistoButton } from './controls/EpistoButton';
+import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoFont } from './controls/EpistoFont';
 
 export const RegistrationPage = () => {
 
-    const token = getQueryParam("token");
-    const isInvited = getQueryParam("isInvited") === "true";
+    const token = getQueryParam('token');
+    const isInvited = getQueryParam('isInvited') === 'true';
 
     const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 
     // registration
-    const [lastName, setLastName] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [emailAddress, setEmailAddress] = useState("");
+    const [lastName, setLastName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [emailAddress, setEmailAddress] = useState('');
 
     // invitation
     const {
@@ -86,7 +86,7 @@ export const RegistrationPage = () => {
             bg="white"
             padding="30px"
             alignItems="center"
-            justifyContent={"center"}
+            justifyContent={'center'}
             className="roundBorders"
             boxShadow="#00000024 10px 30px 50px 0px">
 
@@ -94,9 +94,9 @@ export const RegistrationPage = () => {
             <Flex width="100%"
 maxH={50}
 my="25px"
-justifyContent={"center"}>
+justifyContent={'center'}>
                 <Image width="50%"
-src={getAssetUrl("/images/logo.svg")} />
+src={getAssetUrl('/images/logo.svg')} />
             </Flex>
 
             {!isInvited && <EpistoFont>{translatableTexts.registrationPage.learningStyleSurvey}</EpistoFont>}
@@ -110,21 +110,21 @@ src={getAssetUrl("/images/logo.svg")} />
                     label={translatableTexts.registrationPage.firstNameLabel}
                     value={firstName}
                     onChange={x => setFirstName(x.currentTarget.value)}
-                    style={{ margin: "10px" }}></TextField>
+                    style={{ margin: '10px' }}></TextField>
 
                 <TextField
                     variant="standard"
                     label={translatableTexts.registrationPage.lastNameLabel}
                     value={lastName}
                     onChange={x => setLastName(x.currentTarget.value)}
-                    style={{ margin: "10px" }}></TextField>
+                    style={{ margin: '10px' }}></TextField>
 
                 <TextField
                     variant="standard"
                     label={translatableTexts.registrationPage.emailLabel}
                     value={emailAddress}
                     onChange={x => setEmailAddress(x.currentTarget.value)}
-                    style={{ margin: "10px" }}></TextField>
+                    style={{ margin: '10px' }}></TextField>
             </>}
 
             {/* invited */}
@@ -140,7 +140,7 @@ src={getAssetUrl("/images/logo.svg")} />
                     onChange={x => {
                         setPassword(x.currentTarget.value);
                     }}
-                    style={{ margin: "10px" }}></TextField>
+                    style={{ margin: '10px' }}></TextField>
 
                 <TextField
                     variant="standard"
@@ -152,13 +152,13 @@ src={getAssetUrl("/images/logo.svg")} />
                     onChange={x => {
                         setPasswordCompare(x.currentTarget.value);
                     }}
-                    style={{ margin: "10px" }}>
+                    style={{ margin: '10px' }}>
 
                 </TextField>
             </>}
 
-            <Flex direction={"row"}
-alignItems={"center"}>
+            <Flex direction={'row'}
+alignItems={'center'}>
 
                 <Checkbox
                     checked={acceptPrivacyPolicy}
@@ -167,7 +167,7 @@ alignItems={"center"}>
 
                 <EpistoFont
                     style={{
-                        userSelect: "none"
+                        userSelect: 'none'
                     }}>
 
                     {translatableTexts.registrationPage.privacyPolicyDescriptionParts[0]}
@@ -175,10 +175,10 @@ alignItems={"center"}>
                     <a
                         target="_blank"
                         rel="noreferrer"
-                        style={{ color: "#0055CC" }}
-                        href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
+                        style={{ color: '#0055CC' }}
+                        href={'https://epistogram.com/adatkezelesi-tajekoztato'}>
 
-                        {" " + translatableTexts.registrationPage.privacyPolicyDescriptionParts[1]}
+                        {' ' + translatableTexts.registrationPage.privacyPolicyDescriptionParts[1]}
                     </a>
 
                     {translatableTexts.registrationPage.privacyPolicyDescriptionParts[2]}
@@ -191,9 +191,9 @@ alignItems={"center"}>
                 variant="outlined"
                 isDisabled={!acceptPrivacyPolicy || (isInvited && hasCredentialError)}
                 style={{
-                    width: "200px",
-                    alignSelf: "center",
-                    marginTop: "20px"
+                    width: '200px',
+                    alignSelf: 'center',
+                    marginTop: '20px'
                 }}>
 
                 {translatableTexts.registrationPage.letsStart}

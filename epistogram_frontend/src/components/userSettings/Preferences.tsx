@@ -1,18 +1,18 @@
-import { Flex } from "@chakra-ui/layout";
-import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
-import { useUploadAvatarFile } from "../../services/api/fileApiService";
-import { useRequestPasswordChangeAuthenticated } from "../../services/api/passwordChangeApiService";
-import { useSaveUserSimple } from "../../services/api/userApiService";
-import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
-import { reloadPage } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoEntry } from "../controls/EpistoEntry";
-import { EpistoFont } from "../controls/EpistoFont";
-import { ProfileImage } from "../ProfileImage";
-import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { SelectImage } from "../universal/SelectImage";
+import { Flex } from '@chakra-ui/layout';
+import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { useUploadAvatarFile } from '../../services/api/fileApiService';
+import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
+import { useSaveUserSimple } from '../../services/api/userApiService';
+import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
+import { reloadPage } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFont } from '../controls/EpistoFont';
+import { ProfileImage } from '../ProfileImage';
+import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { SelectImage } from '../universal/SelectImage';
 
 const EditField = (props: { children: ReactNode, label: string }) => {
 
@@ -52,7 +52,7 @@ export const Preferences = () => {
 
     const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
 
-    const [currentPassword, setCurrentPassword] = useState("");
+    const [currentPassword, setCurrentPassword] = useState('');
 
     const isChanged = [
         firstName !== user.firstName,
@@ -113,7 +113,7 @@ export const Preferences = () => {
         if (isPasswordChangeOpen)
             return;
 
-        setCurrentPassword("");
+        setCurrentPassword('');
     }, [isPasswordChangeOpen]);
 
     return <LoadingFrame
@@ -177,7 +177,7 @@ width="100%"
                 isUppercase
                 fontSize="fontExtraSmall"
                 style={{
-                    margin: "10px 0 5px 0",
+                    margin: '10px 0 5px 0',
                 }}>
 
                 {translatableTexts.preferences.changePassword}
@@ -192,9 +192,9 @@ width="100%"
 
                 {!isPasswordChangeOpen && <EpistoButton
                     style={{
-                        background: "var(--transparentWhite70)",
-                        color: "black",
-                        width: "100%"
+                        background: 'var(--transparentWhite70)',
+                        color: 'black',
+                        width: '100%'
                     }}
                     onClick={() => setIsPasswordChangeOpen(true)}
                     variant="colored">
@@ -220,9 +220,9 @@ width="100%">
                         <EpistoButton
                             variant="colored"
                             style={{
-                                background: "var(--transparentWhite70)",
-                                color: "black",
-                                flex: "1"
+                                background: 'var(--transparentWhite70)',
+                                color: 'black',
+                                flex: '1'
                             }}
                             onClick={() => setIsPasswordChangeOpen(false)}>
 
@@ -233,10 +233,10 @@ width="100%">
                             variant="colored"
                             onClick={handleRequestChangePasswordAsync}
                             style={{
-                                marginLeft: "20px",
-                                background: "var(--transparentWhite70)",
-                                color: "black",
-                                flex: "1"
+                                marginLeft: '20px',
+                                background: 'var(--transparentWhite70)',
+                                color: 'black',
+                                flex: '1'
                             }}>
 
                             {translatableTexts.preferences.sendResetMail}
@@ -250,12 +250,12 @@ width="100%">
                 variant="colored"
                 onClick={saveChangesAsync}
                 style={{
-                    alignSelf: "center",
-                    marginTop: "60px",
-                    marginBottom: "30px",
-                    width: "100%",
-                    background: "var(--transparentWhite70)",
-                    color: "black",
+                    alignSelf: 'center',
+                    marginTop: '60px',
+                    marginBottom: '30px',
+                    width: '100%',
+                    background: 'var(--transparentWhite70)',
+                    color: 'black',
                 }}>
 
                 {translatableTexts.preferences.saveChanges}

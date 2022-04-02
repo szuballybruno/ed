@@ -1,20 +1,20 @@
-import { Flex, Image } from "@chakra-ui/react";
-import { CourseModeType } from "../../../shared/types/sharedTypes";
-import { useSetCourseMode } from "../../../services/api/courseApiService";
-import { usePretestResults } from "../../../services/api/pretestApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { useIntParam } from "../../../static/locationHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { EpistoGrid } from "../../controls/EpistoGrid";
-import { getAssetUrl } from "../../../static/frontendHelpers";
+import { Flex, Image } from '@chakra-ui/react';
+import { CourseModeType } from '../../../shared/types/sharedTypes';
+import { useSetCourseMode } from '../../../services/api/courseApiService';
+import { usePretestResults } from '../../../services/api/pretestApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import StatisticsCard from '../../statisticsCard/StatisticsCard';
+import { EpistoGrid } from '../../controls/EpistoGrid';
+import { getAssetUrl } from '../../../static/frontendHelpers';
 
 export const PretestResultsSubpage = () => {
 
-    const courseId = useIntParam("courseId")!;
+    const courseId = useIntParam('courseId')!;
     const { navigateToPlayer } = useNavigation();
 
     const { pretestResults, pretestResultsError, pretestResultsState } = usePretestResults(courseId);
@@ -66,32 +66,32 @@ export const PretestResultsSubpage = () => {
                 </Flex>
 
                 <EpistoGrid
-                    gap={"10"}
+                    gap={'10'}
                     padding="10px"
-                    minColumnWidth={"280px"}
-                    auto={"fill"}
+                    minColumnWidth={'280px'}
+                    auto={'fill'}
                     gridAutoRows="150px" >
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/pretest1.png")}
+                        iconPath={getAssetUrl('/images/pretest1.png')}
                         value={correctAnswerRate.toString()}
                         suffix="%"
                         title="Elért eredmény a felmérő teszten" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/pretest2.png")}
+                        iconPath={getAssetUrl('/images/pretest2.png')}
                         value="6"
                         suffix="db"
                         title="Megtekintésre ajánlott napi videó" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/pretest3.png")}
+                        iconPath={getAssetUrl('/images/pretest3.png')}
                         value="Kezdő"
                         suffix=""
                         title="Üzemmód ajánlott" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl("/images/pretest4.png")}
+                        iconPath={getAssetUrl('/images/pretest4.png')}
                         value="Automata"
                         suffix=""
                         title="Megtekintésre ajánlott napi videó" />
@@ -106,18 +106,18 @@ my="10px">
                         h="30px"
                         w="30px"
                         mr="5px"
-                        src={getAssetUrl("/images/tempomatdatechange.png")}
+                        src={getAssetUrl('/images/tempomatdatechange.png')}
                     />
 
-                    <EpistoFont fontSize={"fontLarge"}>
+                    <EpistoFont fontSize={'fontLarge'}>
 
                         A tanfolyam várható befejezésének dátuma:
                     </EpistoFont>
 
                     <EpistoFont
-                        fontSize={"fontLarge"}
+                        fontSize={'fontLarge'}
                         style={{
-                            marginLeft: "5px",
+                            marginLeft: '5px',
                             fontWeight: 600
                         }}>
 
@@ -146,8 +146,8 @@ my="10px">
                         align="center">
 
                         <EpistoButton
-                            onClick={() => setModeAndNavigateAsync("beginner")}
-                            variant={isBeginner ? "colored" : "plain"}>
+                            onClick={() => setModeAndNavigateAsync('beginner')}
+                            variant={isBeginner ? 'colored' : 'plain'}>
 
                             Kezdő üzemmóddal indulok
                         </EpistoButton>
@@ -156,8 +156,8 @@ my="10px">
                             style={{
                                 marginLeft: 10
                             }}
-                            onClick={() => setModeAndNavigateAsync("advanced")}
-                            variant={isBeginner ? "plain" : "colored"}>
+                            onClick={() => setModeAndNavigateAsync('advanced')}
+                            variant={isBeginner ? 'plain' : 'colored'}>
 
                             Inkább haladó üzemmóddal kezdek
                         </EpistoButton>

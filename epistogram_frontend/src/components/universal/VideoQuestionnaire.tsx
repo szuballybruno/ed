@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useReactTimer } from "../../helpers/reactTimer";
-import { QuestionDTO } from "../../shared/dtos/QuestionDTO";
-import { useAnswerQuestion } from "../../services/api/playerApiService";
-import { epochDates } from "../../static/frontendHelpers";
-import { QuesitionView } from "../QuestionView";
-import { EpistoButton } from "../controls/EpistoButton";
-import { TimeoutFrame } from "./TimeoutFrame";
-import { EpistoFont } from "../controls/EpistoFont";
-import { translatableTexts } from "../../static/translatableTexts";
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useReactTimer } from '../../helpers/reactTimer';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { useAnswerQuestion } from '../../services/api/playerApiService';
+import { epochDates } from '../../static/frontendHelpers';
+import { QuesitionView } from '../QuestionView';
+import { EpistoButton } from '../controls/EpistoButton';
+import { TimeoutFrame } from './TimeoutFrame';
+import { EpistoFont } from '../controls/EpistoFont';
+import { translatableTexts } from '../../static/translatableTexts';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -66,12 +66,12 @@ export const VideoQuestionnaire = (props: {
             bonusCoinsAcquired={answerResult?.coinAcquires?.bonus ?? null}
             {...css} />
 
-        <Flex display={isAnswered ? undefined : "none"}
+        <Flex display={isAnswered ? undefined : 'none'}
 justify="flex-end">
 
             <EpistoButton
                 variant="colored"
-                style={{ padding: "0" }}
+                style={{ padding: '0' }}
                 onClick={() => handleCloseDialog()}>
 
                 <TimeoutFrame reactTimer={reactTimer}>
@@ -79,8 +79,8 @@ justify="flex-end">
                         isUppercase
                         fontSize="fontNormal14"
                         style={{
-                            position: "relative",
-                            margin: "10px"
+                            position: 'relative',
+                            margin: '10px'
                         }}>
 
                         {translatableTexts.videoQuestionnaire.close}

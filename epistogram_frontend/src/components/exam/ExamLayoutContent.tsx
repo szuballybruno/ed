@@ -1,5 +1,5 @@
-import { Flex, Text } from "@chakra-ui/react";
-import React, { CSSProperties, ReactNode } from "react";
+import { Flex, Text } from '@chakra-ui/react';
+import React, { CSSProperties, ReactNode } from 'react';
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
@@ -12,10 +12,10 @@ export const ExamLayoutContent = (props: {
     return (
         <Flex
             id="examLayoutContentRoot"
-            direction={"column"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            width={"80%"}
+            direction={'column'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            width={'80%'}
             flex={1}
             style={style}>
 
@@ -27,11 +27,11 @@ export const ExamLayoutContent = (props: {
 
                 <img
                     style={{
-                        borderRadius: "50%",
-                        padding: "8px",
-                        width: "50px",
-                        height: "50px",
-                        marginRight: "30px"
+                        borderRadius: '50%',
+                        padding: '8px',
+                        width: '50px',
+                        height: '50px',
+                        marginRight: '30px'
                     }}
                     alt=""
                     src="https://static.thenounproject.com/png/92068-200.png"
@@ -39,7 +39,7 @@ export const ExamLayoutContent = (props: {
 
                 <Text
                     as="text"
-                    fontSize={"1.3rem"}>
+                    fontSize={'1.3rem'}>
                     {title}
                 </Text>
             </Flex>
@@ -47,8 +47,8 @@ export const ExamLayoutContent = (props: {
             {/* answers */}
             <Flex
                 id="examLayoutContentContainer"
-                direction={"row"}
-                justifyContent={"center"}
+                direction={'row'}
+                justifyContent={'center'}
                 pt={10}
                 width="100%">
 

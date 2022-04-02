@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/layout";
-import { Close } from "@mui/icons-material";
-import { ButtonType } from "../../models/types";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoCheckbox } from "../controls/EpistoCheckbox";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoSearch } from "../controls/EpistoSearch";
-import { EpistoSelect } from "../controls/EpistoSelect";
-import { BulkEditButtons, BulkEditButtonType } from "./BulkEditButtons";
+import { Flex } from '@chakra-ui/layout';
+import { Close } from '@mui/icons-material';
+import { ButtonType } from '../../models/types';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoCheckbox } from '../controls/EpistoCheckbox';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoSearch } from '../controls/EpistoSearch';
+import { EpistoSelect } from '../controls/EpistoSelect';
+import { BulkEditButtons, BulkEditButtonType } from './BulkEditButtons';
 
 export const AdminListEditHeader = (props: {
     isAllSelected?: boolean,
@@ -50,7 +50,7 @@ export const AdminListEditHeader = (props: {
                         value={!!isAllSelected} />
 
                     <EpistoFont
-                        style={{ marginLeft: "20px", color: "black" }}>
+                        style={{ marginLeft: '20px', color: 'black' }}>
 
                         Összes kijelölése
                     </EpistoFont>
@@ -68,7 +68,7 @@ export const AdminListEditHeader = (props: {
                 <div className="h-flex align-center fontLight">
 
                     <EpistoFont
-                        style={{ marginLeft: "20px", color: "black" }}>
+                        style={{ marginLeft: '20px', color: 'black' }}>
 
                         {`${selectionCount} ${itemLabel} kijelölve`}
                     </EpistoFont>
@@ -97,9 +97,9 @@ export const AdminListEditHeader = (props: {
         {/* search */}
         <Flex
             height="100%"
-            direction={"row"}
-            justifyContent={"flex-start"}
-            alignItems={"center"}
+            direction={'row'}
+            justifyContent={'flex-start'}
+            alignItems={'center'}
             width={140}
             mx={10}>
             <EpistoSearch
@@ -117,9 +117,9 @@ export const AdminListEditHeader = (props: {
             height="100%"
             mx={10}>
             <EpistoSelect
-                minWidth={"fit-content"}
+                minWidth={'fit-content'}
                 items={[]}
-                onSelected={x => { throw new Error("Not implemented!"); }}
+                onSelected={x => { throw new Error('Not implemented!'); }}
                 selectedValue="1"
                 getCompareKey={x => x}
                 defaultValue="Rendezés...">
@@ -136,7 +136,7 @@ export const AdminListEditHeader = (props: {
                     className="margin-right"
                     onClick={x.action}
                     style={{
-                        background: "white"
+                        background: 'white'
                     }}>
 
                     {x.title}

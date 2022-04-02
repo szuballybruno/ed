@@ -1,10 +1,10 @@
-import { Flex } from "@chakra-ui/react";
-import React from "react";
-import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoHeader } from "../EpistoHeader";
-import { ProfileImage } from "../ProfileImage";
+import { Flex } from '@chakra-ui/react';
+import React from 'react';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { getAssetUrl } from '../../static/frontendHelpers';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
+import { ProfileImage } from '../ProfileImage';
 
 export const CourseDetailsTeacherSection = (props: {
     courseDetails: CourseDetailsDTO
@@ -14,28 +14,28 @@ export const CourseDetailsTeacherSection = (props: {
 
     const infoCards = [
         {
-            icon: getAssetUrl("/course_page_icons/teacher_courses.svg"),
+            icon: getAssetUrl('/course_page_icons/teacher_courses.svg'),
             title: `${courseDetails.teacherData.teacherCourseCount} kurzus`
         },
         {
-            icon: getAssetUrl("/course_page_icons/teacher_videos.svg"),
+            icon: getAssetUrl('/course_page_icons/teacher_videos.svg'),
             title: `${courseDetails.teacherData.teacherVideoCount} videó`
         },
         {
-            icon: getAssetUrl("/course_page_icons/teacher_enrolled.svg"),
+            icon: getAssetUrl('/course_page_icons/teacher_enrolled.svg'),
             title: `${courseDetails.teacherData.teacherStudentCount} hallgató`
         },
         {
-            icon: getAssetUrl("/course_page_icons/teacher_review.svg"),
+            icon: getAssetUrl('/course_page_icons/teacher_review.svg'),
             title: `${courseDetails.teacherData.teacherRating} értékelés`
         }
     ];
 
     return <Flex
-        direction={"column"}>
+        direction={'column'}>
 
         <EpistoHeader
-            text={"Az oktatóról"}
+            text={'Az oktatóról'}
             my={10} />
 
         {/* header  */}
@@ -58,14 +58,14 @@ export const CourseDetailsTeacherSection = (props: {
                     className="square50" />
 
                 {/* details */}
-                <Flex flexDir={"column"}
+                <Flex flexDir={'column'}
                     marginLeft="10px">
 
                     {/* full name */}
                     <EpistoFont
-                        fontSize={"fontNormal14"}
+                        fontSize={'fontNormal14'}
                         style={{
-                            fontWeight: "bold"
+                            fontWeight: 'bold'
                         }}>
 
                         {courseDetails.teacherData.teacherFullName}
@@ -99,12 +99,12 @@ export const CourseDetailsTeacherSection = (props: {
                             <img
                                 className="square35"
                                 style={{
-                                    filter: "invert(1)"
+                                    filter: 'invert(1)'
                                 }}
-                                src={getAssetUrl("/course_page_icons/teacher_award.svg")} />
+                                src={getAssetUrl('/course_page_icons/teacher_award.svg')} />
 
                             <EpistoFont
-                                classes={["fontLight"]}>
+                                classes={['fontLight']}>
 
                                 {badge}
                             </EpistoFont>
@@ -116,14 +116,14 @@ export const CourseDetailsTeacherSection = (props: {
         {/* info cards */}
         <Flex
             height={70}
-            justifyContent={"space-between"}>
+            justifyContent={'space-between'}>
 
             {infoCards
                 .map((infoCard, index) => <Flex
                     key={index}
                     width={160}
                     mx={20}
-                    alignItems={"center"}>
+                    alignItems={'center'}>
 
                     {/* icon */}
                     <img
@@ -131,7 +131,7 @@ export const CourseDetailsTeacherSection = (props: {
                             width: 30
                         }}
                         src={infoCard.icon}
-                        alt={""} />
+                        alt={''} />
 
                     {/* text */}
                     <EpistoFont

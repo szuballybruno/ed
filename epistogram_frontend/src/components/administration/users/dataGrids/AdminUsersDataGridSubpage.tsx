@@ -1,14 +1,14 @@
-import { NavigateNextTwoTone } from "@mui/icons-material";
-import { GridRowsProp, GridColDef, DataGrid } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
-import { applicationRoutes } from "../../../../configuration/applicationRoutes";
-import { useNavigation } from "../../../../services/core/navigatior";
-import { AdminPageUserDTO } from "../../../../shared/dtos/admin/AdminPageUserDTO";
-import { formatTimespan } from "../../../../static/frontendHelpers";
-import { EpistoButton } from "../../../controls/EpistoButton";
-import { ProfileImage } from "../../../ProfileImage";
-import { AdminBreadcrumbsHeader } from "../../AdminBreadcrumbsHeader";
+import { NavigateNextTwoTone } from '@mui/icons-material';
+import { GridRowsProp, GridColDef, DataGrid } from '@mui/x-data-grid';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
+import { applicationRoutes } from '../../../../configuration/applicationRoutes';
+import { useNavigation } from '../../../../services/core/navigatior';
+import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
+import { formatTimespan } from '../../../../static/frontendHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { ProfileImage } from '../../../ProfileImage';
+import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
 
 export const AdminUserDataGridSubpage = (props: {
     users: AdminPageUserDTO[]
@@ -37,8 +37,8 @@ export const AdminUserDataGridSubpage = (props: {
 
     const userColumns: GridColDef[] = [
         {
-            field: "avatar",
-            headerName: "Profilkép",
+            field: 'avatar',
+            headerName: 'Profilkép',
             width: 90,
             renderCell: (params) =>
 
@@ -52,32 +52,32 @@ export const AdminUserDataGridSubpage = (props: {
                     lastName={params.value.lastName} />
         },
         {
-            field: "name",
-            headerName: "Név",
+            field: 'name',
+            headerName: 'Név',
             width: 250,
             editable: true
         },
         {
-            field: "email",
-            headerName: "E-mail",
+            field: 'email',
+            headerName: 'E-mail',
             width: 200,
             editable: true
         },
         {
-            field: "coinBalance",
-            headerName: "Egyenleg",
+            field: 'coinBalance',
+            headerName: 'Egyenleg',
             width: 100,
             editable: true
         },
         {
-            field: "totalSpentTimeSeconds",
-            headerName: "Teljes platformon eltöltött idő",
+            field: 'totalSpentTimeSeconds',
+            headerName: 'Teljes platformon eltöltött idő',
             width: 200,
             editable: true
         },
         {
-            field: "id",
-            headerName: "Tanulási jelentés",
+            field: 'id',
+            headerName: 'Tanulási jelentés',
             width: 180,
             renderCell: (params) =>
 
@@ -94,9 +94,9 @@ export const AdminUserDataGridSubpage = (props: {
         viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
         viewSwitchFunction={() => {
 
-            const lastAdminUserPath = localStorage.getItem("lastAdminUserPath");
+            const lastAdminUserPath = localStorage.getItem('lastAdminUserPath');
 
-            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: "a" });
+            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: 'a' });
             /* if (!checked && location.pathname === lastAdminUserPath) {
                  navigate(lastAdminUserPath)
              }  else {
@@ -107,7 +107,7 @@ export const AdminUserDataGridSubpage = (props: {
             rows={userRows}
             rowHeight={80}
             style={{
-                background: "var(--transparentWhite70)"
+                background: 'var(--transparentWhite70)'
             }} />
     </AdminBreadcrumbsHeader >;
 };

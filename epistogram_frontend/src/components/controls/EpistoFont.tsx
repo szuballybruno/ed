@@ -1,9 +1,9 @@
-import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { createClassBuiler } from "../../helpers/classBuilder";
-import { isNumber, isString } from "../../static/frontendHelpers";
-import styles from "./css/EpistoFont.module.css";
+import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { createClassBuiler } from '../../helpers/classBuilder';
+import { isNumber, isString } from '../../static/frontendHelpers';
+import styles from './css/EpistoFont.module.css';
 
-type FontSizeType = number | "fontExtraSmall" | "fontSmall" | "fontNormal14" | "fontMid" | "fontMidPlus" | "fontLarge" | "fontLargePlus" | "fontHuge" | "fontGiant" | "fontXXL"
+type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
 
 export const EpistoFont = (params: {
     children: ReactNode,
@@ -41,7 +41,7 @@ export const EpistoFont = (params: {
 
     const autoFontSize = useAutoFontSize(
         ref,
-        isString(children) ? children as any : "",
+        isString(children) ? children as any : '',
         allowedLines ?? 2,
         maxFontSize ?? 20,
         !!isAutoFontSize);
@@ -53,13 +53,13 @@ export const EpistoFont = (params: {
     const whiteSpace = (() => {
 
         if (isMultiline)
-            return "pre-line";
+            return 'pre-line';
 
         if (isAutoFontSize)
-            return "normal";
+            return 'normal';
 
         if (noLineBreak)
-            return "nowrap";
+            return 'nowrap';
 
         return undefined;
     })();
@@ -73,14 +73,14 @@ export const EpistoFont = (params: {
         style={{
             whiteSpace,
             textTransform: isUppercase
-                ? "uppercase"
+                ? 'uppercase'
                 : undefined,
             fontSize: calcFontSize,
             ...style
         }}
         title={tooltip}
         className={createClassBuiler()
-            .custom(styles["episto-font-main"])
+            .custom(styles['episto-font-main'])
             .if(isString(fontSize), builder => builder
                 .custom(fontSize as string))
             .if(!!classes, builder => builder

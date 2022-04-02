@@ -1,7 +1,7 @@
-import { Flex } from "@chakra-ui/react";
-import ReactECharts, { EChartsOption } from "echarts-for-react";
-import { UserCourseProgressChartDTO } from "../../shared/dtos/UserCourseProgressChartDTO";
-import { iterate } from "../../static/frontendHelpers";
+import { Flex } from '@chakra-ui/react';
+import ReactECharts, { EChartsOption } from 'echarts-for-react';
+import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
+import { iterate } from '../../static/frontendHelpers';
 
 export const UserProgressChart = (props: {
     userProgress: UserCourseProgressChartDTO
@@ -13,7 +13,8 @@ export const UserProgressChart = (props: {
 
     const dates = iterate(courseLengthDays, index => {
 
-        const date = new Date(userProgress.startDate).addDays(index);
+        const date = new Date(userProgress.startDate)
+.addDays(index);
         return date.toLocaleDateString();
     });
 
@@ -29,31 +30,31 @@ export const UserProgressChart = (props: {
         legend: {
             data: [
                 {
-                    name: "Valós haladás",
+                    name: 'Valós haladás',
                 },
                 {
-                    name: "Becsült haladás",
+                    name: 'Becsült haladás',
                 }
             ],
-            orient: "horizontal",
-            icon: "circle",
+            orient: 'horizontal',
+            icon: 'circle',
             itemHeight: 10,
             top: 10,
             show: true,
             textStyle: {
-                fontWeight: "700",
-                color: "black"
+                fontWeight: '700',
+                color: 'black'
             }
         },
         xAxis: {
-            name: "Dátum",
-            nameLocation: "middle",
+            name: 'Dátum',
+            nameLocation: 'middle',
             nameGap: 40,
             nameTextStyle: {
-                fontWeight: "bold"
+                fontWeight: 'bold'
             },
             boundaryGap: false,
-            type: "category",
+            type: 'category',
             data: dates,
             axisLabel: {
                 show: true,
@@ -66,37 +67,37 @@ export const UserProgressChart = (props: {
             }
         },
         yAxis: {
-            name: "Haladás",
-            nameLocation: "middle",
+            name: 'Haladás',
+            nameLocation: 'middle',
             nameGap: 40,
             nameTextStyle: {
-                fontWeight: "bold"
+                fontWeight: 'bold'
             },
-            type: "value",
+            type: 'value',
             axisLabel: {
-                formatter: "{value}%"
+                formatter: '{value}%'
             }
         },
         series: [
             {
-                name: "Becsült haladás",
+                name: 'Becsült haladás',
                 data: dates
                     .map((_, index) => (100 / dates.length) * (index + 1)),
-                type: "line",
+                type: 'line',
                 symbolSize: 10,
-                symbol: "circle",
+                symbol: 'circle',
                 lineStyle: {
                     width: 5,
-                    shadowColor: "rgba(0, 0, 0, 0.3)",
+                    shadowColor: 'rgba(0, 0, 0, 0.3)',
                     shadowOffsetX: 2,
                     shadowOffsetY: 2,
                     shadowBlur: 10
                 }
             },
             {
-                name: "Valós haladás",
+                name: 'Valós haladás',
                 data: actualProgress,
-                type: "line"
+                type: 'line'
             }
         ]
     } as EChartsOption;

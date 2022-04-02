@@ -1,15 +1,15 @@
-import React from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { CreateInvitedUserDTO } from "../../../shared/dtos/CreateInvitedUserDTO";
-import { UserEditDTO } from "../../../shared/dtos/UserEditDTO";
-import { inviteUserAsync } from "../../../services/api/registrationApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AdminEditUserControl } from "./AdminEditUserControl";
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from "../AdminBreadcrumbsHeader";
-import { AdminUserList } from "./AdminUserList";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import React from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { CreateInvitedUserDTO } from '../../../shared/dtos/CreateInvitedUserDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { inviteUserAsync } from '../../../services/api/registrationApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { AdminEditUserControl } from './AdminEditUserControl';
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminUserList } from './AdminUserList';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 
 const AdminAddUserSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -35,9 +35,9 @@ const AdminAddUserSubpage = (props: {
 
             await inviteUserAsync(createInvitedUserDTO);
 
-            showNotification("Felhasználó sikeresen hozzáadva");
+            showNotification('Felhasználó sikeresen hozzáadva');
             refetchUsersFunction();
-            navigate(applicationRoutes.administrationRoute.usersRoute.route + "/a/edit");
+            navigate(applicationRoutes.administrationRoute.usersRoute.route + '/a/edit');
 
             // TODO return added user's id
             //navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + user.id + "/edit")
@@ -56,10 +56,10 @@ const AdminAddUserSubpage = (props: {
             key={1}
             title="Felhasználók"
             iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            to={applicationRoutes.administrationRoute.usersRoute.route + "/a/edit"} />,
+            to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
         <BreadcrumbLink
             key={2}
-            title={"Felhasználó hozzáadása"}
+            title={'Felhasználó hozzáadása'}
             isCurrent />
     ]}>
 

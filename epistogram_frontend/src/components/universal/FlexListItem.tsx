@@ -1,6 +1,6 @@
-import { Flex, FlexProps } from "@chakra-ui/layout";
-import { Checkbox } from "@mui/material";
-import { ReactNode } from "react";
+import { Flex, FlexProps } from '@chakra-ui/layout';
+import { Checkbox } from '@mui/material';
+import { ReactNode } from 'react';
 
 export const FlexListItem = (props: FlexProps & {
     onClick?: () => void,
@@ -25,27 +25,27 @@ export const FlexListItem = (props: FlexProps & {
     return <Flex
         id="flexListItem"
         className="shadowOnHover"
-        cursor={onClick ? "pointer" : undefined}
+        cursor={onClick ? 'pointer' : undefined}
         align="center"
-        pointerEvents={isLocked ? "none" : "all"}
+        pointerEvents={isLocked ? 'none' : 'all'}
         color="#3F3F3F"
         padding="5px"
         onClick={onClick}
         {...css}>
 
         {setIsChecked && <Flex
-            alignItems={"center"}
-            justifyContent={"center"}>
+            alignItems={'center'}
+            justifyContent={'center'}>
 
             <Checkbox
                 checked={isChecked}
                 onChange={x => setIsChecked(x.currentTarget.checked)}
-                style={{ alignSelf: "center" }} />
+                style={{ alignSelf: 'center' }} />
         </Flex>}
 
         {thumbnailContent && <Flex
-            alignItems={"center"}
-            justifyContent={"center"}>
+            alignItems={'center'}
+            justifyContent={'center'}>
 
             {thumbnailContent}
         </Flex>}
@@ -53,8 +53,8 @@ export const FlexListItem = (props: FlexProps & {
         <Flex
             flex="1"
             px="10px"
-            alignItems={"center"}
-            justifyContent={"flex-start"}>
+            alignItems={'center'}
+            justifyContent={'flex-start'}>
 
             {midContent}
         </Flex>

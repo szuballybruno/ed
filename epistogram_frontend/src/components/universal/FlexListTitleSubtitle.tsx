@@ -1,9 +1,9 @@
-import { Flex } from "@chakra-ui/layout";
-import { ArrowForward, ArrowForwardRounded, Circle } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import { ReactNode } from "react";
-import { isString } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex } from '@chakra-ui/layout';
+import { ArrowForward, ArrowForwardRounded, Circle } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+import { ReactNode } from 'react';
+import { isString } from '../../static/frontendHelpers';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const FlexListTitleSubtitle = (props: {
     isSelected?: boolean,
@@ -28,7 +28,7 @@ export const FlexListTitleSubtitle = (props: {
                 style={{
                     fontWeight: props.isSelected ? 600 : undefined,
                 }}
-                fontSize={"fontExtraSmall"}>
+                fontSize={'fontExtraSmall'}>
 
                 {props.subTitle}
             </EpistoFont>

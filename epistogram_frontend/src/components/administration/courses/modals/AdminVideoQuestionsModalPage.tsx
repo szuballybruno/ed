@@ -1,12 +1,12 @@
-import { Flex, Tooltip } from "@chakra-ui/react";
-import { Add, Remove, Timer } from "@mui/icons-material";
-import { Checkbox } from "@mui/material";
-import { useState } from "react";
-import ReactPlayer from "react-player";
-import { iterate } from "../../../../static/frontendHelpers";
-import { EpistoButton } from "../../../controls/EpistoButton";
-import { EpistoEntry } from "../../../controls/EpistoEntry";
-import { EpistoFont } from "../../../controls/EpistoFont";
+import { Flex, Tooltip } from '@chakra-ui/react';
+import { Add, Remove, Timer } from '@mui/icons-material';
+import { Checkbox } from '@mui/material';
+import { useState } from 'react';
+import ReactPlayer from 'react-player';
+import { iterate } from '../../../../static/frontendHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoFont } from '../../../controls/EpistoFont';
 
 
 export const AdminVideoQuestionsModalPage = () => {
@@ -19,7 +19,7 @@ export const AdminVideoQuestionsModalPage = () => {
             p="10px"
             h="330px"
             flex="1"
-            mt={isFirst ? "0" : "100px"}
+            mt={isFirst ? '0' : '100px'}
             direction="column"
             background="var(--transparentIntenseBlue10)"
             className="roundBorders">
@@ -31,7 +31,7 @@ export const AdminVideoQuestionsModalPage = () => {
                     isUppercase
                     fontSize="fontExtraSmall"
                     style={{
-                        letterSpacing: "1.2px"
+                        letterSpacing: '1.2px'
                     }}>
                     Kérdések
                 </EpistoFont>
@@ -51,7 +51,7 @@ export const AdminVideoQuestionsModalPage = () => {
                     flex="1"
                     value="2:43"
                     style={{
-                        fontWeight: "bold",
+                        fontWeight: 'bold',
                         marginLeft: 10
                     }}
                     labelVariant="hidden"
@@ -67,7 +67,7 @@ export const AdminVideoQuestionsModalPage = () => {
                     isUppercase
                     fontSize="fontExtraSmall"
                     style={{
-                        letterSpacing: "1.2px"
+                        letterSpacing: '1.2px'
                     }}>
                     Válaszok
                 </EpistoFont>
@@ -92,7 +92,7 @@ export const AdminVideoQuestionsModalPage = () => {
 
                         <Checkbox
                             sx={{
-                                ".MuiSvgIcon-root": {
+                                '.MuiSvgIcon-root': {
                                     width: 22,
                                     height: 22
                                 }
@@ -131,10 +131,10 @@ export const AdminVideoQuestionsModalPage = () => {
                     progressInterval={100}
                     style={{
                         borderRadius: 7,
-                        background: "green",
-                        overflow: "hidden"
+                        background: 'green',
+                        overflow: 'hidden'
                     }}
-                    url={"https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4"} />
+                    url={'https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4'} />
             </Flex>
 
         </Flex>
@@ -153,9 +153,9 @@ export const AdminVideoQuestionsModalPage = () => {
             <EpistoButton
                 variant="outlined"
                 style={{
-                    margin: "10px 0",
-                    borderColor: "var(--epistoTeal)",
-                    color: "var(--epistoTeal)"
+                    margin: '10px 0',
+                    borderColor: 'var(--epistoTeal)',
+                    color: 'var(--epistoTeal)'
                 }}>
 
                 <Add />
@@ -165,9 +165,9 @@ export const AdminVideoQuestionsModalPage = () => {
         <EpistoButton
             variant="colored"
             style={{
-                position: "absolute",
+                position: 'absolute',
                 bottom: 20,
-                width: "calc(100% - 40px)"
+                width: 'calc(100% - 40px)'
             }}>
 
             Mentés

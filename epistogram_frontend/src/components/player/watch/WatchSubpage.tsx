@@ -1,25 +1,25 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { usePlayerData } from "../../../services/api/playerApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { useIsDesktopView } from "../../../static/frontendHelpers";
-import { useIntParam, useStringParam } from "../../../static/locationHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { FlexFloat } from "../../controls/FlexFloat";
-import { EpistoDialog, useEpistoDialogLogic } from "../../EpistoDialog";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { Copyright } from "../../universal/Copyright";
-import { CourseItemSelector } from "./CourseItemSelector";
-import { ExamPlayer } from "./ExamPlayer";
-import { ModuleView } from "./ModuleView";
-import { WatchView } from "./WatchView";
+import { Box, Flex } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { usePlayerData } from '../../../services/api/playerApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useIsDesktopView } from '../../../static/frontendHelpers';
+import { useIntParam, useStringParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { FlexFloat } from '../../controls/FlexFloat';
+import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { Copyright } from '../../universal/Copyright';
+import { CourseItemSelector } from './CourseItemSelector';
+import { ExamPlayer } from './ExamPlayer';
+import { ModuleView } from './ModuleView';
+import { WatchView } from './WatchView';
 
 export const WatchSubpage = () => {
 
-    const warningDialogLogic = useEpistoDialogLogic("warn3");
+    const warningDialogLogic = useEpistoDialogLogic('warn3');
     const { navigateToPlayer } = useNavigation();
-    const descriptorCode = useStringParam("descriptorCode")!;
+    const descriptorCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
     // get player page data
@@ -34,16 +34,16 @@ export const WatchSubpage = () => {
     const exam = playerData?.exam;
     const module = playerData?.module;
     const answerSessionId = playerData?.answerSessionId;
-    const courseMode = playerData?.mode ?? "beginner";
+    const courseMode = playerData?.mode ?? 'beginner';
     const courseId = playerData?.courseId;
     const courseModules = playerData?.modules ?? [];
     const nextItemCode = playerData?.nextItemCode;
     const title = video?.title || exam?.title || module?.name;
-    const currentItemCode = playerData?.courseItemCode ?? "";
+    const currentItemCode = playerData?.courseItemCode ?? '';
     const nextItemState = playerData?.nextItemState ?? null;
-    const isPlayerLoaded = playerDataStatus === "success";
+    const isPlayerLoaded = playerDataStatus === 'success';
 
-    console.log("nextItemCode: " + nextItemCode);
+    console.log('nextItemCode: ' + nextItemCode);
 
     // redirect if current item should be locked 
     useEffect(() => {
@@ -54,7 +54,7 @@ export const WatchSubpage = () => {
         if (playerData.courseItemCode === descriptorCode)
             return;
 
-        console.log("Invalid course item code: " + descriptorCode);
+        console.log('Invalid course item code: ' + descriptorCode);
         navigateToPlayer(playerData.courseItemCode);
     }, [playerData?.courseItemCode]);
 
@@ -83,7 +83,7 @@ export const WatchSubpage = () => {
 
     const handleContinueCourse = () => {
 
-        console.log("Continue course, next item code: " + nextItemCode);
+        console.log('Continue course, next item code: ' + nextItemCode);
 
         if (nextItemCode)
             navigateToPlayer(nextItemCode);
@@ -137,7 +137,7 @@ export const WatchSubpage = () => {
                         zIndex="10"
                         ml="10px"
                         bg="var(--transparentWhite70)"
-                        maxWidth={isSidebarHidden ? "0px" : "420px"}
+                        maxWidth={isSidebarHidden ? '0px' : '420px'}
                         opacity={isSidebarHidden ? 0 : 1}
                         transition="0.5s">
 

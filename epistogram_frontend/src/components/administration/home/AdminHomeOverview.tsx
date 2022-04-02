@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from "@mui/icons-material";
-import { ReactNode } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useActiveCourses } from "../../../services/api/userProgressApiService";
-import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoGrid } from "../../controls/EpistoGrid";
-import StatisticsCard from "../../statisticsCard/StatisticsCard";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
+import { ReactNode } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useActiveCourses } from '../../../services/api/userProgressApiService';
+import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoGrid } from '../../controls/EpistoGrid';
+import StatisticsCard from '../../statisticsCard/StatisticsCard';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const AdminHomeOverview = () => {
     const AdminSectionWithButton = (props: {
@@ -76,28 +76,28 @@ export const AdminHomeOverview = () => {
                     gridTemplateColumns="repeat(3, minmax(0, 1fr))">
 
                     <StatisticsCard
-                        additionalFunction={() => { throw new Error("Not implemented!"); }}
+                        additionalFunction={() => { throw new Error('Not implemented!'); }}
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard1.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard1.png')}
                         title="Átlagon felül teljesítenek"
                         value="19"
                         suffix="-en" />
 
                     <StatisticsCard
-                        additionalFunction={() => { throw new Error("Not implemented!"); }}
+                        additionalFunction={() => { throw new Error('Not implemented!'); }}
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard2.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard2.png')}
                         title="Átlagosan teljesítenek"
                         value="89"
                         suffix="-en" />
 
                     <StatisticsCard
-                        additionalFunction={() => { throw new Error("Not implemented!"); }}
+                        additionalFunction={() => { throw new Error('Not implemented!'); }}
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard3.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard3.png')}
                         title="Áttekintés javasolt"
                         value="9"
                         suffix="esetben" />
@@ -131,7 +131,7 @@ export const AdminHomeOverview = () => {
                     midContent={
                         <Flex direction="column">
                             <EpistoFont style={{
-                                fontWeight: "bold"
+                                fontWeight: 'bold'
                             }}>
                                 Microsoft Excel Alapok
                             </EpistoFont>
@@ -165,7 +165,7 @@ export const AdminHomeOverview = () => {
                     midContent={
                         <Flex direction="column">
                             <EpistoFont style={{
-                                fontWeight: "bold"
+                                fontWeight: 'bold'
                             }}>
                                 Microsoft PowerPoint Alapok
                             </EpistoFont>
@@ -199,7 +199,7 @@ export const AdminHomeOverview = () => {
                     midContent={
                         <Flex direction="column">
                             <EpistoFont style={{
-                                fontWeight: "bold"
+                                fontWeight: 'bold'
                             }}>
                                 Microsoft Word Alapok
                             </EpistoFont>
@@ -228,7 +228,7 @@ export const AdminHomeOverview = () => {
                     midContent={
                         <Flex direction="column">
                             <EpistoFont style={{
-                                fontWeight: "bold"
+                                fontWeight: 'bold'
                             }}>
                                 OBS Alapok
                             </EpistoFont>
@@ -266,10 +266,10 @@ export const AdminHomeOverview = () => {
 
                     <Flex flex="1">
                         <img
-                            src={currentCourse?.coverFilePath ?? ""}
+                            src={currentCourse?.coverFilePath ?? ''}
                             alt=""
                             style={{
-                                objectFit: "contain"
+                                objectFit: 'contain'
                             }}
                             className="roundBorders" />
                     </Flex>
@@ -295,9 +295,9 @@ export const AdminHomeOverview = () => {
                                 .map((x, index) => <FiberManualRecord
                                     key={index}
                                     style={{
-                                        width: "10px",
-                                        height: "8px",
-                                        color: index === activeCoursesPaging.currentIndex ? "black" : "gray"
+                                        width: '10px',
+                                        height: '8px',
+                                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
                                     }} />)}
 
                             <EpistoButton onClick={() => activeCoursesPaging.next()}>
@@ -322,7 +322,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard4.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard4.png')}
                         title="Felhasználó jelenleg"
                         value="43"
                         suffix="aktív" />
@@ -330,7 +330,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard5.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard5.png')}
                         title="Végezte el a kurzust"
                         value="32"
                         suffix="tanuló" />
@@ -338,7 +338,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard6.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard6.png')}
                         title="Hagyta félbe a tanfolyamot"
                         value="13"
                         suffix="tanuló" />
@@ -346,7 +346,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard7.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard7.png')}
                         title="Átlagos teljesítmény"
                         value="79"
                         suffix="%" />
@@ -354,7 +354,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard8.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard8.png')}
                         title="Nehéznek megjelölve"
                         value="19"
                         suffix="videó" />
@@ -362,7 +362,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl("/images/teacherdashboard9.png")}
+                        iconPath={getAssetUrl('/images/teacherdashboard9.png')}
                         title="Vár válaszokra a tanártól"
                         value="8"
                         suffix="kérdés" />

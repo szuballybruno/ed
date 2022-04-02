@@ -1,5 +1,5 @@
-import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from "@mui/x-data-grid-pro";
-import { ReactNode, useCallback, useEffect } from "react";
+import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
+import { ReactNode, useCallback, useEffect } from 'react';
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
@@ -24,7 +24,7 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     width?: number;
     editable?: boolean;
     resizable?: boolean;
-    type?: "int"
+    type?: 'int'
 };
 
 export type InitialStateType<TSchema> = {
@@ -107,14 +107,14 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
 
         apiRef
             .current
-            .setCellMode(params.id, params.field, "edit");
+            .setCellMode(params.id, params.field, 'edit');
     }, [apiRef]);
 
     const endCellEdit = useCallback((rowKey: any, field: any) => {
 
         apiRef
             .current
-            .setCellMode(rowKey, field, "view");
+            .setCellMode(rowKey, field, 'view');
     }, [apiRef]);
 
     useEffect(() => {
@@ -122,7 +122,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         return apiRef
             .current
             .subscribeEvent(
-                "cellModeChange",
+                'cellModeChange',
                 (params, event) => {
 
                     event.defaultMuiPrevented = true;
@@ -143,7 +143,7 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
             const column = columns
                 .single(x => x.field === field);
 
-            const val: any = column.type === "int"
+            const val: any = column.type === 'int'
                 ? parseInt(value as any)
                 : value;
 
@@ -153,6 +153,6 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         columns={columnsProcessed}
         autoHeight
         style={{
-            background: "var(--transparentWhite70)"
+            background: 'var(--transparentWhite70)'
         }} />;
 };

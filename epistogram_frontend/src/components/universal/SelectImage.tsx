@@ -1,9 +1,9 @@
-import { Box, BoxProps, Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import { useRef, useState } from "react";
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-import { HiddenFileUploadInput } from "./HiddenFileUploadInput";
-import { Edit } from "@mui/icons-material";
+import { Box, BoxProps, Flex } from '@chakra-ui/layout';
+import { Typography } from '@mui/material';
+import { useRef, useState } from 'react';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { HiddenFileUploadInput } from './HiddenFileUploadInput';
+import { Edit } from '@mui/icons-material';
 
 export const SelectImage = (props: {
     setImageSource: (src: string) => void,
@@ -19,7 +19,7 @@ export const SelectImage = (props: {
         position="relative"
         overflow="hidden"
         cursor="pointer"
-        pointerEvents={isInteractionBlocked ? "none" : undefined}
+        pointerEvents={isInteractionBlocked ? 'none' : undefined}
         onClick={() => fileBrowseInputRef?.current?.click()}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -38,7 +38,7 @@ export const SelectImage = (props: {
 
         <Flex
             position="absolute"
-            display={isInteractionBlocked ? "none" : undefined}
+            display={isInteractionBlocked ? 'none' : undefined}
             className="whall"
             height="55%"
             transition="0.4s"
@@ -47,7 +47,7 @@ export const SelectImage = (props: {
             direction="column"
             align="center"
             justify="center"
-            transform={isHovered ? "translateY(100%)" : "translateY(125%)"}
+            transform={isHovered ? 'translateY(100%)' : 'translateY(125%)'}
             opacity={isHovered ? 1 : 0}>
 
             <Edit />

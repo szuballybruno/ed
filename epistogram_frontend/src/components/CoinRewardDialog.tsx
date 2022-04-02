@@ -1,11 +1,11 @@
-import { Box } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { Typography } from "@mui/material";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { EpistoDialog, EpistoDialogLogicType } from "./EpistoDialog";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoFont } from "./controls/EpistoFont";
+import { Box } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/react';
+import { Player } from '@lottiefiles/react-lottie-player';
+import { Typography } from '@mui/material';
+import { getAssetUrl } from '../static/frontendHelpers';
+import { EpistoDialog, EpistoDialogLogicType } from './EpistoDialog';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFont } from './controls/EpistoFont';
 
 export const CoinRewardDialog = (props: {
     coinRewardAmount: number,
@@ -35,10 +35,10 @@ export const CoinRewardDialog = (props: {
                     autoplay
                     loop
                     src={getAssetUrl(lottiePath)}
-                    style={{ position: "absolute", width: "100%", height: "100%" }} />
+                    style={{ position: 'absolute', width: '100%', height: '100%' }} />
             </Box>
 
-            <EpistoFont classes={["fontDark"]}>
+            <EpistoFont classes={['fontDark']}>
                 {text}
             </EpistoFont>
 
@@ -46,23 +46,23 @@ export const CoinRewardDialog = (props: {
 mt="10px">
                 
                 <EpistoFont fontSize="fontGiant"
-style={{ color: "var(--epistoTeal)", fontWeight: "bold" }}>
+style={{ color: 'var(--epistoTeal)', fontWeight: 'bold' }}>
                     {coinRewardAmount}
                 </EpistoFont>
 
-                <EpistoFont classes={["fontDark"]}
-style={{ margin: "0px 0px 4px 4px" }}>
+                <EpistoFont classes={['fontDark']}
+style={{ margin: '0px 0px 4px 4px' }}>
                     EpistoCoin
                 </EpistoFont>
 
                 <img
-                    src={getAssetUrl("images/epistoCoin.png")}
+                    src={getAssetUrl('images/epistoCoin.png')}
                     className="square25"
-                    style={{ margin: "0px 0px 4px 4px" }} />
+                    style={{ margin: '0px 0px 4px 4px' }} />
 
                 <EpistoButton
                     variant="colored"
-                    style={{ margin: "0px 0px 0px 15px" }}
+                    style={{ margin: '0px 0px 0px 15px' }}
                     onClick={() => dialogLogic.closeDialog()}>
 
                     Begyűjtöm!

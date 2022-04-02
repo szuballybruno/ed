@@ -1,9 +1,9 @@
-import { ReactNode, useContext } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ApplicationRoute } from "../../models/types";
-import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
+import { ReactNode, useContext } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 export type RenderRoute = {
     element: JSX.Element;
@@ -12,7 +12,7 @@ export type RenderRoute = {
     isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean;
 }
 
-export type RouteProtectionLevelType = "open" | "justAuthenticate" | "authorize";
+export type RouteProtectionLevelType = 'open' | 'justAuthenticate' | 'authorize';
 
 const verboseLogging = true;
 
@@ -23,7 +23,7 @@ const RouteRenderer = (props: {
 }): JSX.Element => {
 
     const { children, isAuthorizedToView, protectionLevel: pl } = props;
-    const protectionLevel = pl ?? "open";
+    const protectionLevel = pl ?? 'open';
 
     const authState = useContext(AuthenticationStateContext);
     const refetchUserAsync = useContext(RefetchUserAsyncContext);
@@ -33,10 +33,10 @@ const RouteRenderer = (props: {
         console.log(`-- Protection level '${protectionLevel}'`);
 
     // if open route, don't authorize 
-    if (protectionLevel === "open") {
+    if (protectionLevel === 'open') {
 
         if (verboseLogging)
-            console.log(`-- Rendering children...`)
+            console.log('-- Rendering children...');
 
         return children;
     }
@@ -45,19 +45,19 @@ const RouteRenderer = (props: {
         console.log(`-- Auth state '${authState}'`);
 
     // if loading return blank page
-    if (authState === "loading") {
+    if (authState === 'loading') {
 
         if (verboseLogging)
-            console.log(`-- Rendering empty div until loaded.`);
+            console.log('-- Rendering empty div until loaded.');
 
         return <div></div>;
     }
 
     // check authentication 
-    if (authState === "forbidden") {
+    if (authState === 'forbidden') {
 
         if (verboseLogging)
-            console.log("-- Redirecting...");
+            console.log('-- Redirecting...');
 
         return <Navigate
             replace
@@ -66,10 +66,10 @@ const RouteRenderer = (props: {
 
     // if just authenticate protection level, 
     // return since authentication is done.
-    if (protectionLevel === "justAuthenticate") {
+    if (protectionLevel === 'justAuthenticate') {
 
         if (verboseLogging)
-            console.log("-- Rendering children...");
+            console.log('-- Rendering children...');
 
         return children;
     }
@@ -78,7 +78,7 @@ const RouteRenderer = (props: {
     if (!user.userActivity.canAccessApplication) {
 
         if (verboseLogging)
-            console.log("-- Accessing application is not yet aturhorized, redirecting...");
+            console.log('-- Accessing application is not yet aturhorized, redirecting...');
 
         return <Navigate
             replace
@@ -93,7 +93,7 @@ const RouteRenderer = (props: {
     if (!authFuncCheck) {
 
         if (verboseLogging)
-            console.log("-- Authorization function returned false, redirecting...");
+            console.log('-- Authorization function returned false, redirecting...');
 
         return <Navigate
             replace
@@ -101,10 +101,10 @@ const RouteRenderer = (props: {
     }
 
     if (verboseLogging)
-        console.log("-- Rendering...");
+        console.log('-- Rendering...');
 
     return children;
-}
+};
 
 export const EpistoRoutes = (props: {
     renderRoutes: RenderRoute[]
@@ -128,7 +128,7 @@ export const EpistoRoutes = (props: {
                             {renderRoute.element}
                         </RouteRenderer>
                     </>}
-                    key={index} />
+                    key={index} />;
             })}
     </Routes>;
 };

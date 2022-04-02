@@ -1,15 +1,15 @@
-import { Image } from "@chakra-ui/react";
-import { TextField } from "@mui/material";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { useSetNewPassword } from "../services/api/passwordChangeApiService";
-import { useNavigation } from "../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../services/core/notifications";
-import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
-import { EpistoHeader } from "./EpistoHeader";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { PageRootContainer } from "./PageRootContainer";
-import { EpistoButton } from "./controls/EpistoButton";
-import { ContentPane } from "./ContentPane";
+import { Image } from '@chakra-ui/react';
+import { TextField } from '@mui/material';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { useSetNewPassword } from '../services/api/passwordChangeApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { getAssetUrl, getQueryParam, usePasswordEntryState } from '../static/frontendHelpers';
+import { EpistoHeader } from './EpistoHeader';
+import { LoadingFrame } from './system/LoadingFrame';
+import { PageRootContainer } from './PageRootContainer';
+import { EpistoButton } from './controls/EpistoButton';
+import { ContentPane } from './ContentPane';
 
 export const SetNewPasswordPage = () => {
 
@@ -25,7 +25,7 @@ export const SetNewPasswordPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const token = getQueryParam("token");
+    const token = getQueryParam('token');
 
     const showErrorDialog = useShowErrorDialog();
 
@@ -38,7 +38,7 @@ export const SetNewPasswordPage = () => {
 
         if (!token) {
 
-            showErrorDialog("Helytelen url cím. Nincs token megadva. Próbáld újra egy másik linkkel.");
+            showErrorDialog('Helytelen url cím. Nincs token megadva. Próbáld újra egy másik linkkel.');
             return;
         }
 
@@ -46,7 +46,7 @@ export const SetNewPasswordPage = () => {
 
             await setNewPassword(password, passwordCompare, token);
 
-            showNotification("Új jelszó sikeresen beállítva!");
+            showNotification('Új jelszó sikeresen beállítva!');
             navigate(applicationRoutes.homeRoute.route);
 
         }
@@ -59,7 +59,7 @@ export const SetNewPasswordPage = () => {
     return <PageRootContainer
         align="flex-start"
         justify="center"
-        backgoundImageSrc={getAssetUrl("loginScreen/surveybg.png")}
+        backgoundImageSrc={getAssetUrl('loginScreen/surveybg.png')}
         position="relative">
 
         <ContentPane navbarBg="white">
@@ -81,7 +81,7 @@ alignSelf="center">
                 </EpistoHeader>
 
                 <TextField
-                    style={{ margin: "20px" }}
+                    style={{ margin: '20px' }}
                     variant="standard"
                     type="password"
                     error={!!passwordError}
@@ -90,7 +90,7 @@ alignSelf="center">
                     label="Jelszó"></TextField>
 
                 <TextField
-                    style={{ margin: "0 20px 20px 20px" }}
+                    style={{ margin: '0 20px 20px 20px' }}
                     variant="standard"
                     type="password"
                     error={!!passwordCompareError}
@@ -101,7 +101,7 @@ alignSelf="center">
                 <EpistoButton
                     variant="outlined"
                     onClick={handleSetNewPassword}
-                    style={{ alignSelf: "flex-end", margin: "20px" }}>
+                    style={{ alignSelf: 'flex-end', margin: '20px' }}>
 
                     Elküldés
                 </EpistoButton>

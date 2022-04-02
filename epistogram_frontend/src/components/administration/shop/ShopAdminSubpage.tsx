@@ -1,18 +1,18 @@
-import { Flex } from "@chakra-ui/react";
-import { Delete } from "@mui/icons-material";
-import Edit from "@mui/icons-material/Edit";
-import { useState } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { ShopItemAdminShortDTO } from "../../../shared/dtos/ShopItemAdminShortDTO";
-import { useAdminShopItems, useCreateShopItem } from "../../../services/api/shopApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { AdminListEditHeader } from "../AdminListEditHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { Flex } from '@chakra-ui/react';
+import { Delete } from '@mui/icons-material';
+import Edit from '@mui/icons-material/Edit';
+import { useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ShopItemAdminShortDTO } from '../../../shared/dtos/ShopItemAdminShortDTO';
+import { useAdminShopItems, useCreateShopItem } from '../../../services/api/shopApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { AdminListEditHeader } from '../AdminListEditHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const ShopAdminSubpage = () => {
 
@@ -47,7 +47,7 @@ export const ShopAdminSubpage = () => {
 
     const handleDelete = (id: number) => {
 
-        throw new Error("Not implemented!");
+        throw new Error('Not implemented!');
     };
 
     const handleAddNewAsync = async () => {
@@ -55,7 +55,7 @@ export const ShopAdminSubpage = () => {
         try {
 
             const shopItemId = await createShopItemAsync();
-            showNotification("Uj shop item hozzaadva");
+            showNotification('Uj shop item hozzaadva');
             handleEdit(shopItemId);
         }
         catch (e) {
@@ -66,13 +66,13 @@ export const ShopAdminSubpage = () => {
 
     const headerButtons = [
         {
-            name: "editButton",
-            text: "Szerkesztés",
+            name: 'editButton',
+            text: 'Szerkesztés',
             onClick: () => handleEdit(selectedIds[0])
         },
         {
-            name: "deleteButton",
-            text: "Törlés",
+            name: 'deleteButton',
+            text: 'Törlés',
             onClick: () => handleDelete(selectedIds[0])
         }
     ];
@@ -116,7 +116,7 @@ export const ShopAdminSubpage = () => {
                     itemLabel="shop item"
                     buttons={[
                         {
-                            title: "Hozzáadás",
+                            title: 'Hozzáadás',
                             action: () => handleAddNewAsync()
                         }
                     ]} />
@@ -133,7 +133,7 @@ export const ShopAdminSubpage = () => {
                                 thumbnailContent={(
                                     <img
                                         style={{
-                                            objectFit: "cover"
+                                            objectFit: 'cover'
                                         }}
                                         src={shopItem.coverFilePath}
                                         className="square70"
@@ -144,11 +144,11 @@ export const ShopAdminSubpage = () => {
                                 midContent={(
                                     <FlexListTitleSubtitle
                                         title={shopItem.name}
-                                        subTitle={shopItem.shopItemCategoryId + ""} />
+                                        subTitle={shopItem.shopItemCategoryId + ''} />
                                 )}
                                 endContent={<Flex
                                     align="center"
-                                    justifyContent={"flex-end"}
+                                    justifyContent={'flex-end'}
                                     height="100%"
                                     width={165}
                                     px={10}>
@@ -158,9 +158,9 @@ export const ShopAdminSubpage = () => {
                                         .map((x, i) => (
                                             <EpistoButton
                                                 key={i}
-                                                variant={"colored"}
+                                                variant={'colored'}
                                                 onClick={() => x.action(shopItem)}
-                                                style={{ width: 20, margin: "3px" }}>
+                                                style={{ width: 20, margin: '3px' }}>
 
                                                 {x.icon}
                                             </EpistoButton>

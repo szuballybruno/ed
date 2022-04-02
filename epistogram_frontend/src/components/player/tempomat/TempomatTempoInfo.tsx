@@ -1,10 +1,10 @@
-import { Flex } from "@chakra-ui/react";
-import { InfoOutlined } from "@mui/icons-material";
-import { TempomatModeType } from "../../../shared/types/sharedTypes";
-import { getAssetUrl } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { TempomatModeImage } from "./TempomatModeImage";
+import { Flex } from '@chakra-ui/react';
+import { InfoOutlined } from '@mui/icons-material';
+import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { getAssetUrl } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { TempomatModeImage } from './TempomatModeImage';
 
 export const TempomatTempoInfo = (props: {
     onClick: () => void,
@@ -15,16 +15,16 @@ export const TempomatTempoInfo = (props: {
 
     const tempomatLabel = (() => {
 
-        if (tempomatMode === "auto")
-            return "Automata";
+        if (tempomatMode === 'auto')
+            return 'Automata';
 
-        if (tempomatMode === "balanced")
-            return "Kiegyensúlyozott";
+        if (tempomatMode === 'balanced')
+            return 'Kiegyensúlyozott';
 
-        if (tempomatMode === "light")
-            return "Megengedő";
+        if (tempomatMode === 'light')
+            return 'Megengedő';
 
-        return "Szigorú";
+        return 'Szigorú';
     })();
 
     return (
@@ -41,7 +41,7 @@ export const TempomatTempoInfo = (props: {
 
                 <InfoOutlined
                     style={{
-                        height: "15px"
+                        height: '15px'
                     }} />
             </Flex>
 
@@ -57,12 +57,12 @@ export const TempomatTempoInfo = (props: {
                         isSmall
                         mode={tempomatMode}
                         customizeFn={builder => builder
-                            .custom("square25")} />
+                            .custom('square25')} />
 
                     <EpistoFont
                         fontSize="fontSmall"
                         style={{
-                            margin: "0 5px",
+                            margin: '0 5px',
                             fontWeight: 600
                         }}>
 
@@ -70,11 +70,11 @@ export const TempomatTempoInfo = (props: {
                     </EpistoFont>
 
                     <img
-                        src={getAssetUrl("/images/tempomatsettings.png")}
+                        src={getAssetUrl('/images/tempomatsettings.png')}
                         alt=""
                         style={{
-                            height: "20px",
-                            width: "20px",
+                            height: '20px',
+                            width: '20px',
                             marginRight: 5
                         }} />
                 </Flex>

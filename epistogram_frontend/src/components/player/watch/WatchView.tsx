@@ -1,31 +1,31 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { Divider, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useReactTimer } from "../../../helpers/reactTimer";
-import { ModuleDTO } from "../../../shared/dtos/ModuleDTO";
-import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
-import { CourseItemStateType, CourseModeType } from "../../../shared/types/sharedTypes";
-import { VideoDTO } from "../../../shared/dtos/VideoDTO";
-import { StillWatchingDialogMarker } from "../../../models/types";
-import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from "../../../static/frontendHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoHeader } from "../../EpistoHeader";
-import { NavigateToCourseItemActionType } from "../../universal/CourseItemList";
-import { EpistoPaging } from "../../universal/EpistoPaging";
-import { TimeoutFrame } from "../../universal/TimeoutFrame";
-import { VideoQuestionnaire } from "../../universal/VideoQuestionnaire";
-import { CourseItemSelector } from "./CourseItemSelector";
-import Comments from "../description/Comments";
-import PlayerDescription from "../description/PlayerDescription";
-import { VideoContent } from "../description/VideoContent";
-import { OverlayDialog } from "./OverlayDialog";
-import { usePlaybackWatcher } from "./PlaybackWatcherLogic";
-import { StillWatching } from "./StillWatching";
-import { useVideoPlayerState, VideoPlayer } from "./VideoPlayer";
-import { VideoRating } from "./VideoRating";
-import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
+import { Box, Flex } from '@chakra-ui/react';
+import { Divider, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useReactTimer } from '../../../helpers/reactTimer';
+import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
+import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
+import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
+import { VideoDTO } from '../../../shared/dtos/VideoDTO';
+import { StillWatchingDialogMarker } from '../../../models/types';
+import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoHeader } from '../../EpistoHeader';
+import { NavigateToCourseItemActionType } from '../../universal/CourseItemList';
+import { EpistoPaging } from '../../universal/EpistoPaging';
+import { TimeoutFrame } from '../../universal/TimeoutFrame';
+import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
+import { CourseItemSelector } from './CourseItemSelector';
+import Comments from '../description/Comments';
+import PlayerDescription from '../description/PlayerDescription';
+import { VideoContent } from '../description/VideoContent';
+import { OverlayDialog } from './OverlayDialog';
+import { usePlaybackWatcher } from './PlaybackWatcherLogic';
+import { StillWatching } from './StillWatching';
+import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
+import { VideoRating } from './VideoRating';
+import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 
 const autoplayTimeoutInS = 8;
 
@@ -58,7 +58,7 @@ export const WatchView = (props: {
 
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(["Leírás", "A kurzus segédanyagai", "Hozzászólások"]);
+    const descCommentPaging = usePaging<string>(['Leírás', 'A kurzus segédanyagai', 'Hozzászólások']);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
@@ -78,7 +78,7 @@ export const WatchView = (props: {
 
     // video player
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
-    const limitSeek = courseMode === "beginner";
+    const limitSeek = courseMode === 'beginner';
     const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
@@ -133,7 +133,7 @@ export const WatchView = (props: {
 
         if (unansweredQuestion) {
 
-            console.log("asd");
+            console.log('asd');
             setShowNewDialogsEnabled(false);
             setCurrentQuestion(unansweredQuestion);
         }
@@ -213,9 +213,9 @@ export const WatchView = (props: {
 
                     <EpistoButton
                         style={{
-                            pointerEvents: "all",
-                            margin: "100px",
-                            padding: "0"
+                            pointerEvents: 'all',
+                            margin: '100px',
+                            padding: '0'
                         }}
                         onClick={continueCourse}
                         variant="colored">
@@ -225,7 +225,7 @@ export const WatchView = (props: {
                             <EpistoFont
                                 isUppercase
                                 style={{
-                                    margin: "10px"
+                                    margin: '10px'
                                 }}>
 
                                 {translatableTexts.misc.next}
@@ -320,11 +320,11 @@ text={video!.subTitle} />
 
             <Divider
                 style={{
-                    background: "var(--epistoTeal)",
-                    width: "100%",
-                    height: "4px",
-                    borderRadius: "10px",
-                    boxShadow: "inset -1px -2px 1px 1px rgba(0,0,0,0.10)"
+                    background: 'var(--epistoTeal)',
+                    width: '100%',
+                    height: '4px',
+                    borderRadius: '10px',
+                    boxShadow: 'inset -1px -2px 1px 1px rgba(0,0,0,0.10)'
                 }} />
 
             <EpistoPaging

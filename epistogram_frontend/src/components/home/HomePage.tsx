@@ -1,31 +1,31 @@
-import { Flex } from "@chakra-ui/layout";
-import { useMediaQuery } from "@chakra-ui/react";
-import { CSSProperties } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useOverviewPageDTO } from "../../services/api/miscApiService";
-import { useActiveCourses } from "../../services/api/userProgressApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { iterate, usePaging } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { ContentPane } from "../ContentPane";
-import { LeftPane } from "../LeftPane";
-import { PageRootContainer } from "../PageRootContainer";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { CourseItemView } from "../universal/CourseItemList";
-import { DashboardSection } from "../universal/DashboardSection";
-import { FlexListItem } from "../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../universal/FlexListTitleSubtitle";
-import { CourseProgressDisplay } from "./CourseProgressDisplay";
-import { PractiseQuestions } from "./PractiseQuestions";
-import { RecommendedQuota } from "./RecommendedQuota";
-import { StatsSummary } from "./StatsSummary";
+import { Flex } from '@chakra-ui/layout';
+import { useMediaQuery } from '@chakra-ui/react';
+import { CSSProperties } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useOverviewPageDTO } from '../../services/api/miscApiService';
+import { useActiveCourses } from '../../services/api/userProgressApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { iterate, usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ContentPane } from '../ContentPane';
+import { LeftPane } from '../LeftPane';
+import { PageRootContainer } from '../PageRootContainer';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { CourseItemView } from '../universal/CourseItemList';
+import { DashboardSection } from '../universal/DashboardSection';
+import { FlexListItem } from '../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
+import { CourseProgressDisplay } from './CourseProgressDisplay';
+import { PractiseQuestions } from './PractiseQuestions';
+import { RecommendedQuota } from './RecommendedQuota';
+import { StatsSummary } from './StatsSummary';
 
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate } = useNavigation();
 
-    const [isSmallerThan1400] = useMediaQuery("(min-width: 1400px)");
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
@@ -74,7 +74,7 @@ const HomePage = () => {
                             boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                             p="3px"
                             m="7px 10px 7px 0px"
-                            bgColor={"var(--epistoTeal)"} />
+                            bgColor={'var(--epistoTeal)'} />
 
                         <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle}
                             subTitle={translatableTexts.homePage.availableCoursesText} />
@@ -85,12 +85,12 @@ const HomePage = () => {
 
                 <Flex
                     direction="column"
-                    minWidth={isSmallerThan1400 ? "1060px" : undefined}>
+                    minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
                     <Flex wrap="wrap">
 
                         {/* test your knowledge */}
-                        <DashboardSection
+                        <DashboardSection 
                             title={translatableTexts.homePage.practiseTitle}
                             background="var(--transparentIntenseBlue85)"
                             className="largeSoftShadow roundBorders"

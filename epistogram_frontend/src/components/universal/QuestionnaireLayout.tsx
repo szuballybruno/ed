@@ -1,7 +1,7 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
-import { EpistoText } from "../controls/EpistoText";
-import { LoadingFrame, LoadingFramePropsType } from "../system/LoadingFrame";
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import { EpistoText } from '../controls/EpistoText';
+import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
 
 export const QuestionnaireLayout = (props: {
     title: string,
@@ -24,7 +24,7 @@ align="center"
 
             {/* header */}
             <Flex
-                display={onlyShowAnswers === true ? "none" : undefined}
+                display={onlyShowAnswers === true ? 'none' : undefined}
                 direction="column"
                 align="center"
                 p="20px"
@@ -36,7 +36,7 @@ align="center"
                     <EpistoText
                         isAutoFontSize
                         text={title}
-                        style={{ width: "100%", fontSize: 17, fontWeight: 500 }} />
+                        style={{ width: '100%', fontSize: 17, fontWeight: 500 }} />
                 </Flex>
             </Flex>
 
@@ -48,7 +48,7 @@ align="center"
                     direction="column"
                     width="100%"
                     mt="20px"
-                    pointerEvents={contentClickable ? "all" : "none"}>
+                    pointerEvents={contentClickable ? 'all' : 'none'}>
                     {children}
                 </Flex>
             </LoadingFrame>

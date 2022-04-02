@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from "@mui/material";
-import { CSSProperties, forwardRef, ReactNode } from "react";
+import { Button, ButtonProps } from '@mui/material';
+import { CSSProperties, forwardRef, ReactNode } from 'react';
 
 export type EpistoButtonPropsType = {
     children?: string | ReactNode,
@@ -9,14 +9,14 @@ export type EpistoButtonPropsType = {
     isRound?: boolean,
     padding?: string,
     fontSize?: string,
-    variant?: "outlined" | "plain" | "colored" | "light",
+    variant?: 'outlined' | 'plain' | 'colored' | 'light',
     style?: CSSProperties,
     className?: string,
     icon?: ReactNode,
     isDisabled?: boolean,
     buttonProps?: ButtonProps,
     name?: string
-    type?: "button" | "submit" | "reset" | undefined
+    type?: 'button' | 'submit' | 'reset' | undefined
 };
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
@@ -42,16 +42,16 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
 
     const getVariant = () => {
 
-        if (variant === "colored")
-            return "contained";
+        if (variant === 'colored')
+            return 'contained';
 
-        if (variant === "light")
-            return "contained";
+        if (variant === 'light')
+            return 'contained';
 
-        if (variant === "outlined")
-            return "outlined";
+        if (variant === 'outlined')
+            return 'outlined';
 
-        return "text";
+        return 'text';
     };
 
     return <Button
@@ -74,26 +74,26 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         className={`${className} fontNormal14`}
         type={type}
         style={{
-            overflow: "hidden",
-            whiteSpace: "nowrap",
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             fontWeight: 500,
-            minWidth: "0px",
-            background: variant === "light" ? "white" : undefined,
+            minWidth: '0px',
+            background: variant === 'light' ? 'white' : undefined,
             color: isDisabled
-                ? "white"
-                : variant === "colored"
-                    ? "white"
-                    : "black",
+                ? 'white'
+                : variant === 'colored'
+                    ? 'white'
+                    : 'black',
             // background: isDisabled && variant === "colored" ? "var(--mildGrey)" : undefined,
-            margin: "0px",
-            borderRadius: isRound ? "50%" : "7px",
+            margin: '0px',
+            borderRadius: isRound ? '50%' : '7px',
             width: size,
-            filter: isDisabled ? "contrast(0.01)" : undefined,
+            filter: isDisabled ? 'contrast(0.01)' : undefined,
             height: size,
             padding: padding ? padding : undefined,
             fontSize: fontSize ? fontSize : undefined,
-            borderColor: "var(--mildGrey)",
-            pointerEvents: isDisabled ? "none" : undefined,
+            borderColor: 'var(--mildGrey)',
+            pointerEvents: isDisabled ? 'none' : undefined,
             ...style
         }}
         {...buttonProps}>

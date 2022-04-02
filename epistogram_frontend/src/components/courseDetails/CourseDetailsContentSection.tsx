@@ -1,10 +1,10 @@
-import { Flex } from "@chakra-ui/react";
-import { ExpandMore } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
-import React from "react";
-import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex } from '@chakra-ui/react';
+import { ExpandMore } from '@mui/icons-material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import React from 'react';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseDetailsContentSection = (props: { courseDetails: CourseDetailsDTO }) => {
 
@@ -18,7 +18,7 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
         return `${minutes}m ${remainingSeconds}s`;
     };
 
-    return <Flex direction={"column"}
+    return <Flex direction={'column'}
         mt={10}>
 
         {courseDetails
@@ -48,16 +48,16 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                 <Flex align="center">
                                     {/* icon */}
                                     <img
-                                        src={getAssetUrl("images/videosdatasheetd3D.png")}
-                                        alt={""}
+                                        src={getAssetUrl('images/videosdatasheetd3D.png')}
+                                        alt={''}
                                         className="square50"
-                                        style={{ margin: "10px", objectFit: "contain" }} />
+                                        style={{ margin: '10px', objectFit: 'contain' }} />
 
                                     {/* name */}
                                     <EpistoFont
-                                        fontSize={"fontExtraSmall"}
+                                        fontSize={'fontExtraSmall'}
                                         style={{
-                                            fontWeight: "bold"
+                                            fontWeight: 'bold'
                                         }}>
 
                                         {video.title}

@@ -1,18 +1,18 @@
-import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs } from "@mui/material";
-import { useState } from "react";
-import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO";
-import { defaultCharts } from "../../../../static/defaultChartOptions";
-import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers";
-import { translatableTexts } from "../../../../static/translatableTexts";
-import { EpistoFont } from "../../../controls/EpistoFont";
-import { TabPanel } from "../../../courseDetails/TabPanel";
-import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog";
-import { NoProgressChartYet } from "../../../home/NoProgressChartYet";
-import { UserProgressChart } from "../../../home/UserProgressChart";
-import StatisticsCard from "../../../statisticsCard/StatisticsCard";
-import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart";
-import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl";
+import { Flex } from '@chakra-ui/react';
+import { Tab, Tabs } from '@mui/material';
+import { useState } from 'react';
+import { UserCourseProgressChartDTO } from '../../../../shared/dtos/UserCourseProgressChartDTO';
+import { defaultCharts } from '../../../../static/defaultChartOptions';
+import { getAssetUrl, roundNumber } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { TabPanel } from '../../../courseDetails/TabPanel';
+import { EpistoDialog, EpistoDialogLogicType } from '../../../EpistoDialog';
+import { NoProgressChartYet } from '../../../home/NoProgressChartYet';
+import { UserProgressChart } from '../../../home/UserProgressChart';
+import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { EpistoPieChart } from '../../../universal/charts/EpistoPieChart';
+import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {
@@ -38,8 +38,8 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                     <EpistoPieChart
                         title="Teljesítmény"
                         segments={[
-                            { value: 70, name: "Teljesítmény 70%" },
-                            { value: 30, name: "" },
+                            { value: 70, name: 'Teljesítmény 70%' },
+                            { value: 30, name: '' },
                         ]}
                         options={defaultCharts.twoSegmentGreenDoughnut} />
                 </Flex>
@@ -48,8 +48,8 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                     <EpistoPieChart
                         title="Haladás"
                         segments={[
-                            { value: 20, name: "" },
-                            { value: 80, name: "Haladás 20%" },
+                            { value: 20, name: '' },
+                            { value: 80, name: 'Haladás 20%' },
                         ]}
                         options={defaultCharts.twoSegmentRedDoughnut} />
                 </Flex>
@@ -59,10 +59,10 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
                         title="Aktivitás eloszlása"
                         isSortValues
                         segments={[
-                            { value: 30, name: "" },
-                            { value: 17, name: "" },
-                            { value: 10, name: "" },
-                            { value: 20, name: "" }
+                            { value: 30, name: '' },
+                            { value: 17, name: '' },
+                            { value: 10, name: '' },
+                            { value: 20, name: '' }
                         ]}
                         options={defaultCharts.pie} />
                 </Flex>
@@ -82,47 +82,47 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
 
         <div
             style={{
-                width: "100%",
-                maxWidth: "100%",
-                display: "grid",
-                boxSizing: "border-box",
-                marginTop: "20px",
-                gap: "10px",
-                gridAutoFlow: "row dense",
-                gridTemplateColumns: "repeat(auto-fill, minmax(23%, 1fr))",
-                gridAutoRows: "160px"
+                width: '100%',
+                maxWidth: '100%',
+                display: 'grid',
+                boxSizing: 'border-box',
+                marginTop: '20px',
+                gap: '10px',
+                gridAutoFlow: 'row dense',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(23%, 1fr))',
+                gridAutoRows: '160px'
             }}>
 
             {/* total completed video count */}
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-                value={userStats ? userStats.completedVideoCount + "" : "0"}
+                value={userStats ? userStats.completedVideoCount + '' : '0'}
                 suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
-                iconPath={getAssetUrl("images/watchedvideos3Dsmaller.png")}
+                iconPath={getAssetUrl('images/watchedvideos3Dsmaller.png')}
                 isOpenByDefault={false} />
 
             {/* total playback time */}
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-                value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + "" : "0"}
+                value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + '' : '0'}
                 suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
-                iconPath={getAssetUrl("images/watch3D.png")}
+                iconPath={getAssetUrl('images/watch3D.png')}
                 isOpenByDefault={false} />
 
             {/* total given answer count  */}
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
-                value={userStats ? userStats.totalGivenAnswerCount + "" : "0"}
+                value={userStats ? userStats.totalGivenAnswerCount + '' : '0'}
                 suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
-                iconPath={getAssetUrl("images/answeredquestions3D.png")}
+                iconPath={getAssetUrl('images/answeredquestions3D.png')}
                 isOpenByDefault={false} />
 
             {/* correct answer rate  */}
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
-                value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + "" : "0"}
+                value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + '' : '0'}
                 suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
-                iconPath={getAssetUrl("images/rightanswer3D.png")}
+                iconPath={getAssetUrl('images/rightanswer3D.png')}
                 isOpenByDefault={false} />
         </div>
     </Flex>;
@@ -148,23 +148,23 @@ export const AdminUserCourseContentModal = (props: {
 
     const moreInfoDialogTabs = [
         {
-            title: "Áttekintés",
+            title: 'Áttekintés',
             component: <AdminUserCourseContentOverviewModalSubpage userStats={userStats} />
         },
         {
-            title: "Videók",
+            title: 'Videók',
             component: <Flex>
                 <AdminUserVideosDataGridControl />
             </Flex>
         },
         {
-            title: "Vizsgák",
+            title: 'Vizsgák',
             component: <Flex>
 
             </Flex>
         },
         {
-            title: "Kommentek/kérdések",
+            title: 'Kommentek/kérdések',
             component: <Flex>
                 Kommentek/kérdések
             </Flex>
@@ -197,16 +197,16 @@ export const AdminUserCourseContentModal = (props: {
                     <Flex h="50px"
                         direction="column"
                         mr="20px">
-                        <EpistoFont fontSize={"fontLarge"}
+                        <EpistoFont fontSize={'fontLarge'}
                             style={{
-                                display: "flex",
-                                alignItems: "center",
-                                flexDirection: "row",
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexDirection: 'row',
                                 fontWeight: 600
                             }}>
                             Microsoft PowerPoint alapok
                         </EpistoFont>
-                        <EpistoFont fontSize={"fontMid"}>
+                        <EpistoFont fontSize={'fontMid'}>
                             Kiss Edina
                         </EpistoFont>
                     </Flex>
@@ -217,15 +217,15 @@ export const AdminUserCourseContentModal = (props: {
                     className="roundBorders"
                     TabIndicatorProps={{
                         style: {
-                            display: "none",
+                            display: 'none',
                         },
                     }}
                     sx={{
-                        "&.MuiTabs-root": {
+                        '&.MuiTabs-root': {
                             //background: "var(--transparentIntenseBlue85)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                             height: 45,
                             minHeight: 0
                         }
@@ -237,25 +237,25 @@ export const AdminUserCourseContentModal = (props: {
                             return <Tab
                                 key={index}
                                 sx={{
-                                    "&.MuiTab-root": {
-                                        color: "#444",
-                                        cursor: "pointer",
-                                        backgroundColor: "transparent",
-                                        padding: "6px 16px",
-                                        border: "none",
-                                        borderRadius: "5px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        height: "41px",
-                                        minHeight: "0px"
+                                    '&.MuiTab-root': {
+                                        color: '#444',
+                                        cursor: 'pointer',
+                                        backgroundColor: 'transparent',
+                                        padding: '6px 16px',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        height: '41px',
+                                        minHeight: '0px'
                                     },
-                                    "&.MuiTouchRipple-root": {
-                                        lineHeight: "0px"
+                                    '&.MuiTouchRipple-root': {
+                                        lineHeight: '0px'
                                     },
-                                    "&.Mui-selected": {
-                                        color: "#444",
-                                        fontWeight: "bold",
-                                        background: "var(--transparentIntenseTeal)"
+                                    '&.Mui-selected': {
+                                        color: '#444',
+                                        fontWeight: 'bold',
+                                        background: 'var(--transparentIntenseTeal)'
                                     }
                                 }}
                                 label={x.title}

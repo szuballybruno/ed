@@ -1,12 +1,12 @@
-import { Divider, Flex, Image } from "@chakra-ui/react";
-import { useSetTempomatMode } from "../../../services/api/tempomatApiService";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { TempomatModeType } from "../../../shared/types/sharedTypes";
-import { getAssetUrl } from "../../../static/frontendHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoDialog, EpistoDialogLogicType } from "../../EpistoDialog";
-import { TempomatModeTile } from "./TempomatModeTile";
+import { Divider, Flex, Image } from '@chakra-ui/react';
+import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { getAssetUrl } from '../../../static/frontendHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { TempomatModeTile } from './TempomatModeTile';
 
 export const TempomatSettingsDialog = (props: {
     tempomatDialogLogic: EpistoDialogLogicType,
@@ -65,29 +65,29 @@ flex="1" >
                         tempomatMode="auto"
                         title="Automata üzemmód"
                         description={translatableTexts.tempomat.autoModeDescription}
-                        isSelected={tempomatMode === "auto"}
-                        onClick={() => handleSetTempomatMode("auto")} />
+                        isSelected={tempomatMode === 'auto'}
+                        onClick={() => handleSetTempomatMode('auto')} />
 
                     <TempomatModeTile
                         tempomatMode="light"
                         title="Megengedő üzemmód"
-                        isSelected={tempomatMode === "light"}
+                        isSelected={tempomatMode === 'light'}
                         description={translatableTexts.tempomat.lightModeDescription}
-                        onClick={() => handleSetTempomatMode("light")} />
+                        onClick={() => handleSetTempomatMode('light')} />
 
                     <TempomatModeTile
                         tempomatMode="balanced"
                         title="Kiegyensúlyozott üzemmód"
-                        isSelected={tempomatMode === "balanced"}
+                        isSelected={tempomatMode === 'balanced'}
                         description={translatableTexts.tempomat.balancedModeDescription}
-                        onClick={() => handleSetTempomatMode("balanced")} />
+                        onClick={() => handleSetTempomatMode('balanced')} />
 
                     <TempomatModeTile
                         tempomatMode="strict"
                         title="Szigorú üzemmód"
-                        isSelected={tempomatMode === "strict"}
+                        isSelected={tempomatMode === 'strict'}
                         description={translatableTexts.tempomat.strictModeDescription}
-                        onClick={() => handleSetTempomatMode("strict")} />
+                        onClick={() => handleSetTempomatMode('strict')} />
                 </Flex>
 
                 <Divider
@@ -125,7 +125,7 @@ flex="1" >
                             h="30px"
                             w="30px"
                             mr="5px"
-                            src={getAssetUrl("/images/tempomatdatechange.png")}
+                            src={getAssetUrl('/images/tempomatdatechange.png')}
                         />
 
                         <EpistoFont>

@@ -1,17 +1,17 @@
-import { Box, CircularProgress, CircularProgressProps } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { getRandomInteger } from "../../../static/frontendHelpers";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { CourseAdministartionFrame } from "./CourseAdministartionFrame";
+import { Box, CircularProgress, CircularProgressProps } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { getRandomInteger } from '../../../static/frontendHelpers';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 
 export const CircularProgressWithLabel = (
     props: CircularProgressProps & { value: number },
 ) => {
     return (
-        <Box sx={{ position: "relative", display: "inline-flex" }}>
+        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
             <CircularProgress variant="determinate"
 {...props} />
             <Box
@@ -20,10 +20,10 @@ export const CircularProgressWithLabel = (
                     left: 0,
                     bottom: 0,
                     right: 0,
-                    position: "absolute",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    position: 'absolute',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                 }}
             >
                 <EpistoFont>
@@ -36,33 +36,33 @@ export const CircularProgressWithLabel = (
 
 export const AdminCourseUserProgressSubpage = () => {
     const modules = [
-        "Első lépések",
-        "Ismerkedés a függvényekkel",
-        "A formázás alapjai",
-        "Segítség az adatkezelésben",
-        "Munka másokkal",
-        "Formázás felsőfokon",
-        "Munka nagy mennyiségű adattal",
-        "Kreatív adatábrázolás",
-        "Ismerkedés a haladó funkciókkal"
+        'Első lépések',
+        'Ismerkedés a függvényekkel',
+        'A formázás alapjai',
+        'Segítség az adatkezelésben',
+        'Munka másokkal',
+        'Formázás felsőfokon',
+        'Munka nagy mennyiségű adattal',
+        'Kreatív adatábrázolás',
+        'Ismerkedés a haladó funkciókkal'
     ];
 
     const users = [
-        "Bagi Árpád",
-        "Kelecsényi  György",
-        "Zurinka  Gizella",
-        "Dr. Vlaciu Péter",
-        "Rozgonyi Péter",
-        "Lukács Andrea",
-        "Dr. Lepsényi Tamás",
-        "Szabó Péter",
-        "Mányoki Bence",
-        "Benkő Erika",
-        "Zwierczyk Gábor",
-        "Apostagi Károly",
-        "Reichenberger Krisztina",
-        "Borbély Rozália",
-        "Kovács Írisz"
+        'Bagi Árpád',
+        'Kelecsényi  György',
+        'Zurinka  Gizella',
+        'Dr. Vlaciu Péter',
+        'Rozgonyi Péter',
+        'Lukács Andrea',
+        'Dr. Lepsényi Tamás',
+        'Szabó Péter',
+        'Mányoki Bence',
+        'Benkő Erika',
+        'Zwierczyk Gábor',
+        'Apostagi Károly',
+        'Reichenberger Krisztina',
+        'Borbély Rozália',
+        'Kovács Írisz'
     ];
 
     const gridRows = () => {
@@ -94,13 +94,13 @@ export const AdminCourseUserProgressSubpage = () => {
         renderCell?: (params: any) => any
     }[] = [
             {
-                field: "id",
+                field: 'id',
                 width: 80,
                 hide: true
             },
             {
-                field: "userFullName",
-                headerName: "",
+                field: 'userFullName',
+                headerName: '',
                 width: 220,
             }
         ];
@@ -116,10 +116,10 @@ export const AdminCourseUserProgressSubpage = () => {
                     variant="determinate"
                     style={{
                         color: params.value < 30
-                            ? "var(--intenseRed)"
+                            ? 'var(--intenseRed)'
                             : params.value < 60 && params.value >= 30
-                                ? "var(--mildOrange)"
-                                : "var(--deepGreen)"
+                                ? 'var(--mildOrange)'
+                                : 'var(--deepGreen)'
                     }}
                     value={params.value} />;
             }

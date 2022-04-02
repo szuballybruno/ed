@@ -1,13 +1,13 @@
-import { Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from "../../../services/api/videoRatingApiService";
-import { useShowErrorDialog } from "../../../services/core/notifications";
-import { getAssetUrl, iterate } from "../../../static/frontendHelpers";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { RatingStars } from "../../universal/RatingStars";
+import { Flex } from '@chakra-ui/react';
+import { Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from '../../../services/api/videoRatingApiService';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { getAssetUrl, iterate } from '../../../static/frontendHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { RatingStars } from '../../universal/RatingStars';
 
 export const VideoRating = (props: { videoId: number }) => {
 
@@ -107,7 +107,7 @@ export const VideoRating = (props: { videoId: number }) => {
                 <RatingStars
                     selectedIndex={difficultyRating}
                     setSelectedIndex={handleRateVideoDifficultyAsync}
-                    iconUrl={getAssetUrl("images/difficulty3D.png")} />
+                    iconUrl={getAssetUrl('images/difficulty3D.png')} />
             </Flex>}
         </Flex>
     );

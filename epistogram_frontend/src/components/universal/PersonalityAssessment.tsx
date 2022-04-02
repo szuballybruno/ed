@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from "@chakra-ui/layout";
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon, Box } from "@chakra-ui/react";
-import { ExpandMore, InfoOutlined } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
-import { usePersonalityData } from "../../services/api/signupApiService";
-import { translatableTexts } from "../../static/translatableTexts";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoPopper } from "../controls/EpistoPopper";
-import { PersonalityChart } from "./charts/PersonalityChart";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex, FlexProps } from '@chakra-ui/layout';
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
+import { ExpandMore, InfoOutlined } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { usePersonalityData } from '../../services/api/signupApiService';
+import { translatableTexts } from '../../static/translatableTexts';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoPopper } from '../controls/EpistoPopper';
+import { PersonalityChart } from './charts/PersonalityChart';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
@@ -79,10 +79,10 @@ export const PersonalityAssessment = (props: FlexProps) => {
                     {/* personality chart info button and title */}
                     <EpistoButton
                         className="tinyShadow"
-                        variant={"colored"}
+                        variant={'colored'}
                         style={{
-                            background: "var(--transparentWhite70)",
-                            color: "black",
+                            background: 'var(--transparentWhite70)',
+                            color: 'black',
                             marginRight: 5,
                             flex: 3
                         }}
@@ -115,7 +115,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         <EpistoFont
                             fontSize="fontNormal14"
                             style={{
-                                maxWidth: "300px"
+                                maxWidth: '300px'
                             }}>
 
                             {translatableTexts.learningOverview.whatIsThisGraphGoodForDescription}
@@ -124,10 +124,10 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
                     <EpistoButton
                         className="tinyShadow"
-                        variant={"colored"}
+                        variant={'colored'}
                         style={{
-                            background: "var(--transparentWhite70)",
-                            color: "black",
+                            background: 'var(--transparentWhite70)',
+                            color: 'black',
                             flex: 2
                         }}
                         onClick={() => {
@@ -147,8 +147,8 @@ export const PersonalityAssessment = (props: FlexProps) => {
                         }}>
 
                         {allOrAllButOneAccordionsClosed
-                            ? "Összes kibontása"
-                            : "Összecsukás"}
+                            ? 'Összes kibontása'
+                            : 'Összecsukás'}
                     </EpistoButton>
                 </Flex>
 

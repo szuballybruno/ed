@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
-import { Route } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { LearningInsightsOverview } from "../LearningInsightsOverview";
-import { NavigationLinkList } from "../NavigationLinkList";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { PageRootContainer } from "../PageRootContainer";
-import { LearningCourseStats } from "./LearningCourseStats";
-import { LearningStatistics } from "./LearningStatistics";
-import { LeftPane } from "../LeftPane";
-import { ContentPane } from "../ContentPane";
+import React, { useContext } from 'react';
+import { Route } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { LearningInsightsOverview } from '../LearningInsightsOverview';
+import { NavigationLinkList } from '../NavigationLinkList';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { PageRootContainer } from '../PageRootContainer';
+import { LearningCourseStats } from './LearningCourseStats';
+import { LearningStatistics } from './LearningStatistics';
+import { LeftPane } from '../LeftPane';
+import { ContentPane } from '../ContentPane';
 
 const LearningInsightsPage = () => {
 

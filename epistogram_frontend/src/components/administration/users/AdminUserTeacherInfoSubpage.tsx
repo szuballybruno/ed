@@ -1,24 +1,24 @@
-import { Flex } from "@chakra-ui/react";
-import { Checkbox, Slider, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { TeacherBadgeNameType } from "../../../shared/types/sharedTypes";
-import { useSaveTeacherInfoData, useTeacherInfoEditData } from "../../../services/api/teacherInfoApiService";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { translatableTexts } from "../../../static/translatableTexts";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { EpistoFont } from "../../controls/EpistoFont";
-import { EpistoLabel } from "../../controls/EpistoLabel";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
-import { AdminUserList } from "./AdminUserList";
-import { useEditUserData } from "../../../services/api/userApiService";
-import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
-import { useNavigation } from "../../../services/core/navigatior";
-import { EditSection } from "../courses/EditSection";
-import { useIntParam } from "../../../static/locationHelpers";
+import { Flex } from '@chakra-ui/react';
+import { Checkbox, Slider, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';
+import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoLabel } from '../../controls/EpistoLabel';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminUserList } from './AdminUserList';
+import { useEditUserData } from '../../../services/api/userApiService';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { useNavigation } from '../../../services/core/navigatior';
+import { EditSection } from '../courses/EditSection';
+import { useIntParam } from '../../../static/locationHelpers';
 
 export const AdminUserTeacherInfoSubpage = (props: {
     users: AdminPageUserDTO[]
@@ -26,18 +26,18 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
     const { users } = props;
 
-    const editedUserId = useIntParam("userId")!;
+    const editedUserId = useIntParam('userId')!;
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const [skills, setSkills] = useState("");
-    const [courseCount, setCoursesCount] = useState("");
-    const [videoCount, setVideoCount] = useState("");
-    const [studentCount, setStudentCount] = useState("");
-    const [description, setDescription] = useState("");
+    const [skills, setSkills] = useState('');
+    const [courseCount, setCoursesCount] = useState('');
+    const [videoCount, setVideoCount] = useState('');
+    const [studentCount, setStudentCount] = useState('');
+    const [description, setDescription] = useState('');
     const [rating, setRating] = useState(0);
     const [selectedBadges, setSelectedBadges] = useState<TeacherBadgeNameType[]>([]);
 
@@ -48,25 +48,25 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
         setSelectedBadges(teacherInfoEditData.badges);
         setSkills(teacherInfoEditData.skills);
-        setVideoCount(teacherInfoEditData.videoCount + "");
-        setStudentCount(teacherInfoEditData.studentCount + "");
-        setCoursesCount(teacherInfoEditData.courseCount + "");
+        setVideoCount(teacherInfoEditData.videoCount + '');
+        setStudentCount(teacherInfoEditData.studentCount + '');
+        setCoursesCount(teacherInfoEditData.courseCount + '');
         setRating(teacherInfoEditData.rating);
         setDescription(teacherInfoEditData.description);
     }, [teacherInfoEditData]);
 
     const allBadges = [
         {
-            name: "badge1",
-            icon: ""
+            name: 'badge1',
+            icon: ''
         },
         {
-            name: "badge2",
-            icon: ""
+            name: 'badge2',
+            icon: ''
         },
         {
-            name: "badge3",
-            icon: ""
+            name: 'badge3',
+            icon: ''
         }
     ] as ({
         name: TeacherBadgeNameType,
@@ -124,7 +124,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* Teacher skills */}
                     <EpistoEntry
-                        labelVariant={"top"}
+                        labelVariant={'top'}
                         isMultiline
                         value={skills}
                         label={translatableTexts.administration.teacherInfoSubpage.teacherSkills}
@@ -132,7 +132,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* description */}
                     <EpistoEntry
-                        labelVariant={"top"}
+                        labelVariant={'top'}
                         value={description}
                         label={translatableTexts.administration.teacherInfoSubpage.teacherDescription}
                         isMultiline
@@ -140,7 +140,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* Teacher courses count */}
                     <EpistoEntry
-                        labelVariant={"top"}
+                        labelVariant={'top'}
                         type="number"
                         value={courseCount}
                         label={translatableTexts.administration.teacherInfoSubpage.teacherCoursesCount}
@@ -148,7 +148,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* Teacher videos count */}
                     <EpistoEntry
-                        labelVariant={"top"}
+                        labelVariant={'top'}
                         type="number"
                         value={videoCount}
                         label={translatableTexts.administration.teacherInfoSubpage.teacherVideosCount}
@@ -156,7 +156,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* Teacher students count */}
                     <EpistoEntry
-                        labelVariant={"top"}
+                        labelVariant={'top'}
                         type="number"
                         value={studentCount}
                         label={translatableTexts.administration.teacherInfoSubpage.teacherStudentsCount}
@@ -177,24 +177,24 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* Teacher badges */}
                     <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherBadges}>
-                        <Flex flexWrap={"wrap"}>
+                        <Flex flexWrap={'wrap'}>
                             {allBadges
                                 .map((badge, index) => {
                                     return <Flex
                                         key={index}
-                                        flexDir={"column"}
-                                        justifyContent={"space-between"}
-                                        alignItems={"center"}
-                                        flex={"0 0 calc(33.3333333% - 10px)"}
-                                        bgColor={"#f2f2f2"}
+                                        flexDir={'column'}
+                                        justifyContent={'space-between'}
+                                        alignItems={'center'}
+                                        flex={'0 0 calc(33.3333333% - 10px)'}
+                                        bgColor={'#f2f2f2'}
                                         borderRadius={7}
                                         height={180}
-                                        boxSizing={"border-box"}
+                                        boxSizing={'border-box'}
                                         m={5}>
 
                                         <Flex>
                                             <img src={badge.icon}
-                                                alt={""} />
+                                                alt={''} />
                                         </Flex>
 
                                         <Flex>
@@ -212,7 +212,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
                                                     }
                                                 }} />
 
-                                            <EpistoFont fontSize={"fontSmall"}>
+                                            <EpistoFont fontSize={'fontSmall'}>
                                                 {badge.name}
                                             </EpistoFont>
                                         </Flex>
@@ -223,9 +223,9 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* submit button */}
                     <EpistoButton
-                        variant={"colored"}
+                        variant={'colored'}
                         onClick={() => handleSaveAsync()}
-                        style={{ marginTop: "20px", background: "var(--deepBlue)" }}>
+                        style={{ marginTop: '20px', background: 'var(--deepBlue)' }}>
 
                         {translatableTexts.misc.save}
                     </EpistoButton>

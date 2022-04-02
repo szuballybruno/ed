@@ -1,11 +1,11 @@
-import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
-import { ArrowBack } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import React, { ReactNode } from "react";
-import { getAssetUrl, hasValue, isString, useIsDesktopView } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoHeader } from "../EpistoHeader";
-import { EpistoButton } from "../controls/EpistoButton";
+import { Box, Flex, Image, useMediaQuery } from '@chakra-ui/react';
+import { ArrowBack } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { getAssetUrl, hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
+import { EpistoButton } from '../controls/EpistoButton';
 
 export const SignupWrapper = (props: {
     children?: ReactNode,
@@ -41,7 +41,7 @@ export const SignupWrapper = (props: {
     const onNext = props.onNext;
 
     const isDesktop = useIsDesktopView();
-    const [isSmallerThan1400] = useMediaQuery("(min-width: 1350px)");
+    const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
 
     return <Flex
         id="signupWrapperRoot"
@@ -68,11 +68,11 @@ export const SignupWrapper = (props: {
                 height={50}
                 width="100%"
                 hidden={window.innerWidth > 1000}
-                justify={"center"}
-                align={"center"}>
+                justify={'center'}
+                align={'center'}>
 
                 <Image maxH={50}
-src={getAssetUrl("/images/logo.svg")} />
+src={getAssetUrl('/images/logo.svg')} />
             </Flex>
 
             {/* header top */}
@@ -85,11 +85,11 @@ src={getAssetUrl("/images/logo.svg")} />
                     height={80}
                     width="100%"
                     hidden={window.innerWidth < 1000}
-                    justifyContent={"center"}
-                    alignItems={"center"}>
+                    justifyContent={'center'}
+                    alignItems={'center'}>
 
                     <Image maxH={80}
-src={getAssetUrl("/images/logo.svg")} />
+src={getAssetUrl('/images/logo.svg')} />
                 </Flex>
 
             </Flex>
@@ -103,7 +103,7 @@ src={getAssetUrl("/images/logo.svg")} />
             justify="center"
             maxW="100%"
             flex="1"
-            overflowY={"scroll"}>
+            overflowY={'scroll'}>
 
             {/* content */}
             <Flex
@@ -111,8 +111,8 @@ src={getAssetUrl("/images/logo.svg")} />
                 wrap="nowrap"
                 justify="center"
                 align="center"
-                width={isSmallerThan1400 ? "100vw" : "90vw"}
-                height={"90%"}>
+                width={isSmallerThan1400 ? '100vw' : '90vw'}
+                height={'90%'}>
 
                 {/* image */}
                 {hasImage && <Flex
@@ -122,15 +122,15 @@ src={getAssetUrl("/images/logo.svg")} />
                     minWidth="300px"
                     minH={400}
                     height="400"
-                    justifyContent={isDesktop ? "flex-end" : "center"}>
+                    justifyContent={isDesktop ? 'flex-end' : 'center'}>
 
                     <Image maxW={350}
 minWidth="300px"
 maxH="300px"
 height="100%"
 style={{
-                        objectFit: "contain",
-                        margin: "0 30px"
+                        objectFit: 'contain',
+                        margin: '0 30px'
                     }}
 src={currentImage!} />
                 </Flex>}
@@ -147,7 +147,7 @@ src={currentImage!} />
                         variant="strongSub"
                         type="strong"
                         m="10px 10px 10px 0px"
-                        alignSelf={hasImage ? "flex-start" : "center"}
+                        alignSelf={hasImage ? 'flex-start' : 'center'}
                         text={title!}
                         maxW={400}>
                     </EpistoHeader>}
@@ -157,7 +157,7 @@ src={currentImage!} />
                         {
                             isString(description!)
                                 ? <EpistoFont isMultiline
-classes={["fontNormal14"]}>
+classes={['fontNormal14']}>
                                     {description!}
                                 </EpistoFont>
                                 : description
@@ -165,7 +165,7 @@ classes={["fontNormal14"]}>
                     </Box>}
 
                     {/* content */}
-                    <Flex justify={hasImage ? "flex-start" : "center"}>
+                    <Flex justify={hasImage ? 'flex-start' : 'center'}>
                         {children}
                     </Flex>
 
@@ -180,8 +180,8 @@ classes={["fontNormal14"]}>
             width="100%"
             borderRadius="7px"
             bgColor="white"
-            justifyContent={"space-between"}
-            boxShadow={"5px 5px 15px 3px rgba(0,0,0,0.07)"}
+            justifyContent={'space-between'}
+            boxShadow={'5px 5px 15px 3px rgba(0,0,0,0.07)'}
             px="10px"
             my="20"
         >
@@ -191,13 +191,13 @@ classes={["fontNormal14"]}>
                 onClick={() => onNavPrevious!()}
                 variant="outlined"
                 style={{
-                    marginTop: "0",
+                    marginTop: '0',
                     height: 40,
                     width: 40,
-                    color: "#7CC0C2",
-                    backgroundColor: "#7CC0C24F",
-                    border: "none",
-                    boxShadow: "1px 1px 5px 1px rgba(0,0,0,0.1)"
+                    color: '#7CC0C2',
+                    backgroundColor: '#7CC0C24F',
+                    border: 'none',
+                    boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.1)'
                 }}>
 
                 <ArrowBack />
@@ -211,18 +211,18 @@ mx="20">
 
             {/* next button */}
             {onNext && <EpistoButton
-                variant={"outlined"}
+                variant={'outlined'}
                 onClick={() => onNext!()}
                 style={{
                     alignSelf: isDesktop
                         ? hasImage
-                            ? "center"
-                            : "center"
-                        : "flex-end",
-                    color: "white",
-                    backgroundColor: "#97C9CC",
-                    border: "none",
-                    boxShadow: "1px 1px 5px 1px rgba(0,0,0,0.2)"
+                            ? 'center'
+                            : 'center'
+                        : 'flex-end',
+                    color: 'white',
+                    backgroundColor: '#97C9CC',
+                    border: 'none',
+                    boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.2)'
                 }}>
 
                 {nextButtonTitle}
@@ -233,29 +233,29 @@ mx="20">
         {/* magic powder top left */}
         <img
             style={{
-                position: "absolute",
+                position: 'absolute',
                 left: 50,
                 top: -60,
                 width: 300,
-                transform: "rotate(270deg)",
-                objectFit: "contain",
+                transform: 'rotate(270deg)',
+                objectFit: 'contain',
                 zIndex: -1,
             }}
-            src={getAssetUrl("/images/bg-art-2.png")}
+            src={getAssetUrl('/images/bg-art-2.png')}
 alt="" />
 
         {/* magic powder top right */}
         <img
             style={{
-                position: "absolute",
+                position: 'absolute',
                 right: 50,
                 top: -60,
                 width: 300,
-                transform: "rotate(270deg)",
-                objectFit: "contain",
+                transform: 'rotate(270deg)',
+                objectFit: 'contain',
                 zIndex: -1,
             }}
-            src={getAssetUrl("/images/bg-art-6.png")}
+            src={getAssetUrl('/images/bg-art-6.png')}
 alt="" />
     </Flex>;
 };

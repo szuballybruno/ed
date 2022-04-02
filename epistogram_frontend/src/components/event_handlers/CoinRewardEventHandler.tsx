@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { EventCoinAcquireNotificationDTO } from "../../shared/dtos/EventCoinAcquireNotificationDTO";
-import { translatableTexts } from "../../static/translatableTexts";
-import { CoinRewardDialog } from "../CoinRewardDialog";
-import { useEpistoDialogLogic } from "../EpistoDialog";
+import { useEffect, useState } from 'react';
+import { EventCoinAcquireNotificationDTO } from '../../shared/dtos/EventCoinAcquireNotificationDTO';
+import { translatableTexts } from '../../static/translatableTexts';
+import { CoinRewardDialog } from '../CoinRewardDialog';
+import { useEpistoDialogLogic } from '../EpistoDialog';
 
 export const CoinRewardEventHandler = (props: {
     data: EventCoinAcquireNotificationDTO | null,
@@ -11,10 +11,10 @@ export const CoinRewardEventHandler = (props: {
 
     const { data, key } = props;
 
-    const dialogLogic = useEpistoDialogLogic("reward", { defaultCloseButtonType: "none" });
+    const dialogLogic = useEpistoDialogLogic('reward', { defaultCloseButtonType: 'none' });
     const [coinRewardAmount, setCoinRewardAmount] = useState(0);
-    const [coinRewardLottie, setCoinRewardLottie] = useState("");
-    const [coinRewardText, setCoinRewardText] = useState("");
+    const [coinRewardLottie, setCoinRewardLottie] = useState('');
+    const [coinRewardText, setCoinRewardText] = useState('');
 
     useEffect(() => {
 
@@ -24,19 +24,19 @@ export const CoinRewardEventHandler = (props: {
         // set dialog props 
         setCoinRewardAmount(data.amount);
 
-        if (data.reason === "activity_streak_3_days") {
+        if (data.reason === 'activity_streak_3_days') {
 
-            setCoinRewardLottie("lottie_json/session_streak_3.json");
+            setCoinRewardLottie('lottie_json/session_streak_3.json');
             setCoinRewardText(translatableTexts.eventListener.threeDaysStreak);
         }
 
-        if (data.reason === "activity_streak_5_days") {
-            setCoinRewardLottie("lottie_json/session_streak_5.json");
+        if (data.reason === 'activity_streak_5_days') {
+            setCoinRewardLottie('lottie_json/session_streak_5.json');
             setCoinRewardText(translatableTexts.eventListener.fiveDaysStreak);
         }
 
-        if (data.reason === "activity_streak_10_days") {
-            setCoinRewardLottie("lottie_json/session_streak_10.json");
+        if (data.reason === 'activity_streak_10_days') {
+            setCoinRewardLottie('lottie_json/session_streak_10.json');
             setCoinRewardText(translatableTexts.eventListener.tenDaysStreak);
         }
 

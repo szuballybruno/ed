@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { usePaging } from "../../static/frontendHelpers";
-import { SignupQuestionDTO } from "../../shared/dtos/SignupQuestionDTO";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
-import { SignupWrapper } from "../signup/SignupWrapper";
-import { borderRadius } from "@mui/system";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Flex } from '@chakra-ui/react';
+import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { usePaging } from '../../static/frontendHelpers';
+import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { LinearProgressWithLabel } from '../signup/ProgressIndicator';
+import { SignupWrapper } from '../signup/SignupWrapper';
+import { borderRadius } from '@mui/system';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
@@ -123,13 +123,13 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Flex alignItems={"center"}
-justifyContent={"flex-end"}
-width={"30%"}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
+            upperComponent={<Flex alignItems={'center'}
+justifyContent={'flex-end'}
+width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
 
             <RadioGroup
                 id="answers"
-                style={{ marginBottom: "30px" }}
+                style={{ marginBottom: '30px' }}
                 name="radioGroup1"
                 onChange={(e) => {
 
@@ -142,11 +142,11 @@ width={"30%"}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
                         key={answer.answerId}
                         value={answer.answerId}
                         style={{
-                            margin: "5px 0px 0px 0px",
-                            backgroundColor: answer.answerId === selectedAnswerId ? "#7CC0C24F" : "white",
-                            padding: "5px 10px",
-                            border: "1px solid var(--mildGrey)",
-                            borderRadius: "6px"
+                            margin: '5px 0px 0px 0px',
+                            backgroundColor: answer.answerId === selectedAnswerId ? '#7CC0C24F' : 'white',
+                            padding: '5px 10px',
+                            border: '1px solid var(--mildGrey)',
+                            borderRadius: '6px'
                            
                         }}
                         control={<Radio checked={answer.answerId === selectedAnswerId} />}

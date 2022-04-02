@@ -1,5 +1,5 @@
-import ReactECharts from "echarts-for-react";
-import { EpistoPieChartDataType, EpistoPieChartOptionsType } from "./types/EpistoPieChartTypes";
+import ReactECharts from 'echarts-for-react';
+import { EpistoPieChartDataType, EpistoPieChartOptionsType } from './types/EpistoPieChartTypes';
 
 export const EpistoPieChart = (props: {
     title: string,
@@ -24,8 +24,8 @@ export const EpistoPieChart = (props: {
 
 
     const defaultStyle = {
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
     };
 
 
@@ -56,7 +56,7 @@ export const EpistoPieChart = (props: {
                                 ? Object.assign(
                                     d,
                                     {
-                                        color: seriesOptions.color ? seriesOptions.color[index] : ""
+                                        color: seriesOptions.color ? seriesOptions.color[index] : ''
                                     })
                                 : d;
                         })
@@ -65,16 +65,17 @@ export const EpistoPieChart = (props: {
                                 ? Object.assign(
                                     d,
                                     {
-                                        color: seriesOptions.color ? seriesOptions.color[index] : ""
+                                        color: seriesOptions.color ? seriesOptions.color[index] : ''
                                     })
                                 : d;
-                        }).sort((a, b) => {
+                        })
+.sort((a, b) => {
                             return a.value - b.value;
                         })
                 },
                 seriesOptions,
                 {
-                    type: "pie"
+                    type: 'pie'
                 })
         ]
     });
@@ -125,13 +126,14 @@ export const EpistoPieChart = (props: {
                                             color: seriesOptions.color ? seriesOptions.color[index] : undefined
                                         })
                                     : d;
-                            }).sort((a, b) => {
+                            })
+.sort((a, b) => {
                                 return a.value - b.value;
                             })
                     },
                     seriesOptions,
                     {
-                        type: "pie"
+                        type: 'pie'
                     })
             ]
         }}

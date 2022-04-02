@@ -1,10 +1,10 @@
-import { Flex } from "@chakra-ui/react";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import React from "react";
-import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoHeader } from "../EpistoHeader";
+import { Flex } from '@chakra-ui/react';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import React from 'react';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
 
 export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseDetailsDTO }) => {
 
@@ -34,7 +34,7 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
                         align="center">
 
                         <SettingsSuggestIcon
-                            style={{ color: "var(--deepBlue)", marginRight: "10px" }}
+                            style={{ color: 'var(--deepBlue)', marginRight: '10px' }}
                             className="square35" />
 
                         <EpistoFont>

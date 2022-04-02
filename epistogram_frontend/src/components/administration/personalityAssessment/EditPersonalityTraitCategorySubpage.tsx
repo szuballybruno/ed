@@ -1,26 +1,26 @@
-import { Flex } from "@chakra-ui/react";
-import { Delete } from "@mui/icons-material";
-import Edit from "@mui/icons-material/Edit";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { DailyTipDTO } from "../../../shared/dtos/DailyTipDTO";
-import { useCreateDailyTip, useDeleteDailyTip } from "../../../services/api/dailyTipApiService";
-import { usePersonalityTraitCategoryDetails } from "../../../services/api/personalityAssessmentApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useBoolParam, useIntParam } from "../../../static/locationHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { Flex } from '@chakra-ui/react';
+import { Delete } from '@mui/icons-material';
+import Edit from '@mui/icons-material/Edit';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { DailyTipDTO } from '../../../shared/dtos/DailyTipDTO';
+import { useCreateDailyTip, useDeleteDailyTip } from '../../../services/api/dailyTipApiService';
+import { usePersonalityTraitCategoryDetails } from '../../../services/api/personalityAssessmentApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { useBoolParam, useIntParam } from '../../../static/locationHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const EditPersonalityTraitCategorySubpage = () => {
 
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const traitCategoryId = useIntParam("traitCategoryId")!;
-    const isMax = useBoolParam("isMax");
+    const traitCategoryId = useIntParam('traitCategoryId')!;
+    const isMax = useBoolParam('isMax');
 
     // http 
     const {
@@ -49,7 +49,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
         try {
 
             await createDailyTipAsync({ personalityTraitCategoryId: traitCategoryId, isMax });
-            showNotification("Napi tipp sikeresen hozzaadva.");
+            showNotification('Napi tipp sikeresen hozzaadva.');
             await refetchPersonalityTraitCategoryDetails();
         }
         catch (e) {
@@ -63,7 +63,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
         try {
 
             await deleteDailyTipAsync({ dailyTipId });
-            showNotification("Napi tipp sikeresen torolve.");
+            showNotification('Napi tipp sikeresen torolve.');
             await refetchPersonalityTraitCategoryDetails();
         }
         catch (e) {
@@ -99,7 +99,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
                 tabMenuItems={[
                     applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips
                 ]}
-                subRouteLabel={pageLabel ?? ""}>
+                subRouteLabel={pageLabel ?? ''}>
 
                 <Flex
                     bg="var(--deepBlue)"
@@ -111,7 +111,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
                         variant="light"
                         onClick={handleAddTip}
                         style={{
-                            margin: "10px"
+                            margin: '10px'
                         }}>
 
                         Add tip
@@ -137,11 +137,11 @@ export const EditPersonalityTraitCategorySubpage = () => {
                                     .map((x, index) => (
                                         <EpistoButton
                                             key={index}
-                                            variant={"colored"}
+                                            variant={'colored'}
                                             onClick={() => x.action(tip)}
                                             className="square30"
                                             style={{
-                                                margin: "3px"
+                                                margin: '3px'
                                             }}>
 
                                             {x.icon}

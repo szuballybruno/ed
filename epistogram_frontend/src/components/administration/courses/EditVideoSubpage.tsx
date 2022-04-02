@@ -1,30 +1,30 @@
-import { Flex } from "@chakra-ui/layout";
-import { Delete } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
-import LiveHelpIcon from "@mui/icons-material/LiveHelp";
-import TimerIcon from "@mui/icons-material/Timer";
-import { Slider } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import ReactPlayer from "react-player";
-import { useParams } from "react-router";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/api/videoApiService";
-import { getVirtualId } from "../../../services/core/idService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { QuestionDTO } from "../../../shared/dtos/QuestionDTO";
-import { VideoEditDTO } from "../../../shared/dtos/VideoEditDTO";
-import { roundNumber } from "../../../static/frontendHelpers";
-import { useIntParam } from "../../../static/locationHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { EpistoEntry } from "../../controls/EpistoEntry";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexList } from "../../universal/FlexList";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
-import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
-import { EditSection } from "./EditSection";
+import { Flex } from '@chakra-ui/layout';
+import { Delete } from '@mui/icons-material';
+import EditIcon from '@mui/icons-material/Edit';
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import TimerIcon from '@mui/icons-material/Timer';
+import { Slider } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { useParams } from 'react-router';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from '../../../services/api/videoApiService';
+import { getVirtualId } from '../../../services/core/idService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
+import { VideoEditDTO } from '../../../shared/dtos/VideoEditDTO';
+import { roundNumber } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexList } from '../../universal/FlexList';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { HiddenFileUploadInput } from '../../universal/HiddenFileUploadInput';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { EditSection } from './EditSection';
 
 const QuestionItem = (props: {
     currentSeconds: number,
@@ -35,8 +35,8 @@ const QuestionItem = (props: {
 }) => {
 
     const { question, onChanged, currentSeconds, onDeleted, navToEditQuestion } = props;
-    const [text, setText] = useState("");
-    const [showUpSecs, setShowUpSecs] = useState("");
+    const [text, setText] = useState('');
+    const [showUpSecs, setShowUpSecs] = useState('');
 
     useEffect(() => {
 
@@ -44,7 +44,7 @@ const QuestionItem = (props: {
             return;
 
         setText(question.questionText);
-        setShowUpSecs(question.showUpTimeSeconds + "");
+        setShowUpSecs(question.showUpTimeSeconds + '');
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [question.questionText, question.questionId, question.showUpTimeSeconds]);
@@ -90,16 +90,16 @@ const QuestionItem = (props: {
 // deprecated because DataGrid
 export const EditVideoSubpage = () => {
 
-    const [videoTitle, setVideoTitle] = useState("");
-    const [videoSubtitle, setVideoSubtitle] = useState("");
-    const [videoDescription, setVideoDescription] = useState("");
+    const [videoTitle, setVideoTitle] = useState('');
+    const [videoSubtitle, setVideoSubtitle] = useState('');
+    const [videoDescription, setVideoDescription] = useState('');
     const [videoFile, setVideoFile] = useState<File | null>(null);
 
     const videoUploadInputRef = useRef<HTMLInputElement>(null);
     const showError = useShowErrorDialog();
 
-    const videoId = useIntParam("videoId")!;
-    const courseId = useIntParam("courseId")!;
+    const videoId = useIntParam('videoId')!;
+    const courseId = useIntParam('courseId')!;
 
     const { navigate } = useNavigation();
 
@@ -149,7 +149,7 @@ export const EditVideoSubpage = () => {
             // cleanup
             setVideoFile(null);
 
-            showNotification("Video sikeresen mentve!");
+            showNotification('Video sikeresen mentve!');
 
             // reload
             refetchVideoEditDataAsync();
@@ -166,7 +166,7 @@ export const EditVideoSubpage = () => {
     const marks = questions
         .map(x => ({
             value: x.showUpTimeSeconds ?? 0,
-            label: x.showUpTimeSeconds + "s",
+            label: x.showUpTimeSeconds + 's',
         }));
 
     const handleAddNewQuestion = () => {
@@ -175,7 +175,7 @@ export const EditVideoSubpage = () => {
 
         const newQuestion = {
             questionId: getVirtualId(),
-            questionText: "",
+            questionText: '',
             showUpTimeSeconds: playedSecondsRound
         } as QuestionDTO;
 
@@ -269,7 +269,7 @@ export const EditVideoSubpage = () => {
 
                         <EpistoButton
                             variant="outlined"
-                            style={{ margin: "10px 0 10px 0" }}
+                            style={{ margin: '10px 0 10px 0' }}
                             onClick={() => videoUploadInputRef?.current?.click()}>
                             Videó kiválasztása
                         </EpistoButton>
@@ -285,10 +285,10 @@ export const EditVideoSubpage = () => {
                         {videoFile && <EpistoEntry
                             label="Videó fájl"
                             disabled
-                            value={videoFile?.name ?? ""} />}
+                            value={videoFile?.name ?? ''} />}
                         <Slider
                             defaultValue={80}
-                            style={{ pointerEvents: "none" }}
+                            style={{ pointerEvents: 'none' }}
                             max={videoLength}
                             value={playedSeconds}
                             marks={marks} />

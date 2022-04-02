@@ -1,11 +1,11 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
-import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
-import { FlexFloat } from "../controls/FlexFloat";
-import DesktopNavbar from "./DesktopNavbar";
-import classes from "./navbar.module.scss";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
+import { getAssetUrl, useIsDesktopView } from '../../static/frontendHelpers';
+import { FlexFloat } from '../controls/FlexFloat';
+import DesktopNavbar from './DesktopNavbar';
+import classes from './navbar.module.scss';
 
 const Navbar = (props: {
     hideLinks?: boolean,
@@ -38,7 +38,7 @@ const Navbar = (props: {
                     <div className={classes.mobileNavbarLogoWrapper}>
                         <img
                             alt="EpistoGram Logo"
-                            src={getAssetUrl("/images/logo.svg")} />
+                            src={getAssetUrl('/images/logo.svg')} />
                     </div>
                 </NavLink>
             </div>
@@ -53,7 +53,7 @@ const Navbar = (props: {
         boxShadow="none"
         borderRadius={0}
         bgColor="unset"
-        padding={isLowHeight ? "20px 0 20px 0" : "20px 20px 20px 20px"}>
+        padding={isLowHeight ? '20px 0 20px 0' : '20px 20px 20px 20px'}>
 
         {isDesktop
             ? renderDesktopNavbar()

@@ -1,5 +1,5 @@
-import { EpistoGrid } from "../controls/EpistoGrid";
-import { FlexFloat } from "../controls/FlexFloat";
+import { EpistoGrid } from '../controls/EpistoGrid';
+import { FlexFloat } from '../controls/FlexFloat';
 
 export const InfoGrid = (props: { infos: string[] }) => {
 

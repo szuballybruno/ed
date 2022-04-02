@@ -1,11 +1,11 @@
-import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import CircularProgress from "@mui/material/CircularProgress";
-import React, { useEffect, useState } from "react";
-import { LoadingStateType } from "../../models/types";
-import { isArray } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Box, Flex, FlexProps, Heading, Text } from '@chakra-ui/react';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import CircularProgress from '@mui/material/CircularProgress';
+import React, { useEffect, useState } from 'react';
+import { LoadingStateType } from '../../models/types';
+import { isArray } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
@@ -25,8 +25,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     const singleError = getError(error);
     const state = getLoadingState(loadingState, singleError);
 
-    const [prevState, setPrevState] = useState<LoadingStateType>("idle");
-    const showOverlay = prevState === "error" || prevState === "loading";
+    const [prevState, setPrevState] = useState<LoadingStateType>('idle');
+    const showOverlay = prevState === 'error' || prevState === 'loading';
     const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
     const [trigger, setTrigger] = useState(0);
 
@@ -35,7 +35,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         if (prevState === state)
             return;
 
-        if (state !== "loading") {
+        if (state !== 'loading') {
 
             setPrevState(state);
             return;
@@ -85,21 +85,21 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             p="30px">
 
             {/* error */}
-            {finalState === "error" && <Flex align="center"
+            {finalState === 'error' && <Flex align="center"
 direction="column">
-                <ErrorOutlineIcon style={{ width: "100px", height: "100px" }}></ErrorOutlineIcon>
+                <ErrorOutlineIcon style={{ width: '100px', height: '100px' }}></ErrorOutlineIcon>
                 <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
                 <Text maxWidth="300px">{singleError?.message}</Text>
             </Flex>}
 
             {/* loading */}
-            {finalState === "loading" && <Flex
+            {finalState === 'loading' && <Flex
                 id="loadingDisplayContainer"
                 direction="column"
                 justify="center"
                 align="center">
 
-                <CircularProgress style={{ "color": "black" }}
+                <CircularProgress style={{ 'color': 'black' }}
 size={50} />
 
                 <Box pt="20px">
@@ -115,25 +115,25 @@ size={50} />
 const getLoadingState = (loadingState?: LoadingStateType | LoadingStateType[], error?: any): LoadingStateType => {
 
     if (error)
-        return "error";
+        return 'error';
 
     if (!loadingState)
-        return "idle";
+        return 'idle';
 
     if (isArray(loadingState)) {
 
         const loadingStates = loadingState as LoadingStateType[];
 
-        if (loadingStates.some(x => x === "error"))
-            return "error";
+        if (loadingStates.some(x => x === 'error'))
+            return 'error';
 
-        if (loadingStates.some(x => x === "loading"))
-            return "loading";
+        if (loadingStates.some(x => x === 'loading'))
+            return 'loading';
 
-        if (loadingStates.some(x => x === "success"))
-            return "success";
+        if (loadingStates.some(x => x === 'success'))
+            return 'success';
 
-        return "idle";
+        return 'idle';
     }
     else {
 

@@ -1,8 +1,8 @@
-import React from "react";
-import OverflowMenu from "./OverflowMenu";
-import classes from "./css/stylesheet.module.css";
-import { Flex } from "@chakra-ui/react";
-import { FlexProps } from "@chakra-ui/layout";
+import React from 'react';
+import OverflowMenu from './OverflowMenu';
+import classes from './css/stylesheet.module.css';
+import { Flex } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/layout';
 
 export default function IntersectionObserverWrap(props: { children: JSX.Element[] } & FlexProps) {
 
@@ -16,7 +16,7 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
     const updatedEntries: any = {};
 
     entries.forEach((entry: IntersectionObserverEntry) => {
-      updatedEntries[entry.target.getAttribute("name") as string] = entry.isIntersecting;
+      updatedEntries[entry.target.getAttribute('name') as string] = entry.isIntersecting;
       console.log(entry.intersectionRatio);
     });
 
@@ -38,8 +38,8 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
     // only if we have the data attribute observerid on the child elemeent
     const elements: Element[] | null = (navRef && navRef.current && navRef.current.children) && Array.from(navRef.current.children);
     elements && elements.forEach((item: Element) => {
-      console.log(item.getAttribute("name"));
-      if (item.getAttribute("name")) {
+      console.log(item.getAttribute('name'));
+      if (item.getAttribute('name')) {
         observer.observe(item);
       }
     });
@@ -47,14 +47,14 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
   }, []);
 
 
-  return (<Flex overflow={"hidden"}>
+  return (<Flex overflow={'hidden'}>
     <Flex className={classes.toolbarWrapper}
-      overflow={"hidden"}
+      overflow={'hidden'}
       ref={navRef}
       {...css}>
       {React.Children.map(props.children, (child: JSX.Element) => {
         return React.cloneElement(child, {
-          className: visibilityMap[child?.props["name"]] ? classes.visible : classes.inVisible
+          className: visibilityMap[child?.props['name']] ? classes.visible : classes.inVisible
         });
       })}
 
