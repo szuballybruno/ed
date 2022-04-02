@@ -1,15 +1,14 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { useReactTimer } from "../../helpers/reactTimer";
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { useAnswerQuestion } from "../../services/api/playerApiService";
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { epochDates } from "../../static/frontendHelpers";
-import { QuesitionView } from "../QuestionView";
-import { EpistoButton } from "../controls/EpistoButton";
-import { TimeoutFrame } from "./TimeoutFrame";
-import { EpistoFont } from "../controls/EpistoFont";
 import { translatableTexts } from "../../static/translatableTexts";
+import { EpistoButton } from "../controls/EpistoButton";
+import { EpistoFont } from "../controls/EpistoFont";
+import { QuesitionView } from "../QuestionView";
+import { TimeoutFrame } from "./TimeoutFrame";
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,

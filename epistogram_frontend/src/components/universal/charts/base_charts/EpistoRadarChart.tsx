@@ -1,5 +1,5 @@
 import ReactECharts from 'echarts-for-react';
-import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from './types/EpistoRadarChartTypes';
+import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from '../types/EpistoRadarChartTypes';
 
 /**
  * Wrapper component for ECharts

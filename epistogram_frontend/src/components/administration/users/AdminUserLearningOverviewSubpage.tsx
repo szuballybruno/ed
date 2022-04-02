@@ -1,7 +1,9 @@
 import { Box, Flex, GridItem, Image, Text, Tooltip } from "@chakra-ui/react";
-import { Add, List } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import { LinearProgress } from "@mui/material";
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useLocation, useParams } from "react-router-dom";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
 import { ButtonType } from "../../../models/types";
@@ -10,22 +12,21 @@ import { useActiveCourses, useUserProgressData } from "../../../services/api/use
 import { useUserStats } from "../../../services/api/userStatsApiService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { AdminPageUserDTO } from "../../../shared/dtos/admin/AdminPageUserDTO";
+import { defaultCharts } from "../../../static/defaultChartOptions";
 import { getAssetUrl, usePaging } from "../../../static/frontendHelpers";
 import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoFont } from "../../controls/EpistoFont";
 import { EpistoGrid } from "../../controls/EpistoGrid";
 import { FlexFloat } from "../../controls/FlexFloat";
 import { NoProgressChartYet } from "../../home/NoProgressChartYet";
-import { UserProgressChart } from "../../home/UserProgressChart";
+import { UserProgressChart } from "../../universal/charts/UserProgressChart";
 import { SmallStat } from "../../learningInsights/LearningCourseStatsTile";
 import StatisticsCard from "../../statisticsCard/StatisticsCard";
 import { AdminBreadcrumbsHeader } from "../AdminBreadcrumbsHeader";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "../courses/EditSection";
 import { AdminUserList } from "./AdminUserList";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { UserActivityDistributionChart } from "./UserActivityDistributionChart";
+import { EpistoPieChart } from "../../universal/charts/base_charts/EpistoPieChart";
 
 const DummyLearningCourseStatsModified = (props: {
     title: string,
@@ -500,12 +501,16 @@ export const AdminUserStatisticsSubpage = (props: {
                             gridRow: `auto / span 2`
                         }}>
 
-                        <UserActivityDistributionChart />
-                        {/* <Image
-                            src={getAssetUrl("images/piechart.png")}
-                            w="100%"
-                            h="100%"
-                            objectFit="contain" /> */}
+                        <EpistoPieChart
+                            title=""
+                            isSortValues
+                            segments={[
+                                { value: 30, name: 'Videók megtekintése' },
+                                { value: 17, name: 'Vizsga / tesztkitöltés' },
+                                { value: 10, name: 'Kérdések megválaszolása' },
+                                { value: 20, name: 'Nincs tevékenység' }
+                            ]}
+                            options={defaultCharts.pie} />
 
                     </FlexFloat>
 

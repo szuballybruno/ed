@@ -5,10 +5,9 @@ import { getAssetUrl } from "../../../static/frontendHelpers"
 import { translatableTexts } from "../../../static/translatableTexts"
 import { StatisticsGroupType } from "../../learningInsights/LearningStatistics"
 import StatisticsCard from "../../statisticsCard/StatisticsCard"
-import { EpistoBarChart } from "../../universal/charts/EpistoBarChart"
-import { EpistoPieChart } from "../../universal/charts/EpistoPieChart"
+import { EpistoBarChart } from "../../universal/charts/base_charts/EpistoBarChart"
+import { EpistoPieChart } from "../../universal/charts/base_charts/EpistoPieChart"
 import { AdminSubpageHeader } from "../AdminSubpageHeader"
-import { UserActivityDistributionChart } from "../users/UserActivityDistributionChart"
 
 export const AdminHomeDetails = () => {
 

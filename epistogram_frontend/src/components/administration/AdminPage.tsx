@@ -20,7 +20,6 @@ import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/Edi
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
 import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-import AdminStatistics from "./users/AdminStatisticsSubpage";
 import { AdminUserControl } from './users/AdminUserControl';
 
 export const AdminPage = () => {
@@ -126,10 +125,10 @@ export const AdminPage = () => {
                         {getRoute(administrationRoutes.personalityAssessmentRoute.editTips.editTip, <EditDailyTipSubpage />)}
                     </Switch>} />
 
-                {/* statistics */}
+                {/* statistics 
                 <Route exact path={administrationRoutes.myCompanyRoute.route}>
                     <AdminStatistics />
-                </Route>
+                </Route>*/}
 
                 {/* Disabled temporarily */}
                 {/* <ProtectedRoute

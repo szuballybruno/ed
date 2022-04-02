@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { matchPath, useLocation } from "react-router-dom";
 import { ApplicationRoute, LoadingStateType } from "../models/types";
@@ -344,7 +344,7 @@ export const usePasswordEntryState = () => {
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
 
-    const validate = () => {
+    const validate = useCallback(() => {
 
         const error = validatePassowrd(password, passwordCompare);
 
@@ -380,12 +380,12 @@ export const usePasswordEntryState = () => {
                 setPasswordCompareError(null);
                 return true;
         }
-    }
+    }, [password, passwordCompare])
 
     useEffect(() => {
 
         validate();
-    }, [passwordCompare, password]);
+    }, [validate]);
 
     return {
         password,
@@ -599,6 +599,6 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 }
 
 export const useForceUpdate = () => {
-    const [value, setValue] = useState(0); // integer state
+    const [, setValue] = useState(0); // integer state
     return () => setValue(value => value + 1); // update the state to force render
 }

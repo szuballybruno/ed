@@ -7,7 +7,7 @@ import { FlexFloat } from "../controls/FlexFloat";
 import StatisticsCard from "../statisticsCard/StatisticsCard";
 import { CurrentUserContext } from "../system/AuthenticationFrame";
 import { NoProgressChartYet } from "./NoProgressChartYet";
-import { UserProgressChart } from "./UserProgressChart";
+import { UserProgressChart } from "../universal/charts/UserProgressChart";
 
 export const StatsSummary = (props: {
     courseId: number | null

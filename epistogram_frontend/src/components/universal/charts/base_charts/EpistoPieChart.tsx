@@ -1,5 +1,5 @@
 import ReactECharts from 'echarts-for-react';
-import { EpistoPieChartDataType, EpistoPieChartOptionsType } from './types/EpistoPieChartTypes';
+import { EpistoPieChartDataType, EpistoPieChartOptionsType } from '../types/EpistoPieChartTypes';
 
 /**
  * Wrapper component for ECharts

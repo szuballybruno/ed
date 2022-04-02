@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
-import ReactECharts, { EChartsOption } from 'echarts-for-react';
-import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
-import { iterate } from '../../static/frontendHelpers';
+import { UserCourseProgressChartDTO } from '../../../shared/dtos/UserCourseProgressChartDTO';
+import { iterate } from '../../../static/frontendHelpers';
+import { EpistoLineChart } from './base_charts/EpistoLineChart';
+import { EpistoLineChartDataType } from './types/EpistoLineChartTypes';
 
 export const UserProgressChart = (props: {
     userProgress: UserCourseProgressChartDTO
@@ -14,6 +14,7 @@ export const UserProgressChart = (props: {
     const dates = iterate(courseLengthDays, index => {
 
         const date = new Date(userProgress.startDate).addDays(index);
+
         return date.toLocaleDateString(undefined, {
             month: '2-digit',
             day: '2-digit'
@@ -26,38 +27,26 @@ export const UserProgressChart = (props: {
 
     const interval = Math.floor(dates.length / 7);
 
-    console.log(interval);
-
-    const option = {
+    const userProgressChartOptions = {
         legend: {
-            data: [
-                {
-                    name: "Valós haladás",
-                },
-                {
-                    name: "Becsült haladás",
-                }
-            ],
             orient: "horizontal",
             icon: "circle",
             itemHeight: 10,
             top: 10,
             show: true,
             textStyle: {
-                fontWeight: "700",
+                fontWeight: 700,
                 color: "black"
             }
         },
         xAxis: {
-            name: "Dátum",
             nameLocation: "middle",
             nameGap: 40,
             nameTextStyle: {
-                fontWeight: "bold"
+                fontWeight: 600
             },
             boundaryGap: false,
             type: 'category',
-            data: dates,
             axisLabel: {
                 show: true,
                 interval: interval,
@@ -73,42 +62,43 @@ export const UserProgressChart = (props: {
             nameLocation: "middle",
             nameGap: 40,
             nameTextStyle: {
-                fontWeight: "bold"
+                fontWeight: 600
             },
-            type: 'value',
-            axisLabel: {
-                formatter: '{value}%'
-            }
+            type: 'value'
         },
-        series: [
+        seriesOptions: {
+            type: 'line',
+            symbolSize: 10,
+            symbol: "circle",
+            lineStyle: {
+                width: 5,
+                shadowColor: "rgba(0, 0, 0, 0.3)",
+                shadowOffsetX: 2,
+                shadowOffsetY: 2,
+                shadowBlur: 10
+            }
+        }
+
+    }
+
+    return <EpistoLineChart
+        title=''
+        options={userProgressChartOptions}
+        xAxisData={dates}
+        xAxisLabel="Dátum"
+        yAxisLabel="Haladás"
+        yAxisLabelSuffix='%'
+        dataset={[
             {
                 name: "Becsült haladás",
-                data: dates
-                    .map((_, index) => (100 / dates.length) * (index + 1)),
-                type: 'line',
-                symbolSize: 10,
-                symbol: "circle",
-                lineStyle: {
-                    width: 5,
-                    shadowColor: "rgba(0, 0, 0, 0.3)",
-                    shadowOffsetX: 2,
-                    shadowOffsetY: 2,
-                    shadowBlur: 10
-                }
-            },
-            {
+                data: dates.map((_, index) => (100 / dates.length) * (index + 1)) as EpistoLineChartDataType
+            }, {
                 name: "Valós haladás",
-                data: actualProgress,
-                type: 'line'
+                data: actualProgress
             }
-        ]
-    } as EChartsOption;
-
-    return (
-        <Flex>
-            <ReactECharts
-                className="whall"
-                option={option}></ReactECharts>
-        </Flex>
-    )
+        ]}
+        style={{
+            width: "100%",
+            height: "100%"
+        }} />
 }

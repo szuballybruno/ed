@@ -9,11 +9,10 @@ import { EpistoFont } from "../../../controls/EpistoFont"
 import { TabPanel } from "../../../courseDetails/TabPanel"
 import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
 import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
-import { UserProgressChart } from "../../../home/UserProgressChart"
+import { UserProgressChart } from "../../../universal/charts/UserProgressChart"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
 import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
-import { UserActivityDistributionChart } from "../UserActivityDistributionChart"
+import { EpistoPieChart } from "../../../universal/charts/base_charts/EpistoPieChart"
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {

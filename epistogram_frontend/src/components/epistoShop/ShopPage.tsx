@@ -7,7 +7,6 @@ import { useShopItemCategories, useShopItems } from "../../services/api/shopApiS
 import { translatableTexts } from "../../static/translatableTexts";
 import { ContentPane } from "../ContentPane";
 import { EpistoFont } from "../controls/EpistoFont";
-import classes from "../css/courseSearchMain.module.scss";
 import { EpistoConinInfo } from "../EpistoCoinInfo";
 import { useEpistoDialogLogic } from "../EpistoDialog";
 import { LeftPane } from "../LeftPane";
@@ -85,7 +84,6 @@ export const ShopPage = () => {
                     .map((category, index) => {
 
                         return <ToggleButton
-                            className={classes.categoriesListItem}
                             selected={categoryFilterId === category.id}
                             value={category}
                             style={{

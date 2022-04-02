@@ -7,77 +7,286 @@ import { defaultCharts } from "../../../../static/defaultChartOptions"
 import { iterate } from "../../../../static/frontendHelpers"
 import { EpistoFont } from "../../../controls/EpistoFont"
 import { EpistoSelect } from "../../../controls/EpistoSelect"
+import { StatisticsGroupType } from "../../../learningInsights/LearningStatistics"
 import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { EpistoLineChart } from "../../../universal/charts/EpistoLineChart"
-import { EpistoPieChart } from "../../../universal/charts/EpistoPieChart"
+import { EpistoLineChart } from "../../../universal/charts/base_charts/EpistoLineChart"
+import { EpistoPieChart } from "../../../universal/charts/base_charts/EpistoPieChart"
 import { DashboardSection } from "../../../universal/DashboardSection"
+
+export const HotspotsSlider = (props: {
+    valueLabelComponent: React.ElementType<any> | undefined
+}) => {
+
+    const { valueLabelComponent } = props
+
+    return <Slider
+        style={{
+            overflow: "hidden",
+            height: "10px",
+            padding: 0,
+            margin: "0 10px",
+        }
+        }
+        components={{
+            ValueLabel: valueLabelComponent,
+        }}
+        valueLabelDisplay="on"
+        sx={{
+            ".MuiSlider-rail": {
+                padding: "0",
+                borderRadius: "7px",
+                opacity: "100%",
+                backgroundImage:
+                    `linear-gradient(to right, 
+                rgb(30,255,50),
+                rgb(30,255,50), 
+                rgb(30,255,50),
+                rgb(255,240,0),  
+                rgb(30,255,50), 
+                rgb(30,255,50), 
+                rgb(30,255,50), 
+                rgb(30,255,50),
+                rgb(255,240,0),  
+                rgb(255,240,0),
+                rgb(255,40,70), 
+                rgb(30,255,50), 
+                rgb(30,255,50), 
+                rgb(30,255,50), 
+                rgb(30,255,50), 
+                rgb(30,255,50), 
+                rgb(30,255,50))`
+            },
+            ".MuiSlider-track": {
+                display: "none",
+                background: "transparent"
+            },
+            ".MuiSlider-thumb": {
+                height: 5,
+                width: 5,
+                background: "white",
+                color: "white"
+            }
+        }} />
+}
+
+export const adminExamStatistics = [
+    {
+        title: "",
+        items: [
+
+            /* Count of views */
+            {
+                title: "Megtekintések száma",
+                value: "213",
+                suffix: "db"
+            },
+
+            /* Time spent with watch */
+            {
+                title: "Össz. megtekintési idő",
+                value: "23",
+                suffix: "óra"
+            },
+
+            /* Performance on exam */
+            {
+                title: "Átlagos nézési idő",
+                value: "3:45",
+                suffix: ""
+            },
+
+            /* Average time spent per sessions */
+            {
+                title: "Átlagban hány %-át nézik meg a videónak",
+                value: "78",
+                suffix: "%"
+            },
+
+        ]
+    },
+    {
+        title: "",
+        items: [
+
+
+
+            /* Video difficulty by users */
+            {
+                title: "Videó nehézsége az értékelések alapján",
+                value: "2.3",
+                suffix: ""
+            },
+
+            /* Calculated video difficulty */
+            {
+                title: "Videó nehézségének értékelései",
+                value: "210",
+                suffix: "db"
+            },
+
+            /* Video quality rating by users */
+            {
+                title: "Videó minősége az értékelések alapján",
+                value: "4.8",
+                suffix: ""
+            },
+
+            /* Calculated video quality rating */
+            {
+                title: "Videó minőségének értékelései",
+                value: "130",
+                suffix: "db"
+            },
+
+            /* Video watch rate chart*/
+            {
+                isOpenByDefault: true,
+                children: <EpistoPieChart
+                    title="Megtekintési arányok"
+                    segments={[
+                        { value: 33, name: 'Végignézi a videót' },
+                        { value: 31, name: '75%-ig nézi meg a videót' },
+                        { value: 27, name: '50%-ig nézi meg a videót' },
+                        { value: 23, name: '25%-ig nézi meg a videót' },
+                        { value: 40, name: '10%-ig nézi meg a videót' }
+                    ]}
+                    isSortValues
+                    options={defaultCharts.redRadiusPie}
+                    style={{
+                        width: "100%",
+                        height: "100%"
+                    }} />
+            },
+
+            /* Dropout rate by video */
+            {
+                title: "Hányan léptek ki a platformból ezután a videó után",
+                value: "10",
+                suffix: "fő"
+            },
+
+            /* Correct answers count */
+            {
+                title: "Hányan válaszoltak jól a videóhoz tartozó kérdésre?",
+                value: "45",
+                suffix: "fő"
+            },
+
+            /* Correct answers rate by users */
+            {
+                title: "A felhasználók hány %-a válaszolt jól a videóhoz tartozó kérdésre?",
+                value: "70",
+                suffix: "%"
+            },
+
+            /* Average repetition multiplier */
+            {
+                title: "Átlagosan ennyiszer ismétlik meg a felhasználók",
+                value: "1.3",
+                suffix: "x"
+            },
+        ]
+    }
+] as StatisticsGroupType[]
+
+
+
+export const AdminExamStatisticsListItem = (props: {
+    title: string,
+    color: string
+}) => {
+    const { title, color } = props
+
+    return <Flex align="center">
+
+        <FiberManualRecord
+            style={{
+                color: color,
+                height: 10
+            }} />
+
+        <EpistoFont
+            style={{
+                color: color,
+                lineHeight: 1.1,
+                fontWeight: 500,
+                margin: "3px 0"
+            }}
+            fontSize="fontSmall">
+
+            {title}
+        </EpistoFont>
+    </Flex>
+}
+
+export const adminExamStatisticsListItems = [
+    {
+        title: "A legtöbb felhasználónak nehezen érthető",
+        color: "red"
+    },
+    {
+        title: "A felhasználók egy részének nehezen érthető",
+        color: "orange"
+    },
+    {
+        title: "Nem történtek visszatekerések",
+        color: "green"
+    },
+]
+
+export const ValueLabelComponent = (props) => {
+    const { children, value } = props;
+
+    return (
+        <Tooltip
+            className="roundBorders"
+            hasArrow
+            padding="10px"
+            label={value}
+            placement="top"
+            zIndex="9999"
+            h="100px"
+            w="200px">
+
+            {children}
+        </Tooltip >
+    );
+}
 
 export const AdminExamStatisticsModalPage = () => {
 
-    const ValueLabelComponent = (props) => {
-        const { children, value } = props;
 
-        return (
-            <Tooltip
-                className="roundBorders"
-                hasArrow
-                padding="10px"
-                label={value}
-                placement="top"
-                zIndex="9999"
-                h="100px"
-                w="200px">
-
-                {children}
-            </Tooltip >
-        );
-    }
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
     return <Flex direction="column" overflowY="scroll" p="20px">
-        <Grid
-            mt="30px"
-            h="120px"
-            templateColumns="repeat(4, 1fr)"
-            gridGap={10}
-            gridAutoRows="1">
 
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Megtekintések száma"
-                value="213"
-                suffix="db" />
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Össz. megtekintési idő"
-                value="23"
-                suffix="óra" />
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Átlagos nézési idő"
-                value="3:45"
-                suffix="" />
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Átlagban hány %-át nézik meg a videónak"
-                value="78"
-                suffix="%" />
-        </Grid>
+        {/* First statistics card section */}
+        <Flex mt="10px">
+
+            <Grid
+                className="whall"
+                gap="10px"
+                gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+                gridAutoRows="200px"
+                gridAutoFlow="column dense">
+
+                {adminExamStatistics[0].items.map(item => {
+
+                    return <StatisticsCard
+                        style={{
+                            background: "var(--transparentWhite80)",
+                            paddingLeft: 20,
+                            minWidth: 200
+                        }}
+                        {...item} />
+                })}
+            </Grid>
+        </Flex>
 
         {/* Video stats with player */}
         <Flex mt="30px">
+
+            {/* Video player with hotspots slider */}
             <Flex
                 align="flex-start"
                 m="5px 5px 0 0"
@@ -108,58 +317,15 @@ export const AdminExamStatisticsModalPage = () => {
                     w="100%"
                     bottom="0">
 
-                    <Slider
-                        style={{
-                            overflow: "hidden",
-                            height: "10px",
-                            padding: 0,
-                            margin: "0 10px",
-                        }}
-                        components={{
-                            ValueLabel: ValueLabelComponent,
-                        }}
-                        valueLabelDisplay="on"
-                        sx={{
-                            ".MuiSlider-rail": {
-                                padding: "0",
-                                borderRadius: "7px",
-                                opacity: "100%",
-                                backgroundImage:
-                                    `linear-gradient(to right, 
-                                        rgb(30,255,50),
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50),
-                                        rgb(255,240,0),  
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50),
-                                        rgb(255,240,0),  
-                                        rgb(255,240,0),
-                                        rgb(255,40,70), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50), 
-                                        rgb(30,255,50))`
-                            },
-                            ".MuiSlider-track": {
-                                display: "none",
-                                background: "transparent"
-                            },
-                            ".MuiSlider-thumb": {
-                                height: 5,
-                                width: 5,
-                                background: "white",
-                                color: "white"
-                            }
-                        }} />
+                    <HotspotsSlider valueLabelComponent={ValueLabelComponent} />
                 </Flex>
             </Flex>
+
+            {/* Video statistics */}
             <Flex
                 m="5px 0 0 5px"
                 flex="1">
+
                 <Flex
                     direction="column"
                     className="roundBorders"
@@ -173,15 +339,16 @@ export const AdminExamStatisticsModalPage = () => {
 
                             Videó érthetősége - Ismétlés aránya a videón belül
                         </EpistoFont>
+
                         <EpistoSelect
                             items={["Ismétlések aránya"]}
                             selectedValue={"Ismétlések aránya"}
-                            onSelected={() => {
-
-                            }}
+                            onSelected={() => { }}
                             getCompareKey={() => "asd"} />
                     </Flex>
+
                     <Flex flex="1" >
+
                         <Flex
                             direction="row"
                             flex="1"
@@ -191,22 +358,28 @@ export const AdminExamStatisticsModalPage = () => {
                                 direction="column"
                                 justify="space-between"
                                 flex="2">
+
                                 <Flex
                                     direction="column">
+
                                     <EpistoFont
                                         fontSize="fontMid"
                                         style={{
                                             fontWeight: 500
                                         }}>
+
                                         Kritikus pontok a videóban
                                     </EpistoFont>
+
                                     <Flex
                                         justify="space-between">
+
                                         <EpistoFont
                                             fontSize="fontSmallPlus">
 
                                             3:29
                                         </EpistoFont>
+
                                         <EpistoFont
                                             fontSize="fontSmallPlus">
 
@@ -214,81 +387,45 @@ export const AdminExamStatisticsModalPage = () => {
                                         </EpistoFont>
                                     </Flex>
                                 </Flex>
-                                <Flex direction="column">
-                                    <Flex align="center">
-                                        <FiberManualRecord
-                                            style={{
-                                                color: "red",
-                                                height: 10
-                                            }} />
-                                        <EpistoFont
-                                            style={{
-                                                color: "red",
-                                                lineHeight: 1.1,
-                                                fontWeight: 500,
-                                                margin: "3px 0"
-                                            }}
-                                            fontSize="fontSmall">
-                                            A legtöbb felhasználónak nehezen érthető
-                                        </EpistoFont>
-                                    </Flex>
-                                    <Flex align="center">
-                                        <FiberManualRecord
-                                            style={{
-                                                color: "orange",
-                                                height: 10
-                                            }} />
-                                        <EpistoFont
-                                            style={{
-                                                color: "orange",
-                                                lineHeight: 1.1,
-                                                fontWeight: 500,
-                                                margin: "3px 0"
-                                            }}
-                                            fontSize="fontSmall">
-                                            A felhasználók egy részének nehezen érthető
-                                        </EpistoFont>
-                                    </Flex>
-                                    <Flex align="center">
-                                        <FiberManualRecord
-                                            style={{
-                                                color: "green",
-                                                height: 10
-                                            }} />
-                                        <EpistoFont
-                                            style={{
-                                                color: "green",
-                                                fontWeight: 500
-                                            }}
-                                            fontSize="fontSmall">
-                                            Nem történtek visszatekerések
-                                        </EpistoFont>
-                                    </Flex>
-                                </Flex>
 
+                                <Flex direction="column">
+                                    {adminExamStatisticsListItems.map(item => {
+
+                                        return <AdminExamStatisticsListItem
+                                            title={item.title}
+                                            color={item.color} />
+                                    })}
+                                </Flex>
                             </Flex>
+
                             <Divider
                                 orientation="vertical"
                                 background="black"
                                 w="1px"
                                 m="0 10px" />
+
                             <Flex
                                 direction="column"
                                 flex="3">
+
                                 <EpistoFont
                                     fontSize="fontMid"
                                     style={{
                                         fontWeight: 500
                                     }}>
+
                                     Általános statisztika
                                 </EpistoFont>
+
                                 <Flex
                                     justify="space-between">
+
                                     <EpistoFont
                                         fontSize="fontSmallPlus">
 
                                         Helyesen válaszolók aránya
                                     </EpistoFont>
+
                                     <EpistoFont
                                         fontSize="fontSmallPlus">
 
@@ -305,7 +442,7 @@ export const AdminExamStatisticsModalPage = () => {
             </Flex>
         </Flex>
 
-        {/* test your knowledge */}
+        {/* Video low points */}
         <DashboardSection
             title={"Mélypontok"}
             background="var(--transparentWhite80)"
@@ -337,104 +474,22 @@ export const AdminExamStatisticsModalPage = () => {
                 }} />
         </DashboardSection>
 
+        {/* Second statistics card section */}
         <Grid
             mt="30px"
             gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
             gridAutoRows="160px"
             gridGap={10}>
-            <StatisticsCard
-                style={{
-                    background: "var(--transparentWhite80)",
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Videó nehézsége az értékelések alapján"
-                value="2.3"
-                suffix="" />
-            <StatisticsCard
-                style={{
-                    background: "var(--transparentWhite80)",
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Videó nehézségének értékelései"
-                value="210"
-                suffix="db" />
-            <StatisticsCard
-                style={{
-                    background: "var(--transparentWhite80)",
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Videó minősége az értékelések alapján"
-                value="4.8"
-                suffix="" />
-            <StatisticsCard
-                style={{
-                    background: "var(--transparentWhite80)",
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Videó minőségének értékelései"
-                value="130"
-                suffix="db" />
 
-            <DashboardSection
-                title={"Megtekintési arányok"}
-                background="var(--transparentWhite80)"
-                className="mildShadow roundBorders"
-                //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
-                color="black"
-                showDivider
-                gridColumn="auto / span 2"
-                gridRow="auto / span 2">
-
-
-                <EpistoPieChart
-                    title=""
-                    segments={[
-                        { value: 335, name: 'Végignézi a videót' },
-                        { value: 310, name: '75%-ig nézi meg a videót' },
-                        { value: 274, name: '50%-ig nézi meg a videót' },
-                        { value: 235, name: '25%-ig nézi meg a videót' },
-                        { value: 400, name: '10%-ig nézi meg a videót' }
-                    ]}
-                    isSortValues
-                    options={defaultCharts.redRadiusPie} />
-            </DashboardSection>
-
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Hányan léptek ki a platformból ezután a videó után"
-                value="10"
-                suffix="fő" />
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Hányan válaszoltak jól a videóhoz tartozó kérdésre?"
-                value="45"
-                suffix="fő" />
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="A felhasználók hány %-a válaszolt jól a videóhoz tartozó kérdésre?"
-                value="70"
-                suffix="%" />
-            <StatisticsCard
-                style={{
-                    paddingLeft: 20,
-                    minWidth: 200
-                }}
-                title="Átlagosan ennyiszer ismétlik meg a felhasználók"
-                value="1.3"
-                suffix="x" />
+            {adminExamStatistics[1].items.map(item => {
+                return <StatisticsCard
+                    style={{
+                        background: "var(--transparentWhite80)",
+                        paddingLeft: 20,
+                        minWidth: 200
+                    }}
+                    {...item} />
+            })}
         </Grid>
     </Flex>
 }

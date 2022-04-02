@@ -18,7 +18,7 @@ import { EpistoEntry } from "../../controls/EpistoEntry";
 import { EpistoLabel } from "../../controls/EpistoLabel";
 import { EpistoSelect } from "../../controls/EpistoSelect";
 import { LoadingFrame } from "../../system/LoadingFrame";
-import { EpistoRadarChart } from "../../universal/charts/EpistoRadarChart";
+import { EpistoRadarChart } from "../../universal/charts/base_charts/EpistoRadarChart";
 import { SelectImage } from "../../universal/SelectImage";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { SimpleEditList } from "../SimpleEditList";
