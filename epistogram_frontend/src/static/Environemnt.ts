@@ -1,5 +1,5 @@
 export const serverUrl = process.env.REACT_APP_SERVER_URL;
-export const assetStorageUrl = process.env.REACT_APP_CDN_URL;
+export const assetCDNStorageUrl = process.env.REACT_APP_CDN_URL;
 export const currentVersion = process.env.REACT_APP_CURRENT_VERSION;
 export const oneSignalAppId = process.env.REACT_APP_ONE_SIGNAL_APP_ID;
 export const isUnderMaintenance = process.env.REACT_APP_UNDER_MAINTENANCE === "true";
@@ -13,4 +13,4 @@ export const verboseLogging = false;
 
 console.log("Current version: " + currentVersion);
 console.log("Server url: " + serverUrl);
-console.log("CDN url: " + assetStorageUrl);
+console.log("CDN url: " + assetCDNStorageUrl);

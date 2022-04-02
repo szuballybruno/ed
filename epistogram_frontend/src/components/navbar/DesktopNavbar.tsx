@@ -142,7 +142,7 @@ const DesktopNavbar = (props: {
                         </Flex>
                         : (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo)
                             ? <Flex height="50px"
-flex="1 0 600px">
+                                flex="1 0 600px">
 
                                 {menuItems
                                     .map((item, index) => {
@@ -336,8 +336,8 @@ flex="1 0 600px">
                             </Flex>
 
                             {index + 1 < mockNotifications.length && <Divider height={1}
-width="100%"
-bgColor={"grey"} />}
+                                width="100%"
+                                bgColor={"grey"} />}
                         </Flex>;
                     })}
             </EpistoPopper>
@@ -355,8 +355,8 @@ bgColor={"grey"} />}
                 </EpistoButton>
 
                 <Divider height={1}
-width="100%"
-bgColor={"black"} />
+                    width="100%"
+                    bgColor={"black"} />
 
                 {user?.userActivity?.canAccessAdministration && <EpistoButton
                     variant={undefined}
@@ -365,8 +365,8 @@ bgColor={"black"} />
                     }}>
 
                     <Flex className="whall"
-m="5px"
-align="center">
+                        m="5px"
+                        align="center">
 
                         {applicationRoutes.administrationRoute.icon}
 
@@ -394,8 +394,8 @@ align="center">
                             onClick={x.onClick}>
 
                             <Flex className="whall"
-m="5px"
-align="center">
+                                m="5px"
+                                align="center">
 
                                 {x.icon}
 

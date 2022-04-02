@@ -81,7 +81,7 @@ export const applicationRoutes = {
     homeRoute: {
         title: translatableTexts.routeTitles.homePage,
         route: "/home",
-        icon: <Home />
+        icon: () => <Home />
     },
 
     shopRoute: {
@@ -98,7 +98,7 @@ export const applicationRoutes = {
     availableCoursesRoute: {
         title: translatableTexts.routeTitles.availableCourses,
         route: "/courses",
-        icon: <Search />
+        icon: () => <Search />
     },
 
     courseDetailsRoute: {
@@ -109,12 +109,12 @@ export const applicationRoutes = {
     learningRoute: {
         title: translatableTexts.routeTitles.learning,
         route: "/learning",
-        icon: <School />,
+        icon: () => <School />,
 
         learningOverviewRoute: {
             title: translatableTexts.routeTitles.learningOverview,
             route: "/learning",
-            icon: <img
+            icon: () => <img
                 src={getAssetUrl("images/overview3D.png")}
                 alt=""
                 style={{
@@ -128,7 +128,7 @@ export const applicationRoutes = {
         myStatisticsRoute: {
             title: translatableTexts.routeTitles.learningStatistics,
             route: "/learning/myStatistics",
-            icon: <img
+            icon: () => <img
                 src={getAssetUrl("images/mystatsicon3D.png")}
                 alt=""
                 style={{
@@ -141,7 +141,7 @@ export const applicationRoutes = {
         myCoursesRoute: {
             title: translatableTexts.routeTitles.learningCourses,
             route: "/learning/myCourses",
-            icon: <img
+            icon: () => <img
                 src={getAssetUrl("images/watchedvideos3Dsmaller.png")}
                 alt=""
                 style={{
@@ -154,7 +154,7 @@ export const applicationRoutes = {
         myExamsRoute: {
             title: translatableTexts.routeTitles.learningExams,
             route: "/learning/myExams",
-            icon: <img
+            icon: () => <img
                 src={getAssetUrl("images/examsicon3D.png")}
                 alt=""
                 style={{
@@ -168,19 +168,19 @@ export const applicationRoutes = {
     administrationRoute: {
         title: translatableTexts.routeTitles.administration,
         route: "/administration",
-        icon: <AdminPanelSettings />,
+        icon: () => <AdminPanelSettings />,
 
         homeRoute: {
             title: translatableTexts.routeTitles.administrationHome,
             route: "/administration/home",
-            icon: <Home className="fontXXL"
-color={"secondary"} />,
+            icon: () => <Home className="fontXXL"
+                color={"secondary"} />,
 
             overviewRoute: {
                 title: translatableTexts.routeTitles.administrationHomeOverview,
                 route: "/administration/home/overview",
-                icon: <Home className="fontXXL"
-color={"secondary"} />
+                icon: () => <Home className="fontXXL"
+                    color={"secondary"} />
             },
             detailsRoute: {
                 title: translatableTexts.routeTitles.administrationHomeDetails,
@@ -191,8 +191,8 @@ color={"secondary"} />
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
             route: "/administration/users",
-            icon: <Person className="fontXXL"
-color={"secondary"} />,
+            icon: () => <Person className="fontXXL"
+                color={"secondary"} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddUser,
@@ -202,8 +202,8 @@ color={"secondary"} />,
             editRoute: {
                 title: translatableTexts.routeTitles.administrationEditUser,
                 route: "/administration/users/:userId/edit",
-                icon: <Person className="fontXXL"
-color={"secondary"} />,
+                icon: () => <Person className="fontXXL"
+                    color={"secondary"} />,
             },
 
             statsRoute: {
@@ -225,8 +225,8 @@ color={"secondary"} />,
         coursesRoute: {
             title: translatableTexts.routeTitles.administrationCourseAdmin,
             route: "/administration/courses",
-            icon: <Subscriptions className="fontXXL"
-color={"secondary"} />,
+            icon: () => <Subscriptions className="fontXXL"
+                color={"secondary"} />,
             exact: true,
 
             addRoute: {
@@ -236,8 +236,8 @@ color={"secondary"} />,
             courseDetailsRoute: {
                 title: translatableTexts.routeTitles.administrationCourseDetails,
                 route: "/administration/courses/:courseId/details",
-                icon: <Subscriptions className="fontXXL"
-color={"secondary"} />,
+                icon: () => <Subscriptions className="fontXXL"
+                    color={"secondary"} />,
             },
             courseContentRoute: {
                 title: translatableTexts.routeTitles.administrationCourseContent,
@@ -290,8 +290,8 @@ color={"secondary"} />,
         shopRoute: {
             title: translatableTexts.routeTitles.administrationShopMain,
             route: "/administration/shop",
-            icon: <ShoppingCartIcon className="fontXXL"
-color={"secondary"} />,
+            icon: () => <ShoppingCartIcon className="fontXXL"
+                color={"secondary"} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationShopAdd,
@@ -307,8 +307,8 @@ color={"secondary"} />,
         personalityAssessmentRoute: {
             title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
             route: "/administration/personality-assessment",
-            icon: <SupervisedUserCircleIcon className="fontXXL"
-color={"secondary"} />,
+            icon: () => <SupervisedUserCircleIcon className="fontXXL"
+                color={"secondary"} />,
 
             editTips: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
@@ -325,15 +325,15 @@ color={"secondary"} />,
         myCompanyRoute: {
             title: "Céges statisztika",
             route: "/administration/mycompany",
-            icon: <Business className="fontXXL"
-color={"secondary"} />,
+            icon: () => <Business className="fontXXL"
+                color={"secondary"} />,
             exact: true
         },
 
         /* overviewTableRoute: {
             title: "Áttekintés",
             route: "/administration/overview",
-            icon: <GridOn className="fontXXL" color={"secondary"} />,
+            icon: () => <GridOn className="fontXXL" color={"secondary"} />,
             exact: true
         }, */
     },
@@ -341,30 +341,30 @@ color={"secondary"} />,
     settingsRoute: {
         title: translatableTexts.routeTitles.settings,
         route: "/settings",
-        icon: <Settings></Settings>,
+        icon: () => <Settings></Settings>,
 
         preferencesRoute: {
             title: translatableTexts.routeTitles.settingsOverview,
             route: "/settings/preferences",
-            icon: <Settings></Settings>,
+            icon: () => <Settings></Settings>,
         },
 
         developmentNotes: {
             title: translatableTexts.routeTitles.developmentNotes,
             route: "/settings/development-notes",
-            icon: <EventNoteIcon />
+            icon: () => <EventNoteIcon />
         },
 
         featurePreviewRoute: {
             title: translatableTexts.routeTitles.featurePreview,
             route: "/settings/feature-preview",
-            icon: <AutoAwesomeIcon />
+            icon: () => <AutoAwesomeIcon />
         },
 
         coinTransactionsRoute: {
             title: translatableTexts.routeTitles.coinTransactions,
             route: "/settings/coin-transactions",
-            icon: <AttachMoneyIcon />
+            icon: () => <AttachMoneyIcon />
         }
     }
 };

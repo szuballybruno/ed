@@ -4,19 +4,20 @@ import { ThemeProvider } from "@mui/system";
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import { XDialogHost } from "./components/lib/XDialog/XDialogHost";
 import { AuthenticationFrame } from "./components/system/AuthenticationFrame";
 import { ErrorDialogFrame } from "./components/system/DialogFrame";
 import { EventListener } from "./components/system/EventListener";
 import { NotificationsFrame } from "./components/system/NotificationsFrame";
-import { UnderMaintanence } from "./components/UnderMaintanence";
-import { applicationRoutes } from "./configuration/applicationRoutes";
-import { isUnderMaintenance } from "./static/Environemnt";
-import "./index.css";
-import "./shared/logic/jsExtensions.ts"; // extensions, important
-import { MainRouting } from "./MainRouting";
 import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
-import { XDialogHost } from "./components/lib/XDialog/XDialogHost";
+import { UnderMaintanence } from "./components/UnderMaintanence";
+import { EpistoRoutes, RenderRoute } from "./components/universal/EpistoRoutes";
+import "./index.css";
+import { MainRouting } from "./MainRouting";
+import "./shared/logic/jsExtensions.ts"; // extensions, important
+import { isUnderMaintenance } from "./static/Environemnt";
+import { ArrayBuilder } from "./static/frontendHelpers";
 
 // react query 
 const queryClient = new QueryClient();
@@ -61,7 +62,7 @@ const muiTheme = createTheme({
     }
 });
 
-ReactDOM.render(
+const app = (
     <QueryClientProvider client={queryClient}>
         <>
             <ColorModeScript initialColorMode={"light"} />
@@ -70,37 +71,36 @@ ReactDOM.render(
                     <XDialogHost>
                         <PreventMobileFrame>
                             <BrowserRouter>
-                                <Routes>
+                                <EpistoRoutes
+                                    renderRoutes={new ArrayBuilder<RenderRoute>()
 
-                                    {/* under maintanence */}
-                                    {isUnderMaintenance && <Route
-                                        path="/"
-                                        element={UnderMaintanence} />}
-
-                                    {/* under maintanence */}
-                                    <Route
-                                        path={applicationRoutes.underMaintanenceRoute.route}
-                                        element={UnderMaintanence} />
-
-                                    {/* app */}
-                                    <Route path="/">
-                                        <AuthenticationFrame>
-                                            <ErrorDialogFrame>
-                                                <NotificationsFrame>
-                                                    <EventListener>
-                                                        <MainRouting />
-                                                    </EventListener>
-                                                </NotificationsFrame>
-                                            </ErrorDialogFrame>
-                                        </AuthenticationFrame>
-                                    </Route>
-                                </Routes>
-                            </BrowserRouter >
+                                        // under maintanance 
+                                        .addIf(isUnderMaintenance, {
+                                            element: UnderMaintanence,
+                                            route: { route: "*", title: "Maintanance mode" }
+                                        })
+                                        .addIf(!isUnderMaintenance, {
+                                            route: { route: "*", title: "" },
+                                            element: <AuthenticationFrame>
+                                                <ErrorDialogFrame>
+                                                    <NotificationsFrame>
+                                                        <EventListener>
+                                                            <MainRouting />
+                                                        </EventListener>
+                                                    </NotificationsFrame>
+                                                </ErrorDialogFrame>
+                                            </AuthenticationFrame>
+                                        })
+                                        .getArray()} />
+                            </BrowserRouter>
                         </PreventMobileFrame>
                     </XDialogHost>
                 </ThemeProvider>
             </ChakraProvider>
         </>
-    </QueryClientProvider>,
-    document.getElementById("root")
+    </QueryClientProvider >
 );
+
+ReactDOM.render(app, document.getElementById("root"));
+
+

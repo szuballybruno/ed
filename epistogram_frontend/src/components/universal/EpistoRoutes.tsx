@@ -1,0 +1,133 @@
+import { ReactNode, useContext } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { applicationRoutes } from "../../configuration/applicationRoutes";
+import { ApplicationRoute } from "../../models/types";
+import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
+import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
+
+export type RenderRoute = {
+    element: JSX.Element;
+    route: ApplicationRoute;
+    protectionLevel: RouteProtectionLevelType;
+    isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean;
+}
+
+export type RouteProtectionLevelType = "open" | "justAuthenticate" | "authorize";
+
+const verboseLogging = true;
+
+const RouteRenderer = (props: {
+    children: JSX.Element,
+    isAuthorizedToView: (userActivity: UserActivityDTO) => boolean,
+    protectionLevel: RouteProtectionLevelType;
+}): JSX.Element => {
+
+    const { children, isAuthorizedToView, protectionLevel } = props;
+
+    const authState = useContext(AuthenticationStateContext);
+    const refetchUserAsync = useContext(RefetchUserAsyncContext);
+    const user = useContext(CurrentUserContext)!;
+
+    if (verboseLogging)
+        console.log(`-- Protection level '${protectionLevel}'`);
+
+    // if open route, don't authorize 
+    if (protectionLevel === "open") {
+
+        if (verboseLogging)
+            console.log(`-- Rendering children...`)
+
+        return children;
+    }
+
+    if (verboseLogging)
+        console.log(`-- Auth state '${authState}'`);
+
+    // if loading return blank page
+    if (authState === "loading") {
+
+        if (verboseLogging)
+            console.log(`-- Rendering empty div until loaded.`);
+
+        return <div></div>;
+    }
+
+    // check authentication 
+    if (authState === "forbidden") {
+
+        if (verboseLogging)
+            console.log("-- Redirecting...");
+
+        return <Navigate
+            replace
+            to={applicationRoutes.loginRoute.route} />;
+    }
+
+    // if just authenticate protection level, 
+    // return since authentication is done.
+    if (protectionLevel === "justAuthenticate") {
+
+        if (verboseLogging)
+            console.log("-- Rendering children...");
+
+        return children;
+    }
+
+    // redirect to signup if application is not accessable yet
+    if (!user.userActivity.canAccessApplication) {
+
+        if (verboseLogging)
+            console.log("-- Accessing application is not yet aturhorized, redirecting...");
+
+        return <Navigate
+            replace
+            to={applicationRoutes.signupRoute.route} />;
+    }
+
+    // redirect to home if external authorization check fails
+    const authFuncCheck = isAuthorizedToView
+        ? isAuthorizedToView(user.userActivity)
+        : true;
+
+    if (!authFuncCheck) {
+
+        if (verboseLogging)
+            console.log("-- Authorization function returned false, redirecting...");
+
+        return <Navigate
+            replace
+            to={applicationRoutes.homeRoute.route} />;
+    }
+
+    if (verboseLogging)
+        console.log("-- Rendering...");
+
+    return children;
+}
+
+export const EpistoRoutes = (props: {
+    renderRoutes: RenderRoute[]
+}) => {
+
+    const { renderRoutes } = props;
+
+    return <Routes>
+        {renderRoutes
+            .map((renderRoute, index) => {
+
+                if (verboseLogging)
+                    console.log(`Visiting route: '${renderRoute.route.route}'...`);
+
+                return <Route
+                    path={renderRoute.route.route}
+                    element={<>
+                        <RouteRenderer
+                            isAuthorizedToView={renderRoute.isAuthorizedToView}
+                            protectionLevel={renderRoute.protectionLevel}>
+                            {renderRoute.element}
+                        </RouteRenderer>
+                    </>}
+                    key={index} />
+            })}
+    </Routes>;
+};

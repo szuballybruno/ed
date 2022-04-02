@@ -10,7 +10,7 @@ export type StillWatchingDialogMarker = {
 export type ApplicationRoute = {
     title: string;
     route: string;
-    icon?: any;
+    icon?: () => ReactNode;
     exact?: boolean;
     navAction?: () => void;
 }

@@ -90,7 +90,7 @@ export const EpistoFont = (params: {
             .build()}>
 
         {children}
-    </p >;
+    </p>;
 };
 
 export const useAutoFontSize = (

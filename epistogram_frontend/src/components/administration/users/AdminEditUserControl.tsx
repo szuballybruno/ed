@@ -396,7 +396,7 @@ export const AdminEditUserControl = (props: {
                     showDeleteUserDialog(editDTO);
                 } else {
 
-                    throw new Error("Not implemented!")
+                    throw new Error("Not implemented!");
                     // history.goBack();
                 }
             }}

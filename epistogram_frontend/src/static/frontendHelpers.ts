@@ -2,14 +2,13 @@ import { useMediaQuery } from "@chakra-ui/react";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { ApplicationRoute, LoadingStateType } from "../models/types";
+import { LoadingStateType } from "../models/types";
 import { httpGetAsync } from "../services/core/httpClient";
 import { validatePassowrd } from "../shared/logic/sharedLogic";
 import { ErrorCodeType, RoleIdEnum } from "../shared/types/sharedTypes";
-import { assetStorageUrl } from "./Environemnt";
+import { assetCDNStorageUrl } from "./Environemnt";
 import { stringifyQueryObject } from "./locationHelpers";
 import { translatableTexts } from "./translatableTexts";
-import * as RouterDom from "react-router-dom";
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
@@ -470,7 +469,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
     return result;
 };
 
-export const getAssetUrl = (path: string) => assetStorageUrl + ("/" + path).replace("//", "/");
+export const getAssetUrl = (path: string) => assetCDNStorageUrl + ("/" + path).replace("//", "/");
 
 export const hasValue = (obj: any) => {
 
