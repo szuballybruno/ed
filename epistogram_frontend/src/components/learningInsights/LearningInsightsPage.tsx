@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
-import { Route } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
+import { ContentPane } from '../ContentPane';
 import { LearningInsightsOverview } from '../LearningInsightsOverview';
+import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { PageRootContainer } from '../PageRootContainer';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { LearningCourseStats } from './LearningCourseStats';
 import { LearningStatistics } from './LearningStatistics';
-import { LeftPane } from '../LeftPane';
-import { ContentPane } from '../ContentPane';
-import { EpistoRoutes } from '../universal/EpistoRoutes';
 
 const LearningInsightsPage = () => {
 
     const user = useContext(CurrentUserContext)!;
+
+    useRedirectOnExactMatch({
+        route: applicationRoutes.learningRoute,
+        redirectRoute: applicationRoutes.learningRoute.overview
+    });
 
     return <PageRootContainer>
 
@@ -21,7 +26,7 @@ const LearningInsightsPage = () => {
 
             <NavigationLinkList
                 routes={[
-                    applicationRoutes.learningRoute.learningOverviewRoute,
+                    applicationRoutes.learningRoute.overview,
                     applicationRoutes.learningRoute.myStatisticsRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
                 ]} />
@@ -32,7 +37,7 @@ const LearningInsightsPage = () => {
             <EpistoRoutes
                 renderRoutes={[
                     {
-                        route: applicationRoutes.learningRoute,
+                        route: applicationRoutes.learningRoute.overview,
                         element: <LearningInsightsOverview />
                     },
                     {

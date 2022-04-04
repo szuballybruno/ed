@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { matchRoutes, useLocation, useParams } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
+import { useNavigation } from '../services/core/navigatior';
 import { getKeys, validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { assetCDNStorageUrl, verboseLogging } from './Environemnt';
@@ -213,6 +214,27 @@ export const useIsMatchingCurrentRoute = () => {
 
         return { isMatchingRoute, isMatchingRouteExactly };
     };
+};
+
+export const useRedirectOnExactMatch = (opts: {
+    route: ApplicationRoute,
+    redirectRoute: ApplicationRoute,
+    params?: any
+}) => {
+
+    const { redirectRoute, route, params } = opts;
+
+    const isMatching = useIsMatchingCurrentRoute();
+    const { isMatchingRouteExactly } = isMatching(route);
+    const { navigate } = useNavigation();
+
+    useEffect(() => {
+
+        if (!isMatchingRouteExactly)
+            return;
+
+        navigate(redirectRoute, params);
+    }, [isMatchingRouteExactly]);
 };
 
 export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;

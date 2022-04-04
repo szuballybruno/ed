@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useNavigation } from '../../../services/core/navigatior';
-import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
+import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminCourseContentSubpage } from './AdminCourseContentSubpage';
 import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage';
@@ -11,19 +9,11 @@ import { AdminCourseDetailsSubpage } from './EditCourseDetailsSubpage';
 
 export const CourseAdministartionSubpage = () => {
 
-    const isMatching = useIsMatchingCurrentRoute();
-    const { isMatchingRouteExactly } = isMatching(applicationRoutes.administrationRoute.coursesRoute);
-
-    const { navigate } = useNavigation();
-
-    useEffect(() => {
-
-        if (!isMatchingRouteExactly)
-            return;
-
-        console.log('navigate');
-        navigate(applicationRoutes.administrationRoute.coursesRoute.courseContentRoute, { courseId: -1 });
-    }, [isMatchingRouteExactly]);
+    useRedirectOnExactMatch({
+        route: applicationRoutes.administrationRoute.coursesRoute,
+        redirectRoute: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
+        params: { courseId: -1 }
+    });
 
     return (
         <EpistoRoutes

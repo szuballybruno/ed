@@ -121,24 +121,14 @@ export const AdminPage = () => {
                     // shop administartion
                     {
                         route: administrationRoutes.shopRoute,
-                        element: <EpistoRoutes
-                            renderRoutes={[
-                                {
-                                    route: administrationRoutes.shopRoute,
-                                    element: <ShopAdminSubpage />
-                                },
-                                {
-                                    route: administrationRoutes.shopRoute.editRoute,
-                                    element: <ShopAdminEditSubpage />
-                                }
-                            ]} />,
+                        element: <ShopAdminSubpage />,
                         protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     },
 
                     // personality assessment administartion
                     {
-                        route: administrationRoutes.shopRoute,
+                        route: administrationRoutes.personalityAssessmentRoute,
                         element: <EpistoRoutes
                             renderRoutes={[
                                 {

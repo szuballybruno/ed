@@ -452,7 +452,9 @@ export const AdminCourseDetailsSubpage = () => {
                                 minH="300px"
                                 align="center"
                                 justify="center">
-                                <EpistoRadarChart
+
+                                {/* // TODO */}
+                                {/* <EpistoRadarChart
                                     title=""
                                     areas={[{
                                         name: 'Készségek',
@@ -467,7 +469,7 @@ export const AdminCourseDetailsSubpage = () => {
                                     style={{
                                         width: '400px',
                                         height: '300px'
-                                    }} />
+                                    }} /> */}
                             </Flex>
                         </EditSection>
                     </Flex>

@@ -33,7 +33,7 @@ export type ApplicationRoutesType = {
         courseOverviewRoute: ApplicationRoute;
     };
     learningRoute: ApplicationRoute & {
-        learningOverviewRoute: ApplicationRoute;
+        overview: ApplicationRoute;
         myStatisticsRoute: ApplicationRoute;
         myCoursesRoute: ApplicationRoute;
         myExamsRoute: ApplicationRoute;
@@ -59,6 +59,7 @@ export type ApplicationRoutesType = {
             interactiveCourseRoute: ApplicationRoute;
         };
         shopRoute: ApplicationRoute & {
+            overview: ApplicationRoute;
             addRoute: ApplicationRoute;
             editRoute: ApplicationRoute;
         };
@@ -181,7 +182,7 @@ export const applicationRoutes: ApplicationRoutesType = {
         route: new EpistoRoute('/', 'learning', '*'),
         icon: <School />,
 
-        learningOverviewRoute: {
+        overview: {
             title: translatableTexts.routeTitles.learningOverview,
             route: new EpistoRoute('/learning', 'overview'),
             icon: <img
@@ -330,6 +331,11 @@ export const applicationRoutes: ApplicationRoutesType = {
             route: new EpistoRoute('/administration', 'shop', '*'),
             icon: <ShoppingCartIcon className="fontXXL"
                 color={'secondary'} />,
+
+            overview: {
+                title: translatableTexts.routeTitles.administrationShopAdd,
+                route: new EpistoRoute('/administration/shop', 'overview'),
+            },
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationShopAdd,
