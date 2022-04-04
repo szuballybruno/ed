@@ -22,15 +22,18 @@ const environemnts = [
     {
         branchName: "main",
         backendUrl: "api.app.epistogram.com",
+        minInstanceCount: 1,
         isUnderMaintenance: false
     },
     {
         branchName: "demo",
-        backendUrl: "api.demo.epistogram.com"
+        backendUrl: "api.demo.epistogram.com",
+        minInstanceCount: 0
     },
     {
         branchName: "dev",
-        backendUrl: "api.dev.epistogram.com"
+        backendUrl: "api.dev.epistogram.com",
+        minInstanceCount: 0
     }
 ]
 
@@ -51,7 +54,8 @@ environemnts
 
         replaced = replaceAll(replaced, "$BRANCH_NAME$", environemnt.branchName);
         replaced = replaceAll(replaced, "$IS_UNDER_MAINTENANCE$", !!environemnt.isUnderMaintenance);
-        replaced = replaceAll(replaced, "$BACKEND_URL$", environemnt.backendUrl)
+        replaced = replaceAll(replaced, "$BACKEND_URL$", environemnt.backendUrl);
+        replaced = replaceAll(replaced, "$MIN_INSTANCE_COUNT$", environemnt.minInstanceCount);
 
         fs.writeFileSync(`${outputDirectoryPath}/${environemnt.branchName}_pipeline.yml`, replaced)
     });

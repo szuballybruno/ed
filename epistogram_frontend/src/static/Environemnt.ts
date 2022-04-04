@@ -9,7 +9,7 @@ export const currentOrigin = window.location.origin;
 export const fetchNewAccessTokenIntervalInMs = 5 * 60 * 1000; // 5 minutes
 export const fetchUserIntervalInMs = 10 * 60 * 1000; // 10 minutes
 export const eventPoolingIntervalInMs = 20 * 1000; // 20 secs
-export const verboseLogging = true;
+export const verboseLogging = false;
 
 console.log('Current version: ' + currentVersion);
 console.log('Server url: ' + serverUrl);

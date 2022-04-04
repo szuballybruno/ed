@@ -35,10 +35,10 @@ export const CourseAdministartionFrame = (params: {
 
             const base = applicationRoutes.administrationRoute.coursesRoute;
 
-            if (isMatchingCurrentUrl(base.courseDetailsRoute))
+            if (isMatchingCurrentUrl(base.courseDetailsRoute).isMatchingRoute)
                 return base.courseDetailsRoute;
 
-            if (isMatchingCurrentUrl(base.courseContentRoute))
+            if (isMatchingCurrentUrl(base.courseContentRoute).isMatchingRoute)
                 return base.courseContentRoute;
 
             return base.statisticsCourseRoute;
