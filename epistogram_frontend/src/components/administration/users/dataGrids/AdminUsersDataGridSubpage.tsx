@@ -5,7 +5,7 @@ import { useLocation } from 'react-router';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
-import { formatTimespan } from '../../../../static/frontendHelpers';
+import { formatTimespan, isCurrentAppRoute } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { ProfileImage } from '../../../ProfileImage';
 import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
@@ -83,25 +83,15 @@ export const AdminUserDataGridSubpage = (props: {
 
                 <EpistoButton
                     variant="outlined"
-                    onClick={() =>
-                        navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute.route, { userId: params.value })}>
+                    onClick={() => navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
 
                     Tanulási jelentés
                 </EpistoButton>
         }
     ];
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
-        viewSwitchFunction={() => {
-
-            const lastAdminUserPath = localStorage.getItem('lastAdminUserPath');
-
-            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: 'a' });
-            /* if (!checked && location.pathname === lastAdminUserPath) {
-                 navigate(lastAdminUserPath)
-             }  else {
-             } */
-        }}>
+        viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
+        viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: 'a' })}>
         <DataGrid
             columns={userColumns}
             rows={userRows}

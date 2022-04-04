@@ -32,7 +32,7 @@ export const AdminUserListSubpage = () => {
     const user = useContext(CurrentUserContext)!;
     const currentUserId = user.id;
     const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
+    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute);
     const showError = useShowErrorDialog();
 
     const administrationRoutes = applicationRoutes.administrationRoute;
@@ -108,7 +108,7 @@ export const AdminUserListSubpage = () => {
         {
             name: 'editUserButton',
             text: 'Szerkesztés',
-            onClick: () => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id }),
+            onClick: () => navigate(administrationRoutes.usersRoute.editRoute, { userId: user.id }),
         },
         {
             name: 'deleteUserButton',
@@ -118,27 +118,27 @@ export const AdminUserListSubpage = () => {
         {
             name: 'viewUserStatsButton',
             text: 'Statisztika megjelenítése',
-            onClick: () => navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
+            onClick: () => navigate(administrationRoutes.usersRoute.statsRoute, { userId: user.id })
         },
         {
             name: 'editTeacherInfo',
             text: 'Oktatói adatok szerkesztése',
-            onClick: () => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
+            onClick: () => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: user.id })
         }
     ];
 
     const rowButtons = [
         {
             icon: <Edit style={{ width: '20px', height: '20px' }} />,
-            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.editRoute.route, { userId: user.id })
+            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.editRoute, { userId: user.id })
         },
         {
             icon: <Equalizer style={{ width: '20px', height: '20px' }} />,
-            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.statsRoute.route, { userId: user.id })
+            onClick: (user: AdminPageUserDTO) => navigate(administrationRoutes.usersRoute.statsRoute, { userId: user.id })
         },
         {
             icon: <School style={{ width: '20px', height: '20px' }} />,
-            onClick: (user: AdminPageUserDTO) => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: user.id })
+            onClick: (user: AdminPageUserDTO) => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: user.id })
         },
         {
             icon: <DeleteIcon style={{ width: '20px', height: '20px' }}></DeleteIcon>,

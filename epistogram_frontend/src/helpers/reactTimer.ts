@@ -1,6 +1,6 @@
-import { useMemo, useRef } from "react";
-import { useForceUpdate } from "../static/frontendHelpers";
-import { AdvancedTimer } from "./advancedTimer";
+import { useMemo, useRef } from 'react';
+import { useForceUpdate } from '../static/frontendHelpers';
+import { AdvancedTimer } from './advancedTimer';
 
 export const useReactTimer = (endCallback: () => void, delayMiliseconds: number, updateIntervalMiliseconds?: number) => {
 

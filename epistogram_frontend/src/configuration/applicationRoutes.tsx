@@ -4,119 +4,186 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { assetCDNStorageUrl } from '../static/Environemnt';
 import { getAssetUrl as old } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 
 const getAssetUrl = (path: string) => old(path, assetCDNStorageUrl);
 
-export const applicationRoutes = {
+export type ApplicationRoutesType = {
+    matchAll: ApplicationRoute;
+    loginRoute: ApplicationRoute;
+    underMaintanenceRoute: ApplicationRoute;
+    registrationRoute: ApplicationRoute;
+    signupRoute: ApplicationRoute;
+    setNewPasswordRoute: ApplicationRoute;
+    registerViaActivationCodeRoute: ApplicationRoute;
+    homeRoute: ApplicationRoute;
+    rootHomeRoute: ApplicationRoute;
+    shopRoute: ApplicationRoute;
+    availableCoursesRoute: ApplicationRoute;
+    courseDetailsRoute: ApplicationRoute;
+    playerRoute: ApplicationRoute & {
+        watchRoute: ApplicationRoute;
+        prequizRoute: ApplicationRoute;
+        pretestRoute: ApplicationRoute;
+        pretestResultsRoute: ApplicationRoute;
+        courseRatingRoute: ApplicationRoute;
+        courseOverviewRoute: ApplicationRoute;
+    };
+    learningRoute: ApplicationRoute & {
+        learningOverviewRoute: ApplicationRoute;
+        myStatisticsRoute: ApplicationRoute;
+        myCoursesRoute: ApplicationRoute;
+        myExamsRoute: ApplicationRoute;
+    };
+    administrationRoute: ApplicationRoute & {
+        homeRoute: ApplicationRoute & {
+            overviewRoute: ApplicationRoute;
+            detailsRoute: ApplicationRoute;
+        };
+        usersRoute: ApplicationRoute & {
+            addRoute: ApplicationRoute;
+            editRoute: ApplicationRoute;
+            statsRoute: ApplicationRoute;
+            teacherInfoRoute: ApplicationRoute;
+            courseContentRoute: ApplicationRoute;
+        };
+        coursesRoute: ApplicationRoute & {
+            addRoute: ApplicationRoute;
+            courseDetailsRoute: ApplicationRoute;
+            courseContentRoute: ApplicationRoute;
+            statisticsCourseRoute: ApplicationRoute;
+            courseUserProgressRoute: ApplicationRoute;
+            interactiveCourseRoute: ApplicationRoute;
+        };
+        shopRoute: ApplicationRoute & {
+            addRoute: ApplicationRoute;
+            editRoute: ApplicationRoute;
+        };
+        personalityAssessmentRoute: ApplicationRoute & {
+            editTips: ApplicationRoute & {
+                editTip: ApplicationRoute;
+            };
+        };
+        myCompanyRoute: ApplicationRoute;
+    };
+    settingsRoute: ApplicationRoute & {
+        preferencesRoute: ApplicationRoute;
+        developmentNotes: ApplicationRoute;
+        featurePreviewRoute: ApplicationRoute;
+        coinTransactionsRoute: ApplicationRoute;
+    };
+};
+
+export const applicationRoutes: ApplicationRoutesType = {
+
+    matchAll: {
+        title: 'Match all',
+        route: new EpistoRoute('', '*')
+    },
 
     loginRoute: {
         title: translatableTexts.routeTitles.login,
-        route: '/login'
+        route: new EpistoRoute('/', 'login'),
     },
 
     underMaintanenceRoute: {
         title: translatableTexts.routeTitles.underMaintanence,
-        route: '/under-maintanence'
-    },
-
-    playerRoute: {
-        title: translatableTexts.routeTitles.player,
-        route: '/watch',
-
-        watchRoute: {
-            title: translatableTexts.routeTitles.player,
-            route: '/watch/:descriptorCode',
-            exact: true
-        },
-
-        prequizRoute: {
-            title: translatableTexts.routeTitles.prequiz,
-            route: '/watch/prequiz/:courseId',
-            exact: true
-        },
-
-        pretestRoute: {
-            title: translatableTexts.routeTitles.pretest,
-            route: '/watch/pretest/:courseId',
-            exact: true
-        },
-
-        pretestResultsRoute: {
-            title: translatableTexts.routeTitles.pretestResults,
-            route: '/watch/pretest-results/:courseId',
-            exact: true
-        },
-
-        courseRatingRoute: {
-            title: translatableTexts.routeTitles.player,
-            route: '/watch/course-rating/:courseId'
-        },
-
-        courseOverviewRoute: {
-            title: translatableTexts.routeTitles.courseOverview,
-            route: '/watch/course-overview/:courseId'
-        },
+        route: new EpistoRoute('/', 'under-maintanence'),
     },
 
     registrationRoute: {
         title: translatableTexts.routeTitles.registration,
-        route: '/registration'
+        route: new EpistoRoute('/', 'registration'),
     },
 
     signupRoute: {
         title: translatableTexts.routeTitles.registration,
-        route: '/signup'
+        route: new EpistoRoute('/', 'signup'),
     },
 
     setNewPasswordRoute: {
         title: translatableTexts.routeTitles.setNewPassword,
-        route: '/set-new-password'
+        route: new EpistoRoute('/', 'set-new-password'),
     },
 
     registerViaActivationCodeRoute: {
         title: translatableTexts.routeTitles.registerViaActivationCode,
-        route: '/register-via-activation-code'
+        route: new EpistoRoute('/', 'register-via-activation-code'),
     },
 
     homeRoute: {
         title: translatableTexts.routeTitles.homePage,
-        route: '/home',
+        route: new EpistoRoute('/', 'home'),
         icon: <Home />
     },
 
     shopRoute: {
         title: translatableTexts.routeTitles.shopPage,
-        route: '/shop'
+        route: new EpistoRoute('/', 'shop'),
     },
 
     rootHomeRoute: {
         title: translatableTexts.routeTitles.homePage,
-        route: '/',
-        exact: true
+        route: new EpistoRoute('', '/'),
     },
 
     availableCoursesRoute: {
         title: translatableTexts.routeTitles.availableCourses,
-        route: '/courses',
+        route: new EpistoRoute('/', 'courses'),
         icon: <Search />
     },
 
     courseDetailsRoute: {
         title: '',
-        route: '/course-details/:courseId',
+        route: new EpistoRoute('/', 'course-details/:courseId'),
+    },
+
+    playerRoute: {
+        title: translatableTexts.routeTitles.player,
+        route: new EpistoRoute('/', 'watch', '*'),
+
+        watchRoute: {
+            title: translatableTexts.routeTitles.player,
+            route: new EpistoRoute('/watch', ':descriptorCode'),
+        },
+
+        prequizRoute: {
+            title: translatableTexts.routeTitles.prequiz,
+            route: new EpistoRoute('/watch', 'prequiz/:courseId'),
+        },
+
+        pretestRoute: {
+            title: translatableTexts.routeTitles.pretest,
+            route: new EpistoRoute('/watch', 'pretest/:courseId'),
+        },
+
+        pretestResultsRoute: {
+            title: translatableTexts.routeTitles.pretestResults,
+            route: new EpistoRoute('/watch', 'pretest-results/:courseId'),
+        },
+
+        courseRatingRoute: {
+            title: translatableTexts.routeTitles.player,
+            route: new EpistoRoute('/watch', 'course-rating/:courseId'),
+        },
+
+        courseOverviewRoute: {
+            title: translatableTexts.routeTitles.courseOverview,
+            route: new EpistoRoute('/watch', 'course-overview/:courseId'),
+        },
     },
 
     learningRoute: {
         title: translatableTexts.routeTitles.learning,
-        route: '/learning',
+        route: new EpistoRoute('/', 'learning', '*'),
         icon: <School />,
 
         learningOverviewRoute: {
             title: translatableTexts.routeTitles.learningOverview,
-            route: '/learning',
+            route: new EpistoRoute('/learning', 'overview'),
             icon: <img
                 src={getAssetUrl('images/overview3D.png')}
                 alt=""
@@ -124,13 +191,12 @@ export const applicationRoutes = {
                     width: 45,
                     height: 45,
                     objectFit: 'contain'
-                }} />,
-            exact: true
+                }} />
         },
 
         myStatisticsRoute: {
             title: translatableTexts.routeTitles.learningStatistics,
-            route: '/learning/myStatistics',
+            route: new EpistoRoute('/learning', 'myStatistics'),
             icon: <img
                 src={getAssetUrl('images/mystatsicon3D.png')}
                 alt=""
@@ -143,7 +209,7 @@ export const applicationRoutes = {
 
         myCoursesRoute: {
             title: translatableTexts.routeTitles.learningCourses,
-            route: '/learning/myCourses',
+            route: new EpistoRoute('/learning', 'myCourses'),
             icon: <img
                 src={getAssetUrl('images/watchedvideos3Dsmaller.png')}
                 alt=""
@@ -156,7 +222,7 @@ export const applicationRoutes = {
 
         myExamsRoute: {
             title: translatableTexts.routeTitles.learningExams,
-            route: '/learning/myExams',
+            route: new EpistoRoute('/learning', 'myExams'),
             icon: <img
                 src={getAssetUrl('images/examsicon3D.png')}
                 alt=""
@@ -170,203 +236,163 @@ export const applicationRoutes = {
 
     administrationRoute: {
         title: translatableTexts.routeTitles.administration,
-        route: '/administration',
+        route: new EpistoRoute('/', 'administration', '*'),
         icon: <AdminPanelSettings />,
 
         homeRoute: {
             title: translatableTexts.routeTitles.administrationHome,
-            route: '/administration/home',
+            route: new EpistoRoute('/administration', 'home', '*'),
             icon: <Home className="fontXXL"
                 color={'secondary'} />,
 
             overviewRoute: {
                 title: translatableTexts.routeTitles.administrationHomeOverview,
-                route: '/administration/home/overview',
+                route: new EpistoRoute('/administration/home', 'overview'),
                 icon: <Home className="fontXXL"
                     color={'secondary'} />
             },
             detailsRoute: {
                 title: translatableTexts.routeTitles.administrationHomeDetails,
-                route: '/administration/home/details'
+                route: new EpistoRoute('/administration/home', 'details'),
             },
         },
 
         usersRoute: {
             title: translatableTexts.routeTitles.administrationUserAdmin,
-            route: '/administration/users',
+            route: new EpistoRoute('/administration', 'users', '*'),
             icon: <Person className="fontXXL"
                 color={'secondary'} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddUser,
-                route: '/administration/users/add'
+                route: new EpistoRoute('/administration/users', 'add'),
             },
 
             editRoute: {
                 title: translatableTexts.routeTitles.administrationEditUser,
-                route: '/administration/users/:userId/edit',
+                route: new EpistoRoute('/administration/users', ':userId/edit'),
                 icon: <Person className="fontXXL"
                     color={'secondary'} />,
             },
 
             statsRoute: {
                 title: translatableTexts.routeTitles.administrationUserStatistics,
-                route: '/administration/users/:userId/statistics'
+                route: new EpistoRoute('/administration/users', ':userId/statistics'),
             },
 
             teacherInfoRoute: {
                 title: translatableTexts.routeTitles.administrationEditTeacherInfo,
-                route: '/administration/users/:userId/teacherinfo'
+                route: new EpistoRoute('/administration/users', ':userId/teacherinfo'),
             },
 
             courseContentRoute: {
                 title: translatableTexts.routeTitles.administrationUserCourses,
-                route: '/administration/users/:userId/courses'
+                route: new EpistoRoute('/administration/users', ':userId/courses'),
             },
         },
 
         coursesRoute: {
             title: translatableTexts.routeTitles.administrationCourseAdmin,
-            route: '/administration/courses',
+            route: new EpistoRoute('/administration', 'courses', '*'),
             icon: <Subscriptions className="fontXXL"
                 color={'secondary'} />,
-            exact: true,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddCourse,
-                route: '/administration/courses/add'
+                route: new EpistoRoute('/administration/courses', 'add'),
             },
             courseDetailsRoute: {
                 title: translatableTexts.routeTitles.administrationCourseDetails,
-                route: '/administration/courses/:courseId/details',
+                route: new EpistoRoute('/administration/courses', ':courseId/details'),
                 icon: <Subscriptions className="fontXXL"
                     color={'secondary'} />,
             },
             courseContentRoute: {
                 title: translatableTexts.routeTitles.administrationCourseContent,
-                route: '/administration/courses/:courseId/content'
+                route: new EpistoRoute('/administration/courses', ':courseId/content'),
             },
             statisticsCourseRoute: {
                 title: translatableTexts.routeTitles.administrationCourseStatistics,
-                route: '/administration/courses/:courseId/statistics'
+                route: new EpistoRoute('/administration/courses', ':courseId/statistics'),
             },
             courseUserProgressRoute: {
                 title: translatableTexts.routeTitles.administrationCourseUserProgress,
-                route: '/administration/courses/:courseId/userprogress'
+                route: new EpistoRoute('/administration/courses', ':courseId/userprogress'),
             },
             interactiveCourseRoute: {
                 title: translatableTexts.routeTitles.administrationInteractiveCourse,
-                route: '/administration/courses/:courseId/editinteractive'
-            },
-            addVideoRoute: {
-                title: translatableTexts.routeTitles.administrationAddVideo,
-                route: '/administration/courses/:courseId/item/add'
-            },
-            editVideoRoute: {
-                title: translatableTexts.routeTitles.administrationEditVideo,
-                route: '/administration/courses/:courseId/video/:videoId',
-                exact: true,
-            },
-            videoStatsRoute: {
-                title: translatableTexts.routeTitles.administrationVideoStatistics,
-                route: '/administration/courses/:courseId/video/:videoId/stats'
-            },
-            editVideoQuestionRoute: {
-                title: translatableTexts.routeTitles.administrationEditQuestion,
-                route: '/administration/courses/:courseId/video/:videoId/question/:questionId'
-            },
-            editExamRoute: {
-                title: translatableTexts.routeTitles.administrationEditExam,
-                route: '/administration/courses/:courseId/exam/:examId',
-                exact: true,
-            },
-            editExamQuestionRoute: {
-                title: translatableTexts.routeTitles.administrationEditQuestion,
-                route: '/administration/courses/:courseId/exam/:examId/question/:questionId'
-            },
-            editModuleRoute: {
-                title: translatableTexts.routeTitles.administrationEditModule,
-                route: '/administration/courses/:courseId/module/:moduleId'
+                route: new EpistoRoute('/administration/courses', ':courseId/editinteractive'),
             }
         },
 
         shopRoute: {
             title: translatableTexts.routeTitles.administrationShopMain,
-            route: '/administration/shop',
+            route: new EpistoRoute('/administration', 'shop', '*'),
             icon: <ShoppingCartIcon className="fontXXL"
                 color={'secondary'} />,
 
             addRoute: {
                 title: translatableTexts.routeTitles.administrationShopAdd,
-                route: '/administration/shop/add'
+                route: new EpistoRoute('/administration/shop', 'add'),
             },
 
             editRoute: {
                 title: translatableTexts.routeTitles.administrationShopEdit,
-                route: '/administration/shop/edit/:shopItemId'
+                route: new EpistoRoute('/administration/shop', 'edit/:shopItemId'),
             }
         },
 
         personalityAssessmentRoute: {
             title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
-            route: '/administration/personality-assessment',
+            route: new EpistoRoute('/administration', 'personality-assessment', '*'),
             icon: <SupervisedUserCircleIcon className="fontXXL"
                 color={'secondary'} />,
 
             editTips: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
-                route: '/administration/personality-assessment/:traitCategoryId/:isMax/',
-                exact: true,
+                route: new EpistoRoute('/administration/personality-assessment', ':traitCategoryId/:isMax'),
 
                 editTip: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentTip,
-                    route: '/administration/personality-assessment/:traitCategoryId/:isMax/tip/:dailyTipId'
+                    route: new EpistoRoute('/administration/personality-assessment/:traitCategoryId/:isMax', 'tip/:dailyTipId'),
                 }
             },
         },
 
         myCompanyRoute: {
             title: 'Céges statisztika',
-            route: '/administration/mycompany',
+            route: new EpistoRoute('/administration', 'mycompany'),
             icon: <Business className="fontXXL"
-                color={'secondary'} />,
-            exact: true
+                color={'secondary'} />
         },
-
-        /* overviewTableRoute: {
-            title: "Áttekintés",
-            route: "/administration/overview",
-            icon: <GridOn className="fontXXL" color={"secondary"} />,
-            exact: true
-        }, */
     },
 
     settingsRoute: {
         title: translatableTexts.routeTitles.settings,
-        route: '/settings',
+        route: new EpistoRoute('/administration', 'settings', '*'),
         icon: <Settings></Settings>,
 
         preferencesRoute: {
             title: translatableTexts.routeTitles.settingsOverview,
-            route: '/settings/preferences',
+            route: new EpistoRoute('/administration/settings', 'preferences'),
             icon: <Settings></Settings>,
         },
 
         developmentNotes: {
             title: translatableTexts.routeTitles.developmentNotes,
-            route: '/settings/development-notes',
+            route: new EpistoRoute('/administration/settings', 'development-notes'),
             icon: <EventNoteIcon />
         },
 
         featurePreviewRoute: {
             title: translatableTexts.routeTitles.featurePreview,
-            route: '/settings/feature-preview',
+            route: new EpistoRoute('/administration/settings', 'feature-preview'),
             icon: <AutoAwesomeIcon />
         },
 
         coinTransactionsRoute: {
             title: translatableTexts.routeTitles.coinTransactions,
-            route: '/settings/coin-transactions',
+            route: new EpistoRoute('/administration/settings', 'coin-transactions'),
             icon: <AttachMoneyIcon />
         }
     }

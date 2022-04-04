@@ -96,12 +96,12 @@ export const AdminUserTeacherInfoSubpage = (props: {
         }
     };
 
-    return <AdminBreadcrumbsHeader subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
+    return <AdminBreadcrumbsHeader
+        subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        <AdminUserList users={users}
-            navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route, { userId: userId });
-            }} />
+        <AdminUserList
+            users={users}
+            navigationFunction={(userId) => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
 
         {/* admin header */}
         <AdminSubpageHeader

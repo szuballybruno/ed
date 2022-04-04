@@ -4,7 +4,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
 import { getAssetUrl, useIsDesktopView } from '../../static/frontendHelpers';
 import { FlexFloat } from '../controls/FlexFloat';
-import DesktopNavbar from './DesktopNavbar';
+import { DesktopNavbar } from './DesktopNavbar';
 import classes from './navbar.module.scss';
 
 const Navbar = (props: {
@@ -30,12 +30,19 @@ const Navbar = (props: {
 
     // render mobile
     const renderMobileNavbar = () => {
-        return <div className={classes.mobileNavbarOuterWrapperOut}>
+        return <div
+            className={classes.mobileNavbarOuterWrapperOut}>
 
             {/* navbar */}
-            <div className={classes.mobileNavbarOuterWrapperIn}>
-                <NavLink to={applicationRoutes.homeRoute.route}>
-                    <div className={classes.mobileNavbarLogoWrapper}>
+            <div
+                className={classes.mobileNavbarOuterWrapperIn}>
+
+                <NavLink
+                    to={applicationRoutes.homeRoute.route.getAbsolutePath()}>
+
+                    <div
+                        className={classes.mobileNavbarLogoWrapper}>
+
                         <img
                             alt="EpistoGram Logo"
                             src={getAssetUrl('/images/logo.svg')} />

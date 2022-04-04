@@ -1,6 +1,6 @@
 (function (g, u, i, d, e, s) {
 
-    console.log("UserGuiding initializing....");
+    console.log('UserGuiding initializing....');
 
     g[e] = g[e] || [];
     var f = u.getElementsByTagName(i)[0];
@@ -14,12 +14,12 @@
     };
     ug.c = function (n) {
         return function () {
-            ug.q.push([n, arguments])
+            ug.q.push([n, arguments]);
         };
     };
     var m = ['previewGuide', 'finishPreview', 'track', 'identify', 'triggerNps', 'hideChecklist', 'launchChecklist'];
     for (var j = 0; j < m.length; j += 1) {
         ug[m[j]] = ug.c(m[j]);
     }
-    console.log("UserGuiding initialized.");
+    console.log('UserGuiding initialized.');
 })(window, document, 'script', 'userGuiding', 'userGuidingLayer', '192093940ID');

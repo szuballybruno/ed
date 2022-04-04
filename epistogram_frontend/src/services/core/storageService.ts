@@ -1,13 +1,13 @@
-import { VolumeSettingsType } from "../../models/types";
+import { VolumeSettingsType } from '../../models/types';
 
 export const writeVolumeSettings = (volumeSettings: VolumeSettingsType) => {
 
-    writeStorage("volume_settings", JSON.stringify(volumeSettings));
+    writeStorage('volume_settings', JSON.stringify(volumeSettings));
 };
 
 export const readVolumeSettings = () => {
 
-    const volumeSettingsJSON = readStorage<string>("volume_settings");
+    const volumeSettingsJSON = readStorage<string>('volume_settings');
     if (!volumeSettingsJSON)
         return null;
 

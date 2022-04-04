@@ -99,7 +99,7 @@ export const MainRouting = () => {
                     protectionLevel: 'authorize'
                 },
                 {
-                    route: { route: '*', title: 'Not found' },
+                    route: applicationRoutes.matchAll,
                     element: <NotFound />,
                     protectionLevel: 'open'
                 }

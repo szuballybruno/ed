@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useRegistrationFinalizationFormState = () => {
 
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordControl, setPasswordControl] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordControl, setPasswordControl] = useState('');
 
     return {
         phoneNumber,

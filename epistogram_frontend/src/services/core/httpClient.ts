@@ -1,10 +1,10 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { useState } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { serverUrl } from "../../static/Environemnt";
-import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from "../../static/frontendHelpers";
-import HttpErrorResponseDTO from "../../shared/dtos/HttpErrorResponseDTO";
-import { LoadingStateType } from "../../models/types";
+import axios, { AxiosRequestConfig } from 'axios';
+import { useState } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { serverUrl } from '../../static/Environemnt';
+import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from '../../static/frontendHelpers';
+import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
+import { LoadingStateType } from '../../models/types';
 
 export class HTTPResponse {
     code: number;
@@ -26,7 +26,7 @@ const instance = (() => {
     axiosInst.defaults.withCredentials = true;
 
     axiosInst.defaults.headers = {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
     };
 
     return axiosInst;
@@ -96,26 +96,26 @@ export const httpDeleteAsync = async (urlEnding: string) => {
  */
 export const usePostDataUnsafe = <TData, TResult>(url: string) => {
 
-    const [state, setState] = useState<LoadingStateType>("idle");
+    const [state, setState] = useState<LoadingStateType>('idle');
     const [result, setResult] = useState<TResult | null>(null);
 
     const postDataAsync = async (data?: TData) => {
 
         try {
 
-            setState("loading");
+            setState('loading');
 
             const postData = data ? data : undefined;
             const postResult = await httpPostAsync(url, postData, undefined, undefined) as TResult;
 
-            setState("idle");
+            setState('idle');
             setResult(postResult);
 
             return postResult;
         }
         catch (e) {
 
-            setState("idle");
+            setState('idle');
             throw e;
         }
     };
@@ -123,7 +123,7 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
     const clearCache = () => {
 
         setResult(null);
-        setState("idle");
+        setState('idle');
     };
 
     return {
@@ -144,21 +144,21 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
  */
 export const usePostMultipartDataUnsafe = <TData>(url: string) => {
 
-    const [state, setState] = useState<LoadingStateType>("idle");
+    const [state, setState] = useState<LoadingStateType>('idle');
 
     const postMultipartDataAsync = async (data?: TData, file?: File) => {
 
         try {
 
-            setState("loading");
+            setState('loading');
 
             await postMultipartAsync(url, file, data);
 
-            setState("idle");
+            setState('idle');
         }
         catch (e) {
 
-            setState("idle");
+            setState('idle');
             throw e;
         }
     };
@@ -179,7 +179,7 @@ export const usePostMultipartDataUnsafe = <TData>(url: string) => {
  */
 export const usePostData = <TData, TResult>(url: string) => {
 
-    const [state, setState] = useState<LoadingStateType>("success");
+    const [state, setState] = useState<LoadingStateType>('success');
     const [error, setError] = useState<ErrorCode | null>(null);
     const [result, setResult] = useState<TResult | null>(null);
 
@@ -187,16 +187,16 @@ export const usePostData = <TData, TResult>(url: string) => {
 
         try {
 
-            setState("loading");
+            setState('loading');
 
             const postResult = await httpPostAsync(url, data);
 
-            setState("success");
+            setState('success');
             setResult(postResult as TResult);
         }
         catch (e) {
 
-            setState("error");
+            setState('error');
             setError(e as ErrorCode);
         }
     };
@@ -231,25 +231,25 @@ export const postMultipartAsync = async (url: string, file?: File, data?: any) =
     // append file data
     if (file) {
 
-        formData.append("file", file);
+        formData.append('file', file);
     }
 
     // append json data 
     if (data) {
 
         const jsonData = JSON.stringify(data);
-        formData.append("document", jsonData);
+        formData.append('document', jsonData);
     }
 
     return await httpPostAsync(
         url,
         formData,
-        x => x.headers = { ...x.headers, "Content-Type": "multipart/form-data" });
+        x => x.headers = { ...x.headers, 'Content-Type': 'multipart/form-data' });
 };
 
 export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
     config.headers = {
-        "Authorization": "Bearer " + bearerToken
+        'Authorization': 'Bearer ' + bearerToken
     };
 };
 

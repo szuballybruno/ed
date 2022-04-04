@@ -17,20 +17,24 @@ export type RouteProtectionLevelType = 'open' | 'justAuthenticate' | 'authorize'
 const verboseLogging = true;
 
 const RouteRenderer = (props: {
+    route: ApplicationRoute,
     children: JSX.Element,
     isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean,
     protectionLevel?: RouteProtectionLevelType;
 }): JSX.Element => {
 
-    const { children, isAuthorizedToView, protectionLevel: pl } = props;
+    const { children, route, isAuthorizedToView, protectionLevel: pl } = props;
     const protectionLevel = pl ?? 'open';
 
     const authState = useContext(AuthenticationStateContext);
     const refetchUserAsync = useContext(RefetchUserAsyncContext);
     const user = useContext(CurrentUserContext)!;
 
-    if (verboseLogging)
+    if (verboseLogging) {
+
+        console.log(`Route renderer: Abs: '${route.route.getAbsolutePath()}' Rel: '${route.route.getRelativePath()}'`);
         console.log(`-- Protection level '${protectionLevel}'`);
+    }
 
     // if open route, don't authorize 
     if (protectionLevel === 'open') {
@@ -61,7 +65,7 @@ const RouteRenderer = (props: {
 
         return <Navigate
             replace
-            to={applicationRoutes.loginRoute.route} />;
+            to={applicationRoutes.loginRoute.route.getAbsolutePath()} />;
     }
 
     // if just authenticate protection level, 
@@ -82,7 +86,7 @@ const RouteRenderer = (props: {
 
         return <Navigate
             replace
-            to={applicationRoutes.signupRoute.route} />;
+            to={applicationRoutes.signupRoute.route.getAbsolutePath()} />;
     }
 
     // redirect to home if external authorization check fails
@@ -97,7 +101,7 @@ const RouteRenderer = (props: {
 
         return <Navigate
             replace
-            to={applicationRoutes.homeRoute.route} />;
+            to={applicationRoutes.homeRoute.route.getAbsolutePath()} />;
     }
 
     if (verboseLogging)
@@ -116,13 +120,11 @@ export const EpistoRoutes = (props: {
         {renderRoutes
             .map((renderRoute, index) => {
 
-                if (verboseLogging)
-                    console.log(`Visiting route: '${renderRoute.route.route}'...`);
-
                 return <Route
-                    path={renderRoute.route.route}
+                    path={renderRoute.route.route.getRelativePath()}
                     element={<>
                         <RouteRenderer
+                            route={renderRoute.route}
                             isAuthorizedToView={renderRoute.isAuthorizedToView}
                             protectionLevel={renderRoute.protectionLevel}>
                             {renderRoute.element}

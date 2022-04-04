@@ -1,4 +1,4 @@
-import { getRandomInteger } from "../../static/frontendHelpers";
+import { getRandomInteger } from '../../static/frontendHelpers';
 
 /**
  * @param centerColor The main color of each grid item
@@ -51,8 +51,8 @@ export type GridGradientOptions = {
 export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
 
     const defaultRadius = 1000;
-    const defaultCenterColor = "0,100,255";
-    const defaultBackgroundColor = "rgba(0, 100, 255, 0.1)";
+    const defaultCenterColor = '0,100,255';
+    const defaultBackgroundColor = 'rgba(0, 100, 255, 0.1)';
 
     {/* Default gradient options */ }
     const gradientOptions: GradientType[] = [
@@ -61,8 +61,8 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             radius: options?.topLeft?.radius ?? defaultRadius,
             backgroundColor: options?.topLeft?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.topLeft?.centerColor ?? defaultCenterColor,
-            offsetX: options?.topLeft?.offsetX ?? "70%",
-            offsetY: options?.topLeft?.offsetY ?? "400%",
+            offsetX: options?.topLeft?.offsetX ?? '70%',
+            offsetY: options?.topLeft?.offsetY ?? '400%',
             minOpacity: options?.topLeft?.minOpacity ?? 0.4,
             maxOpacity: options?.topLeft?.maxOpacity ?? 0.7
         }, {
@@ -70,15 +70,15 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             backgroundColor: options?.topCenter?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.topCenter?.centerColor ?? defaultCenterColor,
             offsetX: options?.topCenter?.offsetX ?? undefined,
-            offsetY: options?.topCenter?.offsetY ?? "320%",
+            offsetY: options?.topCenter?.offsetY ?? '320%',
             minOpacity: options?.topCenter?.minOpacity ?? 0.5,
             maxOpacity: options?.topCenter?.maxOpacity ?? 0.6
         }, {
             radius: options?.topRight?.radius ?? defaultRadius,
             backgroundColor: options?.topRight?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.topRight?.centerColor ?? defaultCenterColor,
-            offsetX: options?.topRight?.offsetX ?? "30%",
-            offsetY: options?.topRight?.offsetY ?? "400%",
+            offsetX: options?.topRight?.offsetX ?? '30%',
+            offsetY: options?.topRight?.offsetY ?? '400%',
             minOpacity: options?.topRight?.minOpacity ?? 0.4,
             maxOpacity: options?.topRight?.maxOpacity ?? 0.7
         },
@@ -88,8 +88,8 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             radius: options?.centerLeft?.radius ?? defaultRadius,
             backgroundColor: options?.centerLeft?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.centerLeft?.centerColor ?? defaultCenterColor,
-            offsetX: options?.centerLeft?.offsetX ?? "70%",
-            offsetY: options?.centerLeft?.offsetY ?? "50%",
+            offsetX: options?.centerLeft?.offsetX ?? '70%',
+            offsetY: options?.centerLeft?.offsetY ?? '50%',
             minOpacity: options?.centerLeft?.minOpacity ?? 0.3,
             maxOpacity: options?.centerLeft?.maxOpacity ?? 0.4
         }, {
@@ -104,8 +104,8 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             radius: options?.centerRight?.radius ?? defaultRadius,
             backgroundColor: options?.centerRight?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.centerRight?.centerColor ?? defaultCenterColor,
-            offsetX: options?.centerRight?.offsetX ?? "30%",
-            offsetY: options?.centerRight?.offsetY ?? "50%",
+            offsetX: options?.centerRight?.offsetX ?? '30%',
+            offsetY: options?.centerRight?.offsetY ?? '50%',
             minOpacity: options?.centerRight?.minOpacity ?? 0.4,
             maxOpacity: options?.centerRight?.maxOpacity ?? 0.5
         },
@@ -115,8 +115,8 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             radius: options?.bottomLeft?.radius ?? defaultRadius,
             backgroundColor: options?.bottomLeft?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.bottomLeft?.centerColor ?? defaultCenterColor,
-            offsetX: options?.bottomLeft?.offsetX ?? "70%",
-            offsetY: options?.bottomLeft?.offsetY ?? "calc(33vh - 320%)",
+            offsetX: options?.bottomLeft?.offsetX ?? '70%',
+            offsetY: options?.bottomLeft?.offsetY ?? 'calc(33vh - 320%)',
             minOpacity: options?.bottomLeft?.minOpacity ?? 0.6,
             maxOpacity: options?.bottomLeft?.maxOpacity ?? 0.7
         }, {
@@ -124,15 +124,15 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             backgroundColor: options?.bottomCenter?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.bottomCenter?.centerColor ?? defaultCenterColor,
             offsetX: options?.bottomCenter?.offsetX ?? undefined,
-            offsetY: options?.bottomCenter?.offsetY ?? "calc(33vh - 300%)",
+            offsetY: options?.bottomCenter?.offsetY ?? 'calc(33vh - 300%)',
             minOpacity: options?.bottomCenter?.minOpacity ?? 0.6,
             maxOpacity: options?.bottomCenter?.maxOpacity ?? 0.7
         }, {
             radius: options?.bottomRight?.radius ?? defaultRadius,
             backgroundColor: options?.bottomRight?.backgroundColor ?? defaultBackgroundColor,
             centerColor: options?.bottomRight?.centerColor ?? defaultCenterColor,
-            offsetX: options?.bottomRight?.offsetX ?? "30%",
-            offsetY: options?.bottomRight?.offsetY ?? "calc(33vh - 400%)",
+            offsetX: options?.bottomRight?.offsetX ?? '30%',
+            offsetY: options?.bottomRight?.offsetY ?? 'calc(33vh - 400%)',
             minOpacity: options?.bottomRight?.minOpacity ?? 0.4,
             maxOpacity: options?.bottomRight?.maxOpacity ?? 0.5
         }
@@ -150,7 +150,7 @@ export const gradientBackgroundGenerator = (options?: GridGradientOptions) => {
             backgroundColor
         } = gradient;
 
-        return `radial-gradient(${radius}px circle at ${offsetX || "center"} ${offsetY || ""}, rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)}), ${backgroundColor})`;
+        return `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)}), ${backgroundColor})`;
     };
 
     return gradientOptions.map(option => createRadialGradient(option));

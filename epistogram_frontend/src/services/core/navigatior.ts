@@ -1,26 +1,26 @@
-import { useNavigate } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { CourseStageNameType } from "../../shared/types/sharedTypes";
-import { ApplicationRoute } from "../../models/types";
-import { verboseLogging } from "../../static/Environemnt";
-import { getUrl } from "../../static/frontendHelpers";
+import { useNavigate } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { CourseStageNameType } from '../../shared/types/sharedTypes';
+import { ApplicationRoute } from '../../models/types';
+import { verboseLogging } from '../../static/Environemnt';
+import { getUrl } from '../../static/frontendHelpers';
 
 export const useNavigation = () => {
 
     const domNavigate = useNavigate();
 
-    const navigate = (path: string | ApplicationRoute, params?: any, query?: any) => {
+    const navigate = (route: ApplicationRoute, params?: any, query?: any) => {
 
-        const pathAsAny = path as any;
-        const replacedPath = getUrl(pathAsAny.route ? pathAsAny.route : path, params, query);
+        const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
 
         if (verboseLogging)
-            console.log("Navigating to: " + replacedPath);
+            console.log('Navigating to: ' + replacedPath);
 
         domNavigate(replacedPath);
     };
 
-    const openNewTab = (url: string) => (window as any).open(url, "_blank").focus();
+    const openNewTab = (url: string) => (window as any).open(url, '_blank')
+        .focus();
 
     const navigateToPlayer = (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode });
 
@@ -44,13 +44,13 @@ export const useNavigation = () => {
             return;
         }
 
-        if (stageName === "pretest") {
+        if (stageName === 'pretest') {
 
             navigateToWatchPretest(courseId);
             return;
         }
 
-        if (stageName === "pretest_results") {
+        if (stageName === 'pretest_results') {
 
             navigateToWatchPretestResults(courseId);
             return;

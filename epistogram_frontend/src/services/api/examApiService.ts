@@ -1,12 +1,12 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { AnswerQuestionDTO } from "../../shared/dtos/AnswerQuestionDTO";
-import { AnswerResultDTO } from "../../shared/dtos/AnswerResultDTO";
-import { CreateExamDTO } from "../../shared/dtos/CreateExamDTO";
-import { ExamEditDataDTO } from "../../shared/dtos/ExamEditDataDTO";
-import { ExamResultsDTO } from "../../shared/dtos/ExamResultsDTO";
-import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
+import { CreateExamDTO } from '../../shared/dtos/CreateExamDTO';
+import { ExamEditDataDTO } from '../../shared/dtos/ExamEditDataDTO';
+import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
+import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useEditExamData = (examId: number) => {
 
@@ -37,8 +37,8 @@ export const useCreateExam = () => {
     return {
         createExamAsync: (moduleId: number) => qr.postDataAsync({
             moduleId,
-            subtitle: "",
-            title: ""
+            subtitle: '',
+            title: ''
         }),
         createExamState: qr.state,
     };

@@ -13,7 +13,7 @@ import { translatableTexts } from '../static/translatableTexts';
 
 export const LeftPane = (props: FlexProps) => {
 
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
+    const homeRoute = applicationRoutes.rootHomeRoute;
     const user = useContext(CurrentUserContext);
     const { navigate } = useNavigation();
 
@@ -35,10 +35,12 @@ export const LeftPane = (props: FlexProps) => {
             {...props}>
 
             {/* logo link */}
-            <Flex width="100%"
-alignItems={'center'}
-justifyContent="flex-start"
-mb="20px">
+            <Flex
+                width="100%"
+                alignItems={'center'}
+                justifyContent="flex-start"
+                mb="20px">
+                
                 <img
                     src={getAssetUrl('/images/logo.svg')}
                     style={{
@@ -52,7 +54,7 @@ mb="20px">
                     onClick={() => {
 
                         if (user?.userActivity?.canAccessApplication)
-                            navigate(homeUrl);
+                            navigate(homeRoute);
                     }} />
             </Flex>
 
@@ -68,7 +70,7 @@ mb="20px">
                     zIndex: -1,
                 }}
                 src={getAssetUrl('/images/bg-art-6.png')}
-alt="" />
+                alt="" />
 
             {props.children}
 
@@ -84,7 +86,7 @@ alt="" />
                     zIndex: -1,
                 }}
                 src={getAssetUrl('/images/bela3D.png')}
-alt="" />
+                alt="" />
 
             {/* tina image */}
             <Flex

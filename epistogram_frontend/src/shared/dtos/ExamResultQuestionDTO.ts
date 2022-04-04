@@ -1,4 +1,4 @@
-import { ResultAnswerDTO } from "./ResultAnswerDTO";
+import { ResultAnswerDTO } from './ResultAnswerDTO';
 
 export type ExamResultQuestionDTO = {
     text: string;

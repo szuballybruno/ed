@@ -1,6 +1,6 @@
-import { JobTitleDTO } from "./JobTitleDTO";
-import { OrganizationDTO } from "./OrganizationDTO";
-import { RoleDTO } from "./RoleDTO";
+import { JobTitleDTO } from './JobTitleDTO';
+import { OrganizationDTO } from './OrganizationDTO';
+import { RoleDTO } from './RoleDTO';
 
 export class UserEditDTO {
     id: number;

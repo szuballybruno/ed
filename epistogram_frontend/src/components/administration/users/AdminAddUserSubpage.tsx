@@ -37,10 +37,7 @@ const AdminAddUserSubpage = (props: {
 
             showNotification('Felhasználó sikeresen hozzáadva');
             refetchUsersFunction();
-            navigate(applicationRoutes.administrationRoute.usersRoute.route + '/a/edit');
-
-            // TODO return added user's id
-            //navigate(applicationRoutes.administrationRoute.usersRoute.route + "/" + user.id + "/edit")
+            navigate(applicationRoutes.administrationRoute.usersRoute);
         } catch (error) {
 
             // TODO
@@ -51,22 +48,22 @@ const AdminAddUserSubpage = (props: {
         }
     };
 
-    return <AdminBreadcrumbsHeader breadcrumbs={[
-        <BreadcrumbLink
-            key={1}
-            title="Felhasználók"
-            iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-        <BreadcrumbLink
-            key={2}
-            title={'Felhasználó hozzáadása'}
-            isCurrent />
+    return <AdminBreadcrumbsHeader breadcrumbDatas={[
+        // <BreadcrumbLink
+        //     key={1}
+        //     title="Felhasználók"
+        //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+        //     to={applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '/a/edit'} />,
+        // <BreadcrumbLink
+        //     key={2}
+        //     title={'Felhasználó hozzáadása'}
+        //     isCurrent />
     ]}>
 
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId });
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
         <AdminSubpageHeader background="var(--transparentWhite10)"
             className='roundBorders'>

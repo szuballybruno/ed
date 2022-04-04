@@ -11,7 +11,7 @@ import { OrganizationDTO } from '../../../shared/dtos/OrganizationDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserDTO } from '../../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { parseIntOrNull } from '../../../static/frontendHelpers';
+import { isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -285,69 +285,71 @@ export const AdminEditUserControl = (props: {
                 minWidth="300px"
             >
 
-                {location.pathname !== applicationRoutes.administrationRoute.usersRoute.addRoute.route && <LoadingFrame
-                    loadingState={[coinBalanceStatus, giftCoinsToUserState]}
-                    error={coinBalanceError}
-                    direction="column">
+                {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
 
-                    <EditSection isFirst
-                        title="EpistoCoin">
-                        <EpistoLabel
-                            isOverline
-                            text="Egyenleg">
+                    <LoadingFrame
+                        loadingState={[coinBalanceStatus, giftCoinsToUserState]}
+                        error={coinBalanceError}
+                        direction="column">
 
-                            <EpistoFont
-                                fontSize="fontLargePlus"
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    marginLeft: 5,
-                                    fontWeight: 600
-                                }}>
+                        <EditSection isFirst
+                            title="EpistoCoin">
+                            <EpistoLabel
+                                isOverline
+                                text="Egyenleg">
 
-                                {coinBalance}
-                                <EpistoConinImage style={{
-                                    width: 20,
-                                    height: 20,
-                                    marginLeft: 5
-                                }} />
-                            </EpistoFont>
-                        </EpistoLabel>
-
-                        <EpistoLabel width="100%"
-                            isOverline
-                            text="EpistoCoin hozzáadása">
-
-                            <Flex align="center"
-                                flex="1"
-                                mt="10px">
-                                <EpistoEntryNew
-                                    flex="1"
+                                <EpistoFont
+                                    fontSize="fontLargePlus"
                                     style={{
-                                        margin: '0 5px 0 0'
-                                    }}
-                                    type="number"
-                                    placeholder='Összeg amelyet hozzá szeretnél adni'
-                                    state={coinAmountEntryState} />
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginLeft: 5,
+                                        fontWeight: 600
+                                    }}>
 
-                                <EpistoButton
-                                    isDisabled={!!coinAmountEntryState.error}
-                                    onClick={handleAddCoinsAsync}
-                                    variant="colored">
+                                    {coinBalance}
+                                    <EpistoConinImage style={{
+                                        width: 20,
+                                        height: 20,
+                                        marginLeft: 5
+                                    }} />
+                                </EpistoFont>
+                            </EpistoLabel>
 
-                                    Hozzáadás
-                                </EpistoButton>
-                            </Flex>
+                            <EpistoLabel width="100%"
+                                isOverline
+                                text="EpistoCoin hozzáadása">
 
-                        </EpistoLabel>
-                    </EditSection>
+                                <Flex align="center"
+                                    flex="1"
+                                    mt="10px">
+                                    <EpistoEntryNew
+                                        flex="1"
+                                        style={{
+                                            margin: '0 5px 0 0'
+                                        }}
+                                        type="number"
+                                        placeholder='Összeg amelyet hozzá szeretnél adni'
+                                        state={coinAmountEntryState} />
 
+                                    <EpistoButton
+                                        isDisabled={!!coinAmountEntryState.error}
+                                        onClick={handleAddCoinsAsync}
+                                        variant="colored">
 
-                </LoadingFrame>}
+                                        Hozzáadás
+                                    </EpistoButton>
+                                </Flex>
+
+                            </EpistoLabel>
+                        </EditSection>
+
+                    </LoadingFrame>
+                )}
 
                 <EditSection
-                    isFirst={location.pathname === applicationRoutes.administrationRoute.usersRoute.addRoute.route}
+                    isFirst={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute)}
                     title="Alkalmazás adatai">
 
                     {/* is teacher */}

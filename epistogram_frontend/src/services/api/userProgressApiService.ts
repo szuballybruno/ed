@@ -1,8 +1,8 @@
-import { RecomendedItemQuotaDTO } from "../../shared/dtos/RecomendedItemQuotaDTO";
-import { UserActiveCourseDTO } from "../../shared/dtos/UserActiveCourseDTO";
-import { UserCourseProgressChartDTO } from "../../shared/dtos/UserCourseProgressChartDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
+import { RecomendedItemQuotaDTO } from '../../shared/dtos/RecomendedItemQuotaDTO';
+import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
 
 export const useUserProgressData = (courseId: number, enabled: boolean) => {
 

@@ -1,4 +1,4 @@
-import { CourseRatingQuestionDTO } from "./CourseRatingQuestionDTO";
+import { CourseRatingQuestionDTO } from './CourseRatingQuestionDTO';
 
 export class CourseRatingGroupDTO {
     id: number;

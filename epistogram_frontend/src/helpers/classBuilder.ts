@@ -1,6 +1,6 @@
-import { isString } from "../static/frontendHelpers";
+import { isString } from '../static/frontendHelpers';
 
-export type StyleSizeType = "0" | "5" | "10" | "15" | "40";
+export type StyleSizeType = '0' | '5' | '10' | '15' | '40';
 
 export type ClassBuilderCustomizationFnType = (classBuilder: ClassBuilder) => void;
 
@@ -15,7 +15,7 @@ export class ClassBuilder {
 
     build = () => {
 
-        return this._classes.join(" ");
+        return this._classes.join(' ');
     };
 
     appendBuilder = (builder?: ClassBuilder) => {
@@ -80,16 +80,16 @@ export class ClassBuilder {
     private addClass(name: string, arg1?: string, arg2?: string, arg3?: string, arg4?: string) {
 
         if (arg1)
-            name += "-" + arg1;
+            name += '-' + arg1;
 
         if (arg2)
-            name += "-" + arg2;
+            name += '-' + arg2;
 
         if (arg3)
-            name += "-" + arg3;
+            name += '-' + arg3;
 
         if (arg4)
-            name += "-" + arg4;
+            name += '-' + arg4;
 
         this._classes.push(name);
     }

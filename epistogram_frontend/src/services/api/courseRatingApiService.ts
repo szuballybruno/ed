@@ -1,8 +1,8 @@
-import { CourseRatingGroupDTO } from "../../shared/dtos/CourseRatingGroupDTO";
-import { CourseRatingQuestionAnswersDTO } from "../../shared/dtos/CourseRatingQuestionAnswersDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { CourseRatingGroupDTO } from '../../shared/dtos/CourseRatingGroupDTO';
+import { CourseRatingQuestionAnswersDTO } from '../../shared/dtos/CourseRatingQuestionAnswersDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCourseRatingGroups = (courseId: number) => {
 

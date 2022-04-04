@@ -87,11 +87,11 @@ const LoginScreen = () => {
 
             if (user!.userActivity.canAccessApplication) {
 
-                navigate(applicationRoutes.homeRoute.route);
+                navigate(applicationRoutes.homeRoute);
             }
             else {
 
-                navigate(applicationRoutes.signupRoute.route);
+                navigate(applicationRoutes.signupRoute);
             }
         }
 
@@ -269,7 +269,7 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate('/register-via-activation-code')}
+                                onClick={() => navigate(applicationRoutes.registerViaActivationCodeRoute)}
                                 fontSize="fontSmall"
                                 style={{
                                     color: '--deepBlue',

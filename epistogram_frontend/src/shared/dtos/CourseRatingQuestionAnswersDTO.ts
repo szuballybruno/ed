@@ -1,4 +1,4 @@
-import { CourseRatingQuestionAnswerDTO } from "./CourseRatingQuestionAnswerDTO";
+import { CourseRatingQuestionAnswerDTO } from './CourseRatingQuestionAnswerDTO';
 
 export class CourseRatingQuestionAnswersDTO {
     courseId: number;

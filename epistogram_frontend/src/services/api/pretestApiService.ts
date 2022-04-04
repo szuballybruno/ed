@@ -1,8 +1,8 @@
-import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
-import { PretestDataDTO } from "../../shared/dtos/PretestDataDTO";
-import { PretestResultDTO } from "../../shared/dtos/PretestResultDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
+import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { PretestDataDTO } from '../../shared/dtos/PretestDataDTO';
+import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
 
 export const usePretestData = (courseId: number) => {
 

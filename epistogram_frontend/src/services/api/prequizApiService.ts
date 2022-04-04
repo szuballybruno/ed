@@ -1,8 +1,8 @@
-import { PrequizQuestionDTO } from "../../shared/dtos/PrequizQuestionDTO";
-import { PrequizUserAnswerDTO } from "../../shared/dtos/PrequizUserAnswerDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
+import { PrequizUserAnswerDTO } from '../../shared/dtos/PrequizUserAnswerDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const usePrequizQuestions = (courseId: number) => {
 

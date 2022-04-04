@@ -30,6 +30,7 @@ export const AdminCourseDetailsSubpage = () => {
 
     // util
     const courseId = useIntParam('courseId')!;
+    const isAnySelected = courseId != -1;
     const showError = useShowErrorDialog();
 
     // http
@@ -180,7 +181,8 @@ export const AdminCourseDetailsSubpage = () => {
         className="whall">
 
         {/* frame */}
-        <CourseAdministartionFrame>
+        <CourseAdministartionFrame
+            isAnySelected={isAnySelected}>
 
             {/* admin header */}
             <AdminSubpageHeader
@@ -196,12 +198,12 @@ export const AdminCourseDetailsSubpage = () => {
 
                 {/* Course edit */}
                 <Flex direction="row"
-flex="1">
+                    flex="1">
 
                     {/* left pane  */}
                     <Flex direction="column"
-flex="1"
-mr="5px">
+                        flex="1"
+                        mr="5px">
 
                         {/* Basic info section */}
                         <EditSection
@@ -210,15 +212,15 @@ mr="5px">
 
                             {/* Thumbnail image */}
                             <EpistoLabel isOverline
-text="Borítókép">
+                                text="Borítókép">
                                 <SelectImage
                                     width="192px"
                                     height="108px"
                                     setImageFile={setThumbnailImageFile}
                                     setImageSource={setThumbnailSrc}>
                                     <Image className="whall"
-objectFit="cover"
-src={thumbnailSrc} />
+                                        objectFit="cover"
+                                        src={thumbnailSrc} />
                                 </SelectImage>
                             </EpistoLabel>
 
@@ -360,8 +362,8 @@ src={thumbnailSrc} />
 
                     {/* right pane  */}
                     <Flex direction="column"
-flex="1"
-ml="5px">
+                        flex="1"
+                        ml="5px">
 
                         <EditSection
                             isFirst
@@ -447,9 +449,9 @@ ml="5px">
                                 )} />
                             {/* radar chart */}
                             <Flex mt="30px"
-minH="300px"
-align="center"
-justify="center">
+                                minH="300px"
+                                align="center"
+                                justify="center">
                                 <EpistoRadarChart
                                     title=""
                                     areas={[{

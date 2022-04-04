@@ -1,7 +1,7 @@
-import { CourseCategoryDTO } from "./CourseCategoryDTO";
-import { HumanSkillBenefitDTO } from "./HumanSkillBenefitDTO";
-import { TeacherDTO } from "./TeacherDTO";
-import { CourseVisibilityType } from "../types/sharedTypes";
+import { CourseCategoryDTO } from './CourseCategoryDTO';
+import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
+import { TeacherDTO } from './TeacherDTO';
+import { CourseVisibilityType } from '../types/sharedTypes';
 
 export class CourseDetailsEditDataDTO {
     courseId: number;

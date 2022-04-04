@@ -1,6 +1,7 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
 import { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useActiveCourses } from '../../../services/api/userProgressApiService';
 import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
@@ -11,50 +12,50 @@ import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
+const AdminSectionWithButton = (props: {
+    title: string,
+    children?: ReactNode,
+    headerContent?: ReactNode
+} & FlexProps) => {
+    const { title, children, headerContent, ...css } = props;
+    return <Flex
+        direction="column"
+        className="roundBorders"
+        background="var(--transparentWhite70)"
+        p="20px"
+        {...css}>
+
+        <Flex
+            h="40px"
+            w="100%"
+            align="center"
+            justify="space-between">
+
+            <EpistoFont>
+                {title}
+            </EpistoFont>
+
+            {headerContent}
+        </Flex>
+
+        {children}
+    </Flex>;
+};
+
 export const AdminHomeOverview = () => {
-    const AdminSectionWithButton = (props: {
-        title: string,
-        children?: ReactNode,
-        headerContent?: ReactNode
-    } & FlexProps) => {
-        const { title, children, headerContent, ...css } = props;
-        return <Flex
-            direction="column"
-            className="roundBorders"
-            background="var(--transparentWhite70)"
-            p="20px"
-            {...css}>
-
-            <Flex
-                h="40px"
-                w="100%"
-                align="center"
-                justify="space-between">
-
-                <EpistoFont>
-                    {title}
-                </EpistoFont>
-
-                {headerContent}
-            </Flex>
-
-            {children}
-        </Flex>;
-    };
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging(activeCourses);
     const currentCourse = activeCoursesPaging.currentItem;
 
+    const nav = useNavigate();
+
     return <AdminSubpageHeader
         isInverseBackground
-        tabMenuItems={[{
-            route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route,
-            title: applicationRoutes.administrationRoute.homeRoute.overviewRoute.title
-        }, {
-            route: applicationRoutes.administrationRoute.homeRoute.detailsRoute.route,
-            title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
-        }]}>
+        tabMenuItems={[
+            applicationRoutes.administrationRoute.homeRoute.overviewRoute,
+            applicationRoutes.administrationRoute.homeRoute.detailsRoute
+        ]}>
         <Flex flex="3"
             direction="column">
 

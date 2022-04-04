@@ -47,7 +47,7 @@ export const SetNewPasswordPage = () => {
             await setNewPassword(password, passwordCompare, token);
 
             showNotification('Új jelszó sikeresen beállítva!');
-            navigate(applicationRoutes.homeRoute.route);
+            navigate(applicationRoutes.homeRoute);
 
         }
         catch (e) {

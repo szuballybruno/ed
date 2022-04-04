@@ -1,4 +1,4 @@
-import { PersonalityTraitDataDTO } from "./PersonalityTraitDataDTO";
+import { PersonalityTraitDataDTO } from './PersonalityTraitDataDTO';
 
 export type PersonalityChartDataDTO = {
 

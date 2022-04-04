@@ -8,6 +8,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { isCurrentAppRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
@@ -27,8 +28,8 @@ export const AdminEditUserSubpage = (props: {
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
     const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute.route);
-    const navigateToUserCourses = () => navigate(`${applicationRoutes.administrationRoute.usersRoute.route}/${editedUserId}/courses`);
+    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute);
+    const navigateToUserCourses = () => navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { courseId: editedUserId });
     const location = useLocation();
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
@@ -91,34 +92,31 @@ export const AdminEditUserSubpage = (props: {
         const isUserFound = users.some(user => user.id === editedUserId);
 
         if (!isUserFound && users[0]) {
-            navigate(applicationRoutes.administrationRoute.usersRoute.route + '/' + users[0].id + '/edit');
+            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users[0].id });
         }
     };
     checkIfCurrentUserFromUrl();
 
 
-
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={location.pathname === applicationRoutes.administrationRoute.usersRoute.route}
-        viewSwitchFunction={() => {
-            navigate(applicationRoutes.administrationRoute.usersRoute.route);
-        }}
-        breadcrumbs={[
-            <BreadcrumbLink
-                key={1}
-                title="Felhasználók"
-                iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-                to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-            <BreadcrumbLink
-                key={2}
-                title={userEditData?.lastName + ' ' + userEditData?.firstName}
-                isCurrent />
+        viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
+        viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute)}
+        breadcrumbDatas={[
+            // <BreadcrumbLink
+            //     key={1}
+            //     title="Felhasználók"
+            //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
+            // <BreadcrumbLink
+            //     key={2}
+            //     title={userEditData?.lastName + ' ' + userEditData?.firstName}
+            //     isCurrent />
         ]}>
 
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute.route, { userId: userId });
+                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
 
         <AdminSubpageHeader

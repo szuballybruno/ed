@@ -1,13 +1,13 @@
-import { CourseShopItemListDTO } from "../../shared/dtos/CourseShopItemListDTO";
-import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
-import { ShopItemAdminShortDTO } from "../../shared/dtos/ShopItemAdminShortDTO";
-import { ShopItemBriefData } from "../../shared/dtos/ShopItemBriefData";
-import { ShopItemCategoryDTO } from "../../shared/dtos/ShopItemCategoryDTO";
-import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
-import { ShopItemEditDTO } from "../../shared/dtos/ShopItemEditDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
+import { CourseShopItemListDTO } from '../../shared/dtos/CourseShopItemListDTO';
+import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
+import { ShopItemBriefData } from '../../shared/dtos/ShopItemBriefData';
+import { ShopItemCategoryDTO } from '../../shared/dtos/ShopItemCategoryDTO';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useShopItems = () => {
 

@@ -81,8 +81,7 @@ export const AdminCourseUsersGrid = () => {
 
                 <EpistoButton
                     variant="outlined"
-                    onClick={() =>
-                        navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute.route, { userId: params.value })}>
+                    onClick={() => navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
 
                     Tanulási jelentés
                 </EpistoButton>
@@ -105,13 +104,9 @@ export const AdminCourseUsersSubpage = (props: {
 
     const { courses, navigationFunction } = props;
 
-    return <AdminBreadcrumbsHeader>
-
-        {/* <AdminCourseList courses={[]} onCourseClick={() => { }} /> */}
-
+    return (
         <AdminSubpageHeader>
             <AdminCourseUsersGrid />
         </AdminSubpageHeader>
-
-    </AdminBreadcrumbsHeader>;
+    );
 };

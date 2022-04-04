@@ -1,4 +1,4 @@
-import { CoinAcquireResultDTO } from "./CoinAcquireResultDTO";
+import { CoinAcquireResultDTO } from './CoinAcquireResultDTO';
 
 export type AnswerResultDTO = {
     givenAnswerIds: number[];

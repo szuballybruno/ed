@@ -23,7 +23,6 @@ import { AdminUserControl } from './users/AdminUserControl';
 
 export const AdminPage = () => {
 
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
     const user = useContext(CurrentUserContext)!;
     const administrationRoutes = applicationRoutes.administrationRoute;
     const { navigate } = useNavigation();
@@ -34,8 +33,6 @@ export const AdminPage = () => {
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
-        //.add(administrationRoutes.myCompanyRoute)
-        //.addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.overviewTableRoute)
         .getArray();
 
     return <PageRootContainer>
@@ -72,14 +69,13 @@ export const AdminPage = () => {
                     alt=""
                     onClick={() => {
 
-                        if (user?.userActivity?.canAccessApplication)
-                            navigate(homeUrl);
+                        // navigate(homeUrl);
                     }} />
             </Flex>
 
             <NavigationLinkList
                 isNoText
-                items={menuItems} />
+                routes={menuItems} />
         </Flex>
 
         {/* admin content pane */}
@@ -92,14 +88,20 @@ export const AdminPage = () => {
             <EpistoRoutes
                 renderRoutes={[
 
-                    // {/* administration home */ }
+                    // administration home
                     {
-                        route: administrationRoutes.homeRoute.overviewRoute,
-                        element: <AdminHomeOverview />
-                    },
-                    {
-                        route: administrationRoutes.homeRoute.detailsRoute,
-                        element: <AdminHomeDetails />
+                        route: administrationRoutes.homeRoute,
+                        element: <EpistoRoutes
+                            renderRoutes={[
+                                {
+                                    route: administrationRoutes.homeRoute.overviewRoute,
+                                    element: <AdminHomeOverview />
+                                },
+                                {
+                                    route: administrationRoutes.homeRoute.detailsRoute,
+                                    element: <AdminHomeDetails />
+                                },
+                            ]} />
                     },
 
                     // user administration
@@ -159,18 +161,11 @@ export const AdminPage = () => {
                     // statistics
                     {
                         route: administrationRoutes.myCompanyRoute,
-                        element: <AdminStatistics/>,
+                        element: <AdminStatistics />,
                         protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     }
                 ]} />
-
-            {/* Disabled temporarily */}
-            {/* <ProtectedRoute
-                    exact
-                    path={administrationRoutes.overviewTableRoute.route}
-                    isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <AdminOverviewTablePage />} /> */}
         </ContentPane>
     </PageRootContainer>;
 };

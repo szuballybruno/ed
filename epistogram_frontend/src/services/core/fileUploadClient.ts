@@ -1,5 +1,5 @@
-import { serverUrl } from "../../static/Environemnt";
-import { postMultipartAsync } from "./httpClient";
+import { serverUrl } from '../../static/Environemnt';
+import { postMultipartAsync } from './httpClient';
 
 const mbToByte = 1000000;
 const maxChunkSizeBytes = 10 * mbToByte; // 10 mb
@@ -8,7 +8,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
 
     let uploadedBytesCount = 0;
     let chunkIndex = 0;
-    const trimmedUrlEnding = urlEnding.substring(0, 1) === "/"
+    const trimmedUrlEnding = urlEnding.substring(0, 1) === '/'
         ? urlEnding.substring(1)
         : urlEnding;
     const url = serverUrl + trimmedUrlEnding;
@@ -23,7 +23,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
 
         console.log(`Uploading chunk: #${chunkIndex} - ${currentChunkArrayBuffer.byteLength * 0.000001}mb`);
 
-        await postMultipartAsync(url, new File([currentChunkArrayBuffer], "chunk"), {
+        await postMultipartAsync(url, new File([currentChunkArrayBuffer], 'chunk'), {
             chunkIndex,
             chunksCount,
             ...data
@@ -33,7 +33,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
         chunkIndex++;
     }
 
-    console.log("Upload finished!");
+    console.log('Upload finished!');
 };
 
 const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<ArrayBuffer> => {
@@ -52,7 +52,7 @@ const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<Arra
 
                 if (!reader.result) {
 
-                    reject(new Error("Reader returend null or undefined!"));
+                    reject(new Error('Reader returend null or undefined!'));
                 }
                 else {
 

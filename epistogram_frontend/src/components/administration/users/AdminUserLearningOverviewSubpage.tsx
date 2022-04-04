@@ -4,13 +4,13 @@ import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { ButtonType } from '../../../models/types';
+import { ApplicationRoute, ButtonType } from '../../../models/types';
 import { useEditUserData } from '../../../services/api/userApiService';
 import { useActiveCourses, useUserProgressData } from '../../../services/api/userProgressApiService';
 import { useUserStats } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
+import { getAssetUrl, isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -67,7 +67,7 @@ const DummyLearningCourseStatsModified = (props: {
 
             {/* content */}
             <Flex p="10px"
-direction="column">
+                direction="column">
 
                 {/* category  */}
                 <Text
@@ -88,7 +88,7 @@ direction="column">
 
                 {/* small stats */}
                 <Flex mt={7}
-justify="space-evenly">
+                    justify="space-evenly">
 
                     {/* spent time  */}
                     <SmallStat
@@ -158,7 +158,7 @@ const UserStatisticsProgressWithLabel = (props: {
         <EpistoFont style={{
             minWidth: 100
         }}
-fontSize={'fontExtraSmall'}>
+            fontSize={'fontExtraSmall'}>
             {props.title}
         </EpistoFont>
 
@@ -194,8 +194,8 @@ export const AdminUserStatisticsSubpage = (props: {
     const userId = useIntParam('userId')!;
 
     const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(usersRoute.addRoute.route);
-    const navigateToUserCourses = () => navigate(`${usersRoute.route}/${userId}/courses/:courseId/statistics`);
+    const navigateToAddUser = () => navigate(usersRoute.addRoute);
+    const navigateToUserCourses = () => navigate(usersRoute, { userId, courseId: 0 });
     const location = useLocation();
 
     const { activeCourses } = useActiveCourses();
@@ -227,17 +227,13 @@ export const AdminUserStatisticsSubpage = (props: {
     ] as ButtonType[];
 
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={location.pathname === usersRoute.route}
-        viewSwitchFunction={() => {
-            navigate(usersRoute.route);
-        }}
+        viewSwitchChecked={isCurrentAppRoute(usersRoute)}
+        viewSwitchFunction={() => navigate(usersRoute)}
         subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
         <AdminUserList
             users={users}
-            navigationFunction={(userId) => {
-                navigate(usersRoute.statsRoute.route, { userId: userId });
-            }} />
+            navigationFunction={(userId) => navigate(usersRoute.statsRoute, { userId: userId })} />
 
         {/* admin header */}
         <AdminSubpageHeader
@@ -274,16 +270,16 @@ export const AdminUserStatisticsSubpage = (props: {
                         />
 
                         <EpistoFont fontSize={'fontLarge'}
-style={{
-                            minWidth: 150
-                        }}>
+                            style={{
+                                minWidth: 150
+                            }}>
 
                             Vizsgált időszak:
                         </EpistoFont>
 
 
                         <Tooltip title={'tiptool'}
-p="20px">
+                            p="20px">
                             <DatePicker
                                 dateFormat="yyyy-MM-dd"
                                 calendarStartDay={1}
@@ -331,7 +327,7 @@ p="20px">
                                 src={getAssetUrl('/images/happyfacechart.png')} />
 
                             <Flex direction="column"
-p="10px">
+                                p="10px">
                                 <EpistoFont
                                     style={{
                                         fontWeight: 600
@@ -358,19 +354,19 @@ p="10px">
                             </Flex>
                         </Flex>
                         <Flex w="100%"
-mt="20px"
-direction="column">
+                            mt="20px"
+                            direction="column">
 
                             <UserStatisticsProgressWithLabel title="Elköteleződés"
-value={95} />
+                                value={95} />
                             <UserStatisticsProgressWithLabel title="Teljesítmény"
-value={67} />
+                                value={67} />
                             <UserStatisticsProgressWithLabel title="Produktivitás"
-value={81} />
+                                value={81} />
                             <UserStatisticsProgressWithLabel title="Elmélyülés"
-value={83} />
+                                value={83} />
                             <UserStatisticsProgressWithLabel title="Közösségi aktivitás"
-value={78} />
+                                value={78} />
                         </Flex>
                     </Flex>
                     <Flex
@@ -406,9 +402,9 @@ value={78} />
 
             <EditSection title="Kurzusok a hónapban">
                 <EpistoGrid auto="fill"
-gap="15"
-minColumnWidth="250px"
-p="10px 0">
+                    gap="15"
+                    minColumnWidth="250px"
+                    p="10px 0">
 
                     <DummyLearningCourseStatsModified
                         title="Microsoft Excel Mesterkurzus"

@@ -1,4 +1,4 @@
-import { TaskObjectiveType, TaskPriorityType, TaskStatusType } from "../types/sharedTypes";
+import { TaskObjectiveType, TaskPriorityType, TaskStatusType } from '../types/sharedTypes';
 
 export type TaskDTO = {
     name: string;

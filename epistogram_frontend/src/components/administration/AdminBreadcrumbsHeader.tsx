@@ -1,79 +1,119 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { GridOn, List } from '@mui/icons-material';
-import { FormControlLabel, FormGroup, Switch, styled, FormControl } from '@mui/material';
+import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { ReactNode, useState } from 'react';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
 import { useCourseBriefData } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
 import { useBriefUserData } from '../../services/api/userApiService';
-import { objToArray, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { getKeys } from '../../shared/logic/sharedLogic';
+import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const BreadcrumbLink = (props: {
-    to?: string,
-    title: string,
-    iconComponent?: ReactNode,
-    isCurrent?: boolean
+const Content = (props: {
+    isCurrent: boolean,
+    title: string
+    iconComponent?: JSX.Element,
 }) => {
 
-    const Content = () => <Flex>
-        {props.iconComponent && <Flex width={27}
-height="100%"
-m={'2px 10px 2px 2px'}>
-            {props.iconComponent}
-        </Flex>}
+    const { iconComponent, isCurrent, title } = props;
 
-        <EpistoFont
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                fontWeight: props.isCurrent ? 'bold' : undefined,
-                alignItems: 'center',
-                padding: '0 2px 0 5px'
-            }}>
-            {props.title}
-        </EpistoFont>
-    </Flex>;
+    return (
+        <Flex>
 
-    const { to } = props;
-    const isLink = !props.isCurrent && to;
+            {iconComponent && <Flex
+                width={27}
+                height="100%"
+                m={'2px 10px 2px 2px'}>
+
+                {iconComponent}
+            </Flex>}
+
+            <EpistoFont
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    fontWeight: isCurrent ? 'bold' : undefined,
+                    alignItems: 'center',
+                    padding: '0 2px 0 5px'
+                }}>
+
+                {title}
+            </EpistoFont>
+        </Flex>
+    );
+};
+
+export const BreadcrumbLink = (props: {
+    title: string,
+    isCurrent: boolean,
+    iconComponent?: JSX.Element,
+    route?: ApplicationRoute,
+}) => {
+
+    const { route, title, iconComponent, isCurrent } = props;
+    const isLink = !isCurrent && route;
 
     return <Box>
 
         {isLink
-            ? <NavLink to={to!}>
-                <Content />
-            </NavLink>
-            : <Content />}
+            ? (
+                <NavLink
+                    to={route.route.getAbsolutePath()}>
+
+                    <Content
+                        iconComponent={iconComponent}
+                        isCurrent={isCurrent}
+                        title={title} />
+                </NavLink>
+            )
+            : (
+                <Content
+                    iconComponent={iconComponent}
+                    isCurrent={isCurrent}
+                    title={title} />
+            )}
     </Box>;
 };
 
+export type BreadcrumbDataType = {
+
+}
+
 export const AdminBreadcrumbsHeader = (props: {
     children?: ReactNode,
-    breadcrumbs?: ReactNode[],
+    breadcrumbDatas?: BreadcrumbDataType[],
     subRouteLabel?: string,
     viewSwitchChecked?: boolean,
     viewSwitchFunction?: (checked: boolean) => void
 } & FlexProps) => {
 
-    const { subRouteLabel, children, breadcrumbs, viewSwitchChecked, viewSwitchFunction, ...css } = props;
+    const { subRouteLabel, children, breadcrumbDatas: breadcrumbs, viewSwitchChecked, viewSwitchFunction, ...css } = props;
 
+    // params
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
-    const location = useLocation();
-
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
+    // util
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
-    const currentRoute = objToArray(applicationRoutes.administrationRoute)
-        .filter(route => isMatchingCurrentRoute(route, false))[0];
 
+    // http
     const { briefUserData } = useBriefUserData(userId);
     const { courseBriefData } = useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
+
+    // calc
+    const isApplicationRoute = (obj: any) => !!obj.route;
+
+    const currentRoute = getKeys(applicationRoutes.administrationRoute)
+        .map(x => applicationRoutes.administrationRoute[x] as ApplicationRoute)
+        .filter(x => isApplicationRoute(x))
+        .single(route => isMatchingCurrentRoute(route).isMatchingRoute);
 
     const subRouteName = subRouteLabel
         ? subRouteLabel
@@ -83,7 +123,6 @@ export const AdminBreadcrumbsHeader = (props: {
         ? { title: subRouteName! }
         : null;
 
-
     return <Flex
         flex="1"
         mb="20px"
@@ -92,24 +131,30 @@ export const AdminBreadcrumbsHeader = (props: {
         <Flex
             justify="space-between"
             minH="38px">
+
             {/* breadcrumbs */}
             {breadcrumbs
-                ? <Breadcrumbs>
-                    {breadcrumbs}
-                </Breadcrumbs>
-                : <Breadcrumbs>
-                    {currentRoute && <BreadcrumbLink
-                        key={1}
-                        isCurrent={!subRoute}
-                        to={currentRoute.route}
-                        title={currentRoute.title}
-                        iconComponent={currentRoute.icon} />}
+                ? (
+                    <Breadcrumbs>
+                        {breadcrumbs}
+                    </Breadcrumbs>
+                )
+                : (
+                    <Breadcrumbs>
 
-                    {subRoute && <BreadcrumbLink
-                        key={2}
-                        isCurrent
-                        title={subRoute.title} />}
-                </Breadcrumbs>}
+                        {currentRoute && <BreadcrumbLink
+                            key={1}
+                            isCurrent={!subRoute}
+                            route={currentRoute}
+                            title={currentRoute.title}
+                            iconComponent={currentRoute.icon} />}
+
+                        {subRoute && <BreadcrumbLink
+                            key={2}
+                            isCurrent
+                            title={subRoute.title} />}
+                    </Breadcrumbs>
+                )}
 
             {viewSwitchFunction && <FormGroup>
 
@@ -130,8 +175,6 @@ export const AdminBreadcrumbsHeader = (props: {
                 </FormControl>
             </FormGroup>}
         </Flex>
-
-
 
         {/* children  */}
         <Flex

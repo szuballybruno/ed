@@ -31,12 +31,13 @@ export const UserSettingsPage = () => {
 
         <LeftPane p="20px"
             flexBasis="300px" >
+
             <NavigationLinkList
-                items={[
+                routes={[
                     applicationRoutes.settingsRoute.preferencesRoute,
                     applicationRoutes.settingsRoute.featurePreviewRoute,
                     applicationRoutes.settingsRoute.developmentNotes
-                ]}></NavigationLinkList>
+                ]} />
         </LeftPane>
 
         <ContentPane>

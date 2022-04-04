@@ -1,10 +1,10 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { AnswerQuestionDTO } from "../../shared/dtos/AnswerQuestionDTO";
-import { AnswerResultDTO } from "../../shared/dtos/AnswerResultDTO";
-import { QuestionDTO } from "../../shared/dtos/QuestionDTO";
-import { QuestionEditDataDTO } from "../../shared/dtos/QuestionEditDataDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { usePostData, usePostDataUnsafe } from "../core/httpClient";
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostData, usePostDataUnsafe } from '../core/httpClient';
 
 export const useAnswerPractiseQuestion = () => {
 

@@ -38,7 +38,7 @@ export const AdminCourseListSubpage = () => {
     const showError = useShowErrorDialog();
     const warnDialogLogic = useEpistoDialogLogic('warnDialog');
 
-    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.coursesRoute.addRoute.route);
+    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.coursesRoute.addRoute);
 
     const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
     const isAllCoursesSelected = !courses.some(course => !selectedCourseIds.some(uid => uid === course.courseId));
@@ -118,12 +118,12 @@ export const AdminCourseListSubpage = () => {
         {
             name: 'editButton',
             text: 'Adatok',
-            onClick: () => navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: singleSelectedCourse.courseId })
+            onClick: () => navigate(administrationRoutes.coursesRoute.courseDetailsRoute, { courseId: singleSelectedCourse.courseId })
         },
         {
             name: 'editButton',
             text: 'Tartalom',
-            onClick: () => navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: singleSelectedCourse.courseId })
+            onClick: () => navigate(administrationRoutes.coursesRoute.courseContentRoute, { courseId: singleSelectedCourse.courseId })
         },
         {
             name: 'deleteButton',
@@ -133,7 +133,7 @@ export const AdminCourseListSubpage = () => {
         {
             name: 'statsButton',
             text: 'Statisztika megjelenítése',
-            onClick: () => navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: singleSelectedCourse.courseId })
+            onClick: () => navigate(administrationRoutes.coursesRoute.statisticsCourseRoute, { courseId: singleSelectedCourse.courseId })
         }
     ];
 
@@ -229,7 +229,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant={'colored'}
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.courseDetailsRoute.route, { courseId: course.courseId });
+                                        navigate(administrationRoutes.coursesRoute.courseDetailsRoute, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20 }}>
                                     <ShortText style={{ width: '20px', height: '20px' }} />
@@ -238,7 +238,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant={'colored'}
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.courseContentRoute.route, { courseId: course.courseId });
+                                        navigate(administrationRoutes.coursesRoute.courseContentRoute, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20, marginLeft: 5 }}>
                                     <ViewList style={{ width: '20px', height: '20px' }} />
@@ -247,7 +247,7 @@ export const AdminCourseListSubpage = () => {
                                 <EpistoButton
                                     variant="colored"
                                     onClick={() => {
-                                        navigate(administrationRoutes.coursesRoute.statisticsCourseRoute.route, { courseId: course.courseId });
+                                        navigate(administrationRoutes.coursesRoute.statisticsCourseRoute, { courseId: course.courseId });
                                     }}
                                     style={{ width: 20, marginLeft: 5 }} >
                                     <Equalizer style={{ width: '20px', height: '20px' }} />

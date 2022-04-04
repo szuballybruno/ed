@@ -1,10 +1,10 @@
-import { AnswerQuestionDTO } from "../../shared/dtos/AnswerQuestionDTO";
-import { AnswerResultDTO } from "../../shared/dtos/AnswerResultDTO";
-import { CourseItemDTO } from "../../shared/dtos/CourseItemDTO";
-import { PlayerDataDTO } from "../../shared/dtos/PlayerDataDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostData } from "../core/httpClient";
+import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
+import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
+import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostData } from '../core/httpClient';
 
 export const usePlayerData = (descriptorCode: string) => {
 

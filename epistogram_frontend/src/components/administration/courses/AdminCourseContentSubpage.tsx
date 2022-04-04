@@ -331,6 +331,7 @@ export const AdminCourseContentSubpage = () => {
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const videoEditDialogLogic = useEpistoDialogLogic('video_edit_dialog', { defaultCloseButtonType: 'top' });
     const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
+    const isAnySelected = courseId != -1;
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
@@ -512,7 +513,8 @@ export const AdminCourseContentSubpage = () => {
         className="whall">
 
         {/* frame */}
-        <CourseAdministartionFrame>
+        <CourseAdministartionFrame
+            isAnySelected={isAnySelected}>
 
             {/* Right side content */}
             <AdminSubpageHeader

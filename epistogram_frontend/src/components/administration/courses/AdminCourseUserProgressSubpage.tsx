@@ -13,7 +13,7 @@ export const CircularProgressWithLabel = (
     return (
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
             <CircularProgress variant="determinate"
-{...props} />
+                {...props} />
             <Box
                 sx={{
                     top: 0,
@@ -127,7 +127,9 @@ export const AdminCourseUserProgressSubpage = () => {
     });
 
 
-    return <CourseAdministartionFrame>
+    return <CourseAdministartionFrame
+        isAnySelected={true}>
+        
         {/* Right side content */}
         <AdminSubpageHeader
             tabMenuItems={[
@@ -140,7 +142,7 @@ export const AdminCourseUserProgressSubpage = () => {
             direction="column">
 
             <DataGrid rows={gridRows()}
-columns={gridColumns} />
+                columns={gridColumns} />
         </AdminSubpageHeader>
     </CourseAdministartionFrame>;
 };

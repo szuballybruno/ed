@@ -1,4 +1,4 @@
-import { TeacherBadgeNameType } from "../types/sharedTypes";
+import { TeacherBadgeNameType } from '../types/sharedTypes';
 
 export class TeacherInfoEditDTO {
     id: number;

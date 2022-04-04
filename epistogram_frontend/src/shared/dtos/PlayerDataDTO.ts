@@ -1,8 +1,8 @@
-import { ExamPlayerDataDTO } from "./ExamPlayerDataDTO";
-import { ModuleDetailedDTO } from "./ModuleDetailedDTO";
-import { ModuleDTO } from "./ModuleDTO";
-import { CourseItemStateType, CourseModeType } from "../types/sharedTypes";
-import { VideoDTO } from "./VideoDTO";
+import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
+import { ModuleDetailedDTO } from './ModuleDetailedDTO';
+import { ModuleDTO } from './ModuleDTO';
+import { CourseItemStateType, CourseModeType } from '../types/sharedTypes';
+import { VideoDTO } from './VideoDTO';
 
 export type PlayerDataDTO = {
     video: VideoDTO | null;

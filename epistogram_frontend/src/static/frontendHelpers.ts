@@ -1,14 +1,15 @@
-import { useMediaQuery } from "@chakra-ui/react";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { LoadingStateType } from "../models/types";
-import { httpGetAsync } from "../services/core/httpClient";
-import { validatePassowrd } from "../shared/logic/sharedLogic";
-import { ErrorCodeType, RoleIdEnum } from "../shared/types/sharedTypes";
-import { assetCDNStorageUrl } from "./Environemnt";
-import { stringifyQueryObject } from "./locationHelpers";
-import { translatableTexts } from "./translatableTexts";
+import { useMediaQuery } from '@chakra-ui/react';
+import queryString from 'query-string';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { matchRoutes, useLocation, useParams } from 'react-router-dom';
+import { ApplicationRoute, LoadingStateType } from '../models/types';
+import { httpGetAsync } from '../services/core/httpClient';
+import { getKeys, validatePassowrd } from '../shared/logic/sharedLogic';
+import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
+import { assetCDNStorageUrl, verboseLogging } from './Environemnt';
+import { stringifyQueryObject } from './locationHelpers';
+import { translatableTexts } from './translatableTexts';
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
@@ -29,7 +30,7 @@ export const formatTimespan = (seconds: number) => {
     const roundHours = Math.floor(totalHours);
     const minutes = (totalHours - roundHours) * 60;
     const roundMinutes = Math.floor(minutes);
-    const formattedSpentTime = `${roundHours > 0 ? roundHours + "h " : ""}${roundMinutes}m`;
+    const formattedSpentTime = `${roundHours > 0 ? roundHours + 'h ' : ''}${roundMinutes}m`;
 
     return formattedSpentTime;
 };
@@ -37,21 +38,22 @@ export const formatTimespan = (seconds: number) => {
 export const formatTime = (seconds: number) => {
 
     return new Date(seconds * 1000)
-        .toLocaleTimeString("en-GB", {
-            timeZone: "Etc/UTC",
+        .toLocaleTimeString('en-GB', {
+            timeZone: 'Etc/UTC',
             hour12: false,
-            minute: "2-digit",
-            second: "2-digit"
+            minute: '2-digit',
+            second: '2-digit'
         });
 };
 
 export const dateTimeToString = (date: Date | string) => {
 
     if (!date)
-        return "";
+        return '';
 
     if (isString(date))
-        return new Date(date).toLocaleString();
+        return new Date(date)
+            .toLocaleString();
 
     return date.toLocaleString();
 };
@@ -65,7 +67,7 @@ export const getUrl = (path: string, params?: any, query?: any) => {
             if (Object.prototype.hasOwnProperty.call(params, key)) {
 
                 const element = params[key];
-                const token = ":" + key;
+                const token = ':' + key;
 
                 replacedPath = replacedPath.replace(token, element);
             }
@@ -105,8 +107,8 @@ export const parseIntOrNull = (str: string) => {
 
     try {
 
-        if (str === "" || str === null || str === undefined)
-            str = "0";
+        if (str === '' || str === null || str === undefined)
+            str = '0';
 
         return parseInt(str);
     }
@@ -142,18 +144,18 @@ export const daysUntil = (firstDate: Date, secondDate: Date) => {
 export const getMonthName = (index: number) => {
 
     return [
-        "Jan",
-        "Febr",
-        "Márc",
-        "Ápr",
-        "Máj",
-        "Jún",
-        "Júl",
-        "Aug",
-        "Szept",
-        "Okt",
-        "Nov",
-        "Dec"
+        'Jan',
+        'Febr',
+        'Márc',
+        'Ápr',
+        'Máj',
+        'Jún',
+        'Júl',
+        'Aug',
+        'Szept',
+        'Okt',
+        'Nov',
+        'Dec'
     ][index];
 };
 
@@ -163,38 +165,58 @@ export const disallowWindowNavigation = () => {
         // Cancel the event
         // e.preventDefault();
         if (e) {
-            e.returnValue = ""; // Legacy method for cross browser support
+            e.returnValue = ''; // Legacy method for cross browser support
         }
-        return ""; // Legacy method for cross browser support
+        return ''; // Legacy method for cross browser support
     };
+};
+
+export const useCurrentUrlPathname = () => {
+
+    const location = useLocation();
+    return location.pathname;
 };
 
 export const useIsMatchingCurrentRoute = () => {
 
-    // const matchPath = RouterDom.useMatch();
-    // const currentPath = useLocation().pathname;
+    const urlPathname = useCurrentUrlPathname();
+    const params = useParams();
 
-    // const isMatchingCurrentRoute = (route: ApplicationRoute, exactOverride?: boolean) => {
+    const replacePath = (path: string, params: any) => {
 
-    //     const match = matchPath(
-    //         currentPath,
-    //         {
-    //             path: route.route,
-    //             exact: exactOverride !== undefined ? exactOverride : !!route.exact,
-    //             strict: false
-    //         });
+        let replPath = '' + path;
 
-    //     return !!match;
-    // };
+        getKeys(params)
+            .forEach(key => {
 
-    // TODO
-    return (asd: any, asd2?: any) => false; 
+                const tag = ':' + (key as string);
 
-    // return isMatchingCurrentRoute;
+                replPath = replPath
+                    .replaceAll(tag, params[key]);
+            });
+
+        return replPath;
+    };
+
+    return (route: ApplicationRoute) => {
+
+        if (!route)
+            throw new Error('Route is null or undefined!');
+
+        const path = route.route.getAbsolutePath();
+        const replacedPath = replacePath(path, params);
+        const isMatchingRoute = urlPathname.startsWith(replacedPath);
+        const isMatchingRouteExactly = urlPathname === replacedPath;
+
+        if (verboseLogging)
+            console.log(`Loc: ${urlPathname} ReplacedPath: ${replacedPath} Match: ${isMatchingRoute}`);
+
+        return { isMatchingRoute, isMatchingRouteExactly };
+    };
 };
 
-export const isString = (obj: any) => typeof obj === "string" || obj instanceof String;
-export const isNumber = (obj: any) => typeof obj === "number" || obj instanceof Number;
+export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
+export const isNumber = (obj: any) => typeof obj === 'number' || obj instanceof Number;
 
 export function distinct<T>(array: T[]) {
 
@@ -235,7 +257,7 @@ export const usePaging = <T>(
     onNextOverNavigation?: () => void) => {
 
     if (!hasValue(items))
-        throw new Error("Cannot page a null or undefined items collection!");
+        throw new Error('Cannot page a null or undefined items collection!');
 
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
 
@@ -277,10 +299,10 @@ export const usePaging = <T>(
     const setItem = (itemIndex: number) => {
 
         if (itemIndex < 0)
-            throw new Error("Item index is less than 0!");
+            throw new Error('Item index is less than 0!');
 
         if (itemIndex > max - 1)
-            throw new Error("Item index is more than the length of the items collection!");
+            throw new Error('Item index is more than the length of the items collection!');
 
         setCurrentItemIndex(itemIndex);
     };
@@ -328,7 +350,7 @@ export const getQueryParam = (name: string) => {
 
 export const useIsDesktopView = () => {
 
-    const [isDesktopView] = useMediaQuery("(min-width: 980px)");
+    const [isDesktopView] = useMediaQuery('(min-width: 980px)');
     return isDesktopView;
 };
 
@@ -342,8 +364,8 @@ export const useIsScreenWiderThan = (minimumPixels: number) => {
 
 export const usePasswordEntryState = () => {
 
-    const [password, setPassword] = useState("");
-    const [passwordCompare, setPasswordCompare] = useState("");
+    const [password, setPassword] = useState('');
+    const [passwordCompare, setPasswordCompare] = useState('');
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
 
@@ -353,28 +375,28 @@ export const usePasswordEntryState = () => {
 
         switch (error) {
 
-            case "passwordIsEmpty":
+            case 'passwordIsEmpty':
                 setPasswordError(null);
                 setPasswordCompareError(null);
                 return false;
 
-            case "tooShort":
-                setPasswordError("A jelszó túl rövid!");
+            case 'tooShort':
+                setPasswordError('A jelszó túl rövid!');
                 setPasswordCompareError(null);
                 return false;
 
-            case "tooLong":
-                setPasswordError("A jelszó túl hosszú!");
+            case 'tooLong':
+                setPasswordError('A jelszó túl hosszú!');
                 setPasswordCompareError(null);
                 return false;
 
-            case "doesNotMatchControlPassword":
-                setPasswordError("A jelszavak nem egyeznek!");
-                setPasswordCompareError("A jelszavak nem egyeznek!");
+            case 'doesNotMatchControlPassword':
+                setPasswordError('A jelszavak nem egyeznek!');
+                setPasswordCompareError('A jelszavak nem egyeznek!');
                 return false;
 
-            case "hasNoNumber":
-                setPasswordError("A jelszó nem tartalmaz számot!");
+            case 'hasNoNumber':
+                setPasswordError('A jelszó nem tartalmaz számot!');
                 setPasswordCompareError(null);
                 return false;
 
@@ -418,7 +440,7 @@ export const useReactQuery = <T>(
     });
 
     const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
-    const advancedStatus = isFetching ? "loading" : status as LoadingStateType;
+    const advancedStatus = isFetching ? 'loading' : status as LoadingStateType;
 
     return {
         status: advancedStatus,
@@ -445,12 +467,12 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
     });
 
     const state = (queryResult.isIdle
-        ? "idle"
+        ? 'idle'
         : queryResult.isFetching
-            ? "loading"
+            ? 'loading'
             : queryResult.isError
-                ? "error"
-                : "success") as LoadingStateType;
+                ? 'error'
+                : 'success') as LoadingStateType;
 
     const refetch = async () => {
 
@@ -469,7 +491,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
     return result;
 };
 
-export const getAssetUrl = (path: string, assetUrlPath?: string) => (assetUrlPath ? assetUrlPath : assetCDNStorageUrl) + ("/" + path).replace("//", "/");
+export const getAssetUrl = (path: string, assetUrlPath?: string) => (assetUrlPath ? assetUrlPath : assetCDNStorageUrl) + ('/' + path).replace('//', '/');
 
 export const hasValue = (obj: any) => {
 
@@ -479,7 +501,7 @@ export const hasValue = (obj: any) => {
     if (obj === null)
         return false;
 
-    if (obj === "")
+    if (obj === '')
         return false;
 
     return true;
@@ -527,11 +549,17 @@ export const getRandomInteger = (min: number, max: number) => {
 };
 
 export const secondsToTime = (e: any) => {
-    const h = Math.floor(e / 3600).toString().padStart(2, "0"),
-        m = Math.floor(e % 3600 / 60).toString().padStart(2, "0"),
-        s = Math.floor(e % 60).toString().padStart(2, "0");
+    const h = Math.floor(e / 3600)
+        .toString()
+        .padStart(2, '0'),
+        m = Math.floor(e % 3600 / 60)
+            .toString()
+            .padStart(2, '0'),
+        s = Math.floor(e % 60)
+            .toString()
+            .padStart(2, '0');
 
-    return h !== "00" ? h + ":" + m + ":" + s : m + ":" + s;
+    return h !== '00' ? h + ':' + m + ':' + s : m + ':' + s;
 };
 
 export const isArray = (obj: any) => {
@@ -539,22 +567,27 @@ export const isArray = (obj: any) => {
     return Array.isArray(obj);
 };
 
-export const objToArray = (obj: any) => {
+// export const objToArray = (obj: any) => {
 
-    const properties = [] as any[];
+//     const properties = [] as any[];
 
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+//     for (const key in obj) {
+//         if (Object.prototype.hasOwnProperty.call(obj, key)) {
 
-            const element = obj[key];
-            properties.push(element);
-        }
-    }
+//             const element = obj[key];
+//             properties.push(element);
+//         }
+//     }
 
-    return properties;
-};
+//     return properties;
+// };
 
 export const isCurrentRoute = (route: string) => window.location.pathname === route;
+
+export const isCurrentAppRoute = (route: ApplicationRoute) => {
+
+    return false;
+};
 
 export class ErrorCode extends Error {
 
@@ -590,15 +623,15 @@ export const getEventFileCallback = (callback: (value: any) => void) => {
 export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 
     if (code === 400)
-        return "bad request";
+        return 'bad request';
 
     if (code === 500)
-        return "internal server error";
+        return 'internal server error';
 
     if (code === 403)
-        return "forbidden";
+        return 'forbidden';
 
-    return "http error";
+    return 'http error';
 };
 
 export const useForceUpdate = () => {

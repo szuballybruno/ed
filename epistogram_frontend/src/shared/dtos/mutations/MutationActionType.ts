@@ -1,2 +1,2 @@
 
-export type MutationActionType = "delete" | "update" | "add";
+export type MutationActionType = 'delete' | 'update' | 'add';

@@ -1,4 +1,4 @@
-import { CourseLearningDTO } from "./CourseLearningDTO";
+import { CourseLearningDTO } from './CourseLearningDTO';
 
 export type UserCoursesDataDTO = {
     isAnyCoursesComplete: boolean,

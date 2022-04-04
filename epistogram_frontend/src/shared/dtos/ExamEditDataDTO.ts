@@ -1,4 +1,4 @@
-import { QuestionDTO } from "./QuestionDTO";
+import { QuestionDTO } from './QuestionDTO';
 
 export class ExamEditDataDTO {
     id: number;

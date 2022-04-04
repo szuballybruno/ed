@@ -34,7 +34,7 @@ const NoQuestionsAvailable = () => {
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
                 <Text
                     as="text"
-                    onClick={() => navigate('/courses')}
+                    onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
                     color="var(--epistoTeal)"
                     fontWeight="bold"
                     cursor="pointer">
@@ -110,7 +110,7 @@ const InitialGreetings = () => {
                 <EpistoButton
                     variant={'colored'}
                     onClick={() => {
-                        navigate(applicationRoutes.availableCoursesRoute.route);
+                        navigate(applicationRoutes.availableCoursesRoute);
                     }}>
 
                     {translatableTexts.practiseQuestions.goToCourses}

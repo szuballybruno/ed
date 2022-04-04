@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 export const useIntParam = (name: string) => {
 
@@ -23,10 +23,10 @@ export const useBoolParam = (name: string) => {
     const params = useParams();
     const value = params[name];
 
-    if (value !== "true" && value !== "false")
-        throw new Error("Failed to parse boolean url param!");
+    if (value !== 'true' && value !== 'false')
+        throw new Error('Failed to parse boolean url param!');
 
-    return value === "true";
+    return value === 'true';
 };
 
 export const useSetQueryParams = () => {
@@ -47,18 +47,18 @@ export const useSetQueryParams = () => {
 
 export const stringifyQueryObject = (queryObj: any) => {
 
-    let qs = "?";
+    let qs = '?';
 
     for (const key in queryObj) {
         if (Object.prototype.hasOwnProperty.call(queryObj, key)) {
 
             const element = queryObj[key];
-            const andMark = qs === "?"
-                ? ""
-                : "&";
+            const andMark = qs === '?'
+                ? ''
+                : '&';
 
             if (element !== undefined && element !== null)
-                qs += andMark + key + "=" + element;
+                qs += andMark + key + '=' + element;
         }
     }
 

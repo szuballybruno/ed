@@ -1,4 +1,4 @@
-import { AnswerDTO } from "./AnswerDTO";
+import { AnswerDTO } from './AnswerDTO';
 
 export type PractiseQuestionDTO = {
     questionId: number;

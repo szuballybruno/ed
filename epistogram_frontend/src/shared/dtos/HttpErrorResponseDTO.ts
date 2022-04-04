@@ -1,4 +1,4 @@
-import { ErrorCodeType } from "../types/sharedTypes";
+import { ErrorCodeType } from '../types/sharedTypes';
 
 export default class HttpErrorResponseDTO {
 

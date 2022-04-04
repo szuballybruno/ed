@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { UserDTO } from "../../shared/dtos/UserDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { fetchNewAccessTokenIntervalInMs, fetchUserIntervalInMs, verboseLogging } from "../../static/Environemnt";
-import { httpGetAsync, usePostDataUnsafe } from "../core/httpClient";
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { UserDTO } from '../../shared/dtos/UserDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { fetchNewAccessTokenIntervalInMs, fetchUserIntervalInMs, verboseLogging } from '../../static/Environemnt';
+import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
-export type AuthenticationStateType = "loading" | "authenticated" | "forbidden";
+export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden';
 
 export const useLogout = () => {
 
@@ -24,16 +24,16 @@ export const useUserFetching = (enabled: boolean) => {
     const bgFetchingEnabled = enabled && isBgFetchingEnabled;
 
     if (verboseLogging)
-        console.log("Background current user fetching set to: " + bgFetchingEnabled);
+        console.log('Background current user fetching set to: ' + bgFetchingEnabled);
 
     const queryResult = useQuery(
-        "getCurrentUser",
+        'getCurrentUser',
         () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: bgFetchingEnabled ? fetchUserIntervalInMs : false,
         enabled: true,
-        notifyOnChangeProps: ["data", "isSuccess", "status"]
+        notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
 
     const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;
@@ -46,10 +46,10 @@ export const useUserFetching = (enabled: boolean) => {
     }, [isSuccess]);
 
     const authState = (isLoading
-        ? "loading"
+        ? 'loading'
         : currentUser
-            ? "authenticated"
-            : "forbidden") as AuthenticationStateType;
+            ? 'authenticated'
+            : 'forbidden') as AuthenticationStateType;
 
     // console.log("-----");
     // console.log(authState);
@@ -92,13 +92,13 @@ export const useLogInUser = () => {
 export const useRenewUserSessionPooling = () => {
 
     const { isSuccess } = useQuery(
-        ["renewUserSession"],
+        ['renewUserSession'],
         () => httpGetAsync(apiRoutes.authentication.renewUserSession), {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: fetchNewAccessTokenIntervalInMs,
         refetchIntervalInBackground: true,
-        notifyOnChangeProps: ["isSuccess"]
+        notifyOnChangeProps: ['isSuccess']
     });
 
     return { isSuccess };

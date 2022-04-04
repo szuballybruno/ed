@@ -33,23 +33,23 @@ export const AdminUserCourseContentSubpage = (props: {
     const { navigate } = useNavigation();
 
     return <AdminBreadcrumbsHeader
-        breadcrumbs={[
-            <BreadcrumbLink
-                key={1}
-                title="Felhasználók"
-                iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-                to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-            <BreadcrumbLink
-                key={2}
-                title={userEditData?.lastName + ' ' + userEditData?.firstName}
-                to={applicationRoutes.administrationRoute.usersRoute.route + '/' + userId + '/edit'}
-                isCurrent />
+        breadcrumbDatas={[
+            // <BreadcrumbLink
+            //     key={1}
+            //     title="Felhasználók"
+            //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
+            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
+            // <BreadcrumbLink
+            //     key={2}
+            //     title={userEditData?.lastName + ' ' + userEditData?.firstName}
+            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/' + userId + '/edit'}
+            //     isCurrent />
         ]}>
 
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute.route, { userId: userId });
+                navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: userId });
             }} />
 
         <AdminSubpageHeader

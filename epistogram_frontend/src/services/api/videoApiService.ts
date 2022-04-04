@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { CreateVideoDTO } from "../../shared/dtos/CreateVideoDTO";
-import { IdBodyDTO } from "../../shared/dtos/IdBodyDTO";
-import { IdResultDTO } from "../../shared/dtos/IdResultDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { VideoEditDTO } from "../../shared/dtos/VideoEditDTO";
-import { LoadingStateType } from "../../models/types";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { uploadeFileChunksAsync } from "../core/fileUploadClient";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { useState } from 'react';
+import { CreateVideoDTO } from '../../shared/dtos/CreateVideoDTO';
+import { IdBodyDTO } from '../../shared/dtos/IdBodyDTO';
+import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
+import { LoadingStateType } from '../../models/types';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { uploadeFileChunksAsync } from '../core/fileUploadClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCreateVideo = () => {
 
@@ -18,9 +18,9 @@ export const useCreateVideo = () => {
 
             return qr.postDataAsync({
                 moduleId,
-                title: "",
-                description: "",
-                subtitle: ""
+                title: '',
+                description: '',
+                subtitle: ''
             });
         },
         createVideoState: qr.state,
@@ -67,11 +67,11 @@ export const useVideoEditData = (videoId: number) => {
 
 export const useUploadVideoFileAsync = () => {
 
-    const [uploadState, setUploadState] = useState<LoadingStateType>("idle");
+    const [uploadState, setUploadState] = useState<LoadingStateType>('idle');
 
     const saveVideoFileAsync = async (videoId: number, file: File) => {
 
-        setUploadState("loading");
+        setUploadState('loading');
 
         try {
 
@@ -79,11 +79,11 @@ export const useUploadVideoFileAsync = () => {
         }
         catch (e) {
 
-            setUploadState("idle");
+            setUploadState('idle');
             throw e;
         }
 
-        setUploadState("success");
+        setUploadState('success');
     };
 
     return {

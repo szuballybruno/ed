@@ -1,9 +1,9 @@
-import { useForceUpdate } from "@chakra-ui/react";
-import { MutableRefObject, useRef } from "react";
-import { FieldMutation } from "../../../shared/dtos/mutations/FieldMutation";
-import { Mutation } from "../../../shared/dtos/mutations/Mutation";
-import { getKeys } from "../../../shared/logic/sharedLogic";
-import { KeyOfType } from "../../../shared/types/advancedTypes";
+import { useForceUpdate } from '@chakra-ui/react';
+import { MutableRefObject, useRef } from 'react';
+import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
+import { Mutation } from '../../../shared/dtos/mutations/Mutation';
+import { getKeys } from '../../../shared/logic/sharedLogic';
+import { KeyOfType } from '../../../shared/types/advancedTypes';
 
 export type OnMutaionHandlerActionType<TMutatee, TKey, TField extends keyof TMutatee> =
     (params: {
@@ -39,7 +39,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
         const key = getCompareKey(obj);
         if (key === null || key === undefined)
-            throw new Error("Can't use null or undeined as object key!");
+            throw new Error('Can\'t use null or undeined as object key!');
 
         return key;
     };
@@ -59,14 +59,14 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
     const mutatedItems = ([...items])
         .concat(mutRef.current
-            .filter(mut => mut.action === "add")
+            .filter(mut => mut.action === 'add')
             .map(mut => createObj(mut)))
         .filter(item => !mutRef.current
-            .some(mut => mut.action === "delete" && mut.key === getCompareKeyValue(item)));
+            .some(mut => mut.action === 'delete' && mut.key === getCompareKeyValue(item)));
 
     mutRef
         .current
-        .filter(mut => mut.action === "update")
+        .filter(mut => mut.action === 'update')
         .forEach(mut => {
 
             const itemIndex = mutatedItems
@@ -110,7 +110,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         const { field, key, newValue, noOnMutationCallback } = params;
 
         if (key === null || key === undefined)
-            throw new Error("Mutation error, key is null or undefined!");
+            throw new Error('Mutation error, key is null or undefined!');
 
         const setMutationsWithCallback = (muts: Mutation<TMutatee, TKey>[]) => {
 
@@ -165,9 +165,9 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         const oldMutation = newMutations
             .filter(x => x.key === key)[0];
 
-        if (oldMutation && oldMutation.action === "delete") {
+        if (oldMutation && oldMutation.action === 'delete') {
 
-            console.warn("Tying to mutate an object that hase already been marked as removed.");
+            console.warn('Tying to mutate an object that hase already been marked as removed.');
             return;
         }
 
@@ -176,7 +176,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             : {
                 key,
                 fieldMutators: [],
-                action: "update"
+                action: 'update'
             };
 
         // if created new mutation, add it to the mutations 
@@ -206,16 +206,16 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     const remove = (key: TKey) => {
 
         if (key === null || key === undefined)
-            throw new Error("Mutation error, key is null or undefined!");
+            throw new Error('Mutation error, key is null or undefined!');
 
         const newList = [...mutRef.current
             .filter(x => x.key !== key)];
 
-        if (mutRef.current.filter(x => x.key === key)[0]?.action !== "add") {
+        if (mutRef.current.filter(x => x.key === key)[0]?.action !== 'add') {
 
             const mut: Mutation<TMutatee, TKey> = {
                 key,
-                action: "delete",
+                action: 'delete',
                 fieldMutators: []
             };
 
@@ -228,13 +228,13 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     const add = (key: TKey, obj: Partial<TMutatee>) => {
 
         if (key === null || key === undefined)
-            throw new Error("Mutation error, key is null or undefined!");
+            throw new Error('Mutation error, key is null or undefined!');
 
         setCompareKey(obj as TMutatee, key);
 
         const mut: Mutation<TMutatee, TKey> = {
             key,
-            action: "add",
+            action: 'add',
             fieldMutators: getKeys(obj as TMutatee)
                 .map((x): FieldMutation<TMutatee, any> => {
 
@@ -253,7 +253,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     const isMutated = (key: TKey) => {
 
         if (key === null || key === undefined)
-            throw new Error("Mutation error, key is null or undefined!");
+            throw new Error('Mutation error, key is null or undefined!');
 
         const mut = mutRef
             .current
@@ -264,7 +264,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             if (!mut)
                 return false;
 
-            if (mut.action === "add")
+            if (mut.action === 'add')
                 return true;
 
             return mut

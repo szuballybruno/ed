@@ -1,7 +1,7 @@
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { VideoRatingDTO } from "../../shared/dtos/VideoRatingDTO";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { VideoRatingDTO } from '../../shared/dtos/VideoRatingDTO';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRateVideoDifficulty = () => {
 

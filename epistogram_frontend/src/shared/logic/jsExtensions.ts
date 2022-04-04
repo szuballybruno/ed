@@ -92,7 +92,7 @@ Array.prototype.last = function <T>(func: (item: T) => T) {
     const filtered = this.filter(func);
 
     if (filtered.length === 0)
-        throw new Error("Last operaion found no matching elements!");
+        throw new Error('Last operaion found no matching elements!');
 
     return filtered[filtered.length - 1];
 };
@@ -106,7 +106,7 @@ Array.prototype.first = function <T>(func?: (item: T) => boolean) {
     const filtered = this.filter(func);
 
     if (filtered.length === 0)
-        throw new Error("First operaion found no matching elements!");
+        throw new Error('First operaion found no matching elements!');
 
     return filtered[0];
 };
@@ -117,10 +117,10 @@ Array.prototype.single = function <T>(func: (item: T) => T) {
     const filtered = this.filter(func);
 
     if (filtered.length === 0)
-        throw new Error("Single operaion found no matching elements!");
+        throw new Error('Single operaion found no matching elements!');
 
     if (filtered.length > 1)
-        throw new Error("Single operation found more than one matching element!");
+        throw new Error('Single operation found more than one matching element!');
 
     return filtered[0];
 };

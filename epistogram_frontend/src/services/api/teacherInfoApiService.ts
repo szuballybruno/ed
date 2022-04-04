@@ -1,7 +1,7 @@
-import { TeacherInfoEditDTO } from "../../shared/dtos/TeacherInfoEditDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useTeacherInfoEditData = (userId: number) => {
 

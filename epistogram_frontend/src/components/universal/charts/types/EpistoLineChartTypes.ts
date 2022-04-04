@@ -1,4 +1,4 @@
-import { EpistoChartLegendType, EpistoChartTooltipType, EpistoChartXAxisType, EpistoChartYAxisType, EpistoChartSeriesOptionsType } from "./EpistoChartCommonTypes";
+import { EpistoChartLegendType, EpistoChartTooltipType, EpistoChartXAxisType, EpistoChartYAxisType, EpistoChartSeriesOptionsType } from './EpistoChartCommonTypes';
 
 export type EpistoLineChartDataType = number[][]
 

@@ -31,7 +31,7 @@ export const SignupPage = () => {
 
     const handleGoToHomePage = () => {
 
-        navigate(applicationRoutes.homeRoute.route);
+        navigate(applicationRoutes.homeRoute);
 
         console.log('Showing guide...');
         startUserGuide();

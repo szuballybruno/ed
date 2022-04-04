@@ -1,6 +1,6 @@
-import { HumanSkillBenefitDTO } from "./HumanSkillBenefitDTO";
-import { ModuleShortDTO } from "./ModuleShortDTO";
-import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from "../types/sharedTypes";
+import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
+import { ModuleShortDTO } from './ModuleShortDTO';
+import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from '../types/sharedTypes';
 
 export class CourseDetailsDTO {
     title: string;

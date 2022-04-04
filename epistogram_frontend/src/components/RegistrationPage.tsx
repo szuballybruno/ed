@@ -61,7 +61,7 @@ export const RegistrationPage = () => {
 
             showNotification(translatableTexts.registrationPage.successfulRegistration);
             await refetchUser();
-            navigate(applicationRoutes.signupRoute.route);
+            navigate(applicationRoutes.signupRoute);
         }
         catch (e) {
 

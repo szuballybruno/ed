@@ -178,7 +178,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const currentBridge = await this._ormService
             .getRepository(UserCourseBridge)
-            .findOneOrFail({
+            .findOne({
                 where: {
                     userId,
                     isCurrent: true

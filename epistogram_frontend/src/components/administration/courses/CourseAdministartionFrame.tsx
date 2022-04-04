@@ -9,9 +9,12 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminCourseList } from './AdminCourseList';
 
-export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
+export const CourseAdministartionFrame = (params: {
+    children?: ReactNode,
+    isAnySelected: boolean
+}) => {
 
-    const { children } = params;
+    const { children, isAnySelected } = params;
 
     // util
     const { navigate } = useNavigation();
@@ -50,17 +53,18 @@ export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
             className="whall">
 
             {/* header */}
-            <AdminBreadcrumbsHeader
-                breadcrumbs={[
-                    <BreadcrumbLink
-                        key={1}
-                        title="Kurzusok"
-                        iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon} />,
-                    currentCourse && <BreadcrumbLink
-                        key={2}
-                        title={currentCourse?.title + ''}
-                        isCurrent />
-                ]}>
+            <AdminBreadcrumbsHeader>
+                
+            {/* breadcrumbDatas={[
+                    // <BreadcrumbLink
+                    //     key={1}
+                    //     title="Kurzusok"
+                    //     iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon} />,
+                    // currentCourse && <BreadcrumbLink
+                    //     key={2}
+                    //     title={currentCourse?.title + ''}
+                    //     isCurrent />
+                ]} */}
 
                 {/* course list */}
                 <AdminCourseList
@@ -68,7 +72,7 @@ export const CourseAdministartionFrame = (params: { children?: ReactNode }) => {
                     courses={courses} />
 
                 {/* content pane */}
-                {children
+                {isAnySelected
                     ? children
                     : <Flex
                         justify="center"

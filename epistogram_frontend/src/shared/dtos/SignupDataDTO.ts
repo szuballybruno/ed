@@ -1,4 +1,4 @@
-import { SignupQuestionDTO } from "./SignupQuestionDTO";
+import { SignupQuestionDTO } from './SignupQuestionDTO';
 
 export type SignupDataDTO = {
     questions: SignupQuestionDTO[];

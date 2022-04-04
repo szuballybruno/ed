@@ -3,17 +3,21 @@ import React from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { getAssetUrl } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../../universal/charts/EpistoBarChart';
 import { EpistoPieChart } from '../../universal/charts/EpistoPieChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { UserActivityDistributionChart } from '../users/UserActivityDistributionChart';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 export const CourseStatisticsSubpage = () => {
 
+    const courseId = useIntParam('courseId')!;
+    const isAnySelected = courseId != -1;
+
     return (
-        <CourseAdministartionFrame>
+        <CourseAdministartionFrame
+            isAnySelected={isAnySelected} >
 
             <AdminSubpageHeader
                 direction="column"

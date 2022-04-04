@@ -60,9 +60,9 @@ const CourseTile = (props: {
 
         {/* cover image box  */}
         <Box flex="1"
-position="relative"
-minH={150}
-maxH={150}>
+            position="relative"
+            minH={150}
+            maxH={150}>
 
             {/* cover image */}
             <img
@@ -109,30 +109,30 @@ maxH={150}>
 
         {/* content  */}
         <Flex p="10px"
-direction={'column'}
-flex="1">
+            direction={'column'}
+            flex="1">
 
             <Flex direction="column"
-flex="5">
+                flex="5">
 
                 {/* category  */}
                 <Text as="text"
-fontSize="13px"
-color="grey">
+                    fontSize="13px"
+                    color="grey">
                     {courseSubCategory}
                 </Text>
 
                 {/* title */}
                 <Flex direction="column">
                     <Text fontWeight={'600'}
-fontSize="15px">{courseTitle}</Text>
+                        fontSize="15px">{courseTitle}</Text>
                 </Flex>
             </Flex>
 
             {/* small stats  */}
             <Flex mt={7}
-mb="3px"
-justify="space-between">
+                mb="3px"
+                justify="space-between">
 
                 {/* length */}
                 <SmallStat

@@ -1,4 +1,4 @@
-import colors from "../../configuration/colors.json";
+import colors from '../../configuration/colors.json';
 
 const setTheme = (theme: string) => {
     const setProperty = (propertyName: string, propertyValue: string) => {

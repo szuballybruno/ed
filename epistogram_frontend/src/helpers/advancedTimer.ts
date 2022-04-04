@@ -95,6 +95,7 @@ export class AdvancedTimer {
         if (!this._startTime)
             return 0;
 
-        return Math.abs(new Date().getTime() - this._startTime.getTime());
+        return Math.abs(new Date()
+.getTime() - this._startTime.getTime());
     };
 }

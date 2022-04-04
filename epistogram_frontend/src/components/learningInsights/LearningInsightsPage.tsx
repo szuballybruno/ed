@@ -9,6 +9,7 @@ import { LearningCourseStats } from './LearningCourseStats';
 import { LearningStatistics } from './LearningStatistics';
 import { LeftPane } from '../LeftPane';
 import { ContentPane } from '../ContentPane';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
 
 const LearningInsightsPage = () => {
 
@@ -19,7 +20,7 @@ const LearningInsightsPage = () => {
         <LeftPane>
 
             <NavigationLinkList
-                items={[
+                routes={[
                     applicationRoutes.learningRoute.learningOverviewRoute,
                     applicationRoutes.learningRoute.myStatisticsRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
@@ -28,15 +29,21 @@ const LearningInsightsPage = () => {
 
         <ContentPane>
 
-            <Route path={applicationRoutes.learningRoute.route}>
-                <LearningInsightsOverview />
-            </Route>
-            <Route path={applicationRoutes.learningRoute.myStatisticsRoute.route}>
-                <LearningStatistics userId={user.id} />
-            </Route>
-            <Route path={applicationRoutes.learningRoute.myCoursesRoute.route}>
-                <LearningCourseStats />
-            </Route>
+            <EpistoRoutes
+                renderRoutes={[
+                    {
+                        route: applicationRoutes.learningRoute,
+                        element: <LearningInsightsOverview />
+                    },
+                    {
+                        route: applicationRoutes.learningRoute.myStatisticsRoute,
+                        element: <LearningStatistics userId={user.id} />
+                    },
+                    {
+                        route: applicationRoutes.learningRoute.myCoursesRoute,
+                        element: <LearningCourseStats />
+                    }
+                ]} />
         </ContentPane>
     </PageRootContainer>;
 };

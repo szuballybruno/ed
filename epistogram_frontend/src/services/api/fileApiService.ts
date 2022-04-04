@@ -1,5 +1,5 @@
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { usePostMultipartDataUnsafe } from "../core/httpClient";
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useUploadAvatarFile = () => {
 

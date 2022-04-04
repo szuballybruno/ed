@@ -1,8 +1,8 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { ModuleAdminEditDTO } from "../../shared/dtos/ModuleAdminEditDTO";
-import { ModuleCreateDTO } from "../../shared/dtos/ModuleCreateDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
+import { ModuleCreateDTO } from '../../shared/dtos/ModuleCreateDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useCreateModule = () => {
 

@@ -1,4 +1,4 @@
-import { EpistoChartSeriesOptionsType, EpistoChartLegendType, EpistoChartTooltipType } from "./EpistoChartCommonTypes";
+import { EpistoChartSeriesOptionsType, EpistoChartLegendType, EpistoChartTooltipType } from './EpistoChartCommonTypes';
 
 export type EpistoRadarChartDataType = { value: number[], name: string }[]
 
@@ -11,7 +11,7 @@ export interface EpistoRadarChartSeriesOptionsType extends EpistoChartSeriesOpti
             fontWeight?: string
         }
     },
-    roseType?: "radius",
+    roseType?: 'radius',
     color: string[]
 
 

@@ -4,25 +4,28 @@ import { ApplicationRoute } from '../models/types';
 import { isCurrentRoute } from '../static/frontendHelpers';
 import { EpistoFont } from './controls/EpistoFont';
 
-export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?: boolean }) => {
+export const NavigationLinkList = (props: {
+    routes: ApplicationRoute[],
+    isNoText?: boolean
+}) => {
 
-    const { items } = props;
+    const { routes } = props;
 
     return <Flex direction="column">
-        {items
-            .map((menuItem, index) => {
+        {routes
+            .map((route, index) => {
 
-                const isCurrent = isCurrentRoute(menuItem.route);
+                const isCurrent = isCurrentRoute(route.route.getAbsolutePath());
 
                 return <NavLink
-                    to={menuItem.route}
+                    to={route.route.getAbsolutePath()}
                     key={index}>
                     <Flex
                         p="5px 15px"
                         align="center">
 
                         {/* icon */}
-                        {menuItem.icon}
+                        {route.icon}
 
                         {/* text */}
                         {!props.isNoText && <EpistoFont
@@ -33,7 +36,7 @@ export const NavigationLinkList = (props: { items: ApplicationRoute[], isNoText?
                                 color: 'var(--mildDeepBlue)',
                                 fontWeight: isCurrent ? 'bold' : 500
                             }}>
-                            {menuItem.title}
+                            {route.title}
                         </EpistoFont>}
 
                     </Flex>

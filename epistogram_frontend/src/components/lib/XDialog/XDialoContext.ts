@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode } from 'react';
 
 type XDialogContextType = {
     openDialog: (key: string) => void,

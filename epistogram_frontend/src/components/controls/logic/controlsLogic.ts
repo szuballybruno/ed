@@ -1,4 +1,4 @@
-import { EpistoEntryStateType } from "../EpistoEntryNew";
+import { EpistoEntryStateType } from '../EpistoEntryNew';
 
 export const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
 

@@ -18,6 +18,7 @@ import { NotificationsFrame } from './components/system/NotificationsFrame';
 import { PreventMobileFrame } from './components/system/PreventMobileFrame';
 import { UnderMaintanence } from './components/UnderMaintanence';
 import { EpistoRoutes, RenderRoute } from './components/universal/EpistoRoutes';
+import { applicationRoutes } from './configuration/applicationRoutes';
 import './index.css';
 import { MainRouting } from './MainRouting';
 import './shared/logic/jsExtensions.ts'; // extensions, important
@@ -79,13 +80,10 @@ const app = (
                                         // under maintanance
                                         .addIf(isUnderMaintenance, {
                                             element: <UnderMaintanence />,
-                                            route: {
-                                                route: '*',
-                                                title: 'Maintanance mode',
-                                            },
+                                            route: applicationRoutes.matchAll,
                                         })
                                         .addIf(!isUnderMaintenance, {
-                                            route: { route: '*', title: '' },
+                                            route: applicationRoutes.matchAll,
                                             element: (
                                                 <AuthenticationFrame>
                                                     <ErrorDialogFrame>

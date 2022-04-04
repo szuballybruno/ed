@@ -66,7 +66,7 @@ const HomePage = () => {
                 {/* no current course  */}
                 {!pageDTO?.currentCourseProgress && <FlexListItem
                     px="10"
-                    onClick={() => navigate(applicationRoutes.availableCoursesRoute.route)}
+                    onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
                     midContent={<Flex>
 
                         <Flex
@@ -90,7 +90,7 @@ const HomePage = () => {
                     <Flex wrap="wrap">
 
                         {/* test your knowledge */}
-                        <DashboardSection 
+                        <DashboardSection
                             title={translatableTexts.homePage.practiseTitle}
                             background="var(--transparentIntenseBlue85)"
                             className="largeSoftShadow roundBorders"

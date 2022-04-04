@@ -3,20 +3,22 @@ import React from 'react';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
 
-const NavbarButton = (props: {
+export const NavbarButton = (props: {
     menuName?: string,
-    menuPath: string
+    onClick: () => void
 } & FlexProps) => {
 
-    const { menuPath, menuName, children, ...css } = props;
+    const { onClick, menuName, children, ...css } = props;
     const { navigate } = useNavigation();
 
-    return <Flex margin="0 5px 0 5px"
-{...css}>
+    return <Flex
+        margin="0 5px 0 5px"
+        {...css}>
+        
         {children
             ? children
             : <EpistoButton
-                onClick={() => navigate(menuPath)}
+                onClick={() => onClick()}
                 style={{ flex: '1' }}
                 variant="plain" >
 
@@ -24,5 +26,3 @@ const NavbarButton = (props: {
             </EpistoButton>}
     </Flex>;
 };
-
-export default NavbarButton;

@@ -41,20 +41,23 @@ export const AdminSubpageHeader = (props: {
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
     const currentMatchingRoute = tabMenuItemsList
-        .filter(route => isMatchingCurrentRoute(route))[0];
+        .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRoute);
 
-    const handleNavigateToTab = (route: string) => {
+    const handleNavigateToTab = (path: string) => {
 
-        const tabRoute = tabMenuItemsList
-            .filter(x => x.route === route)[0];
+        const targetRoute = tabMenuItemsList
+            .firstOrNull(x => x.route.getAbsolutePath() === path);
 
-        if (tabRoute.navAction) {
+        if (!targetRoute)
+            return;
 
-            tabRoute.navAction();
+        if (targetRoute.navAction) {
+
+            targetRoute.navAction();
         }
         else {
 
-            navigate(route, {
+            navigate(targetRoute, {
                 userId,
                 courseId,
                 videoId,
@@ -86,6 +89,7 @@ export const AdminSubpageHeader = (props: {
                 <Flex
                     p="10px"
                     flex="1">
+
                     {tabMenuItems && <Tabs
                         className="roundBorders"
                         TabIndicatorProps={{
@@ -95,7 +99,6 @@ export const AdminSubpageHeader = (props: {
                         }}
                         sx={{
                             '&.MuiTabs-root': {
-                                //background: "var(--transparentIntenseBlue85)",
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -103,8 +106,8 @@ export const AdminSubpageHeader = (props: {
                                 minHeight: 0
                             }
                         }}
-                        value={currentMatchingRoute?.route}
-                        onChange={(_, route: string) => handleNavigateToTab(route)}>
+                        value={currentMatchingRoute?.route?.getAbsolutePath() ?? ''}
+                        onChange={(_, path: string) => handleNavigateToTab(path)}>
 
                         {tabMenuItems
                             .map((tabRoute, index) => {
@@ -134,7 +137,7 @@ export const AdminSubpageHeader = (props: {
                                         }
                                     }}
                                     label={tabRoute.title}
-                                    value={tabRoute.route} />;
+                                    value={tabRoute.route.getAbsolutePath()} />;
                             })}
                     </Tabs>}
                 </Flex>

@@ -1,7 +1,7 @@
-import { VideoPlaybackSampleDTO } from "../../shared/dtos/VideoPlaybackSampleDTO";
-import { VideoSamplingResultDTO } from "../../shared/dtos/VideoSamplingResultDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { usePostData } from "../core/httpClient";
+import { VideoPlaybackSampleDTO } from '../../shared/dtos/VideoPlaybackSampleDTO';
+import { VideoSamplingResultDTO } from '../../shared/dtos/VideoSamplingResultDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostData } from '../core/httpClient';
 
 export const usePostVideoPlaybackSample = () => {
 

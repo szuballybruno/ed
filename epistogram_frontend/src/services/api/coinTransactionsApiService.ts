@@ -1,7 +1,7 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { CoinTransactionDTO } from "../../shared/dtos/CoinTransactionDTO";
-import { apiRoutes } from "../../shared/types/apiRoutes";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCoinTransactions = () => {
 

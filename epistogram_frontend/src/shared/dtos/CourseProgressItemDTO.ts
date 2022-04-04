@@ -1,4 +1,4 @@
-import { CourseItemStateType, CourseItemType } from "../types/sharedTypes";
+import { CourseItemStateType, CourseItemType } from '../types/sharedTypes';
 
 export class CourseItemProgressDTO {
     id: number;
