@@ -523,6 +523,7 @@ export const translatableTexts = {
             videoRemovedSuccessfully: 'Videó sikeresen törölve!',
 
             addModule: 'Új modul',
+            editModules: 'Modulok szerkesztése',
             addModuleExtended: 'Új modul hozzáadása',
             newModuleAddedSuccessfully: 'Modul sikeresen hozzáadva!',
             doYouReallyRemoveTheModule: 'Biztosan törlöd a modult?',

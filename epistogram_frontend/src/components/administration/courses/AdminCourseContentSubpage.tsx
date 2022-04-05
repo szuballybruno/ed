@@ -21,6 +21,7 @@ import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AddNewItemPopper } from './AddNewItemPopper';
+import { ModuleEditDialog } from './ModuleEditDialog';
 import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import classses from './css/AdminCourseContentSubpage.module.css';
@@ -391,6 +392,7 @@ export const AdminCourseContentSubpage = () => {
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const videoEditDialogLogic = useEpistoDialogLogic('video_edit_dialog', { defaultCloseButtonType: 'top' });
     const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
+    const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
     const isAnySelected = courseId != -1;
 
     // state
@@ -483,16 +485,17 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: 'video' | 'exam') => {
+    const openDialog = (type: 'video' | 'exam' | 'module') => {
 
-        if (type === 'video') {
-
+        if (type === 'video')
             videoEditDialogLogic.openDialog();
-        }
-        else {
 
+        if (type === 'exam')
             examEditDialogLogic.openDialog();
-        }
+
+        if (type === 'module')
+            moduleEditDialogLogic.openDialog();
+
     };
 
     const handleMutateRow: EditRowFnType = (key, field, value) => {
@@ -600,8 +603,13 @@ export const AdminCourseContentSubpage = () => {
                         title: translatableTexts.misc.add
                     },
                     {
+                        action: () => openDialog('module'),
+                        icon: <Edit ref={ref} />,
+                        title: translatableTexts.administration.courseContentSubpage.editModules
+                    },
+                    {
                         action: handleSaveAsync,
-                        title: 'Mentes',
+                        title: 'Mentés',
                         disabled: !isAnyRowsMutated
                     }
                 ]}>
@@ -610,6 +618,7 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDialog logic={deleteWarningDialogLogic} />
                 <VideoEditDialog logic={videoEditDialogLogic} />
                 <ExamEditDialog logic={examEditDialogLogic} />
+                <ModuleEditDialog logic={moduleEditDialogLogic} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper

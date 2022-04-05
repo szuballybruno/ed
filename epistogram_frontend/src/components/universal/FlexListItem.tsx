@@ -24,7 +24,7 @@ export const FlexListItem = (props: FlexProps & {
 
     return <Flex
         id="flexListItem"
-        className="shadowOnHover"
+        //className="shadowOnHover"
         cursor={onClick ? 'pointer' : undefined}
         align="center"
         pointerEvents={isLocked ? 'none' : 'all'}
