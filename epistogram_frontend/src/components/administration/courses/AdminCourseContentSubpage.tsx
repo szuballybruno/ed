@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit, Equalizer } from '@mui/icons-material';
 import { useGridApiContext } from '@mui/x-data-grid-pro';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
@@ -17,7 +16,6 @@ import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType, UseCommitNewValueType } from '../../controls/EpistoDataGrid';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -80,7 +78,6 @@ const useGridColumnDefinitions = (
             className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ''}`}>
 
             <p>
-
                 {children}
             </p>
         </div>;
@@ -241,13 +238,12 @@ const useGridColumnDefinitions = (
             width: 180,
             renderCell: ({ row }) => {
 
-                return 'butt';
-                // return <EpistoButton
-                //     variant="outlined"
-                //     onClick={() => { throw new Error('Not implemented!'); }}>
+                return <EpistoButton
+                    variant="outlined"
+                    onClick={() => { throw new Error('Not implemented!'); }}>
 
-                //     Fájl kiválasztása
-                // </EpistoButton >;
+                    Fájl kiválasztása
+                </EpistoButton >;
             }
         }),
         columnDefGen('quickMenu', {
@@ -255,28 +251,27 @@ const useGridColumnDefinitions = (
             width: 150,
             renderCell: ({ key, row }) => {
 
-                return 'butt';
-                // return (
-                //     <div className="h-flex">
-                //         <EpistoButton
-                //             onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam')}>
+                return (
+                    <div className="h-flex">
+                        <EpistoButton
+                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam')}>
 
-                //             <Edit />
-                //         </EpistoButton>
+                            <Edit />
+                        </EpistoButton>
 
-                //         <EpistoButton
-                //             onClick={() => { throw new Error('Not implemented!'); }}>
+                        <EpistoButton
+                            onClick={() => { throw new Error('Not implemented!'); }}>
 
-                //             <Equalizer />
-                //         </EpistoButton>
+                            <Equalizer />
+                        </EpistoButton>
 
-                //         <EpistoButton
-                //             onClickNoPropagation={() => removeRow(key)}>
+                        <EpistoButton
+                            onClickNoPropagation={() => removeRow(key)}>
 
-                //             <Delete />
-                //         </EpistoButton>
-                //     </div>
-                // );
+                            <Delete />
+                        </EpistoButton>
+                    </div>
+                );
             }
         })
     ];
@@ -330,6 +325,62 @@ const getIssueText = (dto: CourseContentItemIssueDTO) => {
     return null;
 };
 
+const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: number): RowSchema => {
+
+    const { color, label } = getItemTypeValues(item.itemType);
+
+    const isLengthWarning = item
+        .warnings
+        .any(x => x.code === 'video_too_long');
+
+    const hasErrors = item
+        .errors
+        .length > 0;
+
+    return ({
+        rowKey: item.itemCode,
+        rowNumber: rowNumber,
+        itemOrderIndex: item.itemOrderIndex,
+        itemTitle: item.itemTitle,
+        itemSubtitle: item.itemSubtitle,
+        module: {
+            hidden: item.itemType === 'pretest',
+            id: item.moduleId,
+            name: item.moduleName,
+            orderIndex: item.moduleOrderIndex
+        },
+        itemType: {
+            label,
+            color,
+            type: item.itemType
+        },
+        videoLength: {
+            text: item.itemType === 'exam'
+                ? ' - '
+                : !item.warnings || !item.videoLength
+                    ? ''
+                    : formatTime(Math.round(item.videoLength)),
+            color: isLengthWarning
+                ? 'var(--intenseOrange)'
+                : 'gray'
+        },
+        errors: {
+            text: hasErrors
+                ? `${item.errors.length} hiba`
+                : 'Nincs hiba',
+            tooltip: item
+                .errors
+                .map(x => getIssueText(x))
+                .join('\n'),
+            color: hasErrors
+                ? 'var(--intenseRed)'
+                : 'var(--intenseGreen)'
+        },
+        quickMenu: rowNumber,
+        videoFile: 'vf'
+    });
+};
+
 export const AdminCourseContentSubpage = () => {
 
     // util
@@ -375,79 +426,14 @@ export const AdminCourseContentSubpage = () => {
         const items = courseContentAdminData?.items ?? [];
 
         const preproItems = items
-            .map((item, index): RowSchema => {
-
-                const { color, label } = getItemTypeValues(item.itemType);
-
-                const isLengthWarning = item
-                    .warnings
-                    .any(x => x.code === 'video_too_long');
-
-                const hasErrors = item
-                    .errors
-                    .length > 0;
-
-                return ({
-                    rowKey: item.itemCode,
-                    rowNumber: index,
-                    itemOrderIndex: item.itemOrderIndex,
-                    itemTitle: item.itemTitle,
-                    itemSubtitle: item.itemSubtitle,
-                    module: {
-                        hidden: item.itemType === 'pretest',
-                        id: item.moduleId,
-                        name: item.moduleName,
-                        orderIndex: item.moduleOrderIndex
-                    },
-                    itemType: {
-                        label,
-                        color,
-                        type: item.itemType
-                    },
-                    videoLength: {
-                        text: item.itemType === 'exam'
-                            ? ' - '
-                            : !item.warnings || !item.videoLength
-                                ? ''
-                                : formatTime(Math.round(item.videoLength)),
-                        color: isLengthWarning
-                            ? 'var(--intenseOrange)'
-                            : 'gray'
-                    },
-                    errors: {
-                        text: hasErrors
-                            ? `${item.errors.length} hiba`
-                            : 'Nincs hiba',
-                        tooltip: item
-                            .errors
-                            .map(x => getIssueText(x))
-                            .join('\n'),
-                        color: hasErrors
-                            ? 'var(--intenseRed)'
-                            : 'var(--intenseGreen)'
-                    },
-                    quickMenu: index,
-                    videoFile: 'vf'
-                });
-            });
+            .map((item, index) => mapToRowSchema(item, index));
 
         setPreprocessedItems(preproItems);
     }, [courseContentAdminData]);
 
     // post mutation 
     const gridRows: RowSchema[] = mutatedData
-        .map((item, index) => {
-
-            const { ...rest } = item;
-
-            return {
-                ...rest,
-                quickMenu: index,
-                rowNumber: index,
-                videoFile: 'file_',
-                errorsWrapper: index
-            };
-        })
+        .map((x, index) => { x.rowNumber = index; return x; })
         .orderBy(x => x.module.orderIndex)
         .groupBy(x => x.module.id)
         .flatMap(x => x
@@ -516,41 +502,47 @@ export const AdminCourseContentSubpage = () => {
 
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        // const moduleId = modules[0].id;
+        const moduleId = modules[0].id;
 
-        // const moduleOrderIndex = gridRows
-        //     .firstOrNull(x => x.moduleId === moduleId)?.moduleOrderIndex ?? 0;
+        const module = gridRows
+            .firstOrNull(x => x.module.id === moduleId)?.module ?? {
+            hidden: false,
+            id: -1,
+            name: 'No module',
+            orderIndex: 0
+        };
 
-        // const itemOrderIndex = gridRows
-        //     .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
-        //     .length;
+        const itemOrderIndex = gridRows
+            .filter(x => x.module.id === moduleId && x.itemType.type !== 'pretest')
+            .length;
 
-        // if (type === 'exam') {
+        const newId = getVirtualId();
+        const newItemCode = `new_${type}_${newId}`;
 
-        //     addRow('newcode_' + getVirtualId(), {
-        //         itemType: 'exam',
-        //         moduleId,
-        //         itemSubtitle: '',
-        //         itemTitle: '',
-        //         itemOrderIndex,
-        //         moduleOrderIndex,
-        //         courseId
-        //     });
-        // }
-        // else {
+        const dto: CourseContentItemAdminDTO = {
+            itemType: type === 'exam' ? 'exam' : 'video',
+            itemSubtitle: '',
+            itemTitle: '',
+            itemOrderIndex,
+            courseId,
+            warnings: [],
+            errors: [],
+            itemCode: newItemCode,
+            itemId: newId,
+            examId: type === 'exam' ? newId : -1,
+            videoId: type === 'exam' ? -1 : newId,
+            moduleId: module.id,
+            moduleOrderIndex: module.orderIndex,
+            moduleCode: '',
+            moduleName: module.name,
+            videoLength: 0
+        };
 
-        //     addRow('newcode_' + getVirtualId(), {
-        //         itemType: 'video',
-        //         moduleId,
-        //         itemSubtitle: '',
-        //         itemTitle: '',
-        //         itemOrderIndex,
-        //         moduleOrderIndex,
-        //         courseId
-        //     });
-        // }
+        const row = mapToRowSchema(dto, 0);
 
-        // closeAddPopper();
+        addRow(newItemCode, row);
+
+        closeAddPopper();
     };
 
     const handleRemoveRow = (key: string) => {
