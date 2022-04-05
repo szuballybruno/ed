@@ -40,7 +40,7 @@ export class QueryServiceBase<TMainEntity> extends ServiceBase {
             .save(obj);
     }
 
-    public async createAsync(entity: QueryDeepPartialEntity<TMainEntity>) {
+    public async createAsync(entity: DeepPartial<TMainEntity>) {
 
         await this._ormService
             .getRepository(this._mainEntityClass)
