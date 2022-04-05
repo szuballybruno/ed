@@ -103,7 +103,7 @@ export class TokenService {
 
     private verifyJWTToken = <TTokenPayload>(token: string, secret: string) => {
 
-        const payload = verify(token, secret) as TTokenPayload;
+        const payload = verify(token, secret) as any as TTokenPayload;
 
         if (!payload)
             throw new ErrorCode("Token verification failed!", "forbidden");

@@ -123,8 +123,7 @@ export class CourseService {
     async getCourseBriefDataAsync(courseId: number) {
 
         const course = await this._ormService
-            .getRepository(Course)
-            .findOneOrFail(courseId);
+            .getSingleById(Course, courseId);
 
         return this._mapperService
             .map(Course, CourseBriefData, course);
@@ -199,10 +198,10 @@ export class CourseService {
     async getCourseProgressDataAsync(userId: number) {
 
         const courses = await this._ormService
-            .getRepository2(CourseLearningStatsView)
+            .getRepository(CourseLearningStatsView)
             .createQueryBuilder("clsv")
             .where("clsv.userId = :userId", { userId })
-            .getManyAsync();
+            .getMany();
 
         // in progress courses 
         const inProgressCourses = courses
@@ -305,8 +304,7 @@ export class CourseService {
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
 
         const getCourseAsync = () => this._ormService
-            .getRepository(Course)
-            .findOneOrFail(courseId);
+            .getSingleById(Course, courseId);
 
         const setCourseThumbnailIdAsync = (thumbnailFileId: number) => this._ormService
             .getRepository(Course)
@@ -402,8 +400,8 @@ export class CourseService {
             return (await this._examService.getExamByIdAsync(itemId)).courseId;
 
         return (await this._ormService
-            .getRepository(CourseModule)
-            .findOneOrFail(itemId)).courseId;
+            .getSingleById(CourseModule, itemId))
+            .courseId;
     }
 
     /**

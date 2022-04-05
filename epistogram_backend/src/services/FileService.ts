@@ -94,7 +94,6 @@ export class FileService {
     getFileEntityAsync = (id: number) => {
 
         return this._ormService
-            .getRepository(StorageFile)
-            .findOneOrFail(id);
+            .getSingleById(StorageFile, id);
     }
 }

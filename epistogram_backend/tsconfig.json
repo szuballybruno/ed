@@ -13,7 +13,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "lib": [
-      "ES2021"
+      "ESNext"
     ]
   },
   "exclude": [

@@ -105,14 +105,13 @@ export class PlaybackService extends ServiceBase {
         cursorSeconds: number,
         newCompletionDate?: Date) => {
 
-        const repo = this._ormService
-            .getRepository(UserVideoProgressBridge);
-
-        const pbd = await repo
-            .findOne({
-                videoId: videoId,
-                userId: userId
-            });
+        const pbd = await this._ormService
+            .getOneOrNull(UserVideoProgressBridge, "uvpb",
+                [
+                    "WHERE", ["videoId", "=", "videoId"],
+                    "AND", ["userId", "=", "userId"]
+                ],
+                { videoId, userId });
 
         // if already set, do not modify
         // otherwise use the input param 
@@ -129,7 +128,8 @@ export class PlaybackService extends ServiceBase {
             cursorSeconds
         } as UserVideoProgressBridge;
 
-        await repo
+        await this._ormService
+            .getRepository(UserVideoProgressBridge)
             .save(videoPlaybackData);
     }
 
@@ -149,14 +149,13 @@ export class PlaybackService extends ServiceBase {
 
     getVideoIsCompletedStateAsync = async (userId: number, videoId: number) => {
 
-        const repo = this._ormService
-            .getRepository(UserVideoProgressBridge);
-
-        const pbd = await repo
-            .findOne({
-                videoId: videoId,
-                userId: userId
-            });
+        const pbd = await this._ormService
+            .getOneOrNull(UserVideoProgressBridge, "uv",
+                [
+                    "WHERE", ["videoId", "=", "videoId"],
+                    "AND", ["userId", "=", "userId"]
+                ],
+                { userId, videoId })
 
         return !!pbd?.completionDate;
     }

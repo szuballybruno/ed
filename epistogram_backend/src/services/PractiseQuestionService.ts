@@ -67,14 +67,12 @@ export class PractiseQuestionService extends ServiceBase {
 
     getUserPractiseAnswerSession = async (userId: number) => {
 
-        // const userPractiseAnswerSession = await this._ormService
-        //     .getRepository(AnswerSession)
-        //     .createQueryBuilder("as")
-        //     .where("as.type = 'practise'")
-        //     .andWhere("as.userId = :userId", { userId })
-        //     .getOneOrFail();
-
         return this._ormService
-            .querySingle(AnswerSession, "ase", "WHERE ase.type = 'practise' AND ase.user_id = $1", [userId]);
+            .getSingle(AnswerSession, "ase",
+                [
+                    "WHERE", ["type", "=", "practiseType"],
+                    "AND", ["userId", "=", "userId"]
+                ],
+                { practiseType: 'practise', userId });
     }
 }

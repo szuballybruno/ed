@@ -193,26 +193,18 @@ import { User } from './models/entity/User';
     const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(expressServer, [authMiddleware], onActionError, onActionSuccess);
     const addEndpoint = turboExpress.addAPIEndpoint;
 
-    // const user = await ormConnectionService
-    //     .querySingleNew(
-    //         User,
-    //         "u",
-    //         [
-    //             "WHERE", ["id", "=", "userId"],
-    //             "AND",
-    //             "WHERE", ["firstName", "!=", "fname"]
-    //         ],
-    //         {
-    //             userId: 1,
-    //             fname: "ben"
-    //         });
+    const users = await ormConnectionService
+        .getMany(User, "u",
+            [
+                "WHERE", ["id", "<", "userIdMax"],
+                "AND", ["id", ">", "userIdMin"]
+            ],
+            {
+                userIdMin: 0,
+                userIdMax: 3
+            });
 
-    // console.log(user);
-
-    // const asd = await practiseQuestionService
-    //     .getUserPractiseAnswerSession(2);
-
-    // console.log(asd);
+    console.log(users);
 
     // add middlewares
     expressServer.use(getCORSMiddleware(globalConfig));

@@ -58,7 +58,7 @@ export class UserController {
 
     getBriefUserDataAction = async (params: ActionParams) => {
 
-        const userId = withValueOrBadRequest(params.req?.query?.userId);
+        const userId = params.getQuery().getValue(x => x.userId);
 
         await this._userService
             .getBriefUserDataAsync(userId);

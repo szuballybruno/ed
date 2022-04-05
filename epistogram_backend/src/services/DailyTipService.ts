@@ -58,8 +58,7 @@ export class DailyTipService {
     async getDailyTipEditDataAsync(dailyTipId: number) {
 
         const dailyTip = await this._ormService
-            .getRepository(DailyTip)
-            .findOneOrFail(dailyTipId);
+            .getSingleById(DailyTip, dailyTipId)
 
         return this._mapperService
             .map(DailyTip, DailyTipEditDataDTO, dailyTip);

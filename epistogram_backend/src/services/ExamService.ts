@@ -200,8 +200,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamByIdAsync = (examId: number) => {
 
         return this._ormService
-            .getRepository(Exam)
-            .findOneOrFail(examId);
+            .getSingleById(Exam, examId)
     }
 
     /**

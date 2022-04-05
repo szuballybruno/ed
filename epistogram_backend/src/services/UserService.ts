@@ -156,7 +156,7 @@ export class UserService {
      * @param userId 
      * @returns 
      */
-    async getBriefUserDataAsync(userId: unknown) {
+    async getBriefUserDataAsync(userId: number) {
 
         const user = await this._ormService
             .getRepository(User)
@@ -442,14 +442,19 @@ export class UserService {
      */
     getTeachersAsync = async () => {
 
-        const teachers = await this._ormService
-            .getRepository(User)
-            .find({
-                where: {
-                    isTeacher: true
-                }
-            });
+        // const teachers = await this._ormService
+        //     .getRepository(User)
+        //     .find({
+        //         where: {
+                    
+        //         },
+        //         relations: {
+        //             teacherInfo: {
 
-        return teachers;
+        //             }
+        //         }
+        //     });
+
+        // return teachers;
     }
 }

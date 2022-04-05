@@ -121,8 +121,7 @@ export class ModuleService {
         if (file) {
 
             const getModuleAsync = () => this._ormService
-                .getRepository(CourseModule)
-                .findOneOrFail(moduleId);
+                .getSingleById(CourseModule, moduleId)
 
             const setModuleThumbnailIdAsync = (fileId: number) => this._ormService
                 .getRepository(CourseModule)

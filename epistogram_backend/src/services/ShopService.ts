@@ -77,8 +77,7 @@ export class ShopService {
     async purchaseShopItemAsync(userId: number, shopItemId: number) {
 
         const shopItem = await this._ormService
-            .getRepository(ShopItem)
-            .findOneOrFail(shopItemId);
+            .getSingleById(ShopItem, shopItemId);
 
         const shopItemView = await this._ormService
             .getRepository(ShopItemView)
@@ -132,8 +131,7 @@ export class ShopService {
                 });
 
             const user = await this._ormService
-                .getRepository(User)
-                .findOneOrFail(userId);
+                .getSingleById(User, userId);
 
             await this._emailService
                 .sendDiscountCodePurchasedMailAsync(
@@ -296,8 +294,7 @@ export class ShopService {
     private async saveCoverFileAsync(shopItemId: number, file: UploadedFile) {
 
         const getEntityAsync = () => this._ormService
-            .getRepository(ShopItem)
-            .findOneOrFail(shopItemId);
+            .getSingleById(ShopItem, shopItemId);
 
         const setFileIdAsync = (fileId: number) => this._ormService
             .getRepository(ShopItem)

@@ -218,12 +218,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         // unset user current course item
         const item = isExam
             ? await this._ormService
-                .getRepository(Exam)
-                .findOneOrFail(examId)
+                .getSingleById(Exam, examId!)
 
             : await this._ormService
-                .getRepository(Video)
-                .findOneOrFail(videoId);
+                .getSingleById(Video, videoId!)
 
         const currentItemDTO = isExam
             ? this._mapperService.map(Exam, CourseItemDTO, item)

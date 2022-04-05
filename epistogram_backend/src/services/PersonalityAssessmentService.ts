@@ -72,13 +72,15 @@ export class PersonalityAssessmentService {
             });
 
         const tips = await this._ormService
-            .getRepository(DailyTip)
-            .find({
-                where: {
+            .getMany(DailyTip, "dt",
+                [
+                    "WHERE", ["isMax", "=", "isMax"],
+                    "AND", ["personalityTraitCategoryId", "=", "personalityTraitCategoryId"],
+                ],
+                {
                     isMax,
                     personalityTraitCategoryId
-                }
-            });
+                });
 
         return this._mapperService
             .map(PersonalityTraitCategory, PersonalityTraitCategoryDTO, category, tips);

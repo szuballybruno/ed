@@ -67,8 +67,7 @@ export class CoinAcquireService {
         // do not reward user if the question is already answered 
         // correctly and a coin is previously acquired for that 
         const newGivenAnswer = await this._ormService
-            .getRepository(GivenAnswer)
-            .findOneOrFail(givenAnswerId);
+            .getSingleById(GivenAnswer, givenAnswerId);
 
         const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
             .getCoinsForQuestionAsync(userId, newGivenAnswer.questionId);

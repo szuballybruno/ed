@@ -1,25 +1,32 @@
-import { Connection, ConnectionOptions, createConnection, Repository, SelectQueryBuilder } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { ClassType } from "../../models/Types";
 import { getKeys } from "../../shared/logic/sharedLogic";
-import { DeepOptionalEntity, toSQLSnakeCasing } from "../../utilities/helpers";
+import { toSQLSnakeCasing } from "../../utilities/helpers";
 import { GlobalConfiguration } from "../misc/GlobalConfiguration";
 import { log } from "../misc/logger";
-import { SQLBootstrapperService } from "./SQLBootstrapper";
 import { SQLConnectionService } from "./SQLConnectionService";
 
-export type ORMConnection = Connection;
+export type ORMConnection = DataSource;
 
 export type ORMSchemaType = {
     entities: any[],
     viewEntities: any[]
 }
 
-type Condition<TEntity, TParams> = [keyof TEntity, string, keyof TParams];
+type SQLParamType<TParams, TParamName extends keyof TParams> = {
+
+    // $1 $2 etc... 
+    token: string;
+    paramName: TParamName;
+    paramValue: TParams[TParamName];
+}
+
+type OperationType = "=" | "!=" | "<" | ">";
+
+type Condition<TEntity, TParams> = [keyof TEntity, OperationType, keyof TParams];
 
 type ExpressionPart<TEntity, TParam> = "WHERE" | "AND" | Condition<TEntity, TParam>;
-
-type Expression<TEntity, TParam> = ExpressionPart<TEntity, TParam>[];
 
 export class ORMConnectionService {
 
@@ -59,20 +66,48 @@ export class ORMConnectionService {
                 ...this._schema.entities,
                 ...this._schema.viewEntities
             ],
-        } as ConnectionOptions;
+        } as DataSourceOptions;
 
         log("Connecting to database with TypeORM...", "strong");
-        this._ormConnection = await this.createTypeORMConnection(options);
+
+        const initAsync = async (dataSourceOptions: DataSourceOptions): Promise<DataSource> => {
+
+            return new Promise<DataSource>((res, rej) => {
+
+                const dataSource = new DataSource(dataSourceOptions);
+
+                dataSource
+                    .initialize()
+                    .then(() => {
+
+                        res(dataSource);
+                    })
+                    .catch((err) => {
+
+                        rej(err);
+                    });
+            });
+        };
+
+        try {
+
+            log("Connecting to SQL trough TypeORM...");
+            const connection = await initAsync(options);
+
+            if (!connection.manager)
+                throw new Error("TypeORM manager is null or undefined!");
+
+            this._ormConnection = connection;
+        }
+        catch (e) {
+
+            throw new Error("Type ORM connection error!" + e);
+        }
     }
 
     getRepository<T>(classType: ClassType<T>) {
 
         return this._ormConnection.getRepository(classType);
-    }
-
-    getRepository2<T>(classType: ClassType<T>) {
-
-        return new MyRepository<T>(classType, this._ormConnection);
     }
 
     snakeToCamelCase(snakeCaseString: string) {
@@ -81,54 +116,138 @@ export class ORMConnectionService {
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
     }
 
-    async querySingleNew<TEntity, TParam>(classType: ClassType<TEntity>, alias: string, whereQuery: Expression<TEntity, TParam>, params: TParam) {
+    getOrmConnection() {
 
-
+        return this._ormConnection;
     }
 
-    getSQLErrorEnding(query: string, params?: any[]) {
+    /**
+     * Returns a single entity, 
+     * throws error if 0 or more than 1 is found. 
+     */
+    async getSingle<TEntity, TParam>(
+        classType: ClassType<TEntity>,
+        alias: string,
+        whereQuery: ExpressionPart<TEntity, TParam>[],
+        params: TParam): Promise<TEntity> {
 
-        return `Query: ${query}\nValues: ${(params ?? []).map((x, i) => `$${i + 1}: ${x}`)}`;
-    }
-
-    async querySingle<T>(classType: ClassType<T>, alias: string, whereQuery: string, params?: any[]) {
-
-        const query = this.getQuery(classType, alias, whereQuery);
+        const { fullQuery, sqlParamsList } = this.getFullQuery<TEntity, TParam>(classType, alias, whereQuery, params);
 
         const rows = await this
-            .queryManyBase(classType, query, params);
+            .executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
 
-        const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
+        const errorEndingQueryLog = this.getSQLErrorEnding(fullQuery, sqlParamsList);
         const rowCount = rows.length;
 
         if (rowCount === 0)
-            throw new Error(`SQL single query failed, 0 rows has been returned. \n${errorEndingQueryLog}`);
+            throw new Error(`SQL single query failed, 0 rows has been returned.\n${errorEndingQueryLog} `);
 
         if (rowCount > 1)
-            throw new Error(`SQL single query failed, more than 1 rows has been returned. \n${errorEndingQueryLog}`);
+            throw new Error(`SQL single query failed, more than 1 rows has been returned.\n${errorEndingQueryLog} `);
 
         return rows[0];
     }
 
-    async queryMany<T>(classType: ClassType<T>, alias: string, whereQuery: string, params?: any[]) {
+    /**
+     * Returns a single entity, or null if not found.
+     */
+    async getOneOrNull<TEntity, TParam>(
+        classType: ClassType<TEntity>,
+        alias: string,
+        whereQuery: ExpressionPart<TEntity, TParam>[],
+        params: TParam): Promise<TEntity | null> {
 
-        const query = this.getQuery(classType, alias, whereQuery);
-        return this.queryManyBase(classType, query, params);
+        const { fullQuery, sqlParamsList } = this.getFullQuery<TEntity, TParam>(classType, alias, whereQuery, params);
+
+        const rows = await this
+            .executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
+
+        return rows[0] ?? null;
     }
 
-    private getQuery<T>(classType: ClassType<T>, alias: string, whereQuery: string) {
+    /**
+     * Returns the full SQL query that can be run against the DB 
+     */
+    private getFullQuery<TEntity, TParam>(
+        classType: ClassType<TEntity>,
+        alias: string,
+        whereQuery: ExpressionPart<TEntity, TParam>[],
+        params: TParam) {
 
-        const baseQuery = `SELECT * FROM public.${toSQLSnakeCasing(classType.name)} ${alias}`;
-        return `${baseQuery} ${whereQuery}`;
+        const sqlParamsList = getKeys(params)
+            .map((key, index): SQLParamType<TParam, keyof TParam> => ({
+                token: `$${index + 1}`,
+                paramName: key,
+                paramValue: params[key]
+            }));
+
+        const whereQueryStr = whereQuery
+            .map(x => {
+
+                if (typeof x === "string")
+                    return x as string;
+
+                const cond = x as Condition<TEntity, TParam>;
+
+                const snakeColumn = toSQLSnakeCasing(cond[0] as string);
+                const operator = cond[1] as string;
+                const paramName = cond[2];
+                const paramToken = sqlParamsList
+                    .single(x => x.paramName === paramName)
+                    .token;
+
+                return `${alias}.${snakeColumn} ${operator} ${paramToken}`;
+            })
+            .join(' ');
+
+        const baseQuery = `SELECT * FROM public.${toSQLSnakeCasing(classType.name)} ${alias} `;
+        const fullQuery = `${baseQuery} ${whereQueryStr} `;
+
+        return {
+            sqlParamsList,
+            fullQuery
+        }
     }
 
-    private async queryManyBase<T>(classType: ClassType<T>, query: string, params?: any[]) {
+    /**
+     * Returns a single entity by it's id, 
+     * throws error if 0 or more than 1 is found. 
+     */
+    async getSingleById<TEntity, TField extends keyof TEntity>(classType: ClassType<TEntity>, id: number, idField?: TField) {
+
+        const idFieldName = idField ?? "id" as TField;
+        return this.getSingle(classType, classType.name, ["WHERE", [idFieldName, "=", "id"]], { id })
+    }
+
+    /**
+     * Returns multiple entities.
+     */
+    async getMany<TEntity, TParam>(
+        classType: ClassType<TEntity>,
+        alias: string,
+        whereQuery: ExpressionPart<TEntity, TParam>[],
+        params: TParam) {
+
+        const { fullQuery, sqlParamsList } = this
+            .getFullQuery(classType, alias, whereQuery, params);
+
+        return this.executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
+    }
+
+    /**
+     * Executes an SQL query against the DB and returns the results. 
+     */
+    private async executeSQLQuery<TEntity, TParam>(
+        query: string,
+        params?: SQLParamType<TParam, keyof TParam>[]) {
 
         try {
-            console.log(query);
+
+            const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
+            console.log(errorEndingQueryLog);
 
             const res = await this._sqlConnectionService
-                .executeSQLAsync(query, params);
+                .executeSQLAsync(query, (params ?? []).map(x => x.paramValue));
 
             return res
                 .rows
@@ -139,109 +258,24 @@ export class ORMConnectionService {
                     getKeys(row)
                         .forEach(key => obj[this.snakeToCamelCase(key as string)] = row[key]);
 
-                    return obj as T;
+                    return obj as TEntity;
                 });
         }
         catch (e: any) {
 
             const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
-            throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog}\n Message: ${e.message ?? e}`);
+            throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog} \n Message: ${e.message ?? e} `);
         }
     }
 
-    getOrmConnection() {
+    /**
+     * Returns a sophisticated SQL query error string.
+     */
+    private getSQLErrorEnding<TEntity, TParams extends keyof TEntity>(query: string, params?: SQLParamType<TEntity, TParams>[]) {
 
-        return this._ormConnection;
-    }
+        const paramPairs = (params ?? [])
+            .map((param) => `${param.token}: ${param.paramValue}`);
 
-    private createTypeORMConnection = async (opt: ConnectionOptions) => {
-
-        try {
-
-            log("Connecting to SQL trough TypeORM...");
-            const connection = await createConnection(opt);
-
-            if (!connection.manager)
-                throw new Error("TypeORM manager is null or undefined!");
-
-            return connection;
-        }
-        catch (e) {
-
-            throw new Error("Type ORM connection error!" + e);
-        }
-    }
-}
-
-class MyRepository<T> {
-
-    private _connection: Connection;
-    private _classType: ClassType<T>;
-    private _ormRepo: Repository<T>;
-
-    constructor(classType: ClassType<T>, connection: ORMConnection) {
-
-        this._connection = connection;
-        this._classType = classType;
-        this._ormRepo = this._connection
-            .getRepository(this._classType);
-    }
-
-    static getSqlError(e: any) {
-
-        const driverErrorMessage = e.driverError?.message;
-        const message = e.message;
-
-        return new Error("SQL Query Error: " + (driverErrorMessage ?? message));
-    }
-
-    async insertAsync(obj: DeepOptionalEntity<T>) {
-
-        try {
-
-            this._ormRepo
-                .insert(obj);
-        }
-        catch (e) {
-
-            throw MyRepository.getSqlError(e);
-        }
-    }
-
-    createQueryBuilder(alias: string) {
-
-        const queryBuilder = this._ormRepo
-            .createQueryBuilder(alias);
-
-        // get many
-        const getManyAsync = async (qb: SelectQueryBuilder<T>) => {
-
-            try {
-
-                const reuslts = await qb
-                    .getMany();
-
-                return reuslts;
-            }
-            catch (e) {
-
-                throw MyRepository.getSqlError(e);
-            }
-        }
-
-        // where 
-        const where = (condition: string, params: any) => {
-
-            const whereQuery = queryBuilder
-                .where(condition, params);
-
-            return {
-                getManyAsync: () => getManyAsync(whereQuery)
-            }
-        }
-
-        return {
-            where
-        }
+        return `Query: ${query}\nValues: ${paramPairs.join(", ")}`;
     }
 }
