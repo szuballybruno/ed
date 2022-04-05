@@ -106,8 +106,6 @@ jobs:
       - name: Build backend container
         run: |
           docker buildx build ./epistogram_backend \
-          --cache-from type=local,src=/tmp/.buildx-cache \
-          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $BACKEND_IMAGE_NAME \
           --push
@@ -139,7 +137,7 @@ jobs:
           --port 80 \
           --allow-unauthenticated 
 
-  # # DEPLOY BACKEND
+  # DEPLOY BACKEND
   deploy_backend:
     name: Deploy backend
     runs-on: ubuntu-latest

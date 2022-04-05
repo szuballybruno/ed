@@ -15,7 +15,7 @@ COPY /src ./src
 COPY tsconfig.json .
 
 # compile TypeScript to /build folder
-RUN npm run build
+RUN tsc --
 
 # copy runtime dependnecy files, 
 # note, these are not built and copied to the /build

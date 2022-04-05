@@ -12,7 +12,7 @@
         {
             "label": "generate_pipelines",
             "type": "shell",
-            "command": "cmd /c node pipelineGenerator\\generatePipelines.js",
+            "command": "cmd /c node scripts\\pipelineGenerator\\generatePipelines.js",
             "problemMatcher": []
         }
     ]
