@@ -151,8 +151,8 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
         }}
         isRowSelectable={x => false}
         columns={columnsProcessed}
-        autoHeight
         style={{
+            height: '100%',
             background: 'var(--transparentWhite70)'
         }} />;
 };

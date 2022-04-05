@@ -1,0 +1,7 @@
+.pElement {
+    border: 1px solid var(--deepBlue);
+    color: var(--deepBlue);
+    padding: 5px;
+    margin: 2px;
+    font-weight: 700;
+}

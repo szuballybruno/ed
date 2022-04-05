@@ -70,17 +70,15 @@ export const CourseItemEditDialogBase = (props: {
                                 display: 'flex',
                                 alignItems: 'center',
                                 flexDirection: 'row',
-                                fontWeight: 600
+                                fontWeight: 600,
+                                marginRight: '15px'
                             }}>
                             Új dia hozzáadása
                         </EpistoFont>
 
                         <ChipSmall
                             text="Videó"
-                            color="var(--deepBlue)"
-                            style={{
-                                marginLeft: 15
-                            }} />
+                            color="var(--deepBlue)" />
                     </Flex>
 
                     <EpistoFont

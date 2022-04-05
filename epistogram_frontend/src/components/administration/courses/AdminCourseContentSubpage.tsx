@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit, Equalizer } from '@mui/icons-material';
 import { useGridApiContext } from '@mui/x-data-grid-pro';
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../services/api/courseApiService';
 import { getVirtualId } from '../../../services/core/idService';
@@ -30,11 +30,34 @@ import { ExamEditDialog } from './ExamEditDialog';
 import { VideoEditDialog } from './VideoEditDialog';
 import { OnMutationHandlerType, useXListMutator } from './XMutator';
 
-type RowSchema = CourseContentItemAdminDTO & {
-    quickMenu: number;
-    videoFile: string;
+type RowSchema = {
+    rowKey: string;
     rowNumber: number;
-    errorsWrapper: number;
+    itemOrderIndex: number;
+    itemTitle: string;
+    itemSubtitle: string;
+    module: {
+        id: number;
+        hidden: boolean;
+        name: string;
+        orderIndex: number;
+    };
+    itemType: {
+        type: CourseItemType;
+        label: string;
+        color: any;
+    };
+    videoLength: {
+        text: string;
+        color: any;
+    };
+    errors: {
+        text: string;
+        tooltip: string;
+        color: any;
+    };
+    videoFile: string;
+    quickMenu: number;
 };
 
 type EditRowFnType = <TField extends keyof RowSchema, >(key: string, field: TField, value: RowSchema[TField]) => void;
@@ -46,52 +69,6 @@ const useGridColumnDefinitions = (
     editRow: EditRowFnType,
     isModified: (key: string) => (field: keyof RowSchema) => boolean) => {
 
-    const getIssueText = (dto: CourseContentItemIssueDTO) => {
-
-        if (dto.code === 'ans_miss')
-            return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
-
-        if (dto.code === 'corr_ans_miss')
-            return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
-
-        if (dto.code === 'questions_missing')
-            return 'Kerdesek hianyoznak';
-
-        if (dto.code === 'video_too_long')
-            return 'Video tul hosszu';
-
-        return null;
-    };
-
-    const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
-
-        if (itemType === 'exam')
-            return {
-                color: 'var(--deepOrange)',
-                label: 'Vizsga'
-            };
-
-        if (itemType === 'video')
-            return {
-                color: 'var(--deepBlue)',
-                label: 'Videó'
-            };
-
-        if (itemType === 'pretest')
-            return {
-                color: 'purple',
-                label: 'Szintfelmérő'
-            };
-
-        if (itemType === 'final')
-            return {
-                color: 'orange',
-                label: 'Záróvizsga'
-            };
-
-        throw new Error('Unexpected type: ' + itemType);
-    };
-
     const TextCellRenderer = (props: {
         children: ReactNode,
         isMutated: boolean
@@ -102,10 +79,10 @@ const useGridColumnDefinitions = (
         return <div
             className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ''}`}>
 
-            <EpistoFont>
+            <p>
 
                 {children}
-            </EpistoFont>
+            </p>
         </div>;
     };
 
@@ -119,7 +96,7 @@ const useGridColumnDefinitions = (
         const { field, rowKey, row, useCommitNewValue } = props;
         const apiRef = useGridApiContext();
 
-        const [id, setId] = useState<string>(row.moduleId + '');
+        const [id, setId] = useState<string>(row.module!.id + '');
 
         return <EpistoSelect
             items={modules}
@@ -197,7 +174,7 @@ const useGridColumnDefinitions = (
                 </TextCellRenderer>;
             }
         }),
-        columnDefGen('moduleId', {
+        columnDefGen('module', {
             headerName: 'Modul',
             width: 250,
             editable: true,
@@ -206,7 +183,11 @@ const useGridColumnDefinitions = (
                 return <TextCellRenderer
                     isMutated={isModified(key)(field)}>
 
-                    {row.itemType === 'pretest' ? '-' : row.moduleName}
+                    {value
+                        ? value.hidden
+                            ? ' - '
+                            : value.name
+                        : ''}
                 </TextCellRenderer>;
             },
             renderEditCell: (props) => <SelectEditCellRenderer
@@ -223,11 +204,9 @@ const useGridColumnDefinitions = (
                 if (!value)
                     return '';
 
-                const { color, label } = getItemTypeValues(value);
-
                 return <ChipSmall
-                    text={label}
-                    color={color} />;
+                    text={value.label}
+                    color={value.color} />;
             }
         }),
         columnDefGen('videoLength', {
@@ -235,44 +214,26 @@ const useGridColumnDefinitions = (
             width: 80,
             renderCell: ({ value, row }) => {
 
-                if (row.itemType === 'exam')
-                    return '-';
-
-                if (!row.warnings || !value)
+                if (!value)
                     return '';
 
-                const isLengthWarning = row
-                    .warnings
-                    .any(x => x.code === 'video_too_long');
-
                 return <ChipSmall
-                    text={formatTime(Math.round(value))}
-                    color={isLengthWarning
-                        ? 'var(--intenseOrange)'
-                        : 'gray'} />;
+                    text={value.text}
+                    color={value.color} />;
             }
         }),
-        columnDefGen('errorsWrapper', {
+        columnDefGen('errors', {
             headerName: 'Hibak',
             width: 100,
-            renderCell: ({ row }) => {
+            renderCell: ({ value }) => {
 
-                if (!row.errors)
+                if (!value)
                     return '';
 
-                const hasErrors = row.errors.length > 0;
-
                 return <ChipSmall
-                    text={hasErrors
-                        ? `${row.errors.length} hiba`
-                        : 'Nincs hiba'}
-                    tooltip={row
-                        .errors
-                        .map(x => getIssueText(x))
-                        .join('\n')}
-                    color={hasErrors
-                        ? 'var(--intenseRed)'
-                        : 'var(--intenseGreen)'} />;
+                    text={value.text}
+                    tooltip={value.tooltip}
+                    color={value.color} />;
             }
         }),
         columnDefGen('videoFile', {
@@ -280,12 +241,13 @@ const useGridColumnDefinitions = (
             width: 180,
             renderCell: ({ row }) => {
 
-                return <EpistoButton
-                    variant="outlined"
-                    onClick={() => { throw new Error('Not implemented!'); }}>
+                return 'butt';
+                // return <EpistoButton
+                //     variant="outlined"
+                //     onClick={() => { throw new Error('Not implemented!'); }}>
 
-                    Fájl kiválasztása
-                </EpistoButton >;
+                //     Fájl kiválasztása
+                // </EpistoButton >;
             }
         }),
         columnDefGen('quickMenu', {
@@ -293,32 +255,79 @@ const useGridColumnDefinitions = (
             width: 150,
             renderCell: ({ key, row }) => {
 
-                return (
-                    <Flex>
-                        <EpistoButton
-                            onClick={() => openDialog(row.itemType === 'video' ? 'video' : 'exam')}>
+                return 'butt';
+                // return (
+                //     <div className="h-flex">
+                //         <EpistoButton
+                //             onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam')}>
 
-                            <Edit />
-                        </EpistoButton>
+                //             <Edit />
+                //         </EpistoButton>
 
-                        <EpistoButton
-                            onClick={() => { throw new Error('Not implemented!'); }}>
+                //         <EpistoButton
+                //             onClick={() => { throw new Error('Not implemented!'); }}>
 
-                            <Equalizer />
-                        </EpistoButton>
+                //             <Equalizer />
+                //         </EpistoButton>
 
-                        <EpistoButton
-                            onClickNoPropagation={() => removeRow(key)}>
+                //         <EpistoButton
+                //             onClickNoPropagation={() => removeRow(key)}>
 
-                            <Delete />
-                        </EpistoButton>
-                    </Flex>
-                );
+                //             <Delete />
+                //         </EpistoButton>
+                //     </div>
+                // );
             }
         })
     ];
 
     return gridColumns;
+};
+
+const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
+
+    if (itemType === 'exam')
+        return {
+            color: 'var(--deepOrange)',
+            label: 'Vizsga'
+        };
+
+    if (itemType === 'video')
+        return {
+            color: 'var(--deepBlue)',
+            label: 'Videó'
+        };
+
+    if (itemType === 'pretest')
+        return {
+            color: 'purple',
+            label: 'Szintfelmérő'
+        };
+
+    if (itemType === 'final')
+        return {
+            color: 'orange',
+            label: 'Záróvizsga'
+        };
+
+    throw new Error('Unexpected type: ' + itemType);
+};
+
+const getIssueText = (dto: CourseContentItemIssueDTO) => {
+
+    if (dto.code === 'ans_miss')
+        return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+
+    if (dto.code === 'corr_ans_miss')
+        return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+
+    if (dto.code === 'questions_missing')
+        return 'Kerdesek hianyoznak';
+
+    if (dto.code === 'video_too_long')
+        return 'Video tul hosszu';
+
+    return null;
 };
 
 export const AdminCourseContentSubpage = () => {
@@ -335,6 +344,7 @@ export const AdminCourseContentSubpage = () => {
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
+    const [preprocessedItems, setPreprocessedItems] = useState<RowSchema[]>([]);
 
     // http
     const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);
@@ -342,9 +352,8 @@ export const AdminCourseContentSubpage = () => {
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
-    const items = (courseContentAdminData?.items ?? []) as RowSchema[];
 
-    const getRowKey = (row: RowSchema) => row.itemCode;
+    const getRowKey = (row: RowSchema) => row.rowKey;
 
     const mutHandlersRef = useRef<OnMutationHandlerType<RowSchema, string, keyof RowSchema>[]>([]);
 
@@ -358,8 +367,74 @@ export const AdminCourseContentSubpage = () => {
         // addOnMutationHandler,
         mutations,
         resetMutations
-    } = useXListMutator(items, getRowKey, 'itemCode', mutHandlersRef);
+    } = useXListMutator(preprocessedItems, getRowKey, 'rowKey', mutHandlersRef);
 
+    // whe
+    useEffect(() => {
+
+        const items = courseContentAdminData?.items ?? [];
+
+        const preproItems = items
+            .map((item, index): RowSchema => {
+
+                const { color, label } = getItemTypeValues(item.itemType);
+
+                const isLengthWarning = item
+                    .warnings
+                    .any(x => x.code === 'video_too_long');
+
+                const hasErrors = item
+                    .errors
+                    .length > 0;
+
+                return ({
+                    rowKey: item.itemCode,
+                    rowNumber: index,
+                    itemOrderIndex: item.itemOrderIndex,
+                    itemTitle: item.itemTitle,
+                    itemSubtitle: item.itemSubtitle,
+                    module: {
+                        hidden: item.itemType === 'pretest',
+                        id: item.moduleId,
+                        name: item.moduleName,
+                        orderIndex: item.moduleOrderIndex
+                    },
+                    itemType: {
+                        label,
+                        color,
+                        type: item.itemType
+                    },
+                    videoLength: {
+                        text: item.itemType === 'exam'
+                            ? ' - '
+                            : !item.warnings || !item.videoLength
+                                ? ''
+                                : formatTime(Math.round(item.videoLength)),
+                        color: isLengthWarning
+                            ? 'var(--intenseOrange)'
+                            : 'gray'
+                    },
+                    errors: {
+                        text: hasErrors
+                            ? `${item.errors.length} hiba`
+                            : 'Nincs hiba',
+                        tooltip: item
+                            .errors
+                            .map(x => getIssueText(x))
+                            .join('\n'),
+                        color: hasErrors
+                            ? 'var(--intenseRed)'
+                            : 'var(--intenseGreen)'
+                    },
+                    quickMenu: index,
+                    videoFile: 'vf'
+                });
+            });
+
+        setPreprocessedItems(preproItems);
+    }, [courseContentAdminData]);
+
+    // post mutation 
     const gridRows: RowSchema[] = mutatedData
         .map((item, index) => {
 
@@ -369,16 +444,17 @@ export const AdminCourseContentSubpage = () => {
                 ...rest,
                 quickMenu: index,
                 rowNumber: index,
-                videoFile: 'file_' + item.videoId,
+                videoFile: 'file_',
                 errorsWrapper: index
             };
         })
-        .orderBy(x => x.moduleOrderIndex)
-        .groupBy(x => x.moduleId)
+        .orderBy(x => x.module.orderIndex)
+        .groupBy(x => x.module.id)
         .flatMap(x => x
             .items
             .orderBy(i => i.itemOrderIndex));
 
+    // mutation handlers 
     mutHandlersRef
         .current = [
             {
@@ -386,10 +462,10 @@ export const AdminCourseContentSubpage = () => {
                 action: ({ key, field, newValue, item }) => {
 
                     const moduleItems = gridRows
-                        .groupBy(x => x.moduleId)
-                        .filter(x => x.key === item.moduleId)
+                        .groupBy(x => x.module.id)
+                        .filter(x => x.key === item.module.id)
                         .flatMap(x => [...x.items])
-                        .filter(x => x.itemType !== 'pretest')
+                        .filter(x => x.itemType.type !== 'pretest')
                         .map(x => getRowKey(x) === key ? { ...x, itemOrderIndex: newValue as number + 1 } : x)
                         .orderBy(x => x.itemOrderIndex);
 
@@ -440,41 +516,41 @@ export const AdminCourseContentSubpage = () => {
 
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleId = modules[0].id;
+        // const moduleId = modules[0].id;
 
-        const moduleOrderIndex = gridRows
-            .firstOrNull(x => x.moduleId === moduleId)?.moduleOrderIndex ?? 0;
+        // const moduleOrderIndex = gridRows
+        //     .firstOrNull(x => x.moduleId === moduleId)?.moduleOrderIndex ?? 0;
 
-        const itemOrderIndex = gridRows
-            .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
-            .length;
+        // const itemOrderIndex = gridRows
+        //     .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
+        //     .length;
 
-        if (type === 'exam') {
+        // if (type === 'exam') {
 
-            addRow('newcode_' + getVirtualId(), {
-                itemType: 'exam',
-                moduleId,
-                itemSubtitle: '',
-                itemTitle: '',
-                itemOrderIndex,
-                moduleOrderIndex,
-                courseId
-            });
-        }
-        else {
+        //     addRow('newcode_' + getVirtualId(), {
+        //         itemType: 'exam',
+        //         moduleId,
+        //         itemSubtitle: '',
+        //         itemTitle: '',
+        //         itemOrderIndex,
+        //         moduleOrderIndex,
+        //         courseId
+        //     });
+        // }
+        // else {
 
-            addRow('newcode_' + getVirtualId(), {
-                itemType: 'video',
-                moduleId,
-                itemSubtitle: '',
-                itemTitle: '',
-                itemOrderIndex,
-                moduleOrderIndex,
-                courseId
-            });
-        }
+        //     addRow('newcode_' + getVirtualId(), {
+        //         itemType: 'video',
+        //         moduleId,
+        //         itemSubtitle: '',
+        //         itemTitle: '',
+        //         itemOrderIndex,
+        //         moduleOrderIndex,
+        //         courseId
+        //     });
+        // }
 
-        closeAddPopper();
+        // closeAddPopper();
     };
 
     const handleRemoveRow = (key: string) => {
