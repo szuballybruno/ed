@@ -47,6 +47,7 @@ import { AdminPageUserDTO } from "../../shared/dtos/admin/AdminPageUserDTO";
 import { CourseAdminListItemDTO } from "../../shared/dtos/admin/CourseAdminListItemDTO";
 import { CourseContentItemAdminDTO } from "../../shared/dtos/admin/CourseContentItemAdminDTO";
 import { CourseContentItemIssueDTO } from "../../shared/dtos/admin/CourseContentItemIssueDTO";
+import { AdminModuleShortDTO } from "../../shared/dtos/AdminModuleShortDTO";
 import { AnswerDTO } from "../../shared/dtos/AnswerDTO";
 import { AnswerEditDTO } from "../../shared/dtos/AnswerEditDTO";
 import { CoinTransactionDTO } from "../../shared/dtos/CoinTransactionDTO";
@@ -110,6 +111,12 @@ import { MapperService } from "../MapperService";
 import { getItemCode } from "./encodeService";
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(CourseModule, AdminModuleShortDTO, courseModule => ({
+            id: courseModule.id,
+            name: courseModule.name
+        }))
 
     mapperService
         .addMap(CourseModule, ModuleDetailedDTO, courseModule => ({

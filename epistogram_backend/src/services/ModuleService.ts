@@ -1,10 +1,13 @@
 import { UploadedFile } from "express-fileupload";
+import { Course } from "../models/entity/Course";
 import { CourseModule } from "../models/entity/CourseModule";
 import { Exam } from "../models/entity/Exam";
 import { Video } from "../models/entity/Video";
+import { AdminModuleShortDTO } from "../shared/dtos/AdminModuleShortDTO";
 import { ModuleAdminEditDTO } from "../shared/dtos/ModuleAdminEditDTO";
 import { ModuleCreateDTO } from "../shared/dtos/ModuleCreateDTO";
 import { ModuleDetailedDTO } from "../shared/dtos/ModuleDetailedDTO";
+import { ModuleListEditDataDTO } from "../shared/dtos/ModuleListEditDataDTO";
 import { ExamService } from "./ExamService";
 import { FileService } from "./FileService";
 import { MapperService } from "./MapperService";
@@ -139,4 +142,25 @@ export class ModuleService {
                     file.data);
         }
     }
+
+    getModuleListEditDataAsync = async (courseId: number) => {
+
+        const modules = await this._ormService
+            .getMany(CourseModule, "cm",
+                [
+                    "WHERE", ["courseId", "=", "courseId"]
+                ],
+                { courseId });
+
+        const course = await this._ormService
+            .getSingleById(Course, courseId)
+
+        const moduleDTOs = this._mapperService
+            .mapMany(CourseModule, AdminModuleShortDTO, modules);
+
+        return {
+            courseName: course.title,
+            modules: moduleDTOs
+        } as ModuleListEditDataDTO
+    };
 }

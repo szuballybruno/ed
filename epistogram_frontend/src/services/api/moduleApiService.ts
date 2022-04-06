@@ -1,7 +1,8 @@
-import { useReactQuery2 } from '../../static/frontendHelpers';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleCreateDTO } from '../../shared/dtos/ModuleCreateDTO';
+import { ModuleListEditDataDTO } from '../../shared/dtos/ModuleListEditDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useCreateModule = () => {
@@ -40,5 +41,17 @@ export const useModuleEditData = (moduleId: number) => {
         moduleEditDataError: qr.error,
         moduleEditDataState: qr.state,
         refetchModuleEditDataAsync: qr.refetch
+    };
+};
+
+export const useModuleListEditData = (courseId: number) => {
+
+    const qr = useReactQuery2<ModuleListEditDataDTO>(apiRoutes.module.getModuleListEditData, { courseId });
+
+    return {
+        moduleListEditData: qr.data,
+        moduleListEditDataError: qr.error,
+        moduleListEditDataState: qr.state,
+        refetchModuleListEditData: qr.refetch
     };
 };

@@ -1,9 +1,11 @@
-import { Divider, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit } from '@mui/icons-material';
-import { iterate } from '../../../static/frontendHelpers';
+import { useModuleListEditData } from '../../../services/api/moduleApiService';
+import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { LoadingFrame } from '../../system/LoadingFrame';
 import { FlexListItem } from '../../universal/FlexListItem';
 
 export const ModuleEditDialog = (props: {
@@ -11,6 +13,8 @@ export const ModuleEditDialog = (props: {
 }) => {
 
     const { logic: dialogLogic } = props;
+
+    const courseId = useIntParam('courseId')!;
 
     // ".MuiDialog-paper": {
     //     background: "rgba(255,255,255,0.7)",
@@ -22,13 +26,23 @@ export const ModuleEditDialog = (props: {
     //     background: "transparent"
     // }
 
+    const {
+        moduleListEditData,
+        moduleListEditDataState,
+        moduleListEditDataError
+    } = useModuleListEditData(courseId);
+
+    const courseName = moduleListEditData?.courseName ?? '';
+    const modules = moduleListEditData?.modules ?? [];
 
     return <EpistoDialog
         logic={dialogLogic}
         fullScreenX
         fullScreenY>
 
-        <Flex
+        <LoadingFrame
+            loadingState={moduleListEditDataState}
+            error={moduleListEditDataError}
             className="roundBorders"
             flex="1"
             flexDirection="column">
@@ -68,7 +82,7 @@ export const ModuleEditDialog = (props: {
                     <EpistoFont
                         fontSize={'fontMid'}>
 
-                        Microsoft PowerPoint alapok
+                        {courseName}
                     </EpistoFont>
                 </Flex>
 
@@ -100,28 +114,30 @@ export const ModuleEditDialog = (props: {
                             Modulok
                         </EpistoFont>} />
 
-                    {iterate(4, () => <Flex
-                        flex="1"
-                        direction="column">
+                    {modules
+                        .map((module) => <Flex
+                            key={module.id}
+                            flex="1"
+                            direction="column">
 
-                        <FlexListItem
-                            h="50px"
-                            className='dividerBorderBottom'
-                            thumbnailContent={'Modul neve'}
-                            endContent={<Flex>
+                            <FlexListItem
+                                h="50px"
+                                className='dividerBorderBottom'
+                                thumbnailContent={module.name}
+                                endContent={<Flex>
 
-                                <EpistoButton>
-                                    <Edit />
-                                </EpistoButton>
+                                    <EpistoButton>
+                                        <Edit />
+                                    </EpistoButton>
 
-                                <EpistoButton>
-                                    <Delete />
-                                </EpistoButton>
-                            </Flex>
-                            } />
-                    </Flex>)}
+                                    <EpistoButton>
+                                        <Delete />
+                                    </EpistoButton>
+                                </Flex>
+                                } />
+                        </Flex>)}
                 </Flex >
             </Flex >
-        </Flex>
+        </LoadingFrame>
     </EpistoDialog>;
 };

@@ -162,7 +162,8 @@ export const apiRoutes = {
         createModule: '/module/create-module',
         deleteModule: '/module/delete-module',
         getModuleEditData: '/module/get-edit-data',
-        saveModule: '/module/save-module'
+        saveModule: '/module/save-module',
+        getModuleListEditData: '/module/get-modules'
     },
 
     video: {
