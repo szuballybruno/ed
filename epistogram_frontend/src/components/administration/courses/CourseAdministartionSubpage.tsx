@@ -1,7 +1,7 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminCourseContentSubpage } from './AdminCourseContentSubpage';
+import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage';
 import { AdminInteractiveCourseSubpage } from './AdminInteractiveCourseSubpage';
 import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
