@@ -21,11 +21,9 @@ export type OnMutationHandlerType<TMutatee, TKey, TField extends keyof TMutatee>
 export const useXListMutator = <TMutatee extends Object, TKey>(
     items: TMutatee[],
     getCompareKey: (obj: TMutatee) => TKey,
-    keyPropertyName: KeyOfType<TMutatee, TKey>,
-    onMutationHandlers: MutableRefObject<OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]>) => {
+    keyPropertyName: KeyOfType<TMutatee, TKey>) => {
 
-    // const [onMutationHandlers, setOnMutationHandlers] = useState<OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]>([]);
-    // const [mutations, setMutations] = useState<Mutation<TMutatee, TKey>[]>([]);
+    const onMutationHandlersRef = useRef<OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]>([]);
     const forceUpdate = useForceUpdate();
 
     const mutRef = useRef<Mutation<TMutatee, TKey>[]>([]);
@@ -80,20 +78,13 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             }, mut.fieldMutators);
         });
 
-    // console.log(mutRef.current);
-
     const executeMutationHandler = (key: TKey, field: any, newValue: any) => {
 
-        onMutationHandlers
+        onMutationHandlersRef
             .current
             .filter(x => x.field === field)
             .forEach(x => x.action({ key, field, newValue, item: mutatedItems.single(x => getCompareKey(x) === key) }));
     };
-
-    // const addOnMutationHandler = <TField extends keyof TMutatee>(field: TField, action: OnMutaionHandlerActionType<TMutatee, TKey, TField>) => {
-
-    //     setOnMutationHandlers([...onMutationHandlers.filter(x => x.field !== field), { action: action as any, field }]);
-    // }
 
     const setCompareKey = (obj: TMutatee, key: TKey) => {
 
@@ -278,13 +269,19 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         setMutations([]);
     };
 
+    const addOnMutationHandlers = (handers: OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]) => {
+
+        onMutationHandlersRef
+            .current = handers;
+    };
+
     return {
         mutate,
         add,
         remove,
         isMutated,
         resetMutations,
-        // addOnMutationHandler,
+        addOnMutationHandlers,
         mutations: mutRef.current,
         isAnyMutated: mutRef.current.length > 0,
         mutatedData: mutatedItems

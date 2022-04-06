@@ -291,7 +291,7 @@ export class ExamService extends QueryServiceBase<Exam> {
      * @param unsetCurrentCourseItem 
      * @returns 
      */
-    deleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
+    softDeleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
 
         if (examIds.length === 0)
             return;

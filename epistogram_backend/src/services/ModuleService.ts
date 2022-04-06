@@ -72,7 +72,7 @@ export class ModuleService {
             .getMany();
 
         await this._examService
-            .deleteExamsAsync(exams.map(x => x.id), false);
+            .softDeleteExamsAsync(exams.map(x => x.id), false);
 
         // delete modules
         await this._ormService

@@ -6,7 +6,7 @@ declare global {
 
         remove(func: (item: T) => boolean): Array<T>;
         orderBy(func: (item: T) => number | string | Date): Array<T>;
-        groupBy(func: (item: T) => any): Grouping<T>[];
+        groupBy<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
         any(func?: (item: T) => boolean): boolean;
         none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
@@ -23,10 +23,10 @@ declare global {
     }
 }
 
-export type Grouping<T> = {
-    key: any,
-    items: T[],
-    first: T
+export type Grouping<TItem, TKey> = {
+    key: TKey,
+    items: TItem[],
+    first: TItem
 }
 
 // eslint-disable-next-line no-extend-native
@@ -38,9 +38,9 @@ Date.prototype.addDays = function (days: number) {
 }
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.groupBy = function <T>(func: (item: T) => any) {
+Array.prototype.groupBy = function <T, TKey>(func: (item: T) => TKey) {
 
-    const groups = [] as Grouping<T>[];
+    const groups = [] as Grouping<T, TKey>[];
 
     this
         .forEach(item => {

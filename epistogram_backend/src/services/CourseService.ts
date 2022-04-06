@@ -504,21 +504,39 @@ export class CourseService {
     /**
      * Saves the course content 
      */
-    async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, keyof CourseContentItemAdminDTO>[]) {
+    async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
 
-        const checkItemType = (
-            mutation: Mutation<CourseContentItemAdminDTO, keyof CourseContentItemAdminDTO>,
-            itemType: CourseItemType) => {
+        // update items 
+        // await this.saveUpdatedCourseItems(mutations);
 
-            return mutation
-                .fieldMutators
-                .some(fm => fm.field === "itemType" && fm.value === itemType);
-        }
+        // save new items 
+        await this.saveNewCourseItems(mutations);
 
-        const mutationToObj = <
-            TMutatee extends Object,
-            TKey extends keyof TMutatee>(
-                mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
+        // delete items 
+        await this.saveDeletedCourseItems(mutations);
+    }
+
+    private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+
+        const itemCodes = mutations
+            .filter(x => x.action === "delete")
+            .map(x => x.key)
+            .map(x => readItemCode(x))
+            .groupBy(x => x.itemType);
+
+        const deletedExamIds = itemCodes
+            .filter(x => x.key === "exam")
+            .flatMap(x => x.items)
+            .map(x => x.itemId);
+
+        this._examService
+            .softDeleteExamsAsync(deletedExamIds, true);
+    }
+
+    private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+
+        const mutationToObj = <TMutatee extends Object, TKey extends keyof TMutatee>(
+            mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
 
             const obj = {} as Partial<TMutatee>;
 
@@ -529,10 +547,21 @@ export class CourseService {
             return obj;
         }
 
+        const checkMutationItemType = (
+            mutation: Mutation<CourseContentItemAdminDTO, 'itemCode'>,
+            itemType: CourseItemType) => {
+
+            return mutation
+                .fieldMutators
+                .some(fm => fm.field === "itemType" && fm.value === itemType);
+        }
+
+        //
         // insert new videos
+        //
         const newVideos = mutations
             .filter(x => x.action === "add")
-            .filter(x => checkItemType(x, "video"))
+            .filter(x => checkMutationItemType(x, "video"))
             .map((x): Partial<Video> => {
 
                 const mutObject = mutationToObj(x);
@@ -551,7 +580,7 @@ export class CourseService {
         // insert new videos
         const newExams = mutations
             .filter(x => x.action === "add")
-            .filter(x => checkItemType(x, "exam"))
+            .filter(x => checkMutationItemType(x, "exam"))
             .map((x): Partial<Exam> => {
 
                 const mutObject = mutationToObj(x);
@@ -567,50 +596,11 @@ export class CourseService {
                 }
             });
 
-        console.log(newVideos)
-        console.log(newExams)
-
         await this._examService
             .insertBulkAsync(newExams);
 
         await this._videoService
             .insertBulkAsync(newVideos);
-
-        // // save module order index 
-        // await this._ormService
-        //     .getRepository(CourseModule)
-        //     .save(dto
-        //         .modules
-        //         .map(x => ({
-        //             id: x.id,
-        //             orderIndex: x.orderIndex
-        //         } as CourseModule)));
-
-        // // save video orders
-        // await this._ormService
-        //     .getRepository(Video)
-        //     .save(dto
-        //         .modules
-        //         .flatMap(x => x.items)
-        //         .filter(x => x.type === "video")
-        //         .map(x => ({
-        //             id: x.id,
-        //             orderIndex: x.orderIndex,
-        //             moduleId: x.moduleId
-        //         } as Video)));
-
-        // // save exam orders
-        // await this._ormService
-        //     .getRepository(Exam)
-        //     .save(dto
-        //         .modules
-        //         .flatMap(x => x.items)
-        //         .filter(x => x.type === "exam")
-        //         .map(x => ({
-        //             id: x.id,
-        //             orderIndex: x.orderIndex,
-        //             moduleId: x.moduleId
-        //         } as Video)));
     }
 
     /**

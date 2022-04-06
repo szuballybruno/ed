@@ -17,7 +17,7 @@ import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ExamEditDialog } from '../ExamEditDialog';
 import { ModuleEditDialog } from '../ModuleEditDialog';
 import { VideoEditDialog } from '../VideoEditDialog';
-import { OnMutationHandlerType, useXListMutator } from '../XMutator';
+import { useXListMutator } from '../XMutator';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { EditRowFnType, mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 
@@ -47,8 +47,6 @@ export const AdminCourseContentSubpage = () => {
 
     const getRowKey = (row: RowSchema) => row.rowKey;
 
-    const mutHandlersRef = useRef<OnMutationHandlerType<RowSchema, string, keyof RowSchema>[]>([]);
-
     const {
         mutatedData,
         add: addRow,
@@ -56,10 +54,10 @@ export const AdminCourseContentSubpage = () => {
         remove: removeRow,
         isMutated: isRowModified,
         isAnyMutated: isAnyRowsMutated,
-        // addOnMutationHandler,
         mutations,
-        resetMutations
-    } = useXListMutator(preprocessedItems, getRowKey, 'rowKey', mutHandlersRef);
+        resetMutations,
+        addOnMutationHandlers
+    } = useXListMutator<RowSchema, string>(preprocessedItems, getRowKey, 'rowKey');
 
     // whe
     useEffect(() => {
@@ -82,39 +80,38 @@ export const AdminCourseContentSubpage = () => {
             .orderBy(i => i.itemOrderIndex));
 
     // mutation handlers 
-    mutHandlersRef
-        .current = [
-            {
-                field: 'itemOrderIndex',
-                action: ({ key, field, newValue, item }) => {
+    addOnMutationHandlers([
+        {
+            field: 'itemOrderIndex',
+            action: ({ key, field, newValue, item }) => {
 
-                    const moduleItems = gridRows
-                        .groupBy(x => x.module.id)
-                        .filter(x => x.key === item.module.id)
-                        .flatMap(x => [...x.items])
-                        .filter(x => x.itemType.type !== 'pretest')
-                        .map(x => getRowKey(x) === key ? { ...x, itemOrderIndex: newValue as number + 1 } : x)
-                        .orderBy(x => x.itemOrderIndex);
+                const moduleItems = gridRows
+                    .groupBy(x => x.module.id)
+                    .filter(x => x.key === item.module.id)
+                    .flatMap(x => [...x.items])
+                    .filter(x => x.itemType.type !== 'pretest')
+                    .map(x => getRowKey(x) === key ? { ...x, itemOrderIndex: newValue as number + 1 } : x)
+                    .orderBy(x => x.itemOrderIndex);
 
-                    // console.log(moduleItems
-                    //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
+                // console.log(moduleItems
+                //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
 
-                    const indices = moduleItems
-                        .map((item, index) => { item.itemOrderIndex = index; return item; });
+                const indices = moduleItems
+                    .map((item, index) => { item.itemOrderIndex = index; return item; });
 
-                    // console.log(indices
-                    //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
+                // console.log(indices
+                //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
 
-                    indices
-                        .forEach(x => mutateRow({
-                            key: getRowKey(x),
-                            field: 'itemOrderIndex',
-                            newValue: x.itemOrderIndex,
-                            noOnMutationCallback: true
-                        }));
-                }
+                indices
+                    .forEach(x => mutateRow({
+                        key: getRowKey(x),
+                        field: 'itemOrderIndex',
+                        newValue: x.itemOrderIndex,
+                        noOnMutationCallback: true
+                    }));
             }
-        ];
+        }
+    ]);
 
     // console.log(gridRows.map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
 

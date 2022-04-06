@@ -101,6 +101,6 @@ export class ExamController {
         const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
         await this._examService
-            .deleteExamsAsync([examId], true);
+            .softDeleteExamsAsync([examId], true);
     }
 }
