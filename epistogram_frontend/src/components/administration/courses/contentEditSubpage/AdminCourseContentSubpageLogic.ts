@@ -1,7 +1,7 @@
-import { CourseContentItemAdminDTO } from "../../../../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseContentItemIssueDTO } from "../../../../shared/dtos/admin/CourseContentItemIssueDTO";
-import { CourseItemType } from "../../../../shared/types/sharedTypes";
-import { formatTime } from "../../../../static/frontendHelpers";
+import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
+import { CourseItemType } from '../../../../shared/types/sharedTypes';
+import { formatTime } from '../../../../static/frontendHelpers';
 
 export type RowSchema = {
     rowKey: string;

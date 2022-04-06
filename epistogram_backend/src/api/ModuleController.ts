@@ -47,4 +47,15 @@ export class ModuleController {
         return this._moduleService
             .saveModuleAsync(dto.data, file);
     }
+
+    getModuleListEditAction = async (params: ActionParams) => {
+        const query = params
+            .getQuery<any>();
+
+        const courseId = query
+            .getValue(x => x.courseId);
+
+        return this._moduleService
+            .getModuleListEditDataAsync(courseId)
+    }
 }

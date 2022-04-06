@@ -1,19 +1,19 @@
-import { Equalizer } from "@mui/icons-material";
-import Delete from "@mui/icons-material/Delete";
-import Edit from "@mui/icons-material/Edit";
-import { useGridApiContext } from "@mui/x-data-grid";
-import { ReactNode, useState } from "react";
-import { CourseContentItemAdminDTO } from "../../../../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseContentItemIssueDTO } from "../../../../shared/dtos/admin/CourseContentItemIssueDTO";
-import { CourseModuleShortDTO } from "../../../../shared/dtos/admin/CourseModuleShortDTO";
-import { OmitProperty } from "../../../../shared/types/advancedTypes";
-import { CourseItemType } from "../../../../shared/types/sharedTypes";
-import { formatTime } from "../../../../static/frontendHelpers";
-import { EpistoButton } from "../../../controls/EpistoButton";
-import { GridColumnType, UseCommitNewValueType } from "../../../controls/EpistoDataGrid";
-import { EpistoSelect } from "../../../controls/EpistoSelect";
-import { ChipSmall } from "../ChipSmall";
-import { EditRowFnType, RowSchema } from "./AdminCourseContentSubpageLogic";
+import { Equalizer } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
+import { useGridApiContext } from '@mui/x-data-grid';
+import { ReactNode, useState } from 'react';
+import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
+import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
+import { OmitProperty } from '../../../../shared/types/advancedTypes';
+import { CourseItemType } from '../../../../shared/types/sharedTypes';
+import { formatTime } from '../../../../static/frontendHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { GridColumnType, UseCommitNewValueType } from '../../../controls/EpistoDataGrid';
+import { EpistoSelect } from '../../../controls/EpistoSelect';
+import { ChipSmall } from '../ChipSmall';
+import { EditRowFnType, RowSchema } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
 
 export const useGridColumnDefinitions = (

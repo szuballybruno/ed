@@ -338,6 +338,7 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true, authorize: ["administrator"] });
     addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction, { authorize: ["administrator"] });
     addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.getModuleListEditData, moduleController.getModuleListEditAction, { authorize: ["administrator"] });
 
     // video 
     addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ["administrator"] });
