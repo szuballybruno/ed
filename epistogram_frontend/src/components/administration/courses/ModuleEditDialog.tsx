@@ -1,143 +1,110 @@
-import { Flex } from '@chakra-ui/react';
-import { Add, Delete, Edit } from '@mui/icons-material';
-import { useModuleListEditData } from '../../../services/api/moduleApiService';
+import { useState } from 'react';
+import { useCreateModule, useModuleListEditData, useSaveModule } from '../../../services/api/moduleApiService';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { ModuleAdminEditDTO } from '../../../shared/dtos/ModuleAdminEditDTO';
+import { usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { FlexListItem } from '../../universal/FlexListItem';
+import { EpistoDialogLogicType } from '../../EpistoDialog';
+import { EditModuleModalPage } from './EditModuleModalPage';
+import { ModuleEditDialogBase } from './ModuleEditDialogBase';
+import { ModuleListModalPage } from './ModuleListModalPage';
 
 export const ModuleEditDialog = (props: {
     logic: EpistoDialogLogicType
 }) => {
 
-    const { logic: dialogLogic } = props;
+    const { logic } = props;
 
     const courseId = useIntParam('courseId')!;
+    const showError = useShowErrorDialog();
 
-    // ".MuiDialog-paper": {
-    //     background: "rgba(255,255,255,0.7)",
-    //     backdropFilter: "blur(12px)",
-    //     borderRadius: "7px",
-    //     boxShadow: "0px 0px 30px 50px rgba(0,0,0,0.2)"
-    // },
-    // ".MuiBackdrop-root": {
-    //     background: "transparent"
-    // }
+    // state
+    const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
 
-    const {
-        moduleListEditData,
-        moduleListEditDataState,
-        moduleListEditDataError
-    } = useModuleListEditData(courseId);
+    // http
+    const { moduleListEditData, moduleListEditDataState, moduleListEditDataError, refetchModuleListEditData } = useModuleListEditData(courseId);
+    const { saveModuleAsync } = useSaveModule();
+    const { createModuleAsync } = useCreateModule();
 
+    const modulesLength = moduleListEditData?.modules.length!;
     const courseName = moduleListEditData?.courseName ?? '';
-    const modules = moduleListEditData?.modules ?? [];
+    const moduleName = moduleListEditData?.modules.find(x => x.id === editedModuleId)?.name;
 
-    return <EpistoDialog
-        logic={dialogLogic}
-        fullScreenX
-        fullScreenY>
+    // paging
+    const paging = usePaging([
+        {
+            content: () => <ModuleListModalPage
+                moduleListEditData={moduleListEditData}
+                moduleListEditDataState={moduleListEditDataState}
+                moduleListEditDataError={moduleListEditDataError}
+                handleEditModule={handleEditModule} />,
+            title: 'Modulok szerkesztése'
 
-        <LoadingFrame
-            loadingState={moduleListEditDataState}
-            error={moduleListEditDataError}
-            className="roundBorders"
-            flex="1"
-            flexDirection="column">
+        },
+        {
+            content: () => <EditModuleModalPage
+                handleSaveModuleAsync={handleSaveModuleAsync}
+                editedModuleId={editedModuleId!} />,
+            title: 'Statisztika'
+        }
+    ]);
 
-            {/* header */}
-            <Flex
-                background="rgba(255,255,255,0.97)"
-                direction="row"
-                justify="space-between"
-                position="sticky"
-                w="100%"
-                top="0"
-                p="20px 30px 20px 30px"
-                className="mildShadow"
-                zIndex="1000"
-                flex="1">
+    // selects edited module and navigates to edit page
+    const handleEditModule = (moduleId: number) => {
+        setEditedModuleId(moduleId);
+        paging.setItem(1);
+    };
 
-                <Flex
-                    direction="column">
+    // save module
+    const handleSaveModuleAsync = async (module: ModuleAdminEditDTO, moduleImageFile: File | null) => {
 
-                    <Flex align="center">
+        try {
 
-                        <EpistoFont
-                            fontSize={'fontLarge'}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                fontWeight: 600,
-                                marginRight: '15px'
-                            }}>
+            await saveModuleAsync(
+                module,
+                moduleImageFile ?? undefined);
 
-                            Modulok szerkesztése
-                        </EpistoFont>
-                    </Flex>
+            showNotification('Modul sikeresen mentve.');
+            refetchModuleListEditData();
+            paging.setItem(0);
+        }
+        catch (e) {
 
-                    <EpistoFont
-                        fontSize={'fontMid'}>
+            showError(e);
+        }
+    };
 
-                        {courseName}
-                    </EpistoFont>
-                </Flex>
+    // add new module
+    const handleAddModuleAsync = async () => {
 
-                <EpistoButton
-                    icon={<Add />}>
+        try {
 
-                    Hozzáadás
-                </EpistoButton>
-            </Flex>
+            await createModuleAsync({
+                courseId: courseId,
+                name: 'Új modul',
+                orderIndex: modulesLength
+            });
 
-            <Flex
-                flex="1"
-                p="20px">
+            showNotification('Modul sikeresen hozzáadva!');
+            await refetchModuleListEditData();
+        }
+        catch (e) {
 
-                <Flex
-                    flex="1"
-                    direction="column"
-                    className="roundBorders largeSoftShadow"
-                    background="var(--transparentWhite90)"
-                    padding="0 20px">
+            showError(e);
+        }
+    };
 
-                    <FlexListItem
-                        h="50px"
-                        thumbnailContent={<EpistoFont
-                            style={{
-                                fontWeight: 600
-                            }}>
+    // navigates back to module list
+    const handleBackToModuleList = () => {
+        paging.setItem(0);
+    };
 
-                            Modulok
-                        </EpistoFont>} />
-
-                    {modules
-                        .map((module) => <Flex
-                            key={module.id}
-                            flex="1"
-                            direction="column">
-
-                            <FlexListItem
-                                h="50px"
-                                className='dividerBorderBottom'
-                                thumbnailContent={module.name}
-                                endContent={<Flex>
-
-                                    <EpistoButton>
-                                        <Edit />
-                                    </EpistoButton>
-
-                                    <EpistoButton>
-                                        <Delete />
-                                    </EpistoButton>
-                                </Flex>
-                                } />
-                        </Flex>)}
-                </Flex >
-            </Flex >
-        </LoadingFrame>
-    </EpistoDialog>;
+    return <ModuleEditDialogBase
+        courseName={courseName}
+        moduleName={moduleName}
+        logic={logic}
+        handleBackToModuleList={handleBackToModuleList}
+        handleAddModuleAsync={handleAddModuleAsync}
+        currentItemIndex={paging.currentIndex}
+        subpages={paging.items.map(item => item.content)} />;
 };

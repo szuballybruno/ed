@@ -15,9 +15,19 @@ export const SegmentedButton = <T,>(props: {
     const disp = getDisplayValue ?? ((item: T) => item);
 
     return <>
-        <ToggleButtonGroup style={{
-            background: 'var(--transparentWhite90)'
-        }}>
+        <ToggleButtonGroup
+            sx={{
+                '&.MuiToggleButtonGroup-root': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 45,
+                    minHeight: 0
+                }
+            }}
+            style={{
+                background: 'var(--transparentWhite90)'
+            }}>
 
             {paging
                 .items
@@ -32,6 +42,28 @@ export const SegmentedButton = <T,>(props: {
                                 border: 'none',
                                 padding: '15px 25px',
                                 ...buttonStyle
+                            }}
+                            sx={{
+                                '&.MuiToggleButton-root': {
+                                    color: '#444',
+                                    cursor: 'pointer',
+                                    backgroundColor: 'transparent',
+                                    padding: '6px 16px',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    height: '41px',
+                                    minHeight: '0px'
+                                },
+                                '&.MuiTouchRipple-root': {
+                                    lineHeight: '0px'
+                                },
+                                '&.Mui-selected': {
+                                    color: '#444',
+                                    fontWeight: 'bold',
+                                    background: 'var(--transparentIntenseTeal)'
+                                }
                             }}
                             key={index}
                             value={index}

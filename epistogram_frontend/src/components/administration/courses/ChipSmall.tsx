@@ -10,10 +10,14 @@ export const ChipSmall = (props: {
 
     return (
         <p
-            className={`roundBorders ${classes.pElement}`}
+            className={`roundBorders fontSmall ${classes.pElement}`}
             title={tooltip}
             style={{
-                color
+                color,
+                height: '22px',
+                lineHeight: 0,
+                display: 'flex',
+                alignItems: 'center'
             }}>
 
             {text}

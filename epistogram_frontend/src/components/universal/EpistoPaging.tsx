@@ -25,8 +25,11 @@ export const EpistoPaging = (props: FlexProps & {
     const renderCurrentSlide = slides[index](true);
 
     return (
-        <Flex id="slidesDisplayRoot"
-{...flex}>
+        <Flex
+            flex="1"
+            id="slidesDisplayRoot"
+            {...flex}>
+
             {alwaysRender
                 ? renderSlides()
                 : renderCurrentSlide}
