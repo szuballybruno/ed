@@ -115,6 +115,7 @@ export const EpistoDialog = (props: {
             <Flex
                 id="dialogContentFlex"
                 padding={children ? '0px' : '10px'}
+                flex="1"
                 minHeight="70px">
 
                 {/* simple text content */}
