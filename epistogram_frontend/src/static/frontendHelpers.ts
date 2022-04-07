@@ -1,6 +1,7 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import queryString from 'query-string';
-import { useEffect, useState } from 'react';
+import React, { ComponentType } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { matchRoutes, useLocation, useParams } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
@@ -178,12 +179,38 @@ export const useCurrentUrlPathname = () => {
     return location.pathname;
 };
 
+type MemoFnType = <T extends ComponentType<any>>(
+    c: T,
+    areEqual?: (
+        prev: React.ComponentProps<T>,
+        next: React.ComponentProps<T>
+    ) => boolean
+) => T;
+
+type MemoFnType2 = <TProps>(
+    c: (props: TProps) => JSX.Element,
+    areEqual?: (
+        prev: TProps,
+        next: TProps
+    ) => boolean
+) => (props: TProps) => JSX.Element;
+
+export const typedMemo: MemoFnType2 = React.memo as any;
+
+export const valueCompareTest = (val: any, name: string) => {
+
+    const prevValName = `prev_val_${name}`;
+    const prevVal = window[prevValName];
+    console.log(`*** ${name} Is unchanged: ${val === prevVal}`);
+    window[prevValName] = val;
+};
+
 export const useIsMatchingCurrentRoute = () => {
 
     const urlPathname = useCurrentUrlPathname();
     const params = useParams();
 
-    const replacePath = (path: string, params: any) => {
+    const replacePath = useCallback((path: string, params: any) => {
 
         let replPath = '' + path;
 
@@ -197,9 +224,9 @@ export const useIsMatchingCurrentRoute = () => {
             });
 
         return replPath;
-    };
+    }, []);
 
-    return (route: ApplicationRoute) => {
+    const isMatchingCurrentRoute = useCallback((route: ApplicationRoute) => {
 
         if (!route)
             throw new Error('Route is null or undefined!');
@@ -213,7 +240,9 @@ export const useIsMatchingCurrentRoute = () => {
             console.log(`Loc: ${urlPathname} ReplacedPath: ${replacedPath} Match: ${isMatchingRoute}`);
 
         return { isMatchingRoute, isMatchingRouteExactly };
-    };
+    }, [replacePath, urlPathname, params]);
+
+    return isMatchingCurrentRoute;
 };
 
 export const useRedirectOnExactMatch = (opts: {

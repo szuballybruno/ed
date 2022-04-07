@@ -4,12 +4,13 @@ import { CourseStageNameType } from '../../shared/types/sharedTypes';
 import { ApplicationRoute } from '../../models/types';
 import { verboseLogging } from '../../static/Environemnt';
 import { getUrl } from '../../static/frontendHelpers';
+import { useCallback } from 'react';
 
 export const useNavigation = () => {
 
     const domNavigate = useNavigate();
 
-    const navigate = (route: ApplicationRoute, params?: any, query?: any) => {
+    const navigate = useCallback((route: ApplicationRoute, params?: any, query?: any) => {
 
         const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
 
@@ -17,7 +18,7 @@ export const useNavigation = () => {
             console.log('Navigating to: ' + replacedPath);
 
         domNavigate(replacedPath);
-    };
+    }, [domNavigate, getUrl, verboseLogging]);
 
     const openNewTab = (url: string) => (window as any).open(url, '_blank')
         .focus();

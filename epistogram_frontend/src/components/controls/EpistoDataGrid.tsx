@@ -1,5 +1,7 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
+import { loggingSettings } from '../../static/Environemnt';
+import { typedMemo, valueCompareTest } from '../../static/frontendHelpers';
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
@@ -34,7 +36,7 @@ export type InitialStateType<TSchema> = {
     }
 }
 
-export const EpistoDataGrid = <TSchema, TKey>(props: {
+export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, any>[],
     getKey: (row: TSchema) => TKey,
@@ -43,6 +45,10 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
 }) => {
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
+
+    valueCompareTest(handleEdit, 'handleEdit');
+    valueCompareTest(getKey, 'getKey');
+    valueCompareTest(initialState, 'initialState');
 
     const columnsProcessed = columns
         .map(column => {
@@ -132,27 +138,55 @@ export const EpistoDataGrid = <TSchema, TKey>(props: {
                 });
     }, []);
 
-    return <DataGridPro
-        getRowId={x => getKey(x as TSchema) as any}
-        rows={rows}
-        apiRef={apiRef}
-        onCellClick={handleCellClick}
-        initialState={initialState as any}
-        onCellEditCommit={({ id, value, field }) => {
+    if (loggingSettings.render)
+        console.log('rendering grid');
 
-            const column = columns
-                .single(x => x.field === field);
+    return (
+        <DataGridPro
+            getRowId={x => getKey(x as TSchema) as any}
+            rows={rows}
+            apiRef={apiRef}
+            onCellClick={handleCellClick}
+            initialState={initialState as any}
+            onCellEditCommit={({ id, value, field }) => {
 
-            const val: any = column.type === 'int'
-                ? parseInt(value as any)
-                : value;
+                const column = columns
+                    .single(x => x.field === field);
 
-            handleEdit(id as any, field as any, val);
-        }}
-        isRowSelectable={x => false}
-        columns={columnsProcessed}
-        style={{
-            height: '100%',
-            background: 'var(--transparentWhite70)'
-        }} />;
-};
+                const val: any = column.type === 'int'
+                    ? parseInt(value as any)
+                    : value;
+
+                handleEdit(id as any, field as any, val);
+            }}
+            isRowSelectable={x => false}
+            columns={columnsProcessed}
+            style={{
+                height: '100%',
+                background: 'var(--transparentWhite70)'
+            }} />
+    );
+}, (prev, next) => {
+
+    if (prev.getKey !== next.getKey) {
+
+        return false;
+    }
+
+    if (prev.handleEdit !== next.handleEdit) {
+
+        return false;
+    }
+
+    if (JSON.stringify(prev.columns) !== JSON.stringify(next.columns)) {
+
+        return false;
+    }
+
+    if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
+
+        return false;
+    }
+
+    return true;
+});

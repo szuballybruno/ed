@@ -6,6 +6,7 @@ import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage
 import { AdminInteractiveCourseSubpage } from './AdminInteractiveCourseSubpage';
 import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
 import { AdminCourseDetailsSubpage } from './EditCourseDetailsSubpage';
+import { MemoTest } from '../../MemoTest';
 
 export const CourseAdministartionSubpage = () => {
 

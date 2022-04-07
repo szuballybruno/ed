@@ -1,9 +1,10 @@
 import { useForceUpdate } from '@chakra-ui/react';
-import { MutableRefObject, useRef } from 'react';
+import { MutableRefObject, useCallback, useRef } from 'react';
 import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
 import { getKeys } from '../../../shared/logic/sharedLogic';
 import { KeyOfType } from '../../../shared/types/advancedTypes';
+import { valueCompareTest } from '../../../static/frontendHelpers';
 
 export type OnMutaionHandlerActionType<TMutatee, TKey, TField extends keyof TMutatee> =
     (params: {
@@ -27,11 +28,11 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
     const forceUpdate = useForceUpdate();
 
     const mutRef = useRef<Mutation<TMutatee, TKey>[]>([]);
-    const setMutations = (muts: Mutation<TMutatee, TKey>[]) => {
+    const setMutations = useCallback((muts: Mutation<TMutatee, TKey>[]) => {
 
         mutRef.current = muts;
         forceUpdate();
-    };
+    }, [forceUpdate]);
 
     const getCompareKeyValue = (obj: TMutatee) => {
 
@@ -78,20 +79,20 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             }, mut.fieldMutators);
         });
 
-    const executeMutationHandler = (key: TKey, field: any, newValue: any) => {
+    const executeMutationHandler = useCallback((key: TKey, field: any, newValue: any) => {
 
         onMutationHandlersRef
             .current
             .filter(x => x.field === field)
             .forEach(x => x.action({ key, field, newValue, item: mutatedItems.single(x => getCompareKey(x) === key) }));
-    };
+    }, []);
 
     const setCompareKey = (obj: TMutatee, key: TKey) => {
 
         (obj as any)[keyPropertyName] = key;
     };
 
-    const mutate = <TField extends keyof TMutatee>(params: {
+    const mutate = useCallback(<TField extends keyof TMutatee>(params: {
         key: TKey,
         field: TField,
         newValue: TMutatee[TField],
@@ -192,7 +193,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
         console.log(`Adding new mutation: ${key} - ${field} - ${newValue}`);
         setMutationsWithCallback(newMutations);
-    };
+    }, [items, executeMutationHandler, setMutations]);
 
     const remove = (key: TKey) => {
 

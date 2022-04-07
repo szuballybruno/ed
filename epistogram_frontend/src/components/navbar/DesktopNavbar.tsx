@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
+import { loggingSettings } from '../../static/Environemnt';
 import { getAssetUrl, getUrl } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -155,6 +156,9 @@ export const DesktopNavbar = (props: {
             </Flex>
         );
     };
+
+    if (loggingSettings.render)
+        console.log('Rendering navbar');
 
     return (
         <Flex

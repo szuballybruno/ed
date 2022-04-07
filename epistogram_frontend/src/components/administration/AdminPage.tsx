@@ -6,6 +6,7 @@ import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { ArrayBuilder, getAssetUrl } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
+import { MemoTest } from '../MemoTest';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';

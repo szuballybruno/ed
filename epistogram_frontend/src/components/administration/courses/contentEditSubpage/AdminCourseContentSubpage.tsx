@@ -1,15 +1,18 @@
 import { Add, Edit } from '@mui/icons-material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { loggingSettings } from '../../../../static/Environemnt';
+import { valueCompareTest } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoDialog, useEpistoDialogLogic } from '../../../EpistoDialog';
+import { MemoTest } from '../../../MemoTest';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { AddNewItemPopper } from '../AddNewItemPopper';
@@ -45,7 +48,7 @@ export const AdminCourseContentSubpage = () => {
     // computed
     const modules = courseContentAdminData?.modules ?? [];
 
-    const getRowKey = (row: RowSchema) => row.rowKey;
+    const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
 
     const {
         mutatedData,
@@ -112,8 +115,6 @@ export const AdminCourseContentSubpage = () => {
             }
         }
     ]);
-
-    // console.log(gridRows.map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
 
     // 
     // FUNCS
@@ -214,6 +215,14 @@ export const AdminCourseContentSubpage = () => {
     // EFFECTS
     //
 
+    if (loggingSettings.render)
+        console.log('Rendering AdminCourseContentSubpage');
+
+    const handleEdit = useCallback((key: string, field: any, value: any) => {
+
+        mutateRow({ key, field, newValue: value });
+    }, [mutateRow]);
+
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentAdminDataState]}
         error={courseContentAdminDataError}
@@ -267,7 +276,7 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDataGrid
                     columns={gridColumns}
                     rows={gridRows}
-                    handleEdit={(key, field, value) => mutateRow({ key, field, newValue: value })}
+                    handleEdit={handleEdit}
                     getKey={getRowKey}
                     initialState={{
                         pinnedColumns: {

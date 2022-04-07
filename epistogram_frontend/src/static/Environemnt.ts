@@ -10,6 +10,10 @@ export const fetchNewAccessTokenIntervalInMs = 5 * 60 * 1000; // 5 minutes
 export const fetchUserIntervalInMs = 10 * 60 * 1000; // 10 minutes
 export const eventPoolingIntervalInMs = 20 * 1000; // 20 secs
 export const verboseLogging = false;
+export const loggingSettings = {
+    routing: false,
+    render: true
+};
 
 console.log('Current version: ' + currentVersion);
 console.log('Server url: ' + serverUrl);

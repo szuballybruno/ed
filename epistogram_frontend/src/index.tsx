@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { XDialogHost } from './components/lib/XDialog/XDialogHost';
+import { MemoTest } from './components/MemoTest';
 import { AuthenticationFrame } from './components/system/AuthenticationFrame';
 import { ErrorDialogFrame } from './components/system/DialogFrame';
 import { EventListener } from './components/system/EventListener';
@@ -65,7 +66,8 @@ const muiTheme = createTheme({
     },
 });
 
-const app = (
+const app = (<>
+
     <QueryClientProvider client={queryClient}>
         <>
             <ColorModeScript initialColorMode={'light'} />
@@ -105,6 +107,7 @@ const app = (
             </ChakraProvider>
         </>
     </QueryClientProvider>
+</>
 );
 
 ReactDOM.render(app, document.getElementById('root'));

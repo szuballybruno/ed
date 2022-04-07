@@ -14,6 +14,12 @@
             "type": "shell",
             "command": "cmd /c node scripts\\pipelineGenerator\\generatePipelines.js",
             "problemMatcher": []
+        },
+        {
+            "label": "styleGen",
+            "type": "shell",
+            "command": "cmd /c node scripts\\styleGen\\styleGen.js",
+            "problemMatcher": []
         }
     ]
 }

@@ -1,14 +1,15 @@
 import { Image } from '@chakra-ui/image';
 import { Flex } from '@chakra-ui/layout';
-import React from 'react';
+import React, { memo } from 'react';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
+import { loggingSettings } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { FlexList } from '../../universal/FlexList';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
-export const AdminCourseList = (props: {
+export const AdminCourseList = memo((props: {
     onCourseClick: (courseId: number) => void,
     courses: CourseAdminListItemDTO[]
 }) => {
@@ -18,6 +19,9 @@ export const AdminCourseList = (props: {
 
     // util
     const courseId = useIntParam('courseId');
+
+    if (loggingSettings.render)
+        console.log('Rendering AdminCourseList');
 
     return <Flex
         className="roundBorders"
@@ -34,11 +38,12 @@ export const AdminCourseList = (props: {
 
         {/* List of courses */}
         <FlexList flex={1}
-pb="300px"
-flexBasis="350px"
-mt="5px"
-className="roundBorders"
-background="var(--transparentWhite70)">
+            pb="300px"
+            flexBasis="350px"
+            mt="5px"
+            className="roundBorders"
+            background="var(--transparentWhite70)">
+
             {courses
                 .map((course, index) => {
 
@@ -69,4 +74,8 @@ background="var(--transparentWhite70)">
                 })}
         </FlexList>
     </Flex>;
-};
+}, (prev, next) => {
+
+    return prev.onCourseClick === next.onCourseClick
+        && prev.courses.length === next.courses.length;
+});

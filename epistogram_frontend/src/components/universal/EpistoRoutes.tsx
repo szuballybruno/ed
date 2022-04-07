@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
+import { loggingSettings } from '../../static/Environemnt';
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 export type RenderRoute = {
@@ -14,7 +15,7 @@ export type RenderRoute = {
 
 export type RouteProtectionLevelType = 'open' | 'justAuthenticate' | 'authorize';
 
-const verboseLogging = true;
+const verboseLogging = loggingSettings.routing;
 
 const RouteRenderer = (props: {
     route: ApplicationRoute,

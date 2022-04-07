@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { memo, ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useAdminCourseList } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -29,7 +29,7 @@ export const CourseAdministartionFrame = (params: {
         .firstOrNull(x => x.courseId === courseId);
 
     // func
-    const navigationFunction = (courseId: number) => {
+    const navigationFunction = useCallback((courseId: number) => {
 
         const url = (() => {
 
@@ -45,7 +45,7 @@ export const CourseAdministartionFrame = (params: {
         })();
 
         navigate(url, { courseId });
-    };
+    }, [courseId, navigate, isMatchingCurrentUrl, applicationRoutes]);
 
     return (
         <Flex
@@ -54,8 +54,8 @@ export const CourseAdministartionFrame = (params: {
 
             {/* header */}
             <AdminBreadcrumbsHeader>
-                
-            {/* breadcrumbDatas={[
+
+                {/* breadcrumbDatas={[
                     // <BreadcrumbLink
                     //     key={1}
                     //     title="Kurzusok"
