@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { PractiseQuestionView } from "../views/PractiseQuestionView";
-import { Question } from "./Question";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
+import { Question } from "./Question";
 
 @Entity()
 export class Answer {
@@ -9,6 +8,9 @@ export class Answer {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @DeleteDateColumn()
+    deletionDate: Date;
+    
     @Column()
     text: string;
 

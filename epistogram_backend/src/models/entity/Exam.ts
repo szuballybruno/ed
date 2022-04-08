@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ExamType } from "../../shared/types/sharedTypes";
 import { AnswerSession } from "./AnswerSession";
 import { Course } from "./Course";
@@ -11,6 +11,9 @@ export class Exam {
 
     @PrimaryGeneratedColumn()
     id: number;
+    
+    @DeleteDateColumn()
+    deletionDate: Date;
 
     @Column()
     title: string;

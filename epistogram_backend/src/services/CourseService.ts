@@ -472,13 +472,15 @@ export class CourseService {
      * @param courseId 
      * @returns 
      */
-    async getCourseContentAdminDataAsync(courseId: number) {
+    async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
 
         const views = await this._ormService
-            .getRepository(CourseAdminContentView)
-            .createQueryBuilder("c")
-            .where("c.courseId = :courseId", { courseId: courseId })
-            .getMany();
+            .getMany(CourseAdminContentView,
+                [
+                    ["WHERE", "courseId", "=", "courseId"],
+                    ["AND", "itemIsDeleted", "!=", "loadDeleted"]
+                ],
+                { courseId, loadDeleted });
 
         const modules = await this._ormService
             .getRepository(CourseModule)
@@ -529,8 +531,16 @@ export class CourseService {
             .flatMap(x => x.items)
             .map(x => x.itemId);
 
+        const deletedVideoIds = itemCodes
+            .filter(x => x.key === "video")
+            .flatMap(x => x.items)
+            .map(x => x.itemId);
+
         this._examService
             .softDeleteExamsAsync(deletedExamIds, true);
+
+        this._videoService
+            .softDeleteVideosAsync(deletedVideoIds, true);
     }
 
     private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {

@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
 import { AnswerSession } from "./AnswerSession";
 import { CoinTransaction } from "./CoinTransaction";
@@ -11,6 +11,9 @@ export class GivenAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @DeleteDateColumn()
+    deletionDate: Date;
+    
     @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
     creationDate: Date;
 

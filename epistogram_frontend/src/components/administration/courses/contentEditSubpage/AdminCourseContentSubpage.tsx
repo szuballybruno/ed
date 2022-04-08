@@ -1,5 +1,5 @@
 import { Add, Edit } from '@mui/icons-material';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
@@ -7,12 +7,10 @@ import { useNavigation } from '../../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { loggingSettings } from '../../../../static/Environemnt';
-import { valueCompareTest } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoDialog, useEpistoDialogLogic } from '../../../EpistoDialog';
-import { MemoTest } from '../../../MemoTest';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { AddNewItemPopper } from '../AddNewItemPopper';
@@ -42,7 +40,13 @@ export const AdminCourseContentSubpage = () => {
     const [preprocessedItems, setPreprocessedItems] = useState<RowSchema[]>([]);
 
     // http
-    const { courseContentAdminData, courseContentAdminDataError, courseContentAdminDataState, refreshCourseContentAdminData } = useCourseContentAdminData(courseId);
+    const {
+        courseContentAdminData,
+        courseContentAdminDataError,
+        courseContentAdminDataState,
+        refreshCourseContentAdminData
+    } = useCourseContentAdminData(courseId, true);
+
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
 
     // computed
@@ -86,7 +90,8 @@ export const AdminCourseContentSubpage = () => {
     addOnMutationHandlers([
         {
             field: 'itemOrderIndex',
-            action: ({ key, field, newValue, item }) => {
+            action: 'update',
+            callback: ({ key, newValue, item }) => {
 
                 const moduleItems = gridRows
                     .groupBy(x => x.module.id)
@@ -96,20 +101,33 @@ export const AdminCourseContentSubpage = () => {
                     .map(x => getRowKey(x) === key ? { ...x, itemOrderIndex: newValue as number + 1 } : x)
                     .orderBy(x => x.itemOrderIndex);
 
-                // console.log(moduleItems
-                //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
-
                 const indices = moduleItems
                     .map((item, index) => { item.itemOrderIndex = index; return item; });
-
-                // console.log(indices
-                //     .map(x => `${x.itemTitle} ${x.itemOrderIndex}`));
 
                 indices
                     .forEach(x => mutateRow({
                         key: getRowKey(x),
                         field: 'itemOrderIndex',
                         newValue: x.itemOrderIndex,
+                        noOnMutationCallback: true
+                    }));
+            }
+        },
+        {
+            action: 'delete',
+            callback: ({ item }) => {
+
+                const moduleItems = gridRows
+                    .groupBy(x => x.module.id)
+                    .filter(x => x.key === item.module.id)
+                    .flatMap(x => x.items)
+                    .filter(x => getRowKey(x) !== getRowKey(item));
+
+                moduleItems
+                    .forEach((x, index) => mutateRow({
+                        key: getRowKey(x),
+                        field: 'itemOrderIndex',
+                        newValue: index,
                         noOnMutationCallback: true
                     }));
             }

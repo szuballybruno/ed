@@ -65,7 +65,7 @@ export class ModuleService {
             .where('"v"."module_id" IN (:...moduleIds)', { moduleIds })
             .getMany();
 
-        await this._videoService.deleteVideosAsync(videos.map(x => x.id), false);
+        // await this._videoService.deleteVideosAsync(videos.map(x => x.id), false);
 
         // delete exams 
         const exams = await this._ormService
@@ -146,9 +146,9 @@ export class ModuleService {
     getModuleListEditDataAsync = async (courseId: number) => {
 
         const modules = await this._ormService
-            .getMany(CourseModule, "cm",
+            .getMany(CourseModule,
                 [
-                    "WHERE", ["courseId", "=", "courseId"]
+                    ["WHERE", "courseId", "=", "courseId"]
                 ],
                 { courseId });
 

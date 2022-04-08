@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AnswerSession } from "./AnswerSession";
 import { CoinTransaction } from "./CoinTransaction";
 import { Course } from "./Course";
@@ -14,6 +14,9 @@ export class Video {
 
     @PrimaryGeneratedColumn()
     id: number;
+    
+    @DeleteDateColumn()
+    deletionDate: Date;
 
     @Column()
     title: string;

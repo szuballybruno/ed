@@ -106,10 +106,10 @@ export class PlaybackService extends ServiceBase {
         newCompletionDate?: Date) => {
 
         const pbd = await this._ormService
-            .getOneOrNull(UserVideoProgressBridge, "uvpb",
+            .getOneOrNull(UserVideoProgressBridge,
                 [
-                    "WHERE", ["videoId", "=", "videoId"],
-                    "AND", ["userId", "=", "userId"]
+                    ["WHERE", "videoId", "=", "videoId"],
+                    ["AND", "userId", "=", "userId"]
                 ],
                 { videoId, userId });
 
@@ -150,10 +150,10 @@ export class PlaybackService extends ServiceBase {
     getVideoIsCompletedStateAsync = async (userId: number, videoId: number) => {
 
         const pbd = await this._ormService
-            .getOneOrNull(UserVideoProgressBridge, "uv",
+            .getOneOrNull(UserVideoProgressBridge,
                 [
-                    "WHERE", ["videoId", "=", "videoId"],
-                    "AND", ["userId", "=", "userId"]
+                    ["WHERE", "videoId", "=", "videoId"],
+                    ["AND", "userId", "=", "userId"]
                 ],
                 { userId, videoId })
 

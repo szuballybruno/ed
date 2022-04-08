@@ -293,46 +293,46 @@ export class ExamService extends QueryServiceBase<Exam> {
      */
     softDeleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
 
-        if (examIds.length === 0)
-            return;
+        // if (examIds.length === 0)
+        //     return;
 
         // delete exam quesitons 
-        const questions = await this._ormService
-            .getRepository(Question)
-            .createQueryBuilder()
-            .where('"exam_id" IN (:...examIds)', { examIds })
-            .getMany();
+        // const questions = await this._ormService
+        //     .getMany(Question,
+        //         [
+        //             ["SELECT", ["id"]],
+        //             ["WHERE", "examId", "=", "examIds"],
+        //         ],
+        //         { examIds });
 
-        await this._questionsService
-            .deleteQuesitonsAsync(questions.map(x => x.id));
+        // await this._questionsService
+        //     .softDeleteQuesitonsAsync(questions.map(x => x.id));
 
-        // delete answer sessions
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(AnswerSession)
-            .where('"exam_id" IN (:...examIds)', { examIds })
-            .execute();
+        // // delete answer sessions
+        // const answerSessions = await this._ormService
+        //     .getMany(AnswerSession,
+        //         [
+        //             ["SELECT", ["id"]],
+        //             ["WHERE", "examId", "=", "examIds"],
+        //         ],
+        //         { examIds });
 
-        // set current course item on users
-        if (unsetCurrentCourseItem) {
-            for (let index = 0; index < examIds.length; index++) {
+        // await this._ormService
+        //     .softDelete(AnswerSession, answerSessions.map(x => x.id));
 
-                const examId = examIds[index];
-                await this._userCourseBridgeService
-                    .unsetUsersCurrentCourseItemAsync(examId);
-            }
-        }
+        // // set current course item on users
+        // if (unsetCurrentCourseItem) {
+        //     for (let index = 0; index < examIds.length; index++) {
+
+        //         const examId = examIds[index];
+        //         await this._userCourseBridgeService
+        //             .unsetUsersCurrentCourseItemAsync(examId);
+        //     }
+        // }
 
         // delete exam
         await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(Exam)
-            .where("id IN (:...examIds)", { examIds })
-            .execute();
+            .softDelete(Exam, examIds);
     }
 
     /**

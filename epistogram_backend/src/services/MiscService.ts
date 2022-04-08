@@ -59,10 +59,10 @@ export class MiscService {
             .getCurrentCourseIdOrFail(userId);
 
         const view = await this._ormService
-            .getSingle(CourseOverviewView, "cov",
+            .getSingle(CourseOverviewView,
                 [
-                    "WHERE", ["courseId", "=", "courseId"],
-                    "AND", ["userId", "=", "userId"]
+                    ["WHERE", "courseId", "=", "courseId"],
+                    ["AND", "userId", "=", "userId"]
                 ],
                 {
                     courseId,

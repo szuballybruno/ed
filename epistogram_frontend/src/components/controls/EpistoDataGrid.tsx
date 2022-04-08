@@ -1,7 +1,7 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { loggingSettings } from '../../static/Environemnt';
-import { typedMemo, valueCompareTest } from '../../static/frontendHelpers';
+import { typedMemo } from '../../static/frontendHelpers';
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
@@ -45,10 +45,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 }) => {
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
-
-    valueCompareTest(handleEdit, 'handleEdit');
-    valueCompareTest(getKey, 'getKey');
-    valueCompareTest(initialState, 'initialState');
 
     const columnsProcessed = columns
         .map(column => {

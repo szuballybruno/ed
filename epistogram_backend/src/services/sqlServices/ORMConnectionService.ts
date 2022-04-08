@@ -24,9 +24,9 @@ type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
 type OperationType = "=" | "!=" | "<" | ">";
 
-type Condition<TEntity, TParams> = [keyof TEntity, OperationType, keyof TParams];
-
-type ExpressionPart<TEntity, TParam> = "WHERE" | "AND" | Condition<TEntity, TParam>;
+type WhereCondition<TEntity, TParams> = ["WHERE" | "AND", keyof TEntity, OperationType, keyof TParams];
+type SelectCondition<TEntity> = ["SELECT", keyof TEntity | (keyof TEntity)[]];
+type ExpressionPart<TEntity, TParam> = SelectCondition<TEntity> | WhereCondition<TEntity, TParam>;
 
 export class ORMConnectionService {
 
@@ -122,16 +122,29 @@ export class ORMConnectionService {
     }
 
     /**
+     * Soft deletes entites 
+     */
+    async softDelete<TEntity>(classType: ClassType<TEntity>, ids: number[]) {
+
+        if (ids.length === 0)
+            return;
+
+        await this._ormConnection
+            .getRepository(classType)
+            .softDelete(ids);
+    }
+
+    /**
      * Returns a single entity, 
      * throws error if 0 or more than 1 is found. 
      */
     async getSingle<TEntity, TParam>(
         classType: ClassType<TEntity>,
-        alias: string,
         whereQuery: ExpressionPart<TEntity, TParam>[],
-        params: TParam): Promise<TEntity> {
+        params: TParam,
+        alias?: string): Promise<TEntity> {
 
-        const { fullQuery, sqlParamsList } = this.getFullQuery<TEntity, TParam>(classType, alias, whereQuery, params);
+        const { fullQuery, sqlParamsList } = this.getFullQuery<TEntity, TParam>(classType, whereQuery, params, alias);
 
         const rows = await this
             .executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
@@ -153,11 +166,11 @@ export class ORMConnectionService {
      */
     async getOneOrNull<TEntity, TParam>(
         classType: ClassType<TEntity>,
-        alias: string,
         whereQuery: ExpressionPart<TEntity, TParam>[],
-        params: TParam): Promise<TEntity | null> {
+        params: TParam,
+        alias?: string): Promise<TEntity | null> {
 
-        const { fullQuery, sqlParamsList } = this.getFullQuery<TEntity, TParam>(classType, alias, whereQuery, params);
+        const { fullQuery, sqlParamsList } = this.getFullQuery<TEntity, TParam>(classType, whereQuery, params, alias);
 
         const rows = await this
             .executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
@@ -170,38 +183,74 @@ export class ORMConnectionService {
      */
     private getFullQuery<TEntity, TParam>(
         classType: ClassType<TEntity>,
-        alias: string,
-        whereQuery: ExpressionPart<TEntity, TParam>[],
-        params: TParam) {
+        query: ExpressionPart<TEntity, TParam>[],
+        params: TParam,
+        alias?: string) {
+
+        const tableName = toSQLSnakeCasing(classType.name);
+        const sqlAlias = alias ?? `"${tableName}"`;
+        const sqlTableRef = `public.${tableName} ${sqlAlias}`;
 
         const sqlParamsList = getKeys(params)
-            .map((key, index): SQLParamType<TParam, keyof TParam> => ({
-                token: `$${index + 1}`,
-                paramName: key,
-                paramValue: params[key]
-            }));
+            .map((key, index): SQLParamType<TParam, keyof TParam> => {
 
-        const whereQueryStr = whereQuery
+                const value = params[key];
+                const isArray = Array.isArray(value);
+                const token = isArray
+                    ? `ANY($${index + 1}::int[])`
+                    : `$${index + 1}`;
+
+                return ({
+                    token: token,
+                    paramName: key,
+                    paramValue: value
+                })
+            });
+
+        const queryAsString = query
             .map(x => {
 
-                if (typeof x === "string")
-                    return x as string;
+                // select condition
+                if ((x as SelectCondition<TEntity>)[0] === "SELECT") {
 
-                const cond = x as Condition<TEntity, TParam>;
+                    const selectCond = x as SelectCondition<TEntity>;
+                    const columnOrColumns = selectCond[1];
+                    const snakeColumns = Array.isArray(columnOrColumns)
+                        ? columnOrColumns
+                            .map(x => toSQLSnakeCasing(x as string))
+                            .map(x => `${sqlAlias}.${x}`)
+                            .join(", ")
+                        : columnOrColumns;
 
-                const snakeColumn = toSQLSnakeCasing(cond[0] as string);
-                const operator = cond[1] as string;
-                const paramName = cond[2];
-                const paramToken = sqlParamsList
-                    .single(x => x.paramName === paramName)
-                    .token;
+                    // SELECT xy.ab, xy.abc
+                    return `SELECT ${snakeColumns} FROM ${sqlTableRef}`;
+                }
 
-                return `${alias}.${snakeColumn} ${operator} ${paramToken}`;
+                // where condition
+                else {
+
+                    const cond = x as WhereCondition<TEntity, TParam>;
+
+                    const snakeColumn = toSQLSnakeCasing(cond[1] as string);
+                    const operator: OperationType = cond[2];
+                    const paramName: keyof TParam = cond[3];
+                    const paramToken = sqlParamsList
+                        .single(x => x.paramName === paramName)
+                        .token;
+
+                    // WHERE xy.ab = $1
+                    return `${cond[0]} ${sqlAlias}.${snakeColumn} ${operator} ${paramToken}`;
+                }
             })
             .join(' ');
 
-        const baseQuery = `SELECT * FROM public.${toSQLSnakeCasing(classType.name)} ${alias} `;
-        const fullQuery = `${baseQuery} ${whereQueryStr} `;
+
+        const isExplicitSelect = queryAsString
+            .startsWith('SELECT');
+
+        const fullQuery = isExplicitSelect
+            ? queryAsString
+            : `SELECT * FROM  ${sqlTableRef} ${queryAsString} `;
 
         return {
             sqlParamsList,
@@ -216,7 +265,7 @@ export class ORMConnectionService {
     async getSingleById<TEntity, TField extends keyof TEntity>(classType: ClassType<TEntity>, id: number, idField?: TField) {
 
         const idFieldName = idField ?? "id" as TField;
-        return this.getSingle(classType, classType.name, ["WHERE", [idFieldName, "=", "id"]], { id })
+        return this.getSingle(classType, [["WHERE", idFieldName, "=", "id"]], { id })
     }
 
     /**
@@ -224,12 +273,12 @@ export class ORMConnectionService {
      */
     async getMany<TEntity, TParam>(
         classType: ClassType<TEntity>,
-        alias: string,
-        whereQuery: ExpressionPart<TEntity, TParam>[],
-        params: TParam) {
+        query: ExpressionPart<TEntity, TParam>[],
+        params: TParam,
+        alias?: string) {
 
         const { fullQuery, sqlParamsList } = this
-            .getFullQuery(classType, alias, whereQuery, params);
+            .getFullQuery(classType, query, params, alias);
 
         return this.executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
     }
@@ -247,9 +296,9 @@ export class ORMConnectionService {
             console.log(errorEndingQueryLog);
 
             const res = await this._sqlConnectionService
-                .executeSQLAsync(query, (params ?? []).map(x => x.paramValue));
+                .executeSQLAsync(query, this.getParamValues(params));
 
-            return res
+            const rowsMapped = res
                 .rows
                 .map(row => {
 
@@ -260,6 +309,8 @@ export class ORMConnectionService {
 
                     return obj as TEntity;
                 });
+
+            return rowsMapped;
         }
         catch (e: any) {
 
@@ -268,13 +319,28 @@ export class ORMConnectionService {
         }
     }
 
+    private getParamValues<TParam>(params?: SQLParamType<TParam, keyof TParam>[]): any[] {
+
+        return (params ?? [])
+            .map(x => this.getParamValue(x));
+    };
+
+    private getParamValue<TParam>(param: SQLParamType<TParam, keyof TParam>): any {
+
+        return param.paramValue;
+        // if (!Array.isArray(param.paramValue))
+        //     return param.paramValue;
+
+        // return `(${(param.paramValue as any as any[]).join(", ")})`;
+    }
+
     /**
      * Returns a sophisticated SQL query error string.
      */
     private getSQLErrorEnding<TEntity, TParams extends keyof TEntity>(query: string, params?: SQLParamType<TEntity, TParams>[]) {
 
         const paramPairs = (params ?? [])
-            .map((param) => `${param.token}: ${param.paramValue}`);
+            .map((param) => `${param.token}: ${this.getParamValue(param)}`);
 
         return `Query: ${query}\nValues: ${paramPairs.join(", ")}`;
     }

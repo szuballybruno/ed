@@ -12,7 +12,8 @@ export const eventPoolingIntervalInMs = 20 * 1000; // 20 secs
 export const verboseLogging = false;
 export const loggingSettings = {
     routing: false,
-    render: true
+    render: false,
+    mutations: true
 };
 
 console.log('Current version: ' + currentVersion);

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./Answer";
 import { GivenAnswer } from "./GivenAnswer";
 
@@ -8,6 +8,9 @@ export class AnswerGivenAnswerBridge {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @DeleteDateColumn()
+    deletionDate: Date;
+    
     // given answer
     @Column()
     givenAnswerId: number;

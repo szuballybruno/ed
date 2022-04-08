@@ -68,10 +68,10 @@ export class PractiseQuestionService extends ServiceBase {
     getUserPractiseAnswerSession = async (userId: number) => {
 
         return this._ormService
-            .getSingle(AnswerSession, "ase",
+            .getSingle(AnswerSession,
                 [
-                    "WHERE", ["type", "=", "practiseType"],
-                    "AND", ["userId", "=", "userId"]
+                    ["WHERE", "type", "=", "practiseType"],
+                    ["AND", "userId", "=", "userId"]
                 ],
                 { practiseType: 'practise', userId });
     }

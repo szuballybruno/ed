@@ -35,13 +35,6 @@ export class VideoController {
         this._mapperService = mapperService;
     }
 
-    deleteVideoAction = async (params: ActionParams) => {
-
-        const videoId = withValueOrBadRequest<IdBodyDTO>(params.req.body).id;
-
-        await this._videoService.deleteVideosAsync([videoId], true);
-    }
-
     saveVideoAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);

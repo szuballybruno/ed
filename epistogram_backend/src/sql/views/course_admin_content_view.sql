@@ -67,6 +67,7 @@ SELECT
 	civ.video_id,
 	civ.exam_id,
 	civ.item_id,
+	civ.item_is_deleted,
 	civ.item_order_index,
 	civ.item_title,
 	civ.item_subtitle,

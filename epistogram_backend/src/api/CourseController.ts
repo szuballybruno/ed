@@ -33,9 +33,13 @@ export class CourseController {
 
     getCourseContentEditDataAction = async (params: ActionParams) => {
 
-        const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, "number");
+        const query = params
+            .getQuery();
 
-        return await this._courseService.getCourseContentAdminDataAsync(courseId);
+        return await this._courseService
+            .getCourseContentAdminDataAsync(
+                query.getValue(x => x.courseId, "int"),
+                query.getValue(x => x.loadDeleted, "boolean"));
     };
 
     getAdminCourseListAction = (params: ActionParams) => {

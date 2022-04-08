@@ -72,10 +72,10 @@ export class PersonalityAssessmentService {
             });
 
         const tips = await this._ormService
-            .getMany(DailyTip, "dt",
+            .getMany(DailyTip,
                 [
-                    "WHERE", ["isMax", "=", "isMax"],
-                    "AND", ["personalityTraitCategoryId", "=", "personalityTraitCategoryId"],
+                    ["WHERE", "isMax", "=", "isMax"],
+                    ["AND", "personalityTraitCategoryId", "=", "personalityTraitCategoryId"],
                 ],
                 {
                     isMax,

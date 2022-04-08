@@ -32,6 +32,9 @@ export class CourseAdminContentView {
 	itemId: number;
 
     @ViewColumn()
+    itemIsDeleted: boolean;
+
+    @ViewColumn()
 	itemOrderIndex: number;
 
     @ViewColumn()

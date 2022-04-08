@@ -45,7 +45,7 @@ export class QuestionService {
                 .some(question => question.questionId === x.id))
             .map(x => x.id);
 
-        await this.deleteQuesitonsAsync(deletedQuesitonIds);
+        await this.softDeleteQuesitonsAsync(deletedQuesitonIds);
 
         // update questions
         const updateQuestions = questions
@@ -77,70 +77,60 @@ export class QuestionService {
                 .insert(insertQuestions);
     }
 
-    deleteQuesitonsAsync = async (quesitonIds: number[]) => {
-
-        if (quesitonIds.length === 0)
-            return;
+    softDeleteQuesitonsAsync = async (quesitonIds: number[]) => {
 
         // delete given answers 
         const givenAnswers = await this._ormService
-            .getRepository(GivenAnswer)
-            .createQueryBuilder("ga")
-            .where('"question_id" IN (:...quesitonIds)', { quesitonIds })
-            .getMany();
+            .getMany(GivenAnswer,
+                [
+                    ["SELECT", "id"],
+                    ["WHERE", "questionId", "=", "quesitonIds"]
+                ],
+                { quesitonIds });
 
-        await this.deleteGivenAnswers(givenAnswers.map(x => x.id));
+        await this.softDeleteGivenAnswers(givenAnswers.map(x => x.id));
 
         // delete answers 
         const answers = await this._ormService
-            .getRepository(Answer)
-            .createQueryBuilder()
-            .where('"question_id" IN (:...quesitonIds)', { quesitonIds })
-            .getMany();
+            .getMany(Answer,
+                [
+                    ["SELECT", "id"],
+                    ["WHERE", "questionId", "=", "quesitonIds"]
+                ],
+                { quesitonIds });
 
-        await this.deleteAnswersAsync(answers.map(x => x.id));
+        await this.softDeleteAnswersAsync(answers.map(x => x.id));
 
         // delete questions
         await this._ormService
             .getRepository(Question)
-            .delete(quesitonIds);
+            .softDelete(quesitonIds);
     }
 
-    deleteGivenAnswers = async (givenAnswerIds: number[]) => {
+    softDeleteGivenAnswers = async (givenAnswerIds: number[]) => {
 
         // delete given answer bridges
-        if (givenAnswerIds.length === 0)
-            return;
-
         const givenAnswerBridges = await this._ormService
-            .getRepository(AnswerGivenAnswerBridge)
-            .createQueryBuilder("agab")
-            .where('"givenAnswer_id" IN (:...givenAnswerIds)', { givenAnswerIds })
-            .getMany();
+            .getMany(AnswerGivenAnswerBridge,
+                [
+                    ["SELECT", "id"],
+                    ["WHERE", "givenAnswerId", "=", "givenAnswerIds"]
+                ],
+                { givenAnswerIds });
 
         await this._ormService
-            .getRepository(AnswerGivenAnswerBridge)
-            .delete(givenAnswerBridges.map(x => x.id));
+            .softDelete(AnswerGivenAnswerBridge, givenAnswerBridges.map(x => x.id));
 
         // delete given answers 
         await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(GivenAnswer)
-            .where("id IN (:...givenAnswerIds)", { givenAnswerIds })
-            .execute();
+            .softDelete(GivenAnswer, givenAnswerIds);
     }
 
-    deleteAnswersAsync = async (answerIds: number[]) => {
-
-        if (answerIds.length === 0)
-            return;
+    softDeleteAnswersAsync = async (answerIds: number[]) => {
 
         // delete answers 
         await this._ormService
-            .getRepository(Answer)
-            .delete(answerIds);
+            .softDelete(Answer, answerIds);
     }
 
     saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {

@@ -1,10 +1,11 @@
 import { useForceUpdate } from '@chakra-ui/react';
-import { MutableRefObject, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
+import { MutationActionType } from '../../../shared/dtos/mutations/MutationActionType';
 import { getKeys } from '../../../shared/logic/sharedLogic';
 import { KeyOfType } from '../../../shared/types/advancedTypes';
-import { valueCompareTest } from '../../../static/frontendHelpers';
+import { loggingSettings } from '../../../static/Environemnt';
 
 export type OnMutaionHandlerActionType<TMutatee, TKey, TField extends keyof TMutatee> =
     (params: {
@@ -15,8 +16,9 @@ export type OnMutaionHandlerActionType<TMutatee, TKey, TField extends keyof TMut
     }) => void;
 
 export type OnMutationHandlerType<TMutatee, TKey, TField extends keyof TMutatee> = {
-    action: OnMutaionHandlerActionType<TMutatee, TKey, TField>,
-    field: TField
+    callback: OnMutaionHandlerActionType<TMutatee, TKey, TField>;
+    field?: TField;
+    action: MutationActionType;
 }
 
 export const useXListMutator = <TMutatee extends Object, TKey>(
@@ -33,6 +35,11 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         mutRef.current = muts;
         forceUpdate();
     }, [forceUpdate]);
+
+    const logEvent = (text: string) => {
+
+        console.log(`MUTATION: ${text}`);
+    };
 
     const getCompareKeyValue = (obj: TMutatee) => {
 
@@ -79,13 +86,28 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             }, mut.fieldMutators);
         });
 
-    const executeMutationHandler = useCallback((key: TKey, field: any, newValue: any) => {
+    const executeMutationHandler = useCallback((opts: {
+        key: TKey,
+        action: MutationActionType,
+        field?: any,
+        newValue?: any,
+    }) => {
+
+        const { action, key, field, newValue } = opts;
+
+        // get item by key 
+        // note that this will still hold the 
+        // old reference in mut handler callbacks)
+        // so in a delete callback the item will be found 
+        const item = mutatedItems
+            .single(x => getCompareKey(x) === key);
 
         onMutationHandlersRef
             .current
-            .filter(x => x.field === field)
-            .forEach(x => x.action({ key, field, newValue, item: mutatedItems.single(x => getCompareKey(x) === key) }));
-    }, []);
+            .filter(x => x.action === action)
+            .filter(x => !x.field || x.field === field)
+            .forEach(x => x.callback({ key, field, newValue, item }));
+    }, [mutatedItems]);
 
     const setCompareKey = (obj: TMutatee, key: TKey) => {
 
@@ -109,7 +131,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             setMutations(muts);
 
             if (!noOnMutationCallback)
-                executeMutationHandler(key, field, newValue);
+                executeMutationHandler({ key, field, newValue, action: 'update' });
         };
 
         const newMutations = [...mutRef.current];
@@ -136,7 +158,9 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
             if (existingMutation.fieldMutators.length === 1) {
 
-                console.log(`Removing mutation: ${key}`);
+                if (loggingSettings.mutations)
+                    logEvent(`Removing mutation: ${key}`);
+
                 setMutationsWithCallback(newMutations
                     .filter(x => x.key !== key));
             }
@@ -147,7 +171,9 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                         .fieldMutators
                         .filter(x => x.field !== field);
 
-                console.log(`Removing field mutation: ${key} - ${field}`);
+                if (loggingSettings.mutations)
+                    logEvent(`Removing field mutation: ${key} - ${field}`);
+
                 setMutationsWithCallback(newMutations);
             }
 
@@ -172,8 +198,13 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             };
 
         // if created new mutation, add it to the mutations 
-        if (mutation.fieldMutators.length === 0)
+        if (mutation.fieldMutators.length === 0) {
+
+            if (loggingSettings.mutations)
+                logEvent(`Adding new mutation: ${key} - ${field} - ${newValue}`);
+
             newMutations.push(mutation);
+        }
 
         const propertyMutator = mutation
             .fieldMutators
@@ -181,29 +212,66 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
         if (propertyMutator) {
 
+            if (loggingSettings.mutations)
+                logEvent(`Updating mutation '${key}' property mutator '${field}' value: ${propertyMutator.value} -> ${newValue}`);
+
             propertyMutator
                 .value = newValue;
         }
         else {
+
+            if (loggingSettings.mutations)
+                logEvent(`Mutation '${key}' adding new property mutator '${field}' value: ${newValue}`);
 
             mutation
                 .fieldMutators
                 .push({ field, value: newValue });
         }
 
-        console.log(`Adding new mutation: ${key} - ${field} - ${newValue}`);
+
         setMutationsWithCallback(newMutations);
     }, [items, executeMutationHandler, setMutations]);
 
-    const remove = (key: TKey) => {
+    // 
+    // FUNCTION: remove an item from the list 
+    //
+    const remove = useCallback((key: TKey) => {
 
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
 
-        const newList = [...mutRef.current
-            .filter(x => x.key !== key)];
+        // shallow copy new mutations list,
+        // but without mutations related to deleted item
+        // so for example 'add' mutations won't be copied over
+        // thus the item will not show in the new list
+        const newMutations = [...mutRef.current];
 
-        if (mutRef.current.filter(x => x.key === key)[0]?.action !== 'add') {
+        newMutations
+            .forEach(mut => {
+
+                if (mut.key !== key)
+                    return;
+
+                if (loggingSettings)
+                    logEvent(`Removing previous mutation '${mut.action}' of item '${key}', since it's being deleted.`);
+            });
+
+        // check if deleted item is one 
+        // of the newly added items,
+        // if it is there's no need to add a delete mutation, 
+        // just to remove the add mutation (which we already did)
+        const mutationOfDeletedItem = mutRef
+            .current
+            .filter(x => x.key === key)[0];
+
+        const isDeletedItemNewlyAdded = mutationOfDeletedItem?.action === 'add';
+
+        // if it's not a newly created item, 
+        // add delete mutation 
+        if (!isDeletedItemNewlyAdded) {
+
+            if (loggingSettings.mutations)
+                logEvent(`Adding new 'delete' mutation Key: ${key}!`);
 
             const mut: Mutation<TMutatee, TKey> = {
                 key,
@@ -211,11 +279,16 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
                 fieldMutators: []
             };
 
-            newList.push(mut);
+            newMutations.push(mut);
         }
 
-        setMutations(newList);
-    };
+        // set new mutations list 
+        setMutations(newMutations);
+
+        // exec handler callback
+        executeMutationHandler({ key, action: 'delete', });
+
+    }, [executeMutationHandler, setMutations]);
 
     const add = (key: TKey, obj: Partial<TMutatee>) => {
 

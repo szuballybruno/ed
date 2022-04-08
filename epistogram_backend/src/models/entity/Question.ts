@@ -1,5 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PractiseQuestionView } from "../views/PractiseQuestionView";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./Answer";
 import { Exam } from "./Exam";
 import { GivenAnswer } from "./GivenAnswer";
@@ -12,6 +11,9 @@ export class Question {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @DeleteDateColumn()
+    deletionDate: Date;
 
     @Column()
     questionText: string;

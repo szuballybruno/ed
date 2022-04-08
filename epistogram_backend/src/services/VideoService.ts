@@ -1,22 +1,19 @@
 import { AnswerSession } from "../models/entity/AnswerSession";
 import { Question } from "../models/entity/Question";
 import { StorageFile } from "../models/entity/StorageFile";
+import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
 import { Video } from "../models/entity/Video";
 import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
+import { VideoRating } from "../models/entity/VideoRating";
 import { FileService } from "./FileService";
-import { log } from "./misc/logger";
-import { UrlService } from "./UrlService";
+import { MapperService } from "./MapperService";
+import { QueryServiceBase } from "./misc/ServiceBase";
 import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
 import { QuestionAnswerService } from "./QuestionAnswerService";
 import { QuestionService } from "./QuestionService";
 import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UrlService } from "./UrlService";
 import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { VideoRating } from "../models/entity/VideoRating";
-import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
-import { Mutation } from "../shared/dtos/mutations/Mutation";
-import { FieldMutation } from "../shared/dtos/mutations/FieldMutation";
-import { QueryServiceBase } from "./misc/ServiceBase";
-import { MapperService } from "./MapperService";
 
 export class VideoService extends QueryServiceBase<Video> {
 
@@ -92,75 +89,70 @@ export class VideoService extends QueryServiceBase<Video> {
             });
     }
 
-    deleteVideosAsync = async (videoIds: number[], unsetCurrentCourseItem: boolean) => {
+    async softDeleteVideosAsync(videoIds: number[], unsetCurrentCourseItem: boolean) {
 
-        if (videoIds.length === 0)
-            return;
+        // if (videoIds.length === 0)
+        //     return;
 
-        // delete questions
-        const questions = await this._ormService
-            .getRepository(Question)
-            .createQueryBuilder("q")
-            .where('"video_id" IN (:...videoIds)', { videoIds })
-            .getMany();
+        // // delete questions
+        // const questions = await this._ormService
+        //     .getRepository(Question)
+        //     .createQueryBuilder("q")
+        //     .where('"video_id" IN (:...videoIds)', { videoIds })
+        //     .getMany();
 
-        await this._questionsService
-            .deleteQuesitonsAsync(questions.map(x => x.id));
+        // await this._questionsService
+        //     .softDeleteQuesitonsAsync(questions.map(x => x.id));
 
-        // delete answer sessions
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(AnswerSession)
-            .where('"video_id" IN (:...videoIds)', { videoIds })
-            .execute();
+        // // delete answer sessions
+        // await this._ormService
+        //     .getOrmConnection()
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(AnswerSession)
+        //     .where('"video_id" IN (:...videoIds)', { videoIds })
+        //     .execute();
 
-        // set current course item on users
-        if (unsetCurrentCourseItem) {
-            for (let index = 0; index < videoIds.length; index++) {
+        // // set current course item on users
+        // if (unsetCurrentCourseItem) {
+        //     for (let index = 0; index < videoIds.length; index++) {
 
-                const videoId = videoIds[index];
-                await this._userCourseBridgeService
-                    .unsetUsersCurrentCourseItemAsync(undefined, videoId);
-            }
-        }
+        //         const videoId = videoIds[index];
+        //         await this._userCourseBridgeService
+        //             .unsetUsersCurrentCourseItemAsync(undefined, videoId);
+        //     }
+        // }
 
-        // delete playback samples 
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(VideoPlaybackSample)
-            .where('"video_id" IN (:...videoIds)', { videoIds })
-            .execute();
+        // // delete playback samples 
+        // await this._ormService
+        //     .getOrmConnection()
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(VideoPlaybackSample)
+        //     .where('"video_id" IN (:...videoIds)', { videoIds })
+        //     .execute();
 
-        // delete ratings 
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(VideoRating)
-            .where('video_id IN (:...videoIds)', { videoIds })
-            .execute();
+        // // delete ratings 
+        // await this._ormService
+        //     .getOrmConnection()
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(VideoRating)
+        //     .where('video_id IN (:...videoIds)', { videoIds })
+        //     .execute();
 
-        // delete playback samples 
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(UserVideoProgressBridge)
-            .where('"video_id" IN (:...videoIds)', { videoIds })
-            .execute();
+        // // delete playback samples 
+        // await this._ormService
+        //     .getOrmConnection()
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(UserVideoProgressBridge)
+        //     .where('"video_id" IN (:...videoIds)', { videoIds })
+        //     .execute();
 
         // delete video
         await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(Video)
-            .where("id IN (:...videoIds)", { videoIds })
-            .execute();
+            .softDelete(Video, videoIds);
     }
 
     uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
