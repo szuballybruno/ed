@@ -1,4 +1,4 @@
-import { AnswerEditDTO } from "./AnswerEditDTO";
+import { AnswerEditDTO } from './AnswerEditDTO';
 
 export type QuestionEditDataDTO = {
     questionId: number,

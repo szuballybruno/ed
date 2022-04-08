@@ -1,10 +1,10 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ExamType } from "../../shared/types/sharedTypes";
-import { AnswerSession } from "./AnswerSession";
-import { Course } from "./Course";
-import { CourseModule } from "./CourseModule";
-import { Question } from "./Question";
-import { UserExamProgressBridge } from "./UserExamProgressBridge";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ExamType } from '../../shared/types/sharedTypes';
+import { AnswerSession } from './AnswerSession';
+import { Course } from './Course';
+import { CourseModule } from './CourseModule';
+import { Question } from './Question';
+import { UserExamProgressBridge } from './UserExamProgressBridge';
 
 @Entity()
 export class Exam {
@@ -33,7 +33,7 @@ export class Exam {
     @Column({ nullable: true })
     orderIndex: number;
 
-    @Column({ type: "integer", nullable: true })
+    @Column({ type: 'integer', nullable: true })
     retakeLimit: number | null;
 
     // course
@@ -41,11 +41,11 @@ export class Exam {
     courseId: number;
 
     @ManyToOne(type => Course, course => course.exams)
-    @JoinColumn({ name: "course_id" })
+    @JoinColumn({ name: 'course_id' })
     course: Course | null
 
     // questions 
-    @OneToMany(_ => Question, q => q.exam, { onDelete: "CASCADE", cascade: ["remove"] })
+    @OneToMany(_ => Question, q => q.exam, { onDelete: 'CASCADE', cascade: ['remove'] })
     @JoinColumn()
     questions: Question[];
 
@@ -55,11 +55,11 @@ export class Exam {
     answerSessions: AnswerSession[];
 
     // module
-    @Column({ nullable: true, type: "int" })
+    @Column({ nullable: true, type: 'int' })
     moduleId: number | null;
 
     @ManyToOne(_ => CourseModule, x => x.exams)
-    @JoinColumn({ name: "module_id" })
+    @JoinColumn({ name: 'module_id' })
     module: CourseModule | null;
     
     // userProgressBridges

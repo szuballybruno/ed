@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ActivationCode } from "./ActivationCode";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ActivationCode } from './ActivationCode';
+import { User } from './User';
 
 @Entity()
 export class Organization {

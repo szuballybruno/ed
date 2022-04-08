@@ -1,22 +1,22 @@
-import { log } from "console";
-import { Request, Response } from "express";
-import { UploadedFile } from "express-fileupload";
-import { User } from "../models/entity/User";
-import { ParsableValueType } from "../models/Types";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { logError } from "../services/misc/logger";
-import { typecheck } from "../shared/logic/sharedLogic";
-import { ErrorCodeType } from "../shared/types/sharedTypes";
+import { log } from 'console';
+import { Request, Response } from 'express';
+import { UploadedFile } from 'express-fileupload';
+import { User } from '../models/entity/User';
+import { ParsableValueType } from '../models/Types';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { logError } from '../services/misc/logger';
+import { typecheck } from '../shared/logic/sharedLogic';
+import { ErrorCodeType } from '../shared/types/sharedTypes';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
-export const toFullName = (firstName: string, lastName: string, culture?: "en" | "hu") => {
+export const toFullName = (firstName: string, lastName: string, culture?: 'en' | 'hu') => {
 
-    if (culture === "hu")
+    if (culture === 'hu')
         return `${lastName} ${firstName}`;
 
-    return `${firstName} ${lastName}`;;
-}
+    return `${firstName} ${lastName}`;
+};
 
 export function replaceAll(originalText: string, searchText: string, replaceText: string) {
 
@@ -29,24 +29,26 @@ export function replaceAll(originalText: string, searchText: string, replaceText
 
 export const throwNotImplemented = () => {
 
-    throw new Error("Not implemented!");
-}
+    throw new Error('Not implemented!');
+};
 
 export const toSQLSnakeCasing = (name: string) => {
 
-    return name.split(/(?=[A-Z])/).join('_').toLowerCase();
-}
+    return name.split(/(?=[A-Z])/)
+.join('_')
+.toLowerCase();
+};
 
 export const forN = <T>(iterations: number, action: (index: number) => T) => {
 
-    let returnValues = [] as T[];
+    const returnValues = [] as T[];
     for (let index = 0; index < iterations; index++) {
 
         returnValues.push(action(index));
     }
 
     return returnValues;
-}
+};
 
 // TODO REMOVE THIS FROM HERE 
 export class ActionParams {
@@ -78,7 +80,7 @@ export class ActionParams {
         else {
 
             if (this.req.body.document)
-                log("--- WARNING: body has a document property, this might mean it's not a JSON payload, but a multipart form data!");
+                log('--- WARNING: body has a document property, this might mean it\'s not a JSON payload, but a multipart form data!');
 
             const body = withValueOrBadRequest<T>(this.req.body);
             return new SafeObjectWrapper<T>(body);
@@ -106,11 +108,11 @@ export class ActionParams {
 
         const file = this.req.files?.file;
         if (!file)
-            throw new ErrorCode("File not sent!", "bad request");
+            throw new ErrorCode('File not sent!', 'bad request');
 
         return file as UploadedFile;
     }
-};
+}
 
 type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;
 
@@ -123,7 +125,7 @@ export class SafeObjectWrapper<TObject> {
         this.data = data;
     }
 
-    getValueOrNull<TValue>(getter: (data: TObject) => TValue, castType?: "int" | "float" | "boolean"): TValue | null {
+    getValueOrNull<TValue>(getter: (data: TObject) => TValue, castType?: 'int' | 'float' | 'boolean'): TValue | null {
 
         if (getter(this.data) === undefined || getter(this.data) === null)
             return null;
@@ -131,34 +133,34 @@ export class SafeObjectWrapper<TObject> {
         return this.getValue(getter, castType);
     }
 
-    getValue<TValue>(getter: (data: TObject) => TValue, castTypeOrFn?: "int" | "float" | "boolean" | SafeObjectValidatorFunctionType<TValue>): TValue {
+    getValue<TValue>(getter: (data: TObject) => TValue, castTypeOrFn?: 'int' | 'float' | 'boolean' | SafeObjectValidatorFunctionType<TValue>): TValue {
 
         const value = withValueOrBadRequest<any>(getter(this.data));
 
-        if (typecheck(castTypeOrFn, "function")) {
+        if (typecheck(castTypeOrFn, 'function')) {
 
             const validatorFn = castTypeOrFn as SafeObjectValidatorFunctionType<TValue>;
             const isValid = validatorFn(value);
             if (!isValid)
-                throw new Error("Validator function failed on value in safe object.");
+                throw new Error('Validator function failed on value in safe object.');
 
         } else {
 
-            if (castTypeOrFn === "int")
+            if (castTypeOrFn === 'int')
                 return parseInt(value as any as string) as any;
 
-            if (castTypeOrFn === "float")
+            if (castTypeOrFn === 'float')
                 return parseFloat(value as any as string) as any;
 
-            if (castTypeOrFn === "boolean") {
+            if (castTypeOrFn === 'boolean') {
 
                 if (value === true || value === false)
                     return value;
 
-                if (value !== "true" && value !== "false")
-                    throw new Error("Error parsing boolean value: " + value);
+                if (value !== 'true' && value !== 'false')
+                    throw new Error('Error parsing boolean value: ' + value);
 
-                return (value === "true") as any;
+                return (value === 'true') as any;
             }
         }
 
@@ -169,18 +171,18 @@ export class SafeObjectWrapper<TObject> {
 export const getRandomNumber = () => {
 
     return Math.random();
-}
+};
 
 export const toSqlDate = (date: Date) => {
 
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`;
-}
+};
 
 export const trimTimeFromDate = (date: Date) => {
 
     date.setHours(0, 0, 0, 0);
     return date;
-}
+};
 
 /** 
  * This will shift the Date with the UTC offset, 
@@ -190,7 +192,7 @@ export const trimTimeFromDate = (date: Date) => {
  **/
 export const fakeUtcShiftDate = (date: Date) => {
 
-    var now_utc = Date.UTC(
+    const now_utc = Date.UTC(
         date.getFullYear(),
         date.getMonth(),
         date.getDate(),
@@ -199,16 +201,16 @@ export const fakeUtcShiftDate = (date: Date) => {
         date.getSeconds());
 
     return new Date(now_utc);
-}
+};
 
 export const navPropNotNull = (prop: any) => {
 
-    withValue(prop, () => { throw new Error("Navigation property was null, or undefined. This could be caused by an improper or missing join.") });
-}
+    withValue(prop, () => { throw new Error('Navigation property was null, or undefined. This could be caused by an improper or missing join.'); });
+};
 
 export const hasValue = (obj: any) => {
 
-    if (obj === "")
+    if (obj === '')
         return false;
 
     if (obj === undefined)
@@ -218,53 +220,53 @@ export const hasValue = (obj: any) => {
         return false;
 
     return true;
-}
+};
 
 export const withValue = <T>(obj: T, errorFunc?: () => void) => {
 
     if (!errorFunc)
-        errorFunc = () => { throw new Error("Object has no value!"); };
+        errorFunc = () => { throw new Error('Object has no value!'); };
 
     if (!hasValue(obj))
         errorFunc();
 
     return obj;
-}
+};
 
 export const parseType = (obj: any, type: ParsableValueType) => {
 
-    if (type === "number")
+    if (type === 'number')
         return parseInt(obj);
 
-    if (type === "string")
-        return "" + obj;
+    if (type === 'string')
+        return '' + obj;
 
     return obj;
-}
+};
 
 export const requestHasFiles = (req: Request) => {
 
     return !!req.files;
-}
+};
 
 export const getSingleFileFromRequest = (req: Request) => {
 
     if (!req.files)
-        throw new ErrorCode("Request contains no files.", "bad request");
+        throw new ErrorCode('Request contains no files.', 'bad request');
 
     // TODO multiple file error check
 
     return req.files.file as UploadedFile;
-}
+};
 
 export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 
     const objWithValue = withValue<T>(obj, () => {
 
-        throw new ErrorCode("Requied field has no value!", "bad request");
+        throw new ErrorCode('Requied field has no value!', 'bad request');
     });
 
-    return parseType(objWithValue, type ?? "any") as T;
+    return parseType(objWithValue, type ?? 'any') as T;
 };
 
 export const sleepAsync = (seconds: number) => {
@@ -273,20 +275,20 @@ export const sleepAsync = (seconds: number) => {
 
         const handler = () => {
 
-            console.log(`Timeout is over.`)
+            console.log('Timeout is over.');
             resolve();
-        }
+        };
 
-        console.log(`Timeout set for ${seconds}s.`)
+        console.log(`Timeout set for ${seconds}s.`);
         setTimeout(handler, seconds * 1000);
     });
-}
+};
 
 export const getBearerTokenFromRequest = (req: Request) => {
 
     const authHeader = req.headers.authorization;
     return authHeader?.split(' ')[1];
-}
+};
 
 export const getCookies = (req: Request) => {
 
@@ -297,12 +299,13 @@ export const getCookies = (req: Request) => {
     return cookieString
         .split('; ')
         .map(x => ({
-            key: x.split("=")[0],
-            value: x.split("=")[1]
+            key: x.split('=')[0],
+            value: x.split('=')[1]
         }));
-}
+};
 
-export const getCookie = (req: Request, key: string) => getCookies(req).filter(x => x.key === key)[0];
+export const getCookie = (req: Request, key: string) => getCookies(req)
+.filter(x => x.key === key)[0];
 
 export const getAuthTokenFromRequest = (req: Request, config: GlobalConfiguration) => getCookie(req, config.misc.accessTokenCookieName)?.value;
 
@@ -334,7 +337,7 @@ export class ErrorCode extends Error {
 
         this.code = code;
 
-        logError("Error thrown: " + this.toString());
+        logError('Error thrown: ' + this.toString());
     }
 
     toString() {

@@ -1,4 +1,4 @@
-import { SignupAnswerDTO } from "./SignupAnswerDTO";
+import { SignupAnswerDTO } from './SignupAnswerDTO';
 
 export type SignupQuestionDTO = {
     questionId: number;

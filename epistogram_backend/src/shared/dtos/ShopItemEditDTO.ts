@@ -1,4 +1,4 @@
-import { DiscountCodeDTO } from "./DiscountCodeDTO";
+import { DiscountCodeDTO } from './DiscountCodeDTO';
 
 export class ShopItemEditDTO {
     id: number;

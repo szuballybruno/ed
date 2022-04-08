@@ -16,7 +16,7 @@ export class SQLConnectionService {
 
     async establishConnectionAsync() {
 
-        log("Connecting to SQL...");
+        log('Connecting to SQL...');
 
         const dbConfig = this._config
             .getDatabaseConnectionParameters();
@@ -30,10 +30,10 @@ export class SQLConnectionService {
         });
 
         // listen to errors 
-        pool.on("error", x => console.error(x));
+        pool.on('error', x => console.error(x));
 
         // test connection
-        await pool.query("CREATE TABLE IF NOT EXISTS public.\"connection_test_table\" (\"columnA\" integer);");
+        await pool.query('CREATE TABLE IF NOT EXISTS public."connection_test_table" ("columnA" integer);');
 
         this._pool = pool;
     }

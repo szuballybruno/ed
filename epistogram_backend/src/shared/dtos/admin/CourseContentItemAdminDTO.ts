@@ -1,5 +1,5 @@
-import { CourseItemType } from "../../types/sharedTypes";
-import { CourseContentItemIssueDTO } from "./CourseContentItemIssueDTO";
+import { CourseItemType } from '../../types/sharedTypes';
+import { CourseContentItemIssueDTO } from './CourseContentItemIssueDTO';
 
 export class CourseContentItemAdminDTO {
 	courseId: number;

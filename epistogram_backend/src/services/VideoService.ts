@@ -1,19 +1,19 @@
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { Question } from "../models/entity/Question";
-import { StorageFile } from "../models/entity/StorageFile";
-import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
-import { Video } from "../models/entity/Video";
-import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { VideoRating } from "../models/entity/VideoRating";
-import { FileService } from "./FileService";
-import { MapperService } from "./MapperService";
-import { QueryServiceBase } from "./misc/ServiceBase";
-import { getVideoLengthSecondsAsync } from "./misc/videoDurationService";
-import { QuestionAnswerService } from "./QuestionAnswerService";
-import { QuestionService } from "./QuestionService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UrlService } from "./UrlService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { AnswerSession } from '../models/entity/AnswerSession';
+import { Question } from '../models/entity/Question';
+import { StorageFile } from '../models/entity/StorageFile';
+import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
+import { Video } from '../models/entity/Video';
+import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
+import { VideoRating } from '../models/entity/VideoRating';
+import { FileService } from './FileService';
+import { MapperService } from './MapperService';
+import { QueryServiceBase } from './misc/ServiceBase';
+import { getVideoLengthSecondsAsync } from './misc/videoDurationService';
+import { QuestionAnswerService } from './QuestionAnswerService';
+import { QuestionService } from './QuestionService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UrlService } from './UrlService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class VideoService extends QueryServiceBase<Video> {
 
@@ -57,7 +57,7 @@ export class VideoService extends QueryServiceBase<Video> {
     insertVideoAsync = async (video: Video, filePath?: string) => {
 
         if (video.id)
-            throw new Error("Cannot insert with id!");
+            throw new Error('Cannot insert with id!');
 
         if (filePath) {
             const videoFileUrl = this._assetUrlService
@@ -159,7 +159,7 @@ export class VideoService extends QueryServiceBase<Video> {
 
         // upload file
         const filePath = this._fileService
-            .getFilePath("videos", "video", videoId, "mp4");
+            .getFilePath('videos', 'video', videoId, 'mp4');
 
         await this._fileService
             .uploadAssigendFileAsync<Video>(
@@ -180,7 +180,7 @@ export class VideoService extends QueryServiceBase<Video> {
             .save({
                 id: videoId,
                 lengthSeconds: lengthSeconds
-            })
+            });
     }
 
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
@@ -197,11 +197,11 @@ export class VideoService extends QueryServiceBase<Video> {
 
         const video = await this._ormService
             .getRepository(Video)
-            .createQueryBuilder("v")
-            .where("v.id = :videoId", { videoId })
-            .leftJoinAndSelect("v.videoFile", "vf")
-            .leftJoinAndSelect("v.questions", "q")
-            .leftJoinAndSelect("q.answers", "a")
+            .createQueryBuilder('v')
+            .where('v.id = :videoId', { videoId })
+            .leftJoinAndSelect('v.videoFile', 'vf')
+            .leftJoinAndSelect('v.questions', 'q')
+            .leftJoinAndSelect('q.answers', 'a')
             .getOneOrFail();
 
         return video;

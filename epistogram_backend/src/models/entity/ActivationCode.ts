@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Organization } from "./Organization";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Organization } from './Organization';
 
 @Entity()
 export class ActivationCode {
@@ -17,7 +17,7 @@ export class ActivationCode {
     @Column()
     organizationId: number;
 
-    @JoinColumn({ name: "organization_id" })
+    @JoinColumn({ name: 'organization_id' })
     @ManyToOne(_ => Organization, x => x.activationCodes)
     organization: Organization;
 }

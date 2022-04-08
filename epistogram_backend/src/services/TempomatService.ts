@@ -1,14 +1,14 @@
-import { UserCourseCompletionCurrentView } from "../models/views/UserCourseCompletionCurrentView";
-import { UserCourseCompletionOriginalEstimationView } from "../models/views/UserCourseCompletionOriginalEstimationView";
-import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
-import { UserTempomatAdjustmentValueView } from "../models/views/UserTempomatAdjustmentValueView";
-import { TempomatModeType } from "../shared/types/sharedTypes";
-import { EventService } from "./EventService";
-import { LoggerService } from "./LoggerService";
-import { MapperService } from "./MapperService";
-import { ServiceBase } from "./misc/ServiceBase";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
+import { UserCourseCompletionOriginalEstimationView } from '../models/views/UserCourseCompletionOriginalEstimationView';
+import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
+import { UserTempomatAdjustmentValueView } from '../models/views/UserTempomatAdjustmentValueView';
+import { TempomatModeType } from '../shared/types/sharedTypes';
+import { EventService } from './EventService';
+import { LoggerService } from './LoggerService';
+import { MapperService } from './MapperService';
+import { ServiceBase } from './misc/ServiceBase';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class TempomatService extends ServiceBase {
 
@@ -75,7 +75,7 @@ export class TempomatService extends ServiceBase {
 
     async evaluateUserProgressesAsync() {
 
-        this._loggerService.log("------- Evaluating user progresses... -------");
+        this._loggerService.log('------- Evaluating user progresses... -------');
 
         // get all user progresses and handle them accordingly 
         const userCourseProgressViews = await this._ormService
@@ -97,7 +97,7 @@ export class TempomatService extends ServiceBase {
         try {
 
             // set new recommended items per day
-            await this.recalculateUserRecommendedItemsPerDay(userCourseProgressView)
+            await this.recalculateUserRecommendedItemsPerDay(userCourseProgressView);
 
             // handle lag behind 
             await this.handleLagBehindAsync(userCourseProgressView);
@@ -143,12 +143,12 @@ export class TempomatService extends ServiceBase {
         const newDurationDays = currentView.previsionedLengthDays + adjustmentDays;
         const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
-        this._loggerService.log(`TEMPOMAT ADJUSTMENT: `);
+        this._loggerService.log('TEMPOMAT ADJUSTMENT: ');
         this._loggerService.log(`-- Lag behind: ${lagBehindPercentage}%`);
         this._loggerService.log(`-- Mode: '${tempomatMode}'`);
         this._loggerService.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
         this._loggerService.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
-        this._loggerService.log(`-- Adjustment days: ${isPositiveAdjustment ? "+" : ""}${adjustmentDays}`);
+        this._loggerService.log(`-- Adjustment days: ${isPositiveAdjustment ? '+' : ''}${adjustmentDays}`);
         this._loggerService.log(`-- New previsoned length: ${newDurationDays} days`);
 
         await this.setPrevisionedScheduleAsync(

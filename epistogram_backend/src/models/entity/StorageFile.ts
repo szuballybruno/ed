@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Course } from "./Course";
-import { CourseModule } from "./CourseModule";
-import { ShopItem } from "./ShopItem";
-import { User } from "./User";
-import { Video } from "./Video";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from './Course';
+import { CourseModule } from './CourseModule';
+import { ShopItem } from './ShopItem';
+import { User } from './User';
+import { Video } from './Video';
 
 @Entity()
 export class StorageFile {

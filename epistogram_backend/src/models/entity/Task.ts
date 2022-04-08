@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class Task {
@@ -21,6 +21,6 @@ export class Task {
     userId: number;
 
     @ManyToOne(type => User, user => user.tasks)
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 }

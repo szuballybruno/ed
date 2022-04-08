@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PrequizAnswer } from "./PrequizAnswer";
-import { PrequizQuestion } from "./PrequizQuestion";
-import { User } from "../User";
-import { Course } from "../Course";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { PrequizAnswer } from './PrequizAnswer';
+import { PrequizQuestion } from './PrequizQuestion';
+import { User } from '../User';
+import { Course } from '../Course';
 
 @Entity()
 export class PrequizUserAnswer {
@@ -10,22 +10,22 @@ export class PrequizUserAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "int", nullable: true })
+    @Column({ type: 'int', nullable: true })
     value: number | null;
 
     // question 
     @Column()
     questionId: number;
 
-    @JoinColumn({ name: "question_id" })
+    @JoinColumn({ name: 'question_id' })
     @ManyToOne(_ => PrequizQuestion, x => x.userAnswers)
     question: PrequizQuestion;
 
     // answer 
-    @Column({ type: "int", nullable: true })
+    @Column({ type: 'int', nullable: true })
     answerId: number | null;
 
-    @JoinColumn({ name: "answer_id" })
+    @JoinColumn({ name: 'answer_id' })
     @ManyToOne(_ => PrequizAnswer, x => x.userAnswers)
     answer: PrequizAnswer | null;
 
@@ -33,7 +33,7 @@ export class PrequizUserAnswer {
     @Column()
     userId: number;
 
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.prequizAnswers)
     user: User;
     
@@ -41,7 +41,7 @@ export class PrequizUserAnswer {
     @Column()
     courseId: number;
 
-    @JoinColumn({ name: "course_id" })
+    @JoinColumn({ name: 'course_id' })
     @ManyToOne(_ => Course, x => x.prequizUserAnswers)
     course: Course;
 }

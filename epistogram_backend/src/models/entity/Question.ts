@@ -1,10 +1,10 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Answer } from "./Answer";
-import { Exam } from "./Exam";
-import { GivenAnswer } from "./GivenAnswer";
-import { PersonalityTraitCategory } from "./PersonalityTraitCategory";
-import { QuestionType } from "./QuestionType";
-import { Video } from "./Video";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Answer } from './Answer';
+import { Exam } from './Exam';
+import { GivenAnswer } from './GivenAnswer';
+import { PersonalityTraitCategory } from './PersonalityTraitCategory';
+import { QuestionType } from './QuestionType';
+import { Video } from './Video';
 
 @Entity()
 export class Question {
@@ -21,10 +21,10 @@ export class Question {
     @Column({ nullable: true })
     imageUrl: string;
 
-    @Column({ nullable: true, type: "integer" })
+    @Column({ nullable: true, type: 'integer' })
     orderIndex: number | null;
 
-    @Column({ nullable: true, type: "double precision" })
+    @Column({ nullable: true, type: 'double precision' })
     showUpTimeSeconds: number;
 
     // category
@@ -32,7 +32,7 @@ export class Question {
     personalityTraitCategoryId: number;
 
     @ManyToOne(_ => PersonalityTraitCategory, x => x.questions)
-    @JoinColumn({ name: "personality_trait_category_id" })
+    @JoinColumn({ name: 'personality_trait_category_id' })
     personalityTraitCategory: PersonalityTraitCategory | null;
 
     // type 
@@ -40,11 +40,11 @@ export class Question {
     typeId: number;
 
     @ManyToOne(_ => QuestionType, x => x.questions)
-    @JoinColumn({ name: "type_id" })
+    @JoinColumn({ name: 'type_id' })
     type: QuestionType;
 
     // answers
-    @OneToMany(type => Answer, answer => answer.question, { onDelete: "CASCADE", cascade: true })
+    @OneToMany(type => Answer, answer => answer.question, { onDelete: 'CASCADE', cascade: true })
     @JoinColumn()
     answers: Answer[];
 
@@ -58,7 +58,7 @@ export class Question {
     videoId: number;
 
     @ManyToOne(() => Video, v => v.questions)
-    @JoinColumn({ name: "video_id" })
+    @JoinColumn({ name: 'video_id' })
     video: Video;
 
     // exam 
@@ -66,6 +66,6 @@ export class Question {
     examId: number | null;
 
     @ManyToOne(_ => Exam, e => e.questions)
-    @JoinColumn({ name: "exam_id" })
+    @JoinColumn({ name: 'exam_id' })
     exam: Exam | null;
 }

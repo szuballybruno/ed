@@ -1,9 +1,9 @@
-import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from "typeorm";
-import { User } from "../entity/User";
+import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
-    expression: ``
+    expression: ''
 })
 export class CourseLearningStatsView {
 

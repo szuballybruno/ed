@@ -1,27 +1,27 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { RegistrationType } from "../Types";
-import { UserActivityFlatView } from "../views/UserActivityFlatView";
-import { ActivitySession } from "./ActivitySession";
-import { AnswerSession } from "./AnswerSession";
-import { CoinTransaction } from "./CoinTransaction";
-import { Course } from "./Course";
-import { CourseRatingQuestionUserAnswer } from "./courseRating/CourseRatingQuestionUserAnswer";
-import { DailyTipOccurrence } from "./DailyTipOccurrence";
-import { DiscountCode } from "./DiscountCode";
-import { Event } from "./Event";
-import { JobTitle } from "./JobTitle";
-import { Organization } from "./Organization";
-import { PrequizUserAnswer } from "./prequiz/PrequizUserAnswer";
-import { Role } from "./Role";
-import { StorageFile } from "./StorageFile";
-import { Task } from "./Task";
-import { TeacherInfo } from "./TeacherInfo";
-import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
-import { UserCourseBridge } from "./UserCourseBridge";
-import { UserExamProgressBridge } from "./UserExamProgressBridge";
-import { UserVideoProgressBridge } from "./UserVideoProgressBridge";
-import { VideoPlaybackSample } from "./VideoPlaybackSample";
-import { VideoRating } from "./VideoRating";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { RegistrationType } from '../Types';
+import { UserActivityFlatView } from '../views/UserActivityFlatView';
+import { ActivitySession } from './ActivitySession';
+import { AnswerSession } from './AnswerSession';
+import { CoinTransaction } from './CoinTransaction';
+import { Course } from './Course';
+import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
+import { DailyTipOccurrence } from './DailyTipOccurrence';
+import { DiscountCode } from './DiscountCode';
+import { Event } from './Event';
+import { JobTitle } from './JobTitle';
+import { Organization } from './Organization';
+import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
+import { Role } from './Role';
+import { StorageFile } from './StorageFile';
+import { Task } from './Task';
+import { TeacherInfo } from './TeacherInfo';
+import { UserCourseAccessBridge } from './UserCourseAccessBridge';
+import { UserCourseBridge } from './UserCourseBridge';
+import { UserExamProgressBridge } from './UserExamProgressBridge';
+import { UserVideoProgressBridge } from './UserVideoProgressBridge';
+import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoRating } from './VideoRating';
 
 @Entity()
 export class User {
@@ -34,7 +34,7 @@ export class User {
     @Column()
     isInvitationAccepted: boolean;
 
-    @Column({ type: "text" })
+    @Column({ type: 'text' })
     registrationType: RegistrationType;
 
     // a trusted user has been invited to use the application,
@@ -68,18 +68,18 @@ export class User {
     password: string;
 
     // tokens 
-    @Column({ nullable: true, type: "text" })
+    @Column({ nullable: true, type: 'text' })
     refreshToken: string | null;
 
-    @Column({ nullable: true, type: "text" })
+    @Column({ nullable: true, type: 'text' })
     resetPasswordToken: string | null;
 
-    @Column({ nullable: true, type: "text" })
+    @Column({ nullable: true, type: 'text' })
     invitationToken: string | null;
 
     // user activity 
     @OneToOne(_ => UserActivityFlatView, x => x.user)
-    @JoinColumn({ name: "id" })
+    @JoinColumn({ name: 'id' })
     userActivity: UserActivityFlatView;
 
     // user role
@@ -87,7 +87,7 @@ export class User {
     roleId: number;
 
     @ManyToOne(_ => Role, x => x.users)
-    @JoinColumn({ name: "role_id" })
+    @JoinColumn({ name: 'role_id' })
     role: Role;
 
     // Avatar file
@@ -95,23 +95,23 @@ export class User {
     avatarFileId: number;
 
     @ManyToOne(() => StorageFile, sf => sf.users)
-    @JoinColumn({ name: "avatar_file_id" })
+    @JoinColumn({ name: 'avatar_file_id' })
     avatarFile: StorageFile | null
 
     // Organization 
-    @Column({ nullable: true, type: "number" })
+    @Column({ nullable: true, type: 'number' })
     organizationId: number | null;
 
     @ManyToOne(() => Organization, organization => organization.users)
-    @JoinColumn({ name: "organization_id" })
+    @JoinColumn({ name: 'organization_id' })
     organization: Organization;
 
     // job title 
-    @Column({ nullable: true, type: "number" })
+    @Column({ nullable: true, type: 'number' })
     jobTitleId: number | null;
 
     @ManyToOne(_ => JobTitle, x => x.users)
-    @JoinColumn({ name: "job_title_id" })
+    @JoinColumn({ name: 'job_title_id' })
     jobTitle: JobTitle | null;
 
     // teacher info

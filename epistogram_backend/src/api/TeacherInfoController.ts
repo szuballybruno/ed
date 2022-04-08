@@ -1,6 +1,6 @@
-import { TeacherInfoEditDTO } from "../shared/dtos/TeacherInfoEditDTO";
-import { TeacherInfoService } from "../services/TeacherInfoService";
-import { ActionParams } from "../utilities/helpers";
+import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
+import { TeacherInfoService } from '../services/TeacherInfoService';
+import { ActionParams } from '../utilities/helpers';
 
 export class TeacherInfoController {
 
@@ -13,7 +13,8 @@ export class TeacherInfoController {
 
     getTeacherInfoAction = async (params: ActionParams) => {
 
-        const userId = params.getQuery<any>().getValue(x => x.userId);
+        const userId = params.getQuery<any>()
+.getValue(x => x.userId);
 
         return await this._teacherInfoService
             .getTeacherInfoEditDTOAsync(userId);

@@ -1,9 +1,9 @@
-import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseVisibilityType } from "../../shared/types/sharedTypes";
+import { ViewColumn, ViewEntity } from 'typeorm';
+import { CourseVisibilityType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
-    expression: ``
+    expression: ''
 })
 export class CourseAdminDetailedView {
 

@@ -1,4 +1,4 @@
-import { CourseStageNameType } from "../types/sharedTypes";
+import { CourseStageNameType } from '../types/sharedTypes';
 
 export class CourseShortDTO {
     courseId: number;

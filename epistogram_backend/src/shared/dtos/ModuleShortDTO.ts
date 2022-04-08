@@ -1,4 +1,4 @@
-import { VideoShortDTO } from "./VideoShortDTO";
+import { VideoShortDTO } from './VideoShortDTO';
 
 export class ModuleShortDTO {
     name: string;

@@ -1,10 +1,10 @@
-import { User } from "../../models/entity/User";
-import { GlobalConfiguration } from "../misc/GlobalConfiguration";
-import { log } from "../misc/logger";
-import { ORMConnectionService } from "./ORMConnectionService";
-import { SeedService } from "./SeedService";
-import { SQLBootstrapperService } from "./SQLBootstrapper";
-import { ExecSQLFunctionType, SQLConnectionService } from "./SQLConnectionService";
+import { User } from '../../models/entity/User';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
+import { log } from '../misc/logger';
+import { ORMConnectionService } from './ORMConnectionService';
+import { SeedService } from './SeedService';
+import { SQLBootstrapperService } from './SQLBootstrapper';
+import { ExecSQLFunctionType, SQLConnectionService } from './SQLConnectionService';
 
 export type SQLConnectionType = {
     executeSQL: ExecSQLFunctionType,
@@ -40,7 +40,7 @@ export class DbConnectionService {
 
         // check for prod <> purge conflict 
         if (isPurgeDbEnabled && isProdEnvironemnt)
-            throw new Error("----- TRYING TO PURGE DB ON PROD!!!! ----");
+            throw new Error('----- TRYING TO PURGE DB ON PROD!!!! ----');
 
         // connect sql
         await this._sqlConnectionService.establishConnectionAsync();
@@ -57,17 +57,17 @@ export class DbConnectionService {
         const isFreshDB = await this.isEmptyDatabase();
         if (isFreshDB) {
 
-            log("Seeding DB...", "strong");
+            log('Seeding DB...', 'strong');
 
             await this._seedService.seedDBAsync();
 
-            log("Seeding DB done!", "strong");
+            log('Seeding DB done!', 'strong');
         }
     }
 
     private async connectDatabaseAsync() {
 
-        log("Connecting database...");
+        log('Connecting database...');
 
         // connect TypeORM
         await this._ormConnectionService.connectORMAsync();

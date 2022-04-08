@@ -1,5 +1,5 @@
-import { FileService } from "../services/FileService";
-import { ActionParams, ErrorCode } from "../utilities/helpers";
+import { FileService } from '../services/FileService';
+import { ActionParams, ErrorCode } from '../utilities/helpers';
 
 export class FileController {
 
@@ -16,8 +16,8 @@ export class FileController {
             .getSingleFileOrFail();
 
         //TODO: Create a validation function
-        if (!["image/png", "image/jpeg"].includes(file.mimetype))
-            throw new ErrorCode("File upload failed: Only jpeg or png", "bad request")
+        if (!['image/png', 'image/jpeg'].includes(file.mimetype))
+            throw new ErrorCode('File upload failed: Only jpeg or png', 'bad request');
 
         return this._fileService
             .uploadAvatarFileAsync(params.currentUserId, file);

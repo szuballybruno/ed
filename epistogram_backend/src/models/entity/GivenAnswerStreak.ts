@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CoinTransaction } from "./CoinTransaction";
-import { GivenAnswer } from "./GivenAnswer";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CoinTransaction } from './CoinTransaction';
+import { GivenAnswer } from './GivenAnswer';
+import { User } from './User';
 
 @Entity()
 export class GivenAnswerStreak {
@@ -16,7 +16,7 @@ export class GivenAnswerStreak {
     userId: number;
 
     @ManyToOne(_ => User, x => x.activitySessions)
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 
     // given answers

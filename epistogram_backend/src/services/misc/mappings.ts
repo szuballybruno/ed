@@ -1,114 +1,114 @@
-import { Answer } from "../../models/entity/Answer";
-import { Course } from "../../models/entity/Course";
-import { CourseCategory } from "../../models/entity/CourseCategory";
-import { CourseModule } from "../../models/entity/CourseModule";
-import { DailyTip } from "../../models/entity/DailyTip";
-import { DiscountCode } from "../../models/entity/DiscountCode";
-import { Event } from "../../models/entity/Event";
-import { Exam } from "../../models/entity/Exam";
-import { JobTitle } from "../../models/entity/JobTitle";
-import { Organization } from "../../models/entity/Organization";
-import { PersonalityTraitCategory } from "../../models/entity/PersonalityTraitCategory";
-import { Question } from "../../models/entity/Question";
-import { Role } from "../../models/entity/Role";
-import { ShopItem } from "../../models/entity/ShopItem";
-import { ShopItemCategory } from "../../models/entity/ShopItemCategory";
-import { Task } from "../../models/entity/Task";
-import { TeacherInfo } from "../../models/entity/TeacherInfo";
-import { User } from "../../models/entity/User";
-import { Video } from "../../models/entity/Video";
-import { CoinTransactionView } from "../../models/views/CoinTransactionView";
-import { CourseAdminContentView } from "../../models/views/CourseAdminContentView";
-import { CourseAdminDetailedView } from "../../models/views/CourseAdminDetailedView";
-import { CourseAdminShortView } from "../../models/views/CourseAdminShortView";
-import { CourseDetailsView } from "../../models/views/CourseDetailsView";
-import { CourseItemStateView } from "../../models/views/CourseItemStateView";
-import { CourseLearningStatsView } from "../../models/views/CourseLearningStatsView";
-import { CourseModuleOverviewView } from "../../models/views/CourseModuleOverviewView";
-import { CourseOverviewView } from "../../models/views/CourseOverviewView";
-import { CourseProgressView } from "../../models/views/CourseProgressView";
-import { CourseRatingQuestionView } from "../../models/views/CourseRatingQuestionView";
-import { CourseView } from "../../models/views/CourseView";
-import { DailyTipView } from "../../models/views/DailyTipView";
-import { ExamResultView } from "../../models/views/ExamResultView";
-import { ExamView } from "../../models/views/ExamView";
-import { PersonalityTraitCategoryView } from "../../models/views/PersonalityTraitCategoryView";
-import { PrequizQuestionView } from "../../models/views/PrequizQuestionView";
-import { PretestResultView } from "../../models/views/PretestResultView";
-import { ShopItemStatefulView } from "../../models/views/ShopItemStatefulView";
-import { ShopItemView } from "../../models/views/ShopItemView";
-import { SignupQuestionView } from "../../models/views/SignupQuestionView";
-import { UserActiveCourseView } from "../../models/views/UserActiveCourseView";
-import { UserActivityFlatView } from "../../models/views/UserActivityFlatView";
-import { AdminUserListView } from "../../models/views/UserAdminListView";
-import { UserDailyProgressView } from "../../models/views/UserDailyProgressView";
-import { UserStatsView } from "../../models/views/UserStatsView";
-import { AdminPageUserDTO } from "../../shared/dtos/admin/AdminPageUserDTO";
-import { CourseAdminListItemDTO } from "../../shared/dtos/admin/CourseAdminListItemDTO";
-import { CourseContentItemAdminDTO } from "../../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseContentItemIssueDTO } from "../../shared/dtos/admin/CourseContentItemIssueDTO";
-import { AdminModuleShortDTO } from "../../shared/dtos/AdminModuleShortDTO";
-import { AnswerDTO } from "../../shared/dtos/AnswerDTO";
-import { AnswerEditDTO } from "../../shared/dtos/AnswerEditDTO";
-import { CoinTransactionDTO } from "../../shared/dtos/CoinTransactionDTO";
-import { CourseBriefData } from "../../shared/dtos/CourseBriefData";
-import { CourseCategoryDTO } from "../../shared/dtos/CourseCategoryDTO";
-import { CourseContentEditDataDTO } from "../../shared/dtos/CourseContentEditDataDTO";
-import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { CourseDetailsEditDataDTO } from "../../shared/dtos/CourseDetailsEditDataDTO";
-import { CourseItemDTO } from "../../shared/dtos/CourseItemDTO";
-import { CourseItemListDTO } from "../../shared/dtos/CourseItemListDTO";
-import { CourseLearningDTO } from "../../shared/dtos/CourseLearningDTO";
-import { CourseOverviewDataDTO } from "../../shared/dtos/CourseOverviewDataDTO";
-import { CourseProgressShortDTO } from "../../shared/dtos/CourseProgressShortDTO";
-import { CourseRatingGroupDTO } from "../../shared/dtos/CourseRatingGroupDTO";
-import { CourseRatingQuestionDTO } from "../../shared/dtos/CourseRatingQuestionDTO";
-import { CourseShopItemListDTO } from "../../shared/dtos/CourseShopItemListDTO";
-import { CourseShortDTO } from "../../shared/dtos/CourseShortDTO";
-import { CourseStatDTO } from "../../shared/dtos/CourseStatDTO";
-import { DailyTipDTO } from "../../shared/dtos/DailyTipDTO";
-import { DailyTipEditDataDTO } from "../../shared/dtos/DailyTipEditDataDTO";
-import { DiscountCodeDTO } from "../../shared/dtos/DiscountCodeDTO";
-import { EventDTO } from "../../shared/dtos/EventDTO";
-import { ExamEditDataDTO } from "../../shared/dtos/ExamEditDataDTO";
-import { ExamPlayerDataDTO } from "../../shared/dtos/ExamPlayerDataDTO";
-import { ExamResultQuestionDTO } from "../../shared/dtos/ExamResultQuestionDTO";
-import { ExamResultsDTO } from "../../shared/dtos/ExamResultsDTO";
-import { JobTitleDTO } from "../../shared/dtos/JobTitleDTO";
-import { ModuleAdminEditDTO } from "../../shared/dtos/ModuleAdminEditDTO";
-import { ModuleDetailedDTO } from "../../shared/dtos/ModuleDetailedDTO";
-import { ModuleShortDTO } from "../../shared/dtos/ModuleShortDTO";
-import { OrganizationDTO } from "../../shared/dtos/OrganizationDTO";
-import { PersonalityTraitCategoryDTO } from "../../shared/dtos/PersonalityTraitCategoryDTO";
-import { PersonalityTraitCategoryShortDTO } from "../../shared/dtos/PersonalityTraitCategoryShortDTO";
-import { PrequizAnswerDTO } from "../../shared/dtos/PrequizAnswerDTO";
-import { PrequizQuestionDTO } from "../../shared/dtos/PrequizQuestionDTO";
-import { PretestResultDTO } from "../../shared/dtos/PretestResultDTO";
-import { QuestionDTO } from "../../shared/dtos/QuestionDTO";
-import { ResultAnswerDTO } from "../../shared/dtos/ResultAnswerDTO";
-import { RoleDTO } from "../../shared/dtos/RoleDTO";
-import { ShopItemAdminShortDTO } from "../../shared/dtos/ShopItemAdminShortDTO";
-import { ShopItemBriefData } from "../../shared/dtos/ShopItemBriefData";
-import { ShopItemCategoryDTO } from "../../shared/dtos/ShopItemCategoryDTO";
-import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
-import { ShopItemEditDTO } from "../../shared/dtos/ShopItemEditDTO";
-import { SignupAnswerDTO } from "../../shared/dtos/SignupAnswerDTO";
-import { SignupDataDTO } from "../../shared/dtos/SignupDataDTO";
-import { SignupQuestionDTO } from "../../shared/dtos/SignupQuestionDTO";
-import { TaskDTO } from "../../shared/dtos/TaskDTO";
-import { TeacherInfoEditDTO } from "../../shared/dtos/TeacherInfoEditDTO";
-import { UserActiveCourseDTO } from "../../shared/dtos/UserActiveCourseDTO";
-import { UserActivityDTO } from "../../shared/dtos/UserActivityDTO";
-import { UserDailyProgressDTO } from "../../shared/dtos/UserDailyProgressDTO";
-import { UserDTO } from "../../shared/dtos/UserDTO";
-import { UserEditDTO } from "../../shared/dtos/UserEditDTO";
-import { UserStatsDTO } from "../../shared/dtos/UserStatsDTO";
-import { VideoDTO } from "../../shared/dtos/VideoDTO";
-import { VideoEditDTO } from "../../shared/dtos/VideoEditDTO";
-import { CourseContentItemIssueCodeType, CourseItemStateType } from "../../shared/types/sharedTypes";
-import { navPropNotNull, toFullName } from "../../utilities/helpers";
-import { MapperService } from "../MapperService";
-import { getItemCode } from "./encodeService";
+import { Answer } from '../../models/entity/Answer';
+import { Course } from '../../models/entity/Course';
+import { CourseCategory } from '../../models/entity/CourseCategory';
+import { CourseModule } from '../../models/entity/CourseModule';
+import { DailyTip } from '../../models/entity/DailyTip';
+import { DiscountCode } from '../../models/entity/DiscountCode';
+import { Event } from '../../models/entity/Event';
+import { Exam } from '../../models/entity/Exam';
+import { JobTitle } from '../../models/entity/JobTitle';
+import { Organization } from '../../models/entity/Organization';
+import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
+import { Question } from '../../models/entity/Question';
+import { Role } from '../../models/entity/Role';
+import { ShopItem } from '../../models/entity/ShopItem';
+import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
+import { Task } from '../../models/entity/Task';
+import { TeacherInfo } from '../../models/entity/TeacherInfo';
+import { User } from '../../models/entity/User';
+import { Video } from '../../models/entity/Video';
+import { CoinTransactionView } from '../../models/views/CoinTransactionView';
+import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
+import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
+import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
+import { CourseDetailsView } from '../../models/views/CourseDetailsView';
+import { CourseItemStateView } from '../../models/views/CourseItemStateView';
+import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
+import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
+import { CourseOverviewView } from '../../models/views/CourseOverviewView';
+import { CourseProgressView } from '../../models/views/CourseProgressView';
+import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
+import { CourseView } from '../../models/views/CourseView';
+import { DailyTipView } from '../../models/views/DailyTipView';
+import { ExamResultView } from '../../models/views/ExamResultView';
+import { ExamView } from '../../models/views/ExamView';
+import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
+import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
+import { PretestResultView } from '../../models/views/PretestResultView';
+import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
+import { ShopItemView } from '../../models/views/ShopItemView';
+import { SignupQuestionView } from '../../models/views/SignupQuestionView';
+import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
+import { UserActivityFlatView } from '../../models/views/UserActivityFlatView';
+import { AdminUserListView } from '../../models/views/UserAdminListView';
+import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
+import { UserStatsView } from '../../models/views/UserStatsView';
+import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
+import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
+import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { CourseContentItemIssueDTO } from '../../shared/dtos/admin/CourseContentItemIssueDTO';
+import { AdminModuleShortDTO } from '../../shared/dtos/AdminModuleShortDTO';
+import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
+import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
+import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
+import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
+import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
+import { CourseContentEditDataDTO } from '../../shared/dtos/CourseContentEditDataDTO';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
+import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
+import { CourseItemListDTO } from '../../shared/dtos/CourseItemListDTO';
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
+import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
+import { CourseRatingGroupDTO } from '../../shared/dtos/CourseRatingGroupDTO';
+import { CourseRatingQuestionDTO } from '../../shared/dtos/CourseRatingQuestionDTO';
+import { CourseShopItemListDTO } from '../../shared/dtos/CourseShopItemListDTO';
+import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
+import { CourseStatDTO } from '../../shared/dtos/CourseStatDTO';
+import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
+import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
+import { DiscountCodeDTO } from '../../shared/dtos/DiscountCodeDTO';
+import { EventDTO } from '../../shared/dtos/EventDTO';
+import { ExamEditDataDTO } from '../../shared/dtos/ExamEditDataDTO';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
+import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
+import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
+import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
+import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
+import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
+import { OrganizationDTO } from '../../shared/dtos/OrganizationDTO';
+import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
+import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
+import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
+import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
+import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
+import { RoleDTO } from '../../shared/dtos/RoleDTO';
+import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
+import { ShopItemBriefData } from '../../shared/dtos/ShopItemBriefData';
+import { ShopItemCategoryDTO } from '../../shared/dtos/ShopItemCategoryDTO';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
+import { SignupAnswerDTO } from '../../shared/dtos/SignupAnswerDTO';
+import { SignupDataDTO } from '../../shared/dtos/SignupDataDTO';
+import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
+import { TaskDTO } from '../../shared/dtos/TaskDTO';
+import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
+import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
+import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
+import { UserDTO } from '../../shared/dtos/UserDTO';
+import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
+import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
+import { VideoDTO } from '../../shared/dtos/VideoDTO';
+import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
+import { CourseContentItemIssueCodeType, CourseItemStateType } from '../../shared/types/sharedTypes';
+import { navPropNotNull, toFullName } from '../../utilities/helpers';
+import { MapperService } from '../MapperService';
+import { getItemCode } from './encodeService';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -116,7 +116,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(CourseModule, AdminModuleShortDTO, courseModule => ({
             id: courseModule.id,
             name: courseModule.name
-        }))
+        }));
 
     mapperService
         .addMap(CourseModule, ModuleDetailedDTO, courseModule => ({
@@ -194,7 +194,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             const thumbnailImageURL = x.filePath
                 ? getAssetUrl(x.filePath)
-                : getAssetUrl("/images/defaultCourseCover.jpg");
+                : getAssetUrl('/images/defaultCourseCover.jpg');
 
             return {
                 courseId: x.id,
@@ -234,7 +234,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             const thumbnailImageURL = view.coverFilePath
                 ? getAssetUrl(view.coverFilePath)
-                : getAssetUrl("/images/defaultCourseCover.jpg");
+                : getAssetUrl('/images/defaultCourseCover.jpg');
 
             return {
                 title: view.title,
@@ -276,21 +276,21 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(CourseAdminContentView, CourseContentItemAdminDTO, x => {
 
             const getIssueList = (issues: string) => issues
-                .split("\n")
+                .split('\n')
                 .filter(x => !!x)
                 .map((x): CourseContentItemIssueDTO => {
 
-                    if (x.includes(": ")) {
-                        const parts = x.split(": ");
+                    if (x.includes(': ')) {
+                        const parts = x.split(': ');
                         return {
                             code: parts[1] as any,
                             questionName: parts[0]
-                        }
+                        };
                     }
 
                     return {
                         code: x as any
-                    }
+                    };
                 });
 
             const errors = getIssueList(x.errors);
@@ -313,7 +313,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 warnings,
                 videoLength: x.videoLength,
                 itemType: x.itemType
-            }
+            };
         });
 
     mapperService
@@ -323,7 +323,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             const thumbnailImageURL = detailsView.coverFilePath
                 ? getAssetUrl(detailsView.coverFilePath)
-                : getAssetUrl("/images/defaultCourseCover.jpg");
+                : getAssetUrl('/images/defaultCourseCover.jpg');
 
             const modules = moduleViews
                 .groupBy(x => x.moduleId)
@@ -446,14 +446,14 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 title: view.title,
                 coverImageUrl: view.filePath
                     ? getAssetUrl(view.filePath)
-                    : getAssetUrl("/images/defaultCourseCover.jpg")
+                    : getAssetUrl('/images/defaultCourseCover.jpg')
             } as CourseStatDTO;
         });
 
     mapperService
         .addMap(AdminUserListView, AdminPageUserDTO, v => ({
             id: v.userId,
-            name: toFullName(v.firstName, v.lastName, "hu"),
+            name: toFullName(v.firstName, v.lastName, 'hu'),
             firstName: v.firstName,
             lastName: v.lastName,
             roleId: v.roleId,
@@ -485,8 +485,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 subTitle: video.subtitle,
                 title: video.title,
                 description: video.description,
-                thumbnailUrl: "",
-                url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl("images/videoImage.jpg"),
+                thumbnailUrl: '',
+                url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
                 questions: video.questions.map(q => toQuestionDTO(q)),
                 maxWatchedSeconds: maxWatchedSeconds
             } as VideoDTO;
@@ -498,12 +498,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             return {
                 id: video.id,
                 subTitle: video.subtitle,
-                thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl("images/videoImage.jpg"),
+                thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl('images/videoImage.jpg'),
                 title: video.title,
                 orderIndex: video.orderIndex,
-                state: state ?? "available",
-                descriptorCode: getItemCode(video.id, "video"),
-                type: "video"
+                state: state ?? 'available',
+                descriptorCode: getItemCode(video.id, 'video'),
+                type: 'video'
             } as CourseItemDTO;
         });
 
@@ -513,12 +513,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             return {
                 id: exam.id,
                 subTitle: exam.subtitle,
-                thumbnailUrl: getAssetUrl("/images/examCover.jpg"),
+                thumbnailUrl: getAssetUrl('/images/examCover.jpg'),
                 title: exam.title,
                 orderIndex: exam.orderIndex,
-                state: state ?? "available",
-                descriptorCode: getItemCode(exam.id, "exam"),
-                type: "exam"
+                state: state ?? 'available',
+                descriptorCode: getItemCode(exam.id, 'exam'),
+                type: 'exam'
             } as CourseItemDTO;
         });
 
@@ -558,7 +558,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             const thumbnailImageURL = course.filePath
                 ? getAssetUrl(course.filePath)
-                : getAssetUrl("/images/defaultCourseCover.jpg");
+                : getAssetUrl('/images/defaultCourseCover.jpg');
 
             const currentItemCode = course.isStarted
                 ? course.currentItemCode
@@ -582,7 +582,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             const thumbnailImageURL = view.coverFilePath
                 ? getAssetUrl(view.coverFilePath)
-                : getAssetUrl("/images/defaultCourseCover.jpg");
+                : getAssetUrl('/images/defaultCourseCover.jpg');
 
             return {
                 title: view.title,
@@ -649,7 +649,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 orderIndex: courseItemView.itemOrderIndex,
                 state: courseItemView.state,
                 descriptorCode: courseItemView.itemCode,
-                type: courseItemView.itemType === "video" ? "video" : "exam"
+                type: courseItemView.itemType === 'video' ? 'video' : 'exam'
             } as CourseItemDTO;
         });
 
@@ -661,7 +661,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 title: exam.title,
                 courseId: exam.courseId,
                 subTitle: exam.subtitle,
-                isFinalExam: exam.type === "final",
+                isFinalExam: exam.type === 'final',
                 reatakeLimit: exam.retakeLimit,
                 questions: exam
                     .questions
@@ -777,14 +777,14 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 label: isMax ? x.maxLabel : x.minLabel,
                 isMax,
                 tipCount: isMax ? x.maxTipsCount : x.minTipsCount
-            }
+            };
         });
 
     mapperService
         .addMap(DailyTip, DailyTipDTO, x => ({
             description: x.description,
             id: x.id,
-            videoUrl: ""
+            videoUrl: ''
         }));
 
     mapperService
@@ -861,41 +861,41 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             coverFilePath: getAssetUrl(view.coverFilePath),
             title: view.title
         }));
-}
+};
 
-const separationChar = "|";
+const separationChar = '|';
 
 export const createCharSeparatedList = (list: string[]) => {
 
     return list.join(` ${separationChar} `);
-}
+};
 
 const parseCommaSeparatedStringList = (str: string) => {
 
-    return (str ?? "")
+    return (str ?? '')
         .split(separationChar)
         .map(x => x
             .trim());
-}
+};
 
 const parseSkillBenefits = (str: string) => {
 
     if (!str)
         return [];
 
-    return (str ?? "")
+    return (str ?? '')
         .split(separationChar)
         .map(x => {
 
             const trimmed = x.trim();
-            const split = trimmed.split(":");
+            const split = trimmed.split(':');
 
             return {
                 text: split[0].trim(),
                 value: parseInt(split[1].trim())
-            }
-        })
-}
+            };
+        });
+};
 
 export const toRoleDTO = (role: Role) => {
 
@@ -903,7 +903,7 @@ export const toRoleDTO = (role: Role) => {
         id: role.id,
         name: role.name
     } as RoleDTO;
-}
+};
 
 export const toJobTitleDTO = (jobTitle: JobTitle) => {
 
@@ -911,7 +911,7 @@ export const toJobTitleDTO = (jobTitle: JobTitle) => {
         id: jobTitle.id,
         name: jobTitle.name
     } as JobTitleDTO;
-}
+};
 
 export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
 
@@ -920,7 +920,7 @@ export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
     return {
         ...activityFlags
     } as UserActivityDTO;
-}
+};
 
 export const toTaskDTO = (task: Task) => {
 
@@ -929,7 +929,7 @@ export const toTaskDTO = (task: Task) => {
         dueDate: task.dueData,
         objective: task.objective
     } as TaskDTO;
-}
+};
 
 export const toExamResultDTO = (views: ExamResultView[]) => {
 
@@ -948,7 +948,7 @@ export const toExamResultDTO = (views: ExamResultView[]) => {
                     .items
                     .map(x => toResultAnswerDTO(x)),
             } as ExamResultQuestionDTO;
-        })
+        });
 
     return {
         isSuccessful: viewAsExam.isCompletedSession,
@@ -959,7 +959,7 @@ export const toExamResultDTO = (views: ExamResultView[]) => {
         isFinalExam: viewAsExam.isFinalExam,
         shouldShowCourseCompleted: viewAsExam.onlySuccessfulSession && viewAsExam.isFinalExam
     } as ExamResultsDTO;
-}
+};
 
 export const toResultAnswerDTO = (view: ExamResultView) => {
 
@@ -969,7 +969,7 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
         isCorrect: view.isAnswerCorrect,
         isGiven: view.isGivenAnswer
     } as ResultAnswerDTO;
-}
+};
 
 export const toOrganizationDTO = (org: Organization) => {
 
@@ -977,7 +977,7 @@ export const toOrganizationDTO = (org: Organization) => {
         id: org.id,
         name: org.name
     } as OrganizationDTO;
-}
+};
 
 export const toQuestionDTO = (q: Question) => {
 
@@ -994,7 +994,7 @@ export const toQuestionDTO = (q: Question) => {
             .map(x => toAnswerDTO(x))
 
     } as QuestionDTO;
-}
+};
 
 export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
 
@@ -1024,7 +1024,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
             }),
         isCompleted: isCompletedSignup
     } as SignupDataDTO;
-}
+};
 
 export const toAnswerDTO = (a: Answer) => {
 
@@ -1032,7 +1032,7 @@ export const toAnswerDTO = (a: Answer) => {
         answerId: a.id,
         answerText: a.text
     } as AnswerDTO;
-}
+};
 
 export const toAnswerEditDTO = (a: Answer) => {
 
@@ -1041,7 +1041,7 @@ export const toAnswerEditDTO = (a: Answer) => {
         isCorrect: a.isCorrect,
         text: a.text
     } as AnswerEditDTO;
-}
+};
 
 export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
 
@@ -1053,5 +1053,5 @@ export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
                 .map(x => toCourseCategoryDTO(x))
             : []
     } as CourseCategoryDTO;
-}
+};
 

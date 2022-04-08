@@ -1,9 +1,9 @@
-import { JoinColumn, OneToOne, ViewColumn, ViewEntity } from "typeorm";
-import { Course } from "../entity/Course";
+import { JoinColumn, OneToOne, ViewColumn, ViewEntity } from 'typeorm';
+import { Course } from '../entity/Course';
 
 @ViewEntity({
     synchronize: false,
-    expression: ``
+    expression: ''
 })
 export class CourseStateView {
 
@@ -21,6 +21,6 @@ export class CourseStateView {
 
     // course 
     @OneToOne(_ => Course, x => x.courseState)
-    @JoinColumn({ name: "course_id" })
+    @JoinColumn({ name: 'course_id' })
     course: Course;
 }

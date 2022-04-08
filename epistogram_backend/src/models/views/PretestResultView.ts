@@ -1,8 +1,8 @@
-import { ViewColumn, ViewEntity } from "typeorm";
+import { ViewColumn, ViewEntity } from 'typeorm';
 
 @ViewEntity({
 	synchronize: false,
-	expression: ``
+	expression: ''
 })
 export class PretestResultView {
 

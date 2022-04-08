@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Course } from "./Course";
-import { Exam } from "./Exam";
-import { StorageFile } from "./StorageFile";
-import { Video } from "./Video";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from './Course';
+import { Exam } from './Exam';
+import { StorageFile } from './StorageFile';
+import { Video } from './Video';
 
 @Entity()
 export class CourseModule {
@@ -24,7 +24,7 @@ export class CourseModule {
     courseId: number;
 
     @ManyToOne(_ => Course, x => x.modules)
-    @JoinColumn({ name: "course_id" })
+    @JoinColumn({ name: 'course_id' })
     course: Course;
 
     // exams
@@ -38,10 +38,10 @@ export class CourseModule {
     videos: Video[];
 
     // image file 
-    @Column({ nullable: true, type: "integer" })
+    @Column({ nullable: true, type: 'integer' })
     imageFileId: number | null;
 
     @OneToOne(_ => StorageFile, x => x.courseModule)
-    @JoinColumn({ name: "image_file_id" })
+    @JoinColumn({ name: 'image_file_id' })
     imageFile: StorageFile | null;
 }

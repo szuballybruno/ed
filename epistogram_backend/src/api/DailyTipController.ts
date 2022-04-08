@@ -1,6 +1,6 @@
-import { DailyTipEditDataDTO } from "../shared/dtos/DailyTipEditDataDTO";
-import { DailyTipService } from "../services/DailyTipService";
-import { ActionParams } from "../utilities/helpers";
+import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
+import { DailyTipService } from '../services/DailyTipService';
+import { ActionParams } from '../utilities/helpers';
 
 export class DailyTipController {
 
@@ -15,7 +15,7 @@ export class DailyTipController {
 
         const tipId = params
             .getBody<any>()
-            .getValue(x => x.dailyTipId, "int");
+            .getValue(x => x.dailyTipId, 'int');
 
         await this._dailyTipService
             .deleteDailyTipAsync(tipId);
@@ -27,10 +27,10 @@ export class DailyTipController {
             .getBody<any>();
 
         const personalityTraitCategoryId = body
-            .getValue(x => x.personalityTraitCategoryId, "int");
+            .getValue(x => x.personalityTraitCategoryId, 'int');
 
         const isMax = body
-            .getValue(x => x.isMax, "boolean");
+            .getValue(x => x.isMax, 'boolean');
 
         await this._dailyTipService
             .createDailyTipAsync(personalityTraitCategoryId, isMax);
@@ -40,7 +40,7 @@ export class DailyTipController {
 
         const dailyTipId = params
             .getQuery<any>()
-            .getValue(x => x.dailyTipId, "int");
+            .getValue(x => x.dailyTipId, 'int');
 
         return await this._dailyTipService
             .getDailyTipEditDataAsync(dailyTipId);

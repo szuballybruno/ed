@@ -1,5 +1,5 @@
-import { PrequizService } from "../services/PrequizService";
-import { ActionParams } from "../utilities/helpers";
+import { PrequizService } from '../services/PrequizService';
+import { ActionParams } from '../utilities/helpers';
 
 export class PrequizController {
 
@@ -14,7 +14,7 @@ export class PrequizController {
 
         const courseId = params
             .getQuery<any>()
-            .getValue(x => x.courseId, "int");
+            .getValue(x => x.courseId, 'int');
 
         return await this._prequizService
             .getQuestionsAsync(params.currentUserId, courseId);
@@ -26,10 +26,10 @@ export class PrequizController {
             .getQuery<{ questionId: number, courseId: number }>();
 
         const questionId = query
-            .getValue(x => x.questionId, "int");
+            .getValue(x => x.questionId, 'int');
 
         const courseId = query
-            .getValue(x => x.courseId, "int");
+            .getValue(x => x.courseId, 'int');
 
         return await this._prequizService
             .getUserAnswerAsync(params.currentUserId, courseId, questionId);
@@ -46,16 +46,16 @@ export class PrequizController {
             }>();
 
         const questionId = bod
-            .getValue(x => x.questionId, "int");
+            .getValue(x => x.questionId, 'int');
 
         const courseId = bod
-            .getValue(x => x.courseId, "int");
+            .getValue(x => x.courseId, 'int');
 
         const value = bod
-            .getValueOrNull(x => x.value, "int");
+            .getValueOrNull(x => x.value, 'int');
 
         const answerId = bod
-            .getValueOrNull(x => x.answerId, "int");
+            .getValueOrNull(x => x.answerId, 'int');
 
         return await this._prequizService
             .answerPrequizQuestionAsync(params.currentUserId, questionId, courseId, answerId, value);

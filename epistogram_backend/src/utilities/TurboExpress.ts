@@ -1,4 +1,4 @@
-import { Application, NextFunction, Request, Response } from "express";
+import { Application, NextFunction, Request, Response } from 'express';
 
 export interface ITurboMiddleware<TActionParams, TRouteOptions> {
 
@@ -47,11 +47,11 @@ export class TurboExpress<TActionParams, TRouteOptions extends IRouteOptions> {
             }
 
             if (!actionParams)
-                throw new Error("Invalid middleware configuration, one middleware should create the action parameters, but it was left as null.");
+                throw new Error('Invalid middleware configuration, one middleware should create the action parameters, but it was left as null.');
 
             // run action 
             return await action(actionParams);
-        }
+        };
 
         // create sync wrapper
         const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
@@ -65,7 +65,7 @@ export class TurboExpress<TActionParams, TRouteOptions extends IRouteOptions> {
 
                     this._onError(error, req, res);
                 });
-        }
+        };
 
         // register on express as route 
         if (options?.isPost) {

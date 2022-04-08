@@ -1,4 +1,4 @@
-import { CourseRatingQuesitonType } from "../types/sharedTypes";
+import { CourseRatingQuesitonType } from '../types/sharedTypes';
 
 export class CourseRatingQuestionDTO {
     id: number;

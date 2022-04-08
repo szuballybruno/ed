@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { SessionActivityType } from "../../shared/types/sharedTypes";
-import { ActivitySession } from "./ActivitySession";
-import { CoinTransaction } from "./CoinTransaction";
-import { User } from "./User";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { SessionActivityType } from '../../shared/types/sharedTypes';
+import { ActivitySession } from './ActivitySession';
+import { CoinTransaction } from './CoinTransaction';
+import { User } from './User';
 
 @Entity()
 export class UserSessionActivity {
@@ -10,10 +10,10 @@ export class UserSessionActivity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
+    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
 
-    @Column({ type: "text" })
+    @Column({ type: 'text' })
     type: SessionActivityType;
 
     // user
@@ -21,6 +21,6 @@ export class UserSessionActivity {
     activitySessionId: number;
 
     @ManyToOne(_ => ActivitySession, x => x.activities)
-    @JoinColumn({ name: "activity_session_id" })
+    @JoinColumn({ name: 'activity_session_id' })
     activitySession: ActivitySession;
 }

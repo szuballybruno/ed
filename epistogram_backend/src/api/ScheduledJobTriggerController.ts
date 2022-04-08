@@ -1,4 +1,4 @@
-import { TempomatService } from "../services/TempomatService";
+import { TempomatService } from '../services/TempomatService';
 
 export class ScheduledJobTriggerController {
 

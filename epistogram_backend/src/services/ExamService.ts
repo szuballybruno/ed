@@ -1,22 +1,22 @@
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { Exam } from "../models/entity/Exam";
-import { Question } from "../models/entity/Question";
-import { UserExamProgressBridge } from "../models/entity/UserExamProgressBridge";
-import { AnswerSessionView } from "../models/views/AnswerSessionView";
-import { ExamResultView } from "../models/views/ExamResultView";
-import { ExamView } from "../models/views/ExamView";
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { ExamEditDataDTO } from "../shared/dtos/ExamEditDataDTO";
-import { ExamPlayerDataDTO } from "../shared/dtos/ExamPlayerDataDTO";
-import { MapperService } from "./MapperService";
-import { readItemCode } from "./misc/encodeService";
-import { toExamResultDTO } from "./misc/mappings";
-import { QueryServiceBase } from "./misc/ServiceBase";
-import { QuestionAnswerService } from "./QuestionAnswerService";
-import { QuestionService } from "./QuestionService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { UserSessionActivityService } from "./UserSessionActivityService";
+import { AnswerSession } from '../models/entity/AnswerSession';
+import { Exam } from '../models/entity/Exam';
+import { Question } from '../models/entity/Question';
+import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
+import { AnswerSessionView } from '../models/views/AnswerSessionView';
+import { ExamResultView } from '../models/views/ExamResultView';
+import { ExamView } from '../models/views/ExamView';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
+import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
+import { MapperService } from './MapperService';
+import { readItemCode } from './misc/encodeService';
+import { toExamResultDTO } from './misc/mappings';
+import { QueryServiceBase } from './misc/ServiceBase';
+import { QuestionAnswerService } from './QuestionAnswerService';
+import { QuestionService } from './QuestionService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class ExamService extends QueryServiceBase<Exam> {
 
@@ -74,7 +74,7 @@ export class ExamService extends QueryServiceBase<Exam> {
             .getExamQuestionsAsync(examId);
 
         if (questions.length === 0)
-            throw new Error("Exam has no questions assigend.");
+            throw new Error('Exam has no questions assigend.');
 
         return this._mapperService
             .map(ExamView, ExamPlayerDataDTO, examView, questions);
@@ -90,10 +90,10 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         const exam = await this._ormService
             .getRepository(Exam)
-            .createQueryBuilder("e")
-            .where("e.id = :examId", { examId })
-            .leftJoinAndSelect("e.questions", "q")
-            .leftJoinAndSelect("q.answers", "a")
+            .createQueryBuilder('e')
+            .where('e.id = :examId', { examId })
+            .leftJoinAndSelect('e.questions', 'q')
+            .leftJoinAndSelect('q.answers', 'a')
             .getOneOrFail();
 
         return exam.questions;
@@ -109,10 +109,10 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         const exam = await this._ormService
             .getRepository(Exam)
-            .createQueryBuilder("e")
-            .leftJoinAndSelect("e.questions", "eq")
-            .leftJoinAndSelect("eq.answers", "eqa")
-            .where("e.id = :examId", { examId })
+            .createQueryBuilder('e')
+            .leftJoinAndSelect('e.questions', 'eq')
+            .leftJoinAndSelect('eq.answers', 'eqa')
+            .where('e.id = :examId', { examId })
             .getOneOrFail();
 
         return this._mapperService
@@ -130,25 +130,25 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         const examBeforeSave = await this._ormService
             .getRepository(Exam)
-            .createQueryBuilder("e")
-            .leftJoinAndSelect("e.module", "mo")
-            .where("e.id = :examId", { examId })
+            .createQueryBuilder('e')
+            .leftJoinAndSelect('e.module', 'mo')
+            .where('e.id = :examId', { examId })
             .getOneOrFail();
 
         const courseId = examBeforeSave.module?.courseId ?? dto.courseId;
 
         // if this exam was not a final exam previously, 
         // but now it is, set every other exam in the course as non final exam
-        if (dto.isFinalExam && examBeforeSave.type !== "final") {
+        if (dto.isFinalExam && examBeforeSave.type !== 'final') {
 
             // get all exams in course 
             const previousFinalExam = await this._ormService
                 .getRepository(Exam)
-                .createQueryBuilder("e")
-                .leftJoinAndSelect("e.module", "mo")
-                .leftJoinAndSelect("mo.course", "co")
-                .where("co.id = :courseId", { courseId })
-                .andWhere("e.type = 'final'")
+                .createQueryBuilder('e')
+                .leftJoinAndSelect('e.module', 'mo')
+                .leftJoinAndSelect('mo.course', 'co')
+                .where('co.id = :courseId', { courseId })
+                .andWhere('e.type = \'final\'')
                 .getMany();
 
             // set all exams to non final 
@@ -157,7 +157,7 @@ export class ExamService extends QueryServiceBase<Exam> {
                 .save(previousFinalExam
                     .map(x => ({
                         id: x.id,
-                        type: "normal"
+                        type: 'normal'
                     } as Exam)));
         }
 
@@ -200,7 +200,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamByIdAsync = (examId: number) => {
 
         return this._ormService
-            .getSingleById(Exam, examId)
+            .getSingleById(Exam, examId);
     }
 
     /**
@@ -218,16 +218,16 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         // save user activity
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, "exam");
+            .saveUserSessionActivityAsync(userId, 'exam');
 
         // inspect questions
         const questions = await this._ormService
             .getRepository(Question)
-            .createQueryBuilder("q")
-            .leftJoinAndSelect("q.exam", "e")
-            .leftJoinAndSelect("e.answerSessions", "as")
-            .where("as.id = :asid", { asid: answerSessionId })
-            .orderBy("q.orderIndex")
+            .createQueryBuilder('q')
+            .leftJoinAndSelect('q.exam', 'e')
+            .leftJoinAndSelect('e.answerSessions', 'as')
+            .where('as.id = :asid', { asid: answerSessionId })
+            .orderBy('q.orderIndex')
             .getMany();
 
         const isLast = questions[questions.length - 1].id === questionId;
@@ -257,9 +257,9 @@ export class ExamService extends QueryServiceBase<Exam> {
         // set user exam progress
         const answerSessionViews = await this._ormService
             .getRepository(AnswerSessionView)
-            .createQueryBuilder("asv")
-            .where("asv.userId = :userId", { userId })
-            .andWhere("asv.examId = :examId", { examId })
+            .createQueryBuilder('asv')
+            .where('asv.userId = :userId', { userId })
+            .andWhere('asv.examId = :examId', { examId })
             .getMany();
 
         const currentAnswerSessionIsSuccessful = answerSessionViews
@@ -349,8 +349,8 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         const { itemId: currentExamId, itemType } = readItemCode(currentItemCode);
 
-        if (itemType !== "exam")
-            throw new Error("Current item is not an exam!");
+        if (itemType !== 'exam')
+            throw new Error('Current item is not an exam!');
 
         const examResultViews = await this._ormService
             .getRepository(ExamResultView)

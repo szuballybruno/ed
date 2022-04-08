@@ -1,8 +1,8 @@
 
-import { AuthenticationService } from "../services/AuthenticationService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams, getCookie, ErrorCode } from "../utilities/helpers";
+import { AuthenticationService } from '../services/AuthenticationService';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { setAuthCookies } from '../utilities/cookieHelpers';
+import { ActionParams, getCookie, ErrorCode } from '../utilities/helpers';
 
 export class AuthenticationController {
 
@@ -17,7 +17,7 @@ export class AuthenticationController {
 
     renewUserSessionAction = async (params: ActionParams) => {
 
-        const prevRefreshToken = getCookie(params.req, "refreshToken")?.value;
+        const prevRefreshToken = getCookie(params.req, 'refreshToken')?.value;
 
         const { accessToken, refreshToken } = await this._authenticationService
             .renewUserSessionAsync(prevRefreshToken);
@@ -29,7 +29,7 @@ export class AuthenticationController {
 
         // check request 
         if (!params.req.body)
-            throw new ErrorCode("Body is null.", "bad request");
+            throw new ErrorCode('Body is null.', 'bad request');
 
         // get credentials from request
         const { email, password } = params.req.body;

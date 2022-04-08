@@ -1,12 +1,12 @@
-import { Answer } from "../models/entity/Answer";
-import { AnswerGivenAnswerBridge } from "../models/entity/AnswerGivenAnswerBridge";
-import { GivenAnswer } from "../models/entity/GivenAnswer";
-import { Question } from "../models/entity/Question";
-import { AnswerEditDTO } from "../shared/dtos/AnswerEditDTO";
-import { QuestionDTO } from "../shared/dtos/QuestionDTO";
-import { QuestionEditDataDTO } from "../shared/dtos/QuestionEditDataDTO";
-import { QuestionTypeEnum } from "../shared/types/sharedTypes";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { Answer } from '../models/entity/Answer';
+import { AnswerGivenAnswerBridge } from '../models/entity/AnswerGivenAnswerBridge';
+import { GivenAnswer } from '../models/entity/GivenAnswer';
+import { Question } from '../models/entity/Question';
+import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
+import { QuestionDTO } from '../shared/dtos/QuestionDTO';
+import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
+import { QuestionTypeEnum } from '../shared/types/sharedTypes';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class QuestionService {
 
@@ -83,8 +83,8 @@ export class QuestionService {
         const givenAnswers = await this._ormService
             .getMany(GivenAnswer,
                 [
-                    ["SELECT", "id"],
-                    ["WHERE", "questionId", "=", "quesitonIds"]
+                    ['SELECT', 'id'],
+                    ['WHERE', 'questionId', '=', 'quesitonIds']
                 ],
                 { quesitonIds });
 
@@ -94,8 +94,8 @@ export class QuestionService {
         const answers = await this._ormService
             .getMany(Answer,
                 [
-                    ["SELECT", "id"],
-                    ["WHERE", "questionId", "=", "quesitonIds"]
+                    ['SELECT', 'id'],
+                    ['WHERE', 'questionId', '=', 'quesitonIds']
                 ],
                 { quesitonIds });
 
@@ -113,8 +113,8 @@ export class QuestionService {
         const givenAnswerBridges = await this._ormService
             .getMany(AnswerGivenAnswerBridge,
                 [
-                    ["SELECT", "id"],
-                    ["WHERE", "givenAnswerId", "=", "givenAnswerIds"]
+                    ['SELECT', 'id'],
+                    ['WHERE', 'givenAnswerId', '=', 'givenAnswerIds']
                 ],
                 { givenAnswerIds });
 

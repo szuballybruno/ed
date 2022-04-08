@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from "express";
-import HttpErrorResponseDTO from "../shared/dtos/HttpErrorResponseDTO";
-import { ErrorCodeType, RoleType } from "../shared/types/sharedTypes";
-import { log, logError } from "../services/misc/logger";
-import { ErrorCode } from "./helpers";
-import { IRouteOptions } from "./TurboExpress";
+import { NextFunction, Request, Response } from 'express';
+import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
+import { ErrorCodeType, RoleType } from '../shared/types/sharedTypes';
+import { log, logError } from '../services/misc/logger';
+import { ErrorCode } from './helpers';
+import { IRouteOptions } from './TurboExpress';
 
 export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
     isPost?: boolean;
     isMultipart?: boolean;
     authorize?: RoleType[];
-};
+}
 
 export const onActionError = (error: any, req: Request, res: Response) => {
 
@@ -19,8 +19,8 @@ export const onActionError = (error: any, req: Request, res: Response) => {
     log(`${requestPath}: Failed...`);
     logError(error.message);
 
-    respondError(res, "", ((error as ErrorCode).code ?? "internal server error") as ErrorCodeType);
-}
+    respondError(res, '', ((error as ErrorCode).code ?? 'internal server error') as ErrorCodeType);
+};
 
 export const onActionSuccess = (value: any, req: Request, res: Response) => {
 
@@ -28,20 +28,21 @@ export const onActionSuccess = (value: any, req: Request, res: Response) => {
 
     log(`${requestPath}: Succeeded...`);
     respond(res, 200, value);
-}
+};
 
 export const respond = (res: Response, code: number, data?: any) => {
 
     if (data === undefined) {
 
-        log("-- Responding, code: " + code);
+        log('-- Responding, code: ' + code);
         res.sendStatus(code);
     } else {
 
-        log("-- Responding with data, code: " + code);
-        res.status(code).send(data);
+        log('-- Responding with data, code: ' + code);
+        res.status(code)
+.send(data);
     }
-}
+};
 
 export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
 
@@ -53,12 +54,12 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
 
                 logError(error);
 
-                respondError(wrapperRes, error.message, ((error as ErrorCode).code ?? "internal server error") as ErrorCodeType);
+                respondError(wrapperRes, error.message, ((error as ErrorCode).code ?? 'internal server error') as ErrorCodeType);
             });
-    }
+    };
 
     return wrapperFunction;
-}
+};
 
 export const respondError = (res: Response, msg: string, code: ErrorCodeType) => {
 
@@ -70,19 +71,19 @@ export const respondError = (res: Response, msg: string, code: ErrorCodeType) =>
     } as HttpErrorResponseDTO;
 
     switch (code) {
-        case "bad request":
+        case 'bad request':
             respond(res, 400, errorDTO);
             break;
 
-        case "forbidden":
+        case 'forbidden':
             respond(res, 403, errorDTO);
             break;
 
-        case "internal server error":
+        case 'internal server error':
             respond(res, 500, errorDTO);
             break;
 
-        case "under maintenance":
+        case 'under maintenance':
             respond(res, 503, errorDTO);
             break;
 
@@ -90,4 +91,4 @@ export const respondError = (res: Response, msg: string, code: ErrorCodeType) =>
             respond(res, 500, errorDTO);
             break;
     }
-}
+};

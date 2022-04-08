@@ -1,10 +1,10 @@
-import { Event } from "../models/entity/Event";
-import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
-import { EventDTO } from "../shared/dtos/EventDTO";
-import { LagBehindNotificationDTO } from "../shared/dtos/LagBehindNotificationDTO";
-import { EventCodeType } from "../shared/types/sharedTypes";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { Event } from '../models/entity/Event';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { EventDTO } from '../shared/dtos/EventDTO';
+import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';
+import { EventCodeType } from '../shared/types/sharedTypes';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class EventService {
 
@@ -19,17 +19,17 @@ export class EventService {
 
     async addAnswerStreakEventAsync(userId: number, data: CoinAcquireResultDTO) {
 
-        await this.addEventAsync(userId, "coin_acquire_answer_streak", data);
+        await this.addEventAsync(userId, 'coin_acquire_answer_streak', data);
     }
 
     async addSessionStreakEventAsync(userId: number, data: CoinAcquireResultDTO) {
 
-        await this.addEventAsync(userId, "coin_acquire_session_streak", data);
+        await this.addEventAsync(userId, 'coin_acquire_session_streak', data);
     }
 
     async addLagBehindNotificationEventAsync(userId: number, data: LagBehindNotificationDTO) {
 
-        await this.addEventAsync(userId, "lag_behind_notification", data);
+        await this.addEventAsync(userId, 'lag_behind_notification', data);
     }
 
     async addEventAsync(userId: number, eventCode: EventCodeType, eventDataDTO: any) {
@@ -50,9 +50,9 @@ export class EventService {
 
         const events = await this._ormService
             .getRepository(Event)
-            .createQueryBuilder("e")
-            .where("e.is_fulfilled = false")
-            .orderBy("e.creationDate")
+            .createQueryBuilder('e')
+            .where('e.is_fulfilled = false')
+            .orderBy('e.creationDate')
             .getMany();
 
         if (events.length === 0)

@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { RoleActivityBridge } from "./RoleActivityBridge";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { RoleActivityBridge } from './RoleActivityBridge';
 
 @Entity()
 export class Activity {

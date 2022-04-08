@@ -1,11 +1,11 @@
-import { User } from "../models/entity/User";
-import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { ErrorCode } from "../utilities/helpers";
-import { HashService } from "./HashService";
-import { log } from "./misc/logger";
-import { TokenService } from "./TokenService";
-import { UserService } from "./UserService";
-import { UserSessionActivityService } from "./UserSessionActivityService";
+import { User } from '../models/entity/User';
+import { UserActivityFlatView } from '../models/views/UserActivityFlatView';
+import { ErrorCode } from '../utilities/helpers';
+import { HashService } from './HashService';
+import { log } from './misc/logger';
+import { TokenService } from './TokenService';
+import { UserService } from './UserService';
+import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class AuthenticationService {
 
@@ -29,11 +29,11 @@ export class AuthenticationService {
     getRequestAccessTokenPayload = (accessToken: string) => {
 
         if (!accessToken)
-            throw new ErrorCode("Token not sent.", "bad request");
+            throw new ErrorCode('Token not sent.', 'bad request');
 
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
-            throw new ErrorCode("Token is invalid.", "bad request");
+            throw new ErrorCode('Token is invalid.', 'bad request');
 
         return tokenPayload;
     }
@@ -44,21 +44,21 @@ export class AuthenticationService {
             .getUserDTOById(userId);
 
         if (!currentUser)
-            throw new Error("User not found by id.");
+            throw new Error('User not found by id.');
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(currentUser.id, "generic");
+            .saveUserSessionActivityAsync(currentUser.id, 'generic');
 
         return currentUser;
     }
 
     renewUserSessionAsync = async (prevRefreshToken: string) => {
 
-        log("Renewing user session...");
+        log('Renewing user session...');
 
         // check if there is a refresh token sent in the request 
         if (!prevRefreshToken)
-            throw new ErrorCode("Refresh token not sent.", "bad request");
+            throw new ErrorCode('Refresh token not sent.', 'bad request');
 
         // check sent refresh token if invalid by signature or expired
         const tokenMeta = this._tokenService.verifyRefreshToken(prevRefreshToken);
@@ -68,14 +68,14 @@ export class AuthenticationService {
             .getUserRefreshTokenById(tokenMeta.userId);
 
         if (!refreshTokenFromDb)
-            throw new ErrorCode(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, "forbidden");
+            throw new ErrorCode(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
 
         // get user 
         const user = await this._userService
             .getUserById(tokenMeta.userId);
 
         if (!user)
-            throw new ErrorCode("User not found by id " + tokenMeta.userId, "internal server error");
+            throw new ErrorCode('User not found by id ' + tokenMeta.userId, 'internal server error');
 
         // get tokens
         const { accessToken, refreshToken } = await this.getUserLoginTokens(user, user.userActivity);
@@ -87,7 +87,7 @@ export class AuthenticationService {
         return {
             accessToken,
             refreshToken
-        }
+        };
     }
 
     logInUser = async (email: string, password: string) => {
@@ -96,25 +96,25 @@ export class AuthenticationService {
 
         // further validate request 
         if (!email || !password)
-            throw new ErrorCode("Email or password is null.", "bad request");
+            throw new ErrorCode('Email or password is null.', 'bad request');
 
         // authenticate
         const user = await this._userService
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new ErrorCode("Invalid email.", "forbidden");
+            throw new ErrorCode('Invalid email.', 'forbidden');
 
         const isPasswordCorrect = await this._hashService
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
-            throw new ErrorCode("Invalid password.", "forbidden");
+            throw new ErrorCode('Invalid password.', 'forbidden');
 
         const userId = user.id;
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, "login");
+            .saveUserSessionActivityAsync(userId, 'login');
 
         // get auth tokens 
         const tokens = await this.getUserLoginTokens(user, user.userActivity);
@@ -129,7 +129,7 @@ export class AuthenticationService {
     logOutUserAsync = async (userId: number) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, "logout");
+            .saveUserSessionActivityAsync(userId, 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
@@ -145,6 +145,6 @@ export class AuthenticationService {
         return {
             accessToken,
             refreshToken
-        }
+        };
     }
 }

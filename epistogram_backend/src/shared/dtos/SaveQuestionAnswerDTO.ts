@@ -1,4 +1,4 @@
-import { QuestionAnswerDTO } from "./QuestionAnswerDTO";
+import { QuestionAnswerDTO } from './QuestionAnswerDTO';
 
 export type SaveQuestionAnswerDTO = {
     invitationToken: string,

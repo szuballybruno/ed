@@ -1,20 +1,20 @@
-import Module from "module";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CourseVisibilityType } from "../../shared/types/sharedTypes";
-import { CourseStateView } from "../views/CourseStateView";
-import { CourseCategory } from "./CourseCategory";
-import { CourseModule } from "./CourseModule";
-import { CourseRatingGroup } from "./courseRating/CourseRatingGroup";
-import { CourseRatingQuestionUserAnswer } from "./courseRating/CourseRatingQuestionUserAnswer";
-import { Exam } from "./Exam";
-import { PrequizQuestion } from "./prequiz/PrequizQuestion";
-import { PrequizUserAnswer } from "./prequiz/PrequizUserAnswer";
-import { ShopItem } from "./ShopItem";
-import { StorageFile } from "./StorageFile";
-import { User } from "./User";
-import { UserCourseAccessBridge } from "./UserCourseAccessBridge";
-import { UserCourseBridge } from "./UserCourseBridge";
-import { Video } from "./Video";
+import Module from 'module';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CourseVisibilityType } from '../../shared/types/sharedTypes';
+import { CourseStateView } from '../views/CourseStateView';
+import { CourseCategory } from './CourseCategory';
+import { CourseModule } from './CourseModule';
+import { CourseRatingGroup } from './courseRating/CourseRatingGroup';
+import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
+import { Exam } from './Exam';
+import { PrequizQuestion } from './prequiz/PrequizQuestion';
+import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
+import { ShopItem } from './ShopItem';
+import { StorageFile } from './StorageFile';
+import { User } from './User';
+import { UserCourseAccessBridge } from './UserCourseAccessBridge';
+import { UserCourseBridge } from './UserCourseBridge';
+import { Video } from './Video';
 
 @Entity()
 export class Course {
@@ -22,7 +22,7 @@ export class Course {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @UpdateDateColumn({ default: () => "now()", type: "timestamptz" })
+    @UpdateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     modificationDate: Date;
 
     @Column()
@@ -34,10 +34,10 @@ export class Course {
     @Column()
     description: string;
 
-    @Column({ type: "double precision" })
+    @Column({ type: 'double precision' })
     difficulty: number;
 
-    @Column({ type: "double precision" })
+    @Column({ type: 'double precision' })
     benchmark: number;
 
     @Column()
@@ -61,7 +61,7 @@ export class Course {
     @Column()
     humanSkillBenefitsDescription: string;
 
-    @Column({ default: "public", type: "text" })
+    @Column({ default: 'public', type: 'text' })
     visibility: CourseVisibilityType;
 
     // course state view
@@ -74,7 +74,7 @@ export class Course {
     categoryId: number;
 
     @ManyToOne(() => CourseCategory, x => x.categoryCourses)
-    @JoinColumn({ name: "category_id" })
+    @JoinColumn({ name: 'category_id' })
     category: CourseCategory;
 
     // course sub category
@@ -82,7 +82,7 @@ export class Course {
     subCategoryId: number;
 
     @ManyToOne(() => CourseCategory, x => x.subCategoryCourses)
-    @JoinColumn({ name: "sub_category_id" })
+    @JoinColumn({ name: 'sub_category_id' })
     subCategory: CourseCategory;
 
     // videos 
@@ -100,7 +100,7 @@ export class Course {
     teacherId: number
 
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
-    @JoinColumn({ name: "teacher_id" })
+    @JoinColumn({ name: 'teacher_id' })
     teacher: User;
 
     // coverFile
@@ -108,7 +108,7 @@ export class Course {
     coverFileId: number | null;
 
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
-    @JoinColumn({ name: "cover_file_id" })
+    @JoinColumn({ name: 'cover_file_id' })
     coverFile: StorageFile;
 
     // user course bridges 

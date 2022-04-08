@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Course } from "../Course";
-import { PrequizAnswer } from "./PrequizAnswer";
-import { PrequizUserAnswer } from "./PrequizUserAnswer";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from '../Course';
+import { PrequizAnswer } from './PrequizAnswer';
+import { PrequizUserAnswer } from './PrequizUserAnswer';
 
 @Entity()
 export class PrequizQuestion {
@@ -15,22 +15,22 @@ export class PrequizQuestion {
     @Column()
     isNumericAnswer: boolean;
 
-    @Column({ type: "int", nullable: true })
+    @Column({ type: 'int', nullable: true })
     minValue: number;
 
-    @Column({ type: "int", nullable: true })
+    @Column({ type: 'int', nullable: true })
     maxValue: number;
 
-    @Column({ type: "text", nullable: true })
+    @Column({ type: 'text', nullable: true })
     minLabel: string;
 
-    @Column({ type: "text", nullable: true })
+    @Column({ type: 'text', nullable: true })
     maxLabel: string;
 
-    @Column({ type: "int", nullable: true })
+    @Column({ type: 'int', nullable: true })
     stepValue: number;
 
-    @Column({ type: "text", nullable: true })
+    @Column({ type: 'text', nullable: true })
     valuePostfix: string;
 
     // answers 

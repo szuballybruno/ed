@@ -1,6 +1,6 @@
-import { PlaybackService } from "../services/PlaybackService";
-import { VideoPlaybackSampleDTO } from "../shared/dtos/VideoPlaybackSampleDTO";
-import { ActionParams } from "../utilities/helpers";
+import { PlaybackService } from '../services/PlaybackService';
+import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
+import { ActionParams } from '../utilities/helpers';
 
 export class PlaybackController {
 

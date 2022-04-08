@@ -1,27 +1,27 @@
-import { UploadedFile } from "express-fileupload";
-import { Course } from "../models/entity/Course";
-import { DiscountCode } from "../models/entity/DiscountCode";
-import { ShopItem } from "../models/entity/ShopItem";
-import { ShopItemCategory } from "../models/entity/ShopItemCategory";
-import { User } from "../models/entity/User";
-import { CourseBriefData } from "../shared/dtos/CourseBriefData";
-import { CourseShopItemListDTO } from "../shared/dtos/CourseShopItemListDTO";
-import { DiscountCodeDTO } from "../shared/dtos/DiscountCodeDTO";
-import { IdResultDTO } from "../shared/dtos/IdResultDTO";
-import { ShopItemAdminShortDTO } from "../shared/dtos/ShopItemAdminShortDTO";
-import { ShopItemBriefData } from "../shared/dtos/ShopItemBriefData";
-import { ShopItemCategoryDTO } from "../shared/dtos/ShopItemCategoryDTO";
-import { ShopItemDTO } from "../shared/dtos/ShopItemDTO";
-import { ShopItemEditDTO } from "../shared/dtos/ShopItemEditDTO";
-import { ShopItemStatefulView } from "../models/views/ShopItemStatefulView";
-import { ShopItemView } from "../models/views/ShopItemView";
-import { CoinTransactionService } from "./CoinTransactionService";
-import { CourseService } from "./CourseService";
-import { EmailService } from "./EmailService";
-import { FileService } from "./FileService";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UrlService } from "./UrlService";
+import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/Course';
+import { DiscountCode } from '../models/entity/DiscountCode';
+import { ShopItem } from '../models/entity/ShopItem';
+import { ShopItemCategory } from '../models/entity/ShopItemCategory';
+import { User } from '../models/entity/User';
+import { CourseBriefData } from '../shared/dtos/CourseBriefData';
+import { CourseShopItemListDTO } from '../shared/dtos/CourseShopItemListDTO';
+import { DiscountCodeDTO } from '../shared/dtos/DiscountCodeDTO';
+import { IdResultDTO } from '../shared/dtos/IdResultDTO';
+import { ShopItemAdminShortDTO } from '../shared/dtos/ShopItemAdminShortDTO';
+import { ShopItemBriefData } from '../shared/dtos/ShopItemBriefData';
+import { ShopItemCategoryDTO } from '../shared/dtos/ShopItemCategoryDTO';
+import { ShopItemDTO } from '../shared/dtos/ShopItemDTO';
+import { ShopItemEditDTO } from '../shared/dtos/ShopItemEditDTO';
+import { ShopItemStatefulView } from '../models/views/ShopItemStatefulView';
+import { ShopItemView } from '../models/views/ShopItemView';
+import { CoinTransactionService } from './CoinTransactionService';
+import { CourseService } from './CourseService';
+import { EmailService } from './EmailService';
+import { FileService } from './FileService';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UrlService } from './UrlService';
 
 export class ShopService {
 
@@ -55,8 +55,8 @@ export class ShopService {
 
         const shopItemViews = await this._ormService
             .getRepository(ShopItemStatefulView)
-            .createQueryBuilder("siv")
-            .where("siv.userId = :userId", { userId })
+            .createQueryBuilder('siv')
+            .where('siv.userId = :userId', { userId })
             .getMany();
 
         return this._mapperService
@@ -67,7 +67,7 @@ export class ShopService {
 
         const shopItemCategories = await this._ormService
             .getRepository(ShopItemCategory)
-            .createQueryBuilder("sic")
+            .createQueryBuilder('sic')
             .getMany();
 
         return this._mapperService
@@ -114,14 +114,14 @@ export class ShopService {
 
             const discountCodes = await this._ormService
                 .getRepository(DiscountCode)
-                .createQueryBuilder("dc")
-                .where("dc.userId IS NULL")
-                .andWhere("dc.shopItemId = :shopItemId", { shopItemId })
+                .createQueryBuilder('dc')
+                .where('dc.userId IS NULL')
+                .andWhere('dc.shopItemId = :shopItemId', { shopItemId })
                 .getMany();
 
             const discountCode = discountCodes[0];
             if (!discountCode)
-                throw new Error("No more unused discount codes for the selected item!");
+                throw new Error('No more unused discount codes for the selected item!');
 
             await this._ormService
                 .getRepository(DiscountCode)
@@ -138,7 +138,7 @@ export class ShopService {
                     user.email,
                     discountCode.code,
                     shopItemView.name,
-                    shopItem.detailsUrl + "",
+                    shopItem.detailsUrl + '',
                     this._urlService.getAssetUrl(shopItemView.coverFilePath));
 
             return {
@@ -166,7 +166,7 @@ export class ShopService {
 
         const items = await this._ormService
             .getRepository(ShopItemView)
-            .createQueryBuilder("siv")
+            .createQueryBuilder('siv')
             .getMany();
 
         return this._mapperService
@@ -177,9 +177,9 @@ export class ShopService {
 
         const shopItem = await this._ormService
             .getRepository(ShopItem)
-            .createQueryBuilder("si")
-            .leftJoinAndSelect("si.coverFile", "ci")
-            .where("si.id = :shopItemId", { shopItemId })
+            .createQueryBuilder('si')
+            .leftJoinAndSelect('si.coverFile', 'ci')
+            .where('si.id = :shopItemId', { shopItemId })
             .getOneOrFail();
 
         const discountCodes = await this._ormService
@@ -198,9 +198,9 @@ export class ShopService {
 
         const courses = await this._ormService
             .getRepository(Course)
-            .createQueryBuilder("co")
-            .leftJoinAndSelect("co.coverFile", "cf")
-            .where("co.visibility = 'private'")
+            .createQueryBuilder('co')
+            .leftJoinAndSelect('co.coverFile', 'cf')
+            .where('co.visibility = \'private\'')
             .getMany();
 
         return this._mapperService
@@ -240,7 +240,7 @@ export class ShopService {
             coinPrice: 0,
             currencyPrice: 0,
             courseId: null,
-            name: "",
+            name: '',
             purchaseLimit: 0,
             shopItemCategoryId: 1,
             detailsUrl: null
@@ -305,7 +305,7 @@ export class ShopService {
 
         return await this._fileService
             .uploadAssigendFileAsync<ShopItem>(
-                this._fileService.getFilePath("shop_item_cover_images", "shop_item_cover_image", shopItemId, "jpg"),
+                this._fileService.getFilePath('shop_item_cover_images', 'shop_item_cover_image', shopItemId, 'jpg'),
                 getEntityAsync,
                 setFileIdAsync,
                 entity => entity.coverFileId,

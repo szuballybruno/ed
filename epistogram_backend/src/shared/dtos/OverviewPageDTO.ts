@@ -1,7 +1,7 @@
-import { CourseProgressDTO } from "./CourseProgressDTO";
-import { CourseShortDTO } from "./CourseShortDTO";
-import { CurrentTasksDTO } from "./CurrentTasksDTO";
-import { QuestionDTO } from "./QuestionDTO";
+import { CourseProgressDTO } from './CourseProgressDTO';
+import { CourseShortDTO } from './CourseShortDTO';
+import { CurrentTasksDTO } from './CurrentTasksDTO';
+import { QuestionDTO } from './QuestionDTO';
 
 export type OverviewPageDTO = {
 

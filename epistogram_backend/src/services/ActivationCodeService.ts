@@ -1,7 +1,7 @@
-import generatePassword from "password-generator";
-import { ActivationCode } from "../models/entity/ActivationCode";
-import { forN } from "../utilities/helpers";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import generatePassword from 'password-generator';
+import { ActivationCode } from '../models/entity/ActivationCode';
+import { forN } from '../utilities/helpers';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class ActivationCodeService {
 
@@ -51,6 +51,7 @@ export class ActivationCodeService {
 
     private genCode = () => {
 
-        return "PCW-" + generatePassword(8).toUpperCase();
+        return 'PCW-' + generatePassword(8)
+.toUpperCase();
     }
 }

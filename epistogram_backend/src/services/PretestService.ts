@@ -1,14 +1,14 @@
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { Exam } from "../models/entity/Exam";
-import { CourseView } from "../models/views/CourseView";
-import { PretestResultView } from "../models/views/PretestResultView";
-import { IdResultDTO } from "../shared/dtos/IdResultDTO";
-import { PretestDataDTO } from "../shared/dtos/PretestDataDTO";
-import { PretestResultDTO } from "../shared/dtos/PretestResultDTO";
-import { ExamService } from "./ExamService";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { AnswerSession } from '../models/entity/AnswerSession';
+import { Exam } from '../models/entity/Exam';
+import { CourseView } from '../models/views/CourseView';
+import { PretestResultView } from '../models/views/PretestResultView';
+import { IdResultDTO } from '../shared/dtos/IdResultDTO';
+import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
+import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
+import { ExamService } from './ExamService';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PretestService {
 
@@ -34,9 +34,9 @@ export class PretestService {
         const newExam = {
             courseId,
             orderIndex: 0,
-            title: "",
-            type: "pretest",
-            subtitle: ""
+            title: '',
+            type: 'pretest',
+            subtitle: ''
         } as Exam;
 
         await this._examService
@@ -49,7 +49,7 @@ export class PretestService {
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, "pretest", null)
+            .setCurrentCourse(userId, courseId, 'pretest', null);
 
         // pretest exam 
         const pretestExam = await this._ormService
@@ -57,7 +57,7 @@ export class PretestService {
             .findOneOrFail({
                 where: {
                     courseId,
-                    type: "pretest"
+                    type: 'pretest'
                 }
             });
 
@@ -71,7 +71,7 @@ export class PretestService {
                 where: {
                     userId,
                     examId: pretestExam.id,
-                    type: "pretest"
+                    type: 'pretest'
                 }
             });
 
@@ -80,7 +80,7 @@ export class PretestService {
             answerSession = {
                 userId,
                 examId: pretestExam.id,
-                type: "pretest"
+                type: 'pretest'
             } as AnswerSession;
 
             await this._ormService
@@ -98,7 +98,7 @@ export class PretestService {
 
         // set current course stage 
         await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, "pretest_results", null);
+            .setCurrentCourse(userId, courseId, 'pretest_results', null);
 
         const view = await this._ormService
             .getRepository(PretestResultView)
@@ -129,7 +129,7 @@ export class PretestService {
             .findOneOrFail({
                 where: {
                     courseId,
-                    type: "pretest"
+                    type: 'pretest'
                 }
             });
 

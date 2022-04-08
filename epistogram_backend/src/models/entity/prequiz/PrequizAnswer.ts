@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { TempomatAdjustmentValue } from "../TempomatAdjustmentValue";
-import { PrequizQuestion } from "./PrequizQuestion";
-import { PrequizUserAnswer } from "./PrequizUserAnswer";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TempomatAdjustmentValue } from '../TempomatAdjustmentValue';
+import { PrequizQuestion } from './PrequizQuestion';
+import { PrequizUserAnswer } from './PrequizUserAnswer';
 
 @Entity()
 export class PrequizAnswer {
@@ -12,7 +12,7 @@ export class PrequizAnswer {
     @Column()
     text: string;
 
-    @Column({ type: "double precision", nullable: true })
+    @Column({ type: 'double precision', nullable: true })
     value: number;
 
     // question 
@@ -20,7 +20,7 @@ export class PrequizAnswer {
     questionId: number;
 
     @ManyToOne(_ => PrequizQuestion, x => x.answers)
-    @JoinColumn({ name: "question_id" })
+    @JoinColumn({ name: 'question_id' })
     question: PrequizQuestion;
 
     // user answers 

@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import fileUpload from 'express-fileupload';
-import "reflect-metadata"; // needs to be imported for TypeORM
+import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CourseController } from './api/CourseController';
@@ -33,7 +33,7 @@ import { FileService } from './services/FileService';
 import { MapperService } from './services/MapperService';
 import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
-import { log, logError } from "./services/misc/logger";
+import { log, logError } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { UrlService } from './services/UrlService';
@@ -96,9 +96,9 @@ import { User } from './models/entity/User';
 
     const globalConfig = GlobalConfiguration.initGlobalConfig(__dirname);
 
-    log("");
+    log('');
     log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
-    log("");
+    log('');
 
     // services
     const loggerService = new LoggerService();
@@ -204,7 +204,7 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true, authorize: ['administrator'] });
 
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
@@ -217,8 +217,8 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
 
     // teacher info
-    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ['administrator'] });
 
     // tempomat
     addEndpoint(apiRoutes.tempomat.getTempomatMode, tempomatController.getTempomatModeAction);
@@ -226,10 +226,10 @@ import { User } from './models/entity/User';
 
     // daily tip 
     addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);
-    addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true, authorize: ['administrator'] });
 
     // personality assessment 
     addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);
@@ -239,12 +239,12 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
     addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
     addEndpoint(apiRoutes.shop.purchaseShopItem, shopController.purchaseShopItemAction, { isPost: true });
-    addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.shop.createShopItem, shopController.createShopItemAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.shop.createShopItem, shopController.createShopItemAction, { isPost: true, authorize: ['administrator'] });
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
@@ -268,8 +268,8 @@ import { User } from './models/entity/User';
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
     addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
-    addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true, authorize: ['administrator'] });
 
     // prequiz
     addEndpoint(apiRoutes.prequiz.getQuestions, prequizController.getQuestionsAction);
@@ -296,10 +296,10 @@ import { User } from './models/entity/User';
     // user
     addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
     addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
-    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true, authorize: ['administrator'] });
 
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
@@ -319,14 +319,14 @@ import { User } from './models/entity/User';
 
     // course
     addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
     addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
@@ -334,28 +334,28 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.course.getCourseProgressShort, courseController.getCourseProgressShortAction);
 
     // module 
-    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.module.getModuleListEditData, moduleController.getModuleListEditAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.module.getModuleListEditData, moduleController.getModuleListEditAction, { authorize: ['administrator'] });
 
     // video 
-    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ["administrator"] });
+    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ['administrator'] });
 
     // questions
-    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
     addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
 
     // exam
-    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction, { authorize: ["administrator"] });
-    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true, authorize: ["administrator"] });
-    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true, authorize: ["administrator"] });
+    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
@@ -363,15 +363,17 @@ import { User } from './models/entity/User';
     // 404 - no match
     expressServer.use((req, res) => {
 
-        res.status(404).send(`Route did not match: ${req.url}`);
+        res.status(404)
+.send(`Route did not match: ${req.url}`);
     });
 
     // error handler
     expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
 
-        logError("Express error middleware.");
+        logError('Express error middleware.');
         logError(error);
-        return res.status(500).send(error.toString());
+        return res.status(500)
+.send(error.toString());
     });
 
     // listen

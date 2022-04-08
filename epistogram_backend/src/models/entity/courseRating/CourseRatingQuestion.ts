@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CourseRatingQuesitonType } from "../../../shared/types/sharedTypes";
-import { CourseRatingGroup } from "./CourseRatingGroup";
-import { CourseRatingQuestionUserAnswer } from "./CourseRatingQuestionUserAnswer";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CourseRatingQuesitonType } from '../../../shared/types/sharedTypes';
+import { CourseRatingGroup } from './CourseRatingGroup';
+import { CourseRatingQuestionUserAnswer } from './CourseRatingQuestionUserAnswer';
 
 @Entity()
 export class CourseRatingQuestion {
@@ -12,14 +12,14 @@ export class CourseRatingQuestion {
     @Column()
     text: string;
 
-    @Column({ type: "text" })
+    @Column({ type: 'text' })
     type: CourseRatingQuesitonType;
 
     // group
     @Column()
     courseRatingGroupId: number;
 
-    @JoinColumn({ name: "course_rating_group_id" })
+    @JoinColumn({ name: 'course_rating_group_id' })
     @ManyToOne(_ => CourseRatingGroup, x => x.courseRatingQuestions)
     courseRatingGroup: CourseRatingGroup;
 

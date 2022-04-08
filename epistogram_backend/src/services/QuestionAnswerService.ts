@@ -1,9 +1,9 @@
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { AnswerResultDTO } from "../shared/dtos/AnswerResultDTO";
-import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
-import { CoinAcquireService } from "./CoinAcquireService";
-import { SQLFunctionsService } from "./sqlServices/FunctionsService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { AnswerSession } from '../models/entity/AnswerSession';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { CoinAcquireService } from './CoinAcquireService';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class QuestionAnswerService {
 
@@ -60,7 +60,7 @@ export class QuestionAnswerService {
         let coinAcquires = null as null | {
             normal: CoinAcquireResultDTO | null,
             bonus: CoinAcquireResultDTO | null
-        }
+        };
 
         // if answer is correct give coin rewards 
         if (isCorrect && !isExamQuestion) {
@@ -74,7 +74,7 @@ export class QuestionAnswerService {
             coinAcquires = {
                 normal: acquire,
                 bonus: streakAcquire
-            }
+            };
         }
 
         return {

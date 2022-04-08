@@ -1,4 +1,4 @@
-import {TagView} from "../TagDTO";
+import {TagView} from '../TagDTO';
 
 export type AdminPageEditVideoView = {
     editedVideoId: string,

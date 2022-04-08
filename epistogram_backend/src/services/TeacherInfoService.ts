@@ -1,8 +1,8 @@
-import { TeacherInfo } from "../models/entity/TeacherInfo";
-import { User } from "../models/entity/User";
-import { TeacherInfoEditDTO } from "../shared/dtos/TeacherInfoEditDTO";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { TeacherInfo } from '../models/entity/TeacherInfo';
+import { User } from '../models/entity/User';
+import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class TeacherInfoService {
 
@@ -35,9 +35,9 @@ export class TeacherInfoService {
 
         const user = await this._ormService
             .getRepository(User)
-            .createQueryBuilder("u")
-            .leftJoinAndSelect("u.teacherInfo", "ti")
-            .where("u.id = :userId", { userId })
+            .createQueryBuilder('u')
+            .leftJoinAndSelect('u.teacherInfo', 'ti')
+            .where('u.id = :userId', { userId })
             .getOneOrFail();
 
         const teacherInfo = user.teacherInfo;
@@ -74,7 +74,7 @@ export class TeacherInfoService {
                 rating: teacherInfoEditDTO.rating,
                 studentCount: teacherInfoEditDTO.studentCount,
                 skills: teacherInfoEditDTO.skills,
-                badges: teacherInfoEditDTO.badges.join(", "),
+                badges: teacherInfoEditDTO.badges.join(', '),
                 description: teacherInfoEditDTO.description
             });
     }
@@ -94,7 +94,7 @@ export class TeacherInfoService {
             rating: 0,
             studentCount: 0,
             userId,
-            description: ""
+            description: ''
         } as TeacherInfo;
 
         await this._ormService

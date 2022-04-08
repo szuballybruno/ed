@@ -1,5 +1,5 @@
-import { PersonalityAssessmentService } from "../services/PersonalityAssessmentService";
-import { ActionParams } from "../utilities/helpers";
+import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
+import { ActionParams } from '../utilities/helpers';
 
 export class PersonalityAssessmentController {
 
@@ -22,10 +22,10 @@ export class PersonalityAssessmentController {
             .getQuery<any>();
 
         const personalityTraitCategoryId = query
-            .getValue(x => x.personalityTraitCategoryId, "int");
+            .getValue(x => x.personalityTraitCategoryId, 'int');
 
         const isMax = query
-            .getValue(x => x.isMax, "boolean");
+            .getValue(x => x.isMax, 'boolean');
 
         return this._personalityAssessmentService
             .getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId, isMax);

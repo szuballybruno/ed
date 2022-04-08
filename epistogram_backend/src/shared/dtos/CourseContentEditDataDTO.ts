@@ -1,4 +1,4 @@
-import { ModuleAdminShortDTO } from "./ModuleAdminShortDTO";
+import { ModuleAdminShortDTO } from './ModuleAdminShortDTO';
 
 export class CourseContentEditDataDTO {
     courseId: number;

@@ -1,4 +1,4 @@
-import { ExamPlayerDataDTO } from "./ExamPlayerDataDTO";
+import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
 
 export class PretestDataDTO {
     answerSessionId: number;

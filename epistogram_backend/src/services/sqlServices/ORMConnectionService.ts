@@ -1,11 +1,11 @@
-import { DataSource, DataSourceOptions } from "typeorm";
-import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { ClassType } from "../../models/Types";
-import { getKeys } from "../../shared/logic/sharedLogic";
-import { toSQLSnakeCasing } from "../../utilities/helpers";
-import { GlobalConfiguration } from "../misc/GlobalConfiguration";
-import { log } from "../misc/logger";
-import { SQLConnectionService } from "./SQLConnectionService";
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ClassType } from '../../models/Types';
+import { getKeys } from '../../shared/logic/sharedLogic';
+import { toSQLSnakeCasing } from '../../utilities/helpers';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
+import { log } from '../misc/logger';
+import { SQLConnectionService } from './SQLConnectionService';
 
 export type ORMConnection = DataSource;
 
@@ -22,10 +22,10 @@ type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-type OperationType = "=" | "!=" | "<" | ">";
+type OperationType = '=' | '!=' | '<' | '>';
 
-type WhereCondition<TEntity, TParams> = ["WHERE" | "AND", keyof TEntity, OperationType, keyof TParams];
-type SelectCondition<TEntity> = ["SELECT", keyof TEntity | (keyof TEntity)[]];
+type WhereCondition<TEntity, TParams> = ['WHERE' | 'AND', keyof TEntity, OperationType, keyof TParams];
+type SelectCondition<TEntity> = ['SELECT', keyof TEntity | (keyof TEntity)[]];
 type ExpressionPart<TEntity, TParam> = SelectCondition<TEntity> | WhereCondition<TEntity, TParam>;
 
 export class ORMConnectionService {
@@ -49,7 +49,7 @@ export class ORMConnectionService {
         const dbConnOpts = this._config.getDatabaseConnectionParameters();
 
         const options = {
-            type: "postgres",
+            type: 'postgres',
             port: dbConnOpts.port,
             host: dbConnOpts.host,
             username: dbConnOpts.username,
@@ -68,7 +68,7 @@ export class ORMConnectionService {
             ],
         } as DataSourceOptions;
 
-        log("Connecting to database with TypeORM...", "strong");
+        log('Connecting to database with TypeORM...', 'strong');
 
         const initAsync = async (dataSourceOptions: DataSourceOptions): Promise<DataSource> => {
 
@@ -91,17 +91,17 @@ export class ORMConnectionService {
 
         try {
 
-            log("Connecting to SQL trough TypeORM...");
+            log('Connecting to SQL trough TypeORM...');
             const connection = await initAsync(options);
 
             if (!connection.manager)
-                throw new Error("TypeORM manager is null or undefined!");
+                throw new Error('TypeORM manager is null or undefined!');
 
             this._ormConnection = connection;
         }
         catch (e) {
 
-            throw new Error("Type ORM connection error!" + e);
+            throw new Error('Type ORM connection error!' + e);
         }
     }
 
@@ -204,14 +204,14 @@ export class ORMConnectionService {
                     token: token,
                     paramName: key,
                     paramValue: value
-                })
+                });
             });
 
         const queryAsString = query
             .map(x => {
 
                 // select condition
-                if ((x as SelectCondition<TEntity>)[0] === "SELECT") {
+                if ((x as SelectCondition<TEntity>)[0] === 'SELECT') {
 
                     const selectCond = x as SelectCondition<TEntity>;
                     const columnOrColumns = selectCond[1];
@@ -219,7 +219,7 @@ export class ORMConnectionService {
                         ? columnOrColumns
                             .map(x => toSQLSnakeCasing(x as string))
                             .map(x => `${sqlAlias}.${x}`)
-                            .join(", ")
+                            .join(', ')
                         : columnOrColumns;
 
                     // SELECT xy.ab, xy.abc
@@ -255,7 +255,7 @@ export class ORMConnectionService {
         return {
             sqlParamsList,
             fullQuery
-        }
+        };
     }
 
     /**
@@ -264,8 +264,8 @@ export class ORMConnectionService {
      */
     async getSingleById<TEntity, TField extends keyof TEntity>(classType: ClassType<TEntity>, id: number, idField?: TField) {
 
-        const idFieldName = idField ?? "id" as TField;
-        return this.getSingle(classType, [["WHERE", idFieldName, "=", "id"]], { id })
+        const idFieldName = idField ?? 'id' as TField;
+        return this.getSingle(classType, [['WHERE', idFieldName, '=', 'id']], { id });
     }
 
     /**
@@ -302,7 +302,7 @@ export class ORMConnectionService {
                 .rows
                 .map(row => {
 
-                    let obj = {} as any;
+                    const obj = {} as any;
 
                     getKeys(row)
                         .forEach(key => obj[this.snakeToCamelCase(key as string)] = row[key]);
@@ -323,7 +323,7 @@ export class ORMConnectionService {
 
         return (params ?? [])
             .map(x => this.getParamValue(x));
-    };
+    }
 
     private getParamValue<TParam>(param: SQLParamType<TParam, keyof TParam>): any {
 
@@ -342,6 +342,6 @@ export class ORMConnectionService {
         const paramPairs = (params ?? [])
             .map((param) => `${param.token}: ${this.getParamValue(param)}`);
 
-        return `Query: ${query}\nValues: ${paramPairs.join(", ")}`;
+        return `Query: ${query}\nValues: ${paramPairs.join(', ')}`;
     }
 }

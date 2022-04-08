@@ -1,5 +1,5 @@
-import bcrypt from "bcryptjs";
-import { GlobalConfiguration } from "./misc/GlobalConfiguration";
+import bcrypt from 'bcryptjs';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
 export class HashService {
 

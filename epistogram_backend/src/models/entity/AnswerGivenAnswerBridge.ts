@@ -1,6 +1,6 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Answer } from "./Answer";
-import { GivenAnswer } from "./GivenAnswer";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Answer } from './Answer';
+import { GivenAnswer } from './GivenAnswer';
 
 @Entity()
 export class AnswerGivenAnswerBridge {
@@ -16,7 +16,7 @@ export class AnswerGivenAnswerBridge {
     givenAnswerId: number;
 
     @ManyToOne(_ => GivenAnswer, x => x.answerBridges)
-    @JoinColumn({ name: "given_answer_id" })
+    @JoinColumn({ name: 'given_answer_id' })
     givenAnswer: GivenAnswer;
 
     // answer
@@ -24,6 +24,6 @@ export class AnswerGivenAnswerBridge {
     answerId: number;
 
     @ManyToOne(_ => Answer, answer => answer.givenAnswerBridges)
-    @JoinColumn({ name: "answer_id" })
+    @JoinColumn({ name: 'answer_id' })
     answer: Answer;
 }

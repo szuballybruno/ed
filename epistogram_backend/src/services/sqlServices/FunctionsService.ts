@@ -1,7 +1,7 @@
-import { TaskCodeType } from "../../models/Types";
-import { SessionActivityType } from "../../shared/types/sharedTypes";
-import { logObject } from "../misc/logger";
-import { SQLConnectionService } from "./SQLConnectionService";
+import { TaskCodeType } from '../../models/Types';
+import { SessionActivityType } from '../../shared/types/sharedTypes';
+import { logObject } from '../misc/logger';
+import { SQLConnectionService } from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
     userId: number,
@@ -25,7 +25,7 @@ export class SQLFunctionsService {
 
     execSQLFunctionAsync = async <T>(fnName: string, args: any[], isMultiResult?: boolean) => {
 
-        logObject("");
+        logObject('');
         logObject(`Executing SQL funciton (${fnName})... Args: `);
         logObject(args);
 
@@ -37,7 +37,7 @@ export class SQLFunctionsService {
                 .push(`$${index + 1}`));
 
         // create statement 
-        const statement = `SELECT ${isMultiResult ? "* FROM" : ""} ${fnName}(${argsIndicies.join(",")})`;
+        const statement = `SELECT ${isMultiResult ? '* FROM' : ''} ${fnName}(${argsIndicies.join(',')})`;
 
         const result = await this._connectionService
             .executeSQLAsync(statement, args.map(x => x === undefined ? null : x));
@@ -48,7 +48,7 @@ export class SQLFunctionsService {
 
             const returnObject = firstRow as T;
 
-            logObject("Return value: ");
+            logObject('Return value: ');
             logObject(returnObject);
 
             return returnObject;
@@ -57,7 +57,7 @@ export class SQLFunctionsService {
 
             const fnReturnValue = firstRow[fnName];
 
-            logObject("Return value: ");
+            logObject('Return value: ');
             logObject(fnReturnValue);
 
             return fnReturnValue as T;
@@ -67,7 +67,7 @@ export class SQLFunctionsService {
     answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
 
         return this.execSQLFunctionAsync(
-            "answer_signup_question_fn",
+            'answer_signup_question_fn',
             [
                 userId,
                 questionId,
@@ -93,7 +93,7 @@ export class SQLFunctionsService {
 
         const result = await this
             .execSQLFunctionAsync<ReType>(
-                "answer_question_fn",
+                'answer_question_fn',
                 [
                     userId,
                     answerSessionId,
@@ -110,13 +110,13 @@ export class SQLFunctionsService {
             streakId: result.streak_id,
             streakLength: result.streak_length,
             isCorrect: result.is_correct
-        }
+        };
     }
 
     insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {
 
         return this.execSQLFunctionAsync<number>(
-            "insert_coin_transaction",
+            'insert_coin_transaction',
             [
                 params.userId,
                 params.amount,
@@ -127,7 +127,7 @@ export class SQLFunctionsService {
                 params.activityStreakId,
                 params.shopItemId
             ]
-        )
+        );
     }
 
     getUserSessionFirstActivityId = (
@@ -135,12 +135,12 @@ export class SQLFunctionsService {
         sessionActivityId: number) => {
 
         return this.execSQLFunctionAsync<number>(
-            "get_user_session_first_activity_id",
+            'get_user_session_first_activity_id',
             [
                 userId,
                 sessionActivityId
             ]
-        )
+        );
     }
 
     saveUserSessionActivity = (
@@ -148,21 +148,21 @@ export class SQLFunctionsService {
         param_activity_type: SessionActivityType) => {
 
         return this.execSQLFunctionAsync<number>(
-            "save_user_session_activity",
+            'save_user_session_activity',
             [
                 userId,
                 param_activity_type
             ]
-        )
+        );
     }
 
     acquireTaskLockAsync = (taskCode: TaskCodeType) => {
 
         return this.execSQLFunctionAsync<boolean>(
-            "acquire_task_lock_fn",
+            'acquire_task_lock_fn',
             [
                 taskCode
             ]
-        )
+        );
     }
 }

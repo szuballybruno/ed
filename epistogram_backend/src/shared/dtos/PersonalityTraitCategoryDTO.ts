@@ -1,4 +1,4 @@
-import { DailyTipDTO } from "./DailyTipDTO";
+import { DailyTipDTO } from './DailyTipDTO';
 
 export class PersonalityTraitCategoryDTO {
     id: number;

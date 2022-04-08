@@ -1,10 +1,10 @@
-import { AnswerSignupQuestionDTO } from "../shared/dtos/AnswerSignupQuestionDTO";
-import { SignupCompletedView } from "../models/views/SignupCompletedView";
-import { SignupQuestionView } from "../models/views/SignupQuestionView";
-import { EmailService } from "./EmailService";
-import { toSignupDataDTO } from "./misc/mappings";
-import { SQLFunctionsService } from "./sqlServices/FunctionsService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
+import { SignupCompletedView } from '../models/views/SignupCompletedView';
+import { SignupQuestionView } from '../models/views/SignupQuestionView';
+import { EmailService } from './EmailService';
+import { toSignupDataDTO } from './misc/mappings';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class SignupService {
 
@@ -40,8 +40,8 @@ export class SignupService {
 
         const questions = await this._ormService
             .getRepository(SignupQuestionView)
-            .createQueryBuilder("sqv")
-            .where("sqv.userId = :userId", { userId })
+            .createQueryBuilder('sqv')
+            .where('sqv.userId = :userId', { userId })
             .getMany();
 
         return toSignupDataDTO(questions, userSignupCompltedView.isSignupComplete);

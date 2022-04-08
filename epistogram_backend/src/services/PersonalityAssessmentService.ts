@@ -1,15 +1,15 @@
-import { DailyTip } from "../models/entity/DailyTip";
-import { PersonalityTraitCategory } from "../models/entity/PersonalityTraitCategory";
-import { PersonalityAssessmentDTO } from "../shared/dtos/PersonalityAssessmentDTO";
-import { PersonalityCategoryTraitDTO } from "../shared/dtos/PersonalityCategoryTraitDTO";
-import { PersonalityChartDataDTO } from "../shared/dtos/PersonalityChartDataDTO";
-import { PersonalityTraitCategoryDTO } from "../shared/dtos/PersonalityTraitCategoryDTO";
-import { PersonalityTraitCategoryShortDTO } from "../shared/dtos/PersonalityTraitCategoryShortDTO";
-import { PersonalityTraitDataDTO } from "../shared/dtos/PersonalityTraitDataDTO";
-import { PersonalityTraitCategoryView } from "../models/views/PersonalityTraitCategoryView";
-import { PersonalityTraitView } from "../models/views/PersonalityTraitView";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { DailyTip } from '../models/entity/DailyTip';
+import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
+import { PersonalityAssessmentDTO } from '../shared/dtos/PersonalityAssessmentDTO';
+import { PersonalityCategoryTraitDTO } from '../shared/dtos/PersonalityCategoryTraitDTO';
+import { PersonalityChartDataDTO } from '../shared/dtos/PersonalityChartDataDTO';
+import { PersonalityTraitCategoryDTO } from '../shared/dtos/PersonalityTraitCategoryDTO';
+import { PersonalityTraitCategoryShortDTO } from '../shared/dtos/PersonalityTraitCategoryShortDTO';
+import { PersonalityTraitDataDTO } from '../shared/dtos/PersonalityTraitDataDTO';
+import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCategoryView';
+import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class PersonalityAssessmentService {
 
@@ -74,8 +74,8 @@ export class PersonalityAssessmentService {
         const tips = await this._ormService
             .getMany(DailyTip,
                 [
-                    ["WHERE", "isMax", "=", "isMax"],
-                    ["AND", "personalityTraitCategoryId", "=", "personalityTraitCategoryId"],
+                    ['WHERE', 'isMax', '=', 'isMax'],
+                    ['AND', 'personalityTraitCategoryId', '=', 'personalityTraitCategoryId'],
                 ],
                 {
                     isMax,
@@ -164,7 +164,7 @@ export class PersonalityAssessmentService {
                         orderIndex: index + offset,
                         traitScore: categoryView.maxScore
                     });
-            })
+            });
 
         const traitsOrdered = traits
             .orderBy(x => x.orderIndex);

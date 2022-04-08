@@ -1,10 +1,10 @@
-import { CoinTransaction } from "../models/entity/CoinTransaction";
-import { CoinTransactionDTO } from "../shared/dtos/CoinTransactionDTO";
-import { CoinBalanceView } from "../models/views/CoinBalanceView";
-import { CoinTransactionView } from "../models/views/CoinTransactionView";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { InsertCoinFnParamsType, SQLFunctionsService } from "./sqlServices/FunctionsService";
+import { CoinTransaction } from '../models/entity/CoinTransaction';
+import { CoinTransactionDTO } from '../shared/dtos/CoinTransactionDTO';
+import { CoinBalanceView } from '../models/views/CoinBalanceView';
+import { CoinTransactionView } from '../models/views/CoinTransactionView';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class CoinTransactionService {
 
@@ -21,7 +21,7 @@ export class CoinTransactionService {
 
     async makeCoinTransactionAsync(insertCoinFnParamsType: InsertCoinFnParamsType) {
 
-        await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType)
+        await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
     }
 
     async getCoinBalance(userId: number) {
@@ -67,11 +67,11 @@ export class CoinTransactionService {
 
         return await this._ormConnectionService
             .getRepository(CoinTransaction)
-            .createQueryBuilder("ca")
-            .leftJoinAndSelect("ca.givenAnswer", "ga")
-            .where("ca.userId = :userId", { userId })
-            .andWhere("ga.question_id = :questionId", { questionId })
-            .andWhere("ca.given_answer_id IS NOT NULL")
+            .createQueryBuilder('ca')
+            .leftJoinAndSelect('ca.givenAnswer', 'ga')
+            .where('ca.userId = :userId', { userId })
+            .andWhere('ga.question_id = :questionId', { questionId })
+            .andWhere('ca.given_answer_id IS NOT NULL')
             .getMany();
     }
 
@@ -103,9 +103,9 @@ export class CoinTransactionService {
 
         return await this._ormConnectionService
             .getRepository(CoinTransaction)
-            .createQueryBuilder("ca")
-            .where("ca.userId = :userId", { userId })
-            .andWhere("ca.given_answer_streak_id = :gasid", { gasid: answerStreakId })
+            .createQueryBuilder('ca')
+            .where('ca.userId = :userId', { userId })
+            .andWhere('ca.given_answer_streak_id = :gasid', { gasid: answerStreakId })
             .getMany();
     }
 }

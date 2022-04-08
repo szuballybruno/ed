@@ -1,4 +1,4 @@
-import { UserCourseProgressChartDayDTO } from "./UserCourseProgressChartDayDTO";
+import { UserCourseProgressChartDayDTO } from './UserCourseProgressChartDayDTO';
 
 export class UserCourseProgressChartDTO {
     startDate: Date;

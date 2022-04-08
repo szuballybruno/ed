@@ -8,19 +8,19 @@ export const getUnderMaintanenceMiddleware = (config: GlobalConfiguration) => ge
     if (!config.misc.isUnderMaintanence)
         return;
 
-    throw new ErrorCode("Server is under maintanence!", "under maintenance")
+    throw new ErrorCode('Server is under maintanence!', 'under maintenance');
 });
 
 export const getCORSMiddleware = (config: GlobalConfiguration) => cors({
     origin: config.misc.frontendUrl,
     credentials: true,
     allowedHeaders: [
-        "Origin",
-        "X-Requested-With",
-        "Content-Type",
-        "Accept",
-        "Authorization"
+        'Origin',
+        'X-Requested-With',
+        'Content-Type',
+        'Accept',
+        'Authorization'
     ],
     preflightContinue: false,
-    methods: "DELETE, PATCH"
+    methods: 'DELETE, PATCH'
 });

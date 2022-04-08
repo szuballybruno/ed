@@ -1,13 +1,13 @@
-import { Exam } from "../models/entity/Exam";
-import { UserCourseBridge } from "../models/entity/UserCourseBridge";
-import { Video } from "../models/entity/Video";
-import { CourseItemDTO } from "../shared/dtos/CourseItemDTO";
-import { CourseModeType, CourseStageNameType } from "../shared/types/sharedTypes";
-import { CourseItemsService } from "./CourseItemsService";
-import { MapperService } from "./MapperService";
-import { getItemCode } from "./misc/encodeService";
-import { QueryServiceBase } from "./misc/ServiceBase";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { Exam } from '../models/entity/Exam';
+import { UserCourseBridge } from '../models/entity/UserCourseBridge';
+import { Video } from '../models/entity/Video';
+import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
+import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
+import { CourseItemsService } from './CourseItemsService';
+import { MapperService } from './MapperService';
+import { getItemCode } from './misc/encodeService';
+import { QueryServiceBase } from './misc/ServiceBase';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -87,11 +87,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .insert({
                 courseId: courseId,
                 userId: userId,
-                courseMode: "advanced",
+                courseMode: 'advanced',
                 currentItemCode,
                 stageName,
                 isCurrent: true,
-                tempomatMode: "auto"
+                tempomatMode: 'auto'
             } as UserCourseBridge);
     }
 
@@ -106,7 +106,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .createQueryBuilder()
             .delete()
             .from(UserCourseBridge)
-            .where("courseId = :courseId", { courseId })
+            .where('courseId = :courseId', { courseId })
             .execute();
     }
 
@@ -122,7 +122,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
         if (!userCourseBridge)
-            throw new Error("User course bridge not found!");
+            throw new Error('User course bridge not found!');
 
         await this._ormService
             .getRepository(UserCourseBridge)
@@ -156,20 +156,20 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async getCurrentCourseIdOrFail(userId: number) {
 
-        const id = await this.getCurrentCourseId(userId)
+        const id = await this.getCurrentCourseId(userId);
 
         if (!id)
-            throw new Error("Accessing current course, but none found.");
+            throw new Error('Accessing current course, but none found.');
 
         return id;
-    };
+    }
 
     getCurrentItemCodeOrFailAsync = async (userId: number) => {
 
         const currentItemCode = await this.getCurrentItemCodeAsync(userId);
 
         if (!currentItemCode)
-            throw new Error("Course has no current item!");
+            throw new Error('Course has no current item!');
 
         return currentItemCode;
     }
@@ -206,7 +206,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
         if (!userCourseBridge)
-            throw new Error("User course bridge not found, maybe the course is not yet started!");
+            throw new Error('User course bridge not found, maybe the course is not yet started!');
 
         return userCourseBridge;
     }
@@ -221,13 +221,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 .getSingleById(Exam, examId!)
 
             : await this._ormService
-                .getSingleById(Video, videoId!)
+                .getSingleById(Video, videoId!);
 
         const currentItemDTO = isExam
             ? this._mapperService.map(Exam, CourseItemDTO, item)
             : this._mapperService.map(Video, CourseItemDTO, item);
 
-        const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? "exam" : "video");
+        const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? 'exam' : 'video');
 
         const courseId = item.courseId;
 
@@ -272,7 +272,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 .createQueryBuilder()
                 .delete()
                 .from(UserCourseBridge)
-                .where("courseId = :courseId", { courseId })
+                .where('courseId = :courseId', { courseId })
                 .execute();
     }
 }

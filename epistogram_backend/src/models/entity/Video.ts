@@ -1,13 +1,13 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { AnswerSession } from "./AnswerSession";
-import { CoinTransaction } from "./CoinTransaction";
-import { Course } from "./Course";
-import { CourseModule } from "./CourseModule";
-import { Question } from "./Question";
-import { StorageFile } from "./StorageFile";
-import { UserVideoProgressBridge } from "./UserVideoProgressBridge";
-import { VideoPlaybackSample } from "./VideoPlaybackSample";
-import { VideoRating } from "./VideoRating";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AnswerSession } from './AnswerSession';
+import { CoinTransaction } from './CoinTransaction';
+import { Course } from './Course';
+import { CourseModule } from './CourseModule';
+import { Question } from './Question';
+import { StorageFile } from './StorageFile';
+import { UserVideoProgressBridge } from './UserVideoProgressBridge';
+import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoRating } from './VideoRating';
 
 @Entity()
 export class Video {
@@ -30,7 +30,7 @@ export class Video {
     @Column()
     orderIndex: number;
 
-    @Column({ type: "double precision" })
+    @Column({ type: 'double precision' })
     lengthSeconds: number;
 
     // video file
@@ -38,7 +38,7 @@ export class Video {
     videoFileId: number;
 
     @ManyToOne(type => StorageFile, s => s.videos, { cascade: true })
-    @JoinColumn({ name: "video_file_id" })
+    @JoinColumn({ name: 'video_file_id' })
     videoFile: StorageFile;
 
     // thumbnail file
@@ -46,11 +46,11 @@ export class Video {
     thumbnailFileId: number;
 
     @OneToOne(type => StorageFile, { cascade: true })
-    @JoinColumn({ name: "thumbnail_file_id" })
+    @JoinColumn({ name: 'thumbnail_file_id' })
     thumbnailFile: StorageFile
 
     // questions
-    @OneToMany(type => Question, q => q.video, { onDelete: "CASCADE", cascade: true })
+    @OneToMany(type => Question, q => q.video, { onDelete: 'CASCADE', cascade: true })
     @JoinColumn()
     questions: Question[];
 
@@ -59,7 +59,7 @@ export class Video {
     courseId: number;
 
     @ManyToOne(type => Course, course => course.videos)
-    @JoinColumn({ name: "course_id" })
+    @JoinColumn({ name: 'course_id' })
     course: Course
 
     // answer sessions
@@ -77,7 +77,7 @@ export class Video {
     moduleId: number;
 
     @ManyToOne(_ => CourseModule, x => x.videos)
-    @JoinColumn({ name: "module_id" })
+    @JoinColumn({ name: 'module_id' })
     module: CourseModule;
 
     // coin acquires 

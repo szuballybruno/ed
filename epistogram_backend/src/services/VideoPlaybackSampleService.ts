@@ -1,7 +1,7 @@
-import { Video } from "../models/entity/Video";
-import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { hasValue } from "../utilities/helpers";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { Video } from '../models/entity/Video';
+import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
+import { hasValue } from '../utilities/helpers';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export type VideoPlaybackSampleChunk = {
     startSeconds: number;
@@ -24,8 +24,8 @@ export class VideoPlaybackSampleService {
 
         const video = await this._ormService
             .getRepository(Video)
-            .createQueryBuilder("v")
-            .where("v.id = :videoId", { videoId })
+            .createQueryBuilder('v')
+            .where('v.id = :videoId', { videoId })
             .getOneOrFail();
 
         if (video.lengthSeconds === 0)
@@ -45,8 +45,8 @@ export class VideoPlaybackSampleService {
             .createQueryBuilder()
             .delete()
             .from(VideoPlaybackSample)
-            .where("userId = :userId", { userId })
-            .andWhere("videoId = :videoId", { videoId })
+            .where('userId = :userId', { userId })
+            .andWhere('videoId = :videoId', { videoId })
             .execute();
 
         await this._ormService
@@ -67,16 +67,16 @@ export class VideoPlaybackSampleService {
 
         const samples = await this._ormService
             .getRepository(VideoPlaybackSample)
-            .createQueryBuilder("vps")
-            .where("vps.videoId = :videoId", { videoId })
-            .andWhere("vps.userId = :userId", { userId })
+            .createQueryBuilder('vps')
+            .where('vps.videoId = :videoId', { videoId })
+            .andWhere('vps.userId = :userId', { userId })
             .getMany();
 
         const orderedSampels = samples
             .orderBy(x => x.fromSeconds);
 
         let searchCursorSecs = 0;
-        let chunks = [] as VideoPlaybackSampleChunk[];
+        const chunks = [] as VideoPlaybackSampleChunk[];
 
         while (true) {
 
@@ -100,7 +100,7 @@ export class VideoPlaybackSampleService {
         if (!hasValue(lastSampleToSeconds))
             return null;
 
-        let finalSamples = [] as VideoPlaybackSample[];
+        const finalSamples = [] as VideoPlaybackSample[];
 
         while (true) {
 
@@ -129,7 +129,7 @@ export class VideoPlaybackSampleService {
 
             return sample.fromSeconds <= lastSampleToSeconds + sampleChaninigThrashold
                 && sample.toSeconds > lastSampleToSeconds;
-        }
+        };
 
         return orderedSampels
             .filter(sample => isJoinedSample(sample))

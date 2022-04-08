@@ -1,12 +1,12 @@
-import { PrequizUserAnswer } from "../models/entity/prequiz/PrequizUserAnswer";
-import { PrequizQuestionView } from "../models/views/PrequizQuestionView";
-import { PrequizAnswerDTO } from "../shared/dtos/PrequizAnswerDTO";
-import { PrequizQuestionDTO } from "../shared/dtos/PrequizQuestionDTO";
-import { PrequizUserAnswerDTO } from "../shared/dtos/PrequizUserAnswerDTO";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { TempomatService } from "./TempomatService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
+import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
+import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
+import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
+import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { TempomatService } from './TempomatService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PrequizService {
 
@@ -36,11 +36,11 @@ export class PrequizService {
 
         // set course as started, and stage to prequiz
         await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, "prequiz", null)
+            .setCurrentCourse(userId, courseId, 'prequiz', null);
 
         const views = await this._ormService
             .getRepository(PrequizQuestionView)
-            .createQueryBuilder("pqv")
+            .createQueryBuilder('pqv')
             .getMany();
 
         const questions = views
@@ -73,11 +73,11 @@ export class PrequizService {
 
         const userAnswer = await this._ormService
             .getRepository(PrequizUserAnswer)
-            .createQueryBuilder("pua")
-            .leftJoinAndSelect("pua.answer", "puaa")
-            .where("pua.userId = :userId", { userId })
-            .andWhere("pua.questionId = :questionId", { questionId })
-            .andWhere("pua.courseId = :courseId", { courseId })
+            .createQueryBuilder('pua')
+            .leftJoinAndSelect('pua.answer', 'puaa')
+            .where('pua.userId = :userId', { userId })
+            .andWhere('pua.questionId = :questionId', { questionId })
+            .andWhere('pua.courseId = :courseId', { courseId })
             .getOne();
 
         if (!userAnswer)

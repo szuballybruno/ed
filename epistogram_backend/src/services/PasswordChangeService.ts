@@ -1,13 +1,13 @@
-import { User } from "../models/entity/User";
-import { validatePassowrd } from "../shared/logic/sharedLogic";
-import { ErrorCode } from "../utilities/helpers";
-import { EmailService } from "./EmailService";
-import { HashService } from "./HashService";
-import { GlobalConfiguration } from "./misc/GlobalConfiguration";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { TokenService } from "./TokenService";
-import { UrlService } from "./UrlService";
-import { UserService } from "./UserService";
+import { User } from '../models/entity/User';
+import { validatePassowrd } from '../shared/logic/sharedLogic';
+import { ErrorCode } from '../utilities/helpers';
+import { EmailService } from './EmailService';
+import { HashService } from './HashService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { TokenService } from './TokenService';
+import { UrlService } from './UrlService';
+import { UserService } from './UserService';
 
 export class PasswordChangeService {
 
@@ -49,7 +49,7 @@ export class PasswordChangeService {
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new Error("Can not reset passowrd, user does not exists.");
+            throw new Error('Can not reset passowrd, user does not exists.');
 
         const token = this._tokenService
             .createSetNewPasswordToken(user.id);
@@ -88,7 +88,7 @@ export class PasswordChangeService {
             .getUserById(userId);
 
         if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
-            throw new ErrorCode("Wrong password!", "bad request");
+            throw new ErrorCode('Wrong password!', 'bad request');
 
         await this._ormService
             .getRepository(User)
@@ -117,7 +117,7 @@ export class PasswordChangeService {
 
         // verify new password with compare password 
         if (validatePassowrd(password, passwordCompare))
-            throw new ErrorCode("Password is invalid.", "bad request");
+            throw new ErrorCode('Password is invalid.', 'bad request');
 
         // verify token
         const tokenPayload = this._tokenService
@@ -131,7 +131,7 @@ export class PasswordChangeService {
 
         // verify user reset password token
         if (user.resetPasswordToken !== passwordResetToken)
-            throw new ErrorCode("Wrong token.", "bad request");
+            throw new ErrorCode('Wrong token.', 'bad request');
 
         // hash new password
         const hashedPassword = await this._hashService

@@ -1,10 +1,10 @@
-import { UploadedFile } from "express-fileupload";
-import { StorageFile } from "../models/entity/StorageFile";
-import { User } from "../models/entity/User";
-import { replaceAll } from "../utilities/helpers";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { StorageService } from "./StorageService";
-import { UserService } from "./UserService";
+import { UploadedFile } from 'express-fileupload';
+import { StorageFile } from '../models/entity/StorageFile';
+import { User } from '../models/entity/User';
+import { replaceAll } from '../utilities/helpers';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { StorageService } from './StorageService';
+import { UserService } from './UserService';
 
 export class FileService {
 
@@ -25,7 +25,7 @@ export class FileService {
     uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
         // upload new avatar
         await this.uploadAssigendFileAsync<User>(
-            this.getFilePath("userAvatars", "user_avatar", userId, "png"),
+            this.getFilePath('userAvatars', 'user_avatar', userId, 'png'),
             () => this._userService.getUserById(userId),
             (fileId) => this._userService.setUserAvatarFileId(userId, fileId),
             (entity) => entity.avatarFileId,
@@ -52,7 +52,7 @@ export class FileService {
         const oldFileEntityId = getFileEntityId(entity);
         if (oldFileEntityId) {
 
-            const oldFileEntity = await this.getFileEntityAsync(oldFileEntityId)
+            const oldFileEntity = await this.getFileEntityAsync(oldFileEntityId);
             await this.deleteFileEntityAsync(oldFileEntityId);
 
             await this._storageService
@@ -66,9 +66,9 @@ export class FileService {
 
     getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
 
-        extension = replaceAll(extension, ".", "");
+        extension = replaceAll(extension, '.', '');
 
-        return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`
+        return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`;
     }
 
     deleteFileEntityAsync = async (id: number) => {

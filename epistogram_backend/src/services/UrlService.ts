@@ -1,4 +1,4 @@
-import { GlobalConfiguration } from "./misc/GlobalConfiguration";
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
 export class UrlService {
 
@@ -11,13 +11,13 @@ export class UrlService {
 
     getAssetUrl = (assetPath: string) => {
 
-        assetPath = ("/" + assetPath).replace("//", "/");
+        assetPath = ('/' + assetPath).replace('//', '/');
         return this._config.fileStorage.assetStoreUrl + assetPath;
     }
 
     getFrontendUrl = (ending: string) => {
 
-        ending = ("/" + ending).replace("//", "/");
+        ending = ('/' + ending).replace('//', '/');
         return this._config.misc.frontendUrl + ending;
     }
 }

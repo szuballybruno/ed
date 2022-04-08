@@ -1,15 +1,15 @@
-import { CreateInvitedUserDTO } from "../shared/dtos/CreateInvitedUserDTO";
-import { RegisterUserViaActivationCodeDTO } from "../shared/dtos/RegisterUserViaActivationCodeDTO";
-import { RegisterUserViaInvitationTokenDTO } from "../shared/dtos/RegisterUserViaInvitationTokenDTO";
-import { RegisterUserViaPublicTokenDTO } from "../shared/dtos/RegisterUserViaPublicTokenDTO";
-import { RoleIdEnum } from "../shared/types/sharedTypes";
-import { EmailService } from "../services/EmailService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { RegistrationService } from "../services/RegistrationService";
-import { TokenService } from "../services/TokenService";
-import { UserService } from "../services/UserService";
-import { setAuthCookies } from "../utilities/cookieHelpers";
-import { ActionParams, ErrorCode } from "../utilities/helpers";
+import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
+import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
+import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
+import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
+import { RoleIdEnum } from '../shared/types/sharedTypes';
+import { EmailService } from '../services/EmailService';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { RegistrationService } from '../services/RegistrationService';
+import { TokenService } from '../services/TokenService';
+import { UserService } from '../services/UserService';
+import { setAuthCookies } from '../utilities/cookieHelpers';
+import { ActionParams, ErrorCode } from '../utilities/helpers';
 
 export class RegistrationController {
 
@@ -29,7 +29,7 @@ export class RegistrationController {
 
     registerUserViaPublicTokenAction = async (params: ActionParams) => {
 
-        const body = params.getBody<RegisterUserViaPublicTokenDTO>()
+        const body = params.getBody<RegisterUserViaPublicTokenDTO>();
 
         const { accessToken, refreshToken } = await this._registrationService
             .registerUserViaPublicTokenAsync(
@@ -84,7 +84,7 @@ export class RegistrationController {
             throw new ErrorCode(
                 `Current user is not an administrator, 
                 but has rights to add users, but has no organization, 
-                in which he/she could add users.`, "bad request");
+                in which he/she could add users.`, 'bad request');
 
         // create user
         await this._registrationService

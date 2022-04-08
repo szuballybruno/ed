@@ -1,7 +1,7 @@
-import { ModuleCreateDTO } from "../shared/dtos/ModuleCreateDTO";
-import { ModuleAdminEditDTO } from "../shared/dtos/ModuleAdminEditDTO";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
-import { ModuleService } from "../services/ModuleService";
+import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
+import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
+import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ModuleService } from '../services/ModuleService';
 
 export class ModuleController {
 
@@ -22,7 +22,7 @@ export class ModuleController {
 
         const moduleId = params
             .getBody<{ moduleId: number }>()
-            .getValue(x => x.moduleId, "int");
+            .getValue(x => x.moduleId, 'int');
 
         await this._moduleService
             .deleteModulesAsync([moduleId]);
@@ -30,7 +30,7 @@ export class ModuleController {
 
     getModuleEditDataAction = async (params: ActionParams) => {
 
-        const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, "number");
+        const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, 'number');
 
         return this._moduleService
             .getModuleEditDataAsync(moduleId);
@@ -56,6 +56,6 @@ export class ModuleController {
             .getValue(x => x.courseId);
 
         return this._moduleService
-            .getModuleListEditDataAsync(courseId)
+            .getModuleListEditDataAsync(courseId);
     }
 }

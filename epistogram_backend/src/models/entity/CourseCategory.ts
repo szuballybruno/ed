@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Course } from "./Course";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from './Course';
 
 @Entity()
 export class CourseCategory {
@@ -15,7 +15,7 @@ export class CourseCategory {
     parentCategoryId: number;
 
     @ManyToOne(_ => CourseCategory, x => x.childCategories)
-    @JoinColumn({ name: "parent_category_id" })
+    @JoinColumn({ name: 'parent_category_id' })
     parentCategory: CourseCategory;
 
     // child categories 

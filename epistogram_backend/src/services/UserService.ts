@@ -1,20 +1,20 @@
-import { AnswerSession } from "../models/entity/AnswerSession";
-import { Course } from "../models/entity/Course";
-import { User } from "../models/entity/User";
-import { AdminPageUserDTO } from "../shared/dtos/admin/AdminPageUserDTO";
-import { BriefUserDataDTO } from "../shared/dtos/BriefUserDataDTO";
-import { RoleIdEnum } from "../shared/types/sharedTypes";
-import { UserDTO } from "../shared/dtos/UserDTO";
-import { UserEditDTO } from "../shared/dtos/UserEditDTO";
-import { UserEditSimpleDTO } from "../shared/dtos/UserEditSimpleDTO";
-import { RegistrationType } from "../models/Types";
-import { AdminUserListView } from "../models/views/UserAdminListView";
-import { getFullName, toFullName, ErrorCode } from "../utilities/helpers";
-import { HashService } from "./HashService";
-import { MapperService } from "./MapperService";
-import { log } from "./misc/logger";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { TeacherInfoService } from "./TeacherInfoService";
+import { AnswerSession } from '../models/entity/AnswerSession';
+import { Course } from '../models/entity/Course';
+import { User } from '../models/entity/User';
+import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
+import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
+import { RoleIdEnum } from '../shared/types/sharedTypes';
+import { UserDTO } from '../shared/dtos/UserDTO';
+import { UserEditDTO } from '../shared/dtos/UserEditDTO';
+import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
+import { RegistrationType } from '../models/Types';
+import { AdminUserListView } from '../models/views/UserAdminListView';
+import { getFullName, toFullName, ErrorCode } from '../utilities/helpers';
+import { HashService } from './HashService';
+import { MapperService } from './MapperService';
+import { log } from './misc/logger';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { TeacherInfoService } from './TeacherInfoService';
 
 export class UserService {
 
@@ -44,12 +44,12 @@ export class UserService {
 
         const user = await this._ormService
             .getRepository(User)
-            .createQueryBuilder("u")
-            .leftJoinAndSelect("u.organization", "o")
-            .leftJoinAndSelect("u.role", "r")
-            .leftJoinAndSelect("u.jobTitle", "jt")
-            .leftJoinAndSelect("u.teacherInfo", "ti")
-            .where("u.id = :userId", { userId: editedUserId })
+            .createQueryBuilder('u')
+            .leftJoinAndSelect('u.organization', 'o')
+            .leftJoinAndSelect('u.role', 'r')
+            .leftJoinAndSelect('u.jobTitle', 'jt')
+            .leftJoinAndSelect('u.teacherInfo', 'ti')
+            .where('u.id = :userId', { userId: editedUserId })
             .getOneOrFail();
 
         return this._mapperService
@@ -68,12 +68,12 @@ export class UserService {
 
         const users = await this._ormService
             .getRepository(AdminUserListView)
-            .createQueryBuilder("ualv")
+            .createQueryBuilder('ualv')
             .getMany();
 
         const filteredUsers = searchTextLower
             ? users
-                .filter(x => toFullName(x.firstName, x.lastName, "hu")
+                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
                     .toLowerCase()
                     .includes(searchTextLower))
             : users;
@@ -198,7 +198,7 @@ export class UserService {
         // does user already exist?
         const existingUser = await this.getUserByEmailAsync(opts.email);
         if (existingUser)
-            throw new ErrorCode("User already exists. Email: " + opts.email, "email_taken");
+            throw new ErrorCode('User already exists. Email: ' + opts.email, 'email_taken');
 
         // hash user password 
         const hashedPassword = await this._hashService
@@ -215,7 +215,7 @@ export class UserService {
             organizationId: opts.organizationId,
             password: hashedPassword,
             isInvitationAccepted: false,
-            isTrusted: regType === "Invitation",
+            isTrusted: regType === 'Invitation',
             registrationType: regType,
             invitationToken: opts.invitationToken
         } as User;
@@ -232,7 +232,7 @@ export class UserService {
             .getRepository(AnswerSession)
             .insert({
                 examId: 1, // -- 1 always points to signup exam 
-                type: "signup",
+                type: 'signup',
                 userId: userId
             });
 
@@ -241,7 +241,7 @@ export class UserService {
             .getRepository(AnswerSession)
             .insert({
                 userId: userId,
-                type: "practise"
+                type: 'practise'
             });
 
         return user;
@@ -276,11 +276,11 @@ export class UserService {
 
         const user = await this._ormService
             .getRepository(User)
-            .createQueryBuilder("user")
-            .where("user.id = :userId", { userId: userId })
-            .leftJoinAndSelect("user.avatarFile", "a")
-            .leftJoinAndSelect("user.userActivity", "ua")
-            .leftJoinAndSelect("user.jobTitle", "jt")
+            .createQueryBuilder('user')
+            .where('user.id = :userId', { userId: userId })
+            .leftJoinAndSelect('user.avatarFile', 'a')
+            .leftJoinAndSelect('user.userActivity', 'ua')
+            .leftJoinAndSelect('user.jobTitle', 'jt')
             .getOneOrFail();
 
         return user;
@@ -306,7 +306,7 @@ export class UserService {
             });
 
         if (connectedCourses.length > 0)
-            throw new ErrorCode("Cannot delete user when it's set as teacher on undeleted courses!", "bad request");
+            throw new ErrorCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
         return await this._ormService
             .getRepository(User)
@@ -355,9 +355,9 @@ export class UserService {
 
         const user = await this._ormService
             .getRepository(User)
-            .createQueryBuilder("user")
-            .leftJoinAndSelect("user.userActivity", "ua")
-            .where("user.email = :email", { email: email })
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.userActivity', 'ua')
+            .where('user.email = :email', { email: email })
             .getOne();
 
         if (!user)
@@ -431,7 +431,7 @@ export class UserService {
             .getRepository(User)
             .save({
                 id: userId,
-                refreshToken: ""
+                refreshToken: ''
             });
     }
 

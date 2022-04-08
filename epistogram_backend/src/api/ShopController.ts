@@ -1,6 +1,6 @@
-import { ShopItemEditDTO } from "../shared/dtos/ShopItemEditDTO";
-import { ShopService } from "../services/ShopService";
-import { ActionParams } from "../utilities/helpers";
+import { ShopItemEditDTO } from '../shared/dtos/ShopItemEditDTO';
+import { ShopService } from '../services/ShopService';
+import { ActionParams } from '../utilities/helpers';
 
 export class ShopController {
 
@@ -43,7 +43,7 @@ export class ShopController {
         return await this._shopService
             .getShopItemBriefDataAsync(params
                 .getQuery<any>()
-                .getValue(x => x.shopItemId, "int"));
+                .getValue(x => x.shopItemId, 'int'));
     }
 
     getShopItemEditDTOAction = async (params: ActionParams) => {
@@ -51,7 +51,7 @@ export class ShopController {
         return await this._shopService
             .getShopItemEditDTOAsync(params
                 .getQuery<any>()
-                .getValue(x => x.shopItemId, "int"));
+                .getValue(x => x.shopItemId, 'int'));
     }
 
     getPrivateCourseListAction = async (params: ActionParams) => {

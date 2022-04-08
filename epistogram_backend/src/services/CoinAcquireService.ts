@@ -1,11 +1,11 @@
-import { GivenAnswer } from "../models/entity/GivenAnswer";
-import { CoinAcquireResultDTO } from "../shared/dtos/CoinAcquireResultDTO";
-import { ActivityStreakView } from "../models/views/ActivityStreakView";
-import { UserSessionDailyView } from "../models/views/UserActivityDailyView";
-import { trimTimeFromDate } from "../utilities/helpers";
-import { CoinTransactionService } from "./CoinTransactionService";
-import { EventService } from "./EventService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { GivenAnswer } from '../models/entity/GivenAnswer';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { ActivityStreakView } from '../models/views/ActivityStreakView';
+import { UserSessionDailyView } from '../models/views/UserActivityDailyView';
+import { trimTimeFromDate } from '../utilities/helpers';
+import { CoinTransactionService } from './CoinTransactionService';
+import { EventService } from './EventService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class CoinAcquireService {
 
@@ -80,7 +80,7 @@ export class CoinAcquireService {
             .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.questionCorrectAnswer, givenAnswerId });
 
         return {
-            reason: "correct_answer",
+            reason: 'correct_answer',
             amount: this._coinRewardAmounts.questionCorrectAnswer
         } as CoinAcquireResultDTO;
     }
@@ -101,7 +101,7 @@ export class CoinAcquireService {
 
             return {
                 amount: this._coinRewardAmounts.answerStreak5,
-                reason: "answer_streak_5"
+                reason: 'answer_streak_5'
             } as CoinAcquireResultDTO;
         }
 
@@ -112,7 +112,7 @@ export class CoinAcquireService {
 
             return {
                 amount: this._coinRewardAmounts.answerStreak10,
-                reason: "answer_streak_10"
+                reason: 'answer_streak_10'
             } as CoinAcquireResultDTO;
         }
 
@@ -132,7 +132,7 @@ export class CoinAcquireService {
         // check if it's not more than 3 sessions today
         const todaysInfo = await this._ormService
             .getRepository(UserSessionDailyView)
-            .createQueryBuilder("us")
+            .createQueryBuilder('us')
             .where('us.userId = :userId', { userId })
             .getOneOrFail();
 
@@ -188,7 +188,7 @@ export class CoinAcquireService {
 
                 return {
                     amount: this._coinRewardAmounts.activityStreak3Days,
-                    reason: "activity_streak_3_days"
+                    reason: 'activity_streak_3_days'
                 } as CoinAcquireResultDTO;
             }
 
@@ -196,7 +196,7 @@ export class CoinAcquireService {
 
                 return {
                     amount: this._coinRewardAmounts.activityStreak5Days,
-                    reason: "activity_streak_5_days"
+                    reason: 'activity_streak_5_days'
                 } as CoinAcquireResultDTO;
             }
 
@@ -204,13 +204,13 @@ export class CoinAcquireService {
 
                 return {
                     amount: this._coinRewardAmounts.activityStreak10Days,
-                    reason: "activity_streak_10_days"
+                    reason: 'activity_streak_10_days'
                 } as CoinAcquireResultDTO;
             }
 
             return {
                 amount: 0,
-                reason: "activity_streak_10_days"
+                reason: 'activity_streak_10_days'
             } as CoinAcquireResultDTO;
         })();
 

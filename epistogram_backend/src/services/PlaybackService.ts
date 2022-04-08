@@ -1,17 +1,17 @@
-import { UserVideoProgressBridge } from "../models/entity/UserVideoProgressBridge";
-import { VideoPlaybackSample } from "../models/entity/VideoPlaybackSample";
-import { VideoProgressView } from "../models/views/VideoProgressView";
-import { VideoPlaybackSampleDTO } from "../shared/dtos/VideoPlaybackSampleDTO";
-import { VideoSamplingResultDTO } from "../shared/dtos/VideoSamplingResultDTO";
-import { CoinAcquireService } from "./CoinAcquireService";
-import { MapperService } from "./MapperService";
-import { readItemCode } from "./misc/encodeService";
-import { GlobalConfiguration } from "./misc/GlobalConfiguration";
-import { ServiceBase } from "./misc/ServiceBase";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { UserSessionActivityService } from "./UserSessionActivityService";
-import { VideoPlaybackSampleService } from "./VideoPlaybackSampleService";
+import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
+import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
+import { VideoProgressView } from '../models/views/VideoProgressView';
+import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
+import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
+import { CoinAcquireService } from './CoinAcquireService';
+import { MapperService } from './MapperService';
+import { readItemCode } from './misc/encodeService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import { ServiceBase } from './misc/ServiceBase';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { UserSessionActivityService } from './UserSessionActivityService';
+import { VideoPlaybackSampleService } from './VideoPlaybackSampleService';
 
 export class PlaybackService extends ServiceBase {
 
@@ -45,8 +45,8 @@ export class PlaybackService extends ServiceBase {
             .getCurrentItemCodeOrFailAsync(userId);
 
         const { itemId: videoId, itemType } = readItemCode(currentItemCode);
-        if (itemType !== "video")
-            throw new Error("Current item is not of type: video!");
+        if (itemType !== 'video')
+            throw new Error('Current item is not of type: video!');
 
         await this._ormService
             .getRepository(VideoPlaybackSample)
@@ -90,7 +90,7 @@ export class PlaybackService extends ServiceBase {
 
         // save user activity of video watching
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, "video");
+            .saveUserSessionActivityAsync(userId, 'video');
 
         return {
             isWatchedStateChanged: isFirstCompletion,
@@ -108,8 +108,8 @@ export class PlaybackService extends ServiceBase {
         const pbd = await this._ormService
             .getOneOrNull(UserVideoProgressBridge,
                 [
-                    ["WHERE", "videoId", "=", "videoId"],
-                    ["AND", "userId", "=", "userId"]
+                    ['WHERE', 'videoId', '=', 'videoId'],
+                    ['AND', 'userId', '=', 'userId']
                 ],
                 { videoId, userId });
 
@@ -142,7 +142,7 @@ export class PlaybackService extends ServiceBase {
                     userId: userId,
                     videoId: videoId
                 }
-            })
+            });
 
         return ads.toSeconds;
     }
@@ -152,10 +152,10 @@ export class PlaybackService extends ServiceBase {
         const pbd = await this._ormService
             .getOneOrNull(UserVideoProgressBridge,
                 [
-                    ["WHERE", "videoId", "=", "videoId"],
-                    ["AND", "userId", "=", "userId"]
+                    ['WHERE', 'videoId', '=', 'videoId'],
+                    ['AND', 'userId', '=', 'userId']
                 ],
-                { userId, videoId })
+                { userId, videoId });
 
         return !!pbd?.completionDate;
     }

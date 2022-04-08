@@ -1,16 +1,16 @@
 
-import { Organization } from "../models/entity/Organization";
-import { User } from "../models/entity/User";
-import { CourseOverviewDataDTO } from "../shared/dtos/CourseOverviewDataDTO";
-import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
-import { OverviewPageDTO } from "../shared/dtos/OverviewPageDTO";
-import { UserDTO } from "../shared/dtos/UserDTO";
-import { CourseOverviewView } from "../models/views/CourseOverviewView";
-import { CourseService } from "./CourseService";
-import { MapperService } from "./MapperService";
-import { toOrganizationDTO } from "./misc/mappings";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
+import { Organization } from '../models/entity/Organization';
+import { User } from '../models/entity/User';
+import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
+import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
+import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
+import { UserDTO } from '../shared/dtos/UserDTO';
+import { CourseOverviewView } from '../models/views/CourseOverviewView';
+import { CourseService } from './CourseService';
+import { MapperService } from './MapperService';
+import { toOrganizationDTO } from './misc/mappings';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {
 
@@ -61,8 +61,8 @@ export class MiscService {
         const view = await this._ormService
             .getSingle(CourseOverviewView,
                 [
-                    ["WHERE", "courseId", "=", "courseId"],
-                    ["AND", "userId", "=", "userId"]
+                    ['WHERE', 'courseId', '=', 'courseId'],
+                    ['AND', 'userId', '=', 'userId']
                 ],
                 {
                     courseId,
@@ -91,7 +91,7 @@ export class MiscService {
         return overviewPageDTO;
     }
 
-    private getTipOfTheDay = () => "Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!"
+    private getTipOfTheDay = () => 'Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!'
 
     private getDevelopmentChart = () => {
         return {
@@ -114,6 +114,6 @@ export class MiscService {
                     tension: 0.5
                 }
             ],
-        }
+        };
     }
 }

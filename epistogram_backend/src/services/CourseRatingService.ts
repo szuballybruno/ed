@@ -1,12 +1,12 @@
-import { CourseRatingQuestionUserAnswer } from "../models/entity/courseRating/CourseRatingQuestionUserAnswer";
-import { CourseRatingGroupDTO } from "../shared/dtos/CourseRatingGroupDTO";
-import { CourseRatingQuestionAnswerDTO } from "../shared/dtos/CourseRatingQuestionAnswerDTO";
-import { CourseRatingQuestionAnswersDTO } from "../shared/dtos/CourseRatingQuestionAnswersDTO";
-import { CourseRatingQuestionDTO } from "../shared/dtos/CourseRatingQuestionDTO";
-import { CourseRatingQuestionView } from "../models/views/CourseRatingQuestionView";
-import { MapperService } from "./MapperService";
-import { ServiceBase } from "./misc/ServiceBase";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { CourseRatingQuestionUserAnswer } from '../models/entity/courseRating/CourseRatingQuestionUserAnswer';
+import { CourseRatingGroupDTO } from '../shared/dtos/CourseRatingGroupDTO';
+import { CourseRatingQuestionAnswerDTO } from '../shared/dtos/CourseRatingQuestionAnswerDTO';
+import { CourseRatingQuestionAnswersDTO } from '../shared/dtos/CourseRatingQuestionAnswersDTO';
+import { CourseRatingQuestionDTO } from '../shared/dtos/CourseRatingQuestionDTO';
+import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionView';
+import { MapperService } from './MapperService';
+import { ServiceBase } from './misc/ServiceBase';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class CourseRatingService extends ServiceBase {
 
@@ -27,9 +27,9 @@ export class CourseRatingService extends ServiceBase {
 
         const views = await this._ormService
             .getRepository(CourseRatingQuestionView)
-            .createQueryBuilder("crqv")
-            .where("crqv.userId = :userId", { userId })
-            .andWhere("crqv.courseId = :courseId", { courseId })
+            .createQueryBuilder('crqv')
+            .where('crqv.userId = :userId', { userId })
+            .andWhere('crqv.courseId = :courseId', { courseId })
             .getMany();
 
         const groups = views
@@ -65,10 +65,10 @@ export class CourseRatingService extends ServiceBase {
 
         const prevAnswers = await this._ormService
             .getRepository(CourseRatingQuestionUserAnswer)
-            .createQueryBuilder("crqua")
-            .where("crqua.userId = :userId", { userId })
-            .andWhere("crqua.courseId = :courseId", { courseId })
-            .andWhere("crqua.courseRatingQuestionId IN (:...questionIds)", {
+            .createQueryBuilder('crqua')
+            .where('crqua.userId = :userId', { userId })
+            .andWhere('crqua.courseId = :courseId', { courseId })
+            .andWhere('crqua.courseRatingQuestionId IN (:...questionIds)', {
                 questionIds: answersDTO
                     .answers
                     .map(x => x.quesitonId)

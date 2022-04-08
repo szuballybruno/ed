@@ -26,11 +26,11 @@ export class EmailService {
 
         const epistoEmail = {
             to: userEmail,
-            subject: "Üdvözlünk az EpistoGram-ban!",
+            subject: 'Üdvözlünk az EpistoGram-ban!',
             template: {
-                name: "invitationEmailTemplate",
+                name: 'invitationEmailTemplate',
                 params: {
-                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl('images/logo.png'),
                     userFullName: userFullName,
                     registrationUrl: url
                 }
@@ -49,11 +49,11 @@ export class EmailService {
 
         const epistoEmail = {
             to: email,
-            subject: "Üdvözlünk az EpistoGram-ban!",
+            subject: 'Üdvözlünk az EpistoGram-ban!',
             template: {
-                name: "successfulRegistrationEmailTemplate",
+                name: 'successfulRegistrationEmailTemplate',
                 params: {
-                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl('images/logo.png'),
                     generatedPassword: generatedPassword,
                     epistogramAppUrl: epistogramAppUrl
                 }
@@ -69,11 +69,11 @@ export class EmailService {
 
         const epistoEmail = {
             to: email,
-            subject: "Jelszó visszaállítása",
+            subject: 'Jelszó visszaállítása',
             template: {
-                name: "resetPasswordEmailTemplate",
+                name: 'resetPasswordEmailTemplate',
                 params: {
-                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl('images/logo.png'),
                     passwordResetUrl: resetPasswordUrl
                 }
             }
@@ -91,11 +91,11 @@ export class EmailService {
 
         const epistoEmail = {
             to: toEmail,
-            subject: "Bónusz kód megvéve",
+            subject: 'Bónusz kód megvéve',
             template: {
-                name: "discountCodePurchasedMailTemplate",
+                name: 'discountCodePurchasedMailTemplate',
                 params: {
-                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl('images/logo.png'),
                     discountCode: discountCode,
                     itemCoverUrl: itemCoverUrl,
                     itemName: itemName,
@@ -113,11 +113,11 @@ export class EmailService {
 
         const epistoEmail = {
             to: email,
-            subject: "Jelszo visszaallitas",
+            subject: 'Jelszo visszaallitas',
             template: {
-                name: "selfResetPasswordEmailTemplate",
+                name: 'selfResetPasswordEmailTemplate',
                 params: {
-                    epistogramLogoUrl: this._assetUrlService.getAssetUrl("images/logo.png"),
+                    epistogramLogoUrl: this._assetUrlService.getAssetUrl('images/logo.png'),
                     passwordResetUrl: resetPwUrl
                 }
             }
@@ -148,12 +148,12 @@ export class EmailService {
         const to = this._config
             .misc
             .isLocalhost
-            ? "manyoki.bence@epistogram.com"
+            ? 'manyoki.bence@epistogram.com'
             : email.to;
 
         const templatePath = `${__dirname}/../emails/${email.template.name}.html`;
         const templateHtml = readFileSync(templatePath, 'utf8');
-        let replacedHtml = "" + templateHtml;
+        let replacedHtml = '' + templateHtml;
 
         const templateParams = email.template.params;
         for (const paramName in templateParams) {
@@ -169,7 +169,7 @@ export class EmailService {
         const result = await transporter
             .sendMail({
                 to: to,
-                from: "noreply@epistogram.com",
+                from: 'noreply@epistogram.com',
                 subject: email.subject,
                 html: replacedHtml
             });

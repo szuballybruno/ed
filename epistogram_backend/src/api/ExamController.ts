@@ -1,13 +1,13 @@
-import { Course } from "../models/entity/Course";
-import { Exam } from "../models/entity/Exam";
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { CreateExamDTO } from "../shared/dtos/CreateExamDTO";
-import { ExamEditDataDTO } from "../shared/dtos/ExamEditDataDTO";
-import { IdResultDTO } from "../shared/dtos/IdResultDTO";
-import { ExamService } from "../services/ExamService";
-import { toQuestionDTO } from "../services/misc/mappings";
-import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { Course } from '../models/entity/Course';
+import { Exam } from '../models/entity/Exam';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { CreateExamDTO } from '../shared/dtos/CreateExamDTO';
+import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
+import { IdResultDTO } from '../shared/dtos/IdResultDTO';
+import { ExamService } from '../services/ExamService';
+import { toQuestionDTO } from '../services/misc/mappings';
+import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
+import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class ExamController {
 
@@ -39,7 +39,7 @@ export class ExamController {
 
     getExamResultsAction = async (params: ActionParams) => {
 
-        const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, "number");
+        const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, 'number');
 
         return this._examService
             .getExamResultsAsync(params.currentUserId, answerSessionId);
@@ -49,7 +49,7 @@ export class ExamController {
 
         const examId = params
             .getQuery<{ examId: number }>()
-            .getValue(x => x.examId, "int");
+            .getValue(x => x.examId, 'int');
 
         return await this._examService
             .getExamEditDataAsync(examId);
@@ -70,11 +70,11 @@ export class ExamController {
 
         const course = await this._ormService
             .getRepository(Course)
-            .createQueryBuilder("c")
-            .leftJoinAndSelect("c.videos", "v")
-            .leftJoinAndSelect("c.exams", "e")
-            .leftJoinAndSelect("c.modules", "m")
-            .where("m.id = :moduleId", { moduleId: dto.moduleId })
+            .createQueryBuilder('c')
+            .leftJoinAndSelect('c.videos', 'v')
+            .leftJoinAndSelect('c.exams', 'e')
+            .leftJoinAndSelect('c.modules', 'm')
+            .where('m.id = :moduleId', { moduleId: dto.moduleId })
             .getOneOrFail();
 
         const courseItemsLength = course.videos.length + course.exams.length;

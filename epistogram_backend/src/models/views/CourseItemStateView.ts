@@ -1,9 +1,9 @@
-import { ViewColumn, ViewEntity } from "typeorm";
-import { CourseItemStateType, CourseItemType, CourseModeType } from "../../shared/types/sharedTypes";
+import { ViewColumn, ViewEntity } from 'typeorm';
+import { CourseItemStateType, CourseItemType, CourseModeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
-    expression: ``
+    expression: ''
 })
 export class CourseItemStateView {
 

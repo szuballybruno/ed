@@ -1,8 +1,8 @@
-import { AnswerQuestionDTO } from "../shared/dtos/AnswerQuestionDTO";
-import { CourseService } from "../services/CourseService";
-import { PlayerService } from "../services/PlayerService";
-import { VideoService } from "../services/VideoService";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { CourseService } from '../services/CourseService';
+import { PlayerService } from '../services/PlayerService';
+import { VideoService } from '../services/VideoService';
+import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class PlayerController {
 
@@ -21,9 +21,9 @@ export class PlayerController {
 
         const dto = params.getBody<AnswerQuestionDTO>();
         const answerIds = dto.getValue(x => x.answerIds);
-        const questionId = dto.getValue(x => x.questionId, "int");
-        const answerSessionId = dto.getValue(x => x.answerSessionId, "int");
-        const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, "float");
+        const questionId = dto.getValue(x => x.questionId, 'int');
+        const answerSessionId = dto.getValue(x => x.answerSessionId, 'int');
+        const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, 'float');
 
         return this._videoService
             .answerVideoQuestionAsync(params.currentUserId, answerSessionId, questionId, answerIds, elapsedSeconds);

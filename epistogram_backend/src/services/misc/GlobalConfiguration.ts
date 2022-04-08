@@ -1,6 +1,7 @@
-import { log, logError } from "./logger";
+import { log, logError } from './logger';
+import dotenv from 'dotenv';
 
-type EnvironmentType = "development" | "production" | "demo" | "local";
+type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
 
 export class GlobalConfiguration {
 
@@ -8,11 +9,11 @@ export class GlobalConfiguration {
 
     security = {
         secrets: {
-            accessTokenSecret: GlobalConfiguration.getEnvConfigEntry("JWT_SIGN_SECRET"),
-            refreshTokenSecret: "dasdmaodwhw8dha7y37iaiyd7sta77aw6eads7yawid",
-            regTokenSecret: "dwafwfawiudaw8d79afya09d3asnklswf87aw0dja9wu8d",
-            invitationTokenSecret: "d42dh9hd23c9283h9f2fj98h23d9ja0jd98jwd989awhd",
-            setNewPasswordTokenSecret: "sdajwd99839d8y9ac9ayw7dya398yd9aysdas"
+            accessTokenSecret: GlobalConfiguration.getEnvConfigEntry('JWT_SIGN_SECRET'),
+            refreshTokenSecret: 'dasdmaodwhw8dha7y37iaiyd7sta77aw6eads7yawid',
+            regTokenSecret: 'dwafwfawiudaw8d79afya09d3asnklswf87aw0dja9wu8d',
+            invitationTokenSecret: 'd42dh9hd23c9283h9f2fj98h23d9ja0jd98jwd989awhd',
+            setNewPasswordTokenSecret: 'sdajwd99839d8y9ac9ayw7dya398yd9aysdas'
         },
         tokenLifespans: {
             accessTokenLifespanInS: 15 * 60, // 15 minutes
@@ -36,37 +37,37 @@ export class GlobalConfiguration {
     }
 
     misc = {
-        hostPort: GlobalConfiguration.getEnvConfigEntry("HOST_PORT"),
-        environmentName: GlobalConfiguration.getEnvConfigEntry("ENVIRONMENT_NAME"),
-        frontendUrl: GlobalConfiguration.getEnvConfigEntry("FRONTEND_URL"),
-        isLocalhost: GlobalConfiguration.getEnvConfigEntry("IS_LOCALHOST") === "true",
-        accessTokenCookieName: "accessToken",
-        refreshTokenCookieName: "refreshToken",
-        isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry("IS_UNDER_MAINTENANCE") === "true",
-        videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntryInt("VIDEO_COMPLETED_PERCENTAGE")
+        hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
+        environmentName: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME'),
+        frontendUrl: GlobalConfiguration.getEnvConfigEntry('FRONTEND_URL'),
+        isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST') === 'true',
+        accessTokenCookieName: 'accessToken',
+        refreshTokenCookieName: 'refreshToken',
+        isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE') === 'true',
+        videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntryInt('VIDEO_COMPLETED_PERCENTAGE')
     }
 
     fileStorage = {
-        assetStoreUrl: GlobalConfiguration.getEnvConfigEntry("FILE_STORAGE_URL"),
-        bucketName: GlobalConfiguration.getEnvConfigEntry("FILE_STORAGE_BUCKET_NAME"),
+        assetStoreUrl: GlobalConfiguration.getEnvConfigEntry('FILE_STORAGE_URL'),
+        bucketName: GlobalConfiguration.getEnvConfigEntry('FILE_STORAGE_BUCKET_NAME'),
     }
 
     mail = {
-        mailHost: GlobalConfiguration.getEnvConfigEntry("MAIL_HOST"),
-        senderEmail: GlobalConfiguration.getEnvConfigEntry("MAIL_SENDER_MAIL"),
-        senderPassword: GlobalConfiguration.getEnvConfigEntry("MAIL_SENDER_PASSWORD")
+        mailHost: GlobalConfiguration.getEnvConfigEntry('MAIL_HOST'),
+        senderEmail: GlobalConfiguration.getEnvConfigEntry('MAIL_SENDER_MAIL'),
+        senderPassword: GlobalConfiguration.getEnvConfigEntry('MAIL_SENDER_PASSWORD')
     }
 
     database = {
-        name: GlobalConfiguration.getEnvConfigEntry("DB_NAME"),
-        publicHostAddress: GlobalConfiguration.getEnvConfigEntry("DB_HOST_ADDRESS"),
-        gcpCloudSqlConnectionName: "gifted-country-324010:europe-central2:epistogram",
-        port: parseInt(GlobalConfiguration.getEnvConfigEntry("DB_PORT")),
-        serviceUserName: GlobalConfiguration.getEnvConfigEntry("DB_SERVICE_USER_NAME"),
-        serviceUserPassword: GlobalConfiguration.getEnvConfigEntry("DB_SERVICE_USER_PASSWORD"),
-        isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry("DB_IS_ORM_LOGGING_ENABLED") === "true",
-        isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry("IS_DANGEROUS_DB_PURGE_ENABLED") === "true",
-        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry("IS_HOSTED_ON_GCP") === "true"
+        name: GlobalConfiguration.getEnvConfigEntry('DB_NAME'),
+        publicHostAddress: GlobalConfiguration.getEnvConfigEntry('DB_HOST_ADDRESS'),
+        gcpCloudSqlConnectionName: 'gifted-country-324010:europe-central2:epistogram',
+        port: parseInt(GlobalConfiguration.getEnvConfigEntry('DB_PORT')),
+        serviceUserName: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_NAME'),
+        serviceUserPassword: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_PASSWORD'),
+        isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED') === 'true',
+        isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED') === 'true',
+        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true'
     }
 
     constructor(rootDirectory: string) {
@@ -77,7 +78,7 @@ export class GlobalConfiguration {
     getIsProdEnvironment = () => {
 
         const envName = this.misc.environmentName.toLowerCase();
-        const isProdEnvironemnt = envName.includes("prod");
+        const isProdEnvironemnt = envName.includes('prod');
 
         return isProdEnvironemnt;
     }
@@ -86,7 +87,7 @@ export class GlobalConfiguration {
 
         const dbConfig = this.database;
         const isHostedOnGCP = dbConfig.isHostedOnGCP;
-        const gcpCloudSqlConnectionString = `/cloudsql/gifted-country-324010:europe-central2:epistogram`;
+        const gcpCloudSqlConnectionString = '/cloudsql/gifted-country-324010:europe-central2:epistogram';
 
         return {
             host: isHostedOnGCP
@@ -101,7 +102,7 @@ export class GlobalConfiguration {
             socketPath: isHostedOnGCP
                 ? gcpCloudSqlConnectionString
                 : undefined
-        }
+        };
     }
 
     getRootRelativePath = (path: string) => {
@@ -114,11 +115,11 @@ export class GlobalConfiguration {
         const fullEntryName = entryName;
         const value = process.env[fullEntryName];
 
-        if (!value && value !== "false" && !allowEmptyStr)
+        if (!value && value !== 'false' && !allowEmptyStr)
             throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${GlobalConfiguration.getCurrentEnvironmentName()}'!`);
 
-        log(entryName + " -> " + value);
-        return value ?? "";
+        log(entryName + ' -> ' + value);
+        return value ?? '';
     }
 
     static getEnvConfigEntryInt = (entryName: string, allowEmptyStr?: boolean) => {
@@ -131,10 +132,12 @@ export class GlobalConfiguration {
 
     static initGlobalConfig = (rootDirectory: string) => {
 
-        log("Environemnt: " + GlobalConfiguration.getCurrentEnvironmentName());
+        log('Environemnt: ' + GlobalConfiguration.getCurrentEnvironmentName());
 
-        log("Loading config.env...");
-        require('dotenv').config({ path: "config.env" });
+        log('Loading config.env...');
+
+        dotenv
+            .config({ path: 'config.env' });
 
         const globalConfig = new GlobalConfiguration(rootDirectory);
 

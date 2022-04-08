@@ -1,5 +1,5 @@
-import { UserStatsService } from "../services/UserStatsService";
-import { ActionParams } from "../utilities/helpers";
+import { UserStatsService } from '../services/UserStatsService';
+import { ActionParams } from '../utilities/helpers';
 
 export class UserStatsController {
 
@@ -14,7 +14,7 @@ export class UserStatsController {
 
         const userId = params
             .getQuery<{ userId: number }>()
-            .getValue(x => x.userId, "int");
+            .getValue(x => x.userId, 'int');
 
         return await this._userStatsService
             .getUserStatsAsync(userId);

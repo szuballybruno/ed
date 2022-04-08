@@ -1,7 +1,7 @@
-import { UserStatsDTO } from "../shared/dtos/UserStatsDTO";
-import { UserStatsView } from "../models/views/UserStatsView";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
+import { UserStatsView } from '../models/views/UserStatsView';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class UserStatsService {
 
@@ -18,7 +18,7 @@ export class UserStatsService {
 
         const stats = await this._connection
             .getRepository(UserStatsView)
-            .createQueryBuilder("usv")
+            .createQueryBuilder('usv')
             .where('"usv"."user_id" = :userId', { userId })
             .getOneOrFail();
 

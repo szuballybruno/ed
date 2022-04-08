@@ -1,14 +1,14 @@
-import { JobTitle } from "../models/entity/JobTitle";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { MapperService } from "../services/MapperService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { MiscService } from "../services/MiscService";
-import { PractiseQuestionService } from "../services/PractiseQuestionService";
-import { ORMConnectionService } from "../services/sqlServices/ORMConnectionService";
-import { TokenService } from "../services/TokenService";
-import { UserCourseBridgeService } from "../services/UserCourseBridgeService";
-import { UserDTO } from "../shared/dtos/UserDTO";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { JobTitle } from '../models/entity/JobTitle';
+import { AuthenticationService } from '../services/AuthenticationService';
+import { MapperService } from '../services/MapperService';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { MiscService } from '../services/MiscService';
+import { PractiseQuestionService } from '../services/PractiseQuestionService';
+import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
+import { TokenService } from '../services/TokenService';
+import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
+import { UserDTO } from '../shared/dtos/UserDTO';
+import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class MiscController {
 

@@ -1,8 +1,8 @@
-type LogEntryType = "error" | "info" | "warning" | "strong";
+type LogEntryType = 'error' | 'info' | 'warning' | 'strong';
 
-export const logWarning = (content: any) => log(content, "warning");
+export const logWarning = (content: any) => log(content, 'warning');
 
-export const logError = (content: any) => log(content, "error");
+export const logError = (content: any) => log(content, 'error');
 
 export const log = (content: any, entryType?: LogEntryType) => {
 
@@ -12,24 +12,24 @@ export const log = (content: any, entryType?: LogEntryType) => {
     const dateTimeString = dateTime.toLocaleString('en-US', options);
 
     if (!entryType)
-        entryType = "info";
+        entryType = 'info';
 
-    if (entryType === "warning")
+    if (entryType === 'warning')
         console.warn(content);
 
-    if (entryType === "error")
+    if (entryType === 'error')
         console.error(content);
 
-    if (entryType === "info")
+    if (entryType === 'info')
         console.log(`[${dateTimeString}.${miliseconds}] ${content}`);
 
-    if (entryType === "strong") {
+    if (entryType === 'strong') {
 
         console.log(`[${dateTimeString}.${miliseconds}] ------------> ${content}`);
     }
-}
+};
 
 export const logObject = (obj: any) => {
 
     console.log(obj);
-}
+};

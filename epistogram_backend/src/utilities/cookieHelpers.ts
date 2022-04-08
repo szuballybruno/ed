@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
-import { Response } from "express";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
+import dayjs from 'dayjs';
+import { Response } from 'express';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 
 export const setAuthCookies = (config: GlobalConfiguration, res: Response, accessToken: string, refreshToken: string) => {
 
@@ -9,23 +9,27 @@ export const setAuthCookies = (config: GlobalConfiguration, res: Response, acces
         res.cookie(config.misc.accessTokenCookieName, accessToken, {
             secure: true,
             httpOnly: true,
-            expires: dayjs().add(config.security.tokenLifespans.accessTokenLifespanInS, "seconds").toDate(),
-            sameSite: "none"
+            expires: dayjs()
+.add(config.security.tokenLifespans.accessTokenLifespanInS, 'seconds')
+.toDate(),
+            sameSite: 'none'
             // domain: isLocalhost ? undefined : frontendUrl
         });
-    }
+    };
 
     const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
 
         res.cookie(config.misc.refreshTokenCookieName, refreshToken, {
             secure: true,
             httpOnly: true,
-            expires: dayjs().add(config.security.tokenLifespans.refreshTokenLifespanInS, "seconds").toDate(),
-            sameSite: "none"
+            expires: dayjs()
+.add(config.security.tokenLifespans.refreshTokenLifespanInS, 'seconds')
+.toDate(),
+            sameSite: 'none'
             // domain: isLocalhost ? undefined : frontendUrl
         });
-    }
+    };
 
     setAccessTokenCookie(res, accessToken);
     setRefreshTokenCookie(res, refreshToken);
-}
+};

@@ -1,6 +1,6 @@
-import { VideoRatingDTO } from "../shared/dtos/VideoRatingDTO";
-import { VideoRatingService } from "../services/VideoRatingService";
-import { ActionParams } from "../utilities/helpers";
+import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
+import { VideoRatingService } from '../services/VideoRatingService';
+import { ActionParams } from '../utilities/helpers';
 
 export class VideoRatingController {
 
@@ -35,7 +35,7 @@ export class VideoRatingController {
 
         const videoId = params
             .getQuery<{ videoId: number }>()
-            .getValue(x => x.videoId, "int");
+            .getValue(x => x.videoId, 'int');
 
         return await this._videoRatingService
             .getVideoRatingAsync(params.currentUserId, videoId);

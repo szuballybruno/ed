@@ -1,5 +1,5 @@
-import { CourseItemDTO } from "./CourseItemDTO";
-import { CourseItemStateType } from "../types/sharedTypes";
+import { CourseItemDTO } from './CourseItemDTO';
+import { CourseItemStateType } from '../types/sharedTypes';
 
 export class ModuleDTO {
     id: number;

@@ -1,18 +1,18 @@
-import { UploadedFile } from "express-fileupload";
-import { Course } from "../models/entity/Course";
-import { CourseModule } from "../models/entity/CourseModule";
-import { Exam } from "../models/entity/Exam";
-import { Video } from "../models/entity/Video";
-import { AdminModuleShortDTO } from "../shared/dtos/AdminModuleShortDTO";
-import { ModuleAdminEditDTO } from "../shared/dtos/ModuleAdminEditDTO";
-import { ModuleCreateDTO } from "../shared/dtos/ModuleCreateDTO";
-import { ModuleDetailedDTO } from "../shared/dtos/ModuleDetailedDTO";
-import { ModuleListEditDataDTO } from "../shared/dtos/ModuleListEditDataDTO";
-import { ExamService } from "./ExamService";
-import { FileService } from "./FileService";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { VideoService } from "./VideoService";
+import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/Course';
+import { CourseModule } from '../models/entity/CourseModule';
+import { Exam } from '../models/entity/Exam';
+import { Video } from '../models/entity/Video';
+import { AdminModuleShortDTO } from '../shared/dtos/AdminModuleShortDTO';
+import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
+import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
+import { ModuleDetailedDTO } from '../shared/dtos/ModuleDetailedDTO';
+import { ModuleListEditDataDTO } from '../shared/dtos/ModuleListEditDataDTO';
+import { ExamService } from './ExamService';
+import { FileService } from './FileService';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { VideoService } from './VideoService';
 
 export class ModuleService {
 
@@ -47,9 +47,9 @@ export class ModuleService {
 
         const module = await this._ormService
             .getRepository(CourseModule)
-            .createQueryBuilder("mo")
-            .where("mo.id = :moduleId", { moduleId })
-            .leftJoinAndSelect("mo.imageFile", "if")
+            .createQueryBuilder('mo')
+            .where('mo.id = :moduleId', { moduleId })
+            .leftJoinAndSelect('mo.imageFile', 'if')
             .getOneOrFail();
 
         return this._mapperService
@@ -61,7 +61,7 @@ export class ModuleService {
         // delete videos 
         const videos = await this._ormService
             .getRepository(Video)
-            .createQueryBuilder("v")
+            .createQueryBuilder('v')
             .where('"v"."module_id" IN (:...moduleIds)', { moduleIds })
             .getMany();
 
@@ -70,7 +70,7 @@ export class ModuleService {
         // delete exams 
         const exams = await this._ormService
             .getRepository(Exam)
-            .createQueryBuilder("e")
+            .createQueryBuilder('e')
             .where('"e"."module_id" IN (:...moduleIds)', { moduleIds })
             .getMany();
 
@@ -91,7 +91,7 @@ export class ModuleService {
                 courseId: dto.courseId,
                 name: dto.name,
                 orderIndex: dto.orderIndex,
-                description: ""
+                description: ''
             });
     }
 
@@ -99,9 +99,9 @@ export class ModuleService {
 
         const module = await this._ormService
             .getRepository(CourseModule)
-            .createQueryBuilder("mo")
-            .where("mo.id = :moduleId", { moduleId })
-            .leftJoinAndSelect("mo.imageFile", "if")
+            .createQueryBuilder('mo')
+            .where('mo.id = :moduleId', { moduleId })
+            .leftJoinAndSelect('mo.imageFile', 'if')
             .getOneOrFail();
 
         return this._mapperService
@@ -124,7 +124,7 @@ export class ModuleService {
         if (file) {
 
             const getModuleAsync = () => this._ormService
-                .getSingleById(CourseModule, moduleId)
+                .getSingleById(CourseModule, moduleId);
 
             const setModuleThumbnailIdAsync = (fileId: number) => this._ormService
                 .getRepository(CourseModule)
@@ -135,7 +135,7 @@ export class ModuleService {
 
             await this._fileService
                 .uploadAssigendFileAsync<CourseModule>(
-                    this._fileService.getFilePath("module_images", "module_image", dto.id, "jpg"),
+                    this._fileService.getFilePath('module_images', 'module_image', dto.id, 'jpg'),
                     getModuleAsync,
                     setModuleThumbnailIdAsync,
                     module => module.imageFileId,
@@ -148,12 +148,12 @@ export class ModuleService {
         const modules = await this._ormService
             .getMany(CourseModule,
                 [
-                    ["WHERE", "courseId", "=", "courseId"]
+                    ['WHERE', 'courseId', '=', 'courseId']
                 ],
                 { courseId });
 
         const course = await this._ormService
-            .getSingleById(Course, courseId)
+            .getSingleById(Course, courseId);
 
         const moduleDTOs = this._mapperService
             .mapMany(CourseModule, AdminModuleShortDTO, modules);
@@ -161,6 +161,6 @@ export class ModuleService {
         return {
             courseName: course.title,
             modules: moduleDTOs
-        } as ModuleListEditDataDTO
+        } as ModuleListEditDataDTO;
     };
 }

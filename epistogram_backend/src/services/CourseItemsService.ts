@@ -1,7 +1,7 @@
-import { Course } from "../models/entity/Course";
-import { CourseItemListDTO } from "../shared/dtos/CourseItemListDTO";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { Course } from '../models/entity/Course';
+import { CourseItemListDTO } from '../shared/dtos/CourseItemListDTO';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class CourseItemsService {
 
@@ -18,10 +18,10 @@ export class CourseItemsService {
 
         const course = await this._ormService
             .getRepository(Course)
-            .createQueryBuilder("c")
-            .leftJoinAndSelect("c.videos", "v")
-            .leftJoinAndSelect("c.exams", "e")
-            .where("c.id = :courseId", { courseId })
+            .createQueryBuilder('c')
+            .leftJoinAndSelect('c.videos', 'v')
+            .leftJoinAndSelect('c.exams', 'e')
+            .where('c.id = :courseId', { courseId })
             .getOneOrFail();
 
         return this._mapperService

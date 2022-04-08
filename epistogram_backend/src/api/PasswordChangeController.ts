@@ -1,6 +1,6 @@
-import { ChangePasswordDTO } from "../shared/dtos/SetNewPasswordDTO";
-import { PasswordChangeService } from "../services/PasswordChangeService";
-import { ActionParams } from "../utilities/helpers";
+import { ChangePasswordDTO } from '../shared/dtos/SetNewPasswordDTO';
+import { PasswordChangeService } from '../services/PasswordChangeService';
+import { ActionParams } from '../utilities/helpers';
 
 export class PasswordChangeController {
 

@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Activity } from "./Activity";
-import { Role as Role } from "./Role";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Activity } from './Activity';
+import { Role as Role } from './Role';
 
 @Entity()
 export class RoleActivityBridge {
@@ -13,7 +13,7 @@ export class RoleActivityBridge {
     roleId: number;
 
     @ManyToOne(_ => Role, x => x.roleActivityBridges)
-    @JoinColumn({ name: "role_id" })
+    @JoinColumn({ name: 'role_id' })
     role: Role;
 
     // activity
@@ -21,6 +21,6 @@ export class RoleActivityBridge {
     activityId: number;
 
     @ManyToOne(_ => Activity, x => x.roleActivityBridges)
-    @JoinColumn({ name: "activity_id" })
+    @JoinColumn({ name: 'activity_id' })
     activity: Activity;
 }

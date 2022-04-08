@@ -1,4 +1,4 @@
-import { PrequizAnswerDTO } from "./PrequizAnswerDTO";
+import { PrequizAnswerDTO } from './PrequizAnswerDTO';
 
 export class PrequizQuestionDTO {
     id: number;

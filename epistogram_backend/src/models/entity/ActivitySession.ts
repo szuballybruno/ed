@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ActivityStreak } from "./ActivityStreak";
-import { CoinTransaction } from "./CoinTransaction";
-import { User } from "./User";
-import { UserSessionActivity } from "./UserSessionActivity";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ActivityStreak } from './ActivityStreak';
+import { CoinTransaction } from './CoinTransaction';
+import { User } from './User';
+import { UserSessionActivity } from './UserSessionActivity';
 
 @Entity()
 export class ActivitySession {
@@ -10,10 +10,10 @@ export class ActivitySession {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "timestamptz" })
+    @Column({ type: 'timestamptz' })
     startDate: Date;
 
-    @Column({ type: "timestamptz" })
+    @Column({ type: 'timestamptz' })
     endDate: Date;
 
     @Column()
@@ -27,14 +27,14 @@ export class ActivitySession {
     userId: number;
 
     @ManyToOne(_ => User, x => x.activitySessions)
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 
     // activity streak
-    @Column({ nullable: true, type: "integer" })
+    @Column({ nullable: true, type: 'integer' })
     activityStreakId: number;
 
-    @JoinColumn({ name: "activity_streak_id" })
+    @JoinColumn({ name: 'activity_streak_id' })
     @ManyToOne(_ => ActivityStreak, x => x.activitySessions)
     activityStreak: ActivityStreak | null;
 

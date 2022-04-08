@@ -1,6 +1,6 @@
-import { SessionActivityType } from "../shared/types/sharedTypes";
-import { CoinAcquireService } from "./CoinAcquireService";
-import { SQLFunctionsService } from "./sqlServices/FunctionsService";
+import { SessionActivityType } from '../shared/types/sharedTypes';
+import { CoinAcquireService } from './CoinAcquireService';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class UserSessionActivityService {
 

@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { DailyTipOccurrence } from "./DailyTipOccurrence";
-import { PersonalityTraitCategory } from "./PersonalityTraitCategory";
-import { StorageFile } from "./StorageFile";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DailyTipOccurrence } from './DailyTipOccurrence';
+import { PersonalityTraitCategory } from './PersonalityTraitCategory';
+import { StorageFile } from './StorageFile';
 
 @Entity()
 export class DailyTip {
@@ -19,11 +19,11 @@ export class DailyTip {
     isMax: boolean;
 
     // video file
-    @Column({ nullable: true, type: "int" })
+    @Column({ nullable: true, type: 'int' })
     videoFileId: number | null;
 
     @OneToOne(_ => StorageFile)
-    @JoinColumn({ name: "video_file_id" })
+    @JoinColumn({ name: 'video_file_id' })
     videoFile: StorageFile | null;
 
     // occurrances
@@ -36,6 +36,6 @@ export class DailyTip {
     personalityTraitCategoryId: number;
 
     @OneToMany(_ => PersonalityTraitCategory, x => x.tips)
-    @JoinColumn({ name: "personality_trait_category_id" })
+    @JoinColumn({ name: 'personality_trait_category_id' })
     personalityTraitCategory: PersonalityTraitCategory;
 }

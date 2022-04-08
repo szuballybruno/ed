@@ -1,9 +1,9 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { AnswerGivenAnswerBridge } from "./AnswerGivenAnswerBridge";
-import { AnswerSession } from "./AnswerSession";
-import { CoinTransaction } from "./CoinTransaction";
-import { GivenAnswerStreak } from "./GivenAnswerStreak";
-import { Question } from "./Question";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
+import { AnswerSession } from './AnswerSession';
+import { CoinTransaction } from './CoinTransaction';
+import { GivenAnswerStreak } from './GivenAnswerStreak';
+import { Question } from './Question';
 
 @Entity()
 export class GivenAnswer {
@@ -14,13 +14,13 @@ export class GivenAnswer {
     @DeleteDateColumn()
     deletionDate: Date;
     
-    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
+    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
 
     @Column()
     isCorrect: boolean;
 
-    @Column({ type: "double precision" })
+    @Column({ type: 'double precision' })
     elapsedSeconds: number;
 
     @Column({ default: false })
@@ -31,7 +31,7 @@ export class GivenAnswer {
     questionId: number;
 
     @ManyToOne(_ => Question, x => x.givenAnswers)
-    @JoinColumn({ name: "question_id" })
+    @JoinColumn({ name: 'question_id' })
     question: Question;
 
     // answer session
@@ -39,7 +39,7 @@ export class GivenAnswer {
     answerSessionId: number;
 
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
-    @JoinColumn({ name: "answer_session_id" })
+    @JoinColumn({ name: 'answer_session_id' })
     answerSession: AnswerSession;
 
     // answer bridges
@@ -48,10 +48,10 @@ export class GivenAnswer {
     answerBridges: AnswerGivenAnswerBridge[];
 
     // givenAnswerStreakBridges
-    @Column({ nullable: true, type: "integer" })
+    @Column({ nullable: true, type: 'integer' })
     givenAnswerStreakId: number | null;
 
-    @JoinColumn({ name: "given_answer_streak_id" })
+    @JoinColumn({ name: 'given_answer_streak_id' })
     @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
     givenAnswerStreak: GivenAnswerStreak;
 

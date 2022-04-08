@@ -1,5 +1,5 @@
-import { CoinTransactionService } from "../services/CoinTransactionService";
-import { ActionParams } from "../utilities/helpers";
+import { CoinTransactionService } from '../services/CoinTransactionService';
+import { ActionParams } from '../utilities/helpers';
 
 export class CoinTransactionsController {
 
@@ -26,7 +26,7 @@ export class CoinTransactionsController {
 
         const userId = params
             .getQuery<any>()
-            .getValue(x => x.userId, "int");
+            .getValue(x => x.userId, 'int');
 
         return this._coinTransactionService
             .getCoinBalance(userId);
@@ -38,10 +38,10 @@ export class CoinTransactionsController {
             .getBody<{ userId: number, amount: number }>();
 
         const userId = dto
-            .getValue(x => x.userId, "int");
+            .getValue(x => x.userId, 'int');
 
         const amount = dto
-            .getValue(x => x.amount, "int");
+            .getValue(x => x.amount, 'int');
 
         return await this._coinTransactionService
             .giftCoinsToUserAsync(userId, amount);

@@ -1,5 +1,5 @@
-import { JobTitleDTO } from "./JobTitleDTO";
-import { UserActivityDTO } from "./UserActivityDTO";
+import { JobTitleDTO } from './JobTitleDTO';
+import { UserActivityDTO } from './UserActivityDTO';
 
 export class UserDTO {
     id: number;

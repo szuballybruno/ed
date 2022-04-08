@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Course } from "../Course";
-import { CourseRatingQuestion } from "./CourseRatingQuestion";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from '../Course';
+import { CourseRatingQuestion } from './CourseRatingQuestion';
 
 @Entity()
 export class CourseRatingGroup {

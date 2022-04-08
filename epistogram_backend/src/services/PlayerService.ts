@@ -1,19 +1,19 @@
-import { Video } from "../models/entity/Video";
-import { ModuleDTO } from "../shared/dtos/ModuleDTO";
-import { PlayerDataDTO } from "../shared/dtos/PlayerDataDTO";
-import { VideoDTO } from "../shared/dtos/VideoDTO";
-import { CourseItemStateType } from "../shared/types/sharedTypes";
-import { CourseService } from "./CourseService";
-import { ExamService } from "./ExamService";
-import { MapperService } from "./MapperService";
-import { readItemCode } from "./misc/encodeService";
-import { ServiceBase } from "./misc/ServiceBase";
-import { ModuleService } from "./ModuleService";
-import { PlaybackService } from "./PlaybackService";
-import { QuestionAnswerService } from "./QuestionAnswerService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { VideoService } from "./VideoService";
+import { Video } from '../models/entity/Video';
+import { ModuleDTO } from '../shared/dtos/ModuleDTO';
+import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
+import { VideoDTO } from '../shared/dtos/VideoDTO';
+import { CourseItemStateType } from '../shared/types/sharedTypes';
+import { CourseService } from './CourseService';
+import { ExamService } from './ExamService';
+import { MapperService } from './MapperService';
+import { readItemCode } from './misc/encodeService';
+import { ServiceBase } from './misc/ServiceBase';
+import { ModuleService } from './ModuleService';
+import { PlaybackService } from './PlaybackService';
+import { QuestionAnswerService } from './QuestionAnswerService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { VideoService } from './VideoService';
 
 export class PlayerService extends ServiceBase {
 
@@ -60,7 +60,7 @@ export class PlayerService extends ServiceBase {
 
         // set current course 
         await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseId, "watch", validItemCode);
+            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
         // course items 
         const modules = await this._courseService
@@ -68,16 +68,16 @@ export class PlayerService extends ServiceBase {
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
-        const videoDTO = itemType === "video" ? await this.getVideoDTOAsync(userId, itemId) : null;
-        const examDTO = itemType === "exam" ? await this._examService.getExamPlayerDTOAsync(userId, itemId) : null;
-        const moduleDetailedDTO = itemType === "module" ? await this._moduleService.getModuleDetailedDTOAsync(itemId) : null;
+        const videoDTO = itemType === 'video' ? await this.getVideoDTOAsync(userId, itemId) : null;
+        const examDTO = itemType === 'exam' ? await this._examService.getExamPlayerDTOAsync(userId, itemId) : null;
+        const moduleDetailedDTO = itemType === 'module' ? await this._moduleService.getModuleDetailedDTOAsync(itemId) : null;
 
         // get user course bridge
         const userCourseBridge = await this._userCourseBridgeService
             .getUserCourseBridgeOrFailAsync(userId, courseId);
 
         // get new answer session
-        const answerSessionId = itemType === "module"
+        const answerSessionId = itemType === 'module'
             ? null
             : await this._questionAnswerService
                 .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
@@ -125,12 +125,12 @@ export class PlayerService extends ServiceBase {
         const targetItem = courseItemsFlat
             .single(x => x.code === targetItemCode);
 
-        if (targetItem.state !== "locked")
+        if (targetItem.state !== 'locked')
             return targetItem.code;
 
         // target item is locked, fallback...
         const firstLockedIndex = courseItemsFlat
-            .findIndex(x => x.state === "locked");
+            .findIndex(x => x.state === 'locked');
 
         const prevIndex = firstLockedIndex - 1;
 

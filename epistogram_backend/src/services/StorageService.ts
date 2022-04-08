@@ -1,7 +1,7 @@
-import { Storage } from "@google-cloud/storage";
-import { UploadedFile } from "express-fileupload";
-import { GlobalConfiguration } from "./misc/GlobalConfiguration";
-import { logError } from "./misc/logger";
+import { Storage } from '@google-cloud/storage';
+import { UploadedFile } from 'express-fileupload';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import { logError } from './misc/logger';
 
 export class StorageService {
 
@@ -22,7 +22,7 @@ export class StorageService {
     uploadBufferToStorageAsync = (buffer: Buffer, path: string) => new Promise<void>((resolve, reject) => {
 
         const bucket = this.getBucket();
-        const blob = bucket.file(path.replace(/ /g, "_"));
+        const blob = bucket.file(path.replace(/ /g, '_'));
 
         const blobStream = blob
             .createWriteStream({
@@ -46,7 +46,8 @@ export class StorageService {
         try {
 
             const bucket = this.getBucket();
-            await bucket.file(filePath).delete();
+            await bucket.file(filePath)
+.delete();
         }
         catch (e) {
 

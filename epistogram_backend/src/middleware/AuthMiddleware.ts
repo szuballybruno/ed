@@ -1,14 +1,14 @@
-import { Request, Response } from "express";
-import { UserActivityFlatView } from "../models/views/UserActivityFlatView";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { LoggerService } from "../services/LoggerService";
-import { GlobalConfiguration } from "../services/misc/GlobalConfiguration";
-import { UserService } from "../services/UserService";
-import { apiRoutes } from "../shared/types/apiRoutes";
-import { RoleIdEnum, RoleType } from "../shared/types/sharedTypes";
-import { EndpointOptionsType } from "../utilities/apiHelpers";
-import { ActionParams, ErrorCode, getAuthTokenFromRequest } from "../utilities/helpers";
-import { ITurboMiddleware } from "../utilities/TurboExpress";
+import { Request, Response } from 'express';
+import { UserActivityFlatView } from '../models/views/UserActivityFlatView';
+import { AuthenticationService } from '../services/AuthenticationService';
+import { LoggerService } from '../services/LoggerService';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { UserService } from '../services/UserService';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { RoleIdEnum, RoleType } from '../shared/types/sharedTypes';
+import { EndpointOptionsType } from '../utilities/apiHelpers';
+import { ActionParams, ErrorCode, getAuthTokenFromRequest } from '../utilities/helpers';
+import { ITurboMiddleware } from '../utilities/TurboExpress';
 
 export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOptionsType> {
 
@@ -87,7 +87,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
             .some(x => x === currentRoutePath);
 
         if (!isCurrentRouteAccessable)
-            throw new ErrorCode("User has not proper rights to access the requested resource.", "forbidden");
+            throw new ErrorCode('User has not proper rights to access the requested resource.', 'forbidden');
     }
 
     private authorizeUserAsync = async (role: RoleType, authorize: RoleType[] | undefined) => {
@@ -102,6 +102,6 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
             .some(allowedRoleType => allowedRoleType === userRoleType);
 
         if (!isAuthorized)
-            throw new Error("Unauthorized.");
+            throw new Error('Unauthorized.');
     }
 }

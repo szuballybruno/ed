@@ -1,15 +1,15 @@
-import { UserActiveCourseView } from "../models/views/UserActiveCourseView";
-import { UserCourseCompletionCurrentView } from "../models/views/UserCourseCompletionCurrentView";
-import { UserCourseProgressView } from "../models/views/UserCourseProgressView";
-import { UserCourseRecommendedItemQuotaView } from "../models/views/UserCourseRecommendedItemQuotaView";
-import { UserDailyCourseItemProgressView } from "../models/views/UserDailyCourseItemProgressView";
-import { UserWeeklyCourseItemProgressView } from "../models/views/UserWeeklyCourseItemProgressView";
-import { RecomendedItemQuotaDTO } from "../shared/dtos/RecomendedItemQuotaDTO";
-import { UserActiveCourseDTO } from "../shared/dtos/UserActiveCourseDTO";
-import { UserCourseProgressChartDTO } from "../shared/dtos/UserCourseProgressChartDTO";
-import { MapperService } from "./MapperService";
-import { ServiceBase } from "./misc/ServiceBase";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
+import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
+import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
+import { UserCourseRecommendedItemQuotaView } from '../models/views/UserCourseRecommendedItemQuotaView';
+import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
+import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
+import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';
+import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
+import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
+import { MapperService } from './MapperService';
+import { ServiceBase } from './misc/ServiceBase';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class UserProgressService extends ServiceBase {
 
@@ -22,8 +22,8 @@ export class UserProgressService extends ServiceBase {
 
         const views = await this._ormService
             .getRepository(UserActiveCourseView)
-            .createQueryBuilder("uacv")
-            .where("uacv.userId = :userId", { userId })
+            .createQueryBuilder('uacv')
+            .where('uacv.userId = :userId', { userId })
             .getMany();
 
         return this._mapperService
@@ -43,18 +43,18 @@ export class UserProgressService extends ServiceBase {
 
         const currentDailyCompletedView = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
-            .createQueryBuilder("udcipv")
-            .where("udcipv.userId = :userId", { userId })
-            .andWhere("udcipv.courseId = :courseId", { courseId })
-            .andWhere("udcipv.isCurrent = true", { courseId })
+            .createQueryBuilder('udcipv')
+            .where('udcipv.userId = :userId', { userId })
+            .andWhere('udcipv.courseId = :courseId', { courseId })
+            .andWhere('udcipv.isCurrent = true', { courseId })
             .getOne();
 
         const getCurrentWeeklyCompletedView = await this._ormService
             .getRepository(UserWeeklyCourseItemProgressView)
-            .createQueryBuilder("udcipv")
-            .where("udcipv.userId = :userId", { userId })
-            .andWhere("udcipv.courseId = :courseId", { courseId })
-            .andWhere("udcipv.isCurrent = true", { courseId })
+            .createQueryBuilder('udcipv')
+            .where('udcipv.userId = :userId', { userId })
+            .andWhere('udcipv.courseId = :courseId', { courseId })
+            .andWhere('udcipv.isCurrent = true', { courseId })
             .getOne();
 
         return {
@@ -79,9 +79,9 @@ export class UserProgressService extends ServiceBase {
 
         const dailyViews = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
-            .createQueryBuilder("udcipv")
-            .where("udcipv.courseId = :courseId", { courseId })
-            .andWhere("udcipv.userId = :userId", { userId })
+            .createQueryBuilder('udcipv')
+            .where('udcipv.courseId = :courseId', { courseId })
+            .andWhere('udcipv.userId = :userId', { userId })
             .getMany();
 
         const dto = {
@@ -102,7 +102,7 @@ export class UserProgressService extends ServiceBase {
                         completionDate: x.completionDate,
                         offsetDaysFromStart: x.offsetDaysFromStart,
                         completedPercentageSum
-                    }
+                    };
                 })
         } as UserCourseProgressChartDTO;
 

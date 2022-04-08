@@ -1,49 +1,49 @@
-import { UploadedFile } from "express-fileupload";
-import { Course } from "../models/entity/Course";
-import { CourseCategory } from "../models/entity/CourseCategory";
-import { CourseModule } from "../models/entity/CourseModule";
-import { Exam } from "../models/entity/Exam";
-import { User } from "../models/entity/User";
-import { UserCourseAccessBridge } from "../models/entity/UserCourseAccessBridge";
-import { Video } from "../models/entity/Video";
-import { CourseAdminContentView } from "../models/views/CourseAdminContentView";
-import { CourseAdminDetailedView } from "../models/views/CourseAdminDetailedView";
-import { CourseAdminShortView } from "../models/views/CourseAdminShortView";
-import { CourseDetailsView } from "../models/views/CourseDetailsView";
-import { CourseItemStateView } from "../models/views/CourseItemStateView";
-import { CourseLearningStatsView } from "../models/views/CourseLearningStatsView";
-import { CourseModuleOverviewView } from "../models/views/CourseModuleOverviewView";
-import { CourseProgressView } from "../models/views/CourseProgressView";
-import { CourseView } from "../models/views/CourseView";
-import { CourseAdminListItemDTO } from "../shared/dtos/admin/CourseAdminListItemDTO";
-import { CourseContentAdminDTO } from "../shared/dtos/admin/CourseContentAdminDTO";
-import { CourseContentItemAdminDTO } from "../shared/dtos/admin/CourseContentItemAdminDTO";
-import { CourseModuleShortDTO } from "../shared/dtos/admin/CourseModuleShortDTO";
-import { CourseBriefData } from "../shared/dtos/CourseBriefData";
-import { CourseContentEditDataDTO } from "../shared/dtos/CourseContentEditDataDTO";
-import { CourseDetailsDTO } from "../shared/dtos/CourseDetailsDTO";
-import { CourseDetailsEditDataDTO } from "../shared/dtos/CourseDetailsEditDataDTO";
-import { CourseItemDTO } from "../shared/dtos/CourseItemDTO";
-import { CourseLearningDTO } from "../shared/dtos/CourseLearningDTO";
-import { CourseProgressDTO } from "../shared/dtos/CourseProgressDTO";
-import { CourseProgressShortDTO } from "../shared/dtos/CourseProgressShortDTO";
-import { CourseShortDTO } from "../shared/dtos/CourseShortDTO";
-import { CreateCourseDTO } from "../shared/dtos/CreateCourseDTO";
-import { ModuleDTO } from "../shared/dtos/ModuleDTO";
-import { FieldMutation } from "../shared/dtos/mutations/FieldMutation";
-import { Mutation } from "../shared/dtos/mutations/Mutation";
-import { UserCoursesDataDTO } from "../shared/dtos/UserCoursesDataDTO";
-import { CourseItemType } from "../shared/types/sharedTypes";
-import { ExamService } from "./ExamService";
-import { FileService } from "./FileService";
-import { MapperService } from "./MapperService";
-import { readItemCode } from "./misc/encodeService";
-import { createCharSeparatedList } from "./misc/mappings";
-import { ModuleService } from "./ModuleService";
-import { PretestService } from "./PretestService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { UserCourseBridgeService } from "./UserCourseBridgeService";
-import { VideoService } from "./VideoService";
+import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/Course';
+import { CourseCategory } from '../models/entity/CourseCategory';
+import { CourseModule } from '../models/entity/CourseModule';
+import { Exam } from '../models/entity/Exam';
+import { User } from '../models/entity/User';
+import { UserCourseAccessBridge } from '../models/entity/UserCourseAccessBridge';
+import { Video } from '../models/entity/Video';
+import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
+import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
+import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
+import { CourseDetailsView } from '../models/views/CourseDetailsView';
+import { CourseItemStateView } from '../models/views/CourseItemStateView';
+import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
+import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
+import { CourseProgressView } from '../models/views/CourseProgressView';
+import { CourseView } from '../models/views/CourseView';
+import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
+import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
+import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
+import { CourseModuleShortDTO } from '../shared/dtos/admin/CourseModuleShortDTO';
+import { CourseBriefData } from '../shared/dtos/CourseBriefData';
+import { CourseContentEditDataDTO } from '../shared/dtos/CourseContentEditDataDTO';
+import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
+import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
+import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
+import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
+import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
+import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
+import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
+import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
+import { ModuleDTO } from '../shared/dtos/ModuleDTO';
+import { FieldMutation } from '../shared/dtos/mutations/FieldMutation';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
+import { CourseItemType } from '../shared/types/sharedTypes';
+import { ExamService } from './ExamService';
+import { FileService } from './FileService';
+import { MapperService } from './MapperService';
+import { readItemCode } from './misc/encodeService';
+import { createCharSeparatedList } from './misc/mappings';
+import { ModuleService } from './ModuleService';
+import { PretestService } from './PretestService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { VideoService } from './VideoService';
 
 export class CourseService {
 
@@ -86,8 +86,8 @@ export class CourseService {
 
         const views = await this._ormService
             .getRepository(CourseProgressView)
-            .createQueryBuilder("cpv")
-            .where("cpv.userId = :userId", { userId })
+            .createQueryBuilder('cpv')
+            .where('cpv.userId = :userId', { userId })
             .getMany();
 
         return this._mapperService
@@ -140,15 +140,15 @@ export class CourseService {
 
         const courseDetailsView = await this._ormService
             .getRepository(CourseDetailsView)
-            .createQueryBuilder("cdv")
-            .where("cdv.courseId = :courseId", { courseId })
-            .andWhere("cdv.userId = :userId", { userId })
+            .createQueryBuilder('cdv')
+            .where('cdv.courseId = :courseId', { courseId })
+            .andWhere('cdv.userId = :userId', { userId })
             .getOneOrFail();
 
         const moduleViews = await this._ormService
             .getRepository(CourseModuleOverviewView)
-            .createQueryBuilder("v")
-            .where("v.courseId = :courseId", { courseId })
+            .createQueryBuilder('v')
+            .where('v.courseId = :courseId', { courseId })
             .getMany();
 
         return this._mapperService
@@ -169,16 +169,16 @@ export class CourseService {
             subCategoryId: 1,
             difficulty: 0,
             benchmark: 0,
-            description: "",
-            shortDescription: "",
-            language: "magyar",
+            description: '',
+            shortDescription: '',
+            language: 'magyar',
             previouslyCompletedCount: 0,
-            visibility: "private",
-            technicalRequirements: "",
-            humanSkillBenefits: "",
-            humanSkillBenefitsDescription: "",
-            requirementsDescription: "",
-            skillBenefits: ""
+            visibility: 'private',
+            technicalRequirements: '',
+            humanSkillBenefits: '',
+            humanSkillBenefitsDescription: '',
+            requirementsDescription: '',
+            skillBenefits: ''
         } as Course;
 
         await this._ormService
@@ -199,8 +199,8 @@ export class CourseService {
 
         const courses = await this._ormService
             .getRepository(CourseLearningStatsView)
-            .createQueryBuilder("clsv")
-            .where("clsv.userId = :userId", { userId })
+            .createQueryBuilder('clsv')
+            .where('clsv.userId = :userId', { userId })
             .getMany();
 
         // in progress courses 
@@ -276,14 +276,14 @@ export class CourseService {
         const modules = await this.getCourseModulesAsync(userId, courseId);
 
         const currentModule = modules
-            .firstOrNull(x => x.state === "current") ?? modules.first();
+            .firstOrNull(x => x.state === 'current') ?? modules.first();
 
         const nextOrCurrentModules = modules
             .filter(x => x.orderIndex >= currentModule.orderIndex);
 
         const currentItemOrderIndex = currentModule
             .items
-            .filter(x => x.state === "current")[0]?.orderIndex ?? -1;
+            .filter(x => x.state === 'current')[0]?.orderIndex ?? -1;
 
         const nextItems = nextOrCurrentModules
             .flatMap(module => module
@@ -315,7 +315,7 @@ export class CourseService {
 
         return this._fileService
             .uploadAssigendFileAsync<Course>(
-                this._fileService.getFilePath("courseCoverImages", "courseCoverImage", courseId, "jpg"),
+                this._fileService.getFilePath('courseCoverImages', 'courseCoverImage', courseId, 'jpg'),
                 getCourseAsync,
                 setCourseThumbnailIdAsync,
                 course => course.coverFileId,
@@ -332,7 +332,7 @@ export class CourseService {
             .getCurrentCourseId(userId);
 
         if (!courseId)
-            throw new Error("There's no current course!");
+            throw new Error('There\'s no current course!');
 
         return await this.getCourseModulesAsync(userId, courseId);
     }
@@ -348,9 +348,9 @@ export class CourseService {
 
         const views = await this._ormService
             .getRepository(CourseItemStateView)
-            .createQueryBuilder("cisv")
-            .where("cisv.courseId = :courseId", { courseId })
-            .andWhere("cisv.userId = :userId", { userId })
+            .createQueryBuilder('cisv')
+            .where('cisv.courseId = :courseId', { courseId })
+            .andWhere('cisv.userId = :userId', { userId })
             .getMany();
 
         const modules = views
@@ -358,9 +358,9 @@ export class CourseService {
             .map(x => {
 
                 const viewAsModule = x.items.first();
-                const isLockedModule = x.items[0]?.state === "locked";
-                const isCompletedModule = x.items.all(x => x.state === "completed");
-                const isCurrentModule = x.items.some(x => x.state === "current") || viewAsModule.isModuleCurrent;
+                const isLockedModule = x.items[0]?.state === 'locked';
+                const isCompletedModule = x.items.all(x => x.state === 'completed');
+                const isCurrentModule = x.items.some(x => x.state === 'current') || viewAsModule.isModuleCurrent;
                 const items = this._mapperService
                     .mapMany(CourseItemStateView, CourseItemDTO, x.items);
 
@@ -371,12 +371,12 @@ export class CourseService {
                     code: viewAsModule.moduleCode,
                     items: items,
                     state: isCurrentModule
-                        ? "current"
+                        ? 'current'
                         : isLockedModule
-                            ? "locked"
+                            ? 'locked'
                             : isCompletedModule
-                                ? "completed"
-                                : "available"
+                                ? 'completed'
+                                : 'available'
                 } as ModuleDTO;
             });
 
@@ -393,10 +393,10 @@ export class CourseService {
 
         const { itemId, itemType } = readItemCode(descriptorCode);
 
-        if (itemType === "video")
+        if (itemType === 'video')
             return (await this._videoService.getVideoByIdAsync(itemId)).courseId;
 
-        if (itemType === "exam")
+        if (itemType === 'exam')
             return (await this._examService.getExamByIdAsync(itemId)).courseId;
 
         return (await this._ormService
@@ -414,22 +414,22 @@ export class CourseService {
         // get course 
         const view = await this._ormService
             .getRepository(CourseAdminDetailedView)
-            .createQueryBuilder("c")
-            .where("c.courseId = :courseId", { courseId: courseId })
+            .createQueryBuilder('c')
+            .where('c.courseId = :courseId', { courseId: courseId })
             .getOneOrFail();
 
         const categories = await this._ormService
             .getRepository(CourseCategory)
-            .createQueryBuilder("cc")
-            .leftJoinAndSelect("cc.childCategories", "ccc")
-            .where("cc.parentCategoryId IS NULL")
+            .createQueryBuilder('cc')
+            .leftJoinAndSelect('cc.childCategories', 'ccc')
+            .where('cc.parentCategoryId IS NULL')
             .getMany();
 
         const teachers = await this._ormService
             .getRepository(User)
-            .createQueryBuilder("u")
-            .leftJoinAndSelect("u.teacherInfo", "te")
-            .where("te IS NOT NULL")
+            .createQueryBuilder('u')
+            .leftJoinAndSelect('u.teacherInfo', 'te')
+            .where('te IS NOT NULL')
             .getMany();
 
         return this._mapperService
@@ -477,22 +477,22 @@ export class CourseService {
         const views = await this._ormService
             .getMany(CourseAdminContentView,
                 [
-                    ["WHERE", "courseId", "=", "courseId"],
-                    ["AND", "itemIsDeleted", "!=", "loadDeleted"]
+                    ['WHERE', 'courseId', '=', 'courseId'],
+                    ['AND', 'itemIsDeleted', '!=', 'loadDeleted']
                 ],
                 { courseId, loadDeleted });
 
         const modules = await this._ormService
             .getRepository(CourseModule)
-            .createQueryBuilder("mo")
-            .where("mo.courseId = :courseId", { courseId })
+            .createQueryBuilder('mo')
+            .where('mo.courseId = :courseId', { courseId })
             .getMany();
 
         const moduleDtos = modules
             .map(x => ({
                 id: x.id,
                 name: x.name
-            } as CourseModuleShortDTO))
+            } as CourseModuleShortDTO));
 
         const items = this._mapperService
             .mapMany(CourseAdminContentView, CourseContentItemAdminDTO, views);
@@ -509,7 +509,7 @@ export class CourseService {
     async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
 
         // update items 
-        // await this.saveUpdatedCourseItems(mutations);
+        await this.saveUpdatedCourseItems(mutations);
 
         // save new items 
         await this.saveNewCourseItems(mutations);
@@ -518,21 +518,26 @@ export class CourseService {
         await this.saveDeletedCourseItems(mutations);
     }
 
+    private async saveUpdatedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+
+        throw new Error('Not implemented');
+    }
+
     private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
 
         const itemCodes = mutations
-            .filter(x => x.action === "delete")
+            .filter(x => x.action === 'delete')
             .map(x => x.key)
             .map(x => readItemCode(x))
             .groupBy(x => x.itemType);
 
         const deletedExamIds = itemCodes
-            .filter(x => x.key === "exam")
+            .filter(x => x.key === 'exam')
             .flatMap(x => x.items)
             .map(x => x.itemId);
 
         const deletedVideoIds = itemCodes
-            .filter(x => x.key === "video")
+            .filter(x => x.key === 'video')
             .flatMap(x => x.items)
             .map(x => x.itemId);
 
@@ -552,10 +557,10 @@ export class CourseService {
 
             mut
                 .fieldMutators
-                .forEach(x => obj[x.field] = x.value)
+                .forEach(x => obj[x.field] = x.value);
 
             return obj;
-        }
+        };
 
         const checkMutationItemType = (
             mutation: Mutation<CourseContentItemAdminDTO, 'itemCode'>,
@@ -563,15 +568,15 @@ export class CourseService {
 
             return mutation
                 .fieldMutators
-                .some(fm => fm.field === "itemType" && fm.value === itemType);
-        }
+                .some(fm => fm.field === 'itemType' && fm.value === itemType);
+        };
 
         //
         // insert new videos
         //
         const newVideos = mutations
-            .filter(x => x.action === "add")
-            .filter(x => checkMutationItemType(x, "video"))
+            .filter(x => x.action === 'add')
+            .filter(x => checkMutationItemType(x, 'video'))
             .map((x): Partial<Video> => {
 
                 const mutObject = mutationToObj(x);
@@ -582,15 +587,15 @@ export class CourseService {
                     title: mutObject.itemTitle,
                     subtitle: mutObject.itemSubtitle,
                     orderIndex: mutObject.itemOrderIndex,
-                    description: "",
+                    description: '',
                     lengthSeconds: 0
-                }
+                };
             });
 
         // insert new videos
         const newExams = mutations
-            .filter(x => x.action === "add")
-            .filter(x => checkMutationItemType(x, "exam"))
+            .filter(x => x.action === 'add')
+            .filter(x => checkMutationItemType(x, 'exam'))
             .map((x): Partial<Exam> => {
 
                 const mutObject = mutationToObj(x);
@@ -601,9 +606,9 @@ export class CourseService {
                     title: mutObject.itemTitle,
                     subtitle: mutObject.itemSubtitle,
                     orderIndex: mutObject.itemOrderIndex,
-                    description: "",
-                    type: "normal"
-                }
+                    description: '',
+                    type: 'normal'
+                };
             });
 
         await this._examService
@@ -642,7 +647,7 @@ export class CourseService {
         // delete modules 
         const modules = await this._ormService
             .getRepository(CourseModule)
-            .createQueryBuilder("m")
+            .createQueryBuilder('m')
             .where('"m"."course_id" = :courseId', { courseId })
             .getMany();
 
@@ -666,9 +671,9 @@ export class CourseService {
 
         const courses = await this._ormService
             .getRepository(CourseView)
-            .createQueryBuilder("cv")
-            .where("cv.userId = :userId", { userId })
-            .andWhere("cv.canView = true")
+            .createQueryBuilder('cv')
+            .where('cv.userId = :userId', { userId })
+            .andWhere('cv.canView = true')
             .getMany();
 
         return this._mapperService

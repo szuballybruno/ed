@@ -1,11 +1,11 @@
-import { DailyTip } from "../models/entity/DailyTip";
-import { DailyTipOccurrence } from "../models/entity/DailyTipOccurrence";
-import { DailyTipDTO } from "../shared/dtos/DailyTipDTO";
-import { DailyTipEditDataDTO } from "../shared/dtos/DailyTipEditDataDTO";
-import { DailyTipView } from "../models/views/DailyTipView";
-import { getRandomNumber } from "../utilities/helpers";
-import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
+import { DailyTip } from '../models/entity/DailyTip';
+import { DailyTipOccurrence } from '../models/entity/DailyTipOccurrence';
+import { DailyTipDTO } from '../shared/dtos/DailyTipDTO';
+import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
+import { DailyTipView } from '../models/views/DailyTipView';
+import { getRandomNumber } from '../utilities/helpers';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
 
 export class DailyTipService {
 
@@ -43,7 +43,7 @@ export class DailyTipService {
             .getRepository(DailyTip)
             .insert({
                 personalityTraitCategoryId,
-                description: "",
+                description: '',
                 isLive: false,
                 isMax
             });
@@ -58,7 +58,7 @@ export class DailyTipService {
     async getDailyTipEditDataAsync(dailyTipId: number) {
 
         const dailyTip = await this._ormService
-            .getSingleById(DailyTip, dailyTipId)
+            .getSingleById(DailyTip, dailyTipId);
 
         return this._mapperService
             .map(DailyTip, DailyTipEditDataDTO, dailyTip);
@@ -97,8 +97,8 @@ export class DailyTipService {
         // get daily tip views 
         const dailyTips = await this._ormService
             .getRepository(DailyTipView)
-            .createQueryBuilder("dtv")
-            .where("dtv.userId = :userId", { userId })
+            .createQueryBuilder('dtv')
+            .where('dtv.userId = :userId', { userId })
             .getMany();
 
         // get a tip 

@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class TeacherInfo {
@@ -19,7 +19,7 @@ export class TeacherInfo {
     @Column()
     studentCount: number;
 
-    @Column({ type: "double precision" })
+    @Column({ type: 'double precision' })
     rating: number;
 
     @Column()
@@ -33,6 +33,6 @@ export class TeacherInfo {
     userId: number;
 
     @OneToOne(_ => User, x => x.teacherInfo)
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 }

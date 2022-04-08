@@ -1,6 +1,6 @@
-import { TempomatService } from "../services/TempomatService";
-import { TempomatModeType } from "../shared/types/sharedTypes";
-import { ActionParams } from "../utilities/helpers";
+import { TempomatService } from '../services/TempomatService';
+import { TempomatModeType } from '../shared/types/sharedTypes';
+import { ActionParams } from '../utilities/helpers';
 
 export class TempomatController {
 
@@ -14,7 +14,8 @@ export class TempomatController {
     getTempomatModeAction = async (params: ActionParams) => {
 
         return this._tempomatService
-            .getTempomatModeAsync(params.currentUserId, params.getQuery<any>().getValue(x => x.courseId, "int"));
+            .getTempomatModeAsync(params.currentUserId, params.getQuery<any>()
+.getValue(x => x.courseId, 'int'));
     }
 
     setTempomatModeAction = async (params: ActionParams) => {
@@ -23,10 +24,10 @@ export class TempomatController {
             .getBody<any>();
 
         const mode = body
-            .getValue<TempomatModeType>(bod => bod.mode, value => value === "auto" || value === "balanced" || value === "light" || value === "strict");
+            .getValue<TempomatModeType>(bod => bod.mode, value => value === 'auto' || value === 'balanced' || value === 'light' || value === 'strict');
 
         const courseId = body
-            .getValue(x => x.courseId, "int");
+            .getValue(x => x.courseId, 'int');
 
         await this._tempomatService
             .setTempomatModeAsync(params.currentUserId, courseId, mode);

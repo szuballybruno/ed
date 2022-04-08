@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ActivitySession } from "./ActivitySession";
-import { CoinTransaction } from "./CoinTransaction";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ActivitySession } from './ActivitySession';
+import { CoinTransaction } from './CoinTransaction';
+import { User } from './User';
 
 @Entity()
 export class ActivityStreak {
@@ -9,10 +9,10 @@ export class ActivityStreak {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "timestamptz" })
+    @Column({ type: 'timestamptz' })
     startDate: Date;
 
-    @Column({ type: "timestamptz" })
+    @Column({ type: 'timestamptz' })
     endDate: Date;
 
     @Column()
@@ -22,7 +22,7 @@ export class ActivityStreak {
     userId: number;
 
     @ManyToOne(_ => User, x => x.activitySessions)
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 
     // activities 

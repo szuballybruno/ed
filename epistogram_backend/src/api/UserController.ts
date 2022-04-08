@@ -1,7 +1,7 @@
-import { UserEditDTO } from "../shared/dtos/UserEditDTO";
-import { UserEditSimpleDTO } from "../shared/dtos/UserEditSimpleDTO";
-import { UserService } from "../services/UserService";
-import { ActionParams, withValueOrBadRequest } from "../utilities/helpers";
+import { UserEditDTO } from '../shared/dtos/UserEditDTO';
+import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
+import { UserService } from '../services/UserService';
+import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class UserController {
 
@@ -15,7 +15,7 @@ export class UserController {
     deleteUserAction = async (params: ActionParams) => {
 
         const dto = withValueOrBadRequest<any>(params.req.body);
-        const deleteUserId = withValueOrBadRequest<number>(dto.userId, "number");
+        const deleteUserId = withValueOrBadRequest<number>(dto.userId, 'number');
 
         return this._userService
             .deleteUserAsync(params.currentUserId, deleteUserId);
@@ -23,7 +23,7 @@ export class UserController {
 
     getEditUserDataAction = async (params: ActionParams) => {
 
-        const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, "number");
+        const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, 'number');
 
         return await this._userService
             .getEditUserDataAsync(editedUserId);
@@ -58,7 +58,8 @@ export class UserController {
 
     getBriefUserDataAction = async (params: ActionParams) => {
 
-        const userId = params.getQuery().getValue(x => x.userId);
+        const userId = params.getQuery()
+.getValue(x => x.userId);
 
         await this._userService
             .getBriefUserDataAsync(userId);

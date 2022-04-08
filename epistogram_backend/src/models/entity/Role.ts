@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { RoleActivityBridge } from "./RoleActivityBridge";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { RoleActivityBridge } from './RoleActivityBridge';
+import { User } from './User';
 
 @Entity()
 export class Role {

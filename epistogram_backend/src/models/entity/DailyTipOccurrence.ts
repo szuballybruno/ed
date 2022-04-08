@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { DailyTip } from "./DailyTip";
-import { User } from "./User";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DailyTip } from './DailyTip';
+import { User } from './User';
 
 @Entity()
 export class DailyTipOccurrence {
@@ -8,7 +8,7 @@ export class DailyTipOccurrence {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn({ default: () => "now()", type: "timestamptz" })
+    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
 
     // daily tip
@@ -16,7 +16,7 @@ export class DailyTipOccurrence {
     dailyTipId: number;
 
     @ManyToOne(_ => DailyTip, x => x.occurrences)
-    @JoinColumn({ name: "daily_tip_id" })
+    @JoinColumn({ name: 'daily_tip_id' })
     dailyTip: DailyTip;
 
     // user
@@ -24,6 +24,6 @@ export class DailyTipOccurrence {
     userId: number;
 
     @ManyToOne(_ => User, x => x.dailyTipOccurrences)
-    @JoinColumn({ name: "user_id" })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 }

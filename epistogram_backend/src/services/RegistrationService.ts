@@ -1,14 +1,14 @@
-import generatePassword from "password-generator";
-import { validatePassowrd } from "../shared/logic/sharedLogic";
-import { JobTitleIdEnum, RoleIdEnum } from "../shared/types/sharedTypes";
-import { getFullName, ErrorCode } from "../utilities/helpers";
-import { ActivationCodeService } from "./ActivationCodeService";
-import { AuthenticationService } from "./AuthenticationService";
-import { EmailService } from "./EmailService";
-import { log } from "./misc/logger";
-import { ORMConnectionService } from "./sqlServices/ORMConnectionService";
-import { TokenService } from "./TokenService";
-import { UserService } from "./UserService";
+import generatePassword from 'password-generator';
+import { validatePassowrd } from '../shared/logic/sharedLogic';
+import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
+import { getFullName, ErrorCode } from '../utilities/helpers';
+import { ActivationCodeService } from './ActivationCodeService';
+import { AuthenticationService } from './AuthenticationService';
+import { EmailService } from './EmailService';
+import { log } from './misc/logger';
+import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { TokenService } from './TokenService';
+import { UserService } from './UserService';
 
 export class RegistrationService {
 
@@ -56,7 +56,7 @@ export class RegistrationService {
             .isValidCodeAsync(activationCode);
 
         if (!activationCodeEntity)
-            throw new ErrorCode(`Activation code ${activationCode} not found in DB, or already used.`, "activation_code_issue");
+            throw new ErrorCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
         // create user 
         await this.createInvitedUserAsync({
@@ -101,7 +101,7 @@ export class RegistrationService {
                 email,
                 firstName,
                 lastName,
-                registrationType: "PublicRegistrationToken",
+                registrationType: 'PublicRegistrationToken',
                 password: generatedPassword
             });
 
@@ -140,13 +140,13 @@ export class RegistrationService {
             .getUserByEmailAsync(userEmail);
 
         if (!user)
-            throw new ErrorCode("No such user!", "bad request");
+            throw new ErrorCode('No such user!', 'bad request');
 
         const userId = user.id;
 
         // check passwords 
         if (validatePassowrd(password, passwordControl))
-            throw new ErrorCode("Password is invalid.", "bad request");
+            throw new ErrorCode('Password is invalid.', 'bad request');
 
         // update user 
         await this._userService
@@ -199,15 +199,15 @@ export class RegistrationService {
                 organizationId: options.organizationId,
                 roleId: options.roleId,
                 jobTitleId: options.jobTitleId,
-                registrationType: "Invitation",
-                password: "guest",
+                registrationType: 'Invitation',
+                password: 'guest',
                 invitationToken
             });
 
         // send email
         if (!noEmailNotification) {
 
-            log("Sending mail... to: " + email);
+            log('Sending mail... to: ' + email);
 
             await this._emailService
                 .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));

@@ -1,4 +1,4 @@
-import { ExamResultQuestionDTO } from "./ExamResultQuestionDTO";
+import { ExamResultQuestionDTO } from './ExamResultQuestionDTO';
 
 export type ExamResultsDTO = {
     isSuccessful: boolean;

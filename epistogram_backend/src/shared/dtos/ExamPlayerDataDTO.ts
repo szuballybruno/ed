@@ -1,11 +1,11 @@
-import { QuestionDTO } from "./QuestionDTO";
+import { QuestionDTO } from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
     id: number;
     courseId: number;
     subTitle: string;
     title: string;
-    type: "exam";
+    type: 'exam';
     thumbnailUrl: string;
     isFinalExam: boolean;
     canTakeAgain: boolean;
