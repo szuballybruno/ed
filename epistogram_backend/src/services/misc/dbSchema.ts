@@ -91,6 +91,7 @@ import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentV
 import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
+import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
 
 export const dbSchema = {
 
@@ -139,7 +140,7 @@ export const dbSchema = {
         'personality_trait_category_view',
         'course_item_completed_view',
         'user_latest_activity_view',
-        'admin_user_list_view', 
+        'admin_user_list_view',
         'prequiz_question_view',
         'pretest_result_view',
         'course_rating_question_view',
@@ -155,7 +156,8 @@ export const dbSchema = {
         'user_course_progress_actual',
         'user_course_progress_view',
         'user_course_recommended_item_quota_view',
-        'user_tempomat_adjustment_value_view'
+        'user_tempomat_adjustment_value_view',
+        'course_item_question_edit_view'
     ],
 
     functionScripts: [
@@ -237,7 +239,8 @@ export const dbSchema = {
         UserCourseRecommendedItemQuotaView,
         UserTempomatAdjustmentValueView,
         UserCourseBridgeView,
-        UserCourseCompletionOriginalEstimationView
+        UserCourseCompletionOriginalEstimationView,
+        CourseItemQuestionEditView
     ] as any[],
 
     entities: [

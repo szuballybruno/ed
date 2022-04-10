@@ -13,6 +13,8 @@ export const ExamEditDialog = (props: {
 
     return <CourseItemEditDialogBase
         logic={logic}
+        chipText='Vizsga'
+        chipColor='var(--deepOrange)'
         subpages={[
             {
                 content: () => <AdminExamQuestionsModalPage />,

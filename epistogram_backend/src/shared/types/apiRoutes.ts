@@ -173,6 +173,8 @@ export const apiRoutes = {
         uploadVideoFileChunks: '/video/upload-video-file-chunks',
         saveVideo: '/video/save-video',
         getVideoEditData: '/video/get-video-edit-data',
+        getVideoQuestionEditData: '/video/get-video-question-edit-data',
+        saveVideoQuestionEditData: '/video/save-video-question-edit-data'
     },
 
     questions: {

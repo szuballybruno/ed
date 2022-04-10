@@ -1,7 +1,7 @@
 import { AnswerEditDTO } from './AnswerEditDTO';
 
-export type QuestionEditDataDTO = {
-    questionId: number,
+export class QuestionEditDataDTO {
+    questionId: number;
     questionText: string;
     answers: AnswerEditDTO[];
 }

@@ -1,23 +1,39 @@
+import { CSSProperties } from 'react';
+import { ClassBuilder } from '../../../helpers/classBuilder';
 import classes from './css/ChipSmall.module.css';
 
 export const ChipSmall = (props: {
     text: string,
     tooltip?: string,
     color?: string,
+    style?: CSSProperties,
+    size?: 'small' | 'normal'
 }) => {
 
-    const { text, color, tooltip } = props;
+    const {
+        text,
+        color,
+        tooltip,
+        style,
+        size
+    } = props;
 
     return (
         <p
-            className={`roundBorders fontSmall ${classes.pElement}`}
+            className={new ClassBuilder()
+                .if(size === 'small', 'fontExtraSmall')
+                .if(size !== 'small', 'fontSmall')
+                .custom('roundBorders')
+                .custom(classes.pElement)
+                .build()}
             title={tooltip}
             style={{
                 color,
-                height: '22px',
+                height: size === 'small' ? '18px' : '22px',
                 lineHeight: 0,
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                ...style
             }}>
 
             {text}

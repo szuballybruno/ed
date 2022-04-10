@@ -132,7 +132,7 @@ export const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: numbe
                 ? 'var(--intenseRed)'
                 : 'var(--intenseGreen)'
         },
-        quickMenu: rowNumber,
+        quickMenu: item.itemId,
         videoFile: 'vf'
     });
 };

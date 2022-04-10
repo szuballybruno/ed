@@ -1,16 +1,11 @@
-import { UploadedFile } from 'express-fileupload';
 import fs from 'fs';
-import { Course } from '../models/entity/Course';
 import { Video } from '../models/entity/Video';
-import { CreateVideoDTO } from '../shared/dtos/CreateVideoDTO';
-import { IdBodyDTO } from '../shared/dtos/IdBodyDTO';
-import { IdResultDTO } from '../shared/dtos/IdResultDTO';
-import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
 import { MapperService } from '../services/MapperService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { QuestionService } from '../services/QuestionService';
 import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
 import { VideoService } from '../services/VideoService';
+import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
 import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class VideoController {
@@ -69,6 +64,27 @@ export class VideoController {
 
         return this._mapperService
             .map(Video, VideoEditDTO, video);
+    }
+
+    getVideoQuestionEditDataAction = async (params: ActionParams) => {
+
+        const query = params
+            .getQuery<any>();
+
+        const videoId = query
+            .getValue(x => x.videoId);
+
+        return await this._videoService
+            .getVideoQuestionEditDataAsync(videoId)
+    }
+
+    saveVideoQuestionEditDataAction = async (params: ActionParams) => {
+        const mutations = params
+            .getBody()
+            .data;
+
+        await this._videoService
+            .saveVideoQuestionEditDataAsync(mutations);
     }
 
     uploadVideoFileChunksAction = async (params: ActionParams) => {

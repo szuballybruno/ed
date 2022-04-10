@@ -8,6 +8,10 @@ import { EpistoPaging } from '../../universal/EpistoPaging';
 import { ChipSmall } from './ChipSmall';
 
 export const CourseItemEditDialogBase = (props: {
+    title?: string,
+    subTitle?: string,
+    chipText: string,
+    chipColor: string,
     subpages: ({
         title: string,
         content: (isCurrent: boolean) => JSX.Element
@@ -15,7 +19,14 @@ export const CourseItemEditDialogBase = (props: {
     logic: EpistoDialogLogicType
 }) => {
 
-    const { logic: dialogLogic, subpages } = props;
+    const {
+        title,
+        subTitle,
+        chipText,
+        chipColor,
+        logic: dialogLogic,
+        subpages
+    } = props;
 
     const paging = usePaging(subpages);
 
@@ -66,18 +77,18 @@ export const CourseItemEditDialogBase = (props: {
                                 fontWeight: 600,
                                 marginRight: '15px'
                             }}>
-                            Új dia hozzáadása
+                            {title}
                         </EpistoFont>
 
                         <ChipSmall
-                            text="Videó"
-                            color="var(--deepBlue)" />
+                            text={chipText}
+                            color={chipColor} />
                     </Flex>
 
                     <EpistoFont
                         fontSize={'fontMid'}>
 
-                        Microsoft PowerPoint alapok
+                        {subTitle}
                     </EpistoFont>
                 </Flex>
 

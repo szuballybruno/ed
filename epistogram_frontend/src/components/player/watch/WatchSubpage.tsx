@@ -95,15 +95,19 @@ export const WatchSubpage = () => {
 
             <LoadingFrame
                 loadingState={[]}
-                className="whall"
+                height='100vh'
                 direction="column"
                 error={[playerDataError]}>
 
-                <Flex px="20px"
+                <Flex
+                    px="20px"
+                    height='100vh'
                     mb="50px">
 
                     {/* main column */}
-                    <Box id="mainColumn"
+                    <Box
+                        id="mainColumn"
+                        overflowY='scroll'
                         className="whall" >
 
                         {video && <WatchView
@@ -144,6 +148,8 @@ export const WatchSubpage = () => {
                         {isDesktopView && <Flex
                             direction="column"
                             id="courseItemSelectorRoot"
+                            overflowY='scroll'
+                            pb="200px"
                             width="420px"
                             minWidth="420px">
 

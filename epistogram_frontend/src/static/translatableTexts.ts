@@ -179,8 +179,8 @@ export const translatableTexts = {
         },
         courseItemSelector: {
             switchingCourseModeFailed: 'A nehézségi módok közötti váltás nem lehetséges!',
-            beginner: 'Kezdő mód',
-            advanced: 'Haladó mód',
+            beginner: 'Váltás kezdő módra',
+            advanced: 'Váltás haladó módra',
             courseModeSwitchDescription: 'Kezdő módban a meghatározott sorrendben haladhatsz, és előre csak addig részig tekerhetsz, melyet már megtekintettél. Haladó módban korlátlanul váltogathatsz a videók között!'
         }
     },
