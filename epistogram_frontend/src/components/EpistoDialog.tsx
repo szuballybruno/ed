@@ -6,7 +6,7 @@ import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
 import { useXDialogLogic, XDialog, XDialogLogicType } from './lib/XDialog/XDialog';
 
-export const useEpistoDialogLogic = <TParams = any,>(key: string, dialogOptions?: DialogOptions<TParams>) => {
+export const useEpistoDialogLogic = <TParams = any,>(key: string, dialogOptions?: DialogOptions<TParams>): EpistoDialogLogicType<TParams> => {
 
     const [title, setTitle] = useState(dialogOptions?.title ?? '');
     const [description, setDescription] = useState(dialogOptions?.description ?? '');
@@ -69,7 +69,7 @@ export type EpistoDialogLogicType<TParams = any> = {
     title: string;
     description: string;
     buttons: any;
-    params: TParams;
+    params?: TParams;
     dialogOptions: any;
     openDialog: any;
     closeDialog: any;

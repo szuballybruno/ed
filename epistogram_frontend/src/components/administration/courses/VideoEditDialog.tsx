@@ -62,11 +62,11 @@ export const VideoEditDialog = (props: {
     const videoTitle = videoQuestionEditData?.title || '';
     const courseName = videoQuestionEditData?.courseName || '';
 
-    const getRowKey = useCallback((question: QuestionSchema) => {
-        console.log(question.questionId);
-        return question.questionId;
-    }, []);
-
+    /*  const getRowKey = useCallback((question: QuestionSchema) => {
+         console.log(question.questionId);
+         return question.questionId;
+     }, []);
+  */
     const {
         mutatedData,
         add: addQuestion,
@@ -77,7 +77,7 @@ export const VideoEditDialog = (props: {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<QuestionSchema, number>(preprocessedQuestions, getRowKey, 'questionId');
+    } = useXListMutator<QuestionSchema, 'questionId', number>(preprocessedQuestions, 'questionId');
 
     // map data for mutator
     useEffect(() => {
