@@ -3,7 +3,7 @@ import { CoinTransactionDTO } from '../shared/dtos/CoinTransactionDTO';
 import { CoinBalanceView } from '../models/views/CoinBalanceView';
 import { CoinTransactionView } from '../models/views/CoinTransactionView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class CoinTransactionService {

@@ -7,7 +7,7 @@ import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PretestService {

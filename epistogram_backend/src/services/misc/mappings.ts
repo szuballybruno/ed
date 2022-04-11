@@ -1067,7 +1067,7 @@ export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
 
 export const toVideoQuestionEditDTO = (ci: CourseItemQuestionEditView[], getAssetUrl: (path: string) => string): VideoQuestionEditDTO => {
     const questionGroup = ci
-        .groupBy(x => x.questionId)
+        .groupBy(x => x.questionId);
 
 
     const {
@@ -1075,9 +1075,9 @@ export const toVideoQuestionEditDTO = (ci: CourseItemQuestionEditView[], getAsse
         itemSubtitle,
         courseTitle,
         videoFilePath
-    } = questionGroup.first().first
+    } = questionGroup.first().first;
 
-    const videoFileUrl = getAssetUrl(videoFilePath)
+    const videoFileUrl = getAssetUrl(videoFilePath);
 
 
     return {
@@ -1085,7 +1085,7 @@ export const toVideoQuestionEditDTO = (ci: CourseItemQuestionEditView[], getAsse
         title: itemTitle,
         subtitle: itemSubtitle,
         courseName: courseTitle,
-        description: "",
+        description: '',
         videoLengthSeconds: 0,
         videoUrl: videoFileUrl,
         questions: questionGroup
@@ -1098,7 +1098,7 @@ export const toVideoQuestionEditDTO = (ci: CourseItemQuestionEditView[], getAsse
                         text: qi.answerText,
                         isCorrect: false
                     }))
-                }
+                };
             })
-    }
-}
+    };
+};

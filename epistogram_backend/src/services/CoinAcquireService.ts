@@ -5,7 +5,7 @@ import { UserSessionDailyView } from '../models/views/UserActivityDailyView';
 import { trimTimeFromDate } from '../utilities/helpers';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class CoinAcquireService {
 

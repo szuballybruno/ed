@@ -1,7 +1,7 @@
 import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
 import { UserStatsView } from '../models/views/UserStatsView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class UserStatsService {
 

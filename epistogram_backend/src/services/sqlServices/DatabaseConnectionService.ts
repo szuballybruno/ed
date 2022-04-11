@@ -1,7 +1,7 @@
 import { User } from '../../models/entity/User';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
-import { ORMConnectionService } from './ORMConnectionService';
+import { ORMConnectionService } from '../ORMConnectionService/ORMConnectionService';
 import { SeedService } from './SeedService';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { ExecSQLFunctionType, SQLConnectionService } from './SQLConnectionService';

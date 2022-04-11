@@ -9,7 +9,7 @@ import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class UserProgressService extends ServiceBase {
 

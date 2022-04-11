@@ -6,7 +6,7 @@ import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { ExamService } from '../services/ExamService';
 import { toQuestionDTO } from '../services/misc/mappings';
-import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class ExamController {

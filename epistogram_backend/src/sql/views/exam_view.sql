@@ -6,6 +6,7 @@ successful_answer_sessions AS (
 SELECT 
 	u.id user_id,
 	e.id exam_id,
+	e.deletion_date IS NOT NULL is_deleted,
 	e.title title,
 	e.subtitle subtitle,
 	e.description description,

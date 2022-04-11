@@ -4,7 +4,7 @@ import { EventDTO } from '../shared/dtos/EventDTO';
 import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';
 import { EventCodeType } from '../shared/types/sharedTypes';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class EventService {
 

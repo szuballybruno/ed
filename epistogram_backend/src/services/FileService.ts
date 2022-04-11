@@ -2,7 +2,7 @@ import { UploadedFile } from 'express-fileupload';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
 import { replaceAll } from '../utilities/helpers';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
 import { UserService } from './UserService';
 

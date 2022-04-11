@@ -44,9 +44,9 @@ export const useModuleEditData = (moduleId: number) => {
     };
 };
 
-export const useModuleListEditData = (courseId: number) => {
+export const useModuleListEditData = (courseId: number, isEnabled: boolean) => {
 
-    const qr = useReactQuery2<ModuleListEditDataDTO>(apiRoutes.module.getModuleListEditData, { courseId });
+    const qr = useReactQuery2<ModuleListEditDataDTO>(apiRoutes.module.getModuleListEditData, { courseId }, isEnabled);
 
     return {
         moduleListEditData: qr.data,

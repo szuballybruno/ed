@@ -14,7 +14,7 @@ import { toExamResultDTO } from './misc/mappings';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 
@@ -62,16 +62,19 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamPlayerDTOAsync = async (userId: number, examId: number) => {
 
         const examView = await this._ormService
-            .getRepository(ExamView)
-            .findOneOrFail({
-                where: {
-                    examId: examId,
-                    userId: userId
-                }
-            });
+            .getSingle(ExamView,
+                [
+                    ['WHERE', 'examId', '=', 'examId'],
+                    ['AND', 'userId', '=', 'userId'],
+                    ['AND', 'isDeleted', '=', 'false']
+                ],
+                {
+                    examId,
+                    userId
+                });
 
         const questions = await this
-            .getExamQuestionsAsync(examId);
+            .getExamQuestionsAsync(examView.examId);
 
         if (questions.length === 0)
             throw new Error('Exam has no questions assigend.');
@@ -200,7 +203,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamByIdAsync = (examId: number) => {
 
         return this._ormService
-            .getSingleById(Exam, examId);
+            .getSingleById(Exam, examId, { allowDeleted: true });
     }
 
     /**
@@ -224,6 +227,7 @@ export class ExamService extends QueryServiceBase<Exam> {
         const questions = await this._ormService
             .getRepository(Question)
             .createQueryBuilder('q')
+            .withDeleted()
             .leftJoinAndSelect('q.exam', 'e')
             .leftJoinAndSelect('e.answerSessions', 'as')
             .where('as.id = :asid', { asid: answerSessionId })

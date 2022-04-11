@@ -43,7 +43,7 @@ import { createCharSeparatedList } from './misc/mappings';
 import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { ModuleService } from './ModuleService';
 import { PretestService } from './PretestService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 

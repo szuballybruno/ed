@@ -6,7 +6,7 @@ import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { QuestionTypeEnum } from '../shared/types/sharedTypes';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class QuestionService {
 

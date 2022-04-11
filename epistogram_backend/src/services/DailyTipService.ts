@@ -5,7 +5,7 @@ import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
 import { DailyTipView } from '../models/views/DailyTipView';
 import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class DailyTipService {
 

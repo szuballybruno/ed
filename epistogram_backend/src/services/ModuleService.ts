@@ -11,7 +11,7 @@ import { ModuleListEditDataDTO } from '../shared/dtos/ModuleListEditDataDTO';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VideoService } from './VideoService';
 
 export class ModuleService {

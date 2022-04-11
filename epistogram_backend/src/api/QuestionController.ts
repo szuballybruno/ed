@@ -4,7 +4,7 @@ import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { toAnswerEditDTO } from '../services/misc/mappings';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { QuestionService } from '../services/QuestionService';
-import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 
 export class QuestionController {

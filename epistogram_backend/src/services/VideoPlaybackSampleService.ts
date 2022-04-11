@@ -1,7 +1,7 @@
 import { Video } from '../models/entity/Video';
 import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
 import { hasValue } from '../utilities/helpers';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export type VideoPlaybackSampleChunk = {
     startSeconds: number;

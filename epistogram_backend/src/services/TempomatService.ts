@@ -7,7 +7,7 @@ import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class TempomatService extends ServiceBase {

@@ -6,7 +6,7 @@ import { CourseRatingQuestionDTO } from '../shared/dtos/CourseRatingQuestionDTO'
 import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionView';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class CourseRatingService extends ServiceBase {
 

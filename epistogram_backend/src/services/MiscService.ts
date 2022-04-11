@@ -9,7 +9,7 @@ import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseService } from './CourseService';
 import { MapperService } from './MapperService';
 import { toOrganizationDTO } from './misc/mappings';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {

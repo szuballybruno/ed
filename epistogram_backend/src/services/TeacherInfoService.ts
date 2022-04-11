@@ -2,7 +2,7 @@ import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class TeacherInfoService {
 

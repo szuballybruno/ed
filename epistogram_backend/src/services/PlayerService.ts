@@ -11,7 +11,7 @@ import { ServiceBase } from './misc/ServiceBase';
 import { ModuleService } from './ModuleService';
 import { PlaybackService } from './PlaybackService';
 import { QuestionAnswerService } from './QuestionAnswerService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 
@@ -133,9 +133,9 @@ export class PlayerService extends ServiceBase {
         const courseItemsFlat = this.getCourseItemsFlat(modules);
 
         const targetItem = courseItemsFlat
-            .single(x => x.code === targetItemCode);
+            .firstOrNull(x => x.code === targetItemCode);
 
-        if (targetItem.state !== 'locked')
+        if (targetItem && targetItem.state !== 'locked')
             return targetItem.code;
 
         // target item is locked, fallback...
@@ -195,7 +195,7 @@ export class PlayerService extends ServiceBase {
             .getMaxWatchedSeconds(userId, videoId);
 
         const video = await this._videoService
-            .getVideoByIdAsync(videoId);
+            .getVideoPlayerDataAsync(videoId);
 
         return this._mapperService
             .map(Video, VideoDTO, video, maxWathcedSeconds);

@@ -4,7 +4,7 @@ import { MapperService } from '../services/MapperService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { MiscService } from '../services/MiscService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
-import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { UserDTO } from '../shared/dtos/UserDTO';

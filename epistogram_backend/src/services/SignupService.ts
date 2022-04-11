@@ -4,7 +4,7 @@ import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { EmailService } from './EmailService';
 import { toSignupDataDTO } from './misc/mappings';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class SignupService {
 

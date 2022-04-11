@@ -49,7 +49,7 @@ import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
 import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
-import { ORMConnectionService } from './services/sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { SeedService } from './services/sqlServices/SeedService';
 import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
@@ -91,6 +91,7 @@ import { TempomatController } from './api/TempomatController';
 import { randomInt } from 'crypto';
 import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 import { User } from './models/entity/User';
+import { instatiate } from './services/ORMConnectionService/ORMConnectionDecorators';
 
 (async () => {
 
@@ -195,6 +196,24 @@ import { User } from './models/entity/User';
         onActionError,
         onActionSuccess);
     const addEndpoint = turboExpress.addAPIEndpoint;
+
+    class Asd {
+
+        prop = 'asd';
+
+        constructor() {
+            console.log('constructing');
+        }
+
+        hello() {
+            console.log(this.prop);
+        }
+    }
+
+    const instance = instatiate(Asd);
+
+    instance.hello();
+
 
     // add middlewares
     turboExpress.use(getCORSMiddleware(globalConfig));

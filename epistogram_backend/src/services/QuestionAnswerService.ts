@@ -3,7 +3,7 @@ import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { CoinAcquireService } from './CoinAcquireService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class QuestionAnswerService {
 

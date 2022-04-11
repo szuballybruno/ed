@@ -20,7 +20,7 @@ import { CourseService } from './CourseService';
 import { EmailService } from './EmailService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
 
 export class ShopService {

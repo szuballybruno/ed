@@ -4,7 +4,7 @@ import { ErrorCode } from '../utilities/helpers';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TokenService } from './TokenService';
 import { UrlService } from './UrlService';
 import { UserService } from './UserService';

@@ -13,7 +13,7 @@ import { getFullName, toFullName, ErrorCode } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TeacherInfoService } from './TeacherInfoService';
 
 export class UserService {

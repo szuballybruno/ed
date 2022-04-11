@@ -9,7 +9,7 @@ import { PersonalityTraitDataDTO } from '../shared/dtos/PersonalityTraitDataDTO'
 import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class PersonalityAssessmentService {
 

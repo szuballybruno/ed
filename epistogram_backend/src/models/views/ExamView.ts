@@ -11,6 +11,8 @@ export class ExamView {
     @ViewColumn()
     examId: number;
     @ViewColumn()
+    isDeleted: boolean;
+    @ViewColumn()
     title: string;
     @ViewColumn()
     subtitle: string;

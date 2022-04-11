@@ -4,7 +4,7 @@ import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 

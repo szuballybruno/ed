@@ -8,7 +8,7 @@ import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 import { VideoPlaybackSampleService } from './VideoPlaybackSampleService';

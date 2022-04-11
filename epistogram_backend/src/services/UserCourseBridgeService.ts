@@ -7,7 +7,7 @@ import { CourseItemsService } from './CourseItemsService';
 import { MapperService } from './MapperService';
 import { getItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 

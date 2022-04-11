@@ -49,6 +49,7 @@ export class ModuleController {
     }
 
     getModuleListEditAction = async (params: ActionParams) => {
+        
         const query = params
             .getQuery<any>();
 

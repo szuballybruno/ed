@@ -5,7 +5,7 @@ import { getKeys, noUndefined } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
-import { SQLConnectionService } from './SQLConnectionService';
+import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 
 export type ORMConnection = DataSource;
 
@@ -22,9 +22,10 @@ type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-type OperationType = '=' | '!=' | '<' | '>';
+type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
+type SQLStaticValueType = 'NULL' | 'true' | 'false';
 
-type WhereCondition<TEntity, TParams> = ['WHERE' | 'AND', keyof TEntity, OperationType, keyof TParams];
+type WhereCondition<TEntity, TParams> = ['WHERE' | 'AND', keyof TEntity, OperationType, keyof TParams | SQLStaticValueType];
 type SelectCondition<TEntity> = ['SELECT', keyof TEntity | (keyof TEntity)[]];
 type ExpressionPart<TEntity, TParam> = SelectCondition<TEntity> | WhereCondition<TEntity, TParam>;
 
@@ -155,6 +156,39 @@ export class ORMConnectionService {
     }
 
     /**
+     * Returns a single entity by it's id, 
+     * throws error if 0 or more than 1 is found. 
+     */
+    async getSingleById<TEntity, TField extends keyof TEntity, TParam extends Object = any>(classType: ClassType<TEntity>, id: number, opts?: {
+        idField?: TField,
+        query?: ExpressionPart<TEntity, TParam>[],
+        params?: TParam,
+        deletionPropertyName?: keyof TEntity,
+        allowDeleted?: boolean
+    }) {
+
+        type ActualParamType = { id: number } & TParam;
+
+        const allowDeleted = !!opts?.allowDeleted;
+        const deletionPropertyName = opts?.deletionPropertyName;
+
+        const idFieldName = opts?.idField ?? 'id' as TField;
+        const query = opts?.query ?? [];
+        const hahparams: TParam | undefined = opts?.params;
+
+        // create expression
+        let expr: ExpressionPart<TEntity, ActualParamType>[] = [['WHERE', idFieldName, '=', 'id']];
+
+        if (!allowDeleted)
+            expr = expr.concat([['AND', deletionPropertyName ? deletionPropertyName : 'deletionDate' as any, 'IS', 'NULL']]);
+
+        const fullExpr: ExpressionPart<TEntity, ActualParamType>[] = expr.concat(query);
+        const actualParams: ActualParamType = { id, ...hahparams } as any;
+
+        return this.getSingle(classType, fullExpr, actualParams);
+    }
+
+    /**
      * Returns a single entity, 
      * throws error if 0 or more than 1 is found. 
      */
@@ -196,6 +230,21 @@ export class ORMConnectionService {
             .executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
 
         return rows[0] ?? null;
+    }
+
+    /**
+     * Returns multiple entities.
+     */
+    async getMany<TEntity, TParam>(
+        classType: ClassType<TEntity>,
+        query: ExpressionPart<TEntity, TParam>[],
+        params: TParam,
+        alias?: string) {
+
+        const { fullQuery, sqlParamsList } = this
+            .getFullQuery(classType, query, params, alias);
+
+        return this.executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
     }
 
     /**
@@ -253,10 +302,12 @@ export class ORMConnectionService {
 
                     const snakeColumn = toSQLSnakeCasing(cond[1] as string);
                     const operator: OperationType = cond[2];
-                    const paramName: keyof TParam = cond[3];
-                    const paramToken = sqlParamsList
-                        .single(x => x.paramName === paramName)
-                        .token;
+                    const paramName: keyof TParam | SQLStaticValueType = cond[3];
+                    const paramToken = this.isSQLStaticValue(paramName as string)
+                        ? paramName as SQLStaticValueType
+                        : sqlParamsList
+                            .single(x => x.paramName === paramName)
+                            .token;
 
                     // WHERE xy.ab = $1
                     return `${cond[0]} ${sqlAlias}.${snakeColumn} ${operator} ${paramToken}`;
@@ -278,29 +329,9 @@ export class ORMConnectionService {
         };
     }
 
-    /**
-     * Returns a single entity by it's id, 
-     * throws error if 0 or more than 1 is found. 
-     */
-    async getSingleById<TEntity, TField extends keyof TEntity>(classType: ClassType<TEntity>, id: number, idField?: TField) {
+    private isSQLStaticValue(value: string) {
 
-        const idFieldName = idField ?? 'id' as TField;
-        return this.getSingle(classType, [['WHERE', idFieldName, '=', 'id']], { id });
-    }
-
-    /**
-     * Returns multiple entities.
-     */
-    async getMany<TEntity, TParam>(
-        classType: ClassType<TEntity>,
-        query: ExpressionPart<TEntity, TParam>[],
-        params: TParam,
-        alias?: string) {
-
-        const { fullQuery, sqlParamsList } = this
-            .getFullQuery(classType, query, params, alias);
-
-        return this.executeSQLQuery<TEntity, TParam>(fullQuery, sqlParamsList);
+        return value === 'NULL' || value === 'false' || value === 'true';
     }
 
     /**

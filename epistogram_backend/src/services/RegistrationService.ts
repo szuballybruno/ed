@@ -6,7 +6,7 @@ import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { EmailService } from './EmailService';
 import { log } from './misc/logger';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
 

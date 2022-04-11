@@ -3,7 +3,7 @@ import { Video } from '../models/entity/Video';
 import { MapperService } from '../services/MapperService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { QuestionService } from '../services/QuestionService';
-import { ORMConnectionService } from '../services/sqlServices/ORMConnectionService';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { VideoService } from '../services/VideoService';
 import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
 import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
@@ -75,7 +75,7 @@ export class VideoController {
             .getValue(x => x.videoId);
 
         return await this._videoService
-            .getVideoQuestionEditDataAsync(videoId)
+            .getVideoQuestionEditDataAsync(videoId);
     }
 
     saveVideoQuestionEditDataAction = async (params: ActionParams) => {

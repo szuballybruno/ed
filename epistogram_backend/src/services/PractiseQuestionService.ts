@@ -4,7 +4,7 @@ import { PractiseQuestionDTO } from '../shared/dtos/PractiseQuestionDTO';
 import { PractiseQuestionView } from '../models/views/PractiseQuestionView';
 import { PlayerService } from './PlayerService';
 import { QuestionAnswerService } from './QuestionAnswerService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { ServiceBase } from './misc/ServiceBase';
 import { MapperService } from './MapperService';
 

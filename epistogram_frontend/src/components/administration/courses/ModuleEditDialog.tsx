@@ -21,8 +21,16 @@ export const ModuleEditDialog = (props: {
     // state
     const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
 
+    console.log(courseId);
+
     // http
-    const { moduleListEditData, moduleListEditDataState, moduleListEditDataError, refetchModuleListEditData } = useModuleListEditData(courseId);
+    const {
+        moduleListEditData,
+        moduleListEditDataState,
+        moduleListEditDataError,
+        refetchModuleListEditData
+    } = useModuleListEditData(courseId, logic.isOpen);
+    
     const { saveModuleAsync } = useSaveModule();
     const { createModuleAsync } = useCreateModule();
 

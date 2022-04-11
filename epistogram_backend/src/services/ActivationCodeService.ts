@@ -1,7 +1,7 @@
 import generatePassword from 'password-generator';
 import { ActivationCode } from '../models/entity/ActivationCode';
 import { forN } from '../utilities/helpers';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class ActivationCodeService {
 

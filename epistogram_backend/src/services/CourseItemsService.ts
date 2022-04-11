@@ -1,7 +1,7 @@
 import { Course } from '../models/entity/Course';
 import { CourseItemListDTO } from '../shared/dtos/CourseItemListDTO';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class CourseItemsService {
 

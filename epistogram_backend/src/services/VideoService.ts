@@ -11,7 +11,7 @@ import { QueryServiceBase } from './misc/ServiceBase';
 import { getVideoLengthSecondsAsync } from './misc/videoDurationService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
-import { ORMConnectionService } from './sqlServices/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
@@ -196,6 +196,14 @@ export class VideoService extends QueryServiceBase<Video> {
     getVideoByIdAsync = async (videoId: number) => {
 
         const video = await this._ormService
+            .getSingleById(Video, videoId, { allowDeleted: true });
+
+        return video;
+    }
+
+    getVideoPlayerDataAsync = async (videoId: number) => {
+
+        const video = await this._ormService
             .getRepository(Video)
             .createQueryBuilder('v')
             .where('v.id = :videoId', { videoId })
@@ -215,26 +223,23 @@ export class VideoService extends QueryServiceBase<Video> {
             .getRepository(CourseItemQuestionEditView)
             .createQueryBuilder('vq')
             .where('vq.videoId = :videoId', { videoId })
-            .getMany()
+            .getMany();
 
-        const videoQuestionEditDTO = toVideoQuestionEditDTO(
-            questionEditView,
-            this._assetUrlService.getAssetUrl
-        )
+        const videoQuestionEditDTO = toVideoQuestionEditDTO(questionEditView, this._assetUrlService.getAssetUrl);
 
-        return videoQuestionEditDTO
+        return videoQuestionEditDTO;
     }
 
     async saveVideoQuestionEditDataAsync(mutations: Mutation<VideoQuestionEditDTO, 'id'>[]) {
-        await this.saveUpdatedVideoQuestionEditDataAsync(mutations)
+        await this.saveUpdatedVideoQuestionEditDataAsync(mutations);
     }
 
     private async saveUpdatedVideoQuestionEditDataAsync(mutations: Mutation<VideoQuestionEditDTO, 'id'>[]) {
 
         const questionIds = mutations
             .filter(x => x.action === 'update')
-            .map(x => x.key)
+            .map(x => x.key);
 
-        return questionIds
+        return questionIds;
     }
 }
