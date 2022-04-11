@@ -8,8 +8,8 @@ import { EpistoHeader } from '../EpistoHeader';
 
 export type StatisticsCardProps = {
     iconPath?: string
-    suffix: string
-    title: string
+    suffix?: string
+    title?: string
     value?: string
     isOpenByDefault?: boolean
     children?: React.ReactNode
