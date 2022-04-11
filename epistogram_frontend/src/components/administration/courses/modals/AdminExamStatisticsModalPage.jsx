@@ -12,11 +12,9 @@ import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
 import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
 import { DashboardSection } from '../../../universal/DashboardSection';
+/* eslint react/prop-types: 0 */
 
-export const HotspotsSlider = (props: {
-    valueLabelComponent: React.ElementType<any> | undefined
-}) => {
-
+export const HotspotsSlider = (props) => {
     const { valueLabelComponent } = props;
 
     return <Slider
@@ -187,14 +185,9 @@ export const adminExamStatistics = [
             },
         ]
     }
-] as StatisticsGroupType[];
+];
 
-
-
-export const AdminExamStatisticsListItem = (props: {
-    title: string,
-    color: string
-}) => {
+export const AdminExamStatisticsListItem = (props) => {
     const { title, color } = props;
 
     return <Flex align="center">
@@ -234,7 +227,7 @@ export const adminExamStatisticsListItems = [
     },
 ];
 
-export const ValueLabelComponent = (props: { children: ReactNode, value: any }) => {
+export const ValueLabelComponent = (props) => {
 
     const { children, value } = props;
 
