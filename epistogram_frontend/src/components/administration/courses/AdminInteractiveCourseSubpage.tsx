@@ -29,7 +29,10 @@ const elements = [
     { id: 'e2-3', source: '2', target: '3' },
 ];
 
-const CustomNodeComponent = ({ data }) => {
+const CustomNodeComponent = (props: { data: any }) => {
+
+    const { data } = props;
+
     return (
         <Flex
             align="center"
@@ -64,14 +67,18 @@ export const AdminInteractiveCourseSubpage = () => {
 
     return <AdminBreadcrumbsHeader>
         <AdminSubpageHeader direction="row" flex="1" mb="50px">
-            <Flex flex="1" mr="5px" background="var(--transparentWhite70)">
-                <ReactFlow nodeTypes={{
-                    special: CustomNodeComponent
-                }} elements={elements} />
+            
+            {/* TODO2 */}
+            {/* <Flex flex="1" mr="5px" background="var(--transparentWhite70)">
+                <ReactFlow
+                    nodeTypes={{
+                        special: <CustomNodeComponent></CustomNodeComponent>
+                    }}
+                    elements={elements} />
             </Flex>
             <Flex flexBasis={"350px"} background="var(--transparentWhite70)">
 
-            </Flex>
+            </Flex> */}
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>
 }

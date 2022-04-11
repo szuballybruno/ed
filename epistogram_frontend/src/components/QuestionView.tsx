@@ -63,7 +63,7 @@ export const QuesitionView = (props: {
                 style: {
                     border: "solid 2px gold",
                 },
-                icon: () => <img
+                icon: <img
                     src={getAssetUrl("images/epistoCoin.png")} />
             });
     }, [bonusCoinsAcquired]);

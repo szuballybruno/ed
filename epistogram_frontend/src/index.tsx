@@ -1,7 +1,7 @@
 import { ChakraProvider, ColorModeScript, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
-import React from "react";
+import React, { ReactNode } from "react";
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
@@ -17,6 +17,12 @@ import './shared/logic/jsExtensions.ts'; // extensions, important
 import { MainRouting } from "./MainRouting";
 import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
 import { XDialogHost } from "./components/lib/XDialog/XDialogHost";
+
+declare module "react-query/types/react/QueryClientProvider" {
+    interface QueryClientProviderProps {
+        children?: ReactNode;
+    }
+}
 
 // react query 
 const queryClient = new QueryClient();
@@ -61,41 +67,41 @@ const muiTheme = createTheme({
     }
 });
 
+
 ReactDOM.render(
     <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
         <QueryClientProvider client={queryClient}>
-            <>
-                <ColorModeScript initialColorMode={"light"} />
-                <ChakraProvider theme={chakraTheme}>
-                    <ThemeProvider theme={muiTheme}>
-                        <XDialogHost>
-                            <PreventMobileFrame>
-                                <Switch>
+            <ColorModeScript initialColorMode={"light"} />
+            <ChakraProvider theme={chakraTheme}>
+                <ThemeProvider theme={muiTheme}>
+                    <XDialogHost>
+                        <PreventMobileFrame>
+                            <Switch>
 
-                                    {/* under maintanence */}
-                                    {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
+                                {/* under maintanence */}
+                                {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
 
-                                    {/* under maintanence */}
-                                    <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
+                                {/* under maintanence */}
+                                <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
 
-                                    {/* app */}
-                                    <Route path="/">
-                                        <AuthenticationFrame>
-                                            <ErrorDialogFrame>
-                                                <NotificationsFrame>
-                                                    <EventListener >
-                                                        <MainRouting />
-                                                    </EventListener>
-                                                </NotificationsFrame>
-                                            </ErrorDialogFrame>
-                                        </AuthenticationFrame>
-                                    </Route>
-                                </Switch>
-                            </PreventMobileFrame>
-                        </XDialogHost>
-                    </ThemeProvider>
-                </ChakraProvider>
-            </>
+                                {/* app */}
+                                <Route path="/">
+                                    <AuthenticationFrame>
+                                        <ErrorDialogFrame>
+                                            <NotificationsFrame>
+                                                <EventListener >
+                                                    <MainRouting />
+                                                </EventListener>
+                                            </NotificationsFrame>
+                                        </ErrorDialogFrame>
+                                    </AuthenticationFrame>
+                                </Route>
+                            </Switch>
+                        </PreventMobileFrame>
+                    </XDialogHost>
+                </ThemeProvider>
+            </ChakraProvider>
+            <></>
         </QueryClientProvider>
     </BrowserRouter >,
     document.getElementById('root')
