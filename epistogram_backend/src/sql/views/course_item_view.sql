@@ -68,6 +68,8 @@ FROM
 	ON cm.id = sq.module_id
 ) sq2
 
+-- WHERE sq2.course_id = 17
+
 ORDER BY 
 	sq2.course_id, 
 	sq2.module_order_index,

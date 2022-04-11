@@ -11,16 +11,21 @@ export const getUnderMaintanenceMiddleware = (config: GlobalConfiguration) => ge
     throw new ErrorCode('Server is under maintanence!', 'under maintenance');
 });
 
-export const getCORSMiddleware = (config: GlobalConfiguration) => cors({
-    origin: config.misc.frontendUrl,
-    credentials: true,
-    allowedHeaders: [
-        'Origin',
-        'X-Requested-With',
-        'Content-Type',
-        'Accept',
-        'Authorization'
-    ],
-    preflightContinue: false,
-    methods: 'DELETE, PATCH'
-});
+export const getCORSMiddleware = (config: GlobalConfiguration) => {
+
+    const middleware = cors({
+        origin: config.misc.frontendUrl,
+        credentials: true,
+        allowedHeaders: [
+            'Origin',
+            'X-Requested-With',
+            'Content-Type',
+            'Accept',
+            'Authorization'
+        ],
+        preflightContinue: false,
+        methods: 'DELETE, PATCH'
+    });
+
+    return middleware;
+};

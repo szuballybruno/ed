@@ -12,12 +12,14 @@ export class EndpointOptionsType implements IRouteOptions {
     authorize?: RoleType[];
 }
 
-export const onActionError = (error: any, req: Request, res: Response) => {
+export const onActionError = (errorin: any, req: Request, res: Response) => {
 
     const requestPath = req.path;
+    const error = errorin as Error;
 
-    log(`${requestPath}: Failed...`);
-    logError(error.message);
+    logError(`---------------- [${requestPath}] Failed! ----------------`);
+    // logError(error.message);
+    logError(error.stack);
 
     respondError(res, '', ((error as ErrorCode).code ?? 'internal server error') as ErrorCodeType);
 };
@@ -40,7 +42,7 @@ export const respond = (res: Response, code: number, data?: any) => {
 
         log('-- Responding with data, code: ' + code);
         res.status(code)
-.send(data);
+            .send(data);
     }
 };
 
@@ -63,7 +65,7 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
 
 export const respondError = (res: Response, msg: string, code: ErrorCodeType) => {
 
-    logError(`Responding typed error: Type: ${code} Msg: ${msg}`);
+    logError(`-- Responding typed error: Type: ${code} Msg: ${msg}`);
 
     const errorDTO = {
         code: code,

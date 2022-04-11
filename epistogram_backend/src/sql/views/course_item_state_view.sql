@@ -40,7 +40,8 @@ FROM
 	ON ucb.user_id = u.id
 		AND ucb.course_id = civ.course_id
 
-	WHERE civ.item_type != 'pretest'
+	WHERE civ.item_type != 'pretest' 
+		AND civ.item_is_deleted = false
 	
 	ORDER BY
 		user_id,

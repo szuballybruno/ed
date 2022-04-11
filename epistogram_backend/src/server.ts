@@ -189,16 +189,19 @@ import { User } from './models/entity/User';
     await dbConnectionService.seedDBAsync();
 
     // initialize express
-    const expressServer = express();
-    const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(expressServer, [authMiddleware], onActionError, onActionSuccess);
+    const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(
+        [authMiddleware],
+        globalConfig.misc.hostPort,
+        onActionError,
+        onActionSuccess);
     const addEndpoint = turboExpress.addAPIEndpoint;
 
     // add middlewares
-    expressServer.use(getCORSMiddleware(globalConfig));
-    expressServer.use(bodyParser.json({ limit: '32mb' }));
-    expressServer.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
-    expressServer.use(fileUpload());
-    expressServer.use(getUnderMaintanenceMiddleware(globalConfig));
+    turboExpress.use(getCORSMiddleware(globalConfig));
+    turboExpress.use(bodyParser.json({ limit: '32mb' }));
+    turboExpress.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
+    turboExpress.use(fileUpload());
+    turboExpress.use(getUnderMaintanenceMiddleware(globalConfig));
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
@@ -363,14 +366,14 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
 
     // 404 - no match
-    expressServer.use((req, res) => {
+    turboExpress.use((req, res) => {
 
         res.status(404)
             .send(`Route did not match: ${req.url}`);
     });
 
     // error handler
-    expressServer.use((error: express.Errback, req: express.Request, res: express.Response) => {
+    turboExpress.use((error: express.Errback, req: express.Request, res: express.Response) => {
 
         logError('Express error middleware.');
         logError(error);
@@ -379,7 +382,6 @@ import { User } from './models/entity/User';
     });
 
     // listen
-    expressServer.listen(globalConfig.misc.hostPort, () =>
-        log(`Listening on port '${globalConfig.misc.hostPort}'!`));
+    turboExpress.listen();
 })();
 

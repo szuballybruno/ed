@@ -93,7 +93,7 @@ export const useSaveCourseDetailsData = () => {
 
 export const useSaveCourseContentData = () => {
 
-    const qr = usePostDataUnsafe<Mutation<CourseContentItemAdminDTO, string>[], void>(apiRoutes.course.saveCourseContent);
+    const qr = usePostDataUnsafe<Mutation<CourseContentItemAdminDTO, 'itemCode'>[], void>(apiRoutes.course.saveCourseContent);
 
     return {
         saveCourseDataAsync: qr.postDataAsync,
