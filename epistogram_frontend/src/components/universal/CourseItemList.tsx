@@ -19,82 +19,74 @@ import { CollapseItem } from "./CollapseItem";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { getAssetUrl, getRandomInteger } from "../../static/frontendHelpers";
 import { EpistoFont } from "../controls/EpistoFont";
+import { ChipSmall } from "../administration/courses/ChipSmall";
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
     const { title, subTitle, state, descriptorCode, type } = props.courseItem;
-    const isLocked = state === "locked";
+    const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
 
     const navigate = () => navigateToPlayer(descriptorCode);
 
-    const borderWidth = state === "current"
+    const borderWidth = state === 'current'
         ? 5
-        : type === "video"
+        : type === 'video'
             ? 0
-            : 3
+            : 3;
 
-    const borderColor = type === "exam"
-        ? "var(--intenseOrange)"
-        : "var(--epistoTeal)"
+    const borderColor = type === 'exam'
+        ? 'var(--intenseOrange)'
+        : 'var(--epistoTeal)';
+
+    const VideoListSausageIndicator = (props: {
+        color: string
+    }) => {
+
+        const { color: sausageColor } = props;
+
+        return <Flex
+            alignSelf="stretch"
+            className="roundBorders"
+            boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+            p="3px"
+            m="7px 10px 7px 0px"
+            bgColor={sausageColor} />;
+    };
 
     return <FlexListItem
         isLocked={isLocked}
         onClick={navigate}
         midContent={<Flex align="center">
 
-            {getRandomInteger(0, 2) % 2 === 0 && <Flex
-                className="roundBorders"
-                h="10px"
-                w="10px"
-                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                p="3px"
-                m="7px 10px 7px -20px"
-                bgColor="var(--mildOrange)" />}
+            {state === 'current' &&
+                <VideoListSausageIndicator
+                    color='var(--deepGreen)' />}
 
-            <Flex
-                alignSelf="stretch"
-                className="roundBorders"
-                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                p="3px"
-                m="7px 10px 7px 0px"
-                bgColor={borderColor} />
+            {state === 'locked' &&
+                <VideoListSausageIndicator
+                    color='grey' />}
 
-            <FlexListTitleSubtitle title={title} subTitle={subTitle} />
+            {state === 'available' &&
+                <VideoListSausageIndicator
+                    color='var(--epistoTeal)' />}
+
+            {state === 'completed' &&
+                <VideoListSausageIndicator
+                    color='var(--mildGreen)' />}
+
+            <FlexListTitleSubtitle
+                title={title}
+                subTitle={subTitle} />
         </Flex>}
-        endContent={<Flex
-            align="center"
-            justify="center"
-            flexBasis="50px">
-
-            {state === "current" &&
-                <img
-                    src={getAssetUrl("/images/eye3D.png")}
-                    style={{
-                        width: "20px",
-                        color: "var(--epistoTeal)"
-                    }} />}
-
-            {state === "locked" &&
-                <LockIcon style={{
-                    color: "grey"
-                }} />}
-
-            {state === "available" &&
-                <LockOpenIcon
-                    style={{
-                        color: "var(--mildGreen)"
-                    }} />}
-
-            {state === "completed" &&
-                <DoneIcon
-                    style={{
-                        color: "var(--mildGreen)"
-                    }} />}
-        </Flex>}>
-    </FlexListItem>
+        endContent={getRandomInteger(0, 100) % 10 === 0 &&
+            <ChipSmall
+                //size='small'
+                text='Ismétlés ajánlott'
+                color='var(--intenseOrange)' />}>
+    </FlexListItem >;
 }
 
 export const CourseItemList = (props: {
@@ -164,8 +156,7 @@ export const CourseItemList = (props: {
         <Flex
             id="courseItemListRoot"
             direction="column"
-            justifyContent={"flex-start"}
-            overflowY="scroll">
+            justifyContent={'flex-start'}>
 
             {modules
                 .map(module => {
@@ -185,13 +176,13 @@ export const CourseItemList = (props: {
                             color: isLocked ? "gray" : undefined
                         }}
                         header={() => <Flex
-                            bg={isSelected ? `var(--deepBlue)` : undefined}
+                            bg={isSelected ? 'var(--deepBlue)' : undefined}
                             color={headercolor}
                             justify="space-between"
                             borderBottom="1px solid var(--mildGrey)"
                             align="center"
                             height="50px"
-                            minH={"50px"}
+                            minH={'50px'}
                             pl="5px">
 
                             {/* open/close */}

@@ -22,6 +22,8 @@ export const PlayerPage = () => {
             <ContentPane
                 width="var(--playerWidth)"
                 margin="auto"
+                maxHeight='100vh'
+                overflowY='hidden'
                 isMinimalMode
                 showLogo>
 

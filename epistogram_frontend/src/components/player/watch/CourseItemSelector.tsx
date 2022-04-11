@@ -1,4 +1,5 @@
 import { Divider, Flex } from '@chakra-ui/layout';
+import { FilterAlt, Search } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -92,7 +93,7 @@ export const CourseItemSelector = (props: {
         {/* Tempomat info dialog */}
         <TempomatSettingsDialog
             onTempomatModeChanged={refetchTempomatMode}
-            tempomatMode={tempomatMode ?? "auto"}
+            tempomatMode={tempomatMode ?? 'auto'}
             courseId={courseId}
             tempomatDialogLogic={tempomatDialogLogic} />
 
@@ -105,6 +106,10 @@ export const CourseItemSelector = (props: {
         <Flex
             align="center"
             padding="20px"
+            position='sticky'
+            zIndex='1'
+            top='0'
+            background='white'
             height="100px">
 
             {/* tempomat tempo  */}
@@ -112,7 +117,7 @@ export const CourseItemSelector = (props: {
                 flex="1">
 
                 <TempomatTempoInfo
-                    tempomatMode={tempomatMode ?? "auto"}
+                    tempomatMode={tempomatMode ?? 'auto'}
                     onClick={() => tempomatDialogLogic.openDialog()} />
             </Flex>
 
@@ -137,10 +142,10 @@ export const CourseItemSelector = (props: {
         {/* option to enable advanced mode
         IF STARTED COURSE  IN BEGINNER MODE */}
         {
-            (mode === "beginner" && !canChangeCourseMode) && <>
+            (mode === 'beginner' && !canChangeCourseMode) && <>
                 <EpistoButton
                     style={{
-                        margin: "30px"
+                        margin: '30px'
                     }}
                     variant="colored"
                     onClick={changeToAdvancedModePermanently}>
@@ -155,61 +160,67 @@ export const CourseItemSelector = (props: {
             canChangeCourseMode && <RadioGroup
                 value={mode}
                 style={{
-                    position: "relative"
+                    position: 'relative'
                 }}>
 
-                <Flex height="100px" padding="20px" justify="center">
+                <Flex
+                    height="50px"
+                    padding="0 20px"
+                    justify="center">
 
                     <EpistoButton
                         variant="outlined"
-                        onClick={() => setCourseMode("beginner")}
+                        onClick={() => setCourseMode(mode === 'beginner' ? 'advanced' : 'beginner')}
                         style={{
-                            margin: "5px",
-                            padding: "0 0 0 10px",
-                            border: mode === "beginner" ? "2px solid var(--epistoTeal)" : undefined
+                            margin: '5px',
+                            padding: '0 10px 0 10px',
+                            flex: '1',
+                            border: mode === 'beginner' ? '2px solid var(--epistoTeal)' : undefined
                         }}>
 
                         <EpistoFont
                             isUppercase
                             fontSize="fontSmallPlus">
 
-                            {translatableTexts.player.courseItemSelector.beginner}
+                            {mode === 'advanced'
+                                ? translatableTexts.player.courseItemSelector.beginner
+                                : translatableTexts.player.courseItemSelector.advanced}
                         </EpistoFont>
-
-                        <Radio size="small" value="beginner" />
                     </EpistoButton>
-
                     <EpistoButton
-                        variant="outlined"
-                        onClick={() => setCourseMode("advanced")}
+                        variant="colored"
                         style={{
-                            margin: "5px",
-                            padding: "0 0 0 10px",
-                            border: mode === "advanced" ?
-                                "2px solid var(--epistoTeal)" :
-                                undefined
+                            margin: '5px',
+                            padding: '0 10px 0 10px',
+                            width: '40px',
+                            border: '2px solid var(--epistoTeal)'
                         }}>
 
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontSmallPlus">
+                        <Search />
+                    </EpistoButton>
+                    <EpistoButton
+                        variant="colored"
+                        style={{
+                            margin: '5px',
+                            padding: '0 10px 0 10px',
+                            width: '40px',
+                            border: '2px solid var(--epistoTeal)'
+                        }}>
 
-                            {translatableTexts.player.courseItemSelector.advanced}
-                        </EpistoFont>
-
-                        <Radio size="small" value="advanced" />
+                        <FilterAlt />
                     </EpistoButton>
                 </Flex>
 
                 <EpistoButton
                     ref={ref}
                     style={{
-                        padding: "0",
-                        alignSelf: "flex-start",
-                        color: "var(--epistoTeal)",
-                        position: "absolute",
+                        padding: '0',
+                        alignSelf: 'flex-start',
+                        color: 'var(--epistoTeal)',
+                        position: 'absolute',
+                        zIndex: 3,
                         right: 10,
-                        top: 10
+                        top: -20
                     }}
                     icon={<HelpOutlineIcon />}
                     onClick={() => setIsInfoDialogOpen(true)} />
@@ -231,5 +242,5 @@ export const CourseItemSelector = (props: {
         </EpistoPopper>
 
         <CourseItemList modules={modules}></CourseItemList>
-    </>
+    </>;
 }

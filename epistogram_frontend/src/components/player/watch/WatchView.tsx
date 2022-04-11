@@ -278,6 +278,7 @@ export const WatchView = (props: {
             zIndex="10"
             mt="10px"
             px="20px"
+            pb="200px"
             background="var(--transparentWhite70)">
 
             {!isDesktopView && <CourseItemSelector
