@@ -1,9 +1,8 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import queryString from 'query-string';
-import React, { ComponentType } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { matchRoutes, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
@@ -420,7 +419,7 @@ export const usePasswordEntryState = () => {
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
 
-    const validate = useCallback(() => {
+    const validate = () => {
 
         const error = validatePassowrd(password, passwordCompare);
 

@@ -1,30 +1,30 @@
-import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react"
-import { FiberManualRecord } from "@mui/icons-material"
-import { Slider } from "@mui/material"
-import React, { useState } from "react"
-import ReactPlayer from "react-player"
-import { defaultCharts } from "../../../../static/defaultChartOptions"
-import { iterate } from "../../../../static/frontendHelpers"
-import { EpistoFont } from "../../../controls/EpistoFont"
-import { EpistoSelect } from "../../../controls/EpistoSelect"
-import { StatisticsGroupType } from "../../../learningInsights/LearningStatistics"
-import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { EpistoLineChart } from "../../../universal/charts/base_charts/EpistoLineChart"
-import { EpistoPieChart } from "../../../universal/charts/base_charts/EpistoPieChart"
-import { DashboardSection } from "../../../universal/DashboardSection"
+import { Divider, Flex, Grid, Tooltip } from '@chakra-ui/react';
+import { FiberManualRecord } from '@mui/icons-material';
+import { Slider } from '@mui/material';
+import React, { ReactNode, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { defaultCharts } from '../../../../static/defaultChartOptions';
+import { iterate } from '../../../../static/frontendHelpers';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoSelect } from '../../../controls/EpistoSelect';
+import { StatisticsGroupType } from '../../../learningInsights/LearningStatistics';
+import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
+import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
+import { DashboardSection } from '../../../universal/DashboardSection';
 
 export const HotspotsSlider = (props: {
     valueLabelComponent: React.ElementType<any> | undefined
 }) => {
 
-    const { valueLabelComponent } = props
+    const { valueLabelComponent } = props;
 
     return <Slider
         style={{
-            overflow: "hidden",
-            height: "10px",
+            overflow: 'hidden',
+            height: '10px',
             padding: 0,
-            margin: "0 10px",
+            margin: '0 10px',
         }
         }
         components={{
@@ -32,10 +32,10 @@ export const HotspotsSlider = (props: {
         }}
         valueLabelDisplay="on"
         sx={{
-            ".MuiSlider-rail": {
-                padding: "0",
-                borderRadius: "7px",
-                opacity: "100%",
+            '.MuiSlider-rail': {
+                padding: '0',
+                borderRadius: '7px',
+                opacity: '100%',
                 backgroundImage:
                     `linear-gradient(to right, 
                 rgb(30,255,50),
@@ -56,86 +56,86 @@ export const HotspotsSlider = (props: {
                 rgb(30,255,50), 
                 rgb(30,255,50))`
             },
-            ".MuiSlider-track": {
-                display: "none",
-                background: "transparent"
+            '.MuiSlider-track': {
+                display: 'none',
+                background: 'transparent'
             },
-            ".MuiSlider-thumb": {
+            '.MuiSlider-thumb': {
                 height: 5,
                 width: 5,
-                background: "white",
-                color: "white"
+                background: 'white',
+                color: 'white'
             }
-        }} />
-}
+        }} />;
+};
 
 export const adminExamStatistics = [
     {
-        title: "",
+        title: '',
         items: [
 
             /* Count of views */
             {
-                title: "Megtekintések száma",
-                value: "213",
-                suffix: "db"
+                title: 'Megtekintések száma',
+                value: '213',
+                suffix: 'db'
             },
 
             /* Time spent with watch */
             {
-                title: "Össz. megtekintési idő",
-                value: "23",
-                suffix: "óra"
+                title: 'Össz. megtekintési idő',
+                value: '23',
+                suffix: 'óra'
             },
 
             /* Performance on exam */
             {
-                title: "Átlagos nézési idő",
-                value: "3:45",
-                suffix: ""
+                title: 'Átlagos nézési idő',
+                value: '3:45',
+                suffix: ''
             },
 
             /* Average time spent per sessions */
             {
-                title: "Átlagban hány %-át nézik meg a videónak",
-                value: "78",
-                suffix: "%"
+                title: 'Átlagban hány %-át nézik meg a videónak',
+                value: '78',
+                suffix: '%'
             },
 
         ]
     },
     {
-        title: "",
+        title: '',
         items: [
 
 
 
             /* Video difficulty by users */
             {
-                title: "Videó nehézsége az értékelések alapján",
-                value: "2.3",
-                suffix: ""
+                title: 'Videó nehézsége az értékelések alapján',
+                value: '2.3',
+                suffix: ''
             },
 
             /* Calculated video difficulty */
             {
-                title: "Videó nehézségének értékelései",
-                value: "210",
-                suffix: "db"
+                title: 'Videó nehézségének értékelései',
+                value: '210',
+                suffix: 'db'
             },
 
             /* Video quality rating by users */
             {
-                title: "Videó minősége az értékelések alapján",
-                value: "4.8",
-                suffix: ""
+                title: 'Videó minősége az értékelések alapján',
+                value: '4.8',
+                suffix: ''
             },
 
             /* Calculated video quality rating */
             {
-                title: "Videó minőségének értékelései",
-                value: "130",
-                suffix: "db"
+                title: 'Videó minőségének értékelései',
+                value: '130',
+                suffix: 'db'
             },
 
             /* Video watch rate chart*/
@@ -153,41 +153,41 @@ export const adminExamStatistics = [
                     isSortValues
                     options={defaultCharts.redRadiusPie}
                     style={{
-                        width: "100%",
-                        height: "100%"
+                        width: '100%',
+                        height: '100%'
                     }} />
             },
 
             /* Dropout rate by video */
             {
-                title: "Hányan léptek ki a platformból ezután a videó után",
-                value: "10",
-                suffix: "fő"
+                title: 'Hányan léptek ki a platformból ezután a videó után',
+                value: '10',
+                suffix: 'fő'
             },
 
             /* Correct answers count */
             {
-                title: "Hányan válaszoltak jól a videóhoz tartozó kérdésre?",
-                value: "45",
-                suffix: "fő"
+                title: 'Hányan válaszoltak jól a videóhoz tartozó kérdésre?',
+                value: '45',
+                suffix: 'fő'
             },
 
             /* Correct answers rate by users */
             {
-                title: "A felhasználók hány %-a válaszolt jól a videóhoz tartozó kérdésre?",
-                value: "70",
-                suffix: "%"
+                title: 'A felhasználók hány %-a válaszolt jól a videóhoz tartozó kérdésre?',
+                value: '70',
+                suffix: '%'
             },
 
             /* Average repetition multiplier */
             {
-                title: "Átlagosan ennyiszer ismétlik meg a felhasználók",
-                value: "1.3",
-                suffix: "x"
+                title: 'Átlagosan ennyiszer ismétlik meg a felhasználók',
+                value: '1.3',
+                suffix: 'x'
             },
         ]
     }
-] as StatisticsGroupType[]
+] as StatisticsGroupType[];
 
 
 
@@ -195,7 +195,7 @@ export const AdminExamStatisticsListItem = (props: {
     title: string,
     color: string
 }) => {
-    const { title, color } = props
+    const { title, color } = props;
 
     return <Flex align="center">
 
@@ -210,31 +210,32 @@ export const AdminExamStatisticsListItem = (props: {
                 color: color,
                 lineHeight: 1.1,
                 fontWeight: 500,
-                margin: "3px 0"
+                margin: '3px 0'
             }}
             fontSize="fontSmall">
 
             {title}
         </EpistoFont>
-    </Flex>
-}
+    </Flex>;
+};
 
 export const adminExamStatisticsListItems = [
     {
-        title: "A legtöbb felhasználónak nehezen érthető",
-        color: "red"
+        title: 'A legtöbb felhasználónak nehezen érthető',
+        color: 'red'
     },
     {
-        title: "A felhasználók egy részének nehezen érthető",
-        color: "orange"
+        title: 'A felhasználók egy részének nehezen érthető',
+        color: 'orange'
     },
     {
-        title: "Nem történtek visszatekerések",
-        color: "green"
+        title: 'Nem történtek visszatekerések',
+        color: 'green'
     },
-]
+];
 
-export const ValueLabelComponent = (props) => {
+export const ValueLabelComponent = (props: { children: ReactNode, value: any }) => {
+
     const { children, value } = props;
 
     return (
@@ -251,14 +252,16 @@ export const ValueLabelComponent = (props) => {
             {children}
         </Tooltip >
     );
-}
+};
 
 export const AdminExamStatisticsModalPage = () => {
 
 
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
-    return <Flex direction="column" overflowY="scroll" p="20px">
+    return <Flex direction="column"
+        overflowY="scroll"
+        p="20px">
 
         {/* First statistics card section */}
         <Flex mt="10px">
@@ -270,15 +273,16 @@ export const AdminExamStatisticsModalPage = () => {
                 gridAutoRows="200px"
                 gridAutoFlow="column dense">
 
-                {adminExamStatistics[0].items.map(item => {
+                {adminExamStatistics[0].items.map((item, index) => {
 
                     return <StatisticsCard
+                        key={index}
                         style={{
-                            background: "var(--transparentWhite80)",
+                            background: 'var(--transparentWhite80)',
                             paddingLeft: 20,
                             minWidth: 200
                         }}
-                        {...item} />
+                        {...item} />;
                 })}
             </Grid>
         </Flex>
@@ -341,10 +345,10 @@ export const AdminExamStatisticsModalPage = () => {
                         </EpistoFont>
 
                         <EpistoSelect
-                            items={["Ismétlések aránya"]}
-                            selectedValue={"Ismétlések aránya"}
-                            onSelected={() => { }}
-                            getCompareKey={() => "asd"} />
+                            items={['Ismétlések aránya']}
+                            selectedValue={'Ismétlések aránya'}
+                            onSelected={() => { console.log('asd'); }}
+                            getCompareKey={() => 'asd'} />
                     </Flex>
 
                     <Flex flex="1" >
@@ -389,11 +393,12 @@ export const AdminExamStatisticsModalPage = () => {
                                 </Flex>
 
                                 <Flex direction="column">
-                                    {adminExamStatisticsListItems.map(item => {
+                                    {adminExamStatisticsListItems.map((item, index) => {
 
                                         return <AdminExamStatisticsListItem
+                                            key={index}
                                             title={item.title}
-                                            color={item.color} />
+                                            color={item.color} />;
                                     })}
                                 </Flex>
                             </Flex>
@@ -481,14 +486,15 @@ export const AdminExamStatisticsModalPage = () => {
             gridAutoRows="160px"
             gridGap={10}>
 
-            {adminExamStatistics[1].items.map(item => {
+            {adminExamStatistics[1].items.map((item, index) => {
                 return <StatisticsCard
+                    key={index}
                     style={{
-                        background: "var(--transparentWhite80)",
+                        background: 'var(--transparentWhite80)',
                         paddingLeft: 20,
                         minWidth: 200
                     }}
-                    {...item} />
+                    {...item} />;
             })}
         </Grid>
     </Flex>;

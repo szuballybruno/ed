@@ -196,7 +196,7 @@ export class VideoService extends QueryServiceBase<Video> {
     getVideoByIdAsync = async (videoId: number) => {
 
         const video = await this._ormService
-            .getSingleById(Video, videoId, { allowDeleted: true });
+            .getSingleById(Video, videoId);
 
         return video;
     }

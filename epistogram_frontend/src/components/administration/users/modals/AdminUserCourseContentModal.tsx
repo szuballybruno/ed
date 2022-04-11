@@ -1,18 +1,18 @@
-import { Flex, Image } from "@chakra-ui/react"
-import { Tab, Tabs } from "@mui/material"
-import { useState } from "react"
-import { UserCourseProgressChartDTO } from "../../../../shared/dtos/UserCourseProgressChartDTO"
-import { defaultCharts } from "../../../../static/defaultChartOptions"
-import { getAssetUrl, roundNumber } from "../../../../static/frontendHelpers"
-import { translatableTexts } from "../../../../static/translatableTexts"
-import { EpistoFont } from "../../../controls/EpistoFont"
-import { TabPanel } from "../../../courseDetails/TabPanel"
-import { EpistoDialog, EpistoDialogLogicType } from "../../../EpistoDialog"
-import { NoProgressChartYet } from "../../../home/NoProgressChartYet"
-import { UserProgressChart } from "../../../universal/charts/UserProgressChart"
-import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { AdminUserVideosDataGridControl } from "../dataGrids/AdminUserVideosDataGridControl"
-import { EpistoPieChart } from "../../../universal/charts/base_charts/EpistoPieChart"
+import { Flex, Image } from '@chakra-ui/react';
+import { Tab, Tabs } from '@mui/material';
+import { useState } from 'react';
+import { UserCourseProgressChartDTO } from '../../../../shared/dtos/UserCourseProgressChartDTO';
+import { defaultCharts } from '../../../../static/defaultChartOptions';
+import { getAssetUrl, roundNumber } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { TabPanel } from '../../../courseDetails/TabPanel';
+import { EpistoDialog, EpistoDialogLogicType } from '../../../EpistoDialog';
+import { NoProgressChartYet } from '../../../home/NoProgressChartYet';
+import { UserProgressChart } from '../../../universal/charts/UserProgressChart';
+import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
+import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
 
 export const AdminUserCourseContentOverviewModalSubpage = (props: {
     userStats: {

@@ -203,7 +203,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamByIdAsync = (examId: number) => {
 
         return this._ormService
-            .getSingleById(Exam, examId, { allowDeleted: true });
+            .getSingleById(Exam, examId);
     }
 
     /**

@@ -6,7 +6,6 @@ import { Flex } from '@chakra-ui/react';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { LearningStatisticsSeciton } from '../../learningInsights/LearningStatisticsSeciton';
 
-
 const AdminStatistics = () => {
     function getColors(length: number) {
         const pallet = [

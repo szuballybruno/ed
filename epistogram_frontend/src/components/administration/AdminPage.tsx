@@ -16,7 +16,7 @@ import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-import AdminStatistics from './users/AdminStatisticsSubpage';
+// import AdminStatistics from './users/AdminStatisticsSubpage';
 import { AdminUserControl } from './users/AdminUserControl';
 
 export const AdminPage = () => {
@@ -147,12 +147,12 @@ export const AdminPage = () => {
                     },
 
                     // statistics
-                    {
-                        route: administrationRoutes.myCompanyRoute,
-                        element: <AdminStatistics />,
-                        protectionLevel: 'authorize',
-                        isAuthorizedToView: x => x.canAccessShopAdministration
-                    }
+                    // {
+                    //     route: administrationRoutes.myCompanyRoute,
+                    //     element: <AdminStatistics />,
+                    //     protectionLevel: 'authorize',
+                    //     isAuthorizedToView: x => x.canAccessShopAdministration
+                    // }
                 ]} />
         </ContentPane>
     </PageRootContainer>;

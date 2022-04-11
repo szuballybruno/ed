@@ -243,4 +243,4 @@ export const CourseItemSelector = (props: {
 
         <CourseItemList modules={modules}></CourseItemList>
     </>;
-}
+};

@@ -163,13 +163,11 @@ export class ORMConnectionService {
         idField?: TField,
         query?: ExpressionPart<TEntity, TParam>[],
         params?: TParam,
-        deletionPropertyName?: keyof TEntity,
-        allowDeleted?: boolean
+        deletionPropertyName?: keyof TEntity
     }) {
 
         type ActualParamType = { id: number } & TParam;
 
-        const allowDeleted = !!opts?.allowDeleted;
         const deletionPropertyName = opts?.deletionPropertyName;
 
         const idFieldName = opts?.idField ?? 'id' as TField;
@@ -179,8 +177,8 @@ export class ORMConnectionService {
         // create expression
         let expr: ExpressionPart<TEntity, ActualParamType>[] = [['WHERE', idFieldName, '=', 'id']];
 
-        if (!allowDeleted)
-            expr = expr.concat([['AND', deletionPropertyName ? deletionPropertyName : 'deletionDate' as any, 'IS', 'NULL']]);
+        if (deletionPropertyName)
+            expr = expr.concat([['AND', deletionPropertyName, 'IS', 'NULL']]);
 
         const fullExpr: ExpressionPart<TEntity, ActualParamType>[] = expr.concat(query);
         const actualParams: ActualParamType = { id, ...hahparams } as any;

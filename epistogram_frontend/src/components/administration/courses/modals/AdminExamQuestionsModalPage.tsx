@@ -90,27 +90,28 @@ export const AdminExamQuestionsModalPage = () => {
                                 </TableCell>
 
                                 {row.answers
-                                    .map(answer => {
+                                    .map((answer, index) => {
 
                                         return <TableCell
+                                            key={index}
                                             style={{
                                                 color: answer.isCorrect
-                                                    ? "var(--deepGreen)"
-                                                    : "var(--intenseRed)"
+                                                    ? 'var(--deepGreen)'
+                                                    : 'var(--intenseRed)'
                                             }}>
 
                                             <Checkbox
                                                 checked={answer.isCorrect}
                                                 style={{
                                                     color: answer.isCorrect
-                                                        ? "var(--deepGreen)"
-                                                        : "var(--intenseRed)"
+                                                        ? 'var(--deepGreen)'
+                                                        : 'var(--intenseRed)'
                                                 }} />
 
                                             {answer.title}
-                                        </TableCell>
+                                        </TableCell>;
                                     })}
-                            </TableRow>
+                            </TableRow>;
 
                         })}
                 </TableBody>

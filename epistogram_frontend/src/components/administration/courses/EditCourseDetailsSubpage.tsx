@@ -1,6 +1,6 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { Button, Slider } from '@mui/material';
-import { default as React, default as React, useEffect, useState } from 'react';
+import { default as React, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
@@ -159,12 +159,12 @@ export const AdminCourseDetailsSubpage = () => {
         setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
         courseDetailsEditData.humanSkillBenefits.length === 0
             ? iterate(10, () => ({
-                text: "",
+                text: '',
                 value: 0
             }))
-            : setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits)
-        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + "");
-        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + "");
+            : setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
+        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + '');
+        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + '');
 
     }, [courseDetailsEditData]);
 

@@ -13,12 +13,13 @@ export const UserProgressChart = (props: {
 
     const dates = iterate(courseLengthDays, index => {
 
-        const date = new Date(userProgress.startDate).addDays(index);
+        const date = new Date(userProgress.startDate)
+.addDays(index);
 
         return date.toLocaleDateString(undefined, {
             month: '2-digit',
             day: '2-digit'
-        })
+        });
     });
 
     const actualProgress = userProgress
@@ -29,18 +30,18 @@ export const UserProgressChart = (props: {
 
     const userProgressChartOptions = {
         legend: {
-            orient: "horizontal",
-            icon: "circle",
+            orient: 'horizontal',
+            icon: 'circle',
             itemHeight: 10,
             top: 10,
             show: true,
             textStyle: {
                 fontWeight: 700,
-                color: "black"
+                color: 'black'
             }
         },
         xAxis: {
-            nameLocation: "middle",
+            nameLocation: 'middle',
             nameGap: 40,
             nameTextStyle: {
                 fontWeight: 600
@@ -58,8 +59,8 @@ export const UserProgressChart = (props: {
             }
         },
         yAxis: {
-            name: "Haladás",
-            nameLocation: "middle",
+            name: 'Haladás',
+            nameLocation: 'middle',
             nameGap: 40,
             nameTextStyle: {
                 fontWeight: 600
@@ -69,17 +70,17 @@ export const UserProgressChart = (props: {
         seriesOptions: {
             type: 'line',
             symbolSize: 10,
-            symbol: "circle",
+            symbol: 'circle',
             lineStyle: {
                 width: 5,
-                shadowColor: "rgba(0, 0, 0, 0.3)",
+                shadowColor: 'rgba(0, 0, 0, 0.3)',
                 shadowOffsetX: 2,
                 shadowOffsetY: 2,
                 shadowBlur: 10
             }
         }
 
-    }
+    };
 
     return <EpistoLineChart
         title=''
@@ -90,15 +91,15 @@ export const UserProgressChart = (props: {
         yAxisLabelSuffix='%'
         dataset={[
             {
-                name: "Becsült haladás",
+                name: 'Becsült haladás',
                 data: dates.map((_, index) => (100 / dates.length) * (index + 1)) as EpistoLineChartDataType
             }, {
-                name: "Valós haladás",
+                name: 'Valós haladás',
                 data: actualProgress
             }
         ]}
         style={{
-            width: "100%",
-            height: "100%"
-        }} />
-}
+            width: '100%',
+            height: '100%'
+        }} />;
+};

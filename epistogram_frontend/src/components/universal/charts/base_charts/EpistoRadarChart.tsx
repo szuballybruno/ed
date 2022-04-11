@@ -85,10 +85,10 @@ export const EpistoRadarChart = (props: {
                 },
                 seriesOptions,
                 {
-                    type: "radar"
+                    type: 'radar'
                 })
         ]
-    })
+    });
 
     return <ReactECharts
         option={{

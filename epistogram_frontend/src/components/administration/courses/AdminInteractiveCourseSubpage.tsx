@@ -68,10 +68,14 @@ const CustomNodeComponent = (props: { data: any }) => {
 export const AdminInteractiveCourseSubpage = () => {
 
     return <AdminBreadcrumbsHeader>
-        <AdminSubpageHeader direction="row" flex="1" mb="50px">
+        <AdminSubpageHeader direction="row"
+flex="1"
+mb="50px">
             
             {/* TODO2 */}
-            <Flex flex="1" mr="5px" background="var(--transparentWhite70)">
+            <Flex flex="1"
+mr="5px"
+background="var(--transparentWhite70)">
                 <ReactFlow
                     nodeTypes={{
                         special: CustomNodeComponent

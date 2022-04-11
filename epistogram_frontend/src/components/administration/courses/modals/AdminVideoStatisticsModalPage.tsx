@@ -1,14 +1,14 @@
-import { Divider, Flex, Grid, Tooltip } from "@chakra-ui/react"
-import React, { useState } from "react"
-import ReactPlayer from "react-player"
-import { defaultCharts } from "../../../../static/defaultChartOptions"
-import { iterate } from "../../../../static/frontendHelpers"
-import { EpistoFont } from "../../../controls/EpistoFont"
-import { EpistoSelect } from "../../../controls/EpistoSelect"
-import StatisticsCard from "../../../statisticsCard/StatisticsCard"
-import { EpistoLineChart } from "../../../universal/charts/base_charts/EpistoLineChart"
-import { DashboardSection } from "../../../universal/DashboardSection"
-import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from "./AdminExamStatisticsModalPage"
+import { Divider, Flex, Grid, Tooltip } from '@chakra-ui/react';
+import React, { ReactNode, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { defaultCharts } from '../../../../static/defaultChartOptions';
+import { iterate } from '../../../../static/frontendHelpers';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoSelect } from '../../../controls/EpistoSelect';
+import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
+import { DashboardSection } from '../../../universal/DashboardSection';
+import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './AdminExamStatisticsModalPage';
 
 export const AdminVideoStatisticsModalPage = () => {
 
@@ -32,7 +32,9 @@ export const AdminVideoStatisticsModalPage = () => {
     };
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
-    return <Flex direction="column" overflowY="scroll" p="20px">
+    return <Flex direction="column"
+        overflowY="scroll"
+        p="20px">
 
         {/* First statistics card section */}
         <Flex mt="10px">
@@ -44,15 +46,16 @@ export const AdminVideoStatisticsModalPage = () => {
                 gridAutoRows="200px"
                 gridAutoFlow="column dense">
 
-                {adminExamStatistics[0].items.map(item => {
+                {adminExamStatistics[0].items.map((item, index) => {
 
                     return <StatisticsCard
+                        key={index}
                         style={{
-                            background: "var(--transparentWhite80)",
+                            background: 'var(--transparentWhite80)',
                             paddingLeft: 20,
                             minWidth: 200
                         }}
-                        {...item} />
+                        {...item} />;
                 })}
             </Grid>
         </Flex>
@@ -115,10 +118,10 @@ export const AdminVideoStatisticsModalPage = () => {
                         </EpistoFont>
 
                         <EpistoSelect
-                            items={["Ismétlések aránya"]}
-                            selectedValue={"Ismétlések aránya"}
-                            onSelected={() => { }}
-                            getCompareKey={() => "asd"} />
+                            items={['Ismétlések aránya']}
+                            selectedValue={'Ismétlések aránya'}
+                            onSelected={() => { console.log(''); }}
+                            getCompareKey={() => 'asd'} />
                     </Flex>
 
                     <Flex flex="1" >
@@ -163,11 +166,12 @@ export const AdminVideoStatisticsModalPage = () => {
                                 </Flex>
 
                                 <Flex direction="column">
-                                    {adminExamStatisticsListItems.map(item => {
+                                    {adminExamStatisticsListItems.map((item, index) => {
 
                                         return <AdminExamStatisticsListItem
+                                            key={index}
                                             title={item.title}
-                                            color={item.color} />
+                                            color={item.color} />;
                                     })}
                                 </Flex>
                             </Flex>
@@ -255,14 +259,15 @@ export const AdminVideoStatisticsModalPage = () => {
             gridAutoRows="160px"
             gridGap={10}>
 
-            {adminExamStatistics[1].items.map(item => {
+            {adminExamStatistics[1].items.map((item, index) => {
                 return <StatisticsCard
+                    key={index}
                     style={{
-                        background: "var(--transparentWhite80)",
+                        background: 'var(--transparentWhite80)',
                         paddingLeft: 20,
                         minWidth: 200
                     }}
-                    {...item} />
+                    {...item} />;
             })}
         </Grid>
     </Flex>;

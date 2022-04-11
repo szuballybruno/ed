@@ -9,7 +9,7 @@ export type EpistoEntryPropsType<TValue extends number | string | null> = {
     value?: TValue,
     label?: string,
     setValue?: (value: TValue) => void,
-    onFocusLost?: (value: TValue, event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void,
+    onFocusLost?: (value: TValue, event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
     disabled?: boolean,
     isMultiline?: boolean,
     postfix?: string,

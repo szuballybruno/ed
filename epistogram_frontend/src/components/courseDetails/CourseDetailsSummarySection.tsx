@@ -1,12 +1,12 @@
 import { Flex, Grid } from '@chakra-ui/react';
 import DoneIcon from '@mui/icons-material/Done';
-import React from "react";
-import { CourseDetailsDTO } from "../../shared/dtos/CourseDetailsDTO";
-import { defaultCharts } from "../../static/defaultChartOptions";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoHeader } from "../EpistoHeader";
-import { EpistoRadarChart } from "../universal/charts/base_charts/EpistoRadarChart";
+import React from 'react';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { defaultCharts } from '../../static/defaultChartOptions';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
+import { EpistoRadarChart } from '../universal/charts/base_charts/EpistoRadarChart';
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
