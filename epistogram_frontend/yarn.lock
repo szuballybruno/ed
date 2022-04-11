@@ -9185,10 +9185,10 @@ react-onesignal@2.0.1:
   resolved "https://registry.yarnpkg.com/react-onesignal/-/react-onesignal-2.0.1.tgz#431478907c1f9a996a51a89561a0f9ab720c3805"
   integrity sha512-880vbHYHeXIuEyjITuxzPPNpS3cqRhykAE0yuAShU5M52RgNOq3JgvUbYTqTQr8XOj2FlQcsu9rWiK8CBgsI5w==
 
-react-player@2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/react-player/-/react-player-2.10.0.tgz#bd3e0f10ae756cc644efb14177a515d455d97e20"
-  integrity sha512-PccIqea9nxSHAdai6R+Yj9lp6tb2lyXWbaF6YVHi5uO4FiXYMKKr9rMXJrivwV5vXwQa65rYKBmwebsBmRTT3w==
+react-player@2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-player/-/react-player-2.9.0.tgz#ef7fe7073434087565f00ff219824e1e02c4b046"
+  integrity sha512-jNUkTfMmUhwPPAktAdIqiBcVUKsFKrVGH6Ocutj6535CNfM91yrvWxHg6fvIX8Y/fjYUPoejddwh7qboNV9vGA==
   dependencies:
     deepmerge "^4.0.0"
     load-script "^1.0.0"
