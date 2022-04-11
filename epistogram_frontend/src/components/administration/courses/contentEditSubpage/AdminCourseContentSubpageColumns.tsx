@@ -18,7 +18,7 @@ import classses from './css/AdminCourseContentSubpage.module.css';
 
 export const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
-    openDialog: (type: 'video' | 'exam') => void,
+    openDialog: (type: 'video' | 'exam', itemId?: number) => void,
     removeRow: (key: string) => void,
     editRow: EditRowFnType,
     isModified: (key: string) => (field: keyof RowSchema) => boolean) => {
@@ -210,7 +210,7 @@ export const useGridColumnDefinitions = (
                 return (
                     <div className="h-flex">
                         <EpistoButton
-                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam')}>
+                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row.quickMenu)}>
 
                             <Edit />
                         </EpistoButton>

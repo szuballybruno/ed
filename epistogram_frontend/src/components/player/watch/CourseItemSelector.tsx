@@ -1,4 +1,5 @@
 import { Divider, Flex } from '@chakra-ui/layout';
+import { Filter, Filter1, Filter2, FilterAlt, Search } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -105,6 +106,10 @@ export const CourseItemSelector = (props: {
         <Flex
             align="center"
             padding="20px"
+            position='sticky'
+            zIndex='1'
+            top='0'
+            background='white'
             height="100px">
 
             {/* tempomat tempo  */}
@@ -158,16 +163,18 @@ export const CourseItemSelector = (props: {
                     position: 'relative'
                 }}>
 
-                <Flex height="100px"
-                    padding="20px"
+                <Flex
+                    height="50px"
+                    padding="0 20px"
                     justify="center">
 
                     <EpistoButton
                         variant="outlined"
-                        onClick={() => setCourseMode('beginner')}
+                        onClick={() => setCourseMode(mode === 'beginner' ? 'advanced' : 'beginner')}
                         style={{
                             margin: '5px',
-                            padding: '0 0 0 10px',
+                            padding: '0 10px 0 10px',
+                            flex: '1',
                             border: mode === 'beginner' ? '2px solid var(--epistoTeal)' : undefined
                         }}>
 
@@ -175,33 +182,32 @@ export const CourseItemSelector = (props: {
                             isUppercase
                             fontSize="fontNormal14">
 
-                            {translatableTexts.player.courseItemSelector.beginner}
+                            {mode === 'advanced'
+                                ? translatableTexts.player.courseItemSelector.beginner
+                                : translatableTexts.player.courseItemSelector.advanced}
                         </EpistoFont>
-
-                        <Radio size="small"
-                            value="beginner" />
                     </EpistoButton>
-
                     <EpistoButton
-                        variant="outlined"
-                        onClick={() => setCourseMode('advanced')}
+                        variant="colored"
                         style={{
                             margin: '5px',
-                            padding: '0 0 0 10px',
-                            border: mode === 'advanced' ?
-                                '2px solid var(--epistoTeal)' :
-                                undefined
+                            padding: '0 10px 0 10px',
+                            width: '40px',
+                            border: '2px solid var(--epistoTeal)'
                         }}>
 
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontNormal14">
+                        <Search />
+                    </EpistoButton>
+                    <EpistoButton
+                        variant="colored"
+                        style={{
+                            margin: '5px',
+                            padding: '0 10px 0 10px',
+                            width: '40px',
+                            border: '2px solid var(--epistoTeal)'
+                        }}>
 
-                            {translatableTexts.player.courseItemSelector.advanced}
-                        </EpistoFont>
-
-                        <Radio size="small"
-                            value="advanced" />
+                        <FilterAlt />
                     </EpistoButton>
                 </Flex>
 
@@ -212,8 +218,9 @@ export const CourseItemSelector = (props: {
                         alignSelf: 'flex-start',
                         color: 'var(--epistoTeal)',
                         position: 'absolute',
+                        zIndex: 3,
                         right: 10,
-                        top: 10
+                        top: -20
                     }}
                     icon={<HelpOutlineIcon />}
                     onClick={() => setIsInfoDialogOpen(true)} />

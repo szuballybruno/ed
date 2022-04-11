@@ -10,6 +10,7 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
 
     const [title, setTitle] = useState(dialogOptions?.title ?? '');
     const [description, setDescription] = useState(dialogOptions?.description ?? '');
+    const [dialogItemId, setDialogItemId] = useState(dialogOptions?.dialogItemId);
     const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? 'bottom';
     const xlogic = useXDialogLogic(key);
 
@@ -42,6 +43,9 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
 
             if (opt.buttons)
                 setButtons(defaultButtons.concat(opt.buttons ?? []));
+
+            if (opt.dialogItemId)
+                setDialogItemId(opt.dialogItemId);
         }
 
         xlogic.setIsOpen(true);
@@ -52,6 +56,7 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
         title,
         description,
         buttons,
+        dialogItemId,
         dialogOptions,
         openDialog,
         closeDialog,

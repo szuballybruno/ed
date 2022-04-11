@@ -347,6 +347,8 @@ import { User } from './models/entity/User';
     addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.video.getVideoQuestionEditData, videoController.getVideoQuestionEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.video.saveVideoQuestionEditData, videoController.saveVideoQuestionEditDataAction, { isPost: true, authorize: ['administrator'] });
 
     // questions
     addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction, { authorize: ['administrator'] });

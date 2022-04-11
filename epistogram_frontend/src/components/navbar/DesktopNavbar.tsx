@@ -165,9 +165,9 @@ export const DesktopNavbar = (props: {
             align="center"
             width="100%"
             flex="1"
-            height={isLowHeight ? '40px' : '60px'}
-            mt={isLowHeight ? undefined : '10px'}
-            mb={isLowHeight ? undefined : '10px'}
+            height={isMinimalMode ? '30px' : isLowHeight ? '40px' : '60px'}
+            mt={isLowHeight || isMinimalMode ? undefined : '10px'}
+            mb={isLowHeight || isMinimalMode ? undefined : '10px'}
             bg={backgroundContent}
             justify={hideLinks ? 'center' : 'space-between'}>
 
@@ -176,8 +176,8 @@ export const DesktopNavbar = (props: {
                 <img
                     src={getAssetUrl('/images/logo.svg')}
                     style={{
-                        width: '150px',
-                        height: '50px',
+                        width: isMinimalMode ? '80px' : '150px',
+                        height: isMinimalMode ? '50px' : '50px',
                         objectFit: 'contain',
                         cursor: 'pointer',
                     }}

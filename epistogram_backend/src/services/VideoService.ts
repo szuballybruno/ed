@@ -1,12 +1,12 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
-import { Question } from '../models/entity/Question';
 import { StorageFile } from '../models/entity/StorageFile';
-import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
 import { Video } from '../models/entity/Video';
-import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
-import { VideoRating } from '../models/entity/VideoRating';
+import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
+import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { VideoQuestionEditDTO } from '../shared/dtos/VideoQuestionEditDTO';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
+import { toVideoQuestionEditDTO } from './misc/mappings';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { getVideoLengthSecondsAsync } from './misc/videoDurationService';
 import { QuestionAnswerService } from './QuestionAnswerService';
@@ -205,5 +205,36 @@ export class VideoService extends QueryServiceBase<Video> {
             .getOneOrFail();
 
         return video;
+    }
+
+    getVideoQuestionEditDataAsync = async (
+        videoId?: number
+    ) => {
+
+        const questionEditView = await this._ormService
+            .getRepository(CourseItemQuestionEditView)
+            .createQueryBuilder('vq')
+            .where('vq.videoId = :videoId', { videoId })
+            .getMany()
+
+        const videoQuestionEditDTO = toVideoQuestionEditDTO(
+            questionEditView,
+            this._assetUrlService.getAssetUrl
+        )
+
+        return videoQuestionEditDTO
+    }
+
+    async saveVideoQuestionEditDataAsync(mutations: Mutation<VideoQuestionEditDTO, 'id'>[]) {
+        await this.saveUpdatedVideoQuestionEditDataAsync(mutations)
+    }
+
+    private async saveUpdatedVideoQuestionEditDataAsync(mutations: Mutation<VideoQuestionEditDTO, 'id'>[]) {
+
+        const questionIds = mutations
+            .filter(x => x.action === 'update')
+            .map(x => x.key)
+
+        return questionIds
     }
 }

@@ -140,10 +140,10 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: 'video' | 'exam' | 'module') => {
+    const openDialog = (type: 'video' | 'exam' | 'module', itemId?: number) => {
 
         if (type === 'video')
-            videoEditDialogLogic.openDialog();
+            videoEditDialogLogic.openDialog({ dialogItemId: itemId });
 
         if (type === 'exam')
             examEditDialogLogic.openDialog();

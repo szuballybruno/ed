@@ -8,6 +8,8 @@ import { LoadingStateType } from '../../models/types';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { uploadeFileChunksAsync } from '../core/fileUploadClient';
 import { usePostDataUnsafe } from '../core/httpClient';
+import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
+import { Mutation } from '../../shared/dtos/mutations/Mutation';
 
 export const useCreateVideo = () => {
 
@@ -62,6 +64,29 @@ export const useVideoEditData = (videoId: number) => {
         videoEditDataState: qr.state,
         videoEditDataError: qr.error,
         refetchVideoEditDataAsync: qr.refetch
+    };
+};
+
+
+export const useVideoQuestionEditData = (videoId: number | null) => {
+
+    const qr = useReactQuery2<VideoQuestionEditDTO>(apiRoutes.video.getVideoQuestionEditData, { videoId }, !!videoId);
+
+    return {
+        videoQuestionEditData: qr.data,
+        videoQuestionEditDataError: qr.error,
+        videoQuestionEditDataState: qr.state,
+        refetchVideoQuestionEditData: qr.refetch
+    };
+};
+
+export const useSaveVideoQuestionEditData = () => {
+
+    const qr = usePostDataUnsafe<Mutation<VideoQuestionEditDTO, 'id'>[], void>(apiRoutes.video.saveVideoQuestionEditData);
+
+    return {
+        saveVideoQuestionEditData: qr.postDataAsync,
+        saveVideoQuestionEditDataState: qr.state,
     };
 };
 

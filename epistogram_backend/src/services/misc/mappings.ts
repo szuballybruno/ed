@@ -22,6 +22,7 @@ import { CourseAdminContentView } from '../../models/views/CourseAdminContentVie
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
+import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
 import { CourseItemStateView } from '../../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
@@ -53,7 +54,6 @@ import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
-import { CourseContentEditDataDTO } from '../../shared/dtos/CourseContentEditDataDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
 import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
@@ -85,6 +85,7 @@ import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
 import { RoleDTO } from '../../shared/dtos/RoleDTO';
 import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
@@ -105,12 +106,21 @@ import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { VideoDTO } from '../../shared/dtos/VideoDTO';
 import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
-import { CourseContentItemIssueCodeType, CourseItemStateType } from '../../shared/types/sharedTypes';
+import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
+import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(Question, QuestionEditDataDTO, question => ({
+            questionId: question.id,
+            questionText: question.questionText,
+            answers: question.answers
+                .map(answer => toAnswerEditDTO(answer))
+        }));
 
     mapperService
         .addMap(CourseModule, AdminModuleShortDTO, courseModule => ({
@@ -1055,3 +1065,40 @@ export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
     } as CourseCategoryDTO;
 };
 
+export const toVideoQuestionEditDTO = (ci: CourseItemQuestionEditView[], getAssetUrl: (path: string) => string): VideoQuestionEditDTO => {
+    const questionGroup = ci
+        .groupBy(x => x.questionId)
+
+
+    const {
+        itemTitle,
+        itemSubtitle,
+        courseTitle,
+        videoFilePath
+    } = questionGroup.first().first
+
+    const videoFileUrl = getAssetUrl(videoFilePath)
+
+
+    return {
+        id: questionGroup.first().first.videoId,
+        title: itemTitle,
+        subtitle: itemSubtitle,
+        courseName: courseTitle,
+        description: "",
+        videoLengthSeconds: 0,
+        videoUrl: videoFileUrl,
+        questions: questionGroup
+            .map(q => {
+                return {
+                    questionId: q.first.questionId,
+                    questionText: q.first.questionText,
+                    answers: q.items.map(qi => ({
+                        id: qi.answerId,
+                        text: qi.answerText,
+                        isCorrect: false
+                    }))
+                }
+            })
+    }
+}

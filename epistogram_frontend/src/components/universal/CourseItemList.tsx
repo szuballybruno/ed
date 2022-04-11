@@ -1,16 +1,14 @@
 import { Box, Flex } from '@chakra-ui/react';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import DoneIcon from '@mui/icons-material/Done';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import LockIcon from '@mui/icons-material/Lock';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
 import { ModuleDTO } from '../../shared/dtos/ModuleDTO';
-import { getAssetUrl, getRandomInteger } from '../../static/frontendHelpers';
+import { getRandomInteger } from '../../static/frontendHelpers';
+import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { CollapseItem } from './CollapseItem';
@@ -38,62 +36,52 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
         ? 'var(--intenseOrange)'
         : 'var(--epistoTeal)';
 
+    const VideoListSausageIndicator = (props: {
+        color: string
+    }) => {
+
+        const { color: sausageColor } = props;
+
+        return <Flex
+            alignSelf="stretch"
+            className="roundBorders"
+            boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+            p="3px"
+            m="7px 10px 7px 0px"
+            bgColor={sausageColor} />;
+    };
+
     return <FlexListItem
         isLocked={isLocked}
         onClick={navigate}
         midContent={<Flex align="center">
 
-            {getRandomInteger(0, 2) % 2 === 0 && <Flex
-                className="roundBorders"
-                h="10px"
-                w="10px"
-                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                p="3px"
-                m="7px 10px 7px -20px"
-                bgColor="var(--mildOrange)" />}
-
-            <Flex
-                alignSelf="stretch"
-                className="roundBorders"
-                boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                p="3px"
-                m="7px 10px 7px 0px"
-                bgColor={borderColor} />
-
-            <FlexListTitleSubtitle title={title}
-subTitle={subTitle} />
-        </Flex>}
-        endContent={<Flex
-            align="center"
-            justify="center"
-            flexBasis="50px">
-
             {state === 'current' &&
-                <img
-                    src={getAssetUrl('/images/eye3D.png')}
-                    style={{
-                        width: '20px',
-                        color: 'var(--epistoTeal)'
-                    }} />}
+                <VideoListSausageIndicator
+                    color='var(--deepGreen)' />}
 
             {state === 'locked' &&
-                <LockIcon style={{
-                    color: 'grey'
-                }} />}
+                <VideoListSausageIndicator
+                    color='grey' />}
 
             {state === 'available' &&
-                <LockOpenIcon
-                    style={{
-                        color: 'var(--mildGreen)'
-                    }} />}
+                <VideoListSausageIndicator
+                    color='var(--epistoTeal)' />}
 
             {state === 'completed' &&
-                <DoneIcon
-                    style={{
-                        color: 'var(--mildGreen)'
-                    }} />}
-        </Flex>}>
-    </FlexListItem>;
+                <VideoListSausageIndicator
+                    color='var(--mildGreen)' />}
+
+            <FlexListTitleSubtitle
+                title={title}
+                subTitle={subTitle} />
+        </Flex>}
+        endContent={getRandomInteger(0, 100) % 10 === 0 &&
+            <ChipSmall
+                size='small'
+                text='Ismétlés ajánlott'
+                color='var(--intenseOrange)' />}>
+    </FlexListItem >;
 };
 
 export const CourseItemList = (props: {
@@ -163,8 +151,7 @@ export const CourseItemList = (props: {
         <Flex
             id="courseItemListRoot"
             direction="column"
-            justifyContent={'flex-start'}
-            overflowY="scroll">
+            justifyContent={'flex-start'}>
 
             {modules
                 .map((module, index) => {
@@ -225,9 +212,11 @@ export const CourseItemList = (props: {
                             </Box>
                         </Flex>}>
 
-                        <FlexList id="courseItemListContainer"
-p="10px"
-height="100%">
+                        <FlexList
+                            id="courseItemListContainer"
+                            p="10px"
+                            height="100%">
+
                             {module
                                 .items
                                 .map((courseItem, index) => <CourseItemView

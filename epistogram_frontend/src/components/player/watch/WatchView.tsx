@@ -236,7 +236,7 @@ export const WatchView = (props: {
 
                 {/* questionnaire */}
                 <AbsoluteFlexOverlay isVisible={isQuestionVisible}
-hasPointerEvents={true}>
+                    hasPointerEvents={true}>
                     <OverlayDialog
                         showCloseButton={false}>
                         <VideoQuestionnaire
@@ -256,7 +256,7 @@ hasPointerEvents={true}>
 
                 {/* still watching */}
                 <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker}
-hasPointerEvents={true}>
+                    hasPointerEvents={true}>
                     <OverlayDialog showCloseButton={false}>
                         <StillWatching
                             optionIndex={currentStillWatchingMarker?.answerOptionIndex!}
@@ -280,6 +280,7 @@ hasPointerEvents={true}>
             zIndex="10"
             mt="10px"
             px="20px"
+            pb="200px"
             background="var(--transparentWhite70)">
 
             {!isDesktopView && <CourseItemSelector
@@ -299,7 +300,7 @@ hasPointerEvents={true}>
                 align="center">
 
                 <Flex direction="column"
-flex="5">
+                    flex="5">
 
                     <EpistoFont
                         fontSize="fontLargePlus"
@@ -311,7 +312,7 @@ flex="5">
                     </EpistoFont>
 
                     <EpistoHeader variant="sub"
-text={video!.subTitle} />
+                        text={video!.subTitle} />
                 </Flex>
 
                 {/* ratings */}

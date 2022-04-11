@@ -48,6 +48,7 @@ export type DialogOptions = {
     description?: string;
     buttons?: ButtonType[];
     defaultCloseButtonType?: 'none' | 'bottom' | 'top';
+    dialogItemId?: number;
 }
 
 export type ButtonType = {
