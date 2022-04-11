@@ -30,7 +30,7 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic('video_edit_dialog', { defaultCloseButtonType: 'top' });
+    const videoEditDialogLogic = useEpistoDialogLogic<number>('video_edit_dialog', { defaultCloseButtonType: 'top' });
     const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
     const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
     const isAnySelected = courseId != -1;
@@ -143,7 +143,7 @@ export const AdminCourseContentSubpage = () => {
     const openDialog = (type: 'video' | 'exam' | 'module', itemId?: number) => {
 
         if (type === 'video')
-            videoEditDialogLogic.openDialog({ dialogItemId: itemId });
+            videoEditDialogLogic.openDialog({ params: itemId });
 
         if (type === 'exam')
             examEditDialogLogic.openDialog();

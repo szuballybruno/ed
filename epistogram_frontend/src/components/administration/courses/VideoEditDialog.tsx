@@ -36,7 +36,7 @@ export const mapToQuestionSchema = (item: QuestionEditDataDTO, itemId: number): 
 };
 
 export const VideoEditDialog = (props: {
-    logic: EpistoDialogLogicType
+    logic: EpistoDialogLogicType<number>
 }) => {
 
     // props
@@ -54,7 +54,7 @@ export const VideoEditDialog = (props: {
         videoQuestionEditDataState,
         videoQuestionEditDataError,
         refetchVideoQuestionEditData
-    } = useVideoQuestionEditData(logic.dialogItemId!);
+    } = useVideoQuestionEditData(logic.params!);
     const { saveVideoQuestionEditData } = useSaveVideoQuestionEditData();
 
     // computed

@@ -43,12 +43,12 @@ export type ApplicationRoute = {
     navAction?: () => void;
 }
 
-export type DialogOptions = {
+export type DialogOptions<TParams> = {
     title?: string;
     description?: string;
     buttons?: ButtonType[];
     defaultCloseButtonType?: 'none' | 'bottom' | 'top';
-    dialogItemId?: number;
+    params?: TParams;
 }
 
 export type ButtonType = {

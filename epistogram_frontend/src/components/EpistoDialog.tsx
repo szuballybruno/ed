@@ -4,13 +4,13 @@ import React, { ReactNode, useState } from 'react';
 import { ButtonType, DialogOptions } from '../models/types';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
-import { useXDialogLogic, XDialog } from './lib/XDialog/XDialog';
+import { useXDialogLogic, XDialog, XDialogLogicType } from './lib/XDialog/XDialog';
 
-export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions) => {
+export const useEpistoDialogLogic = <TParams = any,>(key: string, dialogOptions?: DialogOptions<TParams>) => {
 
     const [title, setTitle] = useState(dialogOptions?.title ?? '');
     const [description, setDescription] = useState(dialogOptions?.description ?? '');
-    const [dialogItemId, setDialogItemId] = useState(dialogOptions?.dialogItemId);
+    const [params, setParams] = useState(dialogOptions?.params);
     const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? 'bottom';
     const xlogic = useXDialogLogic(key);
 
@@ -31,7 +31,7 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
     const [buttons, setButtons] = useState<ButtonType[]>(defaultButtons
         .concat(dialogOptions?.buttons ?? []));
 
-    const openDialog = (opt?: DialogOptions) => {
+    const openDialog = (opt?: DialogOptions<TParams>) => {
 
         if (opt) {
 
@@ -44,8 +44,8 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
             if (opt.buttons)
                 setButtons(defaultButtons.concat(opt.buttons ?? []));
 
-            if (opt.dialogItemId)
-                setDialogItemId(opt.dialogItemId);
+            if (opt.params)
+                setParams(opt.params);
         }
 
         xlogic.setIsOpen(true);
@@ -56,7 +56,7 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
         title,
         description,
         buttons,
-        dialogItemId,
+        params,
         dialogOptions,
         openDialog,
         closeDialog,
@@ -64,10 +64,20 @@ export const useEpistoDialogLogic = (key: string, dialogOptions?: DialogOptions)
     };
 };
 
-export type EpistoDialogLogicType = ReturnType<typeof useEpistoDialogLogic>;
+export type EpistoDialogLogicType<TParams = any> = {
+    isOpen: boolean;
+    title: string;
+    description: string;
+    buttons: any;
+    params: TParams;
+    dialogOptions: any;
+    openDialog: any;
+    closeDialog: any;
+    xlogic: XDialogLogicType;
+};
 
-export const EpistoDialog = (props: {
-    logic: EpistoDialogLogicType,
+export const EpistoDialog = <TParams = any>(props: {
+    logic: EpistoDialogLogicType<TParams>,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
