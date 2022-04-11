@@ -1,4 +1,4 @@
-import { Application, NextFunction, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 
 export interface ITurboMiddleware<TActionParams, TRouteOptions> {
 
@@ -17,14 +17,19 @@ export class TurboExpress<TActionParams, TRouteOptions extends IRouteOptions> {
     private _middlewares: ITurboMiddleware<TActionParams, TRouteOptions>[];
     private _onError: (e: any, req: Request, res: Response) => void;
     private _onSuccess: (value: any, req: Request, res: Response) => void;
+    private _port: string;
+    private _onListen: (() => void) | undefined;
 
     constructor(
-        expressServer: Application,
         middlewares: ITurboMiddleware<TActionParams, TRouteOptions>[],
+        port: string,
         onError: (e: any, req: Request, res: Response) => void,
-        onSuccess: (value: any, req: Request, res: Response) => void) {
+        onSuccess: (value: any, req: Request, res: Response) => void,
+        onListen?: () => void) {
 
-        this._expressServer = expressServer;
+        this._onListen = onListen;
+        this._port = port;
+        this._expressServer = express();
         this._middlewares = middlewares;
         this._onError = onError;
         this._onSuccess = onSuccess;
@@ -75,5 +80,17 @@ export class TurboExpress<TActionParams, TRouteOptions extends IRouteOptions> {
 
             this._expressServer.get(path, syncActionWrapper);
         }
+    }
+
+    use(middleware: (req: any, res: any, next: any) => void) {
+
+        this._expressServer
+            .use(middleware);
+    }
+
+    listen() {
+
+        this._expressServer
+            .listen(this._port, this._onListen);
     }
 }

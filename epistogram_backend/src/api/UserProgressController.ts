@@ -10,11 +10,12 @@ export class UserProgressController {
         this._userProgressService = userProgressService;
     }
 
-    getRecommendedItemQuotaAction = (params: ActionParams) => {
+    getRecommendedItemQuotaAction = async (params: ActionParams) => {
 
-        return this._userProgressService
-            .getRecommendedItemQuotaAsync(params.currentUserId, params.getQuery<any>()
-.getValue(x => x.courseId, 'int'));
+        return await this._userProgressService
+            .getRecommendedItemQuotaAsync(params.currentUserId, params
+                .getQuery<any>()
+                .getValue(x => x.courseId, 'int'));
     }
 
     getActiveCoursesAction = (params: ActionParams) => {
@@ -27,6 +28,6 @@ export class UserProgressController {
 
         return this._userProgressService
             .getProgressChartDataAsync(params.currentUserId, params.getQuery<any>()
-.getValue(x => x.courseId, 'int'));
+                .getValue(x => x.courseId, 'int'));
     }
 }

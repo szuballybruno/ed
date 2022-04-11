@@ -64,7 +64,7 @@ export const AdminCourseContentSubpage = () => {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<RowSchema, string>(preprocessedItems, getRowKey, 'rowKey');
+    } = useXListMutator<RowSchema, 'rowKey', string>(preprocessedItems, 'rowKey');
 
     // whe
     useEffect(() => {
@@ -236,7 +236,7 @@ export const AdminCourseContentSubpage = () => {
     if (loggingSettings.render)
         console.log('Rendering AdminCourseContentSubpage');
 
-    const handleEdit = useCallback((key: string, field: any, value: any) => {
+    const handleEdit = useCallback((key: any, field: any, value: any) => {
 
         mutateRow({ key, field, newValue: value });
     }, [mutateRow]);

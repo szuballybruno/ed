@@ -1,7 +1,7 @@
 SELECT 
 	u.id user_id,
-	course.id course_id,
-	ucab.id IS NOT NULL OR course.visibility = 'public' can_view,
+	co.id course_id,
+	ucab.id IS NOT NULL OR co.visibility = 'public' can_view,
 	sf.file_path file_path,
 	csv.is_completed is_completed,
 	csv.is_started is_started,
@@ -16,43 +16,48 @@ SELECT
 	ucb.stage_name stage_name,
 	teacher.first_name teacher_first_name,
 	teacher.last_name teacher_last_name,
-	course.*
-FROM public.course
+	co.*
+FROM public.course co
 
 LEFT JOIN public.user u
 ON 1 = 1
 
 LEFT JOIN public.course_item_view first_civ
-ON first_civ.course_id = course.id
+ON first_civ.course_id = co.id
 	AND first_civ.item_order_index = 0
 	AND first_civ.module_order_index = 0 
+	AND first_civ.item_is_deleted = false
 	AND first_civ.item_type != 'pretest'
 
 LEFT JOIN public.course_state_view csv
-ON csv.course_id = course.id 
+ON csv.course_id = co.id 
 	AND csv.user_id = u.id 
 
 LEFT JOIN public.storage_file sf
-ON sf.id = course.cover_file_id
+ON sf.id = co.cover_file_id
 
 LEFT JOIN public.user_course_bridge ucb
 ON ucb.user_id = u.id
-	AND ucb.course_id = course.id
+	AND ucb.course_id = co.id
 	
 LEFT JOIN public.course_category cc
-ON cc.id = course.category_id
+ON cc.id = co.category_id
 	
 LEFT JOIN public.course_category csc
-ON csc.id = course.sub_category_id
+ON csc.id = co.sub_category_id
 	
 LEFT JOIN public.user_course_access_bridge ucab
-ON ucab.user_id = u.id AND ucab.course_id = course.id
+ON ucab.user_id = u.id 
+	AND ucab.course_id = co.id
 	
 LEFT JOIN public.user teacher
-ON teacher.id = course.teacher_id
+ON teacher.id = co.teacher_id
 	
+-- where u.id = 1 
+	 
 ORDER BY 
 	u.id,
-	course.id
+	co.id
+	
 
 

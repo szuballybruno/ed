@@ -1,4 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
+import { DeepPartial } from 'typeorm';
 import { Course } from '../models/entity/Course';
 import { CourseCategory } from '../models/entity/CourseCategory';
 import { CourseModule } from '../models/entity/CourseModule';
@@ -39,6 +40,7 @@ import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { createCharSeparatedList } from './misc/mappings';
+import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { ModuleService } from './ModuleService';
 import { PretestService } from './PretestService';
 import { ORMConnectionService } from './sqlServices/ORMConnectionService';
@@ -520,7 +522,52 @@ export class CourseService {
 
     private async saveUpdatedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
 
-        throw new Error('Not implemented');
+        const updateMuts = mutations
+            .filter(x => x.action === 'update')
+            .map(x => ({ ...x, ...readItemCode(x.key) }))
+            .groupBy(x => x.itemType);
+
+        const videos = updateMuts
+            .filter(x => x.key === 'video')
+            .flatMap(x => x.items)
+            .map(updateMut => {
+
+                const updateDto = mapMutationToPartialObject(updateMut);
+
+                const video: Partial<Video> = {
+                    id: updateMut.itemId,
+                    moduleId: updateDto.moduleId,
+                    title: updateDto.itemTitle,
+                    subtitle: updateDto.itemSubtitle,
+                    orderIndex: updateDto.itemOrderIndex
+                };
+
+                return video;
+            });
+
+        const exams = updateMuts
+            .filter(x => x.key === 'exam')
+            .flatMap(x => x.items)
+            .map(updateMut => {
+
+                const updateDto = mapMutationToPartialObject(updateMut);
+
+                const exam: Partial<Exam> = {
+                    id: updateMut.itemId,
+                    moduleId: updateDto.moduleId,
+                    title: updateDto.itemTitle,
+                    subtitle: updateDto.itemSubtitle,
+                    orderIndex: updateDto.itemOrderIndex
+                };
+
+                return exam;
+            });
+
+        await this._ormService
+            .save(Video, videos);
+
+        await this._ormService
+            .save(Exam, exams);
     }
 
     private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
@@ -541,7 +588,7 @@ export class CourseService {
             .flatMap(x => x.items)
             .map(x => x.itemId);
 
-        this._examService
+        this._examService   
             .softDeleteExamsAsync(deletedExamIds, true);
 
         this._videoService
@@ -549,18 +596,6 @@ export class CourseService {
     }
 
     private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
-
-        const mutationToObj = <TMutatee extends Object, TKey extends keyof TMutatee>(
-            mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
-
-            const obj = {} as Partial<TMutatee>;
-
-            mut
-                .fieldMutators
-                .forEach(x => obj[x.field] = x.value);
-
-            return obj;
-        };
 
         const checkMutationItemType = (
             mutation: Mutation<CourseContentItemAdminDTO, 'itemCode'>,
@@ -579,7 +614,7 @@ export class CourseService {
             .filter(x => checkMutationItemType(x, 'video'))
             .map((x): Partial<Video> => {
 
-                const mutObject = mutationToObj(x);
+                const mutObject = mapMutationToPartialObject(x);
 
                 return {
                     courseId: mutObject.courseId,
@@ -598,7 +633,7 @@ export class CourseService {
             .filter(x => checkMutationItemType(x, 'exam'))
             .map((x): Partial<Exam> => {
 
-                const mutObject = mutationToObj(x);
+                const mutObject = mapMutationToPartialObject(x);
 
                 return {
                     courseId: mutObject.courseId,

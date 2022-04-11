@@ -62,7 +62,7 @@ export class PlayerService extends ServiceBase {
         await this._userCourseBridgeService
             .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
-        // course items 
+        // course items list
         const modules = await this._courseService
             .getCourseModulesAsync(userId, courseId);
 
@@ -83,14 +83,7 @@ export class PlayerService extends ServiceBase {
                 .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
 
         // next 
-        const flat = this.getCourseItemsFlat(modules);
-
-        const currentItemIndexInFlatList = flat
-            .findIndex(x => x.code === validItemCode);
-
-        const nextItem = flat[currentItemIndexInFlatList + 1];
-        const nextItemCode = nextItem?.code ?? null;
-        const nextItemState = nextItem?.state ?? null;
+        const { nextItemCode, nextItemState } = this.getNextItem(modules, validItemCode);
 
         return {
             video: videoDTO,
@@ -104,6 +97,23 @@ export class PlayerService extends ServiceBase {
             nextItemCode,
             nextItemState
         } as PlayerDataDTO;
+    }
+
+    getNextItem(modules: ModuleDTO[], validItemCode: string) {
+
+        const flat = this.getCourseItemsFlat(modules);
+
+        const currentItemIndexInFlatList = flat
+            .findIndex(x => x.code === validItemCode);
+
+        const nextItem = flat[currentItemIndexInFlatList + 1];
+        const nextItemCode = nextItem?.code ?? null;
+        const nextItemState = nextItem?.state ?? null;
+
+        return {
+            nextItemCode,
+            nextItemState
+        };
     }
 
     /**

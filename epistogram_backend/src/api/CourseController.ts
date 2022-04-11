@@ -21,7 +21,8 @@ export class CourseController {
 
     getAvailableCoursesAction = async (params: ActionParams) => {
 
-        return this._courseService.getAvailableCoursesAsync(params.currentUserId);
+        return this._courseService
+            .getAvailableCoursesAsync(params.currentUserId);
     };
 
     getCourseDetailsEditDataAction = async (params: ActionParams) => {

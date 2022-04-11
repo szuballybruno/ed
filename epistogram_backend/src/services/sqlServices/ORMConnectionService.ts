@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { ClassType } from '../../models/Types';
-import { getKeys } from '../../shared/logic/sharedLogic';
+import { getKeys, noUndefined } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
@@ -132,6 +132,26 @@ export class ORMConnectionService {
         await this._ormConnection
             .getRepository(classType)
             .softDelete(ids);
+    }
+
+    async save<TEntity>(classType: ClassType<TEntity>, entites: Partial<TEntity>[]) {
+
+        try {
+
+            if (entites.length === 0)
+                return;
+
+            entites
+                .forEach(x => noUndefined(x));
+
+            await this._ormConnection
+                .getRepository(classType)
+                .save(entites as any);
+        }
+        catch (e: any) {
+
+            throw new Error(`Error while saving entities of type '${classType.name}'. Inner message: \n${e.message}`);
+        }
     }
 
     /**

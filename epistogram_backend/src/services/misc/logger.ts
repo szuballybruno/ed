@@ -18,7 +18,7 @@ export const log = (content: any, entryType?: LogEntryType) => {
         console.warn(content);
 
     if (entryType === 'error')
-        console.error(content);
+        console.error('\x1b[31m%s\x1b[0m', content);
 
     if (entryType === 'info')
         console.log(`[${dateTimeString}.${miliseconds}] ${content}`);

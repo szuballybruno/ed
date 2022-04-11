@@ -21,16 +21,19 @@ export type OnMutationHandlerType<TMutatee, TKey, TField extends keyof TMutatee>
     action: MutationActionType;
 }
 
-export const useXListMutator = <TMutatee extends Object, TKey>(
-    items: TMutatee[],
-    getCompareKey: (obj: TMutatee) => TKey,
-    keyPropertyName: KeyOfType<TMutatee, TKey>) => {
+export const useXListMutator = <
+    TMutatee extends Object,
+    TKeyField extends keyof TMutatee,
+    TKey extends TMutatee[TKeyField]>(
+        items: TMutatee[],
+        keyPropertyName: TKeyField) => {
 
+    const getCompareKey = (item: TMutatee) => item[keyPropertyName];
     const onMutationHandlersRef = useRef<OnMutationHandlerType<TMutatee, TKey, keyof TMutatee>[]>([]);
     const forceUpdate = useForceUpdate();
 
-    const mutRef = useRef<Mutation<TMutatee, TKey>[]>([]);
-    const setMutations = useCallback((muts: Mutation<TMutatee, TKey>[]) => {
+    const mutRef = useRef<Mutation<TMutatee, TKeyField>[]>([]);
+    const setMutations = useCallback((muts: Mutation<TMutatee, TKeyField>[]) => {
 
         mutRef.current = muts;
         forceUpdate();
@@ -58,7 +61,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         return obj;
     };
 
-    const createObj = (mut: Mutation<TMutatee, TKey>): TMutatee => {
+    const createObj = (mut: Mutation<TMutatee, TKeyField>): TMutatee => {
 
         return overrideProps({} as any, mut.fieldMutators!);
     };
@@ -126,7 +129,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
 
-        const setMutationsWithCallback = (muts: Mutation<TMutatee, TKey>[]) => {
+        const setMutationsWithCallback = (muts: Mutation<TMutatee, TKeyField>[]) => {
 
             setMutations(muts);
 
@@ -189,7 +192,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             return;
         }
 
-        const mutation: Mutation<TMutatee, TKey> = oldMutation
+        const mutation: Mutation<TMutatee, TKeyField> = oldMutation
             ? oldMutation
             : {
                 key,
@@ -273,7 +276,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
             if (loggingSettings.mutations)
                 logEvent(`Adding new 'delete' mutation Key: ${key}!`);
 
-            const mut: Mutation<TMutatee, TKey> = {
+            const mut: Mutation<TMutatee, TKeyField> = {
                 key,
                 action: 'delete',
                 fieldMutators: []
@@ -297,7 +300,7 @@ export const useXListMutator = <TMutatee extends Object, TKey>(
 
         setCompareKey(obj as TMutatee, key);
 
-        const mut: Mutation<TMutatee, TKey> = {
+        const mut: Mutation<TMutatee, TKeyField> = {
             key,
             action: 'add',
             fieldMutators: getKeys(obj as TMutatee)
