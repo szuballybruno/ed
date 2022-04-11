@@ -1,5 +1,4 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/layout';
-import { useEffect } from 'react';
 import { ReactTimerType } from '../../helpers/reactTimer';
 
 export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) => {

@@ -274,13 +274,13 @@ export const EditVideoSubpage = () => {
                             Videó kiválasztása
                         </EpistoButton>
 
-                        {/* player */}
+                        {/* player 
                         {(videoEditData?.videoFileUrl && !videoFile) && <ReactPlayer
                             width="100%"
                             controls
                             onProgress={x => setPlayedSeconds(x.playedSeconds)}
                             progressInterval={100}
-                            url={videoEditData.videoFileUrl} />}
+                            url={videoEditData.videoFileUrl} />}*/}
 
                         {videoFile && <EpistoEntry
                             label="Videó fájl"

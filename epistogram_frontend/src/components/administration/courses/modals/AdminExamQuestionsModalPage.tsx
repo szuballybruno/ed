@@ -1,9 +1,9 @@
 import { Flex } from '@chakra-ui/react';
 import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { useEffect, useState } from 'react';
 
 
 export const AdminExamQuestionsModalPage = () => {
+
     const questions = [{
         questionTitle: 'asd',
         answers: [{
@@ -21,8 +21,10 @@ export const AdminExamQuestionsModalPage = () => {
         }]
     }];
 
-    return <Flex flex="1"
-p="20px">
+    return <Flex
+        flex="1"
+        p="20px">
+
         <TableContainer
             className="roundBorders largeSoftShadow"
             style={{
@@ -30,13 +32,17 @@ p="20px">
                 padding: '0 20px',
                 background: 'var(--transparentWhite90)'
             }}>
+
             <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
                 size={'medium'}
             >
+
                 <TableHead>
+
                     <TableRow>
+
                         <TableCell
                             component="th"
                             scope="row"
@@ -45,64 +51,68 @@ p="20px">
                                 fontWeight: 'bold'
                             }}
                         >
+
                             Kérdés
                         </TableCell>
+
                         <TableCell
                             colSpan={4}
                             style={{
                                 fontWeight: 'bold'
                             }}>
+
                             Válaszok
                         </TableCell>
                     </TableRow>
-
                 </TableHead>
 
                 <TableBody>
-                    {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-      rows.slice().sort(getComparator(order, orderBy)) */}
-                    {questions.map((row, index) => {
-                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                        return (
-                            <TableRow
+                    {questions
+                        .map((row, index) => {
+
+                            const labelId = `enhanced-table-checkbox-${index}`;
+
+                            return <TableRow
                                 hover
                                 role="checkbox"
                                 tabIndex={-1}
-                                key={index}
-                            >
+                                key={index}>
+
                                 <TableCell
                                     width={350}
                                     component="th"
                                     id={labelId}
                                     scope="row"
-                                    padding="none"
-                                >
+                                    padding="none">
+
                                     {row.questionTitle}
                                 </TableCell>
-                                {row.answers.map((answer, index) => {
-                                    return <TableCell
-                                        key={index}
-                                        style={{
-                                            color: answer.isCorrect
-                                                ? 'var(--deepGreen)'
-                                                : 'var(--intenseRed)'
-                                        }}>
 
-                                        <Checkbox
-                                            checked={answer.isCorrect}
+                                {row.answers
+                                    .map(answer => {
+
+                                        return <TableCell
                                             style={{
                                                 color: answer.isCorrect
-                                                    ? 'var(--deepGreen)'
-                                                    : 'var(--intenseRed)'
-                                            }} />
+                                                    ? "var(--deepGreen)"
+                                                    : "var(--intenseRed)"
+                                            }}>
 
-                                        {answer.title}
-                                    </TableCell>;
-                                })}
+                                            <Checkbox
+                                                checked={answer.isCorrect}
+                                                style={{
+                                                    color: answer.isCorrect
+                                                        ? "var(--deepGreen)"
+                                                        : "var(--intenseRed)"
+                                                }} />
+
+                                            {answer.title}
+                                        </TableCell>
+                                    })}
                             </TableRow>
-                        );
-                    })}
+
+                        })}
                 </TableBody>
             </Table >
         </TableContainer >

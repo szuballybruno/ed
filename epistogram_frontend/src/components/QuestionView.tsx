@@ -1,12 +1,10 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { showNotification } from '../services/core/notifications';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
-import { showNotification } from '../services/core/notifications';
 import { getAssetUrl } from '../static/frontendHelpers';
 import { EpistoFont } from './controls/EpistoFont';
-import { EpistoText } from './controls/EpistoText';
 import { LoadingFramePropsType } from './system/LoadingFrame';
 import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
 import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
@@ -63,8 +61,8 @@ export const QuesitionView = (props: {
                 style: {
                     border: 'solid 2px gold',
                 },
-                icon: () => <img
-                    src={getAssetUrl('images/epistoCoin.png')} />
+                icon: <img
+                    src={getAssetUrl("images/epistoCoin.png")} />
             });
     }, [bonusCoinsAcquired]);
 

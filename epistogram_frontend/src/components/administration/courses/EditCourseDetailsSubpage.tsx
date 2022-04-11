@@ -1,7 +1,6 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { Button, Slider } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { default as React, default as React, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
@@ -11,7 +10,6 @@ import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
 import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
-import { defaultCharts } from '../../../static/defaultChartOptions';
 import { iterate } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -19,7 +17,6 @@ import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { LoadingFrame } from '../../system/LoadingFrame';
-import { EpistoRadarChart } from '../../universal/charts/EpistoRadarChart';
 import { SelectImage } from '../../universal/SelectImage';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
@@ -160,9 +157,14 @@ export const AdminCourseDetailsSubpage = () => {
         setHumanSkillBenefitsDescription(courseDetailsEditData.humanSkillBenefitsDescription);
         setSkillBenefits(courseDetailsEditData.skillBenefits);
         setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
-        setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
-        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + '');
-        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + '');
+        courseDetailsEditData.humanSkillBenefits.length === 0
+            ? iterate(10, () => ({
+                text: "",
+                value: 0
+            }))
+            : setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits)
+        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + "");
+        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + "");
 
     }, [courseDetailsEditData]);
 
@@ -457,8 +459,8 @@ export const AdminCourseDetailsSubpage = () => {
                                 {/* <EpistoRadarChart
                                     title=""
                                     areas={[{
-                                        name: 'Készségek',
-                                        value: humanSkillBenefits.map(x => x.value) ?? []
+                                        name: "Készségek",
+                                        value: humanSkillBenefits.map(x => x.value)
                                     }]}
                                     radarIndicators={humanSkillBenefits.map(x => ({
                                         name: x.text,

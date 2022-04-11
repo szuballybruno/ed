@@ -1,13 +1,13 @@
-import { Flex, Grid } from '@chakra-ui/react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { defaultCharts } from '../../../static/defaultChartOptions';
-import { getAssetUrl } from '../../../static/frontendHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { StatisticsGroupType } from '../../learningInsights/LearningStatistics';
-import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { EpistoBarChart } from '../../universal/charts/EpistoBarChart';
-import { EpistoPieChart } from '../../universal/charts/EpistoPieChart';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { Flex, Grid } from "@chakra-ui/react"
+import { applicationRoutes } from "../../../configuration/applicationRoutes"
+import { defaultCharts } from "../../../static/defaultChartOptions"
+import { getAssetUrl } from "../../../static/frontendHelpers"
+import { translatableTexts } from "../../../static/translatableTexts"
+import { StatisticsGroupType } from "../../learningInsights/LearningStatistics"
+import StatisticsCard from "../../statisticsCard/StatisticsCard"
+import { EpistoBarChart } from "../../universal/charts/base_charts/EpistoBarChart"
+import { EpistoPieChart } from "../../universal/charts/base_charts/EpistoPieChart"
+import { AdminSubpageHeader } from "../AdminSubpageHeader"
 
 export const AdminHomeDetails = () => {
 

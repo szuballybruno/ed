@@ -1,23 +1,22 @@
-import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
-import { Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import { useContext, useState } from 'react';
-import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
-import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
-import { useShopItemCategories, useShopItems } from '../../services/api/shopApiService';
-import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../ContentPane';
-import { EpistoFont } from '../controls/EpistoFont';
-import classes from '../css/courseSearchMain.module.scss';
-import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { useEpistoDialogLogic } from '../EpistoDialog';
-import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
-import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { EpistoGrid } from '../controls/EpistoGrid';
-import { EpistoSearch } from '../universal/EpistoSearch';
-import { ShopItem } from './ShopItem';
-import { ShopPurchaseConfirmationDialog } from './ShopPurchaseConfirmationDialog';
+import { Box, Flex, GridItem, useMediaQuery } from "@chakra-ui/react";
+import { Select, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { useContext, useState } from "react";
+import { ShopItemDTO } from "../../shared/dtos/ShopItemDTO";
+import { useCoinBalance } from "../../services/api/coinTransactionsApiService";
+import { useShopItemCategories, useShopItems } from "../../services/api/shopApiService";
+import { translatableTexts } from "../../static/translatableTexts";
+import { ContentPane } from "../ContentPane";
+import { EpistoFont } from "../controls/EpistoFont";
+import { EpistoConinInfo } from "../EpistoCoinInfo";
+import { useEpistoDialogLogic } from "../EpistoDialog";
+import { LeftPane } from "../LeftPane";
+import { PageRootContainer } from "../PageRootContainer";
+import { ProfileImage } from "../ProfileImage";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { EpistoGrid } from "../controls/EpistoGrid";
+import { EpistoSearch } from "../universal/EpistoSearch";
+import { ShopItem } from "./ShopItem";
+import { ShopPurchaseConfirmationDialog } from "./ShopPurchaseConfirmationDialog";
 
 export const ShopPage = () => {
 
@@ -87,7 +86,6 @@ export const ShopPage = () => {
                     .map((category, index) => {
 
                         return <ToggleButton
-                            className={classes.categoriesListItem}
                             selected={categoryFilterId === category.id}
                             value={category}
                             style={{

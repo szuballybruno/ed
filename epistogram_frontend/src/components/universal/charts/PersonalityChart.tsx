@@ -3,7 +3,7 @@ import wrap from 'word-wrap';
 import { PersonalityChartDataDTO } from '../../../shared/dtos/PersonalityChartDataDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoRadarChart } from './EpistoRadarChart';
+import { EpistoRadarChart } from "./base_charts/EpistoRadarChart";
 
 export const PersonalityChart = (props: {
     data: PersonalityChartDataDTO

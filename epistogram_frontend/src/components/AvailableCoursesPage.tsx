@@ -214,6 +214,17 @@ const AvailableCoursesPage = () => {
                             gap="15"
                             minColumnWidth="250px">
                             {courses
+                                .sort((a, b) => {
+                                    if (a.courseId > b.courseId) {
+                                        return -1;
+                                    }
+                                    if (a.courseId < b.courseId) {
+                                        return 1;
+                                    } else {
+
+                                        return 0;
+                                    }
+                                })
                                 .map((course, index) => {
 
                                     return <GridItem

@@ -23,7 +23,7 @@ align="center">
                 </Flex>
 
                 <Flex>
-                    {x.reason} {x.creationDate}
+                    {`${x.reason} ${x.creationDate}`}
                 </Flex>
             </Flex>)}
     </Flex>;

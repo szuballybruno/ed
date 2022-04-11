@@ -2,7 +2,7 @@ import {
     ChakraProvider,
     ColorModeScript,
     extendTheme,
-    ThemeConfig,
+    ThemeConfig
 } from '@chakra-ui/react';
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/system';
@@ -11,7 +11,6 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { XDialogHost } from './components/lib/XDialog/XDialogHost';
-import { MemoTest } from './components/MemoTest';
 import { AuthenticationFrame } from './components/system/AuthenticationFrame';
 import { ErrorDialogFrame } from './components/system/DialogFrame';
 import { EventListener } from './components/system/EventListener';

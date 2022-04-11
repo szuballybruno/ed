@@ -1,13 +1,13 @@
-import { useContext } from 'react';
-import { useUserProgressData } from '../../services/api/userProgressApiService';
-import { useUserStats } from '../../services/api/userStatsApiService';
-import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { FlexFloat } from '../controls/FlexFloat';
-import StatisticsCard from '../statisticsCard/StatisticsCard';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { NoProgressChartYet } from './NoProgressChartYet';
-import { UserProgressChart } from './UserProgressChart';
+import { useContext } from "react";
+import { useUserProgressData } from "../../services/api/userProgressApiService";
+import { useUserStats } from "../../services/api/userStatsApiService";
+import { getAssetUrl, roundNumber } from "../../static/frontendHelpers";
+import { translatableTexts } from "../../static/translatableTexts";
+import { FlexFloat } from "../controls/FlexFloat";
+import StatisticsCard from "../statisticsCard/StatisticsCard";
+import { CurrentUserContext } from "../system/AuthenticationFrame";
+import { NoProgressChartYet } from "./NoProgressChartYet";
+import { UserProgressChart } from "../universal/charts/UserProgressChart";
 
 export const StatsSummary = (props: {
     courseId: number | null

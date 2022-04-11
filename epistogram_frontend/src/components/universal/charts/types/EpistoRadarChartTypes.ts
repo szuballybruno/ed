@@ -17,6 +17,26 @@ export interface EpistoRadarChartSeriesOptionsType extends EpistoChartSeriesOpti
 
 }
 
+export type EpistoRadarChartRadarOptionsType = {
+    scale: boolean,
+    radius: string,
+    splitNumber: number,
+    splitLine: {
+        lineStyle: {
+            color: string
+        }
+    },
+    splitArea: boolean,
+    axisLabel: {
+        overflow: string
+    },
+    axisLine: {
+        lineStyle: {
+            color: string
+        }
+    }
+}
+
 export interface EpistoRadarChartOptionsType {
 
     visualMap?: {
@@ -27,7 +47,7 @@ export interface EpistoRadarChartOptionsType {
             colorLightness?: number[]
         }
     },
-    radar: any,
+    radar: EpistoRadarChartRadarOptionsType,
     legend?: EpistoChartLegendType,
     tooltip?: EpistoChartTooltipType,
     seriesOptions: EpistoRadarChartSeriesOptionsType

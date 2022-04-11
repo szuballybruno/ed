@@ -1,5 +1,5 @@
 import { Divider, Flex } from '@chakra-ui/layout';
-import { Filter, Filter1, Filter2, FilterAlt, Search } from '@mui/icons-material';
+import { FilterAlt, Search } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Radio, RadioGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -243,4 +243,4 @@ export const CourseItemSelector = (props: {
 
         <CourseItemList modules={modules}></CourseItemList>
     </>;
-};
+}

@@ -420,7 +420,7 @@ export const usePasswordEntryState = () => {
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
 
-    const validate = () => {
+    const validate = useCallback(() => {
 
         const error = validatePassowrd(password, passwordCompare);
 
@@ -461,7 +461,7 @@ export const usePasswordEntryState = () => {
     useEffect(() => {
 
         validate();
-    }, [passwordCompare, password]);
+    }, [validate]);
 
     return {
         password,

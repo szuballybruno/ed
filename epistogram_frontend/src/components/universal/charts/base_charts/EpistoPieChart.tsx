@@ -1,5 +1,12 @@
 import ReactECharts from 'echarts-for-react';
-import { EpistoPieChartDataType, EpistoPieChartOptionsType } from './types/EpistoPieChartTypes';
+import { EpistoPieChartDataType, EpistoPieChartOptionsType } from '../types/EpistoPieChartTypes';
+
+/**
+ * Wrapper component for ECharts
+ **
+ * All chart options:
+ * @see Docs: https://echarts.apache.org/en/option.html#title
+ */
 
 export const EpistoPieChart = (props: {
     title: string,
@@ -27,58 +34,6 @@ export const EpistoPieChart = (props: {
         width: '100%',
         height: '100%',
     };
-
-
-    console.log({
-        title: {
-            show: !!title,
-            text: title
-        },
-        legend:
-            legend
-                ? Object.assign(
-                    {
-                        show: true,
-                        data: segments.map((data) => ({
-                            name: data.name
-                        }))
-                    },
-                    legend)
-                : undefined,
-        tooltip: tooltip,
-        visualMap: visualMap,
-        series: [
-            Object.assign(
-                {
-                    data: !isSortValues
-                        ? segments.map((d, index) => {
-                            return seriesOptions.color
-                                ? Object.assign(
-                                    d,
-                                    {
-                                        color: seriesOptions.color ? seriesOptions.color[index] : ''
-                                    })
-                                : d;
-                        })
-                        : segments.map((d, index) => {
-                            return seriesOptions.color
-                                ? Object.assign(
-                                    d,
-                                    {
-                                        color: seriesOptions.color ? seriesOptions.color[index] : ''
-                                    })
-                                : d;
-                        })
-.sort((a, b) => {
-                            return a.value - b.value;
-                        })
-                },
-                seriesOptions,
-                {
-                    type: 'pie'
-                })
-        ]
-    });
 
     return <ReactECharts
         option={{

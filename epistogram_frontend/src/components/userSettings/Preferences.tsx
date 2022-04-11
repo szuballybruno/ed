@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/layout';
-import React, { ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { useSaveUserSimple } from '../../services/api/userApiService';
@@ -13,22 +13,6 @@ import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { SelectImage } from '../universal/SelectImage';
-
-const EditField = (props: { children: ReactNode, label: string }) => {
-
-    return <Flex
-        className="dividerBorderBottom"
-        justify="space-between"
-        mb="20px"
-        p="10px"
-        align="flex-end">
-
-        <EpistoFont>
-            {props.label}
-        </EpistoFont>
-        {props.children}
-    </Flex>;
-};
 
 export const Preferences = () => {
 

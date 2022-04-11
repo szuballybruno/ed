@@ -5,9 +5,9 @@ import { useUserStats } from '../../services/api/userStatsApiService';
 import { defaultCharts } from '../../static/defaultChartOptions';
 import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
-import { EpistoBarChart } from '../universal/charts/EpistoBarChart';
-import { LearningStatisticsSeciton } from './LearningStatisticsSeciton';
+import StatisticsCard, { StatisticsCardProps } from "../statisticsCard/StatisticsCard";
+import { EpistoBarChart } from '../universal/charts/base_charts/EpistoBarChart';
+import { LearningStatisticsSeciton } from "./LearningStatisticsSeciton";
 
 // The default options that should be included with chartjs data object
 

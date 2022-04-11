@@ -2,19 +2,9 @@ import { Box, Flex } from '@chakra-ui/react';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { useEffect, useState } from 'react';
-import { useNavigation } from '../../services/core/navigatior';
-import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
-import { ModuleDTO } from '../../shared/dtos/ModuleDTO';
-import { getRandomInteger } from '../../static/frontendHelpers';
-import { ChipSmall } from '../administration/courses/ChipSmall';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { CollapseItem } from './CollapseItem';
-import { FlexList } from './FlexList';
-import { FlexListItem } from './FlexListItem';
-import { FlexListTitleSubtitle } from './FlexListTitleSubtitle';
+import { getRandomInteger } from "../../static/frontendHelpers";
+import { ChipSmall } from "../administration/courses/ChipSmall";
+import { EpistoFont } from "../controls/EpistoFont";
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -78,11 +68,11 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
         </Flex>}
         endContent={getRandomInteger(0, 100) % 10 === 0 &&
             <ChipSmall
-                size='small'
+                //size='small'
                 text='Ismétlés ajánlott'
                 color='var(--intenseOrange)' />}>
     </FlexListItem >;
-};
+}
 
 export const CourseItemList = (props: {
     modules: ModuleDTO[]

@@ -1,7 +1,7 @@
 import ReactECharts from 'echarts-for-react';
-import React from 'react';
-import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from './types/EpistoBarChartTypes';
-import { EpistoChartXAxisDataType } from './types/EpistoChartCommonTypes';
+import React from "react";
+import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from '../types/EpistoBarChartTypes';
+import { EpistoChartXAxisDataType } from '../types/EpistoChartCommonTypes';
 
 /**
  * Wrapper component for ECharts
