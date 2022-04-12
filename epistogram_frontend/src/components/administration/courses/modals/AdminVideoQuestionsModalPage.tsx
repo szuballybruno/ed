@@ -229,7 +229,7 @@ export const AdminVideoQuestionsModalPage = (props: {
 
             <Flex className="mildShadow">
 
-                {/* <ReactPlayer
+                <ReactPlayer
                     width="100%"
                     height="calc(56.25 / 100)"
                     onProgress={x => setPlayedSeconds(x.playedSeconds)}
@@ -239,7 +239,7 @@ export const AdminVideoQuestionsModalPage = (props: {
                         background: 'green',
                         overflow: 'hidden'
                     }}
-                    url={videoUrl} /> */}
+                    url={videoUrl} />
             </Flex>
         </Flex>
 

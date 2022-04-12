@@ -297,7 +297,7 @@ export const AdminExamStatisticsModalPage = () => {
                 position="relative"
                 flex="1">
 
-                {/* <ReactPlayer
+                <ReactPlayer
                     width="100%"
                     height="calc(56.25 / 100)"
                     controls={false}
@@ -308,7 +308,7 @@ export const AdminExamStatisticsModalPage = () => {
                         background: 'green',
                         overflow: 'hidden'
                     }}
-                    url={'https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4'} /> */}
+                    url={'https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4'} />
 
                 <Flex
                     background="linear-gradient(180deg, rgba(190,190,190,0.55) 0%, rgba(240,240,240,1) 20%, rgba(255,255,255,1) 100%)"
