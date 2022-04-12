@@ -1,5 +1,4 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import queryString from 'query-string';
 import React, { ComponentType, useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useParams } from 'react-router-dom';
@@ -390,12 +389,6 @@ export type PagingType<T> = {
     isFirst: boolean;
     currentIndex: number;
     progressPercentage: number;
-};
-
-export const getQueryParam = (name: string) => {
-
-    const params = queryString.parse(window.location.search);
-    return params[name] as string;
 };
 
 export const useIsDesktopView = () => {

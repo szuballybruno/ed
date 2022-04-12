@@ -1,11 +1,10 @@
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { Tab, Tabs } from '@mui/material';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useCourseDetails } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { formatTimespan, getAssetUrl, getQueryParam } from '../../static/frontendHelpers';
+import { formatTimespan, getAssetUrl } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';

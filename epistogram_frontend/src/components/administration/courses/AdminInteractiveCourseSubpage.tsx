@@ -69,18 +69,18 @@ export const AdminInteractiveCourseSubpage = () => {
 
     return <AdminBreadcrumbsHeader>
         <AdminSubpageHeader direction="row"
-flex="1"
-mb="50px">
-            
+            flex="1"
+            mb="50px">
+
             {/* TODO2 */}
             <Flex flex="1"
-mr="5px"
-background="var(--transparentWhite70)">
+                mr="5px"
+                background="var(--transparentWhite70)">
                 <ReactFlow
                     nodeTypes={{
                         special: CustomNodeComponent
                     }}
-                    elements={elements} />
+                    elements={elements as any} />
             </Flex>
 
             <Flex

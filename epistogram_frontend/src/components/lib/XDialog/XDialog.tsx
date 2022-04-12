@@ -69,5 +69,5 @@ export const XDialog = (props: {
     if (!hostElement)
         return <></>;
 
-    return createPortal(children, hostElement);
+    return createPortal(children as any, hostElement);
 };

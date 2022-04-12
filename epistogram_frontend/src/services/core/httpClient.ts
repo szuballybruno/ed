@@ -18,16 +18,20 @@ export class HTTPResponse {
 
 const instance = (() => {
 
-    const axiosInst = axios.create({
-        // .. where we make our configurations
-        baseURL: serverUrl
-    });
+    const axiosInst = axios
+        .create({
+            baseURL: serverUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
     axiosInst.defaults.withCredentials = true;
 
-    axiosInst.defaults.headers = {
-        'Content-Type': 'application/json'
-    };
+    // axiosInst.defaults.headers = {
+    //     post:
+    //         'Content-Type': 'application/json'
+    // };
 
     return axiosInst;
 })();

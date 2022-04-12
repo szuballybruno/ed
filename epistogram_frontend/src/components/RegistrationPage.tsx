@@ -1,22 +1,23 @@
 import { Image } from '@chakra-ui/image';
 import { Flex } from '@chakra-ui/layout';
-import { Checkbox, TextField, Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Checkbox, TextField } from '@mui/material';
+import { useContext, useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
-import { getAssetUrl, getQueryParam, usePasswordEntryState } from '../static/frontendHelpers';
+import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { getAssetUrl, usePasswordEntryState } from '../static/frontendHelpers';
+import { useBoolParam, useStringParam } from '../static/locationHelpers';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFont } from './controls/EpistoFont';
 import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
-import { EpistoButton } from './controls/EpistoButton';
-import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
-import { translatableTexts } from '../static/translatableTexts';
-import { EpistoFont } from './controls/EpistoFont';
 
 export const RegistrationPage = () => {
 
-    const token = getQueryParam('token');
-    const isInvited = getQueryParam('isInvited') === 'true';
+    const token = useStringParam('token')!;
+    const isInvited = useBoolParam('isInvited')!;
 
     const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 

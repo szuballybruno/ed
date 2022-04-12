@@ -1,15 +1,15 @@
-import { Image } from '@chakra-ui/react';
 import { TextField } from '@mui/material';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { getAssetUrl, getQueryParam, usePasswordEntryState } from '../static/frontendHelpers';
-import { EpistoHeader } from './EpistoHeader';
-import { LoadingFrame } from './system/LoadingFrame';
-import { PageRootContainer } from './PageRootContainer';
-import { EpistoButton } from './controls/EpistoButton';
+import { getAssetUrl, usePasswordEntryState } from '../static/frontendHelpers';
+import { useStringParam } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoHeader } from './EpistoHeader';
+import { PageRootContainer } from './PageRootContainer';
+import { LoadingFrame } from './system/LoadingFrame';
 
 export const SetNewPasswordPage = () => {
 
@@ -25,7 +25,7 @@ export const SetNewPasswordPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const token = getQueryParam('token');
+    const token = useStringParam('token')!;
 
     const showErrorDialog = useShowErrorDialog();
 

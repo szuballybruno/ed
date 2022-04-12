@@ -133,28 +133,25 @@ export const AdminBreadcrumbsHeader = (props: {
             minH="38px">
 
             {/* breadcrumbs */}
-            {breadcrumbs
-                ? (
-                    <Breadcrumbs>
-                        {breadcrumbs}
-                    </Breadcrumbs>
-                )
-                : (
-                    <Breadcrumbs>
+            <Breadcrumbs>
+                {/* {breadcrumbs && breadcrumbs
+                    .map(x => <BreadcrumbLink
+                        isCurrent={x.} />)} */}
 
-                        {currentRoute && <BreadcrumbLink
-                            key={1}
-                            isCurrent={!subRoute}
-                            route={currentRoute}
-                            title={currentRoute.title}
-                            iconComponent={currentRoute.icon} />}
+                {!breadcrumbs && <>
+                    {currentRoute && <BreadcrumbLink
+                        key={1}
+                        isCurrent={!subRoute}
+                        route={currentRoute}
+                        title={currentRoute.title}
+                        iconComponent={currentRoute.icon} />}
 
-                        {subRoute && <BreadcrumbLink
-                            key={2}
-                            isCurrent
-                            title={subRoute.title} />}
-                    </Breadcrumbs>
-                )}
+                    {subRoute && <BreadcrumbLink
+                        key={2}
+                        isCurrent
+                        title={subRoute.title} />}
+                </>}
+            </Breadcrumbs>
 
             {viewSwitchFunction && <FormGroup>
 
