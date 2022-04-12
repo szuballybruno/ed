@@ -270,7 +270,7 @@ export const VideoPlayer = (props: {
                     }}
                     position="relative">
 
-                    {/* the player */}
+                    {/* the player
                     <ReactPlayer
                         playbackRate={1}
                         ref={playerRef}
@@ -303,7 +303,7 @@ export const VideoPlayer = (props: {
                             }
                         }}
                         loop={false}
-                        onEnded={handleOnVideoEnded} />
+                        onEnded={handleOnVideoEnded} /> */}
                 </Box>
 
                 {/* video controls */}
