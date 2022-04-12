@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY package.json .
 
-#RUN yarn
+RUN yarn
 
 COPY /src ./src
 COPY /public ./public
