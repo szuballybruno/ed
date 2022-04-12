@@ -49,5 +49,5 @@ export class SQLConnectionService {
             const err = e as any;
             throw new Error(`Message: ${err.message} Detail: ${err.detail}`);
         }
-    }
+    };
 }

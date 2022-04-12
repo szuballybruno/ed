@@ -27,7 +27,7 @@ export class UserController {
 
         return await this._userService
             .getEditUserDataAsync(editedUserId);
-    }
+    };
 
     saveUserSimpleAction = async (params: ActionParams) => {
 
@@ -35,7 +35,7 @@ export class UserController {
 
         await this._userService
             .saveUserSimpleAsync(params.currentUserId, dto);
-    }
+    };
 
     saveUserAction = async (params: ActionParams) => {
 
@@ -43,7 +43,7 @@ export class UserController {
 
         await this._userService
             .saveUserAsync(dto);
-    }
+    };
 
     getUserAdministrationUserListAction = async (params: ActionParams) => {
 
@@ -63,5 +63,5 @@ export class UserController {
 
         await this._userService
             .getBriefUserDataAsync(userId);
-    }
+    };
 }

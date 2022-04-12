@@ -97,7 +97,7 @@ export class PlayerService extends ServiceBase {
             nextItemCode,
             nextItemState
         } as PlayerDataDTO;
-    }
+    };
 
     getNextItem(modules: ModuleDTO[], validItemCode: string) {
 
@@ -147,7 +147,7 @@ export class PlayerService extends ServiceBase {
         return (courseItemsFlat[prevIndex]
             ? courseItemsFlat[prevIndex]
             : courseItemsFlat[0]).code;
-    }
+    };
 
     /**
      * Returns a list of objects symbolizing the items present in the specified course. 
@@ -187,7 +187,7 @@ export class PlayerService extends ServiceBase {
             });
 
         return flatList;
-    }
+    };
 
     getVideoDTOAsync = async (userId: number, videoId: number) => {
 
@@ -199,5 +199,5 @@ export class PlayerService extends ServiceBase {
 
         return this._mapperService
             .map(Video, VideoDTO, video, maxWathcedSeconds);
-    }
+    };
 }

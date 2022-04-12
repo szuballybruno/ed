@@ -15,13 +15,13 @@ export class ShopController {
 
         return this._shopService
             .getShopItemsAsync(params.currentUserId);
-    }
+    };
 
     getShopItemCategoriesAction = async (params: ActionParams) => {
 
         return this._shopService
             .getShopItemCategoriesAsync();
-    }
+    };
 
     purchaseShopItemAction = async (params: ActionParams) => {
 
@@ -30,13 +30,13 @@ export class ShopController {
 
         return await this._shopService
             .purchaseShopItemAsync(params.currentUserId, shopItemId);
-    }
+    };
 
     getAdminShopItemsAction = async (params: ActionParams) => {
 
         return await this._shopService
             .getAdminShopItemsAsync();
-    }
+    };
 
     getShopItemBriefDataAction = async (params: ActionParams) => {
 
@@ -44,7 +44,7 @@ export class ShopController {
             .getShopItemBriefDataAsync(params
                 .getQuery<any>()
                 .getValue(x => x.shopItemId, 'int'));
-    }
+    };
 
     getShopItemEditDTOAction = async (params: ActionParams) => {
 
@@ -52,13 +52,13 @@ export class ShopController {
             .getShopItemEditDTOAsync(params
                 .getQuery<any>()
                 .getValue(x => x.shopItemId, 'int'));
-    }
+    };
 
     getPrivateCourseListAction = async (params: ActionParams) => {
 
         return await this._shopService
             .getPrivateCourseListAsync();
-    }
+    };
 
     saveShopItemAction = async (params: ActionParams) => {
 
@@ -71,11 +71,11 @@ export class ShopController {
 
         return await this._shopService
             .saveShopItemAsync(dto, coverFile);
-    }
+    };
 
     createShopItemAction = async (params: ActionParams) => {
 
         return await this._shopService
             .createShopItemAsync();
-    }
+    };
 }

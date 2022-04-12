@@ -20,5 +20,5 @@ export class UserSessionActivityService {
         // handle coin acqure 
         const coinAcquireResult = await this._coinAcquireService
             .handleSessionActivityCoinsAsync(userId, activitySessionId);
-    }
+    };
 }

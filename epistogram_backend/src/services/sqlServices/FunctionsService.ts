@@ -62,7 +62,7 @@ export class SQLFunctionsService {
 
             return fnReturnValue as T;
         }
-    }
+    };
 
     answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
 
@@ -73,7 +73,7 @@ export class SQLFunctionsService {
                 questionId,
                 answerId
             ]);
-    }
+    };
 
     answerQuestionFn = async (
         userId: number,
@@ -111,7 +111,7 @@ export class SQLFunctionsService {
             streakLength: result.streak_length,
             isCorrect: result.is_correct
         };
-    }
+    };
 
     insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {
 
@@ -128,7 +128,7 @@ export class SQLFunctionsService {
                 params.shopItemId
             ]
         );
-    }
+    };
 
     getUserSessionFirstActivityId = (
         userId: number,
@@ -141,7 +141,7 @@ export class SQLFunctionsService {
                 sessionActivityId
             ]
         );
-    }
+    };
 
     saveUserSessionActivity = (
         userId: number,
@@ -154,7 +154,7 @@ export class SQLFunctionsService {
                 param_activity_type
             ]
         );
-    }
+    };
 
     acquireTaskLockAsync = (taskCode: TaskCodeType) => {
 
@@ -164,5 +164,5 @@ export class SQLFunctionsService {
                 taskCode
             ]
         );
-    }
+    };
 }

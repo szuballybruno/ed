@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
 import { Course } from './Course';
@@ -15,6 +16,7 @@ export class Video {
     @PrimaryGeneratedColumn()
     id: number;
     
+    @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
 
@@ -47,7 +49,7 @@ export class Video {
 
     @OneToOne(type => StorageFile, { cascade: true })
     @JoinColumn({ name: 'thumbnail_file_id' })
-    thumbnailFile: StorageFile
+    thumbnailFile: StorageFile;
 
     // questions
     @OneToMany(type => Question, q => q.video, { onDelete: 'CASCADE', cascade: true })
@@ -60,7 +62,7 @@ export class Video {
 
     @ManyToOne(type => Course, course => course.videos)
     @JoinColumn({ name: 'course_id' })
-    course: Course
+    course: Course;
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.video)

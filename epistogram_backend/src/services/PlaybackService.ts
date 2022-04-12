@@ -96,7 +96,7 @@ export class PlaybackService extends ServiceBase {
             isWatchedStateChanged: isFirstCompletion,
             maxWathcedSeconds
         } as VideoSamplingResultDTO;
-    }
+    };
 
     saveUserVideoProgressBridgeAsync = async (
         userId: number,
@@ -131,7 +131,7 @@ export class PlaybackService extends ServiceBase {
         await this._ormService
             .getRepository(UserVideoProgressBridge)
             .save(videoPlaybackData);
-    }
+    };
 
     getMaxWatchedSeconds = async (userId: number, videoId: number) => {
 
@@ -145,7 +145,7 @@ export class PlaybackService extends ServiceBase {
             });
 
         return ads.toSeconds;
-    }
+    };
 
     getVideoIsCompletedStateAsync = async (userId: number, videoId: number) => {
 
@@ -158,5 +158,5 @@ export class PlaybackService extends ServiceBase {
                 { userId, videoId });
 
         return !!pbd?.completionDate;
-    }
+    };
 }

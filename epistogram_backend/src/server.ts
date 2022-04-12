@@ -5,43 +5,62 @@ import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CourseController } from './api/CourseController';
+import { CourseRatingController } from './api/CourseRatingController';
+import { DailyTipController } from './api/DailyTipController';
 import { EventController } from './api/EventController';
 import { ExamController } from './api/ExamController';
 import { FileController } from './api/FileController';
 import { MiscController } from './api/MiscController';
 import { ModuleController } from './api/ModuleController';
+import { PasswordChangeController } from './api/PasswordChangeController';
+import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
+import { PlaybackController } from './api/PlaybackController';
 import { PlayerController } from './api/PlayerController';
+import { PrequizController } from './api/PrequizController';
+import { PretestController } from './api/PretestController';
 import { QuestionController } from './api/QuestionController';
 import { RegistrationController } from './api/RegistrationController';
+import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 import { ShopController } from './api/ShopController';
 import { SignupController } from './api/SignupController';
 import { TeacherInfoController } from './api/TeacherInfoController';
+import { TempomatController } from './api/TempomatController';
 import { UserController } from './api/UserController';
+import { UserProgressController } from './api/UserProgressController';
 import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
-import { apiRoutes } from './shared/types/apiRoutes';
+import { VideoRatingController } from './api/VideoRatingController';
+import { AuthMiddleware } from './middleware/AuthMiddleware';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
 import { CourseItemsService } from './services/CourseItemsService';
+import { CourseRatingService } from './services/CourseRatingService';
 import { CourseService } from './services/CourseService';
+import { DailyTipService } from './services/DailyTipService';
 import { EmailService } from './services/EmailService';
 import { EventService } from './services/EventService';
 import { ExamService } from './services/ExamService';
 import { FileService } from './services/FileService';
+import { HashService } from './services/HashService';
+import { LoggerService } from './services/LoggerService';
 import { MapperService } from './services/MapperService';
 import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log, logError } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
-import { UrlService } from './services/UrlService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
+import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
+import { PasswordChangeService } from './services/PasswordChangeService';
 import { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
+import { PlaybackService } from './services/PlaybackService';
 import { PlayerService } from './services/PlayerService';
 import { PractiseQuestionService } from './services/PractiseQuestionService';
+import { PrequizService } from './services/PrequizService';
+import { PretestService } from './services/PretestService';
 import { QuestionAnswerService } from './services/QuestionAnswerService';
 import { QuestionService } from './services/QuestionService';
 import { RegistrationService } from './services/RegistrationService';
@@ -49,49 +68,27 @@ import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
 import { SQLFunctionsService } from './services/sqlServices/FunctionsService';
-import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { SeedService } from './services/sqlServices/SeedService';
 import { SQLBootstrapperService } from './services/sqlServices/SQLBootstrapper';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import { StorageService } from './services/StorageService';
 import { TeacherInfoService } from './services/TeacherInfoService';
+import { TempomatService } from './services/TempomatService';
 import { TokenService } from './services/TokenService';
+import { UrlService } from './services/UrlService';
 import { UserCourseBridgeService } from './services/UserCourseBridgeService';
+import { UserProgressService } from './services/UserProgressService';
 import { UserService } from './services/UserService';
 import { UserSessionActivityService } from './services/UserSessionActivityService';
 import { UserStatsService } from './services/UserStatsService';
 import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService';
-import { VideoService } from './services/VideoService';
-import { EndpointOptionsType, onActionError, onActionSuccess } from './utilities/apiHelpers';
-import './shared/logic/jsExtensions';
-import { PasswordChangeService } from './services/PasswordChangeService';
-import { PasswordChangeController } from './api/PasswordChangeController';
-import { AuthMiddleware } from './middleware/AuthMiddleware';
-import { ActionParams, sleepAsync } from './utilities/helpers';
-import { TurboExpress } from './utilities/TurboExpress';
-import { LoggerService } from './services/LoggerService';
-import { HashService } from './services/HashService';
 import { VideoRatingService } from './services/VideoRatingService';
-import { VideoRatingController } from './api/VideoRatingController';
-import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
-import { DailyTipController } from './api/DailyTipController';
-import { DailyTipService } from './services/DailyTipService';
-import { PrequizController } from './api/PrequizController';
-import { PrequizService } from './services/PrequizService';
-import { PretestController } from './api/PretestController';
-import { PretestService } from './services/PretestService';
-import { CourseRatingController } from './api/CourseRatingController';
-import { CourseRatingService } from './services/CourseRatingService';
-import { UserProgressService } from './services/UserProgressService';
-import { UserProgressController } from './api/UserProgressController';
-import { PlaybackService } from './services/PlaybackService';
-import { PlaybackController } from './api/PlaybackController';
-import { TempomatService } from './services/TempomatService';
-import { TempomatController } from './api/TempomatController';
-import { randomInt } from 'crypto';
-import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
-import { User } from './models/entity/User';
-import { instatiate } from './services/ORMConnectionService/ORMConnectionDecorators';
+import { VideoService } from './services/VideoService';
+import './shared/logic/jsExtensions';
+import { apiRoutes } from './shared/types/apiRoutes';
+import { EndpointOptionsType, onActionError, onActionSuccess } from './utilities/apiHelpers';
+import { ActionParams } from './utilities/helpers';
+import { TurboExpress } from './utilities/TurboExpress';
 
 (async () => {
 
@@ -196,24 +193,6 @@ import { instatiate } from './services/ORMConnectionService/ORMConnectionDecorat
         onActionError,
         onActionSuccess);
     const addEndpoint = turboExpress.addAPIEndpoint;
-
-    class Asd {
-
-        prop = 'asd';
-
-        constructor() {
-            console.log('constructing');
-        }
-
-        hello() {
-            console.log(this.prop);
-        }
-    }
-
-    const instance = instatiate(Asd);
-
-    instance.hello();
-
 
     // add middlewares
     turboExpress.use(getCORSMiddleware(globalConfig));

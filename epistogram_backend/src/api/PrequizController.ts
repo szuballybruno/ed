@@ -18,7 +18,7 @@ export class PrequizController {
 
         return await this._prequizService
             .getQuestionsAsync(params.currentUserId, courseId);
-    }
+    };
 
     getUserAnswerAction = async (params: ActionParams) => {
 
@@ -33,7 +33,7 @@ export class PrequizController {
 
         return await this._prequizService
             .getUserAnswerAsync(params.currentUserId, courseId, questionId);
-    }
+    };
 
     answerPrequizQuestionAction = async (params: ActionParams) => {
 
@@ -59,5 +59,5 @@ export class PrequizController {
 
         return await this._prequizService
             .answerPrequizQuestionAsync(params.currentUserId, questionId, courseId, answerId, value);
-    }
+    };
 }

@@ -42,7 +42,7 @@ export class CoinAcquireService {
 
         await this.acquireGenericActivityCoin(userId, activitySessionId);
         await this.acquireActivityStreakCoin(userId);
-    }
+    };
 
     /**
      * Reward user after a video is watched fo the first time 
@@ -54,7 +54,7 @@ export class CoinAcquireService {
 
         await this._coinTransactionService
             .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.videoWatched, videoId });
-    }
+    };
 
     /**
      * Reward user after a question is answered correctly for the first time 
@@ -83,7 +83,7 @@ export class CoinAcquireService {
             reason: 'correct_answer',
             amount: this._coinRewardAmounts.questionCorrectAnswer
         } as CoinAcquireResultDTO;
-    }
+    };
 
     /**
      * Reward user with coins based on the given answer streak length  
@@ -117,7 +117,7 @@ export class CoinAcquireService {
         }
 
         return null;
-    }
+    };
 
     /**
      * Generic activity coins are given at the start of each new activity session,
@@ -149,7 +149,7 @@ export class CoinAcquireService {
         // add acquire 
         await this._coinTransactionService
             .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.genericActivity, activitySessionId });
-    }
+    };
 
     /**
      * Activity streak coins are given after 3-5-10 days of countinous activity
@@ -225,5 +225,5 @@ export class CoinAcquireService {
         // add acquire event 
         this._eventService
             .addSessionStreakEventAsync(userId, { amount, reason });
-    }
+    };
 }

@@ -13,11 +13,11 @@ export class UrlService {
 
         assetPath = ('/' + assetPath).replace('//', '/');
         return this._config.fileStorage.assetStoreUrl + assetPath;
-    }
+    };
 
     getFrontendUrl = (ending: string) => {
 
         ending = ('/' + ending).replace('//', '/');
         return this._config.misc.frontendUrl + ending;
-    }
+    };
 }

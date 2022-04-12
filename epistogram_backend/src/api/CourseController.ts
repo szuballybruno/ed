@@ -46,7 +46,7 @@ export class CourseController {
     getAdminCourseListAction = (params: ActionParams) => {
 
         return this._courseService.getAdminCoursesAsync();
-    }
+    };
 
     getCourseBriefDataAction = async (params: ActionParams) => {
 
@@ -63,7 +63,7 @@ export class CourseController {
             .getValue(x => x.courseId, 'int');
 
         return await this._courseService.getCourseDetailsAsync(params.currentUserId, courseId);
-    }
+    };
 
     saveCourseDetailsAction = async (params: ActionParams) => {
 
@@ -93,14 +93,14 @@ export class CourseController {
 
         await this._courseService
             .saveCourseThumbnailAsync(file, courseId);
-    }
+    };
 
     deleteCourseAction = async (params: ActionParams) => {
 
         const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
 
         await this._courseService.deleteCourseAsync(courseId);
-    }
+    };
 
     createCourseAction = async (params: ActionParams) => {
 
@@ -108,7 +108,7 @@ export class CourseController {
 
         await this._courseService
             .createCourseAsync(dto);
-    }
+    };
 
     setCourseModeAction = async (params: ActionParams) => {
 
@@ -125,7 +125,7 @@ export class CourseController {
     getCourseProgressShortAction = async (params: ActionParams) => {
 
         return this._courseService.getCourseProgressShortAsync(params.currentUserId);
-    }
+    };
 
     getCourseProgressDataAction = async (params: ActionParams) => {
 

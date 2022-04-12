@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { CourseItemType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
@@ -31,6 +32,7 @@ export class CourseAdminContentView {
     @ViewColumn()
 	itemId: number;
 
+    @IsDeletedFlag('bool')
     @ViewColumn()
     itemIsDeleted: boolean;
 

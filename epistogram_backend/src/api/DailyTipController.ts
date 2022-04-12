@@ -19,7 +19,7 @@ export class DailyTipController {
 
         await this._dailyTipService
             .deleteDailyTipAsync(tipId);
-    }
+    };
 
     createDailyTipAction = async (params: ActionParams) => {
 
@@ -34,7 +34,7 @@ export class DailyTipController {
 
         await this._dailyTipService
             .createDailyTipAsync(personalityTraitCategoryId, isMax);
-    }
+    };
 
     getDailyTipEditDataAction = async (params: ActionParams) => {
 
@@ -44,7 +44,7 @@ export class DailyTipController {
 
         return await this._dailyTipService
             .getDailyTipEditDataAsync(dailyTipId);
-    }
+    };
 
     saveDailyTipAction = async (params: ActionParams) => {
 
@@ -54,11 +54,11 @@ export class DailyTipController {
 
         return await this._dailyTipService
             .saveDailyTipAsync(dto);
-    }
+    };
 
     getDailyTipAction = async (params: ActionParams) => {
 
         return await this._dailyTipService
             .getDailyTipAsync(params.currentUserId);
-    }
+    };
 }

@@ -97,7 +97,7 @@ export class Course {
 
     // teacher
     @Column()
-    teacherId: number
+    teacherId: number;
 
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
     @JoinColumn({ name: 'teacher_id' })

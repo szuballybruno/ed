@@ -18,5 +18,5 @@ export class UserStatsController {
 
         return await this._userStatsService
             .getUserStatsAsync(userId);
-    }
+    };
 }

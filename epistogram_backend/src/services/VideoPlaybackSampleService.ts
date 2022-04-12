@@ -36,7 +36,7 @@ export class VideoPlaybackSampleService {
             .reduce((prev, curr) => curr + prev);
 
         return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
-    }
+    };
 
     squishSamplesAsync = async (userId: number, videoId: number, chunks: VideoPlaybackSampleChunk[]) => {
 
@@ -61,7 +61,7 @@ export class VideoPlaybackSampleService {
                         videoId: videoId
                     } as VideoPlaybackSample;
                 }));
-    }
+    };
 
     getSampleChunksAsync = async (userId: number, videoId: number) => {
 
@@ -89,7 +89,7 @@ export class VideoPlaybackSampleService {
         }
 
         return chunks;
-    }
+    };
 
     getSampleChunk = (orderedSampels: VideoPlaybackSample[], searchCursorSecs: number) => {
 
@@ -119,7 +119,7 @@ export class VideoPlaybackSampleService {
             startSeconds: minSample,
             endSeconds: maxSample
         } as VideoPlaybackSampleChunk;
-    }
+    };
 
     getNextSample = (orderedSampels: VideoPlaybackSample[], lastSampleToSeconds: number) => {
 
@@ -135,5 +135,5 @@ export class VideoPlaybackSampleService {
             .filter(sample => isJoinedSample(sample))
             .orderBy(sample => sample.toSeconds)
             .firstOrNull(sample => true);
-    }
+    };
 }

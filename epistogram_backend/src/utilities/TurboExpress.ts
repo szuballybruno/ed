@@ -80,7 +80,7 @@ export class TurboExpress<TActionParams, TRouteOptions extends IRouteOptions> {
 
             this._expressServer.get(path, syncActionWrapper);
         }
-    }
+    };
 
     use(middleware: (req: any, res: any, next: any) => void) {
 

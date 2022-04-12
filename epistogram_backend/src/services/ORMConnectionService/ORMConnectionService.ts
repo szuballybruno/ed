@@ -6,6 +6,7 @@ import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
+import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 
 export type ORMConnection = DataSource;
 
@@ -104,7 +105,7 @@ export class ORMConnectionService {
 
             throw new Error('Type ORM connection error!' + e);
         }
-    }
+    };
 
     getRepository<T>(classType: ClassType<T>) {
 
@@ -163,24 +164,41 @@ export class ORMConnectionService {
         idField?: TField,
         query?: ExpressionPart<TEntity, TParam>[],
         params?: TParam,
-        deletionPropertyName?: keyof TEntity
+        allowDeleted?: boolean
     }) {
 
         type ActualParamType = { id: number } & TParam;
 
-        const deletionPropertyName = opts?.deletionPropertyName;
-
         const idFieldName = opts?.idField ?? 'id' as TField;
         const query = opts?.query ?? [];
         const hahparams: TParam | undefined = opts?.params;
+        const allowDeleted = !!opts?.allowDeleted;
 
         // create expression
-        let expr: ExpressionPart<TEntity, ActualParamType>[] = [['WHERE', idFieldName, '=', 'id']];
+        let baseExpression: ExpressionPart<TEntity, ActualParamType>[] = [['WHERE', idFieldName, '=', 'id']];
 
-        if (deletionPropertyName)
-            expr = expr.concat([['AND', deletionPropertyName, 'IS', 'NULL']]);
+        // check deleted flag 
+        if (!allowDeleted) {
 
-        const fullExpr: ExpressionPart<TEntity, ActualParamType>[] = expr.concat(query);
+            const deletionPropertyData = getIsDeletedDecoratorPropertyData(classType);
+            if (deletionPropertyData) {
+
+                baseExpression = deletionPropertyData.checkType === 'null'
+
+                    // null check 
+                    ? baseExpression
+                        .concat([['AND', deletionPropertyData.propName, 'IS', 'NULL']])
+
+                    // bool check 
+                    : baseExpression
+                        .concat([['AND', deletionPropertyData.propName, '=', 'false']]);
+            }
+        }
+
+        // get full expression by adding the extension expression to the base
+        const fullExpr: ExpressionPart<TEntity, ActualParamType>[] = baseExpression
+            .concat(query);
+
         const actualParams: ActualParamType = { id, ...hahparams } as any;
 
         return this.getSingle(classType, fullExpr, actualParams);

@@ -127,7 +127,7 @@ export class PersonalityAssessmentService {
                 activeDescription: x.activeDescription,
                 categoryTitle: x.taritCategoryTitle
             }) as PersonalityCategoryTraitDTO);
-    }
+    };
 
     /**
      * This is a specialized function that 

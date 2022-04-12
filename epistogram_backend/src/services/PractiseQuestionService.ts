@@ -55,7 +55,7 @@ export class PractiseQuestionService extends ServiceBase {
         } as PractiseQuestionDTO;
 
         return questionDTO;
-    }
+    };
 
     answerPractiseQuestionAsync = async (userId: number, qu: AnswerQuestionDTO) => {
 
@@ -63,7 +63,7 @@ export class PractiseQuestionService extends ServiceBase {
 
         return await this._questionAnswerService
             .answerQuestionAsync(userId, practiseAnswerSession.id, qu.questionId, qu.answerIds, false, 0, true);
-    }
+    };
 
     getUserPractiseAnswerSession = async (userId: number) => {
 
@@ -74,5 +74,5 @@ export class PractiseQuestionService extends ServiceBase {
                     ['AND', 'userId', '=', 'userId']
                 ],
                 { practiseType: 'practise', userId });
-    }
+    };
 }

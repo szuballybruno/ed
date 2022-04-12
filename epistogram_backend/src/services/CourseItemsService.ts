@@ -26,5 +26,5 @@ export class CourseItemsService {
 
         return this._mapperService
             .map(Course, CourseItemListDTO, course);
-    }
+    };
 }

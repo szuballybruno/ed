@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { ExamType } from '../../shared/types/sharedTypes';
 import { AnswerSession } from './AnswerSession';
 import { Course } from './Course';
@@ -12,6 +13,7 @@ export class Exam {
     @PrimaryGeneratedColumn()
     id: number;
     
+    @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
 
@@ -42,7 +44,7 @@ export class Exam {
 
     @ManyToOne(type => Course, course => course.exams)
     @JoinColumn({ name: 'course_id' })
-    course: Course | null
+    course: Course | null;
 
     // questions 
     @OneToMany(_ => Question, q => q.exam, { onDelete: 'CASCADE', cascade: ['remove'] })

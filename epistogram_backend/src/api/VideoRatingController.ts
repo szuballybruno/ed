@@ -19,7 +19,7 @@ export class VideoRatingController {
 
         await this._videoRatingService
             .rateVideoDifficultyAsync(params.currentUserId, dto);
-    }
+    };
 
     rateVideoExperienceAction = async (params: ActionParams) => {
 
@@ -29,7 +29,7 @@ export class VideoRatingController {
 
         await this._videoRatingService
             .rateVideoExperienceAsync(params.currentUserId, dto);
-    }
+    };
 
     getVideoRatingAction = async (params: ActionParams) => {
 
@@ -39,5 +39,5 @@ export class VideoRatingController {
 
         return await this._videoRatingService
             .getVideoRatingAsync(params.currentUserId, videoId);
-    }
+    };
 } 

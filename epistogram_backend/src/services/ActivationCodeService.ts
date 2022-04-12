@@ -53,5 +53,5 @@ export class ActivationCodeService {
 
         return 'PCW-' + generatePassword(8)
 .toUpperCase();
-    }
+    };
 }

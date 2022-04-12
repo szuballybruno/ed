@@ -17,7 +17,7 @@ export class StorageService {
         const { data: buffer } = file;
 
         return this.uploadBufferToStorageAsync(buffer, path);
-    }
+    };
 
     uploadBufferToStorageAsync = (buffer: Buffer, path: string) => new Promise<void>((resolve, reject) => {
 
@@ -53,7 +53,7 @@ export class StorageService {
 
             logError(e);
         }
-    }
+    };
 
     getBucket = () => {
 
@@ -68,5 +68,5 @@ export class StorageService {
 
         return storage
             .bucket(this._config.fileStorage.bucketName);
-    }
+    };
 }

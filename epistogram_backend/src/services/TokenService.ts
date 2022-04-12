@@ -22,27 +22,27 @@ export class TokenService {
     verifyAccessToken = (token: string) => {
 
         return this.verifyJWTToken<AccessTokenPayload>(token, this._config.security.secrets.accessTokenSecret);
-    }
+    };
 
     verifyRefreshToken = (token: string) => {
 
         return this.verifyJWTToken<AccessTokenPayload>(token, this._config.security.secrets.refreshTokenSecret);
-    }
+    };
 
     verifyPublicRegistrationToken = (token: string) => {
 
         return this.verifyJWTToken(token, this._config.security.secrets.regTokenSecret);
-    }
+    };
 
     verifyInvitaionToken = (token: string) => {
 
         return this.verifyJWTToken<InvitationTokenPayload>(token, this._config.security.secrets.invitationTokenSecret);
-    }
+    };
 
     verifySetNewPasswordToken = (token: string) => {
 
         return this.verifyJWTToken<{ userId: number }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
-    }
+    };
 
     //
     // CREATE
@@ -54,7 +54,7 @@ export class TokenService {
             { userEmail },
             this._config.security.secrets.invitationTokenSecret,
             `${this._config.security.tokenLifespans.invitationTokenLifespanInS}s`);
-    }
+    };
 
     createAccessToken = (user: User, userActivity: UserActivityFlatView) => {
 
@@ -66,7 +66,7 @@ export class TokenService {
             },
             this._config.security.secrets.accessTokenSecret,
             `${this._config.security.tokenLifespans.accessTokenLifespanInS}s`);
-    }
+    };
 
     createRefreshToken = (user: User) => {
 
@@ -74,7 +74,7 @@ export class TokenService {
             { userId: user.id },
             this._config.security.secrets.refreshTokenSecret,
             `${this._config.security.tokenLifespans.refreshTokenLifespanInS}s`);
-    }
+    };
 
     createSetNewPasswordToken = (userId: number) => {
 
@@ -82,7 +82,7 @@ export class TokenService {
             { userId },
             this._config.security.secrets.setNewPasswordTokenSecret,
             `${this._config.security.tokenLifespans.setNewPasswordTokenLifespanInS}s`);
-    }
+    };
 
     createRegistrationToken = () => {
 
@@ -90,7 +90,7 @@ export class TokenService {
             { tokenNudli: 'bekacomb' },
             this._config.security.secrets.regTokenSecret,
             `${this._config.security.tokenLifespans.registrationTokenLifespanInS}s`);
-    }
+    };
 
 
     private getJWTToken = <TTokenPayload>(
@@ -99,7 +99,7 @@ export class TokenService {
         expiresIn: string | number): string => {
 
         return sign(tokenData as any, secret, { expiresIn: expiresIn });
-    }
+    };
 
     private verifyJWTToken = <TTokenPayload>(token: string, secret: string) => {
 
@@ -109,5 +109,5 @@ export class TokenService {
             throw new ErrorCode('Token verification failed!', 'forbidden');
 
         return payload;
-    }
+    };
 }

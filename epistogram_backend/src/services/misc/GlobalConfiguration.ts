@@ -34,7 +34,7 @@ export class GlobalConfiguration {
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
             "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/epistogram-service-account%40gifted-country-324010.iam.gserviceaccount.com"
         }`)
-    }
+    };
 
     misc = {
         hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
@@ -45,18 +45,18 @@ export class GlobalConfiguration {
         refreshTokenCookieName: 'refreshToken',
         isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE') === 'true',
         videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntryInt('VIDEO_COMPLETED_PERCENTAGE')
-    }
+    };
 
     fileStorage = {
         assetStoreUrl: GlobalConfiguration.getEnvConfigEntry('FILE_STORAGE_URL'),
         bucketName: GlobalConfiguration.getEnvConfigEntry('FILE_STORAGE_BUCKET_NAME'),
-    }
+    };
 
     mail = {
         mailHost: GlobalConfiguration.getEnvConfigEntry('MAIL_HOST'),
         senderEmail: GlobalConfiguration.getEnvConfigEntry('MAIL_SENDER_MAIL'),
         senderPassword: GlobalConfiguration.getEnvConfigEntry('MAIL_SENDER_PASSWORD')
-    }
+    };
 
     database = {
         name: GlobalConfiguration.getEnvConfigEntry('DB_NAME'),
@@ -68,7 +68,7 @@ export class GlobalConfiguration {
         isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED') === 'true',
         isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED') === 'true',
         isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true'
-    }
+    };
 
     constructor(rootDirectory: string) {
 
@@ -81,7 +81,7 @@ export class GlobalConfiguration {
         const isProdEnvironemnt = envName.includes('prod');
 
         return isProdEnvironemnt;
-    }
+    };
 
     getDatabaseConnectionParameters = () => {
 
@@ -103,12 +103,12 @@ export class GlobalConfiguration {
                 ? gcpCloudSqlConnectionString
                 : undefined
         };
-    }
+    };
 
     getRootRelativePath = (path: string) => {
 
         return this.rootDirectory + path;
-    }
+    };
 
     static getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
 
@@ -120,7 +120,7 @@ export class GlobalConfiguration {
 
         log(entryName + ' -> ' + value);
         return value ?? '';
-    }
+    };
 
     static getEnvConfigEntryInt = (entryName: string, allowEmptyStr?: boolean) => {
 
@@ -128,7 +128,7 @@ export class GlobalConfiguration {
             .getEnvConfigEntry(entryName, allowEmptyStr);
 
         return parseInt(value);
-    }
+    };
 
     static initGlobalConfig = (rootDirectory: string) => {
 
@@ -144,12 +144,12 @@ export class GlobalConfiguration {
         log(`Started in '${globalConfig.misc.environmentName}' environment!`);
 
         return globalConfig;
-    }
+    };
 
     static getCurrentEnvironmentName = () => {
 
         return process.env.ENVIRONMENT_NAME as EnvironmentType;
-    }
+    };
 }
 
 

@@ -13,5 +13,5 @@ export class EventController {
     getUnfulfilledEventAction = async (params: ActionParams) => {
 
         return await this._eventService.getUnfulfilledEventAsync();
-    }
+    };
 }

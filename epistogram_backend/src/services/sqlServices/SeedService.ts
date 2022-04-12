@@ -46,7 +46,7 @@ export class SeedService {
 
         // seed users 
         await this.seedUsersAsync();
-    }
+    };
 
     private seedUsersAsync = async () => {
 
@@ -89,5 +89,5 @@ export class SeedService {
                 'admin123');
 
         log('User 2 token: ' + it2);
-    }
+    };
 }

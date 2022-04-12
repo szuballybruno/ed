@@ -75,7 +75,7 @@ export class QuestionService {
         if (insertQuestions.length > 0)
             await questionRepo
                 .insert(insertQuestions);
-    }
+    };
 
     softDeleteQuesitonsAsync = async (quesitonIds: number[]) => {
 
@@ -105,7 +105,7 @@ export class QuestionService {
         await this._ormService
             .getRepository(Question)
             .softDelete(quesitonIds);
-    }
+    };
 
     softDeleteGivenAnswers = async (givenAnswerIds: number[]) => {
 
@@ -124,14 +124,14 @@ export class QuestionService {
         // delete given answers 
         await this._ormService
             .softDelete(GivenAnswer, givenAnswerIds);
-    }
+    };
 
     softDeleteAnswersAsync = async (answerIds: number[]) => {
 
         // delete answers 
         await this._ormService
             .softDelete(Answer, answerIds);
-    }
+    };
 
     saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {
 
@@ -148,7 +148,7 @@ export class QuestionService {
 
         // save answers
         await this.saveAssociatedAnswersAsync(questionId, dto.answers);
-    }
+    };
 
     saveAssociatedAnswersAsync = async (questionId: number, answers: AnswerEditDTO[]) => {
 
@@ -198,5 +198,5 @@ export class QuestionService {
             await this._ormService
                 .getRepository(Answer)
                 .insert(insertAnswers);
-    }
+    };
 }

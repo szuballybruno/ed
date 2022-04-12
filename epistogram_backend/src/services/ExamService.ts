@@ -81,7 +81,7 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         return this._mapperService
             .map(ExamView, ExamPlayerDataDTO, examView, questions);
-    }
+    };
 
     /**
      * Get questions for a particular exam.
@@ -204,7 +204,7 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         return this._ormService
             .getSingleById(Exam, examId);
-    }
+    };
 
     /**
      * Answer a question in the exam. 
@@ -286,7 +286,7 @@ export class ExamService extends QueryServiceBase<Exam> {
                 examId,
                 userId
             });
-    }
+    };
 
     /**
      * Delete multiple exams by their ids.
@@ -337,7 +337,7 @@ export class ExamService extends QueryServiceBase<Exam> {
         // delete exam
         await this._ormService
             .softDelete(Exam, examIds);
-    }
+    };
 
     /**
      * Get the results of the particular exam.
@@ -367,5 +367,5 @@ export class ExamService extends QueryServiceBase<Exam> {
             });
 
         return toExamResultDTO(examResultViews);
-    }
+    };
 }

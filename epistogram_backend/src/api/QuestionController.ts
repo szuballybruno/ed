@@ -48,7 +48,7 @@ export class QuestionController {
             typeId: question.typeId,
             answers: (question.answers ?? []).map(x => toAnswerEditDTO(x))
         } as QuestionEditDataDTO;
-    }
+    };
 
     saveQuestionAction = async (params: ActionParams) => {
 
@@ -57,5 +57,5 @@ export class QuestionController {
 
         await this._questionService
             .saveQuestionAsync(questionId, dto);
-    }
+    };
 }

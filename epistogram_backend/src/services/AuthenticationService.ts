@@ -36,7 +36,7 @@ export class AuthenticationService {
             throw new ErrorCode('Token is invalid.', 'bad request');
 
         return tokenPayload;
-    }
+    };
 
     async getCurrentUserAsync(userId: number) {
 
@@ -88,7 +88,7 @@ export class AuthenticationService {
             accessToken,
             refreshToken
         };
-    }
+    };
 
     logInUser = async (email: string, password: string) => {
 
@@ -124,7 +124,7 @@ export class AuthenticationService {
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
-    }
+    };
 
     logOutUserAsync = async (userId: number) => {
 
@@ -134,7 +134,7 @@ export class AuthenticationService {
         // remove refresh token, basically makes it invalid from now on
         await this._userService
             .removeRefreshToken(userId);
-    }
+    };
 
     getUserLoginTokens = async (user: User, activity: UserActivityFlatView) => {
 
@@ -146,5 +146,5 @@ export class AuthenticationService {
             accessToken,
             refreshToken
         };
-    }
+    };
 }

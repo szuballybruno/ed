@@ -47,7 +47,7 @@ export class VideoController {
 
         await this._questionService
             .saveAssociatedQuestionsAsync(dto.questions, videoId);
-    }
+    };
 
     getVideoEditDataAction = async (params: ActionParams) => {
 
@@ -64,7 +64,7 @@ export class VideoController {
 
         return this._mapperService
             .map(Video, VideoEditDTO, video);
-    }
+    };
 
     getVideoQuestionEditDataAction = async (params: ActionParams) => {
 
@@ -76,7 +76,7 @@ export class VideoController {
 
         return await this._videoService
             .getVideoQuestionEditDataAsync(videoId);
-    }
+    };
 
     saveVideoQuestionEditDataAction = async (params: ActionParams) => {
         const mutations = params
@@ -85,7 +85,7 @@ export class VideoController {
 
         await this._videoService
             .saveVideoQuestionEditDataAsync(mutations);
-    }
+    };
 
     uploadVideoFileChunksAction = async (params: ActionParams) => {
 
@@ -149,5 +149,5 @@ export class VideoController {
             fs.unlinkSync(filePath);
             throw e;
         }
-    }
+    };
 }

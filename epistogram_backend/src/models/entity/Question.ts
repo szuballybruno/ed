@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { Answer } from './Answer';
 import { Exam } from './Exam';
 import { GivenAnswer } from './GivenAnswer';
@@ -12,6 +13,7 @@ export class Question {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
 

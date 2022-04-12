@@ -39,7 +39,7 @@ export class MiscService {
 
         return orgs
             .map(org => toOrganizationDTO(org));
-    }
+    };
 
     saveUserDataAsync = async (userId: number, dto: UserDTO) => {
 
@@ -51,7 +51,7 @@ export class MiscService {
                 lastName: dto.lastName,
                 phoneNumber: dto.phoneNumber
             });
-    }
+    };
 
     async getCourseOverviewDataAsync(userId: number) {
 
@@ -89,9 +89,9 @@ export class MiscService {
         } as OverviewPageDTO;
 
         return overviewPageDTO;
-    }
+    };
 
-    private getTipOfTheDay = () => 'Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!'
+    private getTipOfTheDay = () => 'Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!';
 
     private getDevelopmentChart = () => {
         return {
@@ -115,5 +115,5 @@ export class MiscService {
                 }
             ],
         };
-    }
+    };
 }

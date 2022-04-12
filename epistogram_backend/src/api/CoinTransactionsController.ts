@@ -14,13 +14,13 @@ export class CoinTransactionsController {
 
         return this._coinTransactionService
             .getCoinTransactionsAsync(params.currentUserId);
-    }
+    };
 
     getCoinBalanceAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
             .getCoinBalance(params.currentUserId);
-    }
+    };
 
     getCoinBalanceOfUserAction = async (params: ActionParams) => {
 
@@ -30,7 +30,7 @@ export class CoinTransactionsController {
 
         return this._coinTransactionService
             .getCoinBalance(userId);
-    }
+    };
 
     giftCoinsToUser = async (params: ActionParams) => {
 
@@ -45,5 +45,5 @@ export class CoinTransactionsController {
 
         return await this._coinTransactionService
             .giftCoinsToUserAsync(userId, amount);
-    }
+    };
 }

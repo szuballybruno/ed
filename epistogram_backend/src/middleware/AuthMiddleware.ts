@@ -88,7 +88,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
 
         if (!isCurrentRouteAccessable)
             throw new ErrorCode('User has not proper rights to access the requested resource.', 'forbidden');
-    }
+    };
 
     private authorizeUserAsync = async (role: RoleType, authorize: RoleType[] | undefined) => {
 
@@ -103,5 +103,5 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
 
         if (!isAuthorized)
             throw new Error('Unauthorized.');
-    }
+    };
 }

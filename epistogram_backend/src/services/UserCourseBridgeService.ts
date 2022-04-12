@@ -172,7 +172,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             throw new Error('Course has no current item!');
 
         return currentItemCode;
-    }
+    };
 
     getCurrentItemCodeAsync = async (userId: number) => {
 
@@ -186,7 +186,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             });
 
         return currentBridge?.currentItemCode ?? null;
-    }
+    };
 
     getUserCourseBridgeAsync = async (userId: number, courseId: number) => {
 
@@ -200,7 +200,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             });
 
         return userCourseBridge;
-    }
+    };
 
     getUserCourseBridgeOrFailAsync = async (userId: number, courseId: number) => {
 
@@ -209,7 +209,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             throw new Error('User course bridge not found, maybe the course is not yet started!');
 
         return userCourseBridge;
-    }
+    };
 
     unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {
 
@@ -274,5 +274,5 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 .from(UserCourseBridge)
                 .where('courseId = :courseId', { courseId })
                 .execute();
-    }
+    };
 }

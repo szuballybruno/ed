@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -10,8 +11,11 @@ export class ExamView {
     userId: number;
     @ViewColumn()
     examId: number;
+    
+    @IsDeletedFlag('bool')
     @ViewColumn()
     isDeleted: boolean;
+    
     @ViewColumn()
     title: string;
     @ViewColumn()

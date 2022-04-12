@@ -83,5 +83,5 @@ export class DbConnectionService {
             .find();
 
         return users.length === 0;
-    }
+    };
 }

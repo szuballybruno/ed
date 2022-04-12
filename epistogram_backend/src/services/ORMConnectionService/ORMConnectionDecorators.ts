@@ -1,44 +1,45 @@
-// // export const IsDeletedFlag = (target: any, memberName: string) => {
-
-// //     return
-// // }
-
 import 'reflect-metadata';
 import { getKeys } from '../../shared/logic/sharedLogic';
 
-const metadataKey = 'MyDecorator';
+const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
 
-export const MyDecorator = (prototype: any, propertyKey: string) => {
+type CheckType = 'null' | 'bool';
 
-    Reflect.defineMetadata(metadataKey, true, prototype, propertyKey);
+export const IsDeletedFlag = (checkType?: CheckType) => {
+
+    return (prototype: any, propertyKey: string) => {
+
+        const chck: CheckType = checkType
+            ? checkType
+            : 'null';
+
+        Reflect.defineMetadata(IS_DELETED_FLAG_METADATA_KEY, chck, prototype, propertyKey);
+    };
 };
 
-export const GetDecorators = <T>(classType: { new(): T }) => {
+export const getIsDeletedDecoratorPropertyData = <T>(classType: { new(): T }) => {
 
     const instance = instatiate(classType);
 
-    getKeys(instance)
-        .forEach(x => console.log(x));
+    const propName = getKeys(instance)
+        .firstOrNull(propertyKey => {
+
+            const hasMetadata = Reflect.hasMetadata(IS_DELETED_FLAG_METADATA_KEY, instance, propertyKey as string);
+            return hasMetadata;
+        });
+
+    if (!propName)
+        return null;
+
+    const checkType = Reflect.getMetadata(IS_DELETED_FLAG_METADATA_KEY, instance, propName as string) as CheckType;
+
+    return {
+        propName,
+        checkType
+    };
 };
 
 export const instatiate = <T>(classType: { new(): T }) => {
 
     return new classType();
 };
-
-// function myDecoratorUsingInstance<T>(instance: T, propertyKey: string) {
-//     return !!Reflect.getMetadata(metadataKey, instance, propertyKey);
-// }
-
-// class MyClass {
-//     @MyDecorator
-//     property1;
-//     property2;
-// }
-
-// console.log(myDecoratorUsingClass(MyClass, 'property1')); // true
-// console.log(myDecoratorUsingClass(MyClass, 'property2')); // false
-
-// const instance = new MyClass();
-// console.log(myDecoratorUsingInstance(instance, 'property1')); // true
-// console.log(myDecoratorUsingInstance(instance, 'property2')); // false

@@ -52,7 +52,7 @@ export class VideoService extends QueryServiceBase<Video> {
 
         return this._questionAnswerService
             .answerQuestionAsync(userId, answerSessionId, questionId, answerIds, false, elapsedSeconds);
-    }
+    };
 
     insertVideoAsync = async (video: Video, filePath?: string) => {
 
@@ -77,7 +77,7 @@ export class VideoService extends QueryServiceBase<Video> {
         await this._ormService
             .getRepository(Video)
             .save(video);
-    }
+    };
 
     setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {
 
@@ -87,7 +87,7 @@ export class VideoService extends QueryServiceBase<Video> {
                 id: videoId,
                 videoFileId: videoFileId
             });
-    }
+    };
 
     async softDeleteVideosAsync(videoIds: number[], unsetCurrentCourseItem: boolean) {
 
@@ -181,7 +181,7 @@ export class VideoService extends QueryServiceBase<Video> {
                 id: videoId,
                 lengthSeconds: lengthSeconds
             });
-    }
+    };
 
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
 
@@ -191,7 +191,7 @@ export class VideoService extends QueryServiceBase<Video> {
                 id: videoId,
                 thumbnailFileId: thumbnailFileId
             });
-    }
+    };
 
     getVideoByIdAsync = async (videoId: number) => {
 
@@ -199,7 +199,7 @@ export class VideoService extends QueryServiceBase<Video> {
             .getSingleById(Video, videoId);
 
         return video;
-    }
+    };
 
     getVideoPlayerDataAsync = async (videoId: number) => {
 
@@ -213,7 +213,7 @@ export class VideoService extends QueryServiceBase<Video> {
             .getOneOrFail();
 
         return video;
-    }
+    };
 
     getVideoQuestionEditDataAsync = async (
         videoId?: number
@@ -228,7 +228,7 @@ export class VideoService extends QueryServiceBase<Video> {
         const videoQuestionEditDTO = toVideoQuestionEditDTO(questionEditView, this._assetUrlService.getAssetUrl);
 
         return videoQuestionEditDTO;
-    }
+    };
 
     async saveVideoQuestionEditDataAsync(mutations: Mutation<VideoQuestionEditDTO, 'id'>[]) {
         await this.saveUpdatedVideoQuestionEditDataAsync(mutations);

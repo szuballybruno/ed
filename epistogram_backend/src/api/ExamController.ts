@@ -35,7 +35,7 @@ export class ExamController {
 
         await this._examService
             .startExamAsync(answerSessionId);
-    }
+    };
 
     getExamResultsAction = async (params: ActionParams) => {
 
@@ -53,7 +53,7 @@ export class ExamController {
 
         return await this._examService
             .getExamEditDataAsync(examId);
-    }
+    };
 
     saveExamAction = async (params: ActionParams) => {
 
@@ -62,7 +62,7 @@ export class ExamController {
 
         await this._examService
             .saveExamAsync(dto.data);
-    }
+    };
 
     createExamAction = async (params: ActionParams) => {
 
@@ -94,7 +94,7 @@ export class ExamController {
         return {
             id: newExam.id
         } as IdResultDTO;
-    }
+    };
 
     deleteExamAction = async (params: ActionParams) => {
 
@@ -102,5 +102,5 @@ export class ExamController {
 
         await this._examService
             .softDeleteExamsAsync([examId], true);
-    }
+    };
 }

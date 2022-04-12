@@ -14,7 +14,7 @@ export class PersonalityAssessmentController {
 
         return this._personalityAssessmentService
             .getPersonalityTraitCategoriesAsync();
-    }
+    };
 
     getPersonalityTraitCategoryDetailsAction = async (params: ActionParams) => {
 
@@ -29,5 +29,5 @@ export class PersonalityAssessmentController {
 
         return this._personalityAssessmentService
             .getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId, isMax);
-    }
+    };
 }

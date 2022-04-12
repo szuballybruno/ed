@@ -13,5 +13,5 @@ export class ScheduledJobTriggerController {
 
         await this._tempomatService
             .evaluateUserProgressesAsync();
-    }
+    };
 }

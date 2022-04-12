@@ -38,7 +38,7 @@ export class AuthenticationController {
             .logInUser(email, password);
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
-    }
+    };
 
     getCurrentUserAction = async (params: ActionParams) => {
 

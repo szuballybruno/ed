@@ -101,7 +101,7 @@ export class PasswordChangeService {
 
         await this._emailService
             .sendResetPasswordMailAsync(user, resetPawsswordUrl);
-    }
+    };
 
     /**
      * This will set a new password for the user.
@@ -145,5 +145,5 @@ export class PasswordChangeService {
                 resetPasswordToken: null,
                 password: hashedPassword
             } as User);
-    }
+    };
 }

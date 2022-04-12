@@ -16,10 +16,10 @@ export class HashService {
             .hash(password, 12);
 
         return hash;
-    }
+    };
 
     comparePasswordAsync = (unhashed: string, hashed: string) => {
 
         return bcrypt.compare(unhashed, hashed);
-    }
+    };
 }

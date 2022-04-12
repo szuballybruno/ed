@@ -50,12 +50,12 @@ export class MiscController {
     getOverviewPageDTOAction = async (params: ActionParams) => {
 
         return this._miscService.getOverviewPageDTOAsync(params.currentUserId);
-    }
+    };
 
     getOrganizationsAction = (params: ActionParams) => {
 
         return this._miscService.getOrganizationsAsync(params.currentUserId);
-    }
+    };
 
     getJobTitlesAction = async (params: ActionParams) => {
 
@@ -86,5 +86,5 @@ export class MiscController {
 
         return this._miscService
             .getCourseOverviewDataAsync(params.currentUserId);
-    }
+    };
 }

@@ -49,7 +49,7 @@ export class SQLBootstrapperService {
 
         log('Recreating indices...');
         await this.recreateIndicesAsync(this._dbSchema.indices);
-    }
+    };
 
     recalcSequencesAsync = async () => {
 
@@ -80,7 +80,7 @@ export class SQLBootstrapperService {
         await this._sqlConnectionService.executeSQLAsync(script);
 
         log('-- Recalculating sequance max values done.');
-    }
+    };
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
 
@@ -91,7 +91,7 @@ export class SQLBootstrapperService {
         const replacedSQl = this.replaceSymbols(sql);
 
         await this._sqlConnectionService.executeSQLAsync(replacedSQl);
-    }
+    };
 
     purgeDBAsync = async () => {
 
@@ -108,7 +108,7 @@ export class SQLBootstrapperService {
         logObject(dropDBScript);
 
         const results = await this._sqlConnectionService.executeSQLAsync(dropDBScript);
-    }
+    };
 
     private recreateConstraintsAsync = async (constraints: SQLConstraintType[]) => {
 
@@ -127,7 +127,7 @@ export class SQLBootstrapperService {
             log(`-- Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
-    }
+    };
 
     private recreateIndicesAsync = async (indices: SQLIndexType[]) => {
 
@@ -148,7 +148,7 @@ export class SQLBootstrapperService {
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
-    }
+    };
 
     private recreateFunctionsAsync = async (functionNames: string[]) => {
 
@@ -167,19 +167,19 @@ export class SQLBootstrapperService {
             log(`-- Creating function: [${functionName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
-    }
+    };
 
     private recreateViewsAsync = async (viewNames: string[]) => {
 
         await this.dropViews(viewNames);
         await this.createViews(viewNames);
-    }
+    };
 
     private replaceSymbols = (sql: string) => {
 
         const url = this._configuration.fileStorage.assetStoreUrl;
         return replaceAll(sql, '{CDN_BUCKET_URL}', url);
-    }
+    };
 
     private createViews = async (viewNames: string[]) => {
 
@@ -191,7 +191,7 @@ export class SQLBootstrapperService {
             log(`-- Creating view: [${viewName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
-    }
+    };
 
     private dropViews = async (viewNames: string[]) => {
 
@@ -199,16 +199,16 @@ export class SQLBootstrapperService {
             .map(viewName => `DROP VIEW IF EXISTS ${viewName} CASCADE;`);
 
         await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
-    }
+    };
 
     private getViewCreationScript = (viewName: string) => {
 
         const sql = this.readSQLFile('views', viewName);
         return `CREATE VIEW ${viewName}\nAS\n${sql}`;
-    }
+    };
 
     private readSQLFile = (folderName: string, fileName: string) => {
 
         return readFileSync(this._configuration.getRootRelativePath(`/sql/${folderName}/${fileName}.sql`), 'utf8');
-    }
+    };
 }

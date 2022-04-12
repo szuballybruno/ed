@@ -62,21 +62,21 @@ export class FileService {
         // upload to storage
         await this._storageService
             .uploadBufferToStorageAsync(fileBuffer, filePath);
-    }
+    };
 
     getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
 
         extension = replaceAll(extension, '.', '');
 
         return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`;
-    }
+    };
 
     deleteFileEntityAsync = async (id: number) => {
 
         await this._ormService
             .getRepository(StorageFile)
             .delete(id);
-    }
+    };
 
     insertFileEntityAsync = async (path: string) => {
 
@@ -89,11 +89,11 @@ export class FileService {
             .insert(file);
 
         return file;
-    }
+    };
 
     getFileEntityAsync = (id: number) => {
 
         return this._ormService
             .getSingleById(StorageFile, id);
-    }
+    };
 }

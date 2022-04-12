@@ -16,7 +16,7 @@ export class ModuleController {
 
         await this._moduleService
             .createModuleAsync(params.getBody<ModuleCreateDTO>().data);
-    }
+    };
 
     deleteModuleAction = async (params: ActionParams) => {
 
@@ -26,7 +26,7 @@ export class ModuleController {
 
         await this._moduleService
             .deleteModulesAsync([moduleId]);
-    }
+    };
 
     getModuleEditDataAction = async (params: ActionParams) => {
 
@@ -34,7 +34,7 @@ export class ModuleController {
 
         return this._moduleService
             .getModuleEditDataAsync(moduleId);
-    }
+    };
 
     saveModuleAction = async (params: ActionParams) => {
 
@@ -46,7 +46,7 @@ export class ModuleController {
 
         return this._moduleService
             .saveModuleAsync(dto.data, file);
-    }
+    };
 
     getModuleListEditAction = async (params: ActionParams) => {
         
@@ -58,5 +58,5 @@ export class ModuleController {
 
         return this._moduleService
             .getModuleListEditDataAsync(courseId);
-    }
+    };
 }

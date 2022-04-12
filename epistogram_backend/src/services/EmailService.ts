@@ -38,7 +38,7 @@ export class EmailService {
         } as EpistoEmail;
 
         await this.sendMailAsync(epistoEmail);
-    }
+    };
 
     sendSuccessfulRegistrationEmailAsync = async (
         user: User,
@@ -61,7 +61,7 @@ export class EmailService {
         } as EpistoEmail;
 
         await this.sendMailAsync(epistoEmail);
-    }
+    };
 
     sendResetPasswordMailAsync = async (user: User, resetPasswordUrl: string) => {
 
@@ -80,7 +80,7 @@ export class EmailService {
         } as EpistoEmail;
 
         await this.sendMailAsync(epistoEmail);
-    }
+    };
 
     sendDiscountCodePurchasedMailAsync = async (
         toEmail: string,
@@ -105,7 +105,7 @@ export class EmailService {
         } as EpistoEmail;
 
         await this.sendMailAsync(epistoEmail);
-    }
+    };
 
     sendSelfPasswordResetMailAsync = async (user: User, resetPwUrl: string) => {
 
@@ -124,7 +124,7 @@ export class EmailService {
         } as EpistoEmail;
 
         await this.sendMailAsync(epistoEmail);
-    }
+    };
 
     /**
      * Sends the mail.
@@ -173,5 +173,5 @@ export class EmailService {
                 subject: email.subject,
                 html: replacedHtml
             });
-    }
+    };
 }

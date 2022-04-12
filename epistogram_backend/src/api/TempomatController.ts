@@ -16,7 +16,7 @@ export class TempomatController {
         return this._tempomatService
             .getTempomatModeAsync(params.currentUserId, params.getQuery<any>()
 .getValue(x => x.courseId, 'int'));
-    }
+    };
 
     setTempomatModeAction = async (params: ActionParams) => {
 
@@ -31,5 +31,5 @@ export class TempomatController {
 
         await this._tempomatService
             .setTempomatModeAsync(params.currentUserId, courseId, mode);
-    }
+    };
 }

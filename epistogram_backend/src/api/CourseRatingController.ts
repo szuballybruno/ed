@@ -21,7 +21,7 @@ export class CourseRatingController {
 
         return this._courseRatingService
             .getCourseRatingGroupsAsync(params.currentUserId, courseId);
-    }
+    };
 
     saveCourseRatingGroupAnswersAction = async (params: ActionParams) => {
 
@@ -31,5 +31,5 @@ export class CourseRatingController {
 
         return this._courseRatingService
             .saveCourseRatingGroupAnswersAsync(params.currentUserId, dto);
-    }
+    };
 }

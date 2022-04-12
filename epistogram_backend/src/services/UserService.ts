@@ -245,7 +245,7 @@ export class UserService {
             });
 
         return user;
-    }
+    };
 
     /**
      * Accept the invitation, 
@@ -264,7 +264,7 @@ export class UserService {
                 password: await this._hashService
                     .hashPasswordAsync(rawPassword)
             });
-    }
+    };
 
     /**
      * Get user entity by it's id.
@@ -284,7 +284,7 @@ export class UserService {
             .getOneOrFail();
 
         return user;
-    }
+    };
 
     /**
      * Delete a user entity by it's id.
@@ -311,7 +311,7 @@ export class UserService {
         return await this._ormService
             .getRepository(User)
             .softDelete(deletedUserId);
-    }
+    };
 
     /**
      * Get user dto by userId.
@@ -327,7 +327,7 @@ export class UserService {
 
         return this._mapperService
             .map(User, UserDTO, foundUser);
-    }
+    };
 
     /**
      * Get user's active refresh token by userId.
@@ -342,7 +342,7 @@ export class UserService {
             return null;
 
         return user.refreshToken;
-    }
+    };
 
     /**
      * Get a user by it's email address. 
@@ -364,7 +364,7 @@ export class UserService {
             return null;
 
         return user;
-    }
+    };
 
     /**
      * Set user's avatar file id.
@@ -380,7 +380,7 @@ export class UserService {
                 id: userId,
                 avatarFileId: avatarFileId
             });
-    }
+    };
 
     /**
      * Set user's refresh token.
@@ -399,7 +399,7 @@ export class UserService {
                 id: userId,
                 refreshToken: refreshToken
             });
-    }
+    };
 
     /**
      * Set user's invitation token.
@@ -415,7 +415,7 @@ export class UserService {
                 id: userId,
                 invitationToken
             });
-    }
+    };
 
     /**
      * Remove user's refresh token, 
@@ -433,7 +433,7 @@ export class UserService {
                 id: userId,
                 refreshToken: ''
             });
-    }
+    };
 
     /**
      * Get a list of the users marked as teacher.
@@ -456,5 +456,5 @@ export class UserService {
         //     });
 
         // return teachers;
-    }
+    };
 }

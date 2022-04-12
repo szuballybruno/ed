@@ -120,7 +120,7 @@ export class RegistrationService {
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
-    }
+    };
 
     /**
      * 
@@ -161,7 +161,7 @@ export class RegistrationService {
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
-    }
+    };
 
     /**
      * This function creates a new invited user, 
@@ -225,5 +225,5 @@ export class RegistrationService {
     private getDefaultPassword = () => {
 
         return generatePassword(10);
-    }
+    };
 }

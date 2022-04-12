@@ -37,7 +37,7 @@ export class QuestionAnswerService {
             .insert(session);
 
         return session.id;
-    }
+    };
 
     answerQuestionAsync = async (
         userId: number,
@@ -83,5 +83,5 @@ export class QuestionAnswerService {
             isCorrect: isCorrect,
             coinAcquires
         } as AnswerResultDTO;
-    }
+    };
 }

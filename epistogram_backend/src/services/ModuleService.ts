@@ -54,7 +54,7 @@ export class ModuleService {
 
         return this._mapperService
             .map(CourseModule, ModuleDetailedDTO, module);
-    }
+    };
 
     deleteModulesAsync = async (moduleIds: number[]) => {
 
@@ -81,7 +81,7 @@ export class ModuleService {
         await this._ormService
             .getRepository(CourseModule)
             .delete(moduleIds);
-    }
+    };
 
     createModuleAsync = async (dto: ModuleCreateDTO) => {
 
@@ -93,7 +93,7 @@ export class ModuleService {
                 orderIndex: dto.orderIndex,
                 description: ''
             });
-    }
+    };
 
     getModuleEditDataAsync = async (moduleId: number) => {
 
@@ -106,7 +106,7 @@ export class ModuleService {
 
         return this._mapperService
             .map(CourseModule, ModuleAdminEditDTO, module);
-    }
+    };
 
     saveModuleAsync = async (dto: ModuleAdminEditDTO, file?: UploadedFile) => {
 
@@ -141,7 +141,7 @@ export class ModuleService {
                     module => module.imageFileId,
                     file.data);
         }
-    }
+    };
 
     getModuleListEditDataAsync = async (courseId: number) => {
 

@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { RegistrationType } from '../Types';
 import { UserActivityFlatView } from '../views/UserActivityFlatView';
 import { ActivitySession } from './ActivitySession';
@@ -28,6 +29,7 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
 
@@ -96,7 +98,7 @@ export class User {
 
     @ManyToOne(() => StorageFile, sf => sf.users)
     @JoinColumn({ name: 'avatar_file_id' })
-    avatarFile: StorageFile | null
+    avatarFile: StorageFile | null;
 
     // Organization 
     @Column({ nullable: true, type: 'number' })
@@ -121,12 +123,12 @@ export class User {
     // Tasks
     @OneToMany(() => Task, task => task.user)
     @JoinColumn()
-    tasks: Task[]
+    tasks: Task[];
 
     // teacher
     @OneToMany(() => Course, course => course.teacher)
     @JoinColumn()
-    teachedCourses: Course[]
+    teachedCourses: Course[];
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.user)
