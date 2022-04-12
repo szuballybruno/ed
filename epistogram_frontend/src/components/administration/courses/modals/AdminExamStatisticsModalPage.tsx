@@ -2,10 +2,10 @@ import { Divider, Flex, Grid, Tooltip } from '@chakra-ui/react';
 import { FiberManualRecord } from '@mui/icons-material';
 import { Slider } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { StatisticsGroupType } from '../../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
@@ -297,7 +297,7 @@ export const AdminExamStatisticsModalPage = () => {
                 position="relative"
                 flex="1">
 
-                <ReactPlayer
+                <EpistoReactPlayer
                     width="100%"
                     height="calc(56.25 / 100)"
                     controls={false}

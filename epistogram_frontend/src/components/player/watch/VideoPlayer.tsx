@@ -9,6 +9,7 @@ import useEventListener from 'react-use-event-listener';
 import screenfull from 'screenfull';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoDTO } from '../../../shared/dtos/VideoDTO';
+import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { VideoControls } from './VideoControls';
 
@@ -271,7 +272,7 @@ export const VideoPlayer = (props: {
                     position="relative">
 
                     {/* the player */}
-                    <ReactPlayer
+                    <EpistoReactPlayer
                         playbackRate={1}
                         ref={playerRef}
                         url={videoUrl}

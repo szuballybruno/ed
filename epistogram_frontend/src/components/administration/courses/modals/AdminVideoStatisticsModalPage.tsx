@@ -1,9 +1,9 @@
 import { Divider, Flex, Grid, Tooltip } from '@chakra-ui/react';
 import React, { ReactNode, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
@@ -70,7 +70,7 @@ export const AdminVideoStatisticsModalPage = () => {
                 position="relative"
                 flex="1">
 
-                <ReactPlayer
+                <EpistoReactPlayer
                     width="100%"
                     height="calc(56.25 / 100)"
                     controls={false}

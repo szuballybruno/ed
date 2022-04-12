@@ -2,12 +2,12 @@ import { Flex } from '@chakra-ui/react';
 import { Add, Remove, Timer } from '@mui/icons-material';
 import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EditQuestionFnType, QuestionSchema } from '../VideoEditDialog';
 
 const QuestionWithAnswersComponent = (props: {
@@ -229,7 +229,7 @@ export const AdminVideoQuestionsModalPage = (props: {
 
             <Flex className="mildShadow">
 
-                <ReactPlayer
+                <EpistoReactPlayer
                     width="100%"
                     height="calc(56.25 / 100)"
                     onProgress={x => setPlayedSeconds(x.playedSeconds)}
