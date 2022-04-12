@@ -23,7 +23,7 @@ export const useVideoPlayerState = (
 
     const { url: videoUrl } = videoItem;
     const playerContainerRef = useRef(null);
-    const playerRef = useRef<ReactPlayer>(null);
+    const playerRef = useRef<ReactPlayer | null>(null);
     const [shouldBePlaying, setShouldBePlaying] = React.useState(true);
     const [playedSeconds, setPlayedSeconds] = React.useState(0);
     const [videoLength, setVideoLength] = React.useState(0);
@@ -243,6 +243,8 @@ export const VideoPlayer = (props: {
 
     const marks = [maxWatchedSeconds];
 
+    console.log(playerRef);
+
     return (
         <Box
             id="fullScreenRoot"
@@ -274,7 +276,7 @@ export const VideoPlayer = (props: {
                     {/* the player */}
                     <EpistoReactPlayer
                         playbackRate={1}
-                        ref={playerRef}
+                        playerRef={playerRef}
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
