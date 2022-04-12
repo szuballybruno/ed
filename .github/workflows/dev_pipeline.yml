@@ -60,6 +60,8 @@ jobs:
       - name: Build frontend container
         run: |
           docker buildx build ./epistogram_frontend \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $FRONTEND_IMAGE_NAME \
           --push
