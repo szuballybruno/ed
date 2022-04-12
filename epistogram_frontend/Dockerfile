@@ -3,6 +3,8 @@ WORKDIR /app
 
 COPY package.json .
 
+CMD ["ls"]
+
 RUN yarn
 
 COPY /src ./src
