@@ -1,12 +1,14 @@
+import { Add } from '@mui/icons-material';
 import { useState } from 'react';
-import { useCreateModule, useModuleListEditData, useSaveModule } from '../../../services/api/moduleApiService';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { ModuleAdminEditDTO } from '../../../shared/dtos/ModuleAdminEditDTO';
-import { usePaging } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoDialogLogicType } from '../../EpistoDialog';
+import { useCreateModule, useModuleListEditData, useSaveModule } from '../../../../services/api/moduleApiService';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
+import { ModuleAdminEditDTO } from '../../../../shared/dtos/ModuleAdminEditDTO';
+import { usePaging } from '../../../../static/frontendHelpers';
+import { useIntParam } from '../../../../static/locationHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoDialogLogicType } from '../../../EpistoDialog';
+import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { EditModuleModalPage } from './EditModuleModalPage';
-import { ModuleEditDialogBase } from './ModuleEditDialogBase';
 import { ModuleListModalPage } from './ModuleListModalPage';
 
 export const ModuleEditDialog = (props: {
@@ -20,8 +22,7 @@ export const ModuleEditDialog = (props: {
 
     // state
     const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
-
-    console.log(courseId);
+    const isEditingModule = !!editedModuleId;
 
     // http
     const {
@@ -30,16 +31,17 @@ export const ModuleEditDialog = (props: {
         moduleListEditDataError,
         refetchModuleListEditData
     } = useModuleListEditData(courseId, logic.isOpen);
-    
+
     const { saveModuleAsync } = useSaveModule();
     const { createModuleAsync } = useCreateModule();
 
     const modulesLength = moduleListEditData?.modules.length!;
     const courseName = moduleListEditData?.courseName ?? '';
-    const moduleName = moduleListEditData?.modules.find(x => x.id === editedModuleId)?.name;
+    const moduleName = moduleListEditData?.modules
+        .find(x => x.id === editedModuleId)?.name ?? '';
 
     // paging
-    const paging = usePaging([
+    const paging = usePaging<EditDialogSubpage>([
         {
             content: () => <ModuleListModalPage
                 moduleListEditData={moduleListEditData}
@@ -53,14 +55,17 @@ export const ModuleEditDialog = (props: {
             content: () => <EditModuleModalPage
                 handleSaveModuleAsync={handleSaveModuleAsync}
                 editedModuleId={editedModuleId!} />,
-            title: 'Statisztika'
+            title: moduleName,
+            isFocused: true
         }
     ]);
 
-    // selects edited module and navigates to edit page
+    // sets edited module id, 
+    // navigates to editmodule page
     const handleEditModule = (moduleId: number) => {
+        
         setEditedModuleId(moduleId);
-        paging.setItem(1);
+        paging.next();
     };
 
     // save module
@@ -102,17 +107,20 @@ export const ModuleEditDialog = (props: {
         }
     };
 
-    // navigates back to module list
-    const handleBackToModuleList = () => {
-        paging.setItem(0);
-    };
-
-    return <ModuleEditDialogBase
-        courseName={courseName}
-        moduleName={moduleName}
+    return <EditDialogBase
+        hideTabs
+        paging={paging}
         logic={logic}
-        handleBackToModuleList={handleBackToModuleList}
-        handleAddModuleAsync={handleAddModuleAsync}
-        currentItemIndex={paging.currentIndex}
-        subpages={paging.items.map(item => item.content)} />;
+        headerButtons={<>
+            <EpistoButton
+                onClick={() => handleAddModuleAsync()}
+                icon={<Add />}>
+
+                Hozzáadás
+            </EpistoButton>
+        </>}
+        chipText='Module'
+        chipColor='var(--deepBlue)'
+        title={'Edit modules'}
+        subTitle={courseName} />;
 };

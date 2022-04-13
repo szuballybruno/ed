@@ -5,10 +5,11 @@ import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AnswerEditDTO } from '../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
 import { EpistoDialogLogicType } from '../../EpistoDialog';
-import { CourseItemEditDialogBase } from './CourseItemEditDialogBase';
+import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
 import { AdminVideoQuestionsModalPage } from './modals/AdminVideoQuestionsModalPage';
 import { AdminVideoStatisticsModalPage } from './modals/AdminVideoStatisticsModalPage';
-import { useXListMutator } from './XMutator';
+import { useXListMutator } from '../../lib/XMutator/XMutator';
+import { usePaging } from '../../../static/frontendHelpers';
 
 export type QuestionSchema = {
     itemId: number,
@@ -138,26 +139,28 @@ export const VideoEditDialog = (props: {
         }
     };
 
-    return <CourseItemEditDialogBase
+    const paging = usePaging<EditDialogSubpage>([
+        {
+            content: () => <AdminVideoQuestionsModalPage
+                videoUrl={videoUrl}
+                questions={mutatedData}
+                handleAddQuestion={handleAddQuestion}
+                handleMutateQuestion={handleMutateQuestion}
+                handleSaveQuestions={handleSaveQuestionsAsync}
+                isAnyQuestionsMutated={isAnyQuestionsMutated} />,
+            title: 'Kérdések'
+        },
+        {
+            content: () => <AdminVideoStatisticsModalPage />,
+            title: 'Statisztika'
+        }
+    ]);
+
+    return <EditDialogBase
         title={videoTitle}
         subTitle={courseName}
         chipText='Videó'
         chipColor='var(--deepBlue)'
         logic={logic}
-        subpages={[
-            {
-                content: () => <AdminVideoQuestionsModalPage
-                    videoUrl={videoUrl}
-                    questions={mutatedData}
-                    handleAddQuestion={handleAddQuestion}
-                    handleMutateQuestion={handleMutateQuestion}
-                    handleSaveQuestions={handleSaveQuestionsAsync}
-                    isAnyQuestionsMutated={isAnyQuestionsMutated} />,
-                title: 'Kérdések'
-            },
-            {
-                content: () => <AdminVideoStatisticsModalPage />,
-                title: 'Statisztika'
-            }
-        ]} />;
+        paging={paging} />;
 };

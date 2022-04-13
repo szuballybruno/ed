@@ -1,11 +1,11 @@
 import { Flex } from '@chakra-ui/react';
 import { Delete, Edit } from '@mui/icons-material';
-import { LoadingStateType } from '../../../models/types';
-import { ModuleListEditDataDTO } from '../../../shared/dtos/ModuleListEditDataDTO';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { FlexListItem } from '../../universal/FlexListItem';
+import { LoadingStateType } from '../../../../models/types';
+import { ModuleListEditDataDTO } from '../../../../shared/dtos/ModuleListEditDataDTO';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { LoadingFrame } from '../../../system/LoadingFrame';
+import { FlexListItem } from '../../../universal/FlexListItem';
 
 export const ModuleListModalPage = (props: {
     moduleListEditData: ModuleListEditDataDTO | null,

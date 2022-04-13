@@ -1,22 +1,29 @@
 import { Flex } from '@chakra-ui/react';
-import React from 'react';
-import { usePaging } from '../../../static/frontendHelpers';
+import { ArrowBack } from '@mui/icons-material';
+import React, { ReactNode } from 'react';
+import { PagingType, usePaging } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
 import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { ChipSmall } from './ChipSmall';
 
-export const CourseItemEditDialogBase = (props: {
+export type EditDialogSubpage = {
+    isFocused?: boolean,
+    title: string,
+    content: (isCurrent: boolean) => JSX.Element
+};
+
+export const EditDialogBase = (props: {
     title?: string,
     subTitle?: string,
-    chipText: string,
-    chipColor: string,
-    subpages: ({
-        title: string,
-        content: (isCurrent: boolean) => JSX.Element
-    })[],
-    logic: EpistoDialogLogicType
+    chipText?: string,
+    chipColor?: string,
+    hideTabs?: boolean,
+    headerButtons?: ReactNode,
+    logic: EpistoDialogLogicType,
+    paging: PagingType<EditDialogSubpage>
 }) => {
 
     const {
@@ -25,15 +32,13 @@ export const CourseItemEditDialogBase = (props: {
         chipText,
         chipColor,
         logic: dialogLogic,
-        subpages
+        headerButtons,
+        hideTabs,
+        paging
     } = props;
 
-    const paging = usePaging(subpages);
-
-    const setTab = (index: number) => {
-
-        paging.setItem(index);
-    };
+    const focusedTab = !!paging.currentItem?.isFocused;
+    const subpages = paging.items;
 
     return <EpistoDialog
         logic={dialogLogic}
@@ -62,7 +67,8 @@ export const CourseItemEditDialogBase = (props: {
                 zIndex="1000"
                 flex="1">
 
-                <Flex
+                {/* unfocused header display */}
+                {!focusedTab && <Flex
                     direction="column"
                     justify='center'>
 
@@ -80,9 +86,9 @@ export const CourseItemEditDialogBase = (props: {
                             {title}
                         </EpistoFont>
 
-                        <ChipSmall
+                        {chipText && <ChipSmall
                             text={chipText}
-                            color={chipColor} />
+                            color={chipColor} />}
                     </Flex>
 
                     <EpistoFont
@@ -90,13 +96,48 @@ export const CourseItemEditDialogBase = (props: {
 
                         {subTitle}
                     </EpistoFont>
+                </Flex>}
+
+                {/* focused header display */}
+                {focusedTab && <>
+
+                    {/* back button */}
+                    <EpistoButton
+                        icon={<ArrowBack />}
+                        style={{
+
+                        }}
+                        onClick={() => paging.previous()}>
+
+                        Vissza
+                    </EpistoButton>
+
+                    {/* header */}
+                    <Flex
+                        align='center'
+                        justify='center'
+                        className='whall'>
+
+                        <EpistoFont
+                            fontSize={'fontLarge'}
+                            style={{
+                                fontWeight: 'bold'
+                            }}>
+
+                            {paging.currentItem?.title}
+                        </EpistoFont>
+                    </Flex>
+                </>}
+
+                <Flex paddingRight='20px'>
+
+                    {/* tab selector */}
+                    {!hideTabs && <SegmentedButton
+                        paging={paging}
+                        getDisplayValue={x => x.title} />}
+
+                    {!focusedTab && headerButtons}
                 </Flex>
-
-                {/* tab selector */}
-                <SegmentedButton
-                    paging={paging}
-                    getDisplayValue={x => x.title} />
-
             </Flex>
 
             {/* tab renderer */}

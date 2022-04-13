@@ -1,12 +1,12 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useModuleEditData } from '../../../services/api/moduleApiService';
-import { ModuleAdminEditDTO } from '../../../shared/dtos/ModuleAdminEditDTO';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoLabel } from '../../controls/EpistoLabel';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { SelectImage } from '../../universal/SelectImage';
+import { useModuleEditData } from '../../../../services/api/moduleApiService';
+import { ModuleAdminEditDTO } from '../../../../shared/dtos/ModuleAdminEditDTO';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoLabel } from '../../../controls/EpistoLabel';
+import { LoadingFrame } from '../../../system/LoadingFrame';
+import { SelectImage } from '../../../universal/SelectImage';
 
 export const EditModuleModalPage = (props: {
     handleSaveModuleAsync: (module: ModuleAdminEditDTO, moduleImageFile: File | null) => void,

@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { Course } from './Course';
 import { Exam } from './Exam';
 import { StorageFile } from './StorageFile';
@@ -10,6 +11,10 @@ export class CourseModule {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @IsDeletedFlag()
+    @DeleteDateColumn()
+    deletionDate: Date;
+    
     @Column()
     name: string;
 

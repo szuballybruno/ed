@@ -3,6 +3,7 @@ import { Course } from '../models/entity/Course';
 import { CourseModule } from '../models/entity/CourseModule';
 import { Exam } from '../models/entity/Exam';
 import { Video } from '../models/entity/Video';
+import { ModuleView } from '../models/views/ModuleView';
 import { AdminModuleShortDTO } from '../shared/dtos/AdminModuleShortDTO';
 import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
 import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
@@ -146,7 +147,7 @@ export class ModuleService {
     getModuleListEditDataAsync = async (courseId: number) => {
 
         const modules = await this._ormService
-            .getMany(CourseModule,
+            .getMany(ModuleView,
                 [
                     ['WHERE', 'courseId', '=', 'courseId']
                 ],
@@ -156,7 +157,7 @@ export class ModuleService {
             .getSingleById(Course, courseId);
 
         const moduleDTOs = this._mapperService
-            .mapMany(CourseModule, AdminModuleShortDTO, modules);
+            .mapMany(ModuleView, AdminModuleShortDTO, modules);
 
         return {
             courseName: course.title,

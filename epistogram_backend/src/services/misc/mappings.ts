@@ -33,6 +33,7 @@ import { CourseView } from '../../models/views/CourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
+import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
@@ -123,9 +124,10 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseModule, AdminModuleShortDTO, courseModule => ({
-            id: courseModule.id,
-            name: courseModule.name
+        .addMap(ModuleView, AdminModuleShortDTO, view => ({
+            id: view.id,
+            name: view.name,
+            canDelete: view.itemCount === 0
         }));
 
     mapperService

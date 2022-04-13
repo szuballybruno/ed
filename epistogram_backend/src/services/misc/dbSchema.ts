@@ -92,6 +92,7 @@ import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomat
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
+import { ModuleView } from '../../models/views/ModuleView';
 
 export const dbSchema = {
 
@@ -157,7 +158,8 @@ export const dbSchema = {
         'user_course_progress_view',
         'user_course_recommended_item_quota_view',
         'user_tempomat_adjustment_value_view',
-        'course_item_question_edit_view'
+        'course_item_question_edit_view',
+        'module_view'
     ],
 
     functionScripts: [
@@ -193,6 +195,7 @@ export const dbSchema = {
     ],
 
     viewEntities: [
+        ModuleView,
         VideoCompletedView,
         ExamCompletedView,
         VideoProgressView,

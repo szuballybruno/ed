@@ -13,12 +13,12 @@ import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoDialog, useEpistoDialogLogic } from '../../../EpistoDialog';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
-import { AddNewItemPopper } from '../AddNewItemPopper';
+import { AddNewItemPopper } from './AddNewItemPopper';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ExamEditDialog } from '../ExamEditDialog';
-import { ModuleEditDialog } from '../ModuleEditDialog';
+import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { VideoEditDialog } from '../VideoEditDialog';
-import { useXListMutator } from '../XMutator';
+import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { EditRowFnType, mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 
