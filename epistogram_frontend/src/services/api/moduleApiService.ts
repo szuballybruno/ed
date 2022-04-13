@@ -20,6 +20,7 @@ export const useDeleteModule = () => {
 
     return {
         deleteModuleAsync: (moduleId: number) => qr.postDataAsync({ moduleId }),
+        deleteModuleState: qr.state,
     };
 };
 

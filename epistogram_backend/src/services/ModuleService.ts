@@ -59,29 +59,28 @@ export class ModuleService {
 
     deleteModulesAsync = async (moduleIds: number[]) => {
 
-        // delete videos 
-        const videos = await this._ormService
-            .getRepository(Video)
-            .createQueryBuilder('v')
-            .where('"v"."module_id" IN (:...moduleIds)', { moduleIds })
-            .getMany();
+        // // delete videos 
+        // const videos = await this._ormService
+        //     .getRepository(Video)
+        //     .createQueryBuilder('v')
+        //     .where('"v"."module_id" IN (:...moduleIds)', { moduleIds })
+        //     .getMany();
 
-        // await this._videoService.deleteVideosAsync(videos.map(x => x.id), false);
+        // // await this._videoService.deleteVideosAsync(videos.map(x => x.id), false);
 
-        // delete exams 
-        const exams = await this._ormService
-            .getRepository(Exam)
-            .createQueryBuilder('e')
-            .where('"e"."module_id" IN (:...moduleIds)', { moduleIds })
-            .getMany();
+        // // delete exams 
+        // const exams = await this._ormService
+        //     .getRepository(Exam)
+        //     .createQueryBuilder('e')
+        //     .where('"e"."module_id" IN (:...moduleIds)', { moduleIds })
+        //     .getMany();
 
-        await this._examService
-            .softDeleteExamsAsync(exams.map(x => x.id), false);
+        // await this._examService
+        //     .softDeleteExamsAsync(exams.map(x => x.id), false);
 
         // delete modules
         await this._ormService
-            .getRepository(CourseModule)
-            .delete(moduleIds);
+            .softDelete(CourseModule, moduleIds);
     };
 
     createModuleAsync = async (dto: ModuleCreateDTO) => {
@@ -147,11 +146,9 @@ export class ModuleService {
     getModuleListEditDataAsync = async (courseId: number) => {
 
         const modules = await this._ormService
-            .getMany(ModuleView,
-                [
-                    ['WHERE', 'courseId', '=', 'courseId']
-                ],
-                { courseId });
+            .query(ModuleView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getMany();
 
         const course = await this._ormService
             .getSingleById(Course, courseId);

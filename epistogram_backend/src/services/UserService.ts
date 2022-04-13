@@ -231,7 +231,7 @@ export class UserService {
         await this._ormService
             .getRepository(AnswerSession)
             .insert({
-                examId: 1, // -- 1 always points to signup exam 
+                examId: 1, // 1 always points to signup exam 
                 type: 'signup',
                 userId: userId
             });

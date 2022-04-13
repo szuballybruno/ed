@@ -1,6 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import { Delete, Edit } from '@mui/icons-material';
 import { LoadingStateType } from '../../../../models/types';
+import { useDeleteModule } from '../../../../services/api/moduleApiService';
+import { showNotification } from '../../../../services/core/notifications';
 import { ModuleListEditDataDTO } from '../../../../shared/dtos/ModuleListEditDataDTO';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -11,6 +13,7 @@ export const ModuleListModalPage = (props: {
     moduleListEditData: ModuleListEditDataDTO | null,
     moduleListEditDataState: LoadingStateType,
     moduleListEditDataError: any,
+    refetchModuleList: () => Promise<void>,
     handleEditModule: (moduleId: number) => any
 }) => {
 
@@ -18,13 +21,27 @@ export const ModuleListModalPage = (props: {
         moduleListEditData,
         moduleListEditDataState,
         moduleListEditDataError,
-        handleEditModule
+        handleEditModule,
+        refetchModuleList
     } = props;
+
+    const {
+        deleteModuleAsync,
+        deleteModuleState
+    } = useDeleteModule();
+
+    const handleDeleteModule = async (moduleId: number) => {
+
+        await deleteModuleAsync(moduleId);
+        await refetchModuleList();
+        
+        showNotification('Modul sikeresen torolve.');
+    };
 
     const modules = moduleListEditData?.modules ?? [];
 
     return <LoadingFrame
-        loadingState={moduleListEditDataState}
+        loadingState={[moduleListEditDataState, deleteModuleState]}
         error={moduleListEditDataError}
         className="roundBorders"
         flex="1"
@@ -70,7 +87,10 @@ export const ModuleListModalPage = (props: {
                                         <Edit />
                                     </EpistoButton>
 
-                                    <EpistoButton>
+                                    <EpistoButton
+                                        onClick={() => handleDeleteModule(module.id)}
+                                        isDisabled={!module.canDelete}>
+
                                         <Delete />
                                     </EpistoButton>
                                 </Flex>

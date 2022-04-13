@@ -4,7 +4,7 @@ import { UploadedFile } from 'express-fileupload';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { logError } from '../services/misc/logger';
+import { logError, logSecondary } from '../services/misc/logger';
 import { typecheck } from '../shared/logic/sharedLogic';
 import { ErrorCodeType } from '../shared/types/sharedTypes';
 
@@ -80,7 +80,7 @@ export class ActionParams {
         else {
 
             if (this.req.body.document)
-                log('--- WARNING: body has a document property, this might mean it\'s not a JSON payload, but a multipart form data!');
+                logSecondary('--- WARNING: body has a document property, this might mean it\'s not a JSON payload, but a multipart form data!');
 
             const body = withValueOrBadRequest<T>(this.req.body);
             return new SafeObjectWrapper<T>(body);

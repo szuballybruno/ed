@@ -1,7 +1,14 @@
+import { log, logSecondary } from './misc/logger';
+
 export class LoggerService {
 
     log(text: string) {
 
-        console.log(text);
+        log(text);
+    }
+
+    logSecondary(text: string) {
+
+        logSecondary(text);
     }
 }

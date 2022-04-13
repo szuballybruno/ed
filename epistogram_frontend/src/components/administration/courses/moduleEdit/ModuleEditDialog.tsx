@@ -17,12 +17,12 @@ export const ModuleEditDialog = (props: {
 
     const { logic } = props;
 
+    // util
     const courseId = useIntParam('courseId')!;
     const showError = useShowErrorDialog();
 
     // state
     const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
-    const isEditingModule = !!editedModuleId;
 
     // http
     const {
@@ -31,10 +31,10 @@ export const ModuleEditDialog = (props: {
         moduleListEditDataError,
         refetchModuleListEditData
     } = useModuleListEditData(courseId, logic.isOpen);
-
     const { saveModuleAsync } = useSaveModule();
     const { createModuleAsync } = useCreateModule();
 
+    // calc 
     const modulesLength = moduleListEditData?.modules.length!;
     const courseName = moduleListEditData?.courseName ?? '';
     const moduleName = moduleListEditData?.modules
@@ -44,6 +44,7 @@ export const ModuleEditDialog = (props: {
     const paging = usePaging<EditDialogSubpage>([
         {
             content: () => <ModuleListModalPage
+                refetchModuleList={refetchModuleListEditData}
                 moduleListEditData={moduleListEditData}
                 moduleListEditDataState={moduleListEditDataState}
                 moduleListEditDataError={moduleListEditDataError}
@@ -60,10 +61,14 @@ export const ModuleEditDialog = (props: {
         }
     ]);
 
+    //
+    // func
+    //
+
     // sets edited module id, 
     // navigates to editmodule page
     const handleEditModule = (moduleId: number) => {
-        
+
         setEditedModuleId(moduleId);
         paging.next();
     };

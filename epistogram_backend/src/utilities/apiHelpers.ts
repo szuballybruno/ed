@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
 import { ErrorCodeType, RoleType } from '../shared/types/sharedTypes';
-import { log, logError } from '../services/misc/logger';
+import { log, logError, logSecondary } from '../services/misc/logger';
 import { ErrorCode } from './helpers';
 import { IRouteOptions } from './TurboExpress';
 
@@ -28,7 +28,7 @@ export const onActionSuccess = (value: any, req: Request, res: Response) => {
 
     const requestPath = req.path;
 
-    log(`${requestPath}: Succeeded...`);
+    logSecondary(`${requestPath}: Succeeded...`);
     respond(res, 200, value);
 };
 
@@ -36,11 +36,11 @@ export const respond = (res: Response, code: number, data?: any) => {
 
     if (data === undefined) {
 
-        log('-- Responding, code: ' + code);
+        logSecondary('Responding, code: ' + code);
         res.sendStatus(code);
     } else {
 
-        log('-- Responding with data, code: ' + code);
+        logSecondary(`Responding with data, code: ${code}`);
         res.status(code)
             .send(data);
     }
@@ -55,7 +55,6 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
             .catch((error: any) => {
 
                 logError(error);
-
                 respondError(wrapperRes, error.message, ((error as ErrorCode).code ?? 'internal server error') as ErrorCodeType);
             });
     };
@@ -65,7 +64,7 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
 
 export const respondError = (res: Response, msg: string, code: ErrorCodeType) => {
 
-    logError(`-- Responding typed error: Type: ${code} Msg: ${msg}`);
+    logSecondary(`Responding typed error: Type: ${code} Msg: ${msg}`);
 
     const errorDTO = {
         code: code,

@@ -1,5 +1,5 @@
-import 'reflect-metadata';
-import { getKeys } from '../../shared/logic/sharedLogic';
+import { ClassType } from '../../models/Types';
+import { XMetadataHandler } from './XMetadataHandler';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
 
@@ -9,29 +9,22 @@ export const IsDeletedFlag = (checkType?: CheckType) => {
 
     return (prototype: any, propertyKey: string) => {
 
+        const className = prototype.constructor.name;
         const chck: CheckType = checkType
             ? checkType
             : 'null';
 
-        Reflect.defineMetadata(IS_DELETED_FLAG_METADATA_KEY, chck, prototype, propertyKey);
+        XMetadataHandler.regMetadata(className, propertyKey, IS_DELETED_FLAG_METADATA_KEY, chck);
     };
 };
 
-export const getIsDeletedDecoratorPropertyData = <T>(classType: { new(): T }) => {
+export const getIsDeletedDecoratorPropertyData = <T>(classType: ClassType<T>) => {
 
-    const instance = instatiate(classType);
-
-    const propName = getKeys(instance)
-        .firstOrNull(propertyKey => {
-
-            const hasMetadata = Reflect.hasMetadata(IS_DELETED_FLAG_METADATA_KEY, instance, propertyKey as string);
-            return hasMetadata;
-        });
-
+    const propName = XMetadataHandler.getFirstOrNullMetadataProperty(classType, IS_DELETED_FLAG_METADATA_KEY);
     if (!propName)
         return null;
 
-    const checkType = Reflect.getMetadata(IS_DELETED_FLAG_METADATA_KEY, instance, propName as string) as CheckType;
+    const checkType = XMetadataHandler.getMetadata(classType.name, propName as string, IS_DELETED_FLAG_METADATA_KEY) as CheckType;
 
     return {
         propName,

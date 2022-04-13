@@ -16,6 +16,7 @@ declare global {
         last(func: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
         count(func: (item: T) => boolean): number;
+        insert(index: number, newItem: T): Array<T>;
     }
 
     interface Date {
@@ -35,6 +36,18 @@ Date.prototype.addDays = function (days: number) {
     const date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
+};
+
+Array.prototype.insert = function <T>(index: number, newItem: T) {
+
+    return [
+        // part of the array before the specified index
+        ...this.slice(0, index),
+        // inserted item
+        newItem,
+        // part of the array after the specified index
+        ...this.slice(index)
+    ];
 };
 
 // eslint-disable-next-line no-extend-native

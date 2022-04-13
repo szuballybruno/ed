@@ -34,7 +34,11 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
         const accessToken = getAuthTokenFromRequest(req, this._globalConfig);
         const requestPath = req.path;
 
-        this._loggerService.log(`${requestPath}: Authorizing request...`);
+        this._loggerService
+            .log(`${requestPath}: REQUEST ARRIVED`);
+
+        this._loggerService
+            .logSecondary(`${requestPath}: Authorizing request...`);
 
         // public route 
         if (options?.isPublic) {
@@ -62,7 +66,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
 
             // permitted. finalization             
             this._loggerService
-                .log(`${requestPath}: Request permitted. UserId: ${userId} Proceeding...`);
+                .logSecondary(`${requestPath}: Request permitted. UserId: ${userId} Proceeding...`);
 
             return new ActionParams(req, res, userId, !!options?.isMultipart);
         }

@@ -5,7 +5,7 @@ FROM
 (
 	SELECT 
 		cm.id module_id,
-		COUNT(civ.item_id) item_count
+		COUNT(civ.item_id)::int item_count
 	FROM public.course_module cm
 
 	LEFT JOIN public.course_item_view civ

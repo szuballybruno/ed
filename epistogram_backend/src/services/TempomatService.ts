@@ -144,12 +144,12 @@ export class TempomatService extends ServiceBase {
         const newCompletionDate = currentView.startDate.addDays(newDurationDays);
 
         this._loggerService.log('TEMPOMAT ADJUSTMENT: ');
-        this._loggerService.log(`-- Lag behind: ${lagBehindPercentage}%`);
-        this._loggerService.log(`-- Mode: '${tempomatMode}'`);
-        this._loggerService.log(`-- Threshold: ${adjustmentThresholdPercentage}%`);
-        this._loggerService.log(`-- Applied adjustment: ${allowedStretchPercetage}%`);
-        this._loggerService.log(`-- Adjustment days: ${isPositiveAdjustment ? '+' : ''}${adjustmentDays}`);
-        this._loggerService.log(`-- New previsoned length: ${newDurationDays} days`);
+        this._loggerService.logSecondary(`Lag behind: ${lagBehindPercentage}%`);
+        this._loggerService.logSecondary(`Mode: '${tempomatMode}'`);
+        this._loggerService.logSecondary(`Threshold: ${adjustmentThresholdPercentage}%`);
+        this._loggerService.logSecondary(`Applied adjustment: ${allowedStretchPercetage}%`);
+        this._loggerService.logSecondary(`Adjustment days: ${isPositiveAdjustment ? '+' : ''}${adjustmentDays}`);
+        this._loggerService.logSecondary(`New previsoned length: ${newDurationDays} days`);
 
         await this.setPrevisionedScheduleAsync(
             userId,

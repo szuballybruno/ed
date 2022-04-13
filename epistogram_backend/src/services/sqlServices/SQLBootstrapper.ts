@@ -2,7 +2,7 @@
 import { readFileSync } from 'fs';
 import { replaceAll, toSQLSnakeCasing } from '../../utilities/helpers';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log, logObject } from '../misc/logger';
+import { log, logObject, logSecondary } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
 
 export type SchemaDefinitionType = {
@@ -79,7 +79,7 @@ export class SQLBootstrapperService {
 
         await this._sqlConnectionService.executeSQLAsync(script);
 
-        log('-- Recalculating sequance max values done.');
+        logSecondary('Recalculating sequance max values done.');
     };
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
@@ -124,7 +124,7 @@ export class SQLBootstrapperService {
             const constraint = constraints[index];
             const script = this.readSQLFile('constraints', constraint.name);
 
-            log(`-- Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
+            logSecondary(`Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -144,7 +144,7 @@ export class SQLBootstrapperService {
             const sqlIndex = indices[index];
             const script = this.readSQLFile('indices', sqlIndex.name);
 
-            log(`-- Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
+            logSecondary(`Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
@@ -164,7 +164,7 @@ export class SQLBootstrapperService {
             const functionName = functionNames[index];
             const script = this.readSQLFile('functions', functionName);
 
-            log(`-- Creating function: [${functionName}]...`);
+            logSecondary(`Creating function: [${functionName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -188,7 +188,7 @@ export class SQLBootstrapperService {
             const viewName = viewNames[index];
             const script = this.getViewCreationScript(viewName);
 
-            log(`-- Creating view: [${viewName}]...`);
+            logSecondary(`Creating view: [${viewName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
