@@ -4,6 +4,7 @@ import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
+import { formatTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -13,23 +14,27 @@ import { EditQuestionFnType, QuestionSchema } from '../VideoEditDialog';
 const QuestionWithAnswersComponent = (props: {
     isFirst?: boolean,
     question: QuestionSchema,
-    handleMutateQuestion: EditQuestionFnType
+    handleMutateQuestion: EditQuestionFnType,
+    handleQuestionShowUpTime: (key: number) => number
 }) => {
 
     // props
     const {
         isFirst,
         question,
-        handleMutateQuestion
+        handleMutateQuestion,
+        handleQuestionShowUpTime
     } = props;
 
     // state
     const [questionText, setQuestionText] = useState('');
+    const [questionShowUpTimeSeconds, setQuestionShowUpTimeSeconds] = useState(0);
     const [answers, setAnswers] = useState<AnswerEditDTO[]>([]);
 
     // effects
     useEffect(() => {
         setQuestionText(question.questionText);
+        setQuestionShowUpTimeSeconds(question.questionShowUpTimeSeconds);
         setAnswers(question.answers);
     }, []);
 
@@ -64,23 +69,32 @@ const QuestionWithAnswersComponent = (props: {
 
             <Flex>
 
-                <Timer />
+                <EpistoButton
+                    onClick={() => {
+
+                        setQuestionShowUpTimeSeconds(handleQuestionShowUpTime(question.questionId));
+                    }}>
+
+                    <Timer />
+                </EpistoButton>
             </Flex>
         </Flex>
 
-        <Flex align="center">
+        <Flex
+            align="flex-start">
 
             <EpistoEntry
                 value={questionText}
                 setValue={setQuestionText}
-                flex="8"
+                isMultiline
+                flex="12"
                 labelVariant="hidden"
                 label="Válaszok" />
 
             <EpistoEntry
-                flex="1"
-                value={'0:00'}
+                value={formatTime(questionShowUpTimeSeconds)}
                 style={{
+                    width: 67,
                     fontWeight: 'bold',
                     marginLeft: 10
                 }}
@@ -209,14 +223,22 @@ export const AdminVideoQuestionsModalPage = (props: {
         questions,
         handleAddQuestion,
         handleMutateQuestion,
+        handleSaveQuestions,
         isAnyQuestionsMutated
     } = props;
 
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
+    const handleQuestionShowUpTime = (key: number) => {
+
+        handleMutateQuestion(key, 'questionShowUpTimeSeconds', playedSeconds);
+        return playedSeconds;
+    };
+
     return <Flex
         direction="row"
         height="auto"
+        flex="1"
         p="20px">
 
         <Flex
@@ -227,16 +249,18 @@ export const AdminVideoQuestionsModalPage = (props: {
             top="115"
             flex="1">
 
-            <Flex className="mildShadow">
+            <Flex
+                className="mildShadow"
+                flex="1">
 
                 <EpistoReactPlayer
                     width="100%"
                     height="calc(56.25 / 100)"
+                    controls
                     onProgress={x => setPlayedSeconds(x.playedSeconds)}
                     progressInterval={100}
                     style={{
                         borderRadius: 7,
-                        background: 'green',
                         overflow: 'hidden'
                     }}
                     url={videoUrl} />
@@ -257,6 +281,7 @@ export const AdminVideoQuestionsModalPage = (props: {
                         key={question.questionId}
                         question={question}
                         handleMutateQuestion={handleMutateQuestion}
+                        handleQuestionShowUpTime={handleQuestionShowUpTime}
                         isFirst />;
                 })}
 
@@ -275,6 +300,7 @@ export const AdminVideoQuestionsModalPage = (props: {
 
         <EpistoButton
             isDisabled={!isAnyQuestionsMutated}
+            onClick={handleSaveQuestions}
             variant="colored"
             style={{
                 position: 'absolute',

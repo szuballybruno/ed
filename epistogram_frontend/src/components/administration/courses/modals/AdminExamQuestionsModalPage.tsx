@@ -1,25 +1,23 @@
 import { Flex } from '@chakra-ui/react';
 import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { EditQuestionFnType, QuestionSchema } from '../VideoEditDialog';
 
 
-export const AdminExamQuestionsModalPage = () => {
+export const AdminExamQuestionsModalPage = (props: {
+    questions: QuestionSchema[],
+    handleAddQuestion: () => void,
+    handleMutateQuestion: EditQuestionFnType,
+    handleSaveQuestions: () => void,
+    isAnyQuestionsMutated: boolean
+}) => {
 
-    const questions = [{
-        questionTitle: 'asd',
-        answers: [{
-            title: 'Válasz 1',
-            isCorrect: false
-        }, {
-            title: 'Válasz 2',
-            isCorrect: false
-        }, {
-            title: 'Válasz 3',
-            isCorrect: true
-        }, {
-            title: 'Válasz 4',
-            isCorrect: false
-        }]
-    }];
+    const {
+        questions,
+        handleAddQuestion,
+        handleMutateQuestion,
+        handleSaveQuestions,
+        isAnyQuestionsMutated
+    } = props;
 
     return <Flex
         flex="1"
@@ -86,7 +84,7 @@ export const AdminExamQuestionsModalPage = () => {
                                     scope="row"
                                     padding="none">
 
-                                    {row.questionTitle}
+                                    {row.questionText}
                                 </TableCell>
 
                                 {row.answers
@@ -108,7 +106,7 @@ export const AdminExamQuestionsModalPage = () => {
                                                         : 'var(--intenseRed)'
                                                 }} />
 
-                                            {answer.title}
+                                            {answer.text}
                                         </TableCell>;
                                     })}
                             </TableRow>;

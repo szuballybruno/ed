@@ -20,6 +20,9 @@ export class CourseItemQuestionEditView {
     videoFilePath: string;
 
     @ViewColumn()
+    videoLengthSeconds: number;
+
+    @ViewColumn()
     courseTitle: string;
 
     @ViewColumn()
@@ -32,8 +35,14 @@ export class CourseItemQuestionEditView {
     questionText: string;
 
     @ViewColumn()
+    questionShowUpTimeSeconds: number;
+
+    @ViewColumn()
     answerId: number;
 
     @ViewColumn()
     answerText: string;
+
+    @ViewColumn()
+    answerIsCorrect: boolean;
 }

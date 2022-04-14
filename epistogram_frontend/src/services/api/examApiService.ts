@@ -1,11 +1,12 @@
-import { useReactQuery2 } from '../../static/frontendHelpers';
 import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { CreateExamDTO } from '../../shared/dtos/CreateExamDTO';
 import { ExamEditDataDTO } from '../../shared/dtos/ExamEditDataDTO';
+import { ExamQuestionEditDTO } from '../../shared/dtos/ExamQuestionEditDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useEditExamData = (examId: number) => {
@@ -19,6 +20,18 @@ export const useEditExamData = (examId: number) => {
         refetchEditDataAsync: qr.refetch
     };
 };
+
+export const useExamQuestionEditData = (examId: number | null) => {
+
+    const qr = useReactQuery2<ExamQuestionEditDTO>(apiRoutes.exam.getExamQuestionEditData, { examId }, !!examId);
+
+    return {
+        examQuestionEditData: qr.data,
+        examQuestionEditDataError: qr.error,
+        examQuestionEditDataState: qr.state,
+        refetchExamQuestionEditData: qr.refetch
+    };
+}
 
 export const useDeleteExam = () => {
 

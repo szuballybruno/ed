@@ -140,10 +140,10 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             type={type}
             sx={{
                 '& .MuiOutlinedInput-root': {
-                    height: height ?? 40,
+                    height: isMultiline ? undefined : height ?? 40,
                     background: transparentBackground
                         ? undefined
-                        : 'var(--transparentWhite90)',
+                        : 'var(--transparentWhite90)'
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                     border: 'none'
@@ -160,7 +160,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
                     : undefined,
                 style: {
                     fontSize: '14px',
-                    padding: '0 15px',
+                    padding: isMultiline ? '10px 15px' : '0 15px',
                 },
                 sx: {
                     '& .MuiInputBase-input': {

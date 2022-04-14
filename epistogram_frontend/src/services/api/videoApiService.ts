@@ -10,6 +10,7 @@ import { uploadeFileChunksAsync } from '../core/fileUploadClient';
 import { usePostDataUnsafe } from '../core/httpClient';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { Mutation } from '../../shared/dtos/mutations/Mutation';
+import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 
 export const useCreateVideo = () => {
 
@@ -82,7 +83,7 @@ export const useVideoQuestionEditData = (videoId: number | null) => {
 
 export const useSaveVideoQuestionEditData = () => {
 
-    const qr = usePostDataUnsafe<Mutation<VideoQuestionEditDTO, 'id'>[], void>(apiRoutes.video.saveVideoQuestionEditData);
+    const qr = usePostDataUnsafe<Mutation<QuestionEditDataDTO, 'questionId'>[], void>(apiRoutes.video.saveVideoQuestionEditData);
 
     return {
         saveVideoQuestionEditData: qr.postDataAsync,

@@ -1,4 +1,4 @@
-SELECT
+/* SELECT
     sq2.*,
     a.id answer_id,
     a.text answer_text
@@ -51,4 +51,37 @@ FROM
 ) sq2
 
 LEFT JOIN public.answer a
-ON a.question_id = sq2.question_id
+ON a.question_id = sq2.question_id */
+
+SELECT 
+    q.id question_id,
+    q.question_text question_text,
+    q.show_up_time_seconds question_show_up_time_seconds,
+    a.id answer_id,
+    a.text answer_text,
+    a.is_correct answer_is_correct,
+    v.course_id course_id,
+    v.id video_id,
+    v.title item_title,
+    v.subtitle item_subtitle,
+    v.length_seconds video_length_seconds,
+    e.id exam_id,
+    sf.file_path video_file_path,
+    c.title course_title
+FROM public.question q
+
+LEFT JOIN public.answer a
+ON q.id = a.question_id
+
+LEFT JOIN public.video v
+ON v.id = q.video_id
+
+LEFT JOIN public.exam e
+ON e.id = q.exam_id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = v.video_file_id
+
+LEFT JOIN public.course c
+ON c.id = v.course_id
+OR c.id = e.course_id

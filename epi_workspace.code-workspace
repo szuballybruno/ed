@@ -16,6 +16,18 @@
 	"settings": {
 		"search.exclude": {
 			"**/build": true
-		}
+		},
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 7000,
+				"driver": "PostgreSQL",
+				"name": "local",
+				"database": "localhostDB",
+				"username": "postgres",
+				"password": "admin"
+			}
+		]
 	}
 }

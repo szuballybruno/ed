@@ -5,7 +5,6 @@ export class VideoQuestionEditDTO {
     title: string;
     subtitle: string;
     courseName: string;
-    description: string;
     videoLengthSeconds: number;
     videoUrl: string;
     questions: QuestionEditDataDTO[];

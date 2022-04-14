@@ -43,8 +43,11 @@ export class QuestionController {
             .getOneOrFail();
 
         return {
+            videoId: question.videoId,
+            examId: question.examId,
             questionId: question.id,
             questionText: question.questionText,
+            questionShowUpTimeSeconds: question.showUpTimeSeconds,
             typeId: question.typeId,
             answers: (question.answers ?? []).map(x => toAnswerEditDTO(x))
         } as QuestionEditDataDTO;

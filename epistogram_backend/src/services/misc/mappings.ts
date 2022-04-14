@@ -1067,38 +1067,45 @@ export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
     } as CourseCategoryDTO;
 };
 
-export const toVideoQuestionEditDTO = (ci: CourseItemQuestionEditView[], getAssetUrl: (path: string) => string): VideoQuestionEditDTO => {
+export const toVideoQuestionEditDTO = (
+    ci: CourseItemQuestionEditView[],
+    getAssetUrl: (path: string) => string
+): VideoQuestionEditDTO => {
+
     const questionGroup = ci
         .groupBy(x => x.questionId);
 
-
     const {
+        videoId,
         itemTitle,
         itemSubtitle,
         courseTitle,
-        videoFilePath
+        videoFilePath,
+        videoLengthSeconds,
     } = questionGroup.first().first;
 
     const videoFileUrl = getAssetUrl(videoFilePath);
 
-
     return {
-        id: questionGroup.first().first.videoId,
+        id: videoId,
         title: itemTitle,
         subtitle: itemSubtitle,
         courseName: courseTitle,
-        description: '',
-        videoLengthSeconds: 0,
+        videoLengthSeconds: videoLengthSeconds,
         videoUrl: videoFileUrl,
         questions: questionGroup
             .map(q => {
+
                 return {
+                    videoId: q.first.videoId,
+                    examId: null,
                     questionId: q.first.questionId,
                     questionText: q.first.questionText,
+                    questionShowUpTimeSeconds: q.first.questionShowUpTimeSeconds,
                     answers: q.items.map(qi => ({
                         id: qi.answerId,
                         text: qi.answerText,
-                        isCorrect: false
+                        isCorrect: qi.answerIsCorrect
                     }))
                 };
             })

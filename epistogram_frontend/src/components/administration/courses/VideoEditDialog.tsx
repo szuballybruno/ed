@@ -12,26 +12,34 @@ import { useXListMutator } from '../../lib/XMutator/XMutator';
 import { usePaging } from '../../../static/frontendHelpers';
 
 export type QuestionSchema = {
-    itemId: number,
+    videoId: number | null,
+    examId: number | null,
     questionId: number,
     questionText: string,
+    questionShowUpTimeSeconds: number,
     answers: AnswerEditDTO[]
 }
 
 export type EditQuestionFnType = <TField extends keyof QuestionSchema, >(key: number, field: TField, value: QuestionSchema[TField]) => void;
 
 
-export const mapToQuestionSchema = (item: QuestionEditDataDTO, itemId: number): QuestionSchema => {
+export const mapToQuestionSchema = (
+    item: QuestionEditDataDTO,
+    videoId?: number,
+    examId?: number
+): QuestionSchema => {
 
     return {
-        itemId: itemId,
+        videoId: videoId ?? null,
+        examId: examId ?? null,
         questionId: item.questionId,
         questionText: item.questionText,
+        questionShowUpTimeSeconds: item.questionShowUpTimeSeconds,
         answers: item.answers
             .map(answer => ({
                 id: answer.id,
                 text: answer.text,
-                isCorrect: false
+                isCorrect: answer.isCorrect
             }))
     };
 };
@@ -63,11 +71,6 @@ export const VideoEditDialog = (props: {
     const videoTitle = videoQuestionEditData?.title || '';
     const courseName = videoQuestionEditData?.courseName || '';
 
-    /*  const getRowKey = useCallback((question: QuestionSchema) => {
-         console.log(question.questionId);
-         return question.questionId;
-     }, []);
-  */
     const {
         mutatedData,
         add: addQuestion,
@@ -97,13 +100,6 @@ export const VideoEditDialog = (props: {
             resetMutations();
     }, [logic.isOpen]);
 
-    // logs mutateddata when it changes
-    useEffect(() => {
-
-        console.log(mutatedData);
-        console.log(mutations);
-    }, [mutatedData]);
-
     // mutation handlers
     const handleMutateQuestion: EditQuestionFnType = (key, field, value) => {
 
@@ -115,8 +111,11 @@ export const VideoEditDialog = (props: {
         const newId = getVirtualId();
 
         const dto: QuestionEditDataDTO = {
+            videoId: null,
+            examId: null,
             questionId: -1,
             questionText: '',
+            questionShowUpTimeSeconds: 0,
             answers: []
         };
 
@@ -129,7 +128,7 @@ export const VideoEditDialog = (props: {
 
         try {
 
-            await saveVideoQuestionEditData(mutations as any);
+            await saveVideoQuestionEditData(mutations);
             resetMutations();
             logic.closeDialog();
         }
