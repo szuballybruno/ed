@@ -493,7 +493,8 @@ export class CourseService {
         const moduleDtos = modules
             .map(x => ({
                 id: x.id,
-                name: x.name
+                name: x.name,
+                orderIndex: x.orderIndex
             } as CourseModuleShortDTO));
 
         const items = this._mapperService

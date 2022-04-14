@@ -4,11 +4,12 @@ import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
 import { MutationActionType } from '../../../shared/dtos/mutations/MutationActionType';
 import { getKeys } from '../../../shared/logic/sharedLogic';
-import { KeyOfType } from '../../../shared/types/advancedTypes';
 import { loggingSettings } from '../../../static/Environemnt';
 
-export type OnMutaionHandlerActionType<TMutatee, TKey, TField extends keyof TMutatee> =
-    (params: {
+export type OnMutaionHandlerActionType<
+    TMutatee,
+    TKey,
+    TField extends keyof TMutatee> = (params: {
         key: TKey,
         field: TField,
         newValue: TMutatee[TField],

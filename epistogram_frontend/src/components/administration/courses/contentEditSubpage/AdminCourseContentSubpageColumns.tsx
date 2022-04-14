@@ -13,7 +13,7 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType, UseCommitNewValueType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { ChipSmall } from '../ChipSmall';
-import { EditRowFnType, RowSchema } from './AdminCourseContentSubpageLogic';
+import { EditRowFnType, RowSchema, RowSchemaModule } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
 
 export const useGridColumnDefinitions = (
@@ -58,13 +58,24 @@ export const useGridColumnDefinitions = (
 
                 setId(value.id + '');
 
+                const rowSchemaModule: RowSchemaModule = {
+                    isPretestModule: false,
+                    id: value.id,
+                    name: value.name,
+                    orderIndex: value.orderIndex
+                };
+
                 apiRef
                     .current
-                    .setEditCellValue({ id: rowKey, field, value: value.id });
+                    .setEditCellValue({ id: rowKey, field, value: rowSchemaModule });
 
                 apiRef
                     .current
                     .commitCellChange({ id: rowKey, field: field });
+                
+                apiRef
+                    .current
+                    .setCellMode(rowKey, field, 'view');
             }}
             getDisplayValue={x => '' + x?.name}
             getCompareKey={module => '' + module?.id} />;
@@ -137,7 +148,7 @@ export const useGridColumnDefinitions = (
                     isMutated={isModified(key)(field)}>
 
                     {value
-                        ? value.hidden
+                        ? value.isPretestModule
                             ? ' - '
                             : value.name
                         : ''}
@@ -300,7 +311,7 @@ const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: number): Row
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
         module: {
-            hidden: item.itemType === 'pretest',
+            isPretestModule: item.itemType === 'pretest',
             id: item.moduleId,
             name: item.moduleName,
             orderIndex: item.moduleOrderIndex

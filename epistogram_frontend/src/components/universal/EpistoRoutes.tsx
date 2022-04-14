@@ -4,6 +4,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
 import { loggingSettings } from '../../static/Environemnt';
+import { setPageTitle } from '../../static/frontendHelpers';
 import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 export type RenderRoute = {
@@ -36,6 +37,8 @@ const RouteRenderer = (props: {
         console.log(`Route renderer: Abs: '${route.route.getAbsolutePath()}' Rel: '${route.route.getRelativePath()}'`);
         console.log(`-- Protection level '${protectionLevel}'`);
     }
+
+    setPageTitle(route.title);
 
     // if open route, don't authorize 
     if (protectionLevel === 'open') {

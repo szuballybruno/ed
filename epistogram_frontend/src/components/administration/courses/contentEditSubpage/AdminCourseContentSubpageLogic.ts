@@ -3,18 +3,20 @@ import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseC
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { formatTime } from '../../../../static/frontendHelpers';
 
+export type RowSchemaModule = {
+    id: number;
+    isPretestModule: boolean;
+    name: string;
+    orderIndex: number;
+};
+
 export type RowSchema = {
     rowKey: string;
     rowNumber: number;
     itemOrderIndex: number;
     itemTitle: string;
     itemSubtitle: string;
-    module: {
-        id: number;
-        hidden: boolean;
-        name: string;
-        orderIndex: number;
-    };
+    module: RowSchemaModule;
     itemType: {
         type: CourseItemType;
         label: string;
@@ -100,7 +102,7 @@ export const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: numbe
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
         module: {
-            hidden: item.itemType === 'pretest',
+            isPretestModule: item.itemType === 'pretest',
             id: item.moduleId,
             name: item.moduleName,
             orderIndex: item.moduleOrderIndex

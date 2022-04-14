@@ -10,7 +10,7 @@ import { useCourseBriefData } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
 import { useBriefUserData } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
-import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoFont } from '../controls/EpistoFont';
 
 const Content = (props: {
@@ -134,23 +134,18 @@ export const AdminBreadcrumbsHeader = (props: {
 
             {/* breadcrumbs */}
             <Breadcrumbs>
-                {/* {breadcrumbs && breadcrumbs
-                    .map(x => <BreadcrumbLink
-                        isCurrent={x.} />)} */}
-
-                {!breadcrumbs && <>
-                    {currentRoute && <BreadcrumbLink
+                {!breadcrumbs && new ArrayBuilder()
+                    .addIf(!!currentRoute, <BreadcrumbLink
                         key={1}
                         isCurrent={!subRoute}
                         route={currentRoute}
                         title={currentRoute.title}
-                        iconComponent={currentRoute.icon} />}
-
-                    {subRoute && <BreadcrumbLink
+                        iconComponent={currentRoute.icon} />)
+                    .addIf(!!subRoute, <BreadcrumbLink
                         key={2}
                         isCurrent
-                        title={subRoute.title} />}
-                </>}
+                        title={subRoute?.title ?? ''} />)
+                    .getArray()}
             </Breadcrumbs>
 
             {viewSwitchFunction && <FormGroup>
@@ -182,5 +177,5 @@ export const AdminBreadcrumbsHeader = (props: {
 
             {children}
         </Flex>
-    </Flex>;
+    </Flex >;
 };
