@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useExamQuestionEditData } from '../../../services/api/examApiService';
 import { getVirtualId } from '../../../services/core/idService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -22,6 +22,18 @@ export const ExamEditDialog = (props: {
     // state
     const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionSchema[]>([]);
 
+    const preprocessItems = useCallback((questions: QuestionEditDataDTO[]) => {
+
+        const preproQuestions = questions
+            .map((item, index) => mapToQuestionSchema(item, examQuestionEditData?.id!));
+
+        setPreprocessedQuestions(preproQuestions);
+    }, [setPreprocessedQuestions]);
+
+    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
+
+        preprocessItems(newMutatedItems);
+    }, [preprocessItems]);
     // http
     const {
         examQuestionEditData,
@@ -41,7 +53,7 @@ export const ExamEditDialog = (props: {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<QuestionSchema, 'questionId', number>(preprocessedQuestions, 'questionId');
+    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(preprocessedQuestions, 'questionId', mutationEndCallback);
 
     // map data for mutator
     useEffect(() => {
