@@ -243,30 +243,30 @@ export class VideoService extends QueryServiceBase<Video> {
         await this.saveNewQuestionsAndAnswers(mutations);
         await this.saveUpdatedQuestions(mutations);
         await this.saveUpdatedAnswers(mutations);
-        await this.saveNewAnswers(mutations)
+        await this.saveNewAnswers(mutations);
     }
 
     private async saveNewQuestionsAndAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
 
         const addMuts = mutations
-            .filter(x => x.action === 'add')
+            .filter(x => x.action === 'add');
 
         const newQuestions = addMuts
             .filter(x => x.key < 0)
             .filter(x => mapMutationToPartialObject(x).questionText)
             .map(updateMut => {
 
-                const updateDto = mapMutationToPartialObject(updateMut)
+                const updateDto = mapMutationToPartialObject(updateMut);
 
                 const question: Partial<Question> = {
                     id: updateMut.key,
                     videoId: updateDto.videoId || undefined,
                     questionText: updateDto.questionText,
                     showUpTimeSeconds: updateDto.questionShowUpTimeSeconds || undefined
-                }
+                };
 
-                return { question, answers: updateDto.answers }
-            })
+                return { question, answers: updateDto.answers };
+            });
 
         // insert new questions
         await this._ormService
@@ -283,8 +283,8 @@ export class VideoService extends QueryServiceBase<Video> {
                     .map(x => ({
                         ...x,
                         questionId: savedQuestion.question.id
-                    })) as Partial<Answer>[]
-            })
+                    })) as Partial<Answer>[];
+            });
 
         // insert new answers where the question was new
         await this._ormService
@@ -295,22 +295,22 @@ export class VideoService extends QueryServiceBase<Video> {
     private async saveUpdatedQuestions(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
 
         const updateMuts = mutations
-            .filter(x => x.action === 'update')
+            .filter(x => x.action === 'update');
 
         const questions = updateMuts
             .filter(x => x.key > 0)
             .map(updateMut => {
 
-                const updateDto = mapMutationToPartialObject(updateMut)
+                const updateDto = mapMutationToPartialObject(updateMut);
 
                 const question: Partial<Question> = {
                     id: updateMut.key,
                     questionText: updateDto.questionText,
                     showUpTimeSeconds: updateDto.questionShowUpTimeSeconds
-                }
+                };
 
-                return question
-            })
+                return question;
+            });
 
         await this._ormService
             .save(Question, questions);
@@ -319,49 +319,49 @@ export class VideoService extends QueryServiceBase<Video> {
     private async saveUpdatedAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
 
         const updateMuts = mutations
-            .filter(x => x.action === 'update')
+            .filter(x => x.action === 'update');
 
         // existing questions existing answers
         const existingAnswers = updateMuts
             .filter(x => x.key > 0)
             .flatMap(y => y.fieldMutators
                 .flat()
-                .filter(x => x.field === "answers")
+                .filter(x => x.field === 'answers')
                 .flatMap(x => x.value as Partial<Answer>)
                 .flatMap(x => {
                     return {
                         ...x,
                         questionId: y.key
-                    }
+                    };
                 })
             )
-            .filter(x => x.id! > 0) as Partial<Answer>[]
+            .filter(x => x.id! > 0) as Partial<Answer>[];
 
         await this._ormService
-            .save(Answer, existingAnswers)
+            .save(Answer, existingAnswers);
     }
 
     private async saveNewAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
 
         const updateMuts = mutations
-            .filter(x => x.action === 'update')
+            .filter(x => x.action === 'update');
 
         // existing questions new answers
         const newAnswers = updateMuts
             .filter(x => x.key > 0)
             .flatMap(y => y.fieldMutators
                 .flat()
-                .filter(x => x.field === "answers")
+                .filter(x => x.field === 'answers')
                 .flatMap(x => x.value as Partial<Answer>)
                 .filter(x => x.text)
                 .flatMap(x => {
                     return {
                         ...x,
                         questionId: y.key
-                    }
+                    };
                 })
             )
-            .filter(x => x.id! < 0) as Partial<Answer>[]
+            .filter(x => x.id! < 0) as Partial<Answer>[];
 
         await this._ormService
             .getRepository(Answer)
