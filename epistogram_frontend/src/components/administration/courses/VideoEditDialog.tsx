@@ -40,127 +40,131 @@ export const VideoEditDialog = (props: {
     logic: EpistoDialogLogicType<number>
 }) => {
 
-    // props
-    const { logic } = props;
+    // // props
+    // const { logic } = props;
 
-    // util
-    const showError = useShowErrorDialog();
+    // // util
+    // const showError = useShowErrorDialog();
 
-    // state
-    const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionSchema[]>([]);
+    // // state
+    // const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionSchema[]>([]);
 
-    // http
-    const {
-        videoQuestionEditData,
-        videoQuestionEditDataState,
-        videoQuestionEditDataError,
-        refetchVideoQuestionEditData
-    } = useVideoQuestionEditData(logic.params!);
-    const { saveVideoQuestionEditData } = useSaveVideoQuestionEditData();
+    // // http
+    // const {
+    //     videoQuestionEditData,
+    //     videoQuestionEditDataState,
+    //     videoQuestionEditDataError,
+    //     refetchVideoQuestionEditData
+    // } = useVideoQuestionEditData(logic.params!);
+    // const { saveVideoQuestionEditData } = useSaveVideoQuestionEditData();
 
-    // computed
-    const videoUrl = videoQuestionEditData?.videoUrl || '';
-    const videoTitle = videoQuestionEditData?.title || '';
-    const courseName = videoQuestionEditData?.courseName || '';
+    // // computed
+    // const videoUrl = videoQuestionEditData?.videoUrl || '';
+    // const videoTitle = videoQuestionEditData?.title || '';
+    // const courseName = videoQuestionEditData?.courseName || '';
 
-    /*  const getRowKey = useCallback((question: QuestionSchema) => {
-         console.log(question.questionId);
-         return question.questionId;
-     }, []);
-  */
-    const {
-        mutatedData,
-        add: addQuestion,
-        mutate: mutateQuestion,
-        remove: removeQuestion,
-        isMutated: isQuestionModified,
-        isAnyMutated: isAnyQuestionsMutated,
-        mutations,
-        resetMutations,
-        addOnMutationHandlers
-    } = useXListMutator<QuestionSchema, 'questionId', number>(preprocessedQuestions, 'questionId');
+    // const preprocessItems = useCallback((questions: QuestionEditDataDTO[]) => {
 
-    // map data for mutator
-    useEffect(() => {
-        const questions = videoQuestionEditData?.questions ?? [];
+    //     const preproQuestions = questions
+    //         .map((item, index) => mapToQuestionSchema(item, videoQuestionEditData?.id!));
 
-        const preproQuestions = questions
-            .map((item, index) => mapToQuestionSchema(item, videoQuestionEditData?.id!));
+    //     setPreprocessedQuestions(preproQuestions);
+    // }, [setPreprocessedQuestions]);
 
-        setPreprocessedQuestions(preproQuestions);
-    }, [videoQuestionEditData]);
+    // const {
+    //     mutatedData,
+    //     add: addQuestion,
+    //     mutate: mutateQuestion,
+    //     remove: removeQuestion,
+    //     isMutated: isQuestionModified,
+    //     isAnyMutated: isAnyQuestionsMutated,
+    //     mutations,
+    //     resetMutations,
+    //     addOnMutationHandlers
+    // } = useXListMutator<QuestionSchema, 'questionId', number>(preprocessedQuestions, 'questionId', preprocessItems);
 
-    // reset mutations on dialog close
-    useEffect(() => {
+    // // map data for mutator
+    // useEffect(() => {
 
-        if (logic.isOpen!)
-            resetMutations();
-    }, [logic.isOpen]);
+    //     if (!videoQuestionEditData)
+    //         return;
 
-    // logs mutateddata when it changes
-    useEffect(() => {
+    //     preprocessItems(videoQuestionEditData.questions);
+    // }, [videoQuestionEditData]);
 
-        console.log(mutatedData);
-        console.log(mutations);
-    }, [mutatedData]);
+    // // reset mutations on dialog close
+    // useEffect(() => {
 
-    // mutation handlers
-    const handleMutateQuestion: EditQuestionFnType = (key, field, value) => {
+    //     if (logic.isOpen!)
+    //         resetMutations();
+    // }, [logic.isOpen]);
 
-        mutateQuestion({ key, field: field as any, newValue: value });
-    };
+    // // logs mutateddata when it changes
+    // useEffect(() => {
 
-    const handleAddQuestion = () => {
+    //     console.log(mutatedData);
+    //     console.log(mutations);
+    // }, [mutatedData]);
 
-        const newId = getVirtualId();
+    // // mutation handlers
+    // const handleMutateQuestion: EditQuestionFnType = (key, field, value) => {
 
-        const dto: QuestionEditDataDTO = {
-            questionId: -1,
-            questionText: '',
-            answers: []
-        };
+    //     mutateQuestion({ key, field: field as any, newValue: value });
+    // };
 
-        const question = mapToQuestionSchema(dto, videoQuestionEditData?.id!);
+    // const handleAddQuestion = () => {
 
-        addQuestion(newId, question);
-    };
+    //     const newId = getVirtualId();
 
-    const handleSaveQuestionsAsync = async () => {
+    //     const dto: QuestionEditDataDTO = {
+    //         questionId: -1,
+    //         questionText: '',
+    //         answers: []
+    //     };
 
-        try {
+    //     const question = mapToQuestionSchema(dto, videoQuestionEditData?.id!);
 
-            await saveVideoQuestionEditData(mutations as any);
-            resetMutations();
-            logic.closeDialog();
-        }
-        catch (e) {
+    //     addQuestion(newId, question);
+    // };
 
-            showError(e);
-        }
-    };
+    // const handleSaveQuestionsAsync = async () => {
 
-    const paging = usePaging<EditDialogSubpage>([
-        {
-            content: () => <AdminVideoQuestionsModalPage
-                videoUrl={videoUrl}
-                questions={mutatedData}
-                handleAddQuestion={handleAddQuestion}
-                handleMutateQuestion={handleMutateQuestion}
-                handleSaveQuestions={handleSaveQuestionsAsync}
-                isAnyQuestionsMutated={isAnyQuestionsMutated} />,
-            title: 'Kérdések'
-        },
-        {
-            content: () => <AdminVideoStatisticsModalPage />,
-            title: 'Statisztika'
-        }
-    ]);
+    //     try {
 
-    return <EditDialogBase
-        title={videoTitle}
-        subTitle={courseName}
-        chipText='Videó'
-        chipColor='var(--deepBlue)'
-        logic={logic}
-        paging={paging} />;
+    //         await saveVideoQuestionEditData(mutations as any);
+    //         resetMutations();
+    //         logic.closeDialog();
+    //     }
+    //     catch (e) {
+
+    //         showError(e);
+    //     }
+    // };
+
+    // const paging = usePaging<EditDialogSubpage>([
+    //     {
+    //         content: () => <AdminVideoQuestionsModalPage
+    //             videoUrl={videoUrl}
+    //             questions={mutatedData}
+    //             handleAddQuestion={handleAddQuestion}
+    //             handleMutateQuestion={handleMutateQuestion}
+    //             handleSaveQuestions={handleSaveQuestionsAsync}
+    //             isAnyQuestionsMutated={isAnyQuestionsMutated} />,
+    //         title: 'Kérdések'
+    //     },
+    //     {
+    //         content: () => <AdminVideoStatisticsModalPage />,
+    //         title: 'Statisztika'
+    //     }
+    // ]);
+
+    // return <EditDialogBase
+    //     title={videoTitle}
+    //     subTitle={courseName}
+    //     chipText='Videó'
+    //     chipColor='var(--deepBlue)'
+    //     logic={logic}
+    //     paging={paging} />;
+
+    return <div>asd</div>;
 };

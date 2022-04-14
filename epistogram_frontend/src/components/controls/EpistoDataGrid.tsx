@@ -6,8 +6,8 @@ import { typedMemo } from '../../static/frontendHelpers';
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
     field: TField,
-    value: Partial<TRow>[TField],
-    row: Partial<TRow>
+    value: TRow[TField],
+    row: TRow
 };
 
 export type UseCommitNewValueType<TKey, TRow> = () => {
@@ -24,7 +24,7 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     renderCell?: (params: RenderCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     renderEditCell?: (params: RenderEditCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     width?: number;
-    editable?: boolean;
+    editHandler?: (params: { rowKey: TKey, value: TRow[TField] }) => void;
     resizable?: boolean;
     type?: 'int'
 };
@@ -49,11 +49,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     const columnsProcessed = columns
         .map(column => {
 
-            const { renderCell, type, editable, renderEditCell, ...others } = column;
+            const { renderCell, type, editHandler, renderEditCell, ...others } = column;
 
             const def: GridColDef = {
                 ...others,
-                editable
+                editable: !!editHandler || !!renderEditCell
             };
 
             if (renderCell)
@@ -112,13 +112,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             .setCellMode(params.id, params.field, 'edit');
     }, [apiRef]);
 
-    const endCellEdit = useCallback((rowKey: any, field: any) => {
-
-        apiRef
-            .current
-            .setCellMode(rowKey, field, 'view');
-    }, [apiRef]);
-
     useEffect(() => {
 
         return apiRef
@@ -144,7 +137,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             apiRef={apiRef}
             onCellClick={handleCellClick}
             initialState={initialState as any}
-            onCellEditCommit={({ id, value, field }) => {
+            onCellEditCommit={(params) => {
+
+                const value = params.value as any;
+                const field = params.field as keyof TSchema;
+                const rowKey = params.id as any as TKey;
 
                 const column = columns
                     .single(x => x.field === field);
@@ -153,7 +150,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                     ? parseInt(value as any)
                     : value;
 
-                handleEdit(id as any, field as any, val);
+                column.editHandler!({ rowKey, value: val });
+
+                //     const writeField = 
+
+                // handleEdit(rowId, field, val);
             }}
             isRowSelectable={x => false}
             columns={columnsProcessed}
