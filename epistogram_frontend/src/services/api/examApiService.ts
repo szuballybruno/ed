@@ -31,7 +31,7 @@ export const useExamQuestionEditData = (examId: number | null) => {
         examQuestionEditDataState: qr.state,
         refetchExamQuestionEditData: qr.refetch
     };
-}
+};
 
 export const useDeleteExam = () => {
 
