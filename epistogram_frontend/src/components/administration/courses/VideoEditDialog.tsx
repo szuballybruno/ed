@@ -71,6 +71,21 @@ export const VideoEditDialog = (props: {
     const videoTitle = videoQuestionEditData?.title || '';
     const courseName = videoQuestionEditData?.courseName || '';
 
+    const questions = videoQuestionEditData?.questions ?? [];
+
+    const preprocessItems = useCallback((questions: QuestionEditDataDTO[]) => {
+
+        const preproQuestions = questions
+            .map((item, index) => mapToQuestionSchema(item, videoQuestionEditData?.id!));
+
+        setPreprocessedQuestions(preproQuestions);
+    }, [setPreprocessedQuestions]);
+
+    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
+
+        preprocessItems(newMutatedItems);
+    }, [preprocessItems]);
+
     const {
         mutatedData,
         add: addQuestion,
@@ -81,16 +96,15 @@ export const VideoEditDialog = (props: {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<QuestionSchema, 'questionId', number>(preprocessedQuestions, 'questionId');
+    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(questions, 'questionId', mutationEndCallback);
 
     // map data for mutator
     useEffect(() => {
-        const questions = videoQuestionEditData?.questions ?? [];
 
-        const preproQuestions = questions
-            .map((item, index) => mapToQuestionSchema(item, videoQuestionEditData?.id!));
+        if (!videoQuestionEditData)
+            return;
 
-        setPreprocessedQuestions(preproQuestions);
+        preprocessItems(videoQuestionEditData.questions);
     }, [videoQuestionEditData]);
 
     // reset mutations on dialog close
@@ -99,6 +113,13 @@ export const VideoEditDialog = (props: {
         if (logic.isOpen!)
             resetMutations();
     }, [logic.isOpen]);
+
+    // logs mutateddata when it changes
+    useEffect(() => {
+
+        console.log(mutatedData);
+        console.log(mutations);
+    }, [mutatedData]);
 
     // mutation handlers
     const handleMutateQuestion: EditQuestionFnType = (key, field, value) => {
@@ -128,7 +149,7 @@ export const VideoEditDialog = (props: {
 
         try {
 
-            await saveVideoQuestionEditData(mutations);
+            await saveVideoQuestionEditData(mutations as any);
             resetMutations();
             logic.closeDialog();
         }

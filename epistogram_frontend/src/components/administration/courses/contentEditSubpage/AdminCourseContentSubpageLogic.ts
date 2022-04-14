@@ -1,5 +1,6 @@
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
+import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { formatTime } from '../../../../static/frontendHelpers';
 
@@ -13,7 +14,7 @@ export type RowSchemaModule = {
 export type RowSchema = {
     rowKey: string;
     rowNumber: number;
-    itemOrderIndex: number;
+    itemOrderIndex: string;
     itemTitle: string;
     itemSubtitle: string;
     module: RowSchemaModule;
@@ -33,9 +34,13 @@ export type RowSchema = {
     };
     videoFile: string;
     quickMenu: number;
+    changedProperties: {
+        itemOrderIndex: boolean;
+        itemTitle: boolean;
+        itemSubtitle: boolean;
+        moduleId: boolean;
+    };
 };
-
-export type EditRowFnType = <TField extends keyof RowSchema, >(key: string, field: TField, value: RowSchema[TField]) => void;
 
 const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
 
@@ -83,7 +88,12 @@ const getIssueText = (dto: CourseContentItemIssueDTO) => {
     return null;
 };
 
-export const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: number): RowSchema => {
+export const mapToRowSchema = (
+    item: CourseContentItemAdminDTO,
+    rowNumber: number,
+    modules: CourseModuleShortDTO[],
+    getItemKey: (item: CourseContentItemAdminDTO) => string,
+    isModified: (key: string, field: keyof CourseContentItemAdminDTO) => boolean): RowSchema => {
 
     const { color, label } = getItemTypeValues(item.itemType);
 
@@ -95,17 +105,30 @@ export const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: numbe
         .errors
         .length > 0;
 
+    const key = getItemKey(item);
+
+    const isPretest = item.itemType === 'pretest';
+
+    const module = isPretest
+        ? {
+            id: -1,
+            name: 'none',
+            orderIndex: -1
+        } as CourseModuleShortDTO
+        : modules
+            .single(x => x.id === item.moduleId);
+
     return ({
         rowKey: item.itemCode,
         rowNumber: rowNumber,
-        itemOrderIndex: item.itemOrderIndex,
+        itemOrderIndex: isPretest ? '-' : item.itemOrderIndex + '',
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
         module: {
-            isPretestModule: item.itemType === 'pretest',
-            id: item.moduleId,
-            name: item.moduleName,
-            orderIndex: item.moduleOrderIndex
+            isPretestModule: isPretest,
+            id: module.id,
+            name: module.name,
+            orderIndex: module.orderIndex
         },
         itemType: {
             label,
@@ -135,6 +158,12 @@ export const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: numbe
                 : 'var(--intenseGreen)'
         },
         quickMenu: item.itemId,
-        videoFile: 'vf'
+        videoFile: 'vf',
+        changedProperties: {
+            itemOrderIndex: isModified(key, 'itemOrderIndex'),
+            itemTitle: isModified(key, 'itemTitle'),
+            itemSubtitle: isModified(key, 'itemSubtitle'),
+            moduleId: isModified(key, 'moduleId'),
+        }
     });
 };

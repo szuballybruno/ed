@@ -11,16 +11,18 @@ import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoDialog, useEpistoDialogLogic } from '../../../EpistoDialog';
+import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
-import { AddNewItemPopper } from './AddNewItemPopper';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ExamEditDialog } from '../ExamEditDialog';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { VideoEditDialog } from '../VideoEditDialog';
-import { useXListMutator } from '../../../lib/XMutator/XMutator';
+import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
-import { EditRowFnType, mapToRowSchema, RowSchema, RowSchemaModule } from './AdminCourseContentSubpageLogic';
+import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
+
+type ItemType = CourseContentItemAdminDTO;
 
 export const AdminCourseContentSubpage = () => {
 
@@ -51,11 +53,32 @@ export const AdminCourseContentSubpage = () => {
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
+    const items = courseContentAdminData?.items ?? [];
 
+    const getItemKey = useCallback((row: ItemType) => row.itemCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
 
+    const preprocessItems = useCallback((items: ItemType[]) => {
+
+        console.log('Preprocessing items...');
+
+        const preproItems = items
+            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, isRowModified))
+            .orderBy(x => x.module.orderIndex)
+            .groupBy(x => x.module.id)
+            .flatMap(x => x
+                .items
+                .orderBy(i => i.itemOrderIndex));
+
+        setPreprocessedItems(preproItems);
+    }, [setPreprocessedItems, modules]);
+
+    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
+
+        preprocessItems(newMutatedItems);
+    }, [preprocessItems]);
+
     const {
-        mutatedData,
         add: addRow,
         mutate: mutateRow,
         remove: removeRow,
@@ -64,34 +87,23 @@ export const AdminCourseContentSubpage = () => {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<RowSchema, 'rowKey', string>(preprocessedItems, 'rowKey');
+    } = useXListMutator<ItemType, 'itemCode', string>(items, 'itemCode', mutationEndCallback);
 
     // set preprocessed items, 
     // this works as a sort of caching
     useEffect(() => {
 
-        const items = courseContentAdminData?.items ?? [];
+        if (!courseContentAdminData)
+            return;
 
-        const preproItems = items
-            .map((item, index) => mapToRowSchema(item, index));
-
-        setPreprocessedItems(preproItems);
+        preprocessItems(courseContentAdminData.items);
     }, [courseContentAdminData]);
 
-    // post mutation 
-    const gridRows: RowSchema[] = mutatedData
-        .map((x, index) => { x.rowNumber = index; return x; })
-        .orderBy(x => x.module.orderIndex)
-        .groupBy(x => x.module.id)
-        .flatMap(x => x
-            .items
-            .orderBy(i => i.itemOrderIndex));
-
-    const setNewOrderIndices = (items: RowSchema[], mutatedRowKey: string, mutateSelf?: boolean) => {
+    const setNewOrderIndices = (items: ItemType[], mutatedRowKey: string, mutateSelf?: boolean) => {
 
         const mapped = items
             .map((item, index) => ({
-                key: getRowKey(item),
+                key: getItemKey(item),
                 newOrderIndex: index
             }));
 
@@ -104,8 +116,7 @@ export const AdminCourseContentSubpage = () => {
             .forEach(x => mutateRow({
                 key: x.key,
                 field: 'itemOrderIndex',
-                newValue: x.newOrderIndex,
-                noOnMutationCallback: true
+                newValue: x.newOrderIndex
             }));
     };
 
@@ -119,11 +130,11 @@ export const AdminCourseContentSubpage = () => {
                 const newItemOrderIndex = newValue as number;
                 const isNewSmaller = newItemOrderIndex < item.itemOrderIndex;
 
-                const orderedItems = gridRows
-                    .filter(row => row.module.id === item.module.id)
+                const orderedItems = items
+                    .filter(row => row.moduleId === item.moduleId)
                     .orderBy(row => {
 
-                        if (getRowKey(row) === key)
+                        if (getItemKey(row) === key)
                             return isNewSmaller
                                 ? newItemOrderIndex - 1
                                 : newItemOrderIndex + 1;
@@ -136,19 +147,19 @@ export const AdminCourseContentSubpage = () => {
         },
         {
             action: 'update',
-            field: 'module',
+            field: 'moduleId',
             callback: ({ key, item, newValue }) => {
 
-                const oldModuleId = item.module.id;
-                const newModuleId = (newValue as RowSchemaModule).id;
+                const oldModuleId = item.moduleId;
+                const newModuleId = newValue as number;
 
-                const oldModuleItems = gridRows
-                    .filter(x => x.module.id === oldModuleId && getRowKey(x) !== key)
+                const oldModuleItems = items
+                    .filter(x => x.moduleId === oldModuleId && getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
 
-                const newModuleItems = gridRows
-                    .filter(x => x.module.id === newModuleId || getRowKey(x) === key)
-                    .orderBy(x => getRowKey(x) === key ? -1 : x.itemOrderIndex);
+                const newModuleItems = items
+                    .filter(x => x.moduleId === newModuleId || getItemKey(x) === key)
+                    .orderBy(x => getItemKey(x) === key ? -1 : x.itemOrderIndex);
 
                 setNewOrderIndices(oldModuleItems, key);
                 setNewOrderIndices(newModuleItems, key, true);
@@ -158,14 +169,14 @@ export const AdminCourseContentSubpage = () => {
             action: 'delete',
             callback: ({ item, key }) => {
 
-                const moduleItems = gridRows
-                    .filter(x => x.module.id === item.module.id)
-                    .filter(x => getRowKey(x) !== key)
+                const moduleItems = items
+                    .filter(x => x.moduleId === item.moduleId)
+                    .filter(x => getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
 
                 setNewOrderIndices(moduleItems, key);
             }
-        },
+        }
     ]);
 
     // 
@@ -187,25 +198,27 @@ export const AdminCourseContentSubpage = () => {
 
     };
 
-    const handleMutateRow: EditRowFnType = (key, field, value) => {
-
-        mutateRow({ key, field: field as any, newValue: value });
-    };
-
     const handleAddRow = (type: 'video' | 'exam') => {
 
         const moduleId = modules[0].id;
 
-        const module = gridRows
-            .firstOrNull(x => x.module.id === moduleId)?.module ?? {
-            isPretestModule: false,
-            id: -1,
-            name: 'No module',
-            orderIndex: 0
-        };
+        const foundModule = items
+            .firstOrNull(x => x.moduleId === moduleId);
 
-        const itemOrderIndex = gridRows
-            .filter(x => x.module.id === moduleId && x.itemType.type !== 'pretest')
+        const moduleInfo = foundModule
+            ? {
+                name: foundModule.moduleName,
+                id: foundModule.moduleId,
+                orderIndex: foundModule.moduleOrderIndex
+            }
+            : {
+                name: 'no module',
+                id: -1,
+                orderIndex: -1
+            };
+
+        const itemOrderIndex = items
+            .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
             .length;
 
         const newId = getVirtualId();
@@ -223,30 +236,22 @@ export const AdminCourseContentSubpage = () => {
             itemId: newId,
             examId: type === 'exam' ? newId : -1,
             videoId: type === 'exam' ? -1 : newId,
-            moduleId: module.id,
-            moduleOrderIndex: module.orderIndex,
+            moduleId: moduleInfo.id,
+            moduleOrderIndex: moduleInfo.orderIndex,
+            moduleName: moduleInfo.name,
             moduleCode: '',
-            moduleName: module.name,
             videoLength: 0
         };
 
-        const row = mapToRowSchema(dto, 0);
-
-        addRow(newItemCode, row);
-
+        addRow(newItemCode, dto);
         closeAddPopper();
-    };
-
-    const handleRemoveRow = (key: string) => {
-
-        removeRow(key);
     };
 
     const handleSaveAsync = async () => {
 
         try {
 
-            await saveCourseDataAsync(mutations as any);
+            await saveCourseDataAsync(mutations);
             resetMutations();
             refreshCourseContentAdminData();
         }
@@ -259,9 +264,8 @@ export const AdminCourseContentSubpage = () => {
     const gridColumns = useGridColumnDefinitions(
         modules,
         openDialog,
-        handleRemoveRow,
-        handleMutateRow,
-        isRowModified);
+        removeRow,
+        mutateRow);
 
     //
     // EFFECTS
@@ -327,7 +331,7 @@ export const AdminCourseContentSubpage = () => {
                 {/* data grid */}
                 <EpistoDataGrid
                     columns={gridColumns}
-                    rows={gridRows}
+                    rows={preprocessedItems}
                     handleEdit={handleEdit}
                     getKey={getRowKey}
                     initialState={{

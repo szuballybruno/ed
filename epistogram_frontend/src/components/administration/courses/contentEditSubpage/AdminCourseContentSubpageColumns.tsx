@@ -4,24 +4,44 @@ import Edit from '@mui/icons-material/Edit';
 import { useGridApiContext } from '@mui/x-data-grid';
 import { ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
-import { CourseItemType } from '../../../../shared/types/sharedTypes';
-import { formatTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType, UseCommitNewValueType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
+import { MutateFnType } from '../../../lib/XMutator/XMutator';
 import { ChipSmall } from '../ChipSmall';
-import { EditRowFnType, RowSchema, RowSchemaModule } from './AdminCourseContentSubpageLogic';
+import { RowSchema } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
+
+const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
+
+    const apiRef = useGridApiContext();
+
+    return (rowKey: TKey, field: TField, value: TRow[TField]) => {
+
+        const rowKeyAny = rowKey as any;
+        const fieldStr = field as string;
+
+        apiRef
+            .current
+            .setEditCellValue({ id: rowKeyAny, field: fieldStr, value: value });
+
+        apiRef
+            .current
+            .commitCellChange({ id: rowKeyAny, field: fieldStr });
+
+        apiRef
+            .current
+            .setCellMode(rowKeyAny, fieldStr, 'view');
+    };
+};
 
 export const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
     openDialog: (type: 'video' | 'exam', itemId?: number) => void,
     removeRow: (key: string) => void,
-    editRow: EditRowFnType,
-    isModified: (key: string) => (field: keyof RowSchema) => boolean) => {
+    mutateRow: MutateFnType<CourseContentItemAdminDTO, string>) => {
 
     const TextCellRenderer = (props: {
         children: ReactNode,
@@ -42,12 +62,12 @@ export const useGridColumnDefinitions = (
     const SelectEditCellRenderer = (props: {
         rowKey: string,
         field: any,
-        row: Partial<RowSchema>,
-        useCommitNewValue: UseCommitNewValueType<string, RowSchema>
+        row: Partial<RowSchema>
     }) => {
 
-        const { field, rowKey, row, useCommitNewValue } = props;
-        const apiRef = useGridApiContext();
+        const { field, rowKey, row } = props;
+
+        const setAndCommitCellValue = useSetAndCommitCellValue<RowSchema, string, 'module'>();
 
         const [id, setId] = useState<string>(row.module!.id + '');
 
@@ -56,26 +76,16 @@ export const useGridColumnDefinitions = (
             currentKey={id}
             onSelected={(value) => {
 
-                setId(value.id + '');
+                const selectedModuleId = value.id;
 
-                const rowSchemaModule: RowSchemaModule = {
+                setId(selectedModuleId + '');
+
+                setAndCommitCellValue(rowKey, 'module', {
+                    id: selectedModuleId,
                     isPretestModule: false,
-                    id: value.id,
                     name: value.name,
                     orderIndex: value.orderIndex
-                };
-
-                apiRef
-                    .current
-                    .setEditCellValue({ id: rowKey, field, value: rowSchemaModule });
-
-                apiRef
-                    .current
-                    .commitCellChange({ id: rowKey, field: field });
-                
-                apiRef
-                    .current
-                    .setCellMode(rowKey, field, 'view');
+                });
             }}
             getDisplayValue={x => '' + x?.name}
             getCompareKey={module => '' + module?.id} />;
@@ -99,12 +109,16 @@ export const useGridColumnDefinitions = (
         columnDefGen('itemOrderIndex', {
             headerName: 'Elhelyezkedés',
             width: 80,
-            editable: true,
+            editHandler: ({ rowKey, value }) => mutateRow({
+                field: 'itemOrderIndex',
+                key: rowKey,
+                newValue: value as any 
+            }),
             type: 'int',
-            renderCell: ({ key, field, value }) => {
+            renderCell: ({ value, row }) => {
 
                 return <TextCellRenderer
-                    isMutated={isModified(key)(field)}>
+                    isMutated={row.changedProperties.itemOrderIndex}>
 
                     {value}
                 </TextCellRenderer>;
@@ -114,11 +128,15 @@ export const useGridColumnDefinitions = (
             headerName: 'Cím',
             width: 220,
             resizable: true,
-            editable: true,
-            renderCell: ({ key, field, value }) => {
+            editHandler: ({ rowKey, value }) => mutateRow({
+                field: 'itemTitle',
+                key: rowKey,
+                newValue: value
+            }),
+            renderCell: ({ value, row }) => {
 
                 return <TextCellRenderer
-                    isMutated={isModified(key)(field)}>
+                    isMutated={row.changedProperties.itemTitle}>
 
                     {value}
                 </TextCellRenderer>;
@@ -128,11 +146,15 @@ export const useGridColumnDefinitions = (
             headerName: 'Alcím',
             width: 220,
             resizable: true,
-            editable: true,
-            renderCell: ({ key, field, value }) => {
+            editHandler: ({ rowKey, value }) => mutateRow({
+                field: 'itemSubtitle',
+                key: rowKey,
+                newValue: value
+            }),
+            renderCell: ({ value, row }) => {
 
                 return <TextCellRenderer
-                    isMutated={isModified(key)(field)}>
+                    isMutated={row.changedProperties.itemSubtitle}>
 
                     {value}
                 </TextCellRenderer>;
@@ -141,11 +163,18 @@ export const useGridColumnDefinitions = (
         columnDefGen('module', {
             headerName: 'Modul',
             width: 250,
-            editable: true,
+            editHandler: ({ rowKey, value }) => {
+
+                mutateRow({
+                    key: rowKey,
+                    field: 'moduleId',
+                    newValue: value.id
+                });
+            },
             renderCell: ({ key, field, row, value }) => {
 
                 return <TextCellRenderer
-                    isMutated={isModified(key)(field)}>
+                    isMutated={row.changedProperties.moduleId}>
 
                     {value
                         ? value.isPretestModule
@@ -157,8 +186,7 @@ export const useGridColumnDefinitions = (
             renderEditCell: (props) => <SelectEditCellRenderer
                 field={props.field}
                 rowKey={props.key}
-                row={props.row}
-                useCommitNewValue={props.useCommitNewValue} />
+                row={props.row} />
         }),
         columnDefGen('itemType', {
             headerName: 'Típus',
@@ -244,106 +272,4 @@ export const useGridColumnDefinitions = (
     ];
 
     return gridColumns;
-};
-
-const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
-
-    if (itemType === 'exam')
-        return {
-            color: 'var(--deepOrange)',
-            label: 'Vizsga'
-        };
-
-    if (itemType === 'video')
-        return {
-            color: 'var(--deepBlue)',
-            label: 'Videó'
-        };
-
-    if (itemType === 'pretest')
-        return {
-            color: 'purple',
-            label: 'Szintfelmérő'
-        };
-
-    if (itemType === 'final')
-        return {
-            color: 'orange',
-            label: 'Záróvizsga'
-        };
-
-    throw new Error('Unexpected type: ' + itemType);
-};
-
-const getIssueText = (dto: CourseContentItemIssueDTO) => {
-
-    if (dto.code === 'ans_miss')
-        return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
-
-    if (dto.code === 'corr_ans_miss')
-        return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
-
-    if (dto.code === 'questions_missing')
-        return 'Kerdesek hianyoznak';
-
-    if (dto.code === 'video_too_long')
-        return 'Video tul hosszu';
-
-    return null;
-};
-
-const mapToRowSchema = (item: CourseContentItemAdminDTO, rowNumber: number): RowSchema => {
-
-    const { color, label } = getItemTypeValues(item.itemType);
-
-    const isLengthWarning = item
-        .warnings
-        .any(x => x.code === 'video_too_long');
-
-    const hasErrors = item
-        .errors
-        .length > 0;
-
-    return ({
-        rowKey: item.itemCode,
-        rowNumber: rowNumber,
-        itemOrderIndex: item.itemOrderIndex,
-        itemTitle: item.itemTitle,
-        itemSubtitle: item.itemSubtitle,
-        module: {
-            isPretestModule: item.itemType === 'pretest',
-            id: item.moduleId,
-            name: item.moduleName,
-            orderIndex: item.moduleOrderIndex
-        },
-        itemType: {
-            label,
-            color,
-            type: item.itemType
-        },
-        videoLength: {
-            text: item.itemType === 'exam'
-                ? ' - '
-                : !item.warnings || !item.videoLength
-                    ? ''
-                    : formatTime(Math.round(item.videoLength)),
-            color: isLengthWarning
-                ? 'var(--intenseOrange)'
-                : 'gray'
-        },
-        errors: {
-            text: hasErrors
-                ? `${item.errors.length} hiba`
-                : 'Nincs hiba',
-            tooltip: item
-                .errors
-                .map(x => getIssueText(x))
-                .join('\n'),
-            color: hasErrors
-                ? 'var(--intenseRed)'
-                : 'var(--intenseGreen)'
-        },
-        quickMenu: rowNumber,
-        videoFile: 'vf'
-    });
 };
