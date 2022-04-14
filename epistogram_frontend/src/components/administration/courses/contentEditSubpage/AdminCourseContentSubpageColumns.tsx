@@ -112,7 +112,7 @@ export const useGridColumnDefinitions = (
             editHandler: ({ rowKey, value }) => mutateRow({
                 field: 'itemOrderIndex',
                 key: rowKey,
-                newValue: value
+                newValue: value as any 
             }),
             type: 'int',
             renderCell: ({ value, row }) => {

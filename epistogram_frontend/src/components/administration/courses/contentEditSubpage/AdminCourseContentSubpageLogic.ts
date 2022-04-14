@@ -14,7 +14,7 @@ export type RowSchemaModule = {
 export type RowSchema = {
     rowKey: string;
     rowNumber: number;
-    itemOrderIndex: number;
+    itemOrderIndex: string;
     itemTitle: string;
     itemSubtitle: string;
     module: RowSchemaModule;
@@ -107,7 +107,9 @@ export const mapToRowSchema = (
 
     const key = getItemKey(item);
 
-    const module = item.itemType === 'pretest'
+    const isPretest = item.itemType === 'pretest';
+
+    const module = isPretest
         ? {
             id: -1,
             name: 'none',
@@ -119,11 +121,11 @@ export const mapToRowSchema = (
     return ({
         rowKey: item.itemCode,
         rowNumber: rowNumber,
-        itemOrderIndex: item.itemOrderIndex,
+        itemOrderIndex: isPretest ? '-' : item.itemOrderIndex + '',
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
         module: {
-            isPretestModule: item.itemType === 'pretest',
+            isPretestModule: isPretest,
             id: module.id,
             name: module.name,
             orderIndex: module.orderIndex
