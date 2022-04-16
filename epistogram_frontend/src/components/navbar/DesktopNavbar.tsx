@@ -7,6 +7,7 @@ import { loggingSettings } from '../../static/Environemnt';
 import { getAssetUrl, getUrl } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
@@ -61,34 +62,38 @@ export const DesktopNavbar = (props: {
 
         return <>
             {currentCourseItemCode && (
-                <NavbarButton
-                    onClick={() => navigate(applicationRoutes.playerRoute, { itemCode: currentCourseItemCode })}>
 
-                    <EpistoButton
-                        className="mildShadow"
+                <EpistoButton
+                    className="mildShadow"
+                    style={{
+                        color: '--epistoTeal',
+                        background:
+                            'var(--transparentWhite70)',
+                        border: 'none',
+                    }}
+                    variant="outlined"
+                    onClick={() => continueCourse()}
+                    icon={
+                        <img
+                            alt=""
+                            src={getAssetUrl(
+                                '/icons/play2.svg'
+                            )}
+                            style={{
+                                width: '25px',
+                                height: '25px',
+                            }}
+                        />}>
+
+                    <EpistoFont
                         style={{
-                            color: '--epistoTeal',
-                            background:
-                                'var(--transparentWhite70)',
-                            border: 'none',
+                            margin: '0 0 0 5px'
                         }}
-                        variant="outlined"
-                        onClick={() => continueCourse()}
-                        icon={
-                            <img
-                                alt=""
-                                src={getAssetUrl(
-                                    '/icons/play2.svg'
-                                )}
-                                style={{
-                                    width: '25px',
-                                    height: '25px',
-                                }}
-                            />}
-                    />
+                        isUppercase>
 
-                    {title}
-                </NavbarButton>
+                        {title}
+                    </EpistoFont>
+                </EpistoButton>
             )}
         </>;
     };
