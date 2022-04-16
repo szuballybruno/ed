@@ -26,11 +26,17 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
 
     const { userStats } = props;
 
-    return <Flex direction="column"
-        p="20px">
-        <Flex>
+    return <Flex
+        direction="column"
+        p="20px"
+        flex="1">
 
-            <Flex flex="1"
+        <Flex
+            flex="1">
+
+            <Flex
+                h="350px"
+                flex="1"
                 align="stretch">
 
                 <Flex flex="1">
@@ -69,6 +75,7 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
             </Flex>
 
             <Flex
+                h="350px"
                 className="roundBorders"
                 flex="1"
                 direction="column"
@@ -185,19 +192,26 @@ export const AdminUserCourseContentModal = (props: {
                 background="rgba(255,255,255,0.97)"
                 direction="row"
                 justify="space-between"
+                align="center"
                 position="sticky"
                 w="100%"
                 top="0"
+                maxH="80px"
                 p="20px 30px 20px 30px"
                 className="mildShadow"
                 zIndex="1000"
                 flex="1">
 
-                <Flex align="center">
-                    <Flex h="50px"
+                <Flex
+                    align="center"
+                    h="50px">
+                    <Flex
+                        h="50px"
                         direction="column"
                         mr="20px">
-                        <EpistoFont fontSize={'fontLarge'}
+
+                        <EpistoFont
+                            fontSize={'fontLarge'}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',

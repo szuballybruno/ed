@@ -73,6 +73,7 @@ import { DiscountCodeDTO } from '../../shared/dtos/DiscountCodeDTO';
 import { EventDTO } from '../../shared/dtos/EventDTO';
 import { ExamEditDataDTO } from '../../shared/dtos/ExamEditDataDTO';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { ExamQuestionEditDTO } from '../../shared/dtos/ExamQuestionEditDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
@@ -1111,3 +1112,37 @@ export const toVideoQuestionEditDTO = (
             })
     };
 };
+
+export const toExamQuestionEditDTO = (
+    ci: CourseItemQuestionEditView[]
+): ExamQuestionEditDTO => {
+
+    const questionGroup = ci
+        .groupBy(x => x.questionId);
+
+    const {
+        examId,
+        courseTitle
+    } = questionGroup.first().first;
+
+    return {
+        id: examId,
+        courseName: courseTitle,
+        questions: questionGroup
+            .map(q => {
+
+                return {
+                    videoId: null,
+                    examId: q.first.examId,
+                    questionId: q.first.questionId,
+                    questionText: q.first.questionText,
+                    answers: q.items.map(qi => ({
+                        id: qi.answerId,
+                        text: qi.answerText,
+                        isCorrect: qi.answerIsCorrect
+                    }))
+                };
+            })
+    };
+};
+

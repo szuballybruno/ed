@@ -1,5 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoEntryNew } from '../../../controls/EpistoEntryNew';
 import { EditQuestionFnType, QuestionSchema } from '../VideoEditDialog';
 
 
@@ -93,20 +95,31 @@ export const AdminExamQuestionsModalPage = (props: {
                                         return <TableCell
                                             key={index}
                                             style={{
+                                                backgroundColor: 'orange',
                                                 color: answer.isCorrect
                                                     ? 'var(--deepGreen)'
                                                     : 'var(--intenseRed)'
                                             }}>
 
-                                            <Checkbox
-                                                checked={answer.isCorrect}
-                                                style={{
-                                                    color: answer.isCorrect
-                                                        ? 'var(--deepGreen)'
-                                                        : 'var(--intenseRed)'
-                                                }} />
+                                            <Flex
+                                                background='pink'
+                                                h='100%'
+                                                minH='100%'
+                                                align='flex-start'>
 
-                                            {answer.text}
+                                                <Checkbox
+                                                    checked={answer.isCorrect}
+                                                    style={{
+                                                        color: answer.isCorrect
+                                                            ? 'var(--deepGreen)'
+                                                            : 'var(--intenseRed)'
+                                                    }} />
+
+                                                <EpistoEntry
+                                                    height='100%'
+                                                    value={answer.text}
+                                                    isMultiline />
+                                            </Flex>
                                         </TableCell>;
                                     })}
                             </TableRow>;

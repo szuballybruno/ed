@@ -191,7 +191,7 @@ export const AdminCourseContentSubpage = () => {
             videoEditDialogLogic.openDialog({ params: itemId });
 
         if (type === 'exam')
-            examEditDialogLogic.openDialog();
+            examEditDialogLogic.openDialog({ params: itemId });
 
         if (type === 'module')
             moduleEditDialogLogic.openDialog();

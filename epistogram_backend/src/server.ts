@@ -358,6 +358,7 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // exam
     addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.exam.getExamQuestionEditData, examController.getExamQuestionEditDataAction, { authorize: ['administrator'] });
     addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true, authorize: ['administrator'] });

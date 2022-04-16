@@ -55,6 +55,15 @@ export class ExamController {
             .getExamEditDataAsync(examId);
     };
 
+    getExamQuestionEditDataAction = async (params: ActionParams) => {
+        const examId = params
+            .getQuery<{ examId: number }>()
+            .getValue(x => x.examId, 'int');
+
+        return await this._examService
+            .getExamQuestionEditDataAsync(examId);
+    };
+
     saveExamAction = async (params: ActionParams) => {
 
         const dto = params

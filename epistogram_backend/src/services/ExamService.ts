@@ -10,13 +10,14 @@ import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
-import { toExamResultDTO } from './misc/mappings';
+import { toExamQuestionEditDTO, toExamResultDTO } from './misc/mappings';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
+import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
 
 export class ExamService extends QueryServiceBase<Exam> {
 
@@ -120,6 +121,27 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         return this._mapperService
             .map(Exam, ExamEditDataDTO, exam);
+    }
+
+    /**
+     * Get question edit data for the exam.
+     * 
+     * @param examId 
+     * @returns 
+     */
+    async getExamQuestionEditDataAsync(
+        examId: number
+    ) {
+
+        const questionEditView = await this._ormService
+            .getRepository(CourseItemQuestionEditView)
+            .createQueryBuilder('eq')
+            .where('eq.examId = :examId', { examId })
+            .getMany();
+
+        const examQuestionEditDTO = toExamQuestionEditDTO(questionEditView);
+
+        return examQuestionEditDTO;
     }
 
     /**
