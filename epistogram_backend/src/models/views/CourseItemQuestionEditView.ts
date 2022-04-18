@@ -11,10 +11,10 @@ export class CourseItemQuestionEditView {
     videoId: number;
 
     @ViewColumn()
-    itemTitle: string;
+    videoTitle: string;
 
     @ViewColumn()
-    itemSubtitle: string;
+    videoSubtitle: string;
 
     @ViewColumn()
     videoFilePath: string;
@@ -27,6 +27,9 @@ export class CourseItemQuestionEditView {
 
     @ViewColumn()
     examId: number;
+
+    @ViewColumn()
+    examTitle: string;
 
     @ViewColumn()
     questionId: number;

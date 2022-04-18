@@ -64,6 +64,15 @@ export class ExamController {
             .getExamQuestionEditDataAsync(examId);
     };
 
+    saveExamQuestionEditDataAction = async (params: ActionParams) => {
+        const mutations = params
+            .getBody()
+            .data;
+
+        await this._examService
+            .saveExamQuestionEditDataAsync(mutations);
+    };
+
     saveExamAction = async (params: ActionParams) => {
 
         const dto = params

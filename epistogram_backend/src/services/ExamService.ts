@@ -18,6 +18,8 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 
 export class ExamService extends QueryServiceBase<Exam> {
 
@@ -142,6 +144,20 @@ export class ExamService extends QueryServiceBase<Exam> {
         const examQuestionEditDTO = toExamQuestionEditDTO(questionEditView);
 
         return examQuestionEditDTO;
+    }
+
+    /**
+     * Saves the question edit data for the exam.
+     * 
+     * @param mutations
+     * @returns 
+     */
+    async saveExamQuestionEditDataAsync(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
+
+        await this._questionsService.saveNewQuestionsAndAnswers(mutations);
+        await this._questionsService.saveUpdatedQuestions(mutations);
+        await this._questionsService.saveUpdatedAnswers(mutations);
+        await this._questionsService.saveNewAnswers(mutations);
     }
 
     /**

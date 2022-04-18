@@ -5,6 +5,8 @@ import { ExamEditDataDTO } from '../../shared/dtos/ExamEditDataDTO';
 import { ExamQuestionEditDTO } from '../../shared/dtos/ExamQuestionEditDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { Mutation } from '../../shared/dtos/mutations/Mutation';
+import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
@@ -30,6 +32,16 @@ export const useExamQuestionEditData = (examId: number | null) => {
         examQuestionEditDataError: qr.error,
         examQuestionEditDataState: qr.state,
         refetchExamQuestionEditData: qr.refetch
+    };
+};
+
+export const useSaveExamQuestionEditData = () => {
+
+    const qr = usePostDataUnsafe<Mutation<QuestionEditDataDTO, 'questionId'>[], void>(apiRoutes.exam.saveExamQuestionEditData);
+
+    return {
+        saveExamQuestionEditData: qr.postDataAsync,
+        saveExamQuestionEditDataState: qr.state,
     };
 };
 

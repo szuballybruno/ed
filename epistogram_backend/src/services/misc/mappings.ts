@@ -1078,8 +1078,8 @@ export const toVideoQuestionEditDTO = (
 
     const {
         videoId,
-        itemTitle,
-        itemSubtitle,
+        videoTitle,
+        videoSubtitle,
         courseTitle,
         videoFilePath,
         videoLengthSeconds,
@@ -1089,8 +1089,8 @@ export const toVideoQuestionEditDTO = (
 
     return {
         id: videoId,
-        title: itemTitle,
-        subtitle: itemSubtitle,
+        title: videoTitle,
+        subtitle: videoSubtitle,
         courseName: courseTitle,
         videoLengthSeconds: videoLengthSeconds,
         videoUrl: videoFileUrl,
@@ -1122,12 +1122,14 @@ export const toExamQuestionEditDTO = (
 
     const {
         examId,
+        examTitle,
         courseTitle
     } = questionGroup.first().first;
 
     return {
         id: examId,
         courseName: courseTitle,
+        title: examTitle,
         questions: questionGroup
             .map(q => {
 

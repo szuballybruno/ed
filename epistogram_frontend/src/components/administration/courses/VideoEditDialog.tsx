@@ -16,7 +16,7 @@ export type QuestionSchema = {
     examId: number | null,
     questionId: number,
     questionText: string,
-    questionShowUpTimeSeconds: number,
+    questionShowUpTimeSeconds: number | undefined,
     answers: AnswerEditDTO[]
 }
 

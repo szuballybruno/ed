@@ -5,6 +5,6 @@ export class QuestionEditDataDTO {
     examId: number | null;
     questionId: number;
     questionText: string;
-    questionShowUpTimeSeconds: number;
+    questionShowUpTimeSeconds?: number;
     answers: AnswerEditDTO[];
 }
