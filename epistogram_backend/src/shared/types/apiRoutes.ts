@@ -187,6 +187,7 @@ export const apiRoutes = {
     exam: {
         getExamEditData: '/exam/get-exam-edit-data',
         getExamQuestionEditData: '/exam/get-exam-question-edit-data',
+        saveExamQuestionEditData: '/exam/save-exam-question-edit-data',
         saveExam: '/exam/save-exam',
         createExam: '/exam/create-exam',
         deleteExam: '/exam/delete-exam',
