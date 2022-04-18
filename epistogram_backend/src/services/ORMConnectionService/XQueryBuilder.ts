@@ -33,6 +33,14 @@ export class XQueryBuilder<TEntity, TParams> {
         return this;
     }
 
+    and(key: keyof TEntity, op: OperationType, paramKeyOrValue: keyof TParams | SQLStaticValueType) {
+
+        this._expression
+            .push(['AND', key, op, paramKeyOrValue]);
+
+        return this;
+    }
+
     setQuery(query: ExpressionPart<TEntity, TParams>[]) {
 
         this._expression = query;

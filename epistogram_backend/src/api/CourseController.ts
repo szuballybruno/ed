@@ -1,12 +1,10 @@
-import { UploadedFile } from 'express-fileupload';
-import { CourseContentEditDataDTO } from '../shared/dtos/CourseContentEditDataDTO';
-import { CourseDetailsEditDataDTO as CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
+import { CourseService } from '../services/CourseService';
+import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
+import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { CourseModeType } from '../shared/types/sharedTypes';
-import { CourseService } from '../services/CourseService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
-import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
+import { ActionParams } from '../utilities/helpers';
 
 export class CourseController {
 
@@ -27,9 +25,10 @@ export class CourseController {
 
     getCourseDetailsEditDataAction = async (params: ActionParams) => {
 
-        const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, 'number');
-
-        return await this._courseService.getCourseDetailsEditDataAsync(courseId);
+        return await this._courseService
+            .getCourseDetailsEditDataAsync(params
+                .getQuery()
+                .getValue(x => x.courseId, 'int'));
     };
 
     getCourseContentEditDataAction = async (params: ActionParams) => {
@@ -50,10 +49,10 @@ export class CourseController {
 
     getCourseBriefDataAction = async (params: ActionParams) => {
 
-        const courseId = withValueOrBadRequest<number>(params.req?.query?.courseId, 'number');
-
         return await this._courseService
-            .getCourseBriefDataAsync(courseId);
+            .getCourseBriefDataAsync(params
+                .getQuery()
+                .getValue(x => x.courseId, 'int'));
     };
 
     getCourseDetailsAction = async (params: ActionParams) => {
@@ -67,9 +66,9 @@ export class CourseController {
 
     saveCourseDetailsAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<CourseDetailsEditDataDTO>(params.req?.body);
-
-        await this._courseService.saveCourseDetailsAsync(dto);
+        await this._courseService
+            .saveCourseDetailsAsync(params
+                .getBody<CourseDetailsEditDataDTO>().data);
     };
 
     saveCourseContentAction = async (params: ActionParams) => {
@@ -97,17 +96,15 @@ export class CourseController {
 
     deleteCourseAction = async (params: ActionParams) => {
 
-        const courseId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
-
-        await this._courseService.deleteCourseAsync(courseId);
+        await this._courseService.softDeleteCourseAsync(params
+            .getBody<IdResultDTO>()
+            .getValue(x => x.id));
     };
 
     createCourseAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<CreateCourseDTO>(params.req.body);
-
         await this._courseService
-            .createCourseAsync(dto);
+            .createCourseAsync(params.getBody<CreateCourseDTO>().data);
     };
 
     setCourseModeAction = async (params: ActionParams) => {

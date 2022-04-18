@@ -1,9 +1,8 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { Button, Slider } from '@mui/material';
+import { Slider } from '@mui/material';
 import { default as React, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { ButtonType } from '../../../models/types';
-import { useCourseDetailsEditData, useCreateCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
+import { useCourseDetailsEditData, useDeleteCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
@@ -12,7 +11,6 @@ import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO'
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
 import { iterate } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
@@ -20,25 +18,29 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { SelectImage } from '../../universal/SelectImage';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
+import { TailingAdminButtons } from '../TailingAdminButtons';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
 
-export const AdminCourseDetailsSubpage = () => {
+export const DetailsEditSubpage = () => {
 
     // util
     const courseId = useIntParam('courseId')!;
     const isAnySelected = courseId != -1;
     const showError = useShowErrorDialog();
+    const { navigate } = useNavigation();
 
     // http
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
-    const { createCourseAsync, createCourseState } = useCreateCourse();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
+    const { deleteCourseAsync, deleteCourseState } = useDeleteCourse();
 
+    // calc 
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
 
+    // state 
     const [title, setTitle] = useState('');
     const [thumbnailSrc, setThumbnailSrc] = useState('');
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
@@ -65,10 +67,8 @@ export const AdminCourseDetailsSubpage = () => {
         value: 0
     })));
 
-    const { navigate } = useNavigation();
 
-    const administrationRoutes = applicationRoutes.administrationRoute;
-
+    // func 
     const handleSaveCourseAsync = async () => {
 
         if (!courseDetailsEditData)
@@ -116,23 +116,18 @@ export const AdminCourseDetailsSubpage = () => {
         }
     };
 
-    // const handleCreateCourseAsync = async () => {
+    const handleDeleteCourseAsync = async () => {
 
-    //     try {
+        try {
 
-    //         await createCourseAsync({
-    //             title: "Uj kurzus"
-    //         });
+            await deleteCourseAsync({ id: courseId });
+            showNotification('Kurzus torolve.');
+            navigate(applicationRoutes.administrationRoute.coursesRoute);
+        } catch (e) {
 
-    //         showNotification("Uj kurzus sikeresen letrehozva!");
-
-    //         await refetchCoursesFunction();
-    //     }
-    //     catch (e) {
-
-    //         showError(e);
-    //     }
-    // }
+            showError(e);
+        }
+    };
 
     // effects 
     useEffect(() => {
@@ -168,16 +163,8 @@ export const AdminCourseDetailsSubpage = () => {
 
     }, [courseDetailsEditData]);
 
-    const bulkEditButtons = [
-        // {
-        //     title: "Hozzáadás",
-        //     icon: <Add style={{ margin: "0 3px 0 0", padding: "0 0 1px 0" }} />,
-        //     action: () => handleCreateCourseAsync()
-        // }
-    ] as ButtonType[];
-
     return <LoadingFrame
-        loadingState={[saveCourseDataState, courseDetailsEditDataState, saveCourseThumbnailState]}
+        loadingState={[saveCourseDataState, deleteCourseState, courseDetailsEditDataState, saveCourseThumbnailState]}
         error={courseDetailsEditDataError}
         direction="column"
         className="whall">
@@ -195,8 +182,7 @@ export const AdminCourseDetailsSubpage = () => {
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                     applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
-                ]}
-                headerButtons={bulkEditButtons}>
+                ]}>
 
                 {/* Course edit */}
                 <Flex direction="row"
@@ -449,6 +435,7 @@ export const AdminCourseDetailsSubpage = () => {
                                             max={10} />
                                     </Flex>
                                 )} />
+
                             {/* radar chart */}
                             <Flex mt="30px"
                                 minH="300px"
@@ -476,36 +463,10 @@ export const AdminCourseDetailsSubpage = () => {
                         </EditSection>
                     </Flex>
                 </Flex>
-                {/* submit button */}
-                <Button
-                    variant="contained"
-                    color={'secondary'}
-                    onClick={() => {
-                        handleSaveCourseAsync();
-                    }}
-                    style={{ margin: '20px 20px 0 20px' }}>
 
-                    {translatableTexts.misc.save}
-                </Button>
-
-                {/* remove button */}
-                <Button
-                    variant={'outlined'}
-                    color={'error'}
-                    onClick={() => {
-
-                        /* if (showDeleteUserDialog) {
-    
-                            showDeleteUserDialog(editDTO)
-                        } else {
-    
-                            history.goBack()
-                        } */
-                    }}
-                    style={{ margin: '20px 20px 0 20px' }}>
-
-                    {translatableTexts.misc.remove}
-                </Button>
+                <TailingAdminButtons
+                    onDeleteCallback={handleDeleteCourseAsync}
+                    onSaveCallback={handleSaveCourseAsync} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >;

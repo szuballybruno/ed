@@ -30,6 +30,9 @@ export const WatchSubpage = () => {
         refetchPlayerData
     } = usePlayerData(descriptorCode);
 
+    const isDeleted = playerDataError.code === 'deleted';
+    console.log('del: ' + isDeleted);
+
     const video = playerData?.video;
     const exam = playerData?.exam;
     const module = playerData?.module;

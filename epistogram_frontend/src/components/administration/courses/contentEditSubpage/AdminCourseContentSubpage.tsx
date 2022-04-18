@@ -35,7 +35,7 @@ export const AdminCourseContentSubpage = () => {
     const videoEditDialogLogic = useEpistoDialogLogic<number>('video_edit_dialog', { defaultCloseButtonType: 'top' });
     const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
     const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
-    const isAnySelected = courseId != -1;
+    const isAnySelected = !!courseId && (courseId != -1);
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
@@ -48,8 +48,7 @@ export const AdminCourseContentSubpage = () => {
         courseContentAdminDataError,
         courseContentAdminDataState,
         refetchCourseContentAdminData
-    } = useCourseContentAdminData(courseId, true);
-
+    } = useCourseContentAdminData(courseId, isAnySelected, true);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
 
     // computed

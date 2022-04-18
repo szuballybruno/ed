@@ -1,5 +1,6 @@
 import Module from 'module';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { CourseVisibilityType } from '../../shared/types/sharedTypes';
 import { CourseStateView } from '../views/CourseStateView';
 import { CourseCategory } from './CourseCategory';
@@ -25,6 +26,10 @@ export class Course {
     @UpdateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     modificationDate: Date;
 
+    @IsDeletedFlag()
+    @DeleteDateColumn()
+    deletionDate: Date;
+    
     @Column()
     title: string;
 

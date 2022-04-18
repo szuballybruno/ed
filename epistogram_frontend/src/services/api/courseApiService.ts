@@ -49,9 +49,9 @@ export const useCourseDetailsEditData = (courseId: number) => {
     };
 };
 
-export const useCourseContentAdminData = (courseId: number, loadDeleted: boolean) => {
+export const useCourseContentAdminData = (courseId: number, isEnabled: boolean, loadDeleted: boolean) => {
 
-    const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted });
+    const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted }, isEnabled);
 
     return {
         courseContentAdminData: qr.data,

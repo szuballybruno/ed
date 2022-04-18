@@ -51,6 +51,7 @@ export type ApplicationRoutesType = {
             courseContentRoute: ApplicationRoute;
         };
         coursesRoute: ApplicationRoute & {
+            landingRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
             courseDetailsRoute: ApplicationRoute;
             courseContentRoute: ApplicationRoute;
@@ -298,6 +299,10 @@ export const applicationRoutes: ApplicationRoutesType = {
             icon: <Subscriptions className="fontXXL"
                 color={'secondary'} />,
 
+            landingRoute: {
+                title: translatableTexts.routeTitles.administrationCourseAdmin,
+                route: new EpistoRoute('/administration/courses', '/')
+            },
             addRoute: {
                 title: translatableTexts.routeTitles.administrationAddCourse,
                 route: new EpistoRoute('/administration/courses', 'add'),

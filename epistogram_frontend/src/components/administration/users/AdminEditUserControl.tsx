@@ -24,6 +24,7 @@ import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
+import { TailingAdminButtons } from '../TailingAdminButtons';
 
 export const roles = [
     {
@@ -377,21 +378,8 @@ export const AdminEditUserControl = (props: {
             </Box>
         </Flex>
 
-        {/* submit button */}
-        <Button
-            variant="contained"
-            color={'secondary'}
-            onClick={() => handleSaveUserAsync()}
-            style={{ margin: '20px 20px 0 20px' }}>
-
-            {translatableTexts.misc.save}
-        </Button>
-
-        {/* remove button */}
-        <Button
-            variant={'outlined'}
-            color={'error'}
-            onClick={() => {
+        <TailingAdminButtons
+            onDeleteCallback={() => {
 
                 if (showDeleteUserDialog) {
 
@@ -402,9 +390,6 @@ export const AdminEditUserControl = (props: {
                     // history.goBack();
                 }
             }}
-            style={{ margin: '20px 20px 0 20px' }}>
-
-            {translatableTexts.misc.remove}
-        </Button>
+            onSaveCallback={handleSaveUserAsync} />
     </Flex >;
 };
