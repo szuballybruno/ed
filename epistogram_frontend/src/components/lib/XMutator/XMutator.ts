@@ -12,7 +12,7 @@ export type OnMutaionHandlerActionType<
         key: TKey;
         field: TField;
         newValue: TMutatee[TField];
-        item: TMutatee;
+        item: TMutatee | null;
     }) => void;
 
 export type OnMutationHandlerType<TMutatee, TKey, TField extends keyof TMutatee> = {
@@ -150,7 +150,7 @@ export const useXListMutator = <
         // old reference in mut handler callbacks)
         // so in a delete callback the item will be found 
         const item = mutatedItems
-            .single(x => getCompareKey(x) === key);
+            .firstOrNull(x => getCompareKey(x) === key);
 
         onMutationHandlersRef
             .current

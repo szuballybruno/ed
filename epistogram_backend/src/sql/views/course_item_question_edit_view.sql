@@ -62,10 +62,11 @@ SELECT
     a.is_correct answer_is_correct,
     v.course_id course_id,
     v.id video_id,
-    v.title item_title,
-    v.subtitle item_subtitle,
+    v.title video_title,
+    v.subtitle video_subtitle,
     v.length_seconds video_length_seconds,
     e.id exam_id,
+    e.title exam_title,
     sf.file_path video_file_path,
     c.title course_title
 FROM public.question q

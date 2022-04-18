@@ -4,16 +4,18 @@ import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
+import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { formatTime } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
-import { EditQuestionFnType, QuestionSchema } from '../VideoEditDialog';
+import { EditQuestionFnType } from '../VideoEditDialog';
 
 const QuestionWithAnswersComponent = (props: {
     isFirst?: boolean,
-    question: QuestionSchema,
+    question: QuestionEditDataDTO,
     handleMutateQuestion: EditQuestionFnType,
     handleQuestionShowUpTime: (key: number) => number
 }) => {
@@ -34,7 +36,7 @@ const QuestionWithAnswersComponent = (props: {
     // effects
     useEffect(() => {
         setQuestionText(question.questionText);
-        setQuestionShowUpTimeSeconds(question.questionShowUpTimeSeconds);
+        setQuestionShowUpTimeSeconds(question.questionShowUpTimeSeconds || 0);
         setAnswers(question.answers);
     }, []);
 
@@ -211,7 +213,7 @@ const QuestionWithAnswersComponent = (props: {
 
 export const AdminVideoQuestionsModalPage = (props: {
     videoUrl: string,
-    questions: QuestionSchema[],
+    questions: QuestionEditDataDTO[],
     handleAddQuestion: () => void,
     handleMutateQuestion: EditQuestionFnType,
     handleSaveQuestions: () => void,
@@ -308,7 +310,7 @@ export const AdminVideoQuestionsModalPage = (props: {
                 width: 'calc(100% - 40px)'
             }}>
 
-            Mentés
+            {translatableTexts.misc.save}
         </EpistoButton>
     </Flex >;
 };

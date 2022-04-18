@@ -589,7 +589,7 @@ export class CourseService {
             .flatMap(x => x.items)
             .map(x => x.itemId);
 
-        this._examService   
+        this._examService
             .softDeleteExamsAsync(deletedExamIds, true);
 
         this._videoService
@@ -661,8 +661,7 @@ export class CourseService {
     async getAdminCoursesAsync() {
 
         const courseAdminShortViews = await this._ormService
-            .getRepository(CourseAdminShortView)
-            .createQueryBuilder()
+            .query(CourseAdminShortView)
             .getMany();
 
         return this._mapperService
@@ -670,31 +669,14 @@ export class CourseService {
     }
 
     /**
-     * Delete course.
+     * Soft delete course.
      * 
      * @param courseId 
      */
-    async deleteCourseAsync(courseId: number) {
+    async softDeleteCourseAsync(courseId: number) {
 
-        // delete user course bridges
-        this._userCourseBridgeService
-            .deleteAllBridgesAsync(courseId);
-
-        // delete modules 
-        const modules = await this._ormService
-            .getRepository(CourseModule)
-            .createQueryBuilder('m')
-            .where('"m"."course_id" = :courseId', { courseId })
-            .getMany();
-
-        await this._moduleService
-            .deleteModulesAsync(modules.map(x => x.id));
-
-        // delete course 
         await this._ormService
-            .getRepository(Course)
-            .delete(courseId);
-
+            .softDelete(Course, [courseId]);
     }
 
     /**
@@ -706,10 +688,9 @@ export class CourseService {
     async getAvailableCoursesAsync(userId: number) {
 
         const courses = await this._ormService
-            .getRepository(CourseView)
-            .createQueryBuilder('cv')
-            .where('cv.userId = :userId', { userId })
-            .andWhere('cv.canView = true')
+            .query(CourseView, { userId })
+            .where('userId', '=', 'userId')
+            .and('canView', '=', 'true')
             .getMany();
 
         return this._mapperService

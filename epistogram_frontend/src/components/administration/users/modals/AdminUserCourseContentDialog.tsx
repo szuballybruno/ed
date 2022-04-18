@@ -14,7 +14,7 @@ import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
 import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
 
-export const AdminUserCourseContentOverviewModalSubpage = (props: {
+export const AdminUserCourseContentDialogSubpage = (props: {
     userStats: {
         userProgressData: UserCourseProgressChartDTO,
         completedVideoCount: number,
@@ -137,7 +137,7 @@ export const AdminUserCourseContentOverviewModalSubpage = (props: {
 
 
 
-export const AdminUserCourseContentModal = (props: {
+export const AdminUserCourseContentDialog = (props: {
     userCourseStatsData: {
         userProgressData: UserCourseProgressChartDTO,
         completedVideoCount: number,
@@ -156,7 +156,7 @@ export const AdminUserCourseContentModal = (props: {
     const moreInfoDialogTabs = [
         {
             title: 'Áttekintés',
-            component: <AdminUserCourseContentOverviewModalSubpage userStats={userStats} />
+            component: <AdminUserCourseContentDialogSubpage userStats={userStats} />
         },
         {
             title: 'Videók',

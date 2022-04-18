@@ -13,7 +13,7 @@ export const usePlayerData = (descriptorCode: string) => {
     return {
         playerData: queryResult.data,
         playerDataStatus: queryResult.state,
-        playerDataError: queryResult.error,
+        playerDataError: queryResult.error ,
         refetchPlayerData: queryResult.refetch
     };
 };

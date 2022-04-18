@@ -1,5 +1,5 @@
-import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm';
-import { User } from '../entity/User';
+import { ViewColumn, ViewEntity } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { CourseStageNameType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
@@ -10,6 +10,10 @@ export class CourseView {
 
     @ViewColumn()
     id: number;
+
+    @IsDeletedFlag('bool')
+    @ViewColumn()
+    isDeleted: boolean;
 
     @ViewColumn()
     userId: number;

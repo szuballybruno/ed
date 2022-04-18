@@ -8,8 +8,8 @@ import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDialogLogicType } from '../../../EpistoDialog';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
-import { EditModuleModalPage } from './EditModuleModalPage';
-import { ModuleListModalPage } from './ModuleListModalPage';
+import { ModuleEditDialogPage } from './ModuleEditDialogPage';
+import { ModuleListEditDialogPage } from './ModuleListEditDialogPage';
 
 export const ModuleEditDialog = (props: {
     logic: EpistoDialogLogicType,
@@ -44,7 +44,7 @@ export const ModuleEditDialog = (props: {
     // paging
     const paging = usePaging<EditDialogSubpage>([
         {
-            content: () => <ModuleListModalPage
+            content: () => <ModuleListEditDialogPage
                 refetchModuleList={refetchModuleListEditData}
                 moduleListEditData={moduleListEditData}
                 moduleListEditDataState={moduleListEditDataState}
@@ -55,7 +55,7 @@ export const ModuleEditDialog = (props: {
 
         },
         {
-            content: () => <EditModuleModalPage
+            content: () => <ModuleEditDialogPage
                 handleSaveModuleAsync={handleSaveModuleAsync}
                 editedModuleId={editedModuleId!} />,
             title: moduleName,

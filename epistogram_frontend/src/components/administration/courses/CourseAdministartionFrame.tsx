@@ -3,7 +3,7 @@ import { memo, ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useAdminCourseList } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
+import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
@@ -28,20 +28,23 @@ export const CourseAdministartionFrame = (params: {
     const currentCourse = courses
         .firstOrNull(x => x.courseId === courseId);
 
+    if (currentCourse)
+        setPageTitle(`Kurzus szerkesztese - ${currentCourse.title}`);
+
     // func
-    const navigationFunction = useCallback((courseId: number) => {
+    const navToCourse = useCallback((courseId: number) => {
 
         const url = (() => {
 
             const base = applicationRoutes.administrationRoute.coursesRoute;
 
-            if (isMatchingCurrentUrl(base.courseDetailsRoute).isMatchingRoute)
-                return base.courseDetailsRoute;
+            if (isMatchingCurrentUrl(base.statisticsCourseRoute).isMatchingRoute)
+                return base.statisticsCourseRoute;
 
             if (isMatchingCurrentUrl(base.courseContentRoute).isMatchingRoute)
                 return base.courseContentRoute;
 
-            return base.statisticsCourseRoute;
+            return base.courseDetailsRoute;
         })();
 
         navigate(url, { courseId });
@@ -55,20 +58,9 @@ export const CourseAdministartionFrame = (params: {
             {/* header */}
             <AdminBreadcrumbsHeader>
 
-                {/* breadcrumbDatas={[
-                    // <BreadcrumbLink
-                    //     key={1}
-                    //     title="Kurzusok"
-                    //     iconComponent={applicationRoutes.administrationRoute.coursesRoute.icon} />,
-                    // currentCourse && <BreadcrumbLink
-                    //     key={2}
-                    //     title={currentCourse?.title + ''}
-                    //     isCurrent />
-                ]} */}
-
                 {/* course list */}
                 <AdminCourseList
-                    onCourseClick={navigationFunction}
+                    onCourseClick={navToCourse}
                     courses={courses} />
 
                 {/* content pane */}

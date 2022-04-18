@@ -1,6 +1,7 @@
 SELECT 
 	u.id user_id,
 	co.id course_id,
+	co.deletion_date IS NOT NULL is_deleted,
 	ucab.id IS NOT NULL OR co.visibility = 'public' can_view,
 	sf.file_path file_path,
 	csv.is_completed is_completed,

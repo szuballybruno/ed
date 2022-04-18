@@ -7,7 +7,7 @@ import { DashboardSection } from '../universal/DashboardSection';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { LearningCourseStatsTile } from './LearningCourseStatsTile';
 import { EpistoFont } from '../controls/EpistoFont';
-import { AdminUserCourseContentModal } from '../administration/users/modals/AdminUserCourseContentModal';
+import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
 import { useEpistoDialogLogic } from '../EpistoDialog';
 
 export const LearningCourseStats = () => {
@@ -30,7 +30,7 @@ export const LearningCourseStats = () => {
         minWidth="100%"
         flex="1">
 
-        <AdminUserCourseContentModal
+        <AdminUserCourseContentDialog
             userCourseStatsData={{
                 userProgressData: {
                     startDate: new Date('2022. 04. 10.'),
@@ -121,7 +121,7 @@ export const LearningCourseStats = () => {
 
         {/* in progress courses  */}
         <DashboardSection width="100%"
-variant="noShadow"
+            variant="noShadow"
             title="Folyamatban lévő kurzusaim">
             {isAnyCoursesInProgress
                 ? <EpistoGrid

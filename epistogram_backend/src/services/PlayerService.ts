@@ -14,6 +14,8 @@ import { QuestionAnswerService } from './QuestionAnswerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
+import { Course } from '../models/entity/Course';
+import { ErrorCode } from '../utilities/helpers';
 
 export class PlayerService extends ServiceBase {
 
@@ -54,6 +56,15 @@ export class PlayerService extends ServiceBase {
         // get current course id
         const courseId = await this._courseService
             .getCourseIdByItemCodeAsync(currentItemCode);
+
+        const course = await this._ormService
+            .query(Course, { courseId })
+            .allowDeleted()
+            .where('id', '=', 'courseId')
+            .getSingle();
+
+        if (course.deletionDate)
+            throw new ErrorCode('Course has been deleted!', 'deleted');
 
         // get valid course item 
         const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);

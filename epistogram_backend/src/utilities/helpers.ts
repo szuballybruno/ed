@@ -336,8 +336,6 @@ export class ErrorCode extends Error {
         super(msg);
 
         this.code = code;
-
-        logError('Error thrown: ' + this.toString());
     }
 
     toString() {

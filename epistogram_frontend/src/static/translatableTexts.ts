@@ -219,10 +219,10 @@ export const translatableTexts = {
         administrationEditTeacherInfo: 'Oktató adatai',
         administrationUserCourses: 'Felhasználó kurzusai',
 
-        administrationCourseAdmin: 'Kurzusok',
+        administrationCourseAdmin: 'Kurzus lista',
         administrationAddCourse: 'Kurzus hozzáadása',
-        administrationCourseDetails: 'Adatok',
-        administrationCourseContent: 'Tartalom',
+        administrationCourseDetails: 'Adatok szerkesztése',
+        administrationCourseContent: 'Tartalom szerkesztése',
         administrationCoursePretest: 'Pretest',
         administrationCourseStatistics: 'Statisztika',
         administrationCourseUserProgress: 'Egyének haladása',

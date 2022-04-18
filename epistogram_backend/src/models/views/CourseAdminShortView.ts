@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -8,6 +9,10 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     id: number;
+
+    @IsDeletedFlag('bool')
+    @ViewColumn()
+    isDeleted: boolean;
 
     @ViewColumn()
     title: string;

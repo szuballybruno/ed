@@ -1,15 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useExamQuestionEditData } from '../../../services/api/examApiService';
+import React, { useEffect } from 'react';
+import { useExamQuestionEditData, useSaveExamQuestionEditData } from '../../../services/api/examApiService';
 import { getVirtualId } from '../../../services/core/idService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { AnswerEditDTO } from '../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
-import { usePaging } from '../../../static/frontendHelpers';
+import { iterate, usePaging } from '../../../static/frontendHelpers';
 import { EpistoDialogLogicType } from '../../EpistoDialog';
 import { useXListMutator } from '../../lib/XMutator/XMutator';
 import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
-import { AdminExamQuestionsModalPage } from './modals/AdminExamQuestionsModalPage';
-import { AdminExamStatisticsModalPage } from './modals/AdminExamStatisticsModalPage';
-import { EditQuestionFnType, mapToQuestionSchema, QuestionSchema } from './VideoEditDialog';
+import { AdminExamQuestionsModalPage } from './dialogs/AdminExamQuestionsDialogPage';
+import { AdminExamStatisticsModalPage } from './dialogs/AdminExamStatisticsDialogPage';
+import { EditQuestionFnType } from './VideoEditDialog';
 
 export const ExamEditDialog = (props: {
     logic: EpistoDialogLogicType
@@ -19,21 +20,6 @@ export const ExamEditDialog = (props: {
 
     const showError = useShowErrorDialog();
 
-    // state
-    const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionSchema[]>([]);
-
-    const preprocessItems = useCallback((questions: QuestionEditDataDTO[]) => {
-
-        const preproQuestions = questions
-            .map((item, index) => mapToQuestionSchema(item, examQuestionEditData?.id!));
-
-        setPreprocessedQuestions(preproQuestions);
-    }, [setPreprocessedQuestions]);
-
-    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
-
-        preprocessItems(newMutatedItems);
-    }, [preprocessItems]);
     // http
     const {
         examQuestionEditData,
@@ -41,7 +27,7 @@ export const ExamEditDialog = (props: {
         examQuestionEditDataError,
         refetchExamQuestionEditData
     } = useExamQuestionEditData(logic.params!);
-
+    const { saveExamQuestionEditData } = useSaveExamQuestionEditData();
 
     const {
         mutatedData,
@@ -53,17 +39,7 @@ export const ExamEditDialog = (props: {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(preprocessedQuestions, 'questionId', mutationEndCallback);
-
-    // map data for mutator
-    useEffect(() => {
-        const questions = examQuestionEditData?.questions ?? [];
-
-        const preproQuestions = questions
-            .map((item, index) => mapToQuestionSchema(item, examQuestionEditData?.id!));
-
-        setPreprocessedQuestions(preproQuestions);
-    }, [examQuestionEditData]);
+    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(examQuestionEditData?.questions ?? [], 'questionId', () => console.log(''));
 
     // reset mutations on dialog close
     useEffect(() => {
@@ -79,28 +55,30 @@ export const ExamEditDialog = (props: {
     };
 
     const handleAddQuestion = () => {
+        console.log('handleaddquestion called...');
 
         const newId = getVirtualId();
 
         const dto: QuestionEditDataDTO = {
             videoId: null,
-            examId: null,
+            examId: examQuestionEditData?.id || null,
             questionId: -1,
             questionText: '',
-            questionShowUpTimeSeconds: 0,
-            answers: []
+            answers: iterate(4, (index) => ({
+                id: 0 - index,
+                text: '',
+                isCorrect: false
+            } as AnswerEditDTO))
         };
 
-        const question = mapToQuestionSchema(dto, undefined, examQuestionEditData?.id!);
-
-        addQuestion(newId, question);
+        addQuestion(newId, dto);
     };
 
     const handleSaveQuestionsAsync = async () => {
 
         try {
 
-            //await saveExamQuestionEditData(mutations);
+            await saveExamQuestionEditData(mutations);
             resetMutations();
             logic.closeDialog();
         }
@@ -117,6 +95,8 @@ export const ExamEditDialog = (props: {
                 handleAddQuestion={handleAddQuestion}
                 handleMutateQuestion={handleMutateQuestion}
                 handleSaveQuestions={handleSaveQuestionsAsync}
+                examQuestionEditDataState={examQuestionEditDataState}
+                examQuestionEditDataError={examQuestionEditDataError}
                 isAnyQuestionsMutated={isAnyQuestionsMutated} />,
             title: 'Kérdések',
         },
@@ -128,6 +108,8 @@ export const ExamEditDialog = (props: {
 
     return <EditDialogBase
         logic={logic}
+        title={examQuestionEditData?.title}
+        subTitle={examQuestionEditData?.courseName}
         chipText='Vizsga'
         chipColor='var(--deepOrange)'
         paging={paging} />;

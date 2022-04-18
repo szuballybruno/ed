@@ -12,6 +12,7 @@ export type ErrorCodeType =
     'unknown' |
     'courseItemNotFound' |
     'activation_code_issue' |
+    'deleted' |
     'email_taken';
 
 // tasks
