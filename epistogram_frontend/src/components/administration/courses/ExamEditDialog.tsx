@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useExamQuestionEditData, useSaveExamQuestionEditData } from '../../../services/api/examApiService';
 import { getVirtualId } from '../../../services/core/idService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { AnswerEditDTO } from '../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
-import { usePaging } from '../../../static/frontendHelpers';
+import { iterate, usePaging } from '../../../static/frontendHelpers';
 import { EpistoDialogLogicType } from '../../EpistoDialog';
 import { useXListMutator } from '../../lib/XMutator/XMutator';
 import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
@@ -19,18 +20,7 @@ export const ExamEditDialog = (props: {
 
     const showError = useShowErrorDialog();
 
-    // state
-    const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionEditDataDTO[]>([]);
 
-    const preprocessItems = useCallback((questions: QuestionEditDataDTO[]) => {
-
-        setPreprocessedQuestions(questions);
-    }, [setPreprocessedQuestions]);
-
-    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
-
-        preprocessItems(newMutatedItems);
-    }, [preprocessItems]);
     // http
     const {
         examQuestionEditData,
@@ -39,7 +29,6 @@ export const ExamEditDialog = (props: {
         refetchExamQuestionEditData
     } = useExamQuestionEditData(logic.params!);
     const { saveExamQuestionEditData } = useSaveExamQuestionEditData();
-
 
     const {
         mutatedData,
@@ -51,14 +40,7 @@ export const ExamEditDialog = (props: {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(preprocessedQuestions, 'questionId', mutationEndCallback);
-
-    // map data for mutator
-    useEffect(() => {
-        const questions = examQuestionEditData?.questions ?? [];
-
-        setPreprocessedQuestions(questions);
-    }, [examQuestionEditData]);
+    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(examQuestionEditData?.questions ?? [], 'questionId', () => console.log(''));
 
     // reset mutations on dialog close
     useEffect(() => {
@@ -83,7 +65,11 @@ export const ExamEditDialog = (props: {
             examId: examQuestionEditData?.id || null,
             questionId: -1,
             questionText: '',
-            answers: []
+            answers: iterate(4, () => ({
+                id: -1,
+                text: '',
+                isCorrect: false
+            } as AnswerEditDTO))
         };
 
         addQuestion(newId, dto);
