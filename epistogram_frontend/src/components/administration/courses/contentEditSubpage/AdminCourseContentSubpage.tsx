@@ -40,7 +40,6 @@ export const AdminCourseContentSubpage = () => {
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
     const [preprocessedItems, setPreprocessedItems] = useState<RowSchema[]>([]);
-    const [mutatedItems, setMutatedItems] = useState<ItemType[]>([]);
 
     // http
     const {
@@ -53,7 +52,7 @@ export const AdminCourseContentSubpage = () => {
 
     // computed
     const modules = courseContentAdminData?.modules ?? [];
-    const items = courseContentAdminData?.items ?? [];
+    const originalItems = courseContentAdminData?.items ?? [];
 
     const getItemKey = useCallback((row: ItemType) => row.itemCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
@@ -76,8 +75,7 @@ export const AdminCourseContentSubpage = () => {
     const mutationEndCallback = useCallback(({ newMutatedItems }) => {
 
         preprocessItems(newMutatedItems);
-        setMutatedItems(newMutatedItems);
-    }, [preprocessItems, setMutatedItems]);
+    }, [preprocessItems]);
 
     const {
         add: addRow,
@@ -87,8 +85,9 @@ export const AdminCourseContentSubpage = () => {
         isAnyMutated: isAnyRowsMutated,
         mutations,
         resetMutations,
-        addOnMutationHandlers
-    } = useXListMutator<ItemType, 'itemCode', string>(items, 'itemCode', mutationEndCallback);
+        addOnMutationHandlers,
+        mutatedData: mutatedItems
+    } = useXListMutator<ItemType, 'itemCode', string>(originalItems, 'itemCode', mutationEndCallback);
 
     // set preprocessed items, 
     // this works as a sort of caching
@@ -98,7 +97,6 @@ export const AdminCourseContentSubpage = () => {
             return;
 
         preprocessItems(courseContentAdminData.items);
-        setMutatedItems(courseContentAdminData.items);
     }, [courseContentAdminData]);
 
     const setNewOrderIndices = (items: ItemType[], mutatedRowKey: string, mutateSelf?: boolean) => {
@@ -130,10 +128,10 @@ export const AdminCourseContentSubpage = () => {
             callback: ({ key, newValue, item }) => {
 
                 const newItemOrderIndex = newValue as number;
-                const isNewSmaller = newItemOrderIndex < item.itemOrderIndex;
+                const isNewSmaller = newItemOrderIndex < item!.itemOrderIndex;
 
                 const orderedItems = mutatedItems
-                    .filter(row => row.moduleId === item.moduleId)
+                    .filter(row => row.moduleId === item!.moduleId)
                     .orderBy(row => {
 
                         if (getItemKey(row) === key)
@@ -152,7 +150,7 @@ export const AdminCourseContentSubpage = () => {
             field: 'moduleId',
             callback: ({ key, item, newValue }) => {
 
-                const oldModuleId = item.moduleId;
+                const oldModuleId = item!.moduleId;
                 const newModuleId = newValue as number;
 
                 const oldModuleItems = mutatedItems
@@ -172,7 +170,7 @@ export const AdminCourseContentSubpage = () => {
             callback: ({ item, key }) => {
 
                 const moduleItems = mutatedItems
-                    .filter(x => x.moduleId === item.moduleId)
+                    .filter(x => x.moduleId === item!.moduleId)
                     .filter(x => getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
 
@@ -204,7 +202,7 @@ export const AdminCourseContentSubpage = () => {
 
         const moduleId = modules[0].id;
 
-        const foundModule = items
+        const foundModule = mutatedItems
             .firstOrNull(x => x.moduleId === moduleId);
 
         const moduleInfo = foundModule
@@ -219,7 +217,7 @@ export const AdminCourseContentSubpage = () => {
                 orderIndex: -1
             };
 
-        const itemOrderIndex = items
+        const itemOrderIndex = mutatedItems
             .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
             .length;
 
