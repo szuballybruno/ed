@@ -10,7 +10,7 @@ import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeade
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminUserCoursesDataGridControl } from './dataGrids/AdminUserCoursesDataGridControl';
-import { AdminUserCourseContentModal } from './modals/AdminUserCourseContentModal';
+import { AdminUserCourseContentDialog } from './modals/AdminUserCourseContentDialog';
 
 export const AdminUserCourseContentSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -62,7 +62,7 @@ export const AdminUserCourseContentSubpage = (props: {
                 ]
                     .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
-            <AdminUserCourseContentModal
+            <AdminUserCourseContentDialog
                 userCourseStatsData={{
                     userProgressData: {
                         startDate: new Date('2022. 04. 10.'),

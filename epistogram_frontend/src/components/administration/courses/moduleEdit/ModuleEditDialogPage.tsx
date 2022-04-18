@@ -8,7 +8,7 @@ import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { SelectImage } from '../../../universal/SelectImage';
 
-export const EditModuleModalPage = (props: {
+export const ModuleEditDialogPage = (props: {
     handleSaveModuleAsync: (module: ModuleAdminEditDTO, moduleImageFile: File | null) => void,
     editedModuleId: number
 }) => {

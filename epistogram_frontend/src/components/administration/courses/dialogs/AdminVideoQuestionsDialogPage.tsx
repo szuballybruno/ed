@@ -11,7 +11,7 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
-import { EditQuestionFnType, QuestionSchema } from '../VideoEditDialog';
+import { EditQuestionFnType } from '../VideoEditDialog';
 
 const QuestionWithAnswersComponent = (props: {
     isFirst?: boolean,

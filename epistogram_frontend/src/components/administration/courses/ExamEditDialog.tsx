@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useExamQuestionEditData, useSaveExamQuestionEditData } from '../../../services/api/examApiService';
 import { getVirtualId } from '../../../services/core/idService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -8,9 +8,9 @@ import { iterate, usePaging } from '../../../static/frontendHelpers';
 import { EpistoDialogLogicType } from '../../EpistoDialog';
 import { useXListMutator } from '../../lib/XMutator/XMutator';
 import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
-import { AdminExamQuestionsModalPage } from './modals/AdminExamQuestionsModalPage';
-import { AdminExamStatisticsModalPage } from './modals/AdminExamStatisticsModalPage';
-import { EditQuestionFnType, mapToQuestionSchema, QuestionSchema } from './VideoEditDialog';
+import { AdminExamQuestionsModalPage } from './dialogs/AdminExamQuestionsDialogPage';
+import { AdminExamStatisticsModalPage } from './dialogs/AdminExamStatisticsDialogPage';
+import { EditQuestionFnType } from './VideoEditDialog';
 
 export const ExamEditDialog = (props: {
     logic: EpistoDialogLogicType
@@ -19,7 +19,6 @@ export const ExamEditDialog = (props: {
     const { logic } = props;
 
     const showError = useShowErrorDialog();
-
 
     // http
     const {
@@ -65,8 +64,8 @@ export const ExamEditDialog = (props: {
             examId: examQuestionEditData?.id || null,
             questionId: -1,
             questionText: '',
-            answers: iterate(4, () => ({
-                id: -1,
+            answers: iterate(4, (index) => ({
+                id: 0 - index,
                 text: '',
                 isCorrect: false
             } as AnswerEditDTO))

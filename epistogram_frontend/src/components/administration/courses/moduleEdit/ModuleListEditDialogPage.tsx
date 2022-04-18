@@ -9,7 +9,7 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { FlexListItem } from '../../../universal/FlexListItem';
 
-export const ModuleListModalPage = (props: {
+export const ModuleListEditDialogPage = (props: {
     moduleListEditData: ModuleListEditDataDTO | null,
     moduleListEditDataState: LoadingStateType,
     moduleListEditDataError: any,
@@ -37,7 +37,7 @@ export const ModuleListModalPage = (props: {
         await deleteModuleAsync(moduleId);
         await refetchModuleList();
         afterChangeCallback();
-        
+
         showNotification('Modul sikeresen torolve.');
     };
 

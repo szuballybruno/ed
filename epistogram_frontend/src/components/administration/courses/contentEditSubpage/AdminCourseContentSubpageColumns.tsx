@@ -1,13 +1,12 @@
-import { Equalizer } from '@mui/icons-material';
+import { Equalizer, Quiz } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
-import Edit from '@mui/icons-material/Edit';
 import { useGridApiContext } from '@mui/x-data-grid';
 import { ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { GridColumnType, UseCommitNewValueType } from '../../../controls/EpistoDataGrid';
+import { GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { MutateFnType } from '../../../lib/XMutator/XMutator';
 import { ChipSmall } from '../ChipSmall';
@@ -112,7 +111,7 @@ export const useGridColumnDefinitions = (
             editHandler: ({ rowKey, value }) => mutateRow({
                 field: 'itemOrderIndex',
                 key: rowKey,
-                newValue: value as any 
+                newValue: value as any
             }),
             type: 'int',
             renderCell: ({ value, row }) => {
@@ -251,7 +250,7 @@ export const useGridColumnDefinitions = (
                         <EpistoButton
                             onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row.quickMenu)}>
 
-                            <Edit />
+                            <Quiz />
                         </EpistoButton>
 
                         <EpistoButton

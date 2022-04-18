@@ -4,45 +4,15 @@ import { getVirtualId } from '../../../services/core/idService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AnswerEditDTO } from '../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
+import { iterate, usePaging } from '../../../static/frontendHelpers';
 import { EpistoDialogLogicType } from '../../EpistoDialog';
-import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
-import { AdminVideoQuestionsModalPage } from './modals/AdminVideoQuestionsModalPage';
-import { AdminVideoStatisticsModalPage } from './modals/AdminVideoStatisticsModalPage';
 import { useXListMutator } from '../../lib/XMutator/XMutator';
-import { usePaging } from '../../../static/frontendHelpers';
-
-export type QuestionSchema = {
-    videoId: number | null,
-    examId: number | null,
-    questionId: number,
-    questionText: string,
-    questionShowUpTimeSeconds: number | undefined,
-    answers: AnswerEditDTO[]
-}
-
-export type EditQuestionFnType = <TField extends keyof QuestionSchema, >(key: number, field: TField, value: QuestionSchema[TField]) => void;
+import { AdminVideoQuestionsModalPage } from './dialogs/AdminVideoQuestionsDialogPage';
+import { AdminVideoStatisticsModalPage } from './dialogs/AdminVideoStatisticsDialogPage';
+import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
 
 
-export const mapToQuestionSchema = (
-    item: QuestionEditDataDTO,
-    videoId?: number,
-    examId?: number
-): QuestionSchema => {
-
-    return {
-        videoId: videoId ?? null,
-        examId: examId ?? null,
-        questionId: item.questionId,
-        questionText: item.questionText,
-        questionShowUpTimeSeconds: item.questionShowUpTimeSeconds,
-        answers: item.answers
-            .map(answer => ({
-                id: answer.id,
-                text: answer.text,
-                isCorrect: answer.isCorrect
-            }))
-    };
-};
+export type EditQuestionFnType = <TField extends keyof QuestionEditDataDTO, >(key: number, field: TField, value: QuestionEditDataDTO[TField]) => void;
 
 export const VideoEditDialog = (props: {
     logic: EpistoDialogLogicType<number>
@@ -50,12 +20,14 @@ export const VideoEditDialog = (props: {
 
     // props
     const { logic } = props;
+    const videoId = logic.params!;
 
     // util
     const showError = useShowErrorDialog();
 
     // state
-    const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionSchema[]>([]);
+    const [preprocessedQuestions, setPreprocessedQuestions] = useState<QuestionEditDataDTO[]>([]);
+
 
     // http
     const {
@@ -63,7 +35,7 @@ export const VideoEditDialog = (props: {
         videoQuestionEditDataState,
         videoQuestionEditDataError,
         refetchVideoQuestionEditData
-    } = useVideoQuestionEditData(logic.params!);
+    } = useVideoQuestionEditData(videoId);
     const { saveVideoQuestionEditData } = useSaveVideoQuestionEditData();
 
     // computed
@@ -72,19 +44,6 @@ export const VideoEditDialog = (props: {
     const courseName = videoQuestionEditData?.courseName || '';
 
     const questions = videoQuestionEditData?.questions ?? [];
-
-    const preprocessItems = useCallback((questions: QuestionEditDataDTO[]) => {
-
-        const preproQuestions = questions
-            .map((item, index) => mapToQuestionSchema(item, videoQuestionEditData?.id!));
-
-        setPreprocessedQuestions(preproQuestions);
-    }, [setPreprocessedQuestions]);
-
-    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
-
-        preprocessItems(newMutatedItems);
-    }, [preprocessItems]);
 
     const {
         mutatedData,
@@ -96,16 +55,7 @@ export const VideoEditDialog = (props: {
         mutations,
         resetMutations,
         addOnMutationHandlers
-    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(questions, 'questionId', mutationEndCallback);
-
-    // map data for mutator
-    useEffect(() => {
-
-        if (!videoQuestionEditData)
-            return;
-
-        preprocessItems(videoQuestionEditData.questions);
-    }, [videoQuestionEditData]);
+    } = useXListMutator<QuestionEditDataDTO, 'questionId', number>(questions, 'questionId', () => console.log(''));
 
     // reset mutations on dialog close
     useEffect(() => {
@@ -113,13 +63,6 @@ export const VideoEditDialog = (props: {
         if (logic.isOpen!)
             resetMutations();
     }, [logic.isOpen]);
-
-    // logs mutateddata when it changes
-    useEffect(() => {
-
-        console.log(mutatedData);
-        console.log(mutations);
-    }, [mutatedData]);
 
     // mutation handlers
     const handleMutateQuestion: EditQuestionFnType = (key, field, value) => {
@@ -132,17 +75,19 @@ export const VideoEditDialog = (props: {
         const newId = getVirtualId();
 
         const dto: QuestionEditDataDTO = {
-            videoId: null,
+            videoId: videoId,
             examId: null,
-            questionId: -1,
+            questionId: newId,
             questionText: '',
             questionShowUpTimeSeconds: 0,
-            answers: []
+            answers: iterate(4, (index) => ({
+                id: 0 - index,
+                text: '',
+                isCorrect: false
+            } as AnswerEditDTO))
         };
 
-        const question = mapToQuestionSchema(dto, videoQuestionEditData?.id!);
-
-        addQuestion(newId, question);
+        addQuestion(newId, dto);
     };
 
     const handleSaveQuestionsAsync = async () => {
