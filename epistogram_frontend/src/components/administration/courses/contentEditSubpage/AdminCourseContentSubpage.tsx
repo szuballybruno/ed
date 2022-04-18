@@ -40,6 +40,7 @@ export const AdminCourseContentSubpage = () => {
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
     const [preprocessedItems, setPreprocessedItems] = useState<RowSchema[]>([]);
+    const [mutatedItems, setMutatedItems] = useState<ItemType[]>([]);
 
     // http
     const {
@@ -76,7 +77,8 @@ export const AdminCourseContentSubpage = () => {
     const mutationEndCallback = useCallback(({ newMutatedItems }) => {
 
         preprocessItems(newMutatedItems);
-    }, [preprocessItems]);
+        setMutatedItems(newMutatedItems);
+    }, [preprocessItems, setMutatedItems]);
 
     const {
         add: addRow,
@@ -97,6 +99,7 @@ export const AdminCourseContentSubpage = () => {
             return;
 
         preprocessItems(courseContentAdminData.items);
+        setMutatedItems(courseContentAdminData.items);
     }, [courseContentAdminData]);
 
     const setNewOrderIndices = (items: ItemType[], mutatedRowKey: string, mutateSelf?: boolean) => {
@@ -130,14 +133,14 @@ export const AdminCourseContentSubpage = () => {
                 const newItemOrderIndex = newValue as number;
                 const isNewSmaller = newItemOrderIndex < item.itemOrderIndex;
 
-                const orderedItems = items
+                const orderedItems = mutatedItems
                     .filter(row => row.moduleId === item.moduleId)
                     .orderBy(row => {
 
                         if (getItemKey(row) === key)
                             return isNewSmaller
-                                ? newItemOrderIndex - 1
-                                : newItemOrderIndex + 1;
+                                ? newItemOrderIndex - 0.5
+                                : newItemOrderIndex + 0.5;
 
                         return row.itemOrderIndex;
                     });
@@ -153,11 +156,11 @@ export const AdminCourseContentSubpage = () => {
                 const oldModuleId = item.moduleId;
                 const newModuleId = newValue as number;
 
-                const oldModuleItems = items
+                const oldModuleItems = mutatedItems
                     .filter(x => x.moduleId === oldModuleId && getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
 
-                const newModuleItems = items
+                const newModuleItems = mutatedItems
                     .filter(x => x.moduleId === newModuleId || getItemKey(x) === key)
                     .orderBy(x => getItemKey(x) === key ? -1 : x.itemOrderIndex);
 
@@ -169,7 +172,7 @@ export const AdminCourseContentSubpage = () => {
             action: 'delete',
             callback: ({ item, key }) => {
 
-                const moduleItems = items
+                const moduleItems = mutatedItems
                     .filter(x => x.moduleId === item.moduleId)
                     .filter(x => getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
@@ -322,7 +325,7 @@ export const AdminCourseContentSubpage = () => {
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}
-                    afterSaveCallback={refetchCourseContentAdminData} />
+                    afterChangeCallback={refetchCourseContentAdminData} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper

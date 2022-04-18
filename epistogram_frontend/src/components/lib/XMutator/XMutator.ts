@@ -46,7 +46,6 @@ export const useXListMutator = <
         if (originalItems.length === 0)
             return;
 
-        console.log(originalItems);
         setMutatedItems(originalItems);
     }, [originalItems, setMutatedItems]);
 

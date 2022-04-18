@@ -13,10 +13,10 @@ import { ModuleListModalPage } from './ModuleListModalPage';
 
 export const ModuleEditDialog = (props: {
     logic: EpistoDialogLogicType,
-    afterSaveCallback: () => void
+    afterChangeCallback: () => void
 }) => {
 
-    const { logic, afterSaveCallback } = props;
+    const { logic, afterChangeCallback } = props;
 
     // util
     const courseId = useIntParam('courseId')!;
@@ -49,7 +49,8 @@ export const ModuleEditDialog = (props: {
                 moduleListEditData={moduleListEditData}
                 moduleListEditDataState={moduleListEditDataState}
                 moduleListEditDataError={moduleListEditDataError}
-                handleEditModule={handleEditModule} />,
+                handleEditModule={handleEditModule}
+                afterChangeCallback={afterChangeCallback} />,
             title: 'Modulok szerkesztése'
 
         },
@@ -86,7 +87,7 @@ export const ModuleEditDialog = (props: {
             showNotification('Modul sikeresen mentve.');
             refetchModuleListEditData();
             paging.setItem(0);
-            afterSaveCallback();
+            afterChangeCallback();
         }
         catch (e) {
 
@@ -107,7 +108,7 @@ export const ModuleEditDialog = (props: {
 
             showNotification('Modul sikeresen hozzáadva!');
             await refetchModuleListEditData();
-            afterSaveCallback();
+            afterChangeCallback();
         }
         catch (e) {
 

@@ -14,7 +14,8 @@ export const ModuleListModalPage = (props: {
     moduleListEditDataState: LoadingStateType,
     moduleListEditDataError: any,
     refetchModuleList: () => Promise<void>,
-    handleEditModule: (moduleId: number) => any
+    handleEditModule: (moduleId: number) => any,
+    afterChangeCallback: () => void
 }) => {
 
     const {
@@ -22,7 +23,8 @@ export const ModuleListModalPage = (props: {
         moduleListEditDataState,
         moduleListEditDataError,
         handleEditModule,
-        refetchModuleList
+        refetchModuleList,
+        afterChangeCallback
     } = props;
 
     const {
@@ -34,6 +36,7 @@ export const ModuleListModalPage = (props: {
 
         await deleteModuleAsync(moduleId);
         await refetchModuleList();
+        afterChangeCallback();
         
         showNotification('Modul sikeresen torolve.');
     };
