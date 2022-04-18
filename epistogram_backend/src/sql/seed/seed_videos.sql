@@ -793,7 +793,7 @@ VALUES
 (367, 'Kezdőképernyő', 'Választás a meglévő témák közül', '', 0, 106.866667, 409, 22, 54),
 (358, 'Táblázatok', 'Függvények a Word-ön belül', '', 6, 331.333333, 399, 28, 52),
 (389, 'Tartalom beillesztése', 'Előnézet, beállítások', '', 22, 265.033333, 431, 22, 54),
-(368, 'Alapvető kefeladatokzelési', 'Új dia hozzáadása és alapvető szerkesztése', '', 1, 231.833333, 410, 22, 54),
+(368, 'Alapvető kezelési feladatok', 'Új dia hozzáadása és alapvető szerkesztése', '', 1, 231.833333, 410, 22, 54),
 (359, 'Egyszerű névjegy és cimke készítése', 'Lapméret és margók ajánlott beállításai', '', 0, 192.3, 400, 28, 53),
 (376, 'A prezentáció videóvá konvertálása', 'Animációk hozzáadása', '', 9, 370.966667, 418, 22, 54),
 (360, 'Magánlevél készítése', 'Borítékméretek és formázás beállítása', '', 1, 232.866667, 401, 28, 53),
