@@ -46,7 +46,7 @@ export const AdminCourseContentSubpage = () => {
         courseContentAdminData,
         courseContentAdminDataError,
         courseContentAdminDataState,
-        refreshCourseContentAdminData
+        refetchCourseContentAdminData
     } = useCourseContentAdminData(courseId, true);
 
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
@@ -253,7 +253,7 @@ export const AdminCourseContentSubpage = () => {
 
             await saveCourseDataAsync(mutations);
             resetMutations();
-            refreshCourseContentAdminData();
+            refetchCourseContentAdminData();
         }
         catch (e) {
 
@@ -319,7 +319,10 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDialog logic={deleteWarningDialogLogic} />
                 <VideoEditDialog logic={videoEditDialogLogic} />
                 <ExamEditDialog logic={examEditDialogLogic} />
-                <ModuleEditDialog logic={moduleEditDialogLogic} />
+
+                <ModuleEditDialog
+                    logic={moduleEditDialogLogic}
+                    afterSaveCallback={refetchCourseContentAdminData} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper

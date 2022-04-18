@@ -57,7 +57,7 @@ export const useCourseContentAdminData = (courseId: number, loadDeleted: boolean
         courseContentAdminData: qr.data,
         courseContentAdminDataError: qr.error,
         courseContentAdminDataState: qr.state,
-        refreshCourseContentAdminData: qr.refetch
+        refetchCourseContentAdminData: qr.refetch
     };
 };
 
