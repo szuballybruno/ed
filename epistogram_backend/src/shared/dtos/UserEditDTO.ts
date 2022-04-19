@@ -1,5 +1,5 @@
 import { JobTitleDTO } from './JobTitleDTO';
-import { OrganizationDTO } from './OrganizationDTO';
+import { CompanyDTO } from './CompanyDTO';
 import { RoleDTO } from './RoleDTO';
 
 export class UserEditDTO {
@@ -8,7 +8,7 @@ export class UserEditDTO {
     lastName: string;
     email: string;
     isTeacher: boolean;
-    organization: OrganizationDTO | null;
+    company: CompanyDTO | null;
     role: RoleDTO | null;
     jobTitle: JobTitleDTO | null;
 }

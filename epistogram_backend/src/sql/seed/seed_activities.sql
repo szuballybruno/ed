@@ -8,7 +8,7 @@ INSERT INTO public."activity"
 VALUES
     (
         1,
-        'canSetInvitedUserOrganization'
+        'canSetInvitedUserCompany'
     ),
     (
         2,

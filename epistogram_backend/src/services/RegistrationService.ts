@@ -63,7 +63,7 @@ export class RegistrationService {
             email,
             firstName,
             lastName,
-            organizationId: activationCodeEntity.organizationId,
+            companyId: activationCodeEntity.companyId,
             roleId: RoleIdEnum.user,
             jobTitleId: JobTitleIdEnum.genericUser
         });
@@ -178,7 +178,7 @@ export class RegistrationService {
             email: string;
             firstName: string;
             lastName: string;
-            organizationId: number;
+            companyId: number;
             roleId: number;
             jobTitleId: number;
         },
@@ -196,7 +196,7 @@ export class RegistrationService {
                 email,
                 firstName: options.firstName,
                 lastName: options.lastName,
-                organizationId: options.organizationId,
+                companyId: options.companyId,
                 roleId: options.roleId,
                 jobTitleId: options.jobTitleId,
                 registrationType: 'Invitation',

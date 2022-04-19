@@ -1,6 +1,6 @@
 BEGIN;
 
-INSERT INTO public."organization"
+INSERT INTO public."company"
     (
         "id",
         "name"

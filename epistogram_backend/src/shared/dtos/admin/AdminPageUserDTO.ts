@@ -11,8 +11,8 @@ export class AdminPageUserDTO {
     avatarUrl: string | null;
     jobTitleId: number;
     jobTitleName: string;
-    organizationId: number;
-    organizationName: string;
+    companyId: number;
+    companyName: string;
     roleId: number;
     latestActivityDate: Date;
     totalSpentTimeSeconds: number;

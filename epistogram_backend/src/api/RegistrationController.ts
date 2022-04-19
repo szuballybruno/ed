@@ -70,20 +70,20 @@ export class RegistrationController {
 
         const dto = params.getBody<CreateInvitedUserDTO>();
 
-        // handle organizationId
+        // handle companyId
         const currentUser = await this._userService
             .getUserById(params.currentUserId);
 
-        // if user is admin require organizationId to be provided
-        // otherwise use the current user's organization
-        const organizationId = currentUser.roleId === RoleIdEnum.administrator
-            ? dto.data.organizationId
-            : currentUser.organizationId;
+        // if user is admin require companyId to be provided
+        // otherwise use the current user's company
+        const companyId = currentUser.roleId === RoleIdEnum.administrator
+            ? dto.data.companyId
+            : currentUser.companyId;
 
-        if (!organizationId)
+        if (!companyId)
             throw new ErrorCode(
                 `Current user is not an administrator, 
-                but has rights to add users, but has no organization, 
+                but has rights to add users, but has no company, 
                 in which he/she could add users.`, 'bad request');
 
         // create user
@@ -94,7 +94,7 @@ export class RegistrationController {
                 firstName: dto.getValue<string>(x => x.firstName),
                 lastName: dto.getValue<string>(x => x.lastName),
                 roleId: dto.getValue<number>(x => x.roleId),
-                organizationId,
+                companyId: companyId,
             });
     };
 }

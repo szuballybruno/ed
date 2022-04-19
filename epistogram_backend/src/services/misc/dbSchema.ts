@@ -9,7 +9,7 @@ import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
 import { Exam } from '../../models/entity/Exam';
 import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { JobTitle } from '../../models/entity/JobTitle';
-import { Organization } from '../../models/entity/Organization';
+import { Company } from '../../models/entity/Company';
 import { Question } from '../../models/entity/Question';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { QuestionType } from '../../models/entity/QuestionType';
@@ -250,7 +250,7 @@ export const dbSchema = {
         Course,
         CourseCategory,
         Exam,
-        Organization,
+        Company,
         User,
         Video,
         Task,

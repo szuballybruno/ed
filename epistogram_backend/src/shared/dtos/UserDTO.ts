@@ -5,7 +5,7 @@ export class UserDTO {
     id: number;
     firstName: string;
     lastName: string;
-    organizationId: number;
+    companyId: number;
     isTrusted: boolean;
     email: string;
     phoneNumber: string;

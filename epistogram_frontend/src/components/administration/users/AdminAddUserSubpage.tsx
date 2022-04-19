@@ -28,7 +28,7 @@ const AdminAddUserSubpage = (props: {
             email: userEditDTO.email,
             jobTitleId: userEditDTO.jobTitle?.id ?? null,
             roleId: userEditDTO.role?.id ?? null,
-            organizationId: userEditDTO.organization?.id ?? null
+            companyId: userEditDTO.company?.id ?? null
         } as CreateInvitedUserDTO;
 
         try {

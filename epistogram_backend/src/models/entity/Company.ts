@@ -3,7 +3,7 @@ import { ActivationCode } from './ActivationCode';
 import { User } from './User';
 
 @Entity()
-export class Organization {
+export class Company {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,12 +12,12 @@ export class Organization {
     name: string;
 
     // users 
-    @OneToMany(_ => User, user => user.organization)
+    @OneToMany(_ => User, user => user.company)
     @JoinColumn()
     users: User[];
 
     // activation codes 
     @JoinColumn()
-    @OneToMany(_ => ActivationCode, x => x.organization)
+    @OneToMany(_ => ActivationCode, x => x.company)
     activationCodes: ActivationCode[];
 }

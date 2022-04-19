@@ -1,6 +1,6 @@
+import { CompanyDTO } from '../../shared/dtos/CompanyDTO';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
-import { OrganizationDTO } from '../../shared/dtos/OrganizationDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
@@ -45,12 +45,12 @@ export const useOverviewPageDTO = () => {
     };
 };
 
-export const useOrganizations = () => {
+export const useCompanies = () => {
 
-    const qr = useReactQuery2<OrganizationDTO[]>(apiRoutes.misc.getOrganizations);
+    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.misc.getCompanies);
 
     return {
-        organizations: qr.data ?? [],
-        organizationsState: qr.state
+        companies: qr.data ?? [],
+        companiesState: qr.state
     };
 };

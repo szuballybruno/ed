@@ -2,7 +2,7 @@ export type CreateInvitedUserDTO = {
     firstName: string;
     lastName: string;
     email: string;
-    organizationId?: number;
+    companyId?: number;
     roleId: number;
     jobTitleId: number;
 }

@@ -9,7 +9,7 @@ export const apiRoutes = {
 
     misc: {
         getJobTitles: '/misc/get-job-titles',
-        getOrganizations: '/misc/get-organizations',
+        getCompanies: '/misc/get-companies',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
         getCourseOverviewData: '/misc/get-course-overview-data'

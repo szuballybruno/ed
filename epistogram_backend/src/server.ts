@@ -212,7 +212,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
     addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
-    addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
+    addEndpoint(apiRoutes.misc.getCompanies, miscController.getCompaniesAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
     addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
 

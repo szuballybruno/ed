@@ -15,7 +15,7 @@ for (let index = 0; index < count; index++) {
 
     codeCommandPairArray
         .push({
-            command: `INSERT INTO public.activation_code (id, code, organization_id, is_used) VALUES (${id}, '${code}', 2, false);`,
+            command: `INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (${id}, '${code}', 2, false);`,
             code
         });
 }

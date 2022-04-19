@@ -7,8 +7,8 @@ SELECT
 	u.first_name,
 	u.last_name,
 	u.role_id,
-	u.organization_id,
-	o.name organization_name,
+	u.company_id,
+	o.name company_name,
 	u.job_title_id,
 	jt.name job_title_name,
 	ulav.latest_activity_date,
@@ -22,8 +22,8 @@ FROM public.user u
 LEFT JOIN public.storage_file sf
 ON sf.id = u.avatar_file_id
 
-LEFT JOIN public.organization o
-ON o.id = u.organization_id
+LEFT JOIN public.company o
+ON o.id = u.company_id
 
 LEFT JOIN public.job_title jt
 ON jt.id = u.job_title_id

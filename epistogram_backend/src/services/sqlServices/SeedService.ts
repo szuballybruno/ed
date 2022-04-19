@@ -17,7 +17,7 @@ export class SeedService {
 
     seedDBAsync = async () => {
 
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_organizations');
+        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_companies');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_question_types');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_activities');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_roles');
@@ -59,7 +59,7 @@ export class SeedService {
                     jobTitleId: 1,
                     roleId: RoleIdEnum.administrator,
                     email: 'marosi.endre@email.com',
-                    organizationId: 1
+                    companyId: 1
                 },
                 true);
 
@@ -78,7 +78,7 @@ export class SeedService {
                     jobTitleId: 1,
                     roleId: RoleIdEnum.user,
                     email: 'r.peter@gmail.com',
-                    organizationId: 1
+                    companyId: 1
                 },
                 true);
 

@@ -45,7 +45,7 @@ export class UserService {
         const user = await this._ormService
             .getRepository(User)
             .createQueryBuilder('u')
-            .leftJoinAndSelect('u.organization', 'o')
+            .leftJoinAndSelect('u.company', 'o')
             .leftJoinAndSelect('u.role', 'r')
             .leftJoinAndSelect('u.jobTitle', 'jt')
             .leftJoinAndSelect('u.teacherInfo', 'ti')
@@ -119,7 +119,7 @@ export class UserService {
                 firstName: dto.firstName,
                 email: dto.email,
                 isTeacher: dto.isTeacher,
-                organizationId: dto.organization?.id,
+                companyId: dto.company?.id,
                 roleId: dto.role?.id,
                 jobTitleId: dto.jobTitle?.id
             });
@@ -186,7 +186,7 @@ export class UserService {
         firstName: string,
         lastName: string,
         registrationType: RegistrationType,
-        organizationId?: number,
+        companyId?: number,
         phoneNumber?: string,
         roleId?: number,
         jobTitleId?: number,
@@ -212,7 +212,7 @@ export class UserService {
             lastName: opts.lastName,
             jobTitleId: opts.jobTitleId,
             phoneNumber: opts.phoneNumber,
-            organizationId: opts.organizationId,
+            companyId: opts.companyId,
             password: hashedPassword,
             isInvitationAccepted: false,
             isTrusted: regType === 'Invitation',

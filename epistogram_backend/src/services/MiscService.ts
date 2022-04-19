@@ -1,5 +1,5 @@
 
-import { Organization } from '../models/entity/Organization';
+import { Company } from '../models/entity/Company';
 import { User } from '../models/entity/User';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
@@ -8,9 +8,9 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseService } from './CourseService';
 import { MapperService } from './MapperService';
-import { toOrganizationDTO } from './misc/mappings';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { CompanyDTO } from '../shared/dtos/CompanyDTO';
 
 export class MiscService {
 
@@ -31,14 +31,14 @@ export class MiscService {
         this._userCourseBridgeService = userCourseBridgeService;
     }
 
-    getOrganizationsAsync = async (userId: number) => {
+    getCompaniesAsync = async (userId: number) => {
 
-        const orgs = await this._ormService
-            .getRepository(Organization)
-            .find();
+        const companies = await this._ormService
+            .query(Company)
+            .getMany();
 
-        return orgs
-            .map(org => toOrganizationDTO(org));
+        return companies
+            .map(company => this._mapperService.map(Company, CompanyDTO, company));
     };
 
     saveUserDataAsync = async (userId: number, dto: UserDTO) => {

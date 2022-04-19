@@ -11,7 +11,7 @@ import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { DiscountCode } from './DiscountCode';
 import { Event } from './Event';
 import { JobTitle } from './JobTitle';
-import { Organization } from './Organization';
+import { Company } from './Company';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
 import { Role } from './Role';
 import { StorageFile } from './StorageFile';
@@ -100,13 +100,13 @@ export class User {
     @JoinColumn({ name: 'avatar_file_id' })
     avatarFile: StorageFile | null;
 
-    // Organization 
+    // company 
     @Column({ nullable: true, type: 'number' })
-    organizationId: number | null;
+    companyId: number | null;
 
-    @ManyToOne(() => Organization, organization => organization.users)
-    @JoinColumn({ name: 'organization_id' })
-    organization: Organization;
+    @ManyToOne(() => Company, x => x.users)
+    @JoinColumn({ name: 'company_id' })
+    company: Company;
 
     // job title 
     @Column({ nullable: true, type: 'number' })

@@ -163,7 +163,7 @@ export const AdminUserListSubpage = () => {
                 icon: <AlternateEmailIcon />
             })
             .add({
-                name: user.organizationName,
+                name: user.companyName,
                 icon: <ApartmentTwoTone />
             })
             .add({

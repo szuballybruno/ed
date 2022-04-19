@@ -7,7 +7,7 @@ import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
 import { Exam } from '../../models/entity/Exam';
 import { JobTitle } from '../../models/entity/JobTitle';
-import { Organization } from '../../models/entity/Organization';
+import { Company } from '../../models/entity/Company';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { Question } from '../../models/entity/Question';
 import { Role } from '../../models/entity/Role';
@@ -80,7 +80,7 @@ import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
 import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
-import { OrganizationDTO } from '../../shared/dtos/OrganizationDTO';
+import { CompanyDTO } from '../../shared/dtos/CompanyDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
@@ -414,8 +414,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     ? toJobTitleDTO(user.jobTitle)
                     : null,
 
-                organization: user.organization
-                    ? toOrganizationDTO(user.organization)
+                company: user.company
+                    ? mapperService.map(Company, CompanyDTO, user.company)
                     : null,
 
                 role: user.role
@@ -429,7 +429,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 id: user.id,
-                organizationId: user.organizationId,
+                companyId: user.companyId,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
@@ -447,7 +447,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     : null,
 
                 userActivity: user.userActivity
-                    ? toUserActivityDTO(user.userActivity)
+                    ? mapperService.map(UserActivityFlatView, UserActivityDTO, user.userActivity)
                     : null
             } as UserDTO;
         });
@@ -478,8 +478,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             isTrusted: v.isTrusted,
             jobTitleId: v.jobTitleId,
             jobTitleName: v.jobTitleName,
-            organizationId: v.organizationId,
-            organizationName: v.organizationName,
+            companyId: v.companyId,
+            companyName: v.companyName,
             canAccessApplication: v.canAccessApplication,
             latestActivityDate: v.latestActivityDate,
             totalSpentTimeSeconds: v.totalSpentSeconds,
@@ -874,6 +874,18 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             coverFilePath: getAssetUrl(view.coverFilePath),
             title: view.title
         }));
+
+    mapperService
+        .addMap(Company, CompanyDTO, x => ({
+            id: x.id,
+            name: x.name
+        }));
+
+    mapperService
+        .addMap(UserActivityFlatView, UserActivityDTO, x => ({
+            ...x
+        }));
+
 };
 
 const separationChar = '|';
@@ -926,15 +938,6 @@ export const toJobTitleDTO = (jobTitle: JobTitle) => {
     } as JobTitleDTO;
 };
 
-export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
-
-    const { user, userId, ...activityFlags } = userRightsView;
-
-    return {
-        ...activityFlags
-    } as UserActivityDTO;
-};
-
 export const toTaskDTO = (task: Task) => {
 
     return {
@@ -982,14 +985,6 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
         isCorrect: view.isAnswerCorrect,
         isGiven: view.isGivenAnswer
     } as ResultAnswerDTO;
-};
-
-export const toOrganizationDTO = (org: Organization) => {
-
-    return {
-        id: org.id,
-        name: org.name
-    } as OrganizationDTO;
 };
 
 export const toQuestionDTO = (q: Question) => {
