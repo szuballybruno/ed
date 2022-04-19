@@ -2,6 +2,7 @@ import { Image } from '@chakra-ui/image';
 import { Flex } from '@chakra-ui/layout';
 import { Checkbox, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
+import { useParams } from 'react-router';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
@@ -16,8 +17,12 @@ import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegistrationPage = () => {
 
-    const token = useStringParam('token')!;
-    const isInvited = useBoolParam('isInvited')!;
+    //const token = useStringParam('token')!;
+    const params = useParams();
+    const token = params.token + '';
+
+    const isInvited = !!params.isInvited;
+    //const isInvited = useBoolParam('isInvited')!;
 
     const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 
