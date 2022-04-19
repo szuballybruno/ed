@@ -83,23 +83,19 @@ export class QuestionService {
 
         // delete given answers 
         const givenAnswers = await this._ormService
-            .getMany(GivenAnswer,
-                [
-                    ['SELECT', 'id'],
-                    ['WHERE', 'questionId', '=', 'quesitonIds']
-                ],
-                { quesitonIds });
+            .query(GivenAnswer, { quesitonIds })
+            .select('id')
+            .where('questionId', '=', 'quesitonIds')
+            .getMany();
 
         await this.softDeleteGivenAnswers(givenAnswers.map(x => x.id));
 
         // delete answers 
         const answers = await this._ormService
-            .getMany(Answer,
-                [
-                    ['SELECT', 'id'],
-                    ['WHERE', 'questionId', '=', 'quesitonIds']
-                ],
-                { quesitonIds });
+            .query(Answer, { quesitonIds })
+            .select('id')
+            .where('questionId', '=', 'quesitonIds')
+            .getMany();
 
         await this.softDeleteAnswersAsync(answers.map(x => x.id));
 
@@ -113,12 +109,10 @@ export class QuestionService {
 
         // delete given answer bridges
         const givenAnswerBridges = await this._ormService
-            .getMany(AnswerGivenAnswerBridge,
-                [
-                    ['SELECT', 'id'],
-                    ['WHERE', 'givenAnswerId', '=', 'givenAnswerIds']
-                ],
-                { givenAnswerIds });
+            .query(AnswerGivenAnswerBridge, { givenAnswerIds })
+            .select('id')
+            .where('givenAnswerId', '=', 'givenAnswerIds')
+            .getMany();
 
         await this._ormService
             .softDelete(AnswerGivenAnswerBridge, givenAnswerBridges.map(x => x.id));

@@ -1,3 +1,4 @@
+import { Course } from '../models/entity/Course';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
@@ -21,9 +22,11 @@ export class UserProgressService extends ServiceBase {
     async getActiveCoursesAsync(userId: number) {
 
         const views = await this._ormService
-            .getRepository(UserActiveCourseView)
-            .createQueryBuilder('uacv')
-            .where('uacv.userId = :userId', { userId })
+            .query(UserActiveCourseView, { userId })
+            .leftJoin(Course, UserActiveCourseView)
+            .on('id', '=', 'courseId')
+            .where('userId', '=', 'userId')
+            .and(Course, 'deletionDate', 'IS', 'NULL')
             .getMany();
 
         return this._mapperService

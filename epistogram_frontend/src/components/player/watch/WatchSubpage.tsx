@@ -1,11 +1,11 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 import { usePlayerData } from '../../../services/api/playerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { useIsDesktopView } from '../../../static/frontendHelpers';
-import { useIntParam, useStringParam } from '../../../static/locationHelpers';
+import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
+import { useStringParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFont } from '../../controls/EpistoFont';
 import { FlexFloat } from '../../controls/FlexFloat';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -30,9 +30,8 @@ export const WatchSubpage = () => {
         refetchPlayerData
     } = usePlayerData(descriptorCode);
 
-    const isDeleted = playerDataError.code === 'deleted';
-    console.log('del: ' + isDeleted);
-
+    // calc
+    const isDeleted = playerDataError?.code === 'deleted';
     const video = playerData?.video;
     const exam = playerData?.exam;
     const module = playerData?.module;
@@ -45,8 +44,6 @@ export const WatchSubpage = () => {
     const currentItemCode = playerData?.courseItemCode ?? '';
     const nextItemState = playerData?.nextItemState ?? null;
     const isPlayerLoaded = playerDataStatus === 'success';
-
-    console.log('nextItemCode: ' + nextItemCode);
 
     // redirect if current item should be locked 
     useEffect(() => {
@@ -64,7 +61,7 @@ export const WatchSubpage = () => {
     useEffect(() => {
 
         if (title)
-            document.title = title;
+            setPageTitle(title);
     }, [title]);
 
     const navigateToCourseItem = (descriptorCode: string) => {
@@ -93,84 +90,102 @@ export const WatchSubpage = () => {
     };
 
     return (
-        <>
-            <EpistoDialog logic={warningDialogLogic} />
-
-            <LoadingFrame
-                loadingState={[]}
-                height='100vh'
-                direction="column"
-                error={[playerDataError]}>
-
+        isDeleted
+            ? <>
                 <Flex
-                    px="20px"
+                    className='whall'
+                    align='center'
+                    justify='center'>
+
+                    <Flex
+                        background='white'
+                        padding='100px'
+                        borderRadius='15px'>
+                        
+                        <EpistoFont>
+                            Course has been deleted!
+                        </EpistoFont>
+                    </Flex>
+                </Flex>
+            </>
+            : <>
+                <EpistoDialog logic={warningDialogLogic} />
+
+                <LoadingFrame
+                    loadingState={[]}
                     height='100vh'
-                    mb="50px">
+                    direction="column"
+                    error={[playerDataError]}>
 
-                    {/* main column */}
-                    <Box
-                        id="mainColumn"
-                        overflowY='scroll'
-                        className="whall" >
+                    <Flex
+                        px="20px"
+                        height='100vh'
+                        mb="50px">
 
-                        {video && <WatchView
-                            isPlayerLoaded={isPlayerLoaded}
-                            currentItemCode={currentItemCode}
-                            nextItemState={nextItemState}
-                            courseId={courseId!}
-                            courseMode={courseMode}
-                            refetchPlayerData={refetchPlayerData}
-                            answerSessionId={answerSessionId!}
-                            video={video}
-                            modules={courseModules}
-                            continueCourse={handleContinueCourse}
-                            navigateToCourseItem={navigateToCourseItem} />}
-
-                        {exam && <ExamPlayer
-                            continueCourse={handleContinueCourse}
-                            answerSessionId={answerSessionId!}
-                            setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
-                            courseId={courseId!}
-                            exam={exam} />}
-
-                        <ModuleView module={module}
-                            startModule={handleContinueCourse} />
-                    </Box>
-
-                    {/* right sidebar */}
-                    <FlexFloat
-                        id="courseItemListSidebar"
-                        justify="flex-start"
-                        zIndex="10"
-                        ml="10px"
-                        bg="var(--transparentWhite70)"
-                        maxWidth={isSidebarHidden ? '0px' : '420px'}
-                        opacity={isSidebarHidden ? 0 : 1}
-                        transition="0.5s">
-
-                        {isDesktopView && <Flex
-                            direction="column"
-                            id="courseItemSelectorRoot"
+                        {/* main column */}
+                        <Box
+                            id="mainColumn"
                             overflowY='scroll'
-                            pb="200px"
-                            width="420px"
-                            minWidth="420px">
+                            className="whall" >
 
-                            <CourseItemSelector
+                            {video && <WatchView
+                                isPlayerLoaded={isPlayerLoaded}
                                 currentItemCode={currentItemCode}
                                 nextItemState={nextItemState}
                                 courseId={courseId!}
-                                mode={courseMode}
+                                courseMode={courseMode}
+                                refetchPlayerData={refetchPlayerData}
+                                answerSessionId={answerSessionId!}
+                                video={video}
                                 modules={courseModules}
-                                isPlayerLoaded={isPlayerLoaded}
-                                refetchPlayerData={refetchPlayerData} />
-                        </Flex>}
-                    </FlexFloat>
-                </Flex>
+                                continueCourse={handleContinueCourse}
+                                navigateToCourseItem={navigateToCourseItem} />}
 
-                <Copyright />
+                            {exam && <ExamPlayer
+                                continueCourse={handleContinueCourse}
+                                answerSessionId={answerSessionId!}
+                                setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
+                                courseId={courseId!}
+                                exam={exam} />}
 
-            </LoadingFrame>
-        </>
+                            <ModuleView module={module}
+                                startModule={handleContinueCourse} />
+                        </Box>
+
+                        {/* right sidebar */}
+                        <FlexFloat
+                            id="courseItemListSidebar"
+                            justify="flex-start"
+                            zIndex="10"
+                            ml="10px"
+                            bg="var(--transparentWhite70)"
+                            maxWidth={isSidebarHidden ? '0px' : '420px'}
+                            opacity={isSidebarHidden ? 0 : 1}
+                            transition="0.5s">
+
+                            {isDesktopView && <Flex
+                                direction="column"
+                                id="courseItemSelectorRoot"
+                                overflowY='scroll'
+                                pb="200px"
+                                width="420px"
+                                minWidth="420px">
+
+                                <CourseItemSelector
+                                    currentItemCode={currentItemCode}
+                                    nextItemState={nextItemState}
+                                    courseId={courseId!}
+                                    mode={courseMode}
+                                    modules={courseModules}
+                                    isPlayerLoaded={isPlayerLoaded}
+                                    refetchPlayerData={refetchPlayerData} />
+                            </Flex>}
+                        </FlexFloat>
+                    </Flex>
+
+                    <Copyright />
+
+                </LoadingFrame>
+            </>
     );
 };

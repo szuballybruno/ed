@@ -243,8 +243,6 @@ export const VideoPlayer = (props: {
 
     const marks = [maxWatchedSeconds];
 
-    console.log(playerRef);
-
     return (
         <Box
             id="fullScreenRoot"

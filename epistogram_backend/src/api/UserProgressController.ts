@@ -26,8 +26,12 @@ export class UserProgressController {
 
     getUserProgressDataAction = (params: ActionParams) => {
 
+        const userId = params.currentUserId;
+        const courseId = params
+            .getQuery<any>()
+            .getValue(x => x.courseId, 'int');
+
         return this._userProgressService
-            .getProgressChartDataAsync(params.currentUserId, params.getQuery<any>()
-                .getValue(x => x.courseId, 'int'));
+            .getProgressChartDataAsync(userId, courseId);
     };
 }

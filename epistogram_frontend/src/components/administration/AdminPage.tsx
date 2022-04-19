@@ -9,14 +9,15 @@ import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
 import { AdminHomeDetails } from './home/AdminHomeDetails';
 import { AdminHomeOverview } from './home/AdminHomeOverview';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
+import { RoleAdminPage } from './roles/RoleAdminPage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-// import AdminStatistics from './users/AdminStatisticsSubpage';
 import { AdminUserControl } from './users/AdminUserControl';
 
 export const AdminPage = () => {
@@ -31,6 +32,8 @@ export const AdminPage = () => {
         .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
         .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
+        .add(administrationRoutes.companiesRoute)
+        .add(administrationRoutes.rolesRoute)
         .getArray();
 
     return <PageRootContainer>
@@ -145,6 +148,16 @@ export const AdminPage = () => {
                         protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     },
+
+                    {
+                        route: administrationRoutes.companiesRoute,
+                        element: <CompanyAdminPage />
+                    },
+
+                    {
+                        route: administrationRoutes.rolesRoute,
+                        element: <RoleAdminPage />
+                    }
 
                     // statistics
                     // {

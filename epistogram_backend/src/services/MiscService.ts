@@ -59,15 +59,10 @@ export class MiscService {
             .getCurrentCourseIdOrFail(userId);
 
         const view = await this._ormService
-            .getSingle(CourseOverviewView,
-                [
-                    ['WHERE', 'courseId', '=', 'courseId'],
-                    ['AND', 'userId', '=', 'userId']
-                ],
-                {
-                    courseId,
-                    userId
-                });
+            .query(CourseOverviewView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         return this._mapperService
             .map(CourseOverviewView, CourseOverviewDataDTO, view);

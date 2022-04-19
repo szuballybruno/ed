@@ -528,7 +528,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
         state,
         refetch,
         data: dataAsT === undefined ? null : dataAsT,
-        error: queryResult.error as ErrorCode
+        error: queryResult.error as ErrorCode | null
     };
 
     return result;

@@ -121,11 +121,13 @@ export class CourseController {
 
     getCourseProgressShortAction = async (params: ActionParams) => {
 
-        return this._courseService.getCourseProgressShortAsync(params.currentUserId);
+        return this._courseService
+            .getCourseProgressShortAsync(params.currentUserId);
     };
 
     getCourseProgressDataAction = async (params: ActionParams) => {
 
-        return this._courseService.getCourseProgressDataAsync(params.currentUserId);
+        return this._courseService
+            .getCourseProgressDataAsync(params.currentUserId);
     };
 }

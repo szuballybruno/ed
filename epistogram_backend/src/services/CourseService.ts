@@ -200,9 +200,11 @@ export class CourseService {
     async getCourseProgressDataAsync(userId: number) {
 
         const courses = await this._ormService
-            .getRepository(CourseLearningStatsView)
-            .createQueryBuilder('clsv')
-            .where('clsv.userId = :userId', { userId })
+            .query(CourseLearningStatsView, {userId})
+            .leftJoin(Course, CourseLearningStatsView)
+            .on('id', '=', 'courseId')
+            .where('userId', '=', 'userId')
+            .and(Course, 'deletionDate', 'IS', 'NULL')
             .getMany();
 
         // in progress courses 
@@ -477,12 +479,10 @@ export class CourseService {
     async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
 
         const views = await this._ormService
-            .getMany(CourseAdminContentView,
-                [
-                    ['WHERE', 'courseId', '=', 'courseId'],
-                    ['AND', 'itemIsDeleted', '!=', 'loadDeleted']
-                ],
-                { courseId, loadDeleted });
+            .query(CourseAdminContentView, { courseId, loadDeleted })
+            .where('courseId', '=', 'courseId')
+            .and('itemIsDeleted', '=', 'loadDeleted')
+            .getMany();
 
         const modules = await this._ormService
             .getRepository(CourseModule)
@@ -674,6 +674,8 @@ export class CourseService {
      * @param courseId 
      */
     async softDeleteCourseAsync(courseId: number) {
+
+
 
         await this._ormService
             .softDelete(Course, [courseId]);

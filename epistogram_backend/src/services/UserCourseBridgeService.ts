@@ -1,3 +1,4 @@
+import { Course } from '../models/entity/Course';
 import { Exam } from '../models/entity/Exam';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { Video } from '../models/entity/Video';
@@ -140,13 +141,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     async getCurrentCourseId(userId: number) {
 
         const courseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
+            .query(UserCourseBridge, { userId })
+            .leftJoin(Course, UserCourseBridge)
+            .on('id', '=', 'courseId')
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'true')
+            .and(Course, 'deletionDate', 'IS', 'NULL')
+            .getOneOrNull();
 
         return courseBridge?.courseId ?? null;
     }

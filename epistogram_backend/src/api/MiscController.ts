@@ -49,7 +49,8 @@ export class MiscController {
 
     getOverviewPageDTOAction = async (params: ActionParams) => {
 
-        return this._miscService.getOverviewPageDTOAsync(params.currentUserId);
+        return this._miscService
+            .getOverviewPageDTOAsync(params.currentUserId);
     };
 
     getOrganizationsAction = (params: ActionParams) => {

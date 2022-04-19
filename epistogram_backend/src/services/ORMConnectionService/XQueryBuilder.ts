@@ -2,21 +2,26 @@ import { ClassType } from '../../models/Types';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { ExpressionPart, OperationType, SQLStaticValueType } from './XQueryBuilderTypes';
+import { ExpressionPart, OperationType, SimpleExpressionPart, SQLStaticValueType } from './XQueryBuilderTypes';
 
 export class XQueryBuilder<TEntity, TParams> {
 
     private _connection: XQueryBuilderCore<TEntity, TParams>;
-    private _classType: ClassType<TEntity>;
+    private _mainClassType: ClassType<TEntity>;
     private _params: TParams | undefined;
-    private _expression: ExpressionPart<TEntity, TParams>[] = [];
+    private _expression: SimpleExpressionPart<TParams>[] = [];
     private _allowDeleted = false;
 
     constructor(connection: SQLConnectionService, classType: ClassType<TEntity>, params?: TParams) {
 
         this._connection = new XQueryBuilderCore<TEntity, TParams>(connection);
-        this._classType = classType;
+        this._mainClassType = classType;
         this._params = params;
+    }
+
+    select(props: keyof TEntity | (keyof TEntity)[]) {
+
+        return this;
     }
 
     allowDeleted(allowDeleted?: boolean) {
@@ -25,20 +30,65 @@ export class XQueryBuilder<TEntity, TParams> {
         return this;
     }
 
-    where(key: keyof TEntity, op: OperationType, paramKeyOrValue: keyof TParams | SQLStaticValueType) {
+    where(key: keyof TEntity, op: OperationType, param: keyof TParams | SQLStaticValueType) {
 
         this._expression
-            .push(['WHERE', key, op, paramKeyOrValue]);
+            .push(['WHERE', this._mainClassType, key, op, param]);
 
         return this;
     }
 
-    and(key: keyof TEntity, op: OperationType, paramKeyOrValue: keyof TParams | SQLStaticValueType) {
+    and(
+        key: keyof TEntity,
+        op: OperationType,
+        param: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
+    and<TCheckEntity>(
+        classType: ClassType<TCheckEntity>,
+        key: keyof TCheckEntity,
+        op: OperationType,
+        param: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
+    and<TCheckEntity>(
+        key_Or_ClassType: keyof TEntity | ClassType<TCheckEntity>,
+        op_Or_Key: OperationType | keyof TCheckEntity,
+        param_OR_op: keyof TParams | SQLStaticValueType | OperationType,
+        param?: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams> {
 
-        this._expression
-            .push(['AND', key, op, paramKeyOrValue]);
+        const isFirstClassType = !!(key_Or_ClassType as any).name;
+
+        if (isFirstClassType) {
+
+            const classType = key_Or_ClassType as ClassType<TCheckEntity>;
+            const key = op_Or_Key as keyof TCheckEntity;
+            const op = param_OR_op as OperationType;
+            const par = param! as keyof TParams | SQLStaticValueType;
+
+            this._expression
+                .push(['AND', classType, key, op, par]);
+        }
+        else {
+
+            const key = key_Or_ClassType as keyof TEntity;
+            const op = op_Or_Key as OperationType;
+            const param = param_OR_op as keyof TParams | SQLStaticValueType;
+
+            this._expression
+                .push(['AND', this._mainClassType, key, op, param]);
+        }
 
         return this;
+    }
+
+    leftJoin<TJoinEntity, TOnEntity>(joinEntity: ClassType<TJoinEntity>, toEntity: ClassType<TOnEntity>) {
+
+        return {
+            on: (onKey: keyof TJoinEntity, onOp: OperationType, toKey: keyof TOnEntity) => {
+
+                this._expression
+                    .push(['JOIN', joinEntity, toEntity, onKey, onOp, toKey]);
+
+                return this;
+            }
+        };
     }
 
     setQuery(query: ExpressionPart<TEntity, TParams>[]) {
@@ -52,7 +102,7 @@ export class XQueryBuilder<TEntity, TParams> {
         this.addDeletedCheck();
 
         return await this._connection
-            .getSingle(this._classType, this._expression, this._params);
+            .getSingle(this._mainClassType, this._expression, this._params);
     }
 
     async getOneOrNull(): Promise<TEntity | null> {
@@ -60,7 +110,7 @@ export class XQueryBuilder<TEntity, TParams> {
         this.addDeletedCheck();
 
         return await this._connection
-            .getOneOrNull(this._classType, this._expression, this._params);
+            .getOneOrNull(this._mainClassType, this._expression, this._params);
     }
 
     async getMany(): Promise<TEntity[]> {
@@ -68,7 +118,7 @@ export class XQueryBuilder<TEntity, TParams> {
         this.addDeletedCheck();
 
         return await this._connection
-            .getMany(this._classType, this._expression, this._params);
+            .getMany(this._mainClassType, this._expression, this._params);
     }
 
     private addDeletedCheck() {
@@ -76,7 +126,7 @@ export class XQueryBuilder<TEntity, TParams> {
         if (this._allowDeleted)
             return;
 
-        const deletionPropertyData = getIsDeletedDecoratorPropertyData(this._classType);
+        const deletionPropertyData = getIsDeletedDecoratorPropertyData(this._mainClassType);
         if (!deletionPropertyData)
             return;
 
@@ -90,14 +140,14 @@ export class XQueryBuilder<TEntity, TParams> {
             if (deletionPropertyData.checkType === 'null') {
 
                 this._expression = this._expression
-                    .insert(whereIndex + 1, ['AND', deletionPropertyData.propName, 'IS', 'NULL']);
+                    .insert(whereIndex + 1, ['AND', this._mainClassType, deletionPropertyData.propName, 'IS', 'NULL']);
             }
 
             // bool check
             else {
 
                 this._expression = this._expression
-                    .insert(whereIndex + 1, ['AND', deletionPropertyData.propName, '=', 'false']);
+                    .insert(whereIndex + 1, ['AND', this._mainClassType, deletionPropertyData.propName, '=', 'false']);
             }
         }
 
@@ -108,14 +158,14 @@ export class XQueryBuilder<TEntity, TParams> {
             if (deletionPropertyData.checkType === 'null') {
 
                 this._expression
-                    .push(['WHERE', deletionPropertyData.propName, 'IS', 'NULL']);
+                    .push(['WHERE', this._mainClassType, deletionPropertyData.propName, 'IS', 'NULL']);
             }
 
             // bool check
             else {
 
                 this._expression
-                    .push(['WHERE', deletionPropertyData.propName, '=', 'false']);
+                    .push(['WHERE', this._mainClassType, deletionPropertyData.propName, '=', 'false']);
             }
         }
     }

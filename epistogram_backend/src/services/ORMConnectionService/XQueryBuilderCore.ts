@@ -1,9 +1,8 @@
 import { ClassType } from '../../models/Types';
 import { getKeys } from '../../shared/logic/sharedLogic';
-import { toSQLSnakeCasing } from '../../utilities/helpers';
+import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
-import { ExpressionPart, OperationType, SelectCondition, SQLParamType, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
+import { ExpressionPart, JoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
 
 export class XQueryBuilderCore<TEntity, TParams> {
 
@@ -20,11 +19,10 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async getSingle(
         classType: ClassType<TEntity>,
-        whereQuery: ExpressionPart<TEntity, TParams>[],
-        params?: TParams,
-        alias?: string): Promise<TEntity> {
+        whereQuery: SimpleExpressionPart<TParams>[],
+        params?: TParams): Promise<TEntity> {
 
-        const { fullQuery, sqlParamsList } = this.getFullQuery(classType, whereQuery, params ?? {} as any, alias);
+        const { fullQuery, sqlParamsList } = this.getFullQuery(classType, whereQuery, params ?? {} as any);
 
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
@@ -46,11 +44,10 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async getOneOrNull(
         classType: ClassType<TEntity>,
-        whereQuery: ExpressionPart<TEntity, TParams>[],
-        params?: TParams,
-        alias?: string): Promise<TEntity | null> {
+        whereQuery: SimpleExpressionPart<TParams>[],
+        params?: TParams): Promise<TEntity | null> {
 
-        const { fullQuery, sqlParamsList } = this.getFullQuery(classType, whereQuery, params ?? {} as any, alias);
+        const { fullQuery, sqlParamsList } = this.getFullQuery(classType, whereQuery, params ?? {} as any);
 
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
@@ -63,12 +60,11 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async getMany(
         classType: ClassType<TEntity>,
-        query: ExpressionPart<TEntity, TParams>[],
-        params?: TParams,
-        alias?: string) {
+        query: SimpleExpressionPart<TParams>[],
+        params?: TParams) {
 
         const { fullQuery, sqlParamsList } = this
-            .getFullQuery(classType, query, params ?? {} as any, alias);
+            .getFullQuery(classType, query, params ?? {} as any);
 
         return this.executeSQLQuery(fullQuery, sqlParamsList);
     }
@@ -80,15 +76,88 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     private getFullQuery(
         classType: ClassType<TEntity>,
-        query: ExpressionPart<TEntity, TParams>[],
-        params: TParams,
-        alias?: string) {
+        expressionParts: SimpleExpressionPart<TParams>[],
+        params: TParams) {
 
-        const tableName = toSQLSnakeCasing(classType.name);
-        const sqlAlias = alias ?? `"${tableName}"`;
-        const sqlTableRef = `public.${tableName} ${sqlAlias}`;
+        const tableName = `"${snk(classType.name)}"`;
+        const sqlTableRef = `public.${tableName} ${tableName}`;
+        const sqlParamsList = this.getSQLParamsList(params);
 
-        const sqlParamsList = getKeys(params)
+        const queryAsString = expressionParts
+            .map(espressionPart => {
+
+                // select condition
+                if ((espressionPart as SelectCondition<TEntity>)[0] === 'SELECT') {
+
+                    const selectCond = espressionPart as SelectCondition<TEntity>;
+                    const columnOrColumns = selectCond[1];
+                    const snakeColumns = Array.isArray(columnOrColumns)
+                        ? columnOrColumns
+                            .map(columnPropertyName => snk(columnPropertyName as string))
+                            .map(columnName => `${sqlTableRef}.${columnName}`)
+                            .join(', ')
+                        : columnOrColumns;
+
+                    // SELECT xy.ab, xy.abc
+                    return `SELECT ${snakeColumns} FROM ${sqlTableRef}`;
+                }
+
+                // join condition
+                else if ((espressionPart as JoinCondition<TEntity, any, TParams>)[0] === 'JOIN') {
+
+                    const joinCond = espressionPart as JoinCondition<TEntity, any, TParams>;
+                    const [, joinEntity, toEntity, onKey, onOp, toKey] = joinCond;
+                    const joinTableName = this.toSQLTableName(joinEntity);
+                    const toTableName = this.toSQLTableName(toEntity);
+                    const onKeySnake = this.toSQLSnakeCasing(onKey as string);
+                    const toKeySnake = this.toSQLSnakeCasing(toKey as string);
+
+                    return `LEFT JOIN ${joinTableName} \nON ${joinTableName}.${onKeySnake} ${onOp} ${toTableName}.${toKeySnake}`;
+                }
+
+                // where condition
+                else {
+
+                    const cond = espressionPart as WhereCondition<TEntity, TParams>;
+                    const [conditionName, classType, columnPropertyName, operatorType, paramProperty] = cond;
+
+                    const tableName: string = this.toSQLTableName(classType);
+                    const snakeColumn: string = this.toSQLSnakeCasing(columnPropertyName as string);
+                    const operator: OperationType = operatorType;
+                    const paramName: keyof TParams | SQLStaticValueType = paramProperty;
+                    const paramToken = this.isSQLStaticValue(paramName as string)
+                        ? paramName as SQLStaticValueType
+                        : sqlParamsList
+                            .single(x => x.paramName === paramName)
+                            .token;
+
+                    // WHERE xy.ab = $1
+                    return `${conditionName} ${tableName}.${snakeColumn} ${operator} ${paramToken}`;
+                }
+            })
+            .join('\n');
+
+        const isExplicitSelect = queryAsString
+            .startsWith('SELECT');
+
+        const fullQuery = isExplicitSelect
+            ? queryAsString
+            : `SELECT * FROM  ${sqlTableRef}\n${queryAsString}`;
+
+        return {
+            sqlParamsList,
+            fullQuery
+        };
+    }
+
+    private toSQLTableName<T>(classType: ClassType<T>) {
+
+        return this.escapeTableName(this.toSQLSnakeCasing(classType.name));
+    }
+
+    private getSQLParamsList(params: TParams) {
+
+        return getKeys(params)
             .map((key, index): SQLParamType<TParams, keyof TParams> => {
 
                 const value = params[key];
@@ -103,58 +172,16 @@ export class XQueryBuilderCore<TEntity, TParams> {
                     paramValue: value
                 });
             });
+    }
 
-        const queryAsString = query
-            .map(x => {
+    private escapeTableName(name: string) {
 
-                // select condition
-                if ((x as SelectCondition<TEntity>)[0] === 'SELECT') {
+        return `"${name}"`;
+    }
 
-                    const selectCond = x as SelectCondition<TEntity>;
-                    const columnOrColumns = selectCond[1];
-                    const snakeColumns = Array.isArray(columnOrColumns)
-                        ? columnOrColumns
-                            .map(x => toSQLSnakeCasing(x as string))
-                            .map(x => `${sqlAlias}.${x}`)
-                            .join(', ')
-                        : columnOrColumns;
+    private toSQLSnakeCasing(str: string) {
 
-                    // SELECT xy.ab, xy.abc
-                    return `SELECT ${snakeColumns} FROM ${sqlTableRef}`;
-                }
-
-                // where condition
-                else {
-
-                    const cond = x as WhereCondition<TEntity, TParams>;
-
-                    const snakeColumn = toSQLSnakeCasing(cond[1] as string);
-                    const operator: OperationType = cond[2];
-                    const paramName: keyof TParams | SQLStaticValueType = cond[3];
-                    const paramToken = this.isSQLStaticValue(paramName as string)
-                        ? paramName as SQLStaticValueType
-                        : sqlParamsList
-                            .single(x => x.paramName === paramName)
-                            .token;
-
-                    // WHERE xy.ab = $1
-                    return `${cond[0]} ${sqlAlias}.${snakeColumn} ${operator} ${paramToken}`;
-                }
-            })
-            .join(' ');
-
-
-        const isExplicitSelect = queryAsString
-            .startsWith('SELECT');
-
-        const fullQuery = isExplicitSelect
-            ? queryAsString
-            : `SELECT * FROM  ${sqlTableRef} ${queryAsString} `;
-
-        return {
-            sqlParamsList,
-            fullQuery
-        };
+        return snk(str);
     }
 
     /**
@@ -224,21 +251,5 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         return snakeCaseString
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-    }
-
-    private addDeleteFlagCheck(expression: ExpressionPart<TEntity, TParams>[], classType: ClassType<TEntity>) {
-
-        const deletionPropertyData = getIsDeletedDecoratorPropertyData(classType);
-        if (!deletionPropertyData)
-            return expression;
-
-        // null check 
-        if (deletionPropertyData.checkType === 'null')
-            return expression
-                .concat([['AND', deletionPropertyData.propName, 'IS', 'NULL']]);
-
-        // bool check 
-        return expression
-            .concat([['AND', deletionPropertyData.propName, '=', 'false']]);
     }
 }

@@ -106,12 +106,10 @@ export class PlaybackService extends ServiceBase {
         newCompletionDate?: Date) => {
 
         const pbd = await this._ormService
-            .getOneOrNull(UserVideoProgressBridge,
-                [
-                    ['WHERE', 'videoId', '=', 'videoId'],
-                    ['AND', 'userId', '=', 'userId']
-                ],
-                { videoId, userId });
+            .query(UserVideoProgressBridge, { videoId, userId })
+            .where('videoId', '=', 'videoId')
+            .and('userId', '=', 'userId')
+            .getOneOrNull();
 
         // if already set, do not modify
         // otherwise use the input param 
@@ -150,12 +148,10 @@ export class PlaybackService extends ServiceBase {
     getVideoIsCompletedStateAsync = async (userId: number, videoId: number) => {
 
         const pbd = await this._ormService
-            .getOneOrNull(UserVideoProgressBridge,
-                [
-                    ['WHERE', 'videoId', '=', 'videoId'],
-                    ['AND', 'userId', '=', 'userId']
-                ],
-                { userId, videoId });
+            .query(UserVideoProgressBridge, { userId, videoId })
+            .where('videoId', '=', 'videoId')
+            .and('userId', '=', 'userId')
+            .getOneOrNull();
 
         return !!pbd?.completionDate;
     };

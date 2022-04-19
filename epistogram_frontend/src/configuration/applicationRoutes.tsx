@@ -8,6 +8,8 @@ import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { assetCDNStorageUrl } from '../static/Environemnt';
 import { getAssetUrl as old } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 
 const getAssetUrl = (path: string) => old(path, assetCDNStorageUrl);
 
@@ -70,6 +72,8 @@ export type ApplicationRoutesType = {
             };
         };
         myCompanyRoute: ApplicationRoute;
+        companiesRoute: ApplicationRoute;
+        rolesRoute: ApplicationRoute;
     };
     settingsRoute: ApplicationRoute & {
         preferencesRoute: ApplicationRoute;
@@ -356,7 +360,8 @@ export const applicationRoutes: ApplicationRoutesType = {
         personalityAssessmentRoute: {
             title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
             route: new EpistoRoute('/administration', 'personality-assessment', '*'),
-            icon: <SupervisedUserCircleIcon className="fontXXL"
+            icon: <SupervisedUserCircleIcon
+                className="fontXXL"
                 color={'secondary'} />,
 
             editTips: {
@@ -376,6 +381,22 @@ export const applicationRoutes: ApplicationRoutesType = {
             icon: <Business className="fontXXL"
                 color={'secondary'} />
         },
+
+        companiesRoute: {
+            title: 'Cégek',
+            route: new EpistoRoute('/administration', 'companies'),
+            icon: <LocationCityIcon
+                className="fontXXL"
+                color={'secondary'} />
+        },
+
+        rolesRoute: {
+            title: 'Roles',
+            route: new EpistoRoute('/administration', 'roles'),
+            icon: <LocalPoliceIcon
+                className="fontXXL"
+                color={'secondary'} />
+        }
     },
 
     settingsRoute: {

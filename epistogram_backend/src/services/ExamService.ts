@@ -65,16 +65,10 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamPlayerDTOAsync = async (userId: number, examId: number) => {
 
         const examView = await this._ormService
-            .getSingle(ExamView,
-                [
-                    ['WHERE', 'examId', '=', 'examId'],
-                    ['AND', 'userId', '=', 'userId'],
-                    ['AND', 'isDeleted', '=', 'false']
-                ],
-                {
-                    examId,
-                    userId
-                });
+            .query(ExamView, { examId, userId })
+            .where('examId', '=', 'examId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         const questions = await this
             .getExamQuestionsAsync(examView.examId);
