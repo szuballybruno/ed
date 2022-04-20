@@ -599,7 +599,7 @@ export const hasValue = (obj: any) => {
     return true;
 };
 
-export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects: (() => Promise<void>)[]) => {
+export const usePostCallback = <T>(fn: (data?: T) => Promise<void>,  afterEffects: (() => void | Promise<void>)[]) => {
 
     const showError = useShowErrorDialog();
     const execSafeAsync = useCallback(async (data?: T) => {
