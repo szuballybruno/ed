@@ -44,13 +44,3 @@ export const useOverviewPageDTO = () => {
         error: queryRes.error
     };
 };
-
-export const useCompanies = () => {
-
-    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.misc.getCompanies);
-
-    return {
-        companies: qr.data ?? [],
-        companiesState: qr.state
-    };
-};

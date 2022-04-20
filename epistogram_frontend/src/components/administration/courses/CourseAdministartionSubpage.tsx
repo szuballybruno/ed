@@ -1,13 +1,10 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage';
 import { AdminInteractiveCourseSubpage } from './AdminInteractiveCourseSubpage';
+import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
 import { DetailsEditSubpage } from './DetailsEditSubpage';
-import { MemoTest } from '../../MemoTest';
-import { EpistoRoute } from '../../../models/types';
 
 export const CourseAdministartionSubpage = () => {
 

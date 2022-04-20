@@ -13,7 +13,7 @@ export const verboseLogging = false;
 export const loggingSettings = {
     routing: false,
     render: false,
-    mutations: true
+    mutations: false
 };
 
 console.log('Current version: ' + currentVersion);

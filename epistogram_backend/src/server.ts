@@ -4,6 +4,7 @@ import fileUpload from 'express-fileupload';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
+import { CompaniesController } from './api/CompaniesController';
 import { CourseController } from './api/CourseController';
 import { CourseRatingController } from './api/CourseRatingController';
 import { DailyTipController } from './api/DailyTipController';
@@ -36,6 +37,7 @@ import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
+import { CompanyService } from './services/CompanyService';
 import { CourseItemsService } from './services/CourseItemsService';
 import { CourseRatingService } from './services/CourseRatingService';
 import { CourseService } from './services/CourseService';
@@ -149,6 +151,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
+    const companyService = new CompanyService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -179,6 +182,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
+    const companyController = new CompaniesController(companyService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -212,9 +216,12 @@ import { TurboExpress } from './utilities/TurboExpress';
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
     addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
-    addEndpoint(apiRoutes.misc.getCompanies, miscController.getCompaniesAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
     addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
+
+    // companies
+    addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
+    addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction);
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });

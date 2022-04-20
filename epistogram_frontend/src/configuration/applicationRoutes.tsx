@@ -72,7 +72,10 @@ export type ApplicationRoutesType = {
             };
         };
         myCompanyRoute: ApplicationRoute;
-        companiesRoute: ApplicationRoute;
+        companiesRoute: ApplicationRoute & {
+            indexRoute: ApplicationRoute;
+            editCompanyRoute: ApplicationRoute;
+        };
         rolesRoute: ApplicationRoute;
     };
     settingsRoute: ApplicationRoute & {
@@ -384,10 +387,19 @@ export const applicationRoutes: ApplicationRoutesType = {
 
         companiesRoute: {
             title: 'Cégek',
-            route: new EpistoRoute('/administration', 'companies'),
+            route: new EpistoRoute('/administration', 'companies', '*'),
             icon: <LocationCityIcon
                 className="fontXXL"
-                color={'secondary'} />
+                color={'secondary'} />,
+
+            indexRoute: {
+                title: 'Cégek',
+                route: new EpistoRoute('/administration/companies', '/')
+            },
+            editCompanyRoute: {
+                title: 'Cég szerkesztese',
+                route: new EpistoRoute('/administration/companies', '/:companyId/edit')
+            },
         },
 
         rolesRoute: {

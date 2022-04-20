@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { useJobTitles, useCompanies } from '../../../services/api/miscApiService';
+import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
 import { CompanyDTO } from '../../../shared/dtos/CompanyDTO';
@@ -25,6 +25,7 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
+import { useCompanies } from '../../../services/api/companiesApiService';
 
 export const roles = [
     {

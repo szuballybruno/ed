@@ -7,7 +7,7 @@ import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { getKeys, validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
-import { assetCDNStorageUrl, verboseLogging } from './Environemnt';
+import { assetCDNStorageUrl, loggingSettings, verboseLogging } from './Environemnt';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
 
@@ -205,43 +205,77 @@ export const valueCompareTest = (val: any, name: string) => {
 
 export const useIsMatchingCurrentRoute = () => {
 
-    const urlPathname = useCurrentUrlPathname();
-    const params = useParams();
+    const currentUrl = useCurrentUrlPathname();
 
-    const replacePath = useCallback((path: string, params: any) => {
+    return (appRoute: ApplicationRoute) => {
 
-        let replPath = '' + path;
-
-        getKeys(params)
-            .forEach(key => {
-
-                const tag = ':' + (key as string);
-
-                replPath = replPath
-                    .replaceAll(tag, params[key]);
-            });
-
-        return replPath;
-    }, []);
-
-    const isMatchingCurrentRoute = useCallback((route: ApplicationRoute) => {
-
-        if (!route)
+        if (!appRoute)
             throw new Error('Route is null or undefined!');
 
-        const path = route.route.getAbsolutePath();
-        const replacedPath = replacePath(path, params);
-        const isMatchingRoute = urlPathname.startsWith(replacedPath);
-        const isMatchingRouteExactly = urlPathname === replacedPath;
+        const compareRoute = appRoute.route.getAbsolutePath();
+        const currentUrlSegments = currentUrl.split('/');
+        const compareRouteSegments = compareRoute.split('/');
+        const segmentsLengthMatch = currentUrlSegments.length === compareRouteSegments.length;
 
-        if (verboseLogging)
-            console.log(`Loc: ${urlPathname} ReplacedPath: ${replacedPath} Match: ${isMatchingRoute}`);
+        const isSegmentsMismatch = compareRouteSegments
+            .some((routeSegment, index) => {
 
-        return { isMatchingRoute, isMatchingRouteExactly };
-    }, [replacePath, urlPathname, params]);
+                // url param
+                if (routeSegment.startsWith(':'))
+                    return false;
 
-    return isMatchingCurrentRoute;
+                if (routeSegment === currentUrlSegments[index])
+                    return false;
+
+                return true;
+            });
+
+        return {
+            isMatchingRoute: !isSegmentsMismatch,
+            isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch
+        };
+    };
 };
+
+// export const useIsMatchingCurrentRoute = () => {
+
+//     const currentUrl = useCurrentUrlPathname();
+//     const params = useParams();
+
+//     const replacePath = useCallback((path: string, params: any) => {
+
+//         let replPath = '' + path;
+
+//         getKeys(params)
+//             .forEach(key => {
+
+//                 const tag = ':' + (key as string);
+
+//                 replPath = replPath
+//                     .replaceAll(tag, params[key]);
+//             });
+
+//         return replPath;
+//     }, []);
+
+//     const isMatchingCurrentRoute = useCallback((route: ApplicationRoute) => {
+
+//         if (!route)
+//             throw new Error('Route is null or undefined!');
+
+//         const path = route.route.getAbsolutePath();
+//         const replacedPath = replacePath(path, params);
+//         const isMatchingRoute = currentUrl.startsWith(replacedPath);
+//         const isMatchingRouteExactly = currentUrl === replacedPath;
+
+//         if (loggingSettings.routing)
+//             console.log(`Loc: ${currentUrl} ReplacedPath: ${replacedPath} Match: ${isMatchingRoute}`);
+
+//         return { isMatchingRoute, isMatchingRouteExactly };
+//     }, [replacePath, currentUrl, params]);
+
+//     return isMatchingCurrentRoute;
+// };
 
 export const useRedirectOnExactMatch = (opts: {
     route: ApplicationRoute,

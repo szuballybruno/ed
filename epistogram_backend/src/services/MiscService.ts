@@ -31,16 +31,6 @@ export class MiscService {
         this._userCourseBridgeService = userCourseBridgeService;
     }
 
-    getCompaniesAsync = async (userId: number) => {
-
-        const companies = await this._ormService
-            .query(Company)
-            .getMany();
-
-        return companies
-            .map(company => this._mapperService.map(Company, CompanyDTO, company));
-    };
-
     saveUserDataAsync = async (userId: number, dto: UserDTO) => {
 
         return this._ormService

@@ -53,11 +53,6 @@ export class MiscController {
             .getOverviewPageDTOAsync(params.currentUserId);
     };
 
-    getCompaniesAction = (params: ActionParams) => {
-
-        return this._miscService.getCompaniesAsync(params.currentUserId);
-    };
-
     getJobTitlesAction = async (params: ActionParams) => {
 
         return await this._ormService

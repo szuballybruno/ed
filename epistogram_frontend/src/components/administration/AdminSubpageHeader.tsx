@@ -41,7 +41,7 @@ export const AdminSubpageHeader = (props: {
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
     const currentMatchingRoute = tabMenuItemsList
-        .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRoute);
+        .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRouteExactly);
 
     const handleNavigateToTab = (path: string) => {
 
@@ -57,6 +57,9 @@ export const AdminSubpageHeader = (props: {
         }
         else {
 
+            // if (loggingSettings.routing)
+            // console.log('navto: ' + targetRoute.route.getAbsolutePath());
+
             navigate(targetRoute, {
                 userId,
                 courseId,
@@ -67,6 +70,10 @@ export const AdminSubpageHeader = (props: {
             });
         }
     };
+
+    const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath() ?? '';
+
+    console.log(currentMatchingAbsUrl);
 
     return <Flex
         direction={'column'}
@@ -106,7 +113,7 @@ export const AdminSubpageHeader = (props: {
                                 minHeight: 0
                             }
                         }}
-                        value={currentMatchingRoute?.route?.getAbsolutePath() ?? ''}
+                        value={currentMatchingAbsUrl}
                         onChange={(_, path: string) => handleNavigateToTab(path)}>
 
                         {tabMenuItems
