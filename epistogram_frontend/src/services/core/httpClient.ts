@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { serverUrl } from '../../static/Environemnt';
 import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from '../../static/frontendHelpers';
@@ -98,12 +98,12 @@ export const httpDeleteAsync = async (urlEnding: string) => {
  * @param url 
  * @returns 
  */
-export const usePostDataUnsafe = <TData, TResult>(url: string) => {
+export const usePostDataUnsafe = <TData = any, TResult = void>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>('idle');
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data?: TData) => {
+    const postDataAsync = useCallback(async (data?: TData) => {
 
         try {
 
@@ -122,13 +122,13 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
             setState('idle');
             throw e;
         }
-    };
+    }, [setState, setResult]);
 
-    const clearCache = () => {
+    const clearCache = useCallback(() => {
 
         setResult(null);
         setState('idle');
-    };
+    }, [setState, setResult]);
 
     return {
         postDataAsync,

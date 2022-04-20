@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { ActivationCode } from './ActivationCode';
 import { User } from './User';
 
@@ -8,6 +9,10 @@ export class Company {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @IsDeletedFlag()
+    @DeleteDateColumn()
+    deletionDate: Date;
+    
     @Column()
     name: string;
 

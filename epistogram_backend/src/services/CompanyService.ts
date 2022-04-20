@@ -44,4 +44,28 @@ export class CompanyService extends QueryServiceBase<Company> {
         return this._mapperService
             .map(Company, CompanyEditDataDTO, comp);
     }
+
+    async createCompanyAsync() {
+
+        await this.createAsync({
+            name: 'New company'
+        });
+    }
+
+    async deleteCompanyAsync(companyId: number) {
+
+        await this._ormService
+            .softDelete(Company, [companyId]);
+    }
+
+    async saveCompanyAsync(dto: CompanyEditDataDTO) {
+
+        await this._ormService
+            .save(Company, [
+                {
+                    id: dto.id,
+                    name: dto.name
+                }
+            ]);
+    }
 }

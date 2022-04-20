@@ -1,10 +1,11 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useParams } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
+import { useShowErrorDialog } from '../services/core/notifications';
 import { getKeys, validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { assetCDNStorageUrl, loggingSettings, verboseLogging } from './Environemnt';
@@ -201,6 +202,14 @@ export const valueCompareTest = (val: any, name: string) => {
     const prevVal = window[prevValName];
     console.log(`*** ${name} Is unchanged: ${val === prevVal}`);
     window[prevValName] = val;
+};
+
+export const useValueCompareTest = (value: any, label: string) => {
+
+    useEffect(() => {
+
+        console.log(`*** ${label} CHANGED!`);
+    }, [value]);
 };
 
 export const useIsMatchingCurrentRoute = () => {
@@ -534,14 +543,20 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
 
     const queryValues = queryParams ? Object.values(queryParams) : [];
 
+    const getFunction = useCallback(() => {
+
+        return httpGetAsync(url, queryParams);
+    }, [url, queryParams]);
+
     const queryResult = useQuery(
         [url, ...queryValues],
-        () => httpGetAsync(url, queryParams), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        keepPreviousData: true,
-        enabled: isEnabled === false ? false : true
-    });
+        getFunction,
+        {
+            retry: false,
+            refetchOnWindowFocus: false,
+            keepPreviousData: true,
+            enabled: isEnabled === false ? false : true
+        });
 
     const state = (queryResult.isIdle
         ? 'idle'
@@ -551,10 +566,10 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
                 ? 'error'
                 : 'success') as LoadingStateType;
 
-    const refetch = async () => {
+    const refetch = useCallback(async () => {
 
         await queryResult.refetch();
-    };
+    }, [queryResult.refetch]);
 
     const dataAsT = queryResult.data as T;
 
@@ -584,7 +599,31 @@ export const hasValue = (obj: any) => {
     return true;
 };
 
-export class ArrayBuilder<T> {
+export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects: (() => Promise<void>)[]) => {
+
+    const showError = useShowErrorDialog();
+    const execSafeAsync = useCallback(async (data?: T) => {
+
+        try {
+
+            await fn(data);
+
+            for (let index = 0; index < afterEffects.length; index++) {
+
+                const element = afterEffects[index];
+                await element();
+            }
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }, [fn, ...afterEffects, showError]);
+
+    return [execSafeAsync];
+};
+
+export class ArrayBuilder<T = any> {
 
     private _array: T[];
 

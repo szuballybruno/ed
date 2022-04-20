@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { toast, ToastOptions, ToastPosition } from 'react-toastify';
 import { ErrorDialogContext } from '../../components/system/DialogFrame';
 
@@ -27,7 +27,7 @@ export const useShowErrorDialog = () => {
 
     const errorDialogLogic = useContext(ErrorDialogContext)!;
 
-    const showErrorDialog = (descriptionOrError: string | any, title?: string) => {
+    const showErrorDialog = useCallback((descriptionOrError: string | any, title?: string) => {
 
         const asAny = descriptionOrError as any;
 
@@ -36,7 +36,7 @@ export const useShowErrorDialog = () => {
                 title: title ?? 'Hiba',
                 description: asAny.message ?? asAny ?? 'Ismeretlen hiba, kerlek probald ujra kesobb!.'
             });
-    };
+    }, [errorDialogLogic]);
 
     return showErrorDialog;
 };

@@ -2,6 +2,7 @@ import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO
 import { CompanyDTO } from '../../shared/dtos/CompanyDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCompaniesAdmin = () => {
 
@@ -9,7 +10,39 @@ export const useCompaniesAdmin = () => {
 
     return {
         companies: qr.data ?? [],
-        companiesState: qr.state
+        companiesState: qr.state,
+        companiesError: qr.error,
+        refetchCompanies: qr.refetch
+    };
+};
+
+export const useCreateCompany = () => {
+
+    const qr = usePostDataUnsafe(apiRoutes.companies.createCompany);
+
+    return {
+        createCompanyAsync: qr.postDataAsync,
+        createCompanyState: qr.state
+    };
+};
+
+export const useDeleteCompany = () => {
+
+    const qr = usePostDataUnsafe<{ companyId: number }, void>(apiRoutes.companies.deleteCompany);
+
+    return {
+        deleteCompanyAsync: qr.postDataAsync,
+        deleteCompanyState: qr.state
+    };
+};
+
+export const useSaveCompany = () => {
+
+    const qr = usePostDataUnsafe<CompanyEditDataDTO, void>(apiRoutes.companies.saveCompany);
+
+    return {
+        saveCompanyAsync: qr.postDataAsync,
+        saveCompanyState: qr.state
     };
 };
 

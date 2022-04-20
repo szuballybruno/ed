@@ -17,7 +17,10 @@ export const apiRoutes = {
     companies: {
         getCompanies: '/companies/get-companies',
         getCompaniesAdmin: '/companies/get-companies-admin',
-        getCompanyEditData: '/companies/get-company-edit-data'
+        getCompanyEditData: '/companies/get-company-edit-data',
+        createCompany: '/companies/create-company',
+        deleteCompany: '/companies/delete-company',
+        saveCompany: '/companies/save-company'
     },
     
     scheduledJobs: {

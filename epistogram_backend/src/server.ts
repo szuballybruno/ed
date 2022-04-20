@@ -221,8 +221,11 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
-    addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction);
-    addEndpoint(apiRoutes.companies.getCompanyEditData, companyController.getCompanyEditDataAction);
+    addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.getCompanyEditData, companyController.getCompanyEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.createCompany, companyController.createCompanyAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.deleteCompany, companyController.deleteCompanyAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.saveCompany, companyController.saveCompanyAction, { isPost: true, authorize: ['administrator'] });
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });

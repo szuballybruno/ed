@@ -1,11 +1,10 @@
 import { Flex } from '@chakra-ui/react';
-import { Edit } from '@mui/icons-material';
+import { Add, Delete, Edit, Save } from '@mui/icons-material';
 import { memo, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { ApplicationRoute } from '../../../models/types';
-import { useCompaniesAdmin, useCompanyEditData } from '../../../services/api/companiesApiService';
+import { useCompaniesAdmin, useCompanyEditData, useCreateCompany, useDeleteCompany } from '../../../services/api/companiesApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
+import { useIsMatchingCurrentRoute, usePostCallback } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -16,32 +15,61 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 const IndexPage = memo(() => {
 
-    const { companies, companiesState } = useCompaniesAdmin();
     const { navigateWithParams } = useNavigation();
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
 
+    // http
+    const { companies, companiesState, companiesError, refetchCompanies } = useCompaniesAdmin();
+    const { createCompanyAsync, createCompanyState } = useCreateCompany();
+    const { deleteCompanyAsync, deleteCompanyState } = useDeleteCompany();
+
+    const [handleCreateCompany] = usePostCallback(createCompanyAsync, [refetchCompanies]);
+    const [handleDeleteCompany] = usePostCallback(deleteCompanyAsync, [refetchCompanies]);
+
     return (
         <LoadingFrame
-            loadingState={companiesState}
+            loadingState={[companiesState, createCompanyState, deleteCompanyState]}
+            error={companiesError}
             className='whall'
             direction='column'>
 
-            {companies
-                .map((company, index) => (
-                    <Flex
-                        key={index}
-                        align='center'>
+            <AdminSubpageHeader
+                direction="column"
+                pb="20px"
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.companiesRoute.indexRoute
+                ]}
+                headerButtons={[
+                    {
+                        title: 'Add',
+                        icon: <Add></Add>,
+                        action: handleCreateCompany
+                    }
+                ]}>
 
-                        <EpistoFont>
-                            {company.name}
-                        </EpistoFont>
+                {companies
+                    .map((company, index) => (
+                        <Flex
+                            key={index}
+                            align='center'>
 
-                        <EpistoButton
-                            onClick={() => navigateWithParams(editRoute, { companyId: company.id })}>
-                            <Edit></Edit>
-                        </EpistoButton>
-                    </Flex>
-                ))}
+                            <EpistoFont>
+                                {company.name}
+                            </EpistoFont>
+
+                            <EpistoButton
+                                onClick={() => navigateWithParams(editRoute, { companyId: company.id })}>
+                                <Edit></Edit>
+                            </EpistoButton>
+
+                            <EpistoButton
+                                onClick={() => handleDeleteCompany({ companyId: company.id })}>
+                                <Delete />
+                            </EpistoButton>
+                        </Flex>
+                    ))}
+
+            </AdminSubpageHeader>
         </LoadingFrame>
     );
 });
@@ -50,6 +78,7 @@ const EditPage = memo((props: { onNameLoaded: (name: string) => void }) => {
 
     const { onNameLoaded } = props;
     const compnayId = useIntParam('companyId')!;
+    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
 
     const {
         companyEditData,
@@ -66,7 +95,23 @@ const EditPage = memo((props: { onNameLoaded: (name: string) => void }) => {
         <LoadingFrame
             loadingState={companyEditDataState}>
 
-            {companyEditData?.name ?? ''}
+            <AdminSubpageHeader
+                direction="column"
+                pb="20px"
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.companiesRoute.indexRoute,
+                    editRoute
+                ]}
+                headerButtons={[
+                    {
+                        title: 'Save',
+                        icon: <Save></Save>,
+                        action: () => { console.log(); }
+                    }
+                ]}>
+
+                {companyEditData?.name ?? ''}
+            </AdminSubpageHeader>
         </LoadingFrame>
     </>;
 }, (p, n) => p.onNameLoaded === n.onNameLoaded);
@@ -78,38 +123,23 @@ export const CompanyAdminPage = memo(() => {
     const [companyName, setCompanyName] = useState<string | null>(null);
     const isEdit = isMatchingCurrentRoute(editRoute).isMatchingRouteExactly;
 
-    console.log('asd');
-
     return (
         <AdminBreadcrumbsHeader
             background='white'
             direction='column'
             subRouteLabel={isEdit ? companyName ?? undefined : undefined}>
 
-            <AdminSubpageHeader
-                direction="column"
-                pb="20px"
-                navigationQueryParams={{
-                    companyId: 1
-                }}
-                tabMenuItems={new ArrayBuilder<ApplicationRoute>()
-                    .add(applicationRoutes.administrationRoute.companiesRoute.indexRoute)
-                    .addIf(isEdit, editRoute)
-                    .getArray()}>
-
-                <EpistoRoutes
-                    renderRoutes={[
-                        {
-                            route: applicationRoutes.administrationRoute.companiesRoute.indexRoute,
-                            element: <IndexPage />
-                        },
-                        {
-                            route: applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute,
-                            element: <EditPage onNameLoaded={setCompanyName} />
-                        }
-                    ]} />
-
-            </AdminSubpageHeader>
+            <EpistoRoutes
+                renderRoutes={[
+                    {
+                        route: applicationRoutes.administrationRoute.companiesRoute.indexRoute,
+                        element: <IndexPage />
+                    },
+                    {
+                        route: applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute,
+                        element: <EditPage onNameLoaded={setCompanyName} />
+                    }
+                ]} />
         </AdminBreadcrumbsHeader >
     );
 });
