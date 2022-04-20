@@ -481,7 +481,7 @@ export class CourseService {
         const views = await this._ormService
             .query(CourseAdminContentView, { courseId, loadDeleted })
             .where('courseId', '=', 'courseId')
-            .and('itemIsDeleted', '=', 'loadDeleted')
+            .and('itemIsDeleted', '!=', 'loadDeleted')
             .getMany();
 
         const modules = await this._ormService
