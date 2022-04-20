@@ -74,7 +74,7 @@ export type ApplicationRoutesType = {
         myCompanyRoute: ApplicationRoute;
         companiesRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
-            editCompanyRoute: ApplicationRoute;
+            editCompanyRoute: ApplicationRoute<{ companyId: number }>;
         };
         rolesRoute: ApplicationRoute;
     };

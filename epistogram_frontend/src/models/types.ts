@@ -36,11 +36,12 @@ export class EpistoRoute {
     }
 }
 
-export type ApplicationRoute = {
+export type ApplicationRoute<T = any> = {
     title: string;
     route: EpistoRoute;
     icon?: JSX.Element;
     navAction?: () => void;
+    paramsType?: T;
 }
 
 export type DialogOptions<TParams> = {

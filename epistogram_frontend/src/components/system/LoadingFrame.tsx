@@ -1,15 +1,17 @@
 import { Box, Flex, FlexProps, Heading, Text } from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from '@mui/material/CircularProgress';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingStateType } from '../../models/types';
 import { isArray } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 
+type ErrorType = any | any[];
+
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
-    error?: any | any[],
+    error?: ErrorType,
     onlyRenderIfLoaded?: boolean
 };
 
@@ -22,44 +24,90 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         ...rootProps
     } = props;
 
-    const singleError = getError(error);
-    const state = getLoadingState(loadingState, singleError);
-
-    const [prevState, setPrevState] = useState<LoadingStateType>('idle');
-    const showOverlay = prevState === 'error' || prevState === 'loading';
+    const [currentLoadingState, setCurrentLoadingState] = useState<LoadingStateType>('idle');
+    const showOverlay = currentLoadingState === 'error' || currentLoadingState === 'loading';
     const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
-    const [trigger, setTrigger] = useState(0);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    useEffect(() => {
+    // func 
+    const cancelTimeout = useCallback(() => {
 
-        if (prevState === state)
-            return;
+        if (timeoutRef.current)
+            clearTimeout(timeoutRef.current);
+    }, []);
 
-        if (state !== 'loading') {
+    const setNewTimeout = useCallback((fn: () => void) => {
 
-            setPrevState(state);
-            return;
+        cancelTimeout();
+        timeoutRef.current = setTimeout(fn, 2000);
+    }, [cancelTimeout]);
+
+    const getLoadingState = useCallback((): LoadingStateType => {
+
+        if (error)
+            return 'error';
+
+        if (!loadingState)
+            return 'idle';
+
+        if (isArray(loadingState)) {
+
+            const loadingStates = loadingState as LoadingStateType[];
+
+            if (loadingStates.some(x => x === 'error'))
+                return 'error';
+
+            if (loadingStates.some(x => x === 'loading'))
+                return 'loading';
+
+            if (loadingStates.some(x => x === 'success'))
+                return 'success';
+
+            return 'idle';
         }
+        else {
 
-        setTimeout(() => {
+            return loadingState as LoadingStateType;
+        }
+    }, [loadingState, error]);
 
-            setTrigger(x => x + 1);
-        }, 200);
+    const getError = useCallback((): ErrorType => {
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state]);
+        if (!error)
+            return error;
+
+        if (isArray(error))
+            return (error as any[])[0];
+
+        return error;
+    }, [error]);
+
+    // calc 
+    const singleError = useMemo(() => getError(), [getError]);
+    const targetLoadingState = useMemo(() => getLoadingState(), [getLoadingState]);
 
     useEffect(() => {
 
-        if (prevState === state)
-            return;
+        console.log(targetLoadingState);
 
-        setPrevState(state);
+        if (targetLoadingState !== 'loading') {
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [trigger]);
+            cancelTimeout();
+            setCurrentLoadingState(targetLoadingState);
+        }
+        else {
 
-    const finalState = prevState;
+            setNewTimeout(() => {
+
+                setCurrentLoadingState(targetLoadingState);
+            });
+        }
+    }, [targetLoadingState, setCurrentLoadingState, cancelTimeout, setNewTimeout]);
+
+    useEffect(() => {
+
+        return () => cancelTimeout();
+    }, [cancelTimeout]);
 
     return <Flex
         id="loadigFrameRoot"
@@ -85,22 +133,24 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             p="30px">
 
             {/* error */}
-            {finalState === 'error' && <Flex align="center"
-direction="column">
+            {currentLoadingState === 'error' && <Flex
+                align="center"
+                direction="column">
+
                 <ErrorOutlineIcon style={{ width: '100px', height: '100px' }}></ErrorOutlineIcon>
                 <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
                 <Text maxWidth="300px">{singleError?.message}</Text>
             </Flex>}
 
             {/* loading */}
-            {finalState === 'loading' && <Flex
+            {currentLoadingState === 'loading' && <Flex
                 id="loadingDisplayContainer"
                 direction="column"
                 justify="center"
                 align="center">
 
                 <CircularProgress style={{ 'color': 'black' }}
-size={50} />
+                    size={50} />
 
                 <Box pt="20px">
                     <EpistoFont>
@@ -112,42 +162,3 @@ size={50} />
     </Flex>;
 };
 
-const getLoadingState = (loadingState?: LoadingStateType | LoadingStateType[], error?: any): LoadingStateType => {
-
-    if (error)
-        return 'error';
-
-    if (!loadingState)
-        return 'idle';
-
-    if (isArray(loadingState)) {
-
-        const loadingStates = loadingState as LoadingStateType[];
-
-        if (loadingStates.some(x => x === 'error'))
-            return 'error';
-
-        if (loadingStates.some(x => x === 'loading'))
-            return 'loading';
-
-        if (loadingStates.some(x => x === 'success'))
-            return 'success';
-
-        return 'idle';
-    }
-    else {
-
-        return loadingState as LoadingStateType;
-    }
-};
-
-const getError = (error?: any | any[]) => {
-
-    if (!error)
-        return error;
-
-    if (isArray(error))
-        return (error as any[])[0];
-
-    return error;
-};

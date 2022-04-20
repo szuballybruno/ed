@@ -20,6 +20,11 @@ export const useNavigation = () => {
         domNavigate(replacedPath);
     }, [domNavigate, getUrl, verboseLogging]);
 
+    const navigateWithParams = <T,>(route: ApplicationRoute<T>, params: T) => {
+
+        navigate(route, params);
+    };
+
     const openNewTab = (url: string) => (window as any).open(url, '_blank')
         .focus();
 
@@ -65,6 +70,7 @@ export const useNavigation = () => {
     return {
         history,
         navigate,
+        navigateWithParams,
         navigateToPlayer,
         navigateToCourseDetails,
         openNewTab,
