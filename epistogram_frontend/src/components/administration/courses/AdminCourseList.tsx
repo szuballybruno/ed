@@ -20,9 +20,6 @@ export const AdminCourseList = memo((props: {
     // util
     const courseId = useIntParam('courseId');
 
-    if (loggingSettings.render)
-        console.log('Rendering AdminCourseList');
-
     return <Flex
         className="roundBorders"
         direction="column"

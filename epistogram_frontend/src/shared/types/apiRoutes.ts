@@ -17,6 +17,7 @@ export const apiRoutes = {
     companies: {
         getCompanies: '/companies/get-companies',
         getCompaniesAdmin: '/companies/get-companies-admin',
+        getCompanyEditData: '/companies/get-company-edit-data'
     },
     
     scheduledJobs: {

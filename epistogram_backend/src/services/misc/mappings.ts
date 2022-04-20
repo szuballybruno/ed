@@ -113,6 +113,7 @@ import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
+import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -451,6 +452,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     : null
             } as UserDTO;
         });
+
+    mapperService
+        .addMap(Company, CompanyEditDataDTO, x => ({
+            id: x.id,
+            name: x.name
+        }));
 
     mapperService
         .addMap(CourseView, CourseStatDTO, view => {

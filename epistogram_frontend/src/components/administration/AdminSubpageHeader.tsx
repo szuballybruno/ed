@@ -73,8 +73,6 @@ export const AdminSubpageHeader = (props: {
 
     const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath() ?? '';
 
-    console.log(currentMatchingAbsUrl);
-
     return <Flex
         direction={'column'}
         className="whall roundBorders"
@@ -138,9 +136,9 @@ export const AdminSubpageHeader = (props: {
                                             lineHeight: '0px'
                                         },
                                         '&.Mui-selected': {
-                                            color: '#444',
+                                            color: 'white',
                                             fontWeight: 'bold',
-                                            background: 'var(--transparentIntenseTeal)'
+                                            background: 'var(--funkyHighlight)'
                                         }
                                     }}
                                     label={tabRoute.title}

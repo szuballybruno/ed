@@ -222,6 +222,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
     addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction);
+    addEndpoint(apiRoutes.companies.getCompanyEditData, companyController.getCompanyEditDataAction);
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });

@@ -1,8 +1,9 @@
 import { Flex } from '@chakra-ui/react';
 import { Edit } from '@mui/icons-material';
+import { memo, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../../models/types';
-import { useCompaniesAdmin } from '../../../services/api/companiesApiService';
+import { useCompaniesAdmin, useCompanyEditData } from '../../../services/api/companiesApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
@@ -13,56 +14,77 @@ import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
-export const CompanyAdminPage = () => {
+const IndexPage = memo(() => {
 
-    const IndexPage = () => {
+    const { companies, companiesState } = useCompaniesAdmin();
+    const { navigateWithParams } = useNavigation();
+    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
 
-        const { companies, companiesState } = useCompaniesAdmin();
-        const { navigateWithParams } = useNavigation();
-        const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
+    return (
+        <LoadingFrame
+            loadingState={companiesState}
+            className='whall'
+            direction='column'>
 
-        return (
-            <LoadingFrame
-                loadingState={companiesState}
-                className='whall'
-                direction='column'>
+            {companies
+                .map((company, index) => (
+                    <Flex
+                        key={index}
+                        align='center'>
 
-                {companies
-                    .map((company, index) => (
-                        <Flex
-                            key={index}
-                            align='center'>
+                        <EpistoFont>
+                            {company.name}
+                        </EpistoFont>
 
-                            <EpistoFont>
-                                {company.name}
-                            </EpistoFont>
+                        <EpistoButton
+                            onClick={() => navigateWithParams(editRoute, { companyId: company.id })}>
+                            <Edit></Edit>
+                        </EpistoButton>
+                    </Flex>
+                ))}
+        </LoadingFrame>
+    );
+});
 
-                            <EpistoButton
-                                onClick={() => navigateWithParams(editRoute, { companyId: company.id })}>
-                                <Edit></Edit>
-                            </EpistoButton>
-                        </Flex>
-                    ))}
-            </LoadingFrame>
-        );
-    };
+const EditPage = memo((props: { onNameLoaded: (name: string) => void }) => {
 
-    const EditPage = () => {
+    const { onNameLoaded } = props;
+    const compnayId = useIntParam('companyId')!;
 
-        const compnayId = useIntParam('companyId');
+    const {
+        companyEditData,
+        companyEditDataState
+    } = useCompanyEditData(compnayId);
 
-        return <>
-            {compnayId}
-        </>;
-    };
+    useEffect(() => {
+
+        if (companyEditData?.name)
+            onNameLoaded(companyEditData.name);
+    }, [companyEditData]);
+
+    return <>
+        <LoadingFrame
+            loadingState={companyEditDataState}>
+
+            {companyEditData?.name ?? ''}
+        </LoadingFrame>
+    </>;
+}, (p, n) => p.onNameLoaded === n.onNameLoaded);
+
+export const CompanyAdminPage = memo(() => {
 
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
+    const [companyName, setCompanyName] = useState<string | null>(null);
+    const isEdit = isMatchingCurrentRoute(editRoute).isMatchingRouteExactly;
+
+    console.log('asd');
 
     return (
         <AdminBreadcrumbsHeader
             background='white'
-            direction='column' >
+            direction='column'
+            subRouteLabel={isEdit ? companyName ?? undefined : undefined}>
 
             <AdminSubpageHeader
                 direction="column"
@@ -72,7 +94,7 @@ export const CompanyAdminPage = () => {
                 }}
                 tabMenuItems={new ArrayBuilder<ApplicationRoute>()
                     .add(applicationRoutes.administrationRoute.companiesRoute.indexRoute)
-                    .addIf(isMatchingCurrentRoute(editRoute).isMatchingRouteExactly, editRoute)
+                    .addIf(isEdit, editRoute)
                     .getArray()}>
 
                 <EpistoRoutes
@@ -83,11 +105,11 @@ export const CompanyAdminPage = () => {
                         },
                         {
                             route: applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute,
-                            element: <EditPage />
+                            element: <EditPage onNameLoaded={setCompanyName} />
                         }
                     ]} />
 
             </AdminSubpageHeader>
         </AdminBreadcrumbsHeader >
     );
-};
+});

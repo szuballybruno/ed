@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
@@ -7,7 +7,7 @@ import { FlexFloat } from '../controls/FlexFloat';
 import { DesktopNavbar } from './DesktopNavbar';
 import classes from './navbar.module.scss';
 
-const Navbar = (props: {
+const Navbar = memo((props: {
     hideLinks?: boolean,
     showLogo?: boolean,
     isLowHeight?: boolean,
@@ -66,6 +66,9 @@ const Navbar = (props: {
             ? renderDesktopNavbar()
             : renderMobileNavbar()}
     </FlexFloat>;
-};
+}, (p, n) => {
+
+    return JSON.stringify(p) === JSON.stringify(n);
+});
 
 export default Navbar;

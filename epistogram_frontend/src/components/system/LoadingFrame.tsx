@@ -26,7 +26,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
     const [currentLoadingState, setCurrentLoadingState] = useState<LoadingStateType>('idle');
     const showOverlay = currentLoadingState === 'error' || currentLoadingState === 'loading';
-    const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
+    const renderContent = true;//onlyRenderIfLoaded ? !showOverlay : true;
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // func 
@@ -87,8 +87,6 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     const targetLoadingState = useMemo(() => getLoadingState(), [getLoadingState]);
 
     useEffect(() => {
-
-        console.log(targetLoadingState);
 
         if (targetLoadingState !== 'loading') {
 

@@ -19,6 +19,14 @@ export class CompaniesController {
     getCompaniesAdminAction = (params: ActionParams) => {
 
         return this._compService
-            .getCompaniesAdmin(params.currentUserId);
+            .getCompaniesAdminAsync(params.currentUserId);
+    };
+
+    getCompanyEditDataAction = (params: ActionParams) => {
+
+        return this._compService
+            .getCompanyEditDataAsync(params
+                .getQuery()
+                .getValue(x => x.companyId, 'int'));
     };
 }

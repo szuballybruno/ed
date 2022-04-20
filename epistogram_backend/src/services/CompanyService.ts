@@ -1,4 +1,5 @@
 import { Company } from '../models/entity/Company';
+import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyDTO } from '../shared/dtos/CompanyDTO';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
@@ -23,7 +24,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .map(company => this._mapperService.map(Company, CompanyDTO, company));
     }
 
-    async getCompaniesAdmin(userId: number) {
+    async getCompaniesAdminAsync(userId: number) {
 
         const companies = await this._ormService
             .query(Company)
@@ -31,5 +32,16 @@ export class CompanyService extends QueryServiceBase<Company> {
 
         return companies
             .map(company => this._mapperService.map(Company, CompanyDTO, company));
+    }
+
+    async getCompanyEditDataAsync(companyId: number) {
+
+        const comp = await this._ormService
+            .query(Company, { companyId })
+            .where('id', '=', 'companyId')
+            .getSingle();
+
+        return this._mapperService
+            .map(Company, CompanyEditDataDTO, comp);
     }
 }

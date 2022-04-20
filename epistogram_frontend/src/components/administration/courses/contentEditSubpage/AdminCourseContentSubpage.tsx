@@ -59,8 +59,6 @@ export const AdminCourseContentSubpage = () => {
 
     const preprocessItems = useCallback((items: ItemType[]) => {
 
-        console.log('Preprocessing items...');
-
         const preproItems = items
             .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, isRowModified))
             .orderBy(x => x.module.orderIndex)
