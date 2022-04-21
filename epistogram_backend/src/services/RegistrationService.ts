@@ -154,7 +154,7 @@ export class RegistrationService extends ServiceBase {
 
         // get auth tokens 
         const tokens = await this._authenticationService
-            .getUserLoginTokens(user, user.userActivity);
+            .getUserLoginTokens(user);
 
         // set user current refresh token 
         await this._userService
@@ -195,7 +195,7 @@ export class RegistrationService extends ServiceBase {
 
         // get auth tokens 
         const tokens = await this._authenticationService
-            .getUserLoginTokens(user, user.userActivity);
+            .getUserLoginTokens(user);
 
         // set user current refresh token 
         await this._userService

@@ -1,5 +1,4 @@
 import { JobTitleDTO } from './JobTitleDTO';
-import { UserActivityDTO } from './UserActivityDTO';
 
 export class UserDTO {
     id: number;
@@ -13,5 +12,4 @@ export class UserDTO {
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
     jobTitle: JobTitleDTO | null;
-    userActivity: UserActivityDTO;
 }

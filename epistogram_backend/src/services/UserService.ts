@@ -207,7 +207,6 @@ export class UserService {
         // set default user fileds
         const user = {
             email: opts.email,
-            roleId: opts.roleId ?? RoleIdEnum.user,
             firstName: opts.firstName,
             lastName: opts.lastName,
             jobTitleId: opts.jobTitleId,
@@ -279,7 +278,6 @@ export class UserService {
             .createQueryBuilder('user')
             .where('user.id = :userId', { userId: userId })
             .leftJoinAndSelect('user.avatarFile', 'a')
-            .leftJoinAndSelect('user.userActivity', 'ua')
             .leftJoinAndSelect('user.jobTitle', 'jt')
             .getOneOrFail();
 
@@ -356,7 +354,6 @@ export class UserService {
         const user = await this._ormService
             .getRepository(User)
             .createQueryBuilder('user')
-            .leftJoinAndSelect('user.userActivity', 'ua')
             .where('user.email = :email', { email: email })
             .getOne();
 

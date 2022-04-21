@@ -1,7 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { RegistrationType } from '../DatabaseTypes';
-import { UserActivityFlatView } from '../views/UserActivityFlatView';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
@@ -24,6 +23,8 @@ import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
+import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
+import { getJoinColumnInverseSide } from '../../utilities/helpers';
 
 @Entity()
 export class User {
@@ -79,11 +80,6 @@ export class User {
 
     @Column({ nullable: true, type: 'text' })
     invitationToken: string | null;
-
-    // user activity 
-    @OneToOne(_ => UserActivityFlatView, x => x.user)
-    @JoinColumn({ name: 'id' })
-    userActivity: UserActivityFlatView;
 
     // Avatar file
     @Column({ nullable: true })
@@ -192,9 +188,14 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => UserExamProgressBridge, x => x.user)
     examProgressBridges: UserExamProgressBridge[];
-    
+
     // role assingments
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.user)
     roleAssignmentBridges: RoleAssignmentBridge[];
+
+    // companyOwnerBridges
+    @JoinColumn()
+    @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
+    companyOwnerBridges: CompanyOwnerBridge[];
 }

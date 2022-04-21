@@ -41,7 +41,6 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserActivityFlatView } from '../../models/views/UserActivityFlatView';
 import { AdminUserListView } from '../../models/views/UserAdminListView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserStatsView } from '../../models/views/UserStatsView';
@@ -101,7 +100,6 @@ import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
 import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
-import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
@@ -445,10 +443,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
                 avatarUrl: user.avatarFile
                     ? getAssetUrl(user.avatarFile.filePath)
-                    : null,
-
-                userActivity: user.userActivity
-                    ? mapperService.map(UserActivityFlatView, UserActivityDTO, user.userActivity)
                     : null
             } as UserDTO;
         });
@@ -887,12 +881,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             id: x.id,
             name: x.name
         }));
-
-    mapperService
-        .addMap(UserActivityFlatView, UserActivityDTO, x => ({
-            ...x
-        }));
-
 };
 
 const separationChar = '|';

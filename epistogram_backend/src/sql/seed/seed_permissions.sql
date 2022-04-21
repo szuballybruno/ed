@@ -1,6 +1,6 @@
 BEGIN;
 
-INSERT INTO public.activity
+INSERT INTO public.permission
     (
         id,
         code
@@ -8,27 +8,27 @@ INSERT INTO public.activity
 VALUES
     (
         1,
-        'canSetInvitedUserCompany'
+        'canChangeCourseMode'
     ),
     (
         2,
-        'canAccessCourseAdministration'
+        'canSetInvitedUserCompany'
     ),
     (
         3,
-        'canAccessAdministration'
+        'canAccessCourseAdministration'
     ),
     (
         4,
-        'canAccessApplication'
+        'canAccessAdministration'
     ),
     (
         5,
-        'canAccessShopAdministration'
+        'canAccessApplication'
     ),
     (
         6,
-        'canChangeCourseMode'
+        'canAccessShopAdministration'
     )
 ON CONFLICT (id) DO UPDATE SET 
     code = EXCLUDED.code;

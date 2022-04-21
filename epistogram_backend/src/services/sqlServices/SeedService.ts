@@ -3,6 +3,7 @@ import { RoleIdEnum } from '../../shared/types/sharedTypes';
 import { RegistrationService } from '../RegistrationService';
 import { log } from '../misc/logger';
 import { SQLBootstrapperService } from './SQLBootstrapper';
+import { dbSchema } from '../misc/dbSchema';
 
 export class SeedService {
 
@@ -17,29 +18,13 @@ export class SeedService {
 
     seedDBAsync = async () => {
 
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_companies');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_question_types');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_permissions');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_roles');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_signup_exam');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_job_titles');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_users');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_signup_questions');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_course_categories');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_courses');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_exams');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_videos');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_answer_sessions');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_questions_video');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_questions_exam');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_daily_tips');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_activation_codes');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_shop_item_categories');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_shop_items');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_discount_codes');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_prequiz_questions');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_course_rating');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_tempomat_adjustment_values');
+        for (let index = 0; index < dbSchema.seedScripts.length; index++) {
+
+            const seedScript = dbSchema.seedScripts[index];
+
+            await this._sqlBootstrapperService
+                .executeSeedScriptAsync(seedScript);
+        }
 
         // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();

@@ -9,7 +9,6 @@ INSERT INTO public.user
     first_name,
     last_name,
     password,
-    role_id,
     company_id,
     job_title_id
 )
@@ -24,7 +23,7 @@ VALUES
     'Árpád', -- first_name
     'Bagi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -38,7 +37,7 @@ VALUES
     'György', -- first_name
     'Kelecsényi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -52,7 +51,7 @@ VALUES
     'Gizella', -- first_name
     'Zurinka', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -66,7 +65,7 @@ VALUES
     'Péter', -- first_name
     'Dr. Vlaciu', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -80,7 +79,7 @@ VALUES
     'Péter', -- first_name
     'Rozgonyi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -94,7 +93,7 @@ VALUES
     'Andrea', -- first_name
     'Lukács', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -108,7 +107,7 @@ VALUES
     'Tamás', -- first_name
     'Dr. Lepsényi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -122,7 +121,7 @@ VALUES
     'Péter', -- first_name
     'Szabó', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -136,7 +135,7 @@ VALUES
     'Bence', -- first_name
     'Mányoki', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -150,7 +149,7 @@ VALUES
     'Erika', -- first_name
     'Benkő', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -164,7 +163,7 @@ VALUES
     'Gábor', -- first_name
     'Zwierczyk', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -178,7 +177,7 @@ VALUES
     'Károly', -- first_name
     'Apostagi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -192,7 +191,7 @@ VALUES
     'Krisztina', -- first_name
     'Reichenberger', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -206,7 +205,7 @@ VALUES
     'Rozália', -- first_name
     'Borbély', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 ),
@@ -220,7 +219,7 @@ VALUES
     'Írisz', -- first_name
     'Kovács', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
+    -- 1, -- role_id
     1, -- company_id
     1 -- job_title_id
 );

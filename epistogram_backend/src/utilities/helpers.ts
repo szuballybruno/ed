@@ -25,6 +25,11 @@ export const getJoinColumnName = <T>(c: ClassType<T>, prop: keyof T) => {
     };
 };
 
+export const getJoinColumnInverseSide = <TCurrent>() => <TOther>(fn: (other: TOther) => TCurrent): ((other: TOther) => TCurrent) => {
+
+    return fn;
+};
+
 export function replaceAll(originalText: string, searchText: string, replaceText: string) {
 
     const result = originalText

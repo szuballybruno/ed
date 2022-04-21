@@ -6,7 +6,6 @@ SELECT
 	u.email,
 	u.first_name,
 	u.last_name,
-	u.role_id,
 	u.company_id,
 	o.name company_name,
 	u.job_title_id,
@@ -15,7 +14,7 @@ SELECT
 	ulav.total_spent_seconds,
 	EXTRACT(epoch FROM ulav.total_spent_seconds)::int total_spent_seconds_seconds,
 	sf.file_path avatar_file_path,
-	uafv.can_access_application,
+	-- uafv.can_access_application,
 	cbv.coin_balance
 FROM public.user u 
 
@@ -31,8 +30,8 @@ ON jt.id = u.job_title_id
 LEFT JOIN public.user_latest_activity_view ulav
 ON ulav.id = u.id
 
-LEFT JOIN public.user_activity_flat_view uafv
-ON uafv.user_id = u.id
+-- LEFT JOIN public.user_activity_flat_view uafv
+-- ON uafv.user_id = u.id
 
 LEFT JOIN public.coin_balance_view cbv
 ON cbv.user_id = u.id

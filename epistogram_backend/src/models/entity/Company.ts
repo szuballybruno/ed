@@ -1,6 +1,8 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { getJoinColumnInverseSide } from '../../utilities/helpers';
 import { ActivationCode } from './ActivationCode';
+import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { User } from './User';
 
@@ -31,4 +33,9 @@ export class Company {
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.company)
     roleAssignmentBridges: RoleAssignmentBridge[];
+    
+    // companyOwnerBridges
+    @JoinColumn()
+    @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<Company>()(x => x.company))
+    companyOwnerBridges: CompanyOwnerBridge[];
 }

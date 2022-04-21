@@ -29,7 +29,6 @@ import { CourseView } from '../../models/views/CourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
-import { UserActivityFlatView } from '../../models/views/UserActivityFlatView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { VideoCompletedView } from '../../models/views/VideoCompletedView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
@@ -93,8 +92,37 @@ import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
 import { ModuleView } from '../../models/views/ModuleView';
+import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
+import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
 
 export const dbSchema = {
+
+    seedScripts: [
+        'seed_companies',
+        'seed_question_types',
+        'seed_permissions',
+        'seed_roles',
+        'seed_signup_exam',
+        'seed_job_titles',
+        'seed_users',
+        'seed_company_owner_bridges',
+        'seed_signup_questions',
+        'seed_course_categories',
+        'seed_courses',
+        'seed_exams',
+        'seed_videos',
+        'seed_answer_sessions',
+        'seed_questions_video',
+        'seed_questions_exam',
+        'seed_daily_tips',
+        'seed_activation_codes',
+        'seed_shop_item_categories',
+        'seed_shop_items',
+        'seed_discount_codes',
+        'seed_prequiz_questions',
+        'seed_course_rating',
+        'seed_tempomat_adjustment_values'
+    ],
 
     viewScripts: [
         'answer_session_view',
@@ -109,8 +137,7 @@ export const dbSchema = {
         'latest_given_answer_view',
         'personality_trait_view',
         'signup_completed_view',
-        'user_activity_view',
-        'user_activity_flat_view',
+        'user_permission_view',
         'exam_result_view',
         'practise_question_view',
         'daily_tip_view',
@@ -204,7 +231,6 @@ export const dbSchema = {
         CourseItemAllView,
         CourseView,
         PersonalityTraitView,
-        UserActivityFlatView,
         SignupCompletedView,
         DailyTipView,
         ExamResultView,
@@ -255,6 +281,7 @@ export const dbSchema = {
         Video,
         Task,
         GivenAnswer,
+        CompanyOwnerBridge,
         AnswerGivenAnswerBridge,
         Question,
         Answer,
@@ -267,6 +294,7 @@ export const dbSchema = {
         Role,
         Permission,
         RolePermissionBridge,
+        RoleAssignmentBridge,
         PractiseQuestionView,
         JobTitle,
         DailyTip,
