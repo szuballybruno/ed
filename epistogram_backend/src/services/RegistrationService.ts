@@ -222,6 +222,7 @@ export class RegistrationService extends ServiceBase {
             companyId: number;
             roleId: number;
             jobTitleId: number;
+            isGod?: boolean;
         },
         noEmailNotification?: boolean) {
 
@@ -242,7 +243,8 @@ export class RegistrationService extends ServiceBase {
                 jobTitleId: options.jobTitleId,
                 registrationType: 'Invitation',
                 password: 'guest',
-                invitationToken
+                invitationToken,
+                isGod: options.isGod
             });
 
         // send email

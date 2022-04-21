@@ -44,7 +44,8 @@ export class SeedService {
                     jobTitleId: 1,
                     roleId: RoleIdEnum.administrator,
                     email: 'marosi.endre@email.com',
-                    companyId: 1
+                    companyId: 1,
+                    isGod: true
                 },
                 true);
 

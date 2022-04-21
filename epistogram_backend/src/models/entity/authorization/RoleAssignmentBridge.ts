@@ -10,9 +10,6 @@ export class RoleAssignmentBridge {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    isOwner: boolean;
-
     // role 
     @Column()
     roleId: number;
@@ -22,7 +19,7 @@ export class RoleAssignmentBridge {
     role: Role;
 
     // user 
-    @Column()
+    @Column({ type: 'int', nullable: true })
     userId: number;
 
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
@@ -30,7 +27,7 @@ export class RoleAssignmentBridge {
     user: User;
 
     // company 
-    @Column()
+    @Column({ type: 'int', nullable: true })
     companyId: number;
 
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)

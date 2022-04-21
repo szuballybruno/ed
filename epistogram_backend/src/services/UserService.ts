@@ -190,7 +190,8 @@ export class UserService {
         phoneNumber?: string,
         roleId?: number,
         jobTitleId?: number,
-        invitationToken?: string
+        invitationToken?: string,
+        isGod?: boolean
     }) => {
 
         const regType = opts.registrationType;
@@ -216,7 +217,8 @@ export class UserService {
             isInvitationAccepted: false,
             isTrusted: regType === 'Invitation',
             registrationType: regType,
-            invitationToken: opts.invitationToken
+            invitationToken: opts.invitationToken,
+            isGod: !!opts.isGod
         } as User;
 
         // insert user

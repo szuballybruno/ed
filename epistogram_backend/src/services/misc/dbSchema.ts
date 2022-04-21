@@ -106,6 +106,8 @@ export const dbSchema = {
         'seed_job_titles',
         'seed_users',
         'seed_company_owner_bridges',
+        'seed_role_assignment_bridges',
+        'seed_role_permission_bridges',
         'seed_signup_questions',
         'seed_course_categories',
         'seed_courses',

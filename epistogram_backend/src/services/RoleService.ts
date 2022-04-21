@@ -72,7 +72,6 @@ export class RoleService extends QueryServiceBase<Role> {
         await this._ormService
             .create(RoleAssignmentBridge, noUndefined<RoleAssignmentBridge>({
                 roleId: role.id,
-                isOwner: true,
                 userId: dto.ownerUserId,
                 companyId: dto.ownerCompanyId,
             }));

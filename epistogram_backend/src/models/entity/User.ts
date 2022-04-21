@@ -35,6 +35,9 @@ export class User {
     @DeleteDateColumn()
     deletionDate: Date;
 
+    @Column({ default: false })
+    isGod: boolean;
+
     @Column()
     isInvitationAccepted: boolean;
 
