@@ -19,7 +19,7 @@ export class SeedService {
 
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_companies');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_question_types');
-        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_activities');
+        await this._sqlBootstrapperService.executeSeedScriptAsync('seed_permissions');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_roles');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_signup_exam');
         await this._sqlBootstrapperService.executeSeedScriptAsync('seed_job_titles');

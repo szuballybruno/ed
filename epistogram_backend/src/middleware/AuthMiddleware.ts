@@ -51,7 +51,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
         else {
 
             // get userId from access token
-            const { userId, userActivity, userRole } = this._authenticationService
+            const { userId } = this._authenticationService
                 .getRequestAccessTokenPayload(accessToken);
 
             // retrieve user from DB
@@ -59,7 +59,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
                 .getUserById(userId);
 
             // authorize user role 
-            await this.authorizeUserAsync(userRole, options?.authorize);
+            // await this.authorizeUserAsync(userRole, options?.authorize);
 
             // authorize user access level (limited / full)
             await this.authrorizeUserAccessLevelAsync(user.userActivity, requestPath);
@@ -92,20 +92,5 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
 
         if (!isCurrentRouteAccessable)
             throw new ErrorCode('User has not proper rights to access the requested resource.', 'forbidden');
-    };
-
-    private authorizeUserAsync = async (role: RoleType, authorize: RoleType[] | undefined) => {
-
-        if (!authorize)
-            return;
-
-        const userRoleType = RoleIdEnum
-            .toRoleType(RoleIdEnum.toRoleId(role));
-
-        const isAuthorized = authorize
-            .some(allowedRoleType => allowedRoleType === userRoleType);
-
-        if (!isAuthorized)
-            throw new Error('Unauthorized.');
     };
 }

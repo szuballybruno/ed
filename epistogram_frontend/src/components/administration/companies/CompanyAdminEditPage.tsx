@@ -13,7 +13,7 @@ export const CompanyAdminEditPage = memo((props: { onNameLoaded: (name: string) 
 
     const { onNameLoaded } = props;
     const compnayId = useIntParam('companyId')!;
-    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
+    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
     const [name, setName] = useState('');
 
     // http

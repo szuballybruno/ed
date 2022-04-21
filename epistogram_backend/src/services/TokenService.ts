@@ -61,7 +61,6 @@ export class TokenService {
         return this.getJWTToken<AccessTokenPayload>(
             {
                 userId: user.id,
-                userRole: RoleIdEnum.toRoleType(user.roleId),
                 userActivity
             },
             this._config.security.secrets.accessTokenSecret,

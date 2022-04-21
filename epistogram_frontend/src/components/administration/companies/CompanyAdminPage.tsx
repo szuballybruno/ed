@@ -9,7 +9,7 @@ import { CompanyAdminIndexPage } from './CompanyAdminIndexPage';
 export const CompanyAdminPage = memo(() => {
 
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
-    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute;
+    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
     const [companyName, setCompanyName] = useState<string | null>(null);
     const isEdit = isMatchingCurrentRoute(editRoute).isMatchingRouteExactly;
 
@@ -26,7 +26,7 @@ export const CompanyAdminPage = memo(() => {
                         element: <CompanyAdminIndexPage />
                     },
                     {
-                        route: applicationRoutes.administrationRoute.companiesRoute.editCompanyRoute,
+                        route: applicationRoutes.administrationRoute.companiesRoute.editRoute,
                         element: <CompanyAdminEditPage onNameLoaded={setCompanyName} />
                     }
                 ]} />

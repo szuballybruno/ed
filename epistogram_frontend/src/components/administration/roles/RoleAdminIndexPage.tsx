@@ -10,7 +10,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
-export const CompanyAdminIndexPage = memo(() => {
+export const RoleAdminIndexPage = memo(() => {
 
     const { navigateWithParams } = useNavigation();
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;

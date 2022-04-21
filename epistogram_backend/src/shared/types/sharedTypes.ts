@@ -1,4 +1,5 @@
-// asd
+import * as DatabaseTypes from '../../models/DatabaseTypes';
+
 
 export type InvitationTokenPayload = { userEmail: string };
 
@@ -29,6 +30,8 @@ export type CourseItemStateType = 'completed' | 'locked' | 'current' | 'availabl
 export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'exam';
 
 export type CourseModeType = 'beginner' | 'advanced';
+
+export type PermissionCodeType = DatabaseTypes.PermissionCodeType;
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

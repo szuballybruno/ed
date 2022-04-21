@@ -1,13 +1,12 @@
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { RegistrationService } from '../services/RegistrationService';
+import { RoleService } from '../services/RoleService';
+import { UserService } from '../services/UserService';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { RoleIdEnum } from '../shared/types/sharedTypes';
-import { EmailService } from '../services/EmailService';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { RegistrationService } from '../services/RegistrationService';
-import { TokenService } from '../services/TokenService';
-import { UserService } from '../services/UserService';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { ActionParams, ErrorCode } from '../utilities/helpers';
 
@@ -68,33 +67,17 @@ export class RegistrationController {
 
     inviteUserAction = async (params: ActionParams) => {
 
-        const dto = params.getBody<CreateInvitedUserDTO>();
+        const dto = params
+            .getBody<CreateInvitedUserDTO>([
+                'companyId',
+                'email',
+                'firstName',
+                'lastName',
+                'roleId',
+                'jobTitleId'
+            ]).data;
 
-        // handle companyId
-        const currentUser = await this._userService
-            .getUserById(params.currentUserId);
-
-        // if user is admin require companyId to be provided
-        // otherwise use the current user's company
-        const companyId = currentUser.roleId === RoleIdEnum.administrator
-            ? dto.data.companyId
-            : currentUser.companyId;
-
-        if (!companyId)
-            throw new ErrorCode(
-                `Current user is not an administrator, 
-                but has rights to add users, but has no company, 
-                in which he/she could add users.`, 'bad request');
-
-        // create user
-        await this._registrationService
-            .createInvitedUserAsync({
-                email: dto.getValue<string>(x => x.email),
-                jobTitleId: dto.getValue<number>(x => x.jobTitleId),
-                firstName: dto.getValue<string>(x => x.firstName),
-                lastName: dto.getValue<string>(x => x.lastName),
-                roleId: dto.getValue<number>(x => x.roleId),
-                companyId: companyId,
-            });
+        return await this._registrationService
+            .inviteUserAsync(params.currentUserId, dto);
     };
 }

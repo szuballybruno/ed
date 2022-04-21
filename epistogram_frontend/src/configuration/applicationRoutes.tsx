@@ -74,9 +74,12 @@ export type ApplicationRoutesType = {
         myCompanyRoute: ApplicationRoute;
         companiesRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
-            editCompanyRoute: ApplicationRoute<{ companyId: number }>;
+            editRoute: ApplicationRoute<{ companyId: number }>;
         };
-        rolesRoute: ApplicationRoute;
+        rolesRoute: ApplicationRoute & {
+            indexRoute: ApplicationRoute;
+            editRoute: ApplicationRoute<{ roleId: number }>;
+        };
     };
     settingsRoute: ApplicationRoute & {
         preferencesRoute: ApplicationRoute;
@@ -396,7 +399,7 @@ export const applicationRoutes: ApplicationRoutesType = {
                 title: 'Cégek',
                 route: new EpistoRoute('/administration/companies', '/')
             },
-            editCompanyRoute: {
+            editRoute: {
                 title: 'Cég szerkesztese',
                 route: new EpistoRoute('/administration/companies', '/:companyId/edit')
             },
@@ -407,7 +410,16 @@ export const applicationRoutes: ApplicationRoutesType = {
             route: new EpistoRoute('/administration', 'roles'),
             icon: <LocalPoliceIcon
                 className="fontXXL"
-                color={'secondary'} />
+                color={'secondary'} />,
+                
+            indexRoute: {
+                title: 'Roles',
+                route: new EpistoRoute('/administration/roles', '/')
+            },
+            editRoute: {
+                title: 'Role edit',
+                route: new EpistoRoute('/administration/roles', '/:roleId/edit')
+            },
         }
     },
 

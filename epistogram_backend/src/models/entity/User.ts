@@ -1,6 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
-import { RegistrationType } from '../Types';
+import { RegistrationType } from '../DatabaseTypes';
 import { UserActivityFlatView } from '../views/UserActivityFlatView';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
@@ -13,7 +13,7 @@ import { Event } from './Event';
 import { JobTitle } from './JobTitle';
 import { Company } from './Company';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
-import { Role } from './Role';
+import { Role } from './authorization/Role';
 import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
@@ -23,6 +23,7 @@ import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
+import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 
 @Entity()
 export class User {
@@ -83,14 +84,6 @@ export class User {
     @OneToOne(_ => UserActivityFlatView, x => x.user)
     @JoinColumn({ name: 'id' })
     userActivity: UserActivityFlatView;
-
-    // user role
-    @Column()
-    roleId: number;
-
-    @ManyToOne(_ => Role, x => x.users)
-    @JoinColumn({ name: 'role_id' })
-    role: Role;
 
     // Avatar file
     @Column({ nullable: true })
@@ -199,4 +192,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => UserExamProgressBridge, x => x.user)
     examProgressBridges: UserExamProgressBridge[];
+    
+    // role assingments
+    @JoinColumn()
+    @OneToMany(_ => RoleAssignmentBridge, x => x.user)
+    roleAssignmentBridges: RoleAssignmentBridge[];
 }

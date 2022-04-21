@@ -1,5 +1,5 @@
 import { JobTitleDTO } from './JobTitleDTO';
-import { CompanyDTO } from './CompanyDTO';
+import { CompanyDTO } from './company/CompanyDTO';
 import { RoleDTO } from './RoleDTO';
 
 export class UserEditDTO {

@@ -10,7 +10,7 @@ import { CourseService } from './CourseService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { CompanyDTO } from '../shared/dtos/CompanyDTO';
+import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 
 export class MiscService {
 

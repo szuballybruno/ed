@@ -1,23 +1,27 @@
 import generatePassword from 'password-generator';
+import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
-import { getFullName, ErrorCode } from '../utilities/helpers';
+import { ErrorCode, getFullName } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { EmailService } from './EmailService';
+import { MapperService } from './MapperService';
 import { log } from './misc/logger';
+import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
 
-export class RegistrationService {
+export class RegistrationService extends ServiceBase {
 
     private _activationCodeService: ActivationCodeService;
     private _emailService: EmailService;
     private _userService: UserService;
     private _authenticationService: AuthenticationService;
     private _tokenService: TokenService;
-    private _ormService: ORMConnectionService;
+    private _roleService: RoleService;
 
     constructor(
         acs: ActivationCodeService,
@@ -25,7 +29,11 @@ export class RegistrationService {
         userService: UserService,
         authenticationService: AuthenticationService,
         tokenService: TokenService,
-        ormService: ORMConnectionService) {
+        ormService: ORMConnectionService,
+        roleService: RoleService,
+        mapperService: MapperService) {
+
+        super(mapperService, ormService);
 
         this._userService = userService;
         this._authenticationService = authenticationService;
@@ -33,7 +41,40 @@ export class RegistrationService {
         this._emailService = emailService;
         this._tokenService = tokenService;
         this._ormService = ormService;
+        this._roleService = roleService;
     }
+
+    inviteUserAsync = async (userId: number, dto: CreateInvitedUserDTO) => {
+
+        // const hasSetUserCompanyPermission = this._roleService
+        //     .findPermissionAsync(userId,  'canSetInvitedUserCompany');
+
+        // // if user is admin require companyId to be provided
+        // // otherwise use the current user's company
+        // const companyId = currentUser.roleId === RoleIdEnum.administrator
+        //     ? dto.data.companyId
+        //     : currentUser.companyId;
+
+        // TODO
+        const companyId = 1;
+
+        if (!companyId)
+            throw new ErrorCode(
+                `Current user is not an administrator, 
+                but has rights to add users, but has no company, 
+                in which he/she could add users.`, 'bad request');
+
+        // create user
+        await this
+            .createInvitedUserAsync({
+                email: dto.email,
+                jobTitleId: dto.jobTitleId,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                roleId: dto.roleId,
+                companyId: companyId,
+            });
+    };
 
     /**
      * This function registers a user using an activation code. 

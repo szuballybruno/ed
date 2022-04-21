@@ -1,9 +1,9 @@
 BEGIN;
 
-INSERT INTO public."activity"
+INSERT INTO public.activity
     (
-        "id",
-        "name"
+        id,
+        code
     )
 VALUES
     (
@@ -30,7 +30,7 @@ VALUES
         6,
         'canChangeCourseMode'
     )
-ON CONFLICT ("id") DO UPDATE SET 
-    "name" = EXCLUDED."name";
+ON CONFLICT (id) DO UPDATE SET 
+    code = EXCLUDED.code;
 
 END;

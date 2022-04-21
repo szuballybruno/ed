@@ -1,5 +1,5 @@
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
-import { CompanyDTO } from '../../shared/dtos/CompanyDTO';
+import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';

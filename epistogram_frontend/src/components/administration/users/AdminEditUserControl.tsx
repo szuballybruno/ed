@@ -7,7 +7,7 @@ import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/
 import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
-import { CompanyDTO } from '../../../shared/dtos/CompanyDTO';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserDTO } from '../../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';

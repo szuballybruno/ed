@@ -7,7 +7,7 @@ import { RoleIdEnum } from '../shared/types/sharedTypes';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { RegistrationType } from '../models/Types';
+import { RegistrationType } from '../models/DatabaseTypes';
 import { AdminUserListView } from '../models/views/UserAdminListView';
 import { getFullName, toFullName, ErrorCode } from '../utilities/helpers';
 import { HashService } from './HashService';

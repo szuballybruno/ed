@@ -1,4 +1,4 @@
-import { Activity } from '../../models/entity/Activity';
+import { Permission } from '../../models/entity/authorization/Permission';
 import { Answer } from '../../models/entity/Answer';
 import { AnswerGivenAnswerBridge } from '../../models/entity/AnswerGivenAnswerBridge';
 import { AnswerSession } from '../../models/entity/AnswerSession';
@@ -13,8 +13,8 @@ import { Company } from '../../models/entity/Company';
 import { Question } from '../../models/entity/Question';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { QuestionType } from '../../models/entity/QuestionType';
-import { Role } from '../../models/entity/Role';
-import { RoleActivityBridge } from '../../models/entity/RoleActivityBridge';
+import { Role } from '../../models/entity/authorization/Role';
+import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
 import { StorageFile } from '../../models/entity/StorageFile';
 import { Task } from '../../models/entity/Task';
 import { User } from '../../models/entity/User';
@@ -265,8 +265,8 @@ export const dbSchema = {
         UserCourseBridge,
         PersonalityTraitCategory,
         Role,
-        Activity,
-        RoleActivityBridge,
+        Permission,
+        RolePermissionBridge,
         PractiseQuestionView,
         JobTitle,
         DailyTip,

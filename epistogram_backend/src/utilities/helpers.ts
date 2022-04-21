@@ -2,7 +2,7 @@ import { log } from 'console';
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { User } from '../models/entity/User';
-import { ParsableValueType } from '../models/Types';
+import { ClassType, ParsableValueType } from '../models/DatabaseTypes';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { logError, logSecondary } from '../services/misc/logger';
 import { typecheck } from '../shared/logic/sharedLogic';
@@ -16,6 +16,13 @@ export const toFullName = (firstName: string, lastName: string, culture?: 'en' |
         return `${lastName} ${firstName}`;
 
     return `${firstName} ${lastName}`;
+};
+
+export const getJoinColumnName = <T>(c: ClassType<T>, prop: keyof T) => {
+
+    return {
+        name: toSQLSnakeCasing(prop as string)
+    };
 };
 
 export function replaceAll(originalText: string, searchText: string, replaceText: string) {
@@ -35,8 +42,8 @@ export const throwNotImplemented = () => {
 export const toSQLSnakeCasing = (name: string) => {
 
     return name.split(/(?=[A-Z])/)
-.join('_')
-.toLowerCase();
+        .join('_')
+        .toLowerCase();
 };
 
 export const forN = <T>(iterations: number, action: (index: number) => T) => {
@@ -69,7 +76,7 @@ export class ActionParams {
         this.currentUserId = userId;
     }
 
-    getBody<T = any>() {
+    getBody<T = any>(notNullOrUndefined: (keyof T)[] = []) {
 
         if (this.isMultipart) {
 
@@ -83,6 +90,13 @@ export class ActionParams {
                 logSecondary('--- WARNING: body has a document property, this might mean it\'s not a JSON payload, but a multipart form data!');
 
             const body = withValueOrBadRequest<T>(this.req.body);
+
+            const nullOrUndefProps = notNullOrUndefined
+                .filter(x => !body[x]);
+
+            if (nullOrUndefProps.length > 0)
+                throw new Error(`Null or undefined properties found on object: [${nullOrUndefProps.join(', ')}]!`);
+
             return new SafeObjectWrapper<T>(body);
         }
     }
@@ -305,7 +319,7 @@ export const getCookies = (req: Request) => {
 };
 
 export const getCookie = (req: Request, key: string) => getCookies(req)
-.filter(x => x.key === key)[0];
+    .filter(x => x.key === key)[0];
 
 export const getAuthTokenFromRequest = (req: Request, config: GlobalConfiguration) => getCookie(req, config.misc.accessTokenCookieName)?.value;
 

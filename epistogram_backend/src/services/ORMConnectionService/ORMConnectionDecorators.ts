@@ -1,4 +1,4 @@
-import { ClassType } from '../../models/Types';
+import { ClassType } from '../../models/DatabaseTypes';
 import { XMetadataHandler } from './XMetadataHandler';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';

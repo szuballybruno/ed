@@ -10,7 +10,7 @@ import { JobTitle } from '../../models/entity/JobTitle';
 import { Company } from '../../models/entity/Company';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { Question } from '../../models/entity/Question';
-import { Role } from '../../models/entity/Role';
+import { Role } from '../../models/entity/authorization/Role';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
@@ -80,7 +80,7 @@ import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
 import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
-import { CompanyDTO } from '../../shared/dtos/CompanyDTO';
+import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
@@ -419,9 +419,9 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     ? mapperService.map(Company, CompanyDTO, user.company)
                     : null,
 
-                role: user.role
-                    ? toRoleDTO(user.role)
-                    : null
+                // role: user.role
+                //     ? toRoleDTO(user.role)
+                //     : null
             } as UserEditDTO;
         });
 

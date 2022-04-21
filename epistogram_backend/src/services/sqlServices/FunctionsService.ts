@@ -1,4 +1,4 @@
-import { TaskCodeType } from '../../models/Types';
+import { TaskCodeType } from '../../models/DatabaseTypes';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';

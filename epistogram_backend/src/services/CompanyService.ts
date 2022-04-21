@@ -1,6 +1,6 @@
 import { Company } from '../models/entity/Company';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
-import { CompanyDTO } from '../shared/dtos/CompanyDTO';
+import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
