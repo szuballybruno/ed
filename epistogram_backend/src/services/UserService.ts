@@ -17,6 +17,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { TeacherInfoService } from './TeacherInfoService';
 import { UserEngagementView } from '../models/views/UserEngagementView';
 import moment from 'moment';
+import { Grouping } from '../shared/logic/jsExtensions';
 
 export class UserService {
 
@@ -438,7 +439,7 @@ export class UserService {
 
     getUserLearningOverviewDataAsync = async (userId: number) => {
 
-        const userEngagementData = await this._ormService
+        const userEngagementData: UserEngagementView[] = await this._ormService
             .getRepository(UserEngagementView)
             .createQueryBuilder('u')
             .where('u.userId = :userId', { userId })
