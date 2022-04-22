@@ -653,7 +653,14 @@ export class UserService {
             coursesInactiveFor14Days.length
         );
 
+        const answerSessions = await this._ormService
+            .getRepository(AnswerSession)
+            .createQueryBuilder('as')
+            .where('as.userId = :userId', { userId })
+            .getMany();
+
         return {
+            answerSessions,
             engagementPoints
         };
     };
