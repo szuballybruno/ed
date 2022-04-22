@@ -130,7 +130,8 @@ export const apiRoutes = {
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
-        getUserListForAdministration: '/users/get-user-administartion-user-list'
+        getUserListForAdministration: '/users/get-user-administartion-user-list',
+        getUserLearningOverviewData: '/users/get-user-learning-overview-data'
     },
 
     file: {

@@ -64,4 +64,15 @@ export class UserController {
         await this._userService
             .getBriefUserDataAsync(userId);
     };
+
+    getUserLearningOverviewDataAction = async (params: ActionParams) => {
+        const query = params
+            .getQuery<any>();
+
+        const userId = query
+            .getValue(x => x.userId);
+
+        return this._userService
+            .getUserLearningOverviewDataAsync(userId);
+    };
 }

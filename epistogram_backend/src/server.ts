@@ -317,6 +317,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
     addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction, { authorize: ['administrator'] });
     addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.user.getUserLearningOverviewData, userController.getUserLearningOverviewDataAction, { authorize: ['administrator'] });
     addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true, authorize: ['administrator'] });
 

@@ -94,6 +94,7 @@ import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestio
 import { ModuleView } from '../../models/views/ModuleView';
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
+import { UserEngagementView } from '../../models/views/UserEngagementView';
 
 export const dbSchema = {
 
@@ -178,6 +179,7 @@ export const dbSchema = {
         'user_course_bridge_view',
         'user_course_completion_original_estimation_view',
         'user_course_completion_current_view',
+        'user_engagement_view',
         'user_spent_time_view',
         'user_daily_progress_view',
         'user_daily_course_item_progress_view',
@@ -269,6 +271,7 @@ export const dbSchema = {
         UserCourseProgressView,
         UserCourseCompletionCurrentView,
         UserCourseRecommendedItemQuotaView,
+        UserEngagementView,
         UserTempomatAdjustmentValueView,
         UserCourseBridgeView,
         UserCourseCompletionOriginalEstimationView,

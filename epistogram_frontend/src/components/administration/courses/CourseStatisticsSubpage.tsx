@@ -156,7 +156,7 @@ export const CourseStatisticsSubpage = () => {
 
     return (
         <CourseAdministartionFrame
-            isAnySelected={false} >
+            isAnySelected={true} >
 
             <AdminSubpageHeader
                 direction="column"
