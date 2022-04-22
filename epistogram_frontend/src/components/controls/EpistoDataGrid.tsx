@@ -3,6 +3,22 @@ import { ReactNode, useCallback, useEffect } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { typedMemo } from '../../static/frontendHelpers';
 
+const removeOverlay = () => {
+
+    const key = 'MUI X: Missing license key';
+    const xpath = `//div[text()='${key}']`;
+    const matchingElement = document
+        .evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+        .singleNodeValue;
+
+    if (!matchingElement)
+        return;
+
+    (matchingElement as any).remove();
+    // console.log();
+    // matchingElement.parentElement
+};
+
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
     field: TField,
@@ -45,6 +61,8 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 }) => {
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
+
+    removeOverlay();
 
     const columnsProcessed = columns
         .map(column => {
