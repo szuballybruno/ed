@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PermissionCodeType } from '../../DatabaseTypes';
+import { PermissionCodeType } from '../../../shared/types/sharedTypes';
 import { RolePermissionBridge } from './RolePermissionBridge';
 
 @Entity()

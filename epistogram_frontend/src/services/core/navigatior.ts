@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CourseStageNameType } from '../../shared/types/sharedTypes';
 import { ApplicationRoute } from '../../models/types';
-import { verboseLogging } from '../../static/Environemnt';
 import { getUrl } from '../../static/frontendHelpers';
 import { useCallback } from 'react';
+import { Environment } from '../../static/Environemnt';
 
 export const useNavigation = () => {
 
@@ -14,11 +14,11 @@ export const useNavigation = () => {
 
         const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
 
-        if (verboseLogging)
+        if (Environment.verboseLogging)
             console.log('Navigating to: ' + replacedPath);
 
         domNavigate(replacedPath);
-    }, [domNavigate, getUrl, verboseLogging]);
+    }, [domNavigate, getUrl, Environment.verboseLogging]);
 
     const navigateWithParams = <T,>(route: ApplicationRoute<T>, params: T) => {
 

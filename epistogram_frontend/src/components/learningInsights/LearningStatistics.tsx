@@ -3,7 +3,8 @@ import { useMediaQuery } from '@chakra-ui/react';
 import React from 'react';
 import { useUserStats } from '../../services/api/userStatsApiService';
 import { defaultCharts } from '../../static/defaultChartOptions';
-import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import {  roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../universal/charts/base_charts/EpistoBarChart';
@@ -116,14 +117,14 @@ export const LearningStatistics = (props: {
                     title: 'Aktívan töltött idő',
                     suffix: 'perc',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/average_session_length.svg')
+                    iconPath: Environment.getAssetUrl('statistics_icons/average_session_length.svg')
                 },
                 {
                     value: userStats ? roundNumber(userStats.averageSessionLengthSeconds / 60) : 0,
                     suffix: 'perc',
                     title: 'Belépés átlagos hossza',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/average_session_length.svg')
+                    iconPath: Environment.getAssetUrl('statistics_icons/average_session_length.svg')
                 },
                 {
                     value: '12-15',
@@ -131,7 +132,7 @@ export const LearningStatistics = (props: {
                     title: 'Mely az általam leginkább preferált idősáv?',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/most_preferred_time_range.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/most_preferred_time_range.svg'),
                     chart: <EpistoBarChart
                         title="Legaktívabb idősávok"
                         xAxisData={[
@@ -157,7 +158,7 @@ export const LearningStatistics = (props: {
                     title: 'Mely a leghatékonyabb idősáv?',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/most_productive_time_range.svg')
+                    iconPath: Environment.getAssetUrl('statistics_icons/most_productive_time_range.svg')
                 },
                 {
                     value: 'Szerda',
@@ -165,7 +166,7 @@ export const LearningStatistics = (props: {
                     title: 'Mely nap(ok)on vagyok a legaktívabb?',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/most_productive_days.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/most_productive_days.svg'),
                     chart: <EpistoBarChart
                         title="Legaktívabb napok"
                         dataset={[
@@ -194,7 +195,7 @@ export const LearningStatistics = (props: {
                     suffix: 'db',
                     title: 'Megtekintett videók a hónapban',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/watched_videos.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/watched_videos.svg'),
                     chart: <EpistoBarChart
                         title="Legaktívabb napok"
                         dataset={[
@@ -218,7 +219,7 @@ export const LearningStatistics = (props: {
                     suffix: 'óra',
                     title: 'Videónézéssel eltöltött idő a hónapban',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/total_watching_time.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/total_watching_time.svg'),
                 }
             ]
         },
@@ -231,7 +232,7 @@ export const LearningStatistics = (props: {
                     title: 'Elkezdett kurzusok száma',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/started_courses.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/started_courses.svg'),
                 },
                 {
                     value: '1',
@@ -239,7 +240,7 @@ export const LearningStatistics = (props: {
                     title: 'Több mint két hete inaktív kurzusok száma',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/inactive_courses.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/inactive_courses.svg'),
                 },
                 {
                     value: '4',
@@ -247,7 +248,7 @@ export const LearningStatistics = (props: {
                     title: 'Kurzusok száma, amelyek legalább 50%-ban készen vannak',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/half_done_courses.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/half_done_courses.svg'),
                 },
                 {
                     value: '3',
@@ -255,7 +256,7 @@ export const LearningStatistics = (props: {
                     title: 'Befejezett kurzusok száma',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/completed_courses.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/completed_courses.svg'),
                 }
             ]
         },
@@ -267,14 +268,14 @@ export const LearningStatistics = (props: {
                     suffix: 'db',
                     title: 'Elvégzett vizsgák száma',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/completed_exams.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/completed_exams.svg'),
                 },
                 {
                     value: userStats ? userStats.totalAnswerSessionSuccessRate : 0,
                     suffix: '%',
                     title: 'Átlagos teljesítmény a vizsgákon',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/average_performance_on_exams.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/average_performance_on_exams.svg'),
                 }
             ]
         },
@@ -286,14 +287,14 @@ export const LearningStatistics = (props: {
                     suffix: 'db',
                     title: 'Megválaszolt tudást vizsgáló kérdések száma',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/answered_questions.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/answered_questions.svg'),
                 },
                 {
                     value: userStats ? roundNumber(userStats?.totalCorrectAnswerRate) : 0,
                     suffix: '%',
                     title: 'Helyes válaszok aránya',
                     isOpenByDefault: false,
-                    iconPath: getAssetUrl('statistics_icons/correct_answer_rate.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/correct_answer_rate.svg'),
                 }
             ]
         },
@@ -306,7 +307,7 @@ export const LearningStatistics = (props: {
                     title: 'Fókuszálás a videómegtekintések során',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/focus_during_videos.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/focus_during_videos.svg'),
                     chartSize: 'normal',
                     chart: <EpistoBarChart
                         title="Legaktívabb napok"
@@ -332,7 +333,7 @@ export const LearningStatistics = (props: {
                     title: 'Reakcióidő fókuszálást vizsgáló kérdésekre',
                     isOpenByDefault: false,
                     isComingSoon: true,
-                    iconPath: getAssetUrl('statistics_icons/reaction_time_still_watching.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/reaction_time_still_watching.svg'),
                 },
                 {
                     value: '9.5',
@@ -340,7 +341,7 @@ export const LearningStatistics = (props: {
                     title: 'Reakcióidő tudást vizsgáló kérdésekre',
                     isOpenByDefault: false,
                     isComingSoon: true,
-                    iconPath: getAssetUrl('statistics_icons/reaction_time_question.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/reaction_time_question.svg'),
                 }
             ]
         },
@@ -353,7 +354,7 @@ export const LearningStatistics = (props: {
                     title: 'Mennyi EpistoCoint szereztem az elmúlt hónapban',
                     isOpenByDefault: false,
                     isDummy: true,
-                    iconPath: getAssetUrl('statistics_icons/acquired_episto_coin.svg'),
+                    iconPath: Environment.getAssetUrl('statistics_icons/acquired_episto_coin.svg'),
                     chart: <EpistoBarChart
                         title="Legaktívabb napok"
                         dataset={[

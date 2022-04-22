@@ -3,7 +3,8 @@ import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { getAssetUrl, usePasswordEntryState } from '../static/frontendHelpers';
+import { Environment } from '../static/Environemnt';
+import { usePasswordEntryState } from '../static/frontendHelpers';
 import { useStringParam } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
@@ -59,7 +60,7 @@ export const SetNewPasswordPage = () => {
     return <PageRootContainer
         align="flex-start"
         justify="center"
-        backgoundImageSrc={getAssetUrl('loginScreen/surveybg.png')}
+        backgoundImageSrc={Environment.getAssetUrl('loginScreen/surveybg.png')}
         position="relative">
 
         <ContentPane navbarBg="white">

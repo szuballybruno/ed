@@ -71,7 +71,7 @@ export const AdminSubpageHeader = (props: {
         }
     };
 
-    const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath() ?? '';
+    const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath();
 
     return <Flex
         direction={'column'}
@@ -95,7 +95,7 @@ export const AdminSubpageHeader = (props: {
                     p="10px"
                     flex="1">
 
-                    {tabMenuItems && <Tabs
+                    {(tabMenuItems && currentMatchingAbsUrl) && <Tabs
                         className="roundBorders"
                         TabIndicatorProps={{
                             style: {

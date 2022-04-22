@@ -10,22 +10,24 @@ INSERT INTO public.user
     last_name,
     password,
     company_id,
-    job_title_id
+    job_title_id,
+    is_god
 )
 VALUES 
 (
     1, -- id 
-    false, -- is_invitation_accepted
+    true, -- is_invitation_accepted
     true, -- is_trusted
     'Invitation', -- registration_type
-    'arpibagi@gmail.com', -- email
-    'teacherusername', -- username
-    'Árpád', -- first_name
-    'Bagi', -- last_name
+    'endre.marosi@gmail.com', -- email
+    'endregod', -- username
+    'Endre', -- first_name
+    'Marosi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    true -- is_god
 ),
 (
     4, -- id 
@@ -39,7 +41,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     5, -- id 
@@ -53,7 +56,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     6, -- id 
@@ -67,7 +71,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     7, -- id 
@@ -81,7 +86,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     8, -- id 
@@ -95,7 +101,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     9, -- id 
@@ -109,7 +116,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     10, -- id 
@@ -123,7 +131,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     11, -- id 
@@ -137,7 +146,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     12, -- id 
@@ -151,7 +161,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     13, -- id 
@@ -165,7 +176,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     14, -- id 
@@ -179,7 +191,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     15, -- id 
@@ -193,7 +206,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     16, -- id 
@@ -207,7 +221,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     17, -- id 
@@ -221,7 +236,8 @@ VALUES
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
     1, -- company_id
-    1 -- job_title_id
+    1, -- job_title_id,
+    false -- is_god
 );
 
 INSERT INTO public.teacher_info 

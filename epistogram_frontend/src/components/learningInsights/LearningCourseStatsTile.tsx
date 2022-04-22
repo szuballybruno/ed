@@ -1,9 +1,10 @@
 import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
 import React from 'react';
-import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { useNavigation } from '../../services/core/navigatior';
-import { formatTimespan, getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';
 
@@ -122,7 +123,7 @@ export const LearningCourseStatsTile = (props: {
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
                     <img
-                        src={getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
+                        src={Environment.getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
                         alt={''}
                         style={{
                             width: 20,
@@ -141,7 +142,7 @@ export const LearningCourseStatsTile = (props: {
 
         {/* content */}
         <Flex p="10px"
-direction="column">
+            direction="column">
 
             {/* category  */}
             <Text
@@ -162,21 +163,21 @@ direction="column">
 
             {/* small stats */}
             <Flex mt={7}
-justify="space-evenly">
+                justify="space-evenly">
 
                 {/* spent time  */}
                 <SmallStat
-                    iconUrl={getAssetUrl('images/time3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/time3D.png')}
                     text={formattedSpentTime} />
 
                 {/* videos  */}
                 <SmallStat
-                    iconUrl={getAssetUrl('images/videos3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/videos3D.png')}
                     text={`${totalVideoCount}/${completedVideoCount}`} />
 
                 {/* video questions */}
                 <SmallStat
-                    iconUrl={getAssetUrl('images/rightanswerontile3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
             </Flex>
 

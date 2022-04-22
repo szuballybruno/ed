@@ -15,7 +15,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { CurrentUserContext } from '../../system/AuthFrame';
 import { CourseItemList } from '../../universal/CourseItemList';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
@@ -34,8 +34,7 @@ export const CourseItemSelector = (props: {
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
-    const user = useContext(CurrentUserContext)!;
-    const canChangeCourseMode = user.userActivity.canChangeCourseMode;
+    const canChangeCourseMode = true;
 
     // http 
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, isPlayerLoaded);

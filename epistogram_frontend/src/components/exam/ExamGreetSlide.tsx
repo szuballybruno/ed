@@ -2,7 +2,8 @@ import { Flex } from '@chakra-ui/react';
 import { Typography } from '@mui/material';
 import React from 'react';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ExamLayout } from './ExamLayout';
@@ -26,11 +27,11 @@ export const ExamGreetSlide = (props: {
         nextButtonTitle={translatableTexts.exam.startExam}>
 
         <Flex direction="column"
-align="center"
-flex="1"
-className="whall">
+            align="center"
+            flex="1"
+            className="whall">
             <img
-                src={getAssetUrl('/images/examCover.png')}
+                src={Environment.getAssetUrl('/images/examCover.png')}
                 alt={''}
                 style={{
                     objectFit: 'contain',

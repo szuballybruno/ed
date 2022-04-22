@@ -112,6 +112,8 @@ import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
+import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
+import { RoleListView } from '../../models/views/RoleListView';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -881,6 +883,13 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             id: x.id,
             name: x.name
         }));
+
+    mapperService
+        .addMap(RoleListView, RoleAdminListDTO, x => ({
+            roleName: x.roleName,
+            ownerName: x.ownerName,
+            ownerType: x.isCompanyOwned ? 'company' : 'user'
+        } as RoleAdminListDTO));
 };
 
 const separationChar = '|';

@@ -8,10 +8,3 @@ export type RegistrationType = 'ActivationCode' | 'PublicRegistrationToken' | 'I
 
 export type TaskCodeType = 'user_progress_evaluation';
 
-export type PermissionCodeType =
-    | 'canSetInvitedUserCompany'
-    | 'canAccessCourseAdministration'
-    | 'canAccessAdministration'
-    | 'canAccessApplication'
-    | 'canAccessShopAdministration'
-    | 'canChangeCourseMode';

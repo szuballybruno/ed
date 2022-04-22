@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
-import { getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 import { ProfileImage } from '../ProfileImage';
@@ -14,19 +15,19 @@ export const CourseDetailsTeacherSection = (props: {
 
     const infoCards = [
         {
-            icon: getAssetUrl('/course_page_icons/teacher_courses.svg'),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_courses.svg'),
             title: `${courseDetails.teacherData.teacherCourseCount} kurzus`
         },
         {
-            icon: getAssetUrl('/course_page_icons/teacher_videos.svg'),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_videos.svg'),
             title: `${courseDetails.teacherData.teacherVideoCount} videó`
         },
         {
-            icon: getAssetUrl('/course_page_icons/teacher_enrolled.svg'),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_enrolled.svg'),
             title: `${courseDetails.teacherData.teacherStudentCount} hallgató`
         },
         {
-            icon: getAssetUrl('/course_page_icons/teacher_review.svg'),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_review.svg'),
             title: `${courseDetails.teacherData.teacherRating} értékelés`
         }
     ];
@@ -101,7 +102,7 @@ export const CourseDetailsTeacherSection = (props: {
                                 style={{
                                     filter: 'invert(1)'
                                 }}
-                                src={getAssetUrl('/course_page_icons/teacher_award.svg')} />
+                                src={Environment.getAssetUrl('/course_page_icons/teacher_award.svg')} />
 
                             <EpistoFont
                                 classes={['fontLight']}>

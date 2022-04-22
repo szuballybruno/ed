@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
-import { getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
 import { EpistoFont } from '../controls/EpistoFont';
+
 
 export const RecommendedItemQuota = (props: {
     completedCount: number,
@@ -28,7 +29,7 @@ export const RecommendedItemQuota = (props: {
                 align="center">
 
                 <img
-                    src={isDaily ? getAssetUrl('/images/dailyquota.png') : getAssetUrl('/images/weeklyquota.png')}
+                    src={isDaily ? Environment.getAssetUrl('/images/dailyquota.png') : Environment.getAssetUrl('/images/weeklyquota.png')}
                     alt=""
                     className="square25"
                     style={{

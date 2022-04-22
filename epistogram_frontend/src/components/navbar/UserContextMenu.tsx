@@ -5,13 +5,13 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { currentVersion } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthorizationContext, RefetchUserAsyncContext } from '../system/AuthFrame';
 
 export const UserContextMenu = (props: {
     isOpen: boolean,
@@ -22,11 +22,11 @@ export const UserContextMenu = (props: {
     const { anchorRef, close, isOpen } = props;
 
     // context
-    const user = useContext(CurrentUserContext)!;
+    const { hasPermission } = useContext(AuthorizationContext)!;
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const canAccessAdmin = user!.userActivity!.canAccessAdministration;
+    const canAccessAdmin = hasPermission('canAccessAdministration');
     const { navigate } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
@@ -150,7 +150,7 @@ export const UserContextMenu = (props: {
                 fontSize="fontNormal14">
 
                 {translatableTexts.navbar.version}
-                {currentVersion ?? '1999.01.01.01:01'}
+                {Environment.currentVersion ?? '1999.01.01.01:01'}
             </EpistoFont>
         </EpistoPopper >
     );

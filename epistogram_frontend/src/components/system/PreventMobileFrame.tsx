@@ -1,7 +1,5 @@
-import { Flex, useMediaQuery } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { isLocalhost } from '../../static/Environemnt';
-import { getAssetUrl } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 
@@ -56,7 +54,7 @@ export const PreventMobileFrame = (props: { children: ReactNode }) => {
 
 // {/* epistogram logo */}
 // <img
-// src={getAssetUrl("/images/logo.svg")}
+// src={Environment.getAssetUrl("/images/logo.svg")}
 // style={{
 //     width: "250px",
 //     maxHeight: "50px",

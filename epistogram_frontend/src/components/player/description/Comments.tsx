@@ -2,15 +2,15 @@ import { Flex } from '@chakra-ui/react';
 import { AccessTime, ThumbUpAlt } from '@mui/icons-material';
 import { Avatar, Checkbox, Divider } from '@mui/material';
 import React from 'react';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 
 const Comments = () => {
     return (
         <Flex direction={'column'}
-minH={600}
-pb="100px">
+            minH={600}
+            pb="100px">
             <EpistoFont
                 style={{
                     margin: '50px 0 10px 0',
@@ -22,13 +22,13 @@ pb="100px">
             </EpistoFont>
             <Flex direction="column">
                 <Flex p="10px"
-align="center">
+                    align="center">
                     <Flex mr="10px">
                         <Avatar alt="Szubally Brúnó"
-src={getAssetUrl('userAvatars/user_avatar_7.png')} />
+                            src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
                     </Flex>
                     <Flex flex="1"
-direction="column">
+                        direction="column">
                         <EpistoFont>
                             Szubally Brúnó
                         </EpistoFont>
@@ -61,8 +61,8 @@ direction="column">
                     </p>
                 </EpistoFont>
                 <Flex justify="space-between"
-align="center"
-m="10px 0">
+                    align="center"
+                    m="10px 0">
                     <Flex direction="column">
                         <Flex align="center">
                             <Checkbox />
@@ -85,15 +85,15 @@ m="10px 0">
                 </Flex>
             </Flex>
             <Divider variant="fullWidth"
-style={{ margin: '10px 0 20px 0' }} />
+                style={{ margin: '10px 0 20px 0' }} />
             <Flex>
                 <Flex p="20px">
                     <Avatar alt="Surányi Ildikó"
-src={getAssetUrl('userAvatars/user_avatar_1.png')} />
+                        src={Environment.getAssetUrl('userAvatars/user_avatar_1.png')} />
                 </Flex>
                 <Flex direction="column">
                     <Flex justify="space-between"
-align="center">
+                        align="center">
 
                         <h4 style={{ margin: 0, textAlign: 'left' }}>Surányi Ildikó</h4>
                         <EpistoButton className="fontSmall">
@@ -116,16 +116,16 @@ align="center">
             </Flex>
 
             <Flex pl="20px"
-mt="30px">
+                mt="30px">
                 <Divider variant="fullWidth"
-orientation="vertical" />
+                    orientation="vertical" />
                 <Flex p="20px">
                     <Avatar alt="Keresztúri Melinda"
-src={getAssetUrl('userAvatars/user_avatar_7.png')} />
+                        src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
                 </Flex>
                 <Flex direction="column">
                     <Flex justify="space-between"
-align="center">
+                        align="center">
 
                         <h4 style={{ margin: 0, textAlign: 'left' }}>Keresztúri Melinda</h4>
                         <EpistoButton className="fontSmall">
@@ -147,16 +147,16 @@ align="center">
                 </Flex>
             </Flex>
             <Flex pl="20px"
-mt="30px">
+                mt="30px">
                 <Divider variant="fullWidth"
-orientation="vertical" />
+                    orientation="vertical" />
                 <Flex p="20px">
                     <Avatar alt="Remy Sharp"
-src={getAssetUrl('userAvatars/user_avatar_5.png')} />
+                        src={Environment.getAssetUrl('userAvatars/user_avatar_5.png')} />
                 </Flex>
                 <Flex direction="column">
                     <Flex justify="space-between"
-align="center">
+                        align="center">
 
                         <h4 style={{ margin: 0, textAlign: 'left' }}>
                             Oláh Mihály
@@ -183,11 +183,11 @@ align="center">
             <Flex mt="30px">
                 <Flex p="20px">
                     <Avatar alt="Remy Sharp"
-src={getAssetUrl('userAvatars/user_avatar_3.png')} />
+                        src={Environment.getAssetUrl('userAvatars/user_avatar_3.png')} />
                 </Flex>
                 <Flex direction="column">
                     <Flex justify="space-between"
-align="center">
+                        align="center">
 
                         <h4 style={{ margin: 0, textAlign: 'left' }}>Kiss Andrea</h4>
                         <EpistoButton className="fontSmall">
@@ -211,16 +211,16 @@ align="center">
             </Flex>
 
             <Flex pl="20px"
-mt="30px">
+                mt="30px">
                 <Divider variant="fullWidth"
-orientation="vertical" />
+                    orientation="vertical" />
                 <Flex p="20px">
                     <Avatar alt="Remy Sharp"
-src={getAssetUrl('userAvatars/user_avatar_4.png')} />
+                        src={Environment.getAssetUrl('userAvatars/user_avatar_4.png')} />
                 </Flex>
                 <Flex direction="column">
                     <Flex justify="space-between"
-align="center">
+                        align="center">
 
                         <h4 style={{ margin: 0, textAlign: 'left' }}>
                             Radeczky Richárd

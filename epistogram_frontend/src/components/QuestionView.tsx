@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { showNotification } from '../services/core/notifications';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
-import { getAssetUrl } from '../static/frontendHelpers';
+import { Environment } from '../static/Environemnt';
 import { EpistoFont } from './controls/EpistoFont';
 import { LoadingFramePropsType } from './system/LoadingFrame';
 import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
@@ -62,7 +62,7 @@ export const QuesitionView = (props: {
                     border: 'solid 2px gold',
                 },
                 icon: <img
-                    src={getAssetUrl('images/epistoCoin.png')} />
+                    src={Environment.getAssetUrl('images/epistoCoin.png')} />
             });
     }, [bonusCoinsAcquired]);
 
@@ -112,7 +112,7 @@ export const QuesitionView = (props: {
             </EpistoFont>
 
             <img
-                src={getAssetUrl('images/epistoCoin.png')}
+                src={Environment.getAssetUrl('images/epistoCoin.png')}
                 className="square25"
                 style={{ margin: '0px 0px 4px 4px' }} />
         </Flex>}

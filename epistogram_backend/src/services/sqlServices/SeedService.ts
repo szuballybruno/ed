@@ -30,50 +30,50 @@ export class SeedService {
         await this._sqlBootstrapperService.recalcSequencesAsync();
 
         // seed users 
-        await this.seedUsersAsync();
+        // await this.seedUsersAsync();
     };
 
-    private seedUsersAsync = async () => {
+    // private seedUsersAsync = async () => {
 
-        log('seeding User 1...');
-        const { invitationToken, createdUser } = await this._regService
-            .createInvitedUserAsync(
-                {
-                    firstName: 'Endre',
-                    lastName: 'Marosi',
-                    jobTitleId: 1,
-                    roleId: RoleIdEnum.administrator,
-                    email: 'marosi.endre@email.com',
-                    companyId: 1,
-                    isGod: true
-                },
-                true);
+    //     log('seeding User 1...');
+    //     const { invitationToken, createdUser } = await this._regService
+    //         .createInvitedUserAsync(
+    //             {
+    //                 firstName: 'Endre',
+    //                 lastName: 'Marosi',
+    //                 jobTitleId: 1,
+    //                 roleId: RoleIdEnum.administrator,
+    //                 email: 'marosi.endre@email.com',
+    //                 companyId: 1,
+    //                 isGod: true
+    //             },
+    //             true);
 
-        await this._regService
-            .registerInvitedUserAsync(
-                invitationToken,
-                'admin123',
-                'admin123');
+    //     await this._regService
+    //         .registerInvitedUserAsync(
+    //             invitationToken,
+    //             'admin123',
+    //             'admin123');
 
-        log('seeding User 2...');
-        const { invitationToken: it2, createdUser: u2 } = await this._regService
-            .createInvitedUserAsync(
-                {
-                    firstName: 'Péter',
-                    lastName: 'Rezsuta',
-                    jobTitleId: 1,
-                    roleId: RoleIdEnum.user,
-                    email: 'r.peter@gmail.com',
-                    companyId: 1
-                },
-                true);
+    //     log('seeding User 2...');
+    //     const { invitationToken: it2, createdUser: u2 } = await this._regService
+    //         .createInvitedUserAsync(
+    //             {
+    //                 firstName: 'Péter',
+    //                 lastName: 'Rezsuta',
+    //                 jobTitleId: 1,
+    //                 roleId: RoleIdEnum.user,
+    //                 email: 'r.peter@gmail.com',
+    //                 companyId: 1
+    //             },
+    //             true);
 
-        await this._regService
-            .registerInvitedUserAsync(
-                it2,
-                'admin123',
-                'admin123');
+    //     await this._regService
+    //         .registerInvitedUserAsync(
+    //             it2,
+    //             'admin123',
+    //             'admin123');
 
-        log('User 2 token: ' + it2);
-    };
+    //     log('User 2 token: ' + it2);
+    // };
 }

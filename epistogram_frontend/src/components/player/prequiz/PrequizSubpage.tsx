@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from '../../../services/api/prequizApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
+import {  usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -84,7 +85,7 @@ export const PrequizSubpage = () => {
 
                 <img
                     alt=""
-                    src={getAssetUrl('course_page_icons/curriculum_test.svg')}
+                    src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
                     className="square35" />
 
                 <EpistoFont style={{ marginLeft: '10px' }}>

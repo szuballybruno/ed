@@ -1,14 +1,13 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ComponentType, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
-import { getKeys, validatePassowrd } from '../shared/logic/sharedLogic';
+import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
-import { assetCDNStorageUrl, loggingSettings, verboseLogging } from './Environemnt';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
 
@@ -470,6 +469,8 @@ export const usePasswordEntryState = () => {
     };
 };
 
+export type ChildPropsType = { children: ReactNode };
+
 export const useReactQuery = <T>(
     queryKey: any[],
     queryFunc: () => Promise<T>,
@@ -543,8 +544,6 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
     return result;
 };
 
-export const getAssetUrl = (path: string, assetUrlPath?: string) => (assetUrlPath ? assetUrlPath : assetCDNStorageUrl) + ('/' + path).replace('//', '/');
-
 export const hasValue = (obj: any) => {
 
     if (obj === undefined)
@@ -559,7 +558,7 @@ export const hasValue = (obj: any) => {
     return true;
 };
 
-export const usePostCallback = <T>(fn: (data?: T) => Promise<void>,  afterEffects: (() => void | Promise<void>)[]) => {
+export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects: (() => void | Promise<void>)[]) => {
 
     const showError = useShowErrorDialog();
     const execSafeAsync = useCallback(async (data?: T) => {

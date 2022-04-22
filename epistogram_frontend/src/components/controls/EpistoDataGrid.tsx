@@ -1,6 +1,6 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
-import { loggingSettings } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { typedMemo } from '../../static/frontendHelpers';
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
@@ -127,7 +127,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                 });
     }, []);
 
-    if (loggingSettings.render)
+    if (Environment.loggingSettings.render)
         console.log('rendering grid');
 
     return (

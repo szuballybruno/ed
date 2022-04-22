@@ -1,13 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ProfileImage } from '../../ProfileImage';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { FlexList } from '../../universal/FlexList';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
@@ -18,27 +13,7 @@ export const AdminUserList = (props: {
 }) => {
     const userId = useIntParam('userId')!;
 
-    const user = useContext(CurrentUserContext)!;
-    const currentUserId = user.id;
-    const { navigate } = useNavigation();
-
-    const administrationRoutes = applicationRoutes.administrationRoute;
-
-    //const [searchText, setSearchText] = useState<string | null>(null);
-
     const { users, navigationFunction } = props;
-
-
-    /* const handleSearch = (value: string) => {
-
-        if (value === "")
-            setSearchText(null);
-
-        if (value.length > 2)
-            setSearchText(value);
-    } */
-
-
 
     return <Flex
         className="roundBorders"

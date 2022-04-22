@@ -1,7 +1,7 @@
 WITH 
 company_inherited_roles AS 
 (
-	SELECT 
+	SELECT
 		u.id user_id,
 		r.id role_id,
 		r.name role_name,
@@ -41,8 +41,8 @@ god_roles AS (
 )
 SELECT 
 	u.id user_id,
-	roles.role_id,
 	roles.company_id,
+	roles.role_id,
 	pe.id permission_id,
 	pe.code permission_code
 FROM public.user u
@@ -77,6 +77,6 @@ WHERE roles.role_id IS NOT NULL
 
 ORDER BY
 	u.id,
-	roles.role_id,
 	roles.company_id,
+	roles.role_id,
 	pe.id

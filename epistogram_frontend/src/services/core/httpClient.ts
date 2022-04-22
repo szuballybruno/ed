@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { serverUrl } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from '../../static/frontendHelpers';
 import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
 import { LoadingStateType } from '../../models/types';
@@ -20,7 +20,7 @@ const instance = (() => {
 
     const axiosInst = axios
         .create({
-            baseURL: serverUrl,
+            baseURL: Environment.serverUrl,
             headers: {
                 'Content-Type': 'application/json'
             }

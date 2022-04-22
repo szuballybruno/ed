@@ -20,7 +20,7 @@ import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryN
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { AuthorizationContext, CurrentUserContext } from '../../system/AuthFrame';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
@@ -55,6 +55,8 @@ export const AdminEditUserControl = (props: {
 
     const editedUserId = useIntParam('userId')!;
 
+    const { hasPermission } = useContext(AuthorizationContext);
+
     // editable fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -65,11 +67,8 @@ export const AdminEditUserControl = (props: {
     const [isTeacher, setIsTeacher] = useState(false);
 
     const showError = useShowErrorDialog();
-    const location = useLocation();
 
-    const user = useContext(CurrentUserContext) as UserDTO;
-    const canSetInvitedUserCompany = user.userActivity.canSetInvitedUserCompany;
-
+    const canSetInvitedUserCompany = hasPermission('canSetInvitedUserCompany');
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();

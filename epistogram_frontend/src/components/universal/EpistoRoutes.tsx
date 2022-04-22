@@ -2,26 +2,25 @@ import { ReactNode, useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
-import { loggingSettings } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { setPageTitle } from '../../static/frontendHelpers';
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext, AuthorizationContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthFrame';
 
 export type RenderRoute = {
     element: JSX.Element;
     route: ApplicationRoute;
     protectionLevel?: RouteProtectionLevelType;
-    isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean;
+    isAuthorizedToView?: (userActivity: any) => boolean;
 }
 
 export type RouteProtectionLevelType = 'open' | 'justAuthenticate' | 'authorize';
 
-const verboseLogging = loggingSettings.routing;
+const verboseLogging = Environment.loggingSettings.routing;
 
 const RouteRenderer = (props: {
     route: ApplicationRoute,
     children: JSX.Element,
-    isAuthorizedToView?: (userActivity: UserActivityDTO) => boolean,
+    isAuthorizedToView?: (userActivity: any) => boolean,
     protectionLevel?: RouteProtectionLevelType;
 }): JSX.Element => {
 
@@ -30,7 +29,7 @@ const RouteRenderer = (props: {
 
     const authState = useContext(AuthenticationStateContext);
     const refetchUserAsync = useContext(RefetchUserAsyncContext);
-    const user = useContext(CurrentUserContext)!;
+    const { hasPermission } = useContext(AuthorizationContext)!;
 
     if (verboseLogging) {
 
@@ -83,7 +82,7 @@ const RouteRenderer = (props: {
     }
 
     // redirect to signup if application is not accessable yet
-    if (!user.userActivity.canAccessApplication) {
+    if (!hasPermission('canAccessApplication')) {
 
         if (verboseLogging)
             console.log('-- Accessing application is not yet aturhorized, redirecting...');
@@ -94,9 +93,7 @@ const RouteRenderer = (props: {
     }
 
     // redirect to home if external authorization check fails
-    const authFuncCheck = isAuthorizedToView
-        ? isAuthorizedToView(user.userActivity)
-        : true;
+    const authFuncCheck = true;
 
     if (!authFuncCheck) {
 

@@ -14,6 +14,10 @@ export const apiRoutes = {
         getCourseOverviewData: '/misc/get-course-overview-data'
     },
 
+    roles: {
+        getRoles: '/roles/get-roles'
+    },
+
     companies: {
         getCompanies: '/companies/get-companies',
         getCompaniesAdmin: '/companies/get-companies-admin',
@@ -22,7 +26,7 @@ export const apiRoutes = {
         deleteCompany: '/companies/delete-company',
         saveCompany: '/companies/save-company'
     },
-    
+
     scheduledJobs: {
         evaluateUserProgress: '/scheduledjobs/evaluate-user-progress'
     },

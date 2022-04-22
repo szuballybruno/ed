@@ -1,12 +1,10 @@
-import { Text } from '@chakra-ui/layout';
 import { Flex } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { ErrorCodeType } from '../shared/types/sharedTypes';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { getAssetUrl } from '../static/frontendHelpers';
+import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { Environment } from '../static/Environemnt';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
@@ -113,7 +111,7 @@ export const RegisterViaActivationCodePage = () => {
 
                     {/* epi logo */}
                     <img
-                        src={getAssetUrl('/images/logo.svg')}
+                        src={Environment.getAssetUrl('/images/logo.svg')}
                         style={{
                             width: '250px',
                             maxHeight: '100px',
@@ -125,7 +123,7 @@ export const RegisterViaActivationCodePage = () => {
 
                     {/* 3d redeem image */}
                     <img
-                        src={getAssetUrl('/images/redeem3D.png')}
+                        src={Environment.getAssetUrl('/images/redeem3D.png')}
                         style={{
                             width: '100%',
                             maxHeight: '350px',
@@ -290,7 +288,7 @@ rel="noreferrer">
                         objectFit: 'contain',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl('/images/bg-art-2.png')}
+                    src={Environment.getAssetUrl('/images/bg-art-2.png')}
                     alt="" />
 
                 {/* Magic powder bottom-left */}
@@ -302,7 +300,7 @@ rel="noreferrer">
                         transform: 'rotate(-90deg) scale(50%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl('/images/bg-art-5.png')}
+                    src={Environment.getAssetUrl('/images/bg-art-5.png')}
                     alt="" />
 
                 {/* Magic powder top-left */}
@@ -314,7 +312,7 @@ rel="noreferrer">
                         transform: 'rotate(270deg) scale(70%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl('/images/bg-art-6.png')}
+                    src={Environment.getAssetUrl('/images/bg-art-6.png')}
                     alt="" />
             </Flex>
         </Flex >

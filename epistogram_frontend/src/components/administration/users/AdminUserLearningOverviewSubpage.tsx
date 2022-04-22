@@ -13,7 +13,7 @@ import { useUserStats } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
-import { getAssetUrl, isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
+import {  isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -28,6 +28,7 @@ import { EditSection } from '../courses/EditSection';
 import { AdminUserList } from './AdminUserList';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
 import { useIntParam } from '../../../static/locationHelpers';
+import { Environment } from '../../../static/Environemnt';
 
 const DummyLearningCourseStatsModified = (props: {
     title: string,
@@ -93,17 +94,17 @@ const DummyLearningCourseStatsModified = (props: {
 
                     {/* spent time  */}
                     <SmallStat
-                        iconUrl={getAssetUrl('images/time3D.png')}
+                        iconUrl={Environment.getAssetUrl('images/time3D.png')}
                         text={'2m'} />
 
                     {/* videos  */}
                     <SmallStat
-                        iconUrl={getAssetUrl('images/videos3D.png')}
+                        iconUrl={Environment.getAssetUrl('images/videos3D.png')}
                         text={'18/1'} />
 
                     {/* video questions */}
                     <SmallStat
-                        iconUrl={getAssetUrl('images/rightanswerontile3D.png')}
+                        iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
                         text={'2/0'} />
                 </Flex>
 
@@ -267,7 +268,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             h="30px"
                             w="30px"
                             mr="5px"
-                            src={getAssetUrl('/images/tempomatdatechange.png')}
+                            src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
                         />
 
                         <EpistoFont fontSize={'fontLarge'}
@@ -325,7 +326,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             <Image
                                 h={'120px'}
                                 w={'120px'}
-                                src={getAssetUrl('/images/happyfacechart.png')} />
+                                src={Environment.getAssetUrl('/images/happyfacechart.png')} />
 
                             <Flex direction="column"
                                 p="10px">
@@ -377,7 +378,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         <Flex h="150px">
 
                             <StatisticsCard
-                                iconPath={getAssetUrl('images/learningreport01.png')}
+                                iconPath={Environment.getAssetUrl('images/learningreport01.png')}
                                 value={'13'}
                                 suffix={'óra'}
                                 style={{
@@ -385,7 +386,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                 }}
                                 title={'Aktívan eltöltött idő a platformon'} />
                             <StatisticsCard
-                                iconPath={getAssetUrl('images/learningreport02.png')}
+                                iconPath={Environment.getAssetUrl('images/learningreport02.png')}
                                 value={'38'}
                                 suffix={'db'}
                                 title={'megtekintett videók a hónapban'} />
@@ -409,10 +410,10 @@ export const AdminUserStatisticsSubpage = (props: {
 
                     <DummyLearningCourseStatsModified
                         title="Microsoft Excel Mesterkurzus"
-                        thumbnailImageUrl={getAssetUrl('courseCoverImages/4.png')} />
+                        thumbnailImageUrl={Environment.getAssetUrl('courseCoverImages/4.png')} />
                     <DummyLearningCourseStatsModified
                         title="Microsoft PowerPoint Mesterkurzus"
-                        thumbnailImageUrl={getAssetUrl('courseCoverImages/courseCoverImage_22_1639469876995..jpg')} />
+                        thumbnailImageUrl={Environment.getAssetUrl('courseCoverImages/courseCoverImage_22_1639469876995..jpg')} />
                 </EpistoGrid>
             </EditSection>
 
@@ -435,7 +436,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             title={'Megválaszolt tudást vizsgáló kérdések száma'}
                             value={'39'}
                             suffix={'db'}
-                            iconPath={getAssetUrl('images/learningreport03.png')}
+                            iconPath={Environment.getAssetUrl('images/learningreport03.png')}
                             isOpenByDefault={false} />
 
                         {/* total playback time */}
@@ -443,7 +444,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             title={'Helyes válaszok aránya'}
                             value={'27'}
                             suffix={'%'}
-                            iconPath={getAssetUrl('images/learningreport04.png')}
+                            iconPath={Environment.getAssetUrl('images/learningreport04.png')}
                             isOpenByDefault={false} />
 
                         {/* total given answer count  */}
@@ -451,7 +452,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             title={'Reakcióidő'}
                             value={'Átlagos'}
                             suffix={''}
-                            iconPath={getAssetUrl('images/learningreport05.png')}
+                            iconPath={Environment.getAssetUrl('images/learningreport05.png')}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
@@ -459,7 +460,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             title={'Átlagos napi megtekintett videók'}
                             value={'6.5'}
                             suffix={'db/nap'}
-                            iconPath={getAssetUrl('images/learningreport06.png')}
+                            iconPath={Environment.getAssetUrl('images/learningreport06.png')}
                             isOpenByDefault={false} />
 
 
@@ -531,7 +532,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         title={'Leggyakoribb aktív idősáv'}
                         value={'17-19'}
                         suffix={'óra között'}
-                        iconPath={getAssetUrl('images/learningreport07.png')}
+                        iconPath={Environment.getAssetUrl('images/learningreport07.png')}
                         isOpenByDefault={false} />
 
                     {/* total playback time */}
@@ -539,7 +540,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         title={'Teljesített vizsgák száma'}
                         value={'8'}
                         suffix={'db'}
-                        iconPath={getAssetUrl('images/learningreport08.png')}
+                        iconPath={Environment.getAssetUrl('images/learningreport08.png')}
                         isOpenByDefault={false} />
 
                     {/* total given answer count  */}
@@ -547,7 +548,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         title={'Egy belépés átlagos hossza'}
                         value={'42'}
                         suffix={'perc'}
-                        iconPath={getAssetUrl('images/learningreport09.png')}
+                        iconPath={Environment.getAssetUrl('images/learningreport09.png')}
                         isOpenByDefault={false} />
 
                     {/* correct answer rate  */}
@@ -555,7 +556,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         title={'Ismétlésre ajánlott videó'}
                         value={'13'}
                         suffix={'db'}
-                        iconPath={getAssetUrl('images/learningreport10.png')}
+                        iconPath={Environment.getAssetUrl('images/learningreport10.png')}
                         isOpenByDefault={false} />
                 </div>
             </EditSection>

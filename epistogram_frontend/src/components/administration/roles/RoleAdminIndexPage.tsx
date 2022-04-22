@@ -1,10 +1,9 @@
 import { Flex } from '@chakra-ui/react';
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCompaniesAdmin, useCreateCompany, useDeleteCompany } from '../../../services/api/companiesApiService';
+import { useRolesList } from '../../../services/api/rolesApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { usePostCallback } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -16,17 +15,12 @@ export const RoleAdminIndexPage = memo(() => {
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
 
     // http
-    const { companies, companiesState, companiesError, refetchCompanies } = useCompaniesAdmin();
-    const { createCompanyAsync, createCompanyState } = useCreateCompany();
-    const { deleteCompanyAsync, deleteCompanyState } = useDeleteCompany();
-
-    const [handleCreateCompany] = usePostCallback(createCompanyAsync, [refetchCompanies]);
-    const [handleDeleteCompany] = usePostCallback(deleteCompanyAsync, [refetchCompanies]);
+    const { refetchRolesList, rolesList, rolesListError, rolesListState } = useRolesList();
 
     return (
         <LoadingFrame
-            loadingState={[companiesState, createCompanyState, deleteCompanyState]}
-            error={companiesError}
+            loadingState={[rolesListState]}
+            error={rolesListError}
             className='whall'
             direction='column'>
 
@@ -40,27 +34,27 @@ export const RoleAdminIndexPage = memo(() => {
                     {
                         title: 'Add',
                         icon: <Add></Add>,
-                        action: handleCreateCompany
+                        action: () => console.log('asd')
                     }
                 ]}>
 
-                {companies
-                    .map((company, index) => (
+                {rolesList
+                    .map((role, index) => (
                         <Flex
                             key={index}
                             align='center'>
 
                             <EpistoFont>
-                                {company.name}
+                                {role.roleName}
                             </EpistoFont>
 
-                            <EpistoButton
-                                onClick={() => navigateWithParams(editRoute, { companyId: company.id })}>
+                            {/* <EpistoButton
+                                onClick={() => navigateWithParams(editRoute, { companyId: role.id })}>
                                 <Edit></Edit>
-                            </EpistoButton>
+                            </EpistoButton> */}
 
                             <EpistoButton
-                                onClick={() => handleDeleteCompany({ companyId: company.id })}>
+                                onClick={() => console.log('del')}>
                                 <Delete />
                             </EpistoButton>
                         </Flex>

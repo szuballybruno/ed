@@ -20,6 +20,15 @@
             "type": "shell",
             "command": "cmd /c node scripts\\styleGen\\styleGen.js",
             "problemMatcher": []
+        },
+        {
+            "label": "getPermissionsType",
+            "type": "shell",
+            "command": "cmd /c start.bat",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}\\scripts\\permissionGen"
+            },
         }
     ]
 }

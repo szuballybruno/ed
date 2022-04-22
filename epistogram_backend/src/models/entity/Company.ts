@@ -3,6 +3,7 @@ import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnection
 import { getJoinColumnInverseSide } from '../../utilities/helpers';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
+import { Role } from './authorization/Role';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { User } from './User';
 
@@ -38,4 +39,9 @@ export class Company {
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<Company>()(x => x.company))
     companyOwnerBridges: CompanyOwnerBridge[];
+    
+    // ownedRoles
+    @JoinColumn()
+    @OneToMany(_ => Role, getJoinColumnInverseSide<Company>()(x => x.ownerCompany))
+    ownedRoles: Role[];
 }

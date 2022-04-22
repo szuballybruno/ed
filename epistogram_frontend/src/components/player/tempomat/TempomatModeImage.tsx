@@ -2,7 +2,7 @@ import { CSSProperties } from 'react';
 import { Image } from '@chakra-ui/react';
 import { ClassBuilder, ClassBuilderCustomizationFnType } from '../../../helpers/classBuilder';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 
 export const TempomatModeImage = (props: {
     isSmall?: boolean,
@@ -17,16 +17,16 @@ export const TempomatModeImage = (props: {
     const url = (() => {
 
         if (mode === 'auto')
-            return getAssetUrl('/images/autopilot.png');
+            return Environment.getAssetUrl('/images/autopilot.png');
 
         if (mode === 'balanced')
-            return getAssetUrl('/images/balancedmode.png');
+            return Environment.getAssetUrl('/images/balancedmode.png');
 
         if (mode === 'light')
-            return getAssetUrl('/images/lightmode.png');
+            return Environment.getAssetUrl('/images/lightmode.png');
 
         if (mode === 'strict')
-            return getAssetUrl('/images/strictmode.png');
+            return Environment.getAssetUrl('/images/strictmode.png');
     })();
 
     return isSmall

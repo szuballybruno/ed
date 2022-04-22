@@ -27,4 +27,8 @@ VALUES
 (
     6,
     'canAccessShopAdministration'
+),
+(
+    7,
+    'COMPANY_ROLE_MANAGER'
 );

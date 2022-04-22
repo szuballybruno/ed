@@ -1,5 +1,6 @@
 import { Role } from '../models/entity/authorization/Role';
 import { RoleAssignmentBridge } from '../models/entity/authorization/RoleAssignmentBridge';
+import { RoleListView } from '../models/views/RoleListView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
@@ -21,17 +22,12 @@ export class RoleService extends QueryServiceBase<Role> {
     async getRolesListAdminAsync(userId: number) {
 
         const roles = await this._ormService
-            .query(Role)
+            .query(RoleListView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
         return this._mapperService
-            .mapMany(Role, RoleAdminListDTO, roles);
-    }
-
-    async getUserRoles(userId: number) {
-
-        // this._ormService
-        //     .query(Role)
+            .mapMany(RoleListView, RoleAdminListDTO, roles);
     }
 
     async getUserPermissionsAsync(userId: number): Promise<PermissionListDTO[]> {

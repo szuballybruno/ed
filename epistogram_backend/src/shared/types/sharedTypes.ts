@@ -1,6 +1,3 @@
-import * as DatabaseTypes from '../../models/DatabaseTypes';
-
-
 export type InvitationTokenPayload = { userEmail: string };
 
 export type ErrorCodeType =
@@ -31,7 +28,18 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 
 export type CourseModeType = 'beginner' | 'advanced';
 
-export type PermissionCodeType = DatabaseTypes.PermissionCodeType;
+
+
+export type PermissionCodeType =
+	| 'canChangeCourseMode'
+	| 'canSetInvitedUserCompany'
+	| 'canAccessCourseAdministration'
+	| 'canAccessAdministration'
+	| 'canAccessApplication'
+	| 'canAccessShopAdministration'
+	| 'COMPANY_ROLE_MANAGER';
+
+
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

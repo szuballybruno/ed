@@ -1,7 +1,6 @@
 import { Box, css, Flex, FlexProps, Text } from '@chakra-ui/react';
-import { LinearProgress } from '@mui/material';
 import React from 'react';
-import { getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
 import { EpistoButton } from '../controls/EpistoButton';
 
 export const ExamTile = (props: {
@@ -95,7 +94,7 @@ export const ExamTile = (props: {
                                 backgroundColor: 'white',
                                 borderRadius: 10
                             }}
-                            src={getAssetUrl('/courseCoverImages/1.png')}
+                            src={Environment.getAssetUrl('/courseCoverImages/1.png')}
                             alt="" />
 
                         <Flex position="relative">
@@ -143,7 +142,7 @@ export const ExamTile = (props: {
                             flex="1">
 
                             <img
-                                src={getAssetUrl('course_exam_tile_icons/tile_lenght_left.svg')}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_lenght_left.svg')}
                                 alt={''}
                                 style={{
                                     width: 15,
@@ -153,7 +152,7 @@ export const ExamTile = (props: {
                             />
 
                             <Text as={'text'}
-color={'grey'}>{'52 perc'}</Text>
+                                color={'grey'}>{'52 perc'}</Text>
                         </Flex>
 
                         <Flex
@@ -163,7 +162,7 @@ color={'grey'}>{'52 perc'}</Text>
                             flex="1">
 
                             <img
-                                src={getAssetUrl('course_exam_tile_icons/tile_videos.svg')}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_videos.svg')}
                                 alt={''}
                                 style={{
                                     width: 15,
@@ -172,7 +171,7 @@ color={'grey'}>{'52 perc'}</Text>
                                 }}
                             />
                             <Text as={'text'}
-color={'grey'}>{'65%-os eredmény'}</Text>
+                                color={'grey'}>{'65%-os eredmény'}</Text>
                         </Flex>
                     </Flex>
 
@@ -188,7 +187,7 @@ color={'grey'}>{'65%-os eredmény'}</Text>
                             flex="1">
 
                             <img
-                                src={getAssetUrl('course_exam_tile_icons/tile_difficulty.svg')}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_difficulty.svg')}
                                 alt={''}
                                 style={{
                                     width: 20,
@@ -210,7 +209,7 @@ color={'grey'}>{'65%-os eredmény'}</Text>
                             flex="1">
 
                             <img
-                                src={getAssetUrl('course_exam_tile_icons/tile_questions.svg')}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_questions.svg')}
                                 alt={''}
                                 style={{
                                     width: 20,

@@ -21,6 +21,7 @@ import { PrequizController } from './api/PrequizController';
 import { PretestController } from './api/PretestController';
 import { QuestionController } from './api/QuestionController';
 import { RegistrationController } from './api/RegistrationController';
+import { RoleController } from './api/RoleController';
 import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 import { ShopController } from './api/ShopController';
 import { SignupController } from './api/SignupController';
@@ -183,6 +184,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
     const companyController = new CompaniesController(companyService);
+    const roleController = new RoleController(roleService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -218,6 +220,9 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
     addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
+
+    // roles
+    addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
 
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);

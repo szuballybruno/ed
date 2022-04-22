@@ -201,4 +201,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
     companyOwnerBridges: CompanyOwnerBridge[];
+
+    // ownedRoles
+    @JoinColumn()
+    @OneToMany(_ => Role, getJoinColumnInverseSide<User>()(x => x.ownerUser))
+    ownedRoles: Role[];
 }

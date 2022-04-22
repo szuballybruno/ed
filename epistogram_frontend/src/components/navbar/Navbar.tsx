@@ -2,7 +2,8 @@ import React, { memo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
-import { getAssetUrl, useIsDesktopView } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import {  useIsDesktopView } from '../../static/frontendHelpers';
 import { FlexFloat } from '../controls/FlexFloat';
 import { DesktopNavbar } from './DesktopNavbar';
 import classes from './navbar.module.scss';
@@ -45,7 +46,7 @@ const Navbar = memo((props: {
 
                         <img
                             alt="EpistoGram Logo"
-                            src={getAssetUrl('/images/logo.svg')} />
+                            src={Environment.getAssetUrl('/images/logo.svg')} />
                     </div>
                 </NavLink>
             </div>

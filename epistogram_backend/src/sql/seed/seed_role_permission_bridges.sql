@@ -34,4 +34,9 @@ VALUES
     6, -- id
     2, -- role_id,
     6 -- permission_id
+),
+(
+    7, -- id
+    4, -- role_id,
+    7 -- permission_id
 );
