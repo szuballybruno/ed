@@ -27,6 +27,7 @@ FROM
 	LEFT JOIN public.role r
 	ON r.owner_user_id = u.id
 		OR (r.owner_company_id = co.id AND upv.permission_id IS NOT NULL)
+		OR r.owner_company_id IS NULL AND u.is_god = true 
 
 	WHERE r.id IS NOT NULL
 	

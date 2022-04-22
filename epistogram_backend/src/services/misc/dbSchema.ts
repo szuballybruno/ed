@@ -188,7 +188,8 @@ export const dbSchema = {
         'user_course_recommended_item_quota_view',
         'user_tempomat_adjustment_value_view',
         'course_item_question_edit_view',
-        'module_view'
+        'module_view',
+        'role_list_view'
     ],
 
     functionScripts: [

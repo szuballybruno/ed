@@ -888,7 +888,9 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(RoleListView, RoleAdminListDTO, x => ({
             roleName: x.roleName,
             ownerName: x.ownerName,
-            ownerType: x.isCompanyOwned ? 'company' : 'user'
+            ownerType: x.isCompanyOwned ? 'company' : 'user',
+            companyId: x.companyId,
+            companyName: x.companyName
         } as RoleAdminListDTO));
 };
 

@@ -1,11 +1,10 @@
-import { Flex } from '@chakra-ui/react';
-import { Add, Delete } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useRolesList } from '../../../services/api/rolesApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
+import { RoleAdminListDTO } from '../../../shared/dtos/role/RoleAdminListDTO';
+import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
@@ -16,6 +15,9 @@ export const RoleAdminIndexPage = memo(() => {
 
     // http
     const { refetchRolesList, rolesList, rolesListError, rolesListState } = useRolesList();
+
+    type RowType = RoleAdminListDTO;
+    const getKey = (x: RowType): string => `${x.roleName}-${x.ownerName}-${x.companyId}`;
 
     return (
         <LoadingFrame
@@ -38,27 +40,27 @@ export const RoleAdminIndexPage = memo(() => {
                     }
                 ]}>
 
-                {rolesList
-                    .map((role, index) => (
-                        <Flex
-                            key={index}
-                            align='center'>
-
-                            <EpistoFont>
-                                {role.roleName}
-                            </EpistoFont>
-
-                            {/* <EpistoButton
-                                onClick={() => navigateWithParams(editRoute, { companyId: role.id })}>
-                                <Edit></Edit>
-                            </EpistoButton> */}
-
-                            <EpistoButton
-                                onClick={() => console.log('del')}>
-                                <Delete />
-                            </EpistoButton>
-                        </Flex>
-                    ))}
+                <EpistoDataGrid
+                    rows={rolesList as RowType[]}
+                    getKey={getKey}
+                    handleEdit={x => console.log(x)}
+                    columns={[
+                        {
+                            headerName: 'Role name',
+                            field: 'roleName',
+                            width: 200
+                        },
+                        {
+                            headerName: 'Owner name',
+                            field: 'ownerName',
+                            width: 200
+                        },
+                        {
+                            headerName: 'Context',
+                            field: 'companyName',
+                            width: 200
+                        }
+                    ] as GridColumnType<RowType, string, keyof RowType>[]} />
 
             </AdminSubpageHeader>
         </LoadingFrame>
