@@ -15,6 +15,8 @@ import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { UserEngagementView } from '../models/views/UserEngagementView';
+import moment from 'moment';
 
 export class UserService {
 
@@ -434,6 +436,235 @@ export class UserService {
             });
     };
 
+    getUserLearningOverviewDataAsync = async (userId: number) => {
+
+        const userEngagementData = await this._ormService
+            .getRepository(UserEngagementView)
+            .createQueryBuilder('u')
+            .where('u.userId = :userId', { userId })
+            .getMany();
+
+        // gets all the courses that the user started
+        const startedCourses = userEngagementData
+            .groupBy(x => x.courseId)
+            .flatMap(x => ({
+                courseId: x.first.courseId,
+                creationDate: x.first.courseCreationDate,
+                completedPercentage: x.first.completedPercentage,
+                latestSessionEndDate: new Date(Math.max(...x.items.map(x => x.endDate)))
+            }));
+
+        // gets courses inactive for more than 14 days and not completed at least 50 percent
+        const coursesInactiveFor14Days = startedCourses.filter(x => {
+            const today = new Date();
+            return x.latestSessionEndDate.getDate() < today.getDate() - 14 && x.completedPercentage < 50;
+        });
+
+        // gets only unique sessions
+        const sessions = [
+            ...new Map(userEngagementData
+                .map(item =>
+                    [item.sessionId, item]
+                )
+            )
+                .values()
+        ];
+
+        /**
+         * Extends objects of an array with yearWeek property by date key
+         */
+        const addWeekToArrayOfObjectsByKey = <T extends Object,>(
+            arr: Array<T>,
+            key: keyof T
+        ): Array<T & { yearWeek: string }> => {
+
+            return arr.map((session) => {
+
+                // gets moment object from startDate
+                const startDateMoment = moment(session[key]);
+
+                // gets year and week from startDate
+                const startDateYear = startDateMoment.year();
+                const startDateWeek = startDateMoment.week();
+
+                // create a composed key: 'year-week' 
+                const yearWeek = `${startDateYear}-${startDateWeek}`;
+
+                // adds yearWeek to sessions
+                return {
+                    ...session,
+                    yearWeek
+                };
+            });
+        };
+
+        // sessions with weeks flat
+        const sessionsWithWeeks = addWeekToArrayOfObjectsByKey(sessions, 'startDate');
+
+        // sessions grouped by weeks
+        const sessionByWeeks = sessionsWithWeeks
+            .groupBy(x => x.yearWeek)
+            .map(x => x.items);
+
+        // count of all unique sessions
+        const sessionCount = [
+            ...new Map(userEngagementData
+                .map(item =>
+                    [item.sessionId, item]
+                )
+            )
+                .values()
+        ].length;
+
+        // gets sessions longer than 15 minutes
+        const getSessionsLongerThan15MinutesByWeek = (
+            sessionsByWeek: (UserEngagementView & {
+                yearWeek: string;
+            })[][]
+        ) => {
+            return sessionByWeeks
+                .map(oneWeekSessions => oneWeekSessions
+                    .filter(x => (x.lengthSeconds / 60) > 15) // longer than 15 minutes
+                );
+        };
+
+        // gets sessions shorter than 15 minutes
+        const getSessionsShorterThan15MinutesByWeek = (
+            sessionsByWeek: (UserEngagementView & {
+                yearWeek: string;
+            })[][]
+        ) => {
+            return sessionByWeeks
+                .map(oneWeekSessions => oneWeekSessions
+                    .filter(x => (x.lengthSeconds / 60) < 5) // shorter than 5 minutes
+                );
+        };
+
+        // gets the total length of unique sessions in minute
+        const getTotalSessionLengthMinutes = (sessions: UserEngagementView[]) => {
+            return sessions
+                .map(x => x.lengthSeconds / 60)
+                .reduce((partialSum, a) => partialSum + a, 0);
+        };
+
+        const sessionsLongerThan15MinutesByWeek = getSessionsLongerThan15MinutesByWeek(sessionByWeeks);
+        const sessionsShorterThan5MinutesByWeek = getSessionsShorterThan15MinutesByWeek(sessionByWeeks);
+        const totalSessionLengthMinutes = getTotalSessionLengthMinutes(sessions);
+
+        /**
+         * Calculate engagement points from engagement data
+         *  */
+        const getEngagementPoints = (
+            sessionCount: number,
+            sessionsLongerThan15MinutesByWeeksCount: number[],
+            sessionsShorterThan5MinutesByWeekCount: number[],
+            totalSessionLengthMinutes: number,
+            inactiveNotWatchedCoursesCount: number
+        ): number => {
+            let points = 0;
+
+            /** 
+             * Adds as many points as sessions until 10
+             * After that it adds 10 points because you logged in more than 10 times,
+             * and this is the maximum point
+             * */
+            sessionCount <= 10
+                ? points += sessionCount
+                : points += 10;
+
+            /** 
+             * Adds 5 points for every session longer than 15 minutes until 8 sessions. 
+             * After that it adds 40 points because you have more long sessions than 8, 
+             * and this is the maximum point which will be added.
+             * 
+             * Important: It calculates the points for every week first.
+             * */
+            sessionsLongerThan15MinutesByWeeksCount
+                .map(x => {
+                    x <= 8
+                        ? x += x * 5
+                        : x += 40;
+                });
+
+            /** 
+             * Removes 3 points for every session shorter than 5 minutes until 5 sessions. 
+             * After that it removes 15 points because you have more short sessions than 5, 
+             * and this is the maximum point which will be deducted.
+             * 
+             * Important: It calculates the points for every week first.
+             * */
+            sessionsShorterThan5MinutesByWeekCount
+                .map(x => {
+                    x <= 5
+                        ? x -= x * 3
+                        : x -= 15;
+
+                });
+
+            /** 
+             * Removes 10 points for every course that is:
+             * - Started in the last 30 days AND
+             * - Inactive for the last 14 days AND
+             * - The progress is less than 50%
+             * */
+            points -= inactiveNotWatchedCoursesCount * 10;
+
+            /** 
+             * Adds different amounts of points by different 
+             * ranges from the total session length. Max. 50 points.
+             * */
+            switch (true) {
+                case totalSessionLengthMinutes > 0 && totalSessionLengthMinutes < 60:
+                    points += 10;
+                    break;
+
+                case totalSessionLengthMinutes >= 60 && totalSessionLengthMinutes < 120:
+                    points += 15;
+                    break;
+
+                case totalSessionLengthMinutes >= 120 && totalSessionLengthMinutes < 180:
+                    points += 30;
+                    break;
+
+                case totalSessionLengthMinutes >= 180 && totalSessionLengthMinutes < 240:
+                    points += 40;
+                    break;
+
+                case totalSessionLengthMinutes >= 240 && totalSessionLengthMinutes < 360:
+                    points += 45;
+                    break;
+
+                case totalSessionLengthMinutes >= 360:
+                    points += 50;
+                    break;
+
+                default:
+                    points += 0;
+            }
+
+            return points;
+        };
+
+        const engagementPoints = getEngagementPoints(
+            sessionCount,
+            sessionsLongerThan15MinutesByWeek.map(x => x.length),
+            sessionsShorterThan5MinutesByWeek.map(x => x.length),
+            totalSessionLengthMinutes / 4,
+            coursesInactiveFor14Days.length
+        );
+
+        const answerSessions = await this._ormService
+            .getRepository(AnswerSession)
+            .createQueryBuilder('as')
+            .where('as.userId = :userId', { userId })
+            .getMany();
+
+        return {
+            answerSessions,
+            engagementPoints
+        };
+    };
+
     /**
      * Get a list of the users marked as teacher.
      * 
@@ -445,7 +676,7 @@ export class UserService {
         //     .getRepository(User)
         //     .find({
         //         where: {
-                    
+
         //         },
         //         relations: {
         //             teacherInfo: {
