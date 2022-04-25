@@ -20,8 +20,7 @@ SELECT
 	co.*
 FROM public.course co
 
-LEFT JOIN public.user u
-ON 1 = 1
+CROSS JOIN public.user u
 
 LEFT JOIN public.course_item_view first_civ
 ON first_civ.course_id = co.id
@@ -51,10 +50,15 @@ LEFT JOIN public.user_course_access_bridge ucab
 ON ucab.user_id = u.id 
 	AND ucab.course_id = co.id
 	
+LEFT JOIN public.user_permission_view upv
+ON upv.user_id = u.id 
+	AND upv.permission_code = 'VIEW_COMPANY_COURSES'
+	AND upv.company_id = u.company_id
+	
 LEFT JOIN public.user teacher
 ON teacher.id = co.teacher_id
 	
--- where u.id = 1 
+WHERE upv.permission_id IS NOT NULL 
 	 
 ORDER BY 
 	u.id,

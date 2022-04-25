@@ -3,36 +3,35 @@ INSERT INTO public.role
     id,
     name,
     owner_user_id,
-    owner_company_id
+    owner_company_id,
+    is_global
 )
 VALUES
 (
     1,
-    'Administrator',
-    4,
-    NULL
-),
-(
-    2,
-    'Supervisor',
-    4,
-    NULL
+    'Company Manager',
+    NULL,
+    NULL,
+    true
 ),
 (
     3,
-    'User',
-    5,
-    NULL
+    'Company HR Viewer',
+    NULL,
+    NULL,
+    true
 ),
 (
     4,
     'Company Role Manager',
-    5,
-    NULL
+    NULL,
+    NULL,
+    true
 ),
 (
     5,
-    'This is a company owned test role',
+    '[Company owned] Custom Role 1',
     NULL,
-    2
+    2,
+    false
 );

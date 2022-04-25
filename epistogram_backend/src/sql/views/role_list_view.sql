@@ -8,10 +8,12 @@ FROM
 (
 	SELECT 
 		u.id user_id,
+		u.email user_email,
 		co.id company_id,
 		co.name company_name,
 		r.id role_id,
 		r.name role_name,
+		r.is_global,
 		r.owner_user_id,
 		r.owner_company_id IS NOT NULL is_company_owned,
 		upv.permission_id IS NOT NULL is_company_role_manager
@@ -21,7 +23,7 @@ FROM
 
 	LEFT JOIN public.user_permission_view upv
 	ON upv.user_id = u.id 
-		AND upv.permission_code = 'COMPANY_ROLE_MANAGER'
+		AND upv.permission_code = 'VIEW_COMPANY_ROLES'
 		AND upv.company_id = co.id
 
 	LEFT JOIN public.role r

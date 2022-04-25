@@ -127,7 +127,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(sqlBootstrapperService, registrationService);
+    const seedService = new SeedService(sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);

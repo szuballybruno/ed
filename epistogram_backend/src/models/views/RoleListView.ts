@@ -19,6 +19,9 @@ export class RoleListView {
     roleId: number;
 
     @ViewColumn()
+    isGlobal: boolean;
+
+    @ViewColumn()
     roleName: string;
 
     @ViewColumn()

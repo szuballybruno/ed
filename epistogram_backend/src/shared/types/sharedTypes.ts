@@ -28,8 +28,6 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 
 export type CourseModeType = 'beginner' | 'advanced';
 
-
-
 export type PermissionCodeType =
 	| 'canChangeCourseMode'
 	| 'canSetInvitedUserCompany'
@@ -37,9 +35,12 @@ export type PermissionCodeType =
 	| 'canAccessAdministration'
 	| 'canAccessApplication'
 	| 'canAccessShopAdministration'
-	| 'COMPANY_ROLE_MANAGER';
-
-
+	| 'COMPANY_ROLE_MANAGER'
+    | 'VIEW_COMPANY_ROLES'
+    | 'ASSIGN_COMPANY_ROLES'
+    | 'DELETE_COMPANY_ROLES'
+    | 'ASSIGN_GLOBAL_ROLES'
+    | 'VIEW_COMPANY_COURSES';
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

@@ -84,8 +84,6 @@ export class SQLBootstrapperService {
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
 
-        log(`Seeding ${seedScriptName}...`);
-
         const sql = this.readSQLFile('seed', seedScriptName);
 
         const replacedSQl = this.replaceSymbols(sql);

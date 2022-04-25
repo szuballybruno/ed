@@ -76,14 +76,14 @@ SELECT
 	) total_video_question_count,
 	(
 		SELECT (cv.can_view)
-		FROM public.course_view cv
+		FROM public.available_course_view cv
 		WHERE (cv.user_id = u.id AND cv.course_id = co.id)
 	) can_start_course
 FROM public.course co
 
 CROSS JOIN public.user u
 
-LEFT JOIN public.course_view cv
+LEFT JOIN public.available_course_view cv
 ON cv.user_id = u.id AND cv.course_id = co.id
 
 LEFT JOIN public.storage_file sf

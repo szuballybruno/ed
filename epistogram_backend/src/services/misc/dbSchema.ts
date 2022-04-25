@@ -25,7 +25,7 @@ import { VideoPlaybackSample } from '../../models/entity/VideoPlaybackSample';
 import { CourseItemAllView } from '../../models/views/CourseItemAllView';
 import { CourseItemStateView } from '../../models/views/CourseItemStateView';
 import { CourseStateView } from '../../models/views/CourseStateView';
-import { CourseView } from '../../models/views/CourseView';
+import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
@@ -134,7 +134,7 @@ export const dbSchema = {
         'course_item_state_view',
         'course_state_view',
         'course_item_all_view',
-        'course_view',
+        'available_course_view',
         'signup_question_view',
         'latest_given_answer_view',
         'personality_trait_view',
@@ -232,7 +232,7 @@ export const dbSchema = {
         CourseItemStateView,
         CourseStateView,
         CourseItemAllView,
-        CourseView,
+        AvailableCourseView,
         PersonalityTraitView,
         SignupCompletedView,
         DailyTipView,

@@ -58,6 +58,11 @@ export const RoleAdminIndexPage = memo(() => {
                             width: 200
                         },
                         {
+                            headerName: 'Is Global',
+                            field: 'isGlobal',
+                            width: 100
+                        },
+                        {
                             headerName: 'Owner name',
                             field: 'ownerName',
                             width: 200

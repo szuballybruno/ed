@@ -42,7 +42,7 @@ god_roles AS (
 SELECT 
 	u.id user_id,
 	roles.company_id,
-	roles.role_id,
+-- 	roles.role_id,
 	pe.id permission_id,
 	pe.code permission_code
 FROM public.user u
@@ -73,10 +73,15 @@ ON rpb.role_id = roles.role_id
 LEFT JOIN public.permission pe
 ON pe.id = rpb.permission_id
 
-WHERE roles.role_id IS NOT NULL
+WHERE pe.id IS NOT NULL
+
+GROUP BY
+	u.id,
+	roles.company_id,
+-- 	roles.role_id,
+	pe.id
 
 ORDER BY
 	u.id,
 	roles.company_id,
-	roles.role_id,
 	pe.id

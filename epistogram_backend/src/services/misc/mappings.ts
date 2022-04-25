@@ -29,7 +29,7 @@ import { CourseModuleOverviewView } from '../../models/views/CourseModuleOvervie
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
-import { CourseView } from '../../models/views/CourseView';
+import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
@@ -456,7 +456,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseView, CourseStatDTO, view => {
+        .addMap(AvailableCourseView, CourseStatDTO, view => {
 
             return {
                 title: view.title,
@@ -570,7 +570,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(CourseView, CourseShortDTO, course => {
+        .addMap(AvailableCourseView, CourseShortDTO, course => {
 
             const thumbnailImageURL = course.filePath
                 ? getAssetUrl(course.filePath)
@@ -843,7 +843,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(PretestResultView, PretestResultDTO, (x, cv: CourseView) => ({
+        .addMap(PretestResultView, PretestResultDTO, (x, cv: AvailableCourseView) => ({
             isCompleted: x.isCompleted,
             correctAnswerRate: x.correctAnswerRate,
             firstItemCode: cv.firstItemCode
@@ -890,7 +890,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             ownerName: x.ownerName,
             ownerType: x.isCompanyOwned ? 'company' : 'user',
             companyId: x.companyId,
-            companyName: x.companyName
+            companyName: x.companyName,
+            isGlobal: x.isGlobal
         } as RoleAdminListDTO));
 };
 

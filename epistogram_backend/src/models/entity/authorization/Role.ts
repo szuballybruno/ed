@@ -14,6 +14,9 @@ export class Role {
     @Column()
     name: string;
 
+    @Column()
+    isGlobal: boolean;
+
     // permissions
     @JoinColumn()
     @OneToMany(_ => RolePermissionBridge, x => x.role, { cascade: true })
@@ -26,7 +29,7 @@ export class Role {
 
     // owner user 
     @Column({ type: 'int', nullable: true })
-    ownerUserId: number;
+    ownerUserId: number  | null;
 
     @JoinColumn(getJoinColumnName(Role, 'ownerUserId'))
     @ManyToOne(_ => User, x => x.ownedRoles)
@@ -34,7 +37,7 @@ export class Role {
 
     // owner company 
     @Column({ type: 'int', nullable: true })
-    ownerCompanyId: number;
+    ownerCompanyId: number | null;
 
     @JoinColumn(getJoinColumnName(Role, 'ownerCompanyId'))
     @ManyToOne(_ => Company, x => x.ownedRoles)
