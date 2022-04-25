@@ -5,7 +5,7 @@ import { CourseCategory } from '../models/entity/CourseCategory';
 import { CourseModule } from '../models/entity/CourseModule';
 import { Exam } from '../models/entity/Exam';
 import { User } from '../models/entity/User';
-import { UserCourseAccessBridge } from '../models/entity/UserCourseAccessBridge';
+import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { Video } from '../models/entity/Video';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
@@ -711,7 +711,7 @@ export class CourseService {
     async createCourseAccessBridge(userId: number, courseId: number) {
 
         await this._ormService
-            .getRepository(UserCourseAccessBridge)
+            .getRepository(CourseAccessBridge)
             .insert({
                 courseId,
                 userId

@@ -145,7 +145,7 @@ VALUES
     'Mányoki', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    2, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -160,7 +160,7 @@ VALUES
     'Benkő', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    2, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -175,7 +175,7 @@ VALUES
     'Zwierczyk', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    2, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -190,7 +190,7 @@ VALUES
     'Apostagi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    3, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -205,7 +205,7 @@ VALUES
     'Reichenberger', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    3, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -220,7 +220,7 @@ VALUES
     'Borbély', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    4, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -235,7 +235,7 @@ VALUES
     'Kovács', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    4, -- company_id
     1, -- job_title_id,
     false -- is_god
 );

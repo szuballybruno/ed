@@ -4,7 +4,7 @@ export type PropConstraintType<TObj, TProp> = {
 };
 
 export type NoComplexTypes<TObj> = {
-    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | undefined) ? TKey : never]: TObj[TKey]
+    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | undefined | null) ? TKey : never]: TObj[TKey]
 };
 
 const constraintFn = <T>() => <TRe extends PropConstraintType<TRe, T>>(obj: TRe): PropConstraintType<TRe, T> => {

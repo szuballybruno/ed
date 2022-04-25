@@ -49,7 +49,7 @@ import { Event } from '../../models/entity/Event';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CoinBalanceView } from '../../models/views/CoinBalanceView';
 import { ActivationCode } from '../../models/entity/ActivationCode';
-import { UserCourseAccessBridge } from '../../models/entity/UserCourseAccessBridge';
+import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
@@ -94,20 +94,26 @@ import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestio
 import { ModuleView } from '../../models/views/ModuleView';
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
+import seed_companies from '../../sql/seed/seed_companies';
+import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
+import { permissionList } from '../../sql/seed/seed_permissions';
+import { roleList } from '../../sql/seed/seed_roles';
+import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
+import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
 
 export const dbSchema = {
 
     seedScripts: [
-        'seed_companies',
+        [Company, seed_companies],
         'seed_question_types',
-        'seed_permissions',
+        [Permission, permissionList],
         'seed_signup_exam',
         'seed_job_titles',
         'seed_users',
-        'seed_roles',
+        [Role, roleList],
         'seed_company_owner_bridges',
-        'seed_role_assignment_bridges',
-        'seed_role_permission_bridges',
+        [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
+        [RolePermissionBridge, rolePermissionList],
         'seed_signup_questions',
         'seed_course_categories',
         'seed_courses',
@@ -123,7 +129,8 @@ export const dbSchema = {
         'seed_discount_codes',
         'seed_prequiz_questions',
         'seed_course_rating',
-        'seed_tempomat_adjustment_values'
+        'seed_tempomat_adjustment_values',
+        [CourseAccessBridge, seed_course_access_bridge]
     ],
 
     viewScripts: [
@@ -134,12 +141,12 @@ export const dbSchema = {
         'course_item_state_view',
         'course_state_view',
         'course_item_all_view',
-        'available_course_view',
         'signup_question_view',
         'latest_given_answer_view',
         'personality_trait_view',
         'signup_completed_view',
         'user_permission_view',
+        'available_course_view',
         'exam_result_view',
         'practise_question_view',
         'daily_tip_view',
@@ -311,7 +318,7 @@ export const dbSchema = {
         ActivityStreak,
         Event,
         ActivationCode,
-        UserCourseAccessBridge,
+        CourseAccessBridge,
         ShopItem,
         ShopItemCategory,
         DiscountCode,

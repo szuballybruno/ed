@@ -6,6 +6,7 @@ import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
 import { Role } from './authorization/Role';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { User } from './User';
+import { CourseAccessBridge } from './CourseAccessBridge';
 
 @Entity()
 export class Company {
@@ -44,4 +45,9 @@ export class Company {
     @JoinColumn()
     @OneToMany(_ => Role, getJoinColumnInverseSide<Company>()(x => x.ownerCompany))
     ownedRoles: Role[];
+    
+    // course access bridges
+    @JoinColumn()
+    @OneToMany(_ => CourseAccessBridge, x => x.company)
+    courseAccessBridges: CourseAccessBridge[];
 }

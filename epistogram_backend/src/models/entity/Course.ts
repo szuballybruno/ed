@@ -13,7 +13,7 @@ import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
 import { ShopItem } from './ShopItem';
 import { StorageFile } from './StorageFile';
 import { User } from './User';
-import { UserCourseAccessBridge } from './UserCourseAccessBridge';
+import { CourseAccessBridge } from './CourseAccessBridge';
 import { UserCourseBridge } from './UserCourseBridge';
 import { Video } from './Video';
 
@@ -128,8 +128,8 @@ export class Course {
 
     // courseAccessBridges
     @JoinColumn()
-    @OneToMany(_ => UserCourseAccessBridge, x => x.course)
-    userAccessBridges: UserCourseAccessBridge[];
+    @OneToMany(_ => CourseAccessBridge, x => x.course)
+    userAccessBridges: CourseAccessBridge[];
 
     // shop items
     @ManyToOne(_ => ShopItem, x => x.course)

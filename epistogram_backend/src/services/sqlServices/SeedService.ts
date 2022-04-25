@@ -3,6 +3,10 @@ import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
+import { Company } from '../../models/entity/Company';
+import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
+import seed_companies from '../../sql/seed/seed_companies';
+import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
 import { permissionList } from '../../sql/seed/seed_permissions';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
@@ -13,6 +17,8 @@ import { dbSchema } from '../misc/dbSchema';
 import { log, logSecondary } from '../misc/logger';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { SQLConnectionService } from './SQLConnectionService';
+
+type NewSeedType = [{ new(): any }, Object];
 
 export class SeedService {
 
@@ -31,32 +37,36 @@ export class SeedService {
             ['seed_permissions', Permission, permissionList],
             ['seed_roles', Role, roleList],
             ['seed_role_permission_bridges', RolePermissionBridge, rolePermissionList],
-            ['seed_role_assignment_bridges', RoleAssignmentBridge, roleAssignmentBridgeSeedList]
+            ['seed_role_assignment_bridges', RoleAssignmentBridge, roleAssignmentBridgeSeedList],
+            ['seed_course_access_bridge', CourseAccessBridge, seed_course_access_bridge],
+            ['seed_companies', Company, seed_companies]
         ];
 
         for (let index = 0; index < dbSchema.seedScripts.length; index++) {
 
             const seedScriptName = dbSchema.seedScripts[index];
 
-            const override = overrides
-                .firstOrNull(x => x[0] === seedScriptName);
+            if (typeof seedScriptName === 'string') {
 
-            log(`Seeding ${seedScriptName}${override ? ' [OVERRIDE]' : ''}...`);
+                log(`Seeding ${seedScriptName}...`);
 
-            if (override) {
+                await this._sqlBootstrapperService
+                    .executeSeedScriptAsync(seedScriptName);
+            }
+            else {
 
-                if (Object.values(override[2]).length === 0) {
+                const [classType, seedObj] = seedScriptName as NewSeedType;
+
+                log(`Seeding ${classType.name}...`);
+
+                if (Object.values(seedObj).length === 0) {
 
                     logSecondary('Skipping, has no values.');
                     continue;
                 }
 
-                const { script, values } = this.parseSeedList(override[1] as any, override[2] as any);
+                const { script, values } = this.parseSeedList(classType, seedObj as any);
                 await this._execService.executeSQLAsync(script, values);
-            } else {
-
-                await this._sqlBootstrapperService
-                    .executeSeedScriptAsync(seedScriptName);
             }
         }
 

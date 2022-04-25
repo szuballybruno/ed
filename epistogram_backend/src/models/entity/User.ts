@@ -16,7 +16,7 @@ import { Role } from './authorization/Role';
 import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
-import { UserCourseAccessBridge } from './UserCourseAccessBridge';
+import { CourseAccessBridge } from './CourseAccessBridge';
 import { UserCourseBridge } from './UserCourseBridge';
 import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
@@ -154,8 +154,8 @@ export class User {
 
     // courseAccessBridges
     @JoinColumn()
-    @OneToMany(_ => UserCourseAccessBridge, x => x.user)
-    courseAccessBridges: UserCourseAccessBridge[];
+    @OneToMany(_ => CourseAccessBridge, x => x.user)
+    courseAccessBridges: CourseAccessBridge[];
 
     // discountCodes
     @JoinColumn()
