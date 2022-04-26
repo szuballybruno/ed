@@ -12,27 +12,28 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
 
-export type WhereCondition<TEntity, TParams> = [
-    'WHERE' | 'AND',
-    ClassType<TEntity>,
-    keyof TEntity,
-    OperationType,
-    keyof TParams | SQLStaticValueType
-];
+export type WhereCondition<TEntity, TParams> = {
+    code: 'WHERE' | 'AND',
+    classType:  ClassType<TEntity>,
+    key: keyof TEntity,
+    op: OperationType,
+    criteria: keyof TParams | SQLStaticValueType
+};
 
-export type SelectCondition<TEntity> = [
-    'SELECT',
-    keyof TEntity | (keyof TEntity)[]
-];
+export type SelectCondition<TEntity> = {
+    code: 'SELECT',
+    keys:  keyof TEntity | (keyof TEntity)[] 
+};
 
-export type JoinCondition<TJoinEntity, TToEntity, TParams> = [
-    'JOIN',
-    ClassType<TJoinEntity>,
-    ClassType<TToEntity>,
-    keyof TJoinEntity,
-    OperationType,
-    keyof TParams | SQLStaticValueType | keyof TToEntity
-];
+export type JoinCondition<TJoinEntity, TToEntity, TParams> = {
+    code: 'JOIN',
+    classType: ClassType<TJoinEntity>,
+    toClassType: ClassType<TToEntity>,
+    key: keyof TJoinEntity,
+    op: OperationType,
+    criteria: keyof TParams | SQLStaticValueType | keyof TToEntity
+};
 
 export type ExpressionPart<TEntity, TParams> = SelectCondition<TEntity> | WhereCondition<TEntity, TParams> | JoinCondition<any, TEntity, TParams>;
+
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;

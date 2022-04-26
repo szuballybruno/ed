@@ -2,7 +2,7 @@ import { ClassType } from '../../models/DatabaseTypes';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { ExpressionPart, OperationType, SimpleExpressionPart, SQLStaticValueType } from './XQueryBuilderTypes';
+import { ExpressionPart, JoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
 
 export class XQueryBuilder<TEntity, TParams> {
 
@@ -33,7 +33,13 @@ export class XQueryBuilder<TEntity, TParams> {
     where(key: keyof TEntity, op: OperationType, param: keyof TParams | SQLStaticValueType) {
 
         this._expression
-            .push(['WHERE', this._mainClassType, key, op, param]);
+            .push({
+                code: 'WHERE',
+                classType: this._mainClassType,
+                key: key,
+                op: op,
+                criteria: param
+            } as WhereCondition<TEntity, TParams>);
 
         return this;
     }
@@ -55,24 +61,42 @@ export class XQueryBuilder<TEntity, TParams> {
 
         const isFirstClassType = !!(key_Or_ClassType as any).name;
 
+        const getOp = (op: OperationType, par: keyof TParams | SQLStaticValueType) => this.getParamValue(par) === null
+            ? ['IS' as OperationType, 'NULL' as SQLStaticValueType]
+            : [op, par];
+
         if (isFirstClassType) {
 
             const classType = key_Or_ClassType as ClassType<TCheckEntity>;
             const key = op_Or_Key as keyof TCheckEntity;
             const op = param_OR_op as OperationType;
             const par = param! as keyof TParams | SQLStaticValueType;
+            const [op2, par2] = getOp(op, par);
 
             this._expression
-                .push(['AND', classType, key, op, par]);
+                .push({
+                    code: 'AND',
+                    classType: classType,
+                    key: key,
+                    op: op2,
+                    criteria: par2
+                } as WhereCondition<TCheckEntity, TParams>);
         }
         else {
 
             const key = key_Or_ClassType as keyof TEntity;
             const op = op_Or_Key as OperationType;
             const param = param_OR_op as keyof TParams | SQLStaticValueType;
+            const [op2, par2] = getOp(op, param);
 
             this._expression
-                .push(['AND', this._mainClassType, key, op, param]);
+                .push({
+                    code: 'AND',
+                    classType: this._mainClassType,
+                    key: key,
+                    op: op2,
+                    criteria: par2
+                } as WhereCondition<TEntity, TParams>);
         }
 
         return this;
@@ -84,7 +108,14 @@ export class XQueryBuilder<TEntity, TParams> {
             on: (onKey: keyof TJoinEntity, onOp: OperationType, toKey: keyof TOnEntity) => {
 
                 this._expression
-                    .push(['JOIN', joinEntity, toEntity, onKey, onOp, toKey]);
+                    .push({
+                        code: 'JOIN',
+                        classType: joinEntity,
+                        toClassType: toEntity,
+                        key: onKey,
+                        op: onOp,
+                        criteria: toKey
+                    } as JoinCondition<TJoinEntity, TOnEntity, TParams>);
 
                 return this;
             }
@@ -131,42 +162,33 @@ export class XQueryBuilder<TEntity, TParams> {
             return;
 
         const whereIndex = this._expression
-            .findIndex(x => x[0] === 'WHERE');
+            .findIndex(x => x.code === 'WHERE');
 
-        // after explicit where 
-        if (whereIndex !== -1) {
+        const isInsert = whereIndex !== -1;
 
-            // null check 
-            if (deletionPropertyData.checkType === 'null') {
+        const getDelChck = (): WhereCondition<TEntity, TParams> => {
 
-                this._expression = this._expression
-                    .insert(whereIndex + 1, ['AND', this._mainClassType, deletionPropertyData.propName, 'IS', 'NULL']);
-            }
+            const clauseName = isInsert ? 'AND' : 'WHERE';
+            const isNullCheck = deletionPropertyData.checkType === 'null';
 
-            // bool check
-            else {
+            return {
+                code: clauseName,
+                classType: this._mainClassType,
+                key: deletionPropertyData.propName,
+                op: isNullCheck ? 'IS' : '=',
+                criteria: isNullCheck ? 'NULL' : 'false'
+            };
+        };
 
-                this._expression = this._expression
-                    .insert(whereIndex + 1, ['AND', this._mainClassType, deletionPropertyData.propName, '=', 'false']);
-            }
-        }
+        isInsert
+            ? this._expression = this._expression
+                .insert(whereIndex + 1, getDelChck())
+            : this._expression
+                .push(getDelChck());
+    }
 
-        // end of expression
-        else {
+    private getParamValue(key: any) {
 
-            // null check 
-            if (deletionPropertyData.checkType === 'null') {
-
-                this._expression
-                    .push(['WHERE', this._mainClassType, deletionPropertyData.propName, 'IS', 'NULL']);
-            }
-
-            // bool check
-            else {
-
-                this._expression
-                    .push(['WHERE', this._mainClassType, deletionPropertyData.propName, '=', 'false']);
-            }
-        }
+        return (this._params as any)[key];
     }
 }

@@ -6,22 +6,28 @@ export const roleList = getSeedList<Role>()({
         name: 'Company Owner',
         ownerCompanyId: null,
         ownerUserId: null,
-        isGlobal: true
+        isGlobal: false
     },
     Company_HR_Viewer: {
         name: 'Company HR Viewer',
         ownerCompanyId: null,
         ownerUserId: null,
-        isGlobal: true
+        isGlobal: false
     },
     Company_Role_Manager: {
         name: 'Company Role Manager',
         ownerCompanyId: null,
         ownerUserId: null,
-        isGlobal: true
+        isGlobal: false
     },
     Company_User: {
         name: 'Company User',
+        ownerCompanyId: null,
+        ownerUserId: null,
+        isGlobal: false
+    },
+    God: {
+        name: 'God',
         ownerCompanyId: null,
         ownerUserId: null,
         isGlobal: true

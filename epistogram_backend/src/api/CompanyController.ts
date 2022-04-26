@@ -3,7 +3,7 @@ import { PermissionService } from '../services/PermissionService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { ActionParams } from '../utilities/helpers';
 
-export class CompaniesController {
+export class CompanyController {
 
     private _compService: CompanyService;
     private _permissionService: PermissionService;
@@ -41,11 +41,17 @@ export class CompaniesController {
 
     createCompanyAction = async (params: ActionParams) => {
 
+        await this._permissionService
+            .checkPermissionAsync(params.currentUserId, 'CREATE_COMPANY');
+
         await this._compService
             .createCompanyAsync();
     };
 
     deleteCompanyAction = async (params: ActionParams) => {
+
+        await this._permissionService
+            .checkPermissionAsync(params.currentUserId, 'DELETE_COMPANY');
 
         await this._compService
             .deleteCompanyAsync(params

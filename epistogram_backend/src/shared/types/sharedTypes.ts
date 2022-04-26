@@ -42,7 +42,9 @@ export type PermissionCodeType =
     | 'DELETE_COMPANY_ROLES'
     | 'ASSIGN_GLOBAL_ROLES'
     | 'VIEW_COMPANY_COURSES'
-    | 'MANAGE_COMPANY';
+    | 'MANAGE_COMPANY'
+    | 'DELETE_COMPANY'
+    | 'CREATE_COMPANY';
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

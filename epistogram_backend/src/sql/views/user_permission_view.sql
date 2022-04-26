@@ -33,7 +33,7 @@ god_roles AS (
 	SELECT 
 		u.id user_id,
 		r.id role_id,
-		co.id company_id
+		CASE WHEN r.is_global THEN NULL ELSE co.id END company_id
 	FROM public.role r
 	CROSS JOIN public.company co
 	CROSS JOIN public.user u 

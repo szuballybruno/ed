@@ -37,5 +37,11 @@ export const permissionList = getSeedList<Permission>()({
     },
     MANAGE_COMPANY: {
         code: 'MANAGE_COMPANY'
+    },
+    DELETE_COMPANY: {
+        code: 'DELETE_COMPANY'
+    },
+    CREATE_COMPANY: {
+        code: 'CREATE_COMPANY'
     }
 });

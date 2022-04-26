@@ -23,5 +23,11 @@ export const roleAssignmentBridgeSeedList = getSeedList<RoleAssignmentBridge>()(
         companyId: seed_companies.Henkel.id,
         roleId: roleList.Company_User.id,
         userId: null
+    },
+
+    almostgod_a: {
+        companyId: seed_companies.PCWorld.id,
+        roleId: roleList.Company_Owner.id,
+        userId: 2
     }
 });

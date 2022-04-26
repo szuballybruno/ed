@@ -4,7 +4,7 @@ import fileUpload from 'express-fileupload';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
-import { CompaniesController } from './api/CompaniesController';
+import { CompanyController } from './api/CompanyController';
 import { CourseController } from './api/CourseController';
 import { CourseRatingController } from './api/CourseRatingController';
 import { DailyTipController } from './api/DailyTipController';
@@ -185,7 +185,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
-    const companyController = new CompaniesController(companyService, permissionService);
+    const companyController = new CompanyController(companyService, permissionService);
     const roleController = new RoleController(roleService);
 
     // middleware 

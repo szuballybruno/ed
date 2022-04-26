@@ -14,15 +14,19 @@ export class PermissionService extends QueryServiceBase<Permission> {
 
         super(mapperService, ormService, Permission);
     }
+    async checkPermissionAsync(userId: number, permissionsCode: PermissionCodeType): Promise<void>;
+    async checkPermissionAsync(userId: number, companyId: number, permissionsCode: PermissionCodeType): Promise<void>;
+    async checkPermissionAsync(userId: number, companyId_or_permissionCode: number | PermissionCodeType, permissionsCodeOrUndefined?: PermissionCodeType) {
 
-    async checkPermissionAsync(userId: number, companyId: number, permissionsCode: PermissionCodeType) {
+        const companyId = permissionsCodeOrUndefined ? companyId_or_permissionCode as number : null;
+        const permissionCode = permissionsCodeOrUndefined ? permissionsCodeOrUndefined : companyId_or_permissionCode as PermissionCodeType;
 
-        const hasPermission = await this.hasPermissionAsync(userId, companyId, permissionsCode);
+        const hasPermission = await this.hasPermissionAsync(userId, companyId, permissionCode);
         if (!hasPermission)
             throw new ErrorCode('User has no permission to access resource.', 'no permission');
     }
 
-    async hasPermissionAsync(userId: number, companyId: number, permissionsCode: PermissionCodeType) {
+    async hasPermissionAsync(userId: number, companyId: number | null, permissionsCode: PermissionCodeType) {
 
         const permission = await this
             ._ormService
