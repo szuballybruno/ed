@@ -18,6 +18,7 @@ import { TeacherInfoService } from './TeacherInfoService';
 import { UserEngagementView } from '../models/views/UserEngagementView';
 import moment from 'moment';
 import { Grouping } from '../shared/logic/jsExtensions';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
 
 export class UserService {
 
@@ -654,14 +655,55 @@ export class UserService {
             coursesInactiveFor14Days.length
         );
 
-        const answerSessions = await this._ormService
-            .getRepository(AnswerSession)
-            .createQueryBuilder('as')
-            .where('as.userId = :userId', { userId })
+        const userPerformanceView = await this._ormService
+            .getRepository(UserPerformanceView)
+            .createQueryBuilder('upv')
+            .where('upv.userId = :userId', { userId })
             .getMany();
 
+        const practiseGivenAnswers = userPerformanceView.filter(x => x.givenAnswerType === 'practise');
+        const videoGivenAnswers = userPerformanceView.filter(x => x.givenAnswerType === 'video');
+        const examGivenAnswers = userPerformanceView.filter(x => x.givenAnswerType === 'exam');
+
+        const getCorrectGivenAnswers = (givenAnswers: UserPerformanceView[]) => {
+            return givenAnswers
+                .reduce((a, b) => b.givenAnswerIsCorrect
+                    ? a + 1
+                    : a, 0);
+        };
+
+        const correctPractiseAnswers = getCorrectGivenAnswers(practiseGivenAnswers);
+        const correctVideoAnswers = getCorrectGivenAnswers(videoGivenAnswers);
+        const correctExamAnswers = getCorrectGivenAnswers(examGivenAnswers);
+
+        const practiseAvgPercentage = Math.floor(correctPractiseAnswers / practiseGivenAnswers.length * 100);
+        const videoAvgPercentage = Math.floor(correctVideoAnswers / videoGivenAnswers.length * 100);
+        const examAvgPercentage = Math.floor(correctExamAnswers / examGivenAnswers.length * 100);
+
+        const getPerformancePercentage = (
+            practiseAvgPercentage: number,
+            videoAvgPercentage: number,
+            examAvgPercentage: number
+        ) => {
+            return (
+                examAvgPercentage * 2.5 +
+                videoAvgPercentage * 1.5 +
+                practiseAvgPercentage
+            ) / 5;
+        };
+
+        const performancePercentage = getPerformancePercentage(
+            practiseAvgPercentage,
+            videoAvgPercentage,
+            examAvgPercentage
+        );
+
         return {
-            answerSessions,
+            userPerformanceView,
+            practiseAvgPercentage,
+            videoAvgPercentage,
+            examAvgPercentage,
+            performancePercentage,
             engagementPoints
         };
     };
