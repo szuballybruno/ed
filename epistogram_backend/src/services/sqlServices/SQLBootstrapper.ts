@@ -93,7 +93,7 @@ export class SQLBootstrapperService {
 
     purgeDBAsync = async () => {
 
-        log('Purging DB...', 'strong');
+        log('Purging DB...', { entryType: 'strong' });
 
         const dropDBScript = this._dbSchema
             .entities

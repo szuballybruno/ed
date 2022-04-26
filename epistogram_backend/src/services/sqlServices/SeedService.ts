@@ -1,24 +1,27 @@
 
-import { Permission } from '../../models/entity/authorization/Permission';
-import { Role } from '../../models/entity/authorization/Role';
-import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
-import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
-import { Company } from '../../models/entity/Company';
-import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
-import seed_companies from '../../sql/seed/seed_companies';
-import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
-import { permissionList } from '../../sql/seed/seed_permissions';
-import { roleList } from '../../sql/seed/seed_roles';
-import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
-import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
-import { NoComplexTypes } from '../../sql/seed/seed_test';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
+import { NoComplexTypes, PropConstraintType, constraintFn } from '../../utilities/misc';
 import { dbSchema } from '../misc/dbSchema';
 import { log, logSecondary } from '../misc/logger';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { SQLConnectionService } from './SQLConnectionService';
 
 type NewSeedType = [{ new(): any }, Object];
+
+export const getSeedList = <TEntity>() => {
+
+    type SeedType = Omit<NoComplexTypes<TEntity>, 'id'>;
+
+    return <TData extends PropConstraintType<TData, SeedType>>(data: TData) => {
+
+        const ret = constraintFn<SeedType>()(data);
+
+        Object.values(ret)
+            .forEach((val, index) => (val as any)['id'] = index + 1);
+
+        return ret as any as PropConstraintType<TData, NoComplexTypes<TEntity>>;
+    };
+};
 
 export class SeedService {
 
@@ -32,15 +35,6 @@ export class SeedService {
     }
 
     private _seedDBAsync = async () => {
-
-        const overrides = [
-            ['seed_permissions', Permission, permissionList],
-            ['seed_roles', Role, roleList],
-            ['seed_role_permission_bridges', RolePermissionBridge, rolePermissionList],
-            ['seed_role_assignment_bridges', RoleAssignmentBridge, roleAssignmentBridgeSeedList],
-            ['seed_course_access_bridge', CourseAccessBridge, seed_course_access_bridge],
-            ['seed_companies', Company, seed_companies]
-        ];
 
         for (let index = 0; index < dbSchema.seedScripts.length; index++) {
 

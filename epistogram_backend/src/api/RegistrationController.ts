@@ -32,10 +32,10 @@ export class RegistrationController {
 
         const { accessToken, refreshToken } = await this._registrationService
             .registerUserViaPublicTokenAsync(
-                body.getValue<string>(x => x.emailAddress),
-                body.getValue<string>(x => x.firstName),
-                body.getValue<string>(x => x.lastName),
-                body.getValue<string>(x => x.registrationToken));
+                body.getValue(x => x.emailAddress, 'string'),
+                body.getValue(x => x.firstName, 'string'),
+                body.getValue(x => x.lastName, 'string'),
+                body.getValue(x => x.registrationToken, 'string'));
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
@@ -46,9 +46,9 @@ export class RegistrationController {
 
         const { accessToken, refreshToken } = await this._registrationService
             .registerInvitedUserAsync(
-                body.getValue<string>(x => x.invitationToken),
-                body.getValue<string>(x => x.password),
-                body.getValue<string>(x => x.passwordCompare));
+                body.getValue(x => x.invitationToken, 'string'),
+                body.getValue(x => x.password, 'string'),
+                body.getValue(x => x.passwordCompare, 'string'));
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
@@ -59,10 +59,10 @@ export class RegistrationController {
 
         await this._registrationService
             .registerUserViaActivationCodeAsync(
-                body.getValue<string>(x => x.activationCode),
-                body.getValue<string>(x => x.emailAddress),
-                body.getValue<string>(x => x.firstName),
-                body.getValue<string>(x => x.lastName));
+                body.getValue(x => x.activationCode, 'string'),
+                body.getValue(x => x.emailAddress, 'string'),
+                body.getValue(x => x.firstName, 'string'),
+                body.getValue(x => x.lastName, 'string'));
     };
 
     inviteUserAction = async (params: ActionParams) => {

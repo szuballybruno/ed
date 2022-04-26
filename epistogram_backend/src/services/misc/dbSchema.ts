@@ -100,15 +100,17 @@ import { permissionList } from '../../sql/seed/seed_permissions';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
+import seed_question_types from '../../sql/seed/seed_question_types';
+import seed_job_titles from '../../sql/seed/seed_job_titles';
 
 export const dbSchema = {
 
     seedScripts: [
         [Company, seed_companies],
-        'seed_question_types',
+        [QuestionType, seed_question_types],
         [Permission, permissionList],
         'seed_signup_exam',
-        'seed_job_titles',
+        [JobTitle, seed_job_titles],
         'seed_users',
         [Role, roleList],
         'seed_company_owner_bridges',
@@ -196,7 +198,8 @@ export const dbSchema = {
         'user_tempomat_adjustment_value_view',
         'course_item_question_edit_view',
         'module_view',
-        'role_list_view'
+        'role_list_view',
+        'company_view'
     ],
 
     functionScripts: [

@@ -1,5 +1,5 @@
 import { Permission } from '../../models/entity/authorization/Permission';
-import { getSeedList } from './seed_test';
+import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const permissionList = getSeedList<Permission>()({
     canChangeCourseMode: {
@@ -34,5 +34,8 @@ export const permissionList = getSeedList<Permission>()({
     },
     VIEW_COMPANY_COURSES: {
         code: 'VIEW_COMPANY_COURSES'
+    },
+    MANAGE_COMPANY: {
+        code: 'MANAGE_COMPANY'
     }
 });

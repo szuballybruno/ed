@@ -1,9 +1,9 @@
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
+import { getSeedList } from '../../services/sqlServices/SeedService';
 import seed_companies from './seed_companies';
-import { getSeedList } from './seed_test';
 
 const list = getSeedList<CourseAccessBridge>()({
-    
+
     // pcworld
     pw_course_17: {
         companyId: seed_companies.PCWorld.id,

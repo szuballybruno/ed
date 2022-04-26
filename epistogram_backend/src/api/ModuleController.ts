@@ -54,7 +54,7 @@ export class ModuleController {
             .getQuery<any>();
 
         const courseId = query
-            .getValue(x => x.courseId);
+            .getValue(x => x.courseId, 'int');
 
         return this._moduleService
             .getModuleListEditDataAsync(courseId);

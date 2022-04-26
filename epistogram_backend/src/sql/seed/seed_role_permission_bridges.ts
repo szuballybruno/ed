@@ -1,24 +1,28 @@
 import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
+import { getSeedList } from '../../services/sqlServices/SeedService';
 import { permissionList } from './seed_permissions';
 import { roleList } from './seed_roles';
-import { getSeedList } from './seed_test';
 
 export const rolePermissionList = getSeedList<RolePermissionBridge>()({
-    manager_: {
-        roleId: roleList.Company_Manager.id,
+    owner_a: {
+        roleId: roleList.Company_Owner.id,
         permissionId: permissionList.ASSIGN_COMPANY_ROLES.id,
     },
-    manager__: {
-        roleId: roleList.Company_Manager.id,
+    owner_b: {
+        roleId: roleList.Company_Owner.id,
         permissionId: permissionList.ASSIGN_GLOBAL_ROLES.id,
     },
-    manager___: {
-        roleId: roleList.Company_Manager.id,
+    owner_c: {
+        roleId: roleList.Company_Owner.id,
         permissionId: permissionList.DELETE_COMPANY_ROLES.id,
     },
-    manager____: {
-        roleId: roleList.Company_Manager.id,
+    owner_d: {
+        roleId: roleList.Company_Owner.id,
         permissionId: permissionList.VIEW_COMPANY_ROLES.id,
+    },
+    owner_e: {
+        roleId: roleList.Company_Owner.id,
+        permissionId: permissionList.MANAGE_COMPANY.id,
     },
 
     role_manager_a: {

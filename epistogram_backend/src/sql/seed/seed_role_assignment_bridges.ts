@@ -1,7 +1,7 @@
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
+import { getSeedList } from '../../services/sqlServices/SeedService';
 import seed_companies from './seed_companies';
 import { roleList } from './seed_roles';
-import { getSeedList } from './seed_test';
 
 export const roleAssignmentBridgeSeedList = getSeedList<RoleAssignmentBridge>()({
     company_1_company_user_role: {

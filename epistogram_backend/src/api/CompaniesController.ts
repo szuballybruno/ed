@@ -1,14 +1,17 @@
 import { CompanyService } from '../services/CompanyService';
+import { PermissionService } from '../services/PermissionService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { ActionParams } from '../utilities/helpers';
 
 export class CompaniesController {
 
     private _compService: CompanyService;
+    private _permissionService: PermissionService;
 
-    constructor(compService: CompanyService) {
+    constructor(compService: CompanyService, permissionService: PermissionService) {
 
         this._compService = compService;
+        this._permissionService = permissionService;
     }
 
     getCompaniesAction = async (params: ActionParams) => {
@@ -25,10 +28,15 @@ export class CompaniesController {
 
     getCompanyEditDataAction = async (params: ActionParams) => {
 
+        const companyId = params
+            .getQuery()
+            .getValue(x => x.companyId, 'int');
+
+        await this._permissionService
+            .checkPermissionAsync(params.currentUserId, companyId, 'MANAGE_COMPANY');
+
         return await this._compService
-            .getCompanyEditDataAsync(params
-                .getQuery()
-                .getValue(x => x.companyId, 'int'));
+            .getCompanyEditDataAsync(companyId);
     };
 
     createCompanyAction = async (params: ActionParams) => {
@@ -38,7 +46,7 @@ export class CompaniesController {
     };
 
     deleteCompanyAction = async (params: ActionParams) => {
-        
+
         await this._compService
             .deleteCompanyAsync(params
                 .getBody()

@@ -55,7 +55,7 @@ export class ORMConnectionService {
             ],
         } as DataSourceOptions;
 
-        log('Connecting to database with TypeORM...', 'strong');
+        log('Connecting to database with TypeORM...', { entryType: 'strong' });
 
         const initAsync = async (dataSourceOptions: DataSourceOptions): Promise<DataSource> => {
 

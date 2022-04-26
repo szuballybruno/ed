@@ -114,6 +114,7 @@ import { getItemCode } from './encodeService';
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleListView } from '../../models/views/RoleListView';
+import { CompanyView } from '../../models/views/CompanyView';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -879,7 +880,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Company, CompanyDTO, x => ({
+        .addMap(CompanyView, CompanyDTO, x => ({
             id: x.id,
             name: x.name
         }));

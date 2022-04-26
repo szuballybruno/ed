@@ -31,7 +31,7 @@ export class ExamController {
     startExamAction = async (params: ActionParams) => {
 
         const body = params.getBody<{ answerSessionId: number }>();
-        const answerSessionId = body.getValue(x => x.answerSessionId);
+        const answerSessionId = body.getValue(x => x.answerSessionId, 'int');
 
         await this._examService
             .startExamAsync(answerSessionId);

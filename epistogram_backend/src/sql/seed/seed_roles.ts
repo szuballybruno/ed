@@ -1,9 +1,9 @@
 import { Role } from '../../models/entity/authorization/Role';
-import { getSeedList } from './seed_test';
+import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const roleList = getSeedList<Role>()({
-    Company_Manager: {
-        name: 'Company Manager',
+    Company_Owner: {
+        name: 'Company Owner',
         ownerCompanyId: null,
         ownerUserId: null,
         isGlobal: true

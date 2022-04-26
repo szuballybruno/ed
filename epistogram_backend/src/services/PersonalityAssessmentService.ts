@@ -61,7 +61,7 @@ export class PersonalityAssessmentService {
      * 
      * @param personalityTraitCategoryId 
      */
-    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: number) {
+    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
         const category = await this._ormService
             .getRepository(PersonalityTraitCategory)

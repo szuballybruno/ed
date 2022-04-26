@@ -72,7 +72,7 @@ export class VideoController {
             .getQuery<any>();
 
         const videoId = query
-            .getValue(x => x.videoId);
+            .getValue(x => x.videoId, 'int');
 
         return await this._videoService
             .getVideoQuestionEditDataAsync(videoId);

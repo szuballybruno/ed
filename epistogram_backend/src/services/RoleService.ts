@@ -35,7 +35,7 @@ export class RoleService extends QueryServiceBase<Role> {
         return [];
     }
 
-    async findPermissionAsync(userId: number, companyId: number, permissionsCode: PermissionCodeType) {
+    async hasPermissionAsync(userId: number, companyId: number, permissionsCode: PermissionCodeType) {
 
         const permissions = await this
             .getUserPermissionsAsync(userId);

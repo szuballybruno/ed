@@ -4,6 +4,7 @@ import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { CompanyView } from '../models/views/CompanyView';
 
 export class CompanyService extends QueryServiceBase<Company> {
 
@@ -17,21 +18,23 @@ export class CompanyService extends QueryServiceBase<Company> {
     async getCompaniesAsync(userId: number) {
 
         const companies = await this._ormService
-            .query(Company)
+            .query(CompanyView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
-        return companies
-            .map(company => this._mapperService.map(Company, CompanyDTO, company));
+        return this._mapperService
+            .mapMany(CompanyView, CompanyDTO, companies);
     }
 
     async getCompaniesAdminAsync(userId: number) {
 
         const companies = await this._ormService
-            .query(Company)
+            .query(CompanyView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
-        return companies
-            .map(company => this._mapperService.map(Company, CompanyDTO, company));
+        return this._mapperService
+            .mapMany(CompanyView, CompanyDTO, companies);
     }
 
     async getCompanyEditDataAsync(companyId: number) {

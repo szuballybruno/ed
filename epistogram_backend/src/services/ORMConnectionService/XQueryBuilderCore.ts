@@ -1,6 +1,7 @@
 import { ClassType } from '../../models/DatabaseTypes';
 import { getKeys } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
+import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { ExpressionPart, JoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
 
@@ -27,7 +28,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
 
-        const errorEndingQueryLog = this.getSQLErrorEnding(fullQuery, sqlParamsList);
+        const errorEndingQueryLog = this.getSQLQueryLog(fullQuery, sqlParamsList);
         const rowCount = rows.length;
 
         if (rowCount === 0)
@@ -193,8 +194,8 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         try {
 
-            const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
-            console.log(errorEndingQueryLog);
+            const queryLog = this.getSQLQueryLog(query, params);
+            log(queryLog, { color: ConsoleColor.purple });
 
             const res = await this._sqlConnectionService
                 .executeSQLAsync(query, this.getParamValues(params));
@@ -215,7 +216,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         }
         catch (e: any) {
 
-            const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
+            const errorEndingQueryLog = this.getSQLQueryLog(query, params);
             throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog} \n Message: ${e.message ?? e} `);
         }
     }
@@ -239,12 +240,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
     /**
      * Returns a sophisticated SQL query error string.
      */
-    private getSQLErrorEnding(query: string, params?: SQLParamType<TParams, keyof TParams>[]) {
+    private getSQLQueryLog(query: string, params?: SQLParamType<TParams, keyof TParams>[]) {
 
         const paramPairs = (params ?? [])
             .map((param) => `${param.token}: ${this.getParamValue(param)}`);
 
-        return `Query: ${query}\nValues: ${paramPairs.join(', ')}`;
+        return `Query: \n${query}\nValues: ${paramPairs.join(', ')}`;
     }
 
     private snakeToCamelCase(snakeCaseString: string) {

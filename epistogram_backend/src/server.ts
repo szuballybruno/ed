@@ -58,6 +58,7 @@ import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
 import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { PasswordChangeService } from './services/PasswordChangeService';
+import { PermissionService } from './services/PermissionService';
 import { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
 import { PlaybackService } from './services/PlaybackService';
 import { PlayerService } from './services/PlayerService';
@@ -153,6 +154,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
     const companyService = new CompanyService(ormConnectionService, mapperService);
+    const permissionService = new PermissionService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -183,7 +185,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
-    const companyController = new CompaniesController(companyService);
+    const companyController = new CompaniesController(companyService, permissionService);
     const roleController = new RoleController(roleService);
 
     // middleware 

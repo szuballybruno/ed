@@ -14,7 +14,7 @@ export class TeacherInfoController {
     getTeacherInfoAction = async (params: ActionParams) => {
 
         const userId = params.getQuery<any>()
-.getValue(x => x.userId);
+            .getValue(x => x.userId, 'int');
 
         return await this._teacherInfoService
             .getTeacherInfoEditDTOAsync(userId);
