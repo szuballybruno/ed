@@ -102,6 +102,7 @@ import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignmen
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
 import seed_question_types from '../../sql/seed/seed_question_types';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
+import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 
 export const dbSchema = {
 
@@ -292,6 +293,7 @@ export const dbSchema = {
         Company,
         User,
         Video,
+        PermissionAssignmentBridge,
         Task,
         GivenAnswer,
         CompanyOwnerBridge,

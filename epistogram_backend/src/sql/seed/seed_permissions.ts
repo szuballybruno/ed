@@ -2,24 +2,6 @@ import { Permission } from '../../models/entity/authorization/Permission';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const permissionList = getSeedList<Permission>()({
-    canChangeCourseMode: {
-        code: 'canChangeCourseMode'
-    },
-    canSetInvitedUserCompany: {
-        code: 'canSetInvitedUserCompany'
-    },
-    canAccessCourseAdministration: {
-        code: 'canAccessCourseAdministration'
-    },
-    canAccessAdministration: {
-        code: 'canAccessAdministration'
-    },
-    canAccessApplication: {
-        code: 'canAccessApplication'
-    },
-    canAccessShopAdministration: {
-        code: 'canAccessShopAdministration'
-    },
     VIEW_COMPANY_ROLES: {
         code: 'VIEW_COMPANY_ROLES'
     },
@@ -37,6 +19,20 @@ export const permissionList = getSeedList<Permission>()({
     },
     MANAGE_COMPANY: {
         code: 'MANAGE_COMPANY'
+    },
+
+    // global permissions
+    MANAGE_COMPANY_COURSES: {
+        code: 'MANAGE_COMPANY_COURSES'
+    },
+    ACCESS_ADMIN: {
+        code: 'ACCESS_ADMIN'
+    },
+    ACCESS_APPLICATION: {
+        code: 'ACCESS_APPLICATION'
+    },
+    MANAGE_SHOP: {
+        code: 'MANAGE_SHOP'
     },
     DELETE_COMPANY: {
         code: 'DELETE_COMPANY'

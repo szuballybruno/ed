@@ -30,12 +30,10 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 export type CourseModeType = 'beginner' | 'advanced';
 
 export type PermissionCodeType =
-    | 'canChangeCourseMode'
-    | 'canSetInvitedUserCompany'
-    | 'canAccessCourseAdministration'
-    | 'canAccessAdministration'
-    | 'canAccessApplication'
-    | 'canAccessShopAdministration'
+    | 'MANAGE_COMPANY_COURSES'
+    | 'ACCESS_ADMIN'
+    | 'ACCESS_APPLICATION'
+    | 'MANAGE_SHOP'
     | 'COMPANY_ROLE_MANAGER'
     | 'VIEW_COMPANY_ROLES'
     | 'ASSIGN_COMPANY_ROLES'
