@@ -892,7 +892,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             ownerType: x.isCompanyOwned ? 'company' : 'user',
             companyId: x.companyId,
             companyName: x.companyName,
-            isGlobal: x.isGlobal
         } as RoleAdminListDTO));
 };
 

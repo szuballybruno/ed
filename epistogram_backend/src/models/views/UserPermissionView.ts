@@ -11,7 +11,7 @@ export class UserPermissionView {
     userId: number;
 
     @ViewColumn()
-    companyId: number;
+    contextCompanyId: number;
 
     @ViewColumn()
     permissionCode: PermissionCodeType;

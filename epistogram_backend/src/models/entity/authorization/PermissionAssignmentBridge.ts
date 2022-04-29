@@ -24,13 +24,21 @@ export class PermissionAssignmentBridge {
 
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'userId'))
-    user: User;
+    user: User | null;
 
     // company 
     @Column({ type: 'int', nullable: true })
     companyId: number | null;
 
-    @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
+    @ManyToOne(_ => Company, x => x.permissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'companyId'))
-    company: User;
+    company: Company | null;
+
+    // context company 
+    @Column({ type: 'int', nullable: true })
+    contextCompanyId: number | null;
+
+    @ManyToOne(_ => Company, x => x.contextPermissionAssignmentBridges)
+    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCompanyId'))
+    contextCompany: Company | null;
 }

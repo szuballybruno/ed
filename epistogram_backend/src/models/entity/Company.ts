@@ -7,6 +7,7 @@ import { Role } from './authorization/Role';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { User } from './User';
 import { CourseAccessBridge } from './CourseAccessBridge';
+import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
 
 @Entity()
 export class Company {
@@ -35,6 +36,21 @@ export class Company {
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.company)
     roleAssignmentBridges: RoleAssignmentBridge[];
+    
+    // context role assingments
+    @JoinColumn()
+    @OneToMany(_ => RoleAssignmentBridge, x => x.contextCompany)
+    contextRoleAssignmentBridges: RoleAssignmentBridge[];
+    
+    // permission assingments
+    @JoinColumn()
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.company)
+    permissionAssignmentBridges: PermissionAssignmentBridge[];
+    
+    // permission assingments context
+    @JoinColumn()
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.contextCompany)
+    contextPermissionAssignmentBridges: PermissionAssignmentBridge[];
     
     // companyOwnerBridges
     @JoinColumn()

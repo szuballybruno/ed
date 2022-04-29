@@ -24,7 +24,7 @@ export class RoleAssignmentBridge {
 
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'userId'))
-    user: User;
+    user: User | null;
 
     // company 
     @Column({ type: 'int', nullable: true })
@@ -32,5 +32,13 @@ export class RoleAssignmentBridge {
 
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'companyId'))
-    company: User;
+    company: Company | null;
+
+    // company 
+    @Column({ type: 'int', nullable: true })
+    contextCompanyId: number | null;
+
+    @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
+    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'contextCompanyId'))
+    contextCompany: Company | null;
 }

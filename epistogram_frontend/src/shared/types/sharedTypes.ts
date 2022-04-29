@@ -11,7 +11,8 @@ export type ErrorCodeType =
     'courseItemNotFound' |
     'activation_code_issue' |
     'deleted' |
-    'email_taken';
+    'email_taken' |
+    'no permission';
 
 // tasks
 export type TaskObjectiveType = 'video' | 'playlist' | 'course' | 'exam';
@@ -29,18 +30,20 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 export type CourseModeType = 'beginner' | 'advanced';
 
 export type PermissionCodeType =
-	| 'canChangeCourseMode'
-	| 'canSetInvitedUserCompany'
-	| 'canAccessCourseAdministration'
-	| 'canAccessAdministration'
-	| 'canAccessApplication'
-	| 'canAccessShopAdministration'
-	| 'COMPANY_ROLE_MANAGER'
+    | 'MANAGE_COMPANY_COURSES'
+    | 'ACCESS_ADMIN'
+    | 'ACCESS_APPLICATION'
+    | 'MANAGE_SHOP'
+    | 'COMPANY_ROLE_MANAGER'
     | 'VIEW_COMPANY_ROLES'
     | 'ASSIGN_COMPANY_ROLES'
     | 'DELETE_COMPANY_ROLES'
     | 'ASSIGN_GLOBAL_ROLES'
-    | 'VIEW_COMPANY_COURSES';
+    | 'VIEW_COMPANY_COURSES'
+    | 'MANAGE_COMPANY'
+    | 'DELETE_COMPANY'
+    | 'CREATE_COMPANY'
+    | 'MANAGE_GLOBAL_ROLES';
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |
@@ -55,7 +58,7 @@ export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 
 export type CourseStageNameType = 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
 
-export type TempomatModeType = 'auto' | 'light' | 'balanced' | 'strict'; 
+export type TempomatModeType = 'auto' | 'light' | 'balanced' | 'strict';
 
 export type EventCodeType = 'coin_acquire_answer_streak' | 'coin_acquire_session_streak' | 'lag_behind_notification';
 

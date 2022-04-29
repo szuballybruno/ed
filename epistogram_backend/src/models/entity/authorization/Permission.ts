@@ -12,6 +12,9 @@ export class Permission {
     @Column({ type: 'text' })
     code: PermissionCodeType;
 
+    @Column()
+    isGlobal: boolean;
+
     // rolePermissionBridges
     @JoinColumn()
     @OneToMany(_ => RolePermissionBridge, x => x.permission)

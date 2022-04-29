@@ -32,7 +32,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             ._ormService
             .query(UserPermissionView, { userId, companyId, permissionsCode })
             .where('userId', '=', 'userId')
-            .and('companyId', '=', 'companyId')
+            .and('contextCompanyId', '=', 'companyId')
             .and('permissionCode', '=', 'permissionsCode')
             .getOneOrNull();
 

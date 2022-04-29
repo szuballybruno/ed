@@ -103,6 +103,7 @@ import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges'
 import seed_question_types from '../../sql/seed/seed_question_types';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
+import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
 
 export const dbSchema = {
 
@@ -116,6 +117,7 @@ export const dbSchema = {
         [Role, roleList],
         'seed_company_owner_bridges',
         [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
+        [PermissionAssignmentBridge, seed_permission_assignment_bridges],
         [RolePermissionBridge, rolePermissionList],
         'seed_signup_questions',
         'seed_course_categories',
@@ -148,6 +150,7 @@ export const dbSchema = {
         'latest_given_answer_view',
         'personality_trait_view',
         'signup_completed_view',
+        'company_permission_view',
         'user_permission_view',
         'available_course_view',
         'exam_result_view',

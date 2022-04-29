@@ -11,7 +11,7 @@ inherited_courses AS
 		AND upv.permission_code = 'VIEW_COMPANY_COURSES'
 
 	INNER JOIN public.course_access_bridge cab
-	ON cab.company_id = upv.company_id
+	ON cab.company_id = upv.context_company_id
 
 	GROUP BY
 		u.id,
@@ -81,7 +81,7 @@ ON ucab.user_id = u.id
 LEFT JOIN public.user_permission_view upv
 ON upv.user_id = u.id 
 	AND upv.permission_code = 'VIEW_COMPANY_COURSES'
-	AND upv.company_id = u.company_id
+	AND upv.context_company_id = u.company_id
 	
 LEFT JOIN public.user teacher
 ON teacher.id = co.teacher_id

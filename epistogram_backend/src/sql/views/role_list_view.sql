@@ -1,7 +1,29 @@
+WITH 
+roles AS 
+(
+	SELECT company_upv.user_id, r.id role_id, company_upv.context_company_id
+	FROM public.user_permission_view company_upv
+
+	INNER JOIN public.role r
+	ON r.owner_company_id = company_upv.context_company_id
+
+	WHERE company_upv.permission_code = 'VIEW_COMPANY_ROLES'
+
+	UNION
+
+	SELECT global_upv.user_id, r.id role_id, NULL context_company_id
+	FROM public.user_permission_view global_upv 
+
+	INNER JOIN public.role r
+	ON r.owner_user_id IS NULL 
+		AND r.owner_company_id IS NULL
+
+	WHERE global_upv.permission_code = 'MANAGE_GLOBAL_ROLES'
+)
 SELECT
 	sq.*,
 	CASE WHEN sq.is_company_owned 
-		THEN sq.company_name 
+		THEN sq.context_company_name 
 		ELSE u.email 
 	END owner_name
 FROM
@@ -9,33 +31,27 @@ FROM
 	SELECT 
 		u.id user_id,
 		u.email user_email,
-		co.id company_id,
-		co.name company_name,
+		context_co.id context_company_id,
+		context_co.name context_company_name,
 		r.id role_id,
 		r.name role_name,
-		r.is_global,
 		r.owner_user_id,
-		r.owner_company_id IS NOT NULL is_company_owned,
-		upv.permission_id IS NOT NULL is_company_role_manager
-	FROM public.user u
-
-	CROSS JOIN public.company co
-
-	LEFT JOIN public.user_permission_view upv
-	ON upv.user_id = u.id 
-		AND upv.permission_code = 'VIEW_COMPANY_ROLES'
-		AND upv.company_id = co.id
-
-	LEFT JOIN public.role r
-	ON r.owner_user_id = u.id
-		OR (r.owner_company_id = co.id AND upv.permission_id IS NOT NULL)
-		OR r.owner_company_id IS NULL AND u.is_god = true 
-
-	WHERE r.id IS NOT NULL
+		r.owner_company_id IS NOT NULL is_company_owned
+	FROM roles
 	
+	LEFT JOIN public.user u
+	ON u.id = roles.user_id
+	
+	LEFT JOIN public.company context_co
+	ON context_co.id = roles.context_company_id
+	
+	LEFT JOIN public.role r
+	ON r.id = roles.role_id
+
 	ORDER BY
 		u.id,
-		co.id
+		context_co.id,
+		r.id
 ) sq
 
 LEFT JOIN public.user u
