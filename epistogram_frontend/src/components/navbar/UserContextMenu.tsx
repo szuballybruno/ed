@@ -26,7 +26,7 @@ export const UserContextMenu = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const canAccessAdmin = hasPermission('canAccessAdministration');
+    const canAccessAdmin = hasPermission('ACCESS_ADMIN');
     const { navigate } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();

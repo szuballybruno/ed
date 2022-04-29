@@ -14,6 +14,7 @@ import { FileController } from './api/FileController';
 import { MiscController } from './api/MiscController';
 import { ModuleController } from './api/ModuleController';
 import { PasswordChangeController } from './api/PasswordChangeController';
+import { PermissionController } from './api/PermissionController';
 import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
 import { PlaybackController } from './api/PlaybackController';
 import { PlayerController } from './api/PlayerController';
@@ -157,6 +158,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const permissionService = new PermissionService(ormConnectionService, mapperService);
 
     // controllers 
+    const permissionController = new PermissionController(permissionService);
     const userStatsController = new UserStatsController(userStatsService);
     const prequizController = new PrequizController(prequizService);
     const pretestController = new PretestController(pretestService);
@@ -225,6 +227,9 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // roles
     addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
+
+    // permissions 
+    addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);
 
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);

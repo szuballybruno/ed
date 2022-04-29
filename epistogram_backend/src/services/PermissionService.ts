@@ -1,5 +1,6 @@
 import { Permission } from '../models/entity/authorization/Permission';
 import { UserPermissionView } from '../models/views/UserPermissionView';
+import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { ErrorCode } from '../utilities/helpers';
 import { MapperService } from './MapperService';
@@ -37,5 +38,16 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .getOneOrNull();
 
         return !!permission;
+    }
+
+    async getPermissionsAsync() {
+
+        const permissions = await this
+            ._ormService
+            .query(Permission)
+            .getMany();
+
+        return this._mapperService
+            .mapMany(Permission, PermissionListDTO, permissions);
     }
 }

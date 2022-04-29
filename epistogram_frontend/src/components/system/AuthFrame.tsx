@@ -42,11 +42,9 @@ const userDefaults: UserDTO = {
 };
 
 const authDefaultPermissions: PermissionCodeType[] = [
-    'canAccessAdministration',
-    'canAccessApplication',
-    'canChangeCourseMode',
-    'canAccessCourseAdministration',
-    'canAccessShopAdministration',
+    'ACCESS_ADMIN',
+    'ACCESS_APPLICATION',
+    'MANAGE_SHOP',
 ];
 
 export const AuthorizationContext = createContext<AuthorizationContextDataType>(getAuthorizationContextData(authDefaultPermissions));

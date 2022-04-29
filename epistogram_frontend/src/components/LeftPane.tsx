@@ -52,7 +52,7 @@ export const LeftPane = (props: FlexProps) => {
                     alt=""
                     onClick={() => {
 
-                        if (hasPermission('canAccessApplication'))
+                        if (hasPermission('ACCESS_APPLICATION'))
                             navigate(homeRoute);
                     }} />
             </Flex>

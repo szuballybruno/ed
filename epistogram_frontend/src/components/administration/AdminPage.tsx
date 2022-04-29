@@ -28,9 +28,9 @@ export const AdminPage = () => {
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.homeRoute.overviewRoute)
         .add(administrationRoutes.usersRoute.editRoute)
-        .addIf(hasPermission('canAccessCourseAdministration'), administrationRoutes.coursesRoute)
-        .addIf(hasPermission('canAccessShopAdministration'), administrationRoutes.shopRoute)
-        .addIf(hasPermission('canAccessShopAdministration'), administrationRoutes.personalityAssessmentRoute)
+        .addIf(hasPermission('ACCESS_ADMIN'), administrationRoutes.coursesRoute)
+        .addIf(hasPermission('MANAGE_SHOP'), administrationRoutes.shopRoute)
+        .addIf(hasPermission('ACCESS_ADMIN'), administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.companiesRoute)
         .add(administrationRoutes.rolesRoute)
         .getArray();

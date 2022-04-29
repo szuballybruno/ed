@@ -68,7 +68,7 @@ export const AdminEditUserControl = (props: {
 
     const showError = useShowErrorDialog();
 
-    const canSetInvitedUserCompany = hasPermission('canSetInvitedUserCompany');
+    const canSetInvitedUserCompany = true;//hasPermission('i');
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();

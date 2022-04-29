@@ -29,8 +29,6 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     const renderContent = true;//onlyRenderIfLoaded ? !showOverlay : true;
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    console.log(currentLoadingState);
-
     // func 
     const cancelTimeout = useCallback(() => {
 

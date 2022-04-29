@@ -86,7 +86,7 @@ const LoginScreen = () => {
 
         if (authState === 'authenticated') {
 
-            if (hasPermission('canAccessApplication')) {
+            if (hasPermission('ACCESS_APPLICATION')) {
 
                 navigate(applicationRoutes.homeRoute);
             }

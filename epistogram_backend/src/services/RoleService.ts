@@ -35,15 +35,6 @@ export class RoleService extends QueryServiceBase<Role> {
         return [];
     }
 
-    async hasPermissionAsync(userId: number, companyId: number, permissionsCode: PermissionCodeType) {
-
-        const permissions = await this
-            .getUserPermissionsAsync(userId);
-
-        return permissions
-            .any(x => x.code === permissionsCode && x.companyId === companyId);
-    }
-
     // async getRoleEditDataAsync(roleId: number) {
 
     //     const comp = await this._ormService

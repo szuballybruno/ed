@@ -18,6 +18,10 @@ export const apiRoutes = {
         getRoles: '/roles/get-roles'
     },
 
+    permissions: {
+        getPermissions: '/permissions/get-permissions'
+    },
+
     companies: {
         getCompanies: '/companies/get-companies',
         getCompaniesAdmin: '/companies/get-companies-admin',

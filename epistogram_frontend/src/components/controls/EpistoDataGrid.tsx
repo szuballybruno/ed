@@ -56,9 +56,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, any>[],
     getKey: (row: TSchema) => TKey,
-    handleEdit: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
+    handleEdit?: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
     initialState?: InitialStateType<TSchema>,
 }) => {
+
+    console.log('rendering grid');
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
 

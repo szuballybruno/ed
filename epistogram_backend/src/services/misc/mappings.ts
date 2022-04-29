@@ -115,6 +115,8 @@ import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleListView } from '../../models/views/RoleListView';
 import { CompanyView } from '../../models/views/CompanyView';
+import { Permission } from '../../models/entity/authorization/Permission';
+import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -893,6 +895,12 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             companyId: x.companyId,
             companyName: x.companyName,
         } as RoleAdminListDTO));
+
+    mapperService
+        .addMap(Permission, PermissionListDTO, x => ({
+            code: x.code,
+            isGlobal: x.isGlobal
+        }));
 };
 
 const separationChar = '|';

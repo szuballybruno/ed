@@ -82,7 +82,7 @@ const RouteRenderer = (props: {
     }
 
     // redirect to signup if application is not accessable yet
-    if (!hasPermission('canAccessApplication')) {
+    if (!hasPermission('ACCESS_APPLICATION')) {
 
         if (verboseLogging)
             console.log('-- Accessing application is not yet aturhorized, redirecting...');
