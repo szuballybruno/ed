@@ -6,7 +6,7 @@ import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Environment } from '../../static/Environemnt';
-import { ChildPropsType } from '../../static/frontendHelpers';
+import { ChildPropsType, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 
 const getAuthorizationContextData = (permissions: PermissionCodeType[]) => {
 
@@ -60,6 +60,9 @@ const AuthFirewall = (props: ChildPropsType & {
 }): JSX.Element => {
 
     const { authState, children } = props;
+    const isMatchingCurrent = useIsMatchingCurrentRoute();
+    const loginRoute = applicationRoutes.loginRoute;
+    const isLoginRoute = isMatchingCurrent(loginRoute).isMatchingRoute;
 
     // if loading return blank page
     if (authState === 'loading') {
@@ -86,14 +89,14 @@ const AuthFirewall = (props: ChildPropsType & {
     }
 
     // check authentication 
-    if (authState === 'forbidden') {
+    if (authState === 'forbidden' && !isLoginRoute) {
 
         if (Environment.loggingSettings.auth)
             console.log('Redirecting...');
 
         return <Navigate
             replace
-            to={applicationRoutes.loginRoute.route.getAbsolutePath()} />;
+            to={loginRoute.route.getAbsolutePath()} />;
     }
 
     if (Environment.loggingSettings.auth)

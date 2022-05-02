@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
-import { UserDTO } from '../../shared/dtos/UserDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { VerboseError } from '../../shared/types/VerboseError';
-import { Environment } from '../../static/Environemnt';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
 export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden' | 'error';
@@ -26,14 +24,14 @@ export const useGetAuthHandshake = () => {
         () => httpGetAsync(apiRoutes.authentication.establishAuthHandshake), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: Environment.getAuthHandshakeIntervalInMs,
+        // refetchInterval: Environment.getAuthHandshakeIntervalInMs,
         enabled: true,
         notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
 
     const { refetch, isLoading, isError } = qr;
-    const authData = isError ? qr.data as AuthDataDTO : null;
-    const error = qr.error as VerboseError;
+    const authData = isError ? null : qr.data as AuthDataDTO;
+    const error = qr.error as VerboseError | null;
 
     const authState = ((): AuthenticationStateType => {
 
@@ -43,7 +41,7 @@ export const useGetAuthHandshake = () => {
         if (authData)
             return 'authenticated';
 
-        if (error.code === 'forbidden')
+        if (error?.code === 'forbidden')
             return 'forbidden';
 
         return 'error';
