@@ -2,7 +2,7 @@ import { Permission } from '../models/entity/authorization/Permission';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
-import { ErrorCode } from '../utilities/helpers';
+import { VerboseError } from '../shared/types/VerboseError';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -24,7 +24,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
 
         const hasPermission = await this.hasPermissionAsync(userId, companyId, permissionCode);
         if (!hasPermission)
-            throw new ErrorCode('User has no permission to access resource.', 'no permission');
+            throw new VerboseError('User has no permission to access resource.', 'no permission');
     }
 
     async hasPermissionAsync(userId: number, companyId: number | null, permissionsCode: PermissionCodeType) {

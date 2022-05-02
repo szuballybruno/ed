@@ -54,7 +54,7 @@ export const XDialog = (props: {
         }
         else {
 
-            closeDialog();
+            closeDialog(logic.key);
         }
     }, [logic.isOpen]);
 

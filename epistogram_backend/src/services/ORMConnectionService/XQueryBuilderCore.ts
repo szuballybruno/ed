@@ -3,7 +3,7 @@ import { getKeys } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { ExpressionPart, JoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, CheckCondition } from './XQueryBuilderTypes';
 
 export class XQueryBuilderCore<TEntity, TParams> {
 
@@ -91,49 +91,82 @@ export class XQueryBuilderCore<TEntity, TParams> {
                 if (espressionPart.code === 'SELECT') {
 
                     const selectCond = espressionPart as SelectCondition<TEntity>;
-                    const columnOrColumns = selectCond.keys;
-                    const snakeColumns = Array.isArray(columnOrColumns)
-                        ? columnOrColumns
-                            .map(columnPropertyName => snk(columnPropertyName as string))
-                            .map(columnName => `${sqlTableRef}.${columnName}`)
-                            .join(', ')
-                        : columnOrColumns;
+
+                    const text = (() => {
+
+                        if (selectCond.key)
+                            return `${tableName}.${this.toSQLSnakeCasing(selectCond.key as string)}`;
+
+                        if (selectCond.keys)
+                            return selectCond.keys
+                                .map(x => `${tableName}.${this.toSQLSnakeCasing(x as string)}`)
+                                .join(', ');
+
+                        if (selectCond.entity)
+                            return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
+
+                        throw new Error('Incorrect select condition!');
+                    })();
 
                     // SELECT xy.ab, xy.abc
-                    return `SELECT ${snakeColumns} FROM ${sqlTableRef}`;
+                    return `SELECT ${text} FROM ${sqlTableRef}`;
                 }
 
-                // join condition
-                else if (espressionPart.code === 'JOIN') {
+                // left join condition
+                else if (espressionPart.code === 'LEFT JOIN') {
 
-                    const joinCond = espressionPart as JoinCondition<TEntity, any, TParams>;
-                    const { op } = joinCond;
+                    const joinCond = espressionPart as LeftJoinCondition<any>;
                     const joinTableName = this.toSQLTableName(joinCond.classType);
-                    const toTableName = this.toSQLTableName(joinCond.toClassType);
-                    const onKeySnake = this.toSQLSnakeCasing(joinCond.key as string);
-                    const toKeySnake = this.toSQLSnakeCasing(joinCond.criteria as string);
 
-                    return `LEFT JOIN ${joinTableName} \nON ${joinTableName}.${onKeySnake} ${op} ${toTableName}.${toKeySnake}`;
+                    return `LEFT JOIN ${joinTableName}`;
+                }
+
+                // inner join condition
+                else if (espressionPart.code === 'INNER JOIN') {
+
+                    const joinCond = espressionPart as InnerJoinCondition<any>;
+                    const joinTableName = this.toSQLTableName(joinCond.classType);
+
+                    return `INNER JOIN ${joinTableName}`;
+                }
+
+                // cross join condition
+                else if (espressionPart.code === 'CROSS JOIN') {
+
+                    const joinCond = espressionPart as CrossJoinCondition<any>;
+                    const joinTableName = this.toSQLTableName(joinCond.classType);
+
+                    return `CROSS JOIN ${joinTableName}`;
                 }
 
                 // where condition
                 else {
 
-                    const cond = espressionPart as WhereCondition<TEntity, TParams>;
-                    const { code, classType, key, op, criteria } = cond;
+                    const cond = espressionPart as CheckCondition<TEntity, TParams>;
+                    const { code, entityA, entityB, keyA, keyB, op } = cond;
+                    const isRefOther = !!entityB;
 
-                    const tableName: string = this.toSQLTableName(classType);
-                    const snakeColumn: string = this.toSQLSnakeCasing(key as string);
+                    const tableAName: string = this.toSQLTableName(entityA);
+                    const snakeColumn: string = this.toSQLSnakeCasing(keyA as string);
+                    const fullValueA = `${tableAName}.${snakeColumn}`;
+
                     const operator: OperationType = op;
-                    const paramName: keyof TParams | SQLStaticValueType = criteria;
-                    const paramToken = this.isSQLStaticValue(paramName as string)
-                        ? paramName as SQLStaticValueType
-                        : sqlParamsList
-                            .single(x => x.paramName === paramName)
+
+                    const fullValueB = (() => {
+
+                        if (this.isSQLStaticValue(keyB as string))
+                            return keyB as SQLStaticValueType;
+
+                        if (isRefOther)
+                            return `${this.toSQLTableName(entityB)}.${this.toSQLSnakeCasing(keyB as string)}`;
+
+                        return sqlParamsList
+                            .single(x => x.paramName === keyB)
                             .token;
+                    })();
 
                     // WHERE xy.ab = $1
-                    return `${code} ${tableName}.${snakeColumn} ${operator} ${paramToken}`;
+                    return `${code} ${fullValueA} ${operator} ${fullValueB}`;
                 }
             })
             .join('\n');
@@ -169,7 +202,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
                     : `$${index + 1}`;
 
                 return ({
-                    token: token,   
+                    token: token,
                     paramName: key,
                     paramValue: value
                 });
@@ -196,6 +229,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         try {
 
             const queryLog = this.getSQLQueryLog(query, params);
+
             log(queryLog, { color: ConsoleColor.purple });
 
             const values = this.getParamValues(params);

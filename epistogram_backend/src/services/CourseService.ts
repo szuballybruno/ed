@@ -201,10 +201,10 @@ export class CourseService {
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
-            .leftJoin(Course, CourseLearningStatsView)
-            .on('id', '=', 'courseId')
+            .innerJoin(Course, x => x
+                .on('id', '=', 'courseId', CourseLearningStatsView)
+                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
-            .and(Course, 'deletionDate', 'IS', 'NULL')
             .getMany();
 
         // in progress courses 

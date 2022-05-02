@@ -25,7 +25,9 @@ SELECT
 	CASE WHEN sq.is_company_owned 
 		THEN sq.context_company_name 
 		ELSE u.email 
-	END owner_name
+	END owner_name,
+	pe.id permission_id,
+	pe.code permission_code
 FROM
 (
 	SELECT 
@@ -47,12 +49,19 @@ FROM
 	
 	LEFT JOIN public.role r
 	ON r.id = roles.role_id
-
-	ORDER BY
-		u.id,
-		context_co.id,
-		r.id
 ) sq
+	
+LEFT JOIN public.role_permission_bridge rpb
+ON rpb.role_id = sq.role_id
+
+LEFT JOIN public.permission pe
+ON pe.id = rpb.permission_id
 
 LEFT JOIN public.user u
 ON u.id = sq.owner_user_id
+
+ORDER BY
+	sq.user_id,
+	sq.context_company_id,
+	sq.role_id,
+	pe.id

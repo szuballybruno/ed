@@ -1,7 +1,7 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { Environment } from '../../static/Environemnt';
-import { typedMemo } from '../../static/frontendHelpers';
+import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
 
 const removeOverlay = () => {
 
@@ -58,6 +58,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     getKey: (row: TSchema) => TKey,
     handleEdit?: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
     initialState?: InitialStateType<TSchema>,
+    deps?: any[]
 }) => {
 
     console.log('rendering grid');
@@ -195,7 +196,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
         return false;
     }
 
-    if (JSON.stringify(prev.columns) !== JSON.stringify(next.columns)) {
+    if (!areArraysEqual(prev.columns, next.columns)) {
 
         return false;
     }
@@ -204,6 +205,9 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 
         return false;
     }
+
+    if (JSON.stringify(prev.deps) !== JSON.stringify(prev.deps))
+        return false;
 
     return true;
 });

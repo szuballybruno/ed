@@ -15,7 +15,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
 import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CurrentUserContext } from '../../system/AuthFrame';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { CourseItemList } from '../../universal/CourseItemList';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';

@@ -60,7 +60,7 @@ export const CompanyAdminIndexPage = memo(() => {
                             </EpistoButton>
 
                             <EpistoButton
-                                onClick={() => handleDeleteCompany({ companyId: company.id })}>
+                                onClick={handleDeleteCompany}>
                                 <Delete />
                             </EpistoButton>
                         </Flex>

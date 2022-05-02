@@ -20,7 +20,7 @@ import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryN
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { AuthorizationContext, CurrentUserContext } from '../../system/AuthFrame';
+import { AuthorizationContext, CurrentUserContext } from '../../system/AuthenticationFrame';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';

@@ -15,7 +15,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 import { Course } from '../models/entity/Course';
-import { ErrorCode } from '../utilities/helpers';
+import { VerboseError } from '../shared/types/VerboseError';
 
 export class PlayerService extends ServiceBase {
 
@@ -64,7 +64,7 @@ export class PlayerService extends ServiceBase {
             .getSingle();
 
         if (course.deletionDate)
-            throw new ErrorCode('Course has been deleted!', 'deleted');
+            throw new VerboseError('Course has been deleted!', 'deleted');
 
         // get valid course item 
         const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);

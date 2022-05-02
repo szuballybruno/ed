@@ -65,3 +65,13 @@ export const useCompanyEditData = (companyId: number) => {
         companyEditDataState: qr.state
     };
 };
+
+export const useAvailableCompaniesForRoleCreation = () => {
+
+    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.companies.getAvailableCompaniesForRoleCreation);
+
+    return {
+        companies: qr.data ?? [],
+        companiesState: qr.state
+    };
+};

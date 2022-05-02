@@ -12,7 +12,7 @@ import { useEpistoDialogLogic } from '../EpistoDialog';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext } from '../system/AuthFrame';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../universal/EpistoSearch';
 import { ShopItem } from './ShopItem';

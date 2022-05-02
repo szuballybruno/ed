@@ -4,7 +4,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { Environment } from '../../static/Environemnt';
 import { setPageTitle } from '../../static/frontendHelpers';
-import { AuthenticationStateContext, AuthorizationContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthFrame';
+import { AuthenticationStateContext, AuthorizationContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 export type RenderRoute = {
     element: JSX.Element;
@@ -51,25 +51,25 @@ const RouteRenderer = (props: {
     if (verboseLogging)
         console.log(`-- Auth state '${authState}'`);
 
-    // if loading return blank page
-    if (authState === 'loading') {
+    // // if loading return blank page
+    // if (authState === 'loading') {
 
-        if (verboseLogging)
-            console.log('-- Rendering empty div until loaded.');
+    //     if (verboseLogging)
+    //         console.log('-- Rendering empty div until loaded.');
 
-        return <div></div>;
-    }
+    //     return <div></div>;
+    // }
 
-    // check authentication 
-    if (authState === 'forbidden') {
+    // // check authentication 
+    // if (authState === 'forbidden') {
 
-        if (verboseLogging)
-            console.log('-- Redirecting...');
+    //     if (verboseLogging)
+    //         console.log('-- Redirecting...');
 
-        return <Navigate
-            replace
-            to={applicationRoutes.loginRoute.route.getAbsolutePath()} />;
-    }
+    //     return <Navigate
+    //         replace
+    //         to={applicationRoutes.loginRoute.route.getAbsolutePath()} />;
+    // }
 
     // if just authenticate protection level, 
     // return since authentication is done.

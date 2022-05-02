@@ -10,8 +10,8 @@ export const setAuthCookies = (config: GlobalConfiguration, res: Response, acces
             secure: true,
             httpOnly: true,
             expires: dayjs()
-.add(config.security.tokenLifespans.accessTokenLifespanInS, 'seconds')
-.toDate(),
+                .add(config.security.tokenLifespans.accessTokenLifespanInS, 'seconds')
+                .toDate(),
             sameSite: 'none'
             // domain: isLocalhost ? undefined : frontendUrl
         });
@@ -23,8 +23,8 @@ export const setAuthCookies = (config: GlobalConfiguration, res: Response, acces
             secure: true,
             httpOnly: true,
             expires: dayjs()
-.add(config.security.tokenLifespans.refreshTokenLifespanInS, 'seconds')
-.toDate(),
+                .add(config.security.tokenLifespans.refreshTokenLifespanInS, 'seconds')
+                .toDate(),
             sameSite: 'none'
             // domain: isLocalhost ? undefined : frontendUrl
         });

@@ -1,14 +1,12 @@
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { RegistrationService } from '../services/RegistrationService';
-import { RoleService } from '../services/RoleService';
 import { UserService } from '../services/UserService';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
-import { RoleIdEnum } from '../shared/types/sharedTypes';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams, ErrorCode } from '../utilities/helpers';
+import { ActionParams } from '../utilities/helpers';
 
 export class RegistrationController {
 

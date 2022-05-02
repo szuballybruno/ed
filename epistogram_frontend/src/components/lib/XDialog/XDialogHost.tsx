@@ -16,7 +16,7 @@ export const XDialogHost = (props: {
 
     const contentPoolRef = useRef<ContentPoolItemType[]>([]);
     const [, setForceUpdate] = useState(0);
-    const [currentKey, setCurrentKey] = useState<string | null>(null);
+    const [openDialogKeys, setOpenDialogKeys] = useState<string[]>([]);
 
     const setContentPool = (list: ContentPoolItemType[]) => {
 
@@ -61,17 +61,18 @@ export const XDialogHost = (props: {
 
     const getOpenState = (key: string) => {
 
-        return currentKey === key;
+        return openDialogKeys.any(x => x === key);
     };
 
-    const closeDialog = () => {
+    const closeDialog = (key: string) => {
 
-        setCurrentKey(null);
+        setOpenDialogKeys(openDialogKeys.filter(x => x !== key));
     };
 
-    const handleOutsideClick = () => {
+    const openDialog = (key: string) => {
 
-        closeDialog();
+        if (!getOpenState(key))
+            setOpenDialogKeys([...openDialogKeys, key]);
     };
 
     const getId = (key: string) => {
@@ -86,48 +87,48 @@ export const XDialogHost = (props: {
 
     return <>
 
-        <div id="dialog_host_root">
-            {contentPoolRef
-                .current
-                .map((x, index) => {
-
-                    const isVisible = currentKey === x.key;
-
-                    return <div
-                        key={index}
-                        id={getId(x.key)}
-                        style={{
-                            position: 'absolute',
-                            width: '100vw',
-                            height: '100vh',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 100,
-                            background: '#0000000d'
-                        }}
-                        className={isVisible ? styles.disp_flex : styles.disp_none}>
-
-                        {/* click handler */}
-                        <div
-                            style={{
-                                position: 'absolute',
-                                width: '100%',
-                                height: '100%'
-                            }}
-                            onClick={handleOutsideClick} />
-                    </div>;
-                })}
-        </div>
-
         <XDialogContext.Provider
             value={{
                 closeDialog,
-                openDialog: (key: string) => setCurrentKey(key),
+                openDialog,
                 mountContent,
                 unmountContent,
                 getOpenState,
                 getHostElement
             }}>
+
+            <div id="dialog_host_root">
+                {contentPoolRef
+                    .current
+                    .map((poolItem, index) => {
+
+                        const isOpen = getOpenState(poolItem.key);
+
+                        return <div
+                            key={index}
+                            id={getId(poolItem.key)}
+                            style={{
+                                position: 'absolute',
+                                width: '100vw',
+                                height: '100vh',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 1000 - index,
+                                background: '#0000000d'
+                            }}
+                            className={isOpen ? styles.disp_flex : styles.disp_none}>
+
+                            {/* click handler */}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '100%'
+                                }}
+                                onClick={() => closeDialog(poolItem.key)} />
+                        </div>;
+                    })}
+            </div>
 
             {children}
         </XDialogContext.Provider>

@@ -12,7 +12,7 @@ import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
 import { useEpistoDialogLogic } from '../EpistoDialog';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext, AuthorizationContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthFrame';
+import { AuthenticationStateContext, AuthorizationContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 

@@ -39,6 +39,12 @@ export class CompanyController {
             .getCompanyEditDataAsync(companyId);
     };
 
+    getAvailableCompaniesForRoleCreationAction = async (params: ActionParams) => {
+
+        return this._compService
+            .getAvailableCompaniesForNewRolesAsync(params.currentUserId);
+    };
+
     createCompanyAction = async (params: ActionParams) => {
 
         await this._permissionService

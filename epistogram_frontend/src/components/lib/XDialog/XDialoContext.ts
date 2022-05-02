@@ -2,7 +2,7 @@ import { createContext, ReactNode } from 'react';
 
 type XDialogContextType = {
     openDialog: (key: string) => void,
-    closeDialog: () => void,
+    closeDialog: (key: string) => void,
     mountContent: (key: string) => void,
     unmountContent: (key: string) => void,
     getOpenState: (key: string) => boolean,

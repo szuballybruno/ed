@@ -227,6 +227,7 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // roles
     addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
+    addEndpoint(apiRoutes.roles.createRole, roleController.createRoleAction, { isPost: true });
 
     // permissions 
     addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);
@@ -238,6 +239,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.companies.createCompany, companyController.createCompanyAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.companies.deleteCompany, companyController.deleteCompanyAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.companies.saveCompany, companyController.saveCompanyAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.getAvailableCompaniesForRoleCreation, companyController.getAvailableCompaniesForRoleCreationAction);
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
@@ -286,9 +288,8 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.passwordChange.requestPasswordChange, passwordChangeController.requestPasswordChangeAction, { isPublic: true, isPost: true });
 
     // authentication 
-    addEndpoint(apiRoutes.authentication.getCurrentUser, authenticationController.getCurrentUserAction);
+    addEndpoint(apiRoutes.authentication.establishAuthHandshake, authenticationController.establishAuthHandshakeAction, { isPublic: true });
     addEndpoint(apiRoutes.authentication.logoutUser, authenticationController.logOutUserAction, { isPost: true });
-    addEndpoint(apiRoutes.authentication.renewUserSession, authenticationController.renewUserSessionAction, { isPublic: true });
     addEndpoint(apiRoutes.authentication.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
 
     // coin transactions 

@@ -8,6 +8,7 @@ import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
+import { VerboseError } from '../shared/types/VerboseError';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
 
@@ -33,6 +34,20 @@ export const formatTimespan = (seconds: number) => {
     const formattedSpentTime = `${roundHours > 0 ? roundHours + 'h ' : ''}${roundMinutes}m`;
 
     return formattedSpentTime;
+};
+
+export const areArraysEqual = <T>(arrA: T[], arrB: T[]) => {
+
+    if (arrA.length !== arrB.length)
+        return false;
+
+    for (let index = 0; index < arrA.length; index++) {
+
+        if (arrA[index] !== arrB[index])
+            return false;
+    }
+
+    return true;
 };
 
 export const formatTime = (seconds: number) => {
@@ -538,7 +553,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
         state,
         refetch,
         data: dataAsT === undefined ? null : dataAsT,
-        error: queryResult.error as ErrorCode | null
+        error: queryResult.error as VerboseError | null
     };
 
     return result;
@@ -561,6 +576,7 @@ export const hasValue = (obj: any) => {
 export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects: (() => void | Promise<void>)[]) => {
 
     const showError = useShowErrorDialog();
+
     const execSafeAsync = useCallback(async (data?: T) => {
 
         try {
@@ -663,17 +679,6 @@ export const isCurrentAppRoute = (route: ApplicationRoute) => {
 
     return false;
 };
-
-export class ErrorCode extends Error {
-
-    code: ErrorCodeType;
-
-    constructor(message: string, code: ErrorCodeType) {
-
-        super(message);
-        this.code = code;
-    }
-}
 
 export const getEventValueCallback = (callback: (value: any) => void) => {
 

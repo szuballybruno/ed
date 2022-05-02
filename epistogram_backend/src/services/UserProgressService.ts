@@ -23,10 +23,10 @@ export class UserProgressService extends ServiceBase {
 
         const views = await this._ormService
             .query(UserActiveCourseView, { userId })
-            .leftJoin(Course, UserActiveCourseView)
-            .on('id', '=', 'courseId')
+            .leftJoin(Course, x => x
+                .on('id', '=', 'courseId', UserActiveCourseView)
+                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
-            .and(Course, 'deletionDate', 'IS', 'NULL')
             .getMany();
 
         return this._mapperService

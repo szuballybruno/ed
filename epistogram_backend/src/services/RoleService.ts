@@ -26,8 +26,27 @@ export class RoleService extends QueryServiceBase<Role> {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return this._mapperService
-            .mapMany(RoleListView, RoleAdminListDTO, roles);
+        return roles
+            .groupBy(x => x.roleId)
+            .map((grouping): RoleAdminListDTO => {
+
+                const viewAsRole = grouping.first;
+
+                return {
+                    roleName: viewAsRole.roleName,
+                    ownerName: viewAsRole.ownerName,
+                    ownerType: viewAsRole.isCompanyOwned ? 'company' : 'user',
+                    companyId: viewAsRole.companyId,
+                    companyName: viewAsRole.companyName,
+                    permissions: grouping
+                        .items
+                        .map(x => ({
+                            code: x.permissionCode,
+                            id: x.permissionId,
+                            isGlobal: false
+                        }))
+                };
+            });
     }
 
     async getUserPermissionsAsync(userId: number): Promise<PermissionListDTO[]> {
@@ -46,7 +65,7 @@ export class RoleService extends QueryServiceBase<Role> {
     //         .map(Role, RoleEditDataDTO, comp);
     // }
 
-    async createRoleAsync(dto: RoleCreateDTO) {
+    async createRoleAsync(userId: number, dto: RoleCreateDTO) {
 
         const role = {
             name: dto.name,
@@ -56,12 +75,12 @@ export class RoleService extends QueryServiceBase<Role> {
         await this.createAsync(role);
 
         // create owner assingnment 
-        await this._ormService
-            .create(RoleAssignmentBridge, noUndefined<RoleAssignmentBridge>({
-                roleId: role.id,
-                userId: dto.ownerUserId,
-                companyId: dto.ownerCompanyId,
-            }));
+        // await this._ormService
+        //     .create(RoleAssignmentBridge, noUndefined<RoleAssignmentBridge>({
+        //         roleId: role.id,
+        //         userId: userId,
+        //         contextCompanyId: dto.contextCompanyId
+        //     }));
     }
 
     async deleteRoleAsync(roleId: number) {

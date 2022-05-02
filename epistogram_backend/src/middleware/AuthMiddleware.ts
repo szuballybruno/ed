@@ -3,9 +3,9 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { UserService } from '../services/UserService';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { VerboseError } from '../shared/types/VerboseError';
 import { EndpointOptionsType } from '../utilities/apiHelpers';
-import { ActionParams, ErrorCode, getAuthTokenFromRequest } from '../utilities/helpers';
+import { ActionParams, getAuthCookies } from '../utilities/helpers';
 import { ITurboMiddleware } from '../utilities/TurboExpress';
 
 export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOptionsType> {
@@ -29,7 +29,7 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
 
     runMiddlewareAsync = async (req: Request, res: Response, options?: EndpointOptionsType, params?: ActionParams) => {
 
-        const accessToken = getAuthTokenFromRequest(req, this._globalConfig);
+        const { accessToken } = getAuthCookies(req);
         const requestPath = req.path;
 
         this._loggerService
@@ -48,13 +48,16 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
         // private (authenticated) route
         else {
 
+            if (!accessToken)
+                throw new VerboseError('Access token not found!', 'forbidden');
+
             // get userId from access token
             const { userId } = this._authenticationService
                 .getRequestAccessTokenPayload(accessToken);
 
             // retrieve user from DB
-            const user = await this._userService
-                .getUserById(userId);
+            // const user = await this._userService
+            //     .getUserById(userId);
 
             // authorize user role 
             // await this.authorizeUserAsync(userRole, options?.authorize);
@@ -89,6 +92,6 @@ export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOp
     //         .some(x => x === currentRoutePath);
 
     //     if (!isCurrentRouteAccessable)
-    //         throw new ErrorCode('User has not proper rights to access the requested resource.', 'forbidden');
+    //         throw new VerboseError('User has not proper rights to access the requested resource.', 'forbidden');
     // };
 }

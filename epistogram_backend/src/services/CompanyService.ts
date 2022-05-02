@@ -5,6 +5,9 @@ import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { CompanyView } from '../models/views/CompanyView';
+import { User } from '../models/entity/User';
+import { UserPermissionView } from '../models/views/UserPermissionView';
+import { PermissionCodeType } from '../shared/types/sharedTypes';
 
 export class CompanyService extends QueryServiceBase<Company> {
 
@@ -35,6 +38,26 @@ export class CompanyService extends QueryServiceBase<Company> {
 
         return this._mapperService
             .mapMany(CompanyView, CompanyDTO, companies);
+    }
+
+    async getAvailableCompaniesForNewRolesAsync(userId: number) {
+
+        const companies = await this._ormService
+            .query(Company, {
+                userId, 
+                permissionCode: 'ASSIGN_COMPANY_ROLES' as PermissionCodeType
+            })
+            .select(Company)
+            .innerJoin(User, builder => builder
+                .on('id', '=', 'userId'))
+            .innerJoin(UserPermissionView, builder => builder
+                .on('userId', '=', 'id', User)
+                .and('permissionCode', '=', 'permissionCode')
+                .and('contextCompanyId', '=', 'id', Company))
+            .getMany();
+
+        return this._mapperService
+            .mapMany(Company, CompanyDTO, companies);
     }
 
     async getCompanyEditDataAsync(companyId: number) {

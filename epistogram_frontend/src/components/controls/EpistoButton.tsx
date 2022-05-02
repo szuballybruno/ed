@@ -60,7 +60,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             if (onClick)
                 onClick();
 
-            if (onClickNoPropagation){
+            if (onClickNoPropagation) {
 
                 e.stopPropagation();
                 onClickNoPropagation();
@@ -97,7 +97,14 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             ...style
         }}
         {...buttonProps}>
-        {icon}
+        
+        {icon && <div
+            style={{
+                marginRight: '5px'
+            }}>
+            {icon}
+        </div>}
+
         {children}
     </Button>;
 });

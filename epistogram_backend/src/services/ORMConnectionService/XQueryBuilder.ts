@@ -2,24 +2,128 @@ import { ClassType } from '../../models/DatabaseTypes';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { ExpressionPart, JoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition } from './XQueryBuilderTypes';
+
+const getCheckCondition = <TEntityA, TEntityB, TParams>(
+    code: 'AND' | 'WHERE' | 'ON',
+    keyA: keyof TEntityA,
+    op: OperationType,
+    keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
+    params: TParams | undefined,
+    classTypeA: ClassType<TEntityA>,
+    classTypeB?: ClassType<TEntityB>): CheckCondition<TEntityA, TEntityB> | CheckCondition<TEntityA, TParams> => {
+
+    const isSimple = !classTypeB;
+
+    const getOp = (op: OperationType, par: keyof TParams | SQLStaticValueType): [OperationType, SQLStaticValueType | keyof TParams] => {
+
+        return (params as any)[par] === null
+            ? ['IS' as OperationType, 'NULL' as SQLStaticValueType]
+            : [op, par];
+    };
+
+    if (isSimple) {
+
+        const [op2, par2] = getOp(op, keyB as keyof TParams | SQLStaticValueType);
+
+        const cond: CheckCondition<TEntityA, TParams> = {
+            code,
+            entityA: classTypeA,
+            keyA: keyA,
+            op: op2,
+            keyB: par2
+        };
+
+        return cond;
+    }
+    else {
+
+        const cond: CheckCondition<TEntityA, TEntityB> = {
+            code,
+            entityA: classTypeA,
+            entityB: classTypeB,
+            keyA: keyA,
+            op: op,
+            keyB: keyB as keyof TEntityB | SQLStaticValueType
+        };
+
+        return cond;
+    }
+};
+
+class JoinBuilder<TEntity, TParams> {
+
+    private _builder: XQueryBuilder<TEntity, TParams>;
+    private _entityClassType: ClassType<TEntity>;
+    private _params: TParams | undefined;
+
+    constructor(
+        entityClassType: ClassType<TEntity>,
+        builder: XQueryBuilder<TEntity, TParams>,
+        params: TParams | undefined) {
+
+        this._builder = builder;
+        this._entityClassType = entityClassType;
+        this._params = params;
+    }
+
+    on(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
+
+    on<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TOtherEntity,
+        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams>
+
+    on<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
+        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams> {
+
+        const cond = getCheckCondition('ON', keyA, op, keyB, this._params, this._entityClassType, classTypeOther);
+
+        this
+            ._builder
+            ._expression
+            .push(cond);
+
+        return this._builder;
+    }
+}
 
 export class XQueryBuilder<TEntity, TParams> {
 
     private _connection: XQueryBuilderCore<TEntity, TParams>;
     private _mainClassType: ClassType<TEntity>;
     private _params: TParams | undefined;
-    private _expression: SimpleExpressionPart<TParams>[] = [];
     private _allowDeleted = false;
+    private _sqlConnection: SQLConnectionService;
+
+    _expression: SimpleExpressionPart<TParams>[] = [];
 
     constructor(connection: SQLConnectionService, classType: ClassType<TEntity>, params?: TParams) {
 
         this._connection = new XQueryBuilderCore<TEntity, TParams>(connection);
+        this._sqlConnection = connection;
         this._mainClassType = classType;
         this._params = params;
     }
 
-    select(props: keyof TEntity | (keyof TEntity)[]) {
+    select(condition: keyof TEntity | (keyof TEntity)[] | ClassType<any>) {
+
+        const cond: SelectCondition<TEntity> = {
+            code: 'SELECT',
+            key: typeof condition === 'string' ? condition as keyof TEntity : undefined,
+            keys: Array.isArray(condition) ? condition as (keyof TEntity)[] : undefined,
+            entity: typeof condition === 'function' ? condition as ClassType<any> : undefined
+        };
+
+        this._expression
+            .push(cond);
 
         return this;
     }
@@ -30,96 +134,106 @@ export class XQueryBuilder<TEntity, TParams> {
         return this;
     }
 
-    where(key: keyof TEntity, op: OperationType, param: keyof TParams | SQLStaticValueType) {
+    where(keyA: keyof TEntity, op: OperationType, keyB: keyof TParams | SQLStaticValueType) {
 
         this._expression
             .push({
                 code: 'WHERE',
-                classType: this._mainClassType,
-                key: key,
+                entityA: this._mainClassType,
+                keyA: keyA,
                 op: op,
-                criteria: param
-            } as WhereCondition<TEntity, TParams>);
+                keyB: keyB
+            } as CheckCondition<TEntity, TParams>);
 
         return this;
     }
 
     and(
-        key: keyof TEntity,
+        keyA: keyof TEntity,
         op: OperationType,
-        param: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
-    and<TCheckEntity>(
-        classType: ClassType<TCheckEntity>,
-        key: keyof TCheckEntity,
+        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
+
+    and<TOtherEntity>(
+        keyA: keyof TEntity,
         op: OperationType,
-        param: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
-    and<TCheckEntity>(
-        key_Or_ClassType: keyof TEntity | ClassType<TCheckEntity>,
-        op_Or_Key: OperationType | keyof TCheckEntity,
-        param_OR_op: keyof TParams | SQLStaticValueType | OperationType,
-        param?: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams> {
+        keyB: keyof TOtherEntity,
+        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams>;
 
-        const isFirstClassType = !!(key_Or_ClassType as any).name;
+    and<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
+        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams> {
 
-        const getOp = (op: OperationType, par: keyof TParams | SQLStaticValueType) => this.getParamValue(par) === null
-            ? ['IS' as OperationType, 'NULL' as SQLStaticValueType]
-            : [op, par];
+        const cond = getCheckCondition('AND', keyA, op, keyB, this._params, this._mainClassType, classTypeOther);
 
-        if (isFirstClassType) {
-
-            const classType = key_Or_ClassType as ClassType<TCheckEntity>;
-            const key = op_Or_Key as keyof TCheckEntity;
-            const op = param_OR_op as OperationType;
-            const par = param! as keyof TParams | SQLStaticValueType;
-            const [op2, par2] = getOp(op, par);
-
-            this._expression
-                .push({
-                    code: 'AND',
-                    classType: classType,
-                    key: key,
-                    op: op2,
-                    criteria: par2
-                } as WhereCondition<TCheckEntity, TParams>);
-        }
-        else {
-
-            const key = key_Or_ClassType as keyof TEntity;
-            const op = op_Or_Key as OperationType;
-            const param = param_OR_op as keyof TParams | SQLStaticValueType;
-            const [op2, par2] = getOp(op, param);
-
-            this._expression
-                .push({
-                    code: 'AND',
-                    classType: this._mainClassType,
-                    key: key,
-                    op: op2,
-                    criteria: par2
-                } as WhereCondition<TEntity, TParams>);
-        }
+        this._expression
+            .push(cond);
 
         return this;
     }
 
-    leftJoin<TJoinEntity, TOnEntity>(joinEntity: ClassType<TJoinEntity>, toEntity: ClassType<TOnEntity>) {
+    leftJoin<TJoinEntity>(
+        joinEntity: ClassType<TJoinEntity>,
+        cond: (builder: JoinBuilder<TJoinEntity, TParams>) => void) {
 
-        return {
-            on: (onKey: keyof TJoinEntity, onOp: OperationType, toKey: keyof TOnEntity) => {
-
-                this._expression
-                    .push({
-                        code: 'JOIN',
-                        classType: joinEntity,
-                        toClassType: toEntity,
-                        key: onKey,
-                        op: onOp,
-                        criteria: toKey
-                    } as JoinCondition<TJoinEntity, TOnEntity, TParams>);
-
-                return this;
-            }
+        // left join 
+        const leftJoin: LeftJoinCondition<TJoinEntity> = {
+            code: 'LEFT JOIN',
+            classType: joinEntity
         };
+
+        this._expression
+            .push(leftJoin);
+
+        // on, and etc
+        const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._params);
+        const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
+
+        cond(builder);
+
+        this._expression = this._expression
+            .concat(queryBuilder._expression);
+
+        // exit 
+        return this;
+    }
+
+    innerJoin<TJoinEntity>(
+        joinEntity: ClassType<TJoinEntity>,
+        cond: (builder: JoinBuilder<TJoinEntity, TParams>) => XQueryBuilder<TJoinEntity, TParams>) {
+
+        // inner join 
+        const innerJoin: InnerJoinCondition<TJoinEntity> = {
+            code: 'INNER JOIN',
+            classType: joinEntity
+        };
+
+        this._expression
+            .push(innerJoin);
+
+        // on, and etc
+        const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._params);
+        const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
+
+        cond(builder);
+
+        this._expression = this._expression
+            .concat(queryBuilder._expression);
+
+        // exit 
+        return this;
+    }
+
+    crossJoin<TEntity>(joinEntity: ClassType<TEntity>) {
+
+        this._expression
+            .push({
+                code: 'CROSS JOIN',
+                classType: joinEntity,
+            } as CrossJoinCondition<TEntity>);
+
+        return this;
     }
 
     setQuery(query: ExpressionPart<TEntity, TParams>[]) {
@@ -166,17 +280,17 @@ export class XQueryBuilder<TEntity, TParams> {
 
         const isInsert = whereIndex !== -1;
 
-        const getDelChck = (): WhereCondition<TEntity, TParams> => {
+        const getDelChck = (): CheckCondition<TEntity, TParams> => {
 
             const clauseName = isInsert ? 'AND' : 'WHERE';
             const isNullCheck = deletionPropertyData.checkType === 'null';
 
             return {
                 code: clauseName,
-                classType: this._mainClassType,
-                key: deletionPropertyData.propName,
+                entityA: this._mainClassType,
+                keyA: deletionPropertyData.propName,
                 op: isNullCheck ? 'IS' : '=',
-                criteria: isNullCheck ? 'NULL' : 'false'
+                keyB: isNullCheck ? 'NULL' : 'false'
             };
         };
 

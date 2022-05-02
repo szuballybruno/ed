@@ -1,8 +1,9 @@
 
 import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { VerboseError } from '../shared/types/VerboseError';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams, getCookie, ErrorCode } from '../utilities/helpers';
+import { ActionParams, getAuthCookies, getCookie } from '../utilities/helpers';
 
 export class AuthenticationController {
 
@@ -15,21 +16,11 @@ export class AuthenticationController {
         this._config = globalConfig;
     }
 
-    renewUserSessionAction = async (params: ActionParams) => {
-
-        const prevRefreshToken = getCookie(params.req, 'refreshToken')?.value;
-
-        const { accessToken, refreshToken } = await this._authenticationService
-            .renewUserSessionAsync(prevRefreshToken);
-
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
-    };
-
     logInUserAction = async (params: ActionParams) => {
 
         // check request 
         if (!params.req.body)
-            throw new ErrorCode('Body is null.', 'bad request');
+            throw new VerboseError('Body is null.', 'bad request');
 
         // get credentials from request
         const { email, password } = params.req.body;
@@ -40,10 +31,16 @@ export class AuthenticationController {
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
-    getCurrentUserAction = async (params: ActionParams) => {
+    establishAuthHandshakeAction = async (params: ActionParams) => {
 
-        return this._authenticationService
-            .getCurrentUserAsync(params.currentUserId);
+        const { refreshToken } = getAuthCookies(params.req);
+
+        const data = await this._authenticationService
+            .establishAuthHandshakeAsync(refreshToken);
+
+        setAuthCookies(this._config, params.res, data.newAccessToken, data.newRefreshToken);
+
+        return data.authData;
     };
 
     logOutUserAction = async (params: ActionParams) => {

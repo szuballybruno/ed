@@ -1,12 +1,10 @@
-import { log } from 'console';
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { User } from '../models/entity/User';
 import { ClassType, ParsableValueType } from '../models/DatabaseTypes';
+import { User } from '../models/entity/User';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { logError, logSecondary } from '../services/misc/logger';
-import { typecheck } from '../shared/logic/sharedLogic';
-import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { logSecondary } from '../services/misc/logger';
+import { VerboseError } from '../shared/types/VerboseError';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -127,7 +125,7 @@ export class ActionParams {
 
         const file = this.req.files?.file;
         if (!file)
-            throw new ErrorCode('File not sent!', 'bad request');
+            throw new VerboseError('File not sent!', 'bad request');
 
         return file as UploadedFile;
     }
@@ -312,7 +310,7 @@ export const requestHasFiles = (req: Request) => {
 export const getSingleFileFromRequest = (req: Request) => {
 
     if (!req.files)
-        throw new ErrorCode('Request contains no files.', 'bad request');
+        throw new VerboseError('Request contains no files.', 'bad request');
 
     // TODO multiple file error check
 
@@ -323,7 +321,7 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
 
     const objWithValue = withValue<T>(obj, () => {
 
-        throw new ErrorCode('Requied field has no value!', 'bad request');
+        throw new VerboseError('Requied field has no value!', 'bad request');
     });
 
     return parseType(objWithValue, type ?? 'any') as T;
@@ -364,10 +362,19 @@ export const getCookies = (req: Request) => {
         }));
 };
 
-export const getCookie = (req: Request, key: string) => getCookies(req)
-    .filter(x => x.key === key)[0];
+export const getCookie = (req: Request, key: string) => {
 
-export const getAuthTokenFromRequest = (req: Request, config: GlobalConfiguration) => getCookie(req, config.misc.accessTokenCookieName)?.value;
+    return getCookies(req)
+        .filter(x => x.key === key)[0]?.value as string | null;
+};
+
+export const getAuthCookies = (req: Request) => {
+
+    return {
+        accessToken: getCookie(req, 'accessToken'),
+        refreshToken: getCookie(req, 'refreshToken')
+    };
+};
 
 /**
  * Make all properties in T optional
@@ -386,19 +393,3 @@ export declare type DeepOptionalEntity<TObject> = {
         ? ReadonlyArray<DeepOptionalEntity<U>>
         : DeepOptionalEntity<TObject[TProperty]>) | (() => string);
 };
-
-export class ErrorCode extends Error {
-
-    code: ErrorCodeType;
-
-    constructor(msg: string, code: ErrorCodeType) {
-
-        super(msg);
-
-        this.code = code;
-    }
-
-    toString() {
-        return `${this.code}: ${this.message}`;
-    }
-}
