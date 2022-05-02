@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { VerboseError } from '../../shared/types/VerboseError';
+import { Environment } from '../../static/Environemnt';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
 export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden' | 'error';
@@ -24,7 +25,7 @@ export const useGetAuthHandshake = () => {
         () => httpGetAsync(apiRoutes.authentication.establishAuthHandshake), {
         retry: false,
         refetchOnWindowFocus: false,
-        // refetchInterval: Environment.getAuthHandshakeIntervalInMs,
+        refetchInterval: Environment.getAuthHandshakeIntervalInMs,
         enabled: true,
         notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });

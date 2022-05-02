@@ -102,9 +102,19 @@ export class ORMConnectionService {
         return this._ormConnection;
     }
 
-    query<TEntity, TParam>(classType: ClassType<TEntity>, params?: TParam) {
+    withResType<TResult>() {
 
-        return new XQueryBuilder(this._sqlConnectionService, classType, params);
+        return {
+            query: <TEntity, TParam>(classType: ClassType<TEntity>, params?: TParam) => {
+
+                return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, params);
+            }
+        };
+    }
+
+    query<TEntity, TParam, TResult = TEntity>(classType: ClassType<TEntity>, params?: TParam) {
+
+        return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, params);
     }
 
     /**

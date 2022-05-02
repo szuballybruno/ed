@@ -54,7 +54,7 @@ export type InitialStateType<TSchema> = {
 
 export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     rows: TSchema[],
-    columns: GridColumnType<TSchema, TKey, any>[],
+    columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
     getKey: (row: TSchema) => TKey,
     handleEdit?: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
     initialState?: InitialStateType<TSchema>,
@@ -70,10 +70,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     const columnsProcessed = columns
         .map(column => {
 
-            const { renderCell, type, editHandler, renderEditCell, ...others } = column;
+            const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
 
             const def: GridColDef = {
                 ...others,
+                field: field as any,
                 editable: !!editHandler || !!renderEditCell
             };
 

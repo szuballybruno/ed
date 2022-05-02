@@ -23,8 +23,7 @@ export type CheckCondition<TEntityA, TEntityB> = {
 
 export type SelectCondition<TEntity> = {
     code: 'SELECT',
-    key?: keyof TEntity
-    keys?: (keyof TEntity)[]
+    columnSelects?: SelectColumnsType<any, any>[],
     entity?: ClassType<TEntity>
 };
 
@@ -51,3 +50,12 @@ export type ExpressionPart<TEntity, TParams> =
     InnerJoinCondition<any>;
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
+
+export type ColumnSelectObjType<TEntity, TRes> = {
+    [K in keyof Partial<TRes>]: keyof TEntity;
+};
+
+export type SelectColumnsType<TEntity, TRes> = {
+    classType: ClassType<TEntity>,
+    columnSelectObj: ColumnSelectObjType<TEntity, TRes>
+};

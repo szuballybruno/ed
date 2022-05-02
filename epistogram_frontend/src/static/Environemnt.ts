@@ -11,7 +11,7 @@ export const Environment = (() => {
     const isLocalhost = process.env.REACT_APP_IS_LOCALHOST === 'true';
 
     const currentOrigin = window.location.origin;
-    const getAuthHandshakeIntervalInMs = 5 * 1000; // 5 minutes
+    const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 1 * 60 * 1000; // 1 mins
     const verboseLogging = false;
     const loggingSettings = {

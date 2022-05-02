@@ -2,7 +2,7 @@ import { ClassType } from '../../models/DatabaseTypes';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition } from './XQueryBuilderTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition, ColumnSelectObjType, SelectColumnsType } from './XQueryBuilderTypes';
 
 const getCheckCondition = <TEntityA, TEntityB, TParams>(
     code: 'AND' | 'WHERE' | 'ON',
@@ -95,7 +95,33 @@ class JoinBuilder<TEntity, TParams> {
     }
 }
 
-export class XQueryBuilder<TEntity, TParams> {
+type SelectBuilderBackrefType<TResult> = {
+    columnSelects: SelectColumnsType<any, TResult>[]
+};
+
+class SelectBuilder<TResult> {
+
+    private _backref: SelectBuilderBackrefType<TResult>;
+
+    constructor(backref: SelectBuilderBackrefType<TResult>) {
+
+        this._backref = backref;
+    }
+
+    columns<T>(ct: ClassType<T>, columnSelectObj: ColumnSelectObjType<T, TResult>) {
+
+        this._backref
+            .columnSelects
+            .push({
+                classType: ct,
+                columnSelectObj: columnSelectObj
+            });
+
+        return this;
+    }
+}
+
+export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
 
     private _connection: XQueryBuilderCore<TEntity, TParams>;
     private _mainClassType: ClassType<TEntity>;
@@ -113,13 +139,30 @@ export class XQueryBuilder<TEntity, TParams> {
         this._params = params;
     }
 
-    select(condition: keyof TEntity | (keyof TEntity)[] | ClassType<any>) {
+    selectFrom(fn: (builder: SelectBuilder<TResult>) => void) {
+
+        const backref: SelectBuilderBackrefType<TResult> = {
+            columnSelects: []
+        };
+
+        fn(new SelectBuilder(backref));
 
         const cond: SelectCondition<TEntity> = {
             code: 'SELECT',
-            key: typeof condition === 'string' ? condition as keyof TEntity : undefined,
-            keys: Array.isArray(condition) ? condition as (keyof TEntity)[] : undefined,
-            entity: typeof condition === 'function' ? condition as ClassType<any> : undefined
+            columnSelects: backref.columnSelects
+        };
+
+        this._expression
+            .push(cond);
+
+        return this;
+    }
+
+    select(ct: ClassType<any>) {
+
+        const cond: SelectCondition<TEntity> = {
+            code: 'SELECT',
+            entity: ct
         };
 
         this._expression
@@ -151,19 +194,19 @@ export class XQueryBuilder<TEntity, TParams> {
     and(
         keyA: keyof TEntity,
         op: OperationType,
-        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
+        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams, TResult>;
 
     and<TOtherEntity>(
         keyA: keyof TEntity,
         op: OperationType,
         keyB: keyof TOtherEntity,
-        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams>;
+        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult>;
 
     and<TOtherEntity>(
         keyA: keyof TEntity,
         op: OperationType,
         keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
-        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams> {
+        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult> {
 
         const cond = getCheckCondition('AND', keyA, op, keyB, this._params, this._mainClassType, classTypeOther);
 
@@ -258,12 +301,14 @@ export class XQueryBuilder<TEntity, TParams> {
             .getOneOrNull(this._mainClassType, this._expression, this._params);
     }
 
-    async getMany(): Promise<TEntity[]> {
+    async getMany(): Promise<TResult[]> {
 
         this.addDeletedCheck();
 
-        return await this._connection
+        const rows = await this._connection
             .getMany(this._mainClassType, this._expression, this._params);
+
+        return rows as any as TResult[];
     }
 
     private addDeletedCheck() {

@@ -1,17 +1,21 @@
-import { Flex } from '@chakra-ui/react';
-import { Add } from '@mui/icons-material';
-import { memo } from 'react';
+import { Add, Edit } from '@mui/icons-material';
+import { memo, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useRolesList } from '../../../services/api/rolesApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../services/core/notifications';
 import { RoleAdminListDTO } from '../../../shared/dtos/role/RoleAdminListDTO';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { useEpistoDialogLogic } from '../../EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AddRoleDialog } from './AddRoleDialog';
+
+type RowType = RoleAdminListDTO & {
+    perms: string,
+    edit: number
+};
 
 export const RoleAdminIndexPage = memo(() => {
 
@@ -21,11 +25,24 @@ export const RoleAdminIndexPage = memo(() => {
     // http
     const { refetchRolesList, rolesList, rolesListError, rolesListState } = useRolesList();
 
+    const roles = rolesList
+        .map((x, i): RowType => ({
+            ...x,
+            perms: x.permissions
+                .map(x => x.code)
+                .join(', \n'),
+            edit: i
+        }));
+
     // grid 
-    type RowType = RoleAdminListDTO;
     const getKey = (x: RowType): string => `${x.roleName}-${x.ownerName}-${x.companyId}`;
 
     const logic = useEpistoDialogLogic('AddRoleDialog', { defaultCloseButtonType: 'top' });
+
+    const handleEdit = useCallback((roleId: number) => {
+
+
+    }, []);
 
     return (
         <LoadingFrame
@@ -34,7 +51,9 @@ export const RoleAdminIndexPage = memo(() => {
             className='whall'
             direction='column'>
 
-            <AddRoleDialog logic={logic} />
+            <AddRoleDialog
+                onSave={refetchRolesList}
+                logic={logic} />
 
             <AdminSubpageHeader
                 direction="column"
@@ -51,7 +70,7 @@ export const RoleAdminIndexPage = memo(() => {
                 ]}>
 
                 <EpistoDataGrid
-                    rows={rolesList as RowType[]}
+                    rows={roles}
                     getKey={getKey}
                     handleEdit={x => console.log(x)}
                     columns={[
@@ -71,9 +90,34 @@ export const RoleAdminIndexPage = memo(() => {
                             width: 200
                         },
                         {
-                            headerName: 'Context',
-                            field: 'companyName',
-                            width: 200
+                            headerName: 'Permissions',
+                            field: 'perms',
+                            width: 200,
+                            renderCell: (x) => {
+
+                                const perms = x.value as string;
+
+                                return (
+                                    <EpistoFont
+                                        tooltip={perms}>
+                                        {x.value}
+                                    </EpistoFont>
+                                );
+                            }
+                        },
+                        {
+                            headerName: '',
+                            field: 'edit',
+                            renderCell: (x) => {
+
+                                return (
+                                    <EpistoButton
+                                        onClick={() => handleEdit(x.row.roleId)}>
+
+                                        <Edit></Edit>
+                                    </EpistoButton>
+                                );
+                            }
                         }
                     ] as GridColumnType<RowType, string, keyof RowType>[]} />
 

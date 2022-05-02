@@ -1,11 +1,10 @@
 import { Role } from '../models/entity/authorization/Role';
-import { RoleAssignmentBridge } from '../models/entity/authorization/RoleAssignmentBridge';
+import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
 import { RoleListView } from '../models/views/RoleListView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
-import { noUndefined } from '../shared/logic/sharedLogic';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -33,6 +32,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 const viewAsRole = grouping.first;
 
                 return {
+                    roleId: viewAsRole.roleId,
                     roleName: viewAsRole.roleName,
                     ownerName: viewAsRole.ownerName,
                     ownerType: viewAsRole.isCompanyOwned ? 'company' : 'user',
@@ -69,18 +69,63 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const role = {
             name: dto.name,
+            ownerCompanyId: dto.ownerCompanyId
         } as Role;
 
         // create role
         await this.createAsync(role);
 
-        // create owner assingnment 
-        // await this._ormService
-        //     .create(RoleAssignmentBridge, noUndefined<RoleAssignmentBridge>({
-        //         roleId: role.id,
-        //         userId: userId,
-        //         contextCompanyId: dto.contextCompanyId
-        //     }));
+        // create permission assignments 
+        const permAssignemnts = dto
+            .permissionIds
+            .map(x => ({
+                permissionId: x,
+                roleId: role.id
+            } as RolePermissionBridge));
+
+        await this._ormService
+            .save(RolePermissionBridge, permAssignemnts);
+    }
+
+    async getRoleEditDataAsync(userId: number, roleId: number) {
+
+        type ResultType = {
+            roleId: number,
+            roleName: string,
+            permissionId: number,
+            ownerCompanyId: number
+        }
+
+        const roles = await this._ormService
+            .withResType<ResultType>()
+            .query(Role, { roleId })
+            .selectFrom(x => x
+                .columns(Role, {
+                    roleId: 'id',
+                    roleName: 'name',
+                    ownerCompanyId: 'ownerCompanyId'
+                })
+                .columns(RolePermissionBridge, {
+                    permissionId: 'permissionId'
+                }))
+            .leftJoin(RolePermissionBridge, x => x
+                .on('roleId', '=', 'id', Role))
+            .where('id', '=', 'roleId')
+            .getMany();
+
+        const group = roles
+            .groupBy(x => x.roleId)
+            .single(x => true);
+
+        const viewAsRole = group.first;
+
+        return {
+            name: viewAsRole.roleName,
+            ownerCompanyId: viewAsRole.ownerCompanyId,
+            permissionIds: group
+                .items
+                .map(x => x.permissionId)
+        } as RoleEditDTO;
     }
 
     async deleteRoleAsync(roleId: number) {

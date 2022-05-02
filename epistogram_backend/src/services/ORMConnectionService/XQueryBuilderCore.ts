@@ -1,5 +1,5 @@
 import { ClassType } from '../../models/DatabaseTypes';
-import { getKeys } from '../../shared/logic/sharedLogic';
+import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
@@ -92,24 +92,25 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
                     const selectCond = espressionPart as SelectCondition<TEntity>;
 
-                    const text = (() => {
-
-                        if (selectCond.key)
-                            return `${tableName}.${this.toSQLSnakeCasing(selectCond.key as string)}`;
-
-                        if (selectCond.keys)
-                            return selectCond.keys
-                                .map(x => `${tableName}.${this.toSQLSnakeCasing(x as string)}`)
-                                .join(', ');
+                    const text = ((): string => {
 
                         if (selectCond.entity)
                             return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
+
+                        if (selectCond.columnSelects)
+                            return selectCond
+                                .columnSelects
+                                .map(x => getKeyValues(x
+                                    .columnSelectObj)
+                                    .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
+                                    .join(', '))
+                                .join(',\n');
 
                         throw new Error('Incorrect select condition!');
                     })();
 
                     // SELECT xy.ab, xy.abc
-                    return `SELECT ${text} FROM ${sqlTableRef}`;
+                    return `SELECT \n${text} \nFROM ${sqlTableRef}`;
                 }
 
                 // left join condition

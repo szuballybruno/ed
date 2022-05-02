@@ -198,6 +198,8 @@ import { TurboExpress } from './utilities/TurboExpress';
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
+    console.log(await roleService.getRoleEditDataAsync(1, 1));
+
     // initialize express
     const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(
         [authMiddleware],
@@ -228,6 +230,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     // roles
     addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
     addEndpoint(apiRoutes.roles.createRole, roleController.createRoleAction, { isPost: true });
+    addEndpoint(apiRoutes.roles.getRoleEditData, roleController.getRoleEditDataAction, { isPost: true });
 
     // permissions 
     addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);

@@ -21,7 +21,15 @@ export class RoleController {
 
         return this._roleService
             .createRoleAsync(params.currentUserId, params
-                .getBody<RoleCreateDTO>(['name', 'contextCompanyId', 'permissionIds'])
+                .getBody<RoleCreateDTO>(['name', 'ownerCompanyId', 'permissionIds'])
                 .data);
+    };
+
+    getRoleEditDataAction = (params: ActionParams) => {
+
+        return this._roleService
+            .getRoleEditDataAsync(params.currentUserId, params
+                .getQuery()
+                .getValue(x => x.roleId, 'int'));
     };
 }
