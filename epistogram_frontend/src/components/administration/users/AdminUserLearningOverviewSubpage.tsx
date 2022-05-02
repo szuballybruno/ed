@@ -7,13 +7,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useLocation, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
-import { useEditUserData } from '../../../services/api/userApiService';
+import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
 import { useActiveCourses, useUserProgressData } from '../../../services/api/userProgressApiService';
 import { useUserStats } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
-import {  isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
+import { isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -208,6 +208,12 @@ export const AdminUserStatisticsSubpage = (props: {
     const { userStats } = useUserStats(userId);
     const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(1, true);
 
+    const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = useUserLearningOverviewData(userId);
+
+    const engagementPoints = userLearningOverviewData?.engagementPoints || 0;
+    const performancePoints = Math.floor(userLearningOverviewData?.performancePercentage || 0);
+    const reactionTimeScorePoints = userLearningOverviewData?.reactionTimeScorePoints || 0;
+
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(null);
     const onChange = (dates) => {
@@ -328,15 +334,17 @@ export const AdminUserStatisticsSubpage = (props: {
                                 w={'120px'}
                                 src={Environment.getAssetUrl('/images/happyfacechart.png')} />
 
-                            <Flex direction="column"
+                            <Flex
+                                direction="column"
                                 p="10px">
+
                                 <EpistoFont
                                     style={{
                                         fontWeight: 600
                                     }}
                                     fontSize={'fontLargePlus'}>
 
-                                    80/100 Pont
+                                    {`${Math.floor(userLearningOverviewData?.overallPerformancePercentage || 0)}/100 Pont`}
                                 </EpistoFont>
 
                                 <EpistoFont
@@ -355,55 +363,62 @@ export const AdminUserStatisticsSubpage = (props: {
                                 </EpistoFont>
                             </Flex>
                         </Flex>
-                        <Flex w="100%"
+
+                        <Flex
+                            w="100%"
                             mt="20px"
                             direction="column">
 
                             <UserStatisticsProgressWithLabel title="Elköteleződés"
-                                value={95} />
+                                value={engagementPoints} />
                             <UserStatisticsProgressWithLabel title="Teljesítmény"
-                                value={67} />
+                                value={performancePoints} />
                             <UserStatisticsProgressWithLabel title="Produktivitás"
-                                value={81} />
-                            <UserStatisticsProgressWithLabel title="Elmélyülés"
-                                value={83} />
+                                value={0} />
                             <UserStatisticsProgressWithLabel title="Közösségi aktivitás"
-                                value={78} />
+                                value={0} />
+                            <UserStatisticsProgressWithLabel title="Reakcióidő"
+                                value={reactionTimeScorePoints} />
                         </Flex>
                     </Flex>
                     <Flex
                         direction="column"
                         flex="5"
                         p="0 0 10px 5px">
+
                         <Flex h="150px">
 
                             <StatisticsCard
                                 iconPath={Environment.getAssetUrl('images/learningreport01.png')}
-                                value={'13'}
+                                value={`${Math.floor((userLearningOverviewData?.totalTimeActiveOnPlatformSeconds || 0) / 60 / 60)}`}
                                 suffix={'óra'}
                                 style={{
                                     marginRight: 10
                                 }}
                                 title={'Aktívan eltöltött idő a platformon'} />
+
                             <StatisticsCard
                                 iconPath={Environment.getAssetUrl('images/learningreport02.png')}
-                                value={'38'}
+                                value={`${userLearningOverviewData?.watchedVideos || 0}`}
                                 suffix={'db'}
                                 title={'megtekintett videók a hónapban'} />
                         </Flex>
+
                         <Flex p="10px">
                             A hallgató elköteleződése 4 mérőszám összeségéből áll össze.
                             Vizsgáljuk a belépésének gyakoriságát, az aktivitásának intenzitását, a platformelhagyást, valamint a lemorzsolódást is.
                             Az elköteleződési szint magasan tartása kulcsfontosságú, hiszen a felhasználónak azt kell éreznie, hogy valóban értéket kap a tanulás során, és nem csak kötelező rosszként éli meg a képzési folyamatot.
                             Csökkenő elköteleződés esetén kérdéseket teszünk fel neki, ezt pedig összehasonlítjuk a kurzuselhagyási és értékelési adatokkal, ezáltal pedig felderíthető, melyek azok a kritikus pontok a tananyagban, melyek javításra szorulnak.
                         </Flex>
-
                     </Flex>
                 </Flex>
             </EditSection>
 
-            <EditSection title="Kurzusok a hónapban">
-                <EpistoGrid auto="fill"
+            <EditSection
+                title="Kurzusok a hónapban">
+
+                <EpistoGrid
+                    auto="fill"
                     gap="15"
                     minColumnWidth="250px"
                     p="10px 0">
@@ -433,8 +448,8 @@ export const AdminUserStatisticsSubpage = (props: {
 
                         {/* total completed video count */}
                         <StatisticsCard
-                            title={'Megválaszolt tudást vizsgáló kérdések száma'}
-                            value={'39'}
+                            title={'Megválaszolt tudást vizsgáló kérdés'}
+                            value={`${userLearningOverviewData?.answeredVideoAndPractiseQuizQuestions || 0}`}
                             suffix={'db'}
                             iconPath={Environment.getAssetUrl('images/learningreport03.png')}
                             isOpenByDefault={false} />
@@ -442,7 +457,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         {/* total playback time */}
                         <StatisticsCard
                             title={'Helyes válaszok aránya'}
-                            value={'27'}
+                            value={`${userLearningOverviewData?.correctAnswerRatePercentage || 0}`}
                             suffix={'%'}
                             iconPath={Environment.getAssetUrl('images/learningreport04.png')}
                             isOpenByDefault={false} />
@@ -450,15 +465,19 @@ export const AdminUserStatisticsSubpage = (props: {
                         {/* total given answer count  */}
                         <StatisticsCard
                             title={'Reakcióidő'}
-                            value={'Átlagos'}
+                            value={(userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) > 1
+                                ? 'Átlagon aluli'
+                                : (userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) < -1
+                                    ? 'Átlagon felüli'
+                                    : 'Átlagos'}
                             suffix={''}
                             iconPath={Environment.getAssetUrl('images/learningreport05.png')}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
                         <StatisticsCard
-                            title={'Átlagos napi megtekintett videók'}
-                            value={'6.5'}
+                            title={'Átlag videómegtekintés naponta'}
+                            value={`${Math.floor(userLearningOverviewData?.averageWatchedVideosPerDay || 0)}`}
                             suffix={'db/nap'}
                             iconPath={Environment.getAssetUrl('images/learningreport06.png')}
                             isOpenByDefault={false} />
@@ -498,7 +517,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         padding: '10px 0',
                         gap: '10px',
                         gridAutoFlow: 'row dense',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
                         gridAutoRows: '160px'
                     }}>
 
@@ -529,16 +548,16 @@ export const AdminUserStatisticsSubpage = (props: {
 
                     {/* total completed video count */}
                     <StatisticsCard
-                        title={'Leggyakoribb aktív idősáv'}
-                        value={'17-19'}
-                        suffix={'óra között'}
+                        title={'A leggyakoribb aktív idősáv'}
+                        value={`${userLearningOverviewData?.mostFrequentTimeRange || 'Ismeretlen'}`}
+                        suffix={''}
                         iconPath={Environment.getAssetUrl('images/learningreport07.png')}
                         isOpenByDefault={false} />
 
                     {/* total playback time */}
                     <StatisticsCard
                         title={'Teljesített vizsgák száma'}
-                        value={'8'}
+                        value={`${userLearningOverviewData?.totalDoneExams || 0}`}
                         suffix={'db'}
                         iconPath={Environment.getAssetUrl('images/learningreport08.png')}
                         isOpenByDefault={false} />
@@ -546,7 +565,7 @@ export const AdminUserStatisticsSubpage = (props: {
                     {/* total given answer count  */}
                     <StatisticsCard
                         title={'Egy belépés átlagos hossza'}
-                        value={'42'}
+                        value={`${Math.floor((userLearningOverviewData?.averageSessionLengthSeconds || 0) / 60)}`}
                         suffix={'perc'}
                         iconPath={Environment.getAssetUrl('images/learningreport09.png')}
                         isOpenByDefault={false} />
@@ -554,7 +573,8 @@ export const AdminUserStatisticsSubpage = (props: {
                     {/* correct answer rate  */}
                     <StatisticsCard
                         title={'Ismétlésre ajánlott videó'}
-                        value={'13'}
+                        isComingSoon
+                        value={`${userLearningOverviewData?.videosToBeRepeatedCount || 0}`}
                         suffix={'db'}
                         iconPath={Environment.getAssetUrl('images/learningreport10.png')}
                         isOpenByDefault={false} />

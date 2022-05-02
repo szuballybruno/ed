@@ -161,10 +161,13 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                 pr="10px">
 
                 {/* value and suffix */}
-                <Flex align="flex-end">
+                <Flex
+                    align="flex-end"
+                    flexWrap={'wrap'}>
 
                     {/* value */}
                     <EpistoFont
+                        isAutoFontSize
                         fontSize={40}
                         style={{
                             lineHeight: 1,

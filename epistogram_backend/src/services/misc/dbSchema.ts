@@ -96,6 +96,8 @@ import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssi
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
 import { UserEngagementView } from '../../models/views/UserEngagementView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
+import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
+import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 
 export const dbSchema = {
 
@@ -151,6 +153,7 @@ export const dbSchema = {
         'video_playback_sample_view',
         'user_session_view',
         'user_stats_view',
+        'user_session_block_view',
         'user_session_daily_view',
         'activity_streak_view',
         'shop_item_view',
@@ -182,6 +185,7 @@ export const dbSchema = {
         'user_course_completion_current_view',
         'user_engagement_view',
         'user_performance_view',
+        'user_learning_overview_stats_view',
         'user_spent_time_view',
         'user_daily_progress_view',
         'user_daily_course_item_progress_view',
@@ -246,6 +250,7 @@ export const dbSchema = {
         CourseAdminDetailedView,
         CourseAdminContentView,
         UserStatsView,
+        UserSessionBlockView,
         UserSessionDailyView,
         UserSessionView,
         ActivityStreakView,
@@ -275,6 +280,7 @@ export const dbSchema = {
         UserCourseRecommendedItemQuotaView,
         UserEngagementView,
         UserPerformanceView,
+        UserLearningOverviewStatsView,
         UserTempomatAdjustmentValueView,
         UserCourseBridgeView,
         UserCourseCompletionOriginalEstimationView,

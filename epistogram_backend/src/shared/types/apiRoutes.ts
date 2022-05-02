@@ -108,7 +108,8 @@ export const apiRoutes = {
     },
 
     userStats: {
-        getUserStats: '/userstats/get-user-stats'
+        getUserStats: '/userstats/get-user-stats',
+        getUserLearningOverviewData: '/users/get-user-learning-overview-data'
     },
 
     userProgress: {
@@ -130,8 +131,7 @@ export const apiRoutes = {
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
-        getUserListForAdministration: '/users/get-user-administartion-user-list',
-        getUserLearningOverviewData: '/users/get-user-learning-overview-data'
+        getUserListForAdministration: '/users/get-user-administartion-user-list'
     },
 
     file: {

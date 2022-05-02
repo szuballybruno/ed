@@ -1,23 +1,24 @@
 import { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
 
-export class getUserLearningOverviewData {
+export class UserLearningOverviewDataDTO {
     userId: number;
 
     overallPerformancePercentage: number;
 
-    engagementPercentage: number;
+    engagementPoints: number;
     performancePercentage: number;
     productivityPercentage: number;
-    deepeningPercentage: number;
     socialActivityPercentage: number;
+    reactionTimeScorePoints: number;
 
-    spentActiveTimeSeconds: number;
-    watchedVideosCount: number;
+    totalTimeActiveOnPlatformSeconds: number;
+    watchedVideos: number;
 
-    answeredQuizQuestionsCount: number;
-    correctAnswersCount: number;
-    averageReactionTimeSeconds: number;
-    averageDailyWatchedVideosCount: number;
+    answeredVideoAndPractiseQuizQuestions: number;
+    correctAnsweredVideoAndPractiseQuizQuestions: number;
+    userReactionTimeDifferenceSeconds: number;
+    correctAnswerRatePercentage: number;
+    averageWatchedVideosPerDay: number;
 
     userProgressData: UserCourseProgressChartDTO;
 
@@ -28,8 +29,8 @@ export class getUserLearningOverviewData {
         noActivityPercentage: number
     };
 
-    mostActiveTimeRange: string;
-    completedExamsCount: number;
+    mostFrequentTimeRange: string;
     averageSessionLengthSeconds: number;
-    videosToRepeatCount: number;
+    totalDoneExams: number;
+    videosToBeRepeatedCount: number;
 }

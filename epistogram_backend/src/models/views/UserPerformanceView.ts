@@ -12,11 +12,11 @@ export class UserPerformanceView {
     userId: number;
 
     @ViewColumn()
-    givenAnswerId: number;
+    performancePercentage: number;
 
     @ViewColumn()
-    givenAnswerType: string;
+    averageReactionTime: number;
 
     @ViewColumn()
-    givenAnswerIsCorrect: boolean;
+    totalAverageReactionTime: number;
 }
