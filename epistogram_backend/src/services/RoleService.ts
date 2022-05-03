@@ -1,10 +1,12 @@
 import { Role } from '../models/entity/authorization/Role';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
 import { RoleListView } from '../models/views/RoleListView';
+import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
+import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -98,7 +100,12 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const roles = await this._ormService
             .withResType<ResultType>()
-            .query(Role, { roleId })
+            .query(Role, {
+                userId,
+                roleId,
+                editCoCode: 'EDIT_COMPANY_ROLES' as PermissionCodeType,
+                editGlobCode: 'EDIT_GLOBAL_ROLES' as PermissionCodeType
+            })
             .selectFrom(x => x
                 .columns(Role, {
                     roleId: 'id',
@@ -108,6 +115,14 @@ export class RoleService extends QueryServiceBase<Role> {
                 .columns(RolePermissionBridge, {
                     permissionId: 'permissionId'
                 }))
+            .innerJoin(UserPermissionView, x => x
+                .on('userId', '=', 'userId')
+                .openBracket()
+                .and('contextCompanyId', '=', 'ownerCompanyId', Role)
+                .and('permissionCode', '=', 'editCoCode')
+                .or('permissionCode', '=', 'editGlobCode')
+                .and('contextCompanyId', 'IS', 'NULL')
+                .closeBracket())
             .leftJoin(RolePermissionBridge, x => x
                 .on('roleId', '=', 'id', Role))
             .where('id', '=', 'roleId')

@@ -85,92 +85,8 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const sqlParamsList = this.getSQLParamsList(params);
 
         const queryAsString = expressionParts
-            .map(espressionPart => {
-
-                // select condition
-                if (espressionPart.code === 'SELECT') {
-
-                    const selectCond = espressionPart as SelectCondition<TEntity>;
-
-                    const text = ((): string => {
-
-                        if (selectCond.entity)
-                            return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
-
-                        if (selectCond.columnSelects)
-                            return selectCond
-                                .columnSelects
-                                .map(x => getKeyValues(x
-                                    .columnSelectObj)
-                                    .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
-                                    .join(', '))
-                                .join(',\n');
-
-                        throw new Error('Incorrect select condition!');
-                    })();
-
-                    // SELECT xy.ab, xy.abc
-                    return `SELECT \n${text} \nFROM ${sqlTableRef}`;
-                }
-
-                // left join condition
-                else if (espressionPart.code === 'LEFT JOIN') {
-
-                    const joinCond = espressionPart as LeftJoinCondition<any>;
-                    const joinTableName = this.toSQLTableName(joinCond.classType);
-
-                    return `LEFT JOIN ${joinTableName}`;
-                }
-
-                // inner join condition
-                else if (espressionPart.code === 'INNER JOIN') {
-
-                    const joinCond = espressionPart as InnerJoinCondition<any>;
-                    const joinTableName = this.toSQLTableName(joinCond.classType);
-
-                    return `INNER JOIN ${joinTableName}`;
-                }
-
-                // cross join condition
-                else if (espressionPart.code === 'CROSS JOIN') {
-
-                    const joinCond = espressionPart as CrossJoinCondition<any>;
-                    const joinTableName = this.toSQLTableName(joinCond.classType);
-
-                    return `CROSS JOIN ${joinTableName}`;
-                }
-
-                // where condition
-                else {
-
-                    const cond = espressionPart as CheckCondition<TEntity, TParams>;
-                    const { code, entityA, entityB, keyA, keyB, op } = cond;
-                    const isRefOther = !!entityB;
-
-                    const tableAName: string = this.toSQLTableName(entityA);
-                    const snakeColumn: string = this.toSQLSnakeCasing(keyA as string);
-                    const fullValueA = `${tableAName}.${snakeColumn}`;
-
-                    const operator: OperationType = op;
-
-                    const fullValueB = (() => {
-
-                        if (this.isSQLStaticValue(keyB as string))
-                            return keyB as SQLStaticValueType;
-
-                        if (isRefOther)
-                            return `${this.toSQLTableName(entityB)}.${this.toSQLSnakeCasing(keyB as string)}`;
-
-                        return sqlParamsList
-                            .single(x => x.paramName === keyB)
-                            .token;
-                    })();
-
-                    // WHERE xy.ab = $1
-                    return `${code} ${fullValueA} ${operator} ${fullValueB}`;
-                }
-            })
-            .join('\n');
+            .map(x => this.getCondition(x, sqlParamsList, sqlTableRef))
+            .join('');
 
         const isExplicitSelect = queryAsString
             .startsWith('SELECT');
@@ -183,6 +99,104 @@ export class XQueryBuilderCore<TEntity, TParams> {
             sqlParamsList,
             fullQuery
         };
+    }
+
+    private getCondition(
+        espressionPart: SimpleExpressionPart<TParams>,
+        sqlParamsList: SQLParamType<TParams, keyof TParams>[],
+        sqlTableRef: string) {
+
+        // select condition
+        if (espressionPart.code === 'SELECT') {
+
+            const selectCond = espressionPart as SelectCondition<TEntity>;
+
+            const text = ((): string => {
+
+                if (selectCond.entity)
+                    return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
+
+                if (selectCond.columnSelects)
+                    return selectCond
+                        .columnSelects
+                        .map(x => '   ' + getKeyValues(x
+                            .columnSelectObj)
+                            .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
+                            .join(', '))
+                        .join(',\n');
+
+                throw new Error('Incorrect select condition!');
+            })();
+
+            // SELECT xy.ab, xy.abc
+            return `SELECT \n${text} \nFROM ${sqlTableRef}`;
+        }
+
+        // left join condition
+        else if (espressionPart.code === 'LEFT JOIN') {
+
+            const joinCond = espressionPart as LeftJoinCondition<any>;
+            const joinTableName = this.toSQLTableName(joinCond.classType);
+
+            return `\n\nLEFT JOIN ${joinTableName}`;
+        }
+
+        // inner join condition
+        else if (espressionPart.code === 'INNER JOIN') {
+
+            const joinCond = espressionPart as InnerJoinCondition<any>;
+            const joinTableName = this.toSQLTableName(joinCond.classType);
+
+            return `\n\nINNER JOIN ${joinTableName}`;
+        }
+
+        // cross join condition
+        else if (espressionPart.code === 'CROSS JOIN') {
+
+            const joinCond = espressionPart as CrossJoinCondition<any>;
+            const joinTableName = this.toSQLTableName(joinCond.classType);
+
+            return `\n\nCROSS JOIN ${joinTableName}`;
+        }
+
+        // bracket condition
+        else if (espressionPart.code === 'CLOSING BRACKET') {
+
+            return ')';
+        }
+
+        // where condition
+        else {
+
+            const cond = espressionPart as CheckCondition<TEntity, TParams>;
+            const { code, entityA, entityB, keyA, keyB, op, bracket } = cond;
+            const isRefOther = !!entityB;
+
+            const tableAName: string = this.toSQLTableName(entityA);
+            const snakeColumn: string = this.toSQLSnakeCasing(keyA as string);
+            const fullValueA = `${tableAName}.${snakeColumn}`;
+
+            const operator: OperationType = op;
+            const bracketProc = bracket ? '(' : '';
+
+            const fullValueB = (() => {
+
+                if (this.isSQLStaticValue(keyB as string))
+                    return keyB as SQLStaticValueType;
+
+                if (isRefOther)
+                    return `${this.toSQLTableName(entityB)}.${this.toSQLSnakeCasing(keyB as string)}`;
+
+                return sqlParamsList
+                    .single(x => x.paramName === keyB)
+                    .token;
+            })();
+
+            const linebreak = code === 'WHERE' ? '\n' : '';
+            const tab = code === 'AND' || code === 'OR' ? '   ' : '';
+
+            return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${fullValueB}`;
+        }
     }
 
     private toSQLTableName<T>(classType: ClassType<T>) {

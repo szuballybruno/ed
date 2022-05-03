@@ -2,8 +2,14 @@ import { Permission } from '../../models/entity/authorization/Permission';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const permissionList = getSeedList<Permission>()({
+
+    // roles
     VIEW_COMPANY_ROLES: {
         code: 'VIEW_COMPANY_ROLES',
+        isGlobal: false
+    },
+    EDIT_COMPANY_ROLES: {
+        code: 'EDIT_COMPANY_ROLES',
         isGlobal: false
     },
     ASSIGN_COMPANY_ROLES: {
@@ -16,8 +22,14 @@ export const permissionList = getSeedList<Permission>()({
     },
     ASSIGN_GLOBAL_ROLES: {
         code: 'ASSIGN_GLOBAL_ROLES',
-        isGlobal: false
+        isGlobal: true
     },
+    EDIT_GLOBAL_ROLES: {
+        code: 'EDIT_GLOBAL_ROLES',
+        isGlobal: true
+    },
+
+    // courses 
     VIEW_COMPANY_COURSES: {
         code: 'VIEW_COMPANY_COURSES',
         isGlobal: false
@@ -31,7 +43,7 @@ export const permissionList = getSeedList<Permission>()({
         isGlobal: false
     },
 
-    // global permissions
+    // misc
     ACCESS_ADMIN: {
         code: 'ACCESS_ADMIN',
         isGlobal: true
@@ -50,10 +62,6 @@ export const permissionList = getSeedList<Permission>()({
     },
     CREATE_COMPANY: {
         code: 'CREATE_COMPANY',
-        isGlobal: true
-    },
-    MANAGE_GLOBAL_ROLES: {
-        code: 'MANAGE_GLOBAL_ROLES',
         isGlobal: true
     }
 });

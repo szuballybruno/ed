@@ -198,7 +198,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
-    console.log(await roleService.getRoleEditDataAsync(1, 1));
+    console.log(await roleService.getRoleEditDataAsync(2, 1));
 
     // initialize express
     const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(

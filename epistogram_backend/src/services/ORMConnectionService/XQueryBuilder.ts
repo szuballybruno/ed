@@ -2,14 +2,15 @@ import { ClassType } from '../../models/DatabaseTypes';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition, ColumnSelectObjType, SelectColumnsType } from './XQueryBuilderTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition } from './XQueryBuilderTypes';
 
 const getCheckCondition = <TEntityA, TEntityB, TParams>(
-    code: 'AND' | 'WHERE' | 'ON',
+    code: 'AND' | 'WHERE' | 'ON' | 'OR',
     keyA: keyof TEntityA,
     op: OperationType,
     keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
     params: TParams | undefined,
+    bracket: SQLBracketType,
     classTypeA: ClassType<TEntityA>,
     classTypeB?: ClassType<TEntityB>): CheckCondition<TEntityA, TEntityB> | CheckCondition<TEntityA, TParams> => {
 
@@ -31,7 +32,8 @@ const getCheckCondition = <TEntityA, TEntityB, TParams>(
             entityA: classTypeA,
             keyA: keyA,
             op: op2,
-            keyB: par2
+            keyB: par2,
+            bracket
         };
 
         return cond;
@@ -44,7 +46,8 @@ const getCheckCondition = <TEntityA, TEntityB, TParams>(
             entityB: classTypeB,
             keyA: keyA,
             op: op,
-            keyB: keyB as keyof TEntityB | SQLStaticValueType
+            keyB: keyB as keyof TEntityB | SQLStaticValueType,
+            bracket
         };
 
         return cond;
@@ -84,7 +87,7 @@ class JoinBuilder<TEntity, TParams> {
         keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
         classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams> {
 
-        const cond = getCheckCondition('ON', keyA, op, keyB, this._params, this._entityClassType, classTypeOther);
+        const cond = getCheckCondition('ON', keyA, op, keyB, this._params, null, this._entityClassType, classTypeOther);
 
         this
             ._builder
@@ -128,6 +131,7 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
     private _params: TParams | undefined;
     private _allowDeleted = false;
     private _sqlConnection: SQLConnectionService;
+    private _bracket: SQLBracketType;
 
     _expression: SimpleExpressionPart<TParams>[] = [];
 
@@ -191,6 +195,23 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
         return this;
     }
 
+    openBracket() {
+
+        this._bracket = '(';
+
+        return this;
+    }
+
+    closeBracket() {
+
+        this._expression
+            .push({
+                code: 'CLOSING BRACKET'
+            } as ClosingBracketCondition);
+
+        return this;
+    }
+
     and(
         keyA: keyof TEntity,
         op: OperationType,
@@ -208,7 +229,38 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
         keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
         classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult> {
 
-        const cond = getCheckCondition('AND', keyA, op, keyB, this._params, this._mainClassType, classTypeOther);
+        const cond = getCheckCondition('AND', keyA, op, keyB, this._params, this._bracket, this._mainClassType, classTypeOther);
+
+        // clear bracket 
+        this.clearBracket();
+
+        this._expression
+            .push(cond);
+
+        return this;
+    }
+
+    or(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams, TResult>;
+
+    or<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TOtherEntity,
+        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult>;
+
+    or<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
+        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult> {
+
+        const cond = getCheckCondition('OR', keyA, op, keyB, this._params, this._bracket, this._mainClassType, classTypeOther);
+
+        // clear bracket 
+        this.clearBracket();
 
         this._expression
             .push(cond);
@@ -311,6 +363,11 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
         return rows as any as TResult[];
     }
 
+    private clearBracket() {
+
+        this._bracket = null;
+    }
+
     private addDeletedCheck() {
 
         if (this._allowDeleted)
@@ -335,7 +392,8 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
                 entityA: this._mainClassType,
                 keyA: deletionPropertyData.propName,
                 op: isNullCheck ? 'IS' : '=',
-                keyB: isNullCheck ? 'NULL' : 'false'
+                keyB: isNullCheck ? 'NULL' : 'false',
+                bracket: null
             };
         };
 

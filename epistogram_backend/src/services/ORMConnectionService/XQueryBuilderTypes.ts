@@ -11,14 +11,16 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
+export type SQLBracketType = null | '(' | ')';
 
 export type CheckCondition<TEntityA, TEntityB> = {
-    code: 'WHERE' | 'AND' | 'ON',
+    code: 'WHERE' | 'AND' | 'ON' | 'OR',
     entityA: ClassType<TEntityA>,
     entityB?: ClassType<TEntityB>,
     keyA: keyof TEntityA,
     op: OperationType,
-    keyB: keyof TEntityB | SQLStaticValueType
+    keyB: keyof TEntityB | SQLStaticValueType,
+    bracket: SQLBracketType
 };
 
 export type SelectCondition<TEntity> = {
@@ -42,12 +44,17 @@ export type CrossJoinCondition<TJoinEntity> = {
     classType: ClassType<TJoinEntity>
 };
 
+export type ClosingBracketCondition = {
+    code: 'CLOSING BRACKET'
+}
+
 export type ExpressionPart<TEntity, TParams> =
     SelectCondition<TEntity> |
     CheckCondition<any, any> |
     LeftJoinCondition<any> |
     CrossJoinCondition<TEntity> |
-    InnerJoinCondition<any>;
+    InnerJoinCondition<any> |
+    ClosingBracketCondition;
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
 
