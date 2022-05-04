@@ -47,6 +47,16 @@ export const getKeys = <T>(obj: T): (keyof T)[] => {
     return keys;
 };
 
+export const getKeyValues = <T>(obj: T) => {
+
+    return Object
+        .keys(obj)
+        .map((key) => ({
+            key: key as keyof T,
+            value: (obj as any)[key]
+        }));
+};
+
 export const noUndefined = <T>(obj: Partial<T>) => {
 
     getKeys(obj)

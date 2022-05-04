@@ -7,6 +7,7 @@ import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { VerboseError } from '../shared/types/VerboseError';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -127,6 +128,9 @@ export class RoleService extends QueryServiceBase<Role> {
                 .on('roleId', '=', 'id', Role))
             .where('id', '=', 'roleId')
             .getMany();
+
+        if (roles.none())
+            throw new VerboseError('forbidden');
 
         const group = roles
             .groupBy(x => x.roleId)

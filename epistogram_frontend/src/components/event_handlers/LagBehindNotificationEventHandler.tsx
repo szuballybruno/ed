@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { LagBehindNotificationDTO } from '../../shared/dtos/LagBehindNotificationDTO';
-import { EpistoDialog, useEpistoDialogLogic } from '../EpistoDialog';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 
 export const LagBehindNotificationEventHandler = (props: {
     data: LagBehindNotificationDTO | null,

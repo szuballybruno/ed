@@ -30,20 +30,27 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 export type CourseModeType = 'beginner' | 'advanced';
 
 export type PermissionCodeType =
-    | 'MANAGE_COMPANY_COURSES'
-    | 'ACCESS_ADMIN'
-    | 'ACCESS_APPLICATION'
-    | 'MANAGE_SHOP'
-    | 'COMPANY_ROLE_MANAGER'
+
+    // role
+    | 'EDIT_GLOBAL_ROLES'
+    | 'ASSIGN_GLOBAL_ROLES'
     | 'VIEW_COMPANY_ROLES'
+    | 'EDIT_COMPANY_ROLES'
     | 'ASSIGN_COMPANY_ROLES'
     | 'DELETE_COMPANY_ROLES'
-    | 'ASSIGN_GLOBAL_ROLES'
+
+    // course 
+    | 'MANAGE_COMPANY_COURSES'
     | 'VIEW_COMPANY_COURSES'
     | 'MANAGE_COMPANY'
     | 'DELETE_COMPANY'
     | 'CREATE_COMPANY'
-    | 'MANAGE_GLOBAL_ROLES';
+    
+    // misc
+    | 'ACCESS_ADMIN'
+    | 'ACCESS_APPLICATION'
+    | 'MANAGE_SHOP'
+    | 'COMPANY_ROLE_MANAGER';
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

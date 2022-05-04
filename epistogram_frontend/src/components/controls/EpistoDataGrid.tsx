@@ -61,7 +61,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     deps?: any[]
 }) => {
 
-    console.log('rendering grid');
+    console.log('Rendering EpistoDataGrid...');
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
 
@@ -187,28 +187,36 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     );
 }, (prev, next) => {
 
-    if (prev.getKey !== next.getKey) {
+    const [isUnhanged, cause] = (() => {
 
-        return false;
-    }
+        if (prev.getKey !== next.getKey) {
 
-    if (prev.handleEdit !== next.handleEdit) {
+            return [false, 'getKey'];
+        }
 
-        return false;
-    }
+        if (prev.handleEdit !== next.handleEdit) {
 
-    if (!areArraysEqual(prev.columns, next.columns)) {
+            return [false, 'handleEdit'];
+        }
 
-        return false;
-    }
+        if (!areArraysEqual(prev.columns, next.columns)) {
 
-    if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
+            return [false, 'columns'];
+        }
 
-        return false;
-    }
+        if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
 
-    if (JSON.stringify(prev.deps) !== JSON.stringify(prev.deps))
-        return false;
+            return [false, 'rows'];
+        }
 
-    return true;
+        if (JSON.stringify(prev.deps) !== JSON.stringify(prev.deps))
+            return [false, 'deps'];
+
+        return [true, null];
+    })();
+
+    if (!isUnhanged)
+        console.log(`Grid params changed, cause: ${cause}`);
+
+    return isUnhanged;
 });

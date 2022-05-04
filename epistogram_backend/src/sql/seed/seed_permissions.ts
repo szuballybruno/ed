@@ -28,6 +28,10 @@ export const permissionList = getSeedList<Permission>()({
         code: 'EDIT_GLOBAL_ROLES',
         isGlobal: true
     },
+    VIEW_GLOBAL_ROLES: {
+        code: 'VIEW_GLOBAL_ROLES',
+        isGlobal: true
+    },
 
     // courses 
     VIEW_COMPANY_COURSES: {

@@ -5,22 +5,22 @@ import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AnswerEditDTO } from '../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
 import { iterate, usePaging } from '../../../static/frontendHelpers';
-import { EpistoDialogLogicType } from '../../EpistoDialog';
+import { } from '../../universal/epistoDialog/EpistoDialog';
 import { useXListMutator } from '../../lib/XMutator/XMutator';
 import { AdminVideoQuestionsModalPage } from './dialogs/AdminVideoQuestionsDialogPage';
 import { AdminVideoStatisticsModalPage } from './dialogs/AdminVideoStatisticsDialogPage';
 import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
-
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 
 export type EditQuestionFnType = <TField extends keyof QuestionEditDataDTO, >(key: number, field: TField, value: QuestionEditDataDTO[TField]) => void;
 
 export const VideoEditDialog = (props: {
-    logic: EpistoDialogLogicType<number>
+    logic: EpistoDialogLogicType<{ videoId: number }>
 }) => {
 
     // props
     const { logic } = props;
-    const videoId = logic.params!;
+    const videoId = logic.params.videoId;
 
     // util
     const showError = useShowErrorDialog();

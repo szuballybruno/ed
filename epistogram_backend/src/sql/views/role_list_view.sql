@@ -17,7 +17,7 @@ roles AS
 	ON r.owner_user_id IS NULL 
 		AND r.owner_company_id IS NULL
 
-	WHERE upv.permission_code = 'MANAGE_GLOBAL_ROLES'
+	WHERE upv.permission_code = 'VIEW_GLOBAL_ROLES'
 )
 SELECT 
 	u.id user_id,

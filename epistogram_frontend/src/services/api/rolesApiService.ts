@@ -1,5 +1,6 @@
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
+import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
 import { RoleDTO } from '../../shared/dtos/RoleDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
@@ -24,5 +25,16 @@ export const useCreateRole = () => {
     return {
         createRoleAsync: qr.postDataAsync,
         createRoleState: qr.state
+    };
+};
+
+export const useRoleEditData = (roleId: number, enabled: boolean) => {
+
+    const qr = useReactQuery2<RoleEditDTO>(apiRoutes.roles.getRoleEditData, { roleId }, enabled);
+
+    return {
+        roleEditData: qr.data,
+        roleEditDataError: qr.error,
+        roleEditDataState: qr.state
     };
 };

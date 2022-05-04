@@ -32,6 +32,7 @@ export type CourseModeType = 'beginner' | 'advanced';
 export type PermissionCodeType =
 
     // role
+    | 'VIEW_GLOBAL_ROLES'
     | 'EDIT_GLOBAL_ROLES'
     | 'ASSIGN_GLOBAL_ROLES'
     | 'VIEW_COMPANY_ROLES'

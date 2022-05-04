@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { XDialogContext } from './XDialoContext';
 
@@ -6,11 +6,11 @@ export const useXDialogLogic = (key: string) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    return {
+    return useMemo(() => ({
         key,
         isOpen,
         setIsOpen
-    };
+    }), [key, isOpen, setIsOpen]);
 };
 
 export type XDialogLogicType = ReturnType<typeof useXDialogLogic>;

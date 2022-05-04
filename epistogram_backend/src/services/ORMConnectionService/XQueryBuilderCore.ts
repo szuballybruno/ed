@@ -93,7 +93,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const fullQuery = isExplicitSelect
             ? queryAsString
-            : `SELECT * FROM  ${sqlTableRef}\n${queryAsString}`;
+            : `SELECT * FROM  ${sqlTableRef}${queryAsString}`;
 
         return {
             sqlParamsList,

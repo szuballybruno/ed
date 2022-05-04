@@ -8,12 +8,13 @@ import { roundNumber } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { TabPanel } from '../../../courseDetails/TabPanel';
-import { EpistoDialog, EpistoDialogLogicType } from '../../../EpistoDialog';
+import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { NoProgressChartYet } from '../../../home/NoProgressChartYet';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
 import { UserProgressChart } from '../../../universal/charts/UserProgressChart';
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
+import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 
 export const AdminUserCourseContentDialogSubpage = (props: {
     userStats: {
