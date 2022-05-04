@@ -59,7 +59,7 @@ export const RoleAdminIndexPage = memo(() => {
         },
         []);
 
-    useEffect(() => console.log('changed'), [deleteWarningDialogLogic]);
+    useEffect(() => console.log('changed'), [deleteWarningDialogLogic.openDialog]);
 
     const handleEdit = useCallback((roleId: number) => {
 
@@ -71,7 +71,7 @@ export const RoleAdminIndexPage = memo(() => {
 
         deleteWarningDialogLogic
             .openDialog({ params: { roleId } });
-    }, [deleteWarningDialogLogic]);
+    }, [deleteWarningDialogLogic.openDialog]);
 
     const columns = useMemo(() => {
         return [

@@ -50,7 +50,7 @@ export const useEpistoDialogLogic = <TParams = undefined,>(
 
         xlogic.setIsOpen(true);
     }, [
-        xlogic,
+        xlogic.setIsOpen,
         setButtons,
         setTitle,
         setDescription,
