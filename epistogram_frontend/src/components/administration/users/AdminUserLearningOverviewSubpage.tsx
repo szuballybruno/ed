@@ -4,16 +4,14 @@ import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
-import { useActiveCourses, useUserProgressData } from '../../../services/api/userProgressApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
-import { isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
+import { isCurrentAppRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -24,7 +22,6 @@ import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseSt
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
-import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
@@ -89,6 +86,12 @@ export const AdminUserStatisticsSubpage = (props: {
     const engagementPoints = userLearningOverviewData?.engagementPoints || 0;
     const performancePoints = Math.floor(userLearningOverviewData?.performancePercentage || 0);
     const reactionTimeScorePoints = userLearningOverviewData?.reactionTimeScorePoints || 0;
+
+    const watchingVideosPercentage = userLearningOverviewData?.userActivityDistributionData.watchingVideosPercentage || 0;
+    const completingExamsPercentage = userLearningOverviewData?.userActivityDistributionData.completingExamsPercentage || 0;
+    const answeringQuestionsPercentage = userLearningOverviewData?.userActivityDistributionData.answeringQuestionsPercentage || 0;
+    const noActivityPercentage = userLearningOverviewData?.userActivityDistributionData.noActivityPercentage || 0;
+
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(null);
@@ -342,7 +345,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             {/* total playback time */}
                             <StatisticsCard
                                 title={texts.statisticsCards.correctAnswerRatePercentage}
-                                value={`${userLearningOverviewData?.correctAnswerRatePercentage || 0}`}
+                                value={`${Math.floor(userLearningOverviewData?.correctAnswerRatePercentage || 0)}`}
                                 suffix={translatableTexts.misc.suffixes.percentage}
                                 iconPath={Environment.getAssetUrl('images/learningreport04.png')}
                                 isOpenByDefault={false} />
@@ -414,16 +417,29 @@ export const AdminUserStatisticsSubpage = (props: {
                                 gridRow: 'auto / span 2'
                             }}>
 
+                            {console.log(userLearningOverviewData?.userActivityDistributionData.watchingVideosPercentage)}
                             <EpistoPieChart
                                 title=""
                                 isSortValues
                                 segments={[
-                                    { value: 30, name: texts.activitiesPieChartTexts.watchingVideos },
-                                    { value: 17, name: texts.activitiesPieChartTexts.doingExamsOrTests },
-                                    { value: 10, name: texts.activitiesPieChartTexts.answeringQuestions },
-                                    { value: 20, name: texts.activitiesPieChartTexts.noActivity }
+                                    {
+                                        value: watchingVideosPercentage,
+                                        name: texts.activitiesPieChartTexts.watchingVideos
+                                    },
+                                    {
+                                        value: completingExamsPercentage,
+                                        name: texts.activitiesPieChartTexts.doingExamsOrTests
+                                    },
+                                    {
+                                        value: answeringQuestionsPercentage,
+                                        name: texts.activitiesPieChartTexts.answeringQuestions
+                                    },
+                                    {
+                                        value: noActivityPercentage,
+                                        name: texts.activitiesPieChartTexts.noActivity
+                                    }
                                 ]}
-                                options={defaultCharts.pie} />
+                                options={defaultCharts.pie3} />
 
                         </FlexFloat>
 

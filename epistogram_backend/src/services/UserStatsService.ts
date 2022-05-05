@@ -10,6 +10,7 @@ import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { Course } from '../models/entity/Course';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
+import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 
 export class UserStatsService {
 
@@ -40,6 +41,11 @@ export class UserStatsService {
      * @returns 
      */
     getUserLearningOverviewDataAsync = async (userId: number) => {
+
+        const userSpentTimeRatio = await this._ormService
+            .query(UserSpentTimeRatioView, { userId })
+            .where('userId', '=', 'userId')
+            .getOneOrNull();
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
@@ -73,6 +79,13 @@ export class UserStatsService {
 
             isAnyCoursesInProgress: inProgressCourses.any(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,
+
+            userActivityDistributionData: {
+                watchingVideosPercentage: userSpentTimeRatio?.totalVideoWatchElapsedTime,
+                completingExamsPercentage: userSpentTimeRatio?.totalExamSessionElapsedTime,
+                answeringQuestionsPercentage: userSpentTimeRatio?.totalQuestionElapsedTime,
+                noActivityPercentage: userSpentTimeRatio?.otherTotalSpentSeconds
+            },
 
             userId: userId,
             engagementPoints: stats.engagementPoints,

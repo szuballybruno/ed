@@ -108,6 +108,7 @@ import seed_job_titles from '../../sql/seed/seed_job_titles';
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
 import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
+import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 
 export const dbSchema = {
 
@@ -198,6 +199,7 @@ export const dbSchema = {
         'user_course_completion_current_view',
         'user_engagement_view',
         'user_performance_view',
+        'user_spent_time_ratio_view',
         'user_learning_overview_stats_view',
         'user_spent_time_view',
         'user_daily_progress_view',
@@ -211,7 +213,7 @@ export const dbSchema = {
         'course_item_question_edit_view',
         'module_view',
         'role_list_view',
-        'company_view'
+        'company_view',
     ],
 
     functionScripts: [
@@ -298,7 +300,8 @@ export const dbSchema = {
         UserTempomatAdjustmentValueView,
         UserCourseBridgeView,
         UserCourseCompletionOriginalEstimationView,
-        CourseItemQuestionEditView
+        CourseItemQuestionEditView,
+        UserSpentTimeRatioView
     ] as any[],
 
     entities: [

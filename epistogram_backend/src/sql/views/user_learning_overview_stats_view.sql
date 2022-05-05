@@ -118,8 +118,6 @@ FROM
 
 		-- videos to be repeated count
 
-
-		
 	
 
 		/* -- total correct given answer count

@@ -9,7 +9,7 @@ sessions AS
 	FROM public.user_session_view usv
 	WHERE usv.is_finalized = true
 ),
-session_groups AS 
+session_groups AS
 (
 	SELECT
 		s.user_id user_id,
@@ -18,8 +18,8 @@ session_groups AS
 		SUM(s.is_longer_than_fifteen_minutes::int) is_longer_than_fifteen_minutes_count,
 		SUM(s.is_shorter_than_five_minutes::int) is_shorter_than_five_minutes_count
 	FROM sessions s
-	GROUP BY 
-		s.week_num, 
+	GROUP BY
+		s.week_num,
 		s.user_id
 ),
 session_points AS
@@ -30,7 +30,7 @@ session_points AS
 		SUM(LEAST (sg.is_longer_than_fifteen_minutes_count * 5, 40)) is_longer_than_fifteen_minutes_points,
 		SUM(GREATEST (sg.is_shorter_than_five_minutes_count * -3, -15)) is_shorter_than_five_minutes_points
 	FROM session_groups sg
-	GROUP BY 
+	GROUP BY
 		sg.user_id
 ),
 total_session_length_points AS
@@ -55,17 +55,17 @@ total_session_length_points AS
             WHEN sq.length_minutes > 60
                 THEN 15
             -- if total length of sessions longer than 0 minutes then 10 points
-            WHEN sq.length_minutes > 0 
+            WHEN sq.length_minutes > 0
                 THEN 10
             ELSE 0
         END total_session_length_points
-	FROM 
+	FROM
 	(
 		SELECT
 			usv.user_id,
 			SUM(usv.length_seconds) / 60 length_minutes
 		FROM user_session_view usv
-		WHERE usv.start_date > CURRENT_DATE - 30 
+		WHERE usv.start_date > CURRENT_DATE - 30
 		GROUP BY usv.user_id
 	) sq
 ),
@@ -80,7 +80,7 @@ user_inactive_courses AS
 (
     SELECT
         user_course_sessions.user_id user_id,
-        COUNT(course_id) 
+        COUNT(course_id)
     FROM (
         SELECT DISTINCT ON (course_id)
             usv.user_id user_id,
@@ -126,7 +126,7 @@ user_inactive_courses AS
     GROUP BY user_course_sessions.user_id
 )
 
-SELECT 
+SELECT
 	u.id user_id,
 	(tslp.total_session_length_points
 	+ sp.session_count_points
