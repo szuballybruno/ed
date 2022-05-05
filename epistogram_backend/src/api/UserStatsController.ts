@@ -25,7 +25,7 @@ export class UserStatsController {
             .getQuery<any>();
 
         const userId = query
-            .getValue(x => x.userId);
+            .getValue(x => x.userId, 'int');
 
         return this._userStatsService
             .getUserLearningOverviewDataAsync(userId);

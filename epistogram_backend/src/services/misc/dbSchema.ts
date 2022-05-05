@@ -99,7 +99,6 @@ import { UserPerformanceView } from '../../models/views/UserPerformanceView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 import seed_companies from '../../sql/seed/seed_companies';
-import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
 import { permissionList } from '../../sql/seed/seed_permissions';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
@@ -108,6 +107,7 @@ import seed_question_types from '../../sql/seed/seed_question_types';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
+import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
 
 export const dbSchema = {
 
