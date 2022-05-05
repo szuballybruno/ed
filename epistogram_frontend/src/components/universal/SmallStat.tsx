@@ -1,10 +1,11 @@
 import { Flex } from '@chakra-ui/react';
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const SmallStat = (props: { iconUrl: string, text: string }) => {
+export const SmallStat = (props: { title?: string, iconUrl: string, text: string }) => {
 
     return <Flex
         align="center"
+        title={props.title}
         mr={5}>
 
         {/* icon */}
