@@ -10,7 +10,7 @@ export const useEpistoDialogLogic = <TParams = undefined,>(
 
     const [title, setTitle] = useState(dialogOptions?.title ?? '');
     const [description, setDescription] = useState(dialogOptions?.description ?? '');
-    const [params, setParams] = useState<TParams>(dialogOptions?.params!);
+    const [params, setParams] = useState<TParams>(dialogOptions?.params ?? {} as any);
     const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? 'bottom';
     const xlogic = useXDialogLogic(typeof dialogKey === 'function' ? dialogKey.name : dialogKey);
 

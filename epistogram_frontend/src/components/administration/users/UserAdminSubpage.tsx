@@ -10,8 +10,11 @@ import { AdminUserStatisticsSubpage } from './AdminUserLearningOverviewSubpage';
 import { AdminUserTeacherInfoSubpage } from './AdminUserTeacherInfoSubpage';
 import { AdminUserDataGridSubpage } from './dataGrids/AdminUsersDataGridSubpage';
 
-export const AdminUserControl = () => {
-    const usersRoute = applicationRoutes.administrationRoute.usersRoute;
+export const UserAdminSubpage = () => {
+
+    const userAdminRoute = applicationRoutes
+        .administrationRoute
+        .usersRoute;
 
     const [searchText, setSearchText] = useState<string | null>(null);
 
@@ -26,40 +29,44 @@ export const AdminUserControl = () => {
             setSearchText(value);
     };
 
-
     return <>
 
         <EpistoRoutes
             renderRoutes={[
                 {
-                    route: usersRoute,
+                    route: userAdminRoute.indexRoute,
                     element: <AdminUserDataGridSubpage
                         users={users} />
                 },
+                // {
+                //     route: userAdminRoute.,
+                //     element: <AdminUserDataGridSubpage
+                //         users={users} />
+                // },
                 {
-                    route: usersRoute.addRoute,
+                    route: userAdminRoute.addRoute,
                     element: <AdminAddUserSubpage
                         users={users}
                         refetchUsersFunction={refetchUsers} />
                 },
                 {
-                    route: usersRoute.editRoute,
+                    route: userAdminRoute.editRoute,
                     element: <AdminEditUserSubpage
                         users={users}
                         refetchUsersFunction={refetchUsers} />
                 },
                 {
-                    route: usersRoute.statsRoute,
+                    route: userAdminRoute.statsRoute,
                     element: <AdminUserStatisticsSubpage
                         users={users} />
                 },
                 {
-                    route: usersRoute.teacherInfoRoute,
+                    route: userAdminRoute.teacherInfoRoute,
                     element: <AdminUserTeacherInfoSubpage
                         users={users} />
                 },
                 {
-                    route: usersRoute.courseContentRoute,
+                    route: userAdminRoute.courseContentRoute,
                     element: <AdminUserCourseContentSubpage
                         users={users}
                         refetchUsersFunction={refetchUsers} />
