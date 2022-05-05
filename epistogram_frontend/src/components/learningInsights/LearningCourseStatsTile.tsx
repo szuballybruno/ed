@@ -2,46 +2,20 @@ import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
 import React from 'react';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
-import { useNavigation } from '../../services/core/navigatior';
+import { Environment } from '../../static/Environemnt';
 import { formatTimespan, getAssetUrl, roundNumber } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';
-
-export const SmallStat = (props: { iconUrl: string, text: string }) => {
-
-    return <Flex
-        align="center"
-        mr={5}>
-
-        {/* icon */}
-        <img
-            src={props.iconUrl}
-            alt={''}
-            style={{
-                width: 15,
-                height: 15,
-                margin: '0 2px 0 2px'
-            }} />
-
-        {/* spent time stat */}
-        <Text
-            as={'text'}
-            color={'grey'}>
-
-            {props.text}
-        </Text>
-    </Flex>;
-};
+import { SmallStat } from '../universal/SmallStat';
 
 export const LearningCourseStatsTile = (props: {
     course: CourseLearningDTO,
-    onClickDetails: () => void
+    actionButtons: EpistoButtonPropsType[]
 } & FlexProps) => {
 
-    const { course, children, ...css } = props;
+    const { course, children, actionButtons, ...css } = props;
     const {
         title,
-        teacherName,
         subCategoryName,
         thumbnailImageURL,
         isComplete,
@@ -52,29 +26,10 @@ export const LearningCourseStatsTile = (props: {
         totalSpentSeconds,
         completedCourseItemCount,
         totalCourseItemCount,
-        examSuccessRateAverage,
-        questionSuccessRate,
-        finalExamSuccessRate,
-        currentItemCode,
-        firstItemCode
     } = course;
-
-    const { navigateToPlayer } = useNavigation();
 
     const formattedSpentTime = formatTimespan(totalSpentSeconds);
     const progressPercentage = roundNumber(completedCourseItemCount / totalCourseItemCount * 100);
-
-    const handleStartCourse = () => {
-
-        if (isComplete) {
-
-            navigateToPlayer(firstItemCode);
-        }
-        else {
-
-            navigateToPlayer(currentItemCode);
-        }
-    };
 
     return <FlexFloat
         className="whall"
@@ -121,6 +76,7 @@ export const LearningCourseStatsTile = (props: {
                     width={130}
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
+
                     <img
                         src={getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
                         alt={''}
@@ -129,6 +85,7 @@ export const LearningCourseStatsTile = (props: {
                             height: 20
                         }}
                     />
+
                     <Text
                         textTransform={'uppercase'}
                         color="white">
@@ -141,7 +98,7 @@ export const LearningCourseStatsTile = (props: {
 
         {/* content */}
         <Flex p="10px"
-direction="column">
+            direction="column">
 
             {/* category  */}
             <Text
@@ -162,7 +119,7 @@ direction="column">
 
             {/* small stats */}
             <Flex mt={7}
-justify="space-evenly">
+                justify="space-evenly">
 
                 {/* spent time  */}
                 <SmallStat
@@ -196,6 +153,7 @@ justify="space-evenly">
                     value={progressPercentage} />
 
                 <Flex m="0 5px 0 20px">
+
                     {`${progressPercentage}%`}
                 </Flex>
 
@@ -205,22 +163,16 @@ justify="space-evenly">
         {/* buttons */}
         <Flex mt="10px">
 
-            {/* details */}
-            <EpistoButton
-                onClick={() => props.onClickDetails()}
-                style={{ flex: '1' }}>
+            {actionButtons.map((button, index) => {
+                return <EpistoButton
+                    key={index}
+                    style={{ flex: '1' }}
+                    {...button}>
 
-                Részletek
-            </EpistoButton>
+                    {button.children}
+                </EpistoButton>;
+            })}
 
-            {/* start course */}
-            <EpistoButton
-                variant="colored"
-                onClick={handleStartCourse}
-                style={{ flex: '1' }}>
-
-                {isComplete ? 'Újrakezdem' : 'Folytatom'}
-            </EpistoButton>
         </Flex>
     </FlexFloat>;
 };

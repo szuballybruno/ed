@@ -1,148 +1,34 @@
-import { Box, Flex, GridItem, Image, Text, Tooltip } from '@chakra-ui/react';
+import { Flex, Image, Tooltip } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { useEditUserData } from '../../../services/api/userApiService';
 import { useActiveCourses, useUserProgressData } from '../../../services/api/userProgressApiService';
-import { useUserStats } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
-import { getAssetUrl, isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
+import { Environment } from '../../../static/Environemnt';
+import { isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { FlexFloat } from '../../controls/FlexFloat';
 import { NoProgressChartYet } from '../../home/NoProgressChartYet';
-import { UserProgressChart } from '../../universal/charts/UserProgressChart';
-import { SmallStat } from '../../learningInsights/LearningCourseStatsTile';
+import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseStatsTile';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
 import { AdminUserList } from './AdminUserList';
-import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
-import { useIntParam } from '../../../static/locationHelpers';
-
-const DummyLearningCourseStatsModified = (props: {
-    title: string,
-    thumbnailImageUrl: string
-}) => <GridItem
-    className="roundBorders"
-    background="var(--transparentWhite70)">
-
-        <FlexFloat
-            className="whall"
-            direction="column"
-            borderRadius="10px"
-            position="relative"
-            overflow="hidden"
-            shadow={'0 0 10px 1px #CCC'}
-            background="var(--transparentWhite70)"
-            p="5"
-            justifyContent="space-between">
-
-            {/* cover image box */}
-            <Box
-                flex="1"
-                position="relative"
-                minHeight={150}
-                maxHeight={150}>
-
-                {/* cover image */}
-                <img
-                    className="whall"
-                    style={{
-                        objectFit: 'cover',
-                        borderRadius: 10,
-                        position: 'absolute'
-                    }}
-                    src={props.thumbnailImageUrl}
-                    alt="" />
-            </Box>
-
-            {/* content */}
-            <Flex p="10px"
-                direction="column">
-
-                {/* category  */}
-                <Text
-                    as="text"
-                    color="grey">
-
-                    Irodai alkalmazások
-                </Text>
-
-                {/* title */}
-                <Text
-                    as="h6"
-                    fontWeight={'bold'}
-                    fontSize="large">
-
-                    {props.title}
-                </Text>
-
-                {/* small stats */}
-                <Flex mt={7}
-                    justify="space-evenly">
-
-                    {/* spent time  */}
-                    <SmallStat
-                        iconUrl={getAssetUrl('images/time3D.png')}
-                        text={'2m'} />
-
-                    {/* videos  */}
-                    <SmallStat
-                        iconUrl={getAssetUrl('images/videos3D.png')}
-                        text={'18/1'} />
-
-                    {/* video questions */}
-                    <SmallStat
-                        iconUrl={getAssetUrl('images/rightanswerontile3D.png')}
-                        text={'2/0'} />
-                </Flex>
-
-                {/* course progress bar chart */}
-                <Flex
-                    direction={'row'}
-                    alignItems={'center'}
-                    mt={7}
-                    width="100%"
-                    height="10px">
-
-                    <LinearProgress
-                        variant="determinate"
-                        style={{
-                            width: '100%',
-                        }}
-                        value={70} />
-
-                    <Flex m="0 5px 0 20px">
-                        {`${70}%`}
-                    </Flex>
-
-                </Flex>
-            </Flex>
-
-            {/* buttons */}
-            <Flex mt="10px">
-
-
-                {/* start course */}
-                <EpistoButton
-                    variant="colored"
-                    style={{ flex: '1' }}>
-
-                    Részletek
-                </EpistoButton>
-            </Flex>
-        </FlexFloat>
-    </GridItem>;
 
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
@@ -196,16 +82,13 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(usersRoute.addRoute);
-    const navigateToUserCourses = () => navigate(usersRoute, { userId, courseId: 0 });
-    const location = useLocation();
-
-    const { activeCourses } = useActiveCourses();
-    const activeCoursesPaging = usePaging(activeCourses);
-    const activeCourseId = activeCoursesPaging?.currentItem?.courseId ?? null;
 
     const { userEditData } = useEditUserData(userId);
-    const { userStats } = useUserStats(userId);
-    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(1, true);
+    const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = useUserLearningOverviewData(userId);
+
+    const engagementPoints = userLearningOverviewData?.engagementPoints || 0;
+    const performancePoints = Math.floor(userLearningOverviewData?.performancePercentage || 0);
+    const reactionTimeScorePoints = userLearningOverviewData?.reactionTimeScorePoints || 0;
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(null);
@@ -215,9 +98,11 @@ export const AdminUserStatisticsSubpage = (props: {
         setEndDate(end);
     };
 
+    const texts = translatableTexts.administration.userLearningOverviewSubpage;
+
     const bulkEditButtons = [
         {
-            title: 'Hozzáadás',
+            title: translatableTexts.misc.add,
             icon: <Add
                 style={{
                     margin: '0 3px 0 0',
@@ -227,338 +112,356 @@ export const AdminUserStatisticsSubpage = (props: {
         }
     ] as ButtonType[];
 
-    return <AdminBreadcrumbsHeader
-        viewSwitchChecked={isCurrentAppRoute(usersRoute)}
-        viewSwitchFunction={() => navigate(usersRoute)}
-        subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
+    return <LoadingFrame
+        loadingState={userLearningOverviewDataStatus}
+        error={userLearningOverviewDataError}>
 
-        <AdminUserList
-            users={users}
-            navigationFunction={(userId) => navigate(usersRoute.statsRoute, { userId: userId })} />
+        <AdminBreadcrumbsHeader
+            viewSwitchChecked={isCurrentAppRoute(usersRoute)}
+            viewSwitchFunction={() => navigate(usersRoute)}
+            subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
-        {/* admin header */}
-        <AdminSubpageHeader
-            direction="column"
-            tabMenuItems={
-                [
-                    usersRoute.editRoute,
-                    usersRoute.statsRoute,
-                    usersRoute.courseContentRoute
-                ]
-                    .concat(
-                        userEditData?.isTeacher
-                            ? usersRoute.teacherInfoRoute
-                            : [])
-            }
-            headerButtons={bulkEditButtons}>
+            <AdminUserList
+                users={users}
+                navigationFunction={(userId) => navigate(usersRoute.statsRoute, { userId: userId })} />
 
-            {/* learning insights header */}
-            <EditSection
-                isFirst
-                title="Tanulási jelentés"
-                rightSideComponent={
+            {/* admin header */}
+            <AdminSubpageHeader
+                direction="column"
+                tabMenuItems={
+                    [
+                        usersRoute.editRoute,
+                        usersRoute.statsRoute,
+                        usersRoute.courseContentRoute
+                    ]
+                        .concat(
+                            userEditData?.isTeacher
+                                ? usersRoute.teacherInfoRoute
+                                : [])
+                }
+                headerButtons={bulkEditButtons}>
 
-                    <Flex
-                        justify="center"
-                        align="center"
-                        my="10px">
+                {/* learning insights header */}
+                <EditSection
+                    isFirst
+                    title={texts.sectionTitles.learningOverviewReport}
+                    rightSideComponent={
 
-                        <Image
-                            h="30px"
-                            w="30px"
-                            mr="5px"
-                            src={getAssetUrl('/images/tempomatdatechange.png')}
-                        />
-
-                        <EpistoFont fontSize={'fontLarge'}
-                            style={{
-                                minWidth: 150
-                            }}>
-
-                            Vizsgált időszak:
-                        </EpistoFont>
-
-
-                        <Tooltip title={'tiptool'}
-                            p="20px">
-                            <DatePicker
-                                dateFormat="yyyy-MM-dd"
-                                calendarStartDay={1}
-                                selected={startDate}
-                                onChange={onChange}
-                                startDate={startDate}
-                                endDate={endDate}
-                                selectsRange
-                            />
-                        </Tooltip>
-
-
-
-                        {/*  <EpistoFont
-                            fontSize={"fontLarge"}
-                            style={{
-                                marginLeft: "5px",
-                                fontWeight: 600
-                            }}>
-
-                            2022.03.14.
-                        </EpistoFont> */}
-                    </Flex>
-                }>
-
-                <Flex minH="400px">
-                    <Flex
-                        direction="column"
-                        justify="flex-start"
-                        flex="4"
-                        p="0 5px 0 0">
-
+                        /* set date range */
                         <Flex
-                            background="var(--transparentWhite70)"
-                            className="roundBorders mildShadow"
+                            justify="center"
                             align="center"
-                            p="10px"
-                            maxH="150px"
-                            flex="1"
-                            position="relative">
+                            my="10px">
 
                             <Image
-                                h={'120px'}
-                                w={'120px'}
-                                src={getAssetUrl('/images/happyfacechart.png')} />
+                                h="30px"
+                                w="30px"
+                                mr="5px"
+                                src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
+                            />
 
-                            <Flex direction="column"
-                                p="10px">
-                                <EpistoFont
-                                    style={{
-                                        fontWeight: 600
-                                    }}
-                                    fontSize={'fontLargePlus'}>
+                            <EpistoFont fontSize={'fontLarge'}
+                                style={{
+                                    minWidth: 150
+                                }}>
 
-                                    80/100 Pont
-                                </EpistoFont>
+                                {texts.dateRange}
+                            </EpistoFont>
 
-                                <EpistoFont
-                                    style={{
-                                        fontWeight: 600
-                                    }}
-                                    fontSize={'fontNormal14'}>
+                            {/* Date picker tooltip */}
+                            <Tooltip title={'tiptool'}
+                                p="20px">
 
-                                    Jól teljesített a hónapban
-                                </EpistoFont>
+                                <DatePicker
+                                    dateFormat="yyyy-MM-dd"
+                                    calendarStartDay={1}
+                                    selected={startDate}
+                                    onChange={onChange}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    selectsRange
+                                />
+                            </Tooltip>
+                        </Flex>
+                    }>
 
-                                <EpistoFont
-                                    fontSize={'fontNormal14'}>
+                    <Flex minH="400px">
 
-                                    A tanfolyamokon jól teljesített, és a kitűzött határidőket is többnyire tartani tudta.
-                                </EpistoFont>
+                        <Flex
+                            direction="column"
+                            justify="flex-start"
+                            flex="4"
+                            p="0 5px 0 0">
+
+                            <Flex
+                                background="var(--transparentWhite70)"
+                                className="roundBorders mildShadow"
+                                align="center"
+                                p="10px"
+                                maxH="150px"
+                                flex="1"
+                                position="relative">
+
+                                <Image
+                                    h={'120px'}
+                                    w={'120px'}
+                                    src={Environment.getAssetUrl('/images/happyfacechart.png')} />
+
+                                <Flex
+                                    direction="column"
+                                    p="10px">
+
+                                    <EpistoFont
+                                        style={{
+                                            fontWeight: 600
+                                        }}
+                                        fontSize={'fontLargePlus'}>
+
+                                        {`${Math.floor(userLearningOverviewData?.overallPerformancePercentage || 0)}/100 Pont`}
+                                    </EpistoFont>
+
+                                    <EpistoFont
+                                        style={{
+                                            fontWeight: 600
+                                        }}
+                                        fontSize={'fontNormal14'}>
+
+                                        {texts.userPerformanceTitles.performedWell}
+                                    </EpistoFont>
+
+                                    <EpistoFont
+                                        fontSize={'fontNormal14'}>
+
+                                        {texts.userPerformanceDescriptions.performedWell}
+                                    </EpistoFont>
+                                </Flex>
+                            </Flex>
+
+                            <Flex
+                                w="100%"
+                                mt="20px"
+                                direction="column">
+
+                                <UserStatisticsProgressWithLabel
+                                    title={texts.progressLabels.engagement}
+                                    value={engagementPoints} />
+
+                                <UserStatisticsProgressWithLabel
+                                    title={texts.progressLabels.performance}
+                                    value={performancePoints} />
+
+                                <UserStatisticsProgressWithLabel
+                                    title={texts.progressLabels.productivity}
+                                    value={0} />
+
+                                <UserStatisticsProgressWithLabel
+                                    title={texts.progressLabels.socialActivity}
+                                    value={0} />
+
+                                <UserStatisticsProgressWithLabel
+                                    title={texts.progressLabels.reactionTime}
+                                    value={reactionTimeScorePoints} />
                             </Flex>
                         </Flex>
-                        <Flex w="100%"
-                            mt="20px"
-                            direction="column">
+                        <Flex
+                            direction="column"
+                            flex="5"
+                            p="0 0 10px 5px">
 
-                            <UserStatisticsProgressWithLabel title="Elköteleződés"
-                                value={95} />
-                            <UserStatisticsProgressWithLabel title="Teljesítmény"
-                                value={67} />
-                            <UserStatisticsProgressWithLabel title="Produktivitás"
-                                value={81} />
-                            <UserStatisticsProgressWithLabel title="Elmélyülés"
-                                value={83} />
-                            <UserStatisticsProgressWithLabel title="Közösségi aktivitás"
-                                value={78} />
+                            <Flex h="150px">
+
+                                <StatisticsCard
+                                    iconPath={Environment.getAssetUrl('images/learningreport01.png')}
+                                    value={`${Math.floor((userLearningOverviewData?.totalTimeActiveOnPlatformSeconds || 0) / 60 / 60)}`}
+                                    suffix={translatableTexts.misc.suffixes.hour}
+                                    style={{
+                                        marginRight: 10
+                                    }}
+                                    title={texts.statisticsCards.activeTimeSpentOnPlatform} />
+
+                                <StatisticsCard
+                                    iconPath={Environment.getAssetUrl('images/learningreport02.png')}
+                                    value={`${userLearningOverviewData?.watchedVideos || 0}`}
+                                    suffix={translatableTexts.misc.suffixes.count}
+                                    title={texts.statisticsCards.watchedVideosInMonth} />
+                            </Flex>
+
+                            <Flex p="10px">
+
+                                {texts.statisticsCards.userEngagementDescription}
+                            </Flex>
                         </Flex>
                     </Flex>
-                    <Flex
-                        direction="column"
-                        flex="5"
-                        p="0 0 10px 5px">
-                        <Flex h="150px">
+                </EditSection>
 
-                            <StatisticsCard
-                                iconPath={getAssetUrl('images/learningreport01.png')}
-                                value={'13'}
-                                suffix={'óra'}
-                                style={{
-                                    marginRight: 10
-                                }}
-                                title={'Aktívan eltöltött idő a platformon'} />
-                            <StatisticsCard
-                                iconPath={getAssetUrl('images/learningreport02.png')}
-                                value={'38'}
-                                suffix={'db'}
-                                title={'megtekintett videók a hónapban'} />
-                        </Flex>
-                        <Flex p="10px">
-                            A hallgató elköteleződése 4 mérőszám összeségéből áll össze.
-                            Vizsgáljuk a belépésének gyakoriságát, az aktivitásának intenzitását, a platformelhagyást, valamint a lemorzsolódást is.
-                            Az elköteleződési szint magasan tartása kulcsfontosságú, hiszen a felhasználónak azt kell éreznie, hogy valóban értéket kap a tanulás során, és nem csak kötelező rosszként éli meg a képzési folyamatot.
-                            Csökkenő elköteleződés esetén kérdéseket teszünk fel neki, ezt pedig összehasonlítjuk a kurzuselhagyási és értékelési adatokkal, ezáltal pedig felderíthető, melyek azok a kritikus pontok a tananyagban, melyek javításra szorulnak.
-                        </Flex>
+                <EditSection
+                    title={texts.sectionTitles.coursesInMonth}>
 
+                    <EpistoGrid
+                        auto="fill"
+                        gap="15"
+                        minColumnWidth="250px"
+                        p="10px 0">
+
+                        {userLearningOverviewData?.inProgressCourses && userLearningOverviewData.inProgressCourses.map((course, index) => {
+                            return <LearningCourseStatsTile
+                                actionButtons={[{
+                                    children: translatableTexts.misc.details,
+                                    onClick: () => { return; }
+                                }]}
+                                course={course}
+                                key={index} />;
+                        })}
+                    </EpistoGrid>
+                </EditSection>
+
+                <EditSection
+                    title={texts.sectionTitles.averageProgressWithCourses}>
+
+                    <Flex p="10px 0">
+                        <div
+                            style={{
+                                width: '80%',
+                                marginRight: '10px',
+                                display: 'grid',
+                                boxSizing: 'border-box',
+                                gap: '10px',
+                                gridAutoFlow: 'row dense',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                                gridAutoRows: '160px'
+                            }}>
+
+                            {/* total completed video count */}
+                            <StatisticsCard
+                                title={texts.statisticsCards.answeredVideoAndPractiseQuizQuestions}
+                                value={`${userLearningOverviewData?.answeredVideoAndPractiseQuizQuestions || 0}`}
+                                suffix={translatableTexts.misc.suffixes.count}
+                                iconPath={Environment.getAssetUrl('images/learningreport03.png')}
+                                isOpenByDefault={false} />
+
+                            {/* total playback time */}
+                            <StatisticsCard
+                                title={texts.statisticsCards.correctAnswerRatePercentage}
+                                value={`${userLearningOverviewData?.correctAnswerRatePercentage || 0}`}
+                                suffix={translatableTexts.misc.suffixes.percentage}
+                                iconPath={Environment.getAssetUrl('images/learningreport04.png')}
+                                isOpenByDefault={false} />
+
+                            {/* total given answer count  */}
+                            <StatisticsCard
+                                title={texts.statisticsCards.reactionTime}
+                                value={(userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) > 1
+                                    ? texts.statisticsCards.belowAverage
+                                    : (userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) < -1
+                                        ? texts.statisticsCards.aboveAverage
+                                        : texts.statisticsCards.average}
+                                suffix={''}
+                                iconPath={Environment.getAssetUrl('images/learningreport05.png')}
+                                isOpenByDefault={false} />
+
+                            {/* correct answer rate  */}
+                            <StatisticsCard
+                                title={texts.statisticsCards.averageWatchedVideosPerDay}
+                                value={`${Math.floor(userLearningOverviewData?.averageWatchedVideosPerDay || 0)}`}
+                                suffix={translatableTexts.misc.suffixes.countPerDay}
+                                iconPath={Environment.getAssetUrl('images/learningreport06.png')}
+                                isOpenByDefault={false} />
+
+
+
+
+                        </div>
+                        {/* chart item  */}
+                        <FlexFloat
+                            background="var(--transparentWhite70)"
+                            direction="column"
+                            p="10px"
+                            minWidth={250}
+                            style={{
+                                gridColumn: 'auto / span 2',
+                                gridRow: 'auto / span 2'
+                            }}>
+
+                            <NoProgressChartYet />
+
+                        </FlexFloat>
                     </Flex>
-                </Flex>
-            </EditSection>
 
-            <EditSection title="Kurzusok a hónapban">
-                <EpistoGrid auto="fill"
-                    gap="15"
-                    minColumnWidth="250px"
-                    p="10px 0">
+                </EditSection>
 
-                    <DummyLearningCourseStatsModified
-                        title="Microsoft Excel Mesterkurzus"
-                        thumbnailImageUrl={getAssetUrl('courseCoverImages/4.png')} />
-                    <DummyLearningCourseStatsModified
-                        title="Microsoft PowerPoint Mesterkurzus"
-                        thumbnailImageUrl={getAssetUrl('courseCoverImages/courseCoverImage_22_1639469876995..jpg')} />
-                </EpistoGrid>
-            </EditSection>
-
-            <EditSection title="Átlagos haladás a tanfolyamokon">
-                <Flex p="10px 0">
+                <EditSection title={texts.sectionTitles.activities}>
                     <div
                         style={{
-                            width: '80%',
-                            marginRight: '10px',
+                            width: '100%',
+                            maxWidth: '100%',
                             display: 'grid',
                             boxSizing: 'border-box',
+                            padding: '10px 0',
                             gap: '10px',
                             gridAutoFlow: 'row dense',
                             gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
                             gridAutoRows: '160px'
                         }}>
 
+                        {/* chart item  */}
+                        <FlexFloat
+                            background="var(--transparentWhite70)"
+                            direction="column"
+                            p="10px"
+                            minWidth={250}
+                            style={{
+                                gridColumn: 'auto / span 2',
+                                gridRow: 'auto / span 2'
+                            }}>
+
+                            <EpistoPieChart
+                                title=""
+                                isSortValues
+                                segments={[
+                                    { value: 30, name: texts.activitiesPieChartTexts.watchingVideos },
+                                    { value: 17, name: texts.activitiesPieChartTexts.doingExamsOrTests },
+                                    { value: 10, name: texts.activitiesPieChartTexts.answeringQuestions },
+                                    { value: 20, name: texts.activitiesPieChartTexts.noActivity }
+                                ]}
+                                options={defaultCharts.pie} />
+
+                        </FlexFloat>
+
                         {/* total completed video count */}
                         <StatisticsCard
-                            title={'Megválaszolt tudást vizsgáló kérdések száma'}
-                            value={'39'}
-                            suffix={'db'}
-                            iconPath={getAssetUrl('images/learningreport03.png')}
+                            title={texts.statisticsCards.mostFrequentTimeRange}
+                            value={`${userLearningOverviewData?.mostFrequentTimeRange || translatableTexts.misc.unknown}`}
+                            suffix={''}
+                            iconPath={Environment.getAssetUrl('images/learningreport07.png')}
                             isOpenByDefault={false} />
 
                         {/* total playback time */}
                         <StatisticsCard
-                            title={'Helyes válaszok aránya'}
-                            value={'27'}
-                            suffix={'%'}
-                            iconPath={getAssetUrl('images/learningreport04.png')}
+                            title={texts.statisticsCards.totalDoneExams}
+                            value={`${userLearningOverviewData?.totalDoneExams || 0}`}
+                            suffix={translatableTexts.misc.suffixes.count}
+                            iconPath={Environment.getAssetUrl('images/learningreport08.png')}
                             isOpenByDefault={false} />
 
                         {/* total given answer count  */}
                         <StatisticsCard
-                            title={'Reakcióidő'}
-                            value={'Átlagos'}
-                            suffix={''}
-                            iconPath={getAssetUrl('images/learningreport05.png')}
+                            title={texts.statisticsCards.averageSessionLength}
+                            value={`${Math.floor((userLearningOverviewData?.averageSessionLengthSeconds || 0) / 60)}`}
+                            suffix={translatableTexts.misc.suffixes.minute}
+                            iconPath={Environment.getAssetUrl('images/learningreport09.png')}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
                         <StatisticsCard
-                            title={'Átlagos napi megtekintett videók'}
-                            value={'6.5'}
-                            suffix={'db/nap'}
-                            iconPath={getAssetUrl('images/learningreport06.png')}
+                            title={texts.statisticsCards.videosToBeRepeated}
+                            isComingSoon
+                            value={`${userLearningOverviewData?.videosToBeRepeatedCount || 0}`}
+                            suffix={translatableTexts.misc.suffixes.count}
+                            iconPath={Environment.getAssetUrl('images/learningreport10.png')}
                             isOpenByDefault={false} />
-
-
-
-
                     </div>
-                    {/* chart item  */}
-                    <FlexFloat
-                        background="var(--transparentWhite70)"
-                        //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-                        direction="column"
-                        p="10px"
-                        minWidth={250}
-                        style={{
-                            gridColumn: 'auto / span 2',
-                            gridRow: 'auto / span 2'
-                        }}>
-
-                        {userProgressData && userProgressData.days.length > 0
-                            ? <UserProgressChart userProgress={userProgressData} />
-                            : <NoProgressChartYet />}
-
-                    </FlexFloat>
-                </Flex>
-
-            </EditSection>
-
-            <EditSection title="Aktivitások">
-                <div
-                    style={{
-                        width: '100%',
-                        maxWidth: '100%',
-                        display: 'grid',
-                        boxSizing: 'border-box',
-                        padding: '10px 0',
-                        gap: '10px',
-                        gridAutoFlow: 'row dense',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                        gridAutoRows: '160px'
-                    }}>
-
-                    {/* chart item  */}
-                    <FlexFloat
-                        background="var(--transparentWhite70)"
-                        //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-                        direction="column"
-                        p="10px"
-                        minWidth={250}
-                        style={{
-                            gridColumn: 'auto / span 2',
-                            gridRow: 'auto / span 2'
-                        }}>
-
-                        <EpistoPieChart
-                            title=""
-                            isSortValues
-                            segments={[
-                                { value: 30, name: 'Videók megtekintése' },
-                                { value: 17, name: 'Vizsga / tesztkitöltés' },
-                                { value: 10, name: 'Kérdések megválaszolása' },
-                                { value: 20, name: 'Nincs tevékenység' }
-                            ]}
-                            options={defaultCharts.pie} />
-
-                    </FlexFloat>
-
-                    {/* total completed video count */}
-                    <StatisticsCard
-                        title={'Leggyakoribb aktív idősáv'}
-                        value={'17-19'}
-                        suffix={'óra között'}
-                        iconPath={getAssetUrl('images/learningreport07.png')}
-                        isOpenByDefault={false} />
-
-                    {/* total playback time */}
-                    <StatisticsCard
-                        title={'Teljesített vizsgák száma'}
-                        value={'8'}
-                        suffix={'db'}
-                        iconPath={getAssetUrl('images/learningreport08.png')}
-                        isOpenByDefault={false} />
-
-                    {/* total given answer count  */}
-                    <StatisticsCard
-                        title={'Egy belépés átlagos hossza'}
-                        value={'42'}
-                        suffix={'perc'}
-                        iconPath={getAssetUrl('images/learningreport09.png')}
-                        isOpenByDefault={false} />
-
-                    {/* correct answer rate  */}
-                    <StatisticsCard
-                        title={'Ismétlésre ajánlott videó'}
-                        value={'13'}
-                        suffix={'db'}
-                        iconPath={getAssetUrl('images/learningreport10.png')}
-                        isOpenByDefault={false} />
-                </div>
-            </EditSection>
-        </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader >;
+                </EditSection>
+            </AdminSubpageHeader>
+        </AdminBreadcrumbsHeader >
+    </LoadingFrame>;
 };

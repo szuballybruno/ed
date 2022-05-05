@@ -11,7 +11,9 @@ export const translatableTexts = {
         remove: 'Törlés',
         openAll: 'Összes kinyitása',
         closeAll: 'Összes becsukása',
+        details: 'Részletek',
         loading: 'Betöltés...',
+        unknown: 'Ismeretlen',
 
         firstName: 'Keresztnév',
         lastName: 'Vezetéknév',
@@ -23,6 +25,15 @@ export const translatableTexts = {
         epistoEntry: {
             shouldntBeEmpty: 'Ez a mező nem lehet üres!'
         },
+
+        suffixes: {
+            percentage: '%',
+            hour: 'óra',
+            minute: 'perc',
+            count: 'db',
+            countPerDay: 'db/nap'
+        },
+
 
         daysOfWeekFromMonday: [
             'Hétfő',
@@ -470,6 +481,50 @@ export const translatableTexts = {
     },
 
     administration: {
+        userLearningOverviewSubpage: {
+            sectionTitles: {
+                learningOverviewReport: 'Tanulási jelentés',
+                coursesInMonth: 'Kurzusok a hónapban',
+                averageProgressWithCourses: 'Átlagos haladás a tanfolyamokon',
+                activities: 'Aktivitások'
+            },
+            progressLabels: {
+                engagement: 'Elköteleződés',
+                performance: 'Teljesítmény',
+                productivity: 'Produktivitás',
+                socialActivity: 'Közösségi aktivitás',
+                reactionTime: 'Reakcióidő'
+            },
+            userPerformanceTitles: {
+                performedWell: 'Jól teljesített a hónapban'
+            },
+            userPerformanceDescriptions: {
+                performedWell: 'A tanfolyamokon jól teljesített, és a kitűzött határidőket is többnyire tartani tudta.'
+            },
+            activitiesPieChartTexts: {
+                watchingVideos: 'Videók megtekintése',
+                doingExamsOrTests: 'Vizsga / tesztkitöltés',
+                answeringQuestions: 'Kérdések megválaszolása',
+                noActivity: 'Nincs tevékenység'
+            },
+            statisticsCards: {
+                activeTimeSpentOnPlatform: 'Aktívan eltöltött idő a platformon',
+                watchedVideosInMonth: 'Megtekintett videó a hónapban',
+                userEngagementDescription: ' A hallgató elköteleződése 4 mérőszám összeségéből áll össze. Vizsgáljuk a belépésének gyakoriságát, az aktivitásának intenzitását, a platformelhagyást, valamint a lemorzsolódást is. Az elköteleződési szint magasan tartása kulcsfontosságú, hiszen a felhasználónak azt kell éreznie, hogy valóban értéket kap a tanulás során, és nem csak kötelező rosszként éli meg a képzési folyamatot. Csökkenő elköteleződés esetén kérdéseket teszünk fel neki, ezt pedig összehasonlítjuk a kurzuselhagyási és értékelési adatokkal, ezáltal pedig felderíthető, melyek azok a kritikus pontok a tananyagban, melyek javításra szorulnak.',
+                answeredVideoAndPractiseQuizQuestions: 'Megválaszolt tudást vizsgáló kérdés',
+                correctAnswerRatePercentage: 'Helyes válaszok aránya',
+                reactionTime: 'Reakcióidő',
+                belowAverage: 'Átlagon aluli',
+                aboveAverage: 'Átlagon felüli',
+                average: 'Átlagos',
+                averageWatchedVideosPerDay: 'Átlag videómegtekintés naponta',
+                mostFrequentTimeRange: 'A leggyakoribb aktív idősáv',
+                totalDoneExams: 'Teljesített vizsgák száma',
+                averageSessionLength: 'Egy belépés átlagos hossza',
+                videosToBeRepeated: 'Ismétlésre ajánlott videó'
+            },
+            dateRange: 'Vizsgált időszak'
+        },
         editUserControl: {
             selectUserAsTeacher: 'Megjelölöm a felhasználót tanárként',
             selectAsTeacher: 'Megjelölés tanárként'

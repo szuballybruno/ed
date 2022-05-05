@@ -9,6 +9,10 @@ import { LearningCourseStatsTile } from './LearningCourseStatsTile';
 import { EpistoFont } from '../controls/EpistoFont';
 import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
 import { useEpistoDialogLogic } from '../EpistoDialog';
+import { WifiProtectedSetupSharp } from '@mui/icons-material';
+import { useNavigation } from '../../services/core/navigatior';
+import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 
 export const LearningCourseStats = () => {
 
@@ -21,6 +25,23 @@ export const LearningCourseStats = () => {
     const dialogLogic = useEpistoDialogLogic('sasd', {
         defaultCloseButtonType: 'top'
     });
+
+
+    const { navigateToPlayer } = useNavigation();
+
+    const handleStartCourse = (course: CourseLearningDTO) => {
+
+        const { isComplete, firstItemCode, currentItemCode } = course;
+
+        if (isComplete) {
+
+            navigateToPlayer(firstItemCode);
+        }
+        else {
+
+            navigateToPlayer(currentItemCode);
+        }
+    };
 
     return <LoadingFrame
         loadingState={coursesDataStatus}
@@ -104,8 +125,15 @@ export const LearningCourseStats = () => {
 
                     {completedCourses
                         .map((course, index) => <LearningCourseStatsTile
+                            actionButtons={[{
+                                children: 'Részletek',
+                                onClick: () => dialogLogic.openDialog()
+                            }, {
+                                children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
+                                variant: 'colored',
+                                onClick: () => handleStartCourse(course)
+                            }]}
                             key={index}
-                            onClickDetails={() => { dialogLogic.openDialog(); }}
                             course={course} />)}
 
                 </EpistoGrid>
@@ -132,8 +160,15 @@ export const LearningCourseStats = () => {
                     {inProgressCourses
                         .map((course, index) => {
                             return <LearningCourseStatsTile
+                                actionButtons={[{
+                                    children: 'Részletek',
+                                    onClick: () => dialogLogic.openDialog()
+                                }, {
+                                    children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
+                                    variant: 'colored',
+                                    onClick: () => handleStartCourse(course)
+                                }]}
                                 key={index}
-                                onClickDetails={() => { dialogLogic.openDialog(); }}
                                 course={course} />;
                         })
                     }
