@@ -18,7 +18,7 @@ import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/Edi
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
 import { RoleAdminPage } from './roles/RoleAdminPage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-import { AdminUserControl } from './users/AdminUserControl';
+import { UserAdminSubpage } from './users/UserAdminSubpage';
 
 export const AdminPage = () => {
 
@@ -107,7 +107,7 @@ export const AdminPage = () => {
                     // user administration
                     {
                         route: administrationRoutes.usersRoute,
-                        element: <AdminUserControl />
+                        element: <UserAdminSubpage />
                     },
 
                     // course administartion

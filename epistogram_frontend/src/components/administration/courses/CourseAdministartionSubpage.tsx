@@ -8,12 +8,6 @@ import { DetailsEditSubpage } from './DetailsEditSubpage';
 
 export const CourseAdministartionSubpage = () => {
 
-    // useRedirectOnExactMatch({
-    //     route: applicationRoutes.administrationRoute.coursesRoute,
-    //     redirectRoute: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-    //     params: { courseId: -1 }
-    // });
-
     return (
         <EpistoRoutes
             renderRoutes={[

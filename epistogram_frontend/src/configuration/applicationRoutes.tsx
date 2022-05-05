@@ -45,6 +45,7 @@ export type ApplicationRoutesType = {
             detailsRoute: ApplicationRoute;
         };
         usersRoute: ApplicationRoute & {
+            indexRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
             editRoute: ApplicationRoute;
             statsRoute: ApplicationRoute;
@@ -276,28 +277,28 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 icon: <Person className="fontXXL"
                     color={'secondary'} />,
 
+                indexRoute: {
+                    title: translatableTexts.routeTitles.administrationUserIndex,
+                    route: new EpistoRoute('/administration/users', ''),
+                },
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationAddUser,
                     route: new EpistoRoute('/administration/users', 'add'),
                 },
-
                 editRoute: {
                     title: translatableTexts.routeTitles.administrationEditUser,
                     route: new EpistoRoute('/administration/users', ':userId/edit'),
                     icon: <Person className="fontXXL"
                         color={'secondary'} />,
                 },
-
                 statsRoute: {
                     title: translatableTexts.routeTitles.administrationUserStatistics,
                     route: new EpistoRoute('/administration/users', ':userId/statistics'),
                 },
-
                 teacherInfoRoute: {
                     title: translatableTexts.routeTitles.administrationEditTeacherInfo,
                     route: new EpistoRoute('/administration/users', ':userId/teacherinfo'),
                 },
-
                 courseContentRoute: {
                     title: translatableTexts.routeTitles.administrationUserCourses,
                     route: new EpistoRoute('/administration/users', ':userId/courses'),

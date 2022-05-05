@@ -67,8 +67,7 @@ export class UserService {
         const searchTextLower = searchText?.toLowerCase();
 
         const users = await this._ormService
-            .getRepository(AdminUserListView)
-            .createQueryBuilder('ualv')
+            .query(AdminUserListView)
             .getMany();
 
         const filteredUsers = searchTextLower

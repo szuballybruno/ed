@@ -212,6 +212,7 @@ export const translatableTexts = {
         administrationHomeDetails: 'Részletes statisztika',
 
         administrationUserAdmin: 'Felhasználók',
+        administrationUserIndex: 'Felhasználók',
         administrationAddUser: 'Felhasználó hozzáadása',
         administrationEditUser: 'Szerkesztés',
         administrationUserStatistics: 'Tanulási jelentés',

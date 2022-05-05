@@ -41,6 +41,44 @@ user_god_permissions AS (
 		u.id,
 		co.id,
 		pe.id
+),
+permissions AS 
+(
+	SELECT 
+		sq.user_id, 
+		sq.context_company_id, 
+		sq.permission_id,
+		SUM(sq.is_inherited::int) = COUNT(true) is_inherited
+	FROM 
+	(
+		-- permissions assigned to user 
+		SELECT uap.user_id, uap.context_company_id, uap.permission_id, false is_inherited
+		FROM user_assigned_permissions uap
+
+		UNION
+
+		-- permissions inherited from user's company
+		SELECT u.id user_id, cpv.context_company_id, cpv.permission_id, true is_inherited
+		FROM public.company_permission_view cpv
+		INNER JOIN public.user u
+		ON u.company_id = cpv.company_id
+
+		UNION
+
+		-- god permissions only the best of us can have
+		SELECT ugp.user_id, ugp.context_company_id, ugp.permission_id, false is_inherited
+		FROM user_god_permissions ugp
+	) sq
+	
+	GROUP BY 
+		sq.user_id, 
+		sq.context_company_id, 
+		sq.permission_id
+	
+	ORDER BY 
+		sq.user_id, 
+		sq.context_company_id,
+		sq.permission_id
 )
 SELECT
 	u.id user_id,
@@ -51,26 +89,8 @@ SELECT
 	pe.is_global permission_is_global
 FROM public.user u
 
-LEFT JOIN 
-(
-	-- permissions assigned to user 
-	SELECT uap.user_id, uap.permission_id, NULL company_id, uap.context_company_id
-	FROM user_assigned_permissions uap
-
-	UNION
-
-	-- permissions inherited from user's company
-	SELECT NULL user_id, cpv.permission_id, cpv.company_id, cpv.context_company_id
-	FROM public.company_permission_view cpv
-
-	UNION
-
-	-- god permissions only the best of us can have
-	SELECT ugp.user_id, ugp.permission_id, NULL company_id, ugp.context_company_id
-	FROM user_god_permissions ugp
-) permissions
-ON permissions.user_id = u.id 
-	OR permissions.company_id = u.company_id
+INNER JOIN permissions
+ON permissions.user_id = u.id
 
 INNER JOIN public.permission pe
 ON pe.id = permissions.permission_id
