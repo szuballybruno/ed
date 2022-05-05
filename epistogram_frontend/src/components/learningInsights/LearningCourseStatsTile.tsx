@@ -5,7 +5,6 @@ import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
-import { useNavigation } from '../../services/core/navigatior';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from '../universal/SmallStat';
 

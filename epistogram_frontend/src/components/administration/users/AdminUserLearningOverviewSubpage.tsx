@@ -4,14 +4,16 @@ import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
+import { useActiveCourses, useUserProgressData } from '../../../services/api/userProgressApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
-import { isCurrentAppRoute } from '../../../static/frontendHelpers';
+import { isCurrentAppRoute, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -22,11 +24,11 @@ import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseSt
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
 import { AdminUserList } from './AdminUserList';
-
 
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
@@ -261,7 +263,6 @@ export const AdminUserStatisticsSubpage = (props: {
                                     value={reactionTimeScorePoints} />
                             </Flex>
                         </Flex>
-
                         <Flex
                             direction="column"
                             flex="5"
@@ -290,100 +291,6 @@ export const AdminUserStatisticsSubpage = (props: {
                                 {texts.statisticsCards.userEngagementDescription}
                             </Flex>
                         </Flex>
-                    </Flex >
-                </EditSection >
-
-                <EditSection
-                    title={texts.sectionTitles.coursesInMonth}>
-
-                    <EpistoGrid
-                        auto="fill"
-                        gap="15"
-                        minColumnWidth="250px"
-                        p="10px 0">
-
-                        {userLearningOverviewData?.inProgressCourses && userLearningOverviewData.inProgressCourses.map((course, index) => {
-                            return <LearningCourseStatsTile
-                                actionButtons={[{
-                                    children: translatableTexts.misc.details,
-                                    onClick: () => { return; }
-                                }]}
-                                course={course}
-                                key={index} />;
-                        })}
-                    </EpistoGrid>
-                </EditSection>
-
-                <EditSection
-                    title={texts.sectionTitles.averageProgressWithCourses}>
-
-                    <Flex p="10px 0">
-                        <div
-                            style={{
-                                width: '80%',
-                                marginRight: '10px',
-                                display: 'grid',
-                                boxSizing: 'border-box',
-                                gap: '10px',
-                                gridAutoFlow: 'row dense',
-                                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                                gridAutoRows: '160px'
-                            }}>
-
-                            {/* total completed video count */}
-                            <StatisticsCard
-                                title={texts.statisticsCards.answeredVideoAndPractiseQuizQuestions}
-                                value={`${userLearningOverviewData?.answeredVideoAndPractiseQuizQuestions || 0}`}
-                                suffix={translatableTexts.misc.suffixes.count}
-                                iconPath={Environment.getAssetUrl('images/learningreport03.png')}
-                                isOpenByDefault={false} />
-
-                            {/* total playback time */}
-                            <StatisticsCard
-                                title={texts.statisticsCards.correctAnswerRatePercentage}
-                                value={`${userLearningOverviewData?.correctAnswerRatePercentage || 0}`}
-                                suffix={translatableTexts.misc.suffixes.percentage}
-                                iconPath={Environment.getAssetUrl('images/learningreport04.png')}
-                                isOpenByDefault={false} />
-
-                            {/* total given answer count  */}
-                            <StatisticsCard
-                                title={texts.statisticsCards.reactionTime}
-                                value={(userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) > 1
-                                    ? texts.statisticsCards.belowAverage
-                                    : (userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) < -1
-                                        ? texts.statisticsCards.aboveAverage
-                                        : texts.statisticsCards.average}
-                                suffix={''}
-                                iconPath={Environment.getAssetUrl('images/learningreport05.png')}
-                                isOpenByDefault={false} />
-
-                            {/* correct answer rate  */}
-                            <StatisticsCard
-                                title={texts.statisticsCards.averageWatchedVideosPerDay}
-                                value={`${Math.floor(userLearningOverviewData?.averageWatchedVideosPerDay || 0)}`}
-                                suffix={translatableTexts.misc.suffixes.countPerDay}
-                                iconPath={Environment.getAssetUrl('images/learningreport06.png')}
-                                isOpenByDefault={false} />
-
-
-
-
-                        </div>
-                        {/* chart item  */}
-                        <FlexFloat
-                            background="var(--transparentWhite70)"
-                            direction="column"
-                            p="10px"
-                            minWidth={250}
-                            style={{
-                                gridColumn: 'auto / span 2',
-                                gridRow: 'auto / span 2'
-                            }}>
-
-                            <NoProgressChartYet />
-
-                        </FlexFloat>
                     </Flex>
                 </EditSection>
 
@@ -522,75 +429,39 @@ export const AdminUserStatisticsSubpage = (props: {
 
                         {/* total completed video count */}
                         <StatisticsCard
-
                             title={texts.statisticsCards.mostFrequentTimeRange}
                             value={`${userLearningOverviewData?.mostFrequentTimeRange || translatableTexts.misc.unknown}`}
                             suffix={''}
-                            iconPath={Environment.getAssetUrl('images/learningreport07.png')} />
-
-                        <StatisticsCard
-                            title={'Megválaszolt tudást vizsgáló kérdés'}
-                            value={`${userLearningOverviewData?.answeredVideoAndPractiseQuizQuestions || 0}`}
-                            suffix={'db'}
-                            iconPath={Environment.getAssetUrl('images/learningreport03.png')}
-
-
+                            iconPath={Environment.getAssetUrl('images/learningreport07.png')}
                             isOpenByDefault={false} />
 
                         {/* total playback time */}
                         <StatisticsCard
-
                             title={texts.statisticsCards.totalDoneExams}
                             value={`${userLearningOverviewData?.totalDoneExams || 0}`}
                             suffix={translatableTexts.misc.suffixes.count}
-                            iconPath={Environment.getAssetUrl('images/learningreport08.png')} />
-
-                        <StatisticsCard
-                            title={'Helyes válaszok aránya'}
-                            value={`${userLearningOverviewData?.correctAnswerRatePercentage || 0}`}
-                            suffix={'%'}
-                            iconPath={Environment.getAssetUrl('images/learningreport04.png')}
+                            iconPath={Environment.getAssetUrl('images/learningreport08.png')}
                             isOpenByDefault={false} />
 
                         {/* total given answer count  */}
                         <StatisticsCard
-
                             title={texts.statisticsCards.averageSessionLength}
                             value={`${Math.floor((userLearningOverviewData?.averageSessionLengthSeconds || 0) / 60)}`}
                             suffix={translatableTexts.misc.suffixes.minute}
-                            iconPath={Environment.getAssetUrl('images/learningreport09.png')} />
-
-                        <StatisticsCard
-                            title={'Reakcióidő'}
-                            value={(userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) > 1
-                                ? 'Átlagon aluli'
-                                : (userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) < -1
-                                    ? 'Átlagon felüli'
-                                    : 'Átlagos'}
-                            suffix={''}
-                            iconPath={Environment.getAssetUrl('images/learningreport05.png')}
-
+                            iconPath={Environment.getAssetUrl('images/learningreport09.png')}
                             isOpenByDefault={false} />
 
                         {/* correct answer rate  */}
                         <StatisticsCard
-
                             title={texts.statisticsCards.videosToBeRepeated}
                             isComingSoon
                             value={`${userLearningOverviewData?.videosToBeRepeatedCount || 0}`}
                             suffix={translatableTexts.misc.suffixes.count}
-                            iconPath={Environment.getAssetUrl('images/learningreport10.png')} />
-
-                        <StatisticsCard
-                            title={'Átlag videómegtekintés naponta'}
-                            value={`${Math.floor(userLearningOverviewData?.averageWatchedVideosPerDay || 0)}`}
-                            suffix={'db/nap'}
-                            iconPath={Environment.getAssetUrl('images/learningreport06.png')}
-
+                            iconPath={Environment.getAssetUrl('images/learningreport10.png')}
                             isOpenByDefault={false} />
                     </div>
-                </EditSection >
-            </AdminSubpageHeader >
+                </EditSection>
+            </AdminSubpageHeader>
         </AdminBreadcrumbsHeader >
     </LoadingFrame>;
 };
