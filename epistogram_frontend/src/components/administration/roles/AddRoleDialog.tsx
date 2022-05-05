@@ -18,7 +18,8 @@ export const AddRoleDialog = (props: {
     return (
         <EditRoleControl
             logic={logic}
-            saveState={createRoleState}
+            saveState={[createRoleState]}
+            error={[]}
             onSave={createRoleCallback}
             saveButton={{
                 title: 'Create',

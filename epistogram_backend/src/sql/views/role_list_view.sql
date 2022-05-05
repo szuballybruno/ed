@@ -23,6 +23,7 @@ SELECT
 	u.id user_id,
 	u.email user_email,
 	co.id owner_company_id,
+	r.deletion_date IS NOT NULL is_deleted,
 	r.owner_user_id,
 	r.id role_id,
 	r.name role_name,

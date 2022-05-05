@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../../services/ORMConnectionService/ORMConnectionDecorators';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { User } from '../User';
@@ -10,6 +11,10 @@ export class Role {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @IsDeletedFlag()
+    @DeleteDateColumn()
+    deletionDate: Date;
 
     @Column()
     name: string;

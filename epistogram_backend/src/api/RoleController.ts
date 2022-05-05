@@ -1,5 +1,6 @@
 import { RoleService } from '../services/RoleService';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
+import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { ActionParams } from '../utilities/helpers';
 
 export class RoleController {
@@ -31,5 +32,21 @@ export class RoleController {
             .getRoleEditDataAsync(params.currentUserId, params
                 .getQuery()
                 .getValue(x => x.roleId, 'int'));
+    };
+
+    deleteRoleAction = (params: ActionParams) => {
+
+        return this._roleService
+            .deleteRoleAsync(params.currentUserId, params
+                .getBody()
+                .getValue(x => x.roleId, 'int'));
+    };
+
+    saveRoleAction = (params: ActionParams) => {
+
+        return this._roleService
+            .saveRoleAsync(params.currentUserId, params
+                .getBody<RoleEditDTO>(['name', 'ownerCompanyId', 'permissionIds'])
+                .data);
     };
 }

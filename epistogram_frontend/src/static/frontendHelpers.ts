@@ -255,7 +255,8 @@ export const useIsMatchingCurrentRoute = () => {
 
         return {
             isMatchingRoute: !isSegmentsMismatch,
-            isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch
+            isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch,
+            currentUrl
         };
     };
 };

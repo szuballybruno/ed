@@ -1,12 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import { createContext } from 'react';
-import { Navigate } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
+import { useNavigation } from '../../services/core/navigatior';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Environment } from '../../static/Environemnt';
-import { ChildPropsType, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { ChildPropsType, useCurrentUrlPathname, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 
 const getAuthorizationContextData = (permissions: PermissionCodeType[]) => {
 
@@ -61,8 +61,10 @@ const AuthFirewall = (props: ChildPropsType & {
 
     const { authState, children } = props;
     const isMatchingCurrent = useIsMatchingCurrentRoute();
+    const dest = useCurrentUrlPathname();
     const loginRoute = applicationRoutes.loginRoute;
-    const isLoginRoute = isMatchingCurrent(loginRoute).isMatchingRoute;
+    const { isMatchingRoute: isLoginRoute } = isMatchingCurrent(loginRoute);
+    const { navigate } = useNavigation();
 
     // if loading return blank page
     if (authState === 'loading') {
@@ -94,9 +96,9 @@ const AuthFirewall = (props: ChildPropsType & {
         if (Environment.loggingSettings.auth)
             console.log('Redirecting...');
 
-        return <Navigate
-            replace
-            to={loginRoute.route.getAbsolutePath()} />;
+        navigate(loginRoute, undefined, { dest });
+
+        return <div></div>;
     }
 
     if (Environment.loggingSettings.auth)

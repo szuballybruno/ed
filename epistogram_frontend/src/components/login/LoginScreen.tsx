@@ -6,6 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
 import { useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { useQueryVal, useStringParam } from '../../static/locationHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -18,11 +19,14 @@ import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 const LoginScreen = () => {
 
     // util
-    const { navigate } = useNavigation();
+    const { navigate, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
     const { hasPermission } = useContext(AuthorizationContext);
+    const dest = useQueryVal('dest');
+
+    console.log(dest);
 
     // state
     const [errorMessage, setErrorMessage] = useState('');
@@ -87,7 +91,14 @@ const LoginScreen = () => {
 
             if (hasPermission('ACCESS_APPLICATION')) {
 
-                navigate(applicationRoutes.homeRoute);
+                if (dest) {
+
+                    navigateToHref(dest);
+                }
+                else {
+
+                    navigate(applicationRoutes.homeRoute);
+                }
             }
             else {
 

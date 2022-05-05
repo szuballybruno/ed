@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom';
 
 export const useIntParam = (name: string) => {
 
@@ -16,6 +16,14 @@ export const useStringParam = (name: string) => {
         return null;
 
     return param;
+};
+
+export const useQueryVal = (name: string) => {
+
+    const [query] = useSearchParams();
+    const val = query.get(name);
+
+    return val;
 };
 
 export const useBoolParam = (name: string) => {

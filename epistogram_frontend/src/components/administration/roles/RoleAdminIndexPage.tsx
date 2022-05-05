@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useRolesList } from '../../../services/api/rolesApiService';
+import { useDeleteRole, useRolesList } from '../../../services/api/rolesApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { RoleAdminListDTO } from '../../../shared/dtos/role/RoleAdminListDTO';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -14,6 +14,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AddRoleDialog } from './AddRoleDialog';
 import { EditRoleDialog } from './EditRoleDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { usePostCallback } from '../../../static/frontendHelpers';
 
 type RowType = RoleAdminListDTO & {
     perms: string,
@@ -27,6 +28,7 @@ export const RoleAdminIndexPage = memo(() => {
 
     // http
     const { refetchRolesList, rolesList, rolesListError, rolesListState } = useRolesList();
+    const { deleteRoleAsync, deleteRoleState } = useDeleteRole();
 
     const roles = useMemo(() => rolesList
         .map((x, i): RowType => ({
@@ -37,8 +39,9 @@ export const RoleAdminIndexPage = memo(() => {
             edit: i
         })), [rolesList]);
 
-    // grid 
     const getKey = useCallback((x: RowType): string => `${x.roleName}-${x.ownerName}-${x.companyId}`, []);
+
+    const [handleDeleteRole] = usePostCallback(deleteRoleAsync, [refetchRolesList]);
 
     const addDialogLogic = useEpistoDialogLogic(AddRoleDialog, { defaultCloseButtonType: 'top' });
     const editDialogLogic = useEpistoDialogLogic<{ roleId: number }>(EditRoleDialog, { defaultCloseButtonType: 'top' });
@@ -49,7 +52,7 @@ export const RoleAdminIndexPage = memo(() => {
             buttons: [
                 {
                     title: 'Yup',
-                    action: (params) => console.log('del' + params.params.roleId)
+                    action: (params) => handleDeleteRole({ roleId: params.params.roleId })
                 },
                 {
                     title: 'Nope',
@@ -58,8 +61,6 @@ export const RoleAdminIndexPage = memo(() => {
             ]
         },
         []);
-
-    useEffect(() => console.log('changed'), [deleteWarningDialogLogic.openDialog]);
 
     const handleEdit = useCallback((roleId: number) => {
 
@@ -133,7 +134,7 @@ export const RoleAdminIndexPage = memo(() => {
 
     return (
         <LoadingFrame
-            loadingState={[rolesListState]}
+            loadingState={[rolesListState, deleteRoleState]}
             error={rolesListError}
             className='whall'
             direction='column'>

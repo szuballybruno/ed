@@ -28,6 +28,16 @@ export const useCreateRole = () => {
     };
 };
 
+export const useSaveRole = () => {
+
+    const qr = usePostDataUnsafe<RoleEditDTO>(apiRoutes.roles.saveRole);
+
+    return {
+        saveRoleAsync: qr.postDataAsync,
+        saveRoleState: qr.state
+    };
+};
+
 export const useRoleEditData = (roleId: number, enabled: boolean) => {
 
     const qr = useReactQuery2<RoleEditDTO>(apiRoutes.roles.getRoleEditData, { roleId }, enabled);
@@ -36,5 +46,15 @@ export const useRoleEditData = (roleId: number, enabled: boolean) => {
         roleEditData: qr.data,
         roleEditDataError: qr.error,
         roleEditDataState: qr.state
+    };
+};
+
+export const useDeleteRole = () => {
+
+    const qr = usePostDataUnsafe<{ roleId: number }>(apiRoutes.roles.deleteRole);
+
+    return {
+        deleteRoleAsync: qr.postDataAsync,
+        deleteRoleState: qr.state
     };
 };

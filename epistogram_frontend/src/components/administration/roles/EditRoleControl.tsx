@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { House, Save } from '@mui/icons-material';
+import { House } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ButtonType, LoadingStateType } from '../../../models/types';
@@ -15,8 +15,8 @@ import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 
 type RowType = PermissionListDTO & {
@@ -26,12 +26,13 @@ type RowType = PermissionListDTO & {
 export const EditRoleControl = (props: {
     onSave: (dto: RoleCreateDTO) => void,
     roleEditData?: RoleEditDTO,
-    saveState: LoadingStateType,
+    saveState: LoadingStateType[],
+    error: any[],
     logic: EpistoDialogLogicType | EpistoDialogLogicType<{ roleId: number }>,
     saveButton: ButtonType
 }) => {
 
-    const { logic, onSave, roleEditData, saveButton } = props;
+    const { logic, onSave, roleEditData, saveButton, error } = props;
 
     const { permissionsList, permissionsListError, permissionsListState, refetchPermissionsList } = usePermissionsList();
     const { companies, companiesState } = useAvailableCompaniesForRoleCreation();
@@ -114,7 +115,7 @@ export const EditRoleControl = (props: {
             <LoadingFrame
                 direction="column"
                 loadingState={[permissionsListState, companiesState]}
-                error={permissionsListError}
+                error={[permissionsListError, ...error]}
                 width='550px'
                 height='700px'
                 padding="30px">

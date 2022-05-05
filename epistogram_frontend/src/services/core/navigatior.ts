@@ -20,6 +20,11 @@ export const useNavigation = () => {
         domNavigate(replacedPath);
     }, [domNavigate, getUrl, Environment.verboseLogging]);
 
+    const navigateToHref = useCallback((href: string) => {
+
+        domNavigate(href);
+    }, [domNavigate]);
+
     const navigateWithParams = <T,>(route: ApplicationRoute<T>, params: T) => {
 
         navigate(route, params);
@@ -80,6 +85,7 @@ export const useNavigation = () => {
         navigateToCourseRating,
         navigateToCourseOverview,
         playCourse,
-        navigateToAdminCourseList
+        navigateToAdminCourseList,
+        navigateToHref
     };
 };

@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
@@ -15,6 +16,10 @@ export class RoleListView {
 
     @ViewColumn()
     companyName: string;
+
+    @ViewColumn()
+    @IsDeletedFlag('bool')
+    isDeleted: boolean;
 
     @ViewColumn()
     roleId: number;

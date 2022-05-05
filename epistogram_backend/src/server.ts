@@ -229,6 +229,8 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
     addEndpoint(apiRoutes.roles.createRole, roleController.createRoleAction, { isPost: true });
     addEndpoint(apiRoutes.roles.getRoleEditData, roleController.getRoleEditDataAction);
+    addEndpoint(apiRoutes.roles.deleteRole, roleController.deleteRoleAction, { isPost: true });
+    addEndpoint(apiRoutes.roles.saveRole, roleController.saveRoleAction, { isPost: true });
 
     // permissions 
     addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);

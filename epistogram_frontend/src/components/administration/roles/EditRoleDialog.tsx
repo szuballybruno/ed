@@ -1,7 +1,7 @@
 import { Save } from '@mui/icons-material';
 import { useEffect } from 'react';
-import { useRoleEditData } from '../../../services/api/rolesApiService';
-import {  } from '../../universal/epistoDialog/EpistoDialog';
+import { useRoleEditData, useSaveRole } from '../../../services/api/rolesApiService';
+import { } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { EditRoleControl } from './EditRoleControl';
 
@@ -14,7 +14,9 @@ export const EditRoleDialog = (props: {
 
     const roleId = logic.params?.roleId;
 
+    // http
     const { roleEditData, roleEditDataError, roleEditDataState } = useRoleEditData(roleId!, !!roleId);
+    const { saveRoleAsync, saveRoleState } = useSaveRole();
 
     useEffect(() => console.log('asd'), [roleEditData]);
 
@@ -24,8 +26,9 @@ export const EditRoleDialog = (props: {
         <EditRoleControl
             logic={logic}
             roleEditData={roleEditData ?? undefined}
-            saveState={roleEditDataState}
-            onSave={x => console.log(x)}
+            error={[roleEditDataError]}
+            saveState={[roleEditDataState, saveRoleState]}
+            onSave={x => saveRoleAsync({ roleId, ...x })}
             saveButton={{
                 title: 'Save',
                 icon: <Save></Save>

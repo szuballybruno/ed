@@ -1,4 +1,5 @@
 import { Role } from '../models/entity/authorization/Role';
+import { RoleAssignmentBridge } from '../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
 import { RoleListView } from '../models/views/RoleListView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
@@ -90,7 +91,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .save(RolePermissionBridge, permAssignemnts);
     }
 
-    async getRoleEditDataAsync(userId: number, roleId: number) {
+    async getRoleEditDataAsync(userId: number, roleId: number): Promise<RoleEditDTO> {
 
         type ResultType = {
             roleId: number,
@@ -139,28 +140,48 @@ export class RoleService extends QueryServiceBase<Role> {
         const viewAsRole = group.first;
 
         return {
+            roleId: viewAsRole.roleId,
             name: viewAsRole.roleName,
             ownerCompanyId: viewAsRole.ownerCompanyId,
             permissionIds: group
                 .items
                 .map(x => x.permissionId)
-        } as RoleEditDTO;
+        };
     }
 
-    async deleteRoleAsync(roleId: number) {
+    async deleteRoleAsync(userId: number, roleId: number) {
 
         await this._ormService
             .softDelete(Role, [roleId]);
     }
 
-    // async saveRoleAsync(dto: RoleEditDataDTO) {
+    async saveRoleAsync(userId: number, dto: RoleEditDTO) {
 
-    //     await this._ormService
-    //         .save(Role, [
-    //             {
-    //                 id: dto.id,
-    //                 name: dto.name
-    //             }
-    //         ]);
-    // }
+        // save role
+        await this._ormService
+            .save(Role, [
+                {
+                    id: dto.roleId,
+                    name: dto.name,
+                    ownerCompanyId: dto.ownerCompanyId
+                }
+            ]);
+
+        // save role permission bridges
+        await this._ormService
+            .getRepository(RolePermissionBridge)
+            .createQueryBuilder()
+            .delete()
+            .from(RolePermissionBridge)
+            .where('roleId = :roleId', { roleId: dto.roleId })
+            .execute();
+
+        await this._ormService
+            .save(RolePermissionBridge, dto
+                .permissionIds
+                .map(x => ({
+                    permissionId: x,
+                    roleId: dto.roleId
+                })));
+    }
 }
