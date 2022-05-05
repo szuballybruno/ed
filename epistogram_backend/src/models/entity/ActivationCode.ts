@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Organization } from './Organization';
+import { Company } from './Company';
 
 @Entity()
 export class ActivationCode {
@@ -13,11 +13,11 @@ export class ActivationCode {
     @Column()
     isUsed: boolean;
 
-    // organization
+    // company
     @Column()
-    organizationId: number;
+    companyId: number;
 
-    @JoinColumn({ name: 'organization_id' })
-    @ManyToOne(_ => Organization, x => x.activationCodes)
-    organization: Organization;
+    @JoinColumn({ name: 'company_id' })
+    @ManyToOne(_ => Company, x => x.activationCodes)
+    company: Company;
 }

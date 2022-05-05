@@ -2,12 +2,12 @@ import { Flex } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { useNavigation } from '../../services/core/navigatior';
-import { ArrayBuilder, getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { AuthorizationContext } from '../system/AuthFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
@@ -22,16 +22,15 @@ import { AdminUserControl } from './users/AdminUserControl';
 
 export const AdminPage = () => {
 
-    const user = useContext(CurrentUserContext)!;
+    const { hasPermission } = useContext(AuthorizationContext);
     const administrationRoutes = applicationRoutes.administrationRoute;
-    const { navigate } = useNavigation();
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.homeRoute.overviewRoute)
         .add(administrationRoutes.usersRoute.editRoute)
-        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
-        .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
-        .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
+        .addIf(hasPermission('canAccessCourseAdministration'), administrationRoutes.coursesRoute)
+        .addIf(hasPermission('canAccessShopAdministration'), administrationRoutes.shopRoute)
+        .addIf(hasPermission('canAccessShopAdministration'), administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.companiesRoute)
         .add(administrationRoutes.rolesRoute)
         .getArray();
@@ -60,7 +59,7 @@ export const AdminPage = () => {
                 mt="10px"
                 mb="20px">
                 <img
-                    src={getAssetUrl('/images/logo_min.svg')}
+                    src={Environment.getAssetUrl('/images/logo_min.svg')}
                     style={{
                         height: '50px',
                         objectFit: 'cover',

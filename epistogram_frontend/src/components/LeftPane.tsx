@@ -1,20 +1,19 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useNavigation } from '../services/core/navigatior';
 import { startUserGuideHelp } from '../services/core/userGuidingService';
-import { getAssetUrl } from '../static/frontendHelpers';
-import { CurrentUserContext } from './system/AuthenticationFrame';
-import { EpistoButton } from './controls/EpistoButton';
-import { FlexFloat } from './controls/FlexFloat';
-import { EpistoFont } from './controls/EpistoFont';
+import { Environment } from '../static/Environemnt';
 import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFont } from './controls/EpistoFont';
+import { FlexFloat } from './controls/FlexFloat';
+import { AuthorizationContext } from './system/AuthFrame';
 
 export const LeftPane = (props: FlexProps) => {
 
     const homeRoute = applicationRoutes.rootHomeRoute;
-    const user = useContext(CurrentUserContext);
+    const { hasPermission } = useContext(AuthorizationContext);
     const { navigate } = useNavigation();
 
     return (
@@ -40,9 +39,9 @@ export const LeftPane = (props: FlexProps) => {
                 alignItems={'center'}
                 justifyContent="flex-start"
                 mb="20px">
-                
+
                 <img
-                    src={getAssetUrl('/images/logo.svg')}
+                    src={Environment.getAssetUrl('/images/logo.svg')}
                     style={{
                         height: '50px',
                         objectFit: 'cover',
@@ -53,7 +52,7 @@ export const LeftPane = (props: FlexProps) => {
                     alt=""
                     onClick={() => {
 
-                        if (user?.userActivity?.canAccessApplication)
+                        if (hasPermission('canAccessApplication'))
                             navigate(homeRoute);
                     }} />
             </Flex>
@@ -69,7 +68,7 @@ export const LeftPane = (props: FlexProps) => {
                     objectFit: 'contain',
                     zIndex: -1,
                 }}
-                src={getAssetUrl('/images/bg-art-6.png')}
+                src={Environment.getAssetUrl('/images/bg-art-6.png')}
                 alt="" />
 
             {props.children}
@@ -85,7 +84,7 @@ export const LeftPane = (props: FlexProps) => {
                     objectFit: 'contain',
                     zIndex: -1,
                 }}
-                src={getAssetUrl('/images/bela3D.png')}
+                src={Environment.getAssetUrl('/images/bela3D.png')}
                 alt="" />
 
             {/* tina image */}

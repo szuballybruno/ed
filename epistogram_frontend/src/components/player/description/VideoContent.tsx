@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/layout';
 import { Flex } from '@chakra-ui/react';
 import { CalendarToday, Download, FileCopy } from '@mui/icons-material';
 import React from 'react';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { FlexListItem } from '../../universal/FlexListItem';
@@ -28,7 +28,7 @@ export const VideoContent = () => {
             p="5px"
             thumbnailContent={<Image
                 className="square70"
-                src={getAssetUrl('file_extension_icons/001-xlsx-1.svg')}
+                src={Environment.getAssetUrl('file_extension_icons/001-xlsx-1.svg')}
                 objectFit="cover"
                 m="10px" />}
             midContent={<Flex className="whall"

@@ -3,8 +3,9 @@ import { LinearProgress } from '@mui/material';
 import React from 'react';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { Environment } from '../../static/Environemnt';
-import { formatTimespan, getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
+import { useNavigation } from '../../services/core/navigatior';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from '../universal/SmallStat';
 
@@ -78,7 +79,7 @@ export const LearningCourseStatsTile = (props: {
                     borderRadius="7px 0 0 7px">
 
                     <img
-                        src={getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
+                        src={Environment.getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
                         alt={''}
                         style={{
                             width: 20,
@@ -123,17 +124,17 @@ export const LearningCourseStatsTile = (props: {
 
                 {/* spent time  */}
                 <SmallStat
-                    iconUrl={getAssetUrl('images/time3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/time3D.png')}
                     text={formattedSpentTime} />
 
                 {/* videos  */}
                 <SmallStat
-                    iconUrl={getAssetUrl('images/videos3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/videos3D.png')}
                     text={`${totalVideoCount}/${completedVideoCount}`} />
 
                 {/* video questions */}
                 <SmallStat
-                    iconUrl={getAssetUrl('images/rightanswerontile3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
             </Flex>
 

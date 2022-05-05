@@ -2,7 +2,7 @@ import { Divider, Flex, Image } from '@chakra-ui/react';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
@@ -125,7 +125,7 @@ flex="1" >
                             h="30px"
                             w="30px"
                             mr="5px"
-                            src={getAssetUrl('/images/tempomatdatechange.png')}
+                            src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
                         />
 
                         <EpistoFont>

@@ -10,7 +10,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoGrid } from '../../controls/EpistoGrid';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 
 export const PretestResultsSubpage = () => {
 
@@ -73,25 +73,25 @@ export const PretestResultsSubpage = () => {
                     gridAutoRows="150px" >
 
                     <StatisticsCard
-                        iconPath={getAssetUrl('/images/pretest1.png')}
+                        iconPath={Environment.getAssetUrl('/images/pretest1.png')}
                         value={correctAnswerRate.toString()}
                         suffix="%"
                         title="Elért eredmény a felmérő teszten" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl('/images/pretest2.png')}
+                        iconPath={Environment.getAssetUrl('/images/pretest2.png')}
                         value="6"
                         suffix="db"
                         title="Megtekintésre ajánlott napi videó" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl('/images/pretest3.png')}
+                        iconPath={Environment.getAssetUrl('/images/pretest3.png')}
                         value="Kezdő"
                         suffix=""
                         title="Üzemmód ajánlott" />
 
                     <StatisticsCard
-                        iconPath={getAssetUrl('/images/pretest4.png')}
+                        iconPath={Environment.getAssetUrl('/images/pretest4.png')}
                         value="Automata"
                         suffix=""
                         title="Megtekintésre ajánlott napi videó" />
@@ -99,14 +99,14 @@ export const PretestResultsSubpage = () => {
                 </EpistoGrid>
 
                 <Flex justify="center"
-align="center"
-my="10px">
+                    align="center"
+                    my="10px">
 
                     <Image
                         h="30px"
                         w="30px"
                         mr="5px"
-                        src={getAssetUrl('/images/tempomatdatechange.png')}
+                        src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
                     />
 
                     <EpistoFont fontSize={'fontLarge'}>

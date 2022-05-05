@@ -22,6 +22,10 @@ declare global {
     interface Date {
         addDays(days: number): Date;
     }
+
+    interface String {
+        trimChar(char: string): string;
+    }
 }
 
 export type Grouping<TItem, TKey> = {
@@ -29,6 +33,11 @@ export type Grouping<TItem, TKey> = {
     items: TItem[],
     first: TItem
 }
+
+String.prototype.trimChar = function (char: string) {
+
+    return this.replace(new RegExp(`^${char}+|${char}+$`, 'g'), '');
+};
 
 // eslint-disable-next-line no-extend-native
 Date.prototype.addDays = function (days: number) {

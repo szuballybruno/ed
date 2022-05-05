@@ -1,11 +1,10 @@
 import { JobTitleDTO } from './JobTitleDTO';
-import { UserActivityDTO } from './UserActivityDTO';
 
 export class UserDTO {
     id: number;
     firstName: string;
     lastName: string;
-    organizationId: number;
+    companyId: number;
     isTrusted: boolean;
     email: string;
     phoneNumber: string;
@@ -13,5 +12,4 @@ export class UserDTO {
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
     jobTitle: JobTitleDTO | null;
-    userActivity: UserActivityDTO;
 }

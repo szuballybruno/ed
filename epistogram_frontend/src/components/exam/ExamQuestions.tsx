@@ -1,11 +1,12 @@
 import { Grid } from '@chakra-ui/layout';
 import { Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
 import { useSaveExamAnswer } from '../../services/api/examApiService';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { getAssetUrl, usePaging } from '../../static/frontendHelpers';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
+import { Environment } from '../../static/Environemnt';
+import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -91,7 +92,7 @@ export const ExamQuestions = (props: {
 
                 <img
                     alt=""
-                    src={getAssetUrl('course_page_icons/curriculum_test.svg')}
+                    src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
                     className="square35" />
 
                 <EpistoFont style={{ marginLeft: '10px' }}>

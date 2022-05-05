@@ -1,4 +1,4 @@
-import { TaskCodeType } from '../../models/Types';
+import { TaskCodeType } from '../../models/DatabaseTypes';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
@@ -145,13 +145,19 @@ export class SQLFunctionsService {
 
     saveUserSessionActivity = (
         userId: number,
-        param_activity_type: SessionActivityType) => {
+        param_activity_type: SessionActivityType,
+        itemId?: number) => {
+
+        const videoId = param_activity_type === 'video' ? itemId : null;
+        const examId = param_activity_type === 'exam' ? itemId : null;
 
         return this.execSQLFunctionAsync<number>(
             'save_user_session_activity',
             [
                 userId,
-                param_activity_type
+                param_activity_type,
+                videoId,
+                examId
             ]
         );
     };

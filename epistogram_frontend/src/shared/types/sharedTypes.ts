@@ -1,5 +1,3 @@
-// asd
-
 export type InvitationTokenPayload = { userEmail: string };
 
 export type ErrorCodeType =
@@ -29,6 +27,19 @@ export type CourseItemStateType = 'completed' | 'locked' | 'current' | 'availabl
 export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'exam';
 
 export type CourseModeType = 'beginner' | 'advanced';
+
+
+
+export type PermissionCodeType =
+	| 'canChangeCourseMode'
+	| 'canSetInvitedUserCompany'
+	| 'canAccessCourseAdministration'
+	| 'canAccessAdministration'
+	| 'canAccessApplication'
+	| 'canAccessShopAdministration'
+	| 'COMPANY_ROLE_MANAGER';
+
+
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

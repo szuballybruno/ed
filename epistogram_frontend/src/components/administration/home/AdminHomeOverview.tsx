@@ -4,7 +4,8 @@ import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useActiveCourses } from '../../../services/api/userProgressApiService';
-import { getAssetUrl, usePaging } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
+import {  usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -80,7 +81,7 @@ export const AdminHomeOverview = () => {
                         additionalFunction={() => { throw new Error('Not implemented!'); }}
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard1.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard1.png')}
                         title="Átlagon felül teljesítenek"
                         value="19"
                         suffix="-en" />
@@ -89,7 +90,7 @@ export const AdminHomeOverview = () => {
                         additionalFunction={() => { throw new Error('Not implemented!'); }}
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard2.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard2.png')}
                         title="Átlagosan teljesítenek"
                         value="89"
                         suffix="-en" />
@@ -98,7 +99,7 @@ export const AdminHomeOverview = () => {
                         additionalFunction={() => { throw new Error('Not implemented!'); }}
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard3.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard3.png')}
                         title="Áttekintés javasolt"
                         value="9"
                         suffix="esetben" />
@@ -323,7 +324,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard4.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard4.png')}
                         title="Felhasználó jelenleg"
                         value="43"
                         suffix="aktív" />
@@ -331,7 +332,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard5.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard5.png')}
                         title="Végezte el a kurzust"
                         value="32"
                         suffix="tanuló" />
@@ -339,7 +340,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard6.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard6.png')}
                         title="Hagyta félbe a tanfolyamot"
                         value="13"
                         suffix="tanuló" />
@@ -347,7 +348,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard7.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard7.png')}
                         title="Átlagos teljesítmény"
                         value="79"
                         suffix="%" />
@@ -355,7 +356,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard8.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard8.png')}
                         title="Nehéznek megjelölve"
                         value="19"
                         suffix="videó" />
@@ -363,7 +364,7 @@ export const AdminHomeOverview = () => {
                     <StatisticsCard
                         minWidth="180px"
                         p="10px 0"
-                        iconPath={getAssetUrl('/images/teacherdashboard9.png')}
+                        iconPath={Environment.getAssetUrl('/images/teacherdashboard9.png')}
                         title="Vár válaszokra a tanártól"
                         value="8"
                         suffix="kérdés" />

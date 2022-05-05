@@ -3,7 +3,7 @@ import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
 import { MutationActionType } from '../../../shared/dtos/mutations/MutationActionType';
 import { getKeys } from '../../../shared/logic/sharedLogic';
-import { loggingSettings } from '../../../static/Environemnt';
+import { Environment } from '../../../static/Environemnt';
 
 export type OnMutaionHandlerActionType<
     TMutatee,
@@ -257,7 +257,7 @@ export const useXListMutator = <
 
             if (existingMutation.fieldMutators.length === 1) {
 
-                if (loggingSettings.mutations)
+                if (Environment.loggingSettings.mutations)
                     logEvent(`Removing mutation: ${key}`);
 
                 setMutationsWithCallback(newMutations
@@ -270,7 +270,7 @@ export const useXListMutator = <
                         .fieldMutators
                         .filter(x => x.field !== field);
 
-                if (loggingSettings.mutations)
+                if (Environment.loggingSettings.mutations)
                     logEvent(`Removing field mutation: ${key} - ${field}`);
 
                 setMutationsWithCallback(newMutations);
@@ -299,7 +299,7 @@ export const useXListMutator = <
         // if created new mutation, add it to the mutations 
         if (mutation.fieldMutators.length === 0) {
 
-            if (loggingSettings.mutations)
+            if (Environment.loggingSettings.mutations)
                 logEvent(`Adding new mutation: ${key} - ${field} - ${newValue}`);
 
             newMutations.push(mutation);
@@ -311,7 +311,7 @@ export const useXListMutator = <
 
         if (propertyMutator) {
 
-            if (loggingSettings.mutations)
+            if (Environment.loggingSettings.mutations)
                 logEvent(`Updating mutation '${key}' property mutator '${field}' value: ${propertyMutator.value} -> ${newValue}`);
 
             propertyMutator
@@ -319,7 +319,7 @@ export const useXListMutator = <
         }
         else {
 
-            if (loggingSettings.mutations)
+            if (Environment.loggingSettings.mutations)
                 logEvent(`Mutation '${key}' adding new property mutator '${field}' value: ${newValue}`);
 
             mutation
@@ -352,7 +352,7 @@ export const useXListMutator = <
                 if (mut.key !== key)
                     return;
 
-                if (loggingSettings)
+                if (Environment.loggingSettings)
                     logEvent(`Removing previous mutation '${mut.action}' of item '${key}', since it's being deleted.`);
             });
 
@@ -370,7 +370,7 @@ export const useXListMutator = <
         // add delete mutation 
         if (!isDeletedItemNewlyAdded) {
 
-            if (loggingSettings.mutations)
+            if (Environment.loggingSettings.mutations)
                 logEvent(`Adding new 'delete' mutation Key: ${key}!`);
 
             const mut: Mutation<TMutatee, TKeyField> = {

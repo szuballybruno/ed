@@ -1,13 +1,13 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
-import { getKeys, validatePassowrd } from '../shared/logic/sharedLogic';
+import { useShowErrorDialog } from '../services/core/notifications';
+import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
-import { assetCDNStorageUrl, verboseLogging } from './Environemnt';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
 
@@ -203,44 +203,46 @@ export const valueCompareTest = (val: any, name: string) => {
     window[prevValName] = val;
 };
 
+export const useValueCompareTest = (value: any, label: string) => {
+
+    useEffect(() => {
+
+        console.log(`*** ${label} CHANGED!`);
+    }, [value]);
+};
+
 export const useIsMatchingCurrentRoute = () => {
 
-    const urlPathname = useCurrentUrlPathname();
-    const params = useParams();
+    const currentUrl = useCurrentUrlPathname();
 
-    const replacePath = useCallback((path: string, params: any) => {
+    return (appRoute: ApplicationRoute) => {
 
-        let replPath = '' + path;
-
-        getKeys(params)
-            .forEach(key => {
-
-                const tag = ':' + (key as string);
-
-                replPath = replPath
-                    .replaceAll(tag, params[key]);
-            });
-
-        return replPath;
-    }, []);
-
-    const isMatchingCurrentRoute = useCallback((route: ApplicationRoute) => {
-
-        if (!route)
+        if (!appRoute)
             throw new Error('Route is null or undefined!');
 
-        const path = route.route.getAbsolutePath();
-        const replacedPath = replacePath(path, params);
-        const isMatchingRoute = urlPathname.startsWith(replacedPath);
-        const isMatchingRouteExactly = urlPathname === replacedPath;
+        const compareRoute = appRoute.route.getAbsolutePath();
+        const currentUrlSegments = currentUrl.split('/');
+        const compareRouteSegments = compareRoute.split('/');
+        const segmentsLengthMatch = currentUrlSegments.length === compareRouteSegments.length;
 
-        if (verboseLogging)
-            console.log(`Loc: ${urlPathname} ReplacedPath: ${replacedPath} Match: ${isMatchingRoute}`);
+        const isSegmentsMismatch = compareRouteSegments
+            .some((routeSegment, index) => {
 
-        return { isMatchingRoute, isMatchingRouteExactly };
-    }, [replacePath, urlPathname, params]);
+                // url param
+                if (routeSegment.startsWith(':'))
+                    return false;
 
-    return isMatchingCurrentRoute;
+                if (routeSegment === currentUrlSegments[index])
+                    return false;
+
+                return true;
+            });
+
+        return {
+            isMatchingRoute: !isSegmentsMismatch,
+            isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch
+        };
+    };
 };
 
 export const useRedirectOnExactMatch = (opts: {
@@ -467,6 +469,8 @@ export const usePasswordEntryState = () => {
     };
 };
 
+export type ChildPropsType = { children: ReactNode };
+
 export const useReactQuery = <T>(
     queryKey: any[],
     queryFunc: () => Promise<T>,
@@ -500,14 +504,20 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
 
     const queryValues = queryParams ? Object.values(queryParams) : [];
 
+    const getFunction = useCallback(() => {
+
+        return httpGetAsync(url, queryParams);
+    }, [url, queryParams]);
+
     const queryResult = useQuery(
         [url, ...queryValues],
-        () => httpGetAsync(url, queryParams), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        keepPreviousData: true,
-        enabled: isEnabled === false ? false : true
-    });
+        getFunction,
+        {
+            retry: false,
+            refetchOnWindowFocus: false,
+            keepPreviousData: true,
+            enabled: isEnabled === false ? false : true
+        });
 
     const state = (queryResult.isIdle
         ? 'idle'
@@ -517,10 +527,10 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
                 ? 'error'
                 : 'success') as LoadingStateType;
 
-    const refetch = async () => {
+    const refetch = useCallback(async () => {
 
         await queryResult.refetch();
-    };
+    }, [queryResult.refetch]);
 
     const dataAsT = queryResult.data as T;
 
@@ -533,8 +543,6 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
 
     return result;
 };
-
-export const getAssetUrl = (path: string, assetUrlPath?: string) => (assetUrlPath ? assetUrlPath : assetCDNStorageUrl) + ('/' + path).replace('//', '/');
 
 export const hasValue = (obj: any) => {
 
@@ -550,7 +558,31 @@ export const hasValue = (obj: any) => {
     return true;
 };
 
-export class ArrayBuilder<T> {
+export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects: (() => void | Promise<void>)[]) => {
+
+    const showError = useShowErrorDialog();
+    const execSafeAsync = useCallback(async (data?: T) => {
+
+        try {
+
+            await fn(data);
+
+            for (let index = 0; index < afterEffects.length; index++) {
+
+                const element = afterEffects[index];
+                await element();
+            }
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }, [fn, ...afterEffects, showError]);
+
+    return [execSafeAsync];
+};
+
+export class ArrayBuilder<T = any> {
 
     private _array: T[];
 

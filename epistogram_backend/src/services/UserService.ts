@@ -7,7 +7,7 @@ import { RoleIdEnum } from '../shared/types/sharedTypes';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { RegistrationType } from '../models/Types';
+import { RegistrationType } from '../models/DatabaseTypes';
 import { AdminUserListView } from '../models/views/UserAdminListView';
 import { getFullName, toFullName, ErrorCode } from '../utilities/helpers';
 import { HashService } from './HashService';
@@ -15,6 +15,12 @@ import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { UserEngagementView } from '../models/views/UserEngagementView';
+import moment from 'moment';
+import { Grouping } from '../shared/logic/jsExtensions';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
+import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
+import { UserStatsView } from '../models/views/UserStatsView';
 
 export class UserService {
 
@@ -45,7 +51,7 @@ export class UserService {
         const user = await this._ormService
             .getRepository(User)
             .createQueryBuilder('u')
-            .leftJoinAndSelect('u.organization', 'o')
+            .leftJoinAndSelect('u.company', 'o')
             .leftJoinAndSelect('u.role', 'r')
             .leftJoinAndSelect('u.jobTitle', 'jt')
             .leftJoinAndSelect('u.teacherInfo', 'ti')
@@ -119,7 +125,7 @@ export class UserService {
                 firstName: dto.firstName,
                 email: dto.email,
                 isTeacher: dto.isTeacher,
-                organizationId: dto.organization?.id,
+                companyId: dto.company?.id,
                 roleId: dto.role?.id,
                 jobTitleId: dto.jobTitle?.id
             });
@@ -186,11 +192,12 @@ export class UserService {
         firstName: string,
         lastName: string,
         registrationType: RegistrationType,
-        organizationId?: number,
+        companyId?: number,
         phoneNumber?: string,
         roleId?: number,
         jobTitleId?: number,
-        invitationToken?: string
+        invitationToken?: string,
+        isGod?: boolean
     }) => {
 
         const regType = opts.registrationType;
@@ -207,17 +214,17 @@ export class UserService {
         // set default user fileds
         const user = {
             email: opts.email,
-            roleId: opts.roleId ?? RoleIdEnum.user,
             firstName: opts.firstName,
             lastName: opts.lastName,
             jobTitleId: opts.jobTitleId,
             phoneNumber: opts.phoneNumber,
-            organizationId: opts.organizationId,
+            companyId: opts.companyId,
             password: hashedPassword,
             isInvitationAccepted: false,
             isTrusted: regType === 'Invitation',
             registrationType: regType,
-            invitationToken: opts.invitationToken
+            invitationToken: opts.invitationToken,
+            isGod: !!opts.isGod
         } as User;
 
         // insert user
@@ -279,7 +286,6 @@ export class UserService {
             .createQueryBuilder('user')
             .where('user.id = :userId', { userId: userId })
             .leftJoinAndSelect('user.avatarFile', 'a')
-            .leftJoinAndSelect('user.userActivity', 'ua')
             .leftJoinAndSelect('user.jobTitle', 'jt')
             .getOneOrFail();
 
@@ -356,7 +362,6 @@ export class UserService {
         const user = await this._ormService
             .getRepository(User)
             .createQueryBuilder('user')
-            .leftJoinAndSelect('user.userActivity', 'ua')
             .where('user.email = :email', { email: email })
             .getOne();
 
@@ -435,6 +440,7 @@ export class UserService {
             });
     };
 
+
     /**
      * Get a list of the users marked as teacher.
      * 
@@ -446,7 +452,7 @@ export class UserService {
         //     .getRepository(User)
         //     .find({
         //         where: {
-                    
+
         //         },
         //         relations: {
         //             teacherInfo: {

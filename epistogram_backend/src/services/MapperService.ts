@@ -1,4 +1,4 @@
-import { ClassType } from '../models/Types';
+import { ClassType } from '../models/DatabaseTypes';
 
 export class MapperService {
 

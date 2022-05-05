@@ -251,10 +251,6 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         const { answerSessionId, answerIds, elapsedSeconds, questionId } = dto;
 
-        // save user activity
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'exam');
-
         // inspect questions
         const questions = await this._ormService
             .getRepository(Question)
@@ -268,6 +264,10 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         const isLast = questions[questions.length - 1].id === questionId;
         const examId = questions.first().examId!;
+
+        // save user activity
+        await this._userSessionActivityService
+            .saveUserSessionActivityAsync(userId, 'exam', examId);
 
         // save answer 
         const result = this._quesitonAnswerService

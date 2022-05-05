@@ -1,8 +1,7 @@
 import { sign, verify } from 'jsonwebtoken';
 import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
 import { User } from '../models/entity/User';
-import { InvitationTokenPayload, RoleIdEnum } from '../shared/types/sharedTypes';
-import { UserActivityFlatView } from '../models/views/UserActivityFlatView';
+import { InvitationTokenPayload } from '../shared/types/sharedTypes';
 import { ErrorCode } from '../utilities/helpers';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
@@ -56,13 +55,11 @@ export class TokenService {
             `${this._config.security.tokenLifespans.invitationTokenLifespanInS}s`);
     };
 
-    createAccessToken = (user: User, userActivity: UserActivityFlatView) => {
+    createAccessToken = (user: User) => {
 
         return this.getJWTToken<AccessTokenPayload>(
             {
-                userId: user.id,
-                userRole: RoleIdEnum.toRoleType(user.roleId),
-                userActivity
+                userId: user.id
             },
             this._config.security.secrets.accessTokenSecret,
             `${this._config.security.tokenLifespans.accessTokenLifespanInS}s`);

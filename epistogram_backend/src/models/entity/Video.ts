@@ -6,6 +6,7 @@ import { Course } from './Course';
 import { CourseModule } from './CourseModule';
 import { Question } from './Question';
 import { StorageFile } from './StorageFile';
+import { UserSessionActivity } from './UserSessionActivity';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
@@ -63,6 +64,11 @@ export class Video {
     @ManyToOne(type => Course, course => course.videos)
     @JoinColumn({ name: 'course_id' })
     course: Course;
+
+    // user session activity
+    @OneToMany(_ => UserSessionActivity, as => as.video)
+    @JoinColumn()
+    userSessionActivities: UserSessionActivity[];
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.video)

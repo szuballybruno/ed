@@ -7,3 +7,4 @@ export declare type ClassType<T> = {
 export type RegistrationType = 'ActivationCode' | 'PublicRegistrationToken' | 'Invitation';
 
 export type TaskCodeType = 'user_progress_evaluation';
+

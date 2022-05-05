@@ -34,10 +34,10 @@ export class AdminUserListView {
     roleId: number;
 
     @ViewColumn()
-    organizationId: number;
+    companyId: number;
 
     @ViewColumn()
-    organizationName: string;
+    companyName: string;
 
     @ViewColumn()
     jobTitleId: number;

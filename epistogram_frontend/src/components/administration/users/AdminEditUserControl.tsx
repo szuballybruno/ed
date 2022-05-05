@@ -4,10 +4,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { useJobTitles, useOrganizations } from '../../../services/api/miscApiService';
+import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
-import { OrganizationDTO } from '../../../shared/dtos/OrganizationDTO';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserDTO } from '../../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
@@ -20,11 +20,12 @@ import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryN
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { AuthorizationContext, CurrentUserContext } from '../../system/AuthFrame';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
+import { useCompanies } from '../../../services/api/companiesApiService';
 
 export const roles = [
     {
@@ -54,25 +55,24 @@ export const AdminEditUserControl = (props: {
 
     const editedUserId = useIntParam('userId')!;
 
+    const { hasPermission } = useContext(AuthorizationContext);
+
     // editable fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
-    const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
+    const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
 
     const showError = useShowErrorDialog();
-    const location = useLocation();
 
-    const user = useContext(CurrentUserContext) as UserDTO;
-    const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
-
+    const canSetInvitedUserCompany = hasPermission('canSetInvitedUserCompany');
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
-    const { organizations } = useOrganizations();
+    const { companies } = useCompanies();
     const { jobTitles } = useJobTitles();
 
     useEffect(() => {
@@ -85,7 +85,7 @@ export const AdminEditUserControl = (props: {
         setEmail(editDTO.email);
         setSelectedRole(editDTO.role);
         setSelectedJobTitle(editDTO.jobTitle);
-        setSelectedOrganization(editDTO.organization);
+        setSelectedCompany(editDTO.company);
         setIsTeacher(editDTO.isTeacher);
     }, [editDTO]);
 
@@ -130,7 +130,7 @@ export const AdminEditUserControl = (props: {
             lastName,
             email,
             jobTitle: selectedJobTitle,
-            organization: selectedOrganization,
+            company: selectedCompany,
             role: selectedRole,
             isTeacher
         } as UserEditDTO;
@@ -187,8 +187,8 @@ export const AdminEditUserControl = (props: {
                 {/* company section */}
                 <EditSection title="Cég és beosztás">
 
-                    {/* organization */}
-                    {canSetInvitedUserOrganization && <Flex
+                    {/* company */}
+                    {canSetInvitedUserCompany && <Flex
                         direction="column"
                         align="stretch"
                         mt="5px"
@@ -206,15 +206,15 @@ export const AdminEditUserControl = (props: {
                         </EpistoFont>
 
                         <EpistoSelect
-                            items={organizations}
-                            selectedValue={selectedOrganization}
-                            onSelected={setSelectedOrganization}
+                            items={companies}
+                            selectedValue={selectedCompany}
+                            onSelected={setSelectedCompany}
                             getDisplayValue={x => '' + x?.name}
-                            getCompareKey={organization => '' + organization?.id} />
+                            getCompareKey={company => '' + company?.id} />
                     </Flex>}
 
                     {/* job title */}
-                    {canSetInvitedUserOrganization && <Flex
+                    {canSetInvitedUserCompany && <Flex
                         direction="column"
                         align="stretch"
                         mt="5px"

@@ -7,10 +7,10 @@ import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
 import { Exam } from '../../models/entity/Exam';
 import { JobTitle } from '../../models/entity/JobTitle';
-import { Organization } from '../../models/entity/Organization';
+import { Company } from '../../models/entity/Company';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { Question } from '../../models/entity/Question';
-import { Role } from '../../models/entity/Role';
+import { Role } from '../../models/entity/authorization/Role';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
@@ -41,7 +41,6 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserActivityFlatView } from '../../models/views/UserActivityFlatView';
 import { AdminUserListView } from '../../models/views/UserAdminListView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserStatsView } from '../../models/views/UserStatsView';
@@ -80,7 +79,7 @@ import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
 import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
-import { OrganizationDTO } from '../../shared/dtos/OrganizationDTO';
+import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
@@ -101,7 +100,6 @@ import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
 import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
-import { UserActivityDTO } from '../../shared/dtos/UserActivityDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
@@ -113,6 +111,9 @@ import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
+import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
+import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
+import { RoleListView } from '../../models/views/RoleListView';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -414,13 +415,13 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     ? toJobTitleDTO(user.jobTitle)
                     : null,
 
-                organization: user.organization
-                    ? toOrganizationDTO(user.organization)
+                company: user.company
+                    ? mapperService.map(Company, CompanyDTO, user.company)
                     : null,
 
-                role: user.role
-                    ? toRoleDTO(user.role)
-                    : null
+                // role: user.role
+                //     ? toRoleDTO(user.role)
+                //     : null
             } as UserEditDTO;
         });
 
@@ -429,7 +430,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 id: user.id,
-                organizationId: user.organizationId,
+                companyId: user.companyId,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
@@ -444,13 +445,15 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
                 avatarUrl: user.avatarFile
                     ? getAssetUrl(user.avatarFile.filePath)
-                    : null,
-
-                userActivity: user.userActivity
-                    ? toUserActivityDTO(user.userActivity)
                     : null
             } as UserDTO;
         });
+
+    mapperService
+        .addMap(Company, CompanyEditDataDTO, x => ({
+            id: x.id,
+            name: x.name
+        }));
 
     mapperService
         .addMap(CourseView, CourseStatDTO, view => {
@@ -478,8 +481,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             isTrusted: v.isTrusted,
             jobTitleId: v.jobTitleId,
             jobTitleName: v.jobTitleName,
-            organizationId: v.organizationId,
-            organizationName: v.organizationName,
+            companyId: v.companyId,
+            companyName: v.companyName,
             canAccessApplication: v.canAccessApplication,
             latestActivityDate: v.latestActivityDate,
             totalSpentTimeSeconds: v.totalSpentSeconds,
@@ -874,6 +877,21 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             coverFilePath: getAssetUrl(view.coverFilePath),
             title: view.title
         }));
+
+    mapperService
+        .addMap(Company, CompanyDTO, x => ({
+            id: x.id,
+            name: x.name
+        }));
+
+    mapperService
+        .addMap(RoleListView, RoleAdminListDTO, x => ({
+            roleName: x.roleName,
+            ownerName: x.ownerName,
+            ownerType: x.isCompanyOwned ? 'company' : 'user',
+            companyId: x.companyId,
+            companyName: x.companyName
+        } as RoleAdminListDTO));
 };
 
 const separationChar = '|';
@@ -926,15 +944,6 @@ export const toJobTitleDTO = (jobTitle: JobTitle) => {
     } as JobTitleDTO;
 };
 
-export const toUserActivityDTO = (userRightsView: UserActivityFlatView) => {
-
-    const { user, userId, ...activityFlags } = userRightsView;
-
-    return {
-        ...activityFlags
-    } as UserActivityDTO;
-};
-
 export const toTaskDTO = (task: Task) => {
 
     return {
@@ -982,14 +991,6 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
         isCorrect: view.isAnswerCorrect,
         isGiven: view.isGivenAnswer
     } as ResultAnswerDTO;
-};
-
-export const toOrganizationDTO = (org: Organization) => {
-
-    return {
-        id: org.id,
-        name: org.name
-    } as OrganizationDTO;
 };
 
 export const toQuestionDTO = (q: Question) => {

@@ -1,5 +1,5 @@
 
-import { Organization } from '../models/entity/Organization';
+import { Company } from '../models/entity/Company';
 import { User } from '../models/entity/User';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
@@ -8,9 +8,9 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseService } from './CourseService';
 import { MapperService } from './MapperService';
-import { toOrganizationDTO } from './misc/mappings';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 
 export class MiscService {
 
@@ -30,16 +30,6 @@ export class MiscService {
         this._mapperService = mapperService;
         this._userCourseBridgeService = userCourseBridgeService;
     }
-
-    getOrganizationsAsync = async (userId: number) => {
-
-        const orgs = await this._ormService
-            .getRepository(Organization)
-            .find();
-
-        return orgs
-            .map(org => toOrganizationDTO(org));
-    };
 
     saveUserDataAsync = async (userId: number, dto: UserDTO) => {
 

@@ -6,6 +6,8 @@ type ContentPoolItemType = {
     key: string
 }
 
+const debug = false;
+
 export const XDialogHost = (props: {
     children: ReactNode
 }) => {
@@ -24,7 +26,8 @@ export const XDialogHost = (props: {
 
     const mountContent = (key: string) => {
 
-        console.log(`Mounting dialog content '${key}'`);
+        if (debug)
+            console.log(`Mounting dialog content '${key}'`);
 
         if (contentPoolRef.current.filter(x => x.key === key).length > 0) {
 
@@ -41,7 +44,8 @@ export const XDialogHost = (props: {
 
     const unmountContent = (key: string) => {
 
-        console.log(`Unmounting dialog content '${key}'`);
+        if (debug)
+            console.log(`Unmounting dialog content '${key}'`);
 
         if (contentPoolRef.current.filter(x => x.key === key).length === 0) {
 

@@ -11,7 +11,7 @@ export class UserActivityFlatView {
     userId: boolean;
 
     @ViewColumn()
-    canSetInvitedUserOrganization: boolean;
+    canSetInvitedUserCompany: boolean;
 
     @ViewColumn()
     canAccessCourseAdministration: boolean;

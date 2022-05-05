@@ -1,7 +1,23 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
-import { loggingSettings } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { typedMemo } from '../../static/frontendHelpers';
+
+const removeOverlay = () => {
+
+    const key = 'MUI X: Missing license key';
+    const xpath = `//div[text()='${key}']`;
+    const matchingElement = document
+        .evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+        .singleNodeValue;
+
+    if (!matchingElement)
+        return;
+
+    (matchingElement as any).remove();
+    // console.log();
+    // matchingElement.parentElement
+};
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
@@ -45,6 +61,8 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 }) => {
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
+
+    removeOverlay();
 
     const columnsProcessed = columns
         .map(column => {
@@ -127,7 +145,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                 });
     }, []);
 
-    if (loggingSettings.render)
+    if (Environment.loggingSettings.render)
         console.log('rendering grid');
 
     return (

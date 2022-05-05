@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { trimChar, trimEndChar } from '../shared/logic/sharedLogic';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -15,7 +16,9 @@ export class EpistoRoute {
 
     constructor(root: string, relativePath: string, matchMore?: '*') {
 
-        this._absolutePath = this.removeDuplicateBreak(root + '/' + relativePath);
+        this._absolutePath = trimEndChar(this
+            .removeDuplicateBreak(root + '/' + relativePath), '/');
+
         this._relativePath = relativePath;
         this._matchMore = !!matchMore;
     }
@@ -36,11 +39,12 @@ export class EpistoRoute {
     }
 }
 
-export type ApplicationRoute = {
+export type ApplicationRoute<T = any> = {
     title: string;
     route: EpistoRoute;
     icon?: JSX.Element;
     navAction?: () => void;
+    paramsType?: T;
 }
 
 export type DialogOptions<TParams> = {

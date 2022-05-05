@@ -1,4 +1,4 @@
-import { ClassType } from '../../models/Types';
+import { ClassType } from '../../models/DatabaseTypes';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';

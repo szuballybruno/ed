@@ -4,7 +4,8 @@ import { GridColDef, GridRowsProp } from '@mui/x-data-grid-pro';
 import { useParams } from 'react-router-dom';
 import { useAdminCourseList } from '../../../../services/api/courseApiService';
 import { useNavigation } from '../../../../services/core/navigatior';
-import { getAssetUrl, getRandomInteger } from '../../../../static/frontendHelpers';
+import { Environment } from '../../../../static/Environemnt';
+import {  getRandomInteger } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -117,7 +118,7 @@ export const AdminUserCoursesDataGridControl = (props: {
                     <Image
                         h="30px"
                         w="30px"
-                        src={getAssetUrl(`images/${randomNumber < 10
+                        src={Environment.getAssetUrl(`images/${randomNumber < 10
                             ? 'autopilot'
                             : randomNumber < 20 && randomNumber >= 10
                                 ? 'balancedmode'

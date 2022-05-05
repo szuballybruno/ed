@@ -2,11 +2,13 @@ import { Course } from '../models/entity/Course';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserStatsView } from '../models/views/UserStatsView';
-import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
+import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
+import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 
 export class UserStatsService {
 

@@ -1,7 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
-import { RegistrationType } from '../Types';
-import { UserActivityFlatView } from '../views/UserActivityFlatView';
+import { RegistrationType } from '../DatabaseTypes';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
@@ -11,9 +10,9 @@ import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { DiscountCode } from './DiscountCode';
 import { Event } from './Event';
 import { JobTitle } from './JobTitle';
-import { Organization } from './Organization';
+import { Company } from './Company';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
-import { Role } from './Role';
+import { Role } from './authorization/Role';
 import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
@@ -23,6 +22,9 @@ import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
+import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
+import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
+import { getJoinColumnInverseSide } from '../../utilities/helpers';
 
 @Entity()
 export class User {
@@ -32,6 +34,9 @@ export class User {
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
+
+    @Column({ default: false })
+    isGod: boolean;
 
     @Column()
     isInvitationAccepted: boolean;
@@ -79,19 +84,6 @@ export class User {
     @Column({ nullable: true, type: 'text' })
     invitationToken: string | null;
 
-    // user activity 
-    @OneToOne(_ => UserActivityFlatView, x => x.user)
-    @JoinColumn({ name: 'id' })
-    userActivity: UserActivityFlatView;
-
-    // user role
-    @Column()
-    roleId: number;
-
-    @ManyToOne(_ => Role, x => x.users)
-    @JoinColumn({ name: 'role_id' })
-    role: Role;
-
     // Avatar file
     @Column({ nullable: true })
     avatarFileId: number;
@@ -100,13 +92,13 @@ export class User {
     @JoinColumn({ name: 'avatar_file_id' })
     avatarFile: StorageFile | null;
 
-    // Organization 
+    // company 
     @Column({ nullable: true, type: 'number' })
-    organizationId: number | null;
+    companyId: number | null;
 
-    @ManyToOne(() => Organization, organization => organization.users)
-    @JoinColumn({ name: 'organization_id' })
-    organization: Organization;
+    @ManyToOne(() => Company, x => x.users)
+    @JoinColumn({ name: 'company_id' })
+    company: Company;
 
     // job title 
     @Column({ nullable: true, type: 'number' })
@@ -199,4 +191,19 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => UserExamProgressBridge, x => x.user)
     examProgressBridges: UserExamProgressBridge[];
+
+    // role assingments
+    @JoinColumn()
+    @OneToMany(_ => RoleAssignmentBridge, x => x.user)
+    roleAssignmentBridges: RoleAssignmentBridge[];
+
+    // companyOwnerBridges
+    @JoinColumn()
+    @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
+    companyOwnerBridges: CompanyOwnerBridge[];
+
+    // ownedRoles
+    @JoinColumn()
+    @OneToMany(_ => Role, getJoinColumnInverseSide<User>()(x => x.ownerUser))
+    ownedRoles: Role[];
 }

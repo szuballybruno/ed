@@ -6,14 +6,14 @@ import { LearningInsightsOverview } from '../LearningInsightsOverview';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { CurrentUserContext } from '../system/AuthFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { LearningCourseStats } from './LearningCourseStats';
 import { LearningStatistics } from './LearningStatistics';
 
 const LearningInsightsPage = () => {
 
-    const user = useContext(CurrentUserContext)!;
+    const { id } = useContext(CurrentUserContext);
 
     useRedirectOnExactMatch({
         route: applicationRoutes.learningRoute,
@@ -42,7 +42,7 @@ const LearningInsightsPage = () => {
                     },
                     {
                         route: applicationRoutes.learningRoute.myStatisticsRoute,
-                        element: <LearningStatistics userId={user.id} />
+                        element: <LearningStatistics userId={id} />
                     },
                     {
                         route: applicationRoutes.learningRoute.myCoursesRoute,

@@ -6,7 +6,7 @@ import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { loggingSettings } from '../../../../static/Environemnt';
+import { Environment } from '../../../../static/Environemnt';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
@@ -58,8 +58,6 @@ export const AdminCourseContentSubpage = () => {
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
 
     const preprocessItems = useCallback((items: ItemType[]) => {
-
-        console.log('Preprocessing items...');
 
         const preproItems = items
             .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, isRowModified))
@@ -271,7 +269,7 @@ export const AdminCourseContentSubpage = () => {
     // EFFECTS
     //
 
-    if (loggingSettings.render)
+    if (Environment.loggingSettings.render)
         console.log('Rendering AdminCourseContentSubpage');
 
     const handleEdit = useCallback((key: any, field: any, value: any) => {

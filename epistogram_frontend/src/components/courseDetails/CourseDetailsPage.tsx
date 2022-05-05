@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useCourseDetails } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { formatTimespan, getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
@@ -61,40 +62,40 @@ const CourseDetailsPage = () => {
     const sidebarInfos = courseDetails
         ? [
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_course_lenght.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_course_lenght.svg'),
                 name: 'Kurzus hossza',
                 value: formatTimespan(courseDetails!.totalVideoSumLengthSeconds)
             },
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_sections.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_sections.svg'),
                 name: 'Témakörök száma',
                 value: courseDetails!.totalModuleCount
             },
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_videos.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_videos.svg'),
                 name: 'Videók száma',
                 value: courseDetails!.totalVideoCount
             },
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_questions.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_questions.svg'),
                 name: 'Tudást felmérő kérdések',
                 value: courseDetails!.totalVideoQuestionCount
             },
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_language.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_language.svg'),
                 name: 'Nyelv',
                 value: courseDetails!.language
             },
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_enrolled.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_enrolled.svg'),
                 name: 'Hányan végezték el eddig',
                 value: courseDetails!.previouslyCompletedCount
             },
             {
-                icon: getAssetUrl('/course_page_icons/right_panel_updated.svg'),
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_updated.svg'),
                 name: 'Frissítve',
                 value: new Date(courseDetails!.modificationDate)
-.toLocaleDateString()
+                    .toLocaleDateString()
             }
         ]
         : [];
@@ -131,7 +132,7 @@ const CourseDetailsPage = () => {
                         justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
-                            icon={getAssetUrl('/course_page_icons/about_category.svg')}
+                            icon={Environment.getAssetUrl('/course_page_icons/about_category.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.category}
                             subTitle={courseDetails?.subCategoryName} />
 
@@ -145,12 +146,12 @@ const CourseDetailsPage = () => {
                             subTitle={courseDetails!.teacherData.teacherFullName} />}
 
                         <CourseDetailsBriefingInfoItem
-                            icon={getAssetUrl('/course_page_icons/about_difficulty.svg')}
+                            icon={Environment.getAssetUrl('/course_page_icons/about_difficulty.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
                             subTitle={courseDetails?.difficulty + ' / 10 pont'} />
 
                         <CourseDetailsBriefingInfoItem
-                            icon={getAssetUrl('/course_page_icons/about_learning_experience.svg')}
+                            icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
                             subTitle={courseDetails?.benchmark + ' / 5 pont'} />
                     </Flex>
@@ -318,7 +319,7 @@ const CourseDetailsPage = () => {
                             onClick={handlePlayCourse}
                             icon={(
                                 <img
-                                    src={getAssetUrl('/icons/play2.svg')}
+                                    src={Environment.getAssetUrl('/icons/play2.svg')}
                                     alt=""
                                     style={{
                                         width: '25px',

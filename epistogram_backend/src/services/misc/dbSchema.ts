@@ -1,4 +1,4 @@
-import { Activity } from '../../models/entity/Activity';
+import { Permission } from '../../models/entity/authorization/Permission';
 import { Answer } from '../../models/entity/Answer';
 import { AnswerGivenAnswerBridge } from '../../models/entity/AnswerGivenAnswerBridge';
 import { AnswerSession } from '../../models/entity/AnswerSession';
@@ -9,12 +9,12 @@ import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
 import { Exam } from '../../models/entity/Exam';
 import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { JobTitle } from '../../models/entity/JobTitle';
-import { Organization } from '../../models/entity/Organization';
+import { Company } from '../../models/entity/Company';
 import { Question } from '../../models/entity/Question';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { QuestionType } from '../../models/entity/QuestionType';
-import { Role } from '../../models/entity/Role';
-import { RoleActivityBridge } from '../../models/entity/RoleActivityBridge';
+import { Role } from '../../models/entity/authorization/Role';
+import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
 import { StorageFile } from '../../models/entity/StorageFile';
 import { Task } from '../../models/entity/Task';
 import { User } from '../../models/entity/User';
@@ -29,7 +29,6 @@ import { CourseView } from '../../models/views/CourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
-import { UserActivityFlatView } from '../../models/views/UserActivityFlatView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { VideoCompletedView } from '../../models/views/VideoCompletedView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
@@ -93,8 +92,43 @@ import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
 import { ModuleView } from '../../models/views/ModuleView';
+import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
+import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
+import { UserEngagementView } from '../../models/views/UserEngagementView';
+import { UserPerformanceView } from '../../models/views/UserPerformanceView';
+import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
+import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 
 export const dbSchema = {
+
+    seedScripts: [
+        'seed_companies',
+        'seed_question_types',
+        'seed_permissions',
+        'seed_signup_exam',
+        'seed_job_titles',
+        'seed_users',
+        'seed_roles',
+        'seed_company_owner_bridges',
+        'seed_role_assignment_bridges',
+        'seed_role_permission_bridges',
+        'seed_signup_questions',
+        'seed_course_categories',
+        'seed_courses',
+        'seed_exams',
+        'seed_videos',
+        'seed_answer_sessions',
+        'seed_questions_video',
+        'seed_questions_exam',
+        'seed_daily_tips',
+        'seed_activation_codes',
+        'seed_shop_item_categories',
+        'seed_shop_items',
+        'seed_discount_codes',
+        'seed_prequiz_questions',
+        'seed_course_rating',
+        'seed_tempomat_adjustment_values'
+    ],
 
     viewScripts: [
         'answer_session_view',
@@ -109,8 +143,7 @@ export const dbSchema = {
         'latest_given_answer_view',
         'personality_trait_view',
         'signup_completed_view',
-        'user_activity_view',
-        'user_activity_flat_view',
+        'user_permission_view',
         'exam_result_view',
         'practise_question_view',
         'daily_tip_view',
@@ -120,6 +153,7 @@ export const dbSchema = {
         'video_playback_sample_view',
         'user_session_view',
         'user_stats_view',
+        'user_session_block_view',
         'user_session_daily_view',
         'activity_streak_view',
         'shop_item_view',
@@ -149,6 +183,9 @@ export const dbSchema = {
         'user_course_bridge_view',
         'user_course_completion_original_estimation_view',
         'user_course_completion_current_view',
+        'user_engagement_view',
+        'user_performance_view',
+        'user_learning_overview_stats_view',
         'user_spent_time_view',
         'user_daily_progress_view',
         'user_daily_course_item_progress_view',
@@ -159,7 +196,8 @@ export const dbSchema = {
         'user_course_recommended_item_quota_view',
         'user_tempomat_adjustment_value_view',
         'course_item_question_edit_view',
-        'module_view'
+        'module_view',
+        'role_list_view'
     ],
 
     functionScripts: [
@@ -204,7 +242,6 @@ export const dbSchema = {
         CourseItemAllView,
         CourseView,
         PersonalityTraitView,
-        UserActivityFlatView,
         SignupCompletedView,
         DailyTipView,
         ExamResultView,
@@ -213,6 +250,7 @@ export const dbSchema = {
         CourseAdminDetailedView,
         CourseAdminContentView,
         UserStatsView,
+        UserSessionBlockView,
         UserSessionDailyView,
         UserSessionView,
         ActivityStreakView,
@@ -240,6 +278,9 @@ export const dbSchema = {
         UserCourseProgressView,
         UserCourseCompletionCurrentView,
         UserCourseRecommendedItemQuotaView,
+        UserEngagementView,
+        UserPerformanceView,
+        UserLearningOverviewStatsView,
         UserTempomatAdjustmentValueView,
         UserCourseBridgeView,
         UserCourseCompletionOriginalEstimationView,
@@ -250,11 +291,12 @@ export const dbSchema = {
         Course,
         CourseCategory,
         Exam,
-        Organization,
+        Company,
         User,
         Video,
         Task,
         GivenAnswer,
+        CompanyOwnerBridge,
         AnswerGivenAnswerBridge,
         Question,
         Answer,
@@ -265,8 +307,9 @@ export const dbSchema = {
         UserCourseBridge,
         PersonalityTraitCategory,
         Role,
-        Activity,
-        RoleActivityBridge,
+        Permission,
+        RolePermissionBridge,
+        RoleAssignmentBridge,
         PractiseQuestionView,
         JobTitle,
         DailyTip,

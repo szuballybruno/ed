@@ -2,7 +2,7 @@ import { Flex, Grid } from '@chakra-ui/react';
 import React from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { defaultCharts } from '../../../static/defaultChartOptions';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 import { StatisticsGroupType } from '../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../../universal/charts/base_charts/EpistoBarChart';
@@ -27,7 +27,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Kurzus teljesítési ráta',
                     value: '79',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic1.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic1.png'),
                     isOpenByDefault: false
                 },
 
@@ -36,7 +36,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Átlagos tanulással töltött idő/hét',
                     value: '3.5',
                     suffix: 'óra',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic2.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic2.png'),
                     isOpenByDefault: false
                 },
 
@@ -50,7 +50,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Teljesítés a vizsgákon',
                     value: '67',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic3.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic3.png'),
                     isOpenByDefault: false
                 },
 
@@ -59,7 +59,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Átlagosan eltöltött idő/alkalom',
                     value: '38',
                     suffix: 'perc',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic4.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic4.png'),
                     isOpenByDefault: false
                 },
 
@@ -115,7 +115,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Átlagosan megtekintett videók naponta',
                     value: '6',
                     suffix: 'videó',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic5.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic5.png'),
                     isOpenByDefault: false
                 },
 
@@ -124,7 +124,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)',
                     value: '38',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic6.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic6.png'),
                     isOpenByDefault: false
                 },
 
@@ -138,7 +138,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Lemorzsolódás',
                     value: '12',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic7.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic7.png'),
                     isOpenByDefault: false,
                 },
 
@@ -147,7 +147,7 @@ export const CourseStatisticsSubpage = () => {
                     title: 'Elköteleződés',
                     value: '73',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic8.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic8.png'),
                     isOpenByDefault: false,
                 }
             ]
@@ -156,7 +156,7 @@ export const CourseStatisticsSubpage = () => {
 
     return (
         <CourseAdministartionFrame
-            isAnySelected={false} >
+            isAnySelected={true} >
 
             <AdminSubpageHeader
                 direction="column"

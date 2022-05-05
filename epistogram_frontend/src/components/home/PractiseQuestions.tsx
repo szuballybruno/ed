@@ -1,20 +1,19 @@
-import { Image } from '@chakra-ui/image';
-import { Divider, Flex, Text } from '@chakra-ui/layout';
+import { Flex, Text } from '@chakra-ui/layout';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { Typography } from '@mui/material';
 import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getAssetUrl, getRandomInteger } from '../../static/frontendHelpers';
-import { useNavigation } from '../../services/core/navigatior';
-import { translatableTexts } from '../../static/translatableTexts';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { LoadingFrame } from '../system/LoadingFrame';
-import { QuesitionView } from '../QuestionView';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoConinImage } from '../universal/EpistoCoinImage';
-import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
+import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { Environment } from '../../static/Environemnt';
+import { getRandomInteger } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
+import { QuesitionView } from '../QuestionView';
+import { CurrentUserContext } from '../system/AuthFrame';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { EpistoConinImage } from '../universal/EpistoCoinImage';
 
 const NoQuestionsAvailable = () => {
     const { navigate } = useNavigation();
@@ -45,7 +44,7 @@ const NoQuestionsAvailable = () => {
         </Flex>
         <Flex>
             <img
-                src={getAssetUrl('/images/welcome3D.png')}
+                src={Environment.getAssetUrl('/images/welcome3D.png')}
                 alt=""
                 style={{
                     objectFit: 'contain',
@@ -57,7 +56,7 @@ const NoQuestionsAvailable = () => {
 const InitialGreetings = () => {
 
     const { navigate } = useNavigation();
-    const firstName = useContext(CurrentUserContext)!.firstName;
+    const { firstName } = useContext(CurrentUserContext);
 
     return <Flex
         direction="row"
@@ -122,7 +121,7 @@ const InitialGreetings = () => {
             <Player
                 autoplay
                 loop
-                src={getAssetUrl('lottie_json/initial_greetings.json')}
+                src={Environment.getAssetUrl('lottie_json/initial_greetings.json')}
                 style={{ height: '300px', width: '300px' }}
             />
         </Flex>
@@ -163,7 +162,7 @@ export const PractiseQuestions = () => {
     const isCorrectAnswer = answerResults?.isCorrect;
     const isAnswered = !!answerResults;
 
-    const gifSource = getAssetUrl('feedback_gifs/' + (isCorrectAnswer
+    const gifSource = Environment.getAssetUrl('feedback_gifs/' + (isCorrectAnswer
         ? 'correct_' + getRandomInteger(1, 3)
         : 'incorrect_' + getRandomInteger(1, 3)) + '.gif');
 

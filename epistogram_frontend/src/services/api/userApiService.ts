@@ -5,6 +5,7 @@ import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
+import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
 
 export const useUserListQuery = (searchText: string | null) => {
 
@@ -49,6 +50,19 @@ export const useEditUserData = (editedUserId: number) => {
         refetchEditUserData: queryRes.refetch
     };
 };
+
+export const useUserLearningOverviewData = (userId: number) => {
+
+    const queryRes = useReactQuery2<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+
+    return {
+        userLearningOverviewData: queryRes.data,
+        userLearningOverviewDataStatus: queryRes.state,
+        userLearningOverviewDataError: queryRes.error,
+        refetchUserLearningOverviewData: queryRes.refetch
+    };
+};
+
 
 export const useBriefUserData = (userId: number | null) => {
 

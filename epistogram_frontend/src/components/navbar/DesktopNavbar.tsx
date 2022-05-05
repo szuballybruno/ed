@@ -3,12 +3,12 @@ import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
-import { loggingSettings } from '../../static/Environemnt';
-import { getAssetUrl, getUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import {  getUrl } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { AuthorizationContext, CurrentUserContext } from '../system/AuthFrame';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
 
@@ -42,14 +42,14 @@ export const DesktopNavbar = (props: {
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     // context
-    const user = useContext(CurrentUserContext);
+    const { isAuthenticated } = useContext(AuthorizationContext);
 
     // media 
     const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');
     const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
 
     // util 
-    const hideLinks = props.hideLinks || !user;
+    const hideLinks = props.hideLinks || !isAuthenticated;
     const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
 
     // funcs
@@ -76,7 +76,7 @@ export const DesktopNavbar = (props: {
                     icon={
                         <img
                             alt=""
-                            src={getAssetUrl(
+                            src={Environment.getAssetUrl(
                                 '/icons/play2.svg'
                             )}
                             style={{
@@ -162,7 +162,7 @@ export const DesktopNavbar = (props: {
         );
     };
 
-    if (loggingSettings.render)
+    if (Environment.loggingSettings.render)
         console.log('Rendering navbar');
 
     return (
@@ -179,7 +179,7 @@ export const DesktopNavbar = (props: {
             {/* logo link */}
             {showLogo && (
                 <img
-                    src={getAssetUrl('/images/logo.svg')}
+                    src={Environment.getAssetUrl('/images/logo.svg')}
                     style={{
                         width: isMinimalMode ? '80px' : '150px',
                         height: isMinimalMode ? '50px' : '50px',
@@ -187,9 +187,10 @@ export const DesktopNavbar = (props: {
                         cursor: 'pointer',
                     }}
                     alt=""
-                    onClick={user?.userActivity?.canAccessApplication
-                        ? () => navigate(applicationRoutes.homeRoute)
-                        : undefined} />
+                    // onClick={(//user?.userActivity?.canAccessApplication
+                    //     ? () => navigate(applicationRoutes.homeRoute)
+                    //     : undefined}
+                    onClick={() => navigate(applicationRoutes.homeRoute)} />
             )}
 
             {/* menu items */}

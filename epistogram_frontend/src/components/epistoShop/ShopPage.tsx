@@ -12,7 +12,7 @@ import { useEpistoDialogLogic } from '../EpistoDialog';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { CurrentUserContext } from '../system/AuthFrame';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../universal/EpistoSearch';
 import { ShopItem } from './ShopItem';
@@ -24,8 +24,6 @@ export const ShopPage = () => {
     const { shopItems, refetchShopItems } = useShopItems();
     const { shopItemCategories } = useShopItemCategories();
     const { coinBalance, refetchCoinBalance } = useCoinBalance();
-
-    const user = useContext(CurrentUserContext)!;
 
     const [categoryFilterId, setCategoryFilterId] = useState(-1);
     const [currentShopItem, setCurrentShopItem] = useState<null | ShopItemDTO>(null);
@@ -141,7 +139,6 @@ export const ShopPage = () => {
                         pr="20px"
                         minWidth="300px">
                         <ProfileImage
-                            url={user.avatarUrl}
                             cursor="pointer"
                             className="square50"
                             style={{

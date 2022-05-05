@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { GridOn, List } from '@mui/icons-material';
 import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
@@ -108,12 +108,18 @@ export const AdminBreadcrumbsHeader = (props: {
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 
     // calc
-    const isApplicationRoute = (obj: any) => !!obj.route;
 
-    const currentRoute = getKeys(applicationRoutes.administrationRoute)
-        .map(x => applicationRoutes.administrationRoute[x] as ApplicationRoute)
-        .filter(x => isApplicationRoute(x))
-        .single(route => isMatchingCurrentRoute(route).isMatchingRoute);
+    const getCurrentRoute = useCallback(() => {
+
+        const isApplicationRoute = (obj: any) => !!obj.route;
+
+        return getKeys(applicationRoutes.administrationRoute)
+            .map(x => applicationRoutes.administrationRoute[x] as ApplicationRoute)
+            .filter(x => isApplicationRoute(x))
+            .single(route => isMatchingCurrentRoute(route).isMatchingRoute);
+    }, [isMatchingCurrentRoute]);
+
+    const currentRoute = getCurrentRoute();
 
     const subRouteName = subRouteLabel
         ? subRouteLabel

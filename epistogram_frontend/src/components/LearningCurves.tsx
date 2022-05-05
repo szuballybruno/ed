@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { translatableTexts } from '../static/translatableTexts';
 import { FlexFloat } from './controls/FlexFloat';
 import { TabPanel } from './courseDetails/TabPanel';
-import { getAssetUrl } from '../static/frontendHelpers';
 import { EpistoHeader } from './EpistoHeader';
 import { EpistoFont } from './controls/EpistoFont';
+import { Environment } from '../static/Environemnt';
 
 export const LearningCurves = () => {
 
@@ -60,7 +60,7 @@ export const LearningCurves = () => {
                         label={translatableTexts.learningOverview.learningCurve}
                         icon={
                             <img
-                                src={getAssetUrl('/icons/learningcurve.svg')}
+                                src={Environment.getAssetUrl('/icons/learningcurve.svg')}
                                 alt=""
                                 style={{
                                     width: 25,
@@ -76,7 +76,7 @@ export const LearningCurves = () => {
                         label={translatableTexts.learningOverview.forgettingCurve}
                         icon={
                             <img
-                                src={getAssetUrl('/icons/forgettingcurve.svg')}
+                                src={Environment.getAssetUrl('/icons/forgettingcurve.svg')}
                                 alt=""
                                 style={{
                                     width: 25,
@@ -126,7 +126,7 @@ index={1}>
 
             {/* learning curve image */}
             <img
-                src={getAssetUrl('/images/learningcurve3D.png')}
+                src={Environment.getAssetUrl('/images/learningcurve3D.png')}
                 alt=""
                 style={{
                     maxHeight: 220,

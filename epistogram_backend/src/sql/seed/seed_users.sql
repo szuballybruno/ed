@@ -9,24 +9,25 @@ INSERT INTO public.user
     first_name,
     last_name,
     password,
-    role_id,
-    organization_id,
-    job_title_id
+    company_id,
+    job_title_id,
+    is_god
 )
 VALUES 
 (
     1, -- id 
-    false, -- is_invitation_accepted
+    true, -- is_invitation_accepted
     true, -- is_trusted
     'Invitation', -- registration_type
-    'arpibagi@gmail.com', -- email
-    'teacherusername', -- username
-    'Árpád', -- first_name
-    'Bagi', -- last_name
+    'endre.marosi@gmail.com', -- email
+    'endregod', -- username
+    'Endre', -- first_name
+    'Marosi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    true -- is_god
 ),
 (
     4, -- id 
@@ -38,9 +39,10 @@ VALUES
     'György', -- first_name
     'Kelecsényi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     5, -- id 
@@ -52,9 +54,10 @@ VALUES
     'Gizella', -- first_name
     'Zurinka', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     6, -- id 
@@ -66,9 +69,10 @@ VALUES
     'Péter', -- first_name
     'Dr. Vlaciu', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     7, -- id 
@@ -80,9 +84,10 @@ VALUES
     'Péter', -- first_name
     'Rozgonyi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     8, -- id 
@@ -94,9 +99,10 @@ VALUES
     'Andrea', -- first_name
     'Lukács', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     9, -- id 
@@ -108,9 +114,10 @@ VALUES
     'Tamás', -- first_name
     'Dr. Lepsényi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     10, -- id 
@@ -122,9 +129,10 @@ VALUES
     'Péter', -- first_name
     'Szabó', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     11, -- id 
@@ -136,9 +144,10 @@ VALUES
     'Bence', -- first_name
     'Mányoki', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     12, -- id 
@@ -150,9 +159,10 @@ VALUES
     'Erika', -- first_name
     'Benkő', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     13, -- id 
@@ -164,9 +174,10 @@ VALUES
     'Gábor', -- first_name
     'Zwierczyk', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     14, -- id 
@@ -178,9 +189,10 @@ VALUES
     'Károly', -- first_name
     'Apostagi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     15, -- id 
@@ -192,9 +204,10 @@ VALUES
     'Krisztina', -- first_name
     'Reichenberger', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     16, -- id 
@@ -206,9 +219,10 @@ VALUES
     'Rozália', -- first_name
     'Borbély', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     17, -- id 
@@ -220,9 +234,10 @@ VALUES
     'Írisz', -- first_name
     'Kovács', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
-    1, -- role_id
-    1, -- organization_id
-    1 -- job_title_id
+    -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 );
 
 INSERT INTO public.teacher_info 

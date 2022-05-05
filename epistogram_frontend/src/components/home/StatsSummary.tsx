@@ -1,22 +1,22 @@
 import { useContext } from 'react';
 import { useUserProgressData } from '../../services/api/userProgressApiService';
 import { useUserStats } from '../../services/api/userStatsApiService';
-import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { NoProgressChartYet } from './NoProgressChartYet';
+import { CurrentUserContext } from '../system/AuthFrame';
 import { UserProgressChart } from '../universal/charts/UserProgressChart';
+import { NoProgressChartYet } from './NoProgressChartYet';
 
 export const StatsSummary = (props: {
     courseId: number | null
 }) => {
 
     const { courseId } = props;
-
-    const currentUser = useContext(CurrentUserContext);
-    const { userStats } = useUserStats(currentUser!.id);
+    const { id } = useContext(CurrentUserContext);
+    const { userStats } = useUserStats(id);
     const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId ?? 0, !!courseId);
 
     return <div
@@ -53,7 +53,7 @@ export const StatsSummary = (props: {
             title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
             value={userStats ? userStats.completedVideoCount + '' : '0'}
             suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
-            iconPath={getAssetUrl('images/watchedvideos3Dsmaller.png')}
+            iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
             isOpenByDefault={false} />
 
         {/* total playback time */}
@@ -61,7 +61,7 @@ export const StatsSummary = (props: {
             title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
             value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + '' : '0'}
             suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
-            iconPath={getAssetUrl('images/watch3D.png')}
+            iconPath={Environment.getAssetUrl('images/watch3D.png')}
             isOpenByDefault={false} />
 
         {/* total given answer count  */}
@@ -69,7 +69,7 @@ export const StatsSummary = (props: {
             title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
             value={userStats ? userStats.totalGivenAnswerCount + '' : '0'}
             suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
-            iconPath={getAssetUrl('images/answeredquestions3D.png')}
+            iconPath={Environment.getAssetUrl('images/answeredquestions3D.png')}
             isOpenByDefault={false} />
 
         {/* correct answer rate  */}
@@ -77,7 +77,7 @@ export const StatsSummary = (props: {
             title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
             value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + '' : '0'}
             suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
-            iconPath={getAssetUrl('images/rightanswer3D.png')}
+            iconPath={Environment.getAssetUrl('images/rightanswer3D.png')}
             isOpenByDefault={false} />
     </div>;
 };

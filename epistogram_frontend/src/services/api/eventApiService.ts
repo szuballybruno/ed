@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useQuery } from 'react-query';
-import { AuthenticationStateContext } from '../../components/system/AuthenticationFrame';
-import { eventPoolingIntervalInMs } from '../../static/Environemnt';
+import { AuthenticationStateContext } from '../../components/system/AuthFrame';
+import { Environment } from '../../static/Environemnt';
 import { EventDTO } from '../../shared/dtos/EventDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { httpGetAsync } from '../core/httpClient';
@@ -15,7 +15,7 @@ export const useEventListener = () => {
         () => httpGetAsync(apiRoutes.event.getUnfulfilledEvent), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: eventPoolingIntervalInMs,
+        refetchInterval: Environment.eventPoolingIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: ['data'],
         enabled: authState === 'authenticated'

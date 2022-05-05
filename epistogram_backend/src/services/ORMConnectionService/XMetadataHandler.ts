@@ -1,4 +1,4 @@
-import { ClassType } from '../../models/Types';
+import { ClassType } from '../../models/DatabaseTypes';
 import { getKeys } from '../../shared/logic/sharedLogic';
 
 const metadatas = {} as any;

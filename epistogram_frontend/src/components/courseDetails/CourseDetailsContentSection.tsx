@@ -3,7 +3,8 @@ import { ExpandMore } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React from 'react';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
-import { getAssetUrl, roundNumber } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { roundNumber } from '../../static/frontendHelpers';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseDetailsContentSection = (props: { courseDetails: CourseDetailsDTO }) => {
@@ -48,7 +49,7 @@ export const CourseDetailsContentSection = (props: { courseDetails: CourseDetail
                                 <Flex align="center">
                                     {/* icon */}
                                     <img
-                                        src={getAssetUrl('images/videosdatasheetd3D.png')}
+                                        src={Environment.getAssetUrl('images/videosdatasheetd3D.png')}
                                         alt={''}
                                         className="square50"
                                         style={{ margin: '10px', objectFit: 'contain' }} />

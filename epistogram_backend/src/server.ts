@@ -4,6 +4,7 @@ import fileUpload from 'express-fileupload';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
+import { CompaniesController } from './api/CompaniesController';
 import { CourseController } from './api/CourseController';
 import { CourseRatingController } from './api/CourseRatingController';
 import { DailyTipController } from './api/DailyTipController';
@@ -20,6 +21,7 @@ import { PrequizController } from './api/PrequizController';
 import { PretestController } from './api/PretestController';
 import { QuestionController } from './api/QuestionController';
 import { RegistrationController } from './api/RegistrationController';
+import { RoleController } from './api/RoleController';
 import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 import { ShopController } from './api/ShopController';
 import { SignupController } from './api/SignupController';
@@ -31,11 +33,11 @@ import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
-import { ModuleView } from './models/views/ModuleView';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
+import { CompanyService } from './services/CompanyService';
 import { CourseItemsService } from './services/CourseItemsService';
 import { CourseRatingService } from './services/CourseRatingService';
 import { CourseService } from './services/CourseService';
@@ -54,7 +56,6 @@ import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
-import { getIsDeletedDecoratorPropertyData } from './services/ORMConnectionService/ORMConnectionDecorators';
 import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { PasswordChangeService } from './services/PasswordChangeService';
 import { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
@@ -66,6 +67,7 @@ import { PretestService } from './services/PretestService';
 import { QuestionAnswerService } from './services/QuestionAnswerService';
 import { QuestionService } from './services/QuestionService';
 import { RegistrationService } from './services/RegistrationService';
+import { RoleService } from './services/RoleService';
 import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
@@ -121,8 +123,9 @@ import { TurboExpress } from './utilities/TurboExpress';
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
     const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService);
     const tokenService = new TokenService(globalConfig);
+    const roleService = new RoleService(ormConnectionService, mapperService);
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
-    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService);
+    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(sqlBootstrapperService, registrationService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
@@ -149,6 +152,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
+    const companyService = new CompanyService(ormConnectionService, mapperService);
 
     // controllers 
     const userStatsController = new UserStatsController(userStatsService);
@@ -179,6 +183,8 @@ import { TurboExpress } from './utilities/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
+    const companyController = new CompaniesController(companyService);
+    const roleController = new RoleController(roleService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -212,9 +218,19 @@ import { TurboExpress } from './utilities/TurboExpress';
     // misc
     addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
     addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
-    addEndpoint(apiRoutes.misc.getOrganizations, miscController.getOrganizationsAction);
     addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
     addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
+
+    // roles
+    addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
+
+    // companies
+    addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
+    addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.getCompanyEditData, companyController.getCompanyEditDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.createCompany, companyController.createCompanyAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.deleteCompany, companyController.deleteCompanyAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.saveCompany, companyController.saveCompanyAction, { isPost: true, authorize: ['administrator'] });
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
@@ -290,6 +306,7 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
+    addEndpoint(apiRoutes.userStats.getUserLearningOverviewData, userStatsController.getUserLearningOverviewDataAction, { authorize: ['administrator'] });
 
     // user progress
     addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);

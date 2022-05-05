@@ -10,13 +10,13 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { SelectImage } from '../universal/SelectImage';
 
 export const Preferences = () => {
 
-    const user = useContext(CurrentUserContext)!;
+    const user = useContext(CurrentUserContext);
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);

@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { ActivitySession } from './ActivitySession';
-import { CoinTransaction } from './CoinTransaction';
-import { User } from './User';
+import { Exam } from './Exam';
+import { Video } from './Video';
 
 @Entity()
 export class UserSessionActivity {
@@ -15,6 +15,22 @@ export class UserSessionActivity {
 
     @Column({ type: 'text' })
     type: SessionActivityType;
+
+    // video 
+    @Column({ nullable: true })
+    videoId: number;
+
+    @ManyToOne(() => Video, v => v.questions)
+    @JoinColumn({ name: 'video_id' })
+    video: Video;
+
+    // exam 
+    @Column({ nullable: true })
+    examId: number | null;
+
+    @ManyToOne(_ => Exam, e => e.questions)
+    @JoinColumn({ name: 'exam_id' })
+    exam: Exam | null;
 
     // user
     @Column()

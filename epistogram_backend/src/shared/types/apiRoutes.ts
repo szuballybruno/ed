@@ -9,10 +9,22 @@ export const apiRoutes = {
 
     misc: {
         getJobTitles: '/misc/get-job-titles',
-        getOrganizations: '/misc/get-organizations',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
         getCourseOverviewData: '/misc/get-course-overview-data'
+    },
+
+    roles: {
+        getRoles: '/roles/get-roles'
+    },
+
+    companies: {
+        getCompanies: '/companies/get-companies',
+        getCompaniesAdmin: '/companies/get-companies-admin',
+        getCompanyEditData: '/companies/get-company-edit-data',
+        createCompany: '/companies/create-company',
+        deleteCompany: '/companies/delete-company',
+        saveCompany: '/companies/save-company'
     },
 
     scheduledJobs: {
@@ -96,7 +108,8 @@ export const apiRoutes = {
     },
 
     userStats: {
-        getUserStats: '/userstats/get-user-stats'
+        getUserStats: '/userstats/get-user-stats',
+        getUserLearningOverviewData: '/users/get-user-learning-overview-data'
     },
 
     userProgress: {

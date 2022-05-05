@@ -6,12 +6,13 @@ import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { getAssetUrl, usePasswordEntryState } from '../static/frontendHelpers';
+import { Environment } from '../static/Environemnt';
+import { usePasswordEntryState } from '../static/frontendHelpers';
 import { useBoolParam, useStringParam } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
-import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
+import { RefetchUserAsyncContext } from './system/AuthFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegistrationPage = () => {
@@ -93,11 +94,11 @@ export const RegistrationPage = () => {
 
 
             <Flex width="100%"
-maxH={50}
-my="25px"
-justifyContent={'center'}>
+                maxH={50}
+                my="25px"
+                justifyContent={'center'}>
                 <Image width="50%"
-src={getAssetUrl('/images/logo.svg')} />
+                    src={Environment.getAssetUrl('/images/logo.svg')} />
             </Flex>
 
             {!isInvited && <EpistoFont>{translatableTexts.registrationPage.learningStyleSurvey}</EpistoFont>}
@@ -159,7 +160,7 @@ src={getAssetUrl('/images/logo.svg')} />
             </>}
 
             <Flex direction={'row'}
-alignItems={'center'}>
+                alignItems={'center'}>
 
                 <Checkbox
                     checked={acceptPrivacyPolicy}

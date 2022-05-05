@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { fetchNewAccessTokenIntervalInMs, fetchUserIntervalInMs, verboseLogging } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
 export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden';
@@ -17,13 +17,13 @@ export const useLogout = () => {
     };
 };
 
-export const useUserFetching = (enabled: boolean) => {
+export const useAuthorizationContextData = (enabled: boolean) => {
 
     const [isBgFetchingEnabled, setIsBgFetchingEnabled] = useState(false);
 
     const bgFetchingEnabled = enabled && isBgFetchingEnabled;
 
-    if (verboseLogging)
+    if (Environment.verboseLogging)
         console.log('Background current user fetching set to: ' + bgFetchingEnabled);
 
     const queryResult = useQuery(
@@ -31,7 +31,61 @@ export const useUserFetching = (enabled: boolean) => {
         () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: bgFetchingEnabled ? fetchUserIntervalInMs : false,
+        refetchInterval: bgFetchingEnabled ? Environment.fetchUserIntervalInMs : false,
+        enabled: true,
+        notifyOnChangeProps: ['data', 'isSuccess', 'status']
+    });
+
+    const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;
+    const currentUser = isError ? null : fetchedUser as UserDTO;
+
+    // turn on background fetching if fetched successfully
+    useEffect(() => {
+
+        setIsBgFetchingEnabled(isSuccess);
+    }, [isSuccess]);
+
+    const authState = (isLoading
+        ? 'loading'
+        : currentUser
+            ? 'authenticated'
+            : 'forbidden') as AuthenticationStateType;
+
+    // console.log("-----");
+    // console.log(authState);
+    // console.log(isLoading);
+    // console.log(isFetching);
+    // console.log(queryResult);
+    // console.log("-----");
+
+    const refetchUserAsync = async () => {
+
+        // console.log("Refetching user...");
+        await refetch();
+    };
+
+    return {
+        currentUser: fetchedUser as UserDTO,
+        authState,
+        refetchUserAsync
+    };
+};
+
+export const useUserFetching = (enabled: boolean) => {
+
+    const [isBgFetchingEnabled, setIsBgFetchingEnabled] = useState(false);
+
+    const bgFetchingEnabled = enabled && isBgFetchingEnabled;
+
+    if (Environment.verboseLogging)
+        console.log('Background current user fetching set to: ' + bgFetchingEnabled);
+
+    const queryResult = useQuery(
+        'getCurrentUser',
+        () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
+        retry: false,
+        refetchOnWindowFocus: false,
+        refetchInterval: bgFetchingEnabled ? Environment.fetchUserIntervalInMs : false,
         enabled: true,
         notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
@@ -96,7 +150,7 @@ export const useRenewUserSessionPooling = () => {
         () => httpGetAsync(apiRoutes.authentication.renewUserSession), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: fetchNewAccessTokenIntervalInMs,
+        refetchInterval: Environment.fetchNewAccessTokenIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: ['isSuccess']
     });

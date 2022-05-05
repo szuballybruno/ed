@@ -18,7 +18,7 @@ ON v.id = vr.video_id
 LEFT JOIN public.course co 
 ON co.id = v.course_id
 
-WHERE u.organization_id = 1
+WHERE u.company_id = 1
 
 ORDER BY 
 	u.id,

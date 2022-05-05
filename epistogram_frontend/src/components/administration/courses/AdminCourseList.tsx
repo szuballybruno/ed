@@ -2,7 +2,6 @@ import { Image } from '@chakra-ui/image';
 import { Flex } from '@chakra-ui/layout';
 import React, { memo } from 'react';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
-import { loggingSettings } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { FlexList } from '../../universal/FlexList';
@@ -19,9 +18,6 @@ export const AdminCourseList = memo((props: {
 
     // util
     const courseId = useIntParam('courseId');
-
-    if (loggingSettings.render)
-        console.log('Rendering AdminCourseList');
 
     return <Flex
         className="roundBorders"

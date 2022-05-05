@@ -1,11 +1,10 @@
 import { Box } from '@chakra-ui/layout';
 import { Flex } from '@chakra-ui/react';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { Typography } from '@mui/material';
-import { getAssetUrl } from '../static/frontendHelpers';
-import { EpistoDialog, EpistoDialogLogicType } from './EpistoDialog';
+import { Environment } from '../static/Environemnt';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
+import { EpistoDialog, EpistoDialogLogicType } from './EpistoDialog';
 
 export const CoinRewardDialog = (props: {
     coinRewardAmount: number,
@@ -34,7 +33,7 @@ export const CoinRewardDialog = (props: {
                 <Player
                     autoplay
                     loop
-                    src={getAssetUrl(lottiePath)}
+                    src={Environment.getAssetUrl(lottiePath)}
                     style={{ position: 'absolute', width: '100%', height: '100%' }} />
             </Box>
 
@@ -56,7 +55,7 @@ style={{ margin: '0px 0px 4px 4px' }}>
                 </EpistoFont>
 
                 <img
-                    src={getAssetUrl('images/epistoCoin.png')}
+                    src={Environment.getAssetUrl('images/epistoCoin.png')}
                     className="square25"
                     style={{ margin: '0px 0px 4px 4px' }} />
 

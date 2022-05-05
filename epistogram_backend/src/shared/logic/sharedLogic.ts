@@ -58,3 +58,19 @@ export const noUndefined = <T>(obj: Partial<T>) => {
 
     return obj;
 };
+
+export const trimChar = (str: string, char: string) => {
+
+    if (str.length < 2)
+        return str;
+
+    return str.replace(new RegExp(`^${char}+|${char}+$`, 'g'), '');
+};
+
+export const trimEndChar = (str: string, char: string) => {
+
+    if (str.length < 2)
+        return str;
+
+    return str.replace(new RegExp(`${char}+$`, 'g'), '');
+};
