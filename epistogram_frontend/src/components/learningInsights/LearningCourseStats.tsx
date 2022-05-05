@@ -1,18 +1,15 @@
 import { Flex } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
 import React from 'react';
 import { useUserCourseData } from '../../services/api/courseApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoGrid } from '../controls/EpistoGrid';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { DashboardSection } from '../universal/DashboardSection';
-import { EpistoGrid } from '../controls/EpistoGrid';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LearningCourseStatsTile } from './LearningCourseStatsTile';
-import { EpistoFont } from '../controls/EpistoFont';
-import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
-import { useEpistoDialogLogic } from '../EpistoDialog';
-import { WifiProtectedSetupSharp } from '@mui/icons-material';
-import { useNavigation } from '../../services/core/navigatior';
-import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
-import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 
 export const LearningCourseStats = () => {
 

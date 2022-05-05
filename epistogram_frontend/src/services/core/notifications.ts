@@ -27,14 +27,14 @@ export const useShowErrorDialog = () => {
 
     const errorDialogLogic = useContext(ErrorDialogContext)!;
 
-    const showErrorDialog = useCallback((descriptionOrError: string | any, title?: string) => {
-
-        const asAny = descriptionOrError as any;
+    const showErrorDialog = useCallback((descriptionOrError?: any, title?: string) => {
 
         errorDialogLogic
             .openDialog({
                 title: title ?? 'Hiba',
-                description: asAny.message ?? asAny ?? 'Ismeretlen hiba, kerlek probald ujra kesobb!.'
+                description: descriptionOrError?.message
+                    ?? descriptionOrError
+                    ?? 'Ismeretlen hiba, kerlek probald ujra kesobb!.'
             });
     }, [errorDialogLogic]);
 

@@ -23,7 +23,7 @@ export const CompanyAdminEditPage = memo((props: { onNameLoaded: (name: string) 
     } = useCompanyEditData(compnayId);
     const { saveCompanyAsync, saveCompanyState } = useSaveCompany();
 
-    const [handleSaveCompanyAsync] = usePostCallback(saveCompanyAsync, [() => showNotification('Sikeresen mentve!')]);
+    const handleSaveCompanyAsync = usePostCallback(saveCompanyAsync, [() => showNotification('Sikeresen mentve!')]);
 
     useEffect(() => {
 

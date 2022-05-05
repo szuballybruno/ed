@@ -5,7 +5,8 @@ import { PagingType, usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { ChipSmall } from './ChipSmall';
 
@@ -15,14 +16,14 @@ export type EditDialogSubpage = {
     content: (isCurrent: boolean) => JSX.Element
 };
 
-export const EditDialogBase = (props: {
+export const EditDialogBase = <TParams,>(props: {
     title?: string,
     subTitle?: string,
     chipText?: string,
     chipColor?: string,
     hideTabs?: boolean,
     headerButtons?: ReactNode,
-    logic: EpistoDialogLogicType,
+    logic: EpistoDialogLogicType<TParams>,
     paging: PagingType<EditDialogSubpage>
 }) => {
 

@@ -9,7 +9,7 @@ import { ContentPane } from '../ContentPane';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
 import { SignupQuestions } from '../SignupQuestions';
-import { RefetchUserAsyncContext } from '../system/AuthFrame';
+import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SignupWrapper } from './SignupWrapper';
 

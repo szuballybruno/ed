@@ -20,7 +20,7 @@ VALUES
     true, -- is_trusted
     'Invitation', -- registration_type
     'endre.marosi@gmail.com', -- email
-    'endregod', -- username
+    'god', -- username
     'Endre', -- first_name
     'Marosi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
@@ -28,6 +28,21 @@ VALUES
     1, -- company_id
     1, -- job_title_id,
     true -- is_god
+),
+(
+    2, -- id 
+    true, -- is_invitation_accepted
+    true, -- is_trusted
+    'Invitation', -- registration_type
+    'ALMOSTGOD@gmail.com', -- email
+    'almostgod', -- username
+    'Almost', -- first_name
+    'God', -- last_name
+    '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
+    -- -- 1, -- role_id
+    1, -- company_id
+    1, -- job_title_id,
+    false -- is_god
 ),
 (
     4, -- id 
@@ -145,7 +160,7 @@ VALUES
     'Mányoki', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    2, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -160,7 +175,7 @@ VALUES
     'Benkő', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    2, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -175,7 +190,7 @@ VALUES
     'Zwierczyk', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    2, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -190,7 +205,7 @@ VALUES
     'Apostagi', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    3, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -205,7 +220,7 @@ VALUES
     'Reichenberger', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    3, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -220,7 +235,7 @@ VALUES
     'Borbély', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    4, -- company_id
     1, -- job_title_id,
     false -- is_god
 ),
@@ -235,7 +250,7 @@ VALUES
     'Kovács', -- last_name
     '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', -- password (admin)
     -- 1, -- role_id
-    1, -- company_id
+    4, -- company_id
     1, -- job_title_id,
     false -- is_god
 );

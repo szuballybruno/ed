@@ -10,7 +10,7 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthFrame';
+import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { SelectImage } from '../universal/SelectImage';
 

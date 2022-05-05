@@ -6,7 +6,7 @@ import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-import { CurrentUserContext } from '../system/AuthFrame';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { UserProgressChart } from '../universal/charts/UserProgressChart';
 import { NoProgressChartYet } from './NoProgressChartYet';
 

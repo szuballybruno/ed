@@ -1,12 +1,10 @@
-import { log } from 'console';
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { User } from '../models/entity/User';
 import { ClassType, ParsableValueType } from '../models/DatabaseTypes';
+import { User } from '../models/entity/User';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { logError, logSecondary } from '../services/misc/logger';
-import { typecheck } from '../shared/logic/sharedLogic';
-import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { logSecondary } from '../services/misc/logger';
+import { VerboseError } from '../shared/types/VerboseError';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -127,13 +125,18 @@ export class ActionParams {
 
         const file = this.req.files?.file;
         if (!file)
-            throw new ErrorCode('File not sent!', 'bad request');
+            throw new VerboseError('File not sent!', 'bad request');
 
         return file as UploadedFile;
     }
 }
 
 type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;
+
+type SaveObjCastType =
+    | 'string' | 'int' | 'float' | 'boolean'
+    | 'string[]' | 'int[]' | 'float[]' | 'boolean[]'
+    | 'custom';
 
 export class SafeObjectWrapper<TObject> {
 
@@ -144,46 +147,82 @@ export class SafeObjectWrapper<TObject> {
         this.data = data;
     }
 
-    getValueOrNull<TValue>(getter: (data: TObject) => TValue, castType?: 'int' | 'float' | 'boolean'): TValue | null {
+    /**
+     * Get value or null
+     */
+    getValueOrNull<TValue>(getter: (data: TObject) => TValue, castType: SaveObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue | null {
 
         if (getter(this.data) === undefined || getter(this.data) === null)
             return null;
 
-        return this.getValue(getter, castType);
+        return this.getValueCore(getter, castType, fn);
     }
 
-    getValue<TValue>(getter: (data: TObject) => TValue, castTypeOrFn?: 'int' | 'float' | 'boolean' | SafeObjectValidatorFunctionType<TValue>): TValue {
+    /**
+     * Get value
+     */
+    getValue(getter: (data: TObject) => string, castTypeOrFn: 'string'): string;
+    getValue(getter: (data: TObject) => string[], castTypeOrFn: 'string[]'): string[];
+    getValue(getter: (data: TObject) => number, castTypeOrFn: 'int'): number;
+    getValue(getter: (data: TObject) => number[], castTypeOrFn: 'int[]'): number[];
+    getValue(getter: (data: TObject) => number, castTypeOrFn: 'float'): number;
+    getValue(getter: (data: TObject) => number[], castTypeOrFn: 'float[]'): number[];
+    getValue(getter: (data: TObject) => boolean, castTypeOrFn: 'boolean'): boolean;
+    getValue(getter: (data: TObject) => boolean[], castTypeOrFn: 'boolean[]'): boolean[];
+    getValue<TValue>(getter: (data: TObject) => TValue, castType: 'custom', fn: SafeObjectValidatorFunctionType<TValue>): TValue;
+    getValue<TValue>(getter: (data: TObject) => TValue, castType: SaveObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue {
+
+        return this.getValueCore(getter, castType, fn);
+    }
+
+    private getValueCore<TValue>(getter: (data: TObject) => TValue, castType: SaveObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): any {
 
         const value = withValueOrBadRequest<any>(getter(this.data));
 
-        if (typecheck(castTypeOrFn, 'function')) {
+        if (castType === 'string[]')
+            return this.parseArray(value, x => x);
 
-            const validatorFn = castTypeOrFn as SafeObjectValidatorFunctionType<TValue>;
-            const isValid = validatorFn(value);
+        if (castType === 'int')
+            return parseInt(value);
+
+        if (castType === 'int[]')
+            return this.parseArray(value, x => parseInt(x));
+
+        if (castType === 'float')
+            return parseFloat(value);
+
+        if (castType === 'float[]')
+            return this.parseArray(value, x => parseFloat(x));
+
+        if (castType === 'boolean')
+            return this.parseBoolean(value);
+
+        if (castType === 'boolean[]')
+            return this.parseArray(value, x => this.parseBoolean(x));
+
+        if (castType === 'custom') {
+            const isValid = fn!(value);
             if (!isValid)
                 throw new Error('Validator function failed on value in safe object.');
-
-        } else {
-
-            if (castTypeOrFn === 'int')
-                return parseInt(value as any as string) as any;
-
-            if (castTypeOrFn === 'float')
-                return parseFloat(value as any as string) as any;
-
-            if (castTypeOrFn === 'boolean') {
-
-                if (value === true || value === false)
-                    return value;
-
-                if (value !== 'true' && value !== 'false')
-                    throw new Error('Error parsing boolean value: ' + value);
-
-                return (value === 'true') as any;
-            }
         }
 
         return value;
+    }
+
+    private parseArray<T>(arr: any, fn: (x: any) => T) {
+
+        return arr as T[];
+    }
+
+    private parseBoolean(value: any) {
+
+        if (value === true || value === false)
+            return value;
+
+        if (value !== 'true' && value !== 'false')
+            throw new Error('Error parsing boolean value: ' + value);
+
+        return (value === 'true');
     }
 }
 
@@ -271,7 +310,7 @@ export const requestHasFiles = (req: Request) => {
 export const getSingleFileFromRequest = (req: Request) => {
 
     if (!req.files)
-        throw new ErrorCode('Request contains no files.', 'bad request');
+        throw new VerboseError('Request contains no files.', 'bad request');
 
     // TODO multiple file error check
 
@@ -282,7 +321,7 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
 
     const objWithValue = withValue<T>(obj, () => {
 
-        throw new ErrorCode('Requied field has no value!', 'bad request');
+        throw new VerboseError('Requied field has no value!', 'bad request');
     });
 
     return parseType(objWithValue, type ?? 'any') as T;
@@ -323,10 +362,19 @@ export const getCookies = (req: Request) => {
         }));
 };
 
-export const getCookie = (req: Request, key: string) => getCookies(req)
-    .filter(x => x.key === key)[0];
+export const getCookie = (req: Request, key: string) => {
 
-export const getAuthTokenFromRequest = (req: Request, config: GlobalConfiguration) => getCookie(req, config.misc.accessTokenCookieName)?.value;
+    return getCookies(req)
+        .filter(x => x.key === key)[0]?.value as string | null;
+};
+
+export const getAuthCookies = (req: Request) => {
+
+    return {
+        accessToken: getCookie(req, 'accessToken'),
+        refreshToken: getCookie(req, 'refreshToken')
+    };
+};
 
 /**
  * Make all properties in T optional
@@ -345,19 +393,3 @@ export declare type DeepOptionalEntity<TObject> = {
         ? ReadonlyArray<DeepOptionalEntity<U>>
         : DeepOptionalEntity<TObject[TProperty]>) | (() => string);
 };
-
-export class ErrorCode extends Error {
-
-    code: ErrorCodeType;
-
-    constructor(msg: string, code: ErrorCodeType) {
-
-        super(msg);
-
-        this.code = code;
-    }
-
-    toString() {
-        return `${this.code}: ${this.message}`;
-    }
-}

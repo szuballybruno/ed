@@ -1,29 +1,32 @@
 import { Box, Flex } from '@chakra-ui/layout';
-import { Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogInUser } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import {  useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { useQueryVal, useStringParam } from '../../static/locationHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
-import { useEpistoDialogLogic } from '../EpistoDialog';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext, AuthorizationContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthFrame';
+import { AuthenticationStateContext, AuthorizationContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 
 const LoginScreen = () => {
 
     // util
-    const { navigate } = useNavigation();
+    const { navigate, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
     const { hasPermission } = useContext(AuthorizationContext);
+    const dest = useQueryVal('dest');
+
+    console.log(dest);
 
     // state
     const [errorMessage, setErrorMessage] = useState('');
@@ -86,9 +89,16 @@ const LoginScreen = () => {
 
         if (authState === 'authenticated') {
 
-            if (hasPermission('canAccessApplication')) {
+            if (hasPermission('ACCESS_APPLICATION')) {
 
-                navigate(applicationRoutes.homeRoute);
+                if (dest) {
+
+                    navigateToHref(dest);
+                }
+                else {
+
+                    navigate(applicationRoutes.homeRoute);
+                }
             }
             else {
 

@@ -27,7 +27,7 @@ export class PretestController {
         return this._pretestService
             .getPretestResultsAsync(params.currentUserId, params
                 .getQuery<any>()
-                .getValue(x => x.courseId));
+                .getValue(x => x.courseId, 'int'));
     };
 
     getPretestExamIdAction = async (params: ActionParams) => {
@@ -35,6 +35,6 @@ export class PretestController {
         return this._pretestService
             .getPretestExamIdAsync(params
                 .getQuery<any>()
-                .getValue(x => x.courseId));
+                .getValue(x => x.courseId, 'int'));
     };
 }

@@ -6,7 +6,7 @@ import { CourseStageNameType } from '../../shared/types/sharedTypes';
     synchronize: false,
     expression: ''
 })
-export class CourseView {
+export class AvailableCourseView {
 
     @ViewColumn()
     id: number;

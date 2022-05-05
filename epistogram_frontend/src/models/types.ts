@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { trimChar, trimEndChar } from '../shared/logic/sharedLogic';
+import { trimEndChar } from '../shared/logic/sharedLogic';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -47,20 +47,12 @@ export type ApplicationRoute<T = any> = {
     paramsType?: T;
 }
 
-export type DialogOptions<TParams> = {
-    title?: string;
-    description?: string;
-    buttons?: ButtonType[];
-    defaultCloseButtonType?: 'none' | 'bottom' | 'top';
-    params?: TParams;
-}
-
-export type ButtonType = {
+export type ButtonType<T = undefined> = {
     title: string,
     icon?: ReactNode,
-    action: () => void,
-    disabled?: boolean
-}
+    disabled?: boolean,
+    action?: T extends undefined ? () => void : (params: T) => void,
+};
 
 export type VolumeSettingsType = {
     volume: number;

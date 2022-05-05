@@ -20,8 +20,8 @@ export const CompanyAdminIndexPage = memo(() => {
     const { createCompanyAsync, createCompanyState } = useCreateCompany();
     const { deleteCompanyAsync, deleteCompanyState } = useDeleteCompany();
 
-    const [handleCreateCompany] = usePostCallback(createCompanyAsync, [refetchCompanies]);
-    const [handleDeleteCompany] = usePostCallback(deleteCompanyAsync, [refetchCompanies]);
+    const handleCreateCompany = usePostCallback(createCompanyAsync, [refetchCompanies]);
+    const handleDeleteCompany = usePostCallback(deleteCompanyAsync, [refetchCompanies]);
 
     return (
         <LoadingFrame
@@ -60,7 +60,7 @@ export const CompanyAdminIndexPage = memo(() => {
                             </EpistoButton>
 
                             <EpistoButton
-                                onClick={() => handleDeleteCompany({ companyId: company.id })}>
+                                onClick={handleDeleteCompany}>
                                 <Delete />
                             </EpistoButton>
                         </Flex>

@@ -11,7 +11,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { QuesitionView } from '../QuestionView';
-import { CurrentUserContext } from '../system/AuthFrame';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { EpistoConinImage } from '../universal/EpistoCoinImage';
 

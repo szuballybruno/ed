@@ -10,7 +10,7 @@ import { Environment } from '../../../../static/Environemnt';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
-import { EpistoDialog, useEpistoDialogLogic } from '../../../EpistoDialog';
+import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
@@ -21,6 +21,7 @@ import { VideoEditDialog } from '../VideoEditDialog';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
+import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 
 type ItemType = CourseContentItemAdminDTO;
 
@@ -32,8 +33,8 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic<number>('video_edit_dialog', { defaultCloseButtonType: 'top' });
-    const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
+    const videoEditDialogLogic = useEpistoDialogLogic<{ videoId: number }>('video_edit_dialog', { defaultCloseButtonType: 'top' });
+    const examEditDialogLogic = useEpistoDialogLogic<{ examId: number }>('exam_edit_dialog', { defaultCloseButtonType: 'top' });
     const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
     const isAnySelected = !!courseId && (courseId != -1);
 
@@ -186,10 +187,10 @@ export const AdminCourseContentSubpage = () => {
     const openDialog = (type: 'video' | 'exam' | 'module', itemId?: number) => {
 
         if (type === 'video')
-            videoEditDialogLogic.openDialog({ params: itemId });
+            videoEditDialogLogic.openDialog({ params: { videoId: itemId! } });
 
         if (type === 'exam')
-            examEditDialogLogic.openDialog({ params: itemId });
+            examEditDialogLogic.openDialog({ params: { examId: itemId! } });
 
         if (type === 'module')
             moduleEditDialogLogic.openDialog();

@@ -11,7 +11,7 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { AuthorizationContext, RefetchUserAsyncContext } from '../system/AuthFrame';
+import { AuthorizationContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 export const UserContextMenu = (props: {
     isOpen: boolean,
@@ -26,7 +26,7 @@ export const UserContextMenu = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const canAccessAdmin = hasPermission('canAccessAdministration');
+    const canAccessAdmin = hasPermission('ACCESS_ADMIN');
     const { navigate } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();

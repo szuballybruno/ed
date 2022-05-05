@@ -5,7 +5,8 @@ import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { EpistoDialog,  } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { TempomatModeTile } from './TempomatModeTile';
 
 export const TempomatSettingsDialog = (props: {

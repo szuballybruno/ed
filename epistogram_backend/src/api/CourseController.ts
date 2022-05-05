@@ -98,7 +98,7 @@ export class CourseController {
 
         await this._courseService.softDeleteCourseAsync(params
             .getBody<IdResultDTO>()
-            .getValue(x => x.id));
+            .getValue(x => x.id, 'int'));
     };
 
     createCourseAction = async (params: ActionParams) => {
@@ -112,8 +112,8 @@ export class CourseController {
         const dto = params
             .getBody<{ courseId: number, mode: CourseModeType }>();
 
-        const courseId = dto.getValue(x => x.courseId);
-        const courseMode = dto.getValue(x => x.mode, value => value === 'advanced' || value === 'beginner');
+        const courseId = dto.getValue(x => x.courseId, 'int');
+        const courseMode = dto.getValue(x => x.mode, 'custom', value => value === 'advanced' || value === 'beginner');
 
         return this._userCourseBridgeService
             .setCourseModeAsync(params.currentUserId, courseId, courseMode);

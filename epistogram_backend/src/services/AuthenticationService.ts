@@ -1,5 +1,6 @@
 import { User } from '../models/entity/User';
-import { ErrorCode } from '../utilities/helpers';
+import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
+import { VerboseError } from '../shared/types/VerboseError';
 import { HashService } from './HashService';
 import { log } from './misc/logger';
 import { TokenService } from './TokenService';
@@ -27,54 +28,64 @@ export class AuthenticationService {
 
     getRequestAccessTokenPayload = (accessToken: string) => {
 
-        if (!accessToken)
-            throw new ErrorCode('Token not sent.', 'bad request');
-
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
-            throw new ErrorCode('Token is invalid.', 'bad request');
+            throw new VerboseError('Token is invalid.', 'bad request');
 
         return tokenPayload;
     };
 
-    async getCurrentUserAsync(userId: number) {
+    async establishAuthHandshakeAsync(refreshToken: string | null) {
 
+        log('Establishing auth handshake...');
+
+        if (!refreshToken)
+            throw new VerboseError('Refresh token not found!', 'forbidden');
+
+        const { userId } = this._tokenService
+            .verifyRefreshToken(refreshToken);
+
+        // get user 
         const currentUser = await this._userService
             .getUserDTOById(userId);
 
         if (!currentUser)
             throw new Error('User not found by id.');
 
+        // save session activity
         await this._userSessionActivityService
             .saveUserSessionActivityAsync(currentUser.id, 'generic');
 
-        return currentUser;
+        // get new tokens
+        const {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
+        } = await this.renewUserSessionAsync(userId, refreshToken);
+
+        return {
+            authData: {
+                currentUser
+            } as AuthDataDTO,
+            newAccessToken,
+            newRefreshToken
+        };
     }
 
-    renewUserSessionAsync = async (prevRefreshToken: string) => {
-
-        log('Renewing user session...');
-
-        // check if there is a refresh token sent in the request 
-        if (!prevRefreshToken)
-            throw new ErrorCode('Refresh token not sent.', 'bad request');
-
-        // check sent refresh token if invalid by signature or expired
-        const tokenMeta = this._tokenService.verifyRefreshToken(prevRefreshToken);
+    private renewUserSessionAsync = async (userId: number, prevRefreshToken: string) => {
 
         // check if this refresh token is associated to the user
         const refreshTokenFromDb = await this._userService
-            .getUserRefreshTokenById(tokenMeta.userId);
+            .getUserRefreshTokenById(userId);
 
         if (!refreshTokenFromDb)
-            throw new ErrorCode(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+            throw new VerboseError(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
 
         // get user 
         const user = await this._userService
-            .getUserById(tokenMeta.userId);
+            .getUserById(userId);
 
         if (!user)
-            throw new ErrorCode('User not found by id ' + tokenMeta.userId, 'internal server error');
+            throw new VerboseError('User not found by id ' + userId, 'internal server error');
 
         // get tokens
         const { accessToken, refreshToken } = await this.getUserLoginTokens(user);
@@ -95,20 +106,20 @@ export class AuthenticationService {
 
         // further validate request 
         if (!email || !password)
-            throw new ErrorCode('Email or password is null.', 'bad request');
+            throw new VerboseError('Email or password is null.', 'bad request');
 
         // authenticate
         const user = await this._userService
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new ErrorCode('Invalid email.', 'forbidden');
+            throw new VerboseError('Invalid email.', 'forbidden');
 
         const isPasswordCorrect = await this._hashService
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
-            throw new ErrorCode('Invalid password.', 'forbidden');
+            throw new VerboseError('Invalid password.', 'forbidden');
 
         const userId = user.id;
 

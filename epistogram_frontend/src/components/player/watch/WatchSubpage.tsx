@@ -7,13 +7,14 @@ import { useStringParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { FlexFloat } from '../../controls/FlexFloat';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { Copyright } from '../../universal/Copyright';
 import { CourseItemSelector } from './CourseItemSelector';
 import { ExamPlayer } from './ExamPlayer';
 import { ModuleView } from './ModuleView';
 import { WatchView } from './WatchView';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 
 export const WatchSubpage = () => {
 

@@ -84,8 +84,6 @@ export class SQLBootstrapperService {
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
 
-        log(`Seeding ${seedScriptName}...`);
-
         const sql = this.readSQLFile('seed', seedScriptName);
 
         const replacedSQl = this.replaceSymbols(sql);
@@ -95,7 +93,7 @@ export class SQLBootstrapperService {
 
     purgeDBAsync = async () => {
 
-        log('Purging DB...', 'strong');
+        log('Purging DB...', { entryType: 'strong' });
 
         const dropDBScript = this._dbSchema
             .entities

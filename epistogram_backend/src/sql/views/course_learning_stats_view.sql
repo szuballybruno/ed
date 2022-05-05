@@ -81,7 +81,7 @@ SELECT
 		
 		WHERE ex.course_id = cv.id AND ex.type = 'final'
 	) final_exam_success_rate
-FROM public.course_view cv
+FROM public.available_course_view cv
 
 LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = cv.user_id AND cstv.course_id = cv.id

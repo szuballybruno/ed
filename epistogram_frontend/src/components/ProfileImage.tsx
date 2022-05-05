@@ -3,7 +3,7 @@ import { Flex, FlexProps } from '@chakra-ui/layout';
 import { forwardRef, useContext } from 'react';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { EpistoFont } from './controls/EpistoFont';
-import { CurrentUserContext } from './system/AuthFrame';
+import { CurrentUserContext } from './system/AuthenticationFrame';
 
 type ProfileImageProps = {
     url?: string | null,

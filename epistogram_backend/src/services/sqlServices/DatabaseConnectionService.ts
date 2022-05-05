@@ -57,11 +57,11 @@ export class DbConnectionService {
         const isFreshDB = await this.isEmptyDatabase();
         if (isFreshDB) {
 
-            log('Seeding DB...', 'strong');
+            log('Seeding DB...', { entryType: 'strong' });
 
             await this._seedService.seedDBAsync();
 
-            log('Seeding DB done!', 'strong');
+            log('Seeding DB done!', { entryType: 'strong' });
         }
     }
 

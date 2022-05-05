@@ -14,9 +14,9 @@ export class PasswordChangeController {
     setNewPasswordAction = async (params: ActionParams) => {
 
         const dto = params.getBody<ChangePasswordDTO>();
-        const password = dto.getValue<string>(x => x.password);
-        const passwordCompare = dto.getValue<string>(x => x.passwordCompare);
-        const passwordResetToken = dto.getValue<string>(x => x.passwordResetToken);
+        const password = dto.getValue(x => x.password, 'string');
+        const passwordCompare = dto.getValue(x => x.passwordCompare, 'string');
+        const passwordResetToken = dto.getValue(x => x.passwordResetToken, 'string');
 
         return this._passwordChangeService
             .setNewPasswordAsync(password, passwordCompare, passwordResetToken);
@@ -26,7 +26,7 @@ export class PasswordChangeController {
 
         const oldPassword = params
             .getBody<any>()
-            .getValue(x => x.oldPassword);
+            .getValue(x => x.oldPassword, 'string');
 
         return await this._passwordChangeService
             .requestPasswordChangeAuthenticatedAsync(params.currentUserId, oldPassword);
@@ -35,8 +35,8 @@ export class PasswordChangeController {
     requestPasswordChangeAction = async (params: ActionParams) => {
 
         const email = params
-            .getBody<{ email: string }>()
-            .getValue(x => x.email);
+            .getBody()
+            .getValue(x => x.email, 'string');
 
         await this._passwordChangeService
             .requestPasswordChangeAsync(email);

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useQuery } from 'react-query';
-import { UserDTO } from '../../shared/dtos/UserDTO';
+import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { VerboseError } from '../../shared/types/VerboseError';
 import { Environment } from '../../static/Environemnt';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
-export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden';
+export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden' | 'error';
 
 export const useLogout = () => {
 
@@ -17,111 +18,42 @@ export const useLogout = () => {
     };
 };
 
-export const useAuthorizationContextData = (enabled: boolean) => {
+export const useGetAuthHandshake = () => {
 
-    const [isBgFetchingEnabled, setIsBgFetchingEnabled] = useState(false);
-
-    const bgFetchingEnabled = enabled && isBgFetchingEnabled;
-
-    if (Environment.verboseLogging)
-        console.log('Background current user fetching set to: ' + bgFetchingEnabled);
-
-    const queryResult = useQuery(
-        'getCurrentUser',
-        () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
+    const qr = useQuery(
+        'useGetAuthHandshake',
+        () => httpGetAsync(apiRoutes.authentication.establishAuthHandshake), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: bgFetchingEnabled ? Environment.fetchUserIntervalInMs : false,
+        refetchInterval: Environment.getAuthHandshakeIntervalInMs,
         enabled: true,
         notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
 
-    const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;
-    const currentUser = isError ? null : fetchedUser as UserDTO;
+    const { refetch, isLoading, isError } = qr;
+    const authData = isError ? null : qr.data as AuthDataDTO;
+    const error = qr.error as VerboseError | null;
 
-    // turn on background fetching if fetched successfully
-    useEffect(() => {
+    const authState = ((): AuthenticationStateType => {
 
-        setIsBgFetchingEnabled(isSuccess);
-    }, [isSuccess]);
+        if (isLoading)
+            return 'loading';
 
-    const authState = (isLoading
-        ? 'loading'
-        : currentUser
-            ? 'authenticated'
-            : 'forbidden') as AuthenticationStateType;
+        if (authData)
+            return 'authenticated';
 
-    // console.log("-----");
-    // console.log(authState);
-    // console.log(isLoading);
-    // console.log(isFetching);
-    // console.log(queryResult);
-    // console.log("-----");
+        if (error?.code === 'forbidden')
+            return 'forbidden';
 
-    const refetchUserAsync = async () => {
+        return 'error';
+    })();
 
-        // console.log("Refetching user...");
-        await refetch();
-    };
+    const refetchAuthHandshake = useCallback((): Promise<void> => refetch() as any, [refetch]);
 
     return {
-        currentUser: fetchedUser as UserDTO,
+        authData: authData,
         authState,
-        refetchUserAsync
-    };
-};
-
-export const useUserFetching = (enabled: boolean) => {
-
-    const [isBgFetchingEnabled, setIsBgFetchingEnabled] = useState(false);
-
-    const bgFetchingEnabled = enabled && isBgFetchingEnabled;
-
-    if (Environment.verboseLogging)
-        console.log('Background current user fetching set to: ' + bgFetchingEnabled);
-
-    const queryResult = useQuery(
-        'getCurrentUser',
-        () => httpGetAsync(apiRoutes.authentication.getCurrentUser), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        refetchInterval: bgFetchingEnabled ? Environment.fetchUserIntervalInMs : false,
-        enabled: true,
-        notifyOnChangeProps: ['data', 'isSuccess', 'status']
-    });
-
-    const { data: fetchedUser, refetch, isLoading, isFetching, isSuccess, isError } = queryResult;
-    const currentUser = isError ? null : fetchedUser as UserDTO;
-
-    // turn on background fetching if fetched successfully
-    useEffect(() => {
-
-        setIsBgFetchingEnabled(isSuccess);
-    }, [isSuccess]);
-
-    const authState = (isLoading
-        ? 'loading'
-        : currentUser
-            ? 'authenticated'
-            : 'forbidden') as AuthenticationStateType;
-
-    // console.log("-----");
-    // console.log(authState);
-    // console.log(isLoading);
-    // console.log(isFetching);
-    // console.log(queryResult);
-    // console.log("-----");
-
-    const refetchUserAsync = async () => {
-
-        // console.log("Refetching user...");
-        await refetch();
-    };
-
-    return {
-        currentUser: fetchedUser as UserDTO,
-        authState,
-        refetchUserAsync
+        refetchAuthHandshake
     };
 };
 
@@ -141,19 +73,4 @@ export const useLogInUser = () => {
             password: password
         })
     };
-};
-
-export const useRenewUserSessionPooling = () => {
-
-    const { isSuccess } = useQuery(
-        ['renewUserSession'],
-        () => httpGetAsync(apiRoutes.authentication.renewUserSession), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        refetchInterval: Environment.fetchNewAccessTokenIntervalInMs,
-        refetchIntervalInBackground: true,
-        notifyOnChangeProps: ['isSuccess']
-    });
-
-    return { isSuccess };
 };

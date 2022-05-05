@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { PermissionCodeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
@@ -16,7 +18,14 @@ export class RoleListView {
     companyName: string;
 
     @ViewColumn()
+    @IsDeletedFlag('bool')
+    isDeleted: boolean;
+
+    @ViewColumn()
     roleId: number;
+
+    @ViewColumn()
+    isGlobal: boolean;
 
     @ViewColumn()
     roleName: string;
@@ -26,4 +35,10 @@ export class RoleListView {
 
     @ViewColumn()
     ownerName: string;
+
+    @ViewColumn()
+    permissionId: number;
+
+    @ViewColumn()
+    permissionCode: PermissionCodeType;
 }

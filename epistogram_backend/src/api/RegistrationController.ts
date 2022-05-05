@@ -1,14 +1,12 @@
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { RegistrationService } from '../services/RegistrationService';
-import { RoleService } from '../services/RoleService';
 import { UserService } from '../services/UserService';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
-import { RoleIdEnum } from '../shared/types/sharedTypes';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams, ErrorCode } from '../utilities/helpers';
+import { ActionParams } from '../utilities/helpers';
 
 export class RegistrationController {
 
@@ -32,10 +30,10 @@ export class RegistrationController {
 
         const { accessToken, refreshToken } = await this._registrationService
             .registerUserViaPublicTokenAsync(
-                body.getValue<string>(x => x.emailAddress),
-                body.getValue<string>(x => x.firstName),
-                body.getValue<string>(x => x.lastName),
-                body.getValue<string>(x => x.registrationToken));
+                body.getValue(x => x.emailAddress, 'string'),
+                body.getValue(x => x.firstName, 'string'),
+                body.getValue(x => x.lastName, 'string'),
+                body.getValue(x => x.registrationToken, 'string'));
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
@@ -46,9 +44,9 @@ export class RegistrationController {
 
         const { accessToken, refreshToken } = await this._registrationService
             .registerInvitedUserAsync(
-                body.getValue<string>(x => x.invitationToken),
-                body.getValue<string>(x => x.password),
-                body.getValue<string>(x => x.passwordCompare));
+                body.getValue(x => x.invitationToken, 'string'),
+                body.getValue(x => x.password, 'string'),
+                body.getValue(x => x.passwordCompare, 'string'));
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
@@ -59,10 +57,10 @@ export class RegistrationController {
 
         await this._registrationService
             .registerUserViaActivationCodeAsync(
-                body.getValue<string>(x => x.activationCode),
-                body.getValue<string>(x => x.emailAddress),
-                body.getValue<string>(x => x.firstName),
-                body.getValue<string>(x => x.lastName));
+                body.getValue(x => x.activationCode, 'string'),
+                body.getValue(x => x.emailAddress, 'string'),
+                body.getValue(x => x.firstName, 'string'),
+                body.getValue(x => x.lastName, 'string'));
     };
 
     inviteUserAction = async (params: ActionParams) => {

@@ -1,8 +1,9 @@
 import { ClassType } from '../../models/DatabaseTypes';
-import { getKeys } from '../../shared/logic/sharedLogic';
+import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
+import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { ExpressionPart, JoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, WhereCondition } from './XQueryBuilderTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, CheckCondition } from './XQueryBuilderTypes';
 
 export class XQueryBuilderCore<TEntity, TParams> {
 
@@ -27,7 +28,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
 
-        const errorEndingQueryLog = this.getSQLErrorEnding(fullQuery, sqlParamsList);
+        const errorEndingQueryLog = this.getSQLQueryLog(fullQuery, sqlParamsList);
         const rowCount = rows.length;
 
         if (rowCount === 0)
@@ -84,70 +85,118 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const sqlParamsList = this.getSQLParamsList(params);
 
         const queryAsString = expressionParts
-            .map(espressionPart => {
-
-                // select condition
-                if ((espressionPart as SelectCondition<TEntity>)[0] === 'SELECT') {
-
-                    const selectCond = espressionPart as SelectCondition<TEntity>;
-                    const columnOrColumns = selectCond[1];
-                    const snakeColumns = Array.isArray(columnOrColumns)
-                        ? columnOrColumns
-                            .map(columnPropertyName => snk(columnPropertyName as string))
-                            .map(columnName => `${sqlTableRef}.${columnName}`)
-                            .join(', ')
-                        : columnOrColumns;
-
-                    // SELECT xy.ab, xy.abc
-                    return `SELECT ${snakeColumns} FROM ${sqlTableRef}`;
-                }
-
-                // join condition
-                else if ((espressionPart as JoinCondition<TEntity, any, TParams>)[0] === 'JOIN') {
-
-                    const joinCond = espressionPart as JoinCondition<TEntity, any, TParams>;
-                    const [, joinEntity, toEntity, onKey, onOp, toKey] = joinCond;
-                    const joinTableName = this.toSQLTableName(joinEntity);
-                    const toTableName = this.toSQLTableName(toEntity);
-                    const onKeySnake = this.toSQLSnakeCasing(onKey as string);
-                    const toKeySnake = this.toSQLSnakeCasing(toKey as string);
-
-                    return `LEFT JOIN ${joinTableName} \nON ${joinTableName}.${onKeySnake} ${onOp} ${toTableName}.${toKeySnake}`;
-                }
-
-                // where condition
-                else {
-
-                    const cond = espressionPart as WhereCondition<TEntity, TParams>;
-                    const [conditionName, classType, columnPropertyName, operatorType, paramProperty] = cond;
-
-                    const tableName: string = this.toSQLTableName(classType);
-                    const snakeColumn: string = this.toSQLSnakeCasing(columnPropertyName as string);
-                    const operator: OperationType = operatorType;
-                    const paramName: keyof TParams | SQLStaticValueType = paramProperty;
-                    const paramToken = this.isSQLStaticValue(paramName as string)
-                        ? paramName as SQLStaticValueType
-                        : sqlParamsList
-                            .single(x => x.paramName === paramName)
-                            .token;
-
-                    // WHERE xy.ab = $1
-                    return `${conditionName} ${tableName}.${snakeColumn} ${operator} ${paramToken}`;
-                }
-            })
-            .join('\n');
+            .map(x => this.getCondition(x, sqlParamsList, sqlTableRef))
+            .join('');
 
         const isExplicitSelect = queryAsString
             .startsWith('SELECT');
 
         const fullQuery = isExplicitSelect
             ? queryAsString
-            : `SELECT * FROM  ${sqlTableRef}\n${queryAsString}`;
+            : `SELECT * FROM  ${sqlTableRef}${queryAsString}`;
 
         return {
             sqlParamsList,
             fullQuery
         };
+    }
+
+    private getCondition(
+        espressionPart: SimpleExpressionPart<TParams>,
+        sqlParamsList: SQLParamType<TParams, keyof TParams>[],
+        sqlTableRef: string) {
+
+        // select condition
+        if (espressionPart.code === 'SELECT') {
+
+            const selectCond = espressionPart as SelectCondition<TEntity>;
+
+            const text = ((): string => {
+
+                if (selectCond.entity)
+                    return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
+
+                if (selectCond.columnSelects)
+                    return selectCond
+                        .columnSelects
+                        .map(x => '   ' + getKeyValues(x
+                            .columnSelectObj)
+                            .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
+                            .join(', '))
+                        .join(',\n');
+
+                throw new Error('Incorrect select condition!');
+            })();
+
+            // SELECT xy.ab, xy.abc
+            return `SELECT \n${text} \nFROM ${sqlTableRef}`;
+        }
+
+        // left join condition
+        else if (espressionPart.code === 'LEFT JOIN') {
+
+            const joinCond = espressionPart as LeftJoinCondition<any>;
+            const joinTableName = this.toSQLTableName(joinCond.classType);
+
+            return `\n\nLEFT JOIN ${joinTableName}`;
+        }
+
+        // inner join condition
+        else if (espressionPart.code === 'INNER JOIN') {
+
+            const joinCond = espressionPart as InnerJoinCondition<any>;
+            const joinTableName = this.toSQLTableName(joinCond.classType);
+
+            return `\n\nINNER JOIN ${joinTableName}`;
+        }
+
+        // cross join condition
+        else if (espressionPart.code === 'CROSS JOIN') {
+
+            const joinCond = espressionPart as CrossJoinCondition<any>;
+            const joinTableName = this.toSQLTableName(joinCond.classType);
+
+            return `\n\nCROSS JOIN ${joinTableName}`;
+        }
+
+        // bracket condition
+        else if (espressionPart.code === 'CLOSING BRACKET') {
+
+            return ')';
+        }
+
+        // where condition
+        else {
+
+            const cond = espressionPart as CheckCondition<TEntity, TParams>;
+            const { code, entityA, entityB, keyA, keyB, op, bracket } = cond;
+            const isRefOther = !!entityB;
+
+            const tableAName: string = this.toSQLTableName(entityA);
+            const snakeColumn: string = this.toSQLSnakeCasing(keyA as string);
+            const fullValueA = `${tableAName}.${snakeColumn}`;
+
+            const operator: OperationType = op;
+            const bracketProc = bracket ? '(' : '';
+
+            const fullValueB = (() => {
+
+                if (this.isSQLStaticValue(keyB as string))
+                    return keyB as SQLStaticValueType;
+
+                if (isRefOther)
+                    return `${this.toSQLTableName(entityB)}.${this.toSQLSnakeCasing(keyB as string)}`;
+
+                return sqlParamsList
+                    .single(x => x.paramName === keyB)
+                    .token;
+            })();
+
+            const linebreak = code === 'WHERE' ? '\n' : '';
+            const tab = code === 'AND' || code === 'OR' ? '   ' : '';
+
+            return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${fullValueB}`;
+        }
     }
 
     private toSQLTableName<T>(classType: ClassType<T>) {
@@ -158,6 +207,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
     private getSQLParamsList(params: TParams) {
 
         return getKeys(params)
+            .filter(key => params[key] !== null)
             .map((key, index): SQLParamType<TParams, keyof TParams> => {
 
                 const value = params[key];
@@ -193,11 +243,14 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         try {
 
-            const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
-            console.log(errorEndingQueryLog);
+            const queryLog = this.getSQLQueryLog(query, params);
+
+            log(queryLog, { color: ConsoleColor.purple });
+
+            const values = this.getParamValues(params);
 
             const res = await this._sqlConnectionService
-                .executeSQLAsync(query, this.getParamValues(params));
+                .executeSQLAsync(query, values);
 
             const rowsMapped = res
                 .rows
@@ -215,7 +268,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         }
         catch (e: any) {
 
-            const errorEndingQueryLog = this.getSQLErrorEnding(query, params);
+            const errorEndingQueryLog = this.getSQLQueryLog(query, params);
             throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog} \n Message: ${e.message ?? e} `);
         }
     }
@@ -239,12 +292,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
     /**
      * Returns a sophisticated SQL query error string.
      */
-    private getSQLErrorEnding(query: string, params?: SQLParamType<TParams, keyof TParams>[]) {
+    private getSQLQueryLog(query: string, params?: SQLParamType<TParams, keyof TParams>[]) {
 
         const paramPairs = (params ?? [])
             .map((param) => `${param.token}: ${this.getParamValue(param)}`);
 
-        return `Query: ${query}\nValues: ${paramPairs.join(', ')}`;
+        return `Query: \n${query}\nValues: ${paramPairs.join(', ')}`;
     }
 
     private snakeToCamelCase(snakeCaseString: string) {

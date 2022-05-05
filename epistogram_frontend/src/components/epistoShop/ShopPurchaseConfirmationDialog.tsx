@@ -8,7 +8,8 @@ import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoDialog, EpistoDialogLogicType } from '../EpistoDialog';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
 import { EpistoPaging } from '../universal/EpistoPaging';
 
 export const ShopPurchaseConfirmationDialog = (props: {

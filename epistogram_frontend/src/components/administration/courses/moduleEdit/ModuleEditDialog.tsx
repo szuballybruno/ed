@@ -6,7 +6,7 @@ import { ModuleAdminEditDTO } from '../../../../shared/dtos/ModuleAdminEditDTO';
 import { usePaging } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoDialogLogicType } from '../../../EpistoDialog';
+import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { ModuleEditDialogPage } from './ModuleEditDialogPage';
 import { ModuleListEditDialogPage } from './ModuleListEditDialogPage';

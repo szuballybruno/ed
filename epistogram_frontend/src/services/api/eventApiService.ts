@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useQuery } from 'react-query';
-import { AuthenticationStateContext } from '../../components/system/AuthFrame';
+import { AuthenticationStateContext } from '../../components/system/AuthenticationFrame';
 import { Environment } from '../../static/Environemnt';
 import { EventDTO } from '../../shared/dtos/EventDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';

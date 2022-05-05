@@ -1,6 +1,6 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { Exam } from '../models/entity/Exam';
-import { CourseView } from '../models/views/CourseView';
+import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
@@ -110,7 +110,7 @@ export class PretestService {
             });
 
         const courseView = await this._ormService
-            .getRepository(CourseView)
+            .getRepository(AvailableCourseView)
             .findOneOrFail({
                 where: {
                     id: courseId,

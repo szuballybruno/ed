@@ -42,9 +42,24 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         timeoutRef.current = setTimeout(fn, 2000);
     }, [cancelTimeout]);
 
+    // error 
+    const getError = useCallback((): ErrorType => {
+
+        if (!error)
+            return error;
+
+        if (isArray(error))
+            return (error as any[])[0];
+
+        return error;
+    }, [error]);
+
+    const singleError = useMemo(() => getError(), [getError]);
+
+    // state 
     const getLoadingState = useCallback((): LoadingStateType => {
 
-        if (error)
+        if (singleError)
             return 'error';
 
         if (!loadingState)
@@ -69,21 +84,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
             return loadingState as LoadingStateType;
         }
-    }, [loadingState, error]);
+    }, [loadingState, singleError]);
 
-    const getError = useCallback((): ErrorType => {
-
-        if (!error)
-            return error;
-
-        if (isArray(error))
-            return (error as any[])[0];
-
-        return error;
-    }, [error]);
-
-    // calc 
-    const singleError = useMemo(() => getError(), [getError]);
     const targetLoadingState = useMemo(() => getLoadingState(), [getLoadingState]);
 
     useEffect(() => {

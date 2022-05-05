@@ -11,28 +11,58 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
+export type SQLBracketType = null | '(' | ')';
 
-export type WhereCondition<TEntity, TParams> = [
-    'WHERE' | 'AND',
-    ClassType<TEntity>,
-    keyof TEntity,
-    OperationType,
-    keyof TParams | SQLStaticValueType
-];
+export type CheckCondition<TEntityA, TEntityB> = {
+    code: 'WHERE' | 'AND' | 'ON' | 'OR',
+    entityA: ClassType<TEntityA>,
+    entityB?: ClassType<TEntityB>,
+    keyA: keyof TEntityA,
+    op: OperationType,
+    keyB: keyof TEntityB | SQLStaticValueType,
+    bracket: SQLBracketType
+};
 
-export type SelectCondition<TEntity> = [
-    'SELECT',
-    keyof TEntity | (keyof TEntity)[]
-];
+export type SelectCondition<TEntity> = {
+    code: 'SELECT',
+    columnSelects?: SelectColumnsType<any, any>[],
+    entity?: ClassType<TEntity>
+};
 
-export type JoinCondition<TJoinEntity, TToEntity, TParams> = [
-    'JOIN',
-    ClassType<TJoinEntity>,
-    ClassType<TToEntity>,
-    keyof TJoinEntity,
-    OperationType,
-    keyof TParams | SQLStaticValueType | keyof TToEntity
-];
+export type LeftJoinCondition<TJoinEntity> = {
+    code: 'LEFT JOIN',
+    classType: ClassType<TJoinEntity>
+};
 
-export type ExpressionPart<TEntity, TParams> = SelectCondition<TEntity> | WhereCondition<TEntity, TParams> | JoinCondition<any, TEntity, TParams>;
+export type InnerJoinCondition<TJoinEntity> = {
+    code: 'INNER JOIN',
+    classType: ClassType<TJoinEntity>
+};
+
+export type CrossJoinCondition<TJoinEntity> = {
+    code: 'CROSS JOIN',
+    classType: ClassType<TJoinEntity>
+};
+
+export type ClosingBracketCondition = {
+    code: 'CLOSING BRACKET'
+}
+
+export type ExpressionPart<TEntity, TParams> =
+    SelectCondition<TEntity> |
+    CheckCondition<any, any> |
+    LeftJoinCondition<any> |
+    CrossJoinCondition<TEntity> |
+    InnerJoinCondition<any> |
+    ClosingBracketCondition;
+
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
+
+export type ColumnSelectObjType<TEntity, TRes> = {
+    [K in keyof Partial<TRes>]: keyof TEntity;
+};
+
+export type SelectColumnsType<TEntity, TRes> = {
+    classType: ClassType<TEntity>,
+    columnSelectObj: ColumnSelectObjType<TEntity, TRes>
+};

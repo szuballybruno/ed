@@ -1,19 +1,29 @@
-import { Flex } from '@chakra-ui/react';
-import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { ArrowUpward } from '@mui/icons-material';
+import { useCreateRole } from '../../../services/api/rolesApiService';
+import { usePostCallback } from '../../../static/frontendHelpers';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
+import { EditRoleControl } from './EditRoleControl';
 
-export const AddRoleDialog = (props: { logic: EpistoDialogLogicType }) => {
+export const AddRoleDialog = (props: {
+    logic: EpistoDialogLogicType,
+    onSave: () => void,
+}) => {
 
-    const { logic } = props;
+    const { logic, onSave } = props;
 
-    return <>
-        <EpistoDialog logic={logic}>
-            <Flex
-                width='300px'
-                height='500px'>
+    const { createRoleAsync, createRoleState } = useCreateRole();
 
-                asd
+    const createRoleCallback = usePostCallback(createRoleAsync, [logic.closeDialog, onSave]);
 
-            </Flex>
-        </EpistoDialog>
-    </>;
+    return (
+        <EditRoleControl
+            logic={logic}
+            saveState={[createRoleState]}
+            error={[]}
+            onSave={createRoleCallback}
+            saveButton={{
+                title: 'Create',
+                icon: <ArrowUpward></ArrowUpward>
+            }} />
+    );
 };

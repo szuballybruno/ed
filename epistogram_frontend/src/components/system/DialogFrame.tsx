@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
-import { EpistoDialog, EpistoDialogLogicType, useEpistoDialogLogic } from '../EpistoDialog';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
 
 export const ErrorDialogContext = React.createContext<EpistoDialogLogicType | null>(null);
 

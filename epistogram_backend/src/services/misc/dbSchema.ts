@@ -25,7 +25,7 @@ import { VideoPlaybackSample } from '../../models/entity/VideoPlaybackSample';
 import { CourseItemAllView } from '../../models/views/CourseItemAllView';
 import { CourseItemStateView } from '../../models/views/CourseItemStateView';
 import { CourseStateView } from '../../models/views/CourseStateView';
-import { CourseView } from '../../models/views/CourseView';
+import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
@@ -49,7 +49,7 @@ import { Event } from '../../models/entity/Event';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CoinBalanceView } from '../../models/views/CoinBalanceView';
 import { ActivationCode } from '../../models/entity/ActivationCode';
-import { UserCourseAccessBridge } from '../../models/entity/UserCourseAccessBridge';
+import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
@@ -98,20 +98,31 @@ import { UserEngagementView } from '../../models/views/UserEngagementView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
+import seed_companies from '../../sql/seed/seed_companies';
+import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
+import { permissionList } from '../../sql/seed/seed_permissions';
+import { roleList } from '../../sql/seed/seed_roles';
+import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
+import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
+import seed_question_types from '../../sql/seed/seed_question_types';
+import seed_job_titles from '../../sql/seed/seed_job_titles';
+import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
+import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
 
 export const dbSchema = {
 
     seedScripts: [
-        'seed_companies',
-        'seed_question_types',
-        'seed_permissions',
+        [Company, seed_companies],
+        [QuestionType, seed_question_types],
+        [Permission, permissionList],
         'seed_signup_exam',
-        'seed_job_titles',
+        [JobTitle, seed_job_titles],
         'seed_users',
-        'seed_roles',
+        [Role, roleList],
         'seed_company_owner_bridges',
-        'seed_role_assignment_bridges',
-        'seed_role_permission_bridges',
+        [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
+        [PermissionAssignmentBridge, seed_permission_assignment_bridges],
+        [RolePermissionBridge, rolePermissionList],
         'seed_signup_questions',
         'seed_course_categories',
         'seed_courses',
@@ -127,7 +138,8 @@ export const dbSchema = {
         'seed_discount_codes',
         'seed_prequiz_questions',
         'seed_course_rating',
-        'seed_tempomat_adjustment_values'
+        'seed_tempomat_adjustment_values',
+        [CourseAccessBridge, seed_course_access_bridge]
     ],
 
     viewScripts: [
@@ -138,12 +150,13 @@ export const dbSchema = {
         'course_item_state_view',
         'course_state_view',
         'course_item_all_view',
-        'course_view',
         'signup_question_view',
         'latest_given_answer_view',
         'personality_trait_view',
         'signup_completed_view',
+        'company_permission_view',
         'user_permission_view',
+        'available_course_view',
         'exam_result_view',
         'practise_question_view',
         'daily_tip_view',
@@ -197,7 +210,8 @@ export const dbSchema = {
         'user_tempomat_adjustment_value_view',
         'course_item_question_edit_view',
         'module_view',
-        'role_list_view'
+        'role_list_view',
+        'company_view'
     ],
 
     functionScripts: [
@@ -240,7 +254,7 @@ export const dbSchema = {
         CourseItemStateView,
         CourseStateView,
         CourseItemAllView,
-        CourseView,
+        AvailableCourseView,
         PersonalityTraitView,
         SignupCompletedView,
         DailyTipView,
@@ -294,6 +308,7 @@ export const dbSchema = {
         Company,
         User,
         Video,
+        PermissionAssignmentBridge,
         Task,
         GivenAnswer,
         CompanyOwnerBridge,
@@ -323,7 +338,7 @@ export const dbSchema = {
         ActivityStreak,
         Event,
         ActivationCode,
-        UserCourseAccessBridge,
+        CourseAccessBridge,
         ShopItem,
         ShopItemCategory,
         DiscountCode,

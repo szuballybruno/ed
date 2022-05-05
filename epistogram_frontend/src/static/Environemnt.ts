@@ -11,14 +11,14 @@ export const Environment = (() => {
     const isLocalhost = process.env.REACT_APP_IS_LOCALHOST === 'true';
 
     const currentOrigin = window.location.origin;
-    const fetchNewAccessTokenIntervalInMs = 5 * 60 * 1000; // 5 minutes
-    const fetchUserIntervalInMs = 10 * 60 * 1000; // 10 minutes
-    const eventPoolingIntervalInMs = 20 * 1000; // 20 secs
+    const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
+    const eventPoolingIntervalInMs = 1 * 60 * 1000; // 1 mins
     const verboseLogging = false;
     const loggingSettings = {
         routing: false,
         render: false,
-        mutations: false
+        mutations: false,
+        auth: true
     };
 
     console.log('Current version: ' + currentVersion);
@@ -38,8 +38,7 @@ export const Environment = (() => {
         isUnderMaintenance,
         isLocalhost,
         currentOrigin,
-        fetchNewAccessTokenIntervalInMs,
-        fetchUserIntervalInMs,
+        getAuthHandshakeIntervalInMs,
         eventPoolingIntervalInMs,
         verboseLogging,
         loggingSettings,

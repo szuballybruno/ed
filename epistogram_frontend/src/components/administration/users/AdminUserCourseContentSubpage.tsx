@@ -1,12 +1,12 @@
-import { useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseBriefData } from '../../../services/api/courseApiService';
 import { useEditUserData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { useIntParam } from '../../../static/locationHelpers';
-import { useEpistoDialogLogic } from '../../EpistoDialog';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminUserCoursesDataGridControl } from './dataGrids/AdminUserCoursesDataGridControl';

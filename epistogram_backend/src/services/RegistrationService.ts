@@ -2,7 +2,8 @@ import generatePassword from 'password-generator';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
-import { ErrorCode, getFullName } from '../utilities/helpers';
+import { VerboseError } from '../shared/types/VerboseError';
+import { getFullName } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { EmailService } from './EmailService';
@@ -59,7 +60,7 @@ export class RegistrationService extends ServiceBase {
         const companyId = 1;
 
         if (!companyId)
-            throw new ErrorCode(
+            throw new VerboseError(
                 `Current user is not an administrator, 
                 but has rights to add users, but has no company, 
                 in which he/she could add users.`, 'bad request');
@@ -97,7 +98,7 @@ export class RegistrationService extends ServiceBase {
             .isValidCodeAsync(activationCode);
 
         if (!activationCodeEntity)
-            throw new ErrorCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
+            throw new VerboseError(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
         // create user 
         await this.createInvitedUserAsync({
@@ -181,13 +182,13 @@ export class RegistrationService extends ServiceBase {
             .getUserByEmailAsync(userEmail);
 
         if (!user)
-            throw new ErrorCode('No such user!', 'bad request');
+            throw new VerboseError('No such user!', 'bad request');
 
         const userId = user.id;
 
         // check passwords 
         if (validatePassowrd(password, passwordControl))
-            throw new ErrorCode('Password is invalid.', 'bad request');
+            throw new VerboseError('Password is invalid.', 'bad request');
 
         // update user 
         await this._userService

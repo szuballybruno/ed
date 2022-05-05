@@ -17,7 +17,7 @@ export class CourseRatingController {
             .getQuery<any>();
 
         const courseId = query
-            .getValue(x => x.courseId);
+            .getValue(x => x.courseId, 'int');
 
         return this._courseRatingService
             .getCourseRatingGroupsAsync(params.currentUserId, courseId);

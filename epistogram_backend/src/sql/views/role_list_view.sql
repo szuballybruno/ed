@@ -1,40 +1,59 @@
-SELECT
-	sq.*,
-	CASE WHEN sq.is_company_owned 
-		THEN sq.company_name 
-		ELSE u.email 
-	END owner_name
-FROM
+WITH 
+roles AS 
 (
-	SELECT 
-		u.id user_id,
-		co.id company_id,
-		co.name company_name,
-		r.id role_id,
-		r.name role_name,
-		r.owner_user_id,
-		r.owner_company_id IS NOT NULL is_company_owned,
-		upv.permission_id IS NOT NULL is_company_role_manager
-	FROM public.user u
+	SELECT upv.user_id, r.id role_id
+	FROM public.role r
 
-	CROSS JOIN public.company co
+	INNER JOIN public.user_permission_view upv
+	ON upv.context_company_id = r.owner_company_id
+		AND upv.permission_code = 'VIEW_COMPANY_ROLES'
 
-	LEFT JOIN public.user_permission_view upv
-	ON upv.user_id = u.id 
-		AND upv.permission_code = 'COMPANY_ROLE_MANAGER'
-		AND upv.company_id = co.id
+	UNION
 
-	LEFT JOIN public.role r
-	ON r.owner_user_id = u.id
-		OR (r.owner_company_id = co.id AND upv.permission_id IS NOT NULL)
-		OR r.owner_company_id IS NULL AND u.is_god = true 
+	SELECT upv.user_id, r.id role_id
+	FROM public.user_permission_view upv 
 
-	WHERE r.id IS NOT NULL
-	
-	ORDER BY
-		u.id,
-		co.id
-) sq
+	INNER JOIN public.role r
+	ON r.owner_user_id IS NULL 
+		AND r.owner_company_id IS NULL
+
+	WHERE upv.permission_code = 'VIEW_GLOBAL_ROLES'
+)
+SELECT 
+	u.id user_id,
+	u.email user_email,
+	co.id owner_company_id,
+	r.deletion_date IS NOT NULL is_deleted,
+	r.is_global,
+	r.owner_user_id,
+	r.id role_id,
+	r.name role_name,
+	r.owner_company_id IS NOT NULL is_company_owned,
+	CASE WHEN r.owner_company_id IS NOT NULL
+		THEN co.name 
+		ELSE u.email
+	END owner_name,	
+	pe.id permission_id,
+	pe.code permission_code
+FROM roles
 
 LEFT JOIN public.user u
-ON u.id = sq.owner_user_id
+ON u.id = roles.user_id
+
+LEFT JOIN public.role r
+ON r.id = roles.role_id
+
+LEFT JOIN public.company co
+ON co.id = r.owner_company_id
+
+LEFT JOIN public.role_permission_bridge rpb
+ON rpb.role_id = r.id
+
+LEFT JOIN public.permission pe
+ON pe.id = rpb.permission_id
+
+ORDER BY
+	u.id,
+	co.id,
+	r.id,
+	pe.id

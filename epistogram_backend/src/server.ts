@@ -4,7 +4,7 @@ import fileUpload from 'express-fileupload';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
-import { CompaniesController } from './api/CompaniesController';
+import { CompanyController } from './api/CompanyController';
 import { CourseController } from './api/CourseController';
 import { CourseRatingController } from './api/CourseRatingController';
 import { DailyTipController } from './api/DailyTipController';
@@ -14,6 +14,7 @@ import { FileController } from './api/FileController';
 import { MiscController } from './api/MiscController';
 import { ModuleController } from './api/ModuleController';
 import { PasswordChangeController } from './api/PasswordChangeController';
+import { PermissionController } from './api/PermissionController';
 import { PersonalityAssessmentController } from './api/PersonalityAssessmentController';
 import { PlaybackController } from './api/PlaybackController';
 import { PlayerController } from './api/PlayerController';
@@ -58,6 +59,7 @@ import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
 import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { PasswordChangeService } from './services/PasswordChangeService';
+import { PermissionService } from './services/PermissionService';
 import { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
 import { PlaybackService } from './services/PlaybackService';
 import { PlayerService } from './services/PlayerService';
@@ -127,7 +129,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(sqlBootstrapperService, registrationService);
+    const seedService = new SeedService(sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);
@@ -153,8 +155,10 @@ import { TurboExpress } from './utilities/TurboExpress';
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
     const companyService = new CompanyService(ormConnectionService, mapperService);
+    const permissionService = new PermissionService(ormConnectionService, mapperService);
 
     // controllers 
+    const permissionController = new PermissionController(permissionService);
     const userStatsController = new UserStatsController(userStatsService);
     const prequizController = new PrequizController(prequizService);
     const pretestController = new PretestController(pretestService);
@@ -183,7 +187,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
-    const companyController = new CompaniesController(companyService);
+    const companyController = new CompanyController(companyService, permissionService);
     const roleController = new RoleController(roleService);
 
     // middleware 
@@ -223,6 +227,13 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // roles
     addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
+    addEndpoint(apiRoutes.roles.createRole, roleController.createRoleAction, { isPost: true });
+    addEndpoint(apiRoutes.roles.getRoleEditData, roleController.getRoleEditDataAction);
+    addEndpoint(apiRoutes.roles.deleteRole, roleController.deleteRoleAction, { isPost: true });
+    addEndpoint(apiRoutes.roles.saveRole, roleController.saveRoleAction, { isPost: true });
+
+    // permissions 
+    addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);
 
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
@@ -231,6 +242,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.companies.createCompany, companyController.createCompanyAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.companies.deleteCompany, companyController.deleteCompanyAction, { isPost: true, authorize: ['administrator'] });
     addEndpoint(apiRoutes.companies.saveCompany, companyController.saveCompanyAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.companies.getAvailableCompaniesForRoleCreation, companyController.getAvailableCompaniesForRoleCreationAction);
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
@@ -279,9 +291,8 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.passwordChange.requestPasswordChange, passwordChangeController.requestPasswordChangeAction, { isPublic: true, isPost: true });
 
     // authentication 
-    addEndpoint(apiRoutes.authentication.getCurrentUser, authenticationController.getCurrentUserAction);
+    addEndpoint(apiRoutes.authentication.establishAuthHandshake, authenticationController.establishAuthHandshakeAction, { isPublic: true });
     addEndpoint(apiRoutes.authentication.logoutUser, authenticationController.logOutUserAction, { isPost: true });
-    addEndpoint(apiRoutes.authentication.renewUserSession, authenticationController.renewUserSessionAction, { isPublic: true });
     addEndpoint(apiRoutes.authentication.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
 
     // coin transactions 

@@ -8,7 +8,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
-import { AuthorizationContext } from '../system/AuthFrame';
+import { AuthorizationContext } from '../system/AuthenticationFrame';
 import { NotificationsPopper } from './NotificationsPopper';
 import { UserContextMenu } from './UserContextMenu';
 

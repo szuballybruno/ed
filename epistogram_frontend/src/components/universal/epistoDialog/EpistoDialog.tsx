@@ -1,80 +1,10 @@
 import { Flex } from '@chakra-ui/layout';
 import { Close } from '@mui/icons-material';
-import React, { ReactNode, useState } from 'react';
-import { ButtonType, DialogOptions } from '../models/types';
-import { EpistoButton } from './controls/EpistoButton';
-import { EpistoHeader } from './EpistoHeader';
-import { useXDialogLogic, XDialog, XDialogLogicType } from './lib/XDialog/XDialog';
-
-export const useEpistoDialogLogic = <TParams = any,>(key: string, dialogOptions?: DialogOptions<TParams>): EpistoDialogLogicType<TParams> => {
-
-    const [title, setTitle] = useState(dialogOptions?.title ?? '');
-    const [description, setDescription] = useState(dialogOptions?.description ?? '');
-    const [params, setParams] = useState(dialogOptions?.params);
-    const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? 'bottom';
-    const xlogic = useXDialogLogic(key);
-
-    const closeDialog = () => {
-
-        xlogic.setIsOpen(false);
-    };
-
-    const defaultButtons = defaultCloseButtonType === 'bottom'
-        ? [
-            {
-                title: 'Bezárás',
-                action: closeDialog
-            }
-        ]
-        : [];
-
-    const [buttons, setButtons] = useState<ButtonType[]>(defaultButtons
-        .concat(dialogOptions?.buttons ?? []));
-
-    const openDialog = (opt?: DialogOptions<TParams>) => {
-
-        if (opt) {
-
-            if (opt.title)
-                setTitle(opt.title);
-
-            if (opt.description)
-                setDescription(opt.description);
-
-            if (opt.buttons)
-                setButtons(defaultButtons.concat(opt.buttons ?? []));
-
-            if (opt.params)
-                setParams(opt.params);
-        }
-
-        xlogic.setIsOpen(true);
-    };
-
-    return {
-        isOpen: xlogic.isOpen,
-        title,
-        description,
-        buttons,
-        params,
-        dialogOptions,
-        openDialog,
-        closeDialog,
-        xlogic
-    };
-};
-
-export type EpistoDialogLogicType<TParams = any> = {
-    isOpen: boolean;
-    title: string;
-    description: string;
-    buttons: any;
-    params?: TParams;
-    dialogOptions: any;
-    openDialog: any;
-    closeDialog: any;
-    xlogic: XDialogLogicType;
-};
+import React, { ReactNode } from 'react';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoHeader } from '../../EpistoHeader';
+import { XDialog } from '../../lib/XDialog/XDialog';
+import { EpistoDialogLogicType } from './EpistoDialogTypes';
 
 export const EpistoDialog = <TParams = any>(props: {
     logic: EpistoDialogLogicType<TParams>,
@@ -152,7 +82,7 @@ export const EpistoDialog = <TParams = any>(props: {
                             variant="outlined"
                             onClick={() => {
 
-                                x.action();
+                                x.action(logic);
                                 closeDialog();
                             }}>
                             {x.title}

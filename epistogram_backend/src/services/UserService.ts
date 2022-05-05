@@ -1,15 +1,15 @@
+import { RegistrationType } from '../models/DatabaseTypes';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { Course } from '../models/entity/Course';
 import { User } from '../models/entity/User';
+import { AdminUserListView } from '../models/views/UserAdminListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
-import { RoleIdEnum } from '../shared/types/sharedTypes';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { RegistrationType } from '../models/DatabaseTypes';
-import { AdminUserListView } from '../models/views/UserAdminListView';
-import { getFullName, toFullName, ErrorCode } from '../utilities/helpers';
+import { VerboseError } from '../shared/types/VerboseError';
+import { getFullName, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
@@ -205,7 +205,7 @@ export class UserService {
         // does user already exist?
         const existingUser = await this.getUserByEmailAsync(opts.email);
         if (existingUser)
-            throw new ErrorCode('User already exists. Email: ' + opts.email, 'email_taken');
+            throw new VerboseError('User already exists. Email: ' + opts.email, 'email_taken');
 
         // hash user password 
         const hashedPassword = await this._hashService
@@ -312,7 +312,7 @@ export class UserService {
             });
 
         if (connectedCourses.length > 0)
-            throw new ErrorCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+            throw new VerboseError('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
         return await this._ormService
             .getRepository(User)

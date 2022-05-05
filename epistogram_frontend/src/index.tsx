@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { XDialogHost } from './components/lib/XDialog/XDialogHost';
-import { AuthenticationFrame } from './components/system/AuthFrame';
+import { AuthenticationFrame } from './components/system/AuthenticationFrame';
 import { ChakraThemeFrame } from './components/system/ChakraThemeFrame';
 import { ErrorDialogFrame } from './components/system/DialogFrame';
 import { EventListener } from './components/system/EventListener';
@@ -25,17 +25,17 @@ const queryClient = new QueryClient();
 
 const app = (
     <InitFrame>
-        <QueryClientProvider client={queryClient}>
-            <ChakraThemeFrame>
-                <MUIThemeFrame>
-                    <XDialogHost>
+        <ChakraThemeFrame>
+            <MUIThemeFrame>
+                <XDialogHost>
+                    <QueryClientProvider client={queryClient}>
                         <PreventMobileFrame>
                             <BrowserRouter>
                                 <EpistoRoutes
                                     renderRoutes={new ArrayBuilder<RenderRoute>()
 
                                         // under maintanance
-                                        .addIf(Environment. isUnderMaintenance, {
+                                        .addIf(Environment.isUnderMaintenance, {
                                             element: <UnderMaintanence />,
                                             route: applicationRoutes.matchAll,
                                         })
@@ -57,10 +57,10 @@ const app = (
                                 />
                             </BrowserRouter>
                         </PreventMobileFrame>
-                    </XDialogHost>
-                </MUIThemeFrame>
-            </ChakraThemeFrame>
-        </QueryClientProvider>
+                    </QueryClientProvider>
+                </XDialogHost>
+            </MUIThemeFrame>
+        </ChakraThemeFrame>
     </InitFrame>
 );
 

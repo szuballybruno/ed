@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
 import { ErrorCodeType, RoleType } from '../shared/types/sharedTypes';
 import { log, logError, logSecondary } from '../services/misc/logger';
-import { ErrorCode } from './helpers';
 import { IRouteOptions } from './TurboExpress';
+import { VerboseError } from '../shared/types/VerboseError';
 
 export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
@@ -21,7 +21,7 @@ export const onActionError = (errorin: any, req: Request, res: Response) => {
     // logError(error.message);
     logError(error.stack);
 
-    respondError(res, '', ((error as ErrorCode).code ?? 'internal server error') as ErrorCodeType);
+    respondError(res, '', ((error as VerboseError).code ?? 'internal server error') as ErrorCodeType);
 };
 
 export const onActionSuccess = (value: any, req: Request, res: Response) => {
@@ -55,7 +55,7 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
             .catch((error: any) => {
 
                 logError(error);
-                respondError(wrapperRes, error.message, ((error as ErrorCode).code ?? 'internal server error') as ErrorCodeType);
+                respondError(wrapperRes, error.message, ((error as VerboseError).code ?? 'internal server error') as ErrorCodeType);
             });
     };
 

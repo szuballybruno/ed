@@ -12,7 +12,7 @@ import { useBoolParam, useStringParam } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
-import { RefetchUserAsyncContext } from './system/AuthFrame';
+import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegistrationPage = () => {

@@ -1,8 +1,8 @@
 import { Divider, Flex } from '@chakra-ui/layout';
 import { FilterAlt, Search } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Radio, RadioGroup } from '@mui/material';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { RadioGroup } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSetCourseMode } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
@@ -13,10 +13,10 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CurrentUserContext } from '../../system/AuthFrame';
 import { CourseItemList } from '../../universal/CourseItemList';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 

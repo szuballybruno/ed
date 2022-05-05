@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag } from '../../../services/ORMConnectionService/ORMConnectionDecorators';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { User } from '../User';
@@ -10,6 +11,13 @@ export class Role {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @IsDeletedFlag()
+    @DeleteDateColumn()
+    deletionDate: Date;
+
+    @Column()
+    isGlobal: boolean;
 
     @Column()
     name: string;
@@ -26,7 +34,7 @@ export class Role {
 
     // owner user 
     @Column({ type: 'int', nullable: true })
-    ownerUserId: number;
+    ownerUserId: number  | null;
 
     @JoinColumn(getJoinColumnName(Role, 'ownerUserId'))
     @ManyToOne(_ => User, x => x.ownedRoles)
@@ -34,7 +42,7 @@ export class Role {
 
     // owner company 
     @Column({ type: 'int', nullable: true })
-    ownerCompanyId: number;
+    ownerCompanyId: number | null;
 
     @JoinColumn(getJoinColumnName(Role, 'ownerCompanyId'))
     @ManyToOne(_ => Company, x => x.ownedRoles)

@@ -2,9 +2,10 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Environment } from '../../static/Environemnt';
-import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from '../../static/frontendHelpers';
+import { getErrorTypeByHTTPCode, getUrl } from '../../static/frontendHelpers';
 import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
 import { LoadingStateType } from '../../models/types';
+import { VerboseError } from '../../shared/types/VerboseError';
 
 export class HTTPResponse {
     code: number;
@@ -184,7 +185,7 @@ export const usePostMultipartDataUnsafe = <TData>(url: string) => {
 export const usePostData = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>('success');
-    const [error, setError] = useState<ErrorCode | null>(null);
+    const [error, setError] = useState<VerboseError | null>(null);
     const [result, setResult] = useState<TResult | null>(null);
 
     const postDataAsync = async (data: TData) => {
@@ -201,7 +202,7 @@ export const usePostData = <TData, TResult>(url: string) => {
         catch (e) {
 
             setState('error');
-            setError(e as ErrorCode);
+            setError(e as VerboseError);
         }
     };
 
@@ -276,16 +277,16 @@ const handleHttpError = (error: any) => {
         // get & check error response data
         const error = response.data as HttpErrorResponseDTO;
         if (!error)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new VerboseError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // get & check error response data properties
         if (!error.message && !error.code)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new VerboseError(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // message only
         // throw with a more informative message
         if (error.message && !error.code)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+            throw new VerboseError(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
 
         // error type and maybe message as well
         const message = error.message
@@ -294,6 +295,6 @@ const handleHttpError = (error: any) => {
 
         // throw with a more informative message
         // and error type
-        throw new ErrorCode(message, error.code);
+        throw new VerboseError(message, error.code);
     }
 };

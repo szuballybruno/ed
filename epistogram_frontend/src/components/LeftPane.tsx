@@ -8,7 +8,7 @@ import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
 import { FlexFloat } from './controls/FlexFloat';
-import { AuthorizationContext } from './system/AuthFrame';
+import { AuthorizationContext } from './system/AuthenticationFrame';
 
 export const LeftPane = (props: FlexProps) => {
 
@@ -52,7 +52,7 @@ export const LeftPane = (props: FlexProps) => {
                     alt=""
                     onClick={() => {
 
-                        if (hasPermission('canAccessApplication'))
+                        if (hasPermission('ACCESS_APPLICATION'))
                             navigate(homeRoute);
                     }} />
             </Flex>

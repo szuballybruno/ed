@@ -1,82 +1,84 @@
 WITH 
-company_inherited_roles AS 
-(
-	SELECT
-		u.id user_id,
-		r.id role_id,
-		r.name role_name,
-		u.company_id
-	FROM public.user u
-
-	LEFT JOIN public.role_assignment_bridge rab
-		ON rab.company_id = u.company_id
-
-	LEFT JOIN public.role r
-		ON r.id = rab.role_id
-	
-	WHERE r.id IS NOT NULL
-),
-assigned_roled AS 
+user_assigned_permissions AS 
 (
 	SELECT 
 		u.id user_id,
-		rab.role_id,
-		rab.company_id
+		pab.permission_id,
+		pab.context_company_id
 	FROM public.user u
 
-	LEFT JOIN public.role_assignment_bridge rab
-		ON rab.user_id = u.id
+	INNER JOIN public.permission_assignment_bridge pab
+	ON pab.user_id = u.id
 	
-	WHERE rab.role_id IS NOT NULL
-),
-god_roles AS (
+	UNION
+	
 	SELECT 
 		u.id user_id,
-		r.id role_id,
-		co.id company_id
-	FROM public.role r
-	CROSS JOIN public.company co
-	CROSS JOIN public.user u 
-	WHERE u.is_god = true
+		rpb.permission_id,
+		rab.context_company_id
+	FROM public.user u
+
+	INNER JOIN public.role_assignment_bridge rab
+	ON rab.user_id = u.id
+	
+	LEFT JOIN public.role_permission_bridge rpb
+	ON rpb.role_id = rab.role_id
+),
+user_god_permissions AS (
+	SELECT 
+		u.id user_id,
+		co.id context_company_id,
+		pe.id permission_id
+	FROM public.permission pe
+
+	LEFT JOIN public.company co
+	ON pe.is_global = false
+	
+	INNER JOIN public.user u
+	ON u.is_god = true
+	
+	ORDER BY
+		u.id,
+		co.id,
+		pe.id
 )
-SELECT 
+SELECT
 	u.id user_id,
-	roles.company_id,
-	roles.role_id,
+	co.id context_company_id,
+	co.name context_company_name,
 	pe.id permission_id,
-	pe.code permission_code
+	pe.code permission_code,
+	pe.is_global permission_is_global
 FROM public.user u
 
 LEFT JOIN 
 (
-	-- roles assigned to user itself 
-	SELECT ar.user_id, ar.role_id, ar.company_id
-	FROM assigned_roled ar
+	-- permissions assigned to user 
+	SELECT uap.user_id, uap.permission_id, NULL company_id, uap.context_company_id
+	FROM user_assigned_permissions uap
 
 	UNION
 
-	-- roles inherited from user's company
-	SELECT cir.user_id, cir.role_id, cir.company_id
-	FROM company_inherited_roles cir
+	-- permissions inherited from user's company
+	SELECT NULL user_id, cpv.permission_id, cpv.company_id, cpv.context_company_id
+	FROM public.company_permission_view cpv
 
 	UNION
 
-	-- god roles only the best of us have
-	SELECT gr.user_id, gr.role_id, gr.company_id
-	FROM god_roles gr
-) roles
-ON roles.user_id = u.id
+	-- god permissions only the best of us can have
+	SELECT ugp.user_id, ugp.permission_id, NULL company_id, ugp.context_company_id
+	FROM user_god_permissions ugp
+) permissions
+ON permissions.user_id = u.id 
+	OR permissions.company_id = u.company_id
 
-LEFT JOIN public.role_permission_bridge rpb
-ON rpb.role_id = roles.role_id
+INNER JOIN public.permission pe
+ON pe.id = permissions.permission_id
 
-LEFT JOIN public.permission pe
-ON pe.id = rpb.permission_id
-
-WHERE roles.role_id IS NOT NULL
+LEFT JOIN public.company co
+ON co.id = permissions.context_company_id
 
 ORDER BY
 	u.id,
-	roles.company_id,
-	roles.role_id,
+	permissions.context_company_id,
 	pe.id

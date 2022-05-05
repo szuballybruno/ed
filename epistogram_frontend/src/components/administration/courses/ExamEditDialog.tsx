@@ -5,15 +5,16 @@ import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AnswerEditDTO } from '../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
 import { iterate, usePaging } from '../../../static/frontendHelpers';
-import { EpistoDialogLogicType } from '../../EpistoDialog';
 import { useXListMutator } from '../../lib/XMutator/XMutator';
-import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
+import { } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { AdminExamQuestionsModalPage } from './dialogs/AdminExamQuestionsDialogPage';
 import { AdminExamStatisticsModalPage } from './dialogs/AdminExamStatisticsDialogPage';
+import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
 import { EditQuestionFnType } from './VideoEditDialog';
 
 export const ExamEditDialog = (props: {
-    logic: EpistoDialogLogicType
+    logic: EpistoDialogLogicType<{ examId: number }>
 }) => {
 
     const { logic } = props;
@@ -26,7 +27,7 @@ export const ExamEditDialog = (props: {
         examQuestionEditDataState,
         examQuestionEditDataError,
         refetchExamQuestionEditData
-    } = useExamQuestionEditData(logic.params!);
+    } = useExamQuestionEditData(logic.params.examId);
     const { saveExamQuestionEditData } = useSaveExamQuestionEditData();
 
     const {

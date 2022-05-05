@@ -1,7 +1,7 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { Environment } from '../../static/Environemnt';
-import { typedMemo } from '../../static/frontendHelpers';
+import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
 
 const removeOverlay = () => {
 
@@ -54,11 +54,14 @@ export type InitialStateType<TSchema> = {
 
 export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     rows: TSchema[],
-    columns: GridColumnType<TSchema, TKey, any>[],
+    columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
     getKey: (row: TSchema) => TKey,
-    handleEdit: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
+    handleEdit?: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
     initialState?: InitialStateType<TSchema>,
+    deps?: any[]
 }) => {
+
+    console.log('Rendering EpistoDataGrid...');
 
     const { columns, rows, initialState, handleEdit, getKey } = props;
 
@@ -67,10 +70,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     const columnsProcessed = columns
         .map(column => {
 
-            const { renderCell, type, editHandler, renderEditCell, ...others } = column;
+            const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
 
             const def: GridColDef = {
                 ...others,
+                field: field as any,
                 editable: !!editHandler || !!renderEditCell
             };
 
@@ -183,25 +187,36 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     );
 }, (prev, next) => {
 
-    if (prev.getKey !== next.getKey) {
+    const [isUnhanged, cause] = (() => {
 
-        return false;
-    }
+        if (prev.getKey !== next.getKey) {
 
-    if (prev.handleEdit !== next.handleEdit) {
+            return [false, 'getKey'];
+        }
 
-        return false;
-    }
+        if (prev.handleEdit !== next.handleEdit) {
 
-    if (JSON.stringify(prev.columns) !== JSON.stringify(next.columns)) {
+            return [false, 'handleEdit'];
+        }
 
-        return false;
-    }
+        if (!areArraysEqual(prev.columns, next.columns)) {
 
-    if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
+            return [false, 'columns'];
+        }
 
-        return false;
-    }
+        if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
 
-    return true;
+            return [false, 'rows'];
+        }
+
+        if (JSON.stringify(prev.deps) !== JSON.stringify(prev.deps))
+            return [false, 'deps'];
+
+        return [true, null];
+    })();
+
+    if (!isUnhanged)
+        console.log(`Grid params changed, cause: ${cause}`);
+
+    return isUnhanged;
 });

@@ -29,7 +29,7 @@ import { CourseModuleOverviewView } from '../../models/views/CourseModuleOvervie
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
-import { CourseView } from '../../models/views/CourseView';
+import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
@@ -114,6 +114,9 @@ import { getItemCode } from './encodeService';
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleListView } from '../../models/views/RoleListView';
+import { CompanyView } from '../../models/views/CompanyView';
+import { Permission } from '../../models/entity/authorization/Permission';
+import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -456,7 +459,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseView, CourseStatDTO, view => {
+        .addMap(AvailableCourseView, CourseStatDTO, view => {
 
             return {
                 title: view.title,
@@ -570,7 +573,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(CourseView, CourseShortDTO, course => {
+        .addMap(AvailableCourseView, CourseShortDTO, course => {
 
             const thumbnailImageURL = course.filePath
                 ? getAssetUrl(course.filePath)
@@ -843,7 +846,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(PretestResultView, PretestResultDTO, (x, cv: CourseView) => ({
+        .addMap(PretestResultView, PretestResultDTO, (x, cv: AvailableCourseView) => ({
             isCompleted: x.isCompleted,
             correctAnswerRate: x.correctAnswerRate,
             firstItemCode: cv.firstItemCode
@@ -879,19 +882,23 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
+        .addMap(CompanyView, CompanyDTO, x => ({
+            id: x.id,
+            name: x.name
+        }));
+
+    mapperService
         .addMap(Company, CompanyDTO, x => ({
             id: x.id,
             name: x.name
         }));
 
     mapperService
-        .addMap(RoleListView, RoleAdminListDTO, x => ({
-            roleName: x.roleName,
-            ownerName: x.ownerName,
-            ownerType: x.isCompanyOwned ? 'company' : 'user',
-            companyId: x.companyId,
-            companyName: x.companyName
-        } as RoleAdminListDTO));
+        .addMap(Permission, PermissionListDTO, x => ({
+            code: x.code,
+            isGlobal: x.isGlobal,
+            id: x.id
+        }));
 };
 
 const separationChar = '|';

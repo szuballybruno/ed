@@ -5,7 +5,7 @@ import { CourseCategory } from '../models/entity/CourseCategory';
 import { CourseModule } from '../models/entity/CourseModule';
 import { Exam } from '../models/entity/Exam';
 import { User } from '../models/entity/User';
-import { UserCourseAccessBridge } from '../models/entity/UserCourseAccessBridge';
+import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { Video } from '../models/entity/Video';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
@@ -15,7 +15,7 @@ import { CourseItemStateView } from '../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
-import { CourseView } from '../models/views/CourseView';
+import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -106,7 +106,7 @@ export class CourseService {
     async getCourseViewAsync(userId: number, courseId: number) {
 
         const view = await this._ormService
-            .getRepository(CourseView)
+            .getRepository(AvailableCourseView)
             .findOneOrFail({
                 where: {
                     id: courseId,
@@ -201,10 +201,10 @@ export class CourseService {
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
-            .leftJoin(Course, CourseLearningStatsView)
-            .on('id', '=', 'courseId')
+            .innerJoin(Course, x => x
+                .on('id', '=', 'courseId', CourseLearningStatsView)
+                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
-            .and(Course, 'deletionDate', 'IS', 'NULL')
             .getMany();
 
         // in progress courses 
@@ -690,13 +690,13 @@ export class CourseService {
     async getAvailableCoursesAsync(userId: number) {
 
         const courses = await this._ormService
-            .query(CourseView, { userId })
+            .query(AvailableCourseView, { userId })
             .where('userId', '=', 'userId')
             .and('canView', '=', 'true')
             .getMany();
 
         return this._mapperService
-            .mapMany(CourseView, CourseShortDTO, courses);
+            .mapMany(AvailableCourseView, CourseShortDTO, courses);
     }
 
     /**
@@ -711,7 +711,7 @@ export class CourseService {
     async createCourseAccessBridge(userId: number, courseId: number) {
 
         await this._ormService
-            .getRepository(UserCourseAccessBridge)
+            .getRepository(CourseAccessBridge)
             .insert({
                 courseId,
                 userId

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { EventCoinAcquireNotificationDTO } from '../../shared/dtos/EventCoinAcquireNotificationDTO';
 import { translatableTexts } from '../../static/translatableTexts';
 import { CoinRewardDialog } from '../CoinRewardDialog';
-import { useEpistoDialogLogic } from '../EpistoDialog';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 
 export const CoinRewardEventHandler = (props: {
     data: EventCoinAcquireNotificationDTO | null,

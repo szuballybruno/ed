@@ -142,11 +142,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const courseBridge = await this._ormService
             .query(UserCourseBridge, { userId })
-            .leftJoin(Course, UserCourseBridge)
-            .on('id', '=', 'courseId')
+            .leftJoin(Course, x => x
+                .on('id', '=', 'courseId', UserCourseBridge)
+                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
-            .and(Course, 'deletionDate', 'IS', 'NULL')
             .getOneOrNull();
 
         return courseBridge?.courseId ?? null;
