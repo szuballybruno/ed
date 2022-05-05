@@ -33,6 +33,7 @@ export const EditRoleControl = (props: {
 }) => {
 
     const { logic, onSave, roleEditData, saveButton, error } = props;
+    const isGlobalRole = !!roleEditData?.isGlobal;
 
     const { permissionsList, permissionsListError, permissionsListState, refetchPermissionsList } = usePermissionsList();
     const { companies, companiesState } = useAvailableCompaniesForRoleCreation();
@@ -82,8 +83,12 @@ export const EditRoleControl = (props: {
         ] as GridColumnType<RowType, string, keyof RowType>[];
     }, [selectedPermissions, setSelectedPermissions, deselectPermission]);
 
-    const handleCreateRole = useCallback(() => onSave({
-        ownerCompanyId: selectedCompany?.id ?? -1,
+    const handleSaveRole = useCallback(() => onSave({
+        isGlobal: false,
+        roleId: roleEditData?.roleId ?? -1,
+        ownerCompanyId: isGlobalRole
+            ? null
+            : selectedCompany?.id ?? -1,
         name,
         permissionIds: selectedPermissions
             .map(x => x.id)
@@ -126,7 +131,7 @@ export const EditRoleControl = (props: {
                     label="Name"
                     labelVariant="top" />
 
-                <EpistoLabel
+                {!isGlobalRole && <EpistoLabel
                     text="Owner company">
 
                     <Flex align="center">
@@ -140,7 +145,7 @@ export const EditRoleControl = (props: {
                             onSelected={setSelectedCompany}
                             margin='0' />
                     </Flex>
-                </EpistoLabel>
+                </EpistoLabel>}
 
                 <EpistoLabel
                     text="Selected Permissions"
@@ -169,7 +174,7 @@ export const EditRoleControl = (props: {
                         style={{
                             marginTop: '10px'
                         }}
-                        onClick={handleCreateRole}
+                        onClick={handleSaveRole}
                         icon={saveButton.icon}>
 
                         {saveButton.title}

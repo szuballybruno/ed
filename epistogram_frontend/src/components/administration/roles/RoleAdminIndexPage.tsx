@@ -41,7 +41,7 @@ export const RoleAdminIndexPage = memo(() => {
 
     const getKey = useCallback((x: RowType): string => `${x.roleName}-${x.ownerName}-${x.companyId}`, []);
 
-    const [handleDeleteRole] = usePostCallback(deleteRoleAsync, [refetchRolesList]);
+    const handleDeleteRole = usePostCallback(deleteRoleAsync, [refetchRolesList]);
 
     const addDialogLogic = useEpistoDialogLogic(AddRoleDialog, { defaultCloseButtonType: 'top' });
     const editDialogLogic = useEpistoDialogLogic<{ roleId: number }>(EditRoleDialog, { defaultCloseButtonType: 'top' });

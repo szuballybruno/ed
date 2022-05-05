@@ -1,6 +1,6 @@
 import { Save } from '@mui/icons-material';
-import { useEffect } from 'react';
 import { useRoleEditData, useSaveRole } from '../../../services/api/rolesApiService';
+import { usePostCallback } from '../../../static/frontendHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { EditRoleControl } from './EditRoleControl';
@@ -18,9 +18,7 @@ export const EditRoleDialog = (props: {
     const { roleEditData, roleEditDataError, roleEditDataState } = useRoleEditData(roleId!, !!roleId);
     const { saveRoleAsync, saveRoleState } = useSaveRole();
 
-    useEffect(() => console.log('asd'), [roleEditData]);
-
-    console.log(logic.params?.roleId);
+    const handleSaveRole = usePostCallback(saveRoleAsync, [onSave, logic.closeDialog]);
 
     return (
         <EditRoleControl
@@ -28,7 +26,7 @@ export const EditRoleDialog = (props: {
             roleEditData={roleEditData ?? undefined}
             error={[roleEditDataError]}
             saveState={[roleEditDataState, saveRoleState]}
-            onSave={x => saveRoleAsync({ roleId, ...x })}
+            onSave={x => handleSaveRole(x)}
             saveButton={{
                 title: 'Save',
                 icon: <Save></Save>

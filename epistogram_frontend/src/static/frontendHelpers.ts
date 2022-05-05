@@ -596,7 +596,7 @@ export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects
         }
     }, [fn, ...afterEffects, showError]);
 
-    return [execSafeAsync];
+    return execSafeAsync;
 };
 
 export class ArrayBuilder<T = any> {

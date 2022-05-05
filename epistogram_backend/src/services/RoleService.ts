@@ -1,5 +1,4 @@
 import { Role } from '../models/entity/authorization/Role';
-import { RoleAssignmentBridge } from '../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
 import { RoleListView } from '../models/views/RoleListView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
@@ -7,8 +6,10 @@ import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
+import { noUndefined } from '../shared/logic/sharedLogic';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { createAsMinimal, MinimalEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -38,6 +39,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 return {
                     roleId: viewAsRole.roleId,
                     roleName: viewAsRole.roleName,
+                    isGlobal: viewAsRole.isGlobal,
                     ownerName: viewAsRole.ownerName,
                     ownerType: viewAsRole.isCompanyOwned ? 'company' : 'user',
                     companyId: viewAsRole.companyId,
@@ -58,23 +60,14 @@ export class RoleService extends QueryServiceBase<Role> {
         return [];
     }
 
-    // async getRoleEditDataAsync(roleId: number) {
-
-    //     const comp = await this._ormService
-    //         .query(Role, { roleId })
-    //         .where('id', '=', 'roleId')
-    //         .getSingle();
-
-    //     return this._mapperService
-    //         .map(Role, RoleEditDataDTO, comp);
-    // }
-
     async createRoleAsync(userId: number, dto: RoleCreateDTO) {
 
-        const role = {
+        const role = createAsMinimal<Role>({
             name: dto.name,
-            ownerCompanyId: dto.ownerCompanyId
-        } as Role;
+            ownerCompanyId: dto.ownerCompanyId,
+            ownerUserId: null,
+            isGlobal: false
+        });
 
         // create role
         await this.createAsync(role);
@@ -97,7 +90,8 @@ export class RoleService extends QueryServiceBase<Role> {
             roleId: number,
             roleName: string,
             permissionId: number,
-            ownerCompanyId: number
+            ownerCompanyId: Role['ownerCompanyId'],
+            isGlobal: boolean
         }
 
         const roles = await this._ormService
@@ -112,7 +106,8 @@ export class RoleService extends QueryServiceBase<Role> {
                 .columns(Role, {
                     roleId: 'id',
                     roleName: 'name',
-                    ownerCompanyId: 'ownerCompanyId'
+                    ownerCompanyId: 'ownerCompanyId',
+                    isGlobal: 'isGlobal'
                 })
                 .columns(RolePermissionBridge, {
                     permissionId: 'permissionId'
@@ -143,6 +138,7 @@ export class RoleService extends QueryServiceBase<Role> {
             roleId: viewAsRole.roleId,
             name: viewAsRole.roleName,
             ownerCompanyId: viewAsRole.ownerCompanyId,
+            isGlobal: viewAsRole.isGlobal,
             permissionIds: group
                 .items
                 .map(x => x.permissionId)
@@ -158,13 +154,20 @@ export class RoleService extends QueryServiceBase<Role> {
     async saveRoleAsync(userId: number, dto: RoleEditDTO) {
 
         // save role
+        const role = await this._ormService
+            .query(Role, { roleId: dto.roleId })
+            .where('id', '=', 'roleId')
+            .getSingle();
+
         await this._ormService
             .save(Role, [
-                {
-                    id: dto.roleId,
+                noUndefined({
+                    id: role.id,
                     name: dto.name,
-                    ownerCompanyId: dto.ownerCompanyId
-                }
+                    ownerCompanyId: role.isGlobal
+                        ? undefined
+                        : dto.ownerCompanyId
+                })
             ]);
 
         // save role permission bridges

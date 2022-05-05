@@ -17,6 +17,9 @@ export class Role {
     deletionDate: Date;
 
     @Column()
+    isGlobal: boolean;
+
+    @Column()
     name: string;
 
     // permissions

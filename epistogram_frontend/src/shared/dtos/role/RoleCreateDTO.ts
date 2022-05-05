@@ -1,5 +1,5 @@
-export class RoleCreateDTO {
-    name: string;
-    permissionIds: number[];
-    ownerCompanyId: number;
+import { RoleEditDTO } from './RoleEditDTO';
+
+export class RoleCreateDTO extends RoleEditDTO {
+
 }

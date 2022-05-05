@@ -46,7 +46,7 @@ export class RoleController {
 
         return this._roleService
             .saveRoleAsync(params.currentUserId, params
-                .getBody<RoleEditDTO>(['name', 'ownerCompanyId', 'permissionIds'])
+                .getBody<RoleEditDTO>(['name', 'permissionIds'])
                 .data);
     };
 }

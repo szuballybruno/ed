@@ -20,8 +20,8 @@ export const CompanyAdminIndexPage = memo(() => {
     const { createCompanyAsync, createCompanyState } = useCreateCompany();
     const { deleteCompanyAsync, deleteCompanyState } = useDeleteCompany();
 
-    const [handleCreateCompany] = usePostCallback(createCompanyAsync, [refetchCompanies]);
-    const [handleDeleteCompany] = usePostCallback(deleteCompanyAsync, [refetchCompanies]);
+    const handleCreateCompany = usePostCallback(createCompanyAsync, [refetchCompanies]);
+    const handleDeleteCompany = usePostCallback(deleteCompanyAsync, [refetchCompanies]);
 
     return (
         <LoadingFrame

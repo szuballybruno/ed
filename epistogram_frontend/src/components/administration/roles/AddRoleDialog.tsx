@@ -13,7 +13,7 @@ export const AddRoleDialog = (props: {
 
     const { createRoleAsync, createRoleState } = useCreateRole();
 
-    const [createRoleCallback] = usePostCallback(createRoleAsync, [logic.closeDialog, onSave]);
+    const createRoleCallback = usePostCallback(createRoleAsync, [logic.closeDialog, onSave]);
 
     return (
         <EditRoleControl

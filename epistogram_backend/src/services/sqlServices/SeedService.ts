@@ -1,6 +1,6 @@
 
 import { toSQLSnakeCasing } from '../../utilities/helpers';
-import { NoComplexTypes, PropConstraintType, constraintFn } from '../../utilities/misc';
+import { NoComplexTypes, PropConstraintType, constraintFn, NoIdType } from '../../utilities/misc';
 import { dbSchema } from '../misc/dbSchema';
 import { log, logSecondary } from '../misc/logger';
 import { SQLBootstrapperService } from './SQLBootstrapper';
@@ -10,7 +10,7 @@ type NewSeedType = [{ new(): any }, Object];
 
 export const getSeedList = <TEntity>() => {
 
-    type SeedType = Omit<NoComplexTypes<TEntity>, 'id'>;
+    type SeedType = NoIdType<NoComplexTypes<TEntity>>;
 
     return <TData extends PropConstraintType<TData, SeedType>>(data: TData) => {
 
