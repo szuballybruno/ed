@@ -1,7 +1,7 @@
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { SignupService } from '../services/SignupService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from '../utilities/helpers';
 
 export class SignupController {
 
@@ -16,7 +16,9 @@ export class SignupController {
 
     answerSignupQuestionAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<AnswerSignupQuestionDTO>(params.req.body);
+        const dto = params
+            .getBody<AnswerSignupQuestionDTO>(['answerId', 'questionId'])
+            .data;
 
         await this._signupService
             .answerSignupQuestionAsync(params.currentUserId, dto);

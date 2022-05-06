@@ -1,13 +1,12 @@
 import { Course } from '../models/entity/Course';
 import { Exam } from '../models/entity/Exam';
+import { ExamService } from '../services/ExamService';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CreateExamDTO } from '../shared/dtos/CreateExamDTO';
 import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
-import { ExamService } from '../services/ExamService';
-import { toQuestionDTO } from '../services/misc/mappings';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from '../utilities/helpers';
 
 export class ExamController {
 
@@ -22,7 +21,9 @@ export class ExamController {
 
     answerExamQuestionAction = async (params: ActionParams) => {
 
-        const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
+        const questionAnswerDTO = params
+            .getBody<AnswerQuestionDTO>()
+            .data;
 
         return this._examService
             .answerExamQuestionAsync(params.currentUserId, questionAnswerDTO);
@@ -39,7 +40,9 @@ export class ExamController {
 
     getExamResultsAction = async (params: ActionParams) => {
 
-        const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, 'number');
+        const answerSessionId = params
+            .getQuery()
+            .getValue(x => x.answerSessionId, 'int');
 
         return this._examService
             .getExamResultsAsync(params.currentUserId, answerSessionId);
@@ -84,7 +87,9 @@ export class ExamController {
 
     createExamAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<CreateExamDTO>(params.req.body);
+        const dto = params
+            .getBody<CreateExamDTO>(['moduleId', 'subtitle', 'title'])
+            .data;
 
         const course = await this._ormService
             .getRepository(Course)
@@ -116,7 +121,9 @@ export class ExamController {
 
     deleteExamAction = async (params: ActionParams) => {
 
-        const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
+        const examId = params
+            .getBody<IdResultDTO>()
+            .getValue(x => x.id, 'int');
 
         await this._examService
             .softDeleteExamsAsync([examId], true);

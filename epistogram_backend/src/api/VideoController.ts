@@ -6,7 +6,7 @@ import { QuestionService } from '../services/QuestionService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { VideoService } from '../services/VideoService';
 import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from '../utilities/helpers';
 
 export class VideoController {
 
@@ -32,26 +32,31 @@ export class VideoController {
 
     saveVideoAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);
-        const videoId = dto.id;
+        const body = params
+            .getBody<VideoEditDTO>();
+
+        const videoId = body
+            .getValue(x => x.id, 'int');
 
         // update vidoeo data
         await this._ormService
             .getRepository(Video)
             .save({
                 id: videoId,
-                title: dto.title,
-                subtitle: dto.subtitle,
-                description: dto.description
+                title: body.getValue(x => x.title, 'string'),
+                subtitle: body.getValue(x => x.subtitle, 'string'),
+                description: body.getValue(x => x.description, 'string')
             });
 
         await this._questionService
-            .saveAssociatedQuestionsAsync(dto.questions, videoId);
+            .saveAssociatedQuestionsAsync(body.getValue(x => x.questions, 'custom', x => true), videoId);
     };
 
     getVideoEditDataAction = async (params: ActionParams) => {
 
-        const videoId = withValueOrBadRequest<number>(params.req.query.videoId, 'number');
+        const videoId = params
+            .getQuery()
+            .getValue(x => x.videoId, 'int');
 
         const video = await this._ormService
             .getRepository(Video)

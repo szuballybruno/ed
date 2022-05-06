@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { ClassType, ParsableValueType } from '../models/DatabaseTypes';
+import { ClassType, ParsableValueType } from '../models/Types';
 import { User } from '../models/entity/User';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { logSecondary } from '../services/misc/logger';
 import { VerboseError } from '../shared/types/VerboseError';
 

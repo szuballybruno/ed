@@ -1,7 +1,8 @@
+import { UserService } from '../services/UserService';
+import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { UserService } from '../services/UserService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from '../utilities/helpers';
 
 export class UserController {
 
@@ -12,10 +13,21 @@ export class UserController {
         this._userService = userService;
     }
 
+    saveUserDataAction = async (params: ActionParams) => {
+
+        const dto = params
+            .getBody<UserDTO>(['firstName', 'lastName', 'phoneNumber'])
+            .data;
+
+        return this._userService
+            .saveUserDataAsync(params.currentUserId, dto);
+    };
+
     deleteUserAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<any>(params.req.body);
-        const deleteUserId = withValueOrBadRequest<number>(dto.userId, 'number');
+        const deleteUserId = params
+            .getBody()
+            .getValue(x => x.userId, 'int');
 
         return this._userService
             .deleteUserAsync(params.currentUserId, deleteUserId);
@@ -23,7 +35,9 @@ export class UserController {
 
     getEditUserDataAction = async (params: ActionParams) => {
 
-        const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, 'number');
+        const editedUserId = params
+            .getBody()
+            .getValue(x => x.editedUserId, 'int');
 
         return await this._userService
             .getEditUserDataAsync(editedUserId);
@@ -31,7 +45,9 @@ export class UserController {
 
     saveUserSimpleAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<UserEditSimpleDTO>(params.req.body);
+        const dto = params
+            .getBody<UserEditSimpleDTO>(['firstName', 'lastName', 'phoneNumber'])
+            .data;
 
         await this._userService
             .saveUserSimpleAsync(params.currentUserId, dto);
@@ -39,7 +55,9 @@ export class UserController {
 
     saveUserAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<UserEditDTO>(params.req.body);
+        const dto = params
+            .getBody<UserEditDTO>(['firstName', 'lastName', 'company', 'email', 'id', 'isTeacher', 'jobTitle'])
+            .data;
 
         await this._userService
             .saveUserAsync(dto);

@@ -16,24 +16,22 @@ export const AdminUserDataGridSubpage = (props: {
 
     const { users } = props;
     const { navigate } = useNavigation();
-    const location = useLocation();
 
-    const getRowsFromUsers = () => users.map((user) => {
-        return {
-            id: user.id,
-            avatar: {
-                avatarUrl: user.avatarUrl,
-                firstName: user.firstName,
-                lastName: user.lastName
-            },
-            name: `${user.lastName} ${user.firstName}`,
-            email: user.email,
-            coinBalance: `${user.coinBalance} EC`,
-            totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
-        };
-    });
-
-    const userRows: GridRowsProp = getRowsFromUsers();
+    const userRows = users
+        .map((user) => {
+            return {
+                id: user.id,
+                avatar: {
+                    avatarUrl: user.avatarUrl,
+                    firstName: user.firstName,
+                    lastName: user.lastName
+                },
+                name: `${user.lastName} ${user.firstName}`,
+                email: user.email,
+                coinBalance: `${user.coinBalance} EC`,
+                totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
+            };
+        });
 
     const userColumns: GridColDef[] = [
         {
@@ -89,6 +87,7 @@ export const AdminUserDataGridSubpage = (props: {
                 </EpistoButton>
         }
     ];
+
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
         viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: 'a' })}>

@@ -1,5 +1,5 @@
-import { ClassType } from '../../models/DatabaseTypes';
-import { XMetadataHandler } from './XMetadataHandler';
+import { ClassType } from '../../models/Types';
+import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
 
@@ -20,7 +20,7 @@ export const IsDeletedFlag = (checkType?: CheckType) => {
 
 export const getIsDeletedDecoratorPropertyData = <T>(classType: ClassType<T>) => {
 
-    const propName = XMetadataHandler.getFirstOrNullMetadataProperty(classType, IS_DELETED_FLAG_METADATA_KEY);
+    const propName = XMetadataHandler.getPropertyNameByMetadataCode(classType, IS_DELETED_FLAG_METADATA_KEY);
     if (!propName)
         return null;
 
@@ -30,9 +30,4 @@ export const getIsDeletedDecoratorPropertyData = <T>(classType: ClassType<T>) =>
         propName,
         checkType
     };
-};
-
-export const instatiate = <T>(classType: { new(): T }) => {
-
-    return new classType();
 };

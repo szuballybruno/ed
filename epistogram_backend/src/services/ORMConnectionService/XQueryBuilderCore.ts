@@ -1,4 +1,4 @@
-import { ClassType } from '../../models/DatabaseTypes';
+import { ClassType } from '../../models/Types';
 import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';

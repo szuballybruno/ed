@@ -1,16 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
+import { logError, logSecondary } from '../services/misc/logger';
 import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
-import { ErrorCodeType, RoleType } from '../shared/types/sharedTypes';
-import { log, logError, logSecondary } from '../services/misc/logger';
-import { IRouteOptions } from './TurboExpress';
+import { ErrorCodeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
-
-export class EndpointOptionsType implements IRouteOptions {
-    isPublic?: boolean;
-    isPost?: boolean;
-    isMultipart?: boolean;
-    authorize?: RoleType[];
-}
 
 export const onActionError = (errorin: any, req: Request, res: Response) => {
 

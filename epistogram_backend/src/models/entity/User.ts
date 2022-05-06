@@ -1,6 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
-import { RegistrationType } from '../DatabaseTypes';
+import { RegistrationType } from '../Types';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';

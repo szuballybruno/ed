@@ -1,7 +1,25 @@
-import { ClassType } from '../../models/DatabaseTypes';
-import { getKeys } from '../../shared/logic/sharedLogic';
+import { ClassType } from '../../models/Types';
+import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 
-const metadatas = {} as any;
+type MetadataKeysType = {
+
+    // metadata code
+    [metadataCodeKey: string]: any;
+};
+
+type MetadataPropertiesType = {
+
+    // prop name
+    [properyNameKey: string]: MetadataKeysType;
+}
+
+type MetadataClassesType = {
+
+    // class name
+    [classNameKey: string]: MetadataPropertiesType;
+}
+
+const metadatas: MetadataClassesType = {};
 
 const regMetadata = (className: string, propertyName: string, metadataCode: string, data?: any) => {
 
@@ -22,7 +40,7 @@ const hasMetadata = (className: string, propertyName: string, metadataCode: stri
     return metadatas[className][propertyName][metadataCode] !== undefined;
 };
 
-const getMetadata = (className: string, propertyName: string, metadataCode: string) => {
+const getMetadata = <T = any>(className: string, propertyName: string, metadataCode: string): T => {
 
     return metadatas[className][propertyName][metadataCode].data;
 };
@@ -32,7 +50,22 @@ const getMetadataProperies = (className: string) => {
     return getKeys(metadatas[className]) as string[];
 };
 
-const getFirstOrNullMetadataProperty = <T>(classType: ClassType<T>, metadataCode: string): keyof T | null => {
+const getMetadataProperiesByCode = <T = any>(className: string, code: string) => {
+
+    const classMetadata = metadatas[className];
+    const propsWithMetadata = getKeys(classMetadata) as string[];
+
+    const props = propsWithMetadata
+        .filter(propName => hasMetadata(className, propName, code));
+
+    return props
+        .map(x => ({
+            propName: x,
+            metadata: getMetadata<T>(className, x, code)
+        }));
+};
+
+const getPropertyNameByMetadataCode = <T>(classType: ClassType<T>, metadataCode: string): keyof T | null => {
 
     const className = classType.name;
 
@@ -50,5 +83,6 @@ export const XMetadataHandler = {
     hasMetadata,
     getMetadata,
     getMetadataProperies,
-    getFirstOrNullMetadataProperty
+    getPropertyNameByMetadataCode,
+    getMetadataProperiesByCode
 };

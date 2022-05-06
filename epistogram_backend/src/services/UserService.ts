@@ -1,4 +1,4 @@
-import { RegistrationType } from '../models/DatabaseTypes';
+import { RegistrationType } from '../models/Types';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { Course } from '../models/entity/Course';
 import { User } from '../models/entity/User';
@@ -96,6 +96,24 @@ export class UserService {
                 id: userId,
                 lastName: dto.lastName,
                 firstName: dto.firstName,
+                phoneNumber: dto.phoneNumber
+            });
+    }
+
+    /**
+     * Save user data which the user itself can edit.  
+     * 
+     * @param userId 
+     * @param dto 
+     */
+    async saveUserDataAsync(userId: number, dto: UserDTO) {
+
+        return this._ormService
+            .getRepository(User)
+            .save({
+                id: userId,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
                 phoneNumber: dto.phoneNumber
             });
     }
@@ -444,7 +462,7 @@ export class UserService {
         //     .getRepository(User)
         //     .find({
         //         where: {
-                    
+
         //         },
         //         relations: {
         //             teacherInfo: {
