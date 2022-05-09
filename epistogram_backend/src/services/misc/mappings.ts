@@ -406,29 +406,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(User, UserEditDTO, user => {
-            return {
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                isTeacher: !!user.teacherInfo,
-
-                jobTitle: user.jobTitle
-                    ? toJobTitleDTO(user.jobTitle)
-                    : null,
-
-                company: user.company
-                    ? mapperService.map(Company, CompanyDTO, user.company)
-                    : null,
-
-                // role: user.role
-                //     ? toRoleDTO(user.role)
-                //     : null
-            } as UserEditDTO;
-        });
-
-    mapperService
         .addMap(User, UserDTO, user => {
 
             return {
@@ -896,7 +873,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
     mapperService
         .addMap(Permission, PermissionListDTO, x => ({
             code: x.code,
-            isGlobal: x.isGlobal,
+            scope: x.scope,
             id: x.id
         }));
 };

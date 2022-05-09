@@ -210,11 +210,11 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
         .setExpressMiddleware(fileUpload())
         .setExpressMiddleware(getUnderMaintanenceMiddleware(globalConfig))
         .addController(MiscController, miscController)
+        .addController(UserController, userController)
+        .addController(PermissionController, permissionController)
         .build();
 
     const addEndpoint = turboExpress.addAPIEndpoint;
-
-    console.log(getControllerActionMetadatas(MiscController));
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
@@ -228,9 +228,6 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
     addEndpoint(apiRoutes.roles.getRoleEditData, roleController.getRoleEditDataAction);
     addEndpoint(apiRoutes.roles.deleteRole, roleController.deleteRoleAction, { isPost: true });
     addEndpoint(apiRoutes.roles.saveRole, roleController.saveRoleAction, { isPost: true });
-
-    // permissions 
-    addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);
 
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
@@ -319,14 +316,6 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
     addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
     addEndpoint(apiRoutes.userProgress.getRecommendedItemQuota, userProgressController.getRecommendedItemQuotaAction);
     addEndpoint(apiRoutes.userProgress.getActiveCourses, userProgressController.getActiveCoursesAction);
-
-    // user
-    addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
-    addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
-    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction);
-    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction);
-    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true });
-    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true });
 
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });

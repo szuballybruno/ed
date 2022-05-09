@@ -2,7 +2,9 @@ import { UserService } from '../services/UserService';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/helpers';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class UserController {
 
@@ -23,6 +25,7 @@ export class UserController {
             .saveUserDataAsync(params.currentUserId, dto);
     };
 
+    @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
     deleteUserAction = async (params: ActionParams) => {
 
         const deleteUserId = params
@@ -33,16 +36,18 @@ export class UserController {
             .deleteUserAsync(params.currentUserId, deleteUserId);
     };
 
+    @XControllerAction(apiRoutes.user.getEditUserData)
     getEditUserDataAction = async (params: ActionParams) => {
 
         const editedUserId = params
-            .getBody()
+            .getQuery()
             .getValue(x => x.editedUserId, 'int');
 
         return await this._userService
             .getEditUserDataAsync(editedUserId);
     };
 
+    @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })
     saveUserSimpleAction = async (params: ActionParams) => {
 
         const dto = params
@@ -53,16 +58,18 @@ export class UserController {
             .saveUserSimpleAsync(params.currentUserId, dto);
     };
 
+    @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
     saveUserAction = async (params: ActionParams) => {
 
         const dto = params
-            .getBody<UserEditDTO>(['firstName', 'lastName', 'company', 'email', 'id', 'isTeacher', 'jobTitle'])
+            .getBody<UserEditDTO>(['firstName', 'lastName', 'companyId', 'email', 'id', 'isTeacher'])
             .data;
 
         await this._userService
             .saveUserAsync(dto);
     };
 
+    @XControllerAction(apiRoutes.user.getUserListForAdministration)
     getUserAdministrationUserListAction = async (params: ActionParams) => {
 
         const searchText = params
@@ -74,6 +81,7 @@ export class UserController {
             .getAdminPageUsersListAsync(searchText);
     };
 
+    @XControllerAction(apiRoutes.user.getBriefUserData)
     getBriefUserDataAction = async (params: ActionParams) => {
 
         const userId = params.getQuery()

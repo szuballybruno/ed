@@ -11,6 +11,7 @@ export type SchemaDefinitionType = {
     functionScripts: string[];
     constraints: SQLConstraintType[];
     indices: SQLIndexType[];
+    triggers: string[];
 }
 
 export type SQLConstraintType = {
@@ -49,6 +50,9 @@ export class SQLBootstrapperService {
 
         log('Recreating indices...');
         await this.recreateIndicesAsync(this._dbSchema.indices);
+
+        log('Recreating triggers...');
+        await this.recreateTriggersAsync(this._dbSchema.triggers);
     };
 
     recalcSequencesAsync = async () => {
@@ -143,6 +147,20 @@ export class SQLBootstrapperService {
             const script = this.readSQLFile('indices', sqlIndex.name);
 
             logSecondary(`Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
+            await this._sqlConnectionService
+                .executeSQLAsync(script);
+        }
+    };
+
+    private recreateTriggersAsync = async (triggers: string[]) => {
+
+        // create triggers 
+        for (let index = 0; index < triggers.length; index++) {
+
+            const triggerName = triggers[index];
+            const script = this.readSQLFile('triggers', triggerName);
+
+            logSecondary(`Creating trigger: [${triggerName}]...`);
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }

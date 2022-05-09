@@ -1,7 +1,9 @@
-import { RegistrationType } from '../models/Types';
 import { AnswerSession } from '../models/entity/AnswerSession';
+import { Permission } from '../models/entity/authorization/Permission';
 import { Course } from '../models/entity/Course';
+import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
+import { RegistrationType } from '../models/Types';
 import { AdminUserListView } from '../models/views/UserAdminListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
@@ -40,20 +42,37 @@ export class UserService {
      * @param editedUserId 
      * @returns 
      */
-    async getEditUserDataAsync(editedUserId: number) {
+    async getEditUserDataAsync(editedUserId: number): Promise<UserEditDTO> {
 
-        const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('u')
-            .leftJoinAndSelect('u.company', 'o')
-            .leftJoinAndSelect('u.role', 'r')
-            .leftJoinAndSelect('u.jobTitle', 'jt')
-            .leftJoinAndSelect('u.teacherInfo', 'ti')
-            .where('u.id = :userId', { userId: editedUserId })
-            .getOneOrFail();
+        type ResType = User & {
+            teacherInfoId: number
+        };
 
-        return this._mapperService
-            .map(User, UserEditDTO, user);
+        const res = await this._ormService
+            .withResType<ResType>()
+            .query(User, { editedUserId })
+            .selectFrom(x => x
+                .columns(User, '*')
+                .columns(TeacherInfo, {
+                    teacherInfoId: 'id'
+                }))
+            .leftJoin(TeacherInfo, x => x
+                .on('userId', '=', 'editedUserId'))
+            .where('id', '=', 'editedUserId')
+            .getSingle();
+
+            // const permissions = await this._ormService
+            // .query(Permission) 
+
+        return {
+            id: res.id,
+            firstName: res.firstName,
+            lastName: res.lastName,
+            email: res.email,
+            isTeacher: !!res.teacherInfoId,
+            jobTitleId: res.jobTitleId,
+            companyId: res.companyId
+        };
     }
 
     /**
@@ -128,18 +147,18 @@ export class UserService {
         const userId = dto.id;
 
         // save user 
+        const user: Partial<User> = {
+            id: userId,
+            lastName: dto.lastName,
+            firstName: dto.firstName,
+            email: dto.email,
+            companyId: dto.companyId,
+            jobTitleId: dto.jobTitleId
+        };
+
         await this._ormService
             .getRepository(User)
-            .save({
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                isTeacher: dto.isTeacher,
-                companyId: dto.company?.id,
-                roleId: dto.role?.id,
-                jobTitleId: dto.jobTitle?.id
-            });
+            .save(user);
 
         // save teacher info
         const teacherInfo = await this._teacherInfoService

@@ -7,7 +7,7 @@ import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { noUndefined } from '../shared/logic/sharedLogic';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { PermissionCodeType, RoleScopeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { createAsMinimal, MinimalEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
@@ -39,17 +39,17 @@ export class RoleService extends QueryServiceBase<Role> {
                 return {
                     roleId: viewAsRole.roleId,
                     roleName: viewAsRole.roleName,
-                    isGlobal: viewAsRole.isGlobal,
+                    roleScope: viewAsRole.roleScope,
                     ownerName: viewAsRole.ownerName,
                     ownerType: viewAsRole.isCompanyOwned ? 'company' : 'user',
                     companyId: viewAsRole.companyId,
                     companyName: viewAsRole.companyName,
                     permissions: grouping
                         .items
-                        .map(x => ({
-                            code: x.permissionCode,
-                            id: x.permissionId,
-                            isGlobal: false
+                        .map((viewAsPermission): PermissionListDTO => ({
+                            code: viewAsPermission.permissionCode,
+                            id: viewAsPermission.permissionId,
+                            scope: 'GLOBAL' // not used 
                         }))
                 };
             });
@@ -64,9 +64,8 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const role = createAsMinimal<Role>({
             name: dto.name,
-            ownerCompanyId: dto.ownerCompanyId,
-            ownerUserId: null,
-            isGlobal: false
+            companyId: dto.companyId,
+            scope: 'COMPANY'
         });
 
         // create role
@@ -90,8 +89,8 @@ export class RoleService extends QueryServiceBase<Role> {
             roleId: number,
             roleName: string,
             permissionId: number,
-            ownerCompanyId: Role['ownerCompanyId'],
-            isGlobal: boolean
+            companyId: Role['companyId'],
+            scope: Role['scope']
         }
 
         const roles = await this._ormService
@@ -106,8 +105,8 @@ export class RoleService extends QueryServiceBase<Role> {
                 .columns(Role, {
                     roleId: 'id',
                     roleName: 'name',
-                    ownerCompanyId: 'ownerCompanyId',
-                    isGlobal: 'isGlobal'
+                    companyId: 'companyId',
+                    scope: 'scope'
                 })
                 .columns(RolePermissionBridge, {
                     permissionId: 'permissionId'
@@ -115,7 +114,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .innerJoin(UserPermissionView, x => x
                 .on('userId', '=', 'userId')
                 .openBracket()
-                .and('contextCompanyId', '=', 'ownerCompanyId', Role)
+                .and('contextCompanyId', '=', 'companyId', Role)
                 .and('permissionCode', '=', 'editCoCode')
                 .or('permissionCode', '=', 'editGlobCode')
                 .and('contextCompanyId', 'IS', 'NULL')
@@ -137,8 +136,8 @@ export class RoleService extends QueryServiceBase<Role> {
         return {
             roleId: viewAsRole.roleId,
             name: viewAsRole.roleName,
-            ownerCompanyId: viewAsRole.ownerCompanyId,
-            isGlobal: viewAsRole.isGlobal,
+            companyId: viewAsRole.companyId,
+            scope: viewAsRole.scope,
             permissionIds: group
                 .items
                 .map(x => x.permissionId)
@@ -164,9 +163,9 @@ export class RoleService extends QueryServiceBase<Role> {
                 noUndefined({
                     id: role.id,
                     name: dto.name,
-                    ownerCompanyId: role.isGlobal
+                    ownerCompanyId: role.scope === 'GLOBAL'
                         ? undefined
-                        : dto.ownerCompanyId
+                        : dto.companyId
                 })
             ]);
 

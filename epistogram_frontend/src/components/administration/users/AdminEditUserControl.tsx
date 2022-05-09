@@ -77,17 +77,16 @@ export const AdminEditUserControl = (props: {
 
     useEffect(() => {
 
-        if (!editDTO)
+        if (!editDTO || jobTitles.length === 0 || companies.length === 0)
             return;
 
         setFirstName(editDTO.firstName);
         setLastName(editDTO.lastName);
         setEmail(editDTO.email);
-        setSelectedRole(editDTO.role);
-        setSelectedJobTitle(editDTO.jobTitle);
-        setSelectedCompany(editDTO.company);
+        setSelectedJobTitle(jobTitles.firstOrNull(x => x.id === editDTO.jobTitleId));
+        setSelectedCompany(companies.firstOrNull(x => x.id === editDTO.companyId));
         setIsTeacher(editDTO.isTeacher);
-    }, [editDTO]);
+    }, [editDTO, jobTitles, companies]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -124,16 +123,18 @@ export const AdminEditUserControl = (props: {
 
     const handleSaveUserAsync = async () => {
 
-        const editedUserDTO = {
-            id: editDTO?.id,
+        if (!editDTO || !selectedCompany || !selectedJobTitle)
+            return;
+
+        const editedUserDTO: UserEditDTO = {
+            id: editDTO.id,
             firstName,
             lastName,
             email,
-            jobTitle: selectedJobTitle,
-            company: selectedCompany,
-            role: selectedRole,
+            companyId: selectedCompany.id,
+            jobTitleId: selectedJobTitle.id,
             isTeacher
-        } as UserEditDTO;
+        };
 
         await saveUserAsync(editedUserDTO);
     };

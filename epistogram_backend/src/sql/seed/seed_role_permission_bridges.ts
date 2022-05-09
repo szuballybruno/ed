@@ -4,6 +4,7 @@ import { permissionList } from './seed_permissions';
 import { roleList } from './seed_roles';
 
 export const rolePermissionList = getSeedList<RolePermissionBridge>()({
+    
     owner_a: {
         roleId: roleList.Company_Owner.id,
         permissionId: permissionList.ASSIGN_COMPANY_ROLES.id,
@@ -23,6 +24,18 @@ export const rolePermissionList = getSeedList<RolePermissionBridge>()({
     owner_e: {
         roleId: roleList.Company_Owner.id,
         permissionId: permissionList.MANAGE_COMPANY.id,
+    },
+    owner_f: {
+        roleId: roleList.Company_Owner.id,
+        permissionId: permissionList.ASSIGN_COMPANY_ROLES.id,
+    },
+    owner_g: {
+        roleId: roleList.Company_Owner.id,
+        permissionId: permissionList.ASSIGN_COMPANY_PERMISSIONS.id,
+    },
+    owner_h: {
+        roleId: roleList.Company_Owner.id,
+        permissionId: permissionList.ASSIGN_GLOBAL_PERMISSIONS.id,
     },
 
     role_manager_a: {
@@ -46,13 +59,4 @@ export const rolePermissionList = getSeedList<RolePermissionBridge>()({
         roleId: roleList.Company_User.id,
         permissionId: permissionList.VIEW_COMPANY_COURSES.id
     },
-
-    god_a: {
-        roleId: roleList.God.id,
-        permissionId: permissionList.CREATE_COMPANY.id
-    },
-    god_b: {
-        roleId: roleList.God.id,
-        permissionId: permissionList.DELETE_COMPANY.id
-    }
 });

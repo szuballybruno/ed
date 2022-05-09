@@ -32,7 +32,7 @@ user_god_permissions AS (
 	FROM public.permission pe
 
 	LEFT JOIN public.company co
-	ON pe.is_global = false
+	ON pe.scope = 'COMPANY'
 	
 	INNER JOIN public.user u
 	ON u.is_god = true
@@ -86,7 +86,7 @@ SELECT
 	co.name context_company_name,
 	pe.id permission_id,
 	pe.code permission_code,
-	pe.is_global permission_is_global
+	pe.scope permission_scope
 FROM public.user u
 
 INNER JOIN permissions

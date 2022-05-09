@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PermissionCodeType } from '../../../shared/types/sharedTypes';
+import { PermissionCodeType, PermissionScopeType, RoleScopeType } from '../../../shared/types/sharedTypes';
 import { PermissionAssignmentBridge } from './PermissionAssignmentBridge';
 import { RolePermissionBridge } from './RolePermissionBridge';
 
@@ -12,8 +12,8 @@ export class Permission {
     @Column({ type: 'text' })
     code: PermissionCodeType;
 
-    @Column()
-    isGlobal: boolean;
+    @Column({ type: 'text' })
+    scope: PermissionScopeType;
 
     // rolePermissionBridges
     @JoinColumn()

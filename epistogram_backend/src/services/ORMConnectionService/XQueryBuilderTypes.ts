@@ -58,7 +58,7 @@ export type ExpressionPart<TEntity, TParams> =
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
 
-export type ColumnSelectObjType<TEntity, TRes> = {
+export type ColumnSelectObjType<TEntity, TRes> = '*' | {
     [K in keyof Partial<TRes>]: keyof TEntity;
 };
 

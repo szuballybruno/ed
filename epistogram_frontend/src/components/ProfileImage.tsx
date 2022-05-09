@@ -19,7 +19,7 @@ const getSignature = (firstName: string, lastName: string) => {
 
 export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props: ProfileImageProps, ref) => {
 
-    const { className, ...css } = props;
+    const { className, firstName: b, lastName: a, url: c, ...css } = props;
     const user = useContext(CurrentUserContext);
     const firstName = props.firstName ?? user.firstName;
     const lastName = props.lastName ?? user.lastName;

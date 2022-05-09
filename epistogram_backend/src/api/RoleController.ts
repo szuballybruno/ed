@@ -22,7 +22,7 @@ export class RoleController {
 
         return this._roleService
             .createRoleAsync(params.currentUserId, params
-                .getBody<RoleCreateDTO>(['name', 'ownerCompanyId', 'permissionIds'])
+                .getBody<RoleCreateDTO>(['name', 'companyId', 'permissionIds'])
                 .data);
     };
 

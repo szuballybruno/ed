@@ -340,5 +340,8 @@ export const dbSchema = {
         UserVideoProgressBridge,
         UserExamProgressBridge,
         TempomatAdjustmentValue
-    ] as any[]
+    ] as any[],
+    triggers: [
+        'role_assignment_validity_check_trigger'
+    ]
 };

@@ -337,20 +337,24 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
         return this;
     }
 
-    async getSingle(): Promise<TEntity> {
+    async getSingle(): Promise<TResult> {
 
         this.addDeletedCheck();
 
-        return await this._connection
+        const single = await this._connection
             .getSingle(this._mainClassType, this._expression, this._params);
+
+        return single as any as TResult;
     }
 
-    async getOneOrNull(): Promise<TEntity | null> {
+    async getOneOrNull(): Promise<TResult | null> {
 
         this.addDeletedCheck();
 
-        return await this._connection
+        const oneOrNull = await this._connection
             .getOneOrNull(this._mainClassType, this._expression, this._params);
+
+        return oneOrNull as any as TResult;
     }
 
     async getMany(): Promise<TResult[]> {

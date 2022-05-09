@@ -94,8 +94,12 @@ export class TurboExpressBuilder<TActionParams> {
                 controllerMetadatas
                     .forEach(meta => {
 
+                        const path = meta.metadata.path;
+
+                        console.log(`Adding endpoint: path: ${path}, prop: ${meta.propName}, meta: ${JSON.stringify(meta.metadata)}`);
+
                         turboExpress
-                            .addAPIEndpoint(meta.metadata.path, instance[meta.propName], meta.metadata);
+                            .addAPIEndpoint(path, instance[meta.propName], meta.metadata);
                     });
             });
 

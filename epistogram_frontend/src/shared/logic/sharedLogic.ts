@@ -59,11 +59,13 @@ export const getKeyValues = <T>(obj: T) => {
 
 export const noUndefined = <T>(obj: Partial<T>) => {
 
+    const objAny = obj as any;
+
     getKeys(obj)
         .forEach(key => {
 
-            if (obj[key] === undefined)
-                delete obj[key];
+            if (objAny[key] === undefined)
+                delete objAny[key];
         });
 
     return obj;
