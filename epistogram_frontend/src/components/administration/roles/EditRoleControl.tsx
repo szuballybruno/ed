@@ -33,7 +33,7 @@ export const EditRoleControl = (props: {
 }) => {
 
     const { logic, onSave, roleEditData, saveButton, error } = props;
-    const isGlobalRole = !!roleEditData?.isGlobal;
+    const roleScope = roleEditData?.scope ?? 'GLOBAL';
 
     const { permissionsList, permissionsListError, permissionsListState, refetchPermissionsList } = usePermissionsList();
     const { companies, companiesState } = useAvailableCompaniesForRoleCreation();
@@ -84,11 +84,11 @@ export const EditRoleControl = (props: {
     }, [selectedPermissions, setSelectedPermissions, deselectPermission]);
 
     const handleSaveRole = useCallback(() => onSave({
-        isGlobal: false,
+        scope: 'GLOBAL', // not used
         roleId: roleEditData?.roleId ?? -1,
-        ownerCompanyId: isGlobalRole
-            ? null
-            : selectedCompany?.id ?? -1,
+        companyId: roleScope === 'COMPANY'
+            ? selectedCompany?.id ?? -1
+            : null,
         name,
         permissionIds: selectedPermissions
             .map(x => x.id)
@@ -103,7 +103,7 @@ export const EditRoleControl = (props: {
             return;
 
         const comp = companies
-            .filter(x => x.id === roleEditData.ownerCompanyId)[0];
+            .filter(x => x.id === roleEditData.companyId)[0];
 
         const perms = permissionsList
             .filter(pDto => roleEditData
@@ -131,7 +131,7 @@ export const EditRoleControl = (props: {
                     label="Name"
                     labelVariant="top" />
 
-                {!isGlobalRole && <EpistoLabel
+                {roleScope === 'COMPANY' && <EpistoLabel
                     text="Owner company">
 
                     <Flex align="center">

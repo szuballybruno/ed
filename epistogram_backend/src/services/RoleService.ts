@@ -1,7 +1,9 @@
 import { Role } from '../models/entity/authorization/Role';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
+import { AssignablePermissionAndRoleView } from '../models/views/AssignablePermissionAndRoleView';
 import { RoleListView } from '../models/views/RoleListView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
+import { AssignablePermissionAndRoleDTO } from '../shared/dtos/AssignablePermissionAndRoleDTO';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
@@ -53,6 +55,21 @@ export class RoleService extends QueryServiceBase<Role> {
                         }))
                 };
             });
+    }
+
+    async getAvailablePermissionsAndRolesAsync(userId: number, companyId: number) {
+
+        const rolesAndPermissions = await this._ormService
+            .query(AssignablePermissionAndRoleView, { userId, companyId })
+            .where('userId', '=', 'userId')
+            .and('contextCompanyId', '=', 'companyId')
+            .getMany();
+
+        return rolesAndPermissions
+            .map((x): AssignablePermissionAndRoleDTO => ({
+                ...x,
+                isRole: !!x.roleId
+            }));
     }
 
     async getUserPermissionsAsync(userId: number): Promise<PermissionListDTO[]> {

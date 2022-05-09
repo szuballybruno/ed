@@ -19,7 +19,8 @@ export const apiRoutes = {
         createRole: '/roles/create-role',
         getRoleEditData: '/roles/get-role-edit-data',
         deleteRole: '/roles/delete-role',
-        saveRole: '/roles/save-role'
+        saveRole: '/roles/save-role',
+        getAssignableRoles: '/roles/get-assignable-roles'
     },
 
     permissions: {

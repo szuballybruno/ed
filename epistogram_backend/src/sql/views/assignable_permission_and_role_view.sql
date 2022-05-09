@@ -43,9 +43,9 @@ roles AS
 		co.id NULLS FIRST,
 		r.id
 )
-SELECT user_id, context_company_id, permission_id, NULL role_id FROM permissions
+SELECT user_id, context_company_id, permission_id, permission_code, null role_id, null role_name FROM permissions
 UNION 
-SELECT user_id, context_company_id, NULL permission_id, role_id FROM roles
+SELECT user_id, context_company_id, NULL permission_id, null permission_code, role_id, role_name FROM roles
 
 ORDER BY
 	user_id,

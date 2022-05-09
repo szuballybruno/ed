@@ -123,9 +123,9 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
-    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService);
-    const tokenService = new TokenService(globalConfig);
     const roleService = new RoleService(ormConnectionService, mapperService);
+    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService);
+    const tokenService = new TokenService(globalConfig);
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
@@ -212,6 +212,7 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
         .addController(MiscController, miscController)
         .addController(UserController, userController)
         .addController(PermissionController, permissionController)
+        .addController(RoleController, roleController)
         .build();
 
     const addEndpoint = turboExpress.addAPIEndpoint;
@@ -221,13 +222,6 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
-
-    // roles
-    addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
-    addEndpoint(apiRoutes.roles.createRole, roleController.createRoleAction, { isPost: true });
-    addEndpoint(apiRoutes.roles.getRoleEditData, roleController.getRoleEditDataAction);
-    addEndpoint(apiRoutes.roles.deleteRole, roleController.deleteRoleAction, { isPost: true });
-    addEndpoint(apiRoutes.roles.saveRole, roleController.saveRoleAction, { isPost: true });
 
     // companies
     addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);

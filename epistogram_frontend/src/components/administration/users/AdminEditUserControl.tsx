@@ -26,6 +26,7 @@ import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
 import { useCompanies } from '../../../services/api/companiesApiService';
+import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
 
 export const roles = [
     {
@@ -243,37 +244,11 @@ export const AdminEditUserControl = (props: {
 
                 {/* access management */}
                 <EditSection title="Jogosultságkezelés">
-                    {/* role */}
-                    <Flex
-                        direction="column"
-                        align="stretch"
-                        width="100%">
 
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontExtraSmall"
-                            style={{
-                                marginTop: '10px',
-                                letterSpacing: '1.2px'
-                            }}>
-
-                            {translatableTexts.misc.role}
-                        </EpistoFont>
-
-                        <EpistoSelect
-                            selectedValue={selectedRole}
-                            items={roles}
-                            onSelected={setSelectedRole}
-                            getDisplayValue={x => '' + (x as any)?.optionText}
-                            getCompareKey={x => '' + x?.id} />
-                    </Flex>
+                    <PermissionAssignerControl />
                 </EditSection>
-
-
-
-
-
             </Flex>
+            
             <Divider orientation='vertical'
                 h="calc(100% - 20px)"
                 w="1px"

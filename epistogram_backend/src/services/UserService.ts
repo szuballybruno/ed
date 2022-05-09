@@ -6,6 +6,7 @@ import { User } from '../models/entity/User';
 import { RegistrationType } from '../models/Types';
 import { AdminUserListView } from '../models/views/UserAdminListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
+import { AssignablePermissionAndRoleDTO } from '../shared/dtos/AssignablePermissionAndRoleDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
@@ -16,6 +17,7 @@ import { HashService } from './HashService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 
 export class UserService {
@@ -24,17 +26,20 @@ export class UserService {
     private _mapperService: MapperService;
     private _teacherInfoService: TeacherInfoService;
     private _hashService: HashService;
+    private _roleService: RoleService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         teacherInfoService: TeacherInfoService,
-        hashService: HashService) {
+        hashService: HashService,
+        roleService: RoleService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._teacherInfoService = teacherInfoService;
         this._hashService = hashService;
+        this._roleService = roleService;
     }
 
     /**
@@ -42,7 +47,7 @@ export class UserService {
      * @param editedUserId 
      * @returns 
      */
-    async getEditUserDataAsync(editedUserId: number): Promise<UserEditDTO> {
+    async getEditUserDataAsync(userId: number, editedUserId: number): Promise<UserEditDTO> {
 
         type ResType = User & {
             teacherInfoId: number
@@ -60,9 +65,6 @@ export class UserService {
                 .on('userId', '=', 'editedUserId'))
             .where('id', '=', 'editedUserId')
             .getSingle();
-
-            // const permissions = await this._ormService
-            // .query(Permission) 
 
         return {
             id: res.id,

@@ -1,7 +1,9 @@
 import { RoleService } from '../services/RoleService';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/helpers';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class RoleController {
 
@@ -12,12 +14,14 @@ export class RoleController {
         this._roleService = roleService;
     }
 
+    @XControllerAction(apiRoutes.roles.getRoles)
     getRolesListAction = (params: ActionParams) => {
 
         return this._roleService
             .getRolesListAdminAsync(params.currentUserId);
     };
 
+    @XControllerAction(apiRoutes.roles.createRole, { isPost: true })
     createRoleAction = (params: ActionParams) => {
 
         return this._roleService
@@ -26,6 +30,7 @@ export class RoleController {
                 .data);
     };
 
+    @XControllerAction(apiRoutes.roles.getRoleEditData)
     getRoleEditDataAction = (params: ActionParams) => {
 
         return this._roleService
@@ -34,6 +39,7 @@ export class RoleController {
                 .getValue(x => x.roleId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.roles.deleteRole, { isPost: true })
     deleteRoleAction = (params: ActionParams) => {
 
         return this._roleService
@@ -42,11 +48,21 @@ export class RoleController {
                 .getValue(x => x.roleId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.roles.saveRole, { isPost: true })
     saveRoleAction = (params: ActionParams) => {
 
         return this._roleService
             .saveRoleAsync(params.currentUserId, params
                 .getBody<RoleEditDTO>(['name', 'permissionIds'])
                 .data);
+    };
+
+    @XControllerAction(apiRoutes.roles.getAssignableRoles)
+    getAssignableRolesAction = (params: ActionParams) => {
+
+        return this._roleService
+            .getAvailablePermissionsAndRolesAsync(params.currentUserId, params
+                .getQuery()
+                .getValue(x => x.comapanyId, 'int'));
     };
 }

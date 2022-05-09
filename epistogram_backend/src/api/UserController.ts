@@ -44,7 +44,7 @@ export class UserController {
             .getValue(x => x.editedUserId, 'int');
 
         return await this._userService
-            .getEditUserDataAsync(editedUserId);
+            .getEditUserDataAsync(params.currentUserId, editedUserId);
     };
 
     @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })

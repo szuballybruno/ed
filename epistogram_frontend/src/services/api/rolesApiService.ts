@@ -1,3 +1,4 @@
+import { AssignablePermissionAndRoleDTO } from '../../shared/dtos/AssignablePermissionAndRoleDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
@@ -15,6 +16,18 @@ export const useRolesList = () => {
         rolesListError: qr.error,
         rolesListState: qr.state,
         refetchRolesList: qr.refetch
+    };
+};
+
+export const useAssignableRoles = () => {
+
+    const qr = useReactQuery2<AssignablePermissionAndRoleDTO[]>(apiRoutes.roles.getAssignableRoles);
+
+    return {
+        assignableRolesList: qr.data ?? [],
+        assignableRolesListError: qr.error,
+        assignableRolesListState: qr.state,
+        refetchAssignableRolesList: qr.refetch
     };
 };
 
