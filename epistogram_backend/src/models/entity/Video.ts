@@ -2,6 +2,7 @@ import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, One
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
+import { Comment } from './Comment';
 import { Course } from './Course';
 import { CourseModule } from './CourseModule';
 import { Question } from './Question';
@@ -16,7 +17,7 @@ export class Video {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
+
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
@@ -69,6 +70,11 @@ export class Video {
     @OneToMany(_ => UserSessionActivity, as => as.video)
     @JoinColumn()
     userSessionActivities: UserSessionActivity[];
+
+    // comment
+    @OneToMany(_ => Comment, x => x.video)
+    @JoinColumn()
+    comments: Comment[];
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.video)

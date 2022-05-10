@@ -22,6 +22,12 @@ export class UserLearningOverviewStatsView {
     performancePercentage: number;
 
     @ViewColumn()
+    userExamLengthPoints: number;
+
+    @ViewColumn()
+    userReactionTimePoints: number;
+
+    @ViewColumn()
     totalTimeActiveOnPlatformSeconds: number;
 
     @ViewColumn()
@@ -37,13 +43,7 @@ export class UserLearningOverviewStatsView {
     correctAnswerRatePercentage: number;
 
     @ViewColumn()
-    userAverageReactionTimeSeconds: number;
-
-    @ViewColumn()
-    totalUsersAverageReactionTimeSeconds: number;
-
-    @ViewColumn()
-    userReactionTimeDifferenceSeconds: number;
+    userReactionTimeDifferencePercentage: number;
 
     @ViewColumn()
     averageWatchedVideosPerDay: number;

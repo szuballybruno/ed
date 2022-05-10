@@ -6,7 +6,127 @@ import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 
+const CommentItem = (props: {
+    fullName: string,
+    commentText: string,
+    dateOfPosting: string,
+    isChild: boolean,
+    avatarUrl?: string
+}) => {
+
+    const {
+        fullName,
+        commentText,
+        dateOfPosting,
+        isChild,
+        avatarUrl
+    } = props;
+
+    return <Flex
+        mt="30px"
+        pl={isChild ? '20px' : undefined}>
+
+        {isChild &&
+            <Divider
+                variant="fullWidth"
+                orientation="vertical" />}
+
+        <Flex p="20px">
+
+            <Avatar
+                alt="Surányi Ildikó"
+                src={avatarUrl} />
+        </Flex>
+
+        <Flex
+            direction="column">
+
+            <Flex
+                justify="space-between"
+                align="center">
+
+                <h4
+                    style={{
+                        margin: 0,
+                        textAlign: 'left'
+                    }}>
+
+                    {fullName}
+                </h4>
+
+                <EpistoButton
+                    className="fontSmall">
+
+                    <ThumbUpAlt
+                        style={{
+                            height: 20,
+                            width: 20,
+                            marginRight: 5
+                        }} />
+
+                    Tetszik
+                </EpistoButton>
+            </Flex>
+
+            <p
+                style={{
+                    textAlign: 'left'
+                }}>
+
+                {commentText}
+                {' '}
+            </p>
+
+            <p
+                style={{
+                    textAlign: 'left',
+                    color: 'gray'
+                }}>
+
+                {dateOfPosting}
+            </p>
+        </Flex>
+    </Flex>;
+};
+
 const Comments = () => {
+
+    const mockComments = [
+        {
+            fullName: 'Surányi Ildikó',
+            commentText: 'Nagyon hasznos videó volt! Egy olyan kérdésem lenne, hogy nincs esetleg valamilyen billentyűkombináció arra, hogy gyorsan lehessen oszlopokat elrejteni?',
+            dateOfPosting: 'posted 1 minute ago',
+            isChild: false
+        },
+        {
+            fullName: 'Keresztúri Melinda',
+            commentText: 'Én erre a CTRL + 0-t szoktam használni!',
+            dateOfPosting: 'posted 2 minutes ago',
+            isChild: true
+        },
+        {
+            fullName: 'Oláh Mihály',
+            commentText: 'Pontosan, ahogyan Melinda írja, ha pedig sorokat szeretnél elrejteni, úgy a CTRL + 9 kombinációt ajánlom.',
+            dateOfPosting: 'posted 2 minutes ago',
+            isChild: true,
+            avatarUrl: Environment.getAssetUrl('userAvatars/user_avatar_5.png')
+        },
+        {
+            fullName: 'Kiss Andrea',
+            commentText: 'Sziasztok! Én használtam a fenti kombinációkat, viszont véletlenül olyan oszlopokat is elrejtettem, amiket nem szerettem volna. Hogyan tudom gyorsan visszahozni őket? A CTRL + Z parancsot próbáltam, viszont közben dolgoztam máson is, így azokat is vissza akarja vonni :(',
+            dateOfPosting: 'posted 2 minutes ago',
+            isChild: false,
+            avatarUrl: Environment.getAssetUrl('userAvatars/user_avatar_3.png')
+        },
+        {
+            fullName: 'Radeczky Richárd',
+            commentText: 'Visszahozni (Felfedés) úgy tudod az oszlopokat, hogy egyben (Shift nyíl) kijelölsz az előtte és utána lévő oszlopban is legalább 1-1 cellát, majd megnyomod a Ctrl Shift 8 kombinációt. (Ez Windowson biztosan működik, Mac-en érdemes utána nézni a megfelelő kombinációnak, de ha erre rákeresel, már segíteni fog)',
+            dateOfPosting: 'posted 2 minutes ago',
+            isChild: true,
+            avatarUrl: Environment.getAssetUrl('userAvatars/user_avatar_4.png')
+        }
+    ];
+
     return (
         <Flex direction={'column'}
             minH={600}
@@ -84,166 +204,20 @@ const Comments = () => {
                     </Flex>
                 </Flex>
             </Flex>
+
+
             <Divider variant="fullWidth"
                 style={{ margin: '10px 0 20px 0' }} />
-            <Flex>
-                <Flex p="20px">
-                    <Avatar alt="Surányi Ildikó"
-                        src={Environment.getAssetUrl('userAvatars/user_avatar_1.png')} />
-                </Flex>
-                <Flex direction="column">
-                    <Flex justify="space-between"
-                        align="center">
 
-                        <h4 style={{ margin: 0, textAlign: 'left' }}>Surányi Ildikó</h4>
-                        <EpistoButton className="fontSmall">
-                            <ThumbUpAlt style={{
-                                height: 20,
-                                width: 20,
-                                marginRight: 5
-                            }} />
-                            Tetszik
-                        </EpistoButton>
-                    </Flex>
-                    <p style={{ textAlign: 'left' }}>
-                        Nagyon hasznos videó volt! Egy olyan kérdésem lenne, hogy nincs esetleg valamilyen billentyűkombináció arra, hogy gyorsan lehessen oszlopokat elrejteni?
-                        {' '}
-                    </p>
-                    <p style={{ textAlign: 'left', color: 'gray' }}>
-                        posted 1 minute ago
-                    </p>
-                </Flex>
-            </Flex>
 
-            <Flex pl="20px"
-                mt="30px">
-                <Divider variant="fullWidth"
-                    orientation="vertical" />
-                <Flex p="20px">
-                    <Avatar alt="Keresztúri Melinda"
-                        src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
-                </Flex>
-                <Flex direction="column">
-                    <Flex justify="space-between"
-                        align="center">
-
-                        <h4 style={{ margin: 0, textAlign: 'left' }}>Keresztúri Melinda</h4>
-                        <EpistoButton className="fontSmall">
-                            <ThumbUpAlt style={{
-                                height: 20,
-                                width: 20,
-                                marginRight: 5
-                            }} />
-                            Tetszik
-                        </EpistoButton>
-                    </Flex>
-                    <p style={{ textAlign: 'left' }}>
-                        Én erre a CTRL + 0-t szoktam használni!
-                        {' '}
-                    </p>
-                    <p style={{ textAlign: 'left', color: 'gray' }}>
-                        posted 1 minute ago
-                    </p>
-                </Flex>
-            </Flex>
-            <Flex pl="20px"
-                mt="30px">
-                <Divider variant="fullWidth"
-                    orientation="vertical" />
-                <Flex p="20px">
-                    <Avatar alt="Remy Sharp"
-                        src={Environment.getAssetUrl('userAvatars/user_avatar_5.png')} />
-                </Flex>
-                <Flex direction="column">
-                    <Flex justify="space-between"
-                        align="center">
-
-                        <h4 style={{ margin: 0, textAlign: 'left' }}>
-                            Oláh Mihály
-                        </h4>
-                        <EpistoButton className="fontSmall">
-                            <ThumbUpAlt style={{
-                                height: 20,
-                                width: 20,
-                                marginRight: 5
-                            }} />
-                            Tetszik
-                        </EpistoButton>
-                    </Flex>
-                    <p style={{ textAlign: 'left' }}>
-                        Pontosan, ahogyan Melinda írja, ha pedig sorokat szeretnél elrejteni, úgy a CTRL + 9 kombinációt ajánlom.
-                        {' '}
-                    </p>
-                    <p style={{ textAlign: 'left', color: 'gray' }}>
-                        posted 1 minute ago
-                    </p>
-                </Flex>
-            </Flex>
-
-            <Flex mt="30px">
-                <Flex p="20px">
-                    <Avatar alt="Remy Sharp"
-                        src={Environment.getAssetUrl('userAvatars/user_avatar_3.png')} />
-                </Flex>
-                <Flex direction="column">
-                    <Flex justify="space-between"
-                        align="center">
-
-                        <h4 style={{ margin: 0, textAlign: 'left' }}>Kiss Andrea</h4>
-                        <EpistoButton className="fontSmall">
-                            <ThumbUpAlt style={{
-                                height: 20,
-                                width: 20,
-                                marginRight: 5
-                            }} />
-                            Tetszik
-                        </EpistoButton>
-                    </Flex>
-                    <p style={{ textAlign: 'left' }}>
-                        Sziasztok! Én használtam a fenti kombinációkat, viszont véletlenül olyan oszlopokat is elrejtettem, amiket nem szerettem volna. Hogyan tudom gyorsan visszahozni őket?
-                        A CTRL + Z parancsot próbáltam, viszont közben dolgoztam máson is, így azokat is vissza akarja vonni :(
-                        {' '}
-                    </p>
-                    <p style={{ textAlign: 'left', color: 'gray' }}>
-                        posted 1 minute ago
-                    </p>
-                </Flex>
-            </Flex>
-
-            <Flex pl="20px"
-                mt="30px">
-                <Divider variant="fullWidth"
-                    orientation="vertical" />
-                <Flex p="20px">
-                    <Avatar alt="Remy Sharp"
-                        src={Environment.getAssetUrl('userAvatars/user_avatar_4.png')} />
-                </Flex>
-                <Flex direction="column">
-                    <Flex justify="space-between"
-                        align="center">
-
-                        <h4 style={{ margin: 0, textAlign: 'left' }}>
-                            Radeczky Richárd
-                        </h4>
-                        <EpistoButton className="fontSmall">
-                            <ThumbUpAlt style={{
-                                height: 20,
-                                width: 20,
-                                marginRight: 5
-                            }} />
-                            Tetszik
-                        </EpistoButton>
-                    </Flex>
-                    <p style={{ textAlign: 'left' }}>
-
-                        Visszahozni (Felfedés) úgy tudod az oszlopokat, hogy egyben (Shift nyíl) kijelölsz az előtte és utána lévő oszlopban is legalább 1-1 cellát, majd megnyomod a Ctrl Shift 8 kombinációt. (Ez Windowson biztosan működik, Mac-en érdemes utána nézni a megfelelő kombinációnak, de ha erre rákeresel, már segíteni fog)
-                        {' '}
-                    </p>
-                    <p style={{ textAlign: 'left', color: 'gray' }}>
-                        posted 1 minute ago
-                    </p>
-                </Flex>
-            </Flex>
+            {mockComments.map((x, index) => {
+                return <CommentItem
+                    fullName={x.fullName}
+                    commentText={x.commentText}
+                    dateOfPosting={x.dateOfPosting}
+                    isChild={x.isChild}
+                    key={index} />;
+            })}
         </Flex>
     );
 };

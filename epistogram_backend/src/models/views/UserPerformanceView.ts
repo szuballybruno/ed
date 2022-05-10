@@ -15,8 +15,8 @@ export class UserPerformanceView {
     performancePercentage: number;
 
     @ViewColumn()
-    averageReactionTime: number;
+    userExamLengthPoints: number;
 
     @ViewColumn()
-    totalAverageReactionTime: number;
+    userReactionTimePoints: number;
 }

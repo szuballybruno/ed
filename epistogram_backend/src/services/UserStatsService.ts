@@ -72,10 +72,8 @@ export class UserStatsService {
             overallPerformancePercentage: stats.overallPerformancePercentage,
 
             performancePercentage: stats.performancePercentage,
-            userAverageReactionTimeSeconds: stats.userAverageReactionTimeSeconds,
-            totalUsersAverageReactionTimeSeconds: stats.totalUsersAverageReactionTimeSeconds,
-            userReactionTimeDifferenceSeconds: stats.userReactionTimeDifferenceSeconds,
-            reactionTimeScorePoints: this.getSingleUserResponseTimePoints(stats.userAverageReactionTimeSeconds, stats.totalUsersAverageReactionTimeSeconds),
+            userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
+            reactionTimeScorePoints: (stats.userReactionTimePoints * 3 + stats.userExamLengthPoints) / 4,
 
             isAnyCoursesInProgress: inProgressCourses.any(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,

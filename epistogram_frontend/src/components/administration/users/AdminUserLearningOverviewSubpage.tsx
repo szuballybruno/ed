@@ -353,9 +353,9 @@ export const AdminUserStatisticsSubpage = (props: {
                             {/* total given answer count  */}
                             <StatisticsCard
                                 title={texts.statisticsCards.reactionTime}
-                                value={(userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) > 1
+                                value={(userLearningOverviewData?.userReactionTimeDifferencePercentage || 0) > 20
                                     ? texts.statisticsCards.belowAverage
-                                    : (userLearningOverviewData?.userReactionTimeDifferenceSeconds || 0) < -1
+                                    : (userLearningOverviewData?.userReactionTimeDifferencePercentage || 0) < -20
                                         ? texts.statisticsCards.aboveAverage
                                         : texts.statisticsCards.average}
                                 suffix={''}
@@ -369,9 +369,6 @@ export const AdminUserStatisticsSubpage = (props: {
                                 suffix={translatableTexts.misc.suffixes.countPerDay}
                                 iconPath={Environment.getAssetUrl('images/learningreport06.png')}
                                 isOpenByDefault={false} />
-
-
-
 
                         </div>
                         {/* chart item  */}

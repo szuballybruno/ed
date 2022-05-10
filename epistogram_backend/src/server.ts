@@ -4,6 +4,7 @@ import fileUpload from 'express-fileupload';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
+import { CommentController } from './api/CommentController';
 import { CompanyController } from './api/CompanyController';
 import { CourseController } from './api/CourseController';
 import { CourseRatingController } from './api/CourseRatingController';
@@ -38,6 +39,7 @@ import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
+import { CommentService } from './services/CommentService';
 import { CompanyService } from './services/CompanyService';
 import { CourseItemsService } from './services/CourseItemsService';
 import { CourseRatingService } from './services/CourseRatingService';
@@ -156,6 +158,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
     const companyService = new CompanyService(ormConnectionService, mapperService);
     const permissionService = new PermissionService(ormConnectionService, mapperService);
+    const commentService = new CommentService(ormConnectionService, mapperService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -189,6 +192,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
     const companyController = new CompanyController(companyService, permissionService);
     const roleController = new RoleController(roleService);
+    const commentController = new CommentController(commentService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -394,6 +398,10 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
+
+    // comment
+    addEndpoint(apiRoutes.comment.createComment, commentController.createCommentAction, { isPost: true });
+    addEndpoint(apiRoutes.comment.getComments, commentController.getCommentsAction);
 
     // 404 - no match
     turboExpress.use((req, res) => {
