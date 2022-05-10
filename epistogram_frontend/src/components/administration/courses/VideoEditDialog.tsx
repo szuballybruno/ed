@@ -15,12 +15,13 @@ import { EditDialogBase, EditDialogSubpage } from './EditDialogBase';
 export type EditQuestionFnType = <TField extends keyof QuestionEditDataDTO, >(key: number, field: TField, value: QuestionEditDataDTO[TField]) => void;
 
 export const VideoEditDialog = (props: {
-    logic: EpistoDialogLogicType<number>
+    logic: EpistoDialogLogicType<{ videoId: number, currentPage: 'details' | 'statistics' }>
 }) => {
 
     // props
     const { logic } = props;
-    const videoId = logic.params!;
+    const videoId = logic.params?.videoId || 0;
+    const currentPage = logic.params?.currentPage || 'details';
 
     // util
     const showError = useShowErrorDialog();
@@ -60,8 +61,17 @@ export const VideoEditDialog = (props: {
     // reset mutations on dialog close
     useEffect(() => {
 
+        console.log(logic.params);
+
         if (logic.isOpen!)
             resetMutations();
+
+        if (currentPage === 'details')
+            paging.setItem(0);
+
+        if (currentPage === 'statistics')
+            paging.setItem(1);
+
     }, [logic.isOpen]);
 
     // mutation handlers

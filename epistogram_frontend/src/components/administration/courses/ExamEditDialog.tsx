@@ -13,10 +13,12 @@ import { AdminExamStatisticsModalPage } from './dialogs/AdminExamStatisticsDialo
 import { EditQuestionFnType } from './VideoEditDialog';
 
 export const ExamEditDialog = (props: {
-    logic: EpistoDialogLogicType
+    logic: EpistoDialogLogicType<{ examId: number, currentPage: 'details' | 'statistics' }>
 }) => {
 
     const { logic } = props;
+    const examId = logic.params?.examId || 0;
+    const currentPage = logic.params?.currentPage || 'details';
 
     const showError = useShowErrorDialog();
 
@@ -26,7 +28,8 @@ export const ExamEditDialog = (props: {
         examQuestionEditDataState,
         examQuestionEditDataError,
         refetchExamQuestionEditData
-    } = useExamQuestionEditData(logic.params!);
+    } = useExamQuestionEditData(examId);
+
     const { saveExamQuestionEditData } = useSaveExamQuestionEditData();
 
     const {
@@ -46,6 +49,12 @@ export const ExamEditDialog = (props: {
 
         if (logic.isOpen!)
             resetMutations();
+
+        if (currentPage === 'details')
+            paging.setItem(0);
+
+        if (currentPage === 'statistics')
+            paging.setItem(1);
     }, [logic.isOpen]);
 
     // mutation handlers

@@ -38,7 +38,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
 export const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
-    openDialog: (type: 'video' | 'exam', itemId?: number) => void,
+    openDialog: (type: 'video' | 'exam', currentPage: 'details' | 'statistics', itemId?: number) => void,
     removeRow: (key: string) => void,
     mutateRow: MutateFnType<CourseContentItemAdminDTO, string>) => {
 
@@ -248,13 +248,23 @@ export const useGridColumnDefinitions = (
                 return (
                     <div className="h-flex">
                         <EpistoButton
-                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row.quickMenu)}>
+                            onClick={() => openDialog(
+                                row.itemType?.type === 'video'
+                                    ? 'video'
+                                    : 'exam',
+                                'details',
+                                row.quickMenu)}>
 
                             <Quiz />
                         </EpistoButton>
 
                         <EpistoButton
-                            onClick={() => { throw new Error('Not implemented!'); }}>
+                            onClick={() => openDialog(
+                                row.itemType?.type === 'video'
+                                    ? 'video'
+                                    : 'exam',
+                                'statistics',
+                                row.quickMenu)}>
 
                             <Equalizer />
                         </EpistoButton>

@@ -32,8 +32,8 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic<number>('video_edit_dialog', { defaultCloseButtonType: 'top' });
-    const examEditDialogLogic = useEpistoDialogLogic('exam_edit_dialog', { defaultCloseButtonType: 'top' });
+    const videoEditDialogLogic = useEpistoDialogLogic<{ videoId: number, currentPage: 'details' | 'statistics' }>('video_edit_dialog', { defaultCloseButtonType: 'top' });
+    const examEditDialogLogic = useEpistoDialogLogic<{ examId: number, currentPage: 'details' | 'statistics' }>('exam_edit_dialog', { defaultCloseButtonType: 'top' });
     const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
     const isAnySelected = !!courseId && (courseId != -1);
 
@@ -185,13 +185,18 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: 'video' | 'exam' | 'module', itemId?: number) => {
+    const openDialog = (
+        type: 'video' | 'exam' | 'module',
+        currentPage?: 'details' | 'statistics',
+        itemId?: number
+    ) => {
+        console.log('Dolgok ' + itemId + ' ' + currentPage);
 
         if (type === 'video')
-            videoEditDialogLogic.openDialog({ params: itemId });
+            videoEditDialogLogic.openDialog({ params: { videoId: itemId, currentPage: currentPage } });
 
         if (type === 'exam')
-            examEditDialogLogic.openDialog({ params: itemId });
+            examEditDialogLogic.openDialog({ params: { examId: itemId, currentPage: currentPage } });
 
         if (type === 'module')
             moduleEditDialogLogic.openDialog();
