@@ -52,74 +52,78 @@ export type InitialStateType<TSchema> = {
     }
 }
 
+const mapColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
+
+    const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
+
+    const def: GridColDef = {
+        ...others,
+        field: field as any,
+        editable: !!editHandler || !!renderEditCell
+    };
+
+    if (renderCell)
+        def.renderCell = (cellData: GridRenderCellParams<any, any, any>) => renderCell({
+            key: getKey(cellData.row),
+            field: column.field,
+            value: cellData.row[column.field],
+            row: cellData.row
+        });
+
+    if (renderEditCell)
+        def.renderEditCell = (cellData: any) => {
+
+            const useCommitNewValue = () => {
+
+                const apiContextRef = useGridApiContext();
+
+                const commitNewValue = <TField extends keyof TSchema,>(key: TKey, field: TField, value: TSchema[TField]) => {
+
+                    apiContextRef
+                        .current
+                        .setEditCellValue({ id: key as any, field: field as any, value: value as any });
+
+                    apiContextRef
+                        .current
+                        .commitCellChange({ id: key as any, field: field as any });
+                };
+
+                return {
+                    commitNewValue
+                };
+            };
+
+            return renderEditCell({
+                key: getKey(cellData.row),
+                field: column.field,
+                value: cellData.row[column.field],
+                row: cellData.row,
+                useCommitNewValue
+            });
+        };
+
+    return def;
+};
+
 export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
     getKey: (row: TSchema) => TKey,
     handleEdit?: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
     initialState?: InitialStateType<TSchema>,
-    deps?: any[]
+    deps?: any[],
+    density?: 'dense' | 'spaced',
+    hideFooter?: boolean,
 }) => {
 
     console.log('Rendering EpistoDataGrid...');
 
-    const { columns, rows, initialState, handleEdit, getKey } = props;
+    const { columns, rows, initialState, density, hideFooter, handleEdit, getKey } = props;
 
     removeOverlay();
 
     const columnsProcessed = columns
-        .map(column => {
-
-            const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
-
-            const def: GridColDef = {
-                ...others,
-                field: field as any,
-                editable: !!editHandler || !!renderEditCell
-            };
-
-            if (renderCell)
-                def.renderCell = (cellData: GridRenderCellParams<any, any, any>) => renderCell({
-                    key: getKey(cellData.row),
-                    field: column.field,
-                    value: cellData.row[column.field],
-                    row: cellData.row
-                });
-
-            if (renderEditCell)
-                def.renderEditCell = (cellData: any) => {
-
-                    const useCommitNewValue = () => {
-
-                        const apiContextRef = useGridApiContext();
-
-                        const commitNewValue = <TField extends keyof TSchema,>(key: TKey, field: TField, value: TSchema[TField]) => {
-
-                            apiContextRef
-                                .current
-                                .setEditCellValue({ id: key as any, field: field as any, value: value as any });
-
-                            apiContextRef
-                                .current
-                                .commitCellChange({ id: key as any, field: field as any });
-                        };
-
-                        return {
-                            commitNewValue
-                        };
-                    };
-
-                    return renderEditCell({
-                        key: getKey(cellData.row),
-                        field: column.field,
-                        value: cellData.row[column.field],
-                        row: cellData.row,
-                        useCommitNewValue
-                    });
-                };
-
-            return def;
-        });
+        .map(column => mapColumn(column, getKey));
 
     const apiRef = useGridApiRef();
 
@@ -159,6 +163,12 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             apiRef={apiRef}
             onCellClick={handleCellClick}
             initialState={initialState as any}
+            density={density === 'dense'
+                ? 'compact'
+                : density === 'spaced'
+                    ? 'standard'
+                    : undefined}
+            hideFooter={hideFooter}
             onCellEditCommit={(params) => {
 
                 const value = params.value as any;

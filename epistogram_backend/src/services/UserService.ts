@@ -1,12 +1,10 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { Permission } from '../models/entity/authorization/Permission';
 import { Course } from '../models/entity/Course';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { RegistrationType } from '../models/Types';
 import { AdminUserListView } from '../models/views/UserAdminListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
-import { AssignablePermissionAndRoleDTO } from '../shared/dtos/AssignablePermissionAndRoleDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';

@@ -4,7 +4,7 @@ import { ViewColumn, ViewEntity } from 'typeorm';
     synchronize: false,
     expression: ''
 })
-export class AssignablePermissionAndRoleView {
+export class AssignableRoleView {
 
     @ViewColumn()
     userId: number;
@@ -13,14 +13,11 @@ export class AssignablePermissionAndRoleView {
     contextCompanyId: number;
 
     @ViewColumn()
-    permissionId: number | null;
+    roleId: number;
 
     @ViewColumn()
-    permissionCode: string | null;
+    roleName: string;
 
     @ViewColumn()
-    roleId: number | null;
-
-    @ViewColumn()
-    roleName: string | null;
+    permissionId: number;
 }

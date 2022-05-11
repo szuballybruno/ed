@@ -1,13 +1,11 @@
-import { Box, Flex } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRoleManageCompanies } from '../../../../services/api/companyApiService';
-import { useAssignableRoles, useUserAssignedAuthItems } from '../../../../services/api/rolesApiService';
-import { AssignablePermissionAndRoleDTO } from '../../../../shared/dtos/AssignablePermissionAndRoleDTO';
+import { useAssignablePermissions, useAssignableRoles, useUserAssignedAuthItems } from '../../../../services/api/rolesApiService';
 import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
-import { UserAssignedAuthItemDTO } from '../../../../shared/dtos/role/UserAssignedAuthItemDTO';
 import { useHandleAddRemoveItems } from '../../../../static/frontendHelpers';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
+import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 
@@ -21,16 +19,23 @@ export const PermissionAssignerControl = (props: {
     const selectedCompanyId = selectedCompany?.id ?? null;
 
     // http
-    const { assignableRolesList, assignableRolesListError, assignableRolesListState } = useAssignableRoles(selectedCompanyId);
+    const { assignableRolesList } = useAssignableRoles(selectedCompanyId);
+    const { assignablePermissionList } = useAssignablePermissions(selectedCompanyId);
     const { roleManageCompanies } = useRoleManageCompanies();
     const { userAssignedAuthItems } = useUserAssignedAuthItems(userId, selectedCompanyId);
 
-    // assigned items 
-    const [assigneDTOs, setAssignDTOs] = useState<UserAssignedAuthItemDTO[]>([]);
-    const getAssignedKey = useCallback((id: number, isRole: boolean) => `${id}_ ${isRole}`, []);
-    const getAssignedKeyFromDTO = useCallback((x: UserAssignedAuthItemDTO) => getAssignedKey(x.id, x.isRole), [getAssignedKey]);
-    const getAssignedKeyFromAv = useCallback((x: AssignablePermissionAndRoleDTO) => getAssignedKey(x.permissionId || x.roleId!, x.isRole), [getAssignedKey]);
-    const [addAssignedId, removeAssignedId] = useHandleAddRemoveItems(assigneDTOs, setAssignDTOs, getAssignedKeyFromDTO);
+    // assigned permissions 
+    const [assignedPermissionIds, setAssignedPermissionIds] = useState<number[]>([]);
+    const [addAssignedPermissionId, removeAssignedPermissionId] = useHandleAddRemoveItems(assignedPermissionIds, setAssignedPermissionIds, x => x);
+
+    // assigned roles
+    const [assignedRoleIds, setAssignedRoleIds] = useState<number[]>([]);
+    const [addAssignedRoleId, removeAssignedRoleId] = useHandleAddRemoveItems(assignedRoleIds, setAssignedRoleIds, x => x);
+
+    // const getAssignedKey = useCallback((id: number, isRole: boolean) => `${id}_ ${isRole}`, []);
+    // const getAssignedKeyFromDTO = useCallback((x: UserAssignedAuthItemDTO) => getAssignedKey(x.id, x.isRole), [getAssignedKey]);
+    // const getAssignedKeyFromAv = useCallback((x: AssignablePermissionAndRoleDTO) => getAssignedKey(x.permissionId || x.roleId!, x.isRole), [getAssignedKey]);
+    // const [addAssignedId, removeAssignedId] = useHandleAddRemoveItems(assigneDTOs, setAssignDTOs, getAssignedKeyFromDTO);
 
     useEffect(() => {
 
@@ -45,82 +50,155 @@ export const PermissionAssignerControl = (props: {
         if (userAssignedAuthItems.length === 0)
             return;
 
-        setAssignDTOs(userAssignedAuthItems);
-    }, [setAssignDTOs, userAssignedAuthItems]);
+        setAssignedRoleIds(userAssignedAuthItems
+            .filter(x => x.isRole)
+            .map(x => x.id));
+
+        setAssignedPermissionIds(userAssignedAuthItems
+            .filter(x => !x.isRole)
+            .map(x => x.id));
+    }, [setAssignedRoleIds, setAssignedPermissionIds, userAssignedAuthItems]);
 
     console.log(userAssignedAuthItems);
 
-    type RowType = {
+    type RoleRowType = {
         rowId: number,
         name: string;
-        type: string;
         isAssigned: boolean;
-        data: AssignablePermissionAndRoleDTO;
+        roleId: number;
     }
 
-    const rows = assignableRolesList
-        .map((assDto, i): RowType => ({
+    type PermissionRowType = {
+        rowId: number,
+        name: string;
+        isAssigned: boolean;
+        permissionId: number;
+    }
+
+    const roleRows = assignableRolesList
+        .map((assRole, i): RoleRowType => ({
             rowId: i,
-            name: assDto.isRole ? assDto.roleName! : assDto.permissionCode!,
-            type: assDto.isRole ? 'Role' : 'Permission',
-            isAssigned: assigneDTOs
-                .any(dto => getAssignedKeyFromDTO(dto) === getAssignedKeyFromAv(assDto)),
-            data: assDto
+            name: assRole.roleName!,
+            roleId: assRole.roleId,
+            isAssigned: assignedRoleIds
+                .any(id => assRole.roleId === id)
+        }));
+
+    const permissionRows = assignablePermissionList
+        .map((assPerm, i): PermissionRowType => ({
+            rowId: i,
+            name: assPerm.permissionCode!,
+            permissionId: assPerm.permissionId,
+            isAssigned: assignedPermissionIds
+                .any(id => assPerm.permissionId === id)
         }));
 
     return (
         <LoadingFrame
             direction="column"
-            minHeight="500px">
+            minHeight="800px">
 
-            <Box>
+            <EpistoLabel
+                text="Company">
+
                 <EpistoSelect
                     selectedValue={selectedCompany ?? undefined}
                     getCompareKey={x => x.id + ''}
                     onSelected={setSelectedCompany}
                     getDisplayValue={x => x.name}
                     items={roleManageCompanies} />
-            </Box>
+            </EpistoLabel>
 
-            <EpistoDataGrid
-                columns={[
-                    {
-                        field: 'rowId',
-                        headerName: 'Index'
-                    },
-                    {
-                        field: 'name',
-                        headerName: 'Name',
-                        width: 250
-                    },
-                    {
-                        field: 'type',
-                        headerName: 'Type'
-                    },
-                    {
-                        field: 'isAssigned',
-                        headerName: 'IsAssigned',
-                        renderCell: ({ value, row }) => {
+            <EpistoLabel
+                flex="1"
+                text="Roles">
 
-                            return (
-                                <EpistoCheckbox
-                                    setValue={isSelected => {
+                <EpistoDataGrid
+                    hideFooter
+                    density="dense"
+                    columns={[
+                        {
+                            field: 'name',
+                            headerName: 'Name',
+                            width: 250
+                        },
+                        {
+                            field: 'isAssigned',
+                            headerName: 'IsAssigned',
+                            renderCell: ({ value, row }) => {
 
-                                        if (isSelected) {
+                                return (
+                                    <EpistoCheckbox
+                                        setValue={isSelected => {
 
-                                            addAssignedId({ id: row.data.permissionId! || row.data.roleId!, isRole: row.data.isRole });
-                                        }
-                                        else {
-                                            removeAssignedId(getAssignedKeyFromAv(row.data));
-                                        }
-                                    }}
-                                    value={value as boolean} />
-                            );
+                                            if (isSelected) {
+
+                                                addAssignedRoleId(row.roleId);
+                                            }
+                                            else {
+
+                                                removeAssignedRoleId(row.roleId);
+                                            }
+                                        }}
+                                        value={value as boolean} />
+                                );
+                            }
                         }
-                    }
-                ]}
-                rows={rows}
-                getKey={x => x.rowId} />
+                    ]}
+                    initialState={{
+                        pinnedColumns: {
+                            right: ['isAssigned']
+                        }
+                    }}
+                    rows={roleRows}
+                    getKey={x => x.rowId} />
+
+            </EpistoLabel>
+
+            <EpistoLabel
+                flex="1"
+                text="Permissions">
+
+                <EpistoDataGrid
+                    hideFooter
+                    density="dense"
+                    columns={[
+                        {
+                            field: 'name',
+                            headerName: 'Name',
+                            width: 250
+                        },
+                        {
+                            field: 'isAssigned',
+                            headerName: 'IsAssigned',
+                            renderCell: ({ value, row }) => {
+
+                                return (
+                                    <EpistoCheckbox
+                                        setValue={isSelected => {
+
+                                            if (isSelected) {
+
+                                                addAssignedPermissionId(row.permissionId);
+                                            }
+                                            else {
+                                                
+                                                removeAssignedPermissionId(row.permissionId);
+                                            }
+                                        }}
+                                        value={value as boolean} />
+                                );
+                            }
+                        }
+                    ]}
+                    initialState={{
+                        pinnedColumns: {
+                            right: ['isAssigned']
+                        }
+                    }}
+                    rows={permissionRows}
+                    getKey={x => x.rowId} />
+            </EpistoLabel>
         </LoadingFrame>
     );
 };

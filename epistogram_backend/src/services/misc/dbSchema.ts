@@ -204,7 +204,8 @@ export const dbSchema = {
         'module_view',
         'role_list_view',
         'company_view',
-        'assignable_permission_and_role_view',
+        'assignable_permission_view',
+        'assignable_role_view',
         'user_assigned_auth_item_view'
     ],
 

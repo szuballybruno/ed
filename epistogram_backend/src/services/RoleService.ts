@@ -1,10 +1,12 @@
 import { Role } from '../models/entity/authorization/Role';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
-import { AssignablePermissionAndRoleView } from '../models/views/AssignablePermissionAndRoleView';
+import { AssignablePermissionView } from '../models/views/AssignablePermissionView';
+import { AssignableRoleView } from '../models/views/AssignableRoleView';
 import { RoleListView } from '../models/views/RoleListView';
 import { UserAssignedAuthItemView } from '../models/views/UserAssignedAuthItemView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
-import { AssignablePermissionAndRoleDTO } from '../shared/dtos/AssignablePermissionAndRoleDTO';
+import { AssignablePermissionDTO } from '../shared/dtos/AssignablePermissionDTO';
+import { AssignableRoleDTO } from '../shared/dtos/AssignableRoleDTO';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
@@ -59,18 +61,41 @@ export class RoleService extends QueryServiceBase<Role> {
             });
     }
 
-    async getAvailablePermissionsAndRolesAsync(userId: number, companyId: number) {
+    async getAssignablePermissionsAsync(userId: number, companyId: number) {
 
         const rolesAndPermissions = await this._ormService
-            .query(AssignablePermissionAndRoleView, { userId, companyId })
+            .query(AssignablePermissionView, { userId, companyId })
             .where('userId', '=', 'userId')
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
         return rolesAndPermissions
-            .map((x): AssignablePermissionAndRoleDTO => ({
-                ...x,
-                isRole: !!x.roleId
+            .map((x): AssignablePermissionDTO => ({
+                contextCompanyId: x.contextCompanyId,
+                permissionCode: x.permissionCode,
+                permissionId: x.permissionId,
+                userId: x.userId
+            }));
+    }
+
+    async getAssignableRolesAsync(userId: number, companyId: number) {
+
+        const roles = await this._ormService
+            .query(AssignableRoleView, { userId, companyId })
+            .where('userId', '=', 'userId')
+            .and('contextCompanyId', '=', 'companyId')
+            .getMany();
+
+        return roles
+            .groupBy(x => x.roleId)
+            .map((viewAsRole): AssignableRoleDTO => ({
+                contextCompanyId: viewAsRole.first.contextCompanyId,
+                roleId: viewAsRole.first.roleId,
+                roleName: viewAsRole.first.roleName,
+                userId: viewAsRole.first.userId,
+                permissionIds: viewAsRole
+                    .items
+                    .map(viewAsPerm => viewAsPerm.permissionId)
             }));
     }
 
