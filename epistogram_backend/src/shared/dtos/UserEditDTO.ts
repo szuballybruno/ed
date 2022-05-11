@@ -1,3 +1,4 @@
+import { AssignedAuthItemsDTO } from './role/AssignedAuthItemsDTO';
 
 export class UserEditDTO {
     id: number;
@@ -7,4 +8,5 @@ export class UserEditDTO {
     isTeacher: boolean;
     companyId: number;
     jobTitleId: number | null;
+    assignedAuthItems: AssignedAuthItemsDTO;
 }

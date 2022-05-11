@@ -27,6 +27,7 @@ import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
 import { useCompanies } from '../../../services/api/companyApiService';
 import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
+import { AssignedAuthItemsDTO } from '../../../shared/dtos/role/AssignedAuthItemsDTO';
 
 export const roles = [
     {
@@ -66,6 +67,7 @@ export const AdminEditUserControl = (props: {
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
+    const [assignedAuthItems, setAssignedAuthItems] = useState<AssignedAuthItemsDTO>({ assignedPermissionIds: [], assignedRoleIds: [] });
 
     const showError = useShowErrorDialog();
 
@@ -87,6 +89,7 @@ export const AdminEditUserControl = (props: {
         setSelectedJobTitle(jobTitles.firstOrNull(x => x.id === editDTO.jobTitleId));
         setSelectedCompany(companies.firstOrNull(x => x.id === editDTO.companyId));
         setIsTeacher(editDTO.isTeacher);
+        setAssignedAuthItems(editDTO.assignedAuthItems);
     }, [editDTO, jobTitles, companies]);
 
     const coinAmountEntryState = useEpistoEntryState({
@@ -134,14 +137,23 @@ export const AdminEditUserControl = (props: {
             email,
             companyId: selectedCompany.id,
             jobTitleId: selectedJobTitle.id,
-            isTeacher
+            isTeacher,
+            assignedAuthItems
         };
 
         await saveUserAsync(editedUserDTO);
     };
 
+
+    const [asd, setAsd] = useState(0);
+
     return <Flex direction="column"
         flex="1">
+
+
+        <EpistoButton onClick={() => setAsd(asd + 1)}>
+            Hello
+        </EpistoButton>
 
         <Flex flex="1">
 
@@ -246,7 +258,9 @@ export const AdminEditUserControl = (props: {
                 <EditSection title="Jogosultságkezelés">
 
                     <PermissionAssignerControl
-                        userId={editedUserId} />
+                        userId={editedUserId}
+                        data={assignedAuthItems}
+                        onChange={setAssignedAuthItems} />
                 </EditSection>
             </Flex>
 

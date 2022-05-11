@@ -64,6 +64,9 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
+        const assignedAuthItems = await this._roleService
+            .getUserAssignedAuthItemsAsync(userId, editedUserId);
+
         return {
             id: res.id,
             firstName: res.firstName,
@@ -71,7 +74,8 @@ export class UserService {
             email: res.email,
             isTeacher: !!res.teacherInfoId,
             jobTitleId: res.jobTitleId,
-            companyId: res.companyId
+            companyId: res.companyId,
+            assignedAuthItems
         };
     }
 

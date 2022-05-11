@@ -27,29 +27,44 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
 export const useHandleAddRemoveItems = <TItem, TKey>(
     items: TItem[],
     setItems: (items: TItem[]) => void,
-    getKey?: (item: TItem) => TKey): [
+    opts?: {
+        getKey?: (item: TItem) => TKey,
+        sideEffects: ((newValue: TItem[]) => void)[]
+    }): [
         (item: TItem) => void,
         (key: TKey) => void
     ] => {
 
     const getKeyInternal: (item: TItem) => TKey = useMemo(() => {
 
-        if (getKey)
-            return getKey;
+        if (opts?.getKey)
+            return opts.getKey;
 
         return (x: TItem): TKey => x as any;
-    }, [getKey]);
+    }, [opts?.getKey]);
 
     const addItem = useCallback((item: TItem) => {
 
-        setItems([...items, item]);
-    }, [items, setItems]);
+        const newItems = [...items, item];
+
+        setItems(newItems);
+
+        if (opts?.sideEffects)
+            opts.sideEffects
+                .forEach(x => x(items));
+    }, [items, setItems, opts?.sideEffects]);
 
     const removeItem = useCallback((key: TKey): void => {
 
-        setItems(items
-            .filter(item => getKeyInternal(item) !== key));
-    }, [items, setItems, getKey]);
+        const newItems = items
+            .filter(item => getKeyInternal(item) !== key);
+
+        setItems(newItems);
+
+        if (opts?.sideEffects)
+            opts.sideEffects
+                .forEach(x => x(items));
+    }, [items, setItems, getKeyInternal, opts?.sideEffects]);
 
     return [
         addItem,

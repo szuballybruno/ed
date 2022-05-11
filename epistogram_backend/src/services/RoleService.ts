@@ -7,6 +7,7 @@ import { UserAssignedAuthItemView } from '../models/views/UserAssignedAuthItemVi
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { AssignablePermissionDTO } from '../shared/dtos/AssignablePermissionDTO';
 import { AssignableRoleDTO } from '../shared/dtos/AssignableRoleDTO';
+import { AssignedAuthItemsDTO } from '../shared/dtos/role/AssignedAuthItemsDTO';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
@@ -99,7 +100,7 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
     }
 
-    async getUserAssignedAuthItemsAsync(userId: number, authItemUserId: number) {
+    async getUserAssignedAuthItemsAsync(userId: number, authItemUserId: number): Promise<AssignedAuthItemsDTO> {
 
         // TODO check permissions of userId
 
@@ -108,11 +109,14 @@ export class RoleService extends QueryServiceBase<Role> {
             .where('userId', '=', 'authItemUserId')
             .getMany();
 
-        return views
-            .map((x): UserAssignedAuthItemDTO => ({
-                isRole: x.isRole,
-                id: x.isRole ? x.roleId! : x.permissionId!
-            }));
+        return {
+            assignedPermissionIds: views
+                .filter(x => !x.isRole)
+                .map(x => x.permissionId!),
+            assignedRoleIds: views
+                .filter(x => x.isRole)
+                .map(x => x.roleId!)
+        };
     }
 
     async getUserPermissionsAsync(userId: number): Promise<PermissionListDTO[]> {

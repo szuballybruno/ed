@@ -44,18 +44,6 @@ export const useAssignablePermissions = (companyId: number | null) => {
     };
 };
 
-export const useUserAssignedAuthItems = (userId: number, companyId: number | null) => {
-
-    const qr = useReactQuery2<UserAssignedAuthItemDTO[]>(apiRoutes.roles.getUserAssignedAuthItems, { companyId, userId }, !!companyId);
-
-    return {
-        userAssignedAuthItems: qr.data ?? [],
-        userAssignedAuthItemsError: qr.error,
-        userAssignedAuthItemsState: qr.state,
-        refetchUserAssignedAuthItems: qr.refetch
-    };
-};
-
 export const useCreateRole = () => {
 
     const qr = usePostDataUnsafe<RoleCreateDTO>(apiRoutes.roles.createRole);
