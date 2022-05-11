@@ -80,6 +80,85 @@ export class UserService {
     }
 
     /**
+     * Save user from admin page, where you can edit almost all fileds.
+     * 
+     * @param dto 
+     */
+    async saveUserAsync(dto: UserEditDTO) {
+
+        const userId = dto.id;
+
+        // save user 
+        const user: Partial<User> = {
+            id: userId,
+            lastName: dto.lastName,
+            firstName: dto.firstName,
+            email: dto.email,
+            companyId: dto.companyId,
+            jobTitleId: dto.jobTitleId
+        };
+
+        await this._ormService
+            .getRepository(User)
+            .save(user);
+
+        // save teacher info
+        await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+
+        // save auth items 
+        await this._roleService
+            .saveUserAssignedAuthItemsAsync(userId, dto.assignedAuthItems);
+    }
+
+    /**
+     * Saves user teacher info
+     */
+    private async _saveTeacherInfoAsync(userId: number, isTeacher: boolean) {
+
+        const teacherInfo = await this._teacherInfoService
+            .getTeacherInfoAsync(userId);
+
+        // teacher info exists
+        if (teacherInfo) {
+
+            if (!isTeacher) {
+
+                await this._teacherInfoService
+                    .deleteTeacherInfoAsync(teacherInfo.id);
+            }
+        }
+
+        // teacher info doesn't exist
+        else {
+
+            if (!teacherInfo && isTeacher) {
+
+                await this._teacherInfoService
+                    .createTeacherInfoAsync(userId);
+            }
+        }
+    }
+
+    /**
+     * Save user data which the user itself can edit.  
+     * 
+     * @param userId 
+     * @param dto 
+     */
+    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
+
+        // save user 
+        await this._ormService
+            .getRepository(User)
+            .save({
+                id: userId,
+                lastName: dto.lastName,
+                firstName: dto.firstName,
+                phoneNumber: dto.phoneNumber
+            });
+    }
+
+    /**
      * Get user dto-s for the admin page user list.
      * 
      * @param searchText 
@@ -110,25 +189,6 @@ export class UserService {
      * @param userId 
      * @param dto 
      */
-    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
-
-        // save user 
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                phoneNumber: dto.phoneNumber
-            });
-    }
-
-    /**
-     * Save user data which the user itself can edit.  
-     * 
-     * @param userId 
-     * @param dto 
-     */
     async saveUserDataAsync(userId: number, dto: UserDTO) {
 
         return this._ormService
@@ -139,54 +199,6 @@ export class UserService {
                 lastName: dto.lastName,
                 phoneNumber: dto.phoneNumber
             });
-    }
-
-    /**
-     * Save user from admin page, where you can edit almost all fileds.
-     * 
-     * @param dto 
-     */
-    async saveUserAsync(dto: UserEditDTO) {
-
-        const userId = dto.id;
-
-        // save user 
-        const user: Partial<User> = {
-            id: userId,
-            lastName: dto.lastName,
-            firstName: dto.firstName,
-            email: dto.email,
-            companyId: dto.companyId,
-            jobTitleId: dto.jobTitleId
-        };
-
-        await this._ormService
-            .getRepository(User)
-            .save(user);
-
-        // save teacher info
-        const teacherInfo = await this._teacherInfoService
-            .getTeacherInfoAsync(dto.id);
-
-        // teacher info exists
-        if (teacherInfo) {
-
-            if (!dto.isTeacher) {
-
-                await this._teacherInfoService
-                    .deleteTeacherInfoAsync(teacherInfo.id);
-            }
-        }
-
-        // teacher info doesn't exist
-        else {
-
-            if (!teacherInfo && dto.isTeacher) {
-
-                await this._teacherInfoService
-                    .createTeacherInfoAsync(userId);
-            }
-        }
     }
 
     /**

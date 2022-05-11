@@ -94,7 +94,7 @@ export class ActionParams {
             const body = withValueOrBadRequest<T>(this.req.body);
 
             const nullOrUndefProps = notNullOrUndefined
-                .filter(x => !body[x]);
+                .filter(x => body[x] === undefined || body[x] === null);
 
             if (nullOrUndefProps.length > 0)
                 throw new Error(`Null or undefined properties found on object: [${nullOrUndefProps.join(', ')}]!`);

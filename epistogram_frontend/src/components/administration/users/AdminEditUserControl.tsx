@@ -47,6 +47,8 @@ export const roles = [
     }
 ];
 
+const defaultAuthItemsDTO = { assignedPermissionIds: [], assignedRoleIds: [] };
+
 export const AdminEditUserControl = (props: {
     editDTO: UserEditDTO | null,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
@@ -67,7 +69,7 @@ export const AdminEditUserControl = (props: {
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
-    const [assignedAuthItems, setAssignedAuthItems] = useState<AssignedAuthItemsDTO>({ assignedPermissionIds: [], assignedRoleIds: [] });
+    const [assignedAuthItems, setAssignedAuthItems] = useState<AssignedAuthItemsDTO>(defaultAuthItemsDTO);
 
     const showError = useShowErrorDialog();
 
@@ -78,16 +80,26 @@ export const AdminEditUserControl = (props: {
     const { companies } = useCompanies();
     const { jobTitles } = useJobTitles();
 
+    console.log(selectedCompany);
+
     useEffect(() => {
 
         if (!editDTO || jobTitles.length === 0 || companies.length === 0)
             return;
 
+        console.log(companies);
+
+        const comp = companies
+            .single(x => x.id === editDTO.companyId);
+
+        const jt = jobTitles
+            .single(x => x.id === editDTO.jobTitleId);
+
         setFirstName(editDTO.firstName);
         setLastName(editDTO.lastName);
         setEmail(editDTO.email);
-        setSelectedJobTitle(jobTitles.firstOrNull(x => x.id === editDTO.jobTitleId));
-        setSelectedCompany(companies.firstOrNull(x => x.id === editDTO.companyId));
+        setSelectedJobTitle(jt);
+        setSelectedCompany(comp);
         setIsTeacher(editDTO.isTeacher);
         setAssignedAuthItems(editDTO.assignedAuthItems);
     }, [editDTO, jobTitles, companies]);
@@ -127,8 +139,11 @@ export const AdminEditUserControl = (props: {
 
     const handleSaveUserAsync = async () => {
 
-        if (!editDTO || !selectedCompany || !selectedJobTitle)
+        if (!editDTO || !selectedCompany || !selectedJobTitle) {
+
+            showNotification('A mandatory field is empty!');
             return;
+        }
 
         const editedUserDTO: UserEditDTO = {
             id: editDTO.id,
@@ -144,16 +159,8 @@ export const AdminEditUserControl = (props: {
         await saveUserAsync(editedUserDTO);
     };
 
-
-    const [asd, setAsd] = useState(0);
-
     return <Flex direction="column"
         flex="1">
-
-
-        <EpistoButton onClick={() => setAsd(asd + 1)}>
-            Hello
-        </EpistoButton>
 
         <Flex flex="1">
 
@@ -259,7 +266,7 @@ export const AdminEditUserControl = (props: {
 
                     <PermissionAssignerControl
                         userId={editedUserId}
-                        data={assignedAuthItems}
+                        data={editDTO?.assignedAuthItems ?? defaultAuthItemsDTO}
                         onChange={setAssignedAuthItems} />
                 </EditSection>
             </Flex>

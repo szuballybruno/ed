@@ -53,11 +53,10 @@ export const PermissionAssignerControl = (props: {
 
     useEffect(() => {
 
-        console.log('asd');
-        // onChange({
-        //     assignedPermissionIds,
-        //     assignedRoleIds
-        // });
+        onChange({
+            assignedPermissionIds,
+            assignedRoleIds
+        });
     }, [assignedPermissionIds, assignedRoleIds]);
 
     const assignedRoles = assignableRolesList

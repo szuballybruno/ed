@@ -119,6 +119,11 @@ export class RoleService extends QueryServiceBase<Role> {
         };
     }
 
+    async saveUserAssignedAuthItemsAsync(userId: number, authItems: AssignedAuthItemsDTO) {
+
+        console.log(authItems);
+    }
+
     async getUserPermissionsAsync(userId: number): Promise<PermissionListDTO[]> {
 
         return [];
