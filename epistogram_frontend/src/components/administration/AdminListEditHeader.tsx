@@ -116,15 +116,15 @@ export const AdminListEditHeader = (props: {
             className="align-center"
             height="100%"
             mx={10}>
-            <EpistoSelect
-                minWidth={'fit-content'}
-                items={[]}
+
+            {/* <EpistoSelect
+                items={[] as string[]}
                 onSelected={x => { throw new Error('Not implemented!'); }}
-                selectedValue="1"
-                getCompareKey={x => x}
+                selectedValue={'1' as string}
+                getCompareKey={x => x as string}
                 defaultValue="Rendezés...">
 
-            </EpistoSelect>
+            </EpistoSelect> */}
         </Flex>
 
         {/* buttons */}

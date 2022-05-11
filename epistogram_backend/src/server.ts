@@ -94,7 +94,6 @@ import { apiRoutes } from './shared/types/apiRoutes';
 import { onActionError, onActionSuccess } from './utilities/apiHelpers';
 import { ActionParams } from './utilities/helpers';
 import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
-import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboExpressDecorators';
 
 (async () => {
 
@@ -213,6 +212,7 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
         .addController(UserController, userController)
         .addController(PermissionController, permissionController)
         .addController(RoleController, roleController)
+        .addController(CompanyController, companyController)
         .build();
 
     const addEndpoint = turboExpress.addAPIEndpoint;
@@ -222,15 +222,6 @@ import { getControllerActionMetadatas } from './utilities/XTurboExpress/XTurboEx
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
-
-    // companies
-    addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
-    addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction);
-    addEndpoint(apiRoutes.companies.getCompanyEditData, companyController.getCompanyEditDataAction);
-    addEndpoint(apiRoutes.companies.createCompany, companyController.createCompanyAction, { isPost: true });
-    addEndpoint(apiRoutes.companies.deleteCompany, companyController.deleteCompanyAction, { isPost: true });
-    addEndpoint(apiRoutes.companies.saveCompany, companyController.saveCompanyAction, { isPost: true });
-    addEndpoint(apiRoutes.companies.getAvailableCompaniesForRoleCreation, companyController.getAvailableCompaniesForRoleCreationAction);
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });

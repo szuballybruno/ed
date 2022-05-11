@@ -35,6 +35,7 @@ export const apiRoutes = {
         deleteCompany: '/companies/delete-company',
         saveCompany: '/companies/save-company',
         getAvailableCompaniesForRoleCreation: '/companies/get-available-companies-for-role-creation',
+        getRoleManageCompanies: '/companies/get-role-manage-companies',
     },
 
     scheduledJobs: {

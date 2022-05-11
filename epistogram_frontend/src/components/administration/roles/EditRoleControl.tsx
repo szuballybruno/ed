@@ -3,7 +3,7 @@ import { House } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ButtonType, LoadingStateType } from '../../../models/types';
-import { useAvailableCompaniesForRoleCreation } from '../../../services/api/companiesApiService';
+import { useAvailableCompaniesForRoleCreation } from '../../../services/api/companyApiService';
 import { usePermissionsList } from '../../../services/api/permissionsApiService';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { PermissionListDTO } from '../../../shared/dtos/role/PermissionListDTO';
@@ -142,8 +142,7 @@ export const EditRoleControl = (props: {
                             selectedValue={selectedCompany}
                             getCompareKey={x => x?.id + ''}
                             getDisplayValue={x => x?.name + ''}
-                            onSelected={setSelectedCompany}
-                            margin='0' />
+                            onSelected={setSelectedCompany} />
                     </Flex>
                 </EpistoLabel>}
 

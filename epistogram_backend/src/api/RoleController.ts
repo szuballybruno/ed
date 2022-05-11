@@ -63,6 +63,6 @@ export class RoleController {
         return this._roleService
             .getAvailablePermissionsAndRolesAsync(params.currentUserId, params
                 .getQuery()
-                .getValue(x => x.comapanyId, 'int'));
+                .getValue(x => x.companyId, 'int'));
     };
 }

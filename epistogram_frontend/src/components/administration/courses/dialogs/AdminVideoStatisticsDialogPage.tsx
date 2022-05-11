@@ -118,6 +118,7 @@ export const AdminVideoStatisticsModalPage = () => {
                         </EpistoFont>
 
                         <EpistoSelect
+                            getDisplayValue={x => x}
                             items={['Ismétlések aránya']}
                             selectedValue={'Ismétlések aránya'}
                             onSelected={() => { console.log(''); }}

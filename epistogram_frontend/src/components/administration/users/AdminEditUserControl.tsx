@@ -25,7 +25,7 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
-import { useCompanies } from '../../../services/api/companiesApiService';
+import { useCompanies } from '../../../services/api/companyApiService';
 import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
 
 export const roles = [
@@ -248,7 +248,7 @@ export const AdminEditUserControl = (props: {
                     <PermissionAssignerControl />
                 </EditSection>
             </Flex>
-            
+
             <Divider orientation='vertical'
                 h="calc(100% - 20px)"
                 w="1px"

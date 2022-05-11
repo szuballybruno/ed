@@ -19,9 +19,9 @@ export const useRolesList = () => {
     };
 };
 
-export const useAssignableRoles = () => {
+export const useAssignableRoles = (companyId?: number) => {
 
-    const qr = useReactQuery2<AssignablePermissionAndRoleDTO[]>(apiRoutes.roles.getAssignableRoles);
+    const qr = useReactQuery2<AssignablePermissionAndRoleDTO[]>(apiRoutes.roles.getAssignableRoles, { companyId }, !!companyId);
 
     return {
         assignableRolesList: qr.data ?? [],
