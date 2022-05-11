@@ -245,7 +245,8 @@ export const AdminEditUserControl = (props: {
                 {/* access management */}
                 <EditSection title="Jogosultságkezelés">
 
-                    <PermissionAssignerControl />
+                    <PermissionAssignerControl
+                        userId={editedUserId} />
                 </EditSection>
             </Flex>
 
@@ -259,8 +260,7 @@ export const AdminEditUserControl = (props: {
                 className='roundBorders'
                 flex="1"
                 p="0 10px 10px 10px"
-                minWidth="300px"
-            >
+                minWidth="300px">
 
                 {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
 

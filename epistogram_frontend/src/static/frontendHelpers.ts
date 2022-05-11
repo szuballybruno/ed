@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
@@ -22,6 +22,31 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     }
 
     return results;
+};
+
+export const useHandleAddRemoveItems = <TItem, TKey>(
+    items: TItem[], 
+    setItems: (items: TItem[]) => void, 
+    getKey: (item: TItem) => TKey): [
+        (item: TItem) => void,
+        (key: TKey) => void
+    ] => {
+
+    const addItem = useCallback((item: TItem) => {
+
+        setItems([...items, item]);
+    }, [items, setItems]);
+
+    const removeItem = useCallback((key: TKey): void => {
+
+        setItems(items
+            .filter(item => getKey(item) !== key));
+    }, [items, setItems, getKey]);
+
+    return [
+        addItem,
+        removeItem
+    ];
 };
 
 export const formatTimespan = (seconds: number) => {

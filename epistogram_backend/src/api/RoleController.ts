@@ -65,4 +65,13 @@ export class RoleController {
                 .getQuery()
                 .getValue(x => x.companyId, 'int'));
     };
+
+    @XControllerAction(apiRoutes.roles.getUserAssignedAuthItems)
+    getUserAssignedAuthItemsAction = (params: ActionParams) => {
+
+        return this._roleService
+            .getUserAssignedAuthItemsAsync(params.currentUserId, params
+                .getQuery()
+                .getValue(x => x.userId, 'int'));
+    };
 }

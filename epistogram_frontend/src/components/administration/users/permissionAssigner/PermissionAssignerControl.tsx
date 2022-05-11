@@ -1,21 +1,36 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRoleManageCompanies } from '../../../../services/api/companyApiService';
-import { useAssignableRoles } from '../../../../services/api/rolesApiService';
+import { useAssignableRoles, useUserAssignedAuthItems } from '../../../../services/api/rolesApiService';
 import { AssignablePermissionAndRoleDTO } from '../../../../shared/dtos/AssignablePermissionAndRoleDTO';
 import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
+import { UserAssignedAuthItemDTO } from '../../../../shared/dtos/role/UserAssignedAuthItemDTO';
+import { useHandleAddRemoveItems } from '../../../../static/frontendHelpers';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 
-export const PermissionAssignerControl = (props: {}) => {
+export const PermissionAssignerControl = (props: {
+    userId: number
+}) => {
+
+    const { userId } = props;
 
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
-    const [assignedIds, setAssignedIds] = useState<number[]>([]);
+    const selectedCompanyId = selectedCompany?.id ?? null;
 
-    const { assignableRolesList, assignableRolesListError, assignableRolesListState } = useAssignableRoles(selectedCompany?.id);
+    // http
+    const { assignableRolesList, assignableRolesListError, assignableRolesListState } = useAssignableRoles(selectedCompanyId);
     const { roleManageCompanies } = useRoleManageCompanies();
+    const { userAssignedAuthItems } = useUserAssignedAuthItems(userId, selectedCompanyId);
+
+    // assigned items 
+    const [assigneDTOs, setAssignDTOs] = useState<UserAssignedAuthItemDTO[]>([]);
+    const getAssignedKey = useCallback((id: number, isRole: boolean) => `${id}_ ${isRole}`, []);
+    const getAssignedKeyFromDTO = useCallback((x: UserAssignedAuthItemDTO) => getAssignedKey(x.id, x.isRole), [getAssignedKey]);
+    const getAssignedKeyFromAv = useCallback((x: AssignablePermissionAndRoleDTO) => getAssignedKey(x.permissionId || x.roleId!, x.isRole), [getAssignedKey]);
+    const [addAssignedId, removeAssignedId] = useHandleAddRemoveItems(assigneDTOs, setAssignDTOs, getAssignedKeyFromDTO);
 
     useEffect(() => {
 
@@ -24,6 +39,16 @@ export const PermissionAssignerControl = (props: {}) => {
 
         setSelectedCompany(roleManageCompanies[0]);
     }, [roleManageCompanies]);
+
+    useEffect(() => {
+
+        if (userAssignedAuthItems.length === 0)
+            return;
+
+        setAssignDTOs(userAssignedAuthItems);
+    }, [setAssignDTOs, userAssignedAuthItems]);
+
+    console.log(userAssignedAuthItems);
 
     type RowType = {
         rowId: number,
@@ -34,13 +59,13 @@ export const PermissionAssignerControl = (props: {}) => {
     }
 
     const rows = assignableRolesList
-        .map((x, i): RowType => ({
+        .map((assDto, i): RowType => ({
             rowId: i,
-            name: x.isRole ? x.roleName! : x.permissionCode!,
-            type: x.isRole ? 'Role' : 'Permission',
-            isAssigned: assignedIds
-                .any(id => id === x.roleId),
-            data: x
+            name: assDto.isRole ? assDto.roleName! : assDto.permissionCode!,
+            type: assDto.isRole ? 'Role' : 'Permission',
+            isAssigned: assigneDTOs
+                .any(dto => getAssignedKeyFromDTO(dto) === getAssignedKeyFromAv(assDto)),
+            data: assDto
         }));
 
     return (
@@ -75,18 +100,18 @@ export const PermissionAssignerControl = (props: {}) => {
                     {
                         field: 'isAssigned',
                         headerName: 'IsAssigned',
-                        renderEditCell: ({ value, row }) => {
+                        renderCell: ({ value, row }) => {
 
                             return (
                                 <EpistoCheckbox
-                                    setValue={x => {
+                                    setValue={isSelected => {
 
-                                        if (x) {
+                                        if (isSelected) {
 
-                                            setAssignedIds([...assignedIds, row.data.permissionId! || row.data.roleId!]);
+                                            addAssignedId({ id: row.data.permissionId! || row.data.roleId!, isRole: row.data.isRole });
                                         }
-                                        else{
-                                            setAssignedIds()
+                                        else {
+                                            removeAssignedId(getAssignedKeyFromAv(row.data));
                                         }
                                     }}
                                     value={value as boolean} />

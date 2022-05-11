@@ -2,12 +2,14 @@ import { Role } from '../models/entity/authorization/Role';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
 import { AssignablePermissionAndRoleView } from '../models/views/AssignablePermissionAndRoleView';
 import { RoleListView } from '../models/views/RoleListView';
+import { UserAssignedAuthItemView } from '../models/views/UserAssignedAuthItemView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { AssignablePermissionAndRoleDTO } from '../shared/dtos/AssignablePermissionAndRoleDTO';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
+import { UserAssignedAuthItemDTO } from '../shared/dtos/role/UserAssignedAuthItemDTO';
 import { noUndefined } from '../shared/logic/sharedLogic';
 import { PermissionCodeType, RoleScopeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
@@ -69,6 +71,22 @@ export class RoleService extends QueryServiceBase<Role> {
             .map((x): AssignablePermissionAndRoleDTO => ({
                 ...x,
                 isRole: !!x.roleId
+            }));
+    }
+
+    async getUserAssignedAuthItemsAsync(userId: number, authItemUserId: number) {
+
+        // TODO check permissions of userId
+
+        const views = await this._ormService
+            .query(UserAssignedAuthItemView, { authItemUserId })
+            .where('userId', '=', 'authItemUserId')
+            .getMany();
+
+        return views
+            .map((x): UserAssignedAuthItemDTO => ({
+                isRole: x.isRole,
+                id: x.isRole ? x.roleId! : x.permissionId!
             }));
     }
 
