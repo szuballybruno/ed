@@ -1,6 +1,7 @@
 SELECT
     CONCAT(u.last_name, ' ', u.first_name) full_name,
     sf.file_path avatar_url,
+    c.id,
     c.text comment_text,
     c.creation_date,
     c.video_id,
@@ -21,4 +22,4 @@ LEFT JOIN storage_file sf
 ON u.avatar_file_id = sf.id
 
 -- first order by threads then creation_date
-ORDER BY thread_id, parent_comment_id desc, creation_date
+ORDER BY thread_id, creation_date, parent_comment_id desc

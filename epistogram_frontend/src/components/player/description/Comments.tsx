@@ -140,6 +140,7 @@ const Comments = (props: {
     const showErrorDialog = useShowErrorDialog();
 
     const [comment, setComment] = useState('');
+    const [isStartedEditing, setIsStartedEditing] = useState(false);
     const [currentReplyCommentId, setCurrentReplyCommentId] = useState<number | null>(null);
     const [currentReplyUserFullName, setCurrentReplyUserFullName] = useState<string | null>(null);
 
@@ -196,6 +197,9 @@ const Comments = (props: {
 
             await createCommentAsync(newComment);
             await refetchComments();
+            setComment('');
+            setCurrentReplyCommentId(null);
+            setCurrentReplyUserFullName(null);
         } catch (e) {
             showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
         }
@@ -227,57 +231,37 @@ const Comments = (props: {
                 {'Kommentek & Kérdések'}
             </EpistoFont>
             <Flex direction="column">
-                <Flex p="10px"
-                    align="center">
-                    <Flex mr="10px">
-                        <Avatar alt="Szubally Brúnó"
-                            src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
-                    </Flex>
-                    <Flex flex="1"
-                        direction="column">
-                        <EpistoFont>
-                            Szubally Brúnó
-                        </EpistoFont>
-                        <Flex align="center">
-                            <AccessTime style={{
-                                height: 20,
-                                width: 20,
-                                margin: '0 10px 0 0'
-                            }} />
-                            <EpistoFont fontSize="fontSmall">
-                                2022. 03. 28. 10:05
-                            </EpistoFont>
-                        </Flex>
-                    </Flex>
-                    <Flex>
-                        <EpistoButton variant="outlined">
-                            Visszavonás
-                        </EpistoButton>
-                    </Flex>
+
+                <Flex
+                    flex='1'
+                    align='center'>
+
+
+                    <Avatar
+                        alt="Szubally Brúnó"
+                        style={{
+                            margin: '0 15px 0 0'
+                        }}
+                        src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
+
+                    <EpistoEntry
+                        isMultiline
+                        label={currentReplyCommentId
+                            ? `Válasz  ${currentReplyUserFullName} felhasználónak`
+                            : ''}
+                        labelVariant='top'
+                        style={{
+                            marginTop: -7,
+                            flex: 1
+                        }}
+                        onInput={() => setIsStartedEditing(true)}
+                        value={comment}
+                        setValue={setComment}
+                        placeholder='Ide írd a kommentedet/kérdésedet' />
                 </Flex>
 
-                <EpistoEntry
-                    isMultiline
-                    label={currentReplyCommentId
-                        ? `Válasz  ${currentReplyUserFullName} felhasználónak`
-                        : ''}
-                    labelVariant='top'
-                    value={comment}
-                    setValue={setComment}
-                    placeholder='Ide írd a kommentedet/kérdésedet' />
-                {/* <EpistoFont
-                    className="roundBorders mildShadow"
-                    style={{
-                        background: 'var(--transparentWhite90)',
-                        padding: '20px'
-                    }}>
 
-
-                    <p style={{ textAlign: 'left', color: 'lightgray' }}>
-                        Ide írd a kommentedet/kérdésedet{' '}
-                    </p>
-                </EpistoFont> */}
-                <Flex justify="space-between"
+                {isStartedEditing && <Flex justify="space-between"
                     align="center"
                     m="10px 0">
                     <Flex direction="column">
@@ -297,13 +281,22 @@ const Comments = (props: {
 
                     <Flex>
                         <EpistoButton
+                            variant="outlined"
+                            style={{
+                                marginRight: 10
+                            }}
+                            onClick={() => setIsStartedEditing(false)}>
+
+                            Mégsem
+                        </EpistoButton>
+                        <EpistoButton
                             variant="colored"
                             onClick={() => handleCreateNewComment(currentReplyCommentId)}>
 
                             Közzététel
                         </EpistoButton>
                     </Flex>
-                </Flex>
+                </Flex>}
             </Flex>
 
 
