@@ -196,14 +196,16 @@ export class RoleService extends QueryServiceBase<Role> {
         const oldPermAssBridges = await this._ormService
             .query(PermissionAssignmentBridge, { savedUserId, contextCompanyId })
             .where('userId', '=', 'savedUserId')
-            .and('companyId', '=', 'contextCompanyId')
+            .and('contextCompanyId', '=', 'contextCompanyId')
             .getMany();
 
+        const deletedPermissionIds = oldPermAssBridges
+            .filter(x => !newlyAssignedPermissionIds
+                .any(x.permissionId))
+            .map(x => x.id);
+
         await this._ormService
-            .hardDelete(PermissionAssignmentBridge, oldPermAssBridges
-                .filter(x => !newlyAssignedPermissionIds
-                    .any(x.permissionId))
-                .map(x => x.id));
+            .hardDelete(PermissionAssignmentBridge, deletedPermissionIds);
 
         const newPermBridgeEntities = newlyAssignedPermissionIds
             .filter(x => !oldPermAssBridges

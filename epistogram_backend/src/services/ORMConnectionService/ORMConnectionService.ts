@@ -160,7 +160,7 @@ export class ORMConnectionService {
 
         return this
             .getRepository(c)
-            .create(ent as any[]);
+            .insert(ent as any[]);
     }
 
     /**
