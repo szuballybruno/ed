@@ -1,6 +1,6 @@
 import { PermissionService } from '../services/PermissionService';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class PermissionController {

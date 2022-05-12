@@ -22,7 +22,7 @@ export class UserController {
             .data;
 
         return this._userService
-            .saveUserDataAsync(params.currentUserId, dto);
+            .saveUserDataAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
@@ -33,7 +33,7 @@ export class UserController {
             .getValue(x => x.userId, 'int');
 
         return this._userService
-            .deleteUserAsync(params.currentUserId, deleteUserId);
+            .deleteUserAsync(params.principalId, deleteUserId);
     };
 
     @XControllerAction(apiRoutes.user.getEditUserData)
@@ -55,7 +55,7 @@ export class UserController {
             .data;
 
         await this._userService
-            .saveUserSimpleAsync(params.currentUserId, dto);
+            .saveUserSimpleAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
@@ -88,6 +88,6 @@ export class UserController {
             .getValue(x => x.userId, 'int');
 
         await this._userService
-            .getBriefUserDataAsync(userId);
+            .getBriefUserDataAsync(params.principalId, userId);
     };
 }

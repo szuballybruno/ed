@@ -1,5 +1,5 @@
 import { UserStatsService } from '../services/UserStatsService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class UserStatsController {
 

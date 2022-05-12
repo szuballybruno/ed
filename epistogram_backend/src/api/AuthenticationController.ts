@@ -4,7 +4,7 @@ import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { VerboseError } from '../shared/types/VerboseError';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies, getCookie } from '../utilities/helpers';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class AuthenticationController {
 
@@ -47,7 +47,7 @@ export class AuthenticationController {
     logOutUserAction = async (params: ActionParams) => {
 
         await this._authenticationService
-            .logOutUserAsync(params.currentUserId);
+            .logOutUserAsync(params.principalId);
 
         // remove browser cookies
         params.res.clearCookie(this._config.misc.accessTokenCookieName);

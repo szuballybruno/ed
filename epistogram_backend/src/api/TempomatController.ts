@@ -1,6 +1,6 @@
 import { TempomatService } from '../services/TempomatService';
 import { TempomatModeType } from '../shared/types/sharedTypes';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class TempomatController {
 
@@ -14,7 +14,7 @@ export class TempomatController {
     getTempomatModeAction = async (params: ActionParams) => {
 
         return this._tempomatService
-            .getTempomatModeAsync(params.currentUserId, params.getQuery<any>()
+            .getTempomatModeAsync(params.principalId, params.getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
     };
 
@@ -30,6 +30,6 @@ export class TempomatController {
             .getValue(x => x.courseId, 'int');
 
         await this._tempomatService
-            .setTempomatModeAsync(params.currentUserId, courseId, mode);
+            .setTempomatModeAsync(params.principalId, courseId, mode);
     };
 }

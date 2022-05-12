@@ -7,6 +7,7 @@ import { QuestionAnswerService } from './QuestionAnswerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { ServiceBase } from './misc/ServiceBase';
 import { MapperService } from './MapperService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class PractiseQuestionService extends ServiceBase {
 
@@ -25,7 +26,9 @@ export class PractiseQuestionService extends ServiceBase {
         this._playerService = playerService;
     }
 
-    getPractiseQuestionAsync = async (userId: number) => {
+    getPractiseQuestionAsync = async (principalId: PrincipalId) => {
+
+        const userId = principalId.toSQLValue();
 
         const questionViews = await this._ormService
             .getRepository(PractiseQuestionView)
@@ -57,7 +60,9 @@ export class PractiseQuestionService extends ServiceBase {
         return questionDTO;
     };
 
-    answerPractiseQuestionAsync = async (userId: number, qu: AnswerQuestionDTO) => {
+    answerPractiseQuestionAsync = async (principalId: PrincipalId, qu: AnswerQuestionDTO) => {
+
+        const userId = principalId.toSQLValue();
 
         const practiseAnswerSession = await this.getUserPractiseAnswerSession(userId);
 

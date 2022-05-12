@@ -18,14 +18,14 @@ export class RoleController {
     getRolesListAction = (params: ActionParams) => {
 
         return this._roleService
-            .getRolesListAdminAsync(params.currentUserId);
+            .getRolesListAdminAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.roles.createRole, { isPost: true })
     createRoleAction = (params: ActionParams) => {
 
         return this._roleService
-            .createRoleAsync(params.currentUserId, params
+            .createRoleAsync(params.principalId, params
                 .getBody<RoleCreateDTO>(['name', 'companyId', 'permissionIds'])
                 .data);
     };
@@ -34,7 +34,7 @@ export class RoleController {
     getRoleEditDataAction = (params: ActionParams) => {
 
         return this._roleService
-            .getRoleEditDataAsync(params.currentUserId, params
+            .getRoleEditDataAsync(params.principalId, params
                 .getQuery()
                 .getValue(x => x.roleId, 'int'));
     };
@@ -43,7 +43,7 @@ export class RoleController {
     deleteRoleAction = (params: ActionParams) => {
 
         return this._roleService
-            .deleteRoleAsync(params.currentUserId, params
+            .deleteRoleAsync(params.principalId, params
                 .getBody()
                 .getValue(x => x.roleId, 'int'));
     };
@@ -52,7 +52,7 @@ export class RoleController {
     saveRoleAction = (params: ActionParams) => {
 
         return this._roleService
-            .saveRoleAsync(params.currentUserId, params
+            .saveRoleAsync(params.principalId, params
                 .getBody<RoleEditDTO>(['name', 'permissionIds'])
                 .data);
     };

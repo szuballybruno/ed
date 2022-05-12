@@ -1,6 +1,7 @@
 import { User } from '../models/entity/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { HashService } from './HashService';
 import { log } from './misc/logger';
 import { TokenService } from './TokenService';
@@ -136,14 +137,14 @@ export class AuthenticationService {
         return tokens;
     };
 
-    logOutUserAsync = async (userId: number) => {
+    logOutUserAsync = async (userId: PrincipalId) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'logout');
+            .saveUserSessionActivityAsync(userId.toSQLValue(), 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
-            .removeRefreshToken(userId);
+            .removeRefreshToken(userId.toSQLValue());
     };
 
     getUserLoginTokens = async (user: User) => {

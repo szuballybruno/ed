@@ -1,6 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
+import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { replaceAll } from '../utilities/helpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
@@ -22,8 +24,14 @@ export class FileService {
         this._ormService = ormService;
     }
 
-    uploadAvatarFileAsync = async (userId: number, file: UploadedFile) => {
-        // upload new avatar
+    uploadAvatarFileAsync = async (principalId: PrincipalId, file: UploadedFile) => {
+
+        const userId = principalId.toSQLValue();
+        
+        //TODO: Create a validation function
+        if (!['image/png', 'image/jpeg'].includes(file.mimetype))
+            throw new VerboseError('File upload failed: Only jpeg or png', 'bad request');
+        
         await this.uploadAssigendFileAsync<User>(
             this.getFilePath('userAvatars', 'user_avatar', userId, 'png'),
             () => this._userService.getUserById(userId),

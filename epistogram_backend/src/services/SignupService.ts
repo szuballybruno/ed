@@ -5,6 +5,7 @@ import { EmailService } from './EmailService';
 import { toSignupDataDTO } from './misc/mappings';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class SignupService {
 
@@ -22,13 +23,17 @@ export class SignupService {
         this._ormService = ormService;
     }
 
-    async answerSignupQuestionAsync(userId: number, questionAnswer: AnswerSignupQuestionDTO) {
+    async answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO) {
+
+        const userId = principalId.toSQLValue();
 
         await this._sqlFuncService
             .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
     }
 
-    async getSignupDataAsync(userId: number) {
+    async getSignupDataAsync(principalId: PrincipalId) {
+
+        const userId = principalId.toSQLValue();
 
         const userSignupCompltedView = await this._ormService
             .getRepository(SignupCompletedView)

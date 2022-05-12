@@ -1,6 +1,4 @@
 import { JobTitle } from '../models/entity/JobTitle';
-import { AuthenticationService } from '../services/AuthenticationService';
-import { MapperService } from '../services/MapperService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { MiscService } from '../services/MiscService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
@@ -8,7 +6,7 @@ import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class MiscController {
@@ -40,14 +38,14 @@ export class MiscController {
     getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
 
         return this._courseBridgeService
-            .getCurrentItemCodeAsync(parms.currentUserId);
+            .getPrincipalCurrentItemCodeAsync(parms.principalId);
     };
 
     @XControllerAction(apiRoutes.misc.getHomePageDTO)
     getOverviewPageDTOAction = async (params: ActionParams) => {
 
         return this._miscService
-            .getOverviewPageDTOAsync(params.currentUserId);
+            .getOverviewPageDTOAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.misc.getJobTitles)
@@ -62,7 +60,7 @@ export class MiscController {
     getCourseOverviewDataAction = async (params: ActionParams) => {
 
         return this._miscService
-            .getCourseOverviewDataAsync(params.currentUserId);
+            .getCourseOverviewDataAsync(params.principalId);
     };
 
     getRegistrationLinkAction = async (params: ActionParams) => {
@@ -73,6 +71,6 @@ export class MiscController {
     getPractiseQuestionAction = async (params: ActionParams) => {
 
         return await this._practiseQuestionService
-            .getPractiseQuestionAsync(params.currentUserId);
+            .getPractiseQuestionAsync(params.principalId);
     };
 }

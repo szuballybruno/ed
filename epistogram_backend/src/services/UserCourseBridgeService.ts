@@ -4,6 +4,7 @@ import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { Video } from '../models/entity/Video';
 import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
+import { PrincipalId } from '../utilities/ActionParams';
 import { CourseItemsService } from './CourseItemsService';
 import { MapperService } from './MapperService';
 import { getItemCode } from './misc/encodeService';
@@ -62,7 +63,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .getRepository(UserCourseBridge)
             .find({
                 where: {
-                    userId
+                    userId: userId
                 }
             });
 
@@ -118,9 +119,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      * @param courseId 
      * @param mode 
      */
-    async setCourseModeAsync(userId: number, courseId: number, mode: CourseModeType) {
+    async setCourseModeAsync(userId: PrincipalId, courseId: number, mode: CourseModeType) {
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
 
         if (!userCourseBridge)
             throw new Error('User course bridge not found!');
@@ -129,7 +130,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .getRepository(UserCourseBridge)
             .save({
                 courseId: courseId,
-                userId: userId,
+                userId: userId.toSQLValue(),
                 id: userCourseBridge.id,
                 courseMode: mode
             } as UserCourseBridge);
@@ -175,13 +176,18 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return currentItemCode;
     };
 
+    getPrincipalCurrentItemCodeAsync = async (userId: PrincipalId) => {
+
+        return await this.getCurrentItemCodeAsync(userId.toSQLValue());
+    };
+
     getCurrentItemCodeAsync = async (userId: number) => {
 
         const currentBridge = await this._ormService
             .getRepository(UserCourseBridge)
             .findOne({
                 where: {
-                    userId,
+                    userId: userId,
                     isCurrent: true
                 }
             });

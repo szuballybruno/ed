@@ -1,7 +1,7 @@
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { SignupService } from '../services/SignupService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class SignupController {
 
@@ -21,18 +21,18 @@ export class SignupController {
             .data;
 
         await this._signupService
-            .answerSignupQuestionAsync(params.currentUserId, dto);
+            .answerSignupQuestionAsync(params.principalId, dto);
     };
 
     getSignupDataAction = (params: ActionParams) => {
 
         return this._signupService
-            .getSignupDataAsync(params.currentUserId);
+            .getSignupDataAsync(params.principalId);
     };
 
     getUserPersonalityDataAction = async (params: ActionParams) => {
 
         return this._personalityAssessmentService
-            .getUserPersonalityAssessmentDTOAsync(params.currentUserId);
+            .getUserPersonalityAssessmentDTOAsync(params.principalId);
     };
 }

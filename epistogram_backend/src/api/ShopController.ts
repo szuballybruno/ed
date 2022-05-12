@@ -1,6 +1,6 @@
 import { ShopItemEditDTO } from '../shared/dtos/ShopItemEditDTO';
 import { ShopService } from '../services/ShopService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class ShopController {
 
@@ -14,7 +14,7 @@ export class ShopController {
     getShopItemsAction = async (params: ActionParams) => {
 
         return this._shopService
-            .getShopItemsAsync(params.currentUserId);
+            .getShopItemsAsync(params.principalId);
     };
 
     getShopItemCategoriesAction = async (params: ActionParams) => {
@@ -29,7 +29,7 @@ export class ShopController {
         const shopItemId = body.getValue(x => x.shopItemId, 'int');
 
         return await this._shopService
-            .purchaseShopItemAsync(params.currentUserId, shopItemId);
+            .purchaseShopItemAsync(params.principalId, shopItemId);
     };
 
     getAdminShopItemsAction = async (params: ActionParams) => {

@@ -32,7 +32,7 @@ import { UserProgressController } from './api/UserProgressController';
 import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
-import { AuthMiddleware } from './middleware/AuthMiddleware';
+import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
@@ -94,6 +94,7 @@ import { apiRoutes } from './shared/types/apiRoutes';
 import { onActionError, onActionSuccess } from './utilities/apiHelpers';
 import { ActionParams } from './utilities/ActionParams';
 import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
+import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
 
 (async () => {
 
@@ -140,7 +141,8 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
-    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService);
+    const permissionService = new PermissionService(ormConnectionService, mapperService);
+    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
@@ -153,8 +155,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
-    const companyService = new CompanyService(ormConnectionService, mapperService);
-    const permissionService = new PermissionService(ormConnectionService, mapperService);
+    const companyService = new CompanyService(ormConnectionService, mapperService, permissionService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -186,11 +187,12 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
-    const companyController = new CompanyController(companyService, permissionService);
+    const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
 
     // middleware 
-    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
+    const authenticationMiddleware = new AuthenticationMiddleware(authenticationService, loggerService);
+    const authorizationMiddleware = new AuthorizationMiddleware();
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
@@ -202,7 +204,8 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
         .setPort(globalConfig.misc.hostPort)
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)
-        .setTurboMiddleware(authMiddleware)
+        .setTurboMiddleware<void, ActionParams>(authenticationMiddleware)
+        .setTurboMiddleware<ActionParams, ActionParams>(authorizationMiddleware)
         .setExpressMiddleware(getCORSMiddleware(globalConfig))
         .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
         .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))

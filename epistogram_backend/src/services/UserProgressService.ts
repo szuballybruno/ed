@@ -8,6 +8,7 @@ import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCour
 import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';
 import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
+import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -19,7 +20,9 @@ export class UserProgressService extends ServiceBase {
         super(mapperService, ormservice);
     }
 
-    async getActiveCoursesAsync(userId: number) {
+    async getActiveCoursesAsync(principalId: PrincipalId) {
+
+        const userId = principalId.toSQLValue();
 
         const views = await this._ormService
             .query(UserActiveCourseView, { userId })
@@ -33,7 +36,9 @@ export class UserProgressService extends ServiceBase {
             .mapMany(UserActiveCourseView, UserActiveCourseDTO, views);
     }
 
-    async getRecommendedItemQuotaAsync(userId: number, courseId: number) {
+    async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: number) {
+
+        const userId = principalId.toSQLValue();
 
         const courseProgressView = await this._ormService
             .getRepository(UserCourseRecommendedItemQuotaView)
@@ -68,7 +73,9 @@ export class UserProgressService extends ServiceBase {
         } as RecomendedItemQuotaDTO;
     }
 
-    async getProgressChartDataAsync(userId: number, courseId: number) {
+    async getProgressChartDataAsync(principalId: PrincipalId, courseId: number) {
+
+        const userId = principalId.toSQLValue();
 
         const estimationView = await this
             ._ormService

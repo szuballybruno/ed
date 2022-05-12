@@ -7,6 +7,7 @@ import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionVi
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class CourseRatingService extends ServiceBase {
 
@@ -23,12 +24,12 @@ export class CourseRatingService extends ServiceBase {
      * 
      * @returns 
      */
-    async getCourseRatingGroupsAsync(userId: number, courseId: number) {
+    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: number) {
 
         const views = await this._ormService
             .getRepository(CourseRatingQuestionView)
             .createQueryBuilder('crqv')
-            .where('crqv.userId = :userId', { userId })
+            .where('crqv.userId = :userId', { userId: userId.toSQLValue() })
             .andWhere('crqv.courseId = :courseId', { courseId })
             .getMany();
 
@@ -59,14 +60,14 @@ export class CourseRatingService extends ServiceBase {
      * @param userId 
      * @param answersDTO 
      */
-    async saveCourseRatingGroupAnswersAsync(userId: number, answersDTO: CourseRatingQuestionAnswersDTO) {
+    async saveCourseRatingGroupAnswersAsync(userId: PrincipalId, answersDTO: CourseRatingQuestionAnswersDTO) {
 
         const courseId = answersDTO.courseId;
 
         const prevAnswers = await this._ormService
             .getRepository(CourseRatingQuestionUserAnswer)
             .createQueryBuilder('crqua')
-            .where('crqua.userId = :userId', { userId })
+            .where('crqua.userId = :userId', { userId: userId.toSQLValue() })
             .andWhere('crqua.courseId = :courseId', { courseId })
             .andWhere('crqua.courseRatingQuestionId IN (:...questionIds)', {
                 questionIds: answersDTO
@@ -80,7 +81,7 @@ export class CourseRatingService extends ServiceBase {
             .map(x => ({
                 id: prevAnswers
                     .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id ?? undefined,
-                userId,
+                userId: userId.toSQLValue(),
                 courseId,
                 text: x.text ?? null,
                 value: x.value ?? null,

@@ -1,5 +1,5 @@
 import { EventService } from '../services/EventService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class EventController {
 

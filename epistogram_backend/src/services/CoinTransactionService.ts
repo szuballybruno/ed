@@ -5,6 +5,7 @@ import { CoinTransactionView } from '../models/views/CoinTransactionView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class CoinTransactionService {
 
@@ -24,13 +25,18 @@ export class CoinTransactionService {
         await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
     }
 
-    async getCoinBalance(userId: number) {
+    async getPrincipalCoinBalance(userId: PrincipalId) {
+
+        return await this.getCoinBalance(userId, userId.toSQLValue());
+    }
+
+    async getCoinBalance(principalId: PrincipalId, userId: number) {
 
         const coinBalance = await this._ormConnectionService
             .getRepository(CoinBalanceView)
             .findOneOrFail({
                 where: {
-                    userId
+                    userId: userId
                 }
             });
 
@@ -48,13 +54,13 @@ export class CoinTransactionService {
             });
     }
 
-    async getCoinTransactionsAsync(userId: number) {
+    async getCoinTransactionsAsync(userId: PrincipalId) {
 
         const coinTransactions = await this._ormConnectionService
             .getRepository(CoinTransactionView)
             .find({
                 where: {
-                    userId
+                    userId: userId.toSQLValue()
                 }
             });
 

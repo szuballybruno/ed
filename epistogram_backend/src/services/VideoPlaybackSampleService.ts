@@ -1,5 +1,6 @@
 import { Video } from '../models/entity/Video';
 import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
+import { PrincipalId } from '../utilities/ActionParams';
 import { hasValue } from '../utilities/helpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -69,7 +70,7 @@ export class VideoPlaybackSampleService {
             .getRepository(VideoPlaybackSample)
             .createQueryBuilder('vps')
             .where('vps.videoId = :videoId', { videoId })
-            .andWhere('vps.userId = :userId', { userId })
+            .andWhere('vps.userId = :userId', { userId: userId })
             .getMany();
 
         const orderedSampels = samples

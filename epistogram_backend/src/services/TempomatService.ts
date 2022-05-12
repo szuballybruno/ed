@@ -3,6 +3,7 @@ import { UserCourseCompletionOriginalEstimationView } from '../models/views/User
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
 import { UserTempomatAdjustmentValueView } from '../models/views/UserTempomatAdjustmentValueView';
 import { TempomatModeType } from '../shared/types/sharedTypes';
+import { PrincipalId } from '../utilities/ActionParams';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
@@ -30,7 +31,9 @@ export class TempomatService extends ServiceBase {
         this._userCourseBridgeService = courseBridgeServie;
     }
 
-    async setTempomatModeAsync(userId: number, courseId: number, tempomatMode: TempomatModeType) {
+    async setTempomatModeAsync(principalId: PrincipalId, courseId: number, tempomatMode: TempomatModeType) {
+
+        const userId = principalId.toSQLValue();
 
         const bridge = await this._userCourseBridgeService
             .getOrFailAsync({
@@ -45,7 +48,9 @@ export class TempomatService extends ServiceBase {
             });
     }
 
-    async getTempomatModeAsync(userId: number, courseId: number) {
+    async getTempomatModeAsync(principalId: PrincipalId, courseId: number) {
+
+        const userId = principalId.toSQLValue();
 
         const bridge = await this._userCourseBridgeService
             .getOrFailAsync({

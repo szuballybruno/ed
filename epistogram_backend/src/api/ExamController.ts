@@ -26,7 +26,7 @@ export class ExamController {
             .data;
 
         return this._examService
-            .answerExamQuestionAsync(params.currentUserId, questionAnswerDTO);
+            .answerExamQuestionAsync(params.principalId, questionAnswerDTO);
     };
 
     startExamAction = async (params: ActionParams) => {
@@ -45,7 +45,7 @@ export class ExamController {
             .getValue(x => x.answerSessionId, 'int');
 
         return this._examService
-            .getExamResultsAsync(params.currentUserId, answerSessionId);
+            .getExamResultsAsync(params.principalId, answerSessionId);
     };
 
     getExamEditDataAction = async (params: ActionParams) => {

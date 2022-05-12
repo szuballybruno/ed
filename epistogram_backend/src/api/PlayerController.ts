@@ -2,7 +2,7 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CourseService } from '../services/CourseService';
 import { PlayerService } from '../services/PlayerService';
 import { VideoService } from '../services/VideoService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class PlayerController {
 
@@ -26,7 +26,7 @@ export class PlayerController {
         const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, 'float');
 
         return this._videoService
-            .answerVideoQuestionAsync(params.currentUserId, answerSessionId, questionId, answerIds, elapsedSeconds);
+            .answerVideoQuestionAsync(params.principalId, answerSessionId, questionId, answerIds, elapsedSeconds);
     };
 
     getPlayerDataAction = (params: ActionParams) => {
@@ -35,12 +35,12 @@ export class PlayerController {
             .getQuery()
             .getValue(x => x.descriptorCode, 'string');
 
-        return this._playerService.getPlayerDataAsync(params.currentUserId, descriptorCode);
+        return this._playerService.getPlayerDataAsync(params.principalId, descriptorCode);
     };
 
     getCourseItemsAction = async (params: ActionParams) => {
 
         return this._courseService
-            .getCurrentCourseModulesAsync(params.currentUserId);
+            .getCurrentCourseModulesAsync(params.principalId);
     };
 }

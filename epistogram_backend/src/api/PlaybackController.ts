@@ -1,6 +1,6 @@
 import { PlaybackService } from '../services/PlaybackService';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class PlaybackController {
 
@@ -17,6 +17,6 @@ export class PlaybackController {
             .getBody<VideoPlaybackSampleDTO>();
 
         return this._playbackService
-            .saveVideoPlaybackSample(params.currentUserId, dto.data);
+            .saveVideoPlaybackSample(params.principalId, dto.data);
     };
 }

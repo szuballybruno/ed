@@ -1,5 +1,5 @@
 import { UserProgressService } from '../services/UserProgressService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class UserProgressController {
 
@@ -13,7 +13,7 @@ export class UserProgressController {
     getRecommendedItemQuotaAction = async (params: ActionParams) => {
 
         return await this._userProgressService
-            .getRecommendedItemQuotaAsync(params.currentUserId, params
+            .getRecommendedItemQuotaAsync(params.principalId, params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
     };
@@ -21,17 +21,16 @@ export class UserProgressController {
     getActiveCoursesAction = (params: ActionParams) => {
 
         return this._userProgressService
-            .getActiveCoursesAsync(params.currentUserId);
+            .getActiveCoursesAsync(params.principalId);
     };
 
     getUserProgressDataAction = (params: ActionParams) => {
 
-        const userId = params.currentUserId;
         const courseId = params
             .getQuery<any>()
             .getValue(x => x.courseId, 'int');
 
         return this._userProgressService
-            .getProgressChartDataAsync(userId, courseId);
+            .getProgressChartDataAsync(params.principalId, courseId);
     };
 }

@@ -1,5 +1,6 @@
 import { VideoRating } from '../models/entity/VideoRating';
 import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
+import { PrincipalId } from '../utilities/ActionParams';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class VideoRatingService {
@@ -11,7 +12,9 @@ export class VideoRatingService {
         this._ormService = ormService;
     }
 
-    async rateVideoExperienceAsync(userId: number, dto: VideoRatingDTO) {
+    async rateVideoExperienceAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
+
+        const userId = principalId.toSQLValue();
 
         const existingRating = await this._ormService
             .getRepository(VideoRating)
@@ -32,7 +35,9 @@ export class VideoRatingService {
             });
     }
 
-    async rateVideoDifficultyAsync(userId: number, dto: VideoRatingDTO) {
+    async rateVideoDifficultyAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
+
+        const userId = principalId.toSQLValue();
 
         const existingRating = await this._ormService
             .getRepository(VideoRating)
@@ -53,7 +58,9 @@ export class VideoRatingService {
             });
     }
 
-    async getVideoRatingAsync(userId: number, videoId: number) {
+    async getVideoRatingAsync(principalId: PrincipalId, videoId: number) {
+
+        const userId = principalId.toSQLValue();
 
         const rating = await this._ormService
             .getRepository(VideoRating)

@@ -16,6 +16,7 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 import { Course } from '../models/entity/Course';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class PlayerService extends ServiceBase {
 
@@ -50,8 +51,10 @@ export class PlayerService extends ServiceBase {
     }
 
     getPlayerDataAsync = async (
-        userId: number,
+        principalId: PrincipalId,
         currentItemCode: string) => {
+
+        const userId = principalId.toSQLValue();
 
         // get current course id
         const courseId = await this._courseService

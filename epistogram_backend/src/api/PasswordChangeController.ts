@@ -1,6 +1,6 @@
 import { ChangePasswordDTO } from '../shared/dtos/SetNewPasswordDTO';
 import { PasswordChangeService } from '../services/PasswordChangeService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class PasswordChangeController {
 
@@ -29,7 +29,7 @@ export class PasswordChangeController {
             .getValue(x => x.oldPassword, 'string');
 
         return await this._passwordChangeService
-            .requestPasswordChangeAuthenticatedAsync(params.currentUserId, oldPassword);
+            .requestPasswordChangeAuthenticatedAsync(params.principalId, oldPassword);
     };
 
     requestPasswordChangeAction = async (params: ActionParams) => {

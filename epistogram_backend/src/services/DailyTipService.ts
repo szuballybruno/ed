@@ -6,6 +6,7 @@ import { DailyTipView } from '../models/views/DailyTipView';
 import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class DailyTipService {
 
@@ -92,13 +93,13 @@ export class DailyTipService {
      * 
      * @returns 
      */
-    async getDailyTipAsync(userId: number) {
+    async getDailyTipAsync(userId: PrincipalId) {
 
         // get daily tip views 
         const dailyTips = await this._ormService
             .getRepository(DailyTipView)
             .createQueryBuilder('dtv')
-            .where('dtv.userId = :userId', { userId })
+            .where('dtv.userId = :userId', { userId: userId.toSQLValue() })
             .getMany();
 
         // get a tip 
@@ -146,7 +147,7 @@ export class DailyTipService {
                 .getRepository(DailyTipOccurrence)
                 .insert({
                     dailyTipId: tip.dailyTipId,
-                    userId
+                    userId: userId.toSQLValue()
                 });
         }
 

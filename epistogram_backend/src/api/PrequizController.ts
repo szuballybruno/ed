@@ -1,5 +1,5 @@
 import { PrequizService } from '../services/PrequizService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class PrequizController {
 
@@ -17,7 +17,7 @@ export class PrequizController {
             .getValue(x => x.courseId, 'int');
 
         return await this._prequizService
-            .getQuestionsAsync(params.currentUserId, courseId);
+            .getQuestionsAsync(params.principalId, courseId);
     };
 
     getUserAnswerAction = async (params: ActionParams) => {
@@ -32,7 +32,7 @@ export class PrequizController {
             .getValue(x => x.courseId, 'int');
 
         return await this._prequizService
-            .getUserAnswerAsync(params.currentUserId, courseId, questionId);
+            .getUserAnswerAsync(params.principalId, courseId, questionId);
     };
 
     answerPrequizQuestionAction = async (params: ActionParams) => {
@@ -58,6 +58,6 @@ export class PrequizController {
             .getValueOrNull(x => x.answerId, 'int');
 
         return await this._prequizService
-            .answerPrequizQuestionAsync(params.currentUserId, questionId, courseId, answerId, value);
+            .answerPrequizQuestionAsync(params.principalId, questionId, courseId, answerId, value);
     };
 }

@@ -6,7 +6,7 @@ import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserVia
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class RegistrationController {
@@ -77,6 +77,6 @@ export class RegistrationController {
             ]).data;
 
         return await this._registrationService
-            .inviteUserAsync(params.currentUserId, dto);
+            .inviteUserAsync(params.principalId, dto);
     };
 }

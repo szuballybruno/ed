@@ -5,6 +5,8 @@ import { PretestResultView } from '../models/views/PretestResultView';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
+import { PrincipalId } from '../utilities/ActionParams';
+import { instatiateInsertEntity } from '../utilities/misc';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -45,11 +47,11 @@ export class PretestService {
         return newExam.id;
     }
 
-    async getPretestDataAsync(userId: number, courseId: number) {
+    async getPretestDataAsync(userId: PrincipalId, courseId: number) {
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, 'pretest', null);
+            .setCurrentCourse(userId.toSQLValue(), courseId, 'pretest', null);
 
         // pretest exam 
         const pretestExam = await this._ormService
@@ -62,14 +64,14 @@ export class PretestService {
             });
 
         const pretestExamDTO = await this._examService
-            .getExamPlayerDTOAsync(userId, pretestExam.id);
+            .getExamPlayerDTOAsync(userId.toSQLValue(), pretestExam.id);
 
         // answer session
         let answerSession = await this._ormService
             .getRepository(AnswerSession)
             .findOne({
                 where: {
-                    userId,
+                    userId: userId.toSQLValue(),
                     examId: pretestExam.id,
                     type: 'pretest'
                 }
@@ -77,11 +79,12 @@ export class PretestService {
 
         if (!answerSession) {
 
-            answerSession = {
-                userId,
+            answerSession = instatiateInsertEntity<AnswerSession>({
+                userId: userId.toSQLValue(),
                 examId: pretestExam.id,
-                type: 'pretest'
-            } as AnswerSession;
+                type: 'pretest',
+                videoId: null
+            });
 
             await this._ormService
                 .getRepository(AnswerSession)
@@ -94,7 +97,9 @@ export class PretestService {
         } as PretestDataDTO;
     }
 
-    async getPretestResultsAsync(userId: number, courseId: number) {
+    async getPretestResultsAsync(principalId: PrincipalId, courseId: number) {
+
+        const userId = principalId.toSQLValue();
 
         // set current course stage 
         await this._courseBridgeService

@@ -1,6 +1,5 @@
 import { FileService } from '../services/FileService';
-import { VerboseError } from '../shared/types/VerboseError';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class FileController {
 
@@ -16,11 +15,7 @@ export class FileController {
         const file = params
             .getSingleFileOrFail();
 
-        //TODO: Create a validation function
-        if (!['image/png', 'image/jpeg'].includes(file.mimetype))
-            throw new VerboseError('File upload failed: Only jpeg or png', 'bad request');
-
         return this._fileService
-            .uploadAvatarFileAsync(params.currentUserId, file);
+            .uploadAvatarFileAsync(params.principalId, file);
     };
 }

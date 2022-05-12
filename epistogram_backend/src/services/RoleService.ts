@@ -32,7 +32,9 @@ export class RoleService extends QueryServiceBase<Role> {
         super(mapperService, ormService, Role);
     }
 
-    async getRolesListAdminAsync(userId: number) {
+    async getRolesListAdminAsync(principalId: PrincipalId) {
+        
+        const userId = principalId.toSQLValue();
 
         const roles = await this._ormService
             .query(RoleListView, { userId })
@@ -226,7 +228,9 @@ export class RoleService extends QueryServiceBase<Role> {
         return [];
     }
 
-    async createRoleAsync(userId: number, dto: RoleCreateDTO) {
+    async createRoleAsync(principalId: PrincipalId, dto: RoleCreateDTO) {
+
+        const userId = principalId.toSQLValue();
 
         // create role
         const role = await this.createAsync(instatiateInsertEntity<Role>({
@@ -247,8 +251,10 @@ export class RoleService extends QueryServiceBase<Role> {
             .save(RolePermissionBridge, permAssignemnts);
     }
 
-    async getRoleEditDataAsync(userId: number, roleId: number): Promise<RoleEditDTO> {
+    async getRoleEditDataAsync(principalId: PrincipalId, roleId: number): Promise<RoleEditDTO> {
 
+        const userId = principalId.toSQLValue();
+        
         type ResultType = {
             roleId: number,
             roleName: string,
@@ -308,13 +314,17 @@ export class RoleService extends QueryServiceBase<Role> {
         };
     }
 
-    async deleteRoleAsync(userId: number, roleId: number) {
+    async deleteRoleAsync(principalId: PrincipalId, roleId: number) {
+
+        const userId = principalId.toSQLValue();
 
         await this._ormService
             .softDelete(Role, [roleId]);
     }
 
-    async saveRoleAsync(userId: number, dto: RoleEditDTO) {
+    async saveRoleAsync(principalId: PrincipalId, dto: RoleEditDTO) {
+
+        const userId = principalId.toSQLValue();
 
         // save role
         const role = await this._ormService

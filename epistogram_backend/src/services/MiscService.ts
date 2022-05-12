@@ -1,16 +1,14 @@
 
-import { Company } from '../models/entity/Company';
-import { User } from '../models/entity/User';
+import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
-import { UserDTO } from '../shared/dtos/UserDTO';
-import { CourseOverviewView } from '../models/views/CourseOverviewView';
+import { PrincipalId } from '../utilities/ActionParams';
 import { CourseService } from './CourseService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 
 export class MiscService {
 
@@ -18,23 +16,26 @@ export class MiscService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _userCourseBridgeService: UserCourseBridgeService;
+    private _permissionService: PermissionService;
 
     constructor(
         courseService: CourseService,
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        userCourseBridgeService: UserCourseBridgeService) {
+        userCourseBridgeService: UserCourseBridgeService,
+        permissionService: PermissionService) {
 
         this._courseService = courseService;
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._userCourseBridgeService = userCourseBridgeService;
+        this._permissionService = permissionService;
     }
 
-    async getCourseOverviewDataAsync(userId: number) {
+    async getCourseOverviewDataAsync(userId: PrincipalId) {
 
         const courseId = await this._userCourseBridgeService
-            .getCurrentCourseIdOrFail(userId);
+            .getCurrentCourseIdOrFail(userId.toSQLValue());
 
         const view = await this._ormService
             .query(CourseOverviewView, { courseId, userId })
@@ -46,13 +47,13 @@ export class MiscService {
             .map(CourseOverviewView, CourseOverviewDataDTO, view);
     }
 
-    getOverviewPageDTOAsync = async (userId: number) => {
+    async getOverviewPageDTOAsync(userId: PrincipalId) {
 
         const recommendedCourseDTOs = [] as CourseShortDTO[];
         const developmentChartData = this.getDevelopmentChart();
 
         const currentCourseProgress = await this._courseService
-            .getCurrentCourseProgressAsync(userId);
+            .getCurrentCourseProgressAsync(userId.toSQLValue());
 
         const overviewPageDTO = {
             tipOfTheDay: this.getTipOfTheDay(),

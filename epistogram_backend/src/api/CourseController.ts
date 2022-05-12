@@ -4,7 +4,7 @@ import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDT
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { CourseModeType } from '../shared/types/sharedTypes';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class CourseController {
 
@@ -20,7 +20,7 @@ export class CourseController {
     getAvailableCoursesAction = async (params: ActionParams) => {
 
         return this._courseService
-            .getAvailableCoursesAsync(params.currentUserId);
+            .getAvailableCoursesAsync(params.principalId);
     };
 
     getCourseDetailsEditDataAction = async (params: ActionParams) => {
@@ -61,7 +61,8 @@ export class CourseController {
             .getQuery<any>()
             .getValue(x => x.courseId, 'int');
 
-        return await this._courseService.getCourseDetailsAsync(params.currentUserId, courseId);
+        return await this._courseService
+            .getCourseDetailsAsync(params.principalId, courseId);
     };
 
     saveCourseDetailsAction = async (params: ActionParams) => {
@@ -116,18 +117,18 @@ export class CourseController {
         const courseMode = dto.getValue(x => x.mode, 'custom', value => value === 'advanced' || value === 'beginner');
 
         return this._userCourseBridgeService
-            .setCourseModeAsync(params.currentUserId, courseId, courseMode);
+            .setCourseModeAsync(params.principalId, courseId, courseMode);
     };
 
     getCourseProgressShortAction = async (params: ActionParams) => {
 
         return this._courseService
-            .getCourseProgressShortAsync(params.currentUserId);
+            .getCourseProgressShortAsync(params.principalId);
     };
 
     getCourseProgressDataAction = async (params: ActionParams) => {
 
         return this._courseService
-            .getCourseProgressDataAsync(params.currentUserId);
+            .getCourseProgressDataAsync(params.principalId);
     };
 }
