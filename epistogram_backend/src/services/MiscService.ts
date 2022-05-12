@@ -31,18 +31,6 @@ export class MiscService {
         this._userCourseBridgeService = userCourseBridgeService;
     }
 
-    saveUserDataAsync = async (userId: number, dto: UserDTO) => {
-
-        return this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                firstName: dto.firstName,
-                lastName: dto.lastName,
-                phoneNumber: dto.phoneNumber
-            });
-    };
-
     async getCourseOverviewDataAsync(userId: number) {
 
         const courseId = await this._userCourseBridgeService

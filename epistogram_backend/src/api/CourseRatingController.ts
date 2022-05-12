@@ -1,6 +1,6 @@
 import { CourseRatingQuestionAnswersDTO } from '../shared/dtos/CourseRatingQuestionAnswersDTO';
 import { CourseRatingService } from '../services/CourseRatingService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class CourseRatingController {
 

@@ -34,7 +34,7 @@ export class RoleAssignmentBridge {
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'companyId'))
     company: Company | null;
 
-    // company 
+    // context company 
     @Column({ type: 'int', nullable: true })
     contextCompanyId: number | null;
 

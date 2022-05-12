@@ -2,6 +2,7 @@ import { CreateInvitedUserDTO } from '../../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../../shared/dtos/RegisterUserViaPublicTokenDTO';
+import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
 
@@ -78,7 +79,12 @@ export const useRegisterUserViaActivationCode = () => {
     };
 };
 
-export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
+export const useCreateInviteUserAsync = () => {
 
-    return httpPostAsync(apiRoutes.registration.inviteUser, dto);
+    const qr = usePostDataUnsafe<UserEditDTO>(apiRoutes.registration.inviteUser);
+
+    return {
+        createInvitedUser: qr.postDataAsync,
+        createInvitedUserState: qr.state
+    };
 };

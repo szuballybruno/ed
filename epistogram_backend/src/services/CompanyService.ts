@@ -40,11 +40,16 @@ export class CompanyService extends QueryServiceBase<Company> {
             .mapMany(CompanyView, CompanyDTO, companies);
     }
 
+    async getRoleManageCompaniesAsync(userId: number) {
+
+        return await this.getCompaniesAdminAsync(userId);
+    }
+
     async getAvailableCompaniesForNewRolesAsync(userId: number) {
 
         const companies = await this._ormService
             .query(Company, {
-                userId, 
+                userId,
                 permissionCode: 'ASSIGN_COMPANY_ROLES' as PermissionCodeType
             })
             .select(Company)

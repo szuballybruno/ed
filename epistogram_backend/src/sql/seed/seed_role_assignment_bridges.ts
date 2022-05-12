@@ -18,7 +18,7 @@ export const roleAssignmentBridgeSeedList = getSeedList<RoleAssignmentBridge>()(
     },
 
     almostgod_a: {
-        contextCompanyId: seed_companies.PCWorld.id,
+        contextCompanyId: seed_companies.EpistoGram.id,
         roleId: roleList.Company_Owner.id,
         companyId: null,
         userId: 2

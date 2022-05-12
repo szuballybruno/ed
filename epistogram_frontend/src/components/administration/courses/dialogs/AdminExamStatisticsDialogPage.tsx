@@ -345,6 +345,7 @@ export const AdminExamStatisticsModalPage = () => {
                         </EpistoFont>
 
                         <EpistoSelect
+                            getDisplayValue={x => x}
                             items={['Ismétlések aránya']}
                             selectedValue={'Ismétlések aránya'}
                             onSelected={() => { console.log('asd'); }}

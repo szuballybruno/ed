@@ -6,66 +6,76 @@ export const permissionList = getSeedList<Permission>()({
     // roles
     VIEW_COMPANY_ROLES: {
         code: 'VIEW_COMPANY_ROLES',
-        isGlobal: false
+        scope: 'COMPANY'
     },
     EDIT_COMPANY_ROLES: {
         code: 'EDIT_COMPANY_ROLES',
-        isGlobal: false
-    },
-    ASSIGN_COMPANY_ROLES: {
-        code: 'ASSIGN_COMPANY_ROLES',
-        isGlobal: false
+        scope: 'COMPANY'
     },
     DELETE_COMPANY_ROLES: {
         code: 'DELETE_COMPANY_ROLES',
-        isGlobal: false
-    },
-    ASSIGN_GLOBAL_ROLES: {
-        code: 'ASSIGN_GLOBAL_ROLES',
-        isGlobal: true
+        scope: 'COMPANY'
     },
     EDIT_GLOBAL_ROLES: {
         code: 'EDIT_GLOBAL_ROLES',
-        isGlobal: true
+        scope: 'GLOBAL'
     },
     VIEW_GLOBAL_ROLES: {
         code: 'VIEW_GLOBAL_ROLES',
-        isGlobal: true
+        scope: 'GLOBAL'
+    },
+    ASSIGN_COMPANY_ROLES: {
+        code: 'ASSIGN_COMPANY_ROLES',
+        scope: 'COMPANY'
+    },
+    ASSIGN_GLOBAL_ROLES: {
+        code: 'ASSIGN_GLOBAL_ROLES',
+        scope: 'COMPANY'
+    },
+
+    // permissions 
+    ASSIGN_COMPANY_PERMISSIONS: {
+        code: 'ASSIGN_COMPANY_PERMISSIONS',
+        scope: 'COMPANY'
+    },
+    ASSIGN_GLOBAL_PERMISSIONS: {
+        code: 'ASSIGN_GLOBAL_PERMISSIONS',
+        scope: 'COMPANY'
     },
 
     // courses 
     VIEW_COMPANY_COURSES: {
         code: 'VIEW_COMPANY_COURSES',
-        isGlobal: false
+        scope: 'COMPANY'
     },
     MANAGE_COMPANY: {
         code: 'MANAGE_COMPANY',
-        isGlobal: false
+        scope: 'COMPANY'
     },
     MANAGE_COMPANY_COURSES: {
         code: 'MANAGE_COMPANY_COURSES',
-        isGlobal: false
+        scope: 'COMPANY'
     },
 
     // misc
     ACCESS_ADMIN: {
         code: 'ACCESS_ADMIN',
-        isGlobal: true
+        scope: 'GLOBAL'
     },
     ACCESS_APPLICATION: {
         code: 'ACCESS_APPLICATION',
-        isGlobal: true
+        scope: 'GLOBAL'
     },
     MANAGE_SHOP: {
         code: 'MANAGE_SHOP',
-        isGlobal: true
+        scope: 'GLOBAL'
     },
     DELETE_COMPANY: {
         code: 'DELETE_COMPANY',
-        isGlobal: true
+        scope: 'GLOBAL'
     },
     CREATE_COMPANY: {
         code: 'CREATE_COMPANY',
-        isGlobal: true
+        scope: 'GLOBAL'
     }
 });

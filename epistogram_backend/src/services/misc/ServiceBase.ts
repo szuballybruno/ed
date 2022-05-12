@@ -1,6 +1,6 @@
 import { DeepPartial, FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { ClassType } from '../../models/DatabaseTypes';
+import { ClassType } from '../../models/Types';
 import { MapperService } from '../MapperService';
 import { ORMConnectionService } from '../ORMConnectionService/ORMConnectionService';
 
@@ -45,6 +45,8 @@ export class QueryServiceBase<TMainEntity> extends ServiceBase {
         await this._ormService
             .getRepository(this._mainEntityClass)
             .insert(entity);
+
+        return entity;
     }
 
     public async deleteAsync(entity: FindOptionsWhere<TMainEntity>) {

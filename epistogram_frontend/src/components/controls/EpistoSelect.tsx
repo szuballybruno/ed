@@ -1,4 +1,3 @@
-import { Box, BoxProps } from '@chakra-ui/layout';
 import React from 'react';
 import { translatableTexts } from '../../static/translatableTexts';
 
@@ -6,14 +5,14 @@ const defaultKey = '___default___';
 
 export const EpistoSelect = <TItem,>(props: {
     items: TItem[],
-    selectedValue?: TItem,
-    currentKey?: string,
     onSelected: (value: TItem) => void,
     getCompareKey: (item: TItem) => string,
-    getDisplayValue?: (item: TItem) => string,
+    getDisplayValue: (item: TItem) => string,
+    selectedValue?: TItem,
+    currentKey?: string,
     defaultValue?: string,
-    isDisabled?: boolean,
-} & BoxProps) => {
+    isDisabled?: boolean
+}) => {
 
     const {
         items,
@@ -23,8 +22,7 @@ export const EpistoSelect = <TItem,>(props: {
         onSelected,
         getDisplayValue,
         defaultValue,
-        isDisabled,
-        ...css
+        isDisabled
     } = props;
 
     const onSelectedValue = (key: string) => {

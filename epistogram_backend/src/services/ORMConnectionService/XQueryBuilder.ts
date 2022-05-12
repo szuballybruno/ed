@@ -1,8 +1,8 @@
-import { ClassType } from '../../models/DatabaseTypes';
+import { ClassType } from '../../models/Types';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './ORMConnectionDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition } from './XQueryBuilderTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType } from './XQueryBuilderTypes';
 
 const getCheckCondition = <TEntityA, TEntityB, TParams>(
     code: 'AND' | 'WHERE' | 'ON' | 'OR',
@@ -54,7 +54,7 @@ const getCheckCondition = <TEntityA, TEntityB, TParams>(
     }
 };
 
-class JoinBuilder<TEntity, TParams> {
+class JoinBuilder<TEntity, TParams extends ParamConstraintType<TParams>> {
 
     private _builder: XQueryBuilder<TEntity, TParams>;
     private _entityClassType: ClassType<TEntity>;
@@ -124,7 +124,7 @@ class SelectBuilder<TResult> {
     }
 }
 
-export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
+export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>, TResult = TEntity> {
 
     private _connection: XQueryBuilderCore<TEntity, TParams>;
     private _mainClassType: ClassType<TEntity>;
@@ -337,20 +337,24 @@ export class XQueryBuilder<TEntity, TParams, TResult = TEntity> {
         return this;
     }
 
-    async getSingle(): Promise<TEntity> {
+    async getSingle(): Promise<TResult> {
 
         this.addDeletedCheck();
 
-        return await this._connection
+        const single = await this._connection
             .getSingle(this._mainClassType, this._expression, this._params);
+
+        return single as any as TResult;
     }
 
-    async getOneOrNull(): Promise<TEntity | null> {
+    async getOneOrNull(): Promise<TResult | null> {
 
         this.addDeletedCheck();
 
-        return await this._connection
+        const oneOrNull = await this._connection
             .getOneOrNull(this._mainClassType, this._expression, this._params);
+
+        return oneOrNull as any as TResult;
     }
 
     async getMany(): Promise<TResult[]> {

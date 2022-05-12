@@ -1,41 +1,31 @@
 import { Role } from '../../models/entity/authorization/Role';
 import { getSeedList } from '../../services/sqlServices/SeedService';
+import seed_companies from './seed_companies';
 
 export const roleList = getSeedList<Role>()({
     Company_Owner: {
         name: 'Company Owner',
-        ownerCompanyId: null,
-        ownerUserId: null,
-        isGlobal: true
+        companyId: null,
+        scope: 'GLOBAL'
     },
     Company_HR_Viewer: {
         name: 'Company HR Viewer',
-        ownerCompanyId: null,
-        ownerUserId: null,
-        isGlobal: true
+        companyId: null,
+        scope: 'GLOBAL'
     },
     Company_Role_Manager: {
         name: 'Company Role Manager',
-        ownerCompanyId: null,
-        ownerUserId: null,
-        isGlobal: true
+        companyId: null,
+        scope: 'GLOBAL'
     },
     Company_User: {
         name: 'Company User',
-        ownerCompanyId: null,
-        ownerUserId: null,
-        isGlobal: true
-    },
-    God: {
-        name: 'God',
-        ownerCompanyId: null,
-        ownerUserId: null,
-        isGlobal: true
+        companyId: null,
+        scope: 'GLOBAL'
     },
     Company_owned_Custom_Role_1: {
         name: '[Company owned] Custom Role 1',
-        ownerCompanyId: 2,
-        ownerUserId: null,
-        isGlobal: false
+        companyId: seed_companies.EpistoGram.id,
+        scope: 'COMPANY'
     }
 });

@@ -1,9 +1,11 @@
-import { ClassType } from '../../models/DatabaseTypes';
+import { ClassType } from '../../models/Types';
 import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, CheckCondition } from './XQueryBuilderTypes';
+import { CheckCondition, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType } from './XQueryBuilderTypes';
+
+const INDENT = '   ';
 
 export class XQueryBuilderCore<TEntity, TParams> {
 
@@ -116,14 +118,19 @@ export class XQueryBuilderCore<TEntity, TParams> {
                 if (selectCond.entity)
                     return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
 
-                if (selectCond.columnSelects)
+                if (selectCond.columnSelects) {
+
+                    const getSelectColumns = (x: SelectColumnsType<any, any>) => INDENT + getKeyValues(x.columnSelectObj)
+                        .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
+                        .join(', ');
+
                     return selectCond
                         .columnSelects
-                        .map(x => '   ' + getKeyValues(x
-                            .columnSelectObj)
-                            .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
-                            .join(', '))
+                        .map(x => x.columnSelectObj === '*'
+                            ? `${INDENT}"${this.toSQLSnakeCasing(x.classType.name)}".*`
+                            : getSelectColumns(x))
                         .join(',\n');
+                }
 
                 throw new Error('Incorrect select condition!');
             })();
@@ -193,7 +200,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
             })();
 
             const linebreak = code === 'WHERE' ? '\n' : '';
-            const tab = code === 'AND' || code === 'OR' ? '   ' : '';
+            const tab = code === 'AND' || code === 'OR' ? INDENT : '';
 
             return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${fullValueB}`;
         }
@@ -210,7 +217,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
             .filter(key => params[key] !== null)
             .map((key, index): SQLParamType<TParams, keyof TParams> => {
 
-                const value = params[key];
+                const rawValue = params[key] as any;
+                
+                const value = rawValue.toSQLValue
+                    ? rawValue.toSQLValue()
+                    : rawValue;
+
                 const isArray = Array.isArray(value);
                 const token = isArray
                     ? `ANY($${index + 1}::int[])`
@@ -241,11 +253,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
         query: string,
         params?: SQLParamType<TParams, keyof TParams>[]) {
 
+        const queryLog = this.getSQLQueryLog(query, params);
+
         try {
 
-            const queryLog = this.getSQLQueryLog(query, params);
-
-            log(queryLog, { color: ConsoleColor.purple });
+            log('X SQL Query: ');
+            log(queryLog, { color: ConsoleColor.purple, noStamp: true });
 
             const values = this.getParamValues(params);
 
@@ -268,8 +281,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         }
         catch (e: any) {
 
-            const errorEndingQueryLog = this.getSQLQueryLog(query, params);
-            throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog} \n Message: ${e.message ?? e} `);
+            throw new Error(`Error occured on SQL server while executing query: \n${queryLog} \n Message: ${e.message ?? e} `);
         }
     }
 
@@ -297,7 +309,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const paramPairs = (params ?? [])
             .map((param) => `${param.token}: ${this.getParamValue(param)}`);
 
-        return `Query: \n${query}\nValues: ${paramPairs.join(', ')}`;
+        return `${query}\nValues: ${paramPairs.join(', ')}`;
     }
 
     private snakeToCamelCase(snakeCaseString: string) {

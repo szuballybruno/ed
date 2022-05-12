@@ -1,9 +1,10 @@
+import { RoleScopeType } from '../../types/sharedTypes';
 import { PermissionListDTO } from './PermissionListDTO';
 
 export class RoleAdminListDTO {
     roleId: number;
     roleName: string;
-    isGlobal: boolean;
+    roleScope: RoleScopeType;
     ownerType: 'user' | 'company' | 'group';
     ownerName: string;
     companyId: number;

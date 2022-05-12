@@ -40,13 +40,17 @@ export type PermissionCodeType =
     | 'ASSIGN_COMPANY_ROLES'
     | 'DELETE_COMPANY_ROLES'
 
+    // permissions
+    | 'ASSIGN_COMPANY_PERMISSIONS'
+    | 'ASSIGN_GLOBAL_PERMISSIONS'
+
     // course 
     | 'MANAGE_COMPANY_COURSES'
     | 'VIEW_COMPANY_COURSES'
     | 'MANAGE_COMPANY'
     | 'DELETE_COMPANY'
     | 'CREATE_COMPANY'
-    
+
     // misc
     | 'ACCESS_ADMIN'
     | 'ACCESS_APPLICATION'
@@ -61,8 +65,10 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
-export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
+export type RoleScopeType = 'GLOBAL' | 'COMPANY' | 'GROUP';
+export type PermissionScopeType = 'GLOBAL' | 'COMPANY' | 'GROUP';
 
+export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 
 export type CourseStageNameType = 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
 

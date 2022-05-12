@@ -1,5 +1,4 @@
 import bodyParser from 'body-parser';
-import express from 'express';
 import fileUpload from 'express-fileupload';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { AuthenticationController } from './api/AuthenticationController';
@@ -54,7 +53,7 @@ import { LoggerService } from './services/LoggerService';
 import { MapperService } from './services/MapperService';
 import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
-import { log, logError } from './services/misc/logger';
+import { log } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
@@ -94,9 +93,9 @@ import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
 import './shared/logic/jsExtensions';
 import { apiRoutes } from './shared/types/apiRoutes';
-import { EndpointOptionsType, onActionError, onActionSuccess } from './utilities/apiHelpers';
-import { ActionParams } from './utilities/helpers';
-import { TurboExpress } from './utilities/TurboExpress';
+import { onActionError, onActionSuccess } from './utilities/apiHelpers';
+import { ActionParams } from "./utilities/ActionParams";
+import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
 (async () => {
 
@@ -125,9 +124,9 @@ import { TurboExpress } from './utilities/TurboExpress';
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
-    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService);
-    const tokenService = new TokenService(globalConfig);
     const roleService = new RoleService(ormConnectionService, mapperService);
+    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService);
+    const tokenService = new TokenService(globalConfig);
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
@@ -169,7 +168,7 @@ import { TurboExpress } from './utilities/TurboExpress';
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, userService, globalConfig);
-    const miscController = new MiscController(miscService, practiseQuestionService, authenticationService, tokenService, ormConnectionService, globalConfig, mapperService, userCourseBridgeService);
+    const miscController = new MiscController(miscService, practiseQuestionService, tokenService, ormConnectionService, globalConfig, userCourseBridgeService);
     const authenticationController = new AuthenticationController(authenticationService, globalConfig);
     const userController = new UserController(userService);
     const fileController = new FileController(fileService);
@@ -203,57 +202,37 @@ import { TurboExpress } from './utilities/TurboExpress';
     await dbConnectionService.seedDBAsync();
 
     // initialize express
-    const turboExpress = new TurboExpress<ActionParams, EndpointOptionsType>(
-        [authMiddleware],
-        globalConfig.misc.hostPort,
-        onActionError,
-        onActionSuccess);
-    const addEndpoint = turboExpress.addAPIEndpoint;
+    const turboExpress = new TurboExpressBuilder<ActionParams>()
+        .setPort(globalConfig.misc.hostPort)
+        .setErrorHandler(onActionError)
+        .setSuccessHandler(onActionSuccess)
+        .setTurboMiddleware(authMiddleware)
+        .setExpressMiddleware(getCORSMiddleware(globalConfig))
+        .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
+        .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))
+        .setExpressMiddleware(fileUpload())
+        .setExpressMiddleware(getUnderMaintanenceMiddleware(globalConfig))
+        .addController(MiscController, miscController)
+        .addController(UserController, userController)
+        .addController(PermissionController, permissionController)
+        .addController(RoleController, roleController)
+        .addController(CompanyController, companyController)
+        .build();
 
-    // add middlewares
-    turboExpress.use(getCORSMiddleware(globalConfig));
-    turboExpress.use(bodyParser.json({ limit: '32mb' }));
-    turboExpress.use(bodyParser.urlencoded({ limit: '32mb', extended: true }));
-    turboExpress.use(fileUpload());
-    turboExpress.use(getUnderMaintanenceMiddleware(globalConfig));
+    const addEndpoint = turboExpress.addAPIEndpoint;
 
     // registration
     addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
     addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true, authorize: ['administrator'] });
-
-    // misc
-    addEndpoint(apiRoutes.misc.getCurrentCourseItemCode, miscController.getCurrentCourseItemCodeAction);
-    addEndpoint(apiRoutes.misc.getJobTitles, miscController.getJobTitlesAction);
-    addEndpoint(apiRoutes.misc.getHomePageDTO, miscController.getOverviewPageDTOAction);
-    addEndpoint(apiRoutes.misc.getCourseOverviewData, miscController.getCourseOverviewDataAction);
-
-    // roles
-    addEndpoint(apiRoutes.roles.getRoles, roleController.getRolesListAction);
-    addEndpoint(apiRoutes.roles.createRole, roleController.createRoleAction, { isPost: true });
-    addEndpoint(apiRoutes.roles.getRoleEditData, roleController.getRoleEditDataAction);
-    addEndpoint(apiRoutes.roles.deleteRole, roleController.deleteRoleAction, { isPost: true });
-    addEndpoint(apiRoutes.roles.saveRole, roleController.saveRoleAction, { isPost: true });
-
-    // permissions 
-    addEndpoint(apiRoutes.permissions.getPermissions, permissionController.getPermissionsAction);
-
-    // companies
-    addEndpoint(apiRoutes.companies.getCompanies, companyController.getCompaniesAction);
-    addEndpoint(apiRoutes.companies.getCompaniesAdmin, companyController.getCompaniesAdminAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.companies.getCompanyEditData, companyController.getCompanyEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.companies.createCompany, companyController.createCompanyAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.companies.deleteCompany, companyController.deleteCompanyAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.companies.saveCompany, companyController.saveCompanyAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.companies.getAvailableCompaniesForRoleCreation, companyController.getAvailableCompaniesForRoleCreationAction);
+    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
 
     // teacher info
-    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction);
+    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true });
 
     // tempomat
     addEndpoint(apiRoutes.tempomat.getTempomatMode, tempomatController.getTempomatModeAction);
@@ -261,10 +240,10 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // daily tip 
     addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);
-    addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true });
+    addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true });
+    addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction);
+    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true });
 
     // personality assessment 
     addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);
@@ -274,12 +253,12 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
     addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
     addEndpoint(apiRoutes.shop.purchaseShopItem, shopController.purchaseShopItemAction, { isPost: true });
-    addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.shop.createShopItem, shopController.createShopItemAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction);
+    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction);
+    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction);
+    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction);
+    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.shop.createShopItem, shopController.createShopItemAction, { isPost: true });
 
     // event 
     addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
@@ -302,8 +281,8 @@ import { TurboExpress } from './utilities/TurboExpress';
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
     addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
-    addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction);
+    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true });
 
     // prequiz
     addEndpoint(apiRoutes.prequiz.getQuestions, prequizController.getQuestionsAction);
@@ -328,14 +307,6 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.userProgress.getRecommendedItemQuota, userProgressController.getRecommendedItemQuotaAction);
     addEndpoint(apiRoutes.userProgress.getActiveCourses, userProgressController.getActiveCoursesAction);
 
-    // user
-    addEndpoint(apiRoutes.user.getBriefUserData, userController.getBriefUserDataAction);
-    addEndpoint(apiRoutes.user.saveUserSimple, userController.saveUserSimpleAction, { isPost: true });
-    addEndpoint(apiRoutes.user.getEditUserData, userController.getEditUserDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.user.getUserListForAdministration, userController.getUserAdministrationUserListAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.user.deleteUser, userController.deleteUserAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.user.saveUser, userController.saveUserAction, { isPost: true, authorize: ['administrator'] });
-
     // file 
     addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
 
@@ -354,14 +325,14 @@ import { TurboExpress } from './utilities/TurboExpress';
 
     // course
     addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction);
+    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction);
+    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction);
+    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true });
+    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true });
+    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true });
+    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
     addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
     addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
     addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
@@ -369,32 +340,32 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.course.getCourseProgressShort, courseController.getCourseProgressShortAction);
 
     // module 
-    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.module.getModuleListEditData, moduleController.getModuleListEditAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });
+    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true });
+    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction);
+    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.module.getModuleListEditData, moduleController.getModuleListEditAction);
 
     // video 
-    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.video.getVideoQuestionEditData, videoController.getVideoQuestionEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.video.saveVideoQuestionEditData, videoController.saveVideoQuestionEditDataAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true });
+    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true });
+    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction);
+    addEndpoint(apiRoutes.video.getVideoQuestionEditData, videoController.getVideoQuestionEditDataAction);
+    addEndpoint(apiRoutes.video.saveVideoQuestionEditData, videoController.saveVideoQuestionEditDataAction, { isPost: true });
 
     // questions
-    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction);
+    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
     addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
 
     // exam
-    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.exam.getExamQuestionEditData, examController.getExamQuestionEditDataAction, { authorize: ['administrator'] });
-    addEndpoint(apiRoutes.exam.saveExamQuestionEditData, examController.saveExamQuestionEditDataAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true, authorize: ['administrator'] });
-    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true, authorize: ['administrator'] });
+    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction);
+    addEndpoint(apiRoutes.exam.getExamQuestionEditData, examController.getExamQuestionEditDataAction);
+    addEndpoint(apiRoutes.exam.saveExamQuestionEditData, examController.saveExamQuestionEditDataAction, { isPost: true });
+    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true });
+    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });
+    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true });
     addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
@@ -404,20 +375,20 @@ import { TurboExpress } from './utilities/TurboExpress';
     addEndpoint(apiRoutes.comment.getComments, commentController.getCommentsAction);
 
     // 404 - no match
-    turboExpress.use((req, res) => {
+    // turboExpress.use((req, res) => {
 
-        res.status(404)
-            .send(`Route did not match: ${req.url}`);
-    });
+    //     res.status(404)
+    //         .send(`Route did not match: ${req.url}`);
+    // });
 
-    // error handler
-    turboExpress.use((error: express.Errback, req: express.Request, res: express.Response) => {
+    // // error handler
+    // turboExpress.use((error: express.Errback, req: express.Request, res: express.Response) => {
 
-        logError('Express error middleware.');
-        logError(error);
-        return res.status(500)
-            .send(error.toString());
-    });
+    //     logError('Express error middleware.');
+    //     logError(error);
+    //     return res.status(500)
+    //         .send(error.toString());
+    // });
 
     // listen
     turboExpress.listen();

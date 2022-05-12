@@ -1,7 +1,7 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { getJoinColumnInverseSide } from '../../utilities/helpers';
-import { RegistrationType } from '../DatabaseTypes';
+import { RegistrationType } from '../Types';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
 import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
@@ -94,8 +94,8 @@ export class User {
     avatarFile: StorageFile | null;
 
     // company 
-    @Column({ nullable: true, type: 'number' })
-    companyId: number | null;
+    @Column()
+    companyId: number;
 
     @ManyToOne(() => Company, x => x.users)
     @JoinColumn({ name: 'company_id' })
@@ -207,9 +207,4 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
     companyOwnerBridges: CompanyOwnerBridge[];
-
-    // ownedRoles
-    @JoinColumn()
-    @OneToMany(_ => Role, getJoinColumnInverseSide<User>()(x => x.ownerUser))
-    ownedRoles: Role[];
 }

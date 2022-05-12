@@ -12,26 +12,27 @@ type ProfileImageProps = {
     className?: string
 } & FlexProps;
 
-const getSignature = (user: UserDTO) => {
+const getSignature = (firstName: string, lastName: string) => {
 
-    const { firstName, lastName } = user;
-    return (firstName ?? user.firstName).substr(0, 1) + (lastName ?? user.lastName).substr(0, 1);
+    return (firstName ?? firstName).substr(0, 1) + (lastName ?? lastName).substr(0, 1);
 };
 
 export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props: ProfileImageProps, ref) => {
 
-    const { className, url, firstName, lastName, ...css } = props;
+    const { className, firstName: b, lastName: a, url: c, ...css } = props;
     const user = useContext(CurrentUserContext);
-    const signature = getSignature(user);
-    const { avatarUrl } = useContext(CurrentUserContext);
-    const uuuurl = url ?? avatarUrl;
-    const showSingature = !uuuurl;
-    const showImage = !!uuuurl;
+    const firstName = props.firstName ?? user.firstName;
+    const lastName = props.lastName ?? user.lastName;
+    const url = props.url ?? user.avatarUrl;
+
+    const signature = getSignature(firstName, lastName);
+    const showSingature = !url;
+    const showImage = !!url;
 
     return <Flex
-        p="6px"
+        p="4px"
         className={className + ' circle'}
-        boxShadow="inset -7px -2px 20px 4px rgba(124,192,194,0.9)"
+        boxShadow="inset -7px -2px 20px 0px rgba(124,192,194,0.9)"
         {...css}>
 
         <Flex
@@ -48,7 +49,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
                 border="none"
                 className="whall"
                 objectFit="cover"
-                src={uuuurl ?? ''}
+                src={url ?? ''}
                 display={showImage ? undefined : 'none'} />
 
             <EpistoFont

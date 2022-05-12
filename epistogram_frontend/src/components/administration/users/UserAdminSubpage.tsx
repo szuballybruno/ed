@@ -38,11 +38,6 @@ export const UserAdminSubpage = () => {
                     element: <AdminUserDataGridSubpage
                         users={users} />
                 },
-                // {
-                //     route: userAdminRoute.,
-                //     element: <AdminUserDataGridSubpage
-                //         users={users} />
-                // },
                 {
                     route: userAdminRoute.addRoute,
                     element: <AdminAddUserSubpage

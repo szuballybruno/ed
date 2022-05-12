@@ -1,7 +1,9 @@
+import { AssignablePermissionDTO } from '../../shared/dtos/AssignablePermissionDTO';
+import { AssignableRoleDTO } from '../../shared/dtos/AssignableRoleDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
-import { RoleDTO } from '../../shared/dtos/RoleDTO';
+import { UserAssignedAuthItemDTO } from '../../shared/dtos/role/UserAssignedAuthItemDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
@@ -15,6 +17,30 @@ export const useRolesList = () => {
         rolesListError: qr.error,
         rolesListState: qr.state,
         refetchRolesList: qr.refetch
+    };
+};
+
+export const useAssignableRoles = (companyId: number | null) => {
+
+    const qr = useReactQuery2<AssignableRoleDTO[]>(apiRoutes.roles.getAssignableRoles, { companyId }, !!companyId);
+
+    return {
+        assignableRolesList: qr.data ?? [],
+        assignableRolesListError: qr.error,
+        assignableRolesListState: qr.state,
+        refetchAssignableRolesList: qr.refetch
+    };
+};
+
+export const useAssignablePermissions = (companyId: number | null) => {
+
+    const qr = useReactQuery2<AssignablePermissionDTO[]>(apiRoutes.roles.getAssignablePermissions, { companyId }, !!companyId);
+
+    return {
+        assignablePermissionList: qr.data ?? [],
+        assignablePermissionListError: qr.error,
+        assignablePermissionListState: qr.state,
+        refetchAssignablePermissionList: qr.refetch
     };
 };
 

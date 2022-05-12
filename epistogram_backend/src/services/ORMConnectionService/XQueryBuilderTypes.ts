@@ -1,4 +1,4 @@
-import { ClassType } from '../../models/DatabaseTypes';
+import { ClassType } from '../../models/Types';
 
 export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
@@ -58,11 +58,19 @@ export type ExpressionPart<TEntity, TParams> =
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
 
-export type ColumnSelectObjType<TEntity, TRes> = {
+export type ColumnSelectObjType<TEntity, TRes> = '*' | {
     [K in keyof Partial<TRes>]: keyof TEntity;
 };
 
 export type SelectColumnsType<TEntity, TRes> = {
     classType: ClassType<TEntity>,
     columnSelectObj: ColumnSelectObjType<TEntity, TRes>
+};
+
+export type SQLValueType = {
+    toSQLValue: () => any
+};
+
+export type ParamConstraintType<TParams> = {
+    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | SQLValueType;
 };

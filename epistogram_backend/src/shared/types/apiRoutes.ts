@@ -19,7 +19,10 @@ export const apiRoutes = {
         createRole: '/roles/create-role',
         getRoleEditData: '/roles/get-role-edit-data',
         deleteRole: '/roles/delete-role',
-        saveRole: '/roles/save-role'
+        saveRole: '/roles/save-role',
+        getAssignableRoles: '/roles/get-assignable-roles',
+        getAssignablePermissions: '/roles/get-assignable-permissions',
+        getUserAssignedAuthItems: '/roles/get-user-assigned-auth-items'
     },
 
     permissions: {
@@ -34,6 +37,7 @@ export const apiRoutes = {
         deleteCompany: '/companies/delete-company',
         saveCompany: '/companies/save-company',
         getAvailableCompaniesForRoleCreation: '/companies/get-available-companies-for-role-creation',
+        getRoleManageCompanies: '/companies/get-role-manage-companies',
     },
 
     scheduledJobs: {

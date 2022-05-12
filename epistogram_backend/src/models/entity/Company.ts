@@ -59,7 +59,7 @@ export class Company {
     
     // ownedRoles
     @JoinColumn()
-    @OneToMany(_ => Role, getJoinColumnInverseSide<Company>()(x => x.ownerCompany))
+    @OneToMany(_ => Role, getJoinColumnInverseSide<Company>()(x => x.company))
     ownedRoles: Role[];
     
     // course access bridges

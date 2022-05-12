@@ -2,7 +2,7 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CourseService } from '../services/CourseService';
 import { PlayerService } from '../services/PlayerService';
 import { VideoService } from '../services/VideoService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class PlayerController {
 
@@ -31,7 +31,9 @@ export class PlayerController {
 
     getPlayerDataAction = (params: ActionParams) => {
 
-        const descriptorCode = withValueOrBadRequest<string>(params.req.query.descriptorCode);
+        const descriptorCode = params
+            .getQuery()
+            .getValue(x => x.descriptorCode, 'string');
 
         return this._playerService.getPlayerDataAsync(params.currentUserId, descriptorCode);
     };

@@ -50,7 +50,7 @@ export const AdminUserList = (props: {
                             url={user.avatarUrl}
                             lastName={user.lastName}
                             firstName={user.firstName}
-                            className="square60" />}
+                            className="square40" />}
                         midContent={<FlexListTitleSubtitle
                             isSelected={user.id === userId}
                             title={`${user.name}`}

@@ -1,7 +1,8 @@
-import { RegistrationType } from '../models/DatabaseTypes';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { Course } from '../models/entity/Course';
+import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
+import { RegistrationType } from '../models/Types';
 import { AdminUserListView } from '../models/views/UserAdminListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
@@ -9,11 +10,13 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { getFullName, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { UserEngagementView } from '../models/views/UserEngagementView';
 import moment from 'moment';
@@ -28,17 +31,20 @@ export class UserService {
     private _mapperService: MapperService;
     private _teacherInfoService: TeacherInfoService;
     private _hashService: HashService;
+    private _roleService: RoleService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         teacherInfoService: TeacherInfoService,
-        hashService: HashService) {
+        hashService: HashService,
+        roleService: RoleService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._teacherInfoService = teacherInfoService;
         this._hashService = hashService;
+        this._roleService = roleService;
     }
 
     /**
@@ -46,20 +52,117 @@ export class UserService {
      * @param editedUserId 
      * @returns 
      */
-    async getEditUserDataAsync(editedUserId: number) {
+    async getEditUserDataAsync(principalId: PrincipalId, editedUserId: number): Promise<UserEditDTO> {
 
-        const user = await this._ormService
+        type ResType = User & {
+            teacherInfoId: number
+        };
+
+        const res = await this._ormService
+            .withResType<ResType>()
+            .query(User, { editedUserId })
+            .selectFrom(x => x
+                .columns(User, '*')
+                .columns(TeacherInfo, {
+                    teacherInfoId: 'id'
+                }))
+            .leftJoin(TeacherInfo, x => x
+                .on('userId', '=', 'editedUserId'))
+            .where('id', '=', 'editedUserId')
+            .getSingle();
+
+        const assignedAuthItems = await this._roleService
+            .getUserAssignedAuthItemsAsync(principalId, editedUserId);
+
+        return {
+            id: res.id,
+            firstName: res.firstName,
+            lastName: res.lastName,
+            email: res.email,
+            isTeacher: !!res.teacherInfoId,
+            jobTitleId: res.jobTitleId,
+            companyId: res.companyId,
+            assignedAuthItems
+        };
+    }
+
+    /**
+     * Save user from admin page, where you can edit almost all fileds.
+     * 
+     * @param dto 
+     */
+    async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
+
+        const userId = dto.id;
+
+        // save user 
+        const user: Partial<User> = {
+            id: userId,
+            lastName: dto.lastName,
+            firstName: dto.firstName,
+            email: dto.email,
+            companyId: dto.companyId,
+            jobTitleId: dto.jobTitleId
+        };
+
+        await this._ormService
             .getRepository(User)
-            .createQueryBuilder('u')
-            .leftJoinAndSelect('u.company', 'o')
-            .leftJoinAndSelect('u.role', 'r')
-            .leftJoinAndSelect('u.jobTitle', 'jt')
-            .leftJoinAndSelect('u.teacherInfo', 'ti')
-            .where('u.id = :userId', { userId: editedUserId })
-            .getOneOrFail();
+            .save(user);
 
-        return this._mapperService
-            .map(User, UserEditDTO, user);
+        // save teacher info
+        await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+
+        // save auth items 
+        await this._roleService
+            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.companyId, dto.assignedAuthItems);
+    }
+
+    /**
+     * Saves user teacher info
+     */
+    private async _saveTeacherInfoAsync(userId: number, isTeacher: boolean) {
+
+        const teacherInfo = await this._teacherInfoService
+            .getTeacherInfoAsync(userId);
+
+        // teacher info exists
+        if (teacherInfo) {
+
+            if (!isTeacher) {
+
+                await this._teacherInfoService
+                    .deleteTeacherInfoAsync(teacherInfo.id);
+            }
+        }
+
+        // teacher info doesn't exist
+        else {
+
+            if (!teacherInfo && isTeacher) {
+
+                await this._teacherInfoService
+                    .createTeacherInfoAsync(userId);
+            }
+        }
+    }
+
+    /**
+     * Save user data which the user itself can edit.  
+     * 
+     * @param userId 
+     * @param dto 
+     */
+    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
+
+        // save user 
+        await this._ormService
+            .getRepository(User)
+            .save({
+                id: userId,
+                lastName: dto.lastName,
+                firstName: dto.firstName,
+                phoneNumber: dto.phoneNumber
+            });
     }
 
     /**
@@ -93,65 +196,16 @@ export class UserService {
      * @param userId 
      * @param dto 
      */
-    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
+    async saveUserDataAsync(userId: number, dto: UserDTO) {
 
-        // save user 
-        await this._ormService
+        return this._ormService
             .getRepository(User)
             .save({
                 id: userId,
-                lastName: dto.lastName,
                 firstName: dto.firstName,
+                lastName: dto.lastName,
                 phoneNumber: dto.phoneNumber
             });
-    }
-
-    /**
-     * Save user from admin page, where you can edit almost all fileds.
-     * 
-     * @param dto 
-     */
-    async saveUserAsync(dto: UserEditDTO) {
-
-        const userId = dto.id;
-
-        // save user 
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                isTeacher: dto.isTeacher,
-                companyId: dto.company?.id,
-                roleId: dto.role?.id,
-                jobTitleId: dto.jobTitle?.id
-            });
-
-        // save teacher info
-        const teacherInfo = await this._teacherInfoService
-            .getTeacherInfoAsync(dto.id);
-
-        // teacher info exists
-        if (teacherInfo) {
-
-            if (!dto.isTeacher) {
-
-                await this._teacherInfoService
-                    .deleteTeacherInfoAsync(teacherInfo.id);
-            }
-        }
-
-        // teacher info doesn't exist
-        else {
-
-            if (!teacherInfo && dto.isTeacher) {
-
-                await this._teacherInfoService
-                    .createTeacherInfoAsync(userId);
-            }
-        }
     }
 
     /**

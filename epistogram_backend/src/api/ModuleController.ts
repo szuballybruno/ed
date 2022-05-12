@@ -1,6 +1,6 @@
 import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
 import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 import { ModuleService } from '../services/ModuleService';
 
 export class ModuleController {
@@ -30,7 +30,9 @@ export class ModuleController {
 
     getModuleEditDataAction = async (params: ActionParams) => {
 
-        const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, 'number');
+        const moduleId = params
+            .getQuery()
+            .getValue(x => x.moduleId, 'int');
 
         return this._moduleService
             .getModuleEditDataAsync(moduleId);
@@ -49,7 +51,7 @@ export class ModuleController {
     };
 
     getModuleListEditAction = async (params: ActionParams) => {
-        
+
         const query = params
             .getQuery<any>();
 

@@ -1,12 +1,12 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { ClassType } from '../../models/DatabaseTypes';
+import { ClassType } from '../../models/Types';
 import { noUndefined } from '../../shared/logic/sharedLogic';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { XQueryBuilder } from './XQueryBuilder';
-import { ExpressionPart } from './XQueryBuilderTypes';
+import { ExpressionPart, ParamConstraintType } from './XQueryBuilderTypes';
 
 export type ORMConnection = DataSource;
 
@@ -105,14 +105,14 @@ export class ORMConnectionService {
     withResType<TResult>() {
 
         return {
-            query: <TEntity, TParam>(classType: ClassType<TEntity>, params?: TParam) => {
+            query: <TEntity, TParam extends ParamConstraintType<TParam>>(classType: ClassType<TEntity>, params?: TParam) => {
 
                 return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, params);
             }
         };
     }
 
-    query<TEntity, TParam, TResult = TEntity>(classType: ClassType<TEntity>, params?: TParam) {
+    query<TEntity, TParam extends ParamConstraintType<TParam>, TResult = TEntity>(classType: ClassType<TEntity>, params?: TParam) {
 
         return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, params);
     }
@@ -130,11 +130,37 @@ export class ORMConnectionService {
             .softDelete(ids);
     }
 
+    /**
+     * Hard deletes entites 
+     */
+    async hardDelete<TEntity>(classType: ClassType<TEntity>, ids: number[]) {
+
+        if (ids.length === 0)
+            return;
+
+        await this._ormConnection
+            .getRepository(classType)
+            .delete(ids);
+    }
+
+    /**
+     * Creates a new entity
+     */
     async create<TEntity>(c: ClassType<TEntity>, ent: Partial<TEntity>) {
 
         return this
             .getRepository(c)
             .create(ent as any);
+    }
+
+    /**
+     * Create many entites
+     */
+    async createMany<TEntity>(c: ClassType<TEntity>, ent: Partial<TEntity>[]) {
+
+        return this
+            .getRepository(c)
+            .create(ent as any[]);
     }
 
     /**
@@ -175,53 +201,5 @@ export class ORMConnectionService {
             .allowDeleted(allowDeleted)
             .where((idField ?? 'id') as any, '=', 'id')
             .getSingle();
-    }
-
-    /**
-     * Returns a single entity, or null if not found.
-     */
-    async getOneOrNull<TEntity, TParam>(
-        classType: ClassType<TEntity>,
-        whereQuery: ExpressionPart<TEntity, TParam>[],
-        params: TParam,
-        allowDeleted?: boolean): Promise<TEntity | null> {
-
-        return await this
-            .query(classType, params)
-            .allowDeleted(allowDeleted)
-            .setQuery(whereQuery)
-            .getOneOrNull();
-    }
-
-    /**
-     * Returns a single entity, or null if not found.
-     */
-    async getSingle<TEntity, TParam>(
-        classType: ClassType<TEntity>,
-        whereQuery: ExpressionPart<TEntity, TParam>[],
-        params: TParam,
-        allowDeleted?: boolean): Promise<TEntity> {
-
-        return await this
-            .query(classType, params)
-            .allowDeleted(allowDeleted)
-            .setQuery(whereQuery)
-            .getSingle();
-    }
-
-    /**
-     * Returns multiple entities.
-     */
-    async getMany<TEntity, TParam>(
-        classType: ClassType<TEntity>,
-        query: ExpressionPart<TEntity, TParam>[],
-        params: TParam,
-        allowDeleted?: boolean) {
-
-        return await this
-            .query(classType, params)
-            .allowDeleted(allowDeleted)
-            .setQuery(query)
-            .getMany();
     }
 }

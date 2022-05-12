@@ -1,5 +1,5 @@
 import { PretestService } from '../services/PretestService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class PretestController {
 

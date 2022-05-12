@@ -4,11 +4,11 @@ import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { UserService } from '../services/UserService';
 import { VerboseError } from '../shared/types/VerboseError';
-import { EndpointOptionsType } from '../utilities/apiHelpers';
-import { ActionParams, getAuthCookies } from '../utilities/helpers';
-import { ITurboMiddleware } from '../utilities/TurboExpress';
+import { getAuthCookies } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
+import { EndpointOptionsType, ITurboMiddleware } from '../utilities/XTurboExpress/TurboExpress';
 
-export class AuthMiddleware implements ITurboMiddleware<ActionParams, EndpointOptionsType> {
+export class AuthMiddleware implements ITurboMiddleware<ActionParams> {
 
     private _authenticationService: AuthenticationService;
     private _userService: UserService;

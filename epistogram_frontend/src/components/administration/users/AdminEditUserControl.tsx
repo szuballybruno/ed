@@ -25,7 +25,9 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
-import { useCompanies } from '../../../services/api/companiesApiService';
+import { useCompanies } from '../../../services/api/companyApiService';
+import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
+import { AssignedAuthItemsDTO } from '../../../shared/dtos/role/AssignedAuthItemsDTO';
 
 export const roles = [
     {
@@ -44,6 +46,8 @@ export const roles = [
         optionText: translatableTexts.roleNames.user
     }
 ];
+
+const defaultAuthItemsDTO = { assignedPermissionIds: [], assignedRoleIds: [] };
 
 export const AdminEditUserControl = (props: {
     editDTO: UserEditDTO | null,
@@ -65,6 +69,7 @@ export const AdminEditUserControl = (props: {
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
+    const [assignedAuthItems, setAssignedAuthItems] = useState<AssignedAuthItemsDTO>(defaultAuthItemsDTO);
 
     const showError = useShowErrorDialog();
 
@@ -77,17 +82,23 @@ export const AdminEditUserControl = (props: {
 
     useEffect(() => {
 
-        if (!editDTO)
+        if (!editDTO || jobTitles.length === 0 || companies.length === 0)
             return;
+
+        const comp = companies
+            .single(x => x.id === editDTO.companyId);
+
+        const jt = jobTitles
+            .single(x => x.id === editDTO.jobTitleId);
 
         setFirstName(editDTO.firstName);
         setLastName(editDTO.lastName);
         setEmail(editDTO.email);
-        setSelectedRole(editDTO.role);
-        setSelectedJobTitle(editDTO.jobTitle);
-        setSelectedCompany(editDTO.company);
+        setSelectedJobTitle(jt);
+        setSelectedCompany(comp);
         setIsTeacher(editDTO.isTeacher);
-    }, [editDTO]);
+        setAssignedAuthItems(editDTO.assignedAuthItems);
+    }, [editDTO, jobTitles, companies]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -124,16 +135,22 @@ export const AdminEditUserControl = (props: {
 
     const handleSaveUserAsync = async () => {
 
-        const editedUserDTO = {
-            id: editDTO?.id,
+        if (!editDTO || !selectedCompany || !selectedJobTitle) {
+
+            showNotification('A mandatory field is empty!');
+            return;
+        }
+
+        const editedUserDTO: UserEditDTO = {
+            id: editDTO.id,
             firstName,
             lastName,
             email,
-            jobTitle: selectedJobTitle,
-            company: selectedCompany,
-            role: selectedRole,
-            isTeacher
-        } as UserEditDTO;
+            companyId: selectedCompany.id,
+            jobTitleId: selectedJobTitle.id,
+            isTeacher,
+            assignedAuthItems
+        };
 
         await saveUserAsync(editedUserDTO);
     };
@@ -209,6 +226,7 @@ export const AdminEditUserControl = (props: {
                             items={companies}
                             selectedValue={selectedCompany}
                             onSelected={setSelectedCompany}
+                            isDisabled={!selectedCompany?.canManage}
                             getDisplayValue={x => '' + x?.name}
                             getCompareKey={company => '' + company?.id} />
                     </Flex>}
@@ -242,37 +260,15 @@ export const AdminEditUserControl = (props: {
 
                 {/* access management */}
                 <EditSection title="Jogosultságkezelés">
-                    {/* role */}
-                    <Flex
-                        direction="column"
-                        align="stretch"
-                        width="100%">
 
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontExtraSmall"
-                            style={{
-                                marginTop: '10px',
-                                letterSpacing: '1.2px'
-                            }}>
-
-                            {translatableTexts.misc.role}
-                        </EpistoFont>
-
-                        <EpistoSelect
-                            selectedValue={selectedRole}
-                            items={roles}
-                            onSelected={setSelectedRole}
-                            getDisplayValue={x => '' + (x as any)?.optionText}
-                            getCompareKey={x => '' + x?.id} />
-                    </Flex>
+                    <PermissionAssignerControl
+                        userCompanyId={editDTO?.companyId ?? null}
+                        userId={editedUserId}
+                        data={editDTO?.assignedAuthItems ?? defaultAuthItemsDTO}
+                        onChange={setAssignedAuthItems} />
                 </EditSection>
-
-
-
-
-
             </Flex>
+
             <Divider orientation='vertical'
                 h="calc(100% - 20px)"
                 w="1px"
@@ -283,8 +279,7 @@ export const AdminEditUserControl = (props: {
                 className='roundBorders'
                 flex="1"
                 p="0 10px 10px 10px"
-                minWidth="300px"
-            >
+                minWidth="300px">
 
                 {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
 

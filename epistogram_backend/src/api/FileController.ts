@@ -1,6 +1,6 @@
 import { FileService } from '../services/FileService';
 import { VerboseError } from '../shared/types/VerboseError';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class FileController {
 

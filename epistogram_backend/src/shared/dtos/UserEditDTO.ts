@@ -1,6 +1,4 @@
-import { JobTitleDTO } from './JobTitleDTO';
-import { CompanyDTO } from './company/CompanyDTO';
-import { RoleDTO } from './RoleDTO';
+import { AssignedAuthItemsDTO } from './role/AssignedAuthItemsDTO';
 
 export class UserEditDTO {
     id: number;
@@ -8,7 +6,7 @@ export class UserEditDTO {
     lastName: string;
     email: string;
     isTeacher: boolean;
-    company: CompanyDTO | null;
-    role: RoleDTO | null;
-    jobTitle: JobTitleDTO | null;
+    companyId: number;
+    jobTitleId: number | null;
+    assignedAuthItems: AssignedAuthItemsDTO;
 }

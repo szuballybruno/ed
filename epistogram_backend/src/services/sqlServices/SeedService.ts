@@ -34,7 +34,7 @@ export class SeedService {
         this._execService = execService;
     }
 
-    private _seedDBAsync = async () => {
+    seedDBAsync = async () => {
 
         for (let index = 0; index < dbSchema.seedScripts.length; index++) {
 
@@ -67,12 +67,6 @@ export class SeedService {
         // recalc seqs
         await this._sqlBootstrapperService.recalcSequencesAsync();
     };
-    public get seedDBAsync() {
-        return this._seedDBAsync;
-    }
-    public set seedDBAsync(value) {
-        this._seedDBAsync = value;
-    }
 
     private parseSeedList<TEntity>(t: { new(): TEntity }, obj: { [K in string]: NoComplexTypes<TEntity> }) {
 

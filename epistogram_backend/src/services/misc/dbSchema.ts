@@ -218,7 +218,10 @@ export const dbSchema = {
         'module_view',
         'role_list_view',
         'company_view',
-        'comment_list_view'
+        'comment_list_view',
+        'assignable_permission_view',
+        'assignable_role_view',
+        'user_assigned_auth_item_view'
     ],
 
     functionScripts: [
@@ -307,8 +310,9 @@ export const dbSchema = {
         UserCourseCompletionOriginalEstimationView,
         CourseItemQuestionEditView,
         UserSpentTimeRatioView,
-        CommentListView
-    ] as any[],
+        CommentListView,
+        CourseItemQuestionEditView
+    ],
 
     entities: [
         Course,
@@ -362,5 +366,8 @@ export const dbSchema = {
         UserVideoProgressBridge,
         UserExamProgressBridge,
         TempomatAdjustmentValue
-    ] as any[]
+    ],
+    triggers: [
+        'role_assignment_validity_check_trigger'
+    ]
 };

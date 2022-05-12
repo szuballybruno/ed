@@ -1,5 +1,7 @@
 import { PermissionService } from '../services/PermissionService';
-import { ActionParams } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ActionParams } from "../utilities/ActionParams";
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class PermissionController {
 
@@ -10,6 +12,7 @@ export class PermissionController {
         this._permissionService = permissionService;
     }
 
+    @XControllerAction(apiRoutes.permissions.getPermissions)
     getPermissionsAction = (params: ActionParams) => {
 
         return this._permissionService

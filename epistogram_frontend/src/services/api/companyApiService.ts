@@ -16,6 +16,18 @@ export const useCompaniesAdmin = () => {
     };
 };
 
+export const useRoleManageCompanies = () => {
+
+    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.companies.getRoleManageCompanies);
+
+    return {
+        roleManageCompanies: qr.data ?? [],
+        roleManageCompaniesState: qr.state,
+        roleManageCompaniesError: qr.error,
+        refetchRoleManageCompanies: qr.refetch
+    };
+};
+
 export const useCreateCompany = () => {
 
     const qr = usePostDataUnsafe(apiRoutes.companies.createCompany);

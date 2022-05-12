@@ -11,12 +11,15 @@ export class CompanyView {
     userId: number;
 
     @ViewColumn()
-    id: number;
+    companyId: number;
 
-    @IsDeletedFlag()
+    @IsDeletedFlag('bool')
     @DeleteDateColumn()
-    deletionDate: Date;
+    isDeleted: Date;
 
     @ViewColumn()
-    name: string;
+    companyName: string;
+
+    @ViewColumn()
+    canManage: boolean;
 }

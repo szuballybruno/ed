@@ -1,7 +1,7 @@
 import { Save } from '@mui/icons-material';
 import { memo, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCompanyEditData, useSaveCompany } from '../../../services/api/companiesApiService';
+import { useCompanyEditData, useSaveCompany } from '../../../services/api/companyApiService';
 import { showNotification } from '../../../services/core/notifications';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';

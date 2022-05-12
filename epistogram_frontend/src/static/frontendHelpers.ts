@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ComponentType, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
@@ -22,6 +22,54 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     }
 
     return results;
+};
+
+export const useHandleAddRemoveItems = <TItem, TKey>(
+    items: TItem[],
+    setItems: (items: TItem[]) => void,
+    opts?: {
+        getKey?: (item: TItem) => TKey,
+        sideEffects: ((newValue: TItem[]) => void)[]
+    }): [
+        (item: TItem) => void,
+        (key: TKey) => void
+    ] => {
+
+    const getKeyInternal: (item: TItem) => TKey = useMemo(() => {
+
+        if (opts?.getKey)
+            return opts.getKey;
+
+        return (x: TItem): TKey => x as any;
+    }, [opts?.getKey]);
+
+    const addItem = useCallback((item: TItem) => {
+
+        const newItems = [...items, item];
+
+        setItems(newItems);
+
+        if (opts?.sideEffects)
+            opts.sideEffects
+                .forEach(x => x(items));
+    }, [items, setItems, opts?.sideEffects]);
+
+    const removeItem = useCallback((key: TKey): void => {
+
+        const newItems = items
+            .filter(item => getKeyInternal(item) !== key);
+
+        setItems(newItems);
+
+        if (opts?.sideEffects)
+            opts.sideEffects
+                .forEach(x => x(items));
+    }, [items, setItems, getKeyInternal, opts?.sideEffects]);
+
+    return [
+        addItem,
+        removeItem
+    ];
 };
 
 export const formatTimespan = (seconds: number) => {

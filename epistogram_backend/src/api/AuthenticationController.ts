@@ -3,7 +3,8 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { VerboseError } from '../shared/types/VerboseError';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams, getAuthCookies, getCookie } from '../utilities/helpers';
+import { getAuthCookies, getCookie } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class AuthenticationController {
 

@@ -1,11 +1,11 @@
 import { Question } from '../models/entity/Question';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { toAnswerEditDTO } from '../services/misc/mappings';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { QuestionService } from '../services/QuestionService';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class QuestionController {
 
@@ -25,7 +25,9 @@ export class QuestionController {
 
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
+        const dto = params
+            .getBody<AnswerQuestionDTO>(['answerIds', 'answerSessionId', 'elapsedSeconds', 'questionId'])
+            .data;
 
         return this._practiseQuestionService
             .answerPractiseQuestionAsync(params.currentUserId, dto);
@@ -33,7 +35,9 @@ export class QuestionController {
 
     getQuestionEditDataAction = async (params: ActionParams) => {
 
-        const questionId = withValueOrBadRequest<number>(params.req.query.questionId, 'number');
+        const questionId = params
+            .getQuery()
+            .getValue(x => x.questionId, 'int');
 
         const question = await this._ormService
             .getRepository(Question)
@@ -55,7 +59,10 @@ export class QuestionController {
 
     saveQuestionAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<QuestionEditDataDTO>(params.req.body);
+        const dto = params
+            .getBody<QuestionEditDataDTO>()
+            .data;
+
         const questionId = dto.questionId;
 
         await this._questionService

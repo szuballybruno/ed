@@ -1,7 +1,7 @@
-import { PermissionCodeType } from '../../types/sharedTypes';
+import { PermissionCodeType, PermissionScopeType } from '../../types/sharedTypes';
 
 export class PermissionListDTO {
     id: number;
     code: PermissionCodeType;
-    isGlobal: boolean;
+    scope: PermissionScopeType;
 }
