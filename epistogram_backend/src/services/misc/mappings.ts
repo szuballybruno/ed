@@ -1,4 +1,8 @@
 import { Answer } from '../../models/entity/Answer';
+import { Permission } from '../../models/entity/authorization/Permission';
+import { Role } from '../../models/entity/authorization/Role';
+import { Comment } from '../../models/entity/Comment';
+import { Company } from '../../models/entity/Company';
 import { Course } from '../../models/entity/Course';
 import { CourseCategory } from '../../models/entity/CourseCategory';
 import { CourseModule } from '../../models/entity/CourseModule';
@@ -7,17 +11,18 @@ import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
 import { Exam } from '../../models/entity/Exam';
 import { JobTitle } from '../../models/entity/JobTitle';
-import { Company } from '../../models/entity/Company';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { Question } from '../../models/entity/Question';
-import { Role } from '../../models/entity/authorization/Role';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { User } from '../../models/entity/User';
 import { Video } from '../../models/entity/Video';
+import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
+import { CommentListView } from '../../models/views/CommentListView';
+import { CompanyView } from '../../models/views/CompanyView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
@@ -29,7 +34,6 @@ import { CourseModuleOverviewView } from '../../models/views/CourseModuleOvervie
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
-import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
@@ -42,6 +46,7 @@ import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { AdminUserListView } from '../../models/views/UserAdminListView';
+import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
@@ -52,6 +57,9 @@ import { AdminModuleShortDTO } from '../../shared/dtos/AdminModuleShortDTO';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
 import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
+import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
+import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
+import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
@@ -79,7 +87,6 @@ import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
 import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
-import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
@@ -88,6 +95,7 @@ import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
+import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
 import { RoleDTO } from '../../shared/dtos/RoleDTO';
 import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
 import { ShopItemBriefData } from '../../shared/dtos/ShopItemBriefData';
@@ -111,14 +119,21 @@ import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
-import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
-import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
-import { RoleListView } from '../../models/views/RoleListView';
-import { CompanyView } from '../../models/views/CompanyView';
-import { Permission } from '../../models/entity/authorization/Permission';
-import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(CommentListView, CommentListDTO, (comment) => {
+
+            return {
+                id: comment.id,
+                fullName: comment.fullName,
+                commentText: comment.commentText,
+                creationDate: comment.creationDate,
+                parentCommentId: comment.parentCommentId,
+                avatarUrl: comment.avatarUrl
+            };
+        });
 
     mapperService
         .addMap(Question, QuestionEditDataDTO, question => ({

@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { Divider, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
 import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
 import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
@@ -26,6 +26,7 @@ import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
 const autoplayTimeoutInS = 8;
 
@@ -84,7 +85,7 @@ export const WatchView = (props: {
 
     const VideoDescription = () => <PlayerDescription description={video!.description} />;
     const VideoContents = () => <VideoContent />;
-    const VideoComments = () => <Comments />;
+    const VideoComments = () => <Comments currentItemCode={currentItemCode} />;
 
     // const currentQuestionAnswered = answeredQuestionIds
     //     .some(qid => currentQuestion?.questionId === qid);

@@ -218,6 +218,7 @@ export const apiRoutes = {
     },
 
     comment: {
-        createComment: '/comment/create-comment'
+        createComment: '/comment/create-comment',
+        getComments: '/comment/get-comments'
     }
 };

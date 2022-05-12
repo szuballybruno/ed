@@ -1,5 +1,7 @@
 import { CommentService } from '../services/CommentService';
-import { CommentDTO } from '../shared/dtos/CommentDTO';
+import { readItemCode } from '../services/misc/encodeService';
+import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
+import { CommentListDTO } from '../shared/dtos/CommentListDTO';
 import { ActionParams } from '../utilities/helpers';
 
 export class CommentController {
@@ -11,21 +13,32 @@ export class CommentController {
         this._commentService = commentService;
     }
 
-    async createCommentAction(params: ActionParams) {
+    createCommentAction = async (params: ActionParams) => {
 
         const dto = params
-            .getBody<CommentDTO>()
+            .getBody<CommentCreateDTO>()
             .data;
 
-        await this._commentService.createCommentAsync(dto);
-    }
+        return this
+            ._commentService
+            .createCommentAsync(
+                dto,
+            );
+    };
 
-    async getCommentsAction(params: ActionParams) {
+    getCommentsAction = async (params: ActionParams) => {
 
-        const videoId = params
-            .getQuery<{ videoId: number }>()
-            .getValue(x => x.videoId, 'int');
+        const itemCode = params
+            .getQuery<{ itemCode: string }>()
+            .getValue(x => x.itemCode, 'string');
 
-        await this._commentService.getCommentsAsync(videoId);
-    }
+        const itemCodeData = readItemCode(itemCode);
+
+        return this
+            ._commentService
+            .getCommentsAsync(
+                itemCodeData.itemType === 'video'
+                    ? itemCodeData.itemId
+                    : 0);
+    };
 }

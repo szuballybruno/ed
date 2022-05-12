@@ -1,6 +1,10 @@
 import { Comment } from '../models/entity/Comment';
-import { CommentDTO } from '../shared/dtos/CommentDTO';
+import { User } from '../models/entity/User';
+import { CommentListView } from '../models/views/CommentListView';
+import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
+import { CommentListDTO } from '../shared/dtos/CommentListDTO';
 import { MapperService } from './MapperService';
+import { readItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -8,26 +12,34 @@ export class CommentService extends QueryServiceBase<Comment> {
 
     constructor(
         ormService: ORMConnectionService,
-        mapperService: MapperService
-    ) {
+        mapperService: MapperService) {
+
         super(mapperService, ormService, Comment);
     }
 
-    async createCommentAsync(comment: CommentDTO) {
+    async createCommentAsync(comment: CommentCreateDTO) {
 
         const {
             text,
+            itemCode,
             isAnonymous,
             isQuestion,
-            userId,
-            videoId
+            replyToCommentId,
+            userId
         } = comment;
+
+        const itemCodeData = readItemCode(itemCode);
+
+        const videoId = itemCodeData.itemType === 'video'
+            ? itemCodeData.itemId
+            : 0;
 
         const newComment = {
             isAnonymous: isAnonymous,
             isQuestion: isQuestion,
             text: text,
             userId: userId,
+            parentCommentId: replyToCommentId,
             videoId: videoId
         } as Comment;
 
@@ -36,10 +48,13 @@ export class CommentService extends QueryServiceBase<Comment> {
 
     getCommentsAsync = async (videoId: number) => {
 
-        return await this
+        const userComments = await this
             ._ormService
-            .query(Comment, { videoId })
+            .query(CommentListView, { videoId })
             .where('videoId', '=', 'videoId')
             .getMany();
+
+        return this._mapperService
+            .mapMany(CommentListView, CommentListDTO, userComments);
     };
 }

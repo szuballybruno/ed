@@ -1,4 +1,4 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { User } from './User';
 import { Video } from './Video';
@@ -12,6 +12,9 @@ export class Comment {
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
+
+    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
+    creationDate: Date;
 
     @Column()
     text: string;

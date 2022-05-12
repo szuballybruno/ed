@@ -1,32 +1,41 @@
 import { Flex } from '@chakra-ui/react';
-import { AccessTime, ThumbUpAlt } from '@mui/icons-material';
+import { AccessTime, Reply, ThumbUpAlt } from '@mui/icons-material';
 import { Avatar, Checkbox, Divider } from '@mui/material';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { useComments, useCreateComment } from '../../../services/api/commentApiService';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { CommentCreateDTO } from '../../../shared/dtos/CommentCreateDTO';
+import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
 import { Environment } from '../../../static/Environemnt';
+import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
 const CommentItem = (props: {
-    fullName: string,
-    commentText: string,
-    dateOfPosting: string,
-    isChild: boolean,
-    avatarUrl?: string
+    comment: CommentListDTO,
+    handleAnswerComment: (comment: CommentListDTO) => void
 }) => {
+
+    const {
+        comment,
+        handleAnswerComment
+    } = props;
 
     const {
         fullName,
         commentText,
-        dateOfPosting,
-        isChild,
+        creationDate,
+        parentCommentId,
         avatarUrl
-    } = props;
+    } = comment;
 
     return <Flex
         mt="30px"
-        pl={isChild ? '20px' : undefined}>
+        pl={parentCommentId ? '20px' : undefined}>
 
-        {isChild &&
+        {parentCommentId &&
             <Divider
                 variant="fullWidth"
                 orientation="vertical" />}
@@ -39,33 +48,65 @@ const CommentItem = (props: {
         </Flex>
 
         <Flex
+            flex='1'
             direction="column">
 
             <Flex
+                flex='1'
                 justify="space-between"
                 align="center">
 
                 <h4
                     style={{
                         margin: 0,
+                        fontWeight: '600',
                         textAlign: 'left'
                     }}>
 
                     {fullName}
                 </h4>
 
-                <EpistoButton
-                    className="fontSmall">
+                <Flex
+                    flex='1'
+                    justify='flex-end'>
 
-                    <ThumbUpAlt
+                    <EpistoButton
+                        className="fontSmall"
                         style={{
-                            height: 20,
-                            width: 20,
-                            marginRight: 5
-                        }} />
+                            color: 'grey'
+                        }}>
 
-                    Tetszik
-                </EpistoButton>
+                        <ThumbUpAlt
+                            style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} />
+
+                        0
+                    </EpistoButton>
+
+                    <EpistoButton
+                        onClick={() => handleAnswerComment(comment)}
+                        className="fontExtraSmall"
+                        style={{
+                            color: 'grey',
+                            marginTop: 3
+                        }}>
+
+                        {/* <Reply
+                            style={{
+                                height: 20,
+                                width: 20,
+                                marginRight: 5
+                            }} /> */}
+
+                        Válasz
+                    </EpistoButton>
+                </Flex>
+
+
+
             </Flex>
 
             <p
@@ -83,13 +124,24 @@ const CommentItem = (props: {
                     color: 'gray'
                 }}>
 
-                {dateOfPosting}
+                {creationDate}
             </p>
         </Flex>
     </Flex>;
 };
 
-const Comments = () => {
+const Comments = (props: {
+    currentItemCode: string
+}) => {
+
+    const { currentItemCode } = props;
+
+    const user = useContext(CurrentUserContext);
+    const showErrorDialog = useShowErrorDialog();
+
+    const [comment, setComment] = useState('');
+    const [currentReplyCommentId, setCurrentReplyCommentId] = useState<number | null>(null);
+    const [currentReplyUserFullName, setCurrentReplyUserFullName] = useState<string | null>(null);
 
     const mockComments = [
         {
@@ -126,6 +178,40 @@ const Comments = () => {
             avatarUrl: Environment.getAssetUrl('userAvatars/user_avatar_4.png')
         }
     ];
+
+    const { comments, commentsState, commentsError, refetchComments } = useComments(currentItemCode);
+
+    const { createCommentAsync, createCommentState } = useCreateComment();
+
+    const handleCreateNewComment = async (replyToCommentId: number | null) => {
+
+        const newComment = {
+            userId: user.id,
+            itemCode: currentItemCode,
+            replyToCommentId: replyToCommentId,
+            text: comment
+        } as CommentCreateDTO;
+
+        try {
+
+            await createCommentAsync(newComment);
+            await refetchComments();
+        } catch (e) {
+            showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
+        }
+    };
+
+    const handleAnswerComment = (comment: CommentListDTO) => {
+
+        if (comment.parentCommentId)
+
+            setCurrentReplyCommentId(comment.parentCommentId);
+        else {
+
+            setCurrentReplyCommentId(comment.id);
+        }
+        setCurrentReplyUserFullName(comment.fullName);
+    };
 
     return (
         <Flex direction={'column'}
@@ -169,17 +255,28 @@ const Comments = () => {
                         </EpistoButton>
                     </Flex>
                 </Flex>
-                <EpistoFont
+
+                <EpistoEntry
+                    isMultiline
+                    label={currentReplyCommentId
+                        ? `Válasz  ${currentReplyUserFullName} felhasználónak`
+                        : ''}
+                    labelVariant='top'
+                    value={comment}
+                    setValue={setComment}
+                    placeholder='Ide írd a kommentedet/kérdésedet' />
+                {/* <EpistoFont
                     className="roundBorders mildShadow"
                     style={{
                         background: 'var(--transparentWhite90)',
                         padding: '20px'
                     }}>
 
+
                     <p style={{ textAlign: 'left', color: 'lightgray' }}>
                         Ide írd a kommentedet/kérdésedet{' '}
                     </p>
-                </EpistoFont>
+                </EpistoFont> */}
                 <Flex justify="space-between"
                     align="center"
                     m="10px 0">
@@ -197,8 +294,12 @@ const Comments = () => {
                             </EpistoFont>
                         </Flex>
                     </Flex>
+
                     <Flex>
-                        <EpistoButton variant="colored">
+                        <EpistoButton
+                            variant="colored"
+                            onClick={() => handleCreateNewComment(currentReplyCommentId)}>
+
                             Közzététel
                         </EpistoButton>
                     </Flex>
@@ -206,18 +307,20 @@ const Comments = () => {
             </Flex>
 
 
-            <Divider variant="fullWidth"
-                style={{ margin: '10px 0 20px 0' }} />
+            <Divider
+                variant="fullWidth"
+                style={{
+                    margin: '10px 0 20px 0'
+                }} />
 
 
-            {mockComments.map((x, index) => {
-                return <CommentItem
-                    fullName={x.fullName}
-                    commentText={x.commentText}
-                    dateOfPosting={x.dateOfPosting}
-                    isChild={x.isChild}
-                    key={index} />;
-            })}
+            {comments
+                .map((comment, index) => {
+                    return <CommentItem
+                        comment={comment}
+                        handleAnswerComment={handleAnswerComment}
+                        key={index} />;
+                })}
         </Flex>
     );
 };

@@ -53,6 +53,7 @@ import { AnswerSessionView } from '../../models/views/AnswerSessionView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinBalanceView } from '../../models/views/CoinBalanceView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
+import { CommentListView } from '../../models/views/CommentListView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
@@ -217,6 +218,7 @@ export const dbSchema = {
         'module_view',
         'role_list_view',
         'company_view',
+        'comment_list_view'
     ],
 
     functionScripts: [
@@ -304,7 +306,8 @@ export const dbSchema = {
         UserCourseBridgeView,
         UserCourseCompletionOriginalEstimationView,
         CourseItemQuestionEditView,
-        UserSpentTimeRatioView
+        UserSpentTimeRatioView,
+        CommentListView
     ] as any[],
 
     entities: [
