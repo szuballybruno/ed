@@ -1,5 +1,5 @@
 import { PrequizService } from '../services/PrequizService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class PrequizController {
 

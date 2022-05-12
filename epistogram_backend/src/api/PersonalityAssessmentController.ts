@@ -1,5 +1,5 @@
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class PersonalityAssessmentController {
 

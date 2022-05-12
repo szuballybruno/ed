@@ -1,6 +1,6 @@
 import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
 import { VideoRatingService } from '../services/VideoRatingService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class VideoRatingController {
 

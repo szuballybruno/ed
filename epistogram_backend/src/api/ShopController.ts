@@ -1,6 +1,6 @@
 import { ShopItemEditDTO } from '../shared/dtos/ShopItemEditDTO';
 import { ShopService } from '../services/ShopService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class ShopController {
 

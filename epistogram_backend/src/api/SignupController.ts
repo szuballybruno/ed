@@ -1,7 +1,7 @@
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { SignupService } from '../services/SignupService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class SignupController {
 

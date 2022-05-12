@@ -1,6 +1,6 @@
 import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
 import { DailyTipService } from '../services/DailyTipService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class DailyTipController {
 

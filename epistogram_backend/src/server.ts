@@ -92,7 +92,7 @@ import { VideoService } from './services/VideoService';
 import './shared/logic/jsExtensions';
 import { apiRoutes } from './shared/types/apiRoutes';
 import { onActionError, onActionSuccess } from './utilities/apiHelpers';
-import { ActionParams } from './utilities/helpers';
+import { ActionParams } from "./utilities/ActionParams";
 import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
 (async () => {

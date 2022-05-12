@@ -8,7 +8,7 @@ import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class MiscController {

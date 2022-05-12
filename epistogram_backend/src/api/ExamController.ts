@@ -6,7 +6,7 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CreateExamDTO } from '../shared/dtos/CreateExamDTO';
 import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from '../utilities/ActionParams';
 
 export class ExamController {
 

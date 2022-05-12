@@ -10,6 +10,7 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { getFullName, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
@@ -45,7 +46,7 @@ export class UserService {
      * @param editedUserId 
      * @returns 
      */
-    async getEditUserDataAsync(userId: number, editedUserId: number): Promise<UserEditDTO> {
+    async getEditUserDataAsync(principalId: PrincipalId, editedUserId: number): Promise<UserEditDTO> {
 
         type ResType = User & {
             teacherInfoId: number
@@ -65,7 +66,7 @@ export class UserService {
             .getSingle();
 
         const assignedAuthItems = await this._roleService
-            .getUserAssignedAuthItemsAsync(userId, editedUserId);
+            .getUserAssignedAuthItemsAsync(principalId, editedUserId);
 
         return {
             id: res.id,
@@ -84,7 +85,7 @@ export class UserService {
      * 
      * @param dto 
      */
-    async saveUserAsync(dto: UserEditDTO) {
+    async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
 
         const userId = dto.id;
 
@@ -107,7 +108,7 @@ export class UserService {
 
         // save auth items 
         await this._roleService
-            .saveUserAssignedAuthItemsAsync(userId, dto.assignedAuthItems);
+            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.companyId, dto.assignedAuthItems);
     }
 
     /**

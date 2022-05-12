@@ -2,7 +2,7 @@ import { CompanyService } from '../services/CompanyService';
 import { PermissionService } from '../services/PermissionService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class CompanyController {

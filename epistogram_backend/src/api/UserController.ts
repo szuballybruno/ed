@@ -3,7 +3,7 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class UserController {
@@ -44,7 +44,7 @@ export class UserController {
             .getValue(x => x.editedUserId, 'int');
 
         return await this._userService
-            .getEditUserDataAsync(params.currentUserId, editedUserId);
+            .getEditUserDataAsync(params.principalId, editedUserId);
     };
 
     @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })
@@ -66,7 +66,7 @@ export class UserController {
             .data;
 
         await this._userService
-            .saveUserAsync(dto);
+            .saveUserAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.user.getUserListForAdministration)

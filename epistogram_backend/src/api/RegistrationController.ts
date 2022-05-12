@@ -6,7 +6,7 @@ import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserVia
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class RegistrationController {

@@ -12,11 +12,12 @@ import { LoadingFrame } from '../../../system/LoadingFrame';
 
 export const PermissionAssignerControl = (props: {
     userId: number,
+    userCompanyId: number | null,
     data: AssignedAuthItemsDTO,
     onChange: (data: AssignedAuthItemsDTO) => void
 }) => {
 
-    const { userId, data, onChange } = props;
+    const { userId, data, onChange, userCompanyId } = props;
 
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const selectedCompanyId = selectedCompany?.id ?? null;
@@ -39,11 +40,12 @@ export const PermissionAssignerControl = (props: {
 
     useEffect(() => {
 
-        if (roleManageCompanies.length === 0)
+        if (roleManageCompanies.length === 0 || !userCompanyId)
             return;
 
-        setSelectedCompany(roleManageCompanies[0]);
-    }, [roleManageCompanies]);
+        setSelectedCompany(roleManageCompanies
+            .single(x => x.id === userCompanyId));
+    }, [roleManageCompanies, userCompanyId]);
 
     useEffect(() => {
 

@@ -45,6 +45,8 @@ export class QueryServiceBase<TMainEntity> extends ServiceBase {
         await this._ormService
             .getRepository(this._mainEntityClass)
             .insert(entity);
+
+        return entity;
     }
 
     public async deleteAsync(entity: FindOptionsWhere<TMainEntity>) {

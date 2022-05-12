@@ -2,7 +2,7 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CourseService } from '../services/CourseService';
 import { PlayerService } from '../services/PlayerService';
 import { VideoService } from '../services/VideoService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class PlayerController {
 

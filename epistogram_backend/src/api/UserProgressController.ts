@@ -1,5 +1,5 @@
 import { UserProgressService } from '../services/UserProgressService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class UserProgressController {
 

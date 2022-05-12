@@ -66,3 +66,11 @@ export type SelectColumnsType<TEntity, TRes> = {
     classType: ClassType<TEntity>,
     columnSelectObj: ColumnSelectObjType<TEntity, TRes>
 };
+
+export type SQLValueType = {
+    toSQLValue: () => any
+};
+
+export type ParamConstraintType<TParams> = {
+    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | SQLValueType;
+};

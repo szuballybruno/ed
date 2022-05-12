@@ -80,14 +80,10 @@ export const AdminEditUserControl = (props: {
     const { companies } = useCompanies();
     const { jobTitles } = useJobTitles();
 
-    console.log(selectedCompany);
-
     useEffect(() => {
 
         if (!editDTO || jobTitles.length === 0 || companies.length === 0)
             return;
-
-        console.log(companies);
 
         const comp = companies
             .single(x => x.id === editDTO.companyId);
@@ -230,6 +226,7 @@ export const AdminEditUserControl = (props: {
                             items={companies}
                             selectedValue={selectedCompany}
                             onSelected={setSelectedCompany}
+                            isDisabled={!selectedCompany?.canManage}
                             getDisplayValue={x => '' + x?.name}
                             getCompareKey={company => '' + company?.id} />
                     </Flex>}
@@ -265,6 +262,7 @@ export const AdminEditUserControl = (props: {
                 <EditSection title="Jogosultságkezelés">
 
                     <PermissionAssignerControl
+                        userCompanyId={editDTO?.companyId ?? null}
                         userId={editedUserId}
                         data={editDTO?.assignedAuthItems ?? defaultAuthItemsDTO}
                         onChange={setAssignedAuthItems} />

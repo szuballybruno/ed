@@ -1,5 +1,5 @@
 import { CoinTransactionService } from '../services/CoinTransactionService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class CoinTransactionsController {
 

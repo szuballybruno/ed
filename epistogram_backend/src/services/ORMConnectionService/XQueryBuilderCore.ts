@@ -217,7 +217,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
             .filter(key => params[key] !== null)
             .map((key, index): SQLParamType<TParams, keyof TParams> => {
 
-                const value = params[key];
+                const rawValue = params[key] as any;
+                
+                const value = rawValue.toSQLValue
+                    ? rawValue.toSQLValue()
+                    : rawValue;
+
                 const isArray = Array.isArray(value);
                 const token = isArray
                     ? `ANY($${index + 1}::int[])`
@@ -248,11 +253,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
         query: string,
         params?: SQLParamType<TParams, keyof TParams>[]) {
 
+        const queryLog = this.getSQLQueryLog(query, params);
+
         try {
 
-            const queryLog = this.getSQLQueryLog(query, params);
-
-            log(queryLog, { color: ConsoleColor.purple });
+            log('X SQL Query: ');
+            log(queryLog, { color: ConsoleColor.purple, noStamp: true });
 
             const values = this.getParamValues(params);
 
@@ -275,8 +281,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         }
         catch (e: any) {
 
-            const errorEndingQueryLog = this.getSQLQueryLog(query, params);
-            throw new Error(`Error occured on SQL server while executing query: \n${errorEndingQueryLog} \n Message: ${e.message ?? e} `);
+            throw new Error(`Error occured on SQL server while executing query: \n${queryLog} \n Message: ${e.message ?? e} `);
         }
     }
 
@@ -304,7 +309,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const paramPairs = (params ?? [])
             .map((param) => `${param.token}: ${this.getParamValue(param)}`);
 
-        return `Query: \n${query}\nValues: ${paramPairs.join(', ')}`;
+        return `${query}\nValues: ${paramPairs.join(', ')}`;
     }
 
     private snakeToCamelCase(snakeCaseString: string) {

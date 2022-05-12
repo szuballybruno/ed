@@ -1,6 +1,6 @@
 import { TempomatService } from '../services/TempomatService';
 import { TempomatModeType } from '../shared/types/sharedTypes';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class TempomatController {
 

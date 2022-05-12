@@ -2,7 +2,7 @@ import { RoleService } from '../services/RoleService';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class RoleController {
@@ -61,7 +61,7 @@ export class RoleController {
     getAssignableRolesAction = (params: ActionParams) => {
 
         return this._roleService
-            .getAssignableRolesAsync(params.currentUserId, params
+            .getAssignableRolesAsync(params.principalId, params
                 .getQuery()
                 .getValue(x => x.companyId, 'int'));
     };
@@ -70,7 +70,7 @@ export class RoleController {
     getAssignablePermissionsAction = (params: ActionParams) => {
 
         return this._roleService
-            .getAssignablePermissionsAsync(params.currentUserId, params
+            .getAssignablePermissionsAsync(params.principalId, params
                 .getQuery()
                 .getValue(x => x.companyId, 'int'));
     };
@@ -79,7 +79,7 @@ export class RoleController {
     getUserAssignedAuthItemsAction = (params: ActionParams) => {
 
         return this._roleService
-            .getUserAssignedAuthItemsAsync(params.currentUserId, params
+            .getUserAssignedAuthItemsAsync(params.principalId, params
                 .getQuery()
                 .getValue(x => x.userId, 'int'));
     };

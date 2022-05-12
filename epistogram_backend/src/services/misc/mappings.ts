@@ -860,8 +860,9 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
     mapperService
         .addMap(CompanyView, CompanyDTO, x => ({
-            id: x.id,
-            name: x.name
+            id: x.companyId,
+            name: x.companyName,
+            canManage: x.canManage
         }));
 
     mapperService

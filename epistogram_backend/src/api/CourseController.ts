@@ -4,7 +4,7 @@ import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDT
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { CourseModeType } from '../shared/types/sharedTypes';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from "../utilities/ActionParams";
 
 export class CourseController {
 
