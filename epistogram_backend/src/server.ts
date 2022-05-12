@@ -192,7 +192,7 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
 
     // middleware 
     const authenticationMiddleware = new AuthenticationMiddleware(authenticationService, loggerService);
-    const authorizationMiddleware = new AuthorizationMiddleware();
+    const authorizationMiddleware = new AuthorizationMiddleware(permissionService);
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
