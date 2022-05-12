@@ -2,7 +2,7 @@ import { CommentService } from '../services/CommentService';
 import { readItemCode } from '../services/misc/encodeService';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../shared/dtos/CommentListDTO';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from '../utilities/ActionParams';
 
 export class CommentController {
 
@@ -30,7 +30,7 @@ export class CommentController {
 
         const itemCode = params
             .getQuery<{ itemCode: string }>()
-            .getValue(x => x.itemCode, 'string');
+            .getValue((x) => x.itemCode, 'string');
 
         const itemCodeData = readItemCode(itemCode);
 

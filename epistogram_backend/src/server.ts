@@ -217,6 +217,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
         .addController(PermissionController, permissionController)
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)
+        .addController(CommentController, commentController)
         .build();
 
     const addEndpoint = turboExpress.addAPIEndpoint;
@@ -300,7 +301,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
-    addEndpoint(apiRoutes.userStats.getUserLearningOverviewData, userStatsController.getUserLearningOverviewDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.userStats.getUserLearningOverviewData, userStatsController.getUserLearningOverviewDataAction);
 
     // user progress
     addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
