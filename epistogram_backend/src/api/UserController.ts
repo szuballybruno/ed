@@ -25,7 +25,7 @@ export class UserController {
             .saveUserDataAsync(params.principalId, dto);
     };
 
-    @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
+    @XControllerAction(apiRoutes.user.deleteUser, { isPost: true, checkPermission: 'ACCESS_ADMIN' })
     deleteUserAction = async (params: ActionParams) => {
 
         const deleteUserId = params

@@ -8,16 +8,15 @@ import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Environment } from '../../static/Environemnt';
 import { ChildPropsType, useCurrentUrlPathname, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 
-const getAuthorizationContextData = (permissions: PermissionCodeType[]) => {
+const getAuthorizationContextData = (permissionCodes: PermissionCodeType[]) => {
 
     return {
-        hasPermission: (perm: PermissionCodeType) => {
+        hasPermission: (permCode: PermissionCodeType) => {
 
-            const isFound = permissions.any(x => x === perm);
+            const isFound = permissionCodes
+                .any(code => code === permCode);
 
-            // console.log(permissions);
-
-            // console.log(`Looking for permission '${perm}'. Found: ${isFound}.`);
+            console.log(`Checking permission: ${permCode} found: ${isFound}`);
 
             return isFound;
         },
@@ -118,7 +117,7 @@ export const AuthenticationFrame = (props) => {
         console.log(`Auth state is: '${authState}'...`);
 
     // authorization context 
-    const authContextData: AuthorizationContextDataType = getAuthorizationContextData(authDefaultPermissions);
+    const authContextData: AuthorizationContextDataType = getAuthorizationContextData(authData?.permissions ?? []);
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserAsyncContext.Provider value={() => refetchAuthHandshake()}>

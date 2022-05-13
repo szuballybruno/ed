@@ -1,5 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { ConstructorSignature } from '../../models/Types';
+import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
 
 export interface ITurboMiddleware<TInParams, TOutParams> {
@@ -24,6 +25,8 @@ export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
     isPost?: boolean;
     isMultipart?: boolean;
+    isUnauthorized?: boolean;
+    checkPermission?: PermissionCodeType;
 }
 
 type MiddlwareFnType = (req: any, res: any, next: any) => void;

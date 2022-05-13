@@ -126,7 +126,8 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     const roleService = new RoleService(ormConnectionService, mapperService);
     const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService);
     const tokenService = new TokenService(globalConfig);
-    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
+    const permissionService = new PermissionService(ormConnectionService, mapperService);
+    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService, permissionService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(sqlBootstrapperService, sqlConnectionService);
@@ -141,7 +142,6 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
-    const permissionService = new PermissionService(ormConnectionService, mapperService);
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
@@ -165,7 +165,7 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     const courseRatingController = new CourseRatingController(courseRatingService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
-    const registrationController = new RegistrationController(registrationService, userService, globalConfig);
+    const registrationController = new RegistrationController(registrationService, globalConfig);
     const miscController = new MiscController(miscService, practiseQuestionService, tokenService, ormConnectionService, globalConfig, userCourseBridgeService);
     const authenticationController = new AuthenticationController(authenticationService, globalConfig);
     const userController = new UserController(userService);
@@ -190,10 +190,6 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
 
-    // middleware 
-    const authenticationMiddleware = new AuthenticationMiddleware(authenticationService, loggerService);
-    const authorizationMiddleware = new AuthorizationMiddleware(permissionService);
-
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
@@ -204,8 +200,8 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
         .setPort(globalConfig.misc.hostPort)
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)
-        .setTurboMiddleware<void, ActionParams>(authenticationMiddleware)
-        .setTurboMiddleware<ActionParams, ActionParams>(authorizationMiddleware)
+        .setTurboMiddleware<void, ActionParams>(new AuthenticationMiddleware(authenticationService, loggerService))
+        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(permissionService))
         .setExpressMiddleware(getCORSMiddleware(globalConfig))
         .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
         .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))
@@ -216,15 +212,12 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
         .addController(PermissionController, permissionController)
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)
+        .addController(AuthenticationController, authenticationController)
+        .addController(ExamController, examController)
+        .addController(RegistrationController, registrationController)
         .build();
 
     const addEndpoint = turboExpress.addAPIEndpoint;
-
-    // registration
-    addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
@@ -271,11 +264,6 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     addEndpoint(apiRoutes.passwordChange.setNewPassword, passwordChangeController.setNewPasswordAction, { isPost: true, isPublic: true });
     addEndpoint(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, passwordChangeController.requestPasswordChangeAuthenticatedAction, { isPost: true });
     addEndpoint(apiRoutes.passwordChange.requestPasswordChange, passwordChangeController.requestPasswordChangeAction, { isPublic: true, isPost: true });
-
-    // authentication 
-    addEndpoint(apiRoutes.authentication.establishAuthHandshake, authenticationController.establishAuthHandshakeAction, { isPublic: true });
-    addEndpoint(apiRoutes.authentication.logoutUser, authenticationController.logOutUserAction, { isPost: true });
-    addEndpoint(apiRoutes.authentication.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
 
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
@@ -356,17 +344,6 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
     addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
-
-    // exam
-    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction);
-    addEndpoint(apiRoutes.exam.getExamQuestionEditData, examController.getExamQuestionEditDataAction);
-    addEndpoint(apiRoutes.exam.saveExamQuestionEditData, examController.saveExamQuestionEditDataAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
-    addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
 
     // 404 - no match
     // turboExpress.use((req, res) => {

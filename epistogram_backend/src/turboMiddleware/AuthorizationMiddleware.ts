@@ -16,6 +16,9 @@ export class AuthorizationMiddleware implements ITurboMiddleware<ActionParams, A
         if (params.options.isPublic)
             return params.inParams;
 
+        if (params.options.isUnauthorized)
+            return params.inParams;
+
         await this._permissionService
             .checkPermissionAsync(params.inParams.principalId, 'ACCESS_APPLICATION');
 

@@ -6,7 +6,9 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CreateExamDTO } from '../shared/dtos/CreateExamDTO';
 import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class ExamController {
 
@@ -19,6 +21,7 @@ export class ExamController {
         this._ormService = ormService;
     }
 
+    @XControllerAction(apiRoutes.exam.answerExamQuestion, { isPost: true })
     answerExamQuestionAction = async (params: ActionParams) => {
 
         const questionAnswerDTO = params
@@ -29,6 +32,7 @@ export class ExamController {
             .answerExamQuestionAsync(params.principalId, questionAnswerDTO);
     };
 
+    @XControllerAction(apiRoutes.exam.startExam, { isPost: true })
     startExamAction = async (params: ActionParams) => {
 
         const body = params.getBody<{ answerSessionId: number }>();
@@ -38,6 +42,7 @@ export class ExamController {
             .startExamAsync(answerSessionId);
     };
 
+    @XControllerAction(apiRoutes.exam.getExamResults, { isPost: true })
     getExamResultsAction = async (params: ActionParams) => {
 
         const answerSessionId = params
@@ -48,6 +53,7 @@ export class ExamController {
             .getExamResultsAsync(params.principalId, answerSessionId);
     };
 
+    @XControllerAction(apiRoutes.exam.getExamEditData, { isPost: true })
     getExamEditDataAction = async (params: ActionParams) => {
 
         const examId = params
@@ -58,6 +64,7 @@ export class ExamController {
             .getExamEditDataAsync(examId);
     };
 
+    @XControllerAction(apiRoutes.exam.getExamQuestionEditData, { isPost: true })
     getExamQuestionEditDataAction = async (params: ActionParams) => {
         const examId = params
             .getQuery<{ examId: number }>()
@@ -67,6 +74,7 @@ export class ExamController {
             .getExamQuestionEditDataAsync(examId);
     };
 
+    @XControllerAction(apiRoutes.exam.saveExamQuestionEditData, { isPost: true })
     saveExamQuestionEditDataAction = async (params: ActionParams) => {
         const mutations = params
             .getBody()
@@ -76,6 +84,7 @@ export class ExamController {
             .saveExamQuestionEditDataAsync(mutations);
     };
 
+    @XControllerAction(apiRoutes.exam.saveExam, { isPost: true })
     saveExamAction = async (params: ActionParams) => {
 
         const dto = params
@@ -85,6 +94,7 @@ export class ExamController {
             .saveExamAsync(dto.data);
     };
 
+    @XControllerAction(apiRoutes.exam.createExam, { isPost: true })
     createExamAction = async (params: ActionParams) => {
 
         const dto = params
@@ -119,6 +129,7 @@ export class ExamController {
         } as IdResultDTO;
     };
 
+    @XControllerAction(apiRoutes.exam.deleteExam, { isPost: true })
     deleteExamAction = async (params: ActionParams) => {
 
         const examId = params

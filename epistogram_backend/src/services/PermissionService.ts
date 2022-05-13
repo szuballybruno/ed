@@ -1,6 +1,7 @@
 import { Permission } from '../models/entity/authorization/Permission';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
+import { PermissionMatrixDTO } from '../shared/dtos/role/PermissionMatrixDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
@@ -26,6 +27,28 @@ export class PermissionService extends QueryServiceBase<Permission> {
         const hasPermission = await this.hasPermissionAsync(userId.toSQLValue(), companyId, permissionCode);
         if (!hasPermission)
             throw new VerboseError('User has no permission to access resource.', 'no permission');
+    }
+
+    async getPermissionMatrixAsync(userId: number, contextCompanyId: number) {
+
+        const perms = await this._ormService
+            .query(UserPermissionView, { userId, contextCompanyId })
+            .where('userId', '=', 'userId')
+            .openBracket()
+            .and('contextCompanyId', '=', 'contextCompanyId')
+            .or('contextCompanyId', 'IS', 'NULL')
+            .closeBracket()
+            .getMany();
+
+        return perms
+            .groupBy(x => x.permissionCode)
+            .map(x => x.first.permissionCode);
+
+        // return perms
+        //     .map((x): PermissionMatrixDTO => ({
+        //         code: x.permissionCode,
+        //         companyId: x.contextCompanyId
+        //     }));
     }
 
     async hasPermissionAsync(userId: number, companyId: number | null, permissionsCode: PermissionCodeType) {

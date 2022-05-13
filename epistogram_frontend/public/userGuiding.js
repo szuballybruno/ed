@@ -1,3 +1,5 @@
+console.log('User guiding script included!');
+
 (function (g, u, i, d, e, s) {
 
     console.log('UserGuiding initializing....');

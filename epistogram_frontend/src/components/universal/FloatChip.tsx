@@ -12,11 +12,11 @@ export const FloatChip = (props: FlexProps & { name: string, icon: any }) => {
         margin="5px"
         {...css}>
         <svg width="40px"
-color={css.color as any ?? 'var(--epistoTeal)'}>
+            color={css.color as any ?? 'var(--epistoTeal)'}>
             {icon}
         </svg>
         <Text as="text"
-fontSize="small"
-mr="10px">{name}</Text>
+            fontSize="small"
+            mr="10px">{name}</Text>
     </FlexFloat>;
 };

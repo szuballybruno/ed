@@ -5,7 +5,7 @@ import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } f
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Environment } from '../../../static/Environemnt';
-import {  usePaging } from '../../../static/frontendHelpers';
+import { usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -23,7 +23,7 @@ export const PrequizSubpage = () => {
     const paging = usePaging(questions);
     const question = paging.currentItem;
 
-    const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(question?.id ?? null);
+    const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(courseId, question?.id ?? null);
     const { answerPrequizQuestionAsync, answerPrequizQuestionState } = useAnswerPrequizQuestion();
 
     const currentQuestionIndex = paging.currentIndex;
@@ -104,7 +104,7 @@ export const PrequizSubpage = () => {
 
                 {question?.isNumeric
                     ? <Flex direction="column"
-align="center">
+                        align="center">
                         <Flex justify="space-between">
                             <EpistoFont>
                                 {question.minLabel}
