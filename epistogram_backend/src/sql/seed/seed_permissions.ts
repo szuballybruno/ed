@@ -10,11 +10,11 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     // role admin 
     VIEW_GLOBAL_ROLES: {
         code: 'VIEW_GLOBAL_ROLES',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     EDIT_GLOBAL_ROLES: {
         code: 'EDIT_GLOBAL_ROLES',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     VIEW_COMPANY_ROLES: {
         code: 'VIEW_COMPANY_ROLES',
@@ -64,7 +64,7 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     },
     CREATE_COMPANY_COURSES: {
         code: 'CREATE_COMPANY_COURSES',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     LIST_COMPANY_COURSES: {
         code: 'LIST_COMPANY_COURSES',
@@ -78,15 +78,15 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     // manage company 
     EDIT_COMPANIES: {
         code: 'EDIT_COMPANIES',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     DELETE_COMPANIES: {
         code: 'DELETE_COMPANIES',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     CREATE_COMPANIES: {
         code: 'CREATE_COMPANIES',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
 
     // player 
@@ -96,7 +96,7 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     },
     SET_COURSE_MODE_GLOBAL: {
         code: 'SET_COURSE_MODE_GLOBAL',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     SET_TEMPOMAT_MODE: {
         code: 'SET_TEMPOMAT_MODE',
@@ -104,7 +104,7 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     },
     SET_TEMPOMAT_MODE_GLOBAL: {
         code: 'SET_TEMPOMAT_MODE_GLOBAL',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     
     // admin
@@ -134,34 +134,34 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     // misc
     SET_COURSE_OWNER_TEACHER_FLAG: {
         code: 'SET_COURSE_OWNER_TEACHER_FLAG',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     ADD_EPISTO_COIN_TO_USERS: {
         code: 'ADD_EPISTO_COIN_TO_USERS',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     VIEW_ANONYM_COMMENTER_NAME: {
         code: 'VIEW_ANONYM_COMMENTER_NAME',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     ACCESS_ADMIN: {
         code: 'ACCESS_ADMIN',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     ACCESS_APPLICATION: {
         code: 'ACCESS_APPLICATION',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     MANAGE_SHOP: {
         code: 'MANAGE_SHOP',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     SET_OWN_EMAIL_ADDRESS: {
         code: 'SET_OWN_EMAIL_ADDRESS',
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     IS_SIGNUP_MANDATORY: {
         code: 'IS_SIGNUP_MANDATORY',
-        scope: 'GLOBAL'
+        scope: 'USER'
     }
 });

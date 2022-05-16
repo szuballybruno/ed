@@ -104,6 +104,8 @@ import seed_question_types from '../../sql/seed/seed_question_types';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
+import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
+import { Group } from '../../models/entity/Group';
 
 export const dbSchema = {
 
@@ -115,7 +117,7 @@ export const dbSchema = {
         [JobTitle, seed_job_titles],
         'seed_users',
         [Role, roleList],
-        'seed_company_owner_bridges',
+        [CompanyOwnerBridge, seed_company_owner_bridges],
         [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
         [PermissionAssignmentBridge, seed_permission_assignment_bridges],
         [RolePermissionBridge, rolePermissionList],
@@ -241,6 +243,10 @@ export const dbSchema = {
         }
     ],
 
+    triggers: [
+        'role_assignment_validity_check_trigger'
+    ],
+
     viewEntities: [
         ModuleView,
         VideoCompletedView,
@@ -294,6 +300,7 @@ export const dbSchema = {
 
     entities: [
         Course,
+        Group,
         CourseCategory,
         Exam,
         Company,
@@ -344,7 +351,4 @@ export const dbSchema = {
         UserExamProgressBridge,
         TempomatAdjustmentValue
     ],
-    triggers: [
-        'role_assignment_validity_check_trigger'
-    ]
 };

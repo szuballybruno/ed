@@ -10,7 +10,7 @@ permissions AS
 	
 	INNER JOIN user_permission_view upv
 	ON (upv.permission_code = 'ASSIGN_COMPANY_PERMISSIONS' AND pe.scope = 'COMPANY')
-	OR (upv.permission_code = 'ASSIGN_GLOBAL_PERMISSIONS' AND pe.scope = 'GLOBAL')
+	OR (upv.permission_code = 'ASSIGN_GLOBAL_PERMISSIONS' AND pe.scope = 'USER')
 	
 	ORDER BY 
 		upv.user_id,

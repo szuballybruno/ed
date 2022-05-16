@@ -75,7 +75,7 @@ export class CompanyService extends QueryServiceBase<Company> {
     async getCompanyEditDataAsync(principalId: PrincipalId, companyId: number) {
 
         await this._permissionService
-            .checkPermissionAsync(principalId, companyId, 'MANAGE_COMPANY');
+            .checkPermissionAsync(principalId, companyId, 'EDIT_COMPANIES');
 
         const comp = await this._ormService
             .query(Company, { companyId })
@@ -89,7 +89,7 @@ export class CompanyService extends QueryServiceBase<Company> {
     async createCompanyAsync(principalId: PrincipalId) {
 
         await this._permissionService
-            .checkPermissionAsync(principalId, 'CREATE_COMPANY');
+            .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
         await this.createAsync({
             name: 'New company'
@@ -99,7 +99,7 @@ export class CompanyService extends QueryServiceBase<Company> {
     async deleteCompanyAsync(principalId: PrincipalId, companyId: number) {
 
         await this._permissionService
-            .checkPermissionAsync(principalId, 'DELETE_COMPANY');
+            .checkPermissionAsync(principalId, 'DELETE_COMPANIES');
 
         await this._ormService
             .softDelete(Company, [companyId]);

@@ -2,13 +2,13 @@ WITH
 roles AS 
 (
 	SELECT 
-		upv.user_id, 
+		upv.assignee_user_id, 
 		r.id role_id
 	FROM public.role r
 
 	INNER JOIN public.user_permission_view upv
 	ON (r.scope = 'COMPANY' AND upv.context_company_id = r.company_id AND upv.permission_code = 'VIEW_COMPANY_ROLES')
-	OR (r.scope = 'GLOBAL' AND upv.permission_code = 'VIEW_GLOBAL_ROLES')
+	OR (r.scope = 'USER' AND upv.permission_code = 'VIEW_GLOBAL_ROLES')
 )
 SELECT 
 	u.id user_id,
@@ -24,7 +24,7 @@ SELECT
 FROM roles
 
 LEFT JOIN public.user u
-ON u.id = roles.user_id
+ON u.id = roles.assignee_user_id
 
 LEFT JOIN public.role r
 ON r.id = roles.role_id

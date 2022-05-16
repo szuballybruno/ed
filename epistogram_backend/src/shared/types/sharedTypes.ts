@@ -95,8 +95,9 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
-export type RoleScopeType = 'GLOBAL' | 'COMPANY' | 'GROUP';
-export type PermissionScopeType = 'GLOBAL' | 'COMPANY' | 'GROUP';
+export type RoleScopeType = 'USER' | 'COMPANY' | 'GROUP';
+
+export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'GROUP';
 
 export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 

@@ -29,33 +29,63 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 
 export type CourseModeType = 'beginner' | 'advanced';
 
-export type PermissionCodeType =
+export const permissionCodes = [
 
-    // role
-    | 'VIEW_GLOBAL_ROLES'
-    | 'EDIT_GLOBAL_ROLES'
-    | 'ASSIGN_GLOBAL_ROLES'
-    | 'VIEW_COMPANY_ROLES'
-    | 'EDIT_COMPANY_ROLES'
-    | 'ASSIGN_COMPANY_ROLES'
-    | 'DELETE_COMPANY_ROLES'
+    // role admin
+    'VIEW_GLOBAL_ROLES',
+    'EDIT_GLOBAL_ROLES',
+    'VIEW_COMPANY_ROLES',
+    'EDIT_COMPANY_ROLES',
+    'DELETE_GLOBAL_ROLES',
+    'DELETE_COMPANY_ROLES',
+
+    // role assign
+    'ASSIGN_GLOBAL_ROLES',
+    'ASSIGN_COMPANY_ROLES',
 
     // permissions
-    | 'ASSIGN_COMPANY_PERMISSIONS'
-    | 'ASSIGN_GLOBAL_PERMISSIONS'
+    'ASSIGN_GLOBAL_PERMISSIONS',
+    'ASSIGN_COMPANY_PERMISSIONS',
 
     // course 
-    | 'MANAGE_COMPANY_COURSES'
-    | 'VIEW_COMPANY_COURSES'
-    | 'MANAGE_COMPANY'
-    | 'DELETE_COMPANY'
-    | 'CREATE_COMPANY'
+    'EDIT_COMPANY_COURSES',
+    'DELETE_COMPANY_COURSES',
+    'CREATE_COMPANY_COURSES',
+    'LIST_COMPANY_COURSES',
+    'WATCH_COURSE',
+
+    // manage company
+    'EDIT_COMPANIES',
+    'DELETE_COMPANIES',
+    'CREATE_COMPANIES',
+
+    // player 
+    'SET_COURSE_MODE',
+    'SET_COURSE_MODE_GLOBAL',
+    'SET_TEMPOMAT_MODE',
+    'SET_TEMPOMAT_MODE_GLOBAL',
+
+    // admin
+    'VIEW_COURSE_ADMIN',
+
+    // misc company scoped 
+    'VIEW_SHOP',
+    'VIEW_TEACHER_OVERVIEW',
+    'SET_JOB_TITLE',
+    'EDIT_COURSE_OWNER_TEACHER_DATA',
 
     // misc
-    | 'ACCESS_ADMIN'
-    | 'ACCESS_APPLICATION'
-    | 'MANAGE_SHOP'
-    | 'COMPANY_ROLE_MANAGER';
+    'SET_COURSE_OWNER_TEACHER_FLAG',
+    'ADD_EPISTO_COIN_TO_USERS',
+    'VIEW_ANONYM_COMMENTER_NAME',
+    'ACCESS_ADMIN',
+    'ACCESS_APPLICATION',
+    'MANAGE_SHOP',
+    'SET_OWN_EMAIL_ADDRESS',
+    'IS_SIGNUP_MANDATORY'
+] as const;
+
+export type PermissionCodeType = typeof permissionCodes[number];
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |
@@ -65,8 +95,9 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
-export type RoleScopeType = 'GLOBAL' | 'COMPANY' | 'GROUP';
-export type PermissionScopeType = 'GLOBAL' | 'COMPANY' | 'GROUP';
+export type RoleScopeType = 'USER' | 'COMPANY' | 'GROUP';
+
+export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'GROUP';
 
 export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 

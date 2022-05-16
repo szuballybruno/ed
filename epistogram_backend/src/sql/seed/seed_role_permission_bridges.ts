@@ -23,7 +23,7 @@ export const rolePermissionList = getSeedList<RolePermissionBridge>()({
     },
     owner_e: {
         roleId: roleList.Company_Owner.id,
-        permissionId: permissionList.MANAGE_COMPANY.id,
+        permissionId: permissionList.EDIT_COMPANIES.id,
     },
     owner_f: {
         roleId: roleList.Company_Owner.id,
@@ -53,6 +53,6 @@ export const rolePermissionList = getSeedList<RolePermissionBridge>()({
 
     company_user_a: {
         roleId: roleList.Company_User.id,
-        permissionId: permissionList.VIEW_COMPANY_COURSES.id
+        permissionId: permissionList.WATCH_COURSE.id
     },
 });

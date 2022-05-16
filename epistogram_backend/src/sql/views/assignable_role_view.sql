@@ -12,7 +12,7 @@ WITH roles AS
 	
 	INNER JOIN user_permission_view upv
 	ON (upv.permission_code = 'ASSIGN_GLOBAL_ROLES' 
-		AND r.scope = 'GLOBAL' 
+		AND r.scope = 'USER' 
 		AND upv.context_company_id = co.id)
 	OR (upv.permission_code = 'ASSIGN_COMPANY_ROLES' 
 		AND r.scope = 'COMPANY' 

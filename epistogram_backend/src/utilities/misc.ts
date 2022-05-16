@@ -19,4 +19,8 @@ export const constraintFn = <TItem, TRootConstraint extends PropConstraintType<T
     };
 };
 
+export type KeyofConstrained<TOriginal, TConstraint> = keyof {
+    [K in keyof TOriginal as TOriginal[K] extends TConstraint ? K : never]: TOriginal[K];
+}
+
 export const instatiateInsertEntity = <T>(entity: InsertEntity<T>) => entity as T;

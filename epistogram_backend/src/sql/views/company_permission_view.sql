@@ -1,5 +1,5 @@
 SELECT
-	co.id company_id,
+	co.id assignee_company_id,
 	rab.context_company_id,
 	rpb.permission_id permission_id
 FROM public.company co
@@ -16,15 +16,15 @@ ON rpb.role_id = r.id
 UNION 
 
 SELECT
-	co.id company_id,
+	co.id assignee_company_id,
 	pab.context_company_id,
 	pab.permission_id permission_id
 FROM public.company co
 
 INNER JOIN public.permission_assignment_bridge pab
-	ON pab.company_id = co.id
+	ON pab.assignee_company_id = co.id
 
 ORDER BY 
-	company_id,
+	assignee_company_id,
 	context_company_id,
 	permission_id

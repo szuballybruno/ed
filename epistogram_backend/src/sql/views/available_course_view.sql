@@ -7,7 +7,7 @@ inherited_courses AS
 	FROM public.user u
 
 	LEFT JOIN public.user_permission_view upv
-	ON upv.user_id = u.id 
+	ON upv.assignee_user_id = u.id 
 		AND upv.permission_code = 'VIEW_COMPANY_COURSES'
 
 	INNER JOIN public.course_access_bridge cab
@@ -79,9 +79,12 @@ ON ucab.user_id = u.id
 	AND ucab.course_id = co.id
 	
 LEFT JOIN public.user_permission_view upv
-ON upv.user_id = u.id 
-	AND upv.permission_code = 'VIEW_COMPANY_COURSES'
+ON upv.assignee_user_id = u.id 
 	AND upv.context_company_id = u.company_id
+
+INNER JOIN public.permission pe
+ON pe.code = 'LIST_COMPANY_COURSES'
+	AND pe.id = upv.permission_id 
 	
 LEFT JOIN public.user teacher
 ON teacher.id = co.teacher_id

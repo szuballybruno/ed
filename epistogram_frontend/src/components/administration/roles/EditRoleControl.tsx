@@ -33,7 +33,7 @@ export const EditRoleControl = (props: {
 }) => {
 
     const { logic, onSave, roleEditData, saveButton, error } = props;
-    const roleScope = roleEditData?.scope ?? 'GLOBAL';
+    const roleScope = roleEditData?.scope ?? 'USER';
 
     const { permissionsList, permissionsListError, permissionsListState, refetchPermissionsList } = usePermissionsList();
     const { companies, companiesState } = useAvailableCompaniesForRoleCreation();
@@ -84,7 +84,7 @@ export const EditRoleControl = (props: {
     }, [selectedPermissions, setSelectedPermissions, deselectPermission]);
 
     const handleSaveRole = useCallback(() => onSave({
-        scope: 'GLOBAL', // not used
+        scope: 'USER', // not used
         roleId: roleEditData?.roleId ?? -1,
         companyId: roleScope === 'COMPANY'
             ? selectedCompany?.id ?? -1

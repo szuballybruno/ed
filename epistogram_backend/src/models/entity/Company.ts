@@ -44,7 +44,7 @@ export class Company {
     
     // permission assingments
     @JoinColumn()
-    @OneToMany(_ => PermissionAssignmentBridge, x => x.company)
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.assigneeCompany)
     permissionAssignmentBridges: PermissionAssignmentBridge[];
     
     // permission assingments context

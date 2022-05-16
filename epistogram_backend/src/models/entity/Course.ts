@@ -16,6 +16,7 @@ import { User } from './User';
 import { CourseAccessBridge } from './CourseAccessBridge';
 import { UserCourseBridge } from './UserCourseBridge';
 import { Video } from './Video';
+import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
 
 @Entity()
 export class Course {
@@ -29,7 +30,7 @@ export class Course {
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
-    
+
     @Column()
     title: string;
 
@@ -145,4 +146,9 @@ export class Course {
     @JoinColumn()
     @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.course)
     courseRatingUserAnswers: CourseRatingQuestionUserAnswer[];
+
+    // contextPermissionAssignmentBridges
+    @JoinColumn()
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.contextCourse)
+    contextPermissionAssignmentBridges: PermissionAssignmentBridge[];
 }

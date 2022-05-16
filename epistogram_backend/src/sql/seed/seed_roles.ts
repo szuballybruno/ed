@@ -6,22 +6,22 @@ export const roleList = getSeedList<Role>()({
     Company_Owner: {
         name: 'Company Owner',
         companyId: null,
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     Company_HR_Viewer: {
         name: 'Company HR Viewer',
         companyId: null,
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     Company_Role_Manager: {
         name: 'Company Role Manager',
         companyId: null,
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     Company_User: {
         name: 'Company User',
         companyId: null,
-        scope: 'GLOBAL'
+        scope: 'USER'
     },
     Company_owned_Custom_Role_1: {
         name: '[Company owned] Custom Role 1',

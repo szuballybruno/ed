@@ -60,7 +60,7 @@ export class RoleService extends QueryServiceBase<Role> {
                         .map((viewAsPermission): PermissionListDTO => ({
                             code: viewAsPermission.permissionCode,
                             id: viewAsPermission.permissionId,
-                            scope: 'GLOBAL' // not used 
+                            scope: 'USER' // not used 
                         }))
                 };
             });
@@ -197,7 +197,7 @@ export class RoleService extends QueryServiceBase<Role> {
         // get old permissionIds 
         const oldPermAssBridges = await this._ormService
             .query(PermissionAssignmentBridge, { savedUserId, contextCompanyId })
-            .where('userId', '=', 'savedUserId')
+            .where('assigneeUserId', '=', 'savedUserId')
             .and('contextCompanyId', '=', 'contextCompanyId')
             .getMany();
 
@@ -213,10 +213,12 @@ export class RoleService extends QueryServiceBase<Role> {
             .filter(x => !oldPermAssBridges
                 .any(y => y.permissionId === x))
             .map(x => instatiateInsertEntity<PermissionAssignmentBridge>({
-                contextCompanyId: contextCompanyId,
                 permissionId: x,
-                userId: savedUserId,
-                companyId: null
+                assigneeUserId: savedUserId,
+                assigneeCompanyId: null,
+                contextCompanyId: contextCompanyId,
+                contextCourseId: null,
+                contextGroupId: null
             }));
 
         await this._ormService
@@ -337,7 +339,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 noUndefined({
                     id: role.id,
                     name: dto.name,
-                    ownerCompanyId: role.scope === 'GLOBAL'
+                    ownerCompanyId: role.scope === 'USER'
                         ? undefined
                         : dto.companyId
                 })
