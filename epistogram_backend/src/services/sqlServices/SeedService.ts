@@ -8,15 +8,16 @@ import { SQLConnectionService } from './SQLConnectionService';
 
 type NewSeedType = [{ new(): any }, Object];
 
-export const getSeedList = <TEntity>() => {
+export const getSeedList = <TEntity, TConstraint extends PropConstraintType<TConstraint, NoIdType<NoComplexTypes<TEntity>>> = {}>() => {
 
     type SeedType = NoIdType<NoComplexTypes<TEntity>>;
 
-    return <TData extends PropConstraintType<TData, SeedType>>(data: TData) => {
+    return <TData extends PropConstraintType<TData, SeedType> & TConstraint>(data: TData) => {
 
         const ret = constraintFn<SeedType>()(data);
 
-        Object.values(ret)
+        Object
+            .values(ret)
             .forEach((val, index) => (val as any)['id'] = index + 1);
 
         return ret as any as PropConstraintType<TData, NoComplexTypes<TEntity>>;

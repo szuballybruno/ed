@@ -6,6 +6,7 @@ import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -26,7 +27,6 @@ export const UserContextMenu = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const canAccessAdmin = hasPermission('ACCESS_ADMIN');
     const { navigate } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
@@ -42,29 +42,34 @@ export const UserContextMenu = (props: {
         }
     };
 
-    const userMenuItems = [
-        {
+    const userMenuItems = new ArrayBuilder<{ name: string, icon: any, color?: any, onClick: () => void }>()
+        .addIf(hasPermission('ACCESS_ADMIN'), {
+            name: applicationRoutes.administrationRoute.title,
+            icon: applicationRoutes.administrationRoute.icon,
+            onClick: () => navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute)
+        })
+        .add({
             name: applicationRoutes.settingsRoute.title,
             icon: applicationRoutes.settingsRoute.icon,
             onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute),
-        },
-        {
+        })
+        .add({
             name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
             icon: applicationRoutes.settingsRoute.featurePreviewRoute.icon,
             onClick: () => navigate(applicationRoutes.settingsRoute.featurePreviewRoute),
-        },
-        {
-            name: applicationRoutes.settingsRoute.developmentNotes.title,
-            icon: applicationRoutes.settingsRoute.developmentNotes.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotes),
-        },
-        {
+        })
+        .add({
+            name: applicationRoutes.settingsRoute.developmentNotesRoute.title,
+            icon: applicationRoutes.settingsRoute.developmentNotesRoute.icon,
+            onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotesRoute),
+        })
+        .add({
             name: translatableTexts.navbar.signout,
             icon: <LogoutIcon></LogoutIcon>,
             color: 'var(--mildRed)',
             onClick: handleLogout,
-        },
-    ];
+        })
+        .getArray();
 
     return (
         <EpistoPopper
@@ -85,7 +90,7 @@ export const UserContextMenu = (props: {
                 bgColor={'black'} />
 
             {/* admin menu item */}
-            {canAccessAdmin && (
+            {/* {canAccessAdmin && (
                 <EpistoButton
                     onClick={() => navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute)}>
 
@@ -107,7 +112,7 @@ export const UserContextMenu = (props: {
                         </EpistoFont>
                     </Flex>
                 </EpistoButton>
-            )}
+            )} */}
 
             {/* menu items */}
             {userMenuItems

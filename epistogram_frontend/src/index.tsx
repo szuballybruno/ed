@@ -11,6 +11,7 @@ import { InitFrame } from './components/system/InitFrame';
 import { MUIThemeFrame } from './components/system/MUIThemeFrame';
 import { NotificationsFrame } from './components/system/NotificationsFrame';
 import { PreventMobileFrame } from './components/system/PreventMobileFrame';
+import { TitleSetterFrame } from './components/system/TitleSetterFrame';
 import { UserGuidingFrame } from './components/system/UserGuidingFrame';
 import { UnderMaintanence } from './components/UnderMaintanence';
 import { EpistoRoutes, RenderRoute } from './components/universal/EpistoRoutes';
@@ -33,30 +34,31 @@ const app = (
                         <QueryClientProvider client={queryClient}>
                             <PreventMobileFrame>
                                 <BrowserRouter>
-                                    <EpistoRoutes
-                                        renderRoutes={new ArrayBuilder<RenderRoute>()
+                                    <TitleSetterFrame>
+                                        <EpistoRoutes
+                                            renderRoutes={new ArrayBuilder<RenderRoute>()
 
-                                            // under maintanance
-                                            .addIf(Environment.isUnderMaintenance, {
-                                                element: <UnderMaintanence />,
-                                                route: applicationRoutes.matchAll,
-                                            })
-                                            .addIf(!Environment.isUnderMaintenance, {
-                                                route: applicationRoutes.matchAll,
-                                                element: (
-                                                    <AuthenticationFrame>
-                                                        <ErrorDialogFrame>
-                                                            <NotificationsFrame>
-                                                                <EventListener>
-                                                                    <MainRouting />
-                                                                </EventListener>
-                                                            </NotificationsFrame>
-                                                        </ErrorDialogFrame>
-                                                    </AuthenticationFrame>
-                                                ),
-                                            })
-                                            .getArray()}
-                                    />
+                                                // under maintanance
+                                                .addIf(Environment.isUnderMaintenance, {
+                                                    element: <UnderMaintanence />,
+                                                    route: applicationRoutes.matchAll,
+                                                })
+                                                .addIf(!Environment.isUnderMaintenance, {
+                                                    route: applicationRoutes.matchAll,
+                                                    element: (
+                                                        <AuthenticationFrame>
+                                                            <ErrorDialogFrame>
+                                                                <NotificationsFrame>
+                                                                    <EventListener>
+                                                                        <MainRouting />
+                                                                    </EventListener>
+                                                                </NotificationsFrame>
+                                                            </ErrorDialogFrame>
+                                                        </AuthenticationFrame>
+                                                    ),
+                                                })
+                                                .getArray()} />
+                                    </TitleSetterFrame>
                                 </BrowserRouter>
                             </PreventMobileFrame>
                         </QueryClientProvider>
@@ -64,7 +66,7 @@ const app = (
                 </MUIThemeFrame>
             </ChakraThemeFrame>
         </InitFrame>
-    </UserGuidingFrame>
+    </UserGuidingFrame >
 );
 
 ReactDOM.render(app, document.getElementById('root'));

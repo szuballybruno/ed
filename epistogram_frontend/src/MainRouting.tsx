@@ -28,80 +28,65 @@ export const MainRouting = () => {
                 {
                     route: applicationRoutes.loginRoute,
                     element: <LoginScreen />,
-                    protectionLevel: 'open'
                 },
                 {
                     route: applicationRoutes.setNewPasswordRoute,
                     element: <SetNewPasswordPage />,
-                    protectionLevel: 'open'
                 },
                 {
                     route: applicationRoutes.registrationRoute,
                     element: <RegistrationPage />,
-                    protectionLevel: 'open'
                 },
                 {
                     route: applicationRoutes.registerViaActivationCodeRoute,
-                    element: < RegisterViaActivationCodePage />,
-                    protectionLevel: 'open'
+                    element: <RegisterViaActivationCodePage />,
                 },
 
                 // protected routes 
                 {
                     route: applicationRoutes.signupRoute,
                     element: <SignupPage />,
-                    protectionLevel: 'justAuthenticate'
                 },
                 {
                     route: applicationRoutes.playerRoute,
                     element: <PlayerPage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.administrationRoute,
                     element: <AdminPage />,
-                    protectionLevel: 'authorize',
                     isAuthorizedToView: x => x.canAccessAdministration
                 },
                 {
                     route: applicationRoutes.homeRoute,
                     element: <HomePage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.shopRoute,
                     element: <ShopPage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.availableCoursesRoute,
                     element: <AvailableCoursesPage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.courseDetailsRoute,
                     element: <CourseDetailsPage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.settingsRoute,
                     element: <UserSettingsPage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.learningRoute,
                     element: <LearningInsightsPage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.rootHomeRoute,
                     element: <HomePage />,
-                    protectionLevel: 'authorize'
                 },
                 {
                     route: applicationRoutes.matchAll,
                     element: <NotFound />,
-                    protectionLevel: 'open'
                 }
             ]} />
     </>;

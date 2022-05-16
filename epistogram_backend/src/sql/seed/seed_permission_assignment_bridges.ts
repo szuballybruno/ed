@@ -15,6 +15,18 @@ export const list = getSeedList<PermissionAssignmentBridge>()({
         contextCompanyId: seed_companies.Manni_BT.id,
         permissionId: permissionList.VIEW_COMPANY_COURSES.id,
         userId: null
+    },
+    user_2_access_app_perm: {
+        companyId: null,
+        contextCompanyId: null,
+        permissionId: permissionList.ACCESS_APPLICATION.id,
+        userId: 2
+    },
+    user_2_admin_access_perm: {
+        companyId: null,
+        contextCompanyId: null,
+        permissionId: permissionList.ACCESS_ADMIN.id,
+        userId: 2
     }
 });
 

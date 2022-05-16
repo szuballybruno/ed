@@ -1,7 +1,7 @@
 import { Environment } from '../../static/Environemnt';
-import { ChildPropsType } from '../../static/frontendHelpers';
+import { PropsWithChildren } from '../../static/frontendHelpers';
 
-export const UserGuidingFrame = (props: ChildPropsType) => {
+export const UserGuidingFrame = (props: PropsWithChildren) => {
 
     return (
         <>

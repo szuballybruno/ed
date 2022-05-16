@@ -67,8 +67,8 @@ export const EditDailyTipSubpage = () => {
             <AdminSubpageHeader
                 direction="column"
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips,
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute,
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute
                 ]}
                 subRouteLabel={'Tipp ' + dailyTipEditData?.id}
                 onSave={handleSaveAsync}

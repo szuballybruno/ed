@@ -11,9 +11,12 @@ export type NoComplexTypes<TObj> = {
 
 export type InsertEntity<T> = NoIdType<NoComplexTypes<T>>;
 
-export const constraintFn = <T>() => <TRe extends PropConstraintType<TRe, T>>(obj: TRe): PropConstraintType<TRe, T> => {
+export const constraintFn = <TItem, TRootConstraint extends PropConstraintType<TRootConstraint, TItem> = {}>() => {
 
-    return obj;
+    return <TObject extends PropConstraintType<TObject, TItem> & TRootConstraint>(obj: TObject): PropConstraintType<TObject, TItem> => {
+
+        return obj;
+    };
 };
 
 export const instatiateInsertEntity = <T>(entity: InsertEntity<T>) => entity as T;

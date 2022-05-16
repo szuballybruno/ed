@@ -36,7 +36,7 @@ export const UserSettingsPage = () => {
                 routes={[
                     applicationRoutes.settingsRoute.preferencesRoute,
                     applicationRoutes.settingsRoute.featurePreviewRoute,
-                    applicationRoutes.settingsRoute.developmentNotes
+                    applicationRoutes.settingsRoute.developmentNotesRoute
                 ]} />
         </LeftPane>
 
@@ -56,7 +56,7 @@ export const UserSettingsPage = () => {
                         element: <FeaturePreview />,
                     },
                     {
-                        route: applicationRoutes.settingsRoute.developmentNotes,
+                        route: applicationRoutes.settingsRoute.developmentNotesRoute,
                         element: <DevelopmentNotes />,
                     }
                 ]} />

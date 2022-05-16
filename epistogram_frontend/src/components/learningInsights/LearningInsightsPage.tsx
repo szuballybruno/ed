@@ -17,7 +17,7 @@ const LearningInsightsPage = () => {
 
     useRedirectOnExactMatch({
         route: applicationRoutes.learningRoute,
-        redirectRoute: applicationRoutes.learningRoute.overview
+        redirectRoute: applicationRoutes.learningRoute.overviewRoute
     });
 
     return <PageRootContainer>
@@ -26,7 +26,7 @@ const LearningInsightsPage = () => {
 
             <NavigationLinkList
                 routes={[
-                    applicationRoutes.learningRoute.overview,
+                    applicationRoutes.learningRoute.overviewRoute,
                     applicationRoutes.learningRoute.myStatisticsRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
                 ]} />
@@ -37,7 +37,7 @@ const LearningInsightsPage = () => {
             <EpistoRoutes
                 renderRoutes={[
                     {
-                        route: applicationRoutes.learningRoute.overview,
+                        route: applicationRoutes.learningRoute.overviewRoute,
                         element: <LearningInsightsOverview />
                     },
                     {

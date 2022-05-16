@@ -5,7 +5,7 @@ import {
     ThemeConfig
 } from '@chakra-ui/react';
 import React from 'react';
-import { ChildPropsType } from '../../static/frontendHelpers';
+import { PropsWithChildren } from '../../static/frontendHelpers';
 
 // chakra theme
 const config: ThemeConfig = {
@@ -20,7 +20,7 @@ const chakraTheme = extendTheme({
     },
 });
 
-export const ChakraThemeFrame = (props: ChildPropsType) => {
+export const ChakraThemeFrame = (props: PropsWithChildren) => {
 
     return <>
         <ColorModeScript initialColorMode={'light'} ></ColorModeScript>

@@ -41,7 +41,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
     const handleEdit = (dailyTipId: number) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip, { traitCategoryId, isMax, dailyTipId });
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { traitCategoryId, isMax, dailyTipId });
     };
 
     const handleAddTip = async () => {
@@ -97,7 +97,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
             <AdminSubpageHeader
                 direction="column"
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute
                 ]}
                 subRouteLabel={pageLabel ?? ''}>
 
