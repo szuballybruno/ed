@@ -194,7 +194,7 @@ export class User {
 
     // role assingments
     @JoinColumn()
-    @OneToMany(_ => RoleAssignmentBridge, x => x.user)
+    @OneToMany(_ => RoleAssignmentBridge, x => x.assigneeUser)
     roleAssignmentBridges: RoleAssignmentBridge[];
 
     // companyOwnerBridges

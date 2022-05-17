@@ -33,7 +33,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
 
         const perms = await this._ormService
             .query(UserPermissionView, { userId, contextCompanyId })
-            .where('userId', '=', 'userId')
+            .where('assigneeUserId', '=', 'userId')
             .openBracket()
             .and('contextCompanyId', '=', 'contextCompanyId')
             .or('contextCompanyId', 'IS', 'NULL')
@@ -56,7 +56,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
         const permission = await this
             ._ormService
             .query(UserPermissionView, { userId, companyId, permissionsCode })
-            .where('userId', '=', 'userId')
+            .where('assigneeUserId', '=', 'userId')
             .and('contextCompanyId', '=', 'companyId')
             .and('permissionCode', '=', 'permissionsCode')
             .getOneOrNull();

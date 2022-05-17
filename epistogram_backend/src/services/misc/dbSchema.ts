@@ -118,12 +118,12 @@ export const dbSchema = {
         'seed_users',
         [Role, roleList],
         [CompanyOwnerBridge, seed_company_owner_bridges],
-        [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
-        [PermissionAssignmentBridge, seed_permission_assignment_bridges],
         [RolePermissionBridge, rolePermissionList],
         'seed_signup_questions',
         'seed_course_categories',
         'seed_courses',
+        [PermissionAssignmentBridge, seed_permission_assignment_bridges],
+        [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
         'seed_exams',
         'seed_videos',
         'seed_answer_sessions',
@@ -244,7 +244,8 @@ export const dbSchema = {
     ],
 
     triggers: [
-        'role_assignment_validity_check_trigger'
+        'role_assignment_validity_check_trigger',
+        'permission_assignment_validity_check_trigger'
     ],
 
     viewEntities: [

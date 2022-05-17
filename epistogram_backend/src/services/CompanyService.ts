@@ -63,7 +63,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .innerJoin(User, builder => builder
                 .on('id', '=', 'userId'))
             .innerJoin(UserPermissionView, builder => builder
-                .on('userId', '=', 'id', User)
+                .on('assigneeUserId', '=', 'id', User)
                 .and('permissionCode', '=', 'permissionCode')
                 .and('contextCompanyId', '=', 'id', Company))
             .getMany();

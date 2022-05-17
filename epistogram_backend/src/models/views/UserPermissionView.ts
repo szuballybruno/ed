@@ -8,10 +8,13 @@ import { PermissionCodeType } from '../../shared/types/sharedTypes';
 export class UserPermissionView {
 
     @ViewColumn()
-    userId: number;
+    assigneeUserId: number;
 
     @ViewColumn()
     contextCompanyId: number;
+
+    @ViewColumn()
+    contextCourseId: number;
 
     @ViewColumn()
     permissionCode: PermissionCodeType;

@@ -156,7 +156,7 @@ export class RoleService extends QueryServiceBase<Role> {
         const oldRoleBridges = await this._ormService
             .query(RoleAssignmentBridge, { savedUserId, contextCompanyId })
             .where('contextCompanyId', '=', 'contextCompanyId')
-            .and('userId', '=', 'savedUserId')
+            .and('assigneeUserId', '=', 'savedUserId')
             .getMany();
 
         await this._ormService
@@ -168,10 +168,10 @@ export class RoleService extends QueryServiceBase<Role> {
             .filter(roleId => !oldRoleBridges
                 .any(oldRoleBridge => oldRoleBridge.roleId === roleId))
             .map(roleId => instatiateInsertEntity<RoleAssignmentBridge>({
-                companyId: null,
-                contextCompanyId,
                 roleId: roleId,
-                userId: savedUserId
+                assigneeCompanyId: null,
+                assigneeUserId: savedUserId,
+                contextCompanyId,
             }));
 
         await this._ormService
@@ -216,9 +216,9 @@ export class RoleService extends QueryServiceBase<Role> {
                 permissionId: x,
                 assigneeUserId: savedUserId,
                 assigneeCompanyId: null,
+                assigneeGroupId: null,
                 contextCompanyId: contextCompanyId,
-                contextCourseId: null,
-                contextGroupId: null
+                contextCourseId: null
             }));
 
         await this._ormService
@@ -284,7 +284,7 @@ export class RoleService extends QueryServiceBase<Role> {
                     permissionId: 'permissionId'
                 }))
             .innerJoin(UserPermissionView, x => x
-                .on('userId', '=', 'userId')
+                .on('assigneeUserId', '=', 'userId')
                 .openBracket()
                 .and('contextCompanyId', '=', 'companyId', Role)
                 .and('permissionCode', '=', 'editCoCode')

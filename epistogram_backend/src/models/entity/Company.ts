@@ -34,7 +34,7 @@ export class Company {
     
     // role assingments
     @JoinColumn()
-    @OneToMany(_ => RoleAssignmentBridge, x => x.company)
+    @OneToMany(_ => RoleAssignmentBridge, x => x.assigneeCompany)
     roleAssignmentBridges: RoleAssignmentBridge[];
     
     // context role assingments

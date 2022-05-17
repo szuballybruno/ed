@@ -53,6 +53,7 @@ export const permissionCodes = [
     'CREATE_COMPANY_COURSES',
     'LIST_COMPANY_COURSES',
     'WATCH_COURSE',
+    'WATCH_COMPANY_COURSES',
 
     // manage company
     'EDIT_COMPANIES',
@@ -95,9 +96,9 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
-export type RoleScopeType = 'USER' | 'COMPANY' | 'GROUP';
+export type RoleScopeType = 'USER' | 'COMPANY';
 
-export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'GROUP';
+export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE';
 
 export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 

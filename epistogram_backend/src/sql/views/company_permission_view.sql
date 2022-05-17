@@ -5,7 +5,7 @@ SELECT
 FROM public.company co
 
 INNER JOIN public.role_assignment_bridge rab
-	ON rab.company_id = co.id
+	ON rab.assignee_company_id = co.id
 
 LEFT JOIN public.role r
 	ON r.id = rab.role_id

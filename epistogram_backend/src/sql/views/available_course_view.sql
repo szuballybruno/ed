@@ -1,25 +1,35 @@
 WITH 
-inherited_courses AS
+assigned_courses AS 
 (
 	SELECT 
 		u.id user_id,
-		cab.course_id
+		co.id course_id
 	FROM public.user u
-
-	LEFT JOIN public.user_permission_view upv
+	
+	INNER JOIN public.user_permission_view upv
 	ON upv.assignee_user_id = u.id 
-		AND upv.permission_code = 'VIEW_COMPANY_COURSES'
-
+	AND upv.permission_code = 'WATCH_COURSE'
+	
+	INNER JOIN public.course co
+	ON co.id = upv.context_course_id
+),
+company_courses AS 
+(
+	SELECT 
+		co.id company_id,
+		cab.course_id
+	FROM public.company co
+	
 	INNER JOIN public.course_access_bridge cab
-	ON cab.company_id = upv.context_company_id
-
-	GROUP BY
-		u.id,
-		cab.course_id
-
-	ORDER BY
-		u.id,
-		cab.course_id
+	ON cab.company_id = co.id 
+),
+available_courses AS 
+(
+	SELECT user_id, course_id FROM assigned_courses
+	UNION
+	SELECT u.id user_id, course_id FROM company_courses
+	LEFT JOIN public.user u 
+	ON u.company_id = company_courses.company_id
 )
 SELECT 
 	u.id user_id,
@@ -42,13 +52,13 @@ SELECT
 	teacher.first_name teacher_first_name,
 	teacher.last_name teacher_last_name,
 	co.*
-FROM public.user u 
+FROM available_courses ac 
 
-INNER JOIN inherited_courses ic
-ON ic.user_id = u.id 
+LEFT JOIN public.user u 
+ON u.id = ac.user_id
 
 LEFT JOIN public.course co
-ON co.id = ic.course_id
+ON co.id = ac.course_id
 
 LEFT JOIN public.course_item_view first_civ
 ON first_civ.course_id = co.id
@@ -74,22 +84,8 @@ ON cc.id = co.category_id
 LEFT JOIN public.course_category csc
 ON csc.id = co.sub_category_id
 	
-LEFT JOIN public.course_access_bridge ucab
-ON ucab.user_id = u.id 
-	AND ucab.course_id = co.id
-	
-LEFT JOIN public.user_permission_view upv
-ON upv.assignee_user_id = u.id 
-	AND upv.context_company_id = u.company_id
-
-INNER JOIN public.permission pe
-ON pe.code = 'LIST_COMPANY_COURSES'
-	AND pe.id = upv.permission_id 
-	
 LEFT JOIN public.user teacher
 ON teacher.id = co.teacher_id
-	
-WHERE upv.permission_id IS NOT NULL 
 	 
 ORDER BY 
 	u.id,

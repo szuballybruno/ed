@@ -8,33 +8,49 @@ export const list = getSeedList<PermissionAssignmentBridge>()({
         permissionId: permissionList.EDIT_COMPANY_COURSES.id,
         assigneeCompanyId: null,
         assigneeUserId: 2,
+        assigneeGroupId: null,
         contextCompanyId: seed_companies.Manni_BT.id,
         contextCourseId: null,
-        contextGroupId: null
     },
     manni_bt_manni_bt_view_company_courses: {
-        permissionId: permissionList.WATCH_COURSE.id,
+        permissionId: permissionList.WATCH_COMPANY_COURSES.id,
         assigneeCompanyId: seed_companies.Manni_BT.id,
         assigneeUserId: null,
+        assigneeGroupId: null,
         contextCompanyId: seed_companies.Manni_BT.id,
         contextCourseId: null,
-        contextGroupId: null
     },
     user_2_access_app_perm: {
         permissionId: permissionList.ACCESS_APPLICATION.id,
         assigneeCompanyId: null,
         assigneeUserId: 2,
+        assigneeGroupId: null,
         contextCompanyId: null,
         contextCourseId: null,
-        contextGroupId: null
     },
     user_2_admin_access_perm: {
         permissionId: permissionList.ACCESS_ADMIN.id,
         assigneeCompanyId: null,
         assigneeUserId: 2,
+        assigneeGroupId: null,
         contextCompanyId: null,
         contextCourseId: null,
-        contextGroupId: null
+    },
+    user_2_set_course_mode_perm: {
+        permissionId: permissionList.SET_COURSE_MODE.id,
+        assigneeCompanyId: null,
+        assigneeUserId: 2,
+        assigneeGroupId: null,
+        contextCompanyId: null,
+        contextCourseId: 28,
+    },
+    user_2_watch_course_perm: {
+        permissionId: permissionList.WATCH_COURSE.id,
+        assigneeCompanyId: null,
+        assigneeUserId: 2,
+        assigneeGroupId: null,
+        contextCompanyId: null,
+        contextCourseId: 28,
     }
 });
 

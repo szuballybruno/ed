@@ -1,7 +1,7 @@
 WITH roles AS
 (
 	SELECT 
-		upv.user_id,
+		upv.assignee_user_id,
 		co.id context_company_id,
 		co.name context_company_name,
 		r.id role_id,
@@ -20,7 +20,7 @@ WITH roles AS
 	   	AND r.company_id = co.id)
 	
 	ORDER BY 
-		upv.user_id,
+		upv.assignee_user_id,
 		co.id NULLS FIRST,
 		r.id
 )

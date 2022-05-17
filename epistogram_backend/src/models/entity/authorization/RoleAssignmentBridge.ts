@@ -20,19 +20,19 @@ export class RoleAssignmentBridge {
 
     // user 
     @Column({ type: 'int', nullable: true })
-    userId: number | null;
+    assigneeUserId: number | null;
 
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
-    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'userId'))
-    user: User | null;
+    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeUserId'))
+    assigneeUser: User | null;
 
     // company 
     @Column({ type: 'int', nullable: true })
-    companyId: number | null;
+    assigneeCompanyId: number | null;
 
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
-    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'companyId'))
-    company: Company | null;
+    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeCompanyId'))
+    assigneeCompany: Company | null;
 
     // context company 
     @Column({ type: 'int', nullable: true })

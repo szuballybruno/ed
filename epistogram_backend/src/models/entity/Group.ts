@@ -9,6 +9,6 @@ export class Group {
 
     // contextPermissionAssignmentBridges
     @JoinColumn()
-    @OneToMany(_ => PermissionAssignmentBridge, x => x.contextGroup)
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.assigneeGroup)
     contextPermissionAssignmentBridges: PermissionAssignmentBridge[];
 }

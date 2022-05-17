@@ -38,6 +38,14 @@ export class PermissionAssignmentBridge {
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeCompanyId'))
     assigneeCompany: Company | null;
 
+    // group
+    @Column({ type: 'int', nullable: true })
+    assigneeGroupId: number | null;
+
+    @ManyToOne(_ => Group, x => x.contextPermissionAssignmentBridges)
+    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeGroupId'))
+    assigneeGroup: Group | null;
+
     // CONTEXTS 
 
     // context company 
@@ -55,12 +63,4 @@ export class PermissionAssignmentBridge {
     @ManyToOne(_ => Course, x => x.contextPermissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCourseId'))
     contextCourse: Course | null;
-
-    // context group
-    @Column({ type: 'int', nullable: true })
-    contextGroupId: number | null;
-
-    @ManyToOne(_ => Group, x => x.contextPermissionAssignmentBridges)
-    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextGroupId'))
-    contextGroup: Group | null;
 }

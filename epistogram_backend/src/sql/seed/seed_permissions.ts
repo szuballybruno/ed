@@ -72,6 +72,10 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     },
     WATCH_COURSE: {
         code: 'WATCH_COURSE',
+        scope: 'COURSE'
+    },
+    WATCH_COMPANY_COURSES: {
+        code: 'WATCH_COMPANY_COURSES',
         scope: 'COMPANY'
     },
 
@@ -92,7 +96,7 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     // player 
     SET_COURSE_MODE: {
         code: 'SET_COURSE_MODE',
-        scope: 'COMPANY'
+        scope: 'COURSE'
     },
     SET_COURSE_MODE_GLOBAL: {
         code: 'SET_COURSE_MODE_GLOBAL',
@@ -100,7 +104,7 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     },
     SET_TEMPOMAT_MODE: {
         code: 'SET_TEMPOMAT_MODE',
-        scope: 'COMPANY'
+        scope: 'COURSE'
     },
     SET_TEMPOMAT_MODE_GLOBAL: {
         code: 'SET_TEMPOMAT_MODE_GLOBAL',
