@@ -1,6 +1,6 @@
 import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
 import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 import { ModuleService } from '../services/ModuleService';
 
 export class ModuleController {

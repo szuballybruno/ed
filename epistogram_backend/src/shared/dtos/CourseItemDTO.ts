@@ -9,4 +9,5 @@ export class CourseItemDTO {
     state: CourseItemStateType;
     descriptorCode: string;
     type: CourseItemType;
+    shouldRepeatVideo: boolean | null;
 }

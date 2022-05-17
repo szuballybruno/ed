@@ -20,7 +20,7 @@ export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
 
-    const { title, subTitle, state, descriptorCode, type } = props.courseItem;
+    const { title, subTitle, state, descriptorCode, shouldRepeatVideo, type } = props.courseItem;
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
 
@@ -76,7 +76,7 @@ export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
                 title={title}
                 subTitle={subTitle} />
         </Flex>}
-        endContent={getRandomInteger(0, 100) % 10 === 0 &&
+        endContent={shouldRepeatVideo &&
             <ChipSmall
                 //size='small'
                 text='Ismétlés ajánlott'

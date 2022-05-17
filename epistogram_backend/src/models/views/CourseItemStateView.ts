@@ -60,4 +60,7 @@ export class CourseItemStateView {
 
     @ViewColumn()
     state: CourseItemStateType;
+
+    @ViewColumn()
+    shouldRepeatVideo: boolean;
 }

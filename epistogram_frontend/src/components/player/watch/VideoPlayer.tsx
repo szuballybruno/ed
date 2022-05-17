@@ -137,26 +137,27 @@ export const useVideoPlayerState = (
     // effect
     //
 
-    useEventListener('keydown', (e) => {
-
-        if (e.key === ' ' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-
-            e.preventDefault();
-
-            if (isShowingOverlay)
-                return;
-
-            if (e.key === ' ')
-                toggleShouldBePlaying();
-
-            if (e.key === 'ArrowLeft')
-                jump();
-
-            if (e.key === 'ArrowRight')
-                jump(true);
-        }
-    });
-
+    // conflicting with comments, disabled temporarly
+    /*    useEventListener('keydown', (e) => {
+   
+           if (e.key === ' ' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+   
+               e.preventDefault();
+   
+               if (isShowingOverlay)
+                   return;
+   
+               if (e.key === ' ')
+                   toggleShouldBePlaying();
+   
+               if (e.key === 'ArrowLeft')
+                   jump();
+   
+               if (e.key === 'ArrowRight')
+                   jump(true);
+           }
+       });
+    */
     useEffect(() => {
 
         const volumeSettings = readVolumeSettings();

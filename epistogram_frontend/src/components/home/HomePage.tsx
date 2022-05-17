@@ -1,11 +1,10 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
-import { CSSProperties } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { iterate, usePaging } from '../../static/frontendHelpers';
+import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
@@ -16,9 +15,10 @@ import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { CourseProgressDisplay } from './CourseProgressDisplay';
+import { HomePageCourseStats } from './HomePageCourseStats';
+import { HomePageUserStats } from './HomePageUserStats';
 import { PractiseQuestions } from './PractiseQuestions';
 import { RecommendedQuota } from './RecommendedQuota';
-import { StatsSummary } from './StatsSummary';
 
 const HomePage = () => {
 
@@ -113,17 +113,26 @@ const HomePage = () => {
                             className="largeSoftShadow"
                             minHeight="30px"
                             marginBottom="10px"
-                            flex="2 2 300px">
+                            flex="2 2 350px">
 
-                            <RecommendedQuota activeCoursesPaging={activeCoursesPaging} />
+                            <HomePageUserStats />
                         </DashboardSection>
                     </Flex>
 
                     {/* stats */}
-                    <Flex pb="40px">
-                        <StatsSummary courseId={activeCoursesPaging?.currentItem?.courseId ?? null} />
-                    </Flex>
+                    <DashboardSection
+                        background="var(--transparentWhite70)"
+                        className="largeSoftShadow roundBorders"
+                        //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
+                        showDivider
+                        minHeight="200px"
+                        m="0 0 10px 0"
+                        flex='1'
+                        title={'Kurzus során nyújtott teljesítményed'}>
 
+                        <HomePageCourseStats
+                            activeCoursesPaging={activeCoursesPaging} />
+                    </DashboardSection>
                 </Flex>
             </ContentPane>
         </LoadingFrame>

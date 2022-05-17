@@ -14,6 +14,26 @@ export const useCreateComment = () => {
     };
 };
 
+export const useCreateLike = () => {
+
+    const qr = usePostDataUnsafe<{ commentId: number }, void>(apiRoutes.comment.createLike);
+
+    return {
+        createLikeAsync: qr.postDataAsync,
+        createLikeState: qr.state
+    };
+};
+
+export const useDeleteLike = () => {
+
+    const qr = usePostDataUnsafe<{ commentId: number }, void>(apiRoutes.comment.deleteLike);
+
+    return {
+        deleteLikeAsync: qr.postDataAsync,
+        deleteLikeState: qr.state
+    };
+};
+
 export const useComments = (itemCode: string) => {
 
     const qr = useReactQuery2<CommentListDTO[]>(apiRoutes.comment.getComments, { itemCode });

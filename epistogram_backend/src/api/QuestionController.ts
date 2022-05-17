@@ -5,7 +5,7 @@ import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { QuestionService } from '../services/QuestionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class QuestionController {
 
@@ -26,7 +26,7 @@ export class QuestionController {
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
         const dto = params
-            .getBody<AnswerQuestionDTO>(['answerIds', 'answerSessionId', 'elapsedSeconds', 'questionId'])
+            .getBody<AnswerQuestionDTO>(['answerIds', 'questionId'])
             .data;
 
         return this._practiseQuestionService

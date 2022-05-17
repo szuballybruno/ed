@@ -467,7 +467,6 @@ export const AdminUserStatisticsSubpage = (props: {
                         {/* correct answer rate  */}
                         <StatisticsCard
                             title={texts.statisticsCards.videosToBeRepeated}
-                            isComingSoon
                             value={`${userLearningOverviewData?.videosToBeRepeatedCount || 0}`}
                             suffix={translatableTexts.misc.suffixes.count}
                             iconPath={Environment.getAssetUrl('images/learningreport10.png')}

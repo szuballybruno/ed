@@ -21,6 +21,7 @@ import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
 import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
+import { Like } from './Like';
 import { UserCourseBridge } from './UserCourseBridge';
 import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
@@ -142,6 +143,11 @@ export class User {
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
     userCourseBridges: UserCourseBridge[];
+
+    // likes
+    @OneToMany(_ => Like, x => x.comment)
+    @JoinColumn()
+    likes: Like[];
 
     // coin acquires 
     @JoinColumn()

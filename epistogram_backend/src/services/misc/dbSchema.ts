@@ -41,6 +41,7 @@ import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
 import { User } from '../../models/entity/User';
+import { Like } from '../../models/entity/Like';
 import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
 import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
@@ -112,6 +113,8 @@ import seed_question_types from '../../sql/seed/seed_question_types';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
+import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
+import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
 
 export const dbSchema = {
 
@@ -151,6 +154,7 @@ export const dbSchema = {
         'answer_session_view',
         'exam_completed_view',
         'video_progress_view',
+        'user_practise_recommendation_view',
         'course_item_view',
         'course_item_state_view',
         'course_state_view',
@@ -201,6 +205,7 @@ export const dbSchema = {
         'user_course_bridge_view',
         'user_course_completion_original_estimation_view',
         'user_course_completion_current_view',
+        'user_inactive_course_view',
         'user_engagement_view',
         'user_performance_view',
         'user_spent_time_ratio_view',
@@ -311,7 +316,9 @@ export const dbSchema = {
         CourseItemQuestionEditView,
         UserSpentTimeRatioView,
         CommentListView,
-        CourseItemQuestionEditView
+        CourseItemQuestionEditView,
+        UserInactiveCourseView,
+        UserPractiseRecommendationView
     ],
 
     entities: [
@@ -333,6 +340,7 @@ export const dbSchema = {
         VideoPlaybackSample,
         TeacherInfo,
         UserCourseBridge,
+        Like,
         PersonalityTraitCategory,
         Role,
         Permission,

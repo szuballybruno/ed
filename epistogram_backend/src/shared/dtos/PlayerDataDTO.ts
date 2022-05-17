@@ -15,4 +15,5 @@ export type PlayerDataDTO = {
     modules: ModuleDTO[];
     nextItemCode: string | null;
     nextItemState: CourseItemStateType | null;
+    shouldRepeatVideo: boolean | null;
 }

@@ -102,7 +102,7 @@ export const WatchSubpage = () => {
                         background='white'
                         padding='100px'
                         borderRadius='15px'>
-                        
+
                         <EpistoFont>
                             Course has been deleted!
                         </EpistoFont>

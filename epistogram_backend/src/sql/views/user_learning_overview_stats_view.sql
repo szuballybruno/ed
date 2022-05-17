@@ -1,10 +1,5 @@
 SELECT 
 	sq.*,
-	
-	/* CASE WHEN sq.completed_exam_count = 0
-		THEN 0
-		ELSE sq.successful_exam_count::double precision / sq.completed_exam_count * 100 
-	END total_successful_exam_rate, */
 
 	-- correct answer rate
 	CASE WHEN sq.answered_video_and_practise_quiz_questions = 0
@@ -26,8 +21,6 @@ FROM
 
 		-- most frequent time range
 		usbv.average_session_block most_frequent_time_range,
-
-		0 videos_to_be_repeated_count,
 
 		-- engagement points D
 		(
@@ -114,9 +107,17 @@ FROM
 			SELECT SUM (ecv.has_successful_session::int)::int
 			FROM public.exam_completed_view ecv
 			WHERE ecv.user_id = u.id
-		) total_done_exams
+		) total_done_exams,
 
 		-- videos to be repeated count
+
+		(
+			SELECT 
+				COUNT(uprv.total_given_answer_count)::int
+			FROM public.user_practise_recommendation_view uprv
+			WHERE uprv.total_given_answer_count = 3
+			AND uprv.last_three_answer_average < 0.66
+		) videos_to_be_repeated_count
 
 	FROM public.user u
 

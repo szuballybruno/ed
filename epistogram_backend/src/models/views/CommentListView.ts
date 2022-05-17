@@ -13,10 +13,13 @@ export class CommentListView {
     videoId: number;
 
     @ViewColumn()
+    threadId: number;
+
+    @ViewColumn()
     userId: number;
 
     @ViewColumn()
-    fullName: string;
+    fullName: string | null;
 
     @ViewColumn()
     commentText: string;
@@ -29,4 +32,16 @@ export class CommentListView {
 
     @ViewColumn()
     avatarUrl: string;
+
+    @ViewColumn()
+    commentLikeCount: number;
+
+    @ViewColumn()
+    currentUserId: number;
+
+    @ViewColumn()
+    isLike: boolean;
+
+    @ViewColumn()
+    isQuestion: boolean;
 }

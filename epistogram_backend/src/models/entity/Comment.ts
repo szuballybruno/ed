@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { User } from './User';
+import { Like as Like } from './Like';
 import { Video } from './Video';
 
 @Entity()
@@ -43,4 +44,9 @@ export class Comment {
     @JoinColumn({ name: 'video_id' })
     @ManyToOne(_ => Video, x => x.comments)
     video: Video;
+
+    // likes
+    @OneToMany(_ => Like, x => x.user)
+    @JoinColumn()
+    likes: Like[];
 }

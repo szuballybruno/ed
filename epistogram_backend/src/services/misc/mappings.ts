@@ -127,11 +127,16 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 id: comment.id,
+                userId: comment.userId,
+                threadId: comment.threadId,
                 fullName: comment.fullName,
                 commentText: comment.commentText,
                 creationDate: comment.creationDate,
                 parentCommentId: comment.parentCommentId,
-                avatarUrl: comment.avatarUrl
+                avatarUrl: comment.avatarUrl,
+                commentLikeCount: comment.commentLikeCount,
+                isCurrentUserLikedComment: comment.isLike,
+                isQuestion: comment.isQuestion
             };
         });
 
@@ -660,7 +665,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 orderIndex: courseItemView.itemOrderIndex,
                 state: courseItemView.state,
                 descriptorCode: courseItemView.itemCode,
-                type: courseItemView.itemType === 'video' ? 'video' : 'exam'
+                type: courseItemView.itemType === 'video' ? 'video' : 'exam',
+                shouldRepeatVideo: courseItemView.shouldRepeatVideo
             } as CourseItemDTO;
         });
 

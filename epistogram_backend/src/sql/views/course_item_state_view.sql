@@ -22,7 +22,13 @@ FROM
 		(uvpb.completion_date IS NOT NULL OR ecv.has_successful_session) IS NOT DISTINCT FROM true is_completed,
 		ucb.course_mode course_mode,
 		ucb.current_item_code = civ.item_code IS NOT DISTINCT FROM true is_current,
-		ucb.current_item_code = civ.module_code IS NOT DISTINCT FROM true is_module_current
+		ucb.current_item_code = civ.module_code IS NOT DISTINCT FROM true is_module_current,
+		CASE 
+			WHEN (uprv.total_given_answer_count = 3
+			AND uprv.last_three_answer_average < 0.66)
+			THEN true
+			ELSE false
+		END should_repeat_video
 	FROM public.course_item_view civ
 
 	LEFT JOIN public.user u
@@ -39,6 +45,10 @@ FROM
 	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.user_id = u.id
 		AND ucb.course_id = civ.course_id
+
+	LEFT JOIN public.user_practise_recommendation_view uprv
+	ON uprv.video_id = civ.video_id
+		AND uprv.user_id = u.id
 
 	WHERE civ.item_type != 'pretest' 
 		AND civ.item_is_deleted = false

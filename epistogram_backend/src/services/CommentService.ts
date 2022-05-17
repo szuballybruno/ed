@@ -17,7 +17,7 @@ export class CommentService extends QueryServiceBase<Comment> {
         super(mapperService, ormService, Comment);
     }
 
-    async createCommentAsync(comment: CommentCreateDTO) {
+    createCommentAsync = async (comment: CommentCreateDTO) => {
 
         const {
             text,
@@ -43,18 +43,24 @@ export class CommentService extends QueryServiceBase<Comment> {
             videoId: videoId
         } as Comment;
 
-        await this.createAsync(newComment);
-    }
+        return await this
+            ._ormService
+            .getRepository(Comment)
+            .insert(newComment);
+    };
 
-    getCommentsAsync = async (videoId: number) => {
+    getCommentsAsync = async (videoId: number, currentUserId: number) => {
 
         const userComments = await this
             ._ormService
-            .query(CommentListView, { videoId })
-            .where('videoId', '=', 'videoId')
+            .getRepository(CommentListView)
+            .createQueryBuilder('clv')
+            .where('clv.videoId = :videoId', { videoId })
+            .andWhere('clv.currentUserId = :currentUserId', { currentUserId })
             .getMany();
 
-        return this._mapperService
+        return await this
+            ._mapperService
             .mapMany(CommentListView, CommentListDTO, userComments);
     };
 }

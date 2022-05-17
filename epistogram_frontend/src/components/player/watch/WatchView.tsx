@@ -17,7 +17,7 @@ import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
 import { CourseItemSelector } from './CourseItemSelector';
-import Comments from '../description/Comments';
+import Comments from '../comments/Comments';
 import PlayerDescription from '../description/PlayerDescription';
 import { VideoContent } from '../description/VideoContent';
 import { OverlayDialog } from './OverlayDialog';

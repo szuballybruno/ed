@@ -83,6 +83,7 @@ import { TeacherInfoService } from './services/TeacherInfoService';
 import { TempomatService } from './services/TempomatService';
 import { TokenService } from './services/TokenService';
 import { UrlService } from './services/UrlService';
+import { LikeService } from './services/LikeService';
 import { UserCourseBridgeService } from './services/UserCourseBridgeService';
 import { UserProgressService } from './services/UserProgressService';
 import { UserService } from './services/UserService';
@@ -158,6 +159,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const companyService = new CompanyService(ormConnectionService, mapperService);
     const permissionService = new PermissionService(ormConnectionService, mapperService);
     const commentService = new CommentService(ormConnectionService, mapperService);
+    const likeService = new LikeService(ormConnectionService, mapperService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -191,7 +193,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
     const companyController = new CompanyController(companyService, permissionService);
     const roleController = new RoleController(roleService);
-    const commentController = new CommentController(commentService);
+    const commentController = new CommentController(commentService, likeService);
 
     // middleware 
     const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
@@ -370,10 +372,6 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
     addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
     addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
-
-    // comment
-    addEndpoint(apiRoutes.comment.createComment, commentController.createCommentAction, { isPost: true });
-    addEndpoint(apiRoutes.comment.getComments, commentController.getCommentsAction);
 
     // 404 - no match
     // turboExpress.use((req, res) => {
