@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Course } from './Course';
 import { CourseModule } from './CourseModule';
 import { ShopItem } from './ShopItem';
@@ -36,5 +36,5 @@ export class StorageFile {
 
     // course module 
     @OneToOne(_ => CourseModule, x => x.imageFile)
-    courseModule: CourseModule;
+    courseModule: Relation<CourseModule>;
 }

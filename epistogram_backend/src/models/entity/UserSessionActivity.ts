@@ -1,8 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { ActivitySession } from './ActivitySession';
-import { CoinTransaction } from './CoinTransaction';
-import { User } from './User';
 
 @Entity()
 export class UserSessionActivity {
@@ -14,7 +12,7 @@ export class UserSessionActivity {
     creationDate: Date;
 
     @Column({ type: 'text' })
-    type: SessionActivityType;
+    type: Relation<SessionActivityType>;
 
     // user
     @Column()
@@ -22,5 +20,5 @@ export class UserSessionActivity {
 
     @ManyToOne(_ => ActivitySession, x => x.activities)
     @JoinColumn({ name: 'activity_session_id' })
-    activitySession: ActivitySession;
+    activitySession: Relation<ActivitySession>;
 }

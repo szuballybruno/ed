@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { User } from './User';
 
 @Entity()
@@ -34,5 +34,5 @@ export class TeacherInfo {
 
     @OneToOne(_ => User, x => x.teacherInfo)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 }

@@ -1,9 +1,8 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../../services/ORMConnectionService/ORMConnectionDecorators';
 import { RoleScopeType } from '../../../shared/types/sharedTypes';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
-import { User } from '../User';
 import { RoleAssignmentBridge } from './RoleAssignmentBridge';
 import { RolePermissionBridge } from './RolePermissionBridge';
 
@@ -26,12 +25,12 @@ export class Role {
     // permissions
     @JoinColumn()
     @OneToMany(_ => RolePermissionBridge, x => x.role, { cascade: true })
-    rolePermissionBridges: RolePermissionBridge[];
+    rolePermissionBridges: Relation<RolePermissionBridge>[];
 
     // assingments
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.role)
-    roleAssignmentBridges: RoleAssignmentBridge[];
+    roleAssignmentBridges: Relation<RoleAssignmentBridge>[];
 
     // owner company 
     @Column({ type: 'int', nullable: true })
@@ -39,5 +38,5 @@ export class Role {
 
     @JoinColumn(getJoinColumnName(Role, 'companyId'))
     @ManyToOne(_ => Company, x => x.ownedRoles)
-    company: Company;
+    company: Relation<Company>;
 }

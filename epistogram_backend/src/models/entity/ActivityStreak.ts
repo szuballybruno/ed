@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { ActivitySession } from './ActivitySession';
 import { CoinTransaction } from './CoinTransaction';
 import { User } from './User';
@@ -23,15 +23,15 @@ export class ActivityStreak {
 
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 
     // activities 
     @OneToMany(_ => ActivitySession, x => x.activityStreak)
     @JoinColumn()
-    activitySessions: ActivitySession[];
+    activitySessions: Relation<ActivitySession>[];
 
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activityStreak)
-    coinAcquires: CoinTransaction[];
+    coinAcquires: Relation<CoinTransaction>[];
 }

@@ -1,12 +1,12 @@
-import { Pool, QueryResult } from 'pg';
+import Postgres from 'pg';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 
-export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<QueryResult<any>>;
+export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Postgres.QueryResult<any>>;
 
 export class SQLConnectionService {
 
-    private _pool: Pool;
+    private _pool: Postgres.Pool;
     private _config: GlobalConfiguration;
 
     constructor(config: GlobalConfiguration) {
@@ -21,7 +21,7 @@ export class SQLConnectionService {
         const dbConfig = this._config
             .getDatabaseConnectionParameters();
 
-        const pool = new Pool({
+        const pool = new Postgres.Pool({
             port: dbConfig.port,
             host: dbConfig.host,
             user: dbConfig.username,

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { PersonalityTraitCategory } from './PersonalityTraitCategory';
 import { StorageFile } from './StorageFile';
@@ -24,12 +24,12 @@ export class DailyTip {
 
     @OneToOne(_ => StorageFile)
     @JoinColumn({ name: 'video_file_id' })
-    videoFile: StorageFile | null;
+    videoFile: Relation<StorageFile> | null;
 
     // occurrances
     @OneToMany(_ => DailyTipOccurrence, x => x.dailyTip)
     @JoinColumn()
-    occurrences: DailyTipOccurrence[];
+    occurrences: Relation<DailyTipOccurrence>[];
 
     // personality trait 
     @Column()
@@ -37,5 +37,5 @@ export class DailyTip {
 
     @OneToMany(_ => PersonalityTraitCategory, x => x.tips)
     @JoinColumn({ name: 'personality_trait_category_id' })
-    personalityTraitCategory: PersonalityTraitCategory;
+    personalityTraitCategory: Relation<PersonalityTraitCategory>;
 }

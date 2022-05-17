@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { User } from '../User';
@@ -15,7 +15,7 @@ export class CompanyOwnerBridge {
 
     @ManyToOne(_ => User, x => x.companyOwnerBridges)
     @JoinColumn(getJoinColumnName(CompanyOwnerBridge, 'userId'))
-    user: User;
+    user: Relation<User>;
 
     // company 
     @Column()
@@ -23,5 +23,5 @@ export class CompanyOwnerBridge {
 
     @ManyToOne(_ => Company, x => x.companyOwnerBridges)
     @JoinColumn(getJoinColumnName(CompanyOwnerBridge, 'companyId'))
-    company: Company;
+    company: Relation<Company>;
 }

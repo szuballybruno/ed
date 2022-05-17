@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Permission } from './Permission';
 import { Role as Role } from './Role';
 
@@ -14,7 +14,7 @@ export class RolePermissionBridge {
 
     @ManyToOne(_ => Role, x => x.rolePermissionBridges)
     @JoinColumn({ name: 'role_id' })
-    role: Role;
+    role: Relation<Role>;
 
     // permission
     @Column()
@@ -22,5 +22,5 @@ export class RolePermissionBridge {
 
     @ManyToOne(_ => Permission, x => x.rolePermissionBridges)
     @JoinColumn({ name: 'permission_id' })
-    permission: Permission;
+    permission: Relation<Permission>;
 }

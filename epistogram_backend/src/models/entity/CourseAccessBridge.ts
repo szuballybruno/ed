@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { getJoinColumnName } from '../../utilities/helpers';
 import { Company } from './Company';
 import { Course } from './Course';
@@ -16,7 +16,7 @@ export class CourseAccessBridge {
 
     @ManyToOne(_ => Course, course => course.userAccessBridges)
     @JoinColumn({ name: 'course_id' })
-    course: Course;
+    course: Relation<Course>;
 
     // user 
     @Column({ type: 'int', nullable: true })
@@ -24,7 +24,7 @@ export class CourseAccessBridge {
 
     @ManyToOne(_ => User, x => x.courseAccessBridges)
     @JoinColumn(getJoinColumnName(CourseAccessBridge, 'userId'))
-    user: User;
+    user: Relation<User>;
 
     // company 
     @Column({ type: 'int', nullable: true })
@@ -32,5 +32,5 @@ export class CourseAccessBridge {
 
     @ManyToOne(_ => Company, x => x.courseAccessBridges)
     @JoinColumn(getJoinColumnName(CourseAccessBridge, 'companyId'))
-    company: Company;
+    company: Relation<Company>;
 }

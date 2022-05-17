@@ -1,9 +1,11 @@
-import { sign, verify } from 'jsonwebtoken';
+import JsonWebToken from 'jsonwebtoken';
 import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
 import { User } from '../models/entity/User';
 import { InvitationTokenPayload } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
+
+const { sign, verify } = JsonWebToken;
 
 export class TokenService {
 

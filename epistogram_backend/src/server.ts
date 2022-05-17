@@ -51,7 +51,7 @@ import { LoggerService } from './services/LoggerService';
 import { MapperService } from './services/MapperService';
 import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
-import { log } from './services/misc/logger';
+import { log, logError } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
@@ -96,7 +96,35 @@ import { ActionParams } from './utilities/ActionParams';
 import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
 
-(async () => {
+const traceLog = (e: any) => {
+
+    if (!e.trace)
+        return;
+
+    logError(e.trace);
+};
+
+const errorFn = async () => {
+
+    throw new Error('asd');
+};
+
+const fn = async () => {
+
+    try {
+
+        await errorFn();
+    }
+    catch (e) {
+
+        traceLog(e);
+        throw e;
+    }
+};
+
+await fn();
+
+const main = async () => {
 
     const globalConfig = GlobalConfiguration.initGlobalConfig(__dirname);
 
@@ -362,6 +390,16 @@ import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddlewa
     // });
 
     // listen
-    turboExpress.listen();
-})();
+    return turboExpress.listen.bind(turboExpress);
+};
+
+// main()
+//     .then(listenFn => {
+
+//         listenFn();
+//     })
+//     .catch(x => {
+
+//         throw new Error(`Error starting server: ${x.message}`);
+//     });
 

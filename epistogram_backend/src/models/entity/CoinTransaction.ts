@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { ActivitySession } from './ActivitySession';
 import { ActivityStreak } from './ActivityStreak';
 import { GivenAnswer } from './GivenAnswer';
@@ -30,7 +30,7 @@ export class CoinTransaction {
 
     @ManyToOne(_ => User, x => x.coinAcquires)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 
     //
     // user session activity 
@@ -40,7 +40,7 @@ export class CoinTransaction {
 
     @JoinColumn({ name: 'activity_session_id' })
     @ManyToOne(_ => ActivitySession, x => x.coinAcquires)
-    activitySession: ActivitySession | null;
+    activitySession: Relation<ActivitySession> | null;
 
     //
     // video 
@@ -50,7 +50,7 @@ export class CoinTransaction {
 
     @JoinColumn({ name: 'video_id' })
     @ManyToOne(_ => Video, x => x.coinAcquires)
-    video: Video | null;
+    video: Relation<Video> | null;
 
     //
     // given answer  
@@ -60,7 +60,7 @@ export class CoinTransaction {
 
     @JoinColumn({ name: 'given_answer_id' })
     @ManyToOne(_ => GivenAnswer, x => x.coinAcquires)
-    givenAnswer: GivenAnswer | null;
+    givenAnswer: Relation<GivenAnswer> | null;
 
     //
     // given answer streak 
@@ -70,7 +70,7 @@ export class CoinTransaction {
 
     @JoinColumn({ name: 'given_answer_streak_id' })
     @ManyToOne(_ => GivenAnswerStreak, x => x.coinAcquires)
-    givenAnswerStreak: GivenAnswerStreak | null;
+    givenAnswerStreak: Relation<GivenAnswerStreak> | null;
 
     // 
     // activity streak
@@ -80,7 +80,7 @@ export class CoinTransaction {
 
     @JoinColumn({ name: 'activity_streak_id' })
     @ManyToOne(_ => ActivityStreak, x => x.coinAcquires)
-    activityStreak: ActivityStreak | null;
+    activityStreak: Relation<ActivityStreak> | null;
 
     // 
     // shop item 
@@ -90,5 +90,5 @@ export class CoinTransaction {
 
     @JoinColumn({ name: 'shop_item_id' })
     @ManyToOne(_ => ShopItem, x => x.coinAcquires)
-    shopItem: ShopItem | null;
+    shopItem: Relation<ShopItem> | null;
 }

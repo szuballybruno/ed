@@ -44,6 +44,14 @@ export const list = getSeedList<PermissionAssignmentBridge>()({
         contextCompanyId: null,
         contextCourseId: 28,
     },
+    user_2_watch_comp_course_perm: {
+        permissionId: permissionList.WATCH_COMPANY_COURSES.id,
+        assigneeCompanyId: null,
+        assigneeUserId: 2,
+        assigneeGroupId: null,
+        contextCompanyId: 1,
+        contextCourseId: null,
+    },
     user_2_watch_course_perm: {
         permissionId: permissionList.WATCH_COURSE.id,
         assigneeCompanyId: null,
