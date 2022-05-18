@@ -3,7 +3,6 @@ import { AssignableRoleDTO } from '../../shared/dtos/AssignableRoleDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
-import { UserAssignedAuthItemDTO } from '../../shared/dtos/role/UserAssignedAuthItemDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
@@ -20,9 +19,9 @@ export const useRolesList = () => {
     };
 };
 
-export const useAssignableRoles = (companyId: number | null) => {
+export const useAssignableRoles = (userId: number, companyId: number | null) => {
 
-    const qr = useReactQuery2<AssignableRoleDTO[]>(apiRoutes.roles.getAssignableRoles, { companyId }, !!companyId);
+    const qr = useReactQuery2<AssignableRoleDTO[]>(apiRoutes.roles.getAssignableRoles, { companyId, userId }, !!companyId);
 
     return {
         assignableRolesList: qr.data ?? [],

@@ -33,7 +33,7 @@ export class RoleService extends QueryServiceBase<Role> {
     }
 
     async getRolesListAdminAsync(principalId: PrincipalId) {
-        
+
         const userId = principalId.toSQLValue();
 
         const roles = await this._ormService
@@ -83,21 +83,22 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
     }
 
-    async getAssignableRolesAsync(principalId: PrincipalId, companyId: number) {
+    async getAssignableRolesAsync(principalId: PrincipalId, assigneeUserId: number, companyId: number) {
 
         const roles = await this._ormService
-            .query(AssignableRoleView, { principalId, companyId })
-            .where('assigneeUserId', '=', 'principalId')
+            .query(AssignableRoleView, { principalId, assigneeUserId, companyId })
+            .where('assignerUserId', '=', 'principalId')
+            .and('assigneeUserId', '=', 'assigneeUserId')
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
         return roles
             .groupBy(x => x.roleId)
             .map((viewAsRole): AssignableRoleDTO => ({
-                contextCompanyId: viewAsRole.first.contextCompanyId,
                 roleId: viewAsRole.first.roleId,
                 roleName: viewAsRole.first.roleName,
-                userId: viewAsRole.first.assigneeUserId,
+                canAssign: viewAsRole.first.canAssign,
+                isAssigned: viewAsRole.first.isAssigned,
                 permissionIds: viewAsRole
                     .items
                     .map(viewAsPerm => viewAsPerm.permissionId)
@@ -129,7 +130,7 @@ export class RoleService extends QueryServiceBase<Role> {
         console.log('TODO Auth: ' + principalId);
 
         // get newly assigned roles 
-        const roles = await this.getAssignableRolesAsync(principalId, contextCompanyId);
+        const roles = await this.getAssignableRolesAsync(principalId, savedUserId, contextCompanyId);
 
         const newlyAssignedRoles = roles
             .filter(x => authItems
@@ -256,7 +257,7 @@ export class RoleService extends QueryServiceBase<Role> {
     async getRoleEditDataAsync(principalId: PrincipalId, roleId: number): Promise<RoleEditDTO> {
 
         const userId = principalId.toSQLValue();
-        
+
         type ResultType = {
             roleId: number,
             roleName: string,

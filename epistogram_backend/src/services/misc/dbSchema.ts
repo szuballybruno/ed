@@ -94,7 +94,6 @@ import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
-import { VideoCompletedView } from '../../models/views/VideoCompletedView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
 import seed_companies from '../../sql/seed/seed_companies';
 import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';

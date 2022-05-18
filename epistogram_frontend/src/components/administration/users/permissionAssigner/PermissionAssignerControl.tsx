@@ -23,7 +23,7 @@ export const PermissionAssignerControl = (props: {
     const selectedCompanyId = selectedCompany?.id ?? null;
 
     // http
-    const { assignableRolesList } = useAssignableRoles(selectedCompanyId);
+    const { assignableRolesList } = useAssignableRoles(userId, selectedCompanyId);
     const { assignablePermissionList } = useAssignablePermissions(selectedCompanyId);
     const { roleManageCompanies } = useRoleManageCompanies();
 
@@ -49,9 +49,15 @@ export const PermissionAssignerControl = (props: {
 
     useEffect(() => {
 
-        setAssignedRoleIds(data.assignedRoleIds);
         setAssignedPermissionIds(data.assignedPermissionIds);
-    }, [data.assignedPermissionIds, data.assignedRoleIds]);
+    }, [data.assignedPermissionIds]);
+
+    useEffect(() => {
+
+        setAssignedRoleIds(assignableRolesList
+            .filter(x => x.isAssigned)
+            .map(x => x.roleId));
+    }, [assignableRolesList]);
 
     useEffect(() => {
 

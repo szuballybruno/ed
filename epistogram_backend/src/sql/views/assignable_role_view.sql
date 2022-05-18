@@ -37,7 +37,7 @@ assignable_role_ids AS
 		co.id,
 		ro.id
 ),
-perms AS
+roles AS
 (
 	SELECT 
 		assigner_u.id assigner_user_id,
@@ -73,7 +73,20 @@ perms AS
 		context_company_id,
 		role_id
 )
-SELECT * FROM perms
+SELECT 
+	ro.*,
+	rpb.permission_id
+FROM roles ro
+
+LEFT JOIN public.role_permission_bridge rpb
+ON rpb.role_id = ro.role_id
+
+ORDER BY 
+	ro.assigner_user_id,
+	ro.assignee_user_id,
+	ro.context_company_id,
+	ro.role_id,
+	rpb.permission_id
 
 -- WHERE assigner_user_id = 1 AND context_company_id = 2 AND assignee_user_id = 2
 
