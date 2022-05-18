@@ -12,7 +12,7 @@ export class Comment {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;

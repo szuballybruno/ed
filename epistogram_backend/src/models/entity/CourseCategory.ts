@@ -12,7 +12,7 @@ export class CourseCategory {
 
     // parent category 
     @Column({ nullable: true })
-    parentCategoryId: number;
+    parentCategoryId: number | null;
 
     @ManyToOne(_ => CourseCategory, x => x.childCategories)
     @JoinColumn({ name: 'parent_category_id' })

@@ -13,7 +13,7 @@ export class PrequizAnswer {
     text: string;
 
     @Column({ type: 'double precision', nullable: true })
-    value: number;
+    value: number | null;
 
     // question 
     @Column()

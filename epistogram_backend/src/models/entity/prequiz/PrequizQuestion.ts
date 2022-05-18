@@ -16,22 +16,22 @@ export class PrequizQuestion {
     isNumericAnswer: boolean;
 
     @Column({ type: 'int', nullable: true })
-    minValue: number;
+    minValue: number | null;
 
     @Column({ type: 'int', nullable: true })
-    maxValue: number;
+    maxValue: number | null;
 
     @Column({ type: 'text', nullable: true })
-    minLabel: string;
+    minLabel: string | null;
 
     @Column({ type: 'text', nullable: true })
-    maxLabel: string;
+    maxLabel: string | null;
 
     @Column({ type: 'int', nullable: true })
-    stepValue: number;
+    stepValue: number | null;
 
     @Column({ type: 'text', nullable: true })
-    valuePostfix: string;
+    valuePostfix: string | null;
 
     // answers 
     @OneToMany(_ => PrequizAnswer, x => x.question)

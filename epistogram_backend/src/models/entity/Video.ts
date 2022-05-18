@@ -20,7 +20,7 @@ export class Video {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column()
     title: string;
@@ -47,7 +47,7 @@ export class Video {
 
     // thumbnail file
     @Column({ nullable: true })
-    thumbnailFileId: number;
+    thumbnailFileId: number | null;
 
     @OneToOne(type => StorageFile, { cascade: true })
     @JoinColumn({ name: 'thumbnail_file_id' })

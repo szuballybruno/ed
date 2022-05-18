@@ -83,7 +83,9 @@ export class PretestService {
                 userId: userId.toSQLValue(),
                 examId: pretestExam.id,
                 type: 'pretest',
-                videoId: null
+                videoId: null,
+                startDate: null,
+                endDate: null
             });
 
             await this._ormService

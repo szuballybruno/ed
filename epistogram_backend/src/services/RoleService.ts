@@ -33,7 +33,7 @@ export class RoleService extends QueryServiceBase<Role> {
     }
 
     async getRolesListAdminAsync(principalId: PrincipalId) {
-        
+
         const userId = principalId.toSQLValue();
 
         const roles = await this._ormService
@@ -238,7 +238,8 @@ export class RoleService extends QueryServiceBase<Role> {
         const role = await this.createAsync(instatiateInsertEntity<Role>({
             name: dto.name,
             companyId: dto.companyId,
-            scope: 'COMPANY'
+            scope: 'COMPANY',
+            deletionDate: null
         }));
 
         // create permission assignments 
@@ -256,7 +257,7 @@ export class RoleService extends QueryServiceBase<Role> {
     async getRoleEditDataAsync(principalId: PrincipalId, roleId: number): Promise<RoleEditDTO> {
 
         const userId = principalId.toSQLValue();
-        
+
         type ResultType = {
             roleId: number,
             roleName: string,

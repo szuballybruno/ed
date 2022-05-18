@@ -106,17 +106,40 @@ import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomat
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoCompletedView } from '../../models/views/VideoCompletedView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
+import seed_activation_codes from '../../sql/seed/seed_activation_codes';
+import seed_activity_sessions from '../../sql/seed/seed_activity_sessions';
+import seed_answers from '../../sql/seed/seed_answers';
+import seed_answer_sessions from '../../sql/seed/seed_answer_sessions';
 import seed_comments from '../../sql/seed/seed_comments';
 import seed_companies from '../../sql/seed/seed_companies';
 import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
+import seed_courses from '../../sql/seed/seed_courses';
 import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
+import seed_course_categories from '../../sql/seed/seed_course_categories';
+import seed_course_rating_groups from '../../sql/seed/seed_course_rating_groups';
+import seed_course_rating_question from '../../sql/seed/seed_course_rating_question';
+import seed_daily_tips from '../../sql/seed/seed_daily_tips';
+import seed_discount_codes from '../../sql/seed/seed_discount_codes';
+import seed_exams from '../../sql/seed/seed_exams';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
+import seed_modules from '../../sql/seed/seed_modules';
 import { permissionList } from '../../sql/seed/seed_permissions';
 import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
+import seed_personality_trait_categories from '../../sql/seed/seed_personality_trait_categories';
+import seed_prequiz_answers from '../../sql/seed/seed_prequiz_answers';
+import seed_prequiz_questions from '../../sql/seed/seed_prequiz_questions';
+import seed_questions from '../../sql/seed/seed_questions';
 import seed_question_types from '../../sql/seed/seed_question_types';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
+import seed_shop_items from '../../sql/seed/seed_shop_items';
+import seed_shop_item_categories from '../../sql/seed/seed_shop_item_categories';
+import seed_storage_file from '../../sql/seed/seed_storage_file';
+import seed_teacher_info from '../../sql/seed/seed_teacher_info';
+import seed_tempomat_adjustment_values from '../../sql/seed/seed_tempomat_adjustment_values';
+import seed_users from '../../sql/seed/seed_users';
+import seed_videos from '../../sql/seed/seed_videos';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
 export const dbSchema: XDBMSchemaType = {
@@ -125,31 +148,36 @@ export const dbSchema: XDBMSchemaType = {
         [Company, seed_companies],
         [QuestionType, seed_question_types],
         [Permission, permissionList],
-        'seed_signup_exam',
+        [ActivationCode, seed_activation_codes],
+        [ActivitySession, seed_activity_sessions],
+        [AnswerSession, seed_answer_sessions],
+        [Answer, seed_answers],
+        [CourseCategory, seed_course_categories],
+        [CourseRatingGroup, seed_course_rating_groups],
+        [CourseRatingQuestion, seed_course_rating_question],
+        [Course, seed_courses],
+        [DailyTip, seed_daily_tips],
+        [DiscountCode, seed_discount_codes],
+        [Exam, seed_exams],
+        [CourseModule, seed_modules],
+        [PersonalityTraitCategory, seed_personality_trait_categories],
+        [PrequizAnswer, seed_prequiz_answers],
+        [PrequizQuestion, seed_prequiz_questions],
+        [Question, seed_questions],
+        [ShopItemCategory, seed_shop_item_categories],
+        [ShopItem, seed_shop_items],
+        [StorageFile, seed_storage_file],
+        [TeacherInfo, seed_teacher_info],
+        [TempomatAdjustmentValue, seed_tempomat_adjustment_values],
+        [User, seed_users],
+        [Video, seed_videos],
         [JobTitle, seed_job_titles],
-        'seed_users',
         [Role, roleList],
         [CompanyOwnerBridge, seed_company_owner_bridges],
         [RolePermissionBridge, rolePermissionList],
-        'seed_signup_questions',
-        'seed_course_categories',
-        'seed_courses',
         [PermissionAssignmentBridge, seed_permission_assignment_bridges],
         [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
-        'seed_exams',
-        'seed_videos',
         [Comment, seed_comments],
-        'seed_answer_sessions',
-        'seed_questions_video',
-        'seed_questions_exam',
-        'seed_daily_tips',
-        'seed_activation_codes',
-        'seed_shop_item_categories',
-        'seed_shop_items',
-        'seed_discount_codes',
-        'seed_prequiz_questions',
-        'seed_course_rating',
-        'seed_tempomat_adjustment_values',
         [CourseAccessBridge, seed_course_access_bridge]
     ],
 

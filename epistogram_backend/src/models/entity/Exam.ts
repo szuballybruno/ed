@@ -13,10 +13,10 @@ export class Exam {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
+
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column()
     title: string;
@@ -25,23 +25,23 @@ export class Exam {
     type: ExamType;
 
     @Column({ nullable: true })
-    subtitle: string;
+    subtitle: string | null;
 
     @Column({ nullable: true })
-    description: string;
+    description: string | null;
 
     @Column({ nullable: true })
-    thumbnailUrl: string;
+    thumbnailUrl: string | null;
 
     @Column({ nullable: true })
-    orderIndex: number;
+    orderIndex: number | null;
 
     @Column({ type: 'integer', nullable: true })
     retakeLimit: number | null;
 
     // course
     @Column({ nullable: true })
-    courseId: number;
+    courseId: number | null;
 
     @ManyToOne(type => Course, course => course.exams)
     @JoinColumn({ name: 'course_id' })
@@ -69,7 +69,7 @@ export class Exam {
     @ManyToOne(_ => CourseModule, x => x.exams)
     @JoinColumn({ name: 'module_id' })
     module: CourseModule | null;
-    
+
     // userProgressBridges
     @JoinColumn()
     @OneToMany(_ => UserExamProgressBridge, x => x.exam)

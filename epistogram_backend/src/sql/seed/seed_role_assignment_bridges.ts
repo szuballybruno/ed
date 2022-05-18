@@ -2,6 +2,7 @@ import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssi
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import seed_companies from './seed_companies';
 import { roleList } from './seed_roles';
+import seed_users from './seed_users';
 
 export const roleAssignmentBridgeSeedList = getSeedList<RoleAssignmentBridge>()({
     pcworld_company_user_role: {
@@ -20,7 +21,7 @@ export const roleAssignmentBridgeSeedList = getSeedList<RoleAssignmentBridge>()(
     almostgod_a: {
         roleId: roleList.Company_Owner.id,
         assigneeCompanyId: null,
-        assigneeUserId: 2,
+        assigneeUserId: seed_users.user_2.id,
         contextCompanyId: seed_companies.EpistoGram.id,
     }
 });

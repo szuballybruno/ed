@@ -14,7 +14,7 @@ export class Role {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column({ type: 'text' })
     scope: RoleScopeType;

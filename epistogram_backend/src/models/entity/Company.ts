@@ -17,8 +17,8 @@ export class Company {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
-    
+    deletionDate: Date | null;
+
     @Column()
     name: string;
 
@@ -31,37 +31,37 @@ export class Company {
     @JoinColumn()
     @OneToMany(_ => ActivationCode, x => x.company)
     activationCodes: ActivationCode[];
-    
+
     // role assingments
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.assigneeCompany)
     roleAssignmentBridges: RoleAssignmentBridge[];
-    
+
     // context role assingments
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.contextCompany)
     contextRoleAssignmentBridges: RoleAssignmentBridge[];
-    
+
     // permission assingments
     @JoinColumn()
     @OneToMany(_ => PermissionAssignmentBridge, x => x.assigneeCompany)
     permissionAssignmentBridges: PermissionAssignmentBridge[];
-    
+
     // permission assingments context
     @JoinColumn()
     @OneToMany(_ => PermissionAssignmentBridge, x => x.contextCompany)
     contextPermissionAssignmentBridges: PermissionAssignmentBridge[];
-    
+
     // companyOwnerBridges
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<Company>()(x => x.company))
     companyOwnerBridges: CompanyOwnerBridge[];
-    
+
     // ownedRoles
     @JoinColumn()
     @OneToMany(_ => Role, getJoinColumnInverseSide<Company>()(x => x.company))
     ownedRoles: Role[];
-    
+
     // course access bridges
     @JoinColumn()
     @OneToMany(_ => CourseAccessBridge, x => x.company)
