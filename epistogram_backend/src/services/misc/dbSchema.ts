@@ -149,6 +149,7 @@ export const dbSchema = {
         'course_state_view',
         'course_item_all_view',
         'signup_question_view',
+        'user_roles_view',
         'latest_given_answer_view',
         'personality_trait_view',
         'signup_completed_view',

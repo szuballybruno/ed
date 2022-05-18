@@ -1,5 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { ConstructorSignature } from '../../models/Types';
+import { log, logSecondary } from '../../services/misc/logger';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
 
@@ -104,12 +105,15 @@ export class TurboExpressBuilder<TActionParams> {
 
                 const controllerMetadatas = getControllerActionMetadatas(sign);
 
+                log(`Controller: ${sign.name}`);
+
                 controllerMetadatas
+                    .orderBy(meta => meta.metadata.isPost + '')
                     .forEach(meta => {
 
                         const path = meta.metadata.path;
 
-                        console.log(`Adding endpoint: path: ${path}, prop: ${meta.propName}, meta: ${JSON.stringify(meta.metadata)}`);
+                        logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
                         turboExpress
                             .addAPIEndpoint(path, instance[meta.propName], meta.metadata);

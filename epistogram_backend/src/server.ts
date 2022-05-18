@@ -1,6 +1,8 @@
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
+import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
+import { fileURLToPath } from 'url';
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CompanyController } from './api/CompanyController';
@@ -32,7 +34,6 @@ import { UserProgressController } from './api/UserProgressController';
 import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
-import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
@@ -51,7 +52,7 @@ import { LoggerService } from './services/LoggerService';
 import { MapperService } from './services/MapperService';
 import { dbSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
-import { log, logError } from './services/misc/logger';
+import { log } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
@@ -91,42 +92,18 @@ import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
 import './shared/logic/jsExtensions';
 import { apiRoutes } from './shared/types/apiRoutes';
-import { onActionError, onActionSuccess } from './utilities/apiHelpers';
-import { ActionParams } from './utilities/ActionParams';
-import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
+import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
+import { ActionParams } from './utilities/ActionParams';
+import { onActionError, onActionSuccess } from './utilities/apiHelpers';
+import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
-const traceLog = (e: any) => {
-
-    if (!e.trace)
-        return;
-
-    logError(e.trace);
-};
-
-const errorFn = async () => {
-
-    throw new Error('asd');
-};
-
-const fn = async () => {
-
-    try {
-
-        await errorFn();
-    }
-    catch (e) {
-
-        traceLog(e);
-        throw e;
-    }
-};
-
-await fn();
+const getCurrentDir = () => dirname(fileURLToPath(import.meta.url));
 
 const main = async () => {
 
-    const globalConfig = GlobalConfiguration.initGlobalConfig(__dirname);
+    const globalConfig = GlobalConfiguration
+        .initGlobalConfig(getCurrentDir());
 
     log('');
     log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
@@ -390,8 +367,10 @@ const main = async () => {
     // });
 
     // listen
-    return turboExpress.listen.bind(turboExpress);
+    turboExpress.listen();
 };
+
+await main();
 
 // main()
 //     .then(listenFn => {

@@ -24,7 +24,7 @@ export const roleList = getSeedList<Role>()({
         scope: 'USER'
     },
     Company_owned_Custom_Role_1: {
-        name: '[Company owned] Custom Role 1',
+        name: 'CUSTOM [company_id: 2 (EPISTOGRAM)]',
         companyId: seed_companies.EpistoGram.id,
         scope: 'COMPANY'
     }

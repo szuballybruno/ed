@@ -7,7 +7,7 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class AssignableRoleView {
 
     @ViewColumn()
-    userId: number;
+    assigneeUserId: number;
 
     @ViewColumn()
     contextCompanyId: number;

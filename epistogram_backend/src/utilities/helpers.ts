@@ -4,6 +4,8 @@ import { ClassType, ParsableValueType } from '../models/Types';
 import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
 import { KeyofConstrained } from './misc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 

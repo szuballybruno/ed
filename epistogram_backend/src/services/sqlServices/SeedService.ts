@@ -43,7 +43,7 @@ export class SeedService {
 
             if (typeof seedScriptName === 'string') {
 
-                log(`Seeding ${seedScriptName}...`);
+                logSecondary(`Seeding ${seedScriptName}...`);
 
                 await this._sqlBootstrapperService
                     .executeSeedScriptAsync(seedScriptName);
@@ -52,7 +52,7 @@ export class SeedService {
 
                 const [classType, seedObj] = seedScriptName as NewSeedType;
 
-                log(`Seeding ${classType.name}...`);
+                logSecondary(`Seeding ${classType.name}...`);
 
                 if (Object.values(seedObj).length === 0) {
 

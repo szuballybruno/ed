@@ -107,9 +107,10 @@ export class SQLBootstrapperService {
         // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
         // writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
 
-        logObject(dropDBScript);
+        // logObject(dropDBScript);
 
-        const results = await this._sqlConnectionService.executeSQLAsync(dropDBScript);
+        const results = await this._sqlConnectionService
+            .executeSQLAsync(dropDBScript);
     };
 
     private recreateConstraintsAsync = async (constraints: SQLConstraintType[]) => {

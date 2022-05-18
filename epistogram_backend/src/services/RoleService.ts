@@ -70,7 +70,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const rolesAndPermissions = await this._ormService
             .query(AssignablePermissionView, { principalId, companyId })
-            .where('userId', '=', 'principalId')
+            .where('assigneeUserId', '=', 'principalId')
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
@@ -79,7 +79,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCompanyId: x.contextCompanyId,
                 permissionCode: x.permissionCode,
                 permissionId: x.permissionId,
-                userId: x.userId
+                userId: x.assigneeUserId
             }));
     }
 
@@ -87,7 +87,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const roles = await this._ormService
             .query(AssignableRoleView, { principalId, companyId })
-            .where('userId', '=', 'principalId')
+            .where('assigneeUserId', '=', 'principalId')
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
@@ -97,7 +97,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCompanyId: viewAsRole.first.contextCompanyId,
                 roleId: viewAsRole.first.roleId,
                 roleName: viewAsRole.first.roleName,
-                userId: viewAsRole.first.userId,
+                userId: viewAsRole.first.assigneeUserId,
                 permissionIds: viewAsRole
                     .items
                     .map(viewAsPerm => viewAsPerm.permissionId)
@@ -110,7 +110,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const views = await this._ormService
             .query(UserAssignedAuthItemView, { authItemUserId })
-            .where('userId', '=', 'authItemUserId')
+            .where('assigneeUserId', '=', 'authItemUserId')
             .getMany();
 
         return {

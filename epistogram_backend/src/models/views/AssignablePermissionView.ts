@@ -7,7 +7,7 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class AssignablePermissionView {
 
     @ViewColumn()
-    userId: number;
+    assigneeUserId: number;
 
     @ViewColumn()
     contextCompanyId: number;
