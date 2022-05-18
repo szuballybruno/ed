@@ -1,113 +1,114 @@
-import { Permission } from '../../models/entity/authorization/Permission';
+import { ActivationCode } from '../../models/entity/ActivationCode';
+import { ActivitySession } from '../../models/entity/ActivitySession';
+import { ActivityStreak } from '../../models/entity/ActivityStreak';
 import { Answer } from '../../models/entity/Answer';
 import { AnswerGivenAnswerBridge } from '../../models/entity/AnswerGivenAnswerBridge';
 import { AnswerSession } from '../../models/entity/AnswerSession';
-import { Course } from '../../models/entity/Course';
-import { CourseCategory } from '../../models/entity/CourseCategory';
-import { DailyTip } from '../../models/entity/DailyTip';
-import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
-import { Exam } from '../../models/entity/Exam';
-import { GivenAnswer } from '../../models/entity/GivenAnswer';
-import { JobTitle } from '../../models/entity/JobTitle';
-import { Company } from '../../models/entity/Company';
-import { Question } from '../../models/entity/Question';
-import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
-import { QuestionType } from '../../models/entity/QuestionType';
+import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
+import { Permission } from '../../models/entity/authorization/Permission';
+import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import { Role } from '../../models/entity/authorization/Role';
+import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
-import { StorageFile } from '../../models/entity/StorageFile';
-import { Task } from '../../models/entity/Task';
-import { User } from '../../models/entity/User';
-import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
-import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
-import { Video } from '../../models/entity/Video';
-import { VideoPlaybackSample } from '../../models/entity/VideoPlaybackSample';
-import { CourseItemAllView } from '../../models/views/CourseItemAllView';
-import { CourseItemStateView } from '../../models/views/CourseItemStateView';
-import { CourseStateView } from '../../models/views/CourseStateView';
-import { AvailableCourseView } from '../../models/views/AvailableCourseView';
-import { DailyTipView } from '../../models/views/DailyTipView';
-import { ExamCompletedView } from '../../models/views/ExamCompletedView';
-import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
-import { SignupCompletedView } from '../../models/views/SignupCompletedView';
-import { VideoCompletedView } from '../../models/views/VideoCompletedView';
-import { VideoProgressView } from '../../models/views/VideoProgressView';
-import { ExamResultView } from '../../models/views/ExamResultView';
-import { SignupQuestionView } from '../../models/views/SignupQuestionView';
-import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
-import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
-import { CourseModule } from '../../models/entity/CourseModule';
-import { UserStatsView } from '../../models/views/UserStatsView';
 import { CoinTransaction } from '../../models/entity/CoinTransaction';
-import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
-import { UserSessionDailyView } from '../../models/views/UserActivityDailyView';
-import { UserSessionView } from '../../models/views/UserSessionView';
-import { ActivitySession } from '../../models/entity/ActivitySession';
-import { ActivityStreak } from '../../models/entity/ActivityStreak';
-import { ActivityStreakView } from '../../models/views/ActivityStreakView';
-import { Event } from '../../models/entity/Event';
-import { CoinTransactionView } from '../../models/views/CoinTransactionView';
-import { CoinBalanceView } from '../../models/views/CoinBalanceView';
-import { ActivationCode } from '../../models/entity/ActivationCode';
+import { Company } from '../../models/entity/Company';
+import { Course } from '../../models/entity/Course';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
-import { ShopItem } from '../../models/entity/ShopItem';
-import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
-import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
-import { ShopItemView } from '../../models/views/ShopItemView';
-import { DiscountCode } from '../../models/entity/DiscountCode';
-import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
-import { CourseProgressView } from '../../models/views/CourseProgressView';
-import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
-import { CourseDetailsView } from '../../models/views/CourseDetailsView';
-import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
-import { TeacherInfo } from '../../models/entity/TeacherInfo';
-import { ExamView } from '../../models/views/ExamView';
-import { VideoRating } from '../../models/entity/VideoRating';
-import { CourseOverviewView } from '../../models/views/CourseOverviewView';
-import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
-import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
-import { AdminUserListView } from '../../models/views/UserAdminListView';
-import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
-import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
-import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
-import { PretestResultView } from '../../models/views/PretestResultView';
+import { CourseCategory } from '../../models/entity/CourseCategory';
+import { CourseModule } from '../../models/entity/CourseModule';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from '../../models/entity/courseRating/CourseRatingQuestionUserAnswer';
-import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
+import { DailyTip } from '../../models/entity/DailyTip';
+import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
+import { DiscountCode } from '../../models/entity/DiscountCode';
+import { Event } from '../../models/entity/Event';
+import { Exam } from '../../models/entity/Exam';
+import { GivenAnswer } from '../../models/entity/GivenAnswer';
+import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
+import { Group } from '../../models/entity/Group';
+import { JobTitle } from '../../models/entity/JobTitle';
+import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
-import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
-import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
-import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
-import { AnswerSessionView } from '../../models/views/AnswerSessionView';
-import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
-import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
-import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
-import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
-import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
+import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
+import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
+import { Question } from '../../models/entity/Question';
+import { QuestionType } from '../../models/entity/QuestionType';
+import { ShopItem } from '../../models/entity/ShopItem';
+import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
+import { StorageFile } from '../../models/entity/StorageFile';
+import { Task } from '../../models/entity/Task';
+import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
-import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
-import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
-import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
+import { User } from '../../models/entity/User';
+import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
+import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
+import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
+import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
+import { Video } from '../../models/entity/Video';
+import { VideoPlaybackSample } from '../../models/entity/VideoPlaybackSample';
+import { VideoRating } from '../../models/entity/VideoRating';
+import { ActivityStreakView } from '../../models/views/ActivityStreakView';
+import { AnswerSessionView } from '../../models/views/AnswerSessionView';
+import { AvailableCourseView } from '../../models/views/AvailableCourseView';
+import { CoinBalanceView } from '../../models/views/CoinBalanceView';
+import { CoinTransactionView } from '../../models/views/CoinTransactionView';
+import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
+import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
+import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
+import { CourseDetailsView } from '../../models/views/CourseDetailsView';
+import { CourseItemAllView } from '../../models/views/CourseItemAllView';
 import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
+import { CourseItemStateView } from '../../models/views/CourseItemStateView';
+import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
+import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
+import { CourseOverviewView } from '../../models/views/CourseOverviewView';
+import { CourseProgressView } from '../../models/views/CourseProgressView';
+import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
+import { CourseStateView } from '../../models/views/CourseStateView';
+import { DailyTipView } from '../../models/views/DailyTipView';
+import { ExamCompletedView } from '../../models/views/ExamCompletedView';
+import { ExamResultView } from '../../models/views/ExamResultView';
+import { ExamView } from '../../models/views/ExamView';
 import { ModuleView } from '../../models/views/ModuleView';
-import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
-import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
+import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
+import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
+import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
+import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
+import { PretestResultView } from '../../models/views/PretestResultView';
+import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
+import { ShopItemView } from '../../models/views/ShopItemView';
+import { SignupCompletedView } from '../../models/views/SignupCompletedView';
+import { SignupQuestionView } from '../../models/views/SignupQuestionView';
+import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
+import { UserSessionDailyView } from '../../models/views/UserActivityDailyView';
+import { AdminUserListView } from '../../models/views/UserAdminListView';
+import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
+import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
+import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
+import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
+import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
+import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
+import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
+import { UserSessionView } from '../../models/views/UserSessionView';
+import { UserStatsView } from '../../models/views/UserStatsView';
+import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
+import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
+import { VideoCompletedView } from '../../models/views/VideoCompletedView';
+import { VideoProgressView } from '../../models/views/VideoProgressView';
 import seed_companies from '../../sql/seed/seed_companies';
+import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
 import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
+import seed_job_titles from '../../sql/seed/seed_job_titles';
 import { permissionList } from '../../sql/seed/seed_permissions';
+import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
+import seed_question_types from '../../sql/seed/seed_question_types';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
-import seed_question_types from '../../sql/seed/seed_question_types';
-import seed_job_titles from '../../sql/seed/seed_job_titles';
-import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
-import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
-import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
-import { Group } from '../../models/entity/Group';
+import { SchemaDefinitionType } from '../XDBManager/XDBManagerTypes';
 
-export const dbSchema = {
+export const dbSchema: SchemaDefinitionType = {
 
     seedScripts: [
         [Company, seed_companies],
@@ -140,76 +141,76 @@ export const dbSchema = {
         [CourseAccessBridge, seed_course_access_bridge]
     ],
 
-    viewScripts: [
-        'answer_session_view',
-        'exam_completed_view',
-        'video_progress_view',
-        'course_item_view',
-        'course_item_state_view',
-        'course_state_view',
-        'course_item_all_view',
-        'signup_question_view',
-        'user_roles_view',
-        'latest_given_answer_view',
-        'personality_trait_view',
-        'signup_completed_view',
-        'company_permission_view',
-        'user_permission_view',
-        'available_course_view',
-        'exam_result_view',
-        'practise_question_view',
-        'daily_tip_view',
-        'course_admin_short_view',
-        'course_admin_detailed_view',
-        'course_admin_content_view',
-        'video_playback_sample_view',
-        'user_session_view',
-        'user_stats_view',
-        'user_session_daily_view',
-        'activity_streak_view',
-        'shop_item_view',
-        'shop_item_stateful_view',
-        'course_length_estimation_view',
-        'coin_transaction_view',
-        'coin_balance_view',
-        'course_questions_success_view',
-        'exam_latest_success_rate_view',
-        'course_spent_time_view',
-        'course_item_count_view',
-        'course_learning_stats_view',
-        'course_progress_view',
-        'course_module_overview_view',
-        'course_details_view',
-        'exam_view',
-        'coin_acquire_per_course_view',
-        'course_overview_view',
-        'personality_trait_category_view',
-        'course_item_completed_view',
-        'user_latest_activity_view',
-        'admin_user_list_view',
-        'prequiz_question_view',
-        'pretest_result_view',
-        'course_rating_question_view',
-        'user_prequiz_answers_view',
-        'user_course_bridge_view',
-        'user_course_completion_original_estimation_view',
-        'user_course_completion_current_view',
-        'user_spent_time_view',
-        'user_daily_progress_view',
-        'user_daily_course_item_progress_view',
-        'user_active_course_view',
-        'user_weekly_course_item_progress_view',
-        'user_course_progress_actual',
-        'user_course_progress_view',
-        'user_course_recommended_item_quota_view',
-        'user_tempomat_adjustment_value_view',
-        'course_item_question_edit_view',
-        'module_view',
-        'role_list_view',
-        'company_view',
-        'assignable_permission_view',
-        'assignable_role_view',
-        'user_assigned_auth_item_view'
+    views: [
+        ['answer_session_view', AnswerSessionView],
+        ['exam_completed_view', ExamCompletedView],
+        ['video_progress_view', VideoProgressView],
+        ['course_item_view'],
+        ['course_item_state_view', CourseItemStateView],
+        ['course_state_view', CourseStateView],
+        ['course_item_all_view', CourseItemAllView],
+        ['signup_question_view', SignupQuestionView],
+        ['user_roles_view'],
+        ['latest_given_answer_view'],
+        ['personality_trait_view', PersonalityTraitView],
+        ['signup_completed_view', SignupCompletedView],
+        ['company_permission_view'],
+        ['user_permission_view'],
+        ['available_course_view', AvailableCourseView],
+        ['exam_result_view', ExamResultView],
+        ['practise_question_view', PractiseQuestionView],
+        ['daily_tip_view', DailyTipView],
+        ['course_admin_short_view', CourseAdminShortView],
+        ['course_admin_detailed_view', CourseAdminDetailedView],
+        ['course_admin_content_view', CourseAdminContentView],
+        ['video_playback_sample_view'],
+        ['user_session_view', UserSessionView],
+        ['user_stats_view', UserStatsView],
+        ['user_session_daily_view', UserSessionDailyView],
+        ['activity_streak_view', ActivityStreakView],
+        ['shop_item_view', ShopItemView],
+        ['shop_item_stateful_view', ShopItemStatefulView],
+        ['course_length_estimation_view'],
+        ['coin_transaction_view', CoinTransactionView],
+        ['coin_balance_view', CoinBalanceView],
+        ['course_questions_success_view'],
+        ['exam_latest_success_rate_view'],
+        ['course_spent_time_view'],
+        ['course_item_count_view'],
+        ['course_learning_stats_view', CourseLearningStatsView],
+        ['course_progress_view', CourseProgressView],
+        ['course_module_overview_view', CourseModuleOverviewView],
+        ['course_details_view', CourseDetailsView],
+        ['exam_view', ExamView],
+        ['coin_acquire_per_course_view'],
+        ['course_overview_view', CourseOverviewView],
+        ['personality_trait_category_view', PersonalityTraitCategoryView],
+        ['course_item_completed_view'],
+        ['user_latest_activity_view'],
+        ['admin_user_list_view', AdminUserListView],
+        ['prequiz_question_view', PrequizQuestionView],
+        ['pretest_result_view', PretestResultView],
+        ['course_rating_question_view', CourseRatingQuestionView],
+        ['user_prequiz_answers_view'],
+        ['user_course_bridge_view', UserCourseBridgeView],
+        ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
+        ['user_course_completion_current_view', UserCourseCompletionCurrentView],
+        ['user_spent_time_view'],
+        ['user_daily_progress_view', UserDailyProgressView],
+        ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
+        ['user_active_course_view', UserActiveCourseView],
+        ['user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
+        ['user_course_progress_actual'],
+        ['user_course_progress_view', UserCourseProgressView],
+        ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
+        ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
+        ['course_item_question_edit_view', CourseItemQuestionEditView],
+        ['module_view', ModuleView],
+        ['role_list_view'],
+        ['company_view'],
+        ['assignable_permission_view'],
+        ['assignable_role_view'],
+        ['user_assigned_auth_item_view']
     ],
 
     functionScripts: [
@@ -230,6 +231,10 @@ export const dbSchema = {
         {
             tableName: 'activation_code',
             name: 'activation_code_uniqe_constraint'
+        },
+        {
+            tableName: 'role_permission_bridge',
+            name: 'role_permission_bridge_constraint'
         }
     ],
 
@@ -249,58 +254,8 @@ export const dbSchema = {
         'permission_assignment_validity_check_trigger'
     ],
 
-    viewEntities: [
-        ModuleView,
-        VideoCompletedView,
-        ExamCompletedView,
-        VideoProgressView,
-        CourseItemStateView,
-        CourseStateView,
-        CourseItemAllView,
-        AvailableCourseView,
-        PersonalityTraitView,
-        SignupCompletedView,
-        DailyTipView,
-        ExamResultView,
-        SignupQuestionView,
-        CourseAdminShortView,
-        CourseAdminDetailedView,
-        CourseAdminContentView,
-        UserStatsView,
-        UserSessionDailyView,
-        UserSessionView,
-        ActivityStreakView,
-        CoinTransactionView,
-        CoinBalanceView,
-        ActivationCode,
-        ShopItemView,
-        ShopItemStatefulView,
-        CourseLearningStatsView,
-        CourseProgressView,
-        CourseDetailsView,
-        CourseModuleOverviewView,
-        ExamView,
-        CourseOverviewView,
-        PersonalityTraitCategoryView,
-        AdminUserListView,
-        PrequizQuestionView,
-        PretestResultView,
-        CourseRatingQuestionView,
-        UserDailyProgressView,
-        AnswerSessionView,
-        UserDailyCourseItemProgressView,
-        UserActiveCourseView,
-        UserWeeklyCourseItemProgressView,
-        UserCourseProgressView,
-        UserCourseCompletionCurrentView,
-        UserCourseRecommendedItemQuotaView,
-        UserTempomatAdjustmentValueView,
-        UserCourseBridgeView,
-        UserCourseCompletionOriginalEstimationView,
-        CourseItemQuestionEditView
-    ],
-
     entities: [
+        ActivationCode,
         Course,
         Group,
         CourseCategory,
@@ -325,7 +280,6 @@ export const dbSchema = {
         Permission,
         RolePermissionBridge,
         RoleAssignmentBridge,
-        PractiseQuestionView,
         JobTitle,
         DailyTip,
         DailyTipOccurrence,

@@ -1,8 +1,7 @@
 
 import { toSQLSnakeCasing } from '../../utilities/helpers';
-import { NoComplexTypes, PropConstraintType, constraintFn, NoIdType } from '../../utilities/misc';
-import { dbSchema } from '../misc/dbSchema';
-import { log, logSecondary } from '../misc/logger';
+import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
+import { logSecondary } from '../misc/logger';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { SQLConnectionService } from './SQLConnectionService';
 
@@ -28,18 +27,20 @@ export class SeedService {
 
     private _sqlBootstrapperService: SQLBootstrapperService;
     private _execService: SQLConnectionService;
+    private _dbSchema: any;
 
-    constructor(sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
+    constructor(dbSchema: any, sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
         this._execService = execService;
+        this._dbSchema = dbSchema;
     }
 
     seedDBAsync = async () => {
 
-        for (let index = 0; index < dbSchema.seedScripts.length; index++) {
+        for (let index = 0; index < this._dbSchema.seedScripts.length; index++) {
 
-            const seedScriptName = dbSchema.seedScripts[index];
+            const seedScriptName = this._dbSchema.seedScripts[index];
 
             if (typeof seedScriptName === 'string') {
 

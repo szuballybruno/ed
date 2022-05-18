@@ -5,25 +5,6 @@ import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log, logObject, logSecondary } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
 
-export type SchemaDefinitionType = {
-    entities: Function[];
-    viewScripts: string[];
-    functionScripts: string[];
-    constraints: SQLConstraintType[];
-    indices: SQLIndexType[];
-    triggers: string[];
-}
-
-export type SQLConstraintType = {
-    name: string;
-    tableName: string;
-}
-
-export type SQLIndexType = {
-    name: string;
-    tableName: string;
-}
-
 export class SQLBootstrapperService {
 
     private _sqlConnectionService: SQLConnectionService;
