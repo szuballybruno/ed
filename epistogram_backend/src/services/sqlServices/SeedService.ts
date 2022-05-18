@@ -2,6 +2,7 @@
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
 import { logSecondary } from '../misc/logger';
+import { XDBMSchemaType as XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { SQLConnectionService } from './SQLConnectionService';
 
@@ -27,9 +28,9 @@ export class SeedService {
 
     private _sqlBootstrapperService: SQLBootstrapperService;
     private _execService: SQLConnectionService;
-    private _dbSchema: any;
+    private _dbSchema: XDBMSchemaType;
 
-    constructor(dbSchema: any, sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
+    constructor(dbSchema: XDBMSchemaType, sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
         this._execService = execService;

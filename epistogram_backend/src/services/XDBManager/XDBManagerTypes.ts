@@ -1,21 +1,21 @@
 import { PropConstraintType } from '../../utilities/misc';
 
-export type SQLConstraintType = {
+export type XDBMConstraintType = {
     name: string;
     tableName: string;
 }
 
-export type SQLIndexType = {
+export type XDMBIndexType = {
     name: string;
     tableName: string;
 }
 
-export type SchemaDefinitionType = {
+export type XDBMSchemaType = {
     seedScripts: ([Function, PropConstraintType<any, any>] | string)[];
     functionScripts: string[];
-    constraints: SQLConstraintType[];
+    constraints: XDBMConstraintType[];
     views: ([string] | [string, Function])[];
     entities: Function[];
-    indices: SQLIndexType[];
+    indices: XDMBIndexType[];
     triggers: string[];
 }

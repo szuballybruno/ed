@@ -106,9 +106,9 @@ import seed_question_types from '../../sql/seed/seed_question_types';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
-import { SchemaDefinitionType } from '../XDBManager/XDBManagerTypes';
+import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
-export const dbSchema: SchemaDefinitionType = {
+export const dbSchema: XDBMSchemaType = {
 
     seedScripts: [
         [Company, seed_companies],

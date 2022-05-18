@@ -135,7 +135,7 @@ const main = async () => {
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService, permissionService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(sqlBootstrapperService, sqlConnectionService);
+    const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);
