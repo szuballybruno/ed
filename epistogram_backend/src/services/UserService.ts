@@ -18,6 +18,12 @@ import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { UserEngagementView } from '../models/views/UserEngagementView';
+import moment from 'moment';
+import { Grouping } from '../shared/logic/jsExtensions';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
+import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
+import { UserStatsView } from '../models/views/UserStatsView';
 
 export class UserService {
 
@@ -490,6 +496,7 @@ export class UserService {
                 refreshToken: ''
             });
     };
+
 
     /**
      * Get a list of the users marked as teacher.

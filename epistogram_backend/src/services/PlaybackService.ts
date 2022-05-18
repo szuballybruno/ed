@@ -93,7 +93,7 @@ export class PlaybackService extends ServiceBase {
 
         // save user activity of video watching
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'video');
+            .saveUserSessionActivityAsync(userId, 'video', videoId);
 
         return {
             isWatchedStateChanged: isFirstCompletion,

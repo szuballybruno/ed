@@ -19,4 +19,15 @@ export class UserStatsController {
         return await this._userStatsService
             .getUserStatsAsync(userId);
     };
+
+    getUserLearningOverviewDataAction = async (params: ActionParams) => {
+        const query = params
+            .getQuery<any>();
+
+        const userId = query
+            .getValue(x => x.userId, 'int');
+
+        return this._userStatsService
+            .getUserLearningOverviewDataAsync(userId);
+    };
 }

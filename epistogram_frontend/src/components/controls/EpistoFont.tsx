@@ -3,7 +3,7 @@ import { createClassBuiler } from '../../helpers/classBuilder';
 import { isNumber, isString } from '../../static/frontendHelpers';
 import styles from './css/EpistoFont.module.css';
 
-type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
+export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
 
 export const EpistoFont = (params: {
     children: ReactNode,

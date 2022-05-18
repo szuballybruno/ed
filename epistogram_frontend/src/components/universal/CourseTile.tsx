@@ -6,34 +6,7 @@ import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { FlexFloat } from '../controls/FlexFloat';
-
-const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
-
-    return <Flex
-        title={props.title}
-        align="center"
-        mr={5}>
-
-        {/* icon */}
-        <img
-            src={props.iconUrl}
-            alt={''}
-            style={{
-                width: 22,
-                height: 22,
-                margin: '0 2px 0 2px'
-            }} />
-
-        {/* spent time stat */}
-        <Text
-            fontSize="13px"
-            as={'text'}
-            color={'grey'}>
-
-            {props.text}
-        </Text>
-    </Flex>;
-};
+import { SmallStat } from './SmallStat';
 
 const CourseTile = (props: {
     course: CourseShortDTO

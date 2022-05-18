@@ -6,6 +6,7 @@ import { Course } from './Course';
 import { CourseModule } from './CourseModule';
 import { Question } from './Question';
 import { UserExamProgressBridge } from './UserExamProgressBridge';
+import { UserSessionActivity } from './UserSessionActivity';
 
 @Entity()
 export class Exam {
@@ -50,6 +51,11 @@ export class Exam {
     @OneToMany(_ => Question, q => q.exam, { onDelete: 'CASCADE', cascade: ['remove'] })
     @JoinColumn()
     questions: Question[];
+
+    // user session activity
+    @OneToMany(_ => UserSessionActivity, as => as.exam)
+    @JoinColumn()
+    userSessionActivities: UserSessionActivity[];
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.exam)

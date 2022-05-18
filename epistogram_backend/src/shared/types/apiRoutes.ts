@@ -120,7 +120,8 @@ export const apiRoutes = {
     },
 
     userStats: {
-        getUserStats: '/userstats/get-user-stats'
+        getUserStats: '/userstats/get-user-stats',
+        getUserLearningOverviewData: '/users/get-user-learning-overview-data'
     },
 
     userProgress: {

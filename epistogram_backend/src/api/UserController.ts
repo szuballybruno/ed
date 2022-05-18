@@ -90,4 +90,5 @@ export class UserController {
         await this._userService
             .getBriefUserDataAsync(params.principalId, userId);
     };
+
 }
