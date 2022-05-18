@@ -82,9 +82,9 @@ export const EpistoPieChart = (props: {
                                         })
                                     : d;
                             })
-.sort((a, b) => {
-                                return a.value - b.value;
-                            })
+                                .sort((a, b) => {
+                                    return a.value - b.value;
+                                })
                     },
                     seriesOptions,
                     {

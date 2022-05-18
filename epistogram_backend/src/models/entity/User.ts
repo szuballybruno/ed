@@ -1,30 +1,32 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { getJoinColumnInverseSide } from '../../utilities/helpers';
 import { RegistrationType } from '../Types';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
+import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
+import { Role } from './authorization/Role';
+import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { CoinTransaction } from './CoinTransaction';
+import { Comment } from './Comment';
+import { Company } from './Company';
 import { Course } from './Course';
+import { CourseAccessBridge } from './CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { DiscountCode } from './DiscountCode';
 import { Event } from './Event';
 import { JobTitle } from './JobTitle';
-import { Company } from './Company';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
-import { Role } from './authorization/Role';
 import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
-import { CourseAccessBridge } from './CourseAccessBridge';
+import { Like } from './Like';
 import { UserCourseBridge } from './UserCourseBridge';
 import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
-import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
-import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
-import { getJoinColumnInverseSide } from '../../utilities/helpers';
 
 @Entity()
 export class User {
@@ -122,6 +124,11 @@ export class User {
     @JoinColumn()
     teachedCourses: Relation<Course>[];
 
+    // comment
+    @OneToMany(() => Comment, comment => comment.user)
+    @JoinColumn()
+    comments: Relation<Comment>[];
+
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.user)
     @JoinColumn()
@@ -136,6 +143,11 @@ export class User {
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
     userCourseBridges: Relation<UserCourseBridge>[];
+
+    // likes
+    @OneToMany(_ => Like, x => x.comment)
+    @JoinColumn()
+    likes: Relation<Like>[];
 
     // coin acquires 
     @JoinColumn()

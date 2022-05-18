@@ -219,5 +219,12 @@ export const apiRoutes = {
         answerExamQuestion: '/exam/answer-exam-question',
         getExamResults: '/exam/get-exam-results',
         startExam: '/exam/start-exam'
+    },
+
+    comment: {
+        createComment: '/comment/create-comment',
+        createLike: '/comment/create-like',
+        getComments: '/comment/get-comments',
+        deleteLike: '/comment/delete-like'
     }
 };

@@ -1,10 +1,5 @@
 SELECT 
 	sq.*,
-	
-	/* CASE WHEN sq.completed_exam_count = 0
-		THEN 0
-		ELSE sq.successful_exam_count::double precision / sq.completed_exam_count * 100 
-	END total_successful_exam_rate, */
 
 	-- correct answer rate
 	CASE WHEN sq.answered_video_and_practise_quiz_questions = 0
@@ -20,14 +15,12 @@ FROM
 		u.email user_email,
 
 		upv.performance_percentage performance_percentage,
-		upv.average_reaction_time user_average_reaction_time_seconds,
-		upv.total_average_reaction_time total_users_average_reaction_time_seconds,
-		upv.average_reaction_time - upv.total_average_reaction_time user_reaction_time_difference_seconds,
+		upv.reaction_time_percent_diff user_reaction_time_difference_percentage,
+		upv.user_reaction_time_points,
+		upv.user_exam_length_points,
 
 		-- most frequent time range
 		usbv.average_session_block most_frequent_time_range,
-
-		0 videos_to_be_repeated_count,
 
 		-- engagement points D
 		(
@@ -114,39 +107,18 @@ FROM
 			SELECT SUM (ecv.has_successful_session::int)::int
 			FROM public.exam_completed_view ecv
 			WHERE ecv.user_id = u.id
-		) total_done_exams
+		) total_done_exams,
 
 		-- videos to be repeated count
 
-
-		
-	
-
-		/* -- total correct given answer count
 		(
-			SELECT COUNT (ga.id)::int 
-			FROM public.given_answer ga
+			SELECT 
+				COUNT(uprv.total_given_answer_count)::int
+			FROM public.user_practise_recommendation_view uprv
+			WHERE uprv.total_given_answer_count = 3
+			AND uprv.last_three_answer_average < 0.66
+		) videos_to_be_repeated_count
 
-			LEFT JOIN public.answer_session ase
-			ON ase.id = ga.answer_session_id
-
-			LEFT JOIN public.question q
-			ON q.id = ga.question_id
-
-			WHERE ase.user_id = u.id 
-				AND q.video_id IS NOT NULL
-				AND ga.is_correct = true 
-		) total_correct_given_answer_count,
-		
-		-- avg session success rate
-		(
-			SELECT AVG(asv.correct_answer_rate)::int
-			FROM public.answer_session_view asv
-			
-			WHERE asv.user_id = u.id 
-				AND asv.answer_session_id IS NOT NULL
-				AND asv.exam_id IS DISTINCT FROM 1
-		) total_answer_session_success_rate */
 	FROM public.user u
 
 	LEFT JOIN public.user_performance_view upv

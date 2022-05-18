@@ -11,6 +11,7 @@ import { Role } from '../../models/entity/authorization/Role';
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
 import { CoinTransaction } from '../../models/entity/CoinTransaction';
+import { Comment } from '../../models/entity/Comment';
 import { Company } from '../../models/entity/Company';
 import { Course } from '../../models/entity/Course';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
@@ -28,6 +29,7 @@ import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
 import { Group } from '../../models/entity/Group';
 import { JobTitle } from '../../models/entity/JobTitle';
+import { Like } from '../../models/entity/Like';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
@@ -53,6 +55,7 @@ import { AnswerSessionView } from '../../models/views/AnswerSessionView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinBalanceView } from '../../models/views/CoinBalanceView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
+import { CommentListView } from '../../models/views/CommentListView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
@@ -90,11 +93,19 @@ import { UserCourseProgressView } from '../../models/views/UserCourseProgressVie
 import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
+import { UserEngagementView } from '../../models/views/UserEngagementView';
+import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
+import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
+import { UserPerformanceView } from '../../models/views/UserPerformanceView';
+import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
+import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 import { UserSessionView } from '../../models/views/UserSessionView';
+import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
+import seed_comments from '../../sql/seed/seed_comments';
 import seed_companies from '../../sql/seed/seed_companies';
 import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
 import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
@@ -126,6 +137,7 @@ export const dbSchema: XDBMSchemaType = {
         [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
         'seed_exams',
         'seed_videos',
+        [Comment, seed_comments],
         'seed_answer_sessions',
         'seed_questions_video',
         'seed_questions_exam',
@@ -145,6 +157,7 @@ export const dbSchema: XDBMSchemaType = {
         ['exam_completed_view', ExamCompletedView],
         ['video_progress_view', VideoProgressView],
         ['course_item_view'],
+        ['user_practise_recommendation_view', UserPractiseRecommendationView],
         ['course_item_state_view', CourseItemStateView],
         ['course_state_view', CourseStateView],
         ['course_item_all_view', CourseItemAllView],
@@ -194,6 +207,11 @@ export const dbSchema: XDBMSchemaType = {
         ['user_course_bridge_view', UserCourseBridgeView],
         ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
         ['user_course_completion_current_view', UserCourseCompletionCurrentView],
+        ['user_performance_view', UserPerformanceView],
+        ['user_session_block_view', UserSessionBlockView],
+        ['user_inactive_course_view', UserInactiveCourseView],
+        ['user_engagement_view', UserEngagementView],
+        ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
         ['user_spent_time_view'],
         ['user_daily_progress_view', UserDailyProgressView],
         ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
@@ -204,6 +222,8 @@ export const dbSchema: XDBMSchemaType = {
         ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
         ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
         ['course_item_question_edit_view', CourseItemQuestionEditView],
+        ['comment_list_view', CommentListView],
+        ['user_spent_time_ratio_view', UserSpentTimeRatioView],
         ['module_view', ModuleView],
         ['role_list_view'],
         ['company_view'],
@@ -280,6 +300,8 @@ export const dbSchema: XDBMSchemaType = {
         RolePermissionBridge,
         RoleAssignmentBridge,
         JobTitle,
+        Comment,
+        Like,
         DailyTip,
         DailyTipOccurrence,
         QuestionType,

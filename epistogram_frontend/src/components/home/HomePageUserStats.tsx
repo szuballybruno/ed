@@ -1,23 +1,15 @@
 import { useContext } from 'react';
-import { useUserProgressData } from '../../services/api/userProgressApiService';
 import { useUserStats } from '../../services/api/userStatsApiService';
 import { Environment } from '../../static/Environemnt';
 import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { UserProgressChart } from '../universal/charts/UserProgressChart';
-import { NoProgressChartYet } from './NoProgressChartYet';
 
-export const StatsSummary = (props: {
-    courseId: number | null
-}) => {
+export const HomePageUserStats = () => {
 
-    const { courseId } = props;
     const { id } = useContext(CurrentUserContext);
     const { userStats } = useUserStats(id);
-    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId ?? 0, !!courseId);
 
     return <div
         style={{
@@ -26,28 +18,11 @@ export const StatsSummary = (props: {
             display: 'grid',
             boxSizing: 'border-box',
             gap: '10px',
+            marginTop: '10px',
             gridAutoFlow: 'row dense',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
             gridAutoRows: '160px'
         }}>
-
-        {/* chart item  */}
-        <FlexFloat
-            background="var(--transparentWhite70)"
-            //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
-            direction="column"
-            p="10px"
-            minWidth={250}
-            style={{
-                gridColumn: 'auto / span 2',
-                gridRow: 'auto / span 2'
-            }} >
-
-            {userProgressData && userProgressData.days.length > 0
-                ? <UserProgressChart userProgress={userProgressData} />
-                : <NoProgressChartYet />}
-        </FlexFloat>
-
         {/* total completed video count */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}

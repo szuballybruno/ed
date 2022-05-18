@@ -24,7 +24,8 @@ export type EpistoEntryPropsType<TValue extends number | string | null> = {
     errorText?: string | null,
     setError?: (errorText: string | null) => void,
     isMandatory?: boolean,
-    transparentBackground?: boolean
+    transparentBackground?: boolean,
+    onInput?: () => void
 }
 
 export const EpistoEntry = <TValue extends number | string | null,>(props: EpistoEntryPropsType<TValue> & { inputRef?: Ref<HTMLInputElement> }) => {
@@ -49,7 +50,8 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
         setError,
         isMandatory,
         transparentBackground,
-        inputRef: ref
+        inputRef: ref,
+        onInput
     } = props;
 
     const [currentValue, setCurrentValue] = useState<TValue>(value ? value as any : '');
@@ -128,6 +130,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
                 .custom('fontNormal14')
                 .build()}
             inputRef={ref}
+            onInput={onInput}
             disabled={disabled}
             size="small"
             label={labelVariant === 'normal' ? label : undefined}

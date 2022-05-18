@@ -22,7 +22,7 @@ export class UserSessionActivity {
 
     @ManyToOne(() => Video, v => v.questions)
     @JoinColumn({ name: 'video_id' })
-    video: Video;
+    video: Relation<Video>;
 
     // exam 
     @Column({ nullable: true })
@@ -30,7 +30,7 @@ export class UserSessionActivity {
 
     @ManyToOne(_ => Exam, e => e.questions)
     @JoinColumn({ name: 'exam_id' })
-    exam: Exam | null;
+    exam: Relation<Exam> | null;
 
     // user
     @Column()

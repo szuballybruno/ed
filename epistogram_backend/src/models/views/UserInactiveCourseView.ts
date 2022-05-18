@@ -6,17 +6,11 @@ import { SessionActivityType } from '../../shared/types/sharedTypes';
     expression: ''
 })
 
-export class UserPerformanceView {
+export class UserInactiveCourseView {
 
     @ViewColumn()
     userId: number;
 
     @ViewColumn()
-    performancePercentage: number;
-
-    @ViewColumn()
-    userExamLengthPoints: number;
-
-    @ViewColumn()
-    userReactionTimePoints: number;
+    inactiveCourseCount: number;
 }

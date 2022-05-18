@@ -20,7 +20,7 @@ export class UserLearningOverviewDataDTO {
 
     answeredVideoAndPractiseQuizQuestions: number;
     correctAnsweredVideoAndPractiseQuizQuestions: number;
-    userReactionTimeDifferenceSeconds: number;
+    userReactionTimeDifferencePercentage: number;
     correctAnswerRatePercentage: number;
     averageWatchedVideosPerDay: number;
 

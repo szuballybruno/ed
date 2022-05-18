@@ -63,31 +63,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             </Flex>
         </Flex>
 
-        {/* navigation buttons */}
-        <Flex
-            h="30px"
-            align="center"
-            justify="center">
 
-            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
-                <ArrowBack />
-            </EpistoButton>
-
-            {activeCoursesPaging
-                .items
-                .map((x, index) => <FiberManualRecord
-                    key={index}
-                    style={{
-                        width: '10px',
-                        height: '8px',
-                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
-                    }} />)}
-
-            <EpistoButton onClick={() => activeCoursesPaging.next()}>
-                <ArrowForward />
-            </EpistoButton>
-
-        </Flex>
 
         {/* text daily tip */}
         {dailyTipData?.description && <Flex

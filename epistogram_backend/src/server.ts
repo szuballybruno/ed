@@ -5,6 +5,7 @@ import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
+import { CommentController } from './api/CommentController';
 import { CompanyController } from './api/CompanyController';
 import { CourseController } from './api/CourseController';
 import { CourseRatingController } from './api/CourseRatingController';
@@ -38,6 +39,7 @@ import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
+import { CommentService } from './services/CommentService';
 import { CompanyService } from './services/CompanyService';
 import { CourseItemsService } from './services/CourseItemsService';
 import { CourseRatingService } from './services/CourseRatingService';
@@ -82,6 +84,7 @@ import { TeacherInfoService } from './services/TeacherInfoService';
 import { TempomatService } from './services/TempomatService';
 import { TokenService } from './services/TokenService';
 import { UrlService } from './services/UrlService';
+import { LikeService } from './services/LikeService';
 import { UserCourseBridgeService } from './services/UserCourseBridgeService';
 import { UserProgressService } from './services/UserProgressService';
 import { UserService } from './services/UserService';
@@ -160,6 +163,8 @@ const main = async () => {
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
+    const commentService = new CommentService(ormConnectionService, mapperService);
+    const likeService = new LikeService(ormConnectionService, mapperService);
     const companyService = new CompanyService(ormConnectionService, mapperService, permissionService);
 
     // controllers 
@@ -194,6 +199,7 @@ const main = async () => {
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
     const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
+    const commentController = new CommentController(commentService, likeService);
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
@@ -217,6 +223,7 @@ const main = async () => {
         .addController(PermissionController, permissionController)
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)
+        .addController(CommentController, commentController)
         .addController(AuthenticationController, authenticationController)
         .addController(ExamController, examController)
         .addController(RegistrationController, registrationController)
@@ -292,7 +299,7 @@ const main = async () => {
 
     // user stats 
     addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
-    addEndpoint(apiRoutes.userStats.getUserLearningOverviewData, userStatsController.getUserLearningOverviewDataAction, { authorize: ['administrator'] });
+    addEndpoint(apiRoutes.userStats.getUserLearningOverviewData, userStatsController.getUserLearningOverviewDataAction);
 
     // user progress
     addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
