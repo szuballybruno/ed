@@ -1,4 +1,4 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { getJoinColumnInverseSide } from '../../utilities/helpers';
 import { RegistrationType } from '../Types';
@@ -92,7 +92,7 @@ export class User {
 
     @ManyToOne(() => StorageFile, sf => sf.users)
     @JoinColumn({ name: 'avatar_file_id' })
-    avatarFile: StorageFile | null;
+    avatarFile: Relation<StorageFile> | null;
 
     // company 
     @Column()
@@ -100,7 +100,7 @@ export class User {
 
     @ManyToOne(() => Company, x => x.users)
     @JoinColumn({ name: 'company_id' })
-    company: Company;
+    company: Relation<Company>;
 
     // job title 
     @Column({ nullable: true, type: 'number' })
@@ -108,109 +108,109 @@ export class User {
 
     @ManyToOne(_ => JobTitle, x => x.users)
     @JoinColumn({ name: 'job_title_id' })
-    jobTitle: JobTitle | null;
+    jobTitle: Relation<JobTitle> | null;
 
     // teacher info
     @OneToOne(_ => TeacherInfo, x => x.user)
-    teacherInfo: TeacherInfo;
+    teacherInfo: Relation<TeacherInfo>;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)
     @JoinColumn()
-    tasks: Task[];
+    tasks: Relation<Task>[];
 
     // teacher
     @OneToMany(() => Course, course => course.teacher)
     @JoinColumn()
-    teachedCourses: Course[];
+    teachedCourses: Relation<Course>[];
 
     // comment
     @OneToMany(() => Comment, comment => comment.user)
     @JoinColumn()
-    comments: Comment[];
+    comments: Relation<Comment>[];
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.user)
     @JoinColumn()
-    answerSessions: AnswerSession[];
+    answerSessions: Relation<AnswerSession>[];
 
     // video playback samples 
     @OneToMany(_ => VideoPlaybackSample, x => x.user)
     @JoinColumn()
-    videoPlaybackSamples: VideoPlaybackSample[];
+    videoPlaybackSamples: Relation<VideoPlaybackSample>[];
 
     // user course bridges 
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
-    userCourseBridges: UserCourseBridge[];
+    userCourseBridges: Relation<UserCourseBridge>[];
 
     // likes
     @OneToMany(_ => Like, x => x.comment)
     @JoinColumn()
-    likes: Like[];
+    likes: Relation<Like>[];
 
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activitySession)
-    coinAcquires: CoinTransaction[];
+    coinAcquires: Relation<CoinTransaction>[];
 
     // sessions
     @JoinColumn()
     @OneToMany(_ => ActivitySession, x => x.user)
-    activitySessions: ActivitySession[];
+    activitySessions: Relation<ActivitySession>[];
 
     // events 
     @JoinColumn()
     @OneToMany(_ => Event, x => x.user)
-    events: Event[];
+    events: Relation<Event>[];
 
     // courseAccessBridges
     @JoinColumn()
     @OneToMany(_ => CourseAccessBridge, x => x.user)
-    courseAccessBridges: CourseAccessBridge[];
+    courseAccessBridges: Relation<CourseAccessBridge>[];
 
     // discountCodes
     @JoinColumn()
     @OneToMany(_ => DiscountCode, x => x.user)
-    discountCodes: DiscountCode[];
+    discountCodes: Relation<DiscountCode>[];
 
     // ratings
     @JoinColumn()
     @OneToMany(_ => VideoRating, x => x.user)
-    videoRatings: VideoRating[];
+    videoRatings: Relation<VideoRating>[];
 
     // dailyTipOccurrences
     @JoinColumn()
     @OneToMany(_ => DailyTipOccurrence, x => x.user)
-    dailyTipOccurrences: DailyTipOccurrence[];
+    dailyTipOccurrences: Relation<DailyTipOccurrence>[];
 
     // answers 
     @OneToMany(_ => PrequizUserAnswer, x => x.question)
     @JoinColumn()
-    prequizAnswers: PrequizUserAnswer[];
+    prequizAnswers: Relation<PrequizUserAnswer>[];
 
     // courseRatingAnswers
     @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.user)
     @JoinColumn()
-    courseRatingAnswers: CourseRatingQuestionUserAnswer[];
+    courseRatingAnswers: Relation<CourseRatingQuestionUserAnswer>[];
 
     // videoProgressBridges
     @JoinColumn()
     @OneToMany(_ => UserVideoProgressBridge, x => x.user)
-    videoProgressBridges: UserVideoProgressBridge[];
+    videoProgressBridges: Relation<UserVideoProgressBridge>[];
 
     // videoProgressBridges
     @JoinColumn()
     @OneToMany(_ => UserExamProgressBridge, x => x.user)
-    examProgressBridges: UserExamProgressBridge[];
+    examProgressBridges: Relation<UserExamProgressBridge>[];
 
     // role assingments
     @JoinColumn()
-    @OneToMany(_ => RoleAssignmentBridge, x => x.user)
-    roleAssignmentBridges: RoleAssignmentBridge[];
+    @OneToMany(_ => RoleAssignmentBridge, x => x.assigneeUser)
+    roleAssignmentBridges: Relation<RoleAssignmentBridge>[];
 
     // companyOwnerBridges
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
-    companyOwnerBridges: CompanyOwnerBridge[];
+    companyOwnerBridges: Relation<CompanyOwnerBridge>[];
 }

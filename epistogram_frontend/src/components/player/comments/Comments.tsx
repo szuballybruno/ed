@@ -99,7 +99,9 @@ const Comments = (props: {
     };
 
     return (
-        <Flex direction={'column'}
+        <Flex
+            flex='1'
+            direction={'column'}
             minH={600}
             pb="100px">
             <EpistoFont

@@ -34,7 +34,7 @@ export type ApplicationRoutesType = {
         courseOverviewRoute: ApplicationRoute;
     };
     learningRoute: ApplicationRoute & {
-        overview: ApplicationRoute;
+        overviewRoute: ApplicationRoute;
         myStatisticsRoute: ApplicationRoute;
         myCoursesRoute: ApplicationRoute;
         myExamsRoute: ApplicationRoute;
@@ -62,13 +62,13 @@ export type ApplicationRoutesType = {
             interactiveCourseRoute: ApplicationRoute;
         };
         shopRoute: ApplicationRoute & {
-            overview: ApplicationRoute;
+            overviewRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
             editRoute: ApplicationRoute;
         };
         personalityAssessmentRoute: ApplicationRoute & {
-            editTips: ApplicationRoute & {
-                editTip: ApplicationRoute;
+            editTipsRoute: ApplicationRoute & {
+                editTipRoute: ApplicationRoute;
             };
         };
         myCompanyRoute: ApplicationRoute;
@@ -83,7 +83,7 @@ export type ApplicationRoutesType = {
     };
     settingsRoute: ApplicationRoute & {
         preferencesRoute: ApplicationRoute;
-        developmentNotes: ApplicationRoute;
+        developmentNotesRoute: ApplicationRoute;
         featurePreviewRoute: ApplicationRoute;
         coinTransactionsRoute: ApplicationRoute;
     };
@@ -101,6 +101,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         loginRoute: {
             title: translatableTexts.routeTitles.login,
             route: new EpistoRoute('/', 'login'),
+            isUnauthorized: true
         },
 
         underMaintanenceRoute: {
@@ -116,6 +117,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         signupRoute: {
             title: translatableTexts.routeTitles.registration,
             route: new EpistoRoute('/', 'signup'),
+            ignoreAccessAppRestriction: true
         },
 
         setNewPasswordRoute: {
@@ -195,7 +197,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
             route: new EpistoRoute('/', 'learning', '*'),
             icon: <School />,
 
-            overview: {
+            overviewRoute: {
                 title: translatableTexts.routeTitles.learningOverview,
                 route: new EpistoRoute('/learning', 'overview'),
                 icon: <img
@@ -349,7 +351,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 icon: <ShoppingCartIcon className="fontXXL"
                     color={'secondary'} />,
 
-                overview: {
+                overviewRoute: {
                     title: translatableTexts.routeTitles.administrationShopAdd,
                     route: new EpistoRoute('/administration/shop', 'overview'),
                 },
@@ -372,11 +374,11 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                     className="fontXXL"
                     color={'secondary'} />,
 
-                editTips: {
+                editTipsRoute: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
                     route: new EpistoRoute('/administration/personality-assessment', ':traitCategoryId/:isMax'),
 
-                    editTip: {
+                    editTipRoute: {
                         title: translatableTexts.routeTitles.administrationPersonalityAssessmentTip,
                         route: new EpistoRoute('/administration/personality-assessment/:traitCategoryId/:isMax', 'tip/:dailyTipId'),
                     }
@@ -427,30 +429,30 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
 
         settingsRoute: {
             title: translatableTexts.routeTitles.settings,
-            route: new EpistoRoute('/administration', 'settings', '*'),
+            route: new EpistoRoute('/', 'settings', '*'),
             icon: <Settings></Settings>,
 
             preferencesRoute: {
                 title: translatableTexts.routeTitles.settingsOverview,
-                route: new EpistoRoute('/administration/settings', 'preferences'),
+                route: new EpistoRoute('/settings/settings', 'preferences'),
                 icon: <Settings></Settings>,
             },
 
-            developmentNotes: {
+            developmentNotesRoute: {
                 title: translatableTexts.routeTitles.developmentNotes,
-                route: new EpistoRoute('/administration/settings', 'development-notes'),
+                route: new EpistoRoute('/settings/settings', 'development-notes'),
                 icon: <EventNoteIcon />
             },
 
             featurePreviewRoute: {
                 title: translatableTexts.routeTitles.featurePreview,
-                route: new EpistoRoute('/administration/settings', 'feature-preview'),
+                route: new EpistoRoute('/settings/settings', 'feature-preview'),
                 icon: <AutoAwesomeIcon />
             },
 
             coinTransactionsRoute: {
                 title: translatableTexts.routeTitles.coinTransactions,
-                route: new EpistoRoute('/administration/settings', 'coin-transactions'),
+                route: new EpistoRoute('/settings/settings', 'coin-transactions'),
                 icon: <AttachMoneyIcon />
             }
         }

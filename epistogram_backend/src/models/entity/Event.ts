@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { EventCodeType } from '../../shared/types/sharedTypes';
 import { User } from './User';
 
@@ -25,5 +25,5 @@ export class Event {
 
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.events)
-    user: User;
+    user: Relation<User>;
 }

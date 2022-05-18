@@ -22,6 +22,7 @@ import { Answer } from '../models/entity/Answer';
 import { X509Certificate } from 'crypto';
 import { CourseController } from '../api/CourseController';
 import { Index } from 'typeorm';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class VideoService extends QueryServiceBase<Video> {
 
@@ -50,7 +51,7 @@ export class VideoService extends QueryServiceBase<Video> {
     }
 
     answerVideoQuestionAsync = async (
-        userId: number,
+        userId: PrincipalId,
         answerSessionId: number,
         questionId: number,
         answerIds: number[],
@@ -59,7 +60,7 @@ export class VideoService extends QueryServiceBase<Video> {
         // validation comes here
 
         return this._questionAnswerService
-            .answerQuestionAsync(userId, answerSessionId, questionId, answerIds, false, elapsedSeconds);
+            .answerQuestionAsync(userId.toSQLValue(), answerSessionId, questionId, answerIds, false, elapsedSeconds);
     };
 
     insertVideoAsync = async (video: Video, filePath?: string) => {

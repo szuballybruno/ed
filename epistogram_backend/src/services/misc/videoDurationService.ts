@@ -1,6 +1,8 @@
-import { getVideoDurationInSeconds } from 'get-video-duration';
+// import { getVideoDurationInSeconds } from 'get-video-duration';
 
 export const getVideoLengthSecondsAsync = (url: string) => {
 
-    return getVideoDurationInSeconds(url);
+    // TODO 
+    return 10;
+    // return getVideoDurationInSeconds(url);
 };

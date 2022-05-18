@@ -6,7 +6,7 @@ import { QuestionService } from '../services/QuestionService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { VideoService } from '../services/VideoService';
 import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class VideoController {
 

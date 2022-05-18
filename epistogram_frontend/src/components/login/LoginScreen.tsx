@@ -26,8 +26,6 @@ const LoginScreen = () => {
     const { hasPermission } = useContext(AuthorizationContext);
     const dest = useQueryVal('dest');
 
-    console.log(dest);
-
     // state
     const [errorMessage, setErrorMessage] = useState('');
 

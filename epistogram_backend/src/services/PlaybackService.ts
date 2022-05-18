@@ -3,6 +3,7 @@ import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
 import { VideoProgressView } from '../models/views/VideoProgressView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
+import { PrincipalId } from '../utilities/ActionParams';
 import { CoinAcquireService } from './CoinAcquireService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -39,7 +40,9 @@ export class PlaybackService extends ServiceBase {
         this._config = config;
     }
 
-    saveVideoPlaybackSample = async (userId: number, dto: VideoPlaybackSampleDTO) => {
+    saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
+
+        const userId = principalId.toSQLValue();
 
         const currentItemCode = await this._courseBridgeService
             .getCurrentItemCodeOrFailAsync(userId);

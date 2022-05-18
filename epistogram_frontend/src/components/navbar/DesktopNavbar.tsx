@@ -4,11 +4,10 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
-import {  getUrl } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
-import { AuthorizationContext, CurrentUserContext } from '../system/AuthenticationFrame';
+import { AuthorizationContext } from '../system/AuthenticationFrame';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
 

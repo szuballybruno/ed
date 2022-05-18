@@ -1,4 +1,4 @@
-import { ChildPropsType } from '../../static/frontendHelpers';
+import { PropsWithChildren } from '../../static/frontendHelpers';
 import { ThemeProvider } from '@mui/system';
 import { createTheme } from '@mui/material/styles';
 
@@ -26,7 +26,7 @@ const muiTheme = createTheme({
     },
 });
 
-export const MUIThemeFrame = (props: ChildPropsType) => {
+export const MUIThemeFrame = (props: PropsWithChildren) => {
 
     return <>
         <ThemeProvider theme={muiTheme}>

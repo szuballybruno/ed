@@ -3,23 +3,24 @@ import { Exam } from '../models/entity/Exam';
 import { Question } from '../models/entity/Question';
 import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
+import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
 import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamView } from '../models/views/ExamView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
+import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { toExamQuestionEditDTO, toExamResultDTO } from './misc/mappings';
 import { QueryServiceBase } from './misc/ServiceBase';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
-import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 
 export class ExamService extends QueryServiceBase<Exam> {
 
@@ -245,9 +246,11 @@ export class ExamService extends QueryServiceBase<Exam> {
      * @param dto 
      * @returns 
      */
-    answerExamQuestionAsync = async (userId: number, dto: AnswerQuestionDTO) => {
+    answerExamQuestionAsync = async (principalId: PrincipalId, dto: AnswerQuestionDTO) => {
 
         // TODO validation comes here
+
+        const userId = principalId.toSQLValue();
 
         const { answerSessionId, answerIds, elapsedSeconds, questionId } = dto;
 
@@ -378,10 +381,10 @@ export class ExamService extends QueryServiceBase<Exam> {
      * @param answerSessionId 
      * @returns 
      */
-    getExamResultsAsync = async (userId: number, answerSessionId: number) => {
+    getExamResultsAsync = async (userId: PrincipalId, answerSessionId: number) => {
 
         const currentItemCode = await this._userCourseBridgeService
-            .getCurrentItemCodeOrFailAsync(userId);
+            .getCurrentItemCodeOrFailAsync(userId.toSQLValue());
 
         const { itemId: currentExamId, itemType } = readItemCode(currentItemCode);
 
@@ -393,7 +396,7 @@ export class ExamService extends QueryServiceBase<Exam> {
             .find({
                 where: {
                     examId: currentExamId,
-                    userId: userId,
+                    userId: userId.toSQLValue(),
                     answerSessionId: answerSessionId
                 }
             });

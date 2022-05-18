@@ -1,23 +1,23 @@
 import { Flex } from '@chakra-ui/react';
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Environment } from '../../static/Environemnt';
-import { ChildPropsType, useCurrentUrlPathname, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 
-const getAuthorizationContextData = (permissions: PermissionCodeType[]) => {
+const getAuthorizationContextData = (permissionCodes?: PermissionCodeType[]) => {
 
     return {
-        hasPermission: (perm: PermissionCodeType) => {
+        hasPermission: (permCode: PermissionCodeType) => {
 
-            const isFound = permissions.any(x => x === perm);
+            if (!permissionCodes)
+                return false;
 
-            // console.log(permissions);
-
-            // console.log(`Looking for permission '${perm}'. Found: ${isFound}.`);
+            const isFound = permissionCodes
+                .any(code => code === permCode);
 
             return isFound;
         },
@@ -26,6 +26,8 @@ const getAuthorizationContextData = (permissions: PermissionCodeType[]) => {
 };
 
 type AuthorizationContextDataType = ReturnType<typeof getAuthorizationContextData>;
+
+export const AuthorizationContext = createContext<AuthorizationContextDataType>(getAuthorizationContextData());
 
 const userDefaults: UserDTO = {
     avatarUrl: '',
@@ -44,33 +46,31 @@ const userDefaults: UserDTO = {
     phoneNumber: ''
 };
 
-const authDefaultPermissions: PermissionCodeType[] = [
-    'ACCESS_ADMIN',
-    'ACCESS_APPLICATION',
-    'MANAGE_SHOP',
-];
-
-export const AuthorizationContext = createContext<AuthorizationContextDataType>(getAuthorizationContextData(authDefaultPermissions));
 export const CurrentUserContext = createContext<UserDTO>(userDefaults);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
 export const AuthenticationStateContext = createContext<AuthenticationStateType>('loading');
 
-const AuthFirewall = (props: ChildPropsType & {
+const AuthFirewall = (props: PropsWithChildren & {
     authState: AuthenticationStateType
 }): JSX.Element => {
 
     const { authState, children } = props;
-    const isMatchingCurrent = useIsMatchingCurrentRoute();
     const dest = useCurrentUrlPathname();
     const loginRoute = applicationRoutes.loginRoute;
-    const { isMatchingRoute: isLoginRoute } = isMatchingCurrent(loginRoute);
+    const signupRoute = applicationRoutes.signupRoute;
     const { navigate } = useNavigation();
+    const currentRoute = useGetCurrentAppRoute();
+    const { hasPermission } = useContext(AuthorizationContext);
+    const isUnauthorized = !!currentRoute.isUnauthorized;
+
+    if (Environment.loggingSettings.auth)
+        console.log(`Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 
     // if loading return blank page
     if (authState === 'loading') {
 
         if (Environment.loggingSettings.auth)
-            console.log('Rendering empty div until loaded.');
+            console.log(`Auth state: ${authState}. Rendering empty div until loaded.`);
 
         return <div></div>;
     }
@@ -79,7 +79,7 @@ const AuthFirewall = (props: ChildPropsType & {
     if (authState === 'error') {
 
         if (Environment.loggingSettings.auth)
-            console.log('Rendering error page.');
+            console.log(`Auth state: ${authState}. Rendering error page.`);
 
         return <Flex
             className="whall"
@@ -91,18 +91,33 @@ const AuthFirewall = (props: ChildPropsType & {
     }
 
     // check authentication 
-    if (authState === 'forbidden' && !isLoginRoute) {
+    if (authState === 'forbidden' && !isUnauthorized) {
 
         if (Environment.loggingSettings.auth)
-            console.log('Redirecting...');
+            console.log(`Auth state: ${authState}. Redirecting...`);
 
         navigate(loginRoute, undefined, { dest });
 
         return <div></div>;
     }
 
+    // check authorization
+    const canAccess = hasPermission('ACCESS_APPLICATION');
+    const ignoreAccessAppRestriction = !!currentRoute.ignoreAccessAppRestriction;
+    if (!canAccess && !ignoreAccessAppRestriction && !isUnauthorized) {
+
+        console.log(`canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
+
+        if (Environment.loggingSettings.auth)
+            console.log(`Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
+
+        navigate(signupRoute, undefined);
+
+        return <div></div>;
+    }
+
     if (Environment.loggingSettings.auth)
-        console.log('Children...');
+        console.log(`Auth state: ${authState}. Rendering content...`);
 
     return <>
         {children}
@@ -118,7 +133,7 @@ export const AuthenticationFrame = (props) => {
         console.log(`Auth state is: '${authState}'...`);
 
     // authorization context 
-    const authContextData: AuthorizationContextDataType = getAuthorizationContextData(authDefaultPermissions);
+    const authContextData = getAuthorizationContextData(authData?.permissions ?? []);
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserAsyncContext.Provider value={() => refetchAuthHandshake()}>

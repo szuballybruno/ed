@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { PrequizAnswer } from './PrequizAnswer';
 import { PrequizQuestion } from './PrequizQuestion';
 import { User } from '../User';
@@ -19,7 +19,7 @@ export class PrequizUserAnswer {
 
     @JoinColumn({ name: 'question_id' })
     @ManyToOne(_ => PrequizQuestion, x => x.userAnswers)
-    question: PrequizQuestion;
+    question: Relation<PrequizQuestion>;
 
     // answer 
     @Column({ type: 'int', nullable: true })
@@ -27,7 +27,7 @@ export class PrequizUserAnswer {
 
     @JoinColumn({ name: 'answer_id' })
     @ManyToOne(_ => PrequizAnswer, x => x.userAnswers)
-    answer: PrequizAnswer | null;
+    answer: Relation<PrequizAnswer> | null;
 
     // user  
     @Column()
@@ -35,7 +35,7 @@ export class PrequizUserAnswer {
 
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.prequizAnswers)
-    user: User;
+    user: Relation<User>;
     
     // course 
     @Column()
@@ -43,5 +43,5 @@ export class PrequizUserAnswer {
 
     @JoinColumn({ name: 'course_id' })
     @ManyToOne(_ => Course, x => x.prequizUserAnswers)
-    course: Course;
+    course: Relation<Course>;
 }

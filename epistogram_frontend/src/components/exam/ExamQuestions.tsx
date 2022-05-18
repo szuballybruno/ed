@@ -129,11 +129,9 @@ export const ExamQuestions = (props: {
                         src="https://static.thenounproject.com/png/92068-200.png"
                         className="tinyShadow" />
 
-                    <Text
-                        as="text"
-                        fontSize="1.3rem">
+                    <EpistoFont>
                         {currentQuestion.questionText}
-                    </Text>
+                    </EpistoFont>
                 </Flex>
 
                 {/* answers */}

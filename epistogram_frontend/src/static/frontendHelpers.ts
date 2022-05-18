@@ -2,6 +2,7 @@ import { useMediaQuery } from '@chakra-ui/react';
 import React, { ComponentType, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
+import { applicationRoutes, ApplicationRoutesType } from '../configuration/applicationRoutes';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
@@ -309,6 +310,43 @@ export const useIsMatchingCurrentRoute = () => {
     };
 };
 
+export const useGetCurrentAppRoute = () => {
+
+    const isMatching = useIsMatchingCurrentRoute();
+
+    const isRouteProp = (x: any) => !!x.route;
+
+    const getMatchingRoutes = (appRoute: ApplicationRoute): ApplicationRoute => {
+
+        // get subroutes 
+        const subRoutes = Object
+            .values(appRoute)
+            .filter(x => isRouteProp(x)) as ApplicationRoute[];
+
+        // exit if no subroutes found
+        if (subRoutes.length === 0)
+            return appRoute;
+
+        // get matching subroute and repeat
+        const matchingRoute = subRoutes
+            .firstOrNull((x: any) => {
+
+                const match = isMatching(x);
+
+                return x.route.isMatchMore()
+                    ? match.isMatchingRoute
+                    : match.isMatchingRouteExactly;
+            });
+
+        if (!matchingRoute)
+            return appRoute;
+
+        return getMatchingRoutes(matchingRoute);
+    };
+
+    return getMatchingRoutes(applicationRoutes as any);
+};
+
 export const useRedirectOnExactMatch = (opts: {
     route: ApplicationRoute,
     redirectRoute: ApplicationRoute,
@@ -533,7 +571,7 @@ export const usePasswordEntryState = () => {
     };
 };
 
-export type ChildPropsType = { children: ReactNode };
+export type PropsWithChildren = { children: ReactNode };
 
 export const useReactQuery = <T>(
     queryKey: any[],

@@ -6,27 +6,23 @@ import { withValueOrBadRequest, SafeObjectWrapper } from './helpers';
 
 export class PrincipalId {
 
-    id: number;
+    private _id: number;
 
     constructor(id: number) {
 
-        this.id = id;
-    }
-
-    get() {
-        return this.id;
+        this._id = id;
     }
 
     toSQLValue() {
 
-        return this.id;
+        return this._id;
     }
 }
 
 export class ActionParams {
     req: Request;
     res: Response;
-    currentUserId: number;
+    // currentUserId: number;
     isMultipart: boolean;
     principalId: PrincipalId;
 
@@ -39,7 +35,7 @@ export class ActionParams {
         this.isMultipart = isMultipart;
         this.req = req;
         this.res = res;
-        this.currentUserId = userId;
+        // this.currentUserId = userId;
         this.principalId = new PrincipalId(userId);
     }
 

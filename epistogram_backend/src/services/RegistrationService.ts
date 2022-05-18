@@ -3,6 +3,7 @@ import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { getFullName } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
@@ -45,8 +46,9 @@ export class RegistrationService extends ServiceBase {
         this._roleService = roleService;
     }
 
-    inviteUserAsync = async (userId: number, dto: CreateInvitedUserDTO) => {
+    inviteUserAsync = async (principalId: PrincipalId, dto: CreateInvitedUserDTO) => {
 
+        const userId = principalId.toSQLValue();
         // const hasSetUserCompanyPermission = this._roleService
         //     .findPermissionAsync(userId,  'canSetInvitedUserCompany');
 

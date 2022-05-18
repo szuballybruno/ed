@@ -49,7 +49,7 @@ export const HomePageCourseStats = (props: {
                 gridAutoRows: '160px'
             }}>
 
-            <Grid
+            {recommendedItemQuota ? <Grid
                 background='transparent'
                 boxShadow="unset"
                 direction="column"
@@ -93,7 +93,22 @@ export const HomePageCourseStats = (props: {
                     iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
                     isOpenByDefault={false} />
 
-            </Grid>
+            </Grid> : <Flex
+                align='center'
+                justify='center'
+                textAlign='center'
+                style={{
+                    gridColumn: 'auto / span 2',
+                    gridRow: 'auto / span 2',
+                    boxSizing: 'border-box',
+                    gap: '10px',
+                    gridAutoFlow: 'row dense',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                    gridAutoRows: '160px'
+                }}>
+
+                Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
+            </Flex>}
 
 
             {/* chart item  */}

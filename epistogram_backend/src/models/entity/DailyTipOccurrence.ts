@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { DailyTip } from './DailyTip';
 import { User } from './User';
 
@@ -17,7 +17,7 @@ export class DailyTipOccurrence {
 
     @ManyToOne(_ => DailyTip, x => x.occurrences)
     @JoinColumn({ name: 'daily_tip_id' })
-    dailyTip: DailyTip;
+    dailyTip: Relation<DailyTip>;
 
     // user
     @Column()
@@ -25,5 +25,5 @@ export class DailyTipOccurrence {
 
     @ManyToOne(_ => User, x => x.dailyTipOccurrences)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 }

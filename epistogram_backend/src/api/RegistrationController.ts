@@ -1,30 +1,28 @@
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { RegistrationService } from '../services/RegistrationService';
-import { UserService } from '../services/UserService';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ActionParams } from '../utilities/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams } from "../utilities/ActionParams";
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class RegistrationController {
 
     private _registrationService: RegistrationService;
-    private _userService: UserService;
     private _config: GlobalConfiguration;
 
     constructor(
         res: RegistrationService,
-        userService: UserService,
         config: GlobalConfiguration) {
 
         this._registrationService = res;
-        this._userService = userService;
         this._config = config;
     }
 
+    @XControllerAction(apiRoutes.registration.registerUserViaPublicToken, { isPublic: true, isPost: true })
     registerUserViaPublicTokenAction = async (params: ActionParams) => {
 
         const body = params.getBody<RegisterUserViaPublicTokenDTO>();
@@ -39,6 +37,7 @@ export class RegistrationController {
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
+    @XControllerAction(apiRoutes.registration.registerUserViaInvitationToken, { isPublic: true, isPost: true })
     registerUserViaInvitationTokenAction = async (params: ActionParams) => {
 
         const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
@@ -52,6 +51,7 @@ export class RegistrationController {
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
+    @XControllerAction(apiRoutes.registration.registerUserViaActivationCode, { isPublic: true, isPost: true })
     registerUserViaActivationCodeAction = async (params: ActionParams) => {
 
         const body = params.getBody<RegisterUserViaActivationCodeDTO>();
@@ -64,6 +64,7 @@ export class RegistrationController {
                 body.getValue(x => x.lastName, 'string'));
     };
 
+    @XControllerAction(apiRoutes.registration.inviteUser, { isPost: true })
     inviteUserAction = async (params: ActionParams) => {
 
         const dto = params
@@ -77,6 +78,6 @@ export class RegistrationController {
             ]).data;
 
         return await this._registrationService
-            .inviteUserAsync(params.currentUserId, dto);
+            .inviteUserAsync(params.principalId, dto);
     };
 }

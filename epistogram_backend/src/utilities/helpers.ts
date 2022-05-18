@@ -3,6 +3,9 @@ import { UploadedFile } from 'express-fileupload';
 import { ClassType, ParsableValueType } from '../models/Types';
 import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
+import { KeyofConstrained } from './misc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -14,7 +17,7 @@ export const toFullName = (firstName: string, lastName: string, culture?: 'en' |
     return `${firstName} ${lastName}`;
 };
 
-export const getJoinColumnName = <T>(c: ClassType<T>, prop: keyof T) => {
+export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, number | null>) => {
 
     return {
         name: toSQLSnakeCasing(prop as string)

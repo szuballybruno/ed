@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { CourseModeType, CourseStageNameType, TempomatModeType } from '../../shared/types/sharedTypes';
 import { Course } from './Course';
 import { User } from './User';
@@ -36,7 +36,7 @@ export class UserCourseBridge {
 
     @ManyToOne(_ => User, x => x.userCourseBridges)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 
     // course
     @Column()
@@ -44,5 +44,5 @@ export class UserCourseBridge {
 
     @ManyToOne(_ => Course, x => x.userCourseBridges)
     @JoinColumn({ name: 'course_id' })
-    course: Course;
+    course: Relation<Course>;
 }

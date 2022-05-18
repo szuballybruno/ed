@@ -4,6 +4,7 @@ import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { CoinAcquireService } from './CoinAcquireService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class QuestionAnswerService {
 

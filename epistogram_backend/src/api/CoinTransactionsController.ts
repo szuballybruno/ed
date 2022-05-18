@@ -1,5 +1,5 @@
 import { CoinTransactionService } from '../services/CoinTransactionService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class CoinTransactionsController {
 
@@ -13,13 +13,13 @@ export class CoinTransactionsController {
     getCoinTransactionsAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
-            .getCoinTransactionsAsync(params.currentUserId);
+            .getCoinTransactionsAsync(params.principalId);
     };
 
     getCoinBalanceAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
-            .getCoinBalance(params.currentUserId);
+            .getPrincipalCoinBalance(params.principalId);
     };
 
     getCoinBalanceOfUserAction = async (params: ActionParams) => {
@@ -29,7 +29,7 @@ export class CoinTransactionsController {
             .getValue(x => x.userId, 'int');
 
         return this._coinTransactionService
-            .getCoinBalance(userId);
+            .getCoinBalance(params.principalId, userId);
     };
 
     giftCoinsToUser = async (params: ActionParams) => {

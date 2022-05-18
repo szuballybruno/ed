@@ -1,8 +1,10 @@
 import { User } from '../models/entity/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { HashService } from './HashService';
 import { log } from './misc/logger';
+import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
 import { UserSessionActivityService } from './UserSessionActivityService';
@@ -13,17 +15,20 @@ export class AuthenticationService {
     private _tokenService: TokenService;
     private _userSessionActivityService: UserSessionActivityService;
     private _hashService: HashService;
+    private _permissionService: PermissionService;
 
     constructor(
         userService: UserService,
         tokenService: TokenService,
         userSessionActivityService: UserSessionActivityService,
-        hashService: HashService) {
+        hashService: HashService,
+        permissionService: PermissionService) {
 
         this._userService = userService;
         this._tokenService = tokenService;
         this._userSessionActivityService = userSessionActivityService;
         this._hashService = hashService;
+        this._permissionService = permissionService;
     }
 
     getRequestAccessTokenPayload = (accessToken: string) => {
@@ -56,49 +61,27 @@ export class AuthenticationService {
         await this._userSessionActivityService
             .saveUserSessionActivityAsync(currentUser.id, 'generic');
 
+        // get permissions 
+        const permissions = await this._permissionService
+            .getPermissionMatrixAsync(userId, currentUser.companyId);
+
         // get new tokens
         const {
             accessToken: newAccessToken,
             refreshToken: newRefreshToken
-        } = await this.renewUserSessionAsync(userId, refreshToken);
+        } = await this._renewUserSessionAsync(userId, refreshToken);
+
+        const authData: AuthDataDTO = {
+            currentUser,
+            permissions
+        };
 
         return {
-            authData: {
-                currentUser
-            } as AuthDataDTO,
+            authData,
             newAccessToken,
             newRefreshToken
         };
     }
-
-    private renewUserSessionAsync = async (userId: number, prevRefreshToken: string) => {
-
-        // check if this refresh token is associated to the user
-        const refreshTokenFromDb = await this._userService
-            .getUserRefreshTokenById(userId);
-
-        if (!refreshTokenFromDb)
-            throw new VerboseError(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
-
-        // get user 
-        const user = await this._userService
-            .getUserById(userId);
-
-        if (!user)
-            throw new VerboseError('User not found by id ' + userId, 'internal server error');
-
-        // get tokens
-        const { accessToken, refreshToken } = await this.getUserLoginTokens(user);
-
-        // save refresh token to DB
-        await this._userService
-            .setUserActiveRefreshToken(user.id, prevRefreshToken);
-
-        return {
-            accessToken,
-            refreshToken
-        };
-    };
 
     logInUser = async (email: string, password: string) => {
 
@@ -136,14 +119,14 @@ export class AuthenticationService {
         return tokens;
     };
 
-    logOutUserAsync = async (userId: number) => {
+    logOutUserAsync = async (userId: PrincipalId) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'logout');
+            .saveUserSessionActivityAsync(userId.toSQLValue(), 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
-            .removeRefreshToken(userId);
+            .removeRefreshToken(userId.toSQLValue());
     };
 
     getUserLoginTokens = async (user: User) => {
@@ -151,6 +134,35 @@ export class AuthenticationService {
         // get tokens
         const accessToken = this._tokenService.createAccessToken(user);
         const refreshToken = this._tokenService.createRefreshToken(user);
+
+        return {
+            accessToken,
+            refreshToken
+        };
+    };
+
+    private _renewUserSessionAsync = async (userId: number, prevRefreshToken: string) => {
+
+        // check if this refresh token is associated to the user
+        const refreshTokenFromDb = await this._userService
+            .getUserRefreshTokenById(userId);
+
+        if (!refreshTokenFromDb)
+            throw new VerboseError(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+
+        // get user 
+        const user = await this._userService
+            .getUserById(userId);
+
+        if (!user)
+            throw new VerboseError('User not found by id ' + userId, 'internal server error');
+
+        // get tokens
+        const { accessToken, refreshToken } = await this.getUserLoginTokens(user);
+
+        // save refresh token to DB
+        await this._userService
+            .setUserActiveRefreshToken(user.id, prevRefreshToken);
 
         return {
             accessToken,

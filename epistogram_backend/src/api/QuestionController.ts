@@ -30,7 +30,7 @@ export class QuestionController {
             .data;
 
         return this._practiseQuestionService
-            .answerPractiseQuestionAsync(params.currentUserId, dto);
+            .answerPractiseQuestionAsync(params.principalId, dto);
     };
 
     getQuestionEditDataAction = async (params: ActionParams) => {

@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { PrincipalId } from '../../utilities/ActionParams';
 import { Comment } from './Comment';
 import { Course } from './Course';
 import { User } from './User';
@@ -23,7 +24,7 @@ export class Like {
 
     @ManyToOne(_ => User, x => x.likes)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 
     // comment
     @Column()
@@ -31,5 +32,5 @@ export class Like {
 
     @ManyToOne(_ => Comment, x => x.likes)
     @JoinColumn({ name: 'comment_id' })
-    comment: Course;
+    comment: Relation<Course>;
 }

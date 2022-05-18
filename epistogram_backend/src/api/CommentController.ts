@@ -40,7 +40,7 @@ export class CommentController {
     @XControllerAction(apiRoutes.comment.createLike, { isPost: true })
     createUserCommentBridgeAction = async (params: ActionParams) => {
 
-        const currentUserId = params.currentUserId;
+        const principalId = params.principalId;
 
         const commentId = params
             .getBody<{ commentId: number }>()
@@ -48,7 +48,7 @@ export class CommentController {
 
         return this
             ._userCommentBridgeService
-            .createUserCommentLikeBridgeAsync(currentUserId, commentId);
+            .createUserCommentLikeBridgeAsync(principalId, commentId);
     };
 
     /**
@@ -57,7 +57,7 @@ export class CommentController {
     @XControllerAction(apiRoutes.comment.getComments)
     getCommentsAction = async (params: ActionParams) => {
 
-        const currentUserId = params.currentUserId;
+        const principalId = params.principalId;
 
         const itemCode = params
             .getQuery<{ itemCode: string }>()
@@ -70,7 +70,7 @@ export class CommentController {
             .getCommentsAsync(
                 itemCodeData.itemType === 'video'
                     ? itemCodeData.itemId
-                    : 0, currentUserId);
+                    : 0, principalId);
     };
 
     /**
@@ -79,7 +79,7 @@ export class CommentController {
     @XControllerAction(apiRoutes.comment.deleteLike, { isPost: true })
     softDeleteUserCommentBridgeAction = async (params: ActionParams) => {
 
-        const currentUserId = params.currentUserId;
+        const principalId = params.principalId;
 
         const commentId = params
             .getBody<{ commentId: number }>()
@@ -87,6 +87,6 @@ export class CommentController {
 
         return this
             ._userCommentBridgeService
-            .softDeleteUserCommentLikeBridgeAsync(currentUserId, commentId);
+            .softDeleteUserCommentLikeBridgeAsync(principalId, commentId);
     };
 }

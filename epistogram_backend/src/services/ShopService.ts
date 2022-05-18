@@ -22,6 +22,7 @@ import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class ShopService {
 
@@ -51,7 +52,9 @@ export class ShopService {
         this._urlService = urlService;
     }
 
-    async getShopItemsAsync(userId: number) {
+    async getShopItemsAsync(principalId: PrincipalId) {
+
+        const userId = principalId.toSQLValue();
 
         const shopItemViews = await this._ormService
             .getRepository(ShopItemStatefulView)
@@ -74,8 +77,10 @@ export class ShopService {
             .mapMany(ShopItemCategory, ShopItemCategoryDTO, shopItemCategories);
     }
 
-    async purchaseShopItemAsync(userId: number, shopItemId: number) {
+    async purchaseShopItemAsync(principalId: PrincipalId, shopItemId: number) {
 
+        const userId = principalId.toSQLValue();
+        
         const shopItem = await this._ormService
             .getSingleById(ShopItem, shopItemId);
 

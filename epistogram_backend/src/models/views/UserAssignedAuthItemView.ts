@@ -7,7 +7,7 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserAssignedAuthItemView {
 
     @ViewColumn()
-    userId: number;
+    assigneeUserId: number;
 
     @ViewColumn()
     permissionId: number | null;

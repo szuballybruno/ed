@@ -46,6 +46,7 @@ import { PretestService } from './PretestService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class CourseService {
 
@@ -84,12 +85,12 @@ export class CourseService {
      * @param userId 
      * @returns 
      */
-    async getCourseProgressShortAsync(userId: number) {
+    async getCourseProgressShortAsync(userId: PrincipalId) {
 
         const views = await this._ormService
             .getRepository(CourseProgressView)
             .createQueryBuilder('cpv')
-            .where('cpv.userId = :userId', { userId })
+            .where('cpv.userId = :userId', { userId: userId.toSQLValue() })
             .getMany();
 
         return this._mapperService
@@ -138,13 +139,13 @@ export class CourseService {
      * @param courseId 
      * @returns 
      */
-    async getCourseDetailsAsync(userId: number, courseId: number) {
+    async getCourseDetailsAsync(userId: PrincipalId, courseId: number) {
 
         const courseDetailsView = await this._ormService
             .getRepository(CourseDetailsView)
             .createQueryBuilder('cdv')
             .where('cdv.courseId = :courseId', { courseId })
-            .andWhere('cdv.userId = :userId', { userId })
+            .andWhere('cdv.userId = :userId', { userId: userId.toSQLValue() })
             .getOneOrFail();
 
         const moduleViews = await this._ormService
@@ -197,7 +198,7 @@ export class CourseService {
      * @param userId 
      * @returns 
      */
-    async getCourseProgressDataAsync(userId: number) {
+    async getCourseProgressDataAsync(userId: PrincipalId) {
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
@@ -248,7 +249,7 @@ export class CourseService {
             .findOne({
                 where: {
                     courseId: currentCourseId,
-                    userId
+                    userId: userId
                 }
             });
 
@@ -330,15 +331,15 @@ export class CourseService {
      * Get the current course modules with items.
      * 
      */
-    async getCurrentCourseModulesAsync(userId: number) {
+    async getCurrentCourseModulesAsync(userId: PrincipalId) {
 
         const courseId = await this._userCourseBridgeService
-            .getCurrentCourseId(userId);
+            .getCurrentCourseId(userId.toSQLValue());
 
         if (!courseId)
             throw new Error('There\'s no current course!');
 
-        return await this.getCourseModulesAsync(userId, courseId);
+        return await this.getCourseModulesAsync(userId.toSQLValue(), courseId);
     }
 
     /**
@@ -354,7 +355,7 @@ export class CourseService {
             .getRepository(CourseItemStateView)
             .createQueryBuilder('cisv')
             .where('cisv.courseId = :courseId', { courseId })
-            .andWhere('cisv.userId = :userId', { userId })
+            .andWhere('cisv.userId = :userId', { userId: userId })
             .getMany();
 
         const modules = views
@@ -687,7 +688,7 @@ export class CourseService {
      * @param userId 
      * @returns 
      */
-    async getAvailableCoursesAsync(userId: number) {
+    async getAvailableCoursesAsync(userId: PrincipalId) {
 
         const courses = await this._ormService
             .query(AvailableCourseView, { userId })

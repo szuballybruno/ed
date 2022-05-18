@@ -1,4 +1,4 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
@@ -43,7 +43,7 @@ export class Video {
 
     @ManyToOne(type => StorageFile, s => s.videos, { cascade: true })
     @JoinColumn({ name: 'video_file_id' })
-    videoFile: StorageFile;
+    videoFile: Relation<StorageFile>;
 
     // thumbnail file
     @Column({ nullable: true })
@@ -51,12 +51,12 @@ export class Video {
 
     @OneToOne(type => StorageFile, { cascade: true })
     @JoinColumn({ name: 'thumbnail_file_id' })
-    thumbnailFile: StorageFile;
+    thumbnailFile: Relation<StorageFile>;
 
     // questions
     @OneToMany(type => Question, q => q.video, { onDelete: 'CASCADE', cascade: true })
     @JoinColumn()
-    questions: Question[];
+    questions: Relation<Question>[];
 
     // course
     @Column()
@@ -64,7 +64,7 @@ export class Video {
 
     @ManyToOne(type => Course, course => course.videos)
     @JoinColumn({ name: 'course_id' })
-    course: Course;
+    course: Relation<Course>;
 
     // user session activity
     @OneToMany(_ => UserSessionActivity, as => as.video)
@@ -79,12 +79,12 @@ export class Video {
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.video)
     @JoinColumn()
-    answerSessions: AnswerSession[];
+    answerSessions: Relation<AnswerSession>[];
 
     // video playback samples 
     @OneToMany(_ => VideoPlaybackSample, x => x.video)
     @JoinColumn()
-    videoPlaybackSamples: VideoPlaybackSample[];
+    videoPlaybackSamples: Relation<VideoPlaybackSample>[];
 
     // module
     @Column()
@@ -92,20 +92,20 @@ export class Video {
 
     @ManyToOne(_ => CourseModule, x => x.videos)
     @JoinColumn({ name: 'module_id' })
-    module: CourseModule;
+    module: Relation<CourseModule>;
 
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activitySession)
-    coinAcquires: CoinTransaction[];
+    coinAcquires: Relation<CoinTransaction>[];
 
     // ratings
     @JoinColumn()
     @OneToMany(_ => VideoRating, x => x.video)
-    videoRatings: VideoRating[];
+    videoRatings: Relation<VideoRating>[];
 
     // userProgressBridges
     @JoinColumn()
     @OneToMany(_ => UserVideoProgressBridge, x => x.video)
-    userProgressBridges: UserVideoProgressBridge[];
+    userProgressBridges: Relation<UserVideoProgressBridge>[];
 }

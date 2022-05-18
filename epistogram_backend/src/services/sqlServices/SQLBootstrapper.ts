@@ -2,35 +2,17 @@
 import { readFileSync } from 'fs';
 import { replaceAll, toSQLSnakeCasing } from '../../utilities/helpers';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log, logObject, logSecondary } from '../misc/logger';
+import { log, logSecondary } from '../misc/logger';
+import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
-
-export type SchemaDefinitionType = {
-    entities: Function[];
-    viewScripts: string[];
-    functionScripts: string[];
-    constraints: SQLConstraintType[];
-    indices: SQLIndexType[];
-    triggers: string[];
-}
-
-export type SQLConstraintType = {
-    name: string;
-    tableName: string;
-}
-
-export type SQLIndexType = {
-    name: string;
-    tableName: string;
-}
 
 export class SQLBootstrapperService {
 
     private _sqlConnectionService: SQLConnectionService;
-    private _dbSchema: SchemaDefinitionType;
+    private _dbSchema: XDBMSchemaType;
     private _configuration: GlobalConfiguration;
 
-    constructor(sqlco: SQLConnectionService, schema: SchemaDefinitionType, configuration: GlobalConfiguration) {
+    constructor(sqlco: SQLConnectionService, schema: XDBMSchemaType, configuration: GlobalConfiguration) {
 
         this._sqlConnectionService = sqlco;
         this._dbSchema = schema;
@@ -40,7 +22,7 @@ export class SQLBootstrapperService {
     bootstrapDatabase = async () => {
 
         log('Recreating views...');
-        await this.recreateViewsAsync(this._dbSchema.viewScripts);
+        await this.recreateViewsAsync(this._dbSchema.views.map(x => x[0]));
 
         log('Recreating functions...');
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
@@ -107,12 +89,13 @@ export class SQLBootstrapperService {
         // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
         // writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
 
-        logObject(dropDBScript);
+        // logObject(dropDBScript);
 
-        const results = await this._sqlConnectionService.executeSQLAsync(dropDBScript);
+        const results = await this._sqlConnectionService
+            .executeSQLAsync(dropDBScript);
     };
 
-    private recreateConstraintsAsync = async (constraints: SQLConstraintType[]) => {
+    private recreateConstraintsAsync = async (constraints: XDBMConstraintType[]) => {
 
         // drop constraints
         const drops = constraints
@@ -131,7 +114,7 @@ export class SQLBootstrapperService {
         }
     };
 
-    private recreateIndicesAsync = async (indices: SQLIndexType[]) => {
+    private recreateIndicesAsync = async (indices: XDMBIndexType[]) => {
 
         // drop all indices
         const drops = indices

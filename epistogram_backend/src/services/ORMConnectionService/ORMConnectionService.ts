@@ -5,24 +5,20 @@ import { noUndefined } from '../../shared/logic/sharedLogic';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
+import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XQueryBuilder } from './XQueryBuilder';
-import { ExpressionPart, ParamConstraintType } from './XQueryBuilderTypes';
+import { ParamConstraintType } from './XQueryBuilderTypes';
 
 export type ORMConnection = DataSource;
-
-export type ORMSchemaType = {
-    entities: any[],
-    viewEntities: any[]
-}
 
 export class ORMConnectionService {
 
     private _config: GlobalConfiguration;
-    private _schema: ORMSchemaType;
+    private _schema: XDBMSchemaType;
     private _ormConnection: ORMConnection;
     private _sqlConnectionService: SQLConnectionService;
 
-    constructor(config: GlobalConfiguration, schema: ORMSchemaType, sqlConnectionService: SQLConnectionService) {
+    constructor(config: GlobalConfiguration, schema: XDBMSchemaType, sqlConnectionService: SQLConnectionService) {
 
         this._config = config;
         this._schema = schema;
@@ -34,6 +30,14 @@ export class ORMConnectionService {
         const isLoggingEnabled = this._config.database.isOrmLoggingEnabled;
         const isDangerousDBPurgeEnabled = this._config.database.isDangerousDBPurgeEnabled;
         const dbConnOpts = this._config.getDatabaseConnectionParameters();
+
+        const views = this._schema
+            .views
+            .filter(x => !!x[1])
+            .map(x => x[1]!);
+
+        const entities = this._schema
+            .entities;
 
         const options = {
             type: 'postgres',
@@ -48,10 +52,9 @@ export class ORMConnectionService {
             extra: {
                 socketPath: dbConnOpts.socketPath
             },
-            // "models/entity/**/*.ts"
             entities: [
-                ...this._schema.entities,
-                ...this._schema.viewEntities
+                ...entities,
+                ...views
             ],
         } as DataSourceOptions;
 
@@ -160,7 +163,7 @@ export class ORMConnectionService {
 
         return this
             .getRepository(c)
-            .create(ent as any[]);
+            .insert(ent as any[]);
     }
 
     /**

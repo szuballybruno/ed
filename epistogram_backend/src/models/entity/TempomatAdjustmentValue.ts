@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { TempomatModeType } from '../../shared/types/sharedTypes';
 import { PrequizAnswer } from './prequiz/PrequizAnswer';
 
@@ -23,5 +23,5 @@ export class TempomatAdjustmentValue {
 
     @JoinColumn({ name: 'prequiz_answer_id' })
     @ManyToOne(_ => PrequizAnswer, x => x.tempomatAdjustmentValues)
-    prequizAnswer: PrequizAnswer;
+    prequizAnswer: Relation<PrequizAnswer>;
 }

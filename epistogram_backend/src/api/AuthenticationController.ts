@@ -1,10 +1,12 @@
 
 import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { ActionParams } from '../utilities/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { getAuthCookies, getCookie } from '../utilities/helpers';
-import { ActionParams } from "../utilities/ActionParams";
+import { getAuthCookies } from '../utilities/helpers';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class AuthenticationController {
 
@@ -17,6 +19,7 @@ export class AuthenticationController {
         this._config = globalConfig;
     }
 
+    @XControllerAction(apiRoutes.authentication.loginUser, { isPost: true, isPublic: true })
     logInUserAction = async (params: ActionParams) => {
 
         // check request 
@@ -32,6 +35,7 @@ export class AuthenticationController {
         setAuthCookies(this._config, params.res, accessToken, refreshToken);
     };
 
+    @XControllerAction(apiRoutes.authentication.establishAuthHandshake, { isPublic: true })
     establishAuthHandshakeAction = async (params: ActionParams) => {
 
         const { refreshToken } = getAuthCookies(params.req);
@@ -44,10 +48,11 @@ export class AuthenticationController {
         return data.authData;
     };
 
+    @XControllerAction(apiRoutes.authentication.logoutUser, { isPost: true, isUnauthorized: true })
     logOutUserAction = async (params: ActionParams) => {
 
         await this._authenticationService
-            .logOutUserAsync(params.currentUserId);
+            .logOutUserAsync(params.principalId);
 
         // remove browser cookies
         params.res.clearCookie(this._config.misc.accessTokenCookieName);

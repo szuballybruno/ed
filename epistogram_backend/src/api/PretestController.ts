@@ -1,5 +1,5 @@
 import { PretestService } from '../services/PretestService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class PretestController {
 
@@ -19,13 +19,13 @@ export class PretestController {
             .getValue(x => x.courseId, 'int');
 
         return await this._pretestService
-            .getPretestDataAsync(params.currentUserId, courseId);
+            .getPretestDataAsync(params.principalId, courseId);
     };
 
     getPretestResultsAction = async (params: ActionParams) => {
 
         return this._pretestService
-            .getPretestResultsAsync(params.currentUserId, params
+            .getPretestResultsAsync(params.principalId, params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
     };

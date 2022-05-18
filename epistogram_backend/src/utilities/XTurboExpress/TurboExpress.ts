@@ -1,15 +1,24 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { ConstructorSignature } from '../../models/Types';
+import { log, logSecondary } from '../../services/misc/logger';
+import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
 
-export interface ITurboMiddleware<TActionParams> {
+export interface ITurboMiddleware<TInParams, TOutParams> {
 
-    runMiddlewareAsync: (req: Request, res: Response, options?: EndpointOptionsType, actionParams?: TActionParams) => Promise<TActionParams>;
+    runMiddlewareAsync: (params: MiddlewareParams<TInParams>) => Promise<TOutParams>;
 }
 
 export interface IRouteOptions {
     isPost?: boolean
 }
+
+export type MiddlewareParams<TInParams> = {
+    req: Request;
+    res: Response;
+    options: EndpointOptionsType;
+    inParams: TInParams;
+};
 
 export type ApiActionType<TActionParams> = (params: TActionParams) => Promise<any>;
 
@@ -17,6 +26,8 @@ export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
     isPost?: boolean;
     isMultipart?: boolean;
+    isUnauthorized?: boolean;
+    checkPermission?: PermissionCodeType;
 }
 
 type MiddlwareFnType = (req: any, res: any, next: any) => void;
@@ -24,7 +35,7 @@ type MiddlwareFnType = (req: any, res: any, next: any) => void;
 export class TurboExpressBuilder<TActionParams> {
 
     private _port: string;
-    private _middlewares: ITurboMiddleware<TActionParams>[];
+    private _middlewares: ITurboMiddleware<any, any>[];
     private _onError: (e: any, req: Request, res: Response) => void;
     private _onSuccess: (value: any, req: Request, res: Response) => void;
     private _expressMiddlewares: MiddlwareFnType[];
@@ -55,10 +66,13 @@ export class TurboExpressBuilder<TActionParams> {
         return this as Pick<TurboExpressBuilder<TActionParams>, 'setTurboMiddleware'>;
     }
 
-    setTurboMiddleware(middleware: ITurboMiddleware<TActionParams>) {
+    setTurboMiddleware<TInParams, TOutParams>(middleware: ITurboMiddleware<TInParams, TOutParams>):
+        Pick<TurboExpressBuilder<TActionParams>, 'setTurboMiddleware' | 'addController' | 'setExpressMiddleware'> {
 
-        this._middlewares.push(middleware);
-        return this as Pick<TurboExpressBuilder<TActionParams>, 'addController' | 'setExpressMiddleware'>;
+        this._middlewares
+            .push(middleware);
+
+        return this;
     }
 
     setExpressMiddleware(middleware: MiddlwareFnType): Pick<TurboExpressBuilder<TActionParams>, 'addController' | 'setExpressMiddleware'> {
@@ -91,12 +105,15 @@ export class TurboExpressBuilder<TActionParams> {
 
                 const controllerMetadatas = getControllerActionMetadatas(sign);
 
+                log(`Controller: ${sign.name}`);
+
                 controllerMetadatas
+                    .orderBy(meta => meta.metadata.isPost + '')
                     .forEach(meta => {
 
                         const path = meta.metadata.path;
 
-                        console.log(`Adding endpoint: path: ${path}, prop: ${meta.propName}, meta: ${JSON.stringify(meta.metadata)}`);
+                        logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
                         turboExpress
                             .addAPIEndpoint(path, instance[meta.propName], meta.metadata);
@@ -110,14 +127,14 @@ export class TurboExpressBuilder<TActionParams> {
 export class TurboExpress<TActionParams extends IRouteOptions> {
 
     private _expressServer: Application;
-    private _middlewares: ITurboMiddleware<TActionParams>[];
+    private _middlewares: ITurboMiddleware<any, any>[];
     private _onError: (e: any, req: Request, res: Response) => void;
     private _onSuccess: (value: any, req: Request, res: Response) => void;
     private _port: string;
     private _onListen: (() => void) | undefined;
 
     constructor(
-        middlewares: ITurboMiddleware<TActionParams>[],
+        middlewares: ITurboMiddleware<any, any>[],
         expressMiddlewares: MiddlwareFnType[],
         port: string,
         onError: (e: any, req: Request, res: Response) => void,
@@ -142,21 +159,26 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
         const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {
 
             // run middlewares 
-            let actionParams = undefined as TActionParams | undefined;
+            let prevMiddlewareParam: any = {};
 
             for (let index = 0; index < this._middlewares.length; index++) {
 
                 const middleware = this._middlewares[index];
 
-                actionParams = await middleware
-                    .runMiddlewareAsync(req, res, options, actionParams);
+                prevMiddlewareParam = await middleware
+                    .runMiddlewareAsync({
+                        req,
+                        res,
+                        options: options ?? {},
+                        inParams: prevMiddlewareParam
+                    });
             }
 
-            if (!actionParams)
-                throw new Error('Invalid middleware configuration, one middleware should create the action parameters, but it was left as null.');
+            if (!prevMiddlewareParam)
+                throw new Error('Invalid middleware configuration, controller action params is null.');
 
             // run action 
-            return await action(actionParams);
+            return await action(prevMiddlewareParam);
         };
 
         // create sync wrapper

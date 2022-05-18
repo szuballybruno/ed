@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
@@ -24,6 +25,7 @@ export const AdminPage = () => {
 
     const { hasPermission } = useContext(AuthorizationContext);
     const administrationRoutes = applicationRoutes.administrationRoute;
+    const { navigate } = useNavigation();
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.homeRoute.overviewRoute)
@@ -34,6 +36,12 @@ export const AdminPage = () => {
         .add(administrationRoutes.companiesRoute)
         .add(administrationRoutes.rolesRoute)
         .getArray();
+
+    useEffect(() => {
+
+        if (!hasPermission('ACCESS_ADMIN'))
+            navigate(applicationRoutes.homeRoute);
+    }, []);
 
     return <PageRootContainer>
 
@@ -114,7 +122,6 @@ export const AdminPage = () => {
                     {
                         route: administrationRoutes.coursesRoute,
                         element: <CourseAdministartionSubpage />,
-                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessCourseAdministration
                     },
 
@@ -122,7 +129,6 @@ export const AdminPage = () => {
                     {
                         route: administrationRoutes.shopRoute,
                         element: <ShopAdminSubpage />,
-                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     },
 
@@ -136,15 +142,14 @@ export const AdminPage = () => {
                                     element: <PersonalityTraitCategoriesSubpage />
                                 },
                                 {
-                                    route: administrationRoutes.personalityAssessmentRoute.editTips,
+                                    route: administrationRoutes.personalityAssessmentRoute.editTipsRoute,
                                     element: <EditPersonalityTraitCategorySubpage />
                                 },
                                 {
-                                    route: administrationRoutes.personalityAssessmentRoute.editTips.editTip,
+                                    route: administrationRoutes.personalityAssessmentRoute.editTipsRoute.editTipRoute,
                                     element: <EditDailyTipSubpage />
                                 }
                             ]} />,
-                        protectionLevel: 'authorize',
                         isAuthorizedToView: x => x.canAccessShopAdministration
                     },
 

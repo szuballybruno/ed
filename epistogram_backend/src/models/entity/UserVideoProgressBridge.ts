@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { User } from './User';
 import { Video } from './Video';
 
@@ -23,7 +23,7 @@ export class UserVideoProgressBridge {
 
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.videoProgressBridges)
-    user: User;
+    user: Relation<User>;
 
     // video 
     @Column()
@@ -31,5 +31,5 @@ export class UserVideoProgressBridge {
 
     @JoinColumn({ name: 'video_id' })
     @ManyToOne(_ => Video, x => x.userProgressBridges)
-    video: Video;
+    video: Relation<Video>;
 }

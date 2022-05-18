@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { User } from '../User';
@@ -16,23 +16,23 @@ export class RoleAssignmentBridge {
 
     @ManyToOne(_ => Role, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'roleId'))
-    role: Role;
+    role: Relation<Role>;
 
     // user 
     @Column({ type: 'int', nullable: true })
-    userId: number | null;
+    assigneeUserId: number | null;
 
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
-    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'userId'))
-    user: User | null;
+    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeUserId'))
+    assigneeUser: Relation<User> | null;
 
     // company 
     @Column({ type: 'int', nullable: true })
-    companyId: number | null;
+    assigneeCompanyId: number | null;
 
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
-    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'companyId'))
-    company: Company | null;
+    @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeCompanyId'))
+    assigneeCompany: Relation<Company> | null;
 
     // context company 
     @Column({ type: 'int', nullable: true })
@@ -40,5 +40,5 @@ export class RoleAssignmentBridge {
 
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'contextCompanyId'))
-    contextCompany: Company | null;
+    contextCompany: Relation<Company> | null;
 }

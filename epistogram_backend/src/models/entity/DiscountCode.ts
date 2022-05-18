@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
 
@@ -25,5 +25,5 @@ export class DiscountCode {
 
     @OneToMany(_ => ShopItem, x => x.discountCodes)
     @JoinColumn({ name: 'shop_item_id' })
-    shopItem: ShopItem;
+    shopItem: Relation<ShopItem>;
 }

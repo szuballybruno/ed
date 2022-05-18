@@ -1,6 +1,6 @@
 import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
 import { DailyTipService } from '../services/DailyTipService';
-import { ActionParams } from "../utilities/ActionParams";
+import { ActionParams } from '../utilities/ActionParams';
 
 export class DailyTipController {
 
@@ -59,6 +59,6 @@ export class DailyTipController {
     getDailyTipAction = async (params: ActionParams) => {
 
         return await this._dailyTipService
-            .getDailyTipAsync(params.currentUserId);
+            .getDailyTipAsync(params.principalId);
     };
 }

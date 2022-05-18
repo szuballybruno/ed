@@ -1,6 +1,7 @@
 import { User } from '../models/entity/User';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
@@ -79,8 +80,10 @@ export class PasswordChangeService {
      * @param userId 
      * @param oldPassword 
      */
-    requestPasswordChangeAuthenticatedAsync = async (userId: number, oldPassword: string) => {
+    requestPasswordChangeAuthenticatedAsync = async (principalId: PrincipalId, oldPassword: string) => {
 
+        const userId = principalId.toSQLValue();
+        
         const resetPawsswordToken = this._tokenService
             .createSetNewPasswordToken(userId);
 

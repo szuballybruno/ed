@@ -2,18 +2,16 @@ import Module from 'module';
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
 import { CourseVisibilityType } from '../../shared/types/sharedTypes';
-import { CourseStateView } from '../views/CourseStateView';
+import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
+import { CourseAccessBridge } from './CourseAccessBridge';
 import { CourseCategory } from './CourseCategory';
 import { CourseModule } from './CourseModule';
-import { CourseRatingGroup } from './courseRating/CourseRatingGroup';
 import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
 import { Exam } from './Exam';
-import { PrequizQuestion } from './prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
 import { ShopItem } from './ShopItem';
 import { StorageFile } from './StorageFile';
 import { User } from './User';
-import { CourseAccessBridge } from './CourseAccessBridge';
 import { UserCourseBridge } from './UserCourseBridge';
 import { Video } from './Video';
 
@@ -29,7 +27,7 @@ export class Course {
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
-    
+
     @Column()
     title: string;
 
@@ -68,11 +66,6 @@ export class Course {
 
     @Column({ default: 'public', type: 'text' })
     visibility: CourseVisibilityType;
-
-    // course state view
-    @OneToOne(_ => CourseStateView, x => x.course)
-    @JoinColumn()
-    courseState: CourseStateView;
 
     // course category
     @Column()
@@ -145,4 +138,9 @@ export class Course {
     @JoinColumn()
     @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.course)
     courseRatingUserAnswers: CourseRatingQuestionUserAnswer[];
+
+    // contextPermissionAssignmentBridges
+    @JoinColumn()
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.contextCourse)
+    contextPermissionAssignmentBridges: PermissionAssignmentBridge[];
 }

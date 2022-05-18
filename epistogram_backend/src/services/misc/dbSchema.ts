@@ -27,7 +27,9 @@ import { Event } from '../../models/entity/Event';
 import { Exam } from '../../models/entity/Exam';
 import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
+import { Group } from '../../models/entity/Group';
 import { JobTitle } from '../../models/entity/JobTitle';
+import { Like } from '../../models/entity/Like';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
@@ -41,7 +43,6 @@ import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
 import { User } from '../../models/entity/User';
-import { Like } from '../../models/entity/Like';
 import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
 import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
@@ -93,8 +94,10 @@ import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCours
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserEngagementView } from '../../models/views/UserEngagementView';
+import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
+import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
@@ -105,6 +108,7 @@ import { VideoCompletedView } from '../../models/views/VideoCompletedView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
 import seed_comments from '../../sql/seed/seed_comments';
 import seed_companies from '../../sql/seed/seed_companies';
+import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
 import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
 import { permissionList } from '../../sql/seed/seed_permissions';
@@ -113,10 +117,9 @@ import seed_question_types from '../../sql/seed/seed_question_types';
 import { roleList } from '../../sql/seed/seed_roles';
 import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
 import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
-import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
-import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
+import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
-export const dbSchema = {
+export const dbSchema: XDBMSchemaType = {
 
     seedScripts: [
         [Company, seed_companies],
@@ -126,13 +129,13 @@ export const dbSchema = {
         [JobTitle, seed_job_titles],
         'seed_users',
         [Role, roleList],
-        'seed_company_owner_bridges',
-        [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
-        [PermissionAssignmentBridge, seed_permission_assignment_bridges],
+        [CompanyOwnerBridge, seed_company_owner_bridges],
         [RolePermissionBridge, rolePermissionList],
         'seed_signup_questions',
         'seed_course_categories',
         'seed_courses',
+        [PermissionAssignmentBridge, seed_permission_assignment_bridges],
+        [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
         'seed_exams',
         'seed_videos',
         [Comment, seed_comments],
@@ -150,83 +153,84 @@ export const dbSchema = {
         [CourseAccessBridge, seed_course_access_bridge]
     ],
 
-    viewScripts: [
-        'answer_session_view',
-        'exam_completed_view',
-        'video_progress_view',
-        'user_practise_recommendation_view',
-        'course_item_view',
-        'course_item_state_view',
-        'course_state_view',
-        'course_item_all_view',
-        'signup_question_view',
-        'latest_given_answer_view',
-        'personality_trait_view',
-        'signup_completed_view',
-        'company_permission_view',
-        'user_permission_view',
-        'available_course_view',
-        'exam_result_view',
-        'practise_question_view',
-        'daily_tip_view',
-        'course_admin_short_view',
-        'course_admin_detailed_view',
-        'course_admin_content_view',
-        'video_playback_sample_view',
-        'user_session_view',
-        'user_stats_view',
-        'user_session_block_view',
-        'user_session_daily_view',
-        'activity_streak_view',
-        'shop_item_view',
-        'shop_item_stateful_view',
-        'course_length_estimation_view',
-        'coin_transaction_view',
-        'coin_balance_view',
-        'course_questions_success_view',
-        'exam_latest_success_rate_view',
-        'course_spent_time_view',
-        'course_item_count_view',
-        'course_learning_stats_view',
-        'course_progress_view',
-        'course_module_overview_view',
-        'course_details_view',
-        'exam_view',
-        'coin_acquire_per_course_view',
-        'course_overview_view',
-        'personality_trait_category_view',
-        'course_item_completed_view',
-        'user_latest_activity_view',
-        'admin_user_list_view',
-        'prequiz_question_view',
-        'pretest_result_view',
-        'course_rating_question_view',
-        'user_prequiz_answers_view',
-        'user_course_bridge_view',
-        'user_course_completion_original_estimation_view',
-        'user_course_completion_current_view',
-        'user_inactive_course_view',
-        'user_engagement_view',
-        'user_performance_view',
-        'user_spent_time_ratio_view',
-        'user_learning_overview_stats_view',
-        'user_spent_time_view',
-        'user_daily_progress_view',
-        'user_daily_course_item_progress_view',
-        'user_active_course_view',
-        'user_weekly_course_item_progress_view',
-        'user_course_progress_actual',
-        'user_course_progress_view',
-        'user_course_recommended_item_quota_view',
-        'user_tempomat_adjustment_value_view',
-        'course_item_question_edit_view',
-        'module_view',
-        'role_list_view',
-        'company_view',
-        'comment_list_view',
-        'assignable_permission_view',
-        'assignable_role_view',
-        'user_assigned_auth_item_view'
+    views: [
+        ['answer_session_view', AnswerSessionView],
+        ['exam_completed_view', ExamCompletedView],
+        ['video_progress_view', VideoProgressView],
+        ['course_item_view'],
+        ['user_practise_recommendation_view', UserPractiseRecommendationView],
+        ['course_item_state_view', CourseItemStateView],
+        ['course_state_view', CourseStateView],
+        ['course_item_all_view', CourseItemAllView],
+        ['signup_question_view', SignupQuestionView],
+        ['user_roles_view'],
+        ['latest_given_answer_view'],
+        ['personality_trait_view', PersonalityTraitView],
+        ['signup_completed_view', SignupCompletedView],
+        ['company_permission_view'],
+        ['user_permission_view'],
+        ['available_course_view', AvailableCourseView],
+        ['exam_result_view', ExamResultView],
+        ['practise_question_view', PractiseQuestionView],
+        ['daily_tip_view', DailyTipView],
+        ['course_admin_short_view', CourseAdminShortView],
+        ['course_admin_detailed_view', CourseAdminDetailedView],
+        ['course_admin_content_view', CourseAdminContentView],
+        ['video_playback_sample_view'],
+        ['user_session_view', UserSessionView],
+        ['user_stats_view', UserStatsView],
+        ['user_session_daily_view', UserSessionDailyView],
+        ['activity_streak_view', ActivityStreakView],
+        ['shop_item_view', ShopItemView],
+        ['shop_item_stateful_view', ShopItemStatefulView],
+        ['course_length_estimation_view'],
+        ['coin_transaction_view', CoinTransactionView],
+        ['coin_balance_view', CoinBalanceView],
+        ['course_questions_success_view'],
+        ['exam_latest_success_rate_view'],
+        ['course_spent_time_view'],
+        ['course_item_count_view'],
+        ['course_learning_stats_view', CourseLearningStatsView],
+        ['course_progress_view', CourseProgressView],
+        ['course_module_overview_view', CourseModuleOverviewView],
+        ['course_details_view', CourseDetailsView],
+        ['exam_view', ExamView],
+        ['coin_acquire_per_course_view'],
+        ['course_overview_view', CourseOverviewView],
+        ['personality_trait_category_view', PersonalityTraitCategoryView],
+        ['course_item_completed_view'],
+        ['user_latest_activity_view'],
+        ['admin_user_list_view', AdminUserListView],
+        ['prequiz_question_view', PrequizQuestionView],
+        ['pretest_result_view', PretestResultView],
+        ['course_rating_question_view', CourseRatingQuestionView],
+        ['user_prequiz_answers_view'],
+        ['user_course_bridge_view', UserCourseBridgeView],
+        ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
+        ['user_course_completion_current_view', UserCourseCompletionCurrentView],
+        ['user_performance_view', UserPerformanceView],
+        ['user_session_block_view', UserSessionBlockView],
+        ['user_inactive_course_view', UserInactiveCourseView],
+        ['user_engagement_view', UserEngagementView],
+        ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
+        ['user_spent_time_view'],
+        ['user_daily_progress_view', UserDailyProgressView],
+        ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
+        ['user_active_course_view', UserActiveCourseView],
+        ['user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
+        ['user_course_progress_actual'],
+        ['user_course_progress_view', UserCourseProgressView],
+        ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
+        ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
+        ['course_item_question_edit_view', CourseItemQuestionEditView],
+        ['comment_list_view', CommentListView],
+        ['user_spent_time_ratio_view', UserSpentTimeRatioView],
+        ['module_view', ModuleView],
+        ['role_list_view'],
+        ['company_view'],
+        ['assignable_permission_view'],
+        ['assignable_role_view'],
+        ['user_assigned_auth_item_view']
     ],
 
     functionScripts: [
@@ -247,6 +251,10 @@ export const dbSchema = {
         {
             tableName: 'activation_code',
             name: 'activation_code_uniqe_constraint'
+        },
+        {
+            tableName: 'role_permission_bridge',
+            name: 'role_permission_bridge_constraint'
         }
     ],
 
@@ -261,68 +269,15 @@ export const dbSchema = {
         }
     ],
 
-    viewEntities: [
-        ModuleView,
-        VideoCompletedView,
-        ExamCompletedView,
-        VideoProgressView,
-        CourseItemStateView,
-        CourseStateView,
-        CourseItemAllView,
-        AvailableCourseView,
-        PersonalityTraitView,
-        SignupCompletedView,
-        DailyTipView,
-        ExamResultView,
-        SignupQuestionView,
-        CourseAdminShortView,
-        CourseAdminDetailedView,
-        CourseAdminContentView,
-        UserStatsView,
-        UserSessionBlockView,
-        UserSessionDailyView,
-        UserSessionView,
-        ActivityStreakView,
-        CoinTransactionView,
-        CoinBalanceView,
-        ActivationCode,
-        ShopItemView,
-        ShopItemStatefulView,
-        CourseLearningStatsView,
-        CourseProgressView,
-        CourseDetailsView,
-        CourseModuleOverviewView,
-        ExamView,
-        CourseOverviewView,
-        PersonalityTraitCategoryView,
-        AdminUserListView,
-        PrequizQuestionView,
-        PretestResultView,
-        CourseRatingQuestionView,
-        UserDailyProgressView,
-        AnswerSessionView,
-        UserDailyCourseItemProgressView,
-        UserActiveCourseView,
-        UserWeeklyCourseItemProgressView,
-        UserCourseProgressView,
-        UserCourseCompletionCurrentView,
-        UserCourseRecommendedItemQuotaView,
-        UserEngagementView,
-        UserPerformanceView,
-        UserLearningOverviewStatsView,
-        UserTempomatAdjustmentValueView,
-        UserCourseBridgeView,
-        UserCourseCompletionOriginalEstimationView,
-        CourseItemQuestionEditView,
-        UserSpentTimeRatioView,
-        CommentListView,
-        CourseItemQuestionEditView,
-        UserInactiveCourseView,
-        UserPractiseRecommendationView
+    triggers: [
+        'role_assignment_validity_check_trigger',
+        'permission_assignment_validity_check_trigger'
     ],
 
     entities: [
+        ActivationCode,
         Course,
+        Group,
         CourseCategory,
         Exam,
         Company,
@@ -340,15 +295,14 @@ export const dbSchema = {
         VideoPlaybackSample,
         TeacherInfo,
         UserCourseBridge,
-        Like,
         PersonalityTraitCategory,
         Role,
         Permission,
         RolePermissionBridge,
         RoleAssignmentBridge,
-        PractiseQuestionView,
         JobTitle,
         Comment,
+        Like,
         DailyTip,
         DailyTipOccurrence,
         QuestionType,
@@ -375,7 +329,4 @@ export const dbSchema = {
         UserExamProgressBridge,
         TempomatAdjustmentValue
     ],
-    triggers: [
-        'role_assignment_validity_check_trigger'
-    ]
 };

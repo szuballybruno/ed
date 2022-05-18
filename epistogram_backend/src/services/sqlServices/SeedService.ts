@@ -1,22 +1,23 @@
 
 import { toSQLSnakeCasing } from '../../utilities/helpers';
-import { NoComplexTypes, PropConstraintType, constraintFn, NoIdType } from '../../utilities/misc';
-import { dbSchema } from '../misc/dbSchema';
-import { log, logSecondary } from '../misc/logger';
+import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
+import { logSecondary } from '../misc/logger';
+import { XDBMSchemaType as XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { SQLConnectionService } from './SQLConnectionService';
 
 type NewSeedType = [{ new(): any }, Object];
 
-export const getSeedList = <TEntity>() => {
+export const getSeedList = <TEntity, TConstraint extends PropConstraintType<TConstraint, NoIdType<NoComplexTypes<TEntity>>> = {}>() => {
 
     type SeedType = NoIdType<NoComplexTypes<TEntity>>;
 
-    return <TData extends PropConstraintType<TData, SeedType>>(data: TData) => {
+    return <TData extends PropConstraintType<TData, SeedType> & TConstraint>(data: TData) => {
 
         const ret = constraintFn<SeedType>()(data);
 
-        Object.values(ret)
+        Object
+            .values(ret)
             .forEach((val, index) => (val as any)['id'] = index + 1);
 
         return ret as any as PropConstraintType<TData, NoComplexTypes<TEntity>>;
@@ -27,22 +28,24 @@ export class SeedService {
 
     private _sqlBootstrapperService: SQLBootstrapperService;
     private _execService: SQLConnectionService;
+    private _dbSchema: XDBMSchemaType;
 
-    constructor(sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
+    constructor(dbSchema: XDBMSchemaType, sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
         this._execService = execService;
+        this._dbSchema = dbSchema;
     }
 
     seedDBAsync = async () => {
 
-        for (let index = 0; index < dbSchema.seedScripts.length; index++) {
+        for (let index = 0; index < this._dbSchema.seedScripts.length; index++) {
 
-            const seedScriptName = dbSchema.seedScripts[index];
+            const seedScriptName = this._dbSchema.seedScripts[index];
 
             if (typeof seedScriptName === 'string') {
 
-                log(`Seeding ${seedScriptName}...`);
+                logSecondary(`Seeding ${seedScriptName}...`);
 
                 await this._sqlBootstrapperService
                     .executeSeedScriptAsync(seedScriptName);
@@ -51,7 +54,7 @@ export class SeedService {
 
                 const [classType, seedObj] = seedScriptName as NewSeedType;
 
-                log(`Seeding ${classType.name}...`);
+                logSecondary(`Seeding ${classType.name}...`);
 
                 if (Object.values(seedObj).length === 0) {
 

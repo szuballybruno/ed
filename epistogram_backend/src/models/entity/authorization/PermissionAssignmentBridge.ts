@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
+import { Course } from '../Course';
+import { Group } from '../Group';
 import { User } from '../User';
 import { Permission } from './Permission';
 
@@ -18,21 +20,33 @@ export class PermissionAssignmentBridge {
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'permissionId'))
     permission: Permission;
 
+    // ASSIGNEE
+
     // user 
     @Column({ type: 'int', nullable: true })
-    userId: number | null;
+    assigneeUserId: number | null;
 
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
-    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'userId'))
-    user: User | null;
+    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeUserId'))
+    assigneeUser: User | null;
 
     // company 
     @Column({ type: 'int', nullable: true })
-    companyId: number | null;
+    assigneeCompanyId: number | null;
 
     @ManyToOne(_ => Company, x => x.permissionAssignmentBridges)
-    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'companyId'))
-    company: Company | null;
+    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeCompanyId'))
+    assigneeCompany: Company | null;
+
+    // group
+    @Column({ type: 'int', nullable: true })
+    assigneeGroupId: number | null;
+
+    @ManyToOne(_ => Group, x => x.contextPermissionAssignmentBridges)
+    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeGroupId'))
+    assigneeGroup: Group | null;
+
+    // CONTEXTS 
 
     // context company 
     @Column({ type: 'int', nullable: true })
@@ -41,4 +55,12 @@ export class PermissionAssignmentBridge {
     @ManyToOne(_ => Company, x => x.contextPermissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCompanyId'))
     contextCompany: Company | null;
+
+    // context course
+    @Column({ type: 'int', nullable: true })
+    contextCourseId: number | null;
+
+    @ManyToOne(_ => Course, x => x.contextPermissionAssignmentBridges)
+    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCourseId'))
+    contextCourse: Course | null;
 }

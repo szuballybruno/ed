@@ -3,6 +3,7 @@ import { User } from '../models/entity/User';
 import { CommentListView } from '../models/views/CommentListView';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../shared/dtos/CommentListDTO';
+import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
@@ -49,14 +50,14 @@ export class CommentService extends QueryServiceBase<Comment> {
             .insert(newComment);
     };
 
-    getCommentsAsync = async (videoId: number, currentUserId: number) => {
+    getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {
 
         const userComments = await this
             ._ormService
             .getRepository(CommentListView)
             .createQueryBuilder('clv')
             .where('clv.videoId = :videoId', { videoId })
-            .andWhere('clv.currentUserId = :currentUserId', { currentUserId })
+            .andWhere('clv.currentUserId = :currentUserId', { currentUserId: currentUserId.toSQLValue() })
             .getMany();
 
         return await this

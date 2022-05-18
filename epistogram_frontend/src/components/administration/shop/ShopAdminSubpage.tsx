@@ -105,14 +105,14 @@ export const ShopAdminSubpage = () => {
 
     useRedirectOnExactMatch({
         route: applicationRoutes.administrationRoute.shopRoute,
-        redirectRoute: applicationRoutes.administrationRoute.shopRoute.overview,
+        redirectRoute: applicationRoutes.administrationRoute.shopRoute.overviewRoute,
     });
 
     return (
         <EpistoRoutes
             renderRoutes={[
                 {
-                    route: applicationRoutes.administrationRoute.shopRoute.overview,
+                    route: applicationRoutes.administrationRoute.shopRoute.overviewRoute,
                     element: <LoadingFrame
                         loadingState={[adminShopItemsState, createShopItemState]}
                         error={adminShopItemsError}

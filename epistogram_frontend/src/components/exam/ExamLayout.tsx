@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import { LinearProgress, Typography } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -20,7 +20,18 @@ export const ExamLayout = (props: {
     footerButtons?: ({ text: string, action: () => void })[]
 }) => {
 
-    const { exitExamAction, footerButtons, headerCenterText, showNextButton, headerLeftItem, children, progressValue, handleNext, handleBack, nextButtonTitle } = props;
+    const {
+        exitExamAction,
+        footerButtons,
+        headerCenterText,
+        showNextButton,
+        headerLeftItem,
+        children,
+        progressValue,
+        handleNext,
+        handleBack,
+        nextButtonTitle
+    } = props;
 
     const footerButton = (title: string, action: () => void, icon?: any, iconFront?: any) => <EpistoButton
         variant={'colored'}
@@ -51,26 +62,32 @@ export const ExamLayout = (props: {
             pl={20}>
 
             <Flex minWidth="200">
-                {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
-                    {headerLeftItem}
-                </Text>}
-                {(headerLeftItem && !isString(headerLeftItem)) && headerLeftItem}
-            </Flex>
 
+                {headerLeftItem && (
+                    isString(headerLeftItem)
+                        ? (
+                            <EpistoFont>
+                                {headerLeftItem}
+                            </EpistoFont>
+                        )
+                        : (
+                            headerLeftItem
+                        )
+                )}
+            </Flex>
 
             <Flex
                 flex="1"
                 align="center"
                 justify="center">
-                <Text
-                    as="text"
-                    fontSize={'1.1rem'}>
+
+                <EpistoFont>
                     {headerCenterText}
-                </Text>
+                </EpistoFont>
             </Flex>
 
             <Flex minWidth="200"
-justify="flex-end">
+                justify="flex-end">
                 {exitExamAction && <EpistoButton
                     onClick={exitExamAction}
                     style={{

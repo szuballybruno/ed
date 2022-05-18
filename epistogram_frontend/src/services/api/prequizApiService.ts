@@ -15,9 +15,9 @@ export const usePrequizQuestions = (courseId: number) => {
     };
 };
 
-export const usePrequizUserAnswer = (questionId: number | null) => {
+export const usePrequizUserAnswer = (courseId: number, questionId: number | null) => {
 
-    const qr = useReactQuery2<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, { questionId }, !!questionId);
+    const qr = useReactQuery2<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, { questionId, courseId }, !!questionId);
 
     return {
         userAnswer: qr.data,

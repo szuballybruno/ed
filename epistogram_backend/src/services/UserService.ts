@@ -152,7 +152,9 @@ export class UserService {
      * @param userId 
      * @param dto 
      */
-    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
+    async saveUserSimpleAsync(principalId: PrincipalId, dto: UserEditSimpleDTO) {
+
+        const userId = principalId.toSQLValue();
 
         // save user 
         await this._ormService
@@ -196,7 +198,9 @@ export class UserService {
      * @param userId 
      * @param dto 
      */
-    async saveUserDataAsync(userId: number, dto: UserDTO) {
+    async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
+
+        const userId = principalId.toSQLValue();
 
         return this._ormService
             .getRepository(User)
@@ -215,7 +219,7 @@ export class UserService {
      * @param userId 
      * @returns 
      */
-    async getBriefUserDataAsync(userId: number) {
+    async getBriefUserDataAsync(principalId: PrincipalId, userId: number) {
 
         const user = await this._ormService
             .getRepository(User)
@@ -352,7 +356,7 @@ export class UserService {
      * @param deletedUserId 
      * @returns 
      */
-    deleteUserAsync = async (userId: number, deletedUserId: number) => {
+    deleteUserAsync = async (userId: PrincipalId, deletedUserId: number) => {
 
         // TODO permissions
 

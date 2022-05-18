@@ -18,7 +18,7 @@ BEGIN
 	WHERE r.id = NEW.role_id
 	INTO var_role;
 	
-	IF (var_role.scope = 'GLOBAL' OR var_role.scope = 'COMPANY') AND NEW.context_company_id IS NULL
+	IF (var_role.scope = 'USER' OR var_role.scope = 'COMPANY') AND NEW.context_company_id IS NULL
 	THEN RAISE EXCEPTION 'Trying to assign a [%] role without specifying a context. This is not allowed.', var_role.scope;
 	END IF;
 	

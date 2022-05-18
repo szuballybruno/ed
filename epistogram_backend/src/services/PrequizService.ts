@@ -3,6 +3,7 @@ import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
+import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
@@ -32,7 +33,9 @@ export class PrequizService {
      * 
      * @returns 
      */
-    async getQuestionsAsync(userId: number, courseId: number) {
+    async getQuestionsAsync(principalId: PrincipalId, courseId: number) {
+
+        const userId = principalId.toSQLValue();
 
         // set course as started, and stage to prequiz
         await this._courseBridgeService
@@ -69,7 +72,9 @@ export class PrequizService {
      * @param userId 
      * @returns 
      */
-    async getUserAnswerAsync(userId: number, courseId: number, questionId: number) {
+    async getUserAnswerAsync(principalId: PrincipalId, courseId: number, questionId: number) {
+
+        const userId = principalId.toSQLValue();
 
         const userAnswer = await this._ormService
             .getRepository(PrequizUserAnswer)
@@ -99,11 +104,13 @@ export class PrequizService {
      * @param value 
      */
     async answerPrequizQuestionAsync(
-        userId: number,
+        principalId: PrincipalId,
         questionId: number,
         courseId: number,
         answerId: number | null,
         value: number | null) {
+
+        const userId = principalId.toSQLValue();
 
         const previousAnswer = await this._ormService
             .getRepository(PrequizUserAnswer)

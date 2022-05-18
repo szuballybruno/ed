@@ -1,6 +1,8 @@
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
+import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
+import { fileURLToPath } from 'url';
 import { AuthenticationController } from './api/AuthenticationController';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CommentController } from './api/CommentController';
@@ -33,7 +35,6 @@ import { UserProgressController } from './api/UserProgressController';
 import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
-import { AuthMiddleware } from './middleware/AuthMiddleware';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
@@ -94,13 +95,18 @@ import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
 import './shared/logic/jsExtensions';
 import { apiRoutes } from './shared/types/apiRoutes';
+import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
+import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
 import { ActionParams } from './utilities/ActionParams';
 import { onActionError, onActionSuccess } from './utilities/apiHelpers';
 import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
-(async () => {
+const getCurrentDir = () => dirname(fileURLToPath(import.meta.url));
 
-    const globalConfig = GlobalConfiguration.initGlobalConfig(__dirname);
+const main = async () => {
+
+    const globalConfig = GlobalConfiguration
+        .initGlobalConfig(getCurrentDir());
 
     log('');
     log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
@@ -128,10 +134,11 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const roleService = new RoleService(ormConnectionService, mapperService);
     const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService);
     const tokenService = new TokenService(globalConfig);
-    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService);
+    const permissionService = new PermissionService(ormConnectionService, mapperService);
+    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService, permissionService);
     const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(sqlBootstrapperService, sqlConnectionService);
+    const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);
@@ -143,7 +150,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
-    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService);
+    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const vpss = new VideoPlaybackSampleService(ormConnectionService);
     const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
@@ -156,10 +163,9 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
-    const companyService = new CompanyService(ormConnectionService, mapperService);
-    const permissionService = new PermissionService(ormConnectionService, mapperService);
     const commentService = new CommentService(ormConnectionService, mapperService);
     const likeService = new LikeService(ormConnectionService, mapperService);
+    const companyService = new CompanyService(ormConnectionService, mapperService, permissionService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -169,7 +175,7 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const courseRatingController = new CourseRatingController(courseRatingService);
     const eventController = new EventController(eventService);
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
-    const registrationController = new RegistrationController(registrationService, userService, globalConfig);
+    const registrationController = new RegistrationController(registrationService, globalConfig);
     const miscController = new MiscController(miscService, practiseQuestionService, tokenService, ormConnectionService, globalConfig, userCourseBridgeService);
     const authenticationController = new AuthenticationController(authenticationService, globalConfig);
     const userController = new UserController(userService);
@@ -191,12 +197,9 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
     const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
-    const companyController = new CompanyController(companyService, permissionService);
+    const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
     const commentController = new CommentController(commentService, likeService);
-
-    // middleware 
-    const authMiddleware = new AuthMiddleware(authenticationService, userService, globalConfig, loggerService);
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
@@ -208,7 +211,8 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
         .setPort(globalConfig.misc.hostPort)
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)
-        .setTurboMiddleware(authMiddleware)
+        .setTurboMiddleware<void, ActionParams>(new AuthenticationMiddleware(authenticationService, loggerService))
+        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(permissionService))
         .setExpressMiddleware(getCORSMiddleware(globalConfig))
         .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
         .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))
@@ -220,15 +224,12 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)
         .addController(CommentController, commentController)
+        .addController(AuthenticationController, authenticationController)
+        .addController(ExamController, examController)
+        .addController(RegistrationController, registrationController)
         .build();
 
     const addEndpoint = turboExpress.addAPIEndpoint;
-
-    // registration
-    addEndpoint(apiRoutes.registration.registerUserViaPublicToken, registrationController.registerUserViaPublicTokenAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.registerUserViaInvitationToken, registrationController.registerUserViaInvitationTokenAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.registerUserViaActivationCode, registrationController.registerUserViaActivationCodeAction, { isPublic: true, isPost: true });
-    addEndpoint(apiRoutes.registration.inviteUser, registrationController.inviteUserAction, { isPost: true });
 
     // scheduled jobs
     addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
@@ -275,11 +276,6 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     addEndpoint(apiRoutes.passwordChange.setNewPassword, passwordChangeController.setNewPasswordAction, { isPost: true, isPublic: true });
     addEndpoint(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, passwordChangeController.requestPasswordChangeAuthenticatedAction, { isPost: true });
     addEndpoint(apiRoutes.passwordChange.requestPasswordChange, passwordChangeController.requestPasswordChangeAction, { isPublic: true, isPost: true });
-
-    // authentication 
-    addEndpoint(apiRoutes.authentication.establishAuthHandshake, authenticationController.establishAuthHandshakeAction, { isPublic: true });
-    addEndpoint(apiRoutes.authentication.logoutUser, authenticationController.logOutUserAction, { isPost: true });
-    addEndpoint(apiRoutes.authentication.loginUser, authenticationController.logInUserAction, { isPost: true, isPublic: true });
 
     // coin transactions 
     addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
@@ -362,17 +358,6 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
     addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
     addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
 
-    // exam
-    addEndpoint(apiRoutes.exam.getExamEditData, examController.getExamEditDataAction);
-    addEndpoint(apiRoutes.exam.getExamQuestionEditData, examController.getExamQuestionEditDataAction);
-    addEndpoint(apiRoutes.exam.saveExamQuestionEditData, examController.saveExamQuestionEditDataAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.saveExam, examController.saveExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.createExam, examController.createExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.deleteExam, examController.deleteExamAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.getExamResults, examController.getExamResultsAction);
-    addEndpoint(apiRoutes.exam.answerExamQuestion, examController.answerExamQuestionAction, { isPost: true });
-    addEndpoint(apiRoutes.exam.startExam, examController.startExamAction, { isPost: true });
-
     // 404 - no match
     // turboExpress.use((req, res) => {
 
@@ -391,5 +376,17 @@ import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
     // listen
     turboExpress.listen();
-})();
+};
+
+await main();
+
+// main()
+//     .then(listenFn => {
+
+//         listenFn();
+//     })
+//     .catch(x => {
+
+//         throw new Error(`Error starting server: ${x.message}`);
+//     });
 

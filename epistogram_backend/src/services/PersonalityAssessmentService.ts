@@ -10,6 +10,7 @@ import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCa
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/ActionParams';
 
 export class PersonalityAssessmentService {
 
@@ -28,8 +29,9 @@ export class PersonalityAssessmentService {
      * @param userId 
      * @returns 
      */
-    async getUserPersonalityAssessmentDTOAsync(userId: number) {
+    async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
 
+        const userId = principalId.toSQLValue();
         const chartData = await this.getUserPersonalityDataAsync(userId);
         const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userId);
 

@@ -32,7 +32,9 @@ export class RoleService extends QueryServiceBase<Role> {
         super(mapperService, ormService, Role);
     }
 
-    async getRolesListAdminAsync(userId: number) {
+    async getRolesListAdminAsync(principalId: PrincipalId) {
+        
+        const userId = principalId.toSQLValue();
 
         const roles = await this._ormService
             .query(RoleListView, { userId })
@@ -58,7 +60,7 @@ export class RoleService extends QueryServiceBase<Role> {
                         .map((viewAsPermission): PermissionListDTO => ({
                             code: viewAsPermission.permissionCode,
                             id: viewAsPermission.permissionId,
-                            scope: 'GLOBAL' // not used 
+                            scope: 'USER' // not used 
                         }))
                 };
             });
@@ -68,7 +70,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const rolesAndPermissions = await this._ormService
             .query(AssignablePermissionView, { principalId, companyId })
-            .where('userId', '=', 'principalId')
+            .where('assigneeUserId', '=', 'principalId')
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
@@ -77,7 +79,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCompanyId: x.contextCompanyId,
                 permissionCode: x.permissionCode,
                 permissionId: x.permissionId,
-                userId: x.userId
+                userId: x.assigneeUserId
             }));
     }
 
@@ -85,7 +87,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const roles = await this._ormService
             .query(AssignableRoleView, { principalId, companyId })
-            .where('userId', '=', 'principalId')
+            .where('assigneeUserId', '=', 'principalId')
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
@@ -95,7 +97,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCompanyId: viewAsRole.first.contextCompanyId,
                 roleId: viewAsRole.first.roleId,
                 roleName: viewAsRole.first.roleName,
-                userId: viewAsRole.first.userId,
+                userId: viewAsRole.first.assigneeUserId,
                 permissionIds: viewAsRole
                     .items
                     .map(viewAsPerm => viewAsPerm.permissionId)
@@ -108,7 +110,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         const views = await this._ormService
             .query(UserAssignedAuthItemView, { authItemUserId })
-            .where('userId', '=', 'authItemUserId')
+            .where('assigneeUserId', '=', 'authItemUserId')
             .getMany();
 
         return {
@@ -154,7 +156,7 @@ export class RoleService extends QueryServiceBase<Role> {
         const oldRoleBridges = await this._ormService
             .query(RoleAssignmentBridge, { savedUserId, contextCompanyId })
             .where('contextCompanyId', '=', 'contextCompanyId')
-            .and('userId', '=', 'savedUserId')
+            .and('assigneeUserId', '=', 'savedUserId')
             .getMany();
 
         await this._ormService
@@ -166,10 +168,10 @@ export class RoleService extends QueryServiceBase<Role> {
             .filter(roleId => !oldRoleBridges
                 .any(oldRoleBridge => oldRoleBridge.roleId === roleId))
             .map(roleId => instatiateInsertEntity<RoleAssignmentBridge>({
-                companyId: null,
-                contextCompanyId,
                 roleId: roleId,
-                userId: savedUserId
+                assigneeCompanyId: null,
+                assigneeUserId: savedUserId,
+                contextCompanyId,
             }));
 
         await this._ormService
@@ -195,24 +197,28 @@ export class RoleService extends QueryServiceBase<Role> {
         // get old permissionIds 
         const oldPermAssBridges = await this._ormService
             .query(PermissionAssignmentBridge, { savedUserId, contextCompanyId })
-            .where('userId', '=', 'savedUserId')
-            .and('companyId', '=', 'contextCompanyId')
+            .where('assigneeUserId', '=', 'savedUserId')
+            .and('contextCompanyId', '=', 'contextCompanyId')
             .getMany();
 
+        const deletedPermissionIds = oldPermAssBridges
+            .filter(x => !newlyAssignedPermissionIds
+                .any(x.permissionId))
+            .map(x => x.id);
+
         await this._ormService
-            .hardDelete(PermissionAssignmentBridge, oldPermAssBridges
-                .filter(x => !newlyAssignedPermissionIds
-                    .any(x.permissionId))
-                .map(x => x.id));
+            .hardDelete(PermissionAssignmentBridge, deletedPermissionIds);
 
         const newPermBridgeEntities = newlyAssignedPermissionIds
             .filter(x => !oldPermAssBridges
                 .any(y => y.permissionId === x))
             .map(x => instatiateInsertEntity<PermissionAssignmentBridge>({
-                contextCompanyId: contextCompanyId,
                 permissionId: x,
-                userId: savedUserId,
-                companyId: null
+                assigneeUserId: savedUserId,
+                assigneeCompanyId: null,
+                assigneeGroupId: null,
+                contextCompanyId: contextCompanyId,
+                contextCourseId: null
             }));
 
         await this._ormService
@@ -224,7 +230,9 @@ export class RoleService extends QueryServiceBase<Role> {
         return [];
     }
 
-    async createRoleAsync(userId: number, dto: RoleCreateDTO) {
+    async createRoleAsync(principalId: PrincipalId, dto: RoleCreateDTO) {
+
+        const userId = principalId.toSQLValue();
 
         // create role
         const role = await this.createAsync(instatiateInsertEntity<Role>({
@@ -245,8 +253,10 @@ export class RoleService extends QueryServiceBase<Role> {
             .save(RolePermissionBridge, permAssignemnts);
     }
 
-    async getRoleEditDataAsync(userId: number, roleId: number): Promise<RoleEditDTO> {
+    async getRoleEditDataAsync(principalId: PrincipalId, roleId: number): Promise<RoleEditDTO> {
 
+        const userId = principalId.toSQLValue();
+        
         type ResultType = {
             roleId: number,
             roleName: string,
@@ -274,7 +284,7 @@ export class RoleService extends QueryServiceBase<Role> {
                     permissionId: 'permissionId'
                 }))
             .innerJoin(UserPermissionView, x => x
-                .on('userId', '=', 'userId')
+                .on('assigneeUserId', '=', 'userId')
                 .openBracket()
                 .and('contextCompanyId', '=', 'companyId', Role)
                 .and('permissionCode', '=', 'editCoCode')
@@ -306,13 +316,17 @@ export class RoleService extends QueryServiceBase<Role> {
         };
     }
 
-    async deleteRoleAsync(userId: number, roleId: number) {
+    async deleteRoleAsync(principalId: PrincipalId, roleId: number) {
+
+        const userId = principalId.toSQLValue();
 
         await this._ormService
             .softDelete(Role, [roleId]);
     }
 
-    async saveRoleAsync(userId: number, dto: RoleEditDTO) {
+    async saveRoleAsync(principalId: PrincipalId, dto: RoleEditDTO) {
+
+        const userId = principalId.toSQLValue();
 
         // save role
         const role = await this._ormService
@@ -325,7 +339,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 noUndefined({
                     id: role.id,
                     name: dto.name,
-                    ownerCompanyId: role.scope === 'GLOBAL'
+                    ownerCompanyId: role.scope === 'USER'
                         ? undefined
                         : dto.companyId
                 })

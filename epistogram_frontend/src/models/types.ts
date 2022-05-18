@@ -33,6 +33,11 @@ export class EpistoRoute {
         return this.removeDuplicateBreak(this._relativePath + (this._matchMore ? '/*' : ''));
     }
 
+    isMatchMore() {
+
+        return this._matchMore;
+    }
+
     private removeDuplicateBreak(path: string) {
 
         return path.replaceAll('//', '/');
@@ -45,6 +50,8 @@ export type ApplicationRoute<T = any> = {
     icon?: JSX.Element;
     navAction?: () => void;
     paramsType?: T;
+    isUnauthorized?: boolean;
+    ignoreAccessAppRestriction?: boolean;
 }
 
 export type ButtonType<T = undefined> = {

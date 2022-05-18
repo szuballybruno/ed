@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Course } from '../Course';
 import { User } from '../User';
 import { CourseRatingQuestion } from './CourseRatingQuestion';
@@ -21,7 +21,7 @@ export class CourseRatingQuestionUserAnswer {
 
     @JoinColumn({ name: 'course_rating_question_id' })
     @ManyToOne(_ => CourseRatingQuestion, x => x.userAnswers)
-    courseRatingQuestion: CourseRatingQuestion;
+    courseRatingQuestion: Relation<CourseRatingQuestion>;
 
     // user
     @Column()
@@ -29,7 +29,7 @@ export class CourseRatingQuestionUserAnswer {
 
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.courseRatingAnswers)
-    user: User;
+    user: Relation<User>;
 
     // course 
     @Column()
@@ -37,5 +37,5 @@ export class CourseRatingQuestionUserAnswer {
 
     @JoinColumn({ name: 'course_id' })
     @ManyToOne(_ => Course, x => x.courseRatingUserAnswers)
-    course: Course;
+    course: Relation<Course>;
 }

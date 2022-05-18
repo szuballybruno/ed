@@ -1,5 +1,6 @@
 import { Comment } from '../models/entity/Comment';
 import { Like } from '../models/entity/Like';
+import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -15,7 +16,7 @@ export class LikeService extends QueryServiceBase<Like> {
 
     // create like with current user
     async createUserCommentLikeBridgeAsync(
-        currentUserId: number,
+        currentUserId: PrincipalId,
         commentId: number
     ) {
 
@@ -32,7 +33,7 @@ export class LikeService extends QueryServiceBase<Like> {
         // check if user already liked the comment
         const userComment = await this
             ._ormService
-            .query(Like, { currentUserId, commentId })
+            .query(Like, { currentUserId: currentUserId.toSQLValue(), commentId })
             .where('commentId', '=', 'commentId')
             .and('userId', '=', 'currentUserId')
             .getOneOrNull();
@@ -45,18 +46,18 @@ export class LikeService extends QueryServiceBase<Like> {
             .getRepository(Like)
             .insert({
                 commentId: commentId,
-                userId: currentUserId
+                userId: currentUserId.toSQLValue()
             } as Like);
     }
 
     // delete like with current user
     async softDeleteUserCommentLikeBridgeAsync(
-        currentUserId: number,
+        currentUserId: PrincipalId,
         commentId: number
     ) {
         const userComment = await this
             ._ormService
-            .query(Like, { currentUserId, commentId })
+            .query(Like, { currentUserId: currentUserId.toSQLValue(), commentId })
             .where('commentId', '=', 'commentId')
             .and('userId', '=', 'currentUserId')
             .getOneOrNull();

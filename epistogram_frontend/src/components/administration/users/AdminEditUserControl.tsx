@@ -1,15 +1,15 @@
 import { Box, Divider, Flex } from '@chakra-ui/react';
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
+import { useCompanies } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
+import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
+import { AssignedAuthItemsDTO } from '../../../shared/dtos/role/AssignedAuthItemsDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
-import { UserDTO } from '../../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
@@ -20,32 +20,12 @@ import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryN
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { AuthorizationContext, CurrentUserContext } from '../../system/AuthenticationFrame';
+import { AuthorizationContext } from '../../system/AuthenticationFrame';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
-import { useCompanies } from '../../../services/api/companyApiService';
 import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
-import { AssignedAuthItemsDTO } from '../../../shared/dtos/role/AssignedAuthItemsDTO';
-
-export const roles = [
-    {
-        name: 'admin',
-        id: 1,
-        optionText: translatableTexts.roleNames.administrator,
-    },
-    {
-        name: 'supervisor',
-        id: 2,
-        optionText: translatableTexts.roleNames.supervisor,
-    },
-    {
-        name: 'user',
-        id: 3,
-        optionText: translatableTexts.roleNames.user
-    }
-];
 
 const defaultAuthItemsDTO = { assignedPermissionIds: [], assignedRoleIds: [] };
 
