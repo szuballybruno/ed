@@ -32,7 +32,7 @@ export class ActivitySession {
 
     // activity streak
     @Column({ nullable: true, type: 'integer' })
-    activityStreakId: number;
+    activityStreakId: number | null;
 
     @JoinColumn({ name: 'activity_streak_id' })
     @ManyToOne(_ => ActivityStreak, x => x.activitySessions)

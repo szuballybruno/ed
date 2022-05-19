@@ -15,23 +15,23 @@ export class Question {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column()
     questionText: string;
 
     @Column({ nullable: true })
-    imageUrl: string;
+    imageUrl: string | null;
 
     @Column({ nullable: true, type: 'integer' })
     orderIndex: number | null;
 
     @Column({ nullable: true, type: 'double precision' })
-    showUpTimeSeconds: number;
+    showUpTimeSeconds: number | null;
 
     // category
     @Column({ nullable: true })
-    personalityTraitCategoryId: number;
+    personalityTraitCategoryId: number | null;
 
     @ManyToOne(_ => PersonalityTraitCategory, x => x.questions)
     @JoinColumn({ name: 'personality_trait_category_id' })
@@ -57,7 +57,7 @@ export class Question {
 
     // video 
     @Column({ nullable: true })
-    videoId: number;
+    videoId: number | null;
 
     @ManyToOne(() => Video, v => v.questions)
     @JoinColumn({ name: 'video_id' })

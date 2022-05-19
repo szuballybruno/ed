@@ -242,7 +242,8 @@ export class RoleService extends QueryServiceBase<Role> {
         const role = await this.createAsync(instatiateInsertEntity<Role>({
             name: dto.name,
             companyId: dto.companyId,
-            isCustom: dto.isCustom
+            isCustom: dto.isCustom,
+            deletionDate: null
         }));
 
         // create permission assignments 

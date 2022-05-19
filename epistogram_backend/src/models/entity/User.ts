@@ -35,7 +35,7 @@ export class User {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column({ default: false })
     isGod: boolean;
@@ -65,13 +65,13 @@ export class User {
     lastName: string;
 
     @Column({ nullable: true })
-    phoneNumber: string;
+    phoneNumber: string | null;
 
     @Column({ nullable: true })
-    userDescription: string;
+    userDescription: string | null;
 
     @Column({ nullable: true })
-    linkedInUrl: string;
+    linkedInUrl: string | null;
 
     @Column({ nullable: true })
     password: string;
@@ -88,7 +88,7 @@ export class User {
 
     // Avatar file
     @Column({ nullable: true })
-    avatarFileId: number;
+    avatarFileId: number | null;
 
     @ManyToOne(() => StorageFile, sf => sf.users)
     @JoinColumn({ name: 'avatar_file_id' })

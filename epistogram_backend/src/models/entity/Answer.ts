@@ -11,13 +11,13 @@ export class Answer {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
-    
+    deletionDate: Date | null;
+
     @Column()
     text: string;
 
     @Column({ nullable: true })
-    isCorrect: boolean;
+    isCorrect: boolean | null;
 
     // question 
     @Column()

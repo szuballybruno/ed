@@ -26,7 +26,7 @@ export class Course {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column()
     title: string;

@@ -6,7 +6,7 @@ export type PropConstraintType<TObj, TProp> = {
 export type NoIdType<T> = Omit<NoComplexTypes<T>, 'id'>;
 
 export type NoComplexTypes<TObj> = {
-    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | undefined | null) ? TKey : never]: TObj[TKey]
+    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | Date | undefined | null) ? TKey : never]: TObj[TKey]
 };
 
 export type InsertEntity<T> = NoIdType<NoComplexTypes<T>>;

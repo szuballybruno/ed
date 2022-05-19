@@ -13,7 +13,7 @@ export class Role {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
     @Column()
     name: string;

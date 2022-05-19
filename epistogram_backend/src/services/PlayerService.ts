@@ -70,15 +70,15 @@ export class PlayerService extends ServiceBase {
             throw new VerboseError('Course has been deleted!', 'deleted');
 
         // get valid course item 
-        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);
+        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId!, currentItemCode);
 
         // set current course 
         await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+            .setCurrentCourse(userId, courseId!, 'watch', validItemCode);
 
         // course items list
         const modules = await this._courseService
-            .getCourseModulesAsync(userId, courseId);
+            .getCourseModulesAsync(userId, courseId!);
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
@@ -88,7 +88,7 @@ export class PlayerService extends ServiceBase {
 
         // get user course bridge
         const userCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeOrFailAsync(userId, courseId);
+            .getUserCourseBridgeOrFailAsync(userId, courseId!);
 
         // get new answer session
         const answerSessionId = itemType === 'module'

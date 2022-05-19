@@ -13,8 +13,8 @@ export class CourseModule {
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
-    
+    deletionDate: Date | null;
+
     @Column()
     name: string;
 
@@ -26,7 +26,7 @@ export class CourseModule {
 
     // course 
     @Column({ nullable: true })
-    courseId: number;
+    courseId: number | null;
 
     @ManyToOne(_ => Course, x => x.modules)
     @JoinColumn({ name: 'course_id' })

@@ -239,7 +239,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         const courseId = item.courseId;
 
         const courseItemListDTO = await this._courseItemsService
-            .getCourseItemDTOs(courseId);
+            .getCourseItemDTOs(courseId!);
 
         const prevIndex = courseItemListDTO
             .courseItems
@@ -261,7 +261,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .find({
                 where: {
                     currentItemCode: currentItemCode,
-                    courseId
+                    courseId: courseId!
                 }
             });
 
