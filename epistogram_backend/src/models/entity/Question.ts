@@ -20,13 +20,13 @@ export class Question {
     @Column()
     questionText: string;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     imageUrl: string | null;
 
-    @Column({ nullable: true, type: 'integer' })
+    @Column({ type: 'int', nullable: true })
     orderIndex: number | null;
 
-    @Column({ nullable: true, type: 'double precision' })
+    @Column({ type: 'double precision', nullable: true })
     showUpTimeSeconds: number | null;
 
     // category

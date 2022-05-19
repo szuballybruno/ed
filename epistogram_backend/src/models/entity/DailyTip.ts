@@ -19,7 +19,7 @@ export class DailyTip {
     isMax: boolean;
 
     // video file
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
     videoFileId: number | null;
 
     @OneToOne(_ => StorageFile)

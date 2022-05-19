@@ -9,10 +9,10 @@ export class CourseRatingQuestionUserAnswer {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
     text: string;
 
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
     value: number;
 
     // quesiton

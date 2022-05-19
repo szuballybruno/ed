@@ -16,7 +16,7 @@ export class Answer {
     @Column()
     text: string;
 
-    @Column({ nullable: true })
+    @Column({ type: 'bool', nullable: true })
     isCorrect: boolean | null;
 
     // question 

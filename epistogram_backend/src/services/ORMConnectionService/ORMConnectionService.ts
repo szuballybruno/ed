@@ -1,6 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { ClassType } from '../../models/Types';
+import { ClassType } from "../misc/advancedTypes/ClassType";
 import { noUndefined } from '../../shared/logic/sharedLogic';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';

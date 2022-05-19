@@ -16,6 +16,7 @@ export const getSeedList = <TEntity, TConstraint extends PropConstraintType<TCon
 
         const ret = constraintFn<SeedType>()(data);
 
+        // automatically set id props 
         Object
             .values(ret)
             .forEach((val, index) => (val as any)['id'] = index + 1);
@@ -71,19 +72,31 @@ export class SeedService {
         await this._sqlBootstrapperService.recalcSequencesAsync();
     };
 
-    private parseSeedList<TEntity>(t: { new(): TEntity }, obj: { [K in string]: NoComplexTypes<TEntity> }) {
+    private parseSeedList<TEntity>(entitySignature: { new(): TEntity }, seedObject: { [K in string]: NoComplexTypes<TEntity> }) {
 
-        const { text, values } = this.getValues(t, obj);
+        const { valuesScript, values } = this.getValues(seedObject);
 
-        const firstObjectKeys = Object.keys(Object.values(obj)[0]);
+        const firstEntity = Object
+            .values(seedObject)
+            .first();
+
+        // get first entity keys 
+        // ---> NOTE: entity keys are orderd by their names
+        const firstEntityKeysOrdered = Object
+            .keys(firstEntity)
+            .orderBy(entityKey => entityKey);
+
+        const insertColumnNames = firstEntityKeysOrdered
+            .map(x => toSQLSnakeCasing(x))
+            .join(', ');
+
+        const insertTableName = toSQLSnakeCasing(entitySignature.name);
 
         const script = `
-INSERT INTO public.${toSQLSnakeCasing(t.name)}
-(${firstObjectKeys
-                .map(x => toSQLSnakeCasing(x))
-                .join(', ')})
+INSERT INTO public.${insertTableName}
+(${insertColumnNames})
 VALUES 
-${text}`;
+${valuesScript}`;
 
         return {
             script,
@@ -91,30 +104,48 @@ ${text}`;
         };
     }
 
-    private getValues<TEntity>(t: { new(): TEntity }, obj: { [K in string]: NoComplexTypes<TEntity> }) {
+    private getValues<TEntity>(seedObject: { [K in string]: NoComplexTypes<TEntity> }) {
 
         const entities = Object
-            .values(obj);
+            .values(seedObject);
 
         const values: any[] = [];
 
-        const lines = entities
-            .map((entity, entityIndex) => {
+        const getEntityInsertScript = (entity: any, index: number) => {
 
-                const entityValues = Object.values(entity);
+            // get entity property values 
+            // these will be inserted to the rows 
+            // of the entity's SQL table
+            // ---- NOTE: values are orderd by their name
+            const entityValuesOrdered = Object
+                .keys(entity)
+                .orderBy(entityKey => entityKey)
+                .map(entitKey => (entity as any)[entitKey]);
 
-                const tokens = entityValues
-                    .map(val => {
+            // get sql token placeholders for each value 
+            const valueIndices = entityValuesOrdered
+                .map(entityValue => {
 
-                        values.push(val);
-                        return `$${values.length}`;
-                    });
+                    // push to global flat values array
+                    values.push(entityValue);
 
-                return `(${tokens.join(', ')})${entityIndex < entities.length - 1 ? ',' : ';'} -- ${entityValues.join(', ')}`;
-            });
+                    // return value index
+                    return `$${values.length}`;
+                });
+
+            // trailing comma or semicolon
+            const comma = index < entities.length - 1
+                ? ','
+                : ';';
+
+            return `(${valueIndices.join(', ')})${comma} -- ${entityValuesOrdered.join(', ')}`;
+        };
+
+        const insertScripts = entities
+            .map(getEntityInsertScript);
 
         return {
-            text: lines.join('\n'),
+            valuesScript: insertScripts.join('\n'),
             values
         };
     }

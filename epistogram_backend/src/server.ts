@@ -50,9 +50,10 @@ import { EventService } from './services/EventService';
 import { ExamService } from './services/ExamService';
 import { FileService } from './services/FileService';
 import { HashService } from './services/HashService';
+import { LikeService } from './services/LikeService';
 import { LoggerService } from './services/LoggerService';
 import { MapperService } from './services/MapperService';
-import { dbSchema } from './services/misc/dbSchema';
+import { createDBSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
@@ -84,7 +85,6 @@ import { TeacherInfoService } from './services/TeacherInfoService';
 import { TempomatService } from './services/TempomatService';
 import { TokenService } from './services/TokenService';
 import { UrlService } from './services/UrlService';
-import { LikeService } from './services/LikeService';
 import { UserCourseBridgeService } from './services/UserCourseBridgeService';
 import { UserProgressService } from './services/UserProgressService';
 import { UserService } from './services/UserService';
@@ -105,12 +105,14 @@ const getCurrentDir = () => dirname(fileURLToPath(import.meta.url));
 
 const main = async () => {
 
+    log('');
+    log('------------- APPLICATION STARTED ----------------');
+    log('');
+
     const globalConfig = GlobalConfiguration
         .initGlobalConfig(getCurrentDir());
 
-    log('');
-    log(`------------- APPLICATION STARTED, ENVIRONEMNT: ${globalConfig.misc.environmentName} ----------------`);
-    log('');
+    const dbSchema = createDBSchema();
 
     // services
     const loggerService = new LoggerService();

@@ -8,10 +8,10 @@ export class VideoRating {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
     experience: number | null;
 
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
     difficulty: number | null;
 
     // video 

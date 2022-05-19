@@ -1,7 +1,7 @@
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<PersonalityTraitCategory>()({
+export const getPersonalityTraitCategoriesSeed = () => getSeedList<PersonalityTraitCategory>()({
 
     personality_trait_category_1: {
         title: 'Egyedül, vagy csoportosan tanulsz szívesebben?',
@@ -40,4 +40,4 @@ const list = getSeedList<PersonalityTraitCategory>()({
     }
 });
 
-export default list;
+export type PersonalityTraitCategoriesSeedType = ReturnType<typeof getPersonalityTraitCategoriesSeed>;

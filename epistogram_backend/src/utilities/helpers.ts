@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { ClassType, ParsableValueType } from '../models/Types';
+import { ParsableValueType } from '../models/Types';
+import { ClassType } from "../services/misc/advancedTypes/ClassType";
 import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
 import { KeyofConstrained } from './misc';

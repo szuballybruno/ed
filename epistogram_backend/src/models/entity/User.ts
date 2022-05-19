@@ -64,30 +64,30 @@ export class User {
     @Column()
     lastName: string;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     phoneNumber: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     userDescription: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     linkedInUrl: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     password: string;
 
     // tokens 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
     refreshToken: string | null;
 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
     resetPasswordToken: string | null;
 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
     invitationToken: string | null;
 
     // Avatar file
-    @Column({ nullable: true })
+    @Column({ type: 'int', nullable: true })
     avatarFileId: number | null;
 
     @ManyToOne(() => StorageFile, sf => sf.users)

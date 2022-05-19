@@ -1,6 +1,7 @@
 import { User } from '../../models/entity/User';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import seed_companies from './seed_companies';
+import seed_job_titles from './seed_job_titles';
 
 const list = getSeedList<User>()({
     user_1: {
@@ -12,18 +13,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: true, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'endre.marosi@gmail.com', // email
-        username: 'god', // username
-        firstName: 'Endre', // first_name
-        lastName: 'Marosi', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: true // is_god
+        isInvitationAccepted: true, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'endre.marosi@gmail.com', 
+        username: 'god', 
+        firstName: 'Endre', 
+        lastName: 'Marosi', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: true 
     },
     user_2: {
         deletionDate: null,
@@ -34,18 +34,38 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: true, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'ALMOSTGOD@gmail.com', // email
-        username: 'almostgod', // username
-        firstName: 'Almost', // first_name
-        lastName: 'God', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: true, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'ALMOSTGOD@gmail.com', 
+        username: 'almostgod', 
+        firstName: 'Almost', 
+        lastName: 'God', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
+    },
+    user_3: {
+        deletionDate: null,
+        phoneNumber: null,
+        linkedInUrl: null,
+        userDescription: null,
+        avatarFileId: null,
+        refreshToken: null,
+        resetPasswordToken: null,
+        invitationToken: null,
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'gyorgy.kelecsenyi@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'György', 
+        lastName: 'Kelecsényi', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_4: {
         deletionDate: null,
@@ -56,18 +76,18 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'gyorgy.kelecsenyi@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'György', // first_name
-        lastName: 'Kelecsényi', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'gizi13@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Gizella', 
+        lastName: 'Zurinka', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_5: {
         deletionDate: null,
@@ -78,18 +98,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'gizi13@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Gizella', // first_name
-        lastName: 'Zurinka', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'vlaicup@hotmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Péter', 
+        lastName: 'Dr. Vlaciu', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_6: {
         deletionDate: null,
@@ -100,18 +119,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'vlaicup@hotmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Péter', // first_name
-        lastName: 'Dr. Vlaciu', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'prozgonyi@microsoft.com', 
+        username: 'teacherusername', 
+        firstName: 'Péter', 
+        lastName: 'Rozgonyi', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_7: {
         deletionDate: null,
@@ -122,18 +140,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'prozgonyi@microsoft.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Péter', // first_name
-        lastName: 'Rozgonyi', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'andi.lukacs@t-online.hu', 
+        username: 'teacherusername', 
+        firstName: 'Andrea', 
+        lastName: 'Lukács', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_8: {
         deletionDate: null,
@@ -144,18 +161,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'andi.lukacs@t-online.hu', // email
-        username: 'teacherusername', // username
-        firstName: 'Andrea', // first_name
-        lastName: 'Lukács', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'lepsenyi.tamas@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Tamás', 
+        lastName: 'Dr. Lepsényi', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_9: {
         deletionDate: null,
@@ -166,18 +182,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'lepsenyi.tamas@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Tamás', // first_name
-        lastName: 'Dr. Lepsényi', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'ptaylor.official@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Péter', 
+        lastName: 'Szabó', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.EpistoGram.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_10: {
         deletionDate: null,
@@ -188,18 +203,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'ptaylor.official@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Péter', // first_name
-        lastName: 'Szabó', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.EpistoGram.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'manyokib20@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Bence', 
+        lastName: 'Mányoki', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.PCWorld.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_11: {
         deletionDate: null,
@@ -210,18 +224,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'manyokib20@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Bence', // first_name
-        lastName: 'Mányoki', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.PCWorld.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'naturahelp77@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Erika', 
+        lastName: 'Benkő', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.PCWorld.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_12: {
         deletionDate: null,
@@ -232,18 +245,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'naturahelp77@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Erika', // first_name
-        lastName: 'Benkő', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.PCWorld.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'zwgabor@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Gábor', 
+        lastName: 'Zwierczyk', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.PCWorld.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_13: {
         deletionDate: null,
@@ -254,18 +266,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'zwgabor@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Gábor', // first_name
-        lastName: 'Zwierczyk', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.PCWorld.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'aposkara@freemail.hu', 
+        username: 'teacherusername', 
+        firstName: 'Károly', 
+        lastName: 'Apostagi', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.Henkel.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_14: {
         deletionDate: null,
@@ -276,18 +287,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'aposkara@freemail.hu', // email
-        username: 'teacherusername', // username
-        firstName: 'Károly', // first_name
-        lastName: 'Apostagi', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.Henkel.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'rgkrisztina@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Krisztina', 
+        lastName: 'Reichenberger', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.Henkel.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
     user_15: {
         deletionDate: null,
@@ -298,20 +308,19 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'rgkrisztina@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Krisztina', // first_name
-        lastName: 'Reichenberger', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.Henkel.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'brozalia74@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Rozália', 
+        lastName: 'Borbély', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.Manni_BT.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     },
-    user_16: {
+    user_kovacskrisz: {
         deletionDate: null,
         phoneNumber: null,
         linkedInUrl: null,
@@ -320,40 +329,17 @@ const list = getSeedList<User>()({
         refreshToken: null,
         resetPasswordToken: null,
         invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'brozalia74@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Rozália', // first_name
-        lastName: 'Borbély', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.Manni_BT.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
-    },
-    user_17: {
-        deletionDate: null,
-        phoneNumber: null,
-        linkedInUrl: null,
-        userDescription: null,
-        avatarFileId: null,
-        refreshToken: null,
-        resetPasswordToken: null,
-        invitationToken: null,
-        isInvitationAccepted: false, // is_invitation_accepted
-        isTrusted: true, // is_trusted
-        registrationType: 'Invitation', // registration_type
-        email: 'kovacsiriszr@gmail.com', // email
-        username: 'teacherusername', // username
-        firstName: 'Írisz', // first_name
-        lastName: 'Kovács', // last_name
-        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', // password (admin)
-        // 1, // role_id
-        companyId: seed_companies.Manni_BT.id, // company_id
-        jobTitleId: 1, // job_title_id,
-        isGod: false // is_god
+        isInvitationAccepted: false, 
+        isTrusted: true, 
+        registrationType: 'Invitation', 
+        email: 'kovacsiriszr@gmail.com', 
+        username: 'teacherusername', 
+        firstName: 'Írisz', 
+        lastName: 'Kovács', 
+        password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C', 
+        companyId: seed_companies.Manni_BT.id, 
+        jobTitleId: seed_job_titles.user.id, 
+        isGod: false 
     }
 });
 

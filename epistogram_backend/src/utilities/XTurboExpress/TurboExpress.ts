@@ -1,5 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
-import { ConstructorSignature } from '../../models/Types';
+import { ConstructorSignature } from '../../services/misc/advancedTypes/ConstructorSignature';
 import { log, logSecondary } from '../../services/misc/logger';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';

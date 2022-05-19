@@ -18,7 +18,7 @@ export class UserCourseBridge {
     @Column()
     isCurrent: boolean;
 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
     currentItemCode: string | null;
 
     @Column({ type: 'text' })

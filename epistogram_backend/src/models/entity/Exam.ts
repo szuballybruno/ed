@@ -24,16 +24,16 @@ export class Exam {
     @Column()
     type: ExamType;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     subtitle: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     description: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     thumbnailUrl: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'int', nullable: true })
     orderIndex: number | null;
 
     @Column({ type: 'integer', nullable: true })
@@ -63,7 +63,7 @@ export class Exam {
     answerSessions: AnswerSession[];
 
     // module
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
     moduleId: number | null;
 
     @ManyToOne(_ => CourseModule, x => x.exams)

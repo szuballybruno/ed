@@ -1,4 +1,4 @@
-import { ConstructorSignature } from '../../models/Types';
+import { ConstructorSignature } from '../../services/misc/advancedTypes/ConstructorSignature';
 import { XMetadataHandler } from '../XMetadata/XMetadataHandler';
 import { EndpointOptionsType } from './TurboExpress';
 
