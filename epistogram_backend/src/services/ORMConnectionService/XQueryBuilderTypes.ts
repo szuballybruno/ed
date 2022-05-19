@@ -1,4 +1,4 @@
-import { ClassType } from "../misc/advancedTypes/ClassType";
+import { ClassType } from '../misc/advancedTypes/ClassType';
 
 export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 

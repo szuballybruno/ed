@@ -42,7 +42,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .getMany();
 
         return roles
-            .currentFn(x => x.roleId)
+            .groupBy(x => x.roleId)
             .map((grouping): RoleAdminListDTO => {
 
                 const viewAsRole = grouping.first;
@@ -91,7 +91,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .getMany();
 
         const roleGroups = roles
-            .currentFn(x => x.roleId);
+            .groupBy(x => x.roleId);
 
         return roleGroups
             .map((viewAsRole): AssignableRoleDTO => ({
@@ -191,7 +191,7 @@ export class RoleService extends QueryServiceBase<Role> {
         // get newly assigned permission ids 
         const roleContainedPermissionIds = newlyAssignedRoles
             .flatMap(x => x.permissionIds)
-            .currentFn(x => x)
+            .groupBy(x => x)
             .map(x => x.first);
 
         const newlyAssignedPermissionIds = permissionIds
@@ -305,7 +305,7 @@ export class RoleService extends QueryServiceBase<Role> {
             throw new VerboseError('forbidden');
 
         const group = roles
-            .currentFn(x => x.roleId)
+            .groupBy(x => x.roleId)
             .single(x => true);
 
         const resultGroupFirst = group.first;

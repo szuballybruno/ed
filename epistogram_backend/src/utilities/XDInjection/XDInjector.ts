@@ -1,13 +1,23 @@
 import { FunctionSignature } from '../../services/misc/advancedTypes/FunctionSignature';
+import { ParametrizedFunction } from '../../services/misc/advancedTypes/ParametrizedFunction';
 
 type FnType = { fn: Function, deps: Function[] };
+
+type Remap<Tuple extends [...any[]]> = {
+    [Index in keyof Tuple]: ParametrizedFunction<Tuple[Index]>;
+} & { length: Tuple['length'] };
+
+type asd2 = Remap<[string, number]>;
 
 export class XDInjector {
 
     private _functions: FnType[] = [];
     private _instances: any;
 
-    add(fn: Function, deps: Function[]) {
+    add<T extends ParametrizedFunction>(fn: T, deps: Remap<Parameters<T>>) {
+
+        if (this._getArgsCount(fn) !== deps.length)
+            throw new Error(`Function [${fn.name}] parameter count mismatch, expected arguments: ${this._getArgsCount(fn)}!`);
 
         this._functions.push({ fn, deps });
         return this;
@@ -16,26 +26,39 @@ export class XDInjector {
     build() {
 
         this._depcheck();
+        this._instances = {};
 
-        const callFn = (currentFn: FnType) => {
+        const callFunction = (currentFn: FnType): any => {
 
-            if (currentFn.deps.length === 0)
-                this._regInstance(currentFn.fn, currentFn.fn());
+            // no deps 
+            if (currentFn.deps.length === 0) {
 
-            const depInstances = currentFn
-                .deps
-                .map(dep => {
+                const currentFnRes = this._execFn(currentFn.fn, []);
+                this._regInstance(currentFn.fn, currentFnRes);
+            }
 
-                    if (this._checkInstance(dep))
-                        return this._getInstance(dep);
+            // deps found 
+            else {
 
-                    const depProvider = this._getDepProviderFunction(dep);
+                const depInstances = currentFn
+                    .deps
+                    .map(dep => {
 
-                    return callFn(depProvider);
-                });
+                        if (this._checkInstance(dep))
+                            return this._getInstance(dep);
+
+                        const depProvider = this._getDepProviderFunction(dep);
+
+                        return callFunction(depProvider);
+                    });
+
+                const currentFnInstance = this._execFn(currentFn.fn, depInstances);
+                this._regInstance(currentFn.fn, currentFnInstance);
+            }
         };
 
-        callFn(this._functions.first());
+        this._functions
+            .forEach(func => callFunction(func));
 
         return this;
     }
@@ -46,6 +69,11 @@ export class XDInjector {
             throw new Error('Build first!');
 
         return this._instances[fn.name] ?? null;
+    }
+
+    _getArgsCount(fn: Function) {
+
+        return fn.length;
     }
 
     _depcheck() {
@@ -84,5 +112,10 @@ export class XDInjector {
     _checkInstance(fn: Function) {
 
         return !!this._getInstance(fn);
+    }
+
+    _execFn(fn: Function, args: any[]) {
+
+        return fn(args[0], args[1], args[2], args[3], args[4]);
     }
 }

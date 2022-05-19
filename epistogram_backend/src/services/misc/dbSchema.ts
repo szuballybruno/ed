@@ -120,7 +120,7 @@ import seed_course_rating_groups from '../../sql/seed/seed_course_rating_groups'
 import seed_course_rating_question from '../../sql/seed/seed_course_rating_question';
 import { getDailyTipsSeed } from '../../sql/seed/seed_daily_tips';
 import seed_discount_codes from '../../sql/seed/seed_discount_codes';
-import seed_exams from '../../sql/seed/seed_exams';
+import seed_exams, { getExamSeedData } from '../../sql/seed/seed_exams';
 import seed_job_titles from '../../sql/seed/seed_job_titles';
 import seed_modules from '../../sql/seed/seed_modules';
 import { permissionList } from '../../sql/seed/seed_permissions';
@@ -139,25 +139,28 @@ import seed_storage_file from '../../sql/seed/seed_storage_file';
 import seed_teacher_info from '../../sql/seed/seed_teacher_info';
 import seed_tempomat_adjustment_values from '../../sql/seed/seed_tempomat_adjustment_values';
 import seed_users from '../../sql/seed/seed_users';
-import seed_videos from '../../sql/seed/seed_videos';
+import { getVideoSeedData } from '../../sql/seed/seed_videos';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
-    const personalityTraitCategories = getPersonalityTraitCategoriesSeed();
-    const dailyTips = getDailyTipsSeed(personalityTraitCategories);
-    const questions = getSeedQuestions(seed_videos, seed_exams, personalityTraitCategories);
-    const answers = getAnswersSeed(questions);
+    // const personalityTraitCategories = getPersonalityTraitCategoriesSeed();
+    // const dailyTips = getDailyTipsSeed(personalityTraitCategories);
+    // const questions = getSeedQuestions(seed_videos, seed_exams, personalityTraitCategories);
+    // const answers = getAnswersSeed(questions);
 
-    const injector = new XDInjector()
+    new XDInjector()
         .add(getPersonalityTraitCategoriesSeed, [])
         .add(getDailyTipsSeed, [getPersonalityTraitCategoriesSeed])
-        .add(getSeedQuestions, [getPersonalityTraitCategoriesSeed])
-        .add(getAnswersSeed, [getSeedQuestions])
-        .build();
+        .add(getVideoSeedData, [() => 1, () => 3, () => 4])
+        .add(getExamSeedData, [])
+        .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed])
+        .add(getAnswersSeed, [getSeedQuestions]);
 
-    const ans = injector.getInstance(getAnswersSeed);
+    type Paramss = Parameters<typeof getVideoSeedData>;
+
+    const asd: Paramss = ['asd', 2, 4];
 
     return {
         seedScripts: [
@@ -169,6 +172,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             [User, seed_users],
             [ActivitySession, seed_activity_sessions],
             [AnswerSession, seed_answer_sessions],
+            [PersonalityTraitCategory, personalityTraitCategories],
             [Question, questions],
             [Answer, answers],
             [CourseCategory, seed_course_categories],
@@ -179,7 +183,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             [DiscountCode, seed_discount_codes],
             [Exam, seed_exams],
             [CourseModule, seed_modules],
-            [PersonalityTraitCategory, personalityTraitCategories],
             [PrequizAnswer, seed_prequiz_answers],
             [PrequizQuestion, seed_prequiz_questions],
             [ShopItemCategory, seed_shop_item_categories],

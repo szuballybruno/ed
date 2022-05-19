@@ -1,4 +1,4 @@
-import { ClassType } from "../misc/advancedTypes/ClassType";
+import { ClassType } from '../misc/advancedTypes/ClassType';
 import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
@@ -20,11 +20,14 @@ export const IsDeletedFlag = (checkType?: CheckType) => {
 
 export const getIsDeletedDecoratorPropertyData = <T>(classType: ClassType<T>) => {
 
-    const propName = XMetadataHandler.getPropertyNameByMetadataCode(classType, IS_DELETED_FLAG_METADATA_KEY);
+    const propName = XMetadataHandler
+        .getSinglePropertyNameByMetadataCode(classType, IS_DELETED_FLAG_METADATA_KEY);
+
     if (!propName)
         return null;
 
-    const checkType = XMetadataHandler.getMetadata(classType.name, propName as string, IS_DELETED_FLAG_METADATA_KEY) as CheckType;
+    const checkType = XMetadataHandler
+        .getMetadata(classType.name, propName as string, IS_DELETED_FLAG_METADATA_KEY) as CheckType;
 
     return {
         propName,

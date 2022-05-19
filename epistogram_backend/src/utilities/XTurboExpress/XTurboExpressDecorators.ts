@@ -30,10 +30,4 @@ export const getControllerActionMetadatas = <T>(controller: ConstructorSignature
         .getMetadataProperiesByCode<ControllerActionDataType>(controller.name, CONTROLLER_ACTION_METADATA_KEY);
 
     return datas;
-    // const checkType = XMetadataHandler.getMetadata(classType.name, propName as string, IS_DELETED_FLAG_METADATA_KEY) as CheckType;
-
-    // return {
-    //     propName,
-    //     checkType
-    // };
 };

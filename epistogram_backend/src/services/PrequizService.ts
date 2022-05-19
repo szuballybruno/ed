@@ -47,7 +47,7 @@ export class PrequizService {
             .getMany();
 
         const questions = views
-            .currentFn(view => view.questionId)
+            .groupBy(view => view.questionId)
             .map(questionGroup => {
 
                 const viewAsQuestion = questionGroup.first;

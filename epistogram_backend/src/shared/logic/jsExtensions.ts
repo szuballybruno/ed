@@ -6,7 +6,7 @@ declare global {
 
         remove(func: (item: T) => boolean): Array<T>;
         orderBy(func: (item: T) => number | string | Date): Array<T>;
-        currentFn<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
+        groupBy<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
         any(funcOrItem?: T | ((item: T) => boolean)): boolean;
         none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
@@ -60,7 +60,7 @@ Array.prototype.insert = function <T>(index: number, newItem: T) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.currentFn = function <T, TKey>(func: (item: T) => TKey) {
+Array.prototype.groupBy = function <T, TKey>(func: (item: T) => TKey) {
 
     const groups = [] as Grouping<T, TKey>[];
 

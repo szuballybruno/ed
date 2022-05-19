@@ -1,88 +1,99 @@
-import { ClassType } from "../../services/misc/advancedTypes/ClassType";
+import { ClassType } from '../../services/misc/advancedTypes/ClassType';
 import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 
-type MetadataKeysType = {
+type MetadataType = {
+    className: string;
+    metadataKey: string;
+    propertyName?: string;
+    data?: any;
+}
 
-    // metadata code
-    [metadataCodeKey: string]: any;
+const metadatas: MetadataType[] = [];
+
+const _addMetadata = (meta: MetadataType) => {
+
+    metadatas.push(meta);
 };
 
-type MetadataPropertiesType = {
+const regMetadata = (className: string, propertyName: string, metadataKey: string, data?: any) => {
 
-    // prop name
-    [properyNameKey: string]: MetadataKeysType;
-}
+    _addMetadata({
+        className,
+        propertyName,
+        metadataKey,
+        data
+    });
+};
 
-type MetadataClassesType = {
+const regClassMetadata = (className: string, metadataKey: string, data?: any) => {
 
-    // class name
-    [classNameKey: string]: MetadataPropertiesType;
-}
+    _addMetadata({
+        className,
+        metadataKey,
+        data
+    });
+};
 
-const metadatas: MetadataClassesType = {};
+const getMetadata = (className: string, propertyName: string, metadataCode: string) => {
 
-const regMetadata = (className: string, propertyName: string, metadataCode: string, data?: any) => {
-
-    if (metadatas[className] === undefined)
-        metadatas[className] = {};
-
-    if (metadatas[className][propertyName] === undefined)
-        metadatas[className][propertyName] = {};
-
-    if (metadatas[className][propertyName][metadataCode] === undefined)
-        metadatas[className][propertyName][metadataCode] = {};
-
-    metadatas[className][propertyName][metadataCode].data = data;
+    return metadatas
+        .firstOrNull(x => x.className === className
+            && x.propertyName === propertyName
+            && x.metadataKey === metadataCode);
 };
 
 const hasMetadata = (className: string, propertyName: string, metadataCode: string) => {
 
-    return metadatas[className][propertyName][metadataCode] !== undefined;
+    return getMetadata(className, propertyName, metadataCode) !== undefined;
 };
 
-const getMetadata = <T = any>(className: string, propertyName: string, metadataCode: string): T => {
+const getMetadataData = <T = any>(className: string, propertyName: string, metadataCode: string): T => {
 
-    return metadatas[className][propertyName][metadataCode].data;
+    if (!hasMetadata(className, propertyName, metadataCode))
+        throw new Error('Metadata not found!');
+
+    return getMetadata(className, propertyName, metadataCode)!.data;
 };
 
-const getMetadataProperies = (className: string) => {
+const getMetadataProperies = (className: string, metadataKey: string) => {
 
-    return getKeys(metadatas[className]) as string[];
+    return metadatas
+        .filter(x => x.className === className
+            && x.propertyName
+            && x.metadataKey === metadataKey)
+        .map(x => x.propertyName);
 };
 
-const getMetadataProperiesByCode = <T = any>(className: string, code: string) => {
+const getMetadataProperiesByCode = <T = any>(className: string, metadataKey: string) => {
 
-    const classMetadata = metadatas[className];
-    const propsWithMetadata = getKeys(classMetadata) as string[];
-
-    const props = propsWithMetadata
-        .filter(propName => hasMetadata(className, propName, code));
-
-    return props
+    return metadatas
+        .filter(x => x.className === className
+            && x.metadataKey === metadataKey
+            && x.propertyName)
         .map(x => ({
-            propName: x,
-            metadata: getMetadata<T>(className, x, code)
+            propName: x.propertyName!,
+            metadata: x.data as T
         }));
 };
 
-const getPropertyNameByMetadataCode = <T>(classType: ClassType<T>, metadataCode: string): keyof T | null => {
+const getSinglePropertyNameByMetadataCode = <T>(classType: ClassType<T>, metadataCode: string): keyof T | null => {
 
     const className = classType.name;
 
-    const propName = getMetadataProperies(className)
-        .firstOrNull(propertyKey => {
-
-            return hasMetadata(className, propertyKey, metadataCode);
-        });
-
-    return propName as any;
+    return metadatas
+        .filter(x => x.className === className
+            && x.metadataKey === metadataCode
+            && x.propertyName)
+        .single(x => true)
+        .propertyName! as keyof T;
 };
 
 export const XMetadataHandler = {
     regMetadata,
+    regClassMetadata,
     hasMetadata,
-    getMetadata,
+    getMetadata: getMetadataData,
     getMetadataProperies,
-    getPropertyNameByMetadataCode,
+    getSinglePropertyNameByMetadataCode,
     getMetadataProperiesByCode
 };

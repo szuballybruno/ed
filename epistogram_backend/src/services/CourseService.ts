@@ -359,7 +359,7 @@ export class CourseService {
             .getMany();
 
         const modules = views
-            .currentFn(x => x.moduleId)
+            .groupBy(x => x.moduleId)
             .map(x => {
 
                 const viewAsModule = x.items.first();
@@ -527,7 +527,7 @@ export class CourseService {
         const updateMuts = mutations
             .filter(x => x.action === 'update')
             .map(x => ({ ...x, ...readItemCode(x.key) }))
-            .currentFn(x => x.itemType);
+            .groupBy(x => x.itemType);
 
         const videos = updateMuts
             .filter(x => x.key === 'video')
@@ -578,7 +578,7 @@ export class CourseService {
             .filter(x => x.action === 'delete')
             .map(x => x.key)
             .map(x => readItemCode(x))
-            .currentFn(x => x.itemType);
+            .groupBy(x => x.itemType);
 
         const deletedExamIds = itemCodes
             .filter(x => x.key === 'exam')

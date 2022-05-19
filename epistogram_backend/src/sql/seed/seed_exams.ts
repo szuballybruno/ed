@@ -1,8 +1,7 @@
 import { Exam } from '../../models/entity/Exam';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_courses from './seed_courses';
 
-const list = getSeedList<Exam>()({
+export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
     signup_exam: {
         courseId: null,
         description: null,
@@ -425,4 +424,4 @@ const list = getSeedList<Exam>()({
     }
 });
 
-export default list;
+export type ExamSeedDataType = ReturnType<typeof getExamSeedData>;
