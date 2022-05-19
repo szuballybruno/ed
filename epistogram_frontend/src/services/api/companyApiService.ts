@@ -3,6 +3,7 @@ import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
+import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompanyDTO';
 
 export const useCompaniesAdmin = () => {
 
@@ -16,15 +17,15 @@ export const useCompaniesAdmin = () => {
     };
 };
 
-export const useRoleManageCompanies = () => {
+export const useRoleAssignCompanies = () => {
 
-    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.companies.getRoleManageCompanies);
+    const qr = useReactQuery2<RoleAssignCompanyDTO[]>(apiRoutes.companies.getRoleAssignCompanies);
 
     return {
-        roleManageCompanies: qr.data ?? [],
-        roleManageCompaniesState: qr.state,
-        roleManageCompaniesError: qr.error,
-        refetchRoleManageCompanies: qr.refetch
+        roleAssignCompanies: qr.data ?? [],
+        roleAssignCompaniesState: qr.state,
+        roleAssignCompaniesError: qr.error,
+        refetchRoleAssignCompanies: qr.refetch
     };
 };
 

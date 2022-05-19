@@ -7,15 +7,14 @@ roles AS
 	FROM public.role r
 
 	INNER JOIN public.user_permission_view upv
-	ON (r.scope = 'COMPANY' AND upv.context_company_id = r.company_id AND upv.permission_code = 'VIEW_COMPANY_ROLES')
-	OR (r.scope = 'USER' AND upv.permission_code = 'VIEW_GLOBAL_ROLES')
+	ON (upv.context_company_id = r.company_id AND upv.permission_code = 'VIEW_CUSTOM_ROLES')
+	OR (r.company_id IS NULL AND upv.permission_code = 'VIEW_PREDEFINED_ROLES')
 )
 SELECT 
 	u.id user_id,
 	u.email user_email,
 	co.id owner_company_id,
 	r.deletion_date IS NOT NULL is_deleted,
-	r.scope role_scope,
 	r.id role_id,
 	r.name role_name,
 	co.name owner_name,

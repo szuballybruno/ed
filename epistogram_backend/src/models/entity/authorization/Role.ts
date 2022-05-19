@@ -1,6 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../../services/ORMConnectionService/ORMConnectionDecorators';
-import { RoleScopeType } from '../../../shared/types/sharedTypes';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { RoleAssignmentBridge } from './RoleAssignmentBridge';
@@ -15,9 +14,6 @@ export class Role {
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date;
-
-    @Column({ type: 'text' })
-    scope: RoleScopeType;
 
     @Column()
     name: string;

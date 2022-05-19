@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRoleManageCompanies } from '../../../../services/api/companyApiService';
+import { useRoleAssignCompanies } from '../../../../services/api/companyApiService';
 import { useAssignablePermissions, useAssignableRoles } from '../../../../services/api/rolesApiService';
-import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
+import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
 import { AssignedAuthItemsDTO } from '../../../../shared/dtos/role/AssignedAuthItemsDTO';
 import { useHandleAddRemoveItems } from '../../../../static/frontendHelpers';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
@@ -9,6 +9,22 @@ import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { LoadingFrame } from '../../../system/LoadingFrame';
+
+type RoleRowType = {
+    rowId: number,
+    name: string;
+    roleId: number;
+    isAssigned: boolean;
+    canAssign: boolean;
+}
+
+type PermissionRowType = {
+    rowId: number,
+    name: string;
+    isAssigned: boolean;
+    isAssignedByRole: boolean;
+    permissionId: number;
+}
 
 export const PermissionAssignerControl = (props: {
     userId: number,
@@ -19,13 +35,13 @@ export const PermissionAssignerControl = (props: {
 
     const { userId, data, onChange, userCompanyId } = props;
 
-    const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
+    const [selectedCompany, setSelectedCompany] = useState<RoleAssignCompanyDTO | null>(null);
     const selectedCompanyId = selectedCompany?.id ?? null;
 
     // http
     const { assignableRolesList } = useAssignableRoles(userId, selectedCompanyId);
     const { assignablePermissionList } = useAssignablePermissions(selectedCompanyId);
-    const { roleManageCompanies } = useRoleManageCompanies();
+    const { roleAssignCompanies } = useRoleAssignCompanies();
 
     // assigned permissions 
     const [assignedPermissionIds, setAssignedPermissionIds] = useState<number[]>([]);
@@ -38,14 +54,16 @@ export const PermissionAssignerControl = (props: {
     const getRoleKey = useCallback((x) => x.rowId, []);
     const getPermissionKey = useCallback((x) => x.rowId, []);
 
+    const isSelectedCompanyRoleAssignable = useMemo(() => !!selectedCompany?.canAssignRole, []);
+
     useEffect(() => {
 
-        if (roleManageCompanies.length === 0 || !userCompanyId)
+        if (roleAssignCompanies.length === 0 || !userCompanyId)
             return;
 
-        setSelectedCompany(roleManageCompanies
+        setSelectedCompany(roleAssignCompanies
             .single(x => x.id === userCompanyId));
-    }, [roleManageCompanies, userCompanyId]);
+    }, [roleAssignCompanies, userCompanyId]);
 
     useEffect(() => {
 
@@ -71,26 +89,12 @@ export const PermissionAssignerControl = (props: {
         .filter(x => assignedRoleIds
             .any(x.roleId));
 
-    type RoleRowType = {
-        rowId: number,
-        name: string;
-        isAssigned: boolean;
-        roleId: number;
-    }
-
-    type PermissionRowType = {
-        rowId: number,
-        name: string;
-        isAssigned: boolean;
-        isAssignedByRole: boolean;
-        permissionId: number;
-    }
-
     const roleRows = assignableRolesList
         .map((assRole, i): RoleRowType => ({
             rowId: i,
             name: assRole.roleName!,
             roleId: assRole.roleId,
+            canAssign: assRole.canAssign,
             isAssigned: assignedRoleIds
                 .any(id => assRole.roleId === id)
         }));
@@ -132,6 +136,7 @@ export const PermissionAssignerControl = (props: {
                                 removeAssignedRoleId(row.roleId);
                             }
                         }}
+                        disabled={!row.canAssign}
                         value={value as boolean} />
                 );
             }
@@ -162,12 +167,12 @@ export const PermissionAssignerControl = (props: {
                                 removeAssignedPermissionId(row.permissionId);
                             }
                         }}
-                        disabled={row.isAssignedByRole}
+                        disabled={!isSelectedCompanyRoleAssignable && row.isAssignedByRole}
                         value={row.isAssignedByRole ? true : value as boolean} />
                 );
             }
         }
-    ], [addAssignedPermissionId, removeAssignedPermissionId]);
+    ], [addAssignedPermissionId, removeAssignedPermissionId, isSelectedCompanyRoleAssignable]);
 
     return (
         <LoadingFrame
@@ -182,7 +187,7 @@ export const PermissionAssignerControl = (props: {
                     getCompareKey={x => x.id + ''}
                     onSelected={setSelectedCompany}
                     getDisplayValue={x => x.name}
-                    items={roleManageCompanies} />
+                    items={roleAssignCompanies} />
             </EpistoLabel>
 
             <EpistoLabel

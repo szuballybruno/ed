@@ -27,11 +27,11 @@ export class CompanyController {
             .getCompaniesAdminAsync(params.principalId);
     };
 
-    @XControllerAction(apiRoutes.companies.getRoleManageCompanies)
-    getRoleManageCompaniesAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.companies.getRoleAssignCompanies)
+    getRoleAssignCompaniesAction = async (params: ActionParams) => {
 
         return await this._compService
-            .getRoleManageCompaniesAsync(params.principalId);
+            .getRoleAssignCompaniesAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.companies.getCompanyEditData)

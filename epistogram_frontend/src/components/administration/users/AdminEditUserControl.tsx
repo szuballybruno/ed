@@ -3,7 +3,7 @@ import { Checkbox } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { useCompanies } from '../../../services/api/companyApiService';
+import { useCompanies, useRoleAssignCompanies } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
@@ -57,15 +57,15 @@ export const AdminEditUserControl = (props: {
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
-    const { companies } = useCompanies();
+    const { roleAssignCompanies } = useRoleAssignCompanies();
     const { jobTitles } = useJobTitles();
 
     useEffect(() => {
 
-        if (!editDTO || jobTitles.length === 0 || companies.length === 0)
+        if (!editDTO || jobTitles.length === 0 || roleAssignCompanies.length === 0)
             return;
 
-        const comp = companies
+        const comp = roleAssignCompanies
             .single(x => x.id === editDTO.companyId);
 
         const jt = jobTitles
@@ -78,7 +78,7 @@ export const AdminEditUserControl = (props: {
         setSelectedCompany(comp);
         setIsTeacher(editDTO.isTeacher);
         setAssignedAuthItems(editDTO.assignedAuthItems);
-    }, [editDTO, jobTitles, companies]);
+    }, [editDTO, jobTitles, roleAssignCompanies]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -203,10 +203,9 @@ export const AdminEditUserControl = (props: {
                         </EpistoFont>
 
                         <EpistoSelect
-                            items={companies}
+                            items={roleAssignCompanies}
                             selectedValue={selectedCompany}
                             onSelected={setSelectedCompany}
-                            isDisabled={!selectedCompany?.canManage}
                             getDisplayValue={x => '' + x?.name}
                             getCompareKey={company => '' + company?.id} />
                     </Flex>}

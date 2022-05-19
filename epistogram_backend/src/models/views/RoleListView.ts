@@ -1,6 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
-import { PermissionCodeType, RoleScopeType } from '../../shared/types/sharedTypes';
+import { PermissionCodeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
@@ -23,9 +23,6 @@ export class RoleListView {
 
     @ViewColumn()
     roleId: number;
-
-    @ViewColumn()
-    roleScope: RoleScopeType;
 
     @ViewColumn()
     roleName: string;

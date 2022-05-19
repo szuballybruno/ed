@@ -8,38 +8,38 @@ type Constraint = { [K in PermissionCodeType]: NoIdType<NoComplexTypes<Permissio
 export const permissionList = getSeedList<Permission, Constraint>()({
 
     // role admin 
-    VIEW_GLOBAL_ROLES: {
-        code: 'VIEW_GLOBAL_ROLES',
+    VIEW_PREDEFINED_ROLES: {
+        code: 'VIEW_PREDEFINED_ROLES',
         scope: 'USER'
     },
-    EDIT_GLOBAL_ROLES: {
-        code: 'EDIT_GLOBAL_ROLES',
+    EDIT_PREDEFINED_ROLES: {
+        code: 'EDIT_PREDEFINED_ROLES',
         scope: 'USER'
     },
-    VIEW_COMPANY_ROLES: {
-        code: 'VIEW_COMPANY_ROLES',
+    VIEW_CUSTOM_ROLES: {
+        code: 'VIEW_CUSTOM_ROLES',
         scope: 'COMPANY'
     },
-    EDIT_COMPANY_ROLES: {
-        code: 'EDIT_COMPANY_ROLES',
+    EDIT_CUSTOM_ROLES: {
+        code: 'EDIT_CUSTOM_ROLES',
         scope: 'COMPANY'
     },
-    DELETE_GLOBAL_ROLES: {
-        code: 'DELETE_COMPANY_ROLES',
+    DELETE_PREDEFINED_ROLES: {
+        code: 'DELETE_CUSTOM_ROLES',
         scope: 'COMPANY'
     },
-    DELETE_COMPANY_ROLES: {
-        code: 'DELETE_COMPANY_ROLES',
+    DELETE_CUSTOM_ROLES: {
+        code: 'DELETE_CUSTOM_ROLES',
         scope: 'COMPANY'
     },
 
     // role assign
-    ASSIGN_GLOBAL_ROLES: {
-        code: 'ASSIGN_GLOBAL_ROLES',
+    ASSIGN_PREDEFINED_ROLES: {
+        code: 'ASSIGN_PREDEFINED_ROLES',
         scope: 'COMPANY'
     },
-    ASSIGN_COMPANY_ROLES: {
-        code: 'ASSIGN_COMPANY_ROLES',
+    ASSIGN_CUSTOM_ROLES: {
+        code: 'ASSIGN_CUSTOM_ROLES',
         scope: 'COMPANY'
     },
 
@@ -91,6 +91,10 @@ export const permissionList = getSeedList<Permission, Constraint>()({
     CREATE_COMPANIES: {
         code: 'CREATE_COMPANIES',
         scope: 'USER'
+    },
+    ASSIGN_ROLES_TO_COMPANY: {
+        code: 'ASSIGN_ROLES_TO_COMPANY',
+        scope: 'COMPANY'
     },
 
     // player 

@@ -1,5 +1,4 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
-import { RoleScopeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
@@ -21,9 +20,6 @@ export class AssignableRoleView {
 
     @ViewColumn()
     roleName: string;
-
-    @ViewColumn()
-    roleScope: RoleScopeType;
 
     @ViewColumn()
     isAssigned: boolean;

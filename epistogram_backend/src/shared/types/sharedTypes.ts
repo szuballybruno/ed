@@ -32,16 +32,16 @@ export type CourseModeType = 'beginner' | 'advanced';
 export const permissionCodes = [
 
     // role admin
-    'VIEW_GLOBAL_ROLES',
-    'EDIT_GLOBAL_ROLES',
-    'VIEW_COMPANY_ROLES',
-    'EDIT_COMPANY_ROLES',
-    'DELETE_GLOBAL_ROLES',
-    'DELETE_COMPANY_ROLES',
+    'VIEW_PREDEFINED_ROLES',
+    'EDIT_PREDEFINED_ROLES',
+    'VIEW_CUSTOM_ROLES',
+    'EDIT_CUSTOM_ROLES',
+    'DELETE_PREDEFINED_ROLES',
+    'DELETE_CUSTOM_ROLES',
 
     // role assign
-    'ASSIGN_GLOBAL_ROLES',
-    'ASSIGN_COMPANY_ROLES',
+    'ASSIGN_PREDEFINED_ROLES',
+    'ASSIGN_CUSTOM_ROLES',
 
     // permissions
     'ASSIGN_GLOBAL_PERMISSIONS',
@@ -59,6 +59,7 @@ export const permissionCodes = [
     'EDIT_COMPANIES',
     'DELETE_COMPANIES',
     'CREATE_COMPANIES',
+    'ASSIGN_ROLES_TO_COMPANY',
 
     // player 
     'SET_COURSE_MODE',
@@ -95,8 +96,6 @@ export type CoinAcquireReasonType =
     'answer_streak_5' |
     'answer_streak_10' |
     'correct_answer';
-
-export type RoleScopeType = 'USER' | 'COMPANY';
 
 export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE';
 

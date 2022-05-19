@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PermissionCodeType, PermissionScopeType, RoleScopeType } from '../../../shared/types/sharedTypes';
+import { PermissionCodeType, PermissionScopeType } from '../../../shared/types/sharedTypes';
 import { PermissionAssignmentBridge } from './PermissionAssignmentBridge';
 import { RolePermissionBridge } from './RolePermissionBridge';
 

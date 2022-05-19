@@ -6,8 +6,8 @@ SELECT
 FROM public.role ro
 
 LEFT JOIN public.company co
-ON ro.scope = 'COMPANY' 
-	AND (ro.company_id IS NULL OR ro.company_id = co.id) 
+ON ro.company_id IS NULL 
+	OR ro.company_id = co.id
 
 LEFT JOIN public.role_assignment_bridge rab
 ON rab.role_id = ro.id

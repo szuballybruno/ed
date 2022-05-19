@@ -50,9 +50,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 return {
                     roleId: viewAsRole.roleId,
                     roleName: viewAsRole.roleName,
-                    roleScope: viewAsRole.roleScope,
                     ownerName: viewAsRole.ownerName,
-                    ownerType: viewAsRole.isCompanyOwned ? 'company' : 'user',
                     companyId: viewAsRole.companyId,
                     companyName: viewAsRole.companyName,
                     permissions: grouping
@@ -92,8 +90,10 @@ export class RoleService extends QueryServiceBase<Role> {
             .and('contextCompanyId', '=', 'companyId')
             .getMany();
 
-        return roles
-            .groupBy(x => x.roleId)
+        const roleGroups = roles
+            .groupBy(x => x.roleId);
+
+        return roleGroups
             .map((viewAsRole): AssignableRoleDTO => ({
                 roleId: viewAsRole.first.roleId,
                 roleName: viewAsRole.first.roleName,
@@ -238,8 +238,7 @@ export class RoleService extends QueryServiceBase<Role> {
         // create role
         const role = await this.createAsync(instatiateInsertEntity<Role>({
             name: dto.name,
-            companyId: dto.companyId,
-            scope: 'COMPANY'
+            companyId: dto.companyId
         }));
 
         // create permission assignments 
@@ -262,8 +261,7 @@ export class RoleService extends QueryServiceBase<Role> {
             roleId: number,
             roleName: string,
             permissionId: number,
-            companyId: Role['companyId'],
-            scope: Role['scope']
+            companyId: Role['companyId']
         }
 
         const roles = await this._ormService
@@ -271,15 +269,14 @@ export class RoleService extends QueryServiceBase<Role> {
             .query(Role, {
                 userId,
                 roleId,
-                editCoCode: 'EDIT_COMPANY_ROLES' as PermissionCodeType,
-                editGlobCode: 'EDIT_GLOBAL_ROLES' as PermissionCodeType
+                editCoCode: 'EDIT_CUSTOM_ROLES' as PermissionCodeType,
+                editGlobCode: 'EDIT_PREDEFINED_ROLES' as PermissionCodeType
             })
             .selectFrom(x => x
                 .columns(Role, {
                     roleId: 'id',
                     roleName: 'name',
-                    companyId: 'companyId',
-                    scope: 'scope'
+                    companyId: 'companyId'
                 })
                 .columns(RolePermissionBridge, {
                     permissionId: 'permissionId'
@@ -310,7 +307,6 @@ export class RoleService extends QueryServiceBase<Role> {
             roleId: viewAsRole.roleId,
             name: viewAsRole.roleName,
             companyId: viewAsRole.companyId,
-            scope: viewAsRole.scope,
             permissionIds: group
                 .items
                 .map(x => x.permissionId)
@@ -340,9 +336,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 noUndefined({
                     id: role.id,
                     name: dto.name,
-                    ownerCompanyId: role.scope === 'USER'
-                        ? undefined
-                        : dto.companyId
+                    ownerCompanyId: dto.companyId
                 })
             ]);
 

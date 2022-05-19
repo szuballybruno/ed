@@ -98,6 +98,7 @@ import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseVie
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
 import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
+import { UserRoleAssignCompanyView } from '../../models/views/UserRoleAssignCompanyView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
@@ -229,7 +230,8 @@ export const dbSchema: XDBMSchemaType = {
         ['company_view'],
         ['assignable_permission_view'],
         ['assignable_role_view'],
-        ['user_assigned_auth_item_view']
+        ['user_assigned_auth_item_view'],
+        ['user_role_assign_company_view', UserRoleAssignCompanyView]
     ],
 
     functionScripts: [

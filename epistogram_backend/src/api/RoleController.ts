@@ -66,8 +66,8 @@ export class RoleController {
         return this._roleService
             .getAssignableRolesAsync(
                 params.principalId,
-                query.getValue(x => x.companyId, 'int'),
-                query.getValue(x => x.userId, 'int'));
+                query.getValue(x => x.userId, 'int'),
+                query.getValue(x => x.companyId, 'int'));
     };
 
     @XControllerAction(apiRoutes.roles.getAssignablePermissions)

@@ -10,6 +10,8 @@ import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
 import { PermissionService } from './PermissionService';
+import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
+import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
 
 export class CompanyService extends QueryServiceBase<Company> {
 
@@ -47,9 +49,20 @@ export class CompanyService extends QueryServiceBase<Company> {
             .mapMany(CompanyView, CompanyDTO, companies);
     }
 
-    async getRoleManageCompaniesAsync(userId: PrincipalId) {
+    async getRoleAssignCompaniesAsync(principalId: PrincipalId) {
 
-        return await this.getCompaniesAdminAsync(userId);
+        const comapanies = await this
+            ._ormService
+            .query(UserRoleAssignCompanyView, { principalId })
+            .where('userId', '=', 'principalId')
+            .getMany();
+
+        return comapanies
+            .map((x): RoleAssignCompanyDTO => ({
+                name: x.companyName,
+                id: x.companyId,
+                canAssignRole: x.canAssign
+            }));
     }
 
     async getAvailableCompaniesForNewRolesAsync(userId: PrincipalId) {
@@ -57,7 +70,7 @@ export class CompanyService extends QueryServiceBase<Company> {
         const companies = await this._ormService
             .query(Company, {
                 userId,
-                permissionCode: 'ASSIGN_COMPANY_ROLES' as PermissionCodeType
+                permissionCode: 'ASSIGN_CUSTOM_ROLES' as PermissionCodeType
             })
             .select(Company)
             .innerJoin(User, builder => builder

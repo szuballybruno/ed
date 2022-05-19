@@ -33,7 +33,6 @@ export const EditRoleControl = (props: {
 }) => {
 
     const { logic, onSave, roleEditData, saveButton, error } = props;
-    const roleScope = roleEditData?.scope ?? 'USER';
 
     const { permissionsList, permissionsListError, permissionsListState, refetchPermissionsList } = usePermissionsList();
     const { companies, companiesState } = useAvailableCompaniesForRoleCreation();
@@ -51,6 +50,8 @@ export const EditRoleControl = (props: {
     }, [selectedPermissions, setSelectedPermissions]);
 
     const getKey = useCallback((x: RowType) => x.code, []);
+
+    const isCustomRole = true;
 
     const columns = useMemo(() => {
 
@@ -84,9 +85,8 @@ export const EditRoleControl = (props: {
     }, [selectedPermissions, setSelectedPermissions, deselectPermission]);
 
     const handleSaveRole = useCallback(() => onSave({
-        scope: 'USER', // not used
         roleId: roleEditData?.roleId ?? -1,
-        companyId: roleScope === 'COMPANY'
+        companyId: isCustomRole
             ? selectedCompany?.id ?? -1
             : null,
         name,
@@ -131,7 +131,7 @@ export const EditRoleControl = (props: {
                     label="Name"
                     labelVariant="top" />
 
-                {roleScope === 'COMPANY' && <EpistoLabel
+                {isCustomRole && <EpistoLabel
                     text="Owner company">
 
                     <Flex align="center">
