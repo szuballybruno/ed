@@ -4,4 +4,5 @@ export class RoleEditDTO {
     name: string;
     permissionIds: number[];
     companyId: number | null;
+    isCustom: boolean;
 }

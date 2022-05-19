@@ -14,7 +14,7 @@ assignable_role_ids AS
 		OR upv.permission_code = 'ASSIGN_CUSTOM_ROLES')
 	
 	INNER JOIN public.role ro
-	ON (ro.company_id IS NULL AND upv.permission_code = 'ASSIGN_PREDEFINED_ROLES') 
+	ON (ro.is_custom = false AND upv.permission_code = 'ASSIGN_PREDEFINED_ROLES') 
 	OR (ro.company_id = upv.context_company_id AND upv.permission_code = 'ASSIGN_CUSTOM_ROLES') 
 	
 	ORDER BY 
@@ -28,8 +28,10 @@ roles AS
 		assigner_u.id assigner_user_id,
 		assignee_u.id assignee_user_id,
 		co.id context_company_id,
+		co.name context_company_name,
 		ro.id role_id,
 		ro.name role_name,
+		CASE WHEN ro.is_custom THEN co.name ELSE NULL END owner_company_name,
 		urv.role_id IS NOT NULL is_assigned,
 		CASE WHEN assignee_u.is_god THEN false ELSE ari.role_id IS NOT NULL END can_assign 
 	FROM public.user assigner_u
@@ -39,7 +41,7 @@ roles AS
 	CROSS JOIN public.company co
 
 	LEFT JOIN public.role ro
-	ON ro.company_id IS NULL OR ro.company_id = co.id
+	ON ro.is_custom = false OR ro.company_id = co.id
 	
 	LEFT JOIN public.user_roles_view urv
 	ON urv.assignee_user_id = assignee_u.id

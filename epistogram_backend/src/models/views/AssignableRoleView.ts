@@ -16,6 +16,15 @@ export class AssignableRoleView {
     contextCompanyId: number;
 
     @ViewColumn()
+    contextCompanyName: string;
+
+    @ViewColumn()
+    ownerCompanyName: string | null;
+
+    @ViewColumn()
+    isCustom: boolean;
+
+    @ViewColumn()
     roleId: number;
 
     @ViewColumn()

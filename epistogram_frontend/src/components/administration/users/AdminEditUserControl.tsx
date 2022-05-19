@@ -236,16 +236,6 @@ export const AdminEditUserControl = (props: {
                             getCompareKey={jt => '' + jt?.id} />
                     </Flex>}
                 </EditSection>
-
-                {/* access management */}
-                <EditSection title="Jogosultságkezelés">
-
-                    <PermissionAssignerControl
-                        userCompanyId={editDTO?.companyId ?? null}
-                        userId={editedUserId}
-                        data={editDTO?.assignedAuthItems ?? defaultAuthItemsDTO}
-                        onChange={setAssignedAuthItems} />
-                </EditSection>
             </Flex>
 
             <Divider orientation='vertical'
@@ -351,6 +341,16 @@ export const AdminEditUserControl = (props: {
                 </EditSection>
             </Box>
         </Flex>
+
+        {/* access management */}
+        <EditSection title="Jogosultságkezelés">
+
+            <PermissionAssignerControl
+                userCompanyId={editDTO?.companyId ?? null}
+                userId={editedUserId}
+                data={editDTO?.assignedAuthItems ?? defaultAuthItemsDTO}
+                onChange={setAssignedAuthItems} />
+        </EditSection>
 
         <TailingAdminButtons
             onDeleteCallback={() => {

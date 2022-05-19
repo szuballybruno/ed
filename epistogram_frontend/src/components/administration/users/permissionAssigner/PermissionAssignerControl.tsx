@@ -14,6 +14,9 @@ type RoleRowType = {
     rowId: number,
     name: string;
     roleId: number;
+    contextCompanyName: string;
+    ownerCompanyName: string;
+    isCustom: boolean;
     isAssigned: boolean;
     canAssign: boolean;
 }
@@ -54,7 +57,7 @@ export const PermissionAssignerControl = (props: {
     const getRoleKey = useCallback((x) => x.rowId, []);
     const getPermissionKey = useCallback((x) => x.rowId, []);
 
-    const isSelectedCompanyRoleAssignable = useMemo(() => !!selectedCompany?.canAssignRole, []);
+    const isSelectedCompanyRoleAssignable = useMemo(() => !!selectedCompany?.canAssignRole, [selectedCompany?.canAssignRole]);
 
     useEffect(() => {
 
@@ -94,6 +97,9 @@ export const PermissionAssignerControl = (props: {
             rowId: i,
             name: assRole.roleName!,
             roleId: assRole.roleId,
+            contextCompanyName: assRole.contextCompanyName,
+            ownerCompanyName: assRole.ownerCompanyName ?? 'Predefined',
+            isCustom: assRole.isCustom,
             canAssign: assRole.canAssign,
             isAssigned: assignedRoleIds
                 .any(id => assRole.roleId === id)
@@ -119,9 +125,21 @@ export const PermissionAssignerControl = (props: {
             width: 250
         },
         {
+            field: 'contextCompanyName',
+            headerName: 'On',
+            width: 100,
+        },
+        {
+            field: 'ownerCompanyName',
+            headerName: 'Owner',
+            width: 100
+        },
+        {
             field: 'isAssigned',
             headerName: 'IsAssigned',
             renderCell: ({ value, row }) => {
+
+                const isDisabled = !isSelectedCompanyRoleAssignable || !row.canAssign;
 
                 return (
                     <EpistoCheckbox
@@ -136,7 +154,7 @@ export const PermissionAssignerControl = (props: {
                                 removeAssignedRoleId(row.roleId);
                             }
                         }}
-                        disabled={!row.canAssign}
+                        disabled={isDisabled}
                         value={value as boolean} />
                 );
             }
@@ -154,6 +172,8 @@ export const PermissionAssignerControl = (props: {
             headerName: 'IsAssigned',
             renderCell: ({ value, row }) => {
 
+                const isDisabled = !isSelectedCompanyRoleAssignable || row.isAssignedByRole;
+
                 return (
                     <EpistoCheckbox
                         setValue={isSelected => {
@@ -167,7 +187,7 @@ export const PermissionAssignerControl = (props: {
                                 removeAssignedPermissionId(row.permissionId);
                             }
                         }}
-                        disabled={!isSelectedCompanyRoleAssignable && row.isAssignedByRole}
+                        disabled={isDisabled}
                         value={row.isAssignedByRole ? true : value as boolean} />
                 );
             }
@@ -181,6 +201,17 @@ export const PermissionAssignerControl = (props: {
 
             <EpistoLabel
                 text="Company">
+
+                <EpistoSelect
+                    selectedValue={selectedCompany ?? undefined}
+                    getCompareKey={x => x.id + ''}
+                    onSelected={setSelectedCompany}
+                    getDisplayValue={x => x.name}
+                    items={roleAssignCompanies} />
+            </EpistoLabel>
+
+            <EpistoLabel
+                text="Course">
 
                 <EpistoSelect
                     selectedValue={selectedCompany ?? undefined}

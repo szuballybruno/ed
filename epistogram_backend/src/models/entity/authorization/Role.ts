@@ -18,6 +18,9 @@ export class Role {
     @Column()
     name: string;
 
+    @Column()
+    isCustom: boolean;
+
     // permissions
     @JoinColumn()
     @OneToMany(_ => RolePermissionBridge, x => x.role, { cascade: true })

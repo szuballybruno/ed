@@ -97,6 +97,9 @@ export class RoleService extends QueryServiceBase<Role> {
             .map((viewAsRole): AssignableRoleDTO => ({
                 roleId: viewAsRole.first.roleId,
                 roleName: viewAsRole.first.roleName,
+                contextCompanyName: viewAsRole.first.contextCompanyName,
+                ownerCompanyName: viewAsRole.first.ownerCompanyName,
+                isCustom: viewAsRole.first.isCustom,
                 canAssign: viewAsRole.first.canAssign,
                 isAssigned: viewAsRole.first.isAssigned,
                 permissionIds: viewAsRole
@@ -238,7 +241,8 @@ export class RoleService extends QueryServiceBase<Role> {
         // create role
         const role = await this.createAsync(instatiateInsertEntity<Role>({
             name: dto.name,
-            companyId: dto.companyId
+            companyId: dto.companyId,
+            isCustom: dto.isCustom
         }));
 
         // create permission assignments 
@@ -261,6 +265,7 @@ export class RoleService extends QueryServiceBase<Role> {
             roleId: number,
             roleName: string,
             permissionId: number,
+            isCustom: boolean,
             companyId: Role['companyId']
         }
 
@@ -276,7 +281,8 @@ export class RoleService extends QueryServiceBase<Role> {
                 .columns(Role, {
                     roleId: 'id',
                     roleName: 'name',
-                    companyId: 'companyId'
+                    companyId: 'companyId',
+                    isCustom: 'isCustom'
                 })
                 .columns(RolePermissionBridge, {
                     permissionId: 'permissionId'
@@ -301,12 +307,13 @@ export class RoleService extends QueryServiceBase<Role> {
             .groupBy(x => x.roleId)
             .single(x => true);
 
-        const viewAsRole = group.first;
+        const resultGroupFirst = group.first;
 
         return {
-            roleId: viewAsRole.roleId,
-            name: viewAsRole.roleName,
-            companyId: viewAsRole.companyId,
+            roleId: resultGroupFirst.roleId,
+            name: resultGroupFirst.roleName,
+            companyId: resultGroupFirst.companyId,
+            isCustom: resultGroupFirst.isCustom,
             permissionIds: group
                 .items
                 .map(x => x.permissionId)

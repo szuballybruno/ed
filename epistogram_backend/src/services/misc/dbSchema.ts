@@ -256,6 +256,10 @@ export const dbSchema: XDBMSchemaType = {
         {
             tableName: 'role_permission_bridge',
             name: 'role_permission_bridge_constraint'
+        },
+        {
+            tableName: 'role',
+            name: 'role_constraint'
         }
     ],
 

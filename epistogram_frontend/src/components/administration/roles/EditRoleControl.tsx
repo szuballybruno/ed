@@ -90,6 +90,7 @@ export const EditRoleControl = (props: {
             ? selectedCompany?.id ?? -1
             : null,
         name,
+        isCustom: isCustomRole,
         permissionIds: selectedPermissions
             .map(x => x.id)
     }), [selectedCompany, name, selectedPermissions]);
