@@ -17,21 +17,21 @@ export class XDInjector {
 
         this._depcheck();
 
-        const callFn = (fn: FnType) => {
+        const callFn = (currentFn: FnType) => {
 
-            if (fn.deps.length === 0)
-                this._regInstance(fn.fn, fn.fn());
+            if (currentFn.deps.length === 0)
+                this._regInstance(currentFn.fn, currentFn.fn());
 
-            const depInstances = fn
+            const depInstances = currentFn
                 .deps
                 .map(dep => {
 
                     if (this._checkInstance(dep))
                         return this._getInstance(dep);
 
-                    const depProvider = this._getDepProviderFunction();
+                    const depProvider = this._getDepProviderFunction(dep);
 
-                    return callFn();
+                    return callFn(depProvider);
                 });
         };
 

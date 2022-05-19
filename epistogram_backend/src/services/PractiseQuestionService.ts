@@ -40,7 +40,7 @@ export class PractiseQuestionService extends ServiceBase {
             return null;
 
         const questionGroup = questionViews
-            .groupBy(x => x.questionId)
+            .currentFn(x => x.questionId)
             .first();
 
         const viewAsQuesiton = questionGroup.items.first();

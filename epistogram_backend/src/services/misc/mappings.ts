@@ -363,7 +363,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 : getAssetUrl('/images/defaultCourseCover.jpg');
 
             const modules = moduleViews
-                .groupBy(x => x.moduleId)
+                .currentFn(x => x.moduleId)
                 .map(group => ({
                     name: group
                         .items
@@ -964,7 +964,7 @@ export const toExamResultDTO = (views: ExamResultView[]) => {
     const viewAsExam = views.first();
 
     const questionDTOs = views
-        .groupBy(x => x.questionId)
+        .currentFn(x => x.questionId)
         .map(questsionGroup => {
 
             const viewAsQuestion = questsionGroup.items.first();
@@ -1020,7 +1020,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
 
     return {
         questions: questions
-            .groupBy(x => x.questionId)
+            .currentFn(x => x.questionId)
             .map(questionGrouping => {
 
                 const viewAsQuestion = questionGrouping.items.first();
@@ -1081,7 +1081,7 @@ export const toVideoQuestionEditDTO = (
 ): VideoQuestionEditDTO => {
 
     const questionGroup = ci
-        .groupBy(x => x.questionId);
+        .currentFn(x => x.questionId);
 
     const {
         videoId,
@@ -1125,7 +1125,7 @@ export const toExamQuestionEditDTO = (
 ): ExamQuestionEditDTO => {
 
     const questionGroup = ci
-        .groupBy(x => x.questionId);
+        .currentFn(x => x.questionId);
 
     const {
         examId,

@@ -34,7 +34,7 @@ export class CourseRatingService extends ServiceBase {
             .getMany();
 
         const groups = views
-            .groupBy(view => view.groupId)
+            .currentFn(view => view.groupId)
             .map(group => {
 
                 const viewAsGroup = group.first;
