@@ -1,4 +1,3 @@
-
 import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { apiRoutes } from '../shared/types/apiRoutes';
@@ -8,7 +7,7 @@ import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
-export class AuthenticationController {
+export class AuthenticationController2 {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfiguration;

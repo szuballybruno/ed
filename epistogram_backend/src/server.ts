@@ -3,7 +3,7 @@ import fileUpload from 'express-fileupload';
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
-import { AuthenticationController } from './api/AuthenticationController';
+import { AuthenticationController2 } from './api/AuthenticationController2';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CommentController } from './api/CommentController';
 import { CompanyController } from './api/CompanyController';
@@ -94,7 +94,6 @@ import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleServic
 import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
 import './shared/logic/jsExtensions';
-import { apiRoutes } from './shared/types/apiRoutes';
 import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
 import { ActionParams } from './utilities/ActionParams';
@@ -179,7 +178,7 @@ const main = async () => {
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, globalConfig);
     const miscController = new MiscController(miscService, practiseQuestionService, tokenService, ormConnectionService, globalConfig, userCourseBridgeService);
-    const authenticationController = new AuthenticationController(authenticationService, globalConfig);
+    const authenticationController = new AuthenticationController2(authenticationService, globalConfig);
     const userController = new UserController(userService);
     const fileController = new FileController(fileService);
     const signupController = new SignupController(signupService, personalityAssessmentService);
