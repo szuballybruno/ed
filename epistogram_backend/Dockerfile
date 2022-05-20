@@ -28,4 +28,4 @@ COPY /src/sql ./build/sql
 EXPOSE 5000
 
 # start container 
-CMD node ./build/server.js
+CMD node --es-module-specifier-resolution=node ./build/server.js

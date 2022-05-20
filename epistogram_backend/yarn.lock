@@ -3504,6 +3504,13 @@ cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+create-esm-loader@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/create-esm-loader/-/create-esm-loader-0.1.1.tgz#a28588700e8d50e7e727cd4cd0e19b6531085216"
+  integrity sha512-WpTsvVJ+g5Ngx6YtmpGITRzX2l0n5EUaSXM7ES6Tn2UTCpVB7x5LmWPeRu+khLH/ConDWKMV1L3+nZoVsJMGHw==
+  dependencies:
+    semver "^7.3.5"
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
@@ -6997,6 +7004,15 @@ no-case@^3.0.4:
   dependencies:
     lower-case "^2.0.2"
     tslib "^2.0.3"
+
+node-esm-loader@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/node-esm-loader/-/node-esm-loader-0.0.1.tgz#ccbb17ac50cb489ac55eb8cb84c02128497bbfd1"
+  integrity sha512-lGR1Vl/NBuP7bHHqWaCULktI7dx+wuBycqeNNQiZp1h8divf69qCAaKJ6ep7VsCsUrFnlYGD9cqwNvjrG7J74w==
+  dependencies:
+    create-esm-loader "^0.1.0"
+    find-up "^5.0.0"
+    yargs "^17.2.1"
 
 node-fetch@^2.6.0, node-fetch@^2.6.1:
   version "2.6.7"
@@ -10563,6 +10579,19 @@ yargs@^16.0.0, yargs@^16.2.0:
     string-width "^4.2.0"
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
+
+yargs@^17.2.1:
+  version "17.5.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.5.1.tgz#e109900cab6fcb7fd44b1d8249166feb0b36e58e"
+  integrity sha512-t6YAJcxDkNX7NFYiVtKvWUz8l+PaKTLiL63mJYWR2GnHq2gjEWISzsLp9wg3aY36dY1j+gfIEL3pIF+XlJJfbA==
+  dependencies:
+    cliui "^7.0.2"
+    escalade "^3.1.1"
+    get-caller-file "^2.0.5"
+    require-directory "^2.1.1"
+    string-width "^4.2.3"
+    y18n "^5.0.5"
+    yargs-parser "^21.0.0"
 
 yargs@^17.3.1:
   version "17.4.1"
