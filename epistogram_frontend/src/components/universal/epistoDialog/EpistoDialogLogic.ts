@@ -1,17 +1,16 @@
 import { useCallback, useMemo, useState } from 'react';
 import { ButtonType } from '../../../models/types';
 import { useXDialogLogic } from '../../lib/XDialog/XDialog';
-import { DialogOptions, EpistoDialogLogicType } from './EpistoDialogTypes';
+import { OpenDialogOptionsType, EpistoDialogLogicType, DeclareDialogOptionsType } from './EpistoDialogTypes';
 
 export const useEpistoDialogLogic = <TParams = undefined,>(
     dialogKey: string | Function,
-    dialogOptions?: DialogOptions<TParams>,
-    deps?: any[]): EpistoDialogLogicType<TParams> => {
+    declareOptions?: DeclareDialogOptionsType): EpistoDialogLogicType<TParams> => {
 
-    const [title, setTitle] = useState(dialogOptions?.title ?? '');
-    const [description, setDescription] = useState(dialogOptions?.description ?? '');
-    const [params, setParams] = useState<TParams>(dialogOptions?.params ?? {} as any);
-    const defaultCloseButtonType = dialogOptions?.defaultCloseButtonType ?? 'bottom';
+    const [title, setTitle] = useState(declareOptions?.title ?? '');
+    const [description, setDescription] = useState(declareOptions?.description ?? '');
+    const [params, setParams] = useState<TParams>({} as TParams);
+    const defaultCloseButtonType = declareOptions?.defaultCloseButtonType ?? 'none';
     const xlogic = useXDialogLogic(typeof dialogKey === 'function' ? dialogKey.name : dialogKey);
 
     const closeDialog = useCallback(() => {
@@ -28,10 +27,9 @@ export const useEpistoDialogLogic = <TParams = undefined,>(
         ]
         : [];
 
-    const [buttons, setButtons] = useState<ButtonType<EpistoDialogLogicType<TParams>>[]>(defaultButtons
-        .concat(dialogOptions?.buttons ?? []));
+    const [buttons, setButtons] = useState<ButtonType<EpistoDialogLogicType<TParams>>[]>(defaultButtons);
 
-    const openDialog = useCallback((opt?: DialogOptions<TParams>) => {
+    const openDialog = useCallback((opt?: OpenDialogOptionsType<TParams>) => {
 
         if (opt) {
 
@@ -65,14 +63,13 @@ export const useEpistoDialogLogic = <TParams = undefined,>(
             title,
             description,
             buttons,
-            dialogOptions,
+            dialogOptions: declareOptions,
             xlogic,
             params
         } as EpistoDialogLogicType<TParams>);
     }, [
         closeDialog,
         openDialog,
-        ...(deps ?? []),
         xlogic
     ]);
 };

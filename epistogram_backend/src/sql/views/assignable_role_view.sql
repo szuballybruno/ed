@@ -43,7 +43,7 @@ roles AS
 	LEFT JOIN public.role ro
 	ON ro.is_custom = false OR ro.company_id = co.id
 	
-	LEFT JOIN public.user_roles_view urv
+	LEFT JOIN public.user_role_view urv
 	ON urv.assignee_user_id = assignee_u.id
 	AND urv.role_id = ro.id 
 	AND (urv.context_company_id IS NULL OR urv.context_company_id = co.id) 

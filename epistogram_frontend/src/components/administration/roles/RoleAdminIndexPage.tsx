@@ -49,18 +49,7 @@ export const RoleAdminIndexPage = memo(() => {
         'deleteWarningDialogLogic',
         {
             defaultCloseButtonType: 'top',
-            buttons: [
-                {
-                    title: 'Yup',
-                    action: (params) => handleDeleteRole({ roleId: params.params.roleId })
-                },
-                {
-                    title: 'Nope',
-                    action: (params) => params.closeDialog()
-                }
-            ]
-        },
-        []);
+        });
 
     const handleEdit = useCallback((roleId: number) => {
 
@@ -148,7 +137,17 @@ export const RoleAdminIndexPage = memo(() => {
                 onSave={refetchRolesList} />
 
             <EpistoDialog
-                logic={deleteWarningDialogLogic}>
+                logic={deleteWarningDialogLogic}
+                buttonComponents={[
+                    {
+                        title: 'Yup',
+                        action: (params) => handleDeleteRole({ roleId: params.params.roleId })
+                    },
+                    {
+                        title: 'Nope',
+                        action: (params) => params.closeDialog()
+                    }
+                ]}>
 
                 You sure bro?
             </EpistoDialog>

@@ -1,13 +1,19 @@
 SELECT 
 	co.id context_company_id,
+	co.name context_company_name,
 	ro.id role_id,
 	ro.name role_name,
+	owner_co.id owner_company_id,
+	owner_co.name owner_company_name,
 	u.id assignee_user_id
 FROM public.role ro
 
 LEFT JOIN public.company co
 ON ro.company_id IS NULL 
 	OR ro.company_id = co.id
+
+LEFT JOIN public.company owner_co
+ON owner_co.id = ro.company_id
 
 LEFT JOIN public.role_assignment_bridge rab
 ON rab.role_id = ro.id

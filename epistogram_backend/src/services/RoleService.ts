@@ -7,6 +7,7 @@ import { AssignableRoleView } from '../models/views/AssignableRoleView';
 import { RoleListView } from '../models/views/RoleListView';
 import { UserAssignedAuthItemView } from '../models/views/UserAssignedAuthItemView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
+import { UserRoleView } from '../models/views/UserRoleView';
 import { AssignablePermissionDTO } from '../shared/dtos/AssignablePermissionDTO';
 import { AssignableRoleDTO } from '../shared/dtos/AssignableRoleDTO';
 import { AssignedAuthItemsDTO } from '../shared/dtos/role/AssignedAuthItemsDTO';
@@ -14,6 +15,7 @@ import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
+import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
 import { noUndefined } from '../shared/logic/sharedLogic';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
@@ -105,6 +107,19 @@ export class RoleService extends QueryServiceBase<Role> {
                 permissionIds: viewAsRole
                     .items
                     .map(viewAsPerm => viewAsPerm.permissionId)
+            }));
+    }
+
+    async getUserRolesAsync(principalId: PrincipalId, userId: number) {
+
+        const roles = await this._ormService
+            .query(UserRoleView, { userId })
+            .where('assigneeUserId', '=', 'userId')
+            .getMany();
+
+        return roles
+            .map((x): UserRoleDTO => ({
+                ...x
             }));
     }
 
