@@ -1,7 +1,7 @@
 import { CourseCategory } from '../../models/entity/CourseCategory';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<CourseCategory>()({
+export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
 
     course_category_1: {
         name: 'IT',
@@ -45,4 +45,4 @@ const list = getSeedList<CourseCategory>()({
     }
 });
 
-export default list;
+export type CourseCategoriesSeedDataType = ReturnType<typeof getCourseCategoriesSeedData>;

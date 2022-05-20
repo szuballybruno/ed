@@ -1,7 +1,8 @@
 import { Exam } from '../../models/entity/Exam';
 import { getSeedList } from '../../services/sqlServices/SeedService';
+import { CourseSeedDataType } from './seed_courses';
 
-export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
+export const getExamSeedData = (courses: CourseSeedDataType) => getSeedList<Exam>()({
     signup_exam: {
         courseId: null,
         description: null,
@@ -23,7 +24,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: null,
-        courseId: seed_courses.course_24.id,
+        courseId: courses.course_24.id,
         moduleId: 2
     },
     exam_9: {
@@ -35,7 +36,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: null,
-        courseId: seed_courses.course_24.id,
+        courseId: courses.course_24.id,
         moduleId: 2
     },
     exam_10: {
@@ -47,7 +48,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: null,
-        courseId: seed_courses.course_17.id,
+        courseId: courses.course_17.id,
         moduleId: 8
     },
     exam_15: {
@@ -59,7 +60,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 38
     },
     exam_16: {
@@ -71,7 +72,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 39
     },
     exam_17: {
@@ -83,7 +84,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 41
     },
     exam_18: {
@@ -95,7 +96,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 42
     },
     exam_20: {
@@ -107,7 +108,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'final',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 44
     },
     exam_21: {
@@ -119,7 +120,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         moduleId: 45
     },
     exam_12: {
@@ -131,7 +132,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 35
     },
     exam_13: {
@@ -143,7 +144,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 36
     },
     exam_14: {
@@ -155,7 +156,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         moduleId: 37
     },
     exam_22: {
@@ -167,7 +168,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         moduleId: 47
     },
     exam_23: {
@@ -179,7 +180,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         moduleId: 48
     },
     exam_24: {
@@ -191,7 +192,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         moduleId: 50
     },
     exam_25: {
@@ -203,7 +204,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         moduleId: 51
     },
     exam_26: {
@@ -215,7 +216,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'final',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         moduleId: 53
     },
     exam_27: {
@@ -227,7 +228,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         moduleId: 54
     },
     exam_28: {
@@ -239,7 +240,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         moduleId: 55
     },
     exam_29: {
@@ -251,7 +252,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         moduleId: 56
     },
     exam_30: {
@@ -263,7 +264,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         moduleId: 57
     },
     exam_31: {
@@ -275,7 +276,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         moduleId: 58
     },
     exam_32: {
@@ -287,11 +288,11 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         type: 'final',
         deletionDate: null,
         retakeLimit: 1,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         moduleId: 60
     },
     pretest_exam_33: {
-        courseId: seed_courses.course_24.id,
+        courseId: courses.course_24.id,
         title: 'Pretest exam course 1',
         subtitle: 'Pretest exam course 1 desc',
         description: '',
@@ -303,7 +304,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_34: {
-        courseId: seed_courses.course_29.id,
+        courseId: courses.course_29.id,
         title: 'Pretest exam course 10',
         subtitle: 'Pretest exam course 10 desc',
         description: '',
@@ -315,7 +316,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_35: {
-        courseId: seed_courses.course_23.id,
+        courseId: courses.course_23.id,
         title: 'Pretest exam course 23',
         subtitle: 'Pretest exam course 23 desc',
         description: '',
@@ -327,7 +328,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_36: {
-        courseId: seed_courses.course_24.id,
+        courseId: courses.course_24.id,
         title: 'Pretest exam course 24',
         subtitle: 'Pretest exam course 24 desc',
         description: '',
@@ -339,7 +340,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_37: {
-        courseId: seed_courses.course_26.id,
+        courseId: courses.course_26.id,
         title: 'Pretest exam course 26',
         subtitle: 'Pretest exam course 26 desc',
         description: '',
@@ -351,7 +352,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_38: {
-        courseId: seed_courses.course_25.id,
+        courseId: courses.course_25.id,
         title: 'Pretest exam course 25',
         subtitle: 'Pretest exam course 25 desc',
         description: '',
@@ -363,7 +364,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_39: {
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         title: 'Word',
         subtitle: 'Kezdés',
         description: '',
@@ -375,7 +376,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_40: {
-        courseId: seed_courses.course_17.id,
+        courseId: courses.course_17.id,
         title: 'OBS',
         subtitle: 'Kezdés',
         description: '',
@@ -387,7 +388,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_41: {
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         title: 'PowerPoint',
         subtitle: 'Kezdés',
         description: '',
@@ -411,7 +412,7 @@ export const getExamSeedData = (seed_courses: any) => getSeedList<Exam>()({
         deletionDate: null
     },
     pretest_exam_43: {
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         title: 'Microsoft Excel szintfelmérő vizsga',
         subtitle: 'Most kiderítjük, hogy megy neked az Excel, majd ez alapján személyre szabjuk számodra a kurzust.',
         description: '',

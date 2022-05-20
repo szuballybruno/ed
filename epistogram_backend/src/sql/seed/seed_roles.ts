@@ -1,8 +1,8 @@
 import { Role } from '../../models/entity/authorization/Role';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_companies from './seed_companies';
+import { CompaniesSeedDataType } from './seed_companies';
 
-export const roleList = getSeedList<Role>()({
+export const getRolesSeedData = (companies: CompaniesSeedDataType) => getSeedList<Role>()({
     Company_Owner: {
         deletionDate: null,
         name: 'Company Owner',
@@ -30,7 +30,9 @@ export const roleList = getSeedList<Role>()({
     Company_owned_Custom_Role_1: {
         deletionDate: null,
         name: 'CUSTOM [company_id: 2 (EPISTOGRAM)]',
-        companyId: seed_companies.EpistoGram.id,
+        companyId: companies.EpistoGram.id,
         isCustom: true
     }
 });
+
+export type RolesSeedDataType = ReturnType<typeof getRolesSeedData>;

@@ -1,7 +1,7 @@
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<ShopItemCategory>()({
+export const getShopItemCategoriesSeedData = () => getSeedList<ShopItemCategory>()({
     shop_item_category_1: {
         name: 'Prémium kurzusok'
     },
@@ -22,4 +22,4 @@ const list = getSeedList<ShopItemCategory>()({
     }
 });
 
-export default list;
+export type ShopItemCategoriesSeedDataType = ReturnType<typeof getShopItemCategoriesSeedData>;

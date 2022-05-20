@@ -1,9 +1,9 @@
 
 import { CourseModule } from '../../models/entity/CourseModule';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_courses from './seed_courses';
+import { CourseSeedDataType } from './seed_courses';
 
-const list = getSeedList<CourseModule>()({
+export const getModuleSeedData = (courses: CourseSeedDataType) => getSeedList<CourseModule>()({
 
     module_1: {
         name: 'module',
@@ -17,7 +17,7 @@ const list = getSeedList<CourseModule>()({
         name: 'module',
         description: 'description',
         orderIndex: 0,
-        courseId: seed_courses.course_10.id,
+        courseId: courses.course_10.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -25,7 +25,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Bevezetés az Excelbe',
         description: 'Excel tanfolyamunk első moduljában az alapvető fogalmakkal, a menürendszerrel, valamint a kezelőszervekkel ismerkedhetsz meg.',
         orderIndex: 0,
-        courseId: seed_courses.course_4.id,
+        courseId: courses.course_4.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -33,7 +33,7 @@ const list = getSeedList<CourseModule>()({
         name: 'OBS használata percek alatt',
         description: 'Ebben a modulban megtanulhatod, hogyan állítsd be villámgyorsan az OBS-t úgy, hogy hatékony erőforrás-kezelés mellett is csúcsminőségű felvételeket tudj készíteni, és akkor se érjen probléma, ha esetleg közben valamiért megszakadna a videó.',
         orderIndex: 0,
-        courseId: seed_courses.course_17.id,
+        courseId: courses.course_17.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -41,7 +41,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Finomságok az OBS-el',
         description: 'Zajszűrés, hangeffektek, az OBS-nek ez sem jelent problémát!',
         orderIndex: 1,
-        courseId: seed_courses.course_17.id,
+        courseId: courses.course_17.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -49,7 +49,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Első felvételünk, vizsga',
         description: 'Készítsd el első felvételed OBS-el!',
         orderIndex: 2,
-        courseId: seed_courses.course_17.id,
+        courseId: courses.course_17.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -57,7 +57,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Első lépések',
         description: '',
         orderIndex: 0,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -65,7 +65,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Ismerkedés a függvényekkel',
         description: '',
         orderIndex: 1,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -73,7 +73,7 @@ const list = getSeedList<CourseModule>()({
         name: 'A formázás alapjai',
         description: '',
         orderIndex: 2,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -81,7 +81,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Leggyakoribb függvények és azok használata',
         description: '',
         orderIndex: 3,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -89,7 +89,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Segítség az adatkezelésben',
         description: '',
         orderIndex: 4,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -97,7 +97,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Munka másokkal',
         description: '',
         orderIndex: 5,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -105,7 +105,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Formázás felsőfokon',
         description: '',
         orderIndex: 6,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -113,7 +113,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Munka nagy mennyiségű adattal',
         description: '',
         orderIndex: 7,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -121,7 +121,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Kreatív adatábrázolás',
         description: '',
         orderIndex: 8,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -129,7 +129,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Ismerkedés a haladó funkciókkal',
         description: '',
         orderIndex: 9,
-        courseId: seed_courses.course_27.id,
+        courseId: courses.course_27.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -137,7 +137,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Első lépések',
         description: '',
         orderIndex: 0,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -145,7 +145,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Formázás - Hogyan készíthetünk letisztult dokumentumokat?',
         description: '',
         orderIndex: 1,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -153,7 +153,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Gyorsabb munka a gyakorlatban',
         description: '',
         orderIndex: 2,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -161,7 +161,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Munka másokkal, dokumentumunk védelme',
         description: '',
         orderIndex: 3,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -169,7 +169,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Szövegírás, elrendezés, ellenőrzés',
         description: '',
         orderIndex: 4,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -177,7 +177,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Képek, vizuális eszközök használata',
         description: '',
         orderIndex: 5,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -185,7 +185,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Táblázatok a Wordben',
         description: '',
         orderIndex: 6,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -193,7 +193,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Példák a gyakorlati alkalmazásra',
         description: '',
         orderIndex: 7,
-        courseId: seed_courses.course_28.id,
+        courseId: courses.course_28.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -201,7 +201,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Első lépések',
         description: '',
         orderIndex: 0,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -209,7 +209,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Szöveg és tartalom formázása',
         description: '',
         orderIndex: 1,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -217,7 +217,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Képek, vizuális eszközök használata',
         description: '',
         orderIndex: 2,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -225,7 +225,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Videók és hanganyagok használata a PowerPointon belül',
         description: '',
         orderIndex: 3,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -233,7 +233,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Prezentáció rendszerezése, segítség az előadás során',
         description: '',
         orderIndex: 4,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -241,7 +241,7 @@ const list = getSeedList<CourseModule>()({
         name: 'Prezentáció további testreszabása és effektusok',
         description: '',
         orderIndex: 5,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     },
@@ -249,10 +249,10 @@ const list = getSeedList<CourseModule>()({
         name: 'Tartalom ellenőrzése és közös munka',
         description: '',
         orderIndex: 6,
-        courseId: seed_courses.course_22.id,
+        courseId: courses.course_22.id,
         imageFileId: null,
         deletionDate: null
     }
 });
 
-export default list;
+export type ModuleSeedDataType = ReturnType<typeof getModuleSeedData>;

@@ -1,7 +1,7 @@
 import { StorageFile } from '../../models/entity/StorageFile';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<StorageFile>()({
+export const getStorageFileSeedData = () => getSeedList<StorageFile>()({
     storage_file_1: {
         filePath: '/daily_tip_videos/video_1.mp4'
     },
@@ -1456,4 +1456,4 @@ const list = getSeedList<StorageFile>()({
     }
 });
 
-export default list;
+export type StorageFileSeedDataType = ReturnType<typeof getStorageFileSeedData>;

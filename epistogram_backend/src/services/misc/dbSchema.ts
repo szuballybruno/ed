@@ -106,39 +106,38 @@ import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
-import seed_activation_codes from '../../sql/seed/seed_activation_codes';
-import seed_activity_sessions from '../../sql/seed/seed_activity_sessions';
+import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
 import { getAnswersSeed } from '../../sql/seed/seed_answers';
-import seed_answer_sessions from '../../sql/seed/seed_answer_sessions';
-import seed_comments from '../../sql/seed/seed_comments';
-import seed_companies from '../../sql/seed/seed_companies';
-import seed_company_owner_bridges from '../../sql/seed/seed_company_owner_bridges';
-import seed_courses from '../../sql/seed/seed_courses';
-import seed_course_access_bridge from '../../sql/seed/seed_course_access_bridge';
-import seed_course_categories from '../../sql/seed/seed_course_categories';
-import seed_course_rating_groups from '../../sql/seed/seed_course_rating_groups';
-import seed_course_rating_question from '../../sql/seed/seed_course_rating_question';
+import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
+import { getCommentsSeedData } from '../../sql/seed/seed_comments';
+import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
+import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
+import { getCourseSeedData } from '../../sql/seed/seed_courses';
+import seed_course_access_bridge, { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
+import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
+import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
+import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
 import { getDailyTipsSeed } from '../../sql/seed/seed_daily_tips';
-import seed_discount_codes from '../../sql/seed/seed_discount_codes';
-import seed_exams, { getExamSeedData } from '../../sql/seed/seed_exams';
-import seed_job_titles from '../../sql/seed/seed_job_titles';
-import seed_modules from '../../sql/seed/seed_modules';
-import { permissionList } from '../../sql/seed/seed_permissions';
-import seed_permission_assignment_bridges from '../../sql/seed/seed_permission_assignment_bridges';
+import { getDiscountCodesSeedData } from '../../sql/seed/seed_discount_codes';
+import { getExamSeedData } from '../../sql/seed/seed_exams';
+import { getJobTitlesSeedData } from '../../sql/seed/seed_job_titles';
+import { getModuleSeedData } from '../../sql/seed/seed_modules';
+import { getPermissionsSeedData } from '../../sql/seed/seed_permissions';
+import { getPermissionAssignmentBridgeSeedData } from '../../sql/seed/seed_permission_assignment_bridges';
 import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personality_trait_categories';
-import seed_prequiz_answers from '../../sql/seed/seed_prequiz_answers';
-import seed_prequiz_questions from '../../sql/seed/seed_prequiz_questions';
+import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
+import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
 import { getSeedQuestions } from '../../sql/seed/seed_questions';
-import seed_question_types from '../../sql/seed/seed_question_types';
-import { roleList } from '../../sql/seed/seed_roles';
-import { roleAssignmentBridgeSeedList } from '../../sql/seed/seed_role_assignment_bridges';
-import { rolePermissionList } from '../../sql/seed/seed_role_permission_bridges';
-import seed_shop_items from '../../sql/seed/seed_shop_items';
-import seed_shop_item_categories from '../../sql/seed/seed_shop_item_categories';
-import seed_storage_file from '../../sql/seed/seed_storage_file';
-import seed_teacher_info from '../../sql/seed/seed_teacher_info';
-import seed_tempomat_adjustment_values from '../../sql/seed/seed_tempomat_adjustment_values';
-import seed_users from '../../sql/seed/seed_users';
+import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
+import { getRolesSeedData } from '../../sql/seed/seed_roles';
+import { getRoleAssignmentBridgeSeedData } from '../../sql/seed/seed_role_assignment_bridges';
+import { getRolePermissionBridgeSeedData } from '../../sql/seed/seed_role_permission_bridges';
+import { getShopItemSeedData } from '../../sql/seed/seed_shop_items';
+import { getShopItemCategoriesSeedData } from '../../sql/seed/seed_shop_item_categories';
+import { getStorageFileSeedData } from '../../sql/seed/seed_storage_file';
+import { getTeacherInfoSeedData } from '../../sql/seed/seed_teacher_info';
+import { getTempomatAdjustmentValueSeedData } from '../../sql/seed/seed_tempomat_adjustment_values';
+import { getUserSeedData } from '../../sql/seed/seed_users';
 import { getVideoSeedData } from '../../sql/seed/seed_videos';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
@@ -150,17 +149,41 @@ export const createDBSchema = (): XDBMSchemaType => {
     // const questions = getSeedQuestions(seed_videos, seed_exams, personalityTraitCategories);
     // const answers = getAnswersSeed(questions);
 
-    new XDInjector()
+    const injector = new XDInjector()
+        .add(getCommentsSeedData, [])
+        .add(getActivationCodeSeedData, [])
+        .add(getQuestionTypeSeedData, [])
+        .add(getPermissionsSeedData, [])
+        .add(getJobTitlesSeedData, [])
+        .add(getCompaniesSeedData, [])
+        .add(getStorageFileSeedData, [])
         .add(getPersonalityTraitCategoriesSeed, [])
+        .add(getCourseCategoriesSeedData, [])
+        .add(getCourseRatingGroupSeedData, [])
+        .add(getShopItemCategoriesSeedData, [])
+        .add(getPrequizQuestionsSeedData, [])
+        .add(getCompanyOwnerBridgeSeedData, [getCompaniesSeedData])
+        .add(getRolesSeedData, [getCompaniesSeedData])
+        .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData])
+        .add(getPrequizAnswersSeedData, [getPrequizQuestionsSeedData])
+        .add(getTempomatAdjustmentValueSeedData, [getPrequizAnswersSeedData])
+        .add(getShopItemSeedData, [getStorageFileSeedData, getShopItemCategoriesSeedData])
+        .add(getDiscountCodesSeedData, [getShopItemSeedData])
+        .add(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData])
+        .add(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData])
+        .add(getTeacherInfoSeedData, [getUserSeedData])
+        .add(getAnswerSessionSeedData, [getUserSeedData])
+        .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData])
+        .add(getModuleSeedData, [getCourseSeedData])
         .add(getDailyTipsSeed, [getPersonalityTraitCategoriesSeed])
-        .add(getVideoSeedData, [() => 1, () => 3, () => 4])
-        .add(getExamSeedData, [])
+        .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData])
+        .add(getExamSeedData, [getCourseSeedData])
         .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed])
-        .add(getAnswersSeed, [getSeedQuestions]);
-
-    type Paramss = Parameters<typeof getVideoSeedData>;
-
-    const asd: Paramss = ['asd', 2, 4];
+        .add(getAnswersSeed, [getSeedQuestions])
+        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData])
+        .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData])
+        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData])
+        .build();
 
     return {
         seedScripts: [

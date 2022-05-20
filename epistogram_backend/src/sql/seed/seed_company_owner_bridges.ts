@@ -1,24 +1,24 @@
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_companies from './seed_companies';
+import { CompaniesSeedDataType } from './seed_companies';
 
-const list = getSeedList<CompanyOwnerBridge>()({
+export const getCompanyOwnerBridgeSeedData = (companies: CompaniesSeedDataType) => getSeedList<CompanyOwnerBridge>()({
     PCWorld: {
-        companyId: seed_companies.PCWorld.id,
+        companyId: companies.PCWorld.id,
         userId: 1
     },
     EpistoGram: {
-        companyId: seed_companies.EpistoGram.id,
+        companyId: companies.EpistoGram.id,
         userId: 4
     },
     Manni_BT: {
-        companyId: seed_companies.Manni_BT.id,
+        companyId: companies.Manni_BT.id,
         userId: 5
     },
     Henkel: {
-        companyId: seed_companies.Henkel.id,
+        companyId: companies.Henkel.id,
         userId: 5
     }
 });
 
-export default list;
+export type CompanyOwnerBridgeSeedData = ReturnType<typeof getCompanyOwnerBridgeSeedData>;

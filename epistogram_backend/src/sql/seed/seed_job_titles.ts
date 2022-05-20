@@ -1,8 +1,7 @@
-
 import { JobTitle } from '../../models/entity/JobTitle';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<JobTitle>()({
+export const getJobTitlesSeedData = () => getSeedList<JobTitle>()({
     user: {
         name: 'Általános felhasználó'
     },
@@ -11,4 +10,4 @@ const list = getSeedList<JobTitle>()({
     }
 });
 
-export default list;
+export type JobTitlesSeedDataType = ReturnType<typeof getJobTitlesSeedData>;

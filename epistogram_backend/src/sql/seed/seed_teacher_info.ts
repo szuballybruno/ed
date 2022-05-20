@@ -1,8 +1,8 @@
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_users from './seed_users';
+import { UserSeedDataType } from './seed_users';
 
-const list = getSeedList<TeacherInfo>()({
+export const getTeacherInfoSeedData = (users: UserSeedDataType) => getSeedList<TeacherInfo>()({
 
     teacher_info_1: {
         skills: 'Teaching, mostly',
@@ -11,9 +11,9 @@ const list = getSeedList<TeacherInfo>()({
         studentCount: 14,
         rating: 4,
         badges: 'badge1',
-        userId: seed_users.user_1.id,
+        userId: users.user_1.id,
         description: 'desc'
     },
 });
 
-export default list;
+export type TeacherInfoSeedDataType = ReturnType<typeof getTeacherInfoSeedData>;

@@ -1,8 +1,7 @@
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
-import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<PrequizQuestion>()({
+export const getPrequizQuestionsSeedData = () => getSeedList<PrequizQuestion>()({
     prequiz_question_1: {
         text: 'Tapasztalat szinted?',
         isNumericAnswer: true,
@@ -35,4 +34,4 @@ const list = getSeedList<PrequizQuestion>()({
     }
 });
 
-export default list;
+export type PrequizQuestionsSeedDataType = ReturnType<typeof getPrequizQuestionsSeedData>;

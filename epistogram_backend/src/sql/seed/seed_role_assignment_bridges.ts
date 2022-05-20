@@ -1,27 +1,33 @@
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_companies from './seed_companies';
-import { roleList } from './seed_roles';
-import seed_users from './seed_users';
+import { CompaniesSeedDataType } from './seed_companies';
+import { RolesSeedDataType } from './seed_roles';
+import { UserSeedDataType } from './seed_users';
 
-export const roleAssignmentBridgeSeedList = getSeedList<RoleAssignmentBridge>()({
+export const getRoleAssignmentBridgeSeedData = (
+    companies: CompaniesSeedDataType,
+    roles: RolesSeedDataType,
+    users: UserSeedDataType
+) => getSeedList<RoleAssignmentBridge>()({
     pcworld_company_user_role: {
-        roleId: roleList.Company_User.id,
-        assigneeCompanyId: seed_companies.PCWorld.id,
+        roleId: roles.Company_User.id,
+        assigneeCompanyId: companies.PCWorld.id,
         assigneeUserId: null,
-        contextCompanyId: seed_companies.PCWorld.id,
+        contextCompanyId: companies.PCWorld.id,
     },
     henkel_company_user_role: {
-        roleId: roleList.Company_User.id,
-        assigneeCompanyId: seed_companies.Henkel.id,
+        roleId: roles.Company_User.id,
+        assigneeCompanyId: companies.Henkel.id,
         assigneeUserId: null,
-        contextCompanyId: seed_companies.Henkel.id,
+        contextCompanyId: companies.Henkel.id,
     },
 
     almostgod_a: {
-        roleId: roleList.Company_Owner.id,
+        roleId: roles.Company_Owner.id,
         assigneeCompanyId: null,
-        assigneeUserId: seed_users.user_2.id,
-        contextCompanyId: seed_companies.EpistoGram.id,
+        assigneeUserId: users.user_2.id,
+        contextCompanyId: companies.EpistoGram.id,
     }
 });
+
+export type RoleAssignmentBridgeSeedDataType = ReturnType<typeof getRoleAssignmentBridgeSeedData>; 

@@ -1,8 +1,7 @@
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import seed_prequiz_answers from './seed_prequiz_answers';
 
-const list = getSeedList<TempomatAdjustmentValue>()({
+export const getTempomatAdjustmentValueSeedData = (seed_prequiz_answers: any) => getSeedList<TempomatAdjustmentValue>()({
 
     // AUTO
 
@@ -73,4 +72,4 @@ const list = getSeedList<TempomatAdjustmentValue>()({
     }
 });
 
-export default list;
+export type TempomatAdjustmentValueSeedDataType = ReturnType<typeof getTempomatAdjustmentValueSeedData>;

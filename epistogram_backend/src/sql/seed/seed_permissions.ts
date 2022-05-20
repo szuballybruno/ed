@@ -5,7 +5,7 @@ import { NoComplexTypes, NoIdType } from '../../utilities/misc';
 
 type Constraint = { [K in PermissionCodeType]: NoIdType<NoComplexTypes<Permission>> };
 
-export const permissionList = getSeedList<Permission, Constraint>()({
+export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>()({
 
     // role admin 
     VIEW_PREDEFINED_ROLES: {
@@ -114,7 +114,7 @@ export const permissionList = getSeedList<Permission, Constraint>()({
         code: 'SET_TEMPOMAT_MODE_GLOBAL',
         scope: 'USER'
     },
-    
+
     // admin
     VIEW_COURSE_ADMIN: {
         code: 'VIEW_COURSE_ADMIN',
@@ -173,3 +173,5 @@ export const permissionList = getSeedList<Permission, Constraint>()({
         scope: 'USER'
     }
 });
+
+export type PermissionsSeedDataType = ReturnType<typeof getPermissionsSeedData>;

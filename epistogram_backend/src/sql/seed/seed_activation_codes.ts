@@ -1,7 +1,7 @@
 import { ActivationCode } from '../../models/entity/ActivationCode';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<ActivationCode>()({
+export const getActivationCodeSeedData = () => getSeedList<ActivationCode>()({
     activation_code_1: {
         code: 'PCW-HAFIKUXU',
         companyId: 1,
@@ -124,4 +124,4 @@ const list = getSeedList<ActivationCode>()({
     }
 });
 
-export default list;
+export type ActivationCodeSeedDataType = ReturnType<typeof getActivationCodeSeedData>;

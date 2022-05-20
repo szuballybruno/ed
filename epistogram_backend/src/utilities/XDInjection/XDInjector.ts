@@ -1,20 +1,15 @@
 import { FunctionSignature } from '../../services/misc/advancedTypes/FunctionSignature';
 import { ParametrizedFunction } from '../../services/misc/advancedTypes/ParametrizedFunction';
+import { RemapToFunctions } from '../../services/misc/advancedTypes/RemapToFunctions';
 
 type FnType = { fn: Function, deps: Function[] };
-
-type Remap<Tuple extends [...any[]]> = {
-    [Index in keyof Tuple]: ParametrizedFunction<Tuple[Index]>;
-} & { length: Tuple['length'] };
-
-type asd2 = Remap<[string, number]>;
 
 export class XDInjector {
 
     private _functions: FnType[] = [];
     private _instances: any;
 
-    add<T extends ParametrizedFunction>(fn: T, deps: Remap<Parameters<T>>) {
+    add<T extends ParametrizedFunction>(fn: T, deps: RemapToFunctions<Parameters<T>>) {
 
         if (this._getArgsCount(fn) !== deps.length)
             throw new Error(`Function [${fn.name}] parameter count mismatch, expected arguments: ${this._getArgsCount(fn)}!`);

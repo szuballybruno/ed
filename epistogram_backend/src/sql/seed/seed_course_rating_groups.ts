@@ -1,8 +1,7 @@
-import { CourseCategory } from '../../models/entity/CourseCategory';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<CourseRatingGroup>()({
+export const getCourseRatingGroupSeedData = () => getSeedList<CourseRatingGroup>()({
 
     course_rating_group_1: {
         name: 'Elégedettség az oktatóval'
@@ -18,4 +17,4 @@ const list = getSeedList<CourseRatingGroup>()({
     }
 });
 
-export default list;
+export type CourseRatingGroupSeedDataType = ReturnType<typeof getCourseRatingGroupSeedData>;

@@ -2,7 +2,7 @@
 import { QuestionType } from '../../models/entity/QuestionType';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<QuestionType>()({
+export const getQuestionTypeSeedData = () => getSeedList<QuestionType>()({
     single_answer: {
         name: 'single_answer'
     },
@@ -11,4 +11,4 @@ const list = getSeedList<QuestionType>()({
     }
 });
 
-export default list;
+export type QuestionTypeSeedDataType = ReturnType<typeof getQuestionTypeSeedData>;

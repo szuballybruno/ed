@@ -1,10 +1,10 @@
 import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import { permissionList } from './seed_permissions';
-import { roleList } from './seed_roles';
+import { PermissionsSeedDataType } from './seed_permissions';
+import { RolesSeedDataType } from './seed_roles';
 
-export const rolePermissionList = getSeedList<RolePermissionBridge>()({
-    
+export const getRolePermissionBridgeSeedData = (permissionList: PermissionsSeedDataType, roleList: RolesSeedDataType) => getSeedList<RolePermissionBridge>()({
+
     owner_a: {
         roleId: roleList.Company_Owner.id,
         permissionId: permissionList.ASSIGN_CUSTOM_ROLES.id,

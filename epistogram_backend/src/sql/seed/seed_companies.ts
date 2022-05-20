@@ -1,7 +1,7 @@
 import { Company } from '../../models/entity/Company';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<Company>()({
+export const getCompaniesSeedData = () => getSeedList<Company>()({
     PCWorld: {
         deletionDate: null,
         name: 'PCWorld'
@@ -20,4 +20,4 @@ const list = getSeedList<Company>()({
     }
 });
 
-export default list;
+export type CompaniesSeedDataType = ReturnType<typeof getCompaniesSeedData>;

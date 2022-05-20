@@ -1,7 +1,7 @@
 import { Comment } from '../../models/entity/Comment';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-const list = getSeedList<Comment>()({
+export const getCommentsSeedData = () => getSeedList<Comment>()({
     excel_comment_1: {
         deletionDate: null,
         creationDate: new Date(Date.now()),
@@ -55,4 +55,4 @@ const list = getSeedList<Comment>()({
     }
 });
 
-export default list;
+export type CommentsSeedDataType = ReturnType<typeof getCommentsSeedData>;
