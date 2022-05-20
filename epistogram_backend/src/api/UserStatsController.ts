@@ -1,5 +1,7 @@
 import { UserStatsService } from '../services/UserStatsService';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class UserStatsController {
 
@@ -10,6 +12,7 @@ export class UserStatsController {
         this._userStatsService = userStatsService;
     }
 
+    @XControllerAction(apiRoutes.userStats.getUserStats)
     getUserStatsAction = async (params: ActionParams) => {
 
         const userId = params
@@ -20,6 +23,7 @@ export class UserStatsController {
             .getUserStatsAsync(userId);
     };
 
+    @XControllerAction(apiRoutes.userStats.getUserLearningOverviewData)
     getUserLearningOverviewDataAction = async (params: ActionParams) => {
         const query = params
             .getQuery<any>();

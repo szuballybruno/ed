@@ -1,6 +1,8 @@
 import { ChangePasswordDTO } from '../shared/dtos/SetNewPasswordDTO';
 import { PasswordChangeService } from '../services/PasswordChangeService';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class PasswordChangeController {
 
@@ -11,6 +13,7 @@ export class PasswordChangeController {
         this._passwordChangeService = passwordChangeService;
     }
 
+    @XControllerAction(apiRoutes.passwordChange.setNewPassword, { isPost: true, isPublic: true })
     setNewPasswordAction = async (params: ActionParams) => {
 
         const dto = params.getBody<ChangePasswordDTO>();
@@ -22,6 +25,7 @@ export class PasswordChangeController {
             .setNewPasswordAsync(password, passwordCompare, passwordResetToken);
     };
 
+    @XControllerAction(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, { isPost: true })
     requestPasswordChangeAuthenticatedAction = async (params: ActionParams) => {
 
         const oldPassword = params
@@ -32,6 +36,7 @@ export class PasswordChangeController {
             .requestPasswordChangeAuthenticatedAsync(params.principalId, oldPassword);
     };
 
+    @XControllerAction(apiRoutes.passwordChange.requestPasswordChange, { isPost: true, isPublic: true })
     requestPasswordChangeAction = async (params: ActionParams) => {
 
         const email = params

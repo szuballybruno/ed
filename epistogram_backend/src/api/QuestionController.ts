@@ -5,7 +5,9 @@ import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { QuestionService } from '../services/QuestionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class QuestionController {
 
@@ -23,6 +25,7 @@ export class QuestionController {
         this._ormService = ormService;
     }
 
+    @XControllerAction(apiRoutes.questions.answerPractiseQuestion, { isPost: true })
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
         const dto = params
@@ -33,6 +36,7 @@ export class QuestionController {
             .answerPractiseQuestionAsync(params.principalId, dto);
     };
 
+    @XControllerAction(apiRoutes.questions.getQuestionEditData)
     getQuestionEditDataAction = async (params: ActionParams) => {
 
         const questionId = params
@@ -57,6 +61,7 @@ export class QuestionController {
         } as QuestionEditDataDTO;
     };
 
+    @XControllerAction(apiRoutes.questions.saveQuestion, { isPost: true })
     saveQuestionAction = async (params: ActionParams) => {
 
         const dto = params

@@ -3,8 +3,10 @@ import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class CourseController {
 
@@ -17,12 +19,14 @@ export class CourseController {
         this._userCourseBridgeService = userCourseBridgeService;
     }
 
+    @XControllerAction(apiRoutes.course.getAvailableCourses)
     getAvailableCoursesAction = async (params: ActionParams) => {
 
         return this._courseService
             .getAvailableCoursesAsync(params.principalId);
     };
 
+    @XControllerAction(apiRoutes.course.getCourseDetailsEditData)
     getCourseDetailsEditDataAction = async (params: ActionParams) => {
 
         return await this._courseService
@@ -31,6 +35,7 @@ export class CourseController {
                 .getValue(x => x.courseId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.course.getCourseContentEditData)
     getCourseContentEditDataAction = async (params: ActionParams) => {
 
         const query = params
@@ -42,11 +47,13 @@ export class CourseController {
                 query.getValue(x => x.loadDeleted, 'boolean'));
     };
 
+    @XControllerAction(apiRoutes.course.getAdminCourseList)
     getAdminCourseListAction = (params: ActionParams) => {
 
         return this._courseService.getAdminCoursesAsync();
     };
 
+    @XControllerAction(apiRoutes.course.getCourseBriefData)
     getCourseBriefDataAction = async (params: ActionParams) => {
 
         return await this._courseService
@@ -55,6 +62,7 @@ export class CourseController {
                 .getValue(x => x.courseId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.course.getCourseDetails)
     getCourseDetailsAction = async (params: ActionParams) => {
 
         const courseId = params
@@ -65,6 +73,7 @@ export class CourseController {
             .getCourseDetailsAsync(params.principalId, courseId);
     };
 
+    @XControllerAction(apiRoutes.course.saveCourseDetails, { isPost: true })
     saveCourseDetailsAction = async (params: ActionParams) => {
 
         await this._courseService
@@ -72,6 +81,7 @@ export class CourseController {
                 .getBody<CourseDetailsEditDataDTO>().data);
     };
 
+    @XControllerAction(apiRoutes.course.saveCourseContent, { isPost: true })
     saveCourseContentAction = async (params: ActionParams) => {
 
         const mutations = params
@@ -82,6 +92,7 @@ export class CourseController {
             .saveCourseContentAsync(mutations);
     };
 
+    @XControllerAction(apiRoutes.course.saveCourseThumbnail, { isPost: true, isMultipart: true })
     saveCourseThumbnailAction = async (params: ActionParams) => {
 
         const file = params
@@ -95,6 +106,7 @@ export class CourseController {
             .saveCourseThumbnailAsync(file, courseId);
     };
 
+    @XControllerAction(apiRoutes.course.deleteCourse, { isPost: true })
     deleteCourseAction = async (params: ActionParams) => {
 
         await this._courseService.softDeleteCourseAsync(params
@@ -102,12 +114,14 @@ export class CourseController {
             .getValue(x => x.id, 'int'));
     };
 
+    @XControllerAction(apiRoutes.course.createCourse, { isPost: true })
     createCourseAction = async (params: ActionParams) => {
 
         await this._courseService
             .createCourseAsync(params.getBody<CreateCourseDTO>().data);
     };
 
+    @XControllerAction(apiRoutes.course.setCourseMode, { isPost: true })
     setCourseModeAction = async (params: ActionParams) => {
 
         const dto = params
@@ -120,12 +134,14 @@ export class CourseController {
             .setCourseModeAsync(params.principalId, courseId, courseMode);
     };
 
+    @XControllerAction(apiRoutes.course.getCourseProgressShort)
     getCourseProgressShortAction = async (params: ActionParams) => {
 
         return this._courseService
             .getCourseProgressShortAsync(params.principalId);
     };
 
+    @XControllerAction(apiRoutes.course.getCourseProgressData)
     getCourseProgressDataAction = async (params: ActionParams) => {
 
         return this._courseService
