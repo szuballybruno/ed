@@ -7,7 +7,7 @@ import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
-export class AuthenticationController2 {
+export class ZAuthenticationController {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfiguration;

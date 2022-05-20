@@ -13,7 +13,7 @@ import { EventController } from './api/EventController';
 import { ExamController } from './api/ExamController';
 import { FileController } from './api/FileController';
 import { MiscController } from './api/MiscController';
-import { AuthenticationController2 } from './api/AuthenticationController2';
+import { ZAuthenticationController } from './api/AuthenticationController2';
 import { ModuleController } from './api/ModuleController';
 import { PasswordChangeController } from './api/PasswordChangeController';
 import { PermissionController } from './api/PermissionController';
@@ -178,7 +178,7 @@ const main = async () => {
     const coinTransactionsController = new CoinTransactionsController(coinTransactionService);
     const registrationController = new RegistrationController(registrationService, globalConfig);
     const miscController = new MiscController(miscService, practiseQuestionService, tokenService, ormConnectionService, globalConfig, userCourseBridgeService);
-    const authenticationController = new AuthenticationController2(authenticationService, globalConfig);
+    const authenticationController = new ZAuthenticationController(authenticationService, globalConfig);
     const userController = new UserController(userService);
     const fileController = new FileController(fileService);
     const signupController = new SignupController(signupService, personalityAssessmentService);
@@ -225,7 +225,7 @@ const main = async () => {
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)
         .addController(CommentController, commentController)
-        .addController(AuthenticationController2, authenticationController)
+        .addController(ZAuthenticationController, authenticationController)
         .addController(ExamController, examController)
         .addController(RegistrationController, registrationController)
         .addController(ScheduledJobTriggerController, scheduledJobTriggerController)
