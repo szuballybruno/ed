@@ -17,6 +17,7 @@ import { VideoService } from './VideoService';
 import { Course } from '../models/entity/Course';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
+import { constraintFn } from '../utilities/misc';
 
 export class PlayerService extends ServiceBase {
 
@@ -60,6 +61,9 @@ export class PlayerService extends ServiceBase {
         const courseId = await this._courseService
             .getCourseIdByItemCodeAsync(currentItemCode);
 
+        if (!courseId)
+            throw new Error('Cannot find courseId');
+
         const course = await this._ormService
             .query(Course, { courseId })
             .allowDeleted()
@@ -70,7 +74,7 @@ export class PlayerService extends ServiceBase {
             throw new VerboseError('Course has been deleted!', 'deleted');
 
         // get valid course item 
-        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId!, currentItemCode);
+        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);
 
         // set current course 
         await this._userCourseBridgeService
