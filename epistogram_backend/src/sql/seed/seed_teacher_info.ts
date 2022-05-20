@@ -11,7 +11,7 @@ export const getTeacherInfoSeedData = (users: UserSeedDataType) => getSeedList<T
         studentCount: 14,
         rating: 4,
         badges: 'badge1',
-        userId: users.user_1.id,
+        userId: users.god.id,
         description: 'desc'
     },
 });

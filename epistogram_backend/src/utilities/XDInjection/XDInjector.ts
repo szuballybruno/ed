@@ -2,19 +2,19 @@ import { FunctionSignature } from '../../services/misc/advancedTypes/FunctionSig
 import { ParametrizedFunction } from '../../services/misc/advancedTypes/ParametrizedFunction';
 import { RemapToFunctions } from '../../services/misc/advancedTypes/RemapToFunctions';
 
-type FnType = { fn: Function, deps: Function[] };
+type FnType<TProps> = { fn: Function, deps: Function[], props: TProps };
 
-export class XDInjector {
+export class XDInjector<TProps = void> {
 
-    private _functions: FnType[] = [];
+    private _functions: FnType<TProps>[] = [];
     private _instances: any;
 
-    add<T extends ParametrizedFunction>(fn: T, deps: RemapToFunctions<Parameters<T>>) {
+    add<T extends ParametrizedFunction>(fn: T, deps: RemapToFunctions<Parameters<T>>, props: TProps) {
 
         if (this._getArgsCount(fn) !== deps.length)
             throw new Error(`Function [${fn.name}] parameter count mismatch, expected arguments: ${this._getArgsCount(fn)}!`);
 
-        this._functions.push({ fn, deps });
+        this._functions.push({ fn, deps, props });
         return this;
     }
 
@@ -23,7 +23,7 @@ export class XDInjector {
         this._depcheck();
         this._instances = {};
 
-        const callFunction = (currentFn: FnType): any => {
+        const callFunction = (currentFn: FnType<TProps>): any => {
 
             // no deps 
             if (currentFn.deps.length === 0) {
@@ -58,12 +58,48 @@ export class XDInjector {
         return this;
     }
 
+    getInstance(fn: Function): any | null; 
     getInstance<T>(fn: FunctionSignature<T>): T | null {
 
         if (!this._instances)
             throw new Error('Build first!');
 
         return this._instances[fn.name] ?? null;
+    }
+
+    getInstanceWithProps<T>(fn: FunctionSignature<T>): { instance: T, props: TProps } | null {
+
+        const instance = this.getInstance(fn);
+        const props = this.getProps(fn);
+
+        if (!instance)
+            return null;
+
+        return {
+            instance,
+            props
+        };
+    }
+
+    getInstances(): any[] {
+
+        return Object.values(this._instances);
+    }
+
+    getFunctions() {
+
+        return this._functions
+            .map(x => ({
+                fn: x.fn,
+                props: x.props
+            }));
+    }
+
+    getProps(fn: Function) {
+
+        return this._functions
+            .single(x => x.fn.name === fn.name)
+            .props;
     }
 
     _getArgsCount(fn: Function) {

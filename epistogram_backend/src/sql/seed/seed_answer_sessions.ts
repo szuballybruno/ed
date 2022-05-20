@@ -9,7 +9,7 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         type: 'practise',
         examId: null,
         videoId: null,
-        userId: users.user_1.id
+        userId: users.god.id
     },
     answer_session_2: {
         startDate: null,
@@ -17,7 +17,7 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         type: 'practise',
         examId: null,
         videoId: null,
-        userId: users.user_2.id
+        userId: users.almostGod.id
     },
     answer_session_3: {
         startDate: null,

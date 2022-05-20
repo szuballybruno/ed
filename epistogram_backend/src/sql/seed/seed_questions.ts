@@ -2,10 +2,10 @@ import { Question } from '../../models/entity/Question';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { ExamSeedDataType } from './seed_exams';
 import { PersonalityTraitCategoriesSeedType } from './seed_personality_trait_categories';
-import { VideoSeedType } from './seed_videos';
+import { VideoSeedDataType } from './seed_videos';
 
 export const getSeedQuestions = (
-    videos: VideoSeedType, 
+    videos: VideoSeedDataType, 
     exams: ExamSeedDataType,
     personalityTraits: PersonalityTraitCategoriesSeedType) => getSeedList<Question>()({
 

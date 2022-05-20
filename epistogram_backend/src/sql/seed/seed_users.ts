@@ -4,7 +4,7 @@ import { CompaniesSeedDataType } from './seed_companies';
 import { JobTitlesSeedDataType } from './seed_job_titles';
 
 export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: JobTitlesSeedDataType) => getSeedList<User>()({
-    user_1: {
+    god: {
         deletionDate: null,
         phoneNumber: null,
         linkedInUrl: null,
@@ -25,7 +25,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         jobTitleId: jobTitles.user.id,
         isGod: true
     },
-    user_2: {
+    almostGod: {
         deletionDate: null,
         phoneNumber: null,
         linkedInUrl: null,

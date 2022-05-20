@@ -4869,4 +4869,4 @@ export const getVideoSeedData = (
         },
     });
 
-export type VideoSeedType = ReturnType<typeof getVideoSeedData>;
+export type VideoSeedDataType = ReturnType<typeof getVideoSeedData>;

@@ -26,7 +26,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_5.id,
             deletionDate: null
         },
@@ -47,7 +47,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_21.id,
             deletionDate: null
         },
@@ -68,7 +68,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_10.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_163.id,
             deletionDate: null
         },
@@ -90,7 +90,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_4.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_165.id,
             deletionDate: null
         },
@@ -112,7 +112,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_3.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_167.id,
             deletionDate: null
         },
@@ -134,7 +134,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_10.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_166.id,
             deletionDate: null
         },
@@ -156,7 +156,7 @@ export const getCourseSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_326.id,
             deletionDate: null
         },
@@ -178,7 +178,7 @@ export const getCourseSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_9.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_162.id,
             deletionDate: null
         },
@@ -200,7 +200,7 @@ export const getCourseSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_161.id,
             deletionDate: null
         },
@@ -222,7 +222,7 @@ export const getCourseSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_1.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: null,
             deletionDate: null
         },
@@ -244,7 +244,7 @@ export const getCourseSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.user_1.id,
+            teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_302.id,
             deletionDate: null
         }

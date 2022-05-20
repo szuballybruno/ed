@@ -14,7 +14,7 @@ export const getPermissionAssignmentBridgeSeedData = (
         manni_bt_user_2_manage_company_courses: {
             permissionId: permissionList.EDIT_COMPANY_COURSES.id,
             assigneeCompanyId: null,
-            assigneeUserId: users.user_2.id,
+            assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: companies.Manni_BT.id,
             contextCourseId: null,
@@ -30,7 +30,7 @@ export const getPermissionAssignmentBridgeSeedData = (
         user_2_access_app_perm: {
             permissionId: permissionList.ACCESS_APPLICATION.id,
             assigneeCompanyId: null,
-            assigneeUserId: users.user_2.id,
+            assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: null,
             contextCourseId: null,
@@ -38,7 +38,7 @@ export const getPermissionAssignmentBridgeSeedData = (
         user_2_admin_access_perm: {
             permissionId: permissionList.ACCESS_ADMIN.id,
             assigneeCompanyId: null,
-            assigneeUserId: users.user_2.id,
+            assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: null,
             contextCourseId: null,
@@ -46,7 +46,7 @@ export const getPermissionAssignmentBridgeSeedData = (
         user_2_set_course_mode_perm: {
             permissionId: permissionList.SET_COURSE_MODE.id,
             assigneeCompanyId: null,
-            assigneeUserId: users.user_2.id,
+            assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: null,
             contextCourseId: courses.course_28.id,
@@ -54,7 +54,7 @@ export const getPermissionAssignmentBridgeSeedData = (
         user_2_watch_comp_course_perm: {
             permissionId: permissionList.WATCH_COMPANY_COURSES.id,
             assigneeCompanyId: null,
-            assigneeUserId: users.user_2.id,
+            assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: companies.EpistoGram.id,
             contextCourseId: null,
@@ -62,11 +62,11 @@ export const getPermissionAssignmentBridgeSeedData = (
         user_2_watch_course_perm: {
             permissionId: permissionList.WATCH_COURSE.id,
             assigneeCompanyId: null,
-            assigneeUserId: users.user_2.id,
+            assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: null,
             contextCourseId: courses.course_28.id,
         }
     });
 
-export default list;
+export type PermissionAssignmentBridgeSeedDataType = ReturnType<typeof getPermissionAssignmentBridgeSeedData>;

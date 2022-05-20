@@ -113,7 +113,7 @@ import { getCommentsSeedData } from '../../sql/seed/seed_comments';
 import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
 import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
 import { getCourseSeedData } from '../../sql/seed/seed_courses';
-import seed_course_access_bridge, { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
+import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
 import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
 import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
 import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
@@ -144,84 +144,87 @@ import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
-    // const personalityTraitCategories = getPersonalityTraitCategoriesSeed();
-    // const dailyTips = getDailyTipsSeed(personalityTraitCategories);
-    // const questions = getSeedQuestions(seed_videos, seed_exams, personalityTraitCategories);
-    // const answers = getAnswersSeed(questions);
-
-    const injector = new XDInjector()
-        .add(getCommentsSeedData, [])
-        .add(getActivationCodeSeedData, [])
-        .add(getQuestionTypeSeedData, [])
-        .add(getPermissionsSeedData, [])
-        .add(getJobTitlesSeedData, [])
-        .add(getCompaniesSeedData, [])
-        .add(getStorageFileSeedData, [])
-        .add(getPersonalityTraitCategoriesSeed, [])
-        .add(getCourseCategoriesSeedData, [])
-        .add(getCourseRatingGroupSeedData, [])
-        .add(getShopItemCategoriesSeedData, [])
-        .add(getPrequizQuestionsSeedData, [])
-        .add(getCompanyOwnerBridgeSeedData, [getCompaniesSeedData])
-        .add(getRolesSeedData, [getCompaniesSeedData])
-        .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData])
-        .add(getPrequizAnswersSeedData, [getPrequizQuestionsSeedData])
-        .add(getTempomatAdjustmentValueSeedData, [getPrequizAnswersSeedData])
-        .add(getShopItemSeedData, [getStorageFileSeedData, getShopItemCategoriesSeedData])
-        .add(getDiscountCodesSeedData, [getShopItemSeedData])
-        .add(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData])
-        .add(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData])
-        .add(getTeacherInfoSeedData, [getUserSeedData])
-        .add(getAnswerSessionSeedData, [getUserSeedData])
-        .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData])
-        .add(getModuleSeedData, [getCourseSeedData])
-        .add(getDailyTipsSeed, [getPersonalityTraitCategoriesSeed])
-        .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData])
-        .add(getExamSeedData, [getCourseSeedData])
-        .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed])
-        .add(getAnswersSeed, [getSeedQuestions])
-        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData])
-        .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData])
-        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData])
+    const injector = new XDInjector<Function>()
+        .add(getQuestionTypeSeedData, [], QuestionType)
+        .add(getPermissionsSeedData, [], Permission)
+        .add(getJobTitlesSeedData, [], JobTitle)
+        .add(getCompaniesSeedData, [], Company)
+        .add(getStorageFileSeedData, [], StorageFile)
+        .add(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
+        .add(getCourseCategoriesSeedData, [], CourseCategory)
+        .add(getCourseRatingGroupSeedData, [], CourseRatingGroup)
+        .add(getShopItemCategoriesSeedData, [], ShopItemCategory)
+        .add(getPrequizQuestionsSeedData, [], PrequizQuestion)
+        .add(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
+        .add(getRolesSeedData, [getCompaniesSeedData], Role)
+        .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
+        .add(getPrequizAnswersSeedData, [getPrequizQuestionsSeedData], PrequizAnswer)
+        .add(getTempomatAdjustmentValueSeedData, [getPrequizAnswersSeedData], TempomatAdjustmentValue)
+        .add(getShopItemSeedData, [getStorageFileSeedData, getShopItemCategoriesSeedData], ShopItem)
+        .add(getDiscountCodesSeedData, [getShopItemSeedData], DiscountCode)
+        .add(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData], CourseRatingQuestion)
+        .add(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData], User)
+        .add(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
+        .add(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
+        .add(getAnswerSessionSeedData, [getUserSeedData], AnswerSession)
+        .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], Course)
+        .add(getModuleSeedData, [getCourseSeedData], CourseModule)
+        .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
+        .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], Video)
+        .add(getCommentsSeedData, [getVideoSeedData, getUserSeedData], Comment)
+        .add(getExamSeedData, [getModuleSeedData, getCourseSeedData], Exam)
+        .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], Question)
+        .add(getAnswersSeed, [getSeedQuestions], Answer)
+        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
+        .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
+        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
         .build();
 
+    const seedScripts = injector
+        .getFunctions()
+        .map((func): [Function, any] => {
+
+            return [func.props, injector.getInstance(func.fn)];
+        });
+
     return {
-        seedScripts: [
-            [Company, seed_companies],
-            [QuestionType, seed_question_types],
-            [Permission, permissionList],
-            [ActivationCode, seed_activation_codes],
-            [JobTitle, seed_job_titles],
-            [User, seed_users],
-            [ActivitySession, seed_activity_sessions],
-            [AnswerSession, seed_answer_sessions],
-            [PersonalityTraitCategory, personalityTraitCategories],
-            [Question, questions],
-            [Answer, answers],
-            [CourseCategory, seed_course_categories],
-            [CourseRatingGroup, seed_course_rating_groups],
-            [CourseRatingQuestion, seed_course_rating_question],
-            [Course, seed_courses],
-            [DailyTip, dailyTips],
-            [DiscountCode, seed_discount_codes],
-            [Exam, seed_exams],
-            [CourseModule, seed_modules],
-            [PrequizAnswer, seed_prequiz_answers],
-            [PrequizQuestion, seed_prequiz_questions],
-            [ShopItemCategory, seed_shop_item_categories],
-            [ShopItem, seed_shop_items],
-            [StorageFile, seed_storage_file],
-            [TeacherInfo, seed_teacher_info],
-            [TempomatAdjustmentValue, seed_tempomat_adjustment_values],
-            [Video, seed_videos],
-            [Role, roleList],
-            [CompanyOwnerBridge, seed_company_owner_bridges],
-            [RolePermissionBridge, rolePermissionList],
-            [PermissionAssignmentBridge, seed_permission_assignment_bridges],
-            [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
-            [Comment, seed_comments],
-            [CourseAccessBridge, seed_course_access_bridge]
-        ],
+        seedScripts,
+        // seedScripts: [
+        //     [Company, seed_companies],
+        //     [QuestionType, seed_question_types],
+        //     [Permission, permissionList],
+        //     [ActivationCode, seed_activation_codes],
+        //     [JobTitle, seed_job_titles],
+        //     [User, seed_users],
+        //     [ActivitySession, seed_activity_sessions],
+        //     [AnswerSession, seed_answer_sessions],
+        //     [PersonalityTraitCategory, personalityTraitCategories],
+        //     [Question, questions],
+        //     [Answer, answers],
+        //     [CourseCategory, seed_course_categories],
+        //     [CourseRatingGroup, seed_course_rating_groups],
+        //     [CourseRatingQuestion, seed_course_rating_question],
+        //     [Course, seed_courses],
+        //     [DailyTip, dailyTips],
+        //     [DiscountCode, seed_discount_codes],
+        //     [Exam, seed_exams],
+        //     [CourseModule, seed_modules],
+        //     [PrequizAnswer, seed_prequiz_answers],
+        //     [PrequizQuestion, seed_prequiz_questions],
+        //     [ShopItemCategory, seed_shop_item_categories],
+        //     [ShopItem, seed_shop_items],
+        //     [StorageFile, seed_storage_file],
+        //     [TeacherInfo, seed_teacher_info],
+        //     [TempomatAdjustmentValue, seed_tempomat_adjustment_values],
+        //     [Video, seed_videos],
+        //     [Role, roleList],
+        //     [CompanyOwnerBridge, seed_company_owner_bridges],
+        //     [RolePermissionBridge, rolePermissionList],
+        //     [PermissionAssignmentBridge, seed_permission_assignment_bridges],
+        //     [RoleAssignmentBridge, roleAssignmentBridgeSeedList],
+        //     [Comment, seed_comments],
+        //     [CourseAccessBridge, seed_course_access_bridge]
+        // ],
 
         views: [
             ['answer_session_view', AnswerSessionView],

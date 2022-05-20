@@ -401,7 +401,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         deletionDate: null
     },
     pretest_exam_42: {
-        courseId: courses.course_29.id,
+        courseId: 29,
         title: 'Pretest exam course 29',
         subtitle: 'Pretest exam course 29 desc',
         description: '',

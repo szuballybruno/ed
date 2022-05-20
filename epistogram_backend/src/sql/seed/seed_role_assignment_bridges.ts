@@ -25,7 +25,7 @@ export const getRoleAssignmentBridgeSeedData = (
     almostgod_a: {
         roleId: roles.Company_Owner.id,
         assigneeCompanyId: null,
-        assigneeUserId: users.user_2.id,
+        assigneeUserId: users.almostGod.id,
         contextCompanyId: companies.EpistoGram.id,
     }
 });
