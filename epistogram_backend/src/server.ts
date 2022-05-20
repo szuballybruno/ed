@@ -225,7 +225,7 @@ const main = async () => {
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)
         .addController(CommentController, commentController)
-        .addController(AuthenticationController, authenticationController)
+        .addController(AuthenticationController2, authenticationController)
         .addController(ExamController, examController)
         .addController(RegistrationController, registrationController)
         .addController(ScheduledJobTriggerController, scheduledJobTriggerController)
