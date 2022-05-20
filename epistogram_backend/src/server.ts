@@ -229,136 +229,29 @@ const main = async () => {
         .addController(AuthenticationController, authenticationController)
         .addController(ExamController, examController)
         .addController(RegistrationController, registrationController)
+        .addController(ScheduledJobTriggerController, scheduledJobTriggerController)
+        .addController(TempomatController, tempomatController)
+        .addController(DailyTipController, dailyTipController)
+        .addController(PersonalityAssessmentController, personalityAssessmentController)
+        .addController(ShopController, shopController)
+        .addController(EventController, eventController)
+        .addController(VideoRatingController, videoRatingController)
+        .addController(PasswordChangeController, passwordChangeController)
+        .addController(CoinTransactionsController, coinTransactionsController)
+        .addController(PrequizController, prequizController)
+        .addController(PretestController, pretestController)
+        .addController(CourseRatingController, courseRatingController)
+        .addController(UserStatsController, userStatsController)
+        .addController(UserProgressController, userProgressController)
+        .addController(FileController, fileController)
+        .addController(SignupController, signupController)
+        .addController(PlayerController, playerController)
+        .addController(PlaybackController, playbackController)
+        .addController(CourseController, courseController)
+        .addController(ModuleController, moduleController)
+        .addController(VideoController, videoController)
+        .addController(QuestionController, questionController)
         .build();
-
-    const addEndpoint = turboExpress.addAPIEndpoint;
-
-    // scheduled jobs
-    addEndpoint(apiRoutes.scheduledJobs.evaluateUserProgress, scheduledJobTriggerController.evaluateUserProgressesAction, { isPublic: true });
-
-    // teacher info
-    addEndpoint(apiRoutes.teacherInfo.getTeacherInfo, teacherInfoController.getTeacherInfoAction);
-    addEndpoint(apiRoutes.teacherInfo.saveTeacherInfo, teacherInfoController.saveTeacherInfoAction, { isPost: true });
-
-    // tempomat
-    addEndpoint(apiRoutes.tempomat.getTempomatMode, tempomatController.getTempomatModeAction);
-    addEndpoint(apiRoutes.tempomat.setTempomatMode, tempomatController.setTempomatModeAction, { isPost: true });
-
-    // daily tip 
-    addEndpoint(apiRoutes.dailyTip.getDailyTip, dailyTipController.getDailyTipAction);
-    addEndpoint(apiRoutes.dailyTip.deleteDailyTip, dailyTipController.deleteDailyTipAction, { isPost: true });
-    addEndpoint(apiRoutes.dailyTip.createDailyTip, dailyTipController.createDailyTipAction, { isPost: true });
-    addEndpoint(apiRoutes.dailyTip.getDailyTipEditData, dailyTipController.getDailyTipEditDataAction);
-    addEndpoint(apiRoutes.dailyTip.saveDailyTip, dailyTipController.saveDailyTipAction, { isPost: true });
-
-    // personality assessment 
-    addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategories, personalityAssessmentController.getPersonalityTraitCategoriesAction);
-    addEndpoint(apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails, personalityAssessmentController.getPersonalityTraitCategoryDetailsAction);
-
-    // shop 
-    addEndpoint(apiRoutes.shop.getShopItems, shopController.getShopItemsAction);
-    addEndpoint(apiRoutes.shop.getShopItemCategories, shopController.getShopItemCategoriesAction);
-    addEndpoint(apiRoutes.shop.purchaseShopItem, shopController.purchaseShopItemAction, { isPost: true });
-    addEndpoint(apiRoutes.shop.getAdminShopItems, shopController.getAdminShopItemsAction);
-    addEndpoint(apiRoutes.shop.getShopItemBriefData, shopController.getShopItemBriefDataAction);
-    addEndpoint(apiRoutes.shop.getShopItemEditData, shopController.getShopItemEditDTOAction);
-    addEndpoint(apiRoutes.shop.getPrivateCourseList, shopController.getPrivateCourseListAction);
-    addEndpoint(apiRoutes.shop.saveShopItem, shopController.saveShopItemAction, { isPost: true, isMultipart: true });
-    addEndpoint(apiRoutes.shop.createShopItem, shopController.createShopItemAction, { isPost: true });
-
-    // event 
-    addEndpoint(apiRoutes.event.getUnfulfilledEvent, eventController.getUnfulfilledEventAction);
-
-    // video rating 
-    addEndpoint(apiRoutes.videoRating.getVideoRating, videoRatingController.getVideoRatingAction);
-    addEndpoint(apiRoutes.videoRating.rateVideoDifficulty, videoRatingController.rateVideoDifficultyAction, { isPost: true });
-    addEndpoint(apiRoutes.videoRating.rateVideoExperience, videoRatingController.rateVideoExperienceAction, { isPost: true });
-
-    // password change 
-    addEndpoint(apiRoutes.passwordChange.setNewPassword, passwordChangeController.setNewPasswordAction, { isPost: true, isPublic: true });
-    addEndpoint(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, passwordChangeController.requestPasswordChangeAuthenticatedAction, { isPost: true });
-    addEndpoint(apiRoutes.passwordChange.requestPasswordChange, passwordChangeController.requestPasswordChangeAction, { isPublic: true, isPost: true });
-
-    // coin transactions 
-    addEndpoint(apiRoutes.coinTransactions.getCoinTransactions, coinTransactionsController.getCoinTransactionsAction);
-    addEndpoint(apiRoutes.coinTransactions.getCoinBalance, coinTransactionsController.getCoinBalanceAction);
-    addEndpoint(apiRoutes.coinTransactions.getCoinBalanceOfUser, coinTransactionsController.getCoinBalanceOfUserAction);
-    addEndpoint(apiRoutes.coinTransactions.giftCoinsToUser, coinTransactionsController.giftCoinsToUser, { isPost: true });
-
-    // prequiz
-    addEndpoint(apiRoutes.prequiz.getQuestions, prequizController.getQuestionsAction);
-    addEndpoint(apiRoutes.prequiz.getUserAnswer, prequizController.getUserAnswerAction);
-    addEndpoint(apiRoutes.prequiz.answerPrequizQuestion, prequizController.answerPrequizQuestionAction, { isPost: true });
-
-    // pretest 
-    addEndpoint(apiRoutes.pretest.getPretestData, pretestController.getPretestDataAction);
-    addEndpoint(apiRoutes.pretest.getPretestResults, pretestController.getPretestResultsAction);
-    addEndpoint(apiRoutes.pretest.getPretestExamId, pretestController.getPretestExamIdAction);
-
-    // course rating 
-    addEndpoint(apiRoutes.courseRating.getCourseRatingGroups, courseRatingController.getCourseRatingGroupsAction);
-    addEndpoint(apiRoutes.courseRating.saveCourseRatingGroupAnswers, courseRatingController.saveCourseRatingGroupAnswersAction, { isPost: true });
-
-    // user stats 
-    addEndpoint(apiRoutes.userStats.getUserStats, userStatsController.getUserStatsAction);
-    addEndpoint(apiRoutes.userStats.getUserLearningOverviewData, userStatsController.getUserLearningOverviewDataAction);
-
-    // user progress
-    addEndpoint(apiRoutes.userProgress.getUserProgressData, userProgressController.getUserProgressDataAction);
-    addEndpoint(apiRoutes.userProgress.getRecommendedItemQuota, userProgressController.getRecommendedItemQuotaAction);
-    addEndpoint(apiRoutes.userProgress.getActiveCourses, userProgressController.getActiveCoursesAction);
-
-    // file 
-    addEndpoint(apiRoutes.file.uploadUserAvatar, fileController.uploadAvatarFileAction, { isPost: true });
-
-    // signup
-    addEndpoint(apiRoutes.signup.answerSignupQuestion, signupController.answerSignupQuestionAction, { isPost: true });
-    addEndpoint(apiRoutes.signup.getSignupData, signupController.getSignupDataAction);
-    addEndpoint(apiRoutes.signup.getUserPersonalityData, signupController.getUserPersonalityDataAction);
-
-    // player
-    addEndpoint(apiRoutes.player.getPlayerData, playerController.getPlayerDataAction);
-    addEndpoint(apiRoutes.player.getCourseItems, playerController.getCourseItemsAction);
-    addEndpoint(apiRoutes.player.answerVideoQuestion, playerController.answerVideoQuestionAction, { isPost: true });
-
-    // playback
-    addEndpoint(apiRoutes.playback.saveVideoPlaybackSample, playbackController.saveVideoPlaybackSampleAction, { isPost: true });
-
-    // course
-    addEndpoint(apiRoutes.course.setCourseMode, courseController.setCourseModeAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAdminCourseList, courseController.getAdminCourseListAction);
-    addEndpoint(apiRoutes.course.getCourseContentEditData, courseController.getCourseContentEditDataAction);
-    addEndpoint(apiRoutes.course.getCourseDetailsEditData, courseController.getCourseDetailsEditDataAction);
-    addEndpoint(apiRoutes.course.saveCourseContent, courseController.saveCourseContentAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseDetails, courseController.saveCourseDetailsAction, { isPost: true });
-    addEndpoint(apiRoutes.course.saveCourseThumbnail, courseController.saveCourseThumbnailAction, { isPost: true, isMultipart: true });
-    addEndpoint(apiRoutes.course.deleteCourse, courseController.deleteCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.createCourse, courseController.createCourseAction, { isPost: true });
-    addEndpoint(apiRoutes.course.getAvailableCourses, courseController.getAvailableCoursesAction);
-    addEndpoint(apiRoutes.course.getCourseBriefData, courseController.getCourseBriefDataAction);
-    addEndpoint(apiRoutes.course.getCourseDetails, courseController.getCourseDetailsAction);
-    addEndpoint(apiRoutes.course.getCourseProgressData, courseController.getCourseProgressDataAction);
-    addEndpoint(apiRoutes.course.getCourseProgressShort, courseController.getCourseProgressShortAction);
-
-    // module 
-    addEndpoint(apiRoutes.module.createModule, moduleController.createModuleAction, { isPost: true });
-    addEndpoint(apiRoutes.module.deleteModule, moduleController.deleteModuleAction, { isPost: true });
-    addEndpoint(apiRoutes.module.getModuleEditData, moduleController.getModuleEditDataAction);
-    addEndpoint(apiRoutes.module.saveModule, moduleController.saveModuleAction, { isPost: true, isMultipart: true });
-    addEndpoint(apiRoutes.module.getModuleListEditData, moduleController.getModuleListEditAction);
-
-    // video 
-    addEndpoint(apiRoutes.video.saveVideo, videoController.saveVideoAction, { isPost: true });
-    addEndpoint(apiRoutes.video.uploadVideoFileChunks, videoController.uploadVideoFileChunksAction, { isPost: true, isMultipart: true });
-    addEndpoint(apiRoutes.video.getVideoEditData, videoController.getVideoEditDataAction);
-    addEndpoint(apiRoutes.video.getVideoQuestionEditData, videoController.getVideoQuestionEditDataAction);
-    addEndpoint(apiRoutes.video.saveVideoQuestionEditData, videoController.saveVideoQuestionEditDataAction, { isPost: true });
-
-    // questions
-    addEndpoint(apiRoutes.questions.getQuestionEditData, questionController.getQuestionEditDataAction);
-    addEndpoint(apiRoutes.questions.saveQuestion, questionController.saveQuestionAction, { isPost: true });
-    addEndpoint(apiRoutes.questions.getPractiseQuestions, miscController.getPractiseQuestionAction);
-    addEndpoint(apiRoutes.questions.answerPractiseQuestion, questionController.answerPractiseQuestionAction, { isPost: true });
 
     // 404 - no match
     // turboExpress.use((req, res) => {

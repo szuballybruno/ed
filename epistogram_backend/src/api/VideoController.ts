@@ -7,6 +7,8 @@ import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnec
 import { VideoService } from '../services/VideoService';
 import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class VideoController {
 
@@ -30,6 +32,7 @@ export class VideoController {
         this._mapperService = mapperService;
     }
 
+    @XControllerAction(apiRoutes.video.saveVideo, { isPost: true })
     saveVideoAction = async (params: ActionParams) => {
 
         const body = params
@@ -52,6 +55,7 @@ export class VideoController {
             .saveAssociatedQuestionsAsync(body.getValue(x => x.questions, 'custom', x => true), videoId);
     };
 
+    @XControllerAction(apiRoutes.video.getVideoEditData)
     getVideoEditDataAction = async (params: ActionParams) => {
 
         const videoId = params
@@ -71,6 +75,7 @@ export class VideoController {
             .map(Video, VideoEditDTO, video);
     };
 
+    @XControllerAction(apiRoutes.video.getVideoQuestionEditData)
     getVideoQuestionEditDataAction = async (params: ActionParams) => {
 
         const query = params
@@ -83,6 +88,7 @@ export class VideoController {
             .getVideoQuestionEditDataAsync(videoId);
     };
 
+    @XControllerAction(apiRoutes.video.saveVideoQuestionEditData, { isPost: true })
     saveVideoQuestionEditDataAction = async (params: ActionParams) => {
         const mutations = params
             .getBody()
@@ -92,6 +98,7 @@ export class VideoController {
             .saveVideoQuestionEditDataAsync(mutations);
     };
 
+    @XControllerAction(apiRoutes.video.saveVideoQuestionEditData, { isPost: true, isMultipart: true })
     uploadVideoFileChunksAction = async (params: ActionParams) => {
 
         const body = params

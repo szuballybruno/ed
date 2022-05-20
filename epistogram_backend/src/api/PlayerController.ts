@@ -3,6 +3,8 @@ import { CourseService } from '../services/CourseService';
 import { PlayerService } from '../services/PlayerService';
 import { VideoService } from '../services/VideoService';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class PlayerController {
 
@@ -17,6 +19,7 @@ export class PlayerController {
         this._videoService = videoService;
     }
 
+    @XControllerAction(apiRoutes.player.answerVideoQuestion, { isPost: true })
     answerVideoQuestionAction = async (params: ActionParams) => {
 
         const dto = params.getBody<AnswerQuestionDTO>();
@@ -29,6 +32,7 @@ export class PlayerController {
             .answerVideoQuestionAsync(params.principalId, answerSessionId, questionId, answerIds, elapsedSeconds);
     };
 
+    @XControllerAction(apiRoutes.player.getPlayerData)
     getPlayerDataAction = (params: ActionParams) => {
 
         const descriptorCode = params
@@ -38,6 +42,7 @@ export class PlayerController {
         return this._playerService.getPlayerDataAsync(params.principalId, descriptorCode);
     };
 
+    @XControllerAction(apiRoutes.player.getCourseItems)
     getCourseItemsAction = async (params: ActionParams) => {
 
         return this._courseService

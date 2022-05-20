@@ -1,6 +1,8 @@
 import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
 import { VideoRatingService } from '../services/VideoRatingService';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class VideoRatingController {
 
@@ -11,6 +13,7 @@ export class VideoRatingController {
         this._videoRatingService = videoRatingService;
     }
 
+    @XControllerAction(apiRoutes.videoRating.rateVideoDifficulty, { isPost: true })
     rateVideoDifficultyAction = async (params: ActionParams) => {
 
         const dto = params
@@ -21,6 +24,7 @@ export class VideoRatingController {
             .rateVideoDifficultyAsync(params.principalId, dto);
     };
 
+    @XControllerAction(apiRoutes.videoRating.rateVideoExperience, { isPost: true })
     rateVideoExperienceAction = async (params: ActionParams) => {
 
         const dto = params
@@ -31,6 +35,7 @@ export class VideoRatingController {
             .rateVideoExperienceAsync(params.principalId, dto);
     };
 
+    @XControllerAction(apiRoutes.videoRating.getVideoRating)
     getVideoRatingAction = async (params: ActionParams) => {
 
         const videoId = params

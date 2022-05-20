@@ -1,6 +1,8 @@
 import { ShopItemEditDTO } from '../shared/dtos/ShopItemEditDTO';
 import { ShopService } from '../services/ShopService';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class ShopController {
 
@@ -11,18 +13,21 @@ export class ShopController {
         this._shopService = shopService;
     }
 
+    @XControllerAction(apiRoutes.shop.getShopItems)
     getShopItemsAction = async (params: ActionParams) => {
 
         return this._shopService
             .getShopItemsAsync(params.principalId);
     };
 
+    @XControllerAction(apiRoutes.shop.getShopItemCategories)
     getShopItemCategoriesAction = async (params: ActionParams) => {
 
         return this._shopService
             .getShopItemCategoriesAsync();
     };
 
+    @XControllerAction(apiRoutes.shop.purchaseShopItem, { isPost: true })
     purchaseShopItemAction = async (params: ActionParams) => {
 
         const body = params.getBody();
@@ -32,12 +37,14 @@ export class ShopController {
             .purchaseShopItemAsync(params.principalId, shopItemId);
     };
 
+    @XControllerAction(apiRoutes.shop.getAdminShopItems)
     getAdminShopItemsAction = async (params: ActionParams) => {
 
         return await this._shopService
             .getAdminShopItemsAsync();
     };
 
+    @XControllerAction(apiRoutes.shop.getShopItemBriefData)
     getShopItemBriefDataAction = async (params: ActionParams) => {
 
         return await this._shopService
@@ -46,6 +53,7 @@ export class ShopController {
                 .getValue(x => x.shopItemId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.shop.getShopItemEditData)
     getShopItemEditDTOAction = async (params: ActionParams) => {
 
         return await this._shopService
@@ -54,12 +62,14 @@ export class ShopController {
                 .getValue(x => x.shopItemId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.shop.getPrivateCourseList)
     getPrivateCourseListAction = async (params: ActionParams) => {
 
         return await this._shopService
             .getPrivateCourseListAsync();
     };
 
+    @XControllerAction(apiRoutes.shop.saveShopItem, { isPost: true, isMultipart: true })
     saveShopItemAction = async (params: ActionParams) => {
 
         const dto = params
@@ -73,6 +83,7 @@ export class ShopController {
             .saveShopItemAsync(dto, coverFile);
     };
 
+    @XControllerAction(apiRoutes.shop.createShopItem, { isPost: true })
     createShopItemAction = async (params: ActionParams) => {
 
         return await this._shopService

@@ -1,5 +1,7 @@
 import { CoinTransactionService } from '../services/CoinTransactionService';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class CoinTransactionsController {
 
@@ -10,18 +12,21 @@ export class CoinTransactionsController {
         this._coinTransactionService = cts;
     }
 
+    @XControllerAction(apiRoutes.coinTransactions.getCoinTransactions)
     getCoinTransactionsAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
             .getCoinTransactionsAsync(params.principalId);
     };
 
+    @XControllerAction(apiRoutes.coinTransactions.getCoinBalance)
     getCoinBalanceAction = async (params: ActionParams) => {
 
         return this._coinTransactionService
             .getPrincipalCoinBalance(params.principalId);
     };
 
+    @XControllerAction(apiRoutes.coinTransactions.getCoinBalanceOfUser)
     getCoinBalanceOfUserAction = async (params: ActionParams) => {
 
         const userId = params
@@ -32,6 +37,7 @@ export class CoinTransactionsController {
             .getCoinBalance(params.principalId, userId);
     };
 
+    @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
     giftCoinsToUser = async (params: ActionParams) => {
 
         const dto = params

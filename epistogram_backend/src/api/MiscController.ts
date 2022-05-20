@@ -68,6 +68,7 @@ export class MiscController {
         return Promise.resolve(`${this._config.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
     };
 
+    @XControllerAction(apiRoutes.questions.getPractiseQuestions)
     getPractiseQuestionAction = async (params: ActionParams) => {
 
         return await this._practiseQuestionService

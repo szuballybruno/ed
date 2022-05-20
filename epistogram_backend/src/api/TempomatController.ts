@@ -1,6 +1,8 @@
 import { TempomatService } from '../services/TempomatService';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class TempomatController {
 
@@ -11,6 +13,7 @@ export class TempomatController {
         this._tempomatService = tempomatService;
     }
 
+    @XControllerAction(apiRoutes.tempomat.getTempomatMode)
     getTempomatModeAction = async (params: ActionParams) => {
 
         return this._tempomatService
@@ -18,6 +21,7 @@ export class TempomatController {
                 .getValue(x => x.courseId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.tempomat.setTempomatMode, { isPost: true })
     setTempomatModeAction = async (params: ActionParams) => {
 
         const body = params

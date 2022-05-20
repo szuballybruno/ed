@@ -1,6 +1,8 @@
 import { CourseRatingQuestionAnswersDTO } from '../shared/dtos/CourseRatingQuestionAnswersDTO';
 import { CourseRatingService } from '../services/CourseRatingService';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class CourseRatingController {
 
@@ -11,6 +13,7 @@ export class CourseRatingController {
         this._courseRatingService = courseRatingService;
     }
 
+    @XControllerAction(apiRoutes.courseRating.getCourseRatingGroups)
     getCourseRatingGroupsAction = async (params: ActionParams) => {
 
         const query = params
@@ -23,6 +26,7 @@ export class CourseRatingController {
             .getCourseRatingGroupsAsync(params.principalId, courseId);
     };
 
+    @XControllerAction(apiRoutes.courseRating.saveCourseRatingGroupAnswers, { isPost: true })
     saveCourseRatingGroupAnswersAction = async (params: ActionParams) => {
 
         const dto = params

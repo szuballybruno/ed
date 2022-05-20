@@ -1,6 +1,8 @@
 import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
 import { DailyTipService } from '../services/DailyTipService';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
 
 export class DailyTipController {
 
@@ -11,6 +13,7 @@ export class DailyTipController {
         this._dailyTipService = dailyTipService;
     }
 
+    @XControllerAction(apiRoutes.dailyTip.getDailyTip, { isPost: true })
     deleteDailyTipAction = async (params: ActionParams) => {
 
         const tipId = params
@@ -21,6 +24,7 @@ export class DailyTipController {
             .deleteDailyTipAsync(tipId);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.createDailyTip, { isPost: true })
     createDailyTipAction = async (params: ActionParams) => {
 
         const body = params
@@ -36,6 +40,7 @@ export class DailyTipController {
             .createDailyTipAsync(personalityTraitCategoryId, isMax);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.getDailyTipEditData)
     getDailyTipEditDataAction = async (params: ActionParams) => {
 
         const dailyTipId = params
@@ -46,6 +51,7 @@ export class DailyTipController {
             .getDailyTipEditDataAsync(dailyTipId);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.saveDailyTip, { isPost: true })
     saveDailyTipAction = async (params: ActionParams) => {
 
         const dto = params
@@ -56,6 +62,7 @@ export class DailyTipController {
             .saveDailyTipAsync(dto);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.getDailyTip)
     getDailyTipAction = async (params: ActionParams) => {
 
         return await this._dailyTipService

@@ -1,5 +1,7 @@
 import { PretestService } from '../services/PretestService';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class PretestController {
 
@@ -10,6 +12,7 @@ export class PretestController {
         this._pretestService = pretestService;
     }
 
+    @XControllerAction(apiRoutes.pretest.getPretestData)
     getPretestDataAction = async (params: ActionParams) => {
 
         const query = params
@@ -22,6 +25,7 @@ export class PretestController {
             .getPretestDataAsync(params.principalId, courseId);
     };
 
+    @XControllerAction(apiRoutes.pretest.getPretestResults)
     getPretestResultsAction = async (params: ActionParams) => {
 
         return this._pretestService
@@ -30,6 +34,7 @@ export class PretestController {
                 .getValue(x => x.courseId, 'int'));
     };
 
+    @XControllerAction(apiRoutes.pretest.getPretestExamId)
     getPretestExamIdAction = async (params: ActionParams) => {
 
         return this._pretestService

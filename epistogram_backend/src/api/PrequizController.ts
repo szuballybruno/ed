@@ -1,5 +1,7 @@
 import { PrequizService } from '../services/PrequizService';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class PrequizController {
 
@@ -10,6 +12,7 @@ export class PrequizController {
         this._prequizService = prequizService;
     }
 
+    @XControllerAction(apiRoutes.prequiz.getQuestions)
     getQuestionsAction = async (params: ActionParams) => {
 
         const courseId = params
@@ -20,6 +23,7 @@ export class PrequizController {
             .getQuestionsAsync(params.principalId, courseId);
     };
 
+    @XControllerAction(apiRoutes.prequiz.getUserAnswer)
     getUserAnswerAction = async (params: ActionParams) => {
 
         const query = params
@@ -35,6 +39,7 @@ export class PrequizController {
             .getUserAnswerAsync(params.principalId, courseId, questionId);
     };
 
+    @XControllerAction(apiRoutes.prequiz.answerPrequizQuestion, { isPost: true })
     answerPrequizQuestionAction = async (params: ActionParams) => {
 
         const bod = params
