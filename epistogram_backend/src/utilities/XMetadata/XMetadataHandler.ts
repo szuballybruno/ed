@@ -80,12 +80,13 @@ const getSinglePropertyNameByMetadataCode = <T>(classType: ClassType<T>, metadat
 
     const className = classType.name;
 
-    return metadatas
+    const firstMetadat = metadatas
         .filter(x => x.className === className
             && x.metadataKey === metadataCode
             && x.propertyName)
-        .single(x => true)
-        .propertyName! as keyof T;
+        .firstOrNull(x => true);
+
+    return firstMetadat?.propertyName as keyof T ?? null;
 };
 
 export const XMetadataHandler = {
