@@ -117,7 +117,10 @@ export const EditRoleControl = (props: {
     }, [roleEditData, permissionsList]);
 
     return <>
-        <EpistoDialog logic={logic as EpistoDialogLogicType}>
+        <EpistoDialog
+            closeButtonType="top"
+            logic={logic as EpistoDialogLogicType}>
+                
             <LoadingFrame
                 direction="column"
                 loadingState={[permissionsListState, companiesState]}

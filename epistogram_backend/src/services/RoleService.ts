@@ -100,6 +100,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 roleId: viewAsRole.first.roleId,
                 roleName: viewAsRole.first.roleName,
                 contextCompanyName: viewAsRole.first.contextCompanyName,
+                ownerCompanyId: viewAsRole.first.ownerCompanyId,
                 ownerCompanyName: viewAsRole.first.ownerCompanyName,
                 isCustom: viewAsRole.first.isCustom,
                 canAssign: viewAsRole.first.canAssign,

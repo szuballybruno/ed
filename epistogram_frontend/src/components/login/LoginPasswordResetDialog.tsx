@@ -42,7 +42,10 @@ export const LoginPasswordResetDialog = (params: {
     };
 
     return (
-        <EpistoDialog logic={passwordResetDialogLogic}>
+        <EpistoDialog
+            closeButtonType="top"
+            logic={passwordResetDialogLogic}>
+
             <Flex
                 id="dialogFlex"
                 width="500px"
@@ -117,7 +120,7 @@ export const LoginPasswordResetDialog = (params: {
                         padding: '15px',
                     }}>
 
-                    Kattints a visszaállítás gombra, és küldjük is a linket! 
+                    Kattints a visszaállítás gombra, és küldjük is a linket!
                 </EpistoFont>
 
                 {/* buttons */}

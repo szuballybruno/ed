@@ -19,6 +19,9 @@ export class AssignableRoleView {
     contextCompanyName: string;
 
     @ViewColumn()
+    ownerCompanyId: number | null;
+
+    @ViewColumn()
     ownerCompanyName: string | null;
 
     @ViewColumn()

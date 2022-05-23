@@ -43,13 +43,9 @@ export const RoleAdminIndexPage = memo(() => {
 
     const handleDeleteRole = usePostCallback(deleteRoleAsync, [refetchRolesList]);
 
-    const addDialogLogic = useEpistoDialogLogic(AddRoleDialog, { defaultCloseButtonType: 'top' });
-    const editDialogLogic = useEpistoDialogLogic<{ roleId: number }>(EditRoleDialog, { defaultCloseButtonType: 'top' });
-    const deleteWarningDialogLogic = useEpistoDialogLogic<{ roleId: number }>(
-        'deleteWarningDialogLogic',
-        {
-            defaultCloseButtonType: 'top',
-        });
+    const addDialogLogic = useEpistoDialogLogic(AddRoleDialog);
+    const editDialogLogic = useEpistoDialogLogic<{ roleId: number }>(EditRoleDialog);
+    const deleteWarningDialogLogic = useEpistoDialogLogic<{ roleId: number }>('deleteWarningDialogLogic');
 
     const handleEdit = useCallback((roleId: number) => {
 
@@ -138,6 +134,7 @@ export const RoleAdminIndexPage = memo(() => {
 
             <EpistoDialog
                 logic={deleteWarningDialogLogic}
+                closeButtonType="top"
                 buttonComponents={[
                     {
                         title: 'Yup',

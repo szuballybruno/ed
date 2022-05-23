@@ -19,10 +19,10 @@ export class UserRoleView {
     roleName: string;
 
     @ViewColumn()
-    ownerCompanyId: number;
+    ownerCompanyId: number | null;
 
     @ViewColumn()
-    ownerCompanyName: string;
+    ownerCompanyName: string | null;
 
     @ViewColumn()
     assigneeUserId: number;

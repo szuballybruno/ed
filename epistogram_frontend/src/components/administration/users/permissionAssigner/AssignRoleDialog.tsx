@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useRoleAssignCompanies } from '../../../../services/api/companyApiService';
 import { useAssignablePermissions, useAssignableRoles } from '../../../../services/api/rolesApiService';
+import { AssignableRoleDTO } from '../../../../shared/dtos/AssignableRoleDTO';
 import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -18,12 +19,18 @@ export const AssignRoleDialog = (props: {
 
     const { dialgoLogic, userId, onAdd } = props;
 
+    // http
     const { roleAssignCompanies } = useRoleAssignCompanies();
 
     const [selectedCompany, setSelectedCompany] = useState<RoleAssignCompanyDTO | null>(null);
-    const selectedCompanyId = selectedCompany?.id ?? null;
-    const selectedRoleId = 1;
+    const [selectedCourse, setSelectedCourse] = useState<RoleAssignCompanyDTO | null>(null);
+    const [selectedRole, setSelectedRole] = useState<AssignableRoleDTO | null>(null);
 
+    const selectedCompanyId = selectedCompany?.id ?? null;
+    const selectedCourseId = selectedCompany?.id ?? null;
+    const selectedRoleId = selectedCompany?.id ?? null;
+
+    // http
     const { assignableRolesList } = useAssignableRoles(userId, selectedCompanyId);
     const { assignablePermissionList } = useAssignablePermissions(selectedCompanyId);
 
@@ -52,20 +59,43 @@ export const AssignRoleDialog = (props: {
                     text="Course">
 
                     <EpistoSelect
-                        selectedValue={selectedCompany ?? undefined}
+                        selectedValue={selectedCourse ?? undefined}
                         getCompareKey={x => x.id + ''}
-                        onSelected={setSelectedCompany}
+                        onSelected={setSelectedCourse}
                         getDisplayValue={x => x.name}
-                        items={roleAssignCompanies} />
+                        items={[]} />
+                </EpistoLabel>
+
+                <EpistoLabel
+                    text="Role">
+
+                    <EpistoSelect
+                        selectedValue={selectedRole ?? undefined}
+                        getCompareKey={x => x.roleId + ''}
+                        onSelected={setSelectedRole}
+                        getDisplayValue={x => x.roleName}
+                        items={assignableRolesList} />
                 </EpistoLabel>
 
                 <EpistoButton
                     variant="colored"
                     onClick={() => {
+
+                        if (!selectedRole)
+                            return;
+
+                        if (!selectedCompany)
+                            return;
+
                         onAdd({
-                            contextCompanyId: selectedCompanyId!,
-                            roleId: selectedRoleId
-                        } as UserRoleDTO);
+                            contextCompanyId: selectedCompany.id,
+                            contextCompanyName: selectedCompany.name,
+                            roleId: selectedRole.roleId,
+                            roleName: selectedRole.roleName,
+                            assigneeUserId: userId,
+                            ownerCompanyId: selectedRole.ownerCompanyId,
+                            ownerCompanyName: selectedRole.ownerCompanyName,
+                        });
                     }}>
 
                     Add
