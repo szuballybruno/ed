@@ -22,11 +22,8 @@ export class UserRoleView {
     roleName: string;
 
     @ViewColumn()
-    ownerCompanyId: number | null;
-
-    @ViewColumn()
-    ownerCompanyName: string | null;
-
-    @ViewColumn()
     assigneeUserId: number;
+
+    @ViewColumn()
+    isInherited: boolean;
 }

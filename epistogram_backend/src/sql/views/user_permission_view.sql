@@ -36,7 +36,7 @@ company_inherited_permissions AS
 		u.id assignee_user_id, 
 		cpv.context_company_id, 
 		NULL::int context_course_id, 
-		NULL::int role_id,
+		cpv.role_id,
 		cpv.permission_id,
 		NULL::int assignment_bridge_id
 	FROM public.company_permission_view cpv
@@ -102,7 +102,8 @@ SELECT
 	pe.id permission_id,
 	pe.code permission_code,
 	pe.scope permission_scope,
-	permissions.role_id,
+	parent_ro.id parent_role_id,
+	parent_ro.name parent_role_name,
 	permissions.assignment_bridge_id
 FROM public.user u
 
@@ -117,6 +118,9 @@ ON co.id = permissions.context_company_id
 
 LEFT JOIN public.course cour
 ON cour.id = permissions.context_course_id
+
+LEFT JOIN public.role parent_ro
+ON parent_ro.id = permissions.role_id
 
 ORDER BY
 	u.id,

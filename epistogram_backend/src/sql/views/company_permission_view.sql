@@ -1,6 +1,7 @@
 SELECT
 	co.id assignee_company_id,
 	rab.context_company_id,
+	rpb.role_id,
 	rpb.permission_id permission_id
 FROM public.company co
 
@@ -18,6 +19,7 @@ UNION
 SELECT
 	co.id assignee_company_id,
 	pab.context_company_id,
+	NULL::int role_id,
 	pab.permission_id permission_id
 FROM public.company co
 

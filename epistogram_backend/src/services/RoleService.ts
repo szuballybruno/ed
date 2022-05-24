@@ -140,8 +140,10 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCourseId: x.contextCourseId,
                 contextCourseName: x.contextCourseName,
                 permissionId: x.permissionId,
-                permissionName: x.permissionName,
-                permissionAssignmentBridgeId: x.assignmentBridgeId
+                permissionCode: x.permissionCode,
+                permissionAssignmentBridgeId: x.assignmentBridgeId,
+                parentRoleId: x.parentRoleId,
+                parentRoleName: x.parentRoleName
             }));
     }
 

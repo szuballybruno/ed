@@ -18,16 +18,17 @@ type RoleRowType = {
     name: string;
     roleId: number;
     contextCompanyName: string;
-    ownerCompanyName: string;
     state: 'new' | 'none';
+    isInherited: boolean;
 }
 
 type PermissionRowType = {
     rowId: number,
     permissionCode: string;
     parentRoleName: string;
-    contextCompanyName: string;
+    contextName: string;
     state: 'new' | 'none';
+    isInherited: boolean;
 }
 
 export const PermissionAssignerControl = (props: {
@@ -56,17 +57,11 @@ export const PermissionAssignerControl = (props: {
     // init roles
     useEffect(() => {
 
-        if (rolesFromServer.length === 0)
-            return;
-
         setUserRoles(rolesFromServer);
     }, [rolesFromServer]);
 
     // init perms
     useEffect(() => {
-
-        if (permissionsFromServer.length === 0)
-            return;
 
         setAssignedPermissions(permissionsFromServer);
     }, [permissionsFromServer]);
@@ -85,19 +80,21 @@ export const PermissionAssignerControl = (props: {
                 name: assRole.roleName!,
                 roleId: assRole.roleId,
                 contextCompanyName: assRole.contextCompanyName,
-                ownerCompanyName: assRole.ownerCompanyName ?? 'Predefined',
-                state: foundInServer ? 'none' : 'new'
+                state: foundInServer ? 'none' : 'new',
+                isInherited: assRole.isInherited
             };
         });
 
     const permissionRows = assignedPermissions
         .map((assPerm, i): PermissionRowType => ({
             rowId: i,
-            permissionCode: assPerm.permissionName,
-            contextCompanyName: assPerm.contextCompanyName ?? '',
-            parentRoleName: assPerm.
+            permissionCode: assPerm.permissionCode,
+            contextName: (assPerm.contextCompanyName || assPerm.contextCourseName) ?? '',
+            parentRoleName: assPerm.parentRoleName ?? '',
+            state: 'none',
+            isInherited: !!assPerm.parentRoleId
         }))
-        .orderBy(x => `${x.isAssignedByRole}`);
+        .orderBy(x => `${x.isInherited}`);
 
     const roleColumns = useMemo((): GridColumnType<RoleRowType, any, keyof RoleRowType>[] => [
         {
@@ -107,13 +104,13 @@ export const PermissionAssignerControl = (props: {
         },
         {
             field: 'contextCompanyName',
-            headerName: 'On',
+            headerName: 'Context',
             width: 150,
         },
         {
-            field: 'ownerCompanyName',
-            headerName: 'Owner',
-            width: 150
+            field: 'isInherited',
+            headerName: 'Inherited',
+            width: 150,
         },
         {
             field: 'state',
@@ -123,9 +120,19 @@ export const PermissionAssignerControl = (props: {
 
     const permColumns = useMemo((): GridColumnType<PermissionRowType, any, keyof PermissionRowType>[] => [
         {
-            field: 'name',
+            field: 'permissionCode',
             headerName: 'Name',
             width: 250
+        },
+        {
+            field: 'contextName',
+            headerName: 'Context',
+            width: 200
+        },
+        {
+            field: 'parentRoleName',
+            headerName: 'Inherited from',
+            width: 200
         }
     ], []);
 
@@ -180,11 +187,6 @@ export const PermissionAssignerControl = (props: {
                     hideFooter
                     density="dense"
                     columns={permColumns}
-                    initialState={{
-                        pinnedColumns: {
-                            right: ['isAssigned']
-                        }
-                    }}
                     rows={permissionRows}
                     getKey={getPermissionKey} />
             </EpistoLabel>

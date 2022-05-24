@@ -26,11 +26,14 @@ export class UserPermissionView {
     permissionId: number;
 
     @ViewColumn()
-    permissionName: string;
-
-    @ViewColumn()
     permissionCode: PermissionCodeType;
 
     @ViewColumn()
     assignmentBridgeId: number | null;
+
+    @ViewColumn()
+    parentRoleId: number | null;
+
+    @ViewColumn()
+    parentRoleName: string | null;
 }

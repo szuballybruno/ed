@@ -5,7 +5,6 @@ export class UserRoleDTO {
     contextCompanyName: string;
     roleId: number;
     roleName: string;
-    ownerCompanyId: number | null;
-    ownerCompanyName: string | null;
     assigneeUserId: number;
+    isInherited: boolean;
 }
