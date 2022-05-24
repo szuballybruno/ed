@@ -1,4 +1,5 @@
 SELECT 
+	rab.id role_assignment_bridge_id,
 	co.id context_company_id,
 	co.name context_company_name,
 	ro.id role_id,

@@ -21,6 +21,7 @@ export const apiRoutes = {
         deleteRole: '/roles/delete-role',
         saveRole: '/roles/save-role',
         getUserRoles: '/roles/get-user-roles',
+        getUserPermissions: '/roles/get-user-permissions',
         getAssignableRoles: '/roles/get-assignable-roles',
         getAssignablePermissions: '/roles/get-assignable-permissions',
         getUserAssignedAuthItems: '/roles/get-user-assigned-auth-items'

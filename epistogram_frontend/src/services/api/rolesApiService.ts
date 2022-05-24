@@ -3,6 +3,7 @@ import { AssignableRoleDTO } from '../../shared/dtos/AssignableRoleDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
+import { UserPermissionDTO } from '../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../shared/dtos/role/UserRoleDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
@@ -53,6 +54,18 @@ export const useUserRoles = (userId: number) => {
         userRolesError: qr.error,
         userRolesState: qr.state,
         refetchUserRoles: qr.refetch
+    };
+};
+
+export const useUserPermissions = (userId: number) => {
+
+    const qr = useReactQuery2<UserPermissionDTO[]>(apiRoutes.roles.getUserPermissions, { userId });
+
+    return {
+        userPermissions: qr.data ?? [],
+        userPermissionsError: qr.error,
+        userPermissionsState: qr.state,
+        refetchUserPermissions: qr.refetch
     };
 };
 

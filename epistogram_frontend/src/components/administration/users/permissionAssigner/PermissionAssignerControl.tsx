@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useUserRoles } from '../../../../services/api/rolesApiService';
+import { useUserPermissions, useUserRoles } from '../../../../services/api/rolesApiService';
 import { AssignedAuthItemsDTO } from '../../../../shared/dtos/role/AssignedAuthItemsDTO';
+import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { useHandleAddRemoveItems } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -10,6 +11,7 @@ import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AssignRoleDialog } from './AssignRoleDialog';
+import { userRoleEquals } from './PermissionAssignerLogic';
 
 type RoleRowType = {
     rowId: number,
@@ -22,38 +24,36 @@ type RoleRowType = {
 
 type PermissionRowType = {
     rowId: number,
-    name: string;
-    isAssigned: boolean;
-    isAssignedByRole: boolean;
-    permissionId: number;
+    permissionCode: string;
+    parentRoleName: string;
+    contextCompanyName: string;
+    state: 'new' | 'none';
 }
 
 export const PermissionAssignerControl = (props: {
     userId: number,
     userCompanyId: number | null,
-    data: AssignedAuthItemsDTO,
-    onChange: (data: AssignedAuthItemsDTO) => void
+    onChange: ({ assignedRoles: UserRoleDTO }) => void
 }) => {
 
-    const { userId, data, onChange, userCompanyId } = props;
+    const { userId, onChange, userCompanyId } = props;
 
     // http
     const { userRoles: rolesFromServer } = useUserRoles(userId);
+    const { userPermissions: permissionsFromServer } = useUserPermissions(userId);
 
     // assigned roles
     const [userRoles, setUserRoles] = useState<UserRoleDTO[]>([]);
     const [addAssignedRole, removeAssignedRole] = useHandleAddRemoveItems(userRoles, setUserRoles);
 
     // assigned permissions 
-    const [assignedPermissionIds, setAssignedPermissionIds] = useState<number[]>([]);
-    const [addAssignedPermissionId, removeAssignedPermissionId] = useHandleAddRemoveItems(assignedPermissionIds, setAssignedPermissionIds);
+    const [assignedPermissions, setAssignedPermissions] = useState<UserPermissionDTO[]>([]);
+    const [addAssignedPermission, removeAssignedPermission] = useHandleAddRemoveItems(assignedPermissions, setAssignedPermissions);
 
     const getRoleKey = useCallback((x) => x.rowId, []);
     const getPermissionKey = useCallback((x) => x.rowId, []);
 
-    const userRoleEquals = useCallback((a: UserRoleDTO, b: UserRoleDTO) => a.roleId === b.roleId
-        && a.contextCompanyId === b.contextCompanyId, []);
-
+    // init roles
     useEffect(() => {
 
         if (rolesFromServer.length === 0)
@@ -61,6 +61,15 @@ export const PermissionAssignerControl = (props: {
 
         setUserRoles(rolesFromServer);
     }, [rolesFromServer]);
+
+    // init perms
+    useEffect(() => {
+
+        if (permissionsFromServer.length === 0)
+            return;
+
+        setAssignedPermissions(permissionsFromServer);
+    }, [permissionsFromServer]);
 
     // dialog 
     const logic = useEpistoDialogLogic('assignRoleDialog');
@@ -81,18 +90,14 @@ export const PermissionAssignerControl = (props: {
             };
         });
 
-    // const permissionRows = assignablePermissionList
-    //     .map((assPerm, i): PermissionRowType => ({
-    //         rowId: i,
-    //         name: assPerm.permissionCode!,
-    //         permissionId: assPerm.permissionId,
-    //         isAssignedByRole: assignedRoles
-    //             .flatMap(x => x.permissionIds)
-    //             .any(assPerm.permissionId),
-    //         isAssigned: assignedPermissionIds
-    //             .any(assPerm.permissionId)
-    //     }))
-    //     .orderBy(x => `${x.isAssignedByRole}`);
+    const permissionRows = assignedPermissions
+        .map((assPerm, i): PermissionRowType => ({
+            rowId: i,
+            permissionCode: assPerm.permissionName,
+            contextCompanyName: assPerm.contextCompanyName ?? '',
+            parentRoleName: assPerm.
+        }))
+        .orderBy(x => `${x.isAssignedByRole}`);
 
     const roleColumns = useMemo((): GridColumnType<RoleRowType, any, keyof RoleRowType>[] => [
         {
@@ -130,16 +135,16 @@ export const PermissionAssignerControl = (props: {
             minHeight="800px">
 
             <AssignRoleDialog
+                assignedRoles={userRoles}
                 dialgoLogic={logic}
                 userId={userId}
                 onAdd={(dto) => {
 
                     addAssignedRole(dto);
 
-                    // onChange({
-                    //     assignedPermissionIds,
-                    //     assignedRoleIds
-                    // });
+                    onChange({
+                        assignedRoles: userRoles
+                    });
                 }} />
 
             <EpistoLabel
@@ -167,7 +172,7 @@ export const PermissionAssignerControl = (props: {
 
             </EpistoLabel>
 
-            {/* <EpistoLabel
+            <EpistoLabel
                 flex="1"
                 text="Permissions">
 
@@ -182,7 +187,7 @@ export const PermissionAssignerControl = (props: {
                     }}
                     rows={permissionRows}
                     getKey={getPermissionKey} />
-            </EpistoLabel> */}
+            </EpistoLabel>
         </LoadingFrame>
     );
 };

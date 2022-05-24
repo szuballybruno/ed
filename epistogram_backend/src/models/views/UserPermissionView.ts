@@ -11,11 +11,26 @@ export class UserPermissionView {
     assigneeUserId: number;
 
     @ViewColumn()
-    contextCompanyId: number;
+    contextCompanyId: number | null;
 
     @ViewColumn()
-    contextCourseId: number;
+    contextCompanyName: string | null;
+
+    @ViewColumn()
+    contextCourseId: number | null;
+
+    @ViewColumn()
+    contextCourseName: string | null;
+
+    @ViewColumn()
+    permissionId: number;
+
+    @ViewColumn()
+    permissionName: string;
 
     @ViewColumn()
     permissionCode: PermissionCodeType;
+
+    @ViewColumn()
+    assignmentBridgeId: number | null;
 }

@@ -71,9 +71,6 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
-        const assignedAuthItems = await this._roleService
-            .getUserAssignedAuthItemsAsync(principalId, editedUserId);
-
         return {
             id: res.id,
             firstName: res.firstName,
@@ -82,7 +79,8 @@ export class UserService {
             isTeacher: !!res.teacherInfoId,
             jobTitleId: res.jobTitleId,
             companyId: res.companyId,
-            assignedAuthItems
+            assignedRoles: [],
+            assignedPermissions: []
         };
     }
 
@@ -114,7 +112,7 @@ export class UserService {
 
         // save auth items 
         await this._roleService
-            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.companyId, dto.assignedAuthItems);
+            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.assignedRoles, dto.assignedPermissions);
     }
 
     /**

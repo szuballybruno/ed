@@ -9,6 +9,7 @@ import { showNotification, useShowErrorDialog } from '../../../services/core/not
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
 import { AssignedAuthItemsDTO } from '../../../shared/dtos/role/AssignedAuthItemsDTO';
+import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
@@ -45,11 +46,10 @@ export const AdminEditUserControl = (props: {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
-    const [assignedAuthItems, setAssignedAuthItems] = useState<AssignedAuthItemsDTO>(defaultAuthItemsDTO);
+    const [assignedRoles, setAssignedRoles] = useState<UserRoleDTO[]>([]);
 
     const showError = useShowErrorDialog();
 
@@ -77,7 +77,6 @@ export const AdminEditUserControl = (props: {
         setSelectedJobTitle(jt);
         setSelectedCompany(comp);
         setIsTeacher(editDTO.isTeacher);
-        setAssignedAuthItems(editDTO.assignedAuthItems);
     }, [editDTO, jobTitles, roleAssignCompanies]);
 
     const coinAmountEntryState = useEpistoEntryState({
@@ -129,7 +128,8 @@ export const AdminEditUserControl = (props: {
             companyId: selectedCompany.id,
             jobTitleId: selectedJobTitle.id,
             isTeacher,
-            assignedAuthItems
+            assignedRoles: assignedRoles,
+            assignedPermissions: []
         };
 
         await saveUserAsync(editedUserDTO);
@@ -348,8 +348,10 @@ export const AdminEditUserControl = (props: {
             <PermissionAssignerControl
                 userCompanyId={editDTO?.companyId ?? null}
                 userId={editedUserId}
-                data={editDTO?.assignedAuthItems ?? defaultAuthItemsDTO}
-                onChange={setAssignedAuthItems} />
+                onChange={({ assignedRoles }) => {
+
+                    setAssignedRoles(assignedRoles);
+                }} />
         </EditSection>
 
         <TailingAdminButtons
