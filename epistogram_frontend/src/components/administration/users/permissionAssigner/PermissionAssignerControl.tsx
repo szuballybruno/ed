@@ -10,8 +10,8 @@ import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
-import { AssignRoleDialog } from './AssignRoleDialog';
-import { userRoleEquals } from './PermissionAssignerLogic';
+import { AssignAuthItemDialog } from './AssignAuthItemDialog';
+import { DialogType, userRoleEquals } from './PermissionAssignerLogic';
 
 type RoleRowType = {
     rowId: number,
@@ -67,7 +67,7 @@ export const PermissionAssignerControl = (props: {
     }, [permissionsFromServer]);
 
     // dialog 
-    const logic = useEpistoDialogLogic('assignRoleDialog');
+    const logic = useEpistoDialogLogic<DialogType>('assignRoleDialog');
 
     const roleRows = userRoles
         .map((assRole, i): RoleRowType => {
@@ -141,8 +141,9 @@ export const PermissionAssignerControl = (props: {
             direction="column"
             minHeight="800px">
 
-            <AssignRoleDialog
+            <AssignAuthItemDialog
                 assignedRoles={userRoles}
+                assignedPermissions={assignedPermissions}
                 dialgoLogic={logic}
                 userId={userId}
                 onAdd={(dto) => {
@@ -164,7 +165,7 @@ export const PermissionAssignerControl = (props: {
 
                     <EpistoButton
                         variant="colored"
-                        onClick={() => logic.openDialog()}>
+                        onClick={() => logic.openDialog({ params: 'role' })}>
 
                         Add
                     </EpistoButton>
@@ -182,6 +183,18 @@ export const PermissionAssignerControl = (props: {
             <EpistoLabel
                 flex="1"
                 text="Permissions">
+
+                <Flex
+                    justify="flex-end"
+                    py="6px">
+
+                    <EpistoButton
+                        variant="colored"
+                        onClick={() => logic.openDialog({ params: 'perm' })}>
+
+                        Add
+                    </EpistoButton>
+                </Flex>
 
                 <EpistoDataGrid
                     hideFooter

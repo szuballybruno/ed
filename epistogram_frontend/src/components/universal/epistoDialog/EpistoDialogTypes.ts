@@ -1,7 +1,7 @@
 import { ButtonType } from '../../../models/types';
 import { XDialogLogicType } from '../../lib/XDialog/XDialog';
 
-export type OpenDialogOptionsType<TParams> = {
+export type OpenDialogOptionsType<TParams = void> = {
     title?: string;
     description?: string;
     buttons?: ButtonType<EpistoDialogLogicType<TParams>>[];
@@ -13,14 +13,14 @@ export type DeclareDialogOptionsType = {
     description?: string;
 }
 
-export type EpistoDialogLogicType<TParams = undefined> = {
+export type EpistoDialogLogicType<TParams = void> = {
     isOpen: boolean;
     title: string;
     description: string;
     buttons: ButtonType<EpistoDialogLogicType<TParams>>[];
-    declareOptions: DeclareDialogOptionsType;
-    openDialog: (opt?: OpenDialogOptionsType<TParams>) => void;
-    closeDialog: any;
+    closeDialog: () => void;
     xlogic: XDialogLogicType;
     params: TParams;
+    declareOptions?: DeclareDialogOptionsType;
+    openDialog: (opt?: OpenDialogOptionsType<TParams>) => void;
 };

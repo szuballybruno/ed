@@ -3,7 +3,7 @@ import { ButtonType } from '../../../models/types';
 import { useXDialogLogic } from '../../lib/XDialog/XDialog';
 import { OpenDialogOptionsType, EpistoDialogLogicType, DeclareDialogOptionsType } from './EpistoDialogTypes';
 
-export const useEpistoDialogLogic = <TParams = undefined,>(
+export const useEpistoDialogLogic = <TParams = void,>(
     dialogKey: string | Function,
     declareOptions?: DeclareDialogOptionsType): EpistoDialogLogicType<TParams> => {
 

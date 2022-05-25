@@ -4,6 +4,7 @@ import { useRoleAssignCompanies } from '../../../../services/api/companyApiServi
 import { useAssignablePermissions, useAssignableRoles } from '../../../../services/api/rolesApiService';
 import { AssignableRoleDTO } from '../../../../shared/dtos/AssignableRoleDTO';
 import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
+import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -11,16 +12,19 @@ import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
-import { userRoleEquals } from './PermissionAssignerLogic';
+import { DialogType, userRoleEquals } from './PermissionAssignerLogic';
 
-export const AssignRoleDialog = (props: {
-    dialgoLogic: EpistoDialogLogicType,
+export const AssignAuthItemDialog = (props: {
+    dialgoLogic: EpistoDialogLogicType<DialogType>,
     userId: number,
     onAdd: (role: UserRoleDTO) => void,
-    assignedRoles: UserRoleDTO[]
+    assignedRoles: UserRoleDTO[],
+    assignedPermissions: UserPermissionDTO[]
 }) => {
 
-    const { dialgoLogic, assignedRoles, userId, onAdd } = props;
+    const { dialgoLogic, assignedRoles, userId, onAdd, assignedPermissions } = props;
+
+    const dialogType = dialgoLogic.params;
 
     // http
     const { roleAssignCompanies } = useRoleAssignCompanies();
@@ -72,7 +76,7 @@ export const AssignRoleDialog = (props: {
 
     return (
         <EpistoDialog
-            title="Assign a role..."
+            title={dialogType === 'role' ? 'Assign a role...' : 'Assign a permission...'}
             closeButtonType="top"
             logic={dialgoLogic}>
 
@@ -93,7 +97,7 @@ export const AssignRoleDialog = (props: {
                         items={roleAssignCompanies} />
                 </EpistoLabel>
 
-                <EpistoLabel
+                {dialogType === 'perm' && <EpistoLabel
                     text="Course">
 
                     <EpistoSelect
@@ -102,7 +106,7 @@ export const AssignRoleDialog = (props: {
                         onSelected={setSelectedCourse}
                         getDisplayValue={x => x.name}
                         items={[]} />
-                </EpistoLabel>
+                </EpistoLabel>}
 
                 <EpistoLabel
                     text="Role">
