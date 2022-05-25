@@ -15,6 +15,9 @@ export class UserPerformanceView {
     performancePercentage: number;
 
     @ViewColumn()
+    totalPerformancePercentage: number;
+
+    @ViewColumn()
     userExamLengthPoints: number;
 
     @ViewColumn()

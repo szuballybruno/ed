@@ -23,6 +23,17 @@ export class UserStatsController {
             .getUserStatsAsync(userId);
     };
 
+    @XControllerAction(apiRoutes.userStats.getUserCourseStats)
+    getUserCourseStatsAction = async (params: ActionParams) => {
+
+        const userId = params
+            .getQuery<{ userId: number }>()
+            .getValue(x => x.userId, 'int');
+
+        return await this._userStatsService
+            .getUserCourseStatsAsync(userId);
+    };
+
     @XControllerAction(apiRoutes.userStats.getUserLearningOverviewData)
     getUserLearningOverviewDataAction = async (params: ActionParams) => {
         const query = params

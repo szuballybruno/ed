@@ -1,14 +1,15 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { DataGrid } from '@mui/x-data-grid';
 import { GridColDef, GridRowsProp } from '@mui/x-data-grid-pro';
-import { useParams } from 'react-router-dom';
 import { useAdminCourseList } from '../../../../services/api/courseApiService';
-import { useNavigation } from '../../../../services/core/navigatior';
+import { useUserCourseStats } from '../../../../services/api/userStatsApiService';
+import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
 import { Environment } from '../../../../static/Environemnt';
-import {  getRandomInteger } from '../../../../static/frontendHelpers';
+import { getRandomInteger } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { LoadingFrame } from '../../../system/LoadingFrame';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
 import { ChipSmall } from '../../courses/ChipSmall';
 
@@ -18,21 +19,27 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const { handleMoreButton } = props;
 
-    const userId = useIntParam('userId');
-    const courseId = useIntParam('courseId');
+    const userId = useIntParam('userId')!;
 
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList('');
+    const { userCourseStats, userCourseStatsStatus, userCourseStatsError } = useUserCourseStats(userId);
 
-    const getRowsFromCourses = () => courses.map((course) => {
+    const getRowsFromCourses = () => userCourseStats.map((course) => {
         return {
-            id: course.courseId,
-            thumbnailImage: course.thumbnailImageURL,
-            title: course.title,
-            category: course.category.name,
-            subCategory: course.subCategory.name,
-            videosCount: course.videosCount,
-            moreDetails: course.courseId
-        };
+            differenceFromAveragePerformancePercentage: course.differenceFromAveragePerformancePercentage || 0,
+            courseProgressPercentage: course.courseProgressPercentage || 0,
+            performancePercentage: course.performancePercentage || 0,
+            completedVideoCount: course.completedVideoCount || 0,
+            completedExamCount: course.completedExamCount || 0,
+            totalSpentSeconds: course.totalSpentSeconds || 0,
+            answeredVideoQuestionCount: course.answeredVideoQuestionCount || 0,
+            answeredPractiseQuestionCount: course.answeredPractiseQuestionCount || 0,
+            isFinalExamCompleted: course.isFinalExamCompleted || 0,
+            recommendedItemsPerWeek: course.recommendedItemsPerWeek || 0,
+            lagBehindPercentage: course.lagBehindPercentage || 0,
+            previsionedCompletionDate: course.previsionedCompletionDate || 0,
+            tempomatMode: course.tempomatMode || 0
+        } as UserCourseStatsDTO;
     });
 
     const rows: GridRowsProp = getRowsFromCourses();
@@ -52,45 +59,87 @@ export const AdminUserCoursesDataGridControl = (props: {
             resizable: true
         },
         {
-            field: 'progress',
-            headerName: 'Haladás',
+            field: 'differenceFromAveragePerformancePercentage',
+            headerName: 'Teljesítmény céges viszonylatban',
             width: 150,
             resizable: true,
-            renderCell: () => <CircularProgressWithLabel value={getRandomInteger(0, 100)} />
+            renderCell: () => <CircularProgressWithLabel
+                value={differenceFromAveragePerformancePercentage} />
         },
         {
-            field: 'currentPerformance',
+            field: 'courseProgressPercentage',
+            headerName: 'Haladás a kurzusban',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <ChipSmall
+                    text={`${courseProgressPercentage || 0}%`}
+                    color={courseProgressPercentage > 40 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
+            }
+        },
+        {
+            field: 'performancePercentage',
             headerName: 'Jelenlegi teljesítmény',
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(0, 100);
-                return <ChipSmall
-                    text={`${randomNumber}%`}
-                    color={randomNumber > 40 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
-            }
-        },
-        {
-            field: 'watchedVideos',
-            headerName: 'Megtekintett videók',
-            width: 150,
-            resizable: true,
-            renderCell: () => {
-                const randomNumber = getRandomInteger(80, 240);
                 return <EpistoFont>
-                    {randomNumber}
+                    {performancePercentage}
                 </EpistoFont>;
             }
         },
         {
-            field: 'doneExams',
+            field: 'completedVideoCount',
+            headerName: 'Megtekintett videók',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {completedVideoCount}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'completedExamCount',
             headerName: 'Elvégzett vizsgák',
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(8, 24);
                 return <EpistoFont>
-                    {randomNumber}
+                    {completedExamCount}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'totalSpentSeconds',
+            headerName: 'Eltöltött idő',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {totalSpentSeconds}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'answeredVideoQuestionCount',
+            headerName: 'Megválaszolt videós kérdések',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {answeredVideoQuestionCount}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'answeredPractiseQuestionCount',
+            headerName: 'Megválaszolt gyakorló kérdések',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {answeredPractiseQuestionCount}
                 </EpistoFont>;
             }
         },
@@ -100,10 +149,53 @@ export const AdminUserCoursesDataGridControl = (props: {
             width: 150,
             resizable: true,
             renderCell: () => {
-                const randomNumber = getRandomInteger(0, 100);
                 return <ChipSmall
-                    text={`${randomNumber > 40 ? 'Elvégezve' : 'Nincs elvégezve'}`}
-                    color={randomNumber > 40 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
+                    text={`${isFinalExamCompleted ? 'Elvégezve' : 'Nincs elvégezve'}`}
+                    color={isFinalExamCompleted ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
+            }
+        },
+        {
+            field: 'recommendedItemsPerWeek',
+            headerName: 'Ajánlott videók hetente',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {recommendedItemsPerWeek}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'lagBehindPercentage',
+            headerName: 'Becsült lemaradás',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {lagBehindPercentage}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'previsionedCompletionDate',
+            headerName: 'Kurzus várható befejezése',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {previsionedCompletionDate}
+                </EpistoFont>;
+            }
+        },
+        {
+            field: 'tempomatMode',
+            headerName: 'Jelenlegi tempomat mód',
+            width: 150,
+            resizable: true,
+            renderCell: () => {
+                return <EpistoFont>
+                    {tempomatMode}
+                </EpistoFont>;
             }
         },
         {
@@ -165,34 +257,39 @@ export const AdminUserCoursesDataGridControl = (props: {
         }
     ];
 
-    return <DataGrid
-        /* initialState={{
-            columns: {
-                columnVisibilityModel: {
-                    // Hide columns status and traderName, the other columns will remain visible
-                    isFinalExamDone: false,
-                    recommendedVideosCount: false,
+    return <LoadingFrame
+        flex='1'
+        loadingState={userCourseStatsStatus}
+        error={userCourseStatsError}>
+        <DataGrid
+            /* initialState={{
+                columns: {
+                    columnVisibilityModel: {
+                        // Hide columns status and traderName, the other columns will remain visible
+                        isFinalExamDone: false,
+                        recommendedVideosCount: false,
+                    },
                 },
-            },
-        }} */
-        rows={rows}
-        autoHeight={true}
-        columns={columns}
-        /*  initialState={{
-             pinnedColumns: {
-                 left: ['thumbnailImage', 'title'],
-                 right: ['moreDetails']
-             }
-         }} */
-        sx={{
-            '& .MuiDataGrid-columnHeaderTitle': {
-                textOverflow: 'clip',
-                whiteSpace: 'break-spaces',
-                lineHeight: 1
-            }
-        }}
-        style={{
-            background: 'var(--transparentWhite70)'
-        }} />;
+            }} */
+            rows={rows}
+            autoHeight={true}
+            columns={columns}
+            /*  initialState={{
+                 pinnedColumns: {
+                     left: ['thumbnailImage', 'title'],
+                     right: ['moreDetails']
+                 }
+             }} */
+            sx={{
+                '& .MuiDataGrid-columnHeaderTitle': {
+                    textOverflow: 'clip',
+                    whiteSpace: 'break-spaces',
+                    lineHeight: 1
+                }
+            }}
+            style={{
+                background: 'var(--transparentWhite70)'
+            }} />
+    </LoadingFrame>;
 };
 

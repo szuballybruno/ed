@@ -47,6 +47,7 @@ import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { AdminUserListView } from '../../models/views/UserAdminListView';
 import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
+import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
@@ -108,6 +109,7 @@ import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
 import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
@@ -121,6 +123,28 @@ import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(UserCourseStatsView, UserCourseStatsDTO, (stats) => {
+            return {
+                userId: stats.userId,
+                courseId: stats.courseId,
+                differenceFromAveragePerformancePercentage: stats.differenceFromAveragePerformancePercentage,
+                courseProgressPercentage: stats.courseProgressPercentage,
+                performancePercentage: stats.performancePercentage,
+                completedVideoCount: stats.completedVideoCount,
+                completedExamCount: stats.completedExamCount,
+                totalSpentSeconds: stats.totalSpentSeconds,
+                averagePerformanceOnCourse: stats.averagePerformanceOnCourse,
+                answeredVideoQuestionCount: stats.answeredVideoQuestionCount,
+                answeredPractiseQuestionCount: stats.answeredPractiseQuestionCount,
+                isFinalExamCompleted: stats.isFinalExamCompleted,
+                recommendedItemsPerWeek: stats.recommendedItemsPerWeek,
+                lagBehindPercentage: stats.lagBehindPercentage,
+                previsionedCompletionDate: stats.previsionedCompletionDate,
+                tempomatMode: stats.tempomatMode,
+            };
+        });
 
     mapperService
         .addMap(CommentListView, CommentListDTO, (comment) => {

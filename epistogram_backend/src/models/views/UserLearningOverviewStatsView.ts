@@ -22,10 +22,7 @@ export class UserLearningOverviewStatsView {
     performancePercentage: number;
 
     @ViewColumn()
-    userExamLengthPoints: number;
-
-    @ViewColumn()
-    userReactionTimePoints: number;
+    totalUserReactionTimePoints: number;
 
     @ViewColumn()
     totalTimeActiveOnPlatformSeconds: number;

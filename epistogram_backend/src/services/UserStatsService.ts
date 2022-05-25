@@ -11,6 +11,8 @@ import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView
 import { Course } from '../models/entity/Course';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
+import { UserCourseStatsView } from '../models/views/UserCourseStatsView';
+import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 
 export class UserStatsService {
 
@@ -33,6 +35,24 @@ export class UserStatsService {
 
         return this._mapperService
             .map(UserStatsView, UserStatsDTO, stats);
+    }
+
+    /**
+     * 
+     * @param userId 
+     * @returns 
+     */
+
+    async getUserCourseStatsAsync(userId: number) {
+
+        const stats = await this._ormService
+            .getRepository(UserCourseStatsView)
+            .createQueryBuilder('ucsv')
+            .where('"ucsv"."user_id" = :userId', { userId })
+            .getMany();
+
+        return this._mapperService
+            .mapMany(UserCourseStatsView, UserCourseStatsDTO, stats);
     }
 
     /**
@@ -73,7 +93,7 @@ export class UserStatsService {
 
             performancePercentage: stats.performancePercentage,
             userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
-            reactionTimeScorePoints: (stats.userReactionTimePoints * 3 + stats.userExamLengthPoints) / 4,
+            reactionTimeScorePoints: stats.totalUserReactionTimePoints,
 
             isAnyCoursesInProgress: inProgressCourses.any(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,

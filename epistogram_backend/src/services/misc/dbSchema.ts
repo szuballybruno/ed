@@ -91,13 +91,16 @@ import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCo
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
 import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
+import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserEngagementView } from '../../models/views/UserEngagementView';
 import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
+import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
 import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
+import { UserReactionTimeView } from '../../models/views/UserReactionTimeView';
 import { UserRoleAssignCompanyView } from '../../models/views/UserRoleAssignCompanyView';
 import { UserRoleView } from '../../models/views/UserRoleView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
@@ -246,6 +249,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_course_bridge_view', UserCourseBridgeView],
             ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
             ['user_course_completion_current_view', UserCourseCompletionCurrentView],
+            ['user_performance_answer_group_view', UserPerformanceAnswerGroupView],
+            ['user_reaction_time_view', UserReactionTimeView],
             ['user_performance_view', UserPerformanceView],
             ['user_session_block_view', UserSessionBlockView],
             ['user_inactive_course_view', UserInactiveCourseView],
@@ -260,6 +265,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_course_progress_view', UserCourseProgressView],
             ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
             ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
+            ['user_course_stats_view', UserCourseStatsView],
             ['course_item_question_edit_view', CourseItemQuestionEditView],
             ['comment_list_view', CommentListView],
             ['user_spent_time_ratio_view', UserSpentTimeRatioView],
