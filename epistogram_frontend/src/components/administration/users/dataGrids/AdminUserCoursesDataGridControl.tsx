@@ -5,7 +5,7 @@ import { useAdminCourseList } from '../../../../services/api/courseApiService';
 import { useUserCourseStats } from '../../../../services/api/userStatsApiService';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
 import { Environment } from '../../../../static/Environemnt';
-import { getRandomInteger } from '../../../../static/frontendHelpers';
+import { getRandomInteger, secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -21,25 +21,29 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const userId = useIntParam('userId')!;
 
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList('');
     const { userCourseStats, userCourseStatsStatus, userCourseStatsError } = useUserCourseStats(userId);
 
-    const getRowsFromCourses = () => userCourseStats.map((course) => {
+    const userCourses = userCourseStats ?? [];
+
+    const getRowsFromCourses = () => userCourses.map((course) => {
         return {
-            differenceFromAveragePerformancePercentage: course.differenceFromAveragePerformancePercentage || 0,
-            courseProgressPercentage: course.courseProgressPercentage || 0,
-            performancePercentage: course.performancePercentage || 0,
-            completedVideoCount: course.completedVideoCount || 0,
-            completedExamCount: course.completedExamCount || 0,
-            totalSpentSeconds: course.totalSpentSeconds || 0,
-            answeredVideoQuestionCount: course.answeredVideoQuestionCount || 0,
-            answeredPractiseQuestionCount: course.answeredPractiseQuestionCount || 0,
-            isFinalExamCompleted: course.isFinalExamCompleted || 0,
-            recommendedItemsPerWeek: course.recommendedItemsPerWeek || 0,
-            lagBehindPercentage: course.lagBehindPercentage || 0,
-            previsionedCompletionDate: course.previsionedCompletionDate || 0,
-            tempomatMode: course.tempomatMode || 0
-        } as UserCourseStatsDTO;
+            id: course.courseId,
+            courseName: course.courseName,
+            thumbnailImage: course.thumbnailImageUrl,
+            differenceFromAveragePerformancePercentage: course.differenceFromAveragePerformancePercentage,
+            courseProgressPercentage: course.courseProgressPercentage,
+            performancePercentage: course.performancePercentage,
+            completedVideoCount: course.completedVideoCount,
+            completedExamCount: course.completedExamCount,
+            totalSpentSeconds: course.totalSpentSeconds,
+            answeredVideoQuestionCount: course.answeredVideoQuestionCount,
+            answeredPractiseQuestionCount: course.answeredPractiseQuestionCount,
+            isFinalExamCompleted: course.isFinalExamCompleted,
+            recommendedItemsPerWeek: course.recommendedItemsPerWeek,
+            lagBehindPercentage: course.lagBehindPercentage,
+            previsionedCompletionDate: course.previsionedCompletionDate,
+            tempomatMode: course.tempomatMode
+        };
     });
 
     const rows: GridRowsProp = getRowsFromCourses();
@@ -52,7 +56,7 @@ export const AdminUserCoursesDataGridControl = (props: {
             renderCell: (params) => <img src={params.value} />
         },
         {
-            field: 'title',
+            field: 'courseName',
             headerName: 'Cím',
             width: 300,
             editable: true,
@@ -63,18 +67,35 @@ export const AdminUserCoursesDataGridControl = (props: {
             headerName: 'Teljesítmény céges viszonylatban',
             width: 150,
             resizable: true,
-            renderCell: () => <CircularProgressWithLabel
-                value={differenceFromAveragePerformancePercentage} />
+            renderCell: (params) =>
+                params.value !== null
+                    ? <ChipSmall
+                        text={params.value > 5
+                            ? 'Átlagon felüli'
+                            : params.value < -5
+                                ? 'Átlagon aluli'
+                                : 'Átlagos'}
+                        color={params.value > 5
+                            ? 'var(--deepGreen)'
+                            : params.value < -5
+                                ? 'var(--intenseRed)'
+                                : ''} />
+                    : <EpistoFont>
+                        -
+                    </EpistoFont>
         },
         {
             field: 'courseProgressPercentage',
             headerName: 'Haladás a kurzusban',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <ChipSmall
-                    text={`${courseProgressPercentage || 0}%`}
-                    color={courseProgressPercentage > 40 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
+            renderCell: (params) => {
+                return params.value !== null
+                    ? <CircularProgressWithLabel
+                        value={Math.round(params.value)} />
+                    : <EpistoFont>
+                        -
+                    </EpistoFont>;
             }
         },
         {
@@ -82,164 +103,173 @@ export const AdminUserCoursesDataGridControl = (props: {
             headerName: 'Jelenlegi teljesítmény',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {performancePercentage}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <CircularProgressWithLabel
+                    value={params.value} />
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {completedVideoCount}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'completedExamCount',
             headerName: 'Elvégzett vizsgák',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {completedExamCount}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'totalSpentSeconds',
             headerName: 'Eltöltött idő',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {totalSpentSeconds}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {secondsToTime(params.value)}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'answeredVideoQuestionCount',
             headerName: 'Megválaszolt videós kérdések',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {answeredVideoQuestionCount}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'answeredPractiseQuestionCount',
             headerName: 'Megválaszolt gyakorló kérdések',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {answeredPractiseQuestionCount}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
-            field: 'isFinalExamDone',
+            field: 'isFinalExamCompleted',
             headerName: 'Kurzuszáró vizsga',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <ChipSmall
-                    text={`${isFinalExamCompleted ? 'Elvégezve' : 'Nincs elvégezve'}`}
-                    color={isFinalExamCompleted ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
-            }
+            renderCell: (params) => params.value !== null
+                ? <ChipSmall
+                    text={`${params.value ? 'Elvégezve' : 'Nincs elvégezve'}`}
+                    color={params.value ? 'var(--deepGreen)' : 'var(--intenseRed)'} />
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'recommendedItemsPerWeek',
             headerName: 'Ajánlott videók hetente',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {recommendedItemsPerWeek}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'lagBehindPercentage',
             headerName: 'Becsült lemaradás',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {lagBehindPercentage}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value
+                ? <EpistoFont isMultiline>
+                    {params.value > 0
+                        ? params.value + '%'
+                        : Math.abs(params.value) + '%-al gyorsabban halad a becslésnél'}
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'previsionedCompletionDate',
             headerName: 'Kurzus várható befejezése',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {previsionedCompletionDate}
-                </EpistoFont>;
-            }
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {
+                        new Date(params.value)
+                            .toLocaleString('hu-hu', {
+                                month: '2-digit',
+                                day: '2-digit'
+                            })
+                    }
+                </EpistoFont>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'tempomatMode',
             headerName: 'Jelenlegi tempomat mód',
-            width: 150,
-            resizable: true,
-            renderCell: () => {
-                return <EpistoFont>
-                    {tempomatMode}
-                </EpistoFont>;
-            }
-        },
-        {
-            field: 'currentTempomatMode',
-            headerName: 'Jelenlegi tempomat mód',
             width: 250,
             resizable: true,
-            renderCell: () => {
-                const randomNumber = getRandomInteger(8, 24);
-                return <Flex align="center">
+            renderCell: (params) => params.value !== null
+                ? <Flex align="center">
 
                     <Image
                         h="30px"
                         w="30px"
-                        src={Environment.getAssetUrl(`images/${randomNumber < 10
+                        src={Environment.getAssetUrl(`images/${params.value === 'auto'
                             ? 'autopilot'
-                            : randomNumber < 20 && randomNumber >= 10
+                            : params.value === 'balanced'
                                 ? 'balancedmode'
-                                : 'strictmode'}.png`)} />
+                                : params.value === 'light'
+                                    ? 'lightmode'
+                                    : 'strictmode'}.png`)} />
 
                     <EpistoFont
                         style={{
                             marginLeft: 5
                         }}>
-                        {randomNumber < 10
-                            ? 'Automata mód'
-                            : randomNumber < 20 && randomNumber >= 10
+                        {params.value === 'auto'
+                            ? 'Automata mód '
+                            : params.value === 'balanced'
                                 ? 'Kiegyensúlyozott mód'
-                                : 'Szigorú mód'}
+                                : params.value === 'light'
+                                    ? 'Megengedő mód'
+                                    : 'Szigorú mód'}
                     </EpistoFont>
-                </Flex>;
-            }
-        },
-        {
-            field: 'recommendedVideosCount',
-            headerName: 'Ajánlott videók hetente',
-            width: 150,
-            resizable: true,
-            renderCell: () => {
-                const randomNumber = getRandomInteger(1, 30);
-                return <EpistoFont>
-                    {randomNumber}
-                </EpistoFont>;
-            }
+                </Flex>
+                : <EpistoFont>
+                    -
+                </EpistoFont>
         },
         {
             field: 'moreDetails',
