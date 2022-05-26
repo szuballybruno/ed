@@ -18,7 +18,7 @@ import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { UserPermissionDTO } from '../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
 import { noUndefined, userRolesEqual } from '../shared/logic/sharedLogic';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
@@ -67,12 +67,19 @@ export class RoleService extends QueryServiceBase<Role> {
             });
     }
 
-    async getAssignablePermissionsAsync(principalId: PrincipalId, companyId: number) {
+    async getAssignablePermissionsAsync(principalId: PrincipalId, courseId: number | null, companyId: number | null) {
+
+        const scope: PermissionScopeType = courseId
+            ? 'COURSE'
+            : companyId
+                ? 'COMPANY'
+                : 'USER';
 
         const rolesAndPermissions = await this._ormService
-            .query(AssignablePermissionView, { principalId, companyId })
+            .query(AssignablePermissionView, { principalId, companyId, scope })
             .where('assigneeUserId', '=', 'principalId')
             .and('contextCompanyId', '=', 'companyId')
+            .and('permissionScope', '=', 'scope')
             .getMany();
 
         return rolesAndPermissions
@@ -106,9 +113,14 @@ export class RoleService extends QueryServiceBase<Role> {
                 isCustom: viewAsRole.first.isCustom,
                 canAssign: viewAsRole.first.canAssign,
                 isAssigned: viewAsRole.first.isAssigned,
-                permissionIds: viewAsRole
+                permissions: viewAsRole
                     .items
-                    .map(viewAsPerm => viewAsPerm.permissionId)
+                    .filter(x => x.permissionId !== null)
+                    .map((viewAsPerm): PermissionListDTO => ({
+                        id: viewAsPerm.permissionId,
+                        code: viewAsPerm.permissionCode,
+                        scope: 'COMPANY' // not used 
+                    }))
             }));
     }
 
@@ -119,9 +131,20 @@ export class RoleService extends QueryServiceBase<Role> {
             .where('assigneeUserId', '=', 'userId')
             .getMany();
 
-        return roles
+        const rg = roles
+            .groupBy(x => `${x.roleId}${x.contextCompanyId}${x.roleAssignmentBridgeId}${x.assigneeUserId}`);
+
+        return rg
             .map((x): UserRoleDTO => ({
-                ...x
+                ...(x.first),
+                permissions: x
+                    .items
+                    .filter(x => x.permissionId !== null)
+                    .map((x): PermissionListDTO => ({
+                        id: x.permissionId,
+                        code: x.permissionCode,
+                        scope: 'COMPANY' // not used 
+                    }))
             }));
     }
 

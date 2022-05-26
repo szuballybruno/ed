@@ -14,6 +14,16 @@ import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { Mutation } from '../../shared/dtos/mutations/Mutation';
+import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAssignDTO';
+
+export const usePermissionAssignCourses = (userId: number) => {
+
+    const qr = useReactQuery2<CoursePermissionAssignDTO[]>(apiRoutes.course.getPermissionAssignCourses, { userId });
+
+    return {
+        permissionAssignCourses: qr.data ?? [],
+    };
+};
 
 export const useAdminCourseList = (searchText: string) => {
 

@@ -1,82 +1,30 @@
 import { Flex } from '@chakra-ui/react';
-import { useEffect, useMemo, useState } from 'react';
-import { useRoleAssignCompanies } from '../../../../services/api/companyApiService';
-import { useAssignablePermissions, useAssignableRoles } from '../../../../services/api/rolesApiService';
-import { AssignableRoleDTO } from '../../../../shared/dtos/AssignableRoleDTO';
-import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
-import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
-import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
+import { ReactNode } from 'react';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
-import { EpistoSelect } from '../../../controls/EpistoSelect';
+import { EpistoSelect, EpistoSelectPropsType } from '../../../controls/EpistoSelect';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
-import { DialogType, userRoleEquals } from './PermissionAssignerLogic';
+
+export type SelectType<T> = { title: string } & EpistoSelectPropsType<T>;
 
 export const AssignAuthItemDialog = (props: {
-    dialgoLogic: EpistoDialogLogicType<DialogType>,
+    children?: ReactNode,
+    dialgoLogic: EpistoDialogLogicType,
     userId: number,
-    onAdd: (role: UserRoleDTO) => void,
-    assignedRoles: UserRoleDTO[],
-    assignedPermissions: UserPermissionDTO[]
+    onAdd: () => void,
+    selects: SelectType<any>[],
+    title: string,
+    isAddDisabled: boolean,
+    conflictError: string | null
 }) => {
 
-    const { dialgoLogic, assignedRoles, userId, onAdd, assignedPermissions } = props;
-
-    const dialogType = dialgoLogic.params;
-
-    // http
-    const { roleAssignCompanies } = useRoleAssignCompanies();
-
-    const [selectedCompany, setSelectedCompany] = useState<RoleAssignCompanyDTO | null>(null);
-    const [selectedCourse, setSelectedCourse] = useState<RoleAssignCompanyDTO | null>(null);
-    const [selectedRole, setSelectedRole] = useState<AssignableRoleDTO | null>(null);
-
-    const selectedCompanyId = selectedCompany?.id ?? null;
-    const selectedCourseId = selectedCompany?.id ?? null;
-    const selectedRoleId = selectedCompany?.id ?? null;
-
-    // http
-    const { assignableRolesList } = useAssignableRoles(userId, selectedCompanyId);
-    const { assignablePermissionList } = useAssignablePermissions(selectedCompanyId);
-
-    useEffect(() => {
-
-        setSelectedRole(assignableRolesList.firstOrNull());
-    }, [assignableRolesList]);
-
-    const dto = useMemo((): UserRoleDTO | undefined => {
-
-        if (!selectedRole)
-            return;
-
-        if (!selectedCompany)
-            return;
-
-        return {
-            contextCompanyId: selectedCompany.id,
-            contextCompanyName: selectedCompany.name,
-            roleId: selectedRole.roleId,
-            roleName: selectedRole.roleName,
-            assigneeUserId: userId,
-            roleAssignmentBridgeId: -1,
-            isInherited: false
-        };
-    }, [selectedCompany, selectedRole]);
-
-    const isSame = useMemo(() => {
-
-        if (!dto)
-            return false;
-
-        return assignedRoles
-            .any(x => userRoleEquals(dto, x));
-    }, [assignedRoles, dto]);
+    const { children, selects, title, dialgoLogic, isAddDisabled, onAdd, conflictError } = props;
 
     return (
         <EpistoDialog
-            title={dialogType === 'role' ? 'Assign a role...' : 'Assign a permission...'}
+            title={title}
             closeButtonType="top"
             logic={dialgoLogic}>
 
@@ -86,55 +34,37 @@ export const AssignAuthItemDialog = (props: {
                 py="50px"
                 px="50px">
 
-                <EpistoLabel
-                    text="Company">
+                {children}
 
-                    <EpistoSelect
-                        selectedValue={selectedCompany ?? undefined}
-                        getCompareKey={x => x.id + ''}
-                        onSelected={setSelectedCompany}
-                        getDisplayValue={x => x.name}
-                        items={roleAssignCompanies} />
-                </EpistoLabel>
+                {/* selects */}
+                {selects
+                    .map((select, i) => {
 
-                {dialogType === 'perm' && <EpistoLabel
-                    text="Course">
+                        const { title, ...selectProps } = select;
 
-                    <EpistoSelect
-                        selectedValue={selectedCourse ?? undefined}
-                        getCompareKey={x => x.id + ''}
-                        onSelected={setSelectedCourse}
-                        getDisplayValue={x => x.name}
-                        items={[]} />
-                </EpistoLabel>}
+                        return (
+                            <EpistoLabel
+                                key={i}
+                                text={title}>
 
-                <EpistoLabel
-                    text="Role">
+                                <EpistoSelect
+                                    {...selectProps} />
+                            </EpistoLabel>
+                        );
+                    })}
 
-                    <EpistoSelect
-                        selectedValue={selectedRole ?? undefined}
-                        getCompareKey={x => x.roleId + ''}
-                        onSelected={setSelectedRole}
-                        getDisplayValue={x => x.roleName}
-                        items={assignableRolesList} />
-                </EpistoLabel>
-
-                {isSame && <EpistoFont
+                {/* conflict warning */}
+                {conflictError && <EpistoFont
                     className='fontError'>
 
-                    Role already added!
+                    {conflictError}
                 </EpistoFont>}
 
+                {/* add button */}
                 <EpistoButton
-                    isDisabled={!selectedCompany || !selectedRole || isSame}
+                    isDisabled={isAddDisabled}
                     variant="colored"
-                    onClick={() => {
-
-                        if (!dto)
-                            return;
-
-                        onAdd(dto);
-                    }}>
+                    onClick={onAdd}>
 
                     Add
                 </EpistoButton>

@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { PermissionCodeType, PermissionScopeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
@@ -16,5 +17,8 @@ export class AssignablePermissionView {
     permissionId: number;
 
     @ViewColumn()
-    permissionCode: string;
+    permissionCode: PermissionCodeType;
+
+    @ViewColumn()
+    permissionScope: PermissionScopeType;
 }

@@ -1,3 +1,4 @@
+import { PermissionListDTO } from './role/PermissionListDTO';
 
 export class AssignableRoleDTO {
     roleId: number;
@@ -8,5 +9,5 @@ export class AssignableRoleDTO {
     isCustom: boolean;
     isAssigned: boolean;
     canAssign: boolean;
-    permissionIds: number[];
+    permissions: PermissionListDTO[];
 }

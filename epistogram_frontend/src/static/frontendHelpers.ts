@@ -32,7 +32,7 @@ export const useHandleAddRemoveItems = <TItem, TKey>(
         getKey?: (item: TItem) => TKey,
         sideEffects: ((newValue: TItem[]) => void)[]
     }): [
-        (item: TItem) => void,
+        (item: TItem | TItem[]) => void,
         (key: TKey) => void
     ] => {
 
@@ -44,9 +44,9 @@ export const useHandleAddRemoveItems = <TItem, TKey>(
         return (x: TItem): TKey => x as any;
     }, [opts?.getKey]);
 
-    const addItem = useCallback((item: TItem) => {
+    const addItem = useCallback((item: TItem | TItem[]) => {
 
-        const newItems = [...items, item];
+        const newItems = [...items, ...(Array.isArray(item) ? item : [item])];
 
         setItems(newItems);
 
@@ -412,20 +412,20 @@ export const usePaging = <T>(
     if (!hasValue(items))
         throw new Error('Cannot page a null or undefined items collection!');
 
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+    const [currentIndex, setCurrentItemIndex] = useState(0);
 
-    const max = isNumber(items)
+    const max = useMemo(() => isNumber(items)
         ? items as number
-        : (items as any[]).length;
+        : (items as any[]).length, [items]);
 
-    const isLast = currentItemIndex === max - 1;
-    const isFirst = currentItemIndex === 0;
-    const currentItem = items[currentItemIndex] as T | null;
-    const progressPercentage = max > 0
-        ? currentItemIndex / max * 100
-        : 0;
+    const isLast = useMemo(() => currentIndex === max - 1, [max, currentIndex]);
+    const isFirst = useMemo(() => currentIndex === 0, [currentIndex]);
+    const currentItem = useMemo(() => items[currentIndex] as T | null, [items, currentIndex]);
+    const progressPercentage = useMemo(() => max > 0
+        ? currentIndex / max * 100
+        : 0, [max, currentIndex]);
 
-    const next = () => {
+    const next = useCallback(() => {
 
         if (isLast) {
 
@@ -433,11 +433,11 @@ export const usePaging = <T>(
                 onNextOverNavigation();
         } else {
 
-            setCurrentItemIndex(currentItemIndex + 1);
+            setCurrentItemIndex(currentIndex + 1);
         }
-    };
+    }, [onNextOverNavigation, setCurrentItemIndex, currentIndex, isLast]);
 
-    const previous = () => {
+    const previous = useCallback(() => {
 
         if (isFirst) {
 
@@ -445,11 +445,11 @@ export const usePaging = <T>(
                 onPreviousOverNavigation();
         } else {
 
-            setCurrentItemIndex(currentItemIndex - 1);
+            setCurrentItemIndex(currentIndex - 1);
         }
-    };
+    }, [onPreviousOverNavigation, setCurrentItemIndex, isFirst, currentIndex]);
 
-    const setItem = (itemIndex: number) => {
+    const setItem = useCallback((itemIndex: number) => {
 
         if (itemIndex < 0)
             throw new Error('Item index is less than 0!');
@@ -458,25 +458,36 @@ export const usePaging = <T>(
             throw new Error('Item index is more than the length of the items collection!');
 
         setCurrentItemIndex(itemIndex);
-    };
+    }, [setCurrentItemIndex]);
 
-    const jumpToLast = () => {
+    const jumpToLast = useCallback(() => {
 
         setItem(max - 1);
-    };
+    }, [setItem, max]);
 
-    return {
+    return useMemo(() => ({
         items,
         next,
         previous,
         isLast,
         isFirst,
-        currentIndex: currentItemIndex,
+        currentIndex,
         currentItem,
         progressPercentage,
         setItem,
         jumpToLast
-    } as PagingType<T>;
+    } as PagingType<T>), [
+        items,
+        next,
+        previous,
+        isLast,
+        isFirst,
+        currentIndex,
+        currentItem,
+        progressPercentage,
+        setItem,
+        jumpToLast
+    ]);
 };
 
 export type PagingType<T> = {

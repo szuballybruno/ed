@@ -56,7 +56,9 @@ SELECT
 	ro.id role_id,
 	ro.name role_name,
 	u.id assignee_user_id,
-	all_roles.is_inherited
+	all_roles.is_inherited,
+	pe.id permission_id,
+	pe.code permission_code
 FROM all_roles
 
 LEFT JOIN public.company co
@@ -67,6 +69,12 @@ ON ro.id = all_roles.role_id
 
 LEFT JOIN public.user u
 ON u.id = all_roles.assignee_user_id
+
+LEFT JOIN public.role_permission_bridge rpb
+ON rpb.role_id = all_roles.role_id 
+
+LEFT JOIN public.permission pe 
+ON pe.id = rpb.permission_id 
 
 ORDER BY
 	u.id,

@@ -64,11 +64,15 @@ perm_join AS
 (
 	SELECT 
 		ro.*,
-		rpb.permission_id
+		pe.id permission_id,
+		pe.code permission_code
 	FROM roles ro
 
 	LEFT JOIN public.role_permission_bridge rpb
 	ON rpb.role_id = ro.role_id
+	
+	LEFT JOIN public.permission pe
+	ON pe.id = rpb.permission_id
 
 	ORDER BY 
 		ro.assigner_user_id,

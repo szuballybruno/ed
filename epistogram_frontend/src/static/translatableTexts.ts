@@ -7,7 +7,11 @@ const translations: TranslationType[] = [
 
 const instatiateTranslation = (code: string): TranslationType['data'] => {
 
-    return translations.single(x => x.languageCode === code).data;
+    const trans = translations.filter(x => x.languageCode === code)[0];
+    if (!trans)
+        throw new Error('Translation not found: ' + code);
+
+    return trans.data;
 };
 
 export const translatableTexts = instatiateTranslation('hu');

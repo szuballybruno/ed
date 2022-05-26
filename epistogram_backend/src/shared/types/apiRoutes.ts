@@ -169,6 +169,7 @@ export const apiRoutes = {
     },
 
     course: {
+        getPermissionAssignCourses: '/course/get-permission-assign-courses',
         getCourseContentEditData: '/course/get-course-content-edit-data',
         getCourseDetailsEditData: '/course/get-course-details-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',

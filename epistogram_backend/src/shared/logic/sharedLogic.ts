@@ -1,3 +1,4 @@
+import { UserPermissionDTO } from '../dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../dtos/role/UserRoleDTO';
 import { PasswordValidationIssueType } from '../types/sharedTypes';
 
@@ -97,6 +98,26 @@ export const userRolesEqual = (a: UserRoleDTO, b: UserRoleDTO) => {
         return false;
 
     if (a.assigneeUserId !== b.assigneeUserId)
+        return false;
+
+    return true;
+};
+
+export const userPermissionsEqual = (a: UserPermissionDTO, b: UserPermissionDTO) => {
+
+    if (a.permissionId !== b.permissionId)
+        return false;
+
+    if (a.contextCompanyId !== b.contextCompanyId)
+        return false;
+
+    if (a.assigneeUserId !== b.assigneeUserId)
+        return false;
+
+    if (a.parentRoleId !== b.parentRoleId)
+        return false;
+
+    if (a.contextCourseId !== b.contextCourseId)
         return false;
 
     return true;
