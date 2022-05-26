@@ -129,6 +129,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             return {
                 userId: stats.userId,
                 courseId: stats.courseId,
+                courseName: stats.title,
+                thumbnailImageUrl: getAssetUrl(stats.coverFilePath),
                 differenceFromAveragePerformancePercentage: stats.differenceFromAveragePerformancePercentage,
                 courseProgressPercentage: stats.courseProgressPercentage,
                 performancePercentage: stats.performancePercentage,

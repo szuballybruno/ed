@@ -3,6 +3,8 @@ import { TempomatModeType } from '../../shared/types/sharedTypes';
 export class UserCourseStatsDTO {
     userId: number;
     courseId: number;
+    thumbnailImageUrl: string;
+    courseName: string;
     differenceFromAveragePerformancePercentage: number;
     courseProgressPercentage: number;
     performancePercentage: number;

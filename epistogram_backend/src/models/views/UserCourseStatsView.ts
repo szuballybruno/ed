@@ -14,6 +14,12 @@ export class UserCourseStatsView {
     courseId: number;
 
     @ViewColumn()
+    title: string;
+
+    @ViewColumn()
+    coverFilePath: string;
+
+    @ViewColumn()
     differenceFromAveragePerformancePercentage: number;
 
     @ViewColumn()
