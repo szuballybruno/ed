@@ -1,3 +1,5 @@
+import { ChangeSet } from './changeSet/ChangeSet';
+import { UserPermissionDTO } from './role/UserPermissionDTO';
 import { UserRoleDTO } from './role/UserRoleDTO';
 
 export class UserEditDTO {
@@ -8,6 +10,6 @@ export class UserEditDTO {
     isTeacher: boolean;
     companyId: number;
     jobTitleId: number | null;
-    assignedRoles: UserRoleDTO[];
-    assignedPermissions: any[];
+    roles: ChangeSet<UserRoleDTO>;
+    permissions: ChangeSet<UserPermissionDTO>;
 }

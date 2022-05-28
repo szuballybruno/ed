@@ -5,7 +5,7 @@ import { useUserPermissions, useUserRoles } from '../../../../services/api/roles
 import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { userPermissionsEqual, userRolesEqual } from '../../../../shared/logic/sharedLogic';
-import { useHandleAddRemoveItems } from '../../../../static/frontendHelpers';
+import { useHandleAddRemoveItems, useValueCompareTest, valueCompareTest, valuesCompareTest } from '../../../../static/frontendHelpers';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
@@ -15,6 +15,7 @@ import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDial
 import { AssignPermissionDialog } from './AssignPermissionDialog';
 import { AssignRoleDialog } from './AssignRoleDialog';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { ChangeSet } from '../../../../shared/dtos/changeSet/ChangeSet';
 
 type StateType = 'new' | 'removed' | 'none';
 
@@ -73,10 +74,12 @@ const AuthItemRemoveButton = (props: {
 
 const useRolesLogic = (props: {
     userId: number,
-    onChange: (roles: UserRoleDTO[]) => void
+    onChange: (data: { assignedRoles: ChangeSet<UserRoleDTO> }) => void
 }) => {
 
     const { userId, onChange } = props;
+
+    // const onChange = useCallback((x: any) => console.log(x), []);
 
     // http
     const { userRoles: rolesFromServer } = useUserRoles(userId);
@@ -87,11 +90,16 @@ const useRolesLogic = (props: {
 
     const [removedRoles, setRemovedRoles] = useState<UserRoleDTO[]>([]);
 
+    const assignedRolesChangeset: ChangeSet<UserRoleDTO> = useMemo(() => ({
+        newItems: assignedRoles
+            .filter(x => !x.isInherited && x.roleAssignmentBridgeId === -1),
+        deletedItems: removedRoles
+    }), [assignedRoles, removedRoles]);
+
     const assignNewRole = useCallback((dto: UserRoleDTO) => {
 
         addAssignedRole(dto);
-        onChange(assignedRoles);
-    }, [onChange, addAssignedRole]);
+    }, [addAssignedRole]);
 
     const removeRole = useCallback((dto: UserRoleDTO, isNew: boolean) => {
 
@@ -112,6 +120,11 @@ const useRolesLogic = (props: {
             .filter(x => !userRolesEqual(x, dto)));
     }, [setRemovedRoles, removedRoles]);
 
+    useEffect(() => {
+
+        onChange({ assignedRoles: assignedRolesChangeset });
+    }, [assignedRolesChangeset, onChange]);
+
     const getRoleKey = useCallback((x) => x.rowId, []);
 
     // init roles
@@ -119,7 +132,6 @@ const useRolesLogic = (props: {
 
         setAssignedRoles(rolesFromServer);
     }, [rolesFromServer]);
-
 
     // dialogs
     const roleDialogLogic = useEpistoDialogLogic(AssignRoleDialog);
@@ -205,10 +217,11 @@ const useRolesLogic = (props: {
 // permissions 
 const usePermissionLogic = (props: {
     userId: number,
-    rolesLogic: ReturnType<typeof useRolesLogic>
+    rolesLogic: ReturnType<typeof useRolesLogic>,
+    onChange: (data: { assignedPermissions: ChangeSet<UserPermissionDTO> }) => void
 }) => {
 
-    const { userId, rolesLogic } = props;
+    const { userId, rolesLogic, onChange } = props;
 
     // http
     const { userPermissions: permissionsFromServer } = useUserPermissions(userId);
@@ -273,6 +286,13 @@ const usePermissionLogic = (props: {
         }))
         .orderBy(x => `${x.data.contextCompanyId}${x.data.contextCourseId}${x.isInherited}`);
 
+    const assignedPermissionsChangeset: ChangeSet<UserPermissionDTO> = useMemo(() => ({
+        deletedItems: removedPermissions,
+        newItems: assignedPermissions
+            .filter(x => x.permissionAssignmentBridgeId === -1)
+            .filter(x => x.parentRoleId === null)
+    }), [assignedPermissions, removedPermissions]);
+
     const assignNewPermission = useCallback((permissionDTO: UserPermissionDTO) => {
 
         addAssignedPermission(permissionDTO);
@@ -296,6 +316,11 @@ const usePermissionLogic = (props: {
         setRemovedPermissions(removedPermissions
             .filter(x => !userPermissionsEqual(x, dto)));
     }, [setRemovedPermissions, removedPermissions]);
+
+    useEffect(() => {
+
+        onChange({ assignedPermissions: assignedPermissionsChangeset });
+    }, [assignedPermissionsChangeset, onChange]);
 
     const permColumns = useMemo((): GridColumnType<PermissionRowType, any, keyof PermissionRowType>[] => [
         {
@@ -354,19 +379,23 @@ const usePermissionLogic = (props: {
 export const PermissionAssignerControl = (props: {
     userId: number,
     userCompanyId: number | null,
-    onChange: ({ assignedRoles: UserRoleDTO }) => void
+    onChange: (data: {
+        assignedRoles?: ChangeSet<UserRoleDTO>;
+        assignedPermissions?: ChangeSet<UserPermissionDTO>
+    }) => void
 }) => {
 
     const { userId, onChange, userCompanyId } = props;
 
     const rolesLogic = useRolesLogic({
         userId,
-        onChange: (assignedRoles) => onChange({ assignedRoles })
+        onChange
     });
 
     const permissionLogic = usePermissionLogic({
         userId,
-        rolesLogic
+        rolesLogic,
+        onChange
     });
 
     return (
@@ -405,6 +434,7 @@ export const PermissionAssignerControl = (props: {
                 </Flex>
 
                 <EpistoDataGrid
+                    id="roles_datagrid"
                     hideFooter
                     density="dense"
                     columns={rolesLogic.roleColumns}
@@ -430,6 +460,7 @@ export const PermissionAssignerControl = (props: {
                 </Flex>
 
                 <EpistoDataGrid
+                    id="permissions_datagrid"
                     hideFooter
                     density="dense"
                     columns={permissionLogic.permColumns}

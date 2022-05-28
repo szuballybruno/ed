@@ -10,6 +10,7 @@ import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleView } from '../models/views/UserRoleView';
 import { AssignablePermissionDTO } from '../shared/dtos/AssignablePermissionDTO';
 import { AssignableRoleDTO } from '../shared/dtos/AssignableRoleDTO';
+import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 import { AssignedAuthItemsDTO } from '../shared/dtos/role/AssignedAuthItemsDTO';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
@@ -17,6 +18,7 @@ import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { UserPermissionDTO } from '../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
+import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { noUndefined, userRolesEqual } from '../shared/logic/sharedLogic';
 import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
@@ -173,8 +175,8 @@ export class RoleService extends QueryServiceBase<Role> {
     async saveUserAssignedAuthItemsAsync(
         principalId: PrincipalId,
         savedUserId: number,
-        assignedRoles: UserRoleDTO[],
-        assignedPermissions: any[]) {
+        rolesChangeSet: ChangeSet<UserRoleDTO>,
+        permissionsChangeSet: ChangeSet<UserPermissionDTO>) {
 
         // TODO authorize userId
         console.log('TODO Auth: ' + principalId);
@@ -183,23 +185,26 @@ export class RoleService extends QueryServiceBase<Role> {
         await this._saveRolesAsync(
             principalId,
             savedUserId,
-            assignedRoles);
+            rolesChangeSet);
 
         // save permissions
         await this._savePermissionsAsync(
             savedUserId,
-            assignedRoles,
-            assignedPermissions);
+            rolesChangeSet,
+            permissionsChangeSet);
     }
 
-    async _saveRolesAsync(principalId: PrincipalId, savedUserId: number, assignedRoles: UserRoleDTO[]) {
+    async _saveRolesAsync(principalId: PrincipalId, savedUserId: number, assignedRoles: ChangeSet<UserRoleDTO>) {
 
-        const assignedRolesInDB = await this.getUserRolesAsync(principalId, savedUserId);
+        // const assignedRolesInDB = await this.getUserRolesAsync(principalId, savedUserId);
+
+        // TODO validation
 
         // assign roles 
-        const rolesToAssign = assignedRolesInDB
-            .filter(roleInDB => assignedRoles
-                .any(assignedRole => userRolesEqual(assignedRole, roleInDB)));
+        // const rolesToAssign = assignedRolesInDB
+        //     .filter(roleInDB => assignedRoles
+        //         .any(assignedRole => userRolesEqual(assignedRole, roleInDB)));
+        const rolesToAssign = assignedRoles.newItems;
 
         const newBridges = rolesToAssign
             .map(userRole => instatiateInsertEntity<RoleAssignmentBridge>({
@@ -213,9 +218,10 @@ export class RoleService extends QueryServiceBase<Role> {
             .createMany(RoleAssignmentBridge, newBridges);
 
         // deassign roles 
-        const rolesToDeassign = assignedRolesInDB
-            .filter(roleInDB => assignedRoles
-                .any(assignedRole => userRolesEqual(assignedRole, roleInDB)));
+        // const rolesToDeassign = assignedRolesInDB
+        //     .filter(roleInDB => assignedRoles
+        //         .any(assignedRole => userRolesEqual(assignedRole, roleInDB)));
+        const rolesToDeassign = assignedRoles.deletedItems;
 
         const roleBridgeIdsToDeassign = rolesToDeassign
             .map(x => x.roleAssignmentBridgeId);
@@ -226,8 +232,8 @@ export class RoleService extends QueryServiceBase<Role> {
 
     async _savePermissionsAsync(
         savedUserId: number,
-        assignedRoles: UserRoleDTO[],
-        assignedPermissions: UserPermissionDTO[]) {
+        assignedRoles: ChangeSet<UserRoleDTO>,
+        assignedPermissions: ChangeSet<UserPermissionDTO>) {
 
         // const assignedRoleIds = assignedRoles
         //     .map(x => x.roleId);

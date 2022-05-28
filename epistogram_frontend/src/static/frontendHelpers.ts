@@ -263,8 +263,21 @@ export const valueCompareTest = (val: any, name: string) => {
 
     const prevValName = `prev_val_${name}`;
     const prevVal = window[prevValName];
-    console.log(`*** ${name} Is unchanged: ${val === prevVal}`);
+
+    if (val !== prevVal)
+        console.log(`*** ${name} Changed!!!`);
+
     window[prevValName] = val;
+};
+
+export const valuesCompareTest = (valNames: string[]) => {
+
+    valNames
+        .forEach(name => {
+
+            const val = eval(name);
+            valueCompareTest(val, name);
+        });
 };
 
 export const useValueCompareTest = (value: any, label: string) => {
@@ -584,36 +597,14 @@ export const usePasswordEntryState = () => {
 
 export type PropsWithChildren = { children: ReactNode };
 
-export const useReactQuery = <T>(
-    queryKey: any[],
-    queryFunc: () => Promise<T>,
-    enabled?: boolean) => {
+export type QueryResult<T> = {
+    state: LoadingStateType;
+    refetch: () => Promise<void>;
+    data: T;
+    error: VerboseError | null;
+}
 
-    const isEnabled = enabled === true || enabled === undefined;
-
-    const queryResult = useQuery(
-        queryKey,
-        queryFunc, {
-        retry: false,
-        refetchOnWindowFocus: false,
-        enabled: isEnabled
-    });
-
-    const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
-    const advancedStatus = isFetching ? 'loading' : status as LoadingStateType;
-
-    return {
-        status: advancedStatus,
-        refetch: async () => {
-
-            await refetch();
-        },
-        data: data ?? null,
-        ...queryResult2
-    };
-};
-
-export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean) => {
+export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
     const queryValues = queryParams ? Object.values(queryParams) : [];
 
@@ -632,29 +623,52 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
             enabled: isEnabled === false ? false : true
         });
 
-    const state = (queryResult.isIdle
-        ? 'idle'
-        : queryResult.isFetching
-            ? 'loading'
-            : queryResult.isError
-                ? 'error'
-                : 'success') as LoadingStateType;
+    const state = useMemo((): LoadingStateType => {
+
+        if (queryResult.isIdle)
+            return 'idle';
+
+        if (queryResult.isFetching)
+            return 'loading';
+
+        if (queryResult.isError)
+            return 'error';
+
+        return 'success';
+    }, [queryResult.isIdle, queryResult.isFetching, queryResult.isError]);
 
     const refetch = useCallback(async () => {
 
         await queryResult.refetch();
     }, [queryResult.refetch]);
 
-    const dataAsT = queryResult.data as T;
+    const data = useMemo((): T => {
 
-    const result = {
+        return queryResult.data
+            ? queryResult.data
+            : null;
+    }, [queryResult.data]);
+
+    const error = queryResult.error as VerboseError | null;
+
+    return {
         state,
         refetch,
-        data: dataAsT === undefined ? null : dataAsT,
-        error: queryResult.error as VerboseError | null
+        data,
+        error
     };
+};
 
-    return result;
+export const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T[]> => {
+
+    const { data, ...qr } = useReactQuery2<T[]>(url, queryParams, isEnabled);
+
+    const empty = useMemo(() => [], []);
+
+    return {
+        ...qr,
+        data: data ?? empty
+    };
 };
 
 export const hasValue = (obj: any) => {

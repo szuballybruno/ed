@@ -24,6 +24,7 @@ import { Grouping } from '../shared/logic/jsExtensions';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserStatsView } from '../models/views/UserStatsView';
+import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 
 export class UserService {
 
@@ -79,8 +80,8 @@ export class UserService {
             isTeacher: !!res.teacherInfoId,
             jobTitleId: res.jobTitleId,
             companyId: res.companyId,
-            assignedRoles: [],
-            assignedPermissions: []
+            roles: new ChangeSet(),
+            permissions: new ChangeSet()
         };
     }
 
@@ -112,7 +113,7 @@ export class UserService {
 
         // save auth items 
         await this._roleService
-            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.assignedRoles, dto.assignedPermissions);
+            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
     }
 
     /**

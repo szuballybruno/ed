@@ -6,15 +6,15 @@ import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
 import { UserPermissionDTO } from '../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../shared/dtos/role/UserRoleDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { useReactQuery2, useXQueryArray } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRolesList = () => {
 
-    const qr = useReactQuery2<RoleAdminListDTO[]>(apiRoutes.roles.getRoles);
+    const qr = useXQueryArray<RoleAdminListDTO>(apiRoutes.roles.getRoles);
 
     return {
-        rolesList: qr.data ?? [],
+        rolesList: qr.data,
         rolesListError: qr.error,
         rolesListState: qr.state,
         refetchRolesList: qr.refetch
@@ -23,10 +23,10 @@ export const useRolesList = () => {
 
 export const useAssignableRoles = (userId: number, companyId: number | null) => {
 
-    const qr = useReactQuery2<AssignableRoleDTO[]>(apiRoutes.roles.getAssignableRoles, { companyId, userId }, !!companyId);
+    const qr = useXQueryArray<AssignableRoleDTO>(apiRoutes.roles.getAssignableRoles, { companyId, userId }, !!companyId);
 
     return {
-        assignableRolesList: qr.data ?? [],
+        assignableRolesList: qr.data,
         assignableRolesListError: qr.error,
         assignableRolesListState: qr.state,
         refetchAssignableRolesList: qr.refetch
@@ -35,10 +35,10 @@ export const useAssignableRoles = (userId: number, companyId: number | null) => 
 
 export const useAssignablePermissions = (userId: number, courseId: number | null, companyId: number | null) => {
 
-    const qr = useReactQuery2<AssignablePermissionDTO[]>(apiRoutes.roles.getAssignablePermissions, { userId, courseId, companyId });
+    const qr = useXQueryArray<AssignablePermissionDTO>(apiRoutes.roles.getAssignablePermissions, { userId, courseId, companyId });
 
     return {
-        assignablePermissionList: qr.data ?? [],
+        assignablePermissionList: qr.data,
         assignablePermissionListError: qr.error,
         assignablePermissionListState: qr.state,
         refetchAssignablePermissionList: qr.refetch
@@ -47,10 +47,10 @@ export const useAssignablePermissions = (userId: number, courseId: number | null
 
 export const useUserRoles = (userId: number) => {
 
-    const qr = useReactQuery2<UserRoleDTO[]>(apiRoutes.roles.getUserRoles, { userId });
+    const qr = useXQueryArray<UserRoleDTO>(apiRoutes.roles.getUserRoles, { userId });
 
     return {
-        userRoles: qr.data ?? [],
+        userRoles: qr.data,
         userRolesError: qr.error,
         userRolesState: qr.state,
         refetchUserRoles: qr.refetch
@@ -59,10 +59,10 @@ export const useUserRoles = (userId: number) => {
 
 export const useUserPermissions = (userId: number) => {
 
-    const qr = useReactQuery2<UserPermissionDTO[]>(apiRoutes.roles.getUserPermissions, { userId });
+    const qr = useXQueryArray<UserPermissionDTO>(apiRoutes.roles.getUserPermissions, { userId });
 
     return {
-        userPermissions: qr.data ?? [],
+        userPermissions: qr.data,
         userPermissionsError: qr.error,
         userPermissionsState: qr.state,
         refetchUserPermissions: qr.refetch
