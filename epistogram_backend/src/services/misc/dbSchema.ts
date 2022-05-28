@@ -86,6 +86,7 @@ import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserSessionDailyView } from '../../models/views/UserActivityDailyView';
 import { AdminUserListView } from '../../models/views/UserAdminListView';
+import { UserAnswerView } from '../../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
@@ -108,6 +109,7 @@ import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
+import { UserVideoPractiseProgressView } from '../../models/views/UserVideoPractiseProgressView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
@@ -249,6 +251,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_course_bridge_view', UserCourseBridgeView],
             ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
             ['user_course_completion_current_view', UserCourseCompletionCurrentView],
+            ['user_answer_view', UserAnswerView],
             ['user_performance_answer_group_view', UserPerformanceAnswerGroupView],
             ['user_reaction_time_view', UserReactionTimeView],
             ['user_performance_view', UserPerformanceView],
@@ -266,6 +269,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
             ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
             ['user_course_stats_view', UserCourseStatsView],
+            ['user_video_practise_progress_view', UserVideoPractiseProgressView],
             ['course_item_question_edit_view', CourseItemQuestionEditView],
             ['comment_list_view', CommentListView],
             ['user_spent_time_ratio_view', UserSpentTimeRatioView],

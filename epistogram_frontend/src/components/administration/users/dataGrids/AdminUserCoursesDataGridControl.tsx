@@ -1,17 +1,21 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { DataGrid } from '@mui/x-data-grid';
-import { GridColDef, GridRowsProp } from '@mui/x-data-grid-pro';
-import { useAdminCourseList } from '../../../../services/api/courseApiService';
+import { useCallback } from 'react';
 import { useUserCourseStats } from '../../../../services/api/userStatsApiService';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
+import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { Environment } from '../../../../static/Environemnt';
-import { getRandomInteger, secondsToTime } from '../../../../static/frontendHelpers';
+import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
 import { ChipSmall } from '../../courses/ChipSmall';
+
+export const EmptyCell = () => <EpistoFont>
+    -
+</EpistoFont>;
 
 export const AdminUserCoursesDataGridControl = (props: {
     handleMoreButton: () => void
@@ -25,11 +29,13 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const userCourses = userCourseStats ?? [];
 
+    const getRowKey = useCallback((row: Partial<UserCourseStatsDTO>) => `${row.courseId}`, []);
+
     const getRowsFromCourses = () => userCourses.map((course) => {
         return {
-            id: course.courseId,
+            courseId: course.courseId,
             courseName: course.courseName,
-            thumbnailImage: course.thumbnailImageUrl,
+            thumbnailImageUrl: course.thumbnailImageUrl,
             differenceFromAveragePerformancePercentage: course.differenceFromAveragePerformancePercentage,
             courseProgressPercentage: course.courseProgressPercentage,
             performancePercentage: course.performancePercentage,
@@ -43,32 +49,39 @@ export const AdminUserCoursesDataGridControl = (props: {
             lagBehindPercentage: course.lagBehindPercentage,
             previsionedCompletionDate: course.previsionedCompletionDate,
             tempomatMode: course.tempomatMode
-        };
+        } as Partial<UserCourseStatsDTO>;
     });
 
-    const rows: GridRowsProp = getRowsFromCourses();
+    const rows: Partial<UserCourseStatsDTO>[] = getRowsFromCourses();
 
-    const columns: GridColDef[] = [
-        {
-            field: 'thumbnailImage',
+    const columnDefGen = <TField extends keyof Partial<UserCourseStatsDTO & { moreDetails: string }>>(
+        field: TField,
+        columnOptions: OmitProperty<GridColumnType<Partial<UserCourseStatsDTO & { moreDetails: string }>, string | undefined, TField>, 'field'>) => {
+
+        return {
+            field,
+            ...columnOptions
+        };
+    };
+
+    const columns: GridColumnType<Partial<UserCourseStatsDTO>, string | undefined, any>[] = [
+        columnDefGen('thumbnailImageUrl', {
             headerName: 'Thumbnail kép',
             width: 130,
-            renderCell: (params) => <img src={params.value} />
-        },
-        {
-            field: 'courseName',
+            renderCell: (params) => <img
+                src={params.value} />
+        }),
+        columnDefGen('courseName', {
             headerName: 'Cím',
             width: 300,
-            editable: true,
             resizable: true
-        },
-        {
-            field: 'differenceFromAveragePerformancePercentage',
+        }),
+        columnDefGen('differenceFromAveragePerformancePercentage', {
             headerName: 'Teljesítmény céges viszonylatban',
             width: 150,
             resizable: true,
             renderCell: (params) =>
-                params.value !== null
+                params.value !== null && params.value !== undefined
                     ? <ChipSmall
                         text={params.value > 5
                             ? 'Átlagon felüli'
@@ -80,51 +93,38 @@ export const AdminUserCoursesDataGridControl = (props: {
                             : params.value < -5
                                 ? 'var(--intenseRed)'
                                 : ''} />
-                    : <EpistoFont>
-                        -
-                    </EpistoFont>
-        },
-        {
-            field: 'courseProgressPercentage',
+                    : <EmptyCell />
+        }),
+        columnDefGen('courseProgressPercentage', {
             headerName: 'Haladás a kurzusban',
             width: 150,
             resizable: true,
-            renderCell: (params) => {
-                return params.value !== null
-                    ? <CircularProgressWithLabel
-                        value={Math.round(params.value)} />
-                    : <EpistoFont>
-                        -
-                    </EpistoFont>;
-            }
-        },
-        {
-            field: 'performancePercentage',
+            renderCell: (params) => params.value !== null && params.value !== undefined
+                ? <CircularProgressWithLabel
+                    value={Math.round(params.value)} />
+                : <EmptyCell />
+
+        }),
+        columnDefGen('performancePercentage', {
             headerName: 'Jelenlegi teljesítmény',
             width: 150,
             resizable: true,
-            renderCell: (params) => params.value !== null
+            renderCell: (params) => params.value !== null && params.value !== undefined
                 ? <CircularProgressWithLabel
                     value={params.value} />
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'completedVideoCount',
+                : <EmptyCell />
+        }),
+        columnDefGen('completedVideoCount', {
             headerName: 'Megtekintett videók',
             width: 150,
             resizable: true,
-            renderCell: (params) => params.value !== null
+            renderCell: (params) => params.value !== null && params.value !== undefined
                 ? <EpistoFont>
                     {params.value}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'completedExamCount',
+                : <EmptyCell />
+        }),
+        columnDefGen('completedExamCount', {
             headerName: 'Elvégzett vizsgák',
             width: 150,
             resizable: true,
@@ -132,12 +132,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                 ? <EpistoFont>
                     {params.value}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'totalSpentSeconds',
+                : <EmptyCell />
+        }),
+        columnDefGen('totalSpentSeconds', {
             headerName: 'Eltöltött idő',
             width: 150,
             resizable: true,
@@ -145,12 +142,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                 ? <EpistoFont>
                     {secondsToTime(params.value)}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'answeredVideoQuestionCount',
+                : <EmptyCell />
+        }),
+        columnDefGen('answeredVideoQuestionCount', {
             headerName: 'Megválaszolt videós kérdések',
             width: 150,
             resizable: true,
@@ -158,12 +152,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                 ? <EpistoFont>
                     {params.value}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'answeredPractiseQuestionCount',
+                : <EmptyCell />
+        }),
+        columnDefGen('answeredPractiseQuestionCount', {
             headerName: 'Megválaszolt gyakorló kérdések',
             width: 150,
             resizable: true,
@@ -171,12 +162,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                 ? <EpistoFont>
                     {params.value}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'isFinalExamCompleted',
+                : <EmptyCell />
+        }),
+        columnDefGen('isFinalExamCompleted', {
             headerName: 'Kurzuszáró vizsga',
             width: 150,
             resizable: true,
@@ -184,12 +172,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                 ? <ChipSmall
                     text={`${params.value ? 'Elvégezve' : 'Nincs elvégezve'}`}
                     color={params.value ? 'var(--deepGreen)' : 'var(--intenseRed)'} />
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'recommendedItemsPerWeek',
+                : <EmptyCell />
+        }),
+        columnDefGen('recommendedItemsPerWeek', {
             headerName: 'Ajánlott videók hetente',
             width: 150,
             resizable: true,
@@ -197,12 +182,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                 ? <EpistoFont>
                     {params.value}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'lagBehindPercentage',
+                : <EmptyCell />
+        }),
+        columnDefGen('lagBehindPercentage', {
             headerName: 'Becsült lemaradás',
             width: 150,
             resizable: true,
@@ -212,16 +194,13 @@ export const AdminUserCoursesDataGridControl = (props: {
                         ? params.value + '%'
                         : Math.abs(params.value) + '%-al gyorsabban halad a becslésnél'}
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'previsionedCompletionDate',
+                : <EmptyCell />
+        }),
+        columnDefGen('previsionedCompletionDate', {
             headerName: 'Kurzus várható befejezése',
             width: 150,
             resizable: true,
-            renderCell: (params) => params.value !== null
+            renderCell: (params) => params.value !== null && params.value !== undefined
                 ? <EpistoFont>
                     {
                         new Date(params.value)
@@ -231,12 +210,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                             })
                     }
                 </EpistoFont>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'tempomatMode',
+                : <EmptyCell />
+        }),
+        columnDefGen('tempomatMode', {
             headerName: 'Jelenlegi tempomat mód',
             width: 250,
             resizable: true,
@@ -267,12 +243,9 @@ export const AdminUserCoursesDataGridControl = (props: {
                                     : 'Szigorú mód'}
                     </EpistoFont>
                 </Flex>
-                : <EpistoFont>
-                    -
-                </EpistoFont>
-        },
-        {
-            field: 'moreDetails',
+                : <EmptyCell />
+        }),
+        columnDefGen('moreDetails', {
             headerName: 'Részletek',
             width: 150,
             renderCell: (params) =>
@@ -282,44 +255,29 @@ export const AdminUserCoursesDataGridControl = (props: {
                     onClick={() => {
                         handleMoreButton();
                     }} >
+
                     Bővebben
                 </EpistoButton>
-        }
+        })
     ];
 
     return <LoadingFrame
         flex='1'
         loadingState={userCourseStatsStatus}
         error={userCourseStatsError}>
-        <DataGrid
-            /* initialState={{
-                columns: {
-                    columnVisibilityModel: {
-                        // Hide columns status and traderName, the other columns will remain visible
-                        isFinalExamDone: false,
-                        recommendedVideosCount: false,
-                    },
-                },
-            }} */
-            rows={rows}
-            autoHeight={true}
-            columns={columns}
-            /*  initialState={{
-                 pinnedColumns: {
-                     left: ['thumbnailImage', 'title'],
-                     right: ['moreDetails']
-                 }
-             }} */
-            sx={{
-                '& .MuiDataGrid-columnHeaderTitle': {
-                    textOverflow: 'clip',
-                    whiteSpace: 'break-spaces',
-                    lineHeight: 1
-                }
-            }}
-            style={{
-                background: 'var(--transparentWhite70)'
-            }} />
+
+        {userCourses.length > 0
+            ? <EpistoDataGrid
+                getKey={getRowKey}
+                rows={rows}
+                columns={columns} />
+            : <Flex
+                flex='1'
+                align='center'
+                justify='center'>
+
+                A felhasználó még egyetlen kurzust sem kezdett el
+            </Flex>}
     </LoadingFrame>;
 };
 
