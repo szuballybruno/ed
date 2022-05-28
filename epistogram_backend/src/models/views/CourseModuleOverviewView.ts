@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -7,17 +8,22 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class CourseModuleOverviewView {
 
     @ViewColumn()
+    @XViewColumn()
     courseId: number;
 
     @ViewColumn()
+    @XViewColumn()
     moduleId: number;
 
     @ViewColumn()
+    @XViewColumn()
     moduleName: string;
 
     @ViewColumn()
+    @XViewColumn()
     videoTitle: string;
 
     @ViewColumn()
+    @XViewColumn()
     videoLengthSeconds: number;
 }

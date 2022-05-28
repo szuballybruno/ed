@@ -12,7 +12,7 @@ import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
 import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
+import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -30,11 +30,12 @@ import { PermissionAssignerControl } from './permissionAssigner/PermissionAssign
 
 export const AdminEditUserControl = (props: {
     editDTO: UserEditDTO | null,
+    refetchTrigger: EventTriggerType,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
     showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void
 }) => {
 
-    const { editDTO, saveUserAsync, showDeleteUserDialog } = props;
+    const { editDTO, saveUserAsync, showDeleteUserDialog, refetchTrigger } = props;
 
     const editedUserId = useIntParam('userId')!;
 
@@ -131,10 +132,10 @@ export const AdminEditUserControl = (props: {
             roles: rolesChangeSet
         };
 
-        console.log(editedUserDTO);
-
-        // await saveUserAsync(editedUserDTO);
+        await saveUserAsync(editedUserDTO);
     };
+
+    useEffect(() => console.log('Useredit dto reloaded'), [editDTO]);
 
     const onAuthItemsChanged = useCallback((data: {
         assignedRoles?: ChangeSet<UserRoleDTO>,
@@ -361,7 +362,8 @@ export const AdminEditUserControl = (props: {
             <PermissionAssignerControl
                 userCompanyId={editDTO?.companyId ?? null}
                 userId={editedUserId}
-                onChange={onAuthItemsChanged} />
+                onChange={onAuthItemsChanged}
+                refetchTrigger={refetchTrigger} />
         </EditSection>
 
         <TailingAdminButtons

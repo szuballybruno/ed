@@ -1,21 +1,20 @@
 import { Flex } from '@chakra-ui/react';
-import { Delete } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useUserPermissions, useUserRoles } from '../../../../services/api/rolesApiService';
+import { ChangeSet } from '../../../../shared/dtos/changeSet/ChangeSet';
 import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { userPermissionsEqual, userRolesEqual } from '../../../../shared/logic/sharedLogic';
-import { useHandleAddRemoveItems, useValueCompareTest, valueCompareTest, valuesCompareTest } from '../../../../static/frontendHelpers';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
+import { EventTriggerType, useHandleAddRemoveItems, useSubscribeEventTrigger } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
+import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AssignPermissionDialog } from './AssignPermissionDialog';
 import { AssignRoleDialog } from './AssignRoleDialog';
-import { EpistoFont } from '../../../controls/EpistoFont';
-import { ChangeSet } from '../../../../shared/dtos/changeSet/ChangeSet';
 
 type StateType = 'new' | 'removed' | 'none';
 
@@ -74,15 +73,17 @@ const AuthItemRemoveButton = (props: {
 
 const useRolesLogic = (props: {
     userId: number,
-    onChange: (data: { assignedRoles: ChangeSet<UserRoleDTO> }) => void
+    onChange: (data: { assignedRoles: ChangeSet<UserRoleDTO> }) => void,
+    refetchTrigger: EventTriggerType
 }) => {
 
-    const { userId, onChange } = props;
-
-    // const onChange = useCallback((x: any) => console.log(x), []);
+    const { userId, onChange, refetchTrigger } = props;
 
     // http
-    const { userRoles: rolesFromServer } = useUserRoles(userId);
+    const { userRoles: rolesFromServer, refetchUserRoles } = useUserRoles(userId);
+    
+    // subscribe refetch trigger
+    useSubscribeEventTrigger(refetchTrigger, refetchUserRoles);
 
     // assigned roles
     const [assignedRoles, setAssignedRoles] = useState<UserRoleDTO[]>([]);
@@ -92,7 +93,7 @@ const useRolesLogic = (props: {
 
     const assignedRolesChangeset: ChangeSet<UserRoleDTO> = useMemo(() => ({
         newItems: assignedRoles
-            .filter(x => !x.isInherited && x.roleAssignmentBridgeId === -1),
+            .filter(x => !x.isInherited && x.assignmentBridgeId === -1),
         deletedItems: removedRoles
     }), [assignedRoles, removedRoles]);
 
@@ -218,13 +219,17 @@ const useRolesLogic = (props: {
 const usePermissionLogic = (props: {
     userId: number,
     rolesLogic: ReturnType<typeof useRolesLogic>,
-    onChange: (data: { assignedPermissions: ChangeSet<UserPermissionDTO> }) => void
+    onChange: (data: { assignedPermissions: ChangeSet<UserPermissionDTO> }) => void,
+    refetchTrigger: EventTriggerType
 }) => {
 
-    const { userId, rolesLogic, onChange } = props;
+    const { userId, rolesLogic, onChange, refetchTrigger } = props;
 
     // http
-    const { userPermissions: permissionsFromServer } = useUserPermissions(userId);
+    const { userPermissions: permissionsFromServer, refetchUserPermissions } = useUserPermissions(userId);
+
+    // subscribe refetch trigger
+    useSubscribeEventTrigger(refetchTrigger, refetchUserPermissions);
 
     // assigned permissions 
     const [assignedPermissions, setAssignedPermissions] = useState<UserPermissionDTO[]>([]);
@@ -382,20 +387,23 @@ export const PermissionAssignerControl = (props: {
     onChange: (data: {
         assignedRoles?: ChangeSet<UserRoleDTO>;
         assignedPermissions?: ChangeSet<UserPermissionDTO>
-    }) => void
+    }) => void,
+    refetchTrigger: EventTriggerType
 }) => {
 
-    const { userId, onChange, userCompanyId } = props;
+    const { userId, onChange, userCompanyId, refetchTrigger } = props;
 
     const rolesLogic = useRolesLogic({
         userId,
-        onChange
+        onChange,
+        refetchTrigger
     });
 
     const permissionLogic = usePermissionLogic({
         userId,
         rolesLogic,
-        onChange
+        onChange,
+        refetchTrigger
     });
 
     return (

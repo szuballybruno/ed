@@ -3,6 +3,7 @@ import fileUpload from 'express-fileupload';
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
+import { ZAuthenticationController } from './api/AuthenticationController2';
 import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CommentController } from './api/CommentController';
 import { CompanyController } from './api/CompanyController';
@@ -13,7 +14,6 @@ import { EventController } from './api/EventController';
 import { ExamController } from './api/ExamController';
 import { FileController } from './api/FileController';
 import { MiscController } from './api/MiscController';
-import { ZAuthenticationController } from './api/AuthenticationController2';
 import { ModuleController } from './api/ModuleController';
 import { PasswordChangeController } from './api/PasswordChangeController';
 import { PermissionController } from './api/PermissionController';

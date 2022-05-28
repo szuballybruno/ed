@@ -671,6 +671,28 @@ export const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: bo
     };
 };
 
+export const useEventTrigger = () => {
+
+    const [state, setState] = useState(1);
+
+    const fireEvent = useCallback(() => setState(state + 1), []);
+
+    return {
+        subscriptionValue: state,
+        fireEvent
+    };
+};
+
+export type EventTriggerType = ReturnType<typeof useEventTrigger>;
+
+export const useSubscribeEventTrigger = (trigger: EventTriggerType, callback: () => void) => {
+
+    useEffect(() => {
+
+        callback();
+    }, [trigger.subscriptionValue]);
+};
+
 export const hasValue = (obj: any) => {
 
     if (obj === undefined)

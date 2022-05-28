@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
@@ -9,14 +10,18 @@ import { SessionActivityType } from '../../shared/types/sharedTypes';
 export class UserPerformanceView {
 
     @ViewColumn()
+    @XViewColumn()
     userId: number;
 
     @ViewColumn()
+    @XViewColumn()
     performancePercentage: number;
 
     @ViewColumn()
+    @XViewColumn()
     userExamLengthPoints: number;
 
     @ViewColumn()
+    @XViewColumn()
     userReactionTimePoints: number;
 }

@@ -44,7 +44,7 @@ export const AssignRoleDialog = (props: {
             roleId: selectedRole.roleId,
             roleName: selectedRole.roleName,
             assigneeUserId: userId,
-            roleAssignmentBridgeId: -1,
+            assignmentBridgeId: -1,
             isInherited: false,
             permissions: selectedRole.permissions
         };

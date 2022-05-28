@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
@@ -8,29 +9,38 @@ import { PermissionCodeType } from '../../shared/types/sharedTypes';
 export class UserRoleView {
 
     @ViewColumn()
-    roleAssignmentBridgeId: number;
+    @XViewColumn()
+    assignmentBridgeId: number;
 
     @ViewColumn()
+    @XViewColumn()
     contextCompanyId: number;
 
     @ViewColumn()
+    @XViewColumn()
     contextCompanyName: string;
 
     @ViewColumn()
+    @XViewColumn()
     roleId: number;
 
     @ViewColumn()
+    @XViewColumn()
     roleName: string;
 
     @ViewColumn()
+    @XViewColumn()
     assigneeUserId: number;
 
     @ViewColumn()
+    @XViewColumn()
     isInherited: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     permissionId: number;
-    
+
     @ViewColumn()
+    @XViewColumn()
     permissionCode: PermissionCodeType;
 }

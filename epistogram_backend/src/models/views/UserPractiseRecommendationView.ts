@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -8,21 +9,27 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserPractiseRecommendationView {
 
     @ViewColumn()
+    @XViewColumn()
     questionId: number;
 
     @ViewColumn()
+    @XViewColumn()
     videoId: number;
 
     @ViewColumn()
+    @XViewColumn()
     totalGivenAnswerCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     totalCorrectAnswerCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     userId: number;
 
     @ViewColumn()
+    @XViewColumn()
     lastThreeAnswerAverage: number;
 
 }

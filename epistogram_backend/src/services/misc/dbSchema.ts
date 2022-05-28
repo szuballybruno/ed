@@ -85,7 +85,7 @@ import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserSessionDailyView } from '../../models/views/UserActivityDailyView';
-import { AdminUserListView } from '../../models/views/UserAdminListView';
+import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
