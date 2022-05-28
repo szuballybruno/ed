@@ -1,5 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -8,27 +9,35 @@ import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnection
 export class ModuleView {
 
     @ViewColumn()
+    @XViewColumn()
     id: number;
 
     @IsDeletedFlag()
     @ViewColumn()
+    @XViewColumn()
     deletionDate: Date;
 
     @ViewColumn()
+    @XViewColumn()
     name: string;
 
     @ViewColumn()
+    @XViewColumn()
     description: string;
 
     @ViewColumn()
+    @XViewColumn()
     orderIndex: number;
 
     @ViewColumn()
+    @XViewColumn()
     courseId: number;
 
     @ViewColumn()
+    @XViewColumn()
     imageFileId: number | null;
 
     @ViewColumn()
+    @XViewColumn()
     itemCount: number;
 }

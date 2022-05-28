@@ -21,6 +21,7 @@ export const apiRoutes = {
         deleteRole: '/roles/delete-role',
         saveRole: '/roles/save-role',
         getUserRoles: '/roles/get-user-roles',
+        getUserPermissions: '/roles/get-user-permissions',
         getAssignableRoles: '/roles/get-assignable-roles',
         getAssignablePermissions: '/roles/get-assignable-permissions',
         getUserAssignedAuthItems: '/roles/get-user-assigned-auth-items'
@@ -169,6 +170,7 @@ export const apiRoutes = {
     },
 
     course: {
+        getPermissionAssignCourses: '/course/get-permission-assign-courses',
         getCourseContentEditData: '/course/get-course-content-edit-data',
         getCourseDetailsEditData: '/course/get-course-details-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',

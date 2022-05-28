@@ -42,6 +42,7 @@ export const EditDialogBase = <TParams,>(props: {
     const subpages = paging.items;
 
     return <EpistoDialog
+        closeButtonType="top"
         logic={dialogLogic}
         fullScreenX
         fullScreenY>

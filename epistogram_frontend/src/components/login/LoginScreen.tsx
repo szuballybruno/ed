@@ -33,9 +33,7 @@ const LoginScreen = () => {
     const emailRef = React.useRef<HTMLInputElement>(null);
     const pwRef = React.useRef<HTMLInputElement>(null);
 
-    const passwordResetDialogLogic = useEpistoDialogLogic('pwreset', {
-        defaultCloseButtonType: 'top'
-    });
+    const passwordResetDialogLogic = useEpistoDialogLogic('pwreset');
 
     const isDesktopView = useIsScreenWiderThan(1200);
 

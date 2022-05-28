@@ -31,6 +31,8 @@ roles AS
 		co.name context_company_name,
 		ro.id role_id,
 		ro.name role_name,
+		ro.is_custom,
+		CASE WHEN ro.is_custom THEN co.id ELSE NULL END owner_company_id,
 		CASE WHEN ro.is_custom THEN co.name ELSE NULL END owner_company_name,
 		urv.role_id IS NOT NULL is_assigned,
 		CASE WHEN assignee_u.is_god THEN false ELSE ari.role_id IS NOT NULL END can_assign 
@@ -63,11 +65,15 @@ perm_join AS
 (
 	SELECT 
 		ro.*,
-		rpb.permission_id
+		pe.id permission_id,
+		pe.code permission_code
 	FROM roles ro
 
 	LEFT JOIN public.role_permission_bridge rpb
 	ON rpb.role_id = ro.role_id
+	
+	LEFT JOIN public.permission pe
+	ON pe.id = rpb.permission_id
 
 	ORDER BY 
 		ro.assigner_user_id,

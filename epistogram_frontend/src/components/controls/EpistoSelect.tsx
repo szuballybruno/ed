@@ -3,7 +3,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 
 const defaultKey = '___default___';
 
-export const EpistoSelect = <TItem,>(props: {
+export type EpistoSelectPropsType<TItem> = {
     items: TItem[],
     onSelected: (value: TItem) => void,
     getCompareKey: (item: TItem) => string,
@@ -12,7 +12,9 @@ export const EpistoSelect = <TItem,>(props: {
     currentKey?: string,
     defaultValue?: string,
     isDisabled?: boolean
-}) => {
+};
+
+export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
 
     const {
         items,
@@ -54,9 +56,9 @@ export const EpistoSelect = <TItem,>(props: {
             pointerEvents: isDisabled ? 'none' : undefined
         }}>
 
-        {!isSelectedSomething && <option value={defaultKey}>
+        <option value={defaultKey}>
             {defaultValue ?? translatableTexts.misc.selectOption}
-        </option>}
+        </option>
 
         {items
             .map((item, index) => {

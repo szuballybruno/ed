@@ -1,6 +1,6 @@
 import Module from 'module';
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../shared/types/sharedTypes';
 import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
 import { CourseAccessBridge } from './CourseAccessBridge';

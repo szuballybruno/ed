@@ -45,7 +45,7 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { AdminUserListView } from '../../models/views/UserAdminListView';
+import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
@@ -498,7 +498,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             name: toFullName(v.firstName, v.lastName, 'hu'),
             firstName: v.firstName,
             lastName: v.lastName,
-            roleId: v.roleId,
             avatarUrl: v.avatarFilePath
                 ? getAssetUrl(v.avatarFilePath)
                 : null,
@@ -509,7 +508,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             jobTitleName: v.jobTitleName,
             companyId: v.companyId,
             companyName: v.companyName,
-            canAccessApplication: v.canAccessApplication,
+            canAccessApplication: true,
             latestActivityDate: v.latestActivityDate,
             totalSpentTimeSeconds: v.totalSpentSeconds,
             coinBalance: v.coinBalance,

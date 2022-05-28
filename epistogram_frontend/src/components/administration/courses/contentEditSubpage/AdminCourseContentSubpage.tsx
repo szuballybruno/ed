@@ -33,9 +33,9 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic<{ videoId: number }>('video_edit_dialog', { defaultCloseButtonType: 'top' });
-    const examEditDialogLogic = useEpistoDialogLogic<{ examId: number }>('exam_edit_dialog', { defaultCloseButtonType: 'top' });
-    const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
+    const videoEditDialogLogic = useEpistoDialogLogic<{ videoId: number }>('video_edit_dialog');
+    const examEditDialogLogic = useEpistoDialogLogic<{ examId: number }>('exam_edit_dialog');
+    const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog');
     const isAnySelected = !!courseId && (courseId != -1);
 
     // state

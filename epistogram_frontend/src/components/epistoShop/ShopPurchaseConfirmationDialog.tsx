@@ -55,8 +55,8 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
     const confirmationSlide = () => (
         <Flex direction="column"
-align="center"
-w="500px">
+            align="center"
+            w="500px">
 
             <EpistoFont
                 classes={['dividerBorderBottom']}
@@ -150,7 +150,9 @@ w="500px">
         </Flex>
     );
 
-    return <EpistoDialog logic={dialogLogic}>
+    return <EpistoDialog
+        closeButtonType="top"
+        logic={dialogLogic}>
 
         <EpistoPaging
             slides={[confirmationSlide, feedbackSlide]}

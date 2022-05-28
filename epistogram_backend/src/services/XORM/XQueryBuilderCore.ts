@@ -4,6 +4,7 @@ import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { CheckCondition, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType } from './XQueryBuilderTypes';
+import { getXViewColumnNames } from './XORMDecorators';
 
 const INDENT = '   ';
 
@@ -39,7 +40,11 @@ export class XQueryBuilderCore<TEntity, TParams> {
         if (rowCount > 1)
             throw new Error(`SQL single query failed, more than 1 rows has been returned.\n${errorEndingQueryLog} `);
 
-        return rows[0];
+        const resultRow = rows[0];
+
+        this.checkColumnMappingIntegrity(resultRow, classType);
+
+        return resultRow;
     }
 
     /**
@@ -55,7 +60,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
 
-        return rows[0] ?? null;
+        const row = rows[0] ?? null;
+
+        if (row)
+            this.checkColumnMappingIntegrity(row, classType);
+
+        return row;
     }
 
     /**
@@ -69,7 +79,12 @@ export class XQueryBuilderCore<TEntity, TParams> {
         const { fullQuery, sqlParamsList } = this
             .getFullQuery(classType, query, params ?? {} as any);
 
-        return this.executeSQLQuery(fullQuery, sqlParamsList);
+        const rows = await this.executeSQLQuery(fullQuery, sqlParamsList);
+
+        if (rows.length > 0)
+            this.checkColumnMappingIntegrity(rows[0], classType);
+
+        return rows;
     }
 
     // ----- PRIVATE ----- //
@@ -218,7 +233,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
             .map((key, index): SQLParamType<TParams, keyof TParams> => {
 
                 const rawValue = params[key] as any;
-                
+
                 const value = rawValue.toSQLValue
                     ? rawValue.toSQLValue()
                     : rawValue;
@@ -316,5 +331,23 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         return snakeCaseString
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+    }
+
+    private checkColumnMappingIntegrity<T>(row: any, entitySignature: ClassType<T>) {
+
+        const rowKeys = Object.keys(row);
+        const columnNames = getXViewColumnNames(entitySignature);
+
+        if (columnNames.length === 0)
+            return;
+
+        const missingColumns = columnNames
+            .filter(columnName => !rowKeys
+                .any(rowKey => rowKey === columnName));
+
+        if (missingColumns.length === 0)
+            return;
+
+        throw new Error(`Column mapping mismatch in ${entitySignature.name}, columns are missing from the returned row(s): [${missingColumns.join(', ')}]`);
     }
 }

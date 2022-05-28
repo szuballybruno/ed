@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag } from '../../../services/ORMConnectionService/ORMConnectionDecorators';
+import { IsDeletedFlag } from '../../../services/XORM/XORMDecorators';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { RoleAssignmentBridge } from './RoleAssignmentBridge';

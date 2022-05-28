@@ -180,7 +180,9 @@ export const AdminUserCourseContentDialog = (props: {
         }
     ];
 
-    return <EpistoDialog fullScreenX
+    return <EpistoDialog
+        closeButtonType="top"
+        fullScreenX
         fullScreenY
         logic={dialogLogic}>
         <Flex

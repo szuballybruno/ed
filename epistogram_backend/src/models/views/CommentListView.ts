@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -7,41 +8,54 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class CommentListView {
 
     @ViewColumn()
+    @XViewColumn()
     id: number;
 
     @ViewColumn()
+    @XViewColumn()
     videoId: number;
 
     @ViewColumn()
+    @XViewColumn()
     threadId: number;
 
     @ViewColumn()
+    @XViewColumn()
     userId: number;
 
     @ViewColumn()
+    @XViewColumn()
     fullName: string | null;
 
     @ViewColumn()
+    @XViewColumn()
     commentText: string;
 
     @ViewColumn()
+    @XViewColumn()
     creationDate: Date;
 
     @ViewColumn()
+    @XViewColumn()
     parentCommentId: number;
 
     @ViewColumn()
+    @XViewColumn()
     avatarUrl: string;
 
     @ViewColumn()
+    @XViewColumn()
     commentLikeCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     currentUserId: number;
 
     @ViewColumn()
+    @XViewColumn()
     isLike: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     isQuestion: boolean;
 }

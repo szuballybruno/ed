@@ -46,6 +46,7 @@ export const permissionCodes = [
     // permissions
     'ASSIGN_GLOBAL_PERMISSIONS',
     'ASSIGN_COMPANY_PERMISSIONS',
+    'ASSIGN_COURSE_PERMISSIONS',
 
     // course 
     'EDIT_COMPANY_COURSES',

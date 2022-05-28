@@ -19,9 +19,7 @@ export const LearningCourseStats = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    const dialogLogic = useEpistoDialogLogic('sasd', {
-        defaultCloseButtonType: 'top'
-    });
+    const dialogLogic = useEpistoDialogLogic('sasd');
 
 
     const { navigateToPlayer } = useNavigation();
