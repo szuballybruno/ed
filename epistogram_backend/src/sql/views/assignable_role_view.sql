@@ -31,6 +31,7 @@ roles AS
 		co.name context_company_name,
 		ro.id role_id,
 		ro.name role_name,
+		ro.is_custom,
 		CASE WHEN ro.is_custom THEN co.id ELSE NULL END owner_company_id,
 		CASE WHEN ro.is_custom THEN co.name ELSE NULL END owner_company_name,
 		urv.role_id IS NOT NULL is_assigned,

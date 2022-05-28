@@ -675,7 +675,7 @@ export const useEventTrigger = () => {
 
     const [state, setState] = useState(1);
 
-    const fireEvent = useCallback(() => setState(state + 1), []);
+    const fireEvent = useCallback(() => setState(state + 1), [setState, state]);
 
     return {
         subscriptionValue: state,
