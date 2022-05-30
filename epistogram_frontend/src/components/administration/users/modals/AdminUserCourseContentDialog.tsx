@@ -162,9 +162,9 @@ export const AdminUserCourseContentDialog = (props: {
         },
         {
             title: 'Videók',
-            component: <Flex>
-                <AdminUserVideosDataGridControl />
-            </Flex>
+            component: <AdminUserVideosDataGridControl handleMoreButton={function (): void {
+                throw new Error('Function not implemented.');
+            }} />
         },
         {
             title: 'Vizsgák',
@@ -180,12 +180,14 @@ export const AdminUserCourseContentDialog = (props: {
         }
     ];
 
-    return <EpistoDialog fullScreenX
+    return <EpistoDialog
+        closeButtonType="top"
+        fullScreenX
         fullScreenY
         logic={dialogLogic}>
+
         <Flex
-            overflowY="scroll"
-            className="roundBorders"
+            className="roundBorders whall"
             flex="1"
             flexDirection="column">
 
@@ -201,8 +203,7 @@ export const AdminUserCourseContentDialog = (props: {
                 maxH="80px"
                 p="20px 30px 20px 30px"
                 className="mildShadow"
-                zIndex="1000"
-                flex="1">
+                zIndex="1000">
 
                 <Flex
                     align="center"
@@ -238,7 +239,7 @@ export const AdminUserCourseContentDialog = (props: {
                     }}
                     sx={{
                         '&.MuiTabs-root': {
-                            //background: "var(--transparentIntenseBlue85)",
+                            //background: 'var(--transparentIntenseBlue85)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -281,14 +282,23 @@ export const AdminUserCourseContentDialog = (props: {
             </Flex>
 
             { /* tab contents */}
-            {moreInfoDialogTabs
-                .map((x, index) => <TabPanel
-                    key={index}
-                    value={currentTab}
-                    index={index}>
+            <Flex
+                flex='1'
+                className='whall'>
 
-                    {x.component}
-                </TabPanel>)}
+                {moreInfoDialogTabs
+                    .map((x, index) => <TabPanel
+                        style={{
+                            height: '100%',
+                            width: '100%',
+                        }}
+                        key={index}
+                        value={currentTab}
+                        index={index}>
+
+                        {x.component}
+                    </TabPanel>)}
+            </Flex>
         </Flex>
     </EpistoDialog>;
 };

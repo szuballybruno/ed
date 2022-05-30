@@ -27,7 +27,7 @@ export const ShopPage = () => {
     const [categoryFilterId, setCategoryFilterId] = useState(-1);
     const [currentShopItem, setCurrentShopItem] = useState<null | ShopItemDTO>(null);
 
-    const confirmationDilaogLogic = useEpistoDialogLogic('confirm', { defaultCloseButtonType: 'top' });
+    const confirmationDilaogLogic = useEpistoDialogLogic('confirm');
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 

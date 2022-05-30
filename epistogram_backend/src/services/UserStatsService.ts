@@ -1,16 +1,18 @@
 
+import { Course } from '../models/entity/Course';
+import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
+import { UserCourseStatsView } from '../models/views/UserCourseStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
+import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserStatsView } from '../models/views/UserStatsView';
+import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
+import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
+import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
+import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
+import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { UserPerformanceView } from '../models/views/UserPerformanceView';
-import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
-import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
-import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
-import { Course } from '../models/entity/Course';
-import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
-import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 
 export class UserStatsService {
 
@@ -36,9 +38,53 @@ export class UserStatsService {
     }
 
     /**
+     * Gets the statistics for the users every course
+     * @param userId 
+     * @returns
+     * 
+     * TODO: Filter courses by permissions
+     * TODO: Rearrange the view, so when the user hasn't
+     *       started a course yet, return all the courses with empty
+     *       data, instead of [] 
+     */
+
+    async getUserCourseStatsAsync(userId: number) {
+
+        const stats = await this._ormService
+            .getRepository(UserCourseStatsView)
+            .createQueryBuilder('ucsv')
+            .where('"ucsv"."user_id" = :userId', { userId })
+            .getMany();
+
+        return this._mapperService
+            .mapMany(UserCourseStatsView, UserCourseStatsDTO, stats);
+    }
+
+    /**
+     * Gets the statistics for the users every watched video
+     * @param userId 
+     * @returns
+     */
+
+    async getUserVideoStatsAsync(userId: number, courseId: number) {
+
+        const stats = await this._ormService
+            .getRepository(UserVideoStatsView)
+            .createQueryBuilder('uvsv')
+            .where('"uvsv"."user_id" = :userId', { userId, courseId })
+            .andWhere('"uvsv"."course_id" = :courseId')
+            .getMany();
+
+        return this._mapperService
+            .mapMany(UserVideoStatsView, UserVideoStatsDTO, stats);
+    }
+
+    /**
      * Gets the learning overview statistics data for single user
      * @param userId 
      * @returns 
+     * 
+     * TODO: Correct mapping
      */
     getUserLearningOverviewDataAsync = async (userId: number) => {
 
@@ -73,7 +119,7 @@ export class UserStatsService {
 
             performancePercentage: stats.performancePercentage,
             userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
-            reactionTimeScorePoints: (stats.userReactionTimePoints * 3 + stats.userExamLengthPoints) / 4,
+            reactionTimeScorePoints: stats.totalUserReactionTimePoints,
 
             isAnyCoursesInProgress: inProgressCourses.any(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,
@@ -98,62 +144,5 @@ export class UserStatsService {
             totalDoneExams: stats.totalDoneExams,
             videosToBeRepeatedCount: stats.videosToBeRepeatedCount
         } as Partial<UserLearningOverviewDataDTO>;
-    };
-
-    private getSingleUserResponseTimePoints = (
-        currentUserResponseTimeAverageSeconds: number,
-        usersResponseTimeAverageSeconds: number
-    ) => {
-        const difference = currentUserResponseTimeAverageSeconds - usersResponseTimeAverageSeconds;
-        const absDifference = Math.abs(difference);
-        const onePercentDifference = usersResponseTimeAverageSeconds / 100;
-
-        let points: number | null = 0;
-
-        switch (true) {
-
-            case absDifference < onePercentDifference * 15 && absDifference > 0:
-                points += 50;
-                break;
-
-            case difference > onePercentDifference * 15 && difference < onePercentDifference * 30:
-                points += 30;
-                break;
-
-            case difference > onePercentDifference * 30 && difference < onePercentDifference * 40:
-                points += 25;
-                break;
-
-            case difference > onePercentDifference * 45 && difference < onePercentDifference * 55:
-                points += 20;
-                break;
-
-            case difference > onePercentDifference * 55 && difference < onePercentDifference * 65:
-                points += 10;
-                break;
-
-            case difference < -(onePercentDifference * 15) && difference > -(onePercentDifference * 25):
-                points += 65;
-                break;
-
-            case difference < -(onePercentDifference * 25) && difference > -(onePercentDifference * 35):
-                points += 80;
-                break;
-
-            case difference < -(onePercentDifference * 35) && difference > -(onePercentDifference * 50):
-                points += 90;
-                break;
-
-            case difference < -(onePercentDifference * 50):
-                points += 100;
-                break;
-
-            default:
-                points = null;
-                break;
-
-        }
-
-        return points;
     };
 }

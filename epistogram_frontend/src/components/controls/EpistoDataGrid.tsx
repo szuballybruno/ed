@@ -114,11 +114,12 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     deps?: any[],
     density?: 'dense' | 'spaced',
     hideFooter?: boolean,
+    id?: string
 }) => {
 
-    console.log('Rendering EpistoDataGrid...');
+    const { columns, id, rows, initialState, density, hideFooter, handleEdit, getKey } = props;
 
-    const { columns, rows, initialState, density, hideFooter, handleEdit, getKey } = props;
+    console.log(`${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
     removeOverlay();
 
@@ -226,7 +227,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     })();
 
     if (!isUnhanged)
-        console.log(`Grid params changed, cause: ${cause}`);
+        console.log(`${prev.id ? `[id: ${prev.id}] ` : ''}Grid params changed, cause: ${cause}`);
 
     return isUnhanged;
 });

@@ -52,6 +52,10 @@ export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>(
         code: 'ASSIGN_COMPANY_PERMISSIONS',
         scope: 'COMPANY'
     },
+    ASSIGN_COURSE_PERMISSIONS: {
+        code: 'ASSIGN_COURSE_PERMISSIONS',
+        scope: 'USER'
+    },
 
     // courses 
     EDIT_COMPANY_COURSES: {
@@ -128,15 +132,15 @@ export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>(
     },
     VIEW_TEACHER_OVERVIEW: {
         code: 'VIEW_TEACHER_OVERVIEW',
-        scope: 'COMPANY'
+        scope: 'USER'
     },
     SET_JOB_TITLE: {
         code: 'SET_JOB_TITLE',
-        scope: 'COMPANY'
+        scope: 'USER'
     },
     EDIT_COURSE_OWNER_TEACHER_DATA: {
         code: 'EDIT_COURSE_OWNER_TEACHER_DATA',
-        scope: 'COMPANY'
+        scope: 'USER'
     },
 
     // misc

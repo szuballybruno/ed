@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
@@ -8,7 +8,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { isCurrentAppRoute } from '../../../static/frontendHelpers';
+import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
@@ -32,6 +32,7 @@ export const AdminEditUserSubpage = (props: {
     const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute);
     const navigateToUserCourses = () => navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { courseId: editedUserId });
     const location = useLocation();
+    const refetchTrigger = useEventTrigger();
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -39,13 +40,16 @@ export const AdminEditUserSubpage = (props: {
 
             await saveUserAsync(dto);
             showNotification('A változtatások sikeresen mentésre kerültek.');
-            refetchEditUserData();
+            refetchTrigger.fireEvent();
         }
         catch (e) {
 
             showError(e);
         }
     };
+
+    // subscribe refetch trigger
+    useSubscribeEventTrigger(refetchTrigger, refetchEditUserData);
 
     const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn');
 
@@ -134,6 +138,7 @@ export const AdminEditUserSubpage = (props: {
             <EpistoDialog logic={deleteWaningDialogLogic} />
 
             <AdminEditUserControl
+                refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
                 showDeleteUserDialog={showDeleteUserDialog}
                 saveUserAsync={handleSaveUserAsync} />

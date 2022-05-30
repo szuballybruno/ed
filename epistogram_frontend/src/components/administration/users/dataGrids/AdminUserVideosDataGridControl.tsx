@@ -1,214 +1,187 @@
-import { DataGrid } from '@mui/x-data-grid';
-import { DataGridPro, GridColDef, GridRowsProp } from '@mui/x-data-grid-pro';
-import { getRandomInteger } from '../../../../static/frontendHelpers';
+import { Flex } from '@chakra-ui/react';
+import { useCallback } from 'react';
+import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
+import { UserVideoStatsDTO } from '../../../../shared/dtos/UserVideoStatsDTO';
+import { OmitProperty } from '../../../../shared/types/advancedTypes';
+import { useIntParam } from '../../../../static/locationHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { LoadingFrame } from '../../../system/LoadingFrame';
 import { ChipSmall } from '../../courses/ChipSmall';
+import { EmptyCell } from './AdminUserCoursesDataGridControl';
 
-export const AdminUserVideosDataGridControl = () => {
-    const dummyVideos = [
-        {
-            id: 0,
-            title: 'Kezdőképernyő',
-            videoLength: '1:47',
-            allSpentTime: '3:10',
-            replaysCount: '1.6x',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 11.2,
-            lastWatchTime: '2022.02.12.',
-        },
-        {
-            id: 1,
-            title: 'A képernyő részei',
-            videoLength: '3:52',
-            allSpentTime: '4:00',
-            replaysCount: '0',
-            isAnsweredCorrectly: 'Nem',
-            reactionTime: 8,
-            lastWatchTime: '2022.02.12',
-        },
-        {
-            id: 2,
-            title: 'Több dokumentum egyidejű kezelése',
-            videoLength: '3:47',
-            allSpentTime: '9:10',
-            replaysCount: '2.2x',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 13.2,
-            lastWatchTime: '2022.02.12.',
-        },
-        {
-            id: 3,
-            title: 'A nagyítás lehetőségei',
-            videoLength: '2:13',
-            allSpentTime: '4:10',
-            replaysCount: '1.9',
-            isAnsweredCorrectly: 'Nem',
-            reactionTime: 19.2,
-            lastWatchTime: '2022.02.12.',
-        },
-        {
-            id: 4,
-            title: 'A prezentáció tartalma',
-            videoLength: '2:22',
-            allSpentTime: '2:30',
-            replaysCount: '0',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 5.2,
-            lastWatchTime: '2022.02.12.',
-        },
-        {
-            id: 5,
-            title: 'A gyorselérési eszköztár használata',
-            videoLength: '3:19',
-            allSpentTime: '12:30',
-            replaysCount: '3.8x',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 12.2,
-            lastWatchTime: '2022.02.13.',
-        },
-        {
-            id: 6,
-            title: 'A fájl menü lehetőségei',
-            videoLength: '4:55',
-            allSpentTime: '11:30',
-            replaysCount: '2.2x',
-            isAnsweredCorrectly: 'Nem',
-            reactionTime: 15.2,
-            lastWatchTime: '2022.02.13.',
-        },
-        {
-            id: 7,
-            title: 'A prezentáció mentése',
-            videoLength: '2:02',
-            allSpentTime: '2:02',
-            replaysCount: '0',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 9.1,
-            lastWatchTime: '2022.02.14.',
-        },
-        {
-            id: 8,
-            title: 'Mentés diavetítésként',
-            videoLength: '2:07',
-            allSpentTime: '3:30',
-            replaysCount: '1.52x',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 10.1,
-            lastWatchTime: '2022.02.14.',
-        },
-        {
-            id: 9,
-            title: 'Kattintás és húzás',
-            videoLength: '4:25',
-            allSpentTime: '4:25',
-            replaysCount: '0',
-            isAnsweredCorrectly: 'Igen',
-            reactionTime: 7.7,
-            lastWatchTime: '2022.02.15.',
-        },
-        {
-            id: 10,
-            title: 'Tartalom beillesztése',
-            videoLength: '4:07',
-            allSpentTime: '4:7',
-            replaysCount: '0',
-            isAnsweredCorrectly: 'Nem',
-            reactionTime: 22.2,
-            lastWatchTime: '2022.02.16.',
-        },
+export const AdminUserVideosDataGridControl = (props: {
+    handleMoreButton: () => void
+}) => {
 
-    ];
+    const { handleMoreButton } = props;
 
-    const getRowsFromVideos = () => dummyVideos.map((video) => {
+    const userId = useIntParam('userId')!;
+    const courseId = 11;
+
+    const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(userId, courseId);
+
+    const userVideos = userVideoStats ?? [];
+
+    const getRowKey = useCallback((row: Partial<UserVideoStatsDTO>) => `${row.videoId}`, []);
+
+    const getRowsFromVideos = () => userVideos.map((video) => {
         return {
-            id: video.id,
-            title: video.title,
-            videoLength: video.videoLength,
-            allSpentTime: video.allSpentTime,
-            replaysCount: video.replaysCount,
-            isAnsweredCorrectly: video.isAnsweredCorrectly,
-            reactionTime: video.reactionTime,
+            userId: video.userId,
+            videoId: video.videoId,
+            videoTitle: video.videoTitle,
+            courseId: video.courseId,
+            lengthSeconds: video.lengthSeconds,
+            totalSpentTimeSeconds: video.totalSpentTimeSeconds,
+            videoReplaysCount: video.videoReplaysCount,
+            isRecommendedForRetry: video.isRecommendedForRetry,
+            lastThreeAnswerAverage: video.lastThreeAnswerAverage,
+            averageReactionTime: video.averageReactionTime,
             lastWatchTime: video.lastWatchTime
-        };
+        } as Partial<UserVideoStatsDTO>;
     });
 
-    const videoRows: GridRowsProp = getRowsFromVideos();
+    const rows: Partial<UserVideoStatsDTO>[] = getRowsFromVideos();
 
-    const videoColumns: GridColDef[] = [
-        {
-            field: 'title',
+    const columnDefGen = <TField extends keyof Partial<UserVideoStatsDTO & { moreDetails: string }>>(
+        field: TField,
+        columnOptions: OmitProperty<GridColumnType<Partial<UserVideoStatsDTO & { moreDetails: string }>, string | undefined, TField>, 'field'>) => {
+
+        return {
+            field,
+            ...columnOptions
+        };
+    };
+
+    const columns: GridColumnType<Partial<UserVideoStatsDTO>, string | undefined, any>[] = [
+
+        columnDefGen('videoTitle', {
             headerName: 'Cím',
-            width: 300
-        },
-        {
-            field: 'videoLength',
-            headerName: 'Videó hossz',
-            width: 120,
-            editable: true,
+            width: 300,
             resizable: true
-        },
-        {
-            field: 'allSpentTime',
-            headerName: 'Összes eltöltött idő', width: 150,
-            resizable: true
-        },
-        {
-            field: 'replaysCount',
+        }),
+        columnDefGen('lengthSeconds', {
+            headerName: 'Videó hossza',
+            width: 150,
+            resizable: true,
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EmptyCell />
+        }),
+        columnDefGen('totalSpentTimeSeconds', {
+            headerName: 'Összes megtekintési idő',
+            width: 150,
+            resizable: true,
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EmptyCell />
+
+        }),
+        columnDefGen('videoReplaysCount', {
             headerName: 'Ismétlések száma',
             width: 150,
-            resizable: true
-        },
-        {
-            field: 'replayRecommended',
+            resizable: true,
+            renderCell: (params) => params.value !== null
+                ? <EpistoFont>
+                    {params.value}
+                </EpistoFont>
+                : <EmptyCell />
+
+        }),
+        columnDefGen('isRecommendedForRetry', {
             headerName: 'Ismétlésre ajánlott',
             width: 150,
             resizable: true,
-            renderCell: () => {
-                const randomNumber = getRandomInteger(0, 100);
-                return <ChipSmall
-                    text={`${randomNumber < 20 ? 'Igen' : 'Nem'}`}
-                    color={randomNumber > 20 ? 'var(--deepGreen)' : 'var(--intenseRed)'} />;
-            }
-        },
-        {
-            field: 'isAnsweredCorrectly',
-            headerName: 'Helyesen válaszolt?',
+            renderCell: (params) => params.value !== null
+                ? <ChipSmall
+                    text={'Ismétlésre ajánlott'}
+                    color={'var(--deepOrange)'} />
+                : <EmptyCell />
+        }),
+        columnDefGen('lastThreeAnswerAverage', {
+            headerName: 'Elvégzett vizsgák',
             width: 150,
             resizable: true,
-            renderCell: (params) =>
-                <ChipSmall
-                    text={params.value}
-                    color={params.value === 'Igen'
-                        ? 'var(--intenseGreen)'
-                        : 'var(--intenseRed)'} />
-        },
-        {
-            field: 'reactionTime',
+            renderCell: (params) => params.value !== null && params.value !== undefined
+                ? <EpistoFont>
+                    {Math.round(params.value)}
+                </EpistoFont>
+                : <EmptyCell />
+        }),
+        columnDefGen('averageReactionTime', {
             headerName: 'Reakcióidő',
             width: 150,
             resizable: true,
-            renderCell: (params) => <ChipSmall
-                text={params.value < 10
-                    ? 'Átlagon felüli'
-                    : params.value < 15 && params.value >= 10
-                        ? 'Átlagos'
-                        : 'Átlag alatti'}
-                color={params.value < 10
-                    ? 'var(--deepGreen)'
-                    : params.value < 15 && params.value >= 10
-                        ? 'var(--mildOrange)'
-                        : 'var(--intenseRed)'
-                } />
-        },
-        {
-            field: 'lastWatchTime',
+            renderCell: (params) =>
+                params.value !== null && params.value !== undefined
+                    ? <ChipSmall
+                        text={params.value > 5
+                            ? 'Átlagon felüli'
+                            : params.value < -5
+                                ? 'Átlagon aluli'
+                                : 'Átlagos'}
+                        color={params.value > 5
+                            ? 'var(--deepGreen)'
+                            : params.value < -5
+                                ? 'var(--intenseRed)'
+                                : ''} />
+                    : <EmptyCell />
+        }),
+        columnDefGen('lastWatchTime', {
             headerName: 'Utolsó megtekintés ideje',
             width: 150,
-            resizable: true
-        }
+            resizable: true,
+            renderCell: (params) => params.value !== null && params.value !== undefined
+                ? <EpistoFont>
+                    {new Date(params.value)
+                        .toLocaleDateString('hu-hu', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })}
+                </EpistoFont>
+                : <EmptyCell />
+        }),
+
+        columnDefGen('moreDetails', {
+            headerName: 'Részletek',
+            width: 150,
+            renderCell: (params) =>
+
+                <EpistoButton
+                    variant="outlined"
+                    onClick={() => {
+                        handleMoreButton();
+                    }} >
+
+                    Bővebben
+                </EpistoButton>
+        })
     ];
-    return <DataGrid
-        autoHeight
-        rows={videoRows}
-        columns={videoColumns} />;
+
+    return <LoadingFrame
+        flex='1'
+        className='whall'
+        loadingState={userVideoStatsStatus}
+        error={userVideoStatsError}>
+
+        {userVideos.length > 0
+            ? <EpistoDataGrid
+                getKey={getRowKey}
+                rows={rows}
+                columns={columns} />
+            : <Flex
+                flex='1'
+                align='center'
+                justify='center'>
+
+                A felhasználó még egyetlen videót sem kezdett el ebben a kurzusban
+            </Flex>}
+    </LoadingFrame>;
 };

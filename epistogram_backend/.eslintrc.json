@@ -25,6 +25,14 @@
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "no-constant-condition": "off",
+        "@typescript-eslint/no-inferrable-types": {
+            "ignoreParameters": true,
+            "ignoreProperties": true
+        },
+        "no-inferrable-types": {
+            "ignoreParameters": true,
+            "ignoreProperties": true
+        },
         "newline-per-chained-call": [
             "error",
             {

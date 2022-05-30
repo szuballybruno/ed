@@ -14,10 +14,12 @@ FROM
 		u.id user_id,
 		u.email user_email,
 
-		upv.performance_percentage performance_percentage,
-		upv.reaction_time_percent_diff user_reaction_time_difference_percentage,
-		upv.user_reaction_time_points,
-		upv.user_exam_length_points,
+		upv.total_performance_percentage performance_percentage,
+		
+		urtv.reaction_time_percent_diff user_reaction_time_difference_percentage,
+		urtv.user_reaction_time_points,
+		urtv.user_exam_length_points,
+		urtv.total_user_reaction_time_points,
 
 		-- most frequent time range
 		usbv.average_session_block most_frequent_time_range,
@@ -104,7 +106,8 @@ FROM
 
 		-- completed_exam_count
 		(
-			SELECT SUM (ecv.has_successful_session::int)::int
+			SELECT 
+				COUNT(ecv.has_successful_session::int)
 			FROM public.exam_completed_view ecv
 			WHERE ecv.user_id = u.id
 		) total_done_exams,
@@ -127,7 +130,20 @@ FROM
 	LEFT JOIN public.user_session_block_view usbv
 	ON usbv.user_id = u.id
 
+	LEFT JOIN public.user_reaction_time_view urtv
+	ON urtv.user_id = u.id
+
 	WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
+
+	GROUP BY 
+		u.id, 
+		u.email, 
+		upv.total_performance_percentage, 
+		urtv.reaction_time_percent_diff, 
+		urtv.user_reaction_time_points, 
+		urtv.user_exam_length_points, 
+		urtv.total_user_reaction_time_points, 
+		usbv.average_session_block
 
 	ORDER BY u.id
 ) sq

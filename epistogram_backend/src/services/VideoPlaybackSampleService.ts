@@ -41,27 +41,27 @@ export class VideoPlaybackSampleService {
 
     squishSamplesAsync = async (userId: number, videoId: number, chunks: VideoPlaybackSampleChunk[]) => {
 
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(VideoPlaybackSample)
-            .where('userId = :userId', { userId })
-            .andWhere('videoId = :videoId', { videoId })
-            .execute();
-
-        await this._ormService
-            .getRepository(VideoPlaybackSample)
-            .save(chunks
-                .map(chunk => {
-
-                    return {
-                        fromSeconds: chunk.startSeconds,
-                        toSeconds: chunk.endSeconds,
-                        userId: userId,
-                        videoId: videoId
-                    } as VideoPlaybackSample;
-                }));
+        /*  await this._ormService
+             .getOrmConnection()
+             .createQueryBuilder()
+             .delete()
+             .from(VideoPlaybackSample)
+             .where('userId = :userId', { userId })
+             .andWhere('videoId = :videoId', { videoId })
+             .execute();
+ 
+         await this._ormService
+             .getRepository(VideoPlaybackSample)
+             .save(chunks
+                 .map(chunk => {
+ 
+                     return {
+                         fromSeconds: chunk.startSeconds,
+                         toSeconds: chunk.endSeconds,
+                         userId: userId,
+                         videoId: videoId
+                     } as VideoPlaybackSample;
+                 })); */
     };
 
     getSampleChunksAsync = async (userId: number, videoId: number) => {

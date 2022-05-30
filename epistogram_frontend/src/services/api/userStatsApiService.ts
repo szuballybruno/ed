@@ -1,5 +1,7 @@
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
+import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
 export const useUserStats = (userId: number) => {
@@ -10,5 +12,27 @@ export const useUserStats = (userId: number) => {
         userStats: queryRes.data,
         userStatsStatus: queryRes.state,
         userStatsError: queryRes.error
+    };
+};
+
+export const useUserCourseStats = (userId: number) => {
+
+    const queryRes = useReactQuery2<UserCourseStatsDTO[]>(apiRoutes.userStats.getUserCourseStats, { userId });
+
+    return {
+        userCourseStats: queryRes.data,
+        userCourseStatsStatus: queryRes.state,
+        userCourseStatsError: queryRes.error
+    };
+};
+
+export const useUserVideoStats = (userId: number, courseId: number) => {
+
+    const queryRes = useReactQuery2<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { userId, courseId });
+
+    return {
+        userVideoStats: queryRes.data,
+        userVideoStatsStatus: queryRes.state,
+        userVideoStatsError: queryRes.error
     };
 };

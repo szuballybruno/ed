@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -8,8 +9,10 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserSessionBlockView {
 
     @ViewColumn()
+    @XViewColumn()
     userId: number;
 
     @ViewColumn()
+    @XViewColumn()
     averageSessionBlock: string;
 }

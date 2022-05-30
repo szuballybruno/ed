@@ -130,6 +130,10 @@
   color: var(--intenseGray) !important;
 }
 
+.fontError {
+  color: var(--mildRed) !important;
+}
+
 /* sqares  */
 
 .square15 {

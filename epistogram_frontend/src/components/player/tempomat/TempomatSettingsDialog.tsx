@@ -5,7 +5,7 @@ import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog,  } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { TempomatModeTile } from './TempomatModeTile';
 
@@ -34,7 +34,7 @@ export const TempomatSettingsDialog = (props: {
             showError(e);
         }
     };
-    
+
     // "& .MuiDialog-container": {
     //     justifyContent: "center",
     //     alignItems: "center"
@@ -48,11 +48,13 @@ export const TempomatSettingsDialog = (props: {
     return (
         <EpistoDialog
             fullScreenX
-            logic={tempomatDialogLogic}>
+            title='A tanfolyam tempójának beállítása'
+            closeButtonType='top'
+            logic={tempomatDialogLogic} >
 
             <Flex direction="column"
-align="center"
-flex="1" >
+                align="center"
+                flex="1" >
                 <Divider
                     h="1px"
                     w="calc(100% - 20px)"
@@ -135,6 +137,6 @@ flex="1" >
                     </Flex>
                 </Flex>
             </Flex>
-        </EpistoDialog>
+        </EpistoDialog >
     );
 };

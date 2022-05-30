@@ -19,6 +19,15 @@ export class CourseController {
         this._userCourseBridgeService = userCourseBridgeService;
     }
 
+    @XControllerAction(apiRoutes.course.getPermissionAssignCourses)
+    getPermissionAssignCoursesAction = async (parmas: ActionParams) => {
+
+        return this._courseService
+            .getPermissionAssignCoursesAsync(parmas.principalId, parmas
+                .getQuery()
+                .getValue(x => x.userId, 'int'));
+    };
+
     @XControllerAction(apiRoutes.course.getAvailableCourses)
     getAvailableCoursesAction = async (params: ActionParams) => {
 

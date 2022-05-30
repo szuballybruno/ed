@@ -14,6 +14,7 @@ export function TabPanel(props: TabPanelProps) {
 
     return (
         <div
+            className='whall'
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
@@ -21,8 +22,11 @@ export function TabPanel(props: TabPanelProps) {
             style={style}
             {...other}>
             {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <EpistoFont>{children}</EpistoFont>
+                <Box
+                    flex='1'
+                    sx={{ p: 3, width: '100%', height: '100%' }}>
+
+                    {children}
                 </Box>
             )}
         </div>

@@ -1,4 +1,6 @@
-import { AssignedAuthItemsDTO } from './role/AssignedAuthItemsDTO';
+import { ChangeSet } from './changeSet/ChangeSet';
+import { UserPermissionDTO } from './role/UserPermissionDTO';
+import { UserRoleDTO } from './role/UserRoleDTO';
 
 export class UserEditDTO {
     id: number;
@@ -8,5 +10,6 @@ export class UserEditDTO {
     isTeacher: boolean;
     companyId: number;
     jobTitleId: number | null;
-    assignedAuthItems: AssignedAuthItemsDTO;
+    roles: ChangeSet<UserRoleDTO>;
+    permissions: ChangeSet<UserPermissionDTO>;
 }

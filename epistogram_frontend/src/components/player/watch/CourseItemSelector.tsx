@@ -42,14 +42,9 @@ export const CourseItemSelector = (props: {
     const { setCourseModeAsync } = useSetCourseMode();
 
     // dialog state 
-    const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog', {
-        defaultCloseButtonType: 'top'
-    });
+    const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
 
-    const tempomatDialogLogic = useEpistoDialogLogic('tempomat', {
-        title: 'A tanfolyam tempójának beállítása',
-        defaultCloseButtonType: 'top'
-    });
+    const tempomatDialogLogic = useEpistoDialogLogic('tempomat');
 
     // func 
 
@@ -97,7 +92,10 @@ export const CourseItemSelector = (props: {
             tempomatDialogLogic={tempomatDialogLogic} />
 
         {/* warning dialog */}
-        <EpistoDialog logic={dialogLogic}>
+        <EpistoDialog
+            logic={dialogLogic}
+            closeButtonType="top">
+
             Point of no return
         </EpistoDialog>
 

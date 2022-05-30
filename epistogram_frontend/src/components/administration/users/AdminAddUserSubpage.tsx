@@ -4,7 +4,7 @@ import { useCreateInviteUserAsync } from '../../../services/api/registrationApiS
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { usePostCallback } from '../../../static/frontendHelpers';
+import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
@@ -21,6 +21,8 @@ const AdminAddUserSubpage = (props: {
 
     // http 
     const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
+
+    const refetchTrigger = useEventTrigger();
 
     const postCreateInvitedUser = useCallback(() => {
 
@@ -43,6 +45,7 @@ const AdminAddUserSubpage = (props: {
             className='roundBorders'>
 
             <AdminEditUserControl
+                refetchTrigger={refetchTrigger}
                 editDTO={null}
                 saveUserAsync={handleCreateInvitedUser}></AdminEditUserControl>
         </AdminSubpageHeader>

@@ -32,7 +32,7 @@ export const useHandleAddRemoveItems = <TItem, TKey>(
         getKey?: (item: TItem) => TKey,
         sideEffects: ((newValue: TItem[]) => void)[]
     }): [
-        (item: TItem) => void,
+        (item: TItem | TItem[]) => void,
         (key: TKey) => void
     ] => {
 
@@ -44,9 +44,9 @@ export const useHandleAddRemoveItems = <TItem, TKey>(
         return (x: TItem): TKey => x as any;
     }, [opts?.getKey]);
 
-    const addItem = useCallback((item: TItem) => {
+    const addItem = useCallback((item: TItem | TItem[]) => {
 
-        const newItems = [...items, item];
+        const newItems = [...items, ...(Array.isArray(item) ? item : [item])];
 
         setItems(newItems);
 
@@ -263,8 +263,21 @@ export const valueCompareTest = (val: any, name: string) => {
 
     const prevValName = `prev_val_${name}`;
     const prevVal = window[prevValName];
-    console.log(`*** ${name} Is unchanged: ${val === prevVal}`);
+
+    if (val !== prevVal)
+        console.log(`*** ${name} Changed!!!`);
+
     window[prevValName] = val;
+};
+
+export const valuesCompareTest = (valNames: string[]) => {
+
+    valNames
+        .forEach(name => {
+
+            const val = eval(name);
+            valueCompareTest(val, name);
+        });
 };
 
 export const useValueCompareTest = (value: any, label: string) => {
@@ -412,20 +425,20 @@ export const usePaging = <T>(
     if (!hasValue(items))
         throw new Error('Cannot page a null or undefined items collection!');
 
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+    const [currentIndex, setCurrentItemIndex] = useState(0);
 
-    const max = isNumber(items)
+    const max = useMemo(() => isNumber(items)
         ? items as number
-        : (items as any[]).length;
+        : (items as any[]).length, [items]);
 
-    const isLast = currentItemIndex === max - 1;
-    const isFirst = currentItemIndex === 0;
-    const currentItem = items[currentItemIndex] as T | null;
-    const progressPercentage = max > 0
-        ? currentItemIndex / max * 100
-        : 0;
+    const isLast = useMemo(() => currentIndex === max - 1, [max, currentIndex]);
+    const isFirst = useMemo(() => currentIndex === 0, [currentIndex]);
+    const currentItem = useMemo(() => items[currentIndex] as T | null, [items, currentIndex]);
+    const progressPercentage = useMemo(() => max > 0
+        ? currentIndex / max * 100
+        : 0, [max, currentIndex]);
 
-    const next = () => {
+    const next = useCallback(() => {
 
         if (isLast) {
 
@@ -433,11 +446,11 @@ export const usePaging = <T>(
                 onNextOverNavigation();
         } else {
 
-            setCurrentItemIndex(currentItemIndex + 1);
+            setCurrentItemIndex(currentIndex + 1);
         }
-    };
+    }, [onNextOverNavigation, setCurrentItemIndex, currentIndex, isLast]);
 
-    const previous = () => {
+    const previous = useCallback(() => {
 
         if (isFirst) {
 
@@ -445,11 +458,11 @@ export const usePaging = <T>(
                 onPreviousOverNavigation();
         } else {
 
-            setCurrentItemIndex(currentItemIndex - 1);
+            setCurrentItemIndex(currentIndex - 1);
         }
-    };
+    }, [onPreviousOverNavigation, setCurrentItemIndex, isFirst, currentIndex]);
 
-    const setItem = (itemIndex: number) => {
+    const setItem = useCallback((itemIndex: number) => {
 
         if (itemIndex < 0)
             throw new Error('Item index is less than 0!');
@@ -458,25 +471,36 @@ export const usePaging = <T>(
             throw new Error('Item index is more than the length of the items collection!');
 
         setCurrentItemIndex(itemIndex);
-    };
+    }, [setCurrentItemIndex]);
 
-    const jumpToLast = () => {
+    const jumpToLast = useCallback(() => {
 
         setItem(max - 1);
-    };
+    }, [setItem, max]);
 
-    return {
+    return useMemo(() => ({
         items,
         next,
         previous,
         isLast,
         isFirst,
-        currentIndex: currentItemIndex,
+        currentIndex,
         currentItem,
         progressPercentage,
         setItem,
         jumpToLast
-    } as PagingType<T>;
+    } as PagingType<T>), [
+        items,
+        next,
+        previous,
+        isLast,
+        isFirst,
+        currentIndex,
+        currentItem,
+        progressPercentage,
+        setItem,
+        jumpToLast
+    ]);
 };
 
 export type PagingType<T> = {
@@ -573,36 +597,14 @@ export const usePasswordEntryState = () => {
 
 export type PropsWithChildren = { children: ReactNode };
 
-export const useReactQuery = <T>(
-    queryKey: any[],
-    queryFunc: () => Promise<T>,
-    enabled?: boolean) => {
+export type QueryResult<T> = {
+    state: LoadingStateType;
+    refetch: () => Promise<void>;
+    data: T;
+    error: VerboseError | null;
+}
 
-    const isEnabled = enabled === true || enabled === undefined;
-
-    const queryResult = useQuery(
-        queryKey,
-        queryFunc, {
-        retry: false,
-        refetchOnWindowFocus: false,
-        enabled: isEnabled
-    });
-
-    const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
-    const advancedStatus = isFetching ? 'loading' : status as LoadingStateType;
-
-    return {
-        status: advancedStatus,
-        refetch: async () => {
-
-            await refetch();
-        },
-        data: data ?? null,
-        ...queryResult2
-    };
-};
-
-export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean) => {
+export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
     const queryValues = queryParams ? Object.values(queryParams) : [];
 
@@ -621,29 +623,74 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
             enabled: isEnabled === false ? false : true
         });
 
-    const state = (queryResult.isIdle
-        ? 'idle'
-        : queryResult.isFetching
-            ? 'loading'
-            : queryResult.isError
-                ? 'error'
-                : 'success') as LoadingStateType;
+    const state = useMemo((): LoadingStateType => {
+
+        if (queryResult.isIdle)
+            return 'idle';
+
+        if (queryResult.isFetching)
+            return 'loading';
+
+        if (queryResult.isError)
+            return 'error';
+
+        return 'success';
+    }, [queryResult.isIdle, queryResult.isFetching, queryResult.isError]);
 
     const refetch = useCallback(async () => {
 
         await queryResult.refetch();
     }, [queryResult.refetch]);
 
-    const dataAsT = queryResult.data as T;
+    const data = useMemo((): T => {
 
-    const result = {
+        return queryResult.data
+            ? queryResult.data
+            : null;
+    }, [queryResult.data]);
+
+    const error = queryResult.error as VerboseError | null;
+
+    return {
         state,
         refetch,
-        data: dataAsT === undefined ? null : dataAsT,
-        error: queryResult.error as VerboseError | null
+        data,
+        error
     };
+};
 
-    return result;
+export const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T[]> => {
+
+    const { data, ...qr } = useReactQuery2<T[]>(url, queryParams, isEnabled);
+
+    const empty = useMemo(() => [], []);
+
+    return {
+        ...qr,
+        data: data ?? empty
+    };
+};
+
+export const useEventTrigger = () => {
+
+    const [state, setState] = useState(1);
+
+    const fireEvent = useCallback(() => setState(state + 1), [setState, state]);
+
+    return {
+        subscriptionValue: state,
+        fireEvent
+    };
+};
+
+export type EventTriggerType = ReturnType<typeof useEventTrigger>;
+
+export const useSubscribeEventTrigger = (trigger: EventTriggerType, callback: () => void) => {
+
+    useEffect(() => {
+
+        callback();
+    }, [trigger.subscriptionValue]);
 };
 
 export const hasValue = (obj: any) => {

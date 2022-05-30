@@ -3,7 +3,7 @@ import { Course } from '../models/entity/Course';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { RegistrationType } from '../models/Types';
-import { AdminUserListView } from '../models/views/UserAdminListView';
+import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
@@ -24,6 +24,7 @@ import { Grouping } from '../shared/logic/jsExtensions';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserStatsView } from '../models/views/UserStatsView';
+import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 
 export class UserService {
 
@@ -71,9 +72,6 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
-        const assignedAuthItems = await this._roleService
-            .getUserAssignedAuthItemsAsync(principalId, editedUserId);
-
         return {
             id: res.id,
             firstName: res.firstName,
@@ -82,7 +80,8 @@ export class UserService {
             isTeacher: !!res.teacherInfoId,
             jobTitleId: res.jobTitleId,
             companyId: res.companyId,
-            assignedAuthItems
+            roles: new ChangeSet(),
+            permissions: new ChangeSet()
         };
     }
 
@@ -114,7 +113,7 @@ export class UserService {
 
         // save auth items 
         await this._roleService
-            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.companyId, dto.assignedAuthItems);
+            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
     }
 
     /**

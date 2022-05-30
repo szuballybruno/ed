@@ -4,7 +4,7 @@ import React from 'react';
 import { useUserStats } from '../../services/api/userStatsApiService';
 import { defaultCharts } from '../../static/defaultChartOptions';
 import { Environment } from '../../static/Environemnt';
-import {  roundNumber } from '../../static/frontendHelpers';
+import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../universal/charts/base_charts/EpistoBarChart';
@@ -96,7 +96,7 @@ export type StatisticsGroupType = {
     items: StatisticsCardProps[];
 }
 
-
+const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
 export const LearningStatistics = (props: {
     userId: number
@@ -179,7 +179,7 @@ export const LearningStatistics = (props: {
                                 data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
                             }
                         ]}
-                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisData={weekdayLabels}
                         xAxisLabel="A hét napjai"
                         yAxisLabel="Belépések száma"
                         yAxisLabelSuffix="db"
@@ -208,7 +208,7 @@ export const LearningStatistics = (props: {
                                 data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
                             }
                         ]}
-                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisData={weekdayLabels}
                         xAxisLabel="A hét napjai"
                         yAxisLabel="Belépések száma"
                         yAxisLabelSuffix="db"
@@ -321,7 +321,7 @@ export const LearningStatistics = (props: {
                                 data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
                             }
                         ]}
-                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisData={weekdayLabels}
                         xAxisLabel="A hét napjai"
                         yAxisLabel="Belépések száma"
                         yAxisLabelSuffix="db"
@@ -367,7 +367,7 @@ export const LearningStatistics = (props: {
                                 data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
                             }
                         ]}
-                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisData={weekdayLabels}
                         xAxisLabel="A hét napjai"
                         yAxisLabel="Belépések száma"
                         yAxisLabelSuffix="db"

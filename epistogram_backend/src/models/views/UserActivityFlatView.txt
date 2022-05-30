@@ -8,24 +8,31 @@ import { User } from '../entity/User';
 export class UserActivityFlatView {
 
     @ViewColumn()
+    @XViewColumn()
     userId: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     canSetInvitedUserCompany: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     canAccessCourseAdministration: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     canAccessAdministration: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     canAccessApplication: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     canAccessShopAdministration: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     canChangeCourseMode: boolean;
 
     // user

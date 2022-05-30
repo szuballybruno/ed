@@ -1,28 +1,80 @@
+WITH 
+god_roles AS
+(
+	SELECT 
+		u.id assignee_user_id,
+		NULL::int assignment_bridge_id,
+		co.id context_company_id,
+		ro.id role_id,
+		false is_inherited
+	FROM public.company co
+	
+	LEFT JOIN public.role ro
+	ON ro.is_custom = false OR ro.company_id = co.id
+	
+	INNER JOIN public.user u
+	ON u.is_god
+),
+assigned_roles AS
+(
+	SELECT 
+		u.id assignee_user_id,
+		rab.id assignment_bridge_id,
+		rab.context_company_id,
+		rab.role_id,
+		false is_inherited
+	FROM public.user u
+	
+	INNER JOIN public.role_assignment_bridge rab
+	ON rab.assignee_user_id = u.id
+),
+comp_inherited_roles AS 
+(
+	SELECT 
+		u.id assignee_user_id,
+		rab.id assignment_bridge_id,
+		rab.context_company_id,
+		rab.role_id,
+		true is_inherited
+	FROM public.user u
+	
+	INNER JOIN public.role_assignment_bridge rab
+	ON rab.assignee_company_id = u.company_id
+),
+all_roles AS 
+(
+	SELECT * FROM god_roles
+	UNION
+	SELECT * FROM assigned_roles 
+	UNION
+	SELECT * FROM comp_inherited_roles
+)
 SELECT 
+	all_roles.assignment_bridge_id,
 	co.id context_company_id,
 	co.name context_company_name,
 	ro.id role_id,
 	ro.name role_name,
-	owner_co.id owner_company_id,
-	owner_co.name owner_company_name,
-	u.id assignee_user_id
-FROM public.role ro
+	u.id assignee_user_id,
+	all_roles.is_inherited,
+	pe.id permission_id,
+	pe.code permission_code
+FROM all_roles
 
 LEFT JOIN public.company co
-ON ro.company_id IS NULL 
-	OR ro.company_id = co.id
+ON co.id = all_roles.context_company_id 
 
-LEFT JOIN public.company owner_co
-ON owner_co.id = ro.company_id
-
-LEFT JOIN public.role_assignment_bridge rab
-ON rab.role_id = ro.id
-	AND rab.context_company_id = co.id
-	AND rab.assignee_user_id IS NOT NULL
+LEFT JOIN public.role ro
+ON ro.id = all_roles.role_id
 
 LEFT JOIN public.user u
-ON u.id = rab.assignee_user_id
-OR u.is_god = true
+ON u.id = all_roles.assignee_user_id
+
+LEFT JOIN public.role_permission_bridge rpb
+ON rpb.role_id = all_roles.role_id 
+
+LEFT JOIN public.permission pe 
+ON pe.id = rpb.permission_id 
 
 ORDER BY
 	u.id,

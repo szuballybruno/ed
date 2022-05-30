@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 import { User } from './User';
 import { Like as Like } from './Like';
 import { Video } from './Video';

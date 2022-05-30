@@ -7,21 +7,37 @@ import { XDialog } from '../../lib/XDialog/XDialog';
 import { EpistoDialogLogicType } from './EpistoDialogTypes';
 
 export const EpistoDialog = <TParams = any>(props: {
+    closeButtonType?: 'bottom' | 'top',
     logic: EpistoDialogLogicType<TParams>,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
     buttonComponents?: ReactNode,
-    children?: ReactNode
+    children?: ReactNode,
+    title?: string,
+    description?: string
 }) => {
 
-    const {
-        title,
-        description,
-        buttons,
-        closeDialog,
-    } = props.logic;
+    const dialogLogic = props.logic;
 
-    const { children, logic, buttonComponents, fullScreenX, fullScreenY } = props;
+    const {
+        closeButtonType,
+        children, logic,
+        buttonComponents,
+        fullScreenX,
+        fullScreenY
+    } = props;
+
+    const dialogButtons = props.logic.buttons
+        .concat(closeButtonType === 'bottom'
+            ? [
+                {
+                    title: 'Bezárás',
+                    action: (x: EpistoDialogLogicType<TParams>) => dialogLogic.closeDialog()
+                }
+            ]
+            : []);
+
+    const { title, description } = props;
 
     return <XDialog
         logic={logic.xlogic}>
@@ -43,8 +59,8 @@ export const EpistoDialog = <TParams = any>(props: {
                 margin="15px"
                 text={title} />}
 
-            {logic.dialogOptions?.defaultCloseButtonType === 'top' && <Close
-                onClick={closeDialog}
+            {closeButtonType === 'top' && <Close
+                onClick={dialogLogic.closeDialog}
                 style={{
                     color: 'black',
                     margin: '15px',
@@ -71,19 +87,21 @@ export const EpistoDialog = <TParams = any>(props: {
             </Flex>
 
             {/* buttons */}
-            {buttons.length > 0 && <>
+            {dialogButtons.length > 0 && <>
                 <Flex
                     p="10px"
                     flexDirection="row-reverse">
 
-                    {buttons
+                    {dialogButtons
                         .map((x, index) => <EpistoButton
                             key={index}
                             variant="outlined"
                             onClick={() => {
 
-                                x.action(logic);
-                                closeDialog();
+                                if (x.action)
+                                    x.action(logic);
+
+                                dialogLogic.closeDialog();
                             }}>
                             {x.title}
                         </EpistoButton>)}

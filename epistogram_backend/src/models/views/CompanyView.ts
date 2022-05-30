@@ -1,5 +1,5 @@
 import { DeleteDateColumn, ViewColumn, ViewEntity } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { IsDeletedFlag, XViewColumn } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -8,9 +8,11 @@ import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnection
 export class CompanyView {
 
     @ViewColumn()
+    @XViewColumn()
     userId: number;
 
     @ViewColumn()
+    @XViewColumn()
     companyId: number;
 
     @IsDeletedFlag('bool')
@@ -18,8 +20,10 @@ export class CompanyView {
     isDeleted: Date;
 
     @ViewColumn()
+    @XViewColumn()
     companyName: string;
 
     @ViewColumn()
+    @XViewColumn()
     canManage: boolean;
 }

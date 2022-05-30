@@ -47,6 +47,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
 
 export class CourseService {
 
@@ -77,6 +78,23 @@ export class CourseService {
         this._fileService = fileService;
         this._examService = examService;
         this._pretestService = pretestService;
+    }
+
+    /**
+     * Returns courses that the principal can use as context
+     * when assigning permissions to a user 
+     */
+    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: number) {
+
+        const courses = await this._ormService
+            .query(Course)
+            .getMany();
+
+        return courses
+            .map((x): CoursePermissionAssignDTO => ({
+                id: x.id,
+                title: x.title
+            }));
     }
 
     /**

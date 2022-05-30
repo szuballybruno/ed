@@ -1,10 +1,12 @@
+import { PermissionListDTO } from './PermissionListDTO';
 
 export class UserRoleDTO {
+    assignmentBridgeId: number;
     contextCompanyId: number;
     contextCompanyName: string;
     roleId: number;
     roleName: string;
-    ownerCompanyId: number;
-    ownerCompanyName: string;
     assigneeUserId: number;
+    isInherited: boolean;
+    permissions: PermissionListDTO[];
 }

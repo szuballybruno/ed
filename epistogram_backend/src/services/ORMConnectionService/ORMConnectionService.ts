@@ -6,8 +6,8 @@ import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
-import { XQueryBuilder } from './XQueryBuilder';
-import { ParamConstraintType } from './XQueryBuilderTypes';
+import { XQueryBuilder } from '../XORM/XQueryBuilder';
+import { ParamConstraintType } from '../XORM/XQueryBuilderTypes';
 
 export type ORMConnection = DataSource;
 
