@@ -110,6 +110,7 @@ import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioVie
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
 import { UserVideoPractiseProgressView } from '../../models/views/UserVideoPractiseProgressView';
+import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
@@ -270,6 +271,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
             ['user_course_stats_view', UserCourseStatsView],
             ['user_video_practise_progress_view', UserVideoPractiseProgressView],
+            ['user_video_stats_view', UserVideoStatsView],
             ['course_item_question_edit_view', CourseItemQuestionEditView],
             ['comment_list_view', CommentListView],
             ['user_spent_time_ratio_view', UserSpentTimeRatioView],

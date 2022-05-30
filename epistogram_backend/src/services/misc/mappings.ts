@@ -1,7 +1,6 @@
 import { Answer } from '../../models/entity/Answer';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
-import { Comment } from '../../models/entity/Comment';
 import { Company } from '../../models/entity/Company';
 import { Course } from '../../models/entity/Course';
 import { CourseCategory } from '../../models/entity/CourseCategory';
@@ -19,6 +18,7 @@ import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { User } from '../../models/entity/User';
 import { Video } from '../../models/entity/Video';
+import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CommentListView } from '../../models/views/CommentListView';
@@ -45,11 +45,10 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { AdminUserListView } from '../../models/views/AdminUserListView';
-import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserStatsView } from '../../models/views/UserStatsView';
+import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -112,8 +111,8 @@ import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
-import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
+import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoDTO } from '../../shared/dtos/VideoDTO';
 import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
@@ -123,6 +122,23 @@ import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {
+            return {
+                userId: stats.userId,
+                videoId: stats.videoId,
+                videoTitle: stats.videoTitle,
+                courseId: stats.courseId,
+                lengthSeconds: stats.lengthSeconds,
+                totalSpentTimeSeconds: stats.totalSpentTimeSeconds,
+                videoReplaysCount: stats.videoReplaysCount,
+                isRecommendedForRetry: stats.isRecommendedForRetry,
+                lastThreeAnswerAverage: stats.lastThreeAnswerAverage,
+                averageReactionTime: stats.averageReactionTime,
+                lastWatchTime: stats.lastWatchTime
+            }
+        })
 
     mapperService
         .addMap(UserCourseStatsView, UserCourseStatsDTO, (stats) => {
