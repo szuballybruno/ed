@@ -66,6 +66,14 @@ export const getPermissionAssignmentBridgeSeedData = (
             assigneeGroupId: null,
             contextCompanyId: null,
             contextCourseId: courses.course_28.id,
+        },
+        kovkrisz_access_app: {
+            permissionId: permissionList.ACCESS_APPLICATION.id,
+            assigneeCompanyId: null,
+            assigneeUserId: users.user_kovacskrisz.id,
+            assigneeGroupId: null,
+            contextCompanyId: null,
+            contextCourseId: null
         }
     });
 

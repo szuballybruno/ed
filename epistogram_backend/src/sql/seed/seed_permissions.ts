@@ -84,9 +84,9 @@ export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>(
     },
 
     // manage company 
-    EDIT_COMPANIES: {
-        code: 'EDIT_COMPANIES',
-        scope: 'USER'
+    EDIT_COMPANY: {
+        code: 'EDIT_COMPANY',
+        scope: 'COMPANY'
     },
     DELETE_COMPANIES: {
         code: 'DELETE_COMPANIES',

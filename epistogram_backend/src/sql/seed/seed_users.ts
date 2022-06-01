@@ -337,7 +337,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         firstName: 'Írisz',
         lastName: 'Kovács',
         password: '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C',
-        companyId: companies.Manni_BT.id,
+        companyId: companies.Henkel.id,
         jobTitleId: jobTitles.user.id,
         isGod: false
     }

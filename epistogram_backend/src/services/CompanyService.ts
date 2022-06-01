@@ -88,7 +88,7 @@ export class CompanyService extends QueryServiceBase<Company> {
     async getCompanyEditDataAsync(principalId: PrincipalId, companyId: number) {
 
         await this._permissionService
-            .checkPermissionAsync(principalId, companyId, 'EDIT_COMPANIES');
+            .checkPermissionAsync(principalId, companyId, 'EDIT_COMPANY');
 
         const comp = await this._ormService
             .query(Company, { companyId })

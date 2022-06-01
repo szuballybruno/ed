@@ -3,7 +3,8 @@ assigned_courses AS
 (
 	SELECT 
 		u.id user_id,
-		co.id course_id
+		co.id course_id,
+		co.title
 	FROM public.user u
 	
 	INNER JOIN public.user_permission_view upv
@@ -12,30 +13,6 @@ assigned_courses AS
 	
 	INNER JOIN public.course co
 	ON co.id = upv.context_course_id
-),
-company_courses AS 
-(
-	SELECT 
-		co.id company_id,
-		u.id user_id,
-		cab.course_id
-	FROM public.company co
-	
-	LEFT JOIN public.user u
-	ON u.company_id = co.id 
-	
-	INNER JOIN public.course_access_bridge cab
-	ON cab.company_id = co.id 
-	
-	INNER JOIN public.user_permission_view upv
-	ON upv.assignee_user_id = u.id 
-		AND upv.permission_code = 'WATCH_COMPANY_COURSES'
-),
-available_courses AS 
-(
-	SELECT user_id, course_id FROM assigned_courses
-	UNION
-	SELECT user_id, course_id FROM company_courses
 )
 SELECT 
 	u.id user_id,
@@ -58,7 +35,7 @@ SELECT
 	teacher.first_name teacher_first_name,
 	teacher.last_name teacher_last_name,
 	co.*
-FROM available_courses ac 
+FROM assigned_courses ac 
 
 LEFT JOIN public.user u 
 ON u.id = ac.user_id
