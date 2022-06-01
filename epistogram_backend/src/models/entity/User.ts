@@ -25,8 +25,9 @@ import { Like } from './Like';
 import { UserCourseBridge } from './UserCourseBridge';
 import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
-import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
+import { VideoPlaybackSession } from './playback/VideoPlaybackSession';
 
 @Entity()
 export class User {
@@ -213,4 +214,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
     companyOwnerBridges: Relation<CompanyOwnerBridge>[];
+
+    // video playback samples 
+    @OneToMany(_ => VideoPlaybackSession, x => x.user)
+    @JoinColumn()
+    videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 }

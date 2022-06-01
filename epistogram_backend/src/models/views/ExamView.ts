@@ -11,6 +11,7 @@ export class ExamView {
     @ViewColumn()
     @XViewColumn()
     userId: number;
+
     @ViewColumn()
     @XViewColumn()
     examId: number;

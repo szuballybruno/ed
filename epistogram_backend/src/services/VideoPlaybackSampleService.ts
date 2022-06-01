@@ -1,5 +1,5 @@
 import { Video } from '../models/entity/Video';
-import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
+import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 import { PrincipalId } from '../utilities/ActionParams';
 import { hasValue } from '../utilities/helpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

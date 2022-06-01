@@ -1,5 +1,5 @@
 import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
-import { VideoPlaybackSample } from '../models/entity/VideoPlaybackSample';
+import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 import { VideoProgressView } from '../models/views/VideoProgressView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
@@ -21,6 +21,7 @@ export class PlaybackService extends ServiceBase {
     private _userSessionActivityService: UserSessionActivityService;
     private _courseBridgeService: UserCourseBridgeService;
     private _config: GlobalConfiguration;
+    private static _SAMPLE_THRESHOLD_SECONDS = 1;
 
     constructor(
         mapperService: MapperService,
@@ -43,22 +44,75 @@ export class PlaybackService extends ServiceBase {
     saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
 
         const userId = principalId.toSQLValue();
+        const { videoPlaybackSessionId, videoItemCode, fromSeconds, toSeconds } = dto;
 
-        const currentItemCode = await this._courseBridgeService
-            .getCurrentItemCodeOrFailAsync(userId);
-
-        const { itemId: videoId, itemType } = readItemCode(currentItemCode);
+        // get videoId, check item code
+        const { itemId: videoId, itemType } = readItemCode(videoItemCode);
         if (itemType !== 'video')
             throw new Error('Current item is not of type: video!');
 
-        await this._ormService
-            .getRepository(VideoPlaybackSample)
-            .insert({
-                videoId: videoId,
-                userId: userId,
-                fromSeconds: dto.fromSeconds,
-                toSeconds: dto.toSeconds
-            });
+        // get old playback samples
+        const oldSamples = await this
+            .getVideoPlaybackSamples(userId, videoId, videoPlaybackSessionId);
+
+
+
+        // let allSamples = oldSamples
+        //     .concat({
+        //         fromSeconds,
+        //         toSeconds
+        //     } as VideoPlaybackSample);
+
+        // let done = false;
+
+        // while (!done) {
+
+        //     const resutlts = allSamples
+        //         .flatMap(sampleA => allSamples
+        //             .map(sampleB => isOverlapping(sampleA, sampleB)));
+
+
+
+        //     if (!resutlts.any(x => x !== null))
+        //         done = true;
+        // }
+
+        // const canAppendToSample = (() => {
+
+        //     // check count
+        //     if (oldSamples.length === 0)
+        //         return false;
+
+        //     // check after
+        //     const canAppendAfter = oldSamples
+        //         .any(oldSample => this._sampleThresholdEquals(oldSample.toSeconds, fromSeconds));
+
+        //     if (canAppendAfter)
+        //         return 'after';
+
+        //     // check before
+        //     const canAppendBefore = oldSamples
+        //         .any(oldSample => this._sampleThresholdEquals(oldSample.fromSeconds, toSeconds));
+
+        //     if (canAppendBefore)
+        //         return 'after';
+
+        //     // no match within threshold
+        //     return false;
+        // })();
+
+        // first sample in this session
+        // if () {
+
+        //     await this._ormService
+        //         .getRepository(VideoPlaybackSample)
+        //         .insert({
+        //             videoId: videoId,
+        //             userId: userId,
+        //             fromSeconds: dto.fromSeconds,
+        //             toSeconds: dto.toSeconds
+        //         });
+        // }
 
         // get sample chunks
         const chunks = await this._videoPlaybackSampleService
@@ -100,6 +154,118 @@ export class PlaybackService extends ServiceBase {
             maxWathcedSeconds
         } as VideoSamplingResultDTO;
     };
+
+    static _squisOverlapping(overlappingSamples: VideoPlaybackSample[]) {
+
+        const min = overlappingSamples
+            .orderBy(x => x.fromSeconds)
+            .first();
+
+        const max = overlappingSamples
+            .orderBy(x => x.toSeconds)
+            .last();
+
+        return {
+            fromSeconds: min.fromSeconds,
+            toSeconds: max.toSeconds
+        } as VideoPlaybackSample;
+    }
+
+    static _mergeSamples(samples: VideoPlaybackSample[]) {
+
+        let allOverlappingIndices: number[] = [];
+        let resultSamples: VideoPlaybackSample[] = [];
+
+        for (let sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
+
+            const currentSample = samples[sampleIndex];
+
+            // ignore previously overlapping samples
+            if (allOverlappingIndices.any(x => x === sampleIndex))
+                continue;
+
+            // samples that are overlapping with current 
+            const overlappingSamples = samples
+                .map((sample, index) => {
+
+                    if (index <= sampleIndex)
+                        return;
+
+                    if (allOverlappingIndices
+                        .any(overlappingIndex => overlappingIndex === index))
+                        return;
+
+                    return {
+                        isOverlapping: this._isOverlapping(currentSample, sample),
+                        sample: sample,
+                        index
+                    };
+                })
+                .filter(x => x?.isOverlapping);
+
+            // save overlapping indices
+            const overlappingIndices = overlappingSamples
+                .map(x => x!.index);
+
+            allOverlappingIndices = [...allOverlappingIndices, ...overlappingIndices];
+
+            // to res -> squis overlapping or current sample 
+            resultSamples
+                .push(overlappingSamples.length > 0
+                    ? this._squisOverlapping([currentSample, ...overlappingSamples.map(x => x!.sample)])
+                    : currentSample);
+        }
+
+        return resultSamples;
+    }
+
+    static _isOverlapping(sampleA: VideoPlaybackSample, sampleB: VideoPlaybackSample) {
+
+        // case 1
+        const inRangeAndWatchedBefore = this
+            ._inRange(sampleA.fromSeconds, sampleA.toSeconds, sampleB.toSeconds) && sampleB.fromSeconds < sampleA.fromSeconds;
+
+        if (inRangeAndWatchedBefore)
+            return true;
+
+        // case 2
+        const inRangeAndWatchedAfter = this
+            ._inRange(sampleA.fromSeconds, sampleA.toSeconds, sampleB.fromSeconds) && sampleB.toSeconds > sampleA.toSeconds;
+
+        if (inRangeAndWatchedAfter)
+            return true;
+
+        // case 3
+        const superset = sampleB.fromSeconds < sampleA.fromSeconds && sampleB.toSeconds > sampleA.toSeconds;
+
+        if (superset)
+            return true;
+
+
+        // case 3
+        const subset = sampleB.fromSeconds > sampleA.fromSeconds && sampleB.toSeconds < sampleA.toSeconds;
+
+        if (subset)
+            return true;
+
+        return false;
+    }
+
+    private static _inRange(rangeMin: number, rangeMax: number, value: number) {
+
+        return rangeMin - this._SAMPLE_THRESHOLD_SECONDS < value
+            && rangeMax + this._SAMPLE_THRESHOLD_SECONDS > value;
+    }
+
+    async getVideoPlaybackSamples(userId: number, videoId: number, videoPlaybackSessionId: number) {
+
+        return this._ormService
+            .query(VideoPlaybackSample, { userId, videoId, videoPlaybackSessionId })
+            .where('videoId', '=', 'videoId')
+            .and('userId', '=', 'userId')
+            .and('videoPlaybackSessionId', '=', 'videoPlaybackSessionId')
+            .getMany();
+    }
 
     saveUserVideoProgressBridgeAsync = async (
         userId: number,

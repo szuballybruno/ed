@@ -9,8 +9,9 @@ import { Question } from './Question';
 import { StorageFile } from './StorageFile';
 import { UserSessionActivity } from './UserSessionActivity';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
-import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
+import { VideoPlaybackSession } from './playback/VideoPlaybackSession';
 
 @Entity()
 export class Video {
@@ -85,6 +86,11 @@ export class Video {
     @OneToMany(_ => VideoPlaybackSample, x => x.video)
     @JoinColumn()
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
+
+    // video playback sessions 
+    @OneToMany(_ => VideoPlaybackSession, x => x.video)
+    @JoinColumn()
+    videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 
     // module
     @Column()

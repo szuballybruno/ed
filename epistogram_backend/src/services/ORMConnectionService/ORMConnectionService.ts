@@ -7,7 +7,7 @@ import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
-import { ParamConstraintType } from '../XORM/XQueryBuilderTypes';
+import { ParamConstraintType } from '../XORM/XORMTypes';
 
 export type ORMConnection = DataSource;
 
