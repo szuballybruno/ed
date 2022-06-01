@@ -47,7 +47,6 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of [] 
      */
-
     async getUserCourseStatsAsync(userId: number) {
 
         const stats = await this._ormService
@@ -65,7 +64,6 @@ export class UserStatsService {
      * @param userId 
      * @returns
      */
-
     async getUserVideoStatsAsync(userId: number, courseId: number) {
 
         const stats = await this._ormService

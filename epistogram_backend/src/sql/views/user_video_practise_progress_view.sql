@@ -7,6 +7,8 @@ FROM
             SUM(sq.total_playback_duration) playback_duration,
             sq.length_seconds
      FROM
+
+        -- squash
          (SELECT vpsv.user_id,
                  vpsv.video_id,
                  vpsv.creation_date,
@@ -14,8 +16,7 @@ FROM
                  MAX(to_seconds),
                  v.length_seconds,
                  vpsv.total_playback_duration,
-                 ROW_NUMBER() OVER (
-                                    ORDER BY vpsv.creation_date) - ROW_NUMBER() OVER (PARTITION BY vpsv.video_id,
+                 ROW_NUMBER() OVER (ORDER BY vpsv.creation_date) - ROW_NUMBER() OVER (PARTITION BY vpsv.video_id,
                                                                                                    vpsv.user_id
                                                                                       ORDER BY vpsv.creation_date) grp
           FROM video_playback_sample_view vpsv
