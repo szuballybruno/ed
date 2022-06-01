@@ -1,5 +1,6 @@
-import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
+import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
+import { Video } from '../models/entity/Video';
 import { VideoProgressView } from '../models/views/VideoProgressView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
@@ -10,37 +11,30 @@ import { readItemCode } from './misc/encodeService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { SampleMergeService } from './SampleMergeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
-import { VideoPlaybackSampleService } from './VideoPlaybackSampleService';
 
 export class PlaybackService extends ServiceBase {
-
-    private _videoPlaybackSampleService: VideoPlaybackSampleService;
-    private _coinAcquireService: CoinAcquireService;
-    private _userSessionActivityService: UserSessionActivityService;
-    private _courseBridgeService: UserCourseBridgeService;
-    private _config: GlobalConfiguration;
-    private static _SAMPLE_THRESHOLD_SECONDS = 1;
 
     constructor(
         mapperService: MapperService,
         ormService: ORMConnectionService,
-        videoPlaybackSampleService: VideoPlaybackSampleService,
-        coinAcquireService: CoinAcquireService,
-        userSessionActivityService: UserSessionActivityService,
-        courseBridgeService: UserCourseBridgeService,
-        config: GlobalConfiguration) {
+        private _coinAcquireService: CoinAcquireService,
+        private _userSessionActivityService: UserSessionActivityService,
+        private _config: GlobalConfiguration,
+        private _sampleMergeService: SampleMergeService) {
 
         super(mapperService, ormService);
-
-        this._userSessionActivityService = userSessionActivityService;
-        this._coinAcquireService = coinAcquireService;
-        this._videoPlaybackSampleService = videoPlaybackSampleService;
-        this._courseBridgeService = courseBridgeService;
-        this._config = config;
     }
 
+    /**
+     * Reciveves an incoming video playback sample. 
+     * - Merges the new sample with the existing ones, and saves them to the DB.
+     * - Calculates the video progress.
+     * - Handles video completion related stuff.
+     * - Saves user activity.
+     * Returns: the completion flag, and a value of maxWatchedSeconds 
+     */
     saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
 
         const userId = principalId.toSQLValue();
@@ -51,91 +45,58 @@ export class PlaybackService extends ServiceBase {
         if (itemType !== 'video')
             throw new Error('Current item is not of type: video!');
 
+        // handle sample merge
+        const { mergedSamples } = await this
+            ._handleSampleMerge(userId, videoId, videoPlaybackSessionId, fromSeconds, toSeconds);
+
+        // handle video progress
+        const { isFirstCompletion } = await this
+            ._handleVideoProgressAsync(userId, videoId, toSeconds, mergedSamples);
+
+        // save user activity of video watching
+        await this._userSessionActivityService
+            .saveUserSessionActivityAsync(userId, 'video', videoId);
+
+        // get max watched seconds
+        const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
+
+        return {
+            isWatchedStateChanged: isFirstCompletion,
+            maxWathcedSeconds
+        } as VideoSamplingResultDTO;
+    };
+
+    private async _handleSampleMerge(userId: number, videoId: number, videoPlaybackSessionId: number, fromSeconds: number, toSeconds: number) {
+
         // get old playback samples
         const oldSamples = await this
             .getVideoPlaybackSamples(userId, videoId, videoPlaybackSessionId);
 
+        // merge samples 
+        const currentSample = {
+            fromSeconds,
+            toSeconds
+        } as VideoPlaybackSample;
 
+        const mergedSamples = this._sampleMergeService
+            .mergeSamples([currentSample, ...oldSamples]);
 
-        // let allSamples = oldSamples
-        //     .concat({
-        //         fromSeconds,
-        //         toSeconds
-        //     } as VideoPlaybackSample);
+        return { mergedSamples };
+    }
 
-        // let done = false;
+    private async _handleVideoProgressAsync(userId: number, videoId: number, toSeconds: number, mergedSamples: VideoPlaybackSample[]) {
 
-        // while (!done) {
-
-        //     const resutlts = allSamples
-        //         .flatMap(sampleA => allSamples
-        //             .map(sampleB => isOverlapping(sampleA, sampleB)));
-
-
-
-        //     if (!resutlts.any(x => x !== null))
-        //         done = true;
-        // }
-
-        // const canAppendToSample = (() => {
-
-        //     // check count
-        //     if (oldSamples.length === 0)
-        //         return false;
-
-        //     // check after
-        //     const canAppendAfter = oldSamples
-        //         .any(oldSample => this._sampleThresholdEquals(oldSample.toSeconds, fromSeconds));
-
-        //     if (canAppendAfter)
-        //         return 'after';
-
-        //     // check before
-        //     const canAppendBefore = oldSamples
-        //         .any(oldSample => this._sampleThresholdEquals(oldSample.fromSeconds, toSeconds));
-
-        //     if (canAppendBefore)
-        //         return 'after';
-
-        //     // no match within threshold
-        //     return false;
-        // })();
-
-        // first sample in this session
-        // if () {
-
-        //     await this._ormService
-        //         .getRepository(VideoPlaybackSample)
-        //         .insert({
-        //             videoId: videoId,
-        //             userId: userId,
-        //             fromSeconds: dto.fromSeconds,
-        //             toSeconds: dto.toSeconds
-        //         });
-        // }
-
-        // get sample chunks
-        const chunks = await this._videoPlaybackSampleService
-            .getSampleChunksAsync(userId, videoId);
-
-        // calucate and save watched percent
-        const watchedPercent = await this._videoPlaybackSampleService
-            .getVideoWatchedPercentAsync(userId, videoId, chunks);
+        // calucate watched percent
+        const watchedPercent = await this
+            .getVideoWatchedPercentAsync(videoId, mergedSamples);
 
         const isCompleted = watchedPercent > this._config.misc.videoCompletedPercentage;
         const isCompletedBefore = await this.getVideoIsCompletedStateAsync(userId, videoId);
         const isFirstCompletion = isCompleted && !isCompletedBefore;
         const completionDate = isFirstCompletion ? new Date() : undefined;
 
-        // squish chunks to store less data 
-        await this._videoPlaybackSampleService
-            .squishSamplesAsync(userId, videoId, chunks);
-
         // save user video progress bridge
-        await this.saveUserVideoProgressBridgeAsync(userId, videoId, watchedPercent, dto.toSeconds, completionDate);
-
-        // get max watched seconds
-        const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
+        await this.saveUserVideoProgressBridgeAsync(userId, videoId, watchedPercent, toSeconds, completionDate);
 
         // if is watched state changed 
         // reward user with episto coins
@@ -145,117 +106,29 @@ export class PlaybackService extends ServiceBase {
                 .acquireVideoWatchedCoinsAsync(userId, videoId);
         }
 
-        // save user activity of video watching
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'video', videoId);
+        return { isFirstCompletion };
+    }
 
-        return {
-            isWatchedStateChanged: isFirstCompletion,
-            maxWathcedSeconds
-        } as VideoSamplingResultDTO;
+    async getVideoWatchedPercentAsync(videoId: number, samples: VideoPlaybackSample[]) {
+
+        if (samples.length === 0)
+            return 0;
+
+        const video = await this._ormService
+            .getRepository(Video)
+            .createQueryBuilder('v')
+            .where('v.id = :videoId', { videoId })
+            .getOneOrFail();
+
+        if (video.lengthSeconds === 0)
+            return 0;
+
+        const netWatchedSeconds = samples
+            .map(x => x.toSeconds - x.fromSeconds)
+            .reduce((prev, curr) => curr + prev);
+
+        return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
     };
-
-    static _squisOverlapping(overlappingSamples: VideoPlaybackSample[]) {
-
-        const min = overlappingSamples
-            .orderBy(x => x.fromSeconds)
-            .first();
-
-        const max = overlappingSamples
-            .orderBy(x => x.toSeconds)
-            .last();
-
-        return {
-            fromSeconds: min.fromSeconds,
-            toSeconds: max.toSeconds
-        } as VideoPlaybackSample;
-    }
-
-    static _mergeSamples(samples: VideoPlaybackSample[]) {
-
-        let allOverlappingIndices: number[] = [];
-        let resultSamples: VideoPlaybackSample[] = [];
-
-        for (let sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
-
-            const currentSample = samples[sampleIndex];
-
-            // ignore previously overlapping samples
-            if (allOverlappingIndices.any(x => x === sampleIndex))
-                continue;
-
-            // samples that are overlapping with current 
-            const overlappingSamples = samples
-                .map((sample, index) => {
-
-                    if (index <= sampleIndex)
-                        return;
-
-                    if (allOverlappingIndices
-                        .any(overlappingIndex => overlappingIndex === index))
-                        return;
-
-                    return {
-                        isOverlapping: this._isOverlapping(currentSample, sample),
-                        sample: sample,
-                        index
-                    };
-                })
-                .filter(x => x?.isOverlapping);
-
-            // save overlapping indices
-            const overlappingIndices = overlappingSamples
-                .map(x => x!.index);
-
-            allOverlappingIndices = [...allOverlappingIndices, ...overlappingIndices];
-
-            // to res -> squis overlapping or current sample 
-            resultSamples
-                .push(overlappingSamples.length > 0
-                    ? this._squisOverlapping([currentSample, ...overlappingSamples.map(x => x!.sample)])
-                    : currentSample);
-        }
-
-        return resultSamples;
-    }
-
-    static _isOverlapping(sampleA: VideoPlaybackSample, sampleB: VideoPlaybackSample) {
-
-        // case 1
-        const inRangeAndWatchedBefore = this
-            ._inRange(sampleA.fromSeconds, sampleA.toSeconds, sampleB.toSeconds) && sampleB.fromSeconds < sampleA.fromSeconds;
-
-        if (inRangeAndWatchedBefore)
-            return true;
-
-        // case 2
-        const inRangeAndWatchedAfter = this
-            ._inRange(sampleA.fromSeconds, sampleA.toSeconds, sampleB.fromSeconds) && sampleB.toSeconds > sampleA.toSeconds;
-
-        if (inRangeAndWatchedAfter)
-            return true;
-
-        // case 3
-        const superset = sampleB.fromSeconds < sampleA.fromSeconds && sampleB.toSeconds > sampleA.toSeconds;
-
-        if (superset)
-            return true;
-
-
-        // case 3
-        const subset = sampleB.fromSeconds > sampleA.fromSeconds && sampleB.toSeconds < sampleA.toSeconds;
-
-        if (subset)
-            return true;
-
-        return false;
-    }
-
-    private static _inRange(rangeMin: number, rangeMax: number, value: number) {
-
-        return rangeMin - this._SAMPLE_THRESHOLD_SECONDS < value
-            && rangeMax + this._SAMPLE_THRESHOLD_SECONDS > value;
-    }
 
     async getVideoPlaybackSamples(userId: number, videoId: number, videoPlaybackSessionId: number) {
 

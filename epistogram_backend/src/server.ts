@@ -35,9 +35,6 @@ import { UserProgressController } from './api/UserProgressController';
 import { UserStatsController } from './api/UserStatsController';
 import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
-import { VideoPlaybackSample } from './models/entity/playback/VideoPlaybackSample';
-import { VideoPlaybackSession } from './models/entity/playback/VideoPlaybackSession';
-import { ExamView } from './models/views/ExamView';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
@@ -76,6 +73,7 @@ import { QuestionAnswerService } from './services/QuestionAnswerService';
 import { QuestionService } from './services/QuestionService';
 import { RegistrationService } from './services/RegistrationService';
 import { RoleService } from './services/RoleService';
+import { SampleMergeService } from './services/SampleMergeService';
 import { ShopService } from './services/ShopService';
 import { SignupService } from './services/SignupService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
@@ -93,16 +91,13 @@ import { UserProgressService } from './services/UserProgressService';
 import { UserService } from './services/UserService';
 import { UserSessionActivityService } from './services/UserSessionActivityService';
 import { UserStatsService } from './services/UserStatsService';
-import { VideoPlaybackSampleService } from './services/VideoPlaybackSampleService';
 import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
-import { getXViewColumnNames } from './services/XORM/XORMDecorators';
 import './shared/logic/jsExtensions';
 import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
 import { ActionParams } from './utilities/ActionParams';
 import { onActionError, onActionSuccess } from './utilities/apiHelpers';
-import { XMetadataHandler } from './utilities/XMetadata/XMetadataHandler';
 import { TurboExpressBuilder } from './utilities/XTurboExpress/TurboExpress';
 
 const getCurrentDir = () => dirname(fileURLToPath(import.meta.url));
@@ -157,8 +152,8 @@ const main = async () => {
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
-    const vpss = new VideoPlaybackSampleService(ormConnectionService);
-    const playbackService = new PlaybackService(mapperService, ormConnectionService, vpss, coinAcquireService, userSessionActivityService, userCourseBridgeService, globalConfig);
+    const sampleMergeService = new SampleMergeService();
+    const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
@@ -206,36 +201,6 @@ const main = async () => {
     const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
     const commentController = new CommentController(commentService, likeService);
-
-
-    const samples = [
-        {
-            fromSeconds: 1,
-            toSeconds: 3
-        },
-        {
-            fromSeconds: 2.3,
-            toSeconds: 5
-        },
-        {
-            fromSeconds: 2,
-            toSeconds: 2.1
-        },
-        {
-            fromSeconds: 6,
-            toSeconds: 8
-        },
-        {
-            fromSeconds: 7,
-            toSeconds: 9
-        }
-    ];
-
-    const samp = samples as any[];
-
-    console.log(PlaybackService._mergeSamples(samp));
-
-    return;
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
