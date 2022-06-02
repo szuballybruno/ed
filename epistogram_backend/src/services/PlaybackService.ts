@@ -66,11 +66,29 @@ export class PlaybackService extends ServiceBase {
         } as VideoSamplingResultDTO;
     };
 
+    /**
+     * Gets the max watched seconds // TODO clarify this
+     */
+    getMaxWatchedSeconds = async (userId: number, videoId: number) => {
+
+        const ads = await this._ormService
+            .query(VideoProgressView, { userId, videoId })
+            .where('userId', '=', 'userId')
+            .and('videoId', '=', 'videoId')
+            .getSingle();
+
+        return ads.toSeconds;
+    };
+
+    //
+    // PRIVATE
+    //
+
     private async _handleSampleMerge(userId: number, videoId: number, videoPlaybackSessionId: number, fromSeconds: number, toSeconds: number) {
 
         // get old playback samples
         const oldSamples = await this
-            .getVideoPlaybackSamples(userId, videoId, videoPlaybackSessionId);
+            ._getVideoPlaybackSamples(userId, videoId, videoPlaybackSessionId);
 
         // merge samples 
         const currentSample = {
@@ -88,15 +106,15 @@ export class PlaybackService extends ServiceBase {
 
         // calucate watched percent
         const watchedPercent = await this
-            .getVideoWatchedPercentAsync(videoId, mergedSamples);
+            ._getVideoWatchedPercentAsync(videoId, mergedSamples);
 
         const isCompleted = watchedPercent > this._config.misc.videoCompletedPercentage;
-        const isCompletedBefore = await this.getVideoIsCompletedStateAsync(userId, videoId);
+        const isCompletedBefore = await this._getVideoIsCompletedStateAsync(userId, videoId);
         const isFirstCompletion = isCompleted && !isCompletedBefore;
         const completionDate = isFirstCompletion ? new Date() : undefined;
 
         // save user video progress bridge
-        await this.saveUserVideoProgressBridgeAsync(userId, videoId, watchedPercent, toSeconds, completionDate);
+        await this._saveUserVideoProgressBridgeAsync(userId, videoId, watchedPercent, toSeconds, completionDate);
 
         // if is watched state changed 
         // reward user with episto coins
@@ -109,7 +127,7 @@ export class PlaybackService extends ServiceBase {
         return { isFirstCompletion };
     }
 
-    async getVideoWatchedPercentAsync(videoId: number, samples: VideoPlaybackSample[]) {
+    private async _getVideoWatchedPercentAsync(videoId: number, samples: VideoPlaybackSample[]) {
 
         if (samples.length === 0)
             return 0;
@@ -130,7 +148,7 @@ export class PlaybackService extends ServiceBase {
         return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
     };
 
-    async getVideoPlaybackSamples(userId: number, videoId: number, videoPlaybackSessionId: number) {
+    private async _getVideoPlaybackSamples(userId: number, videoId: number, videoPlaybackSessionId: number) {
 
         return this._ormService
             .query(VideoPlaybackSample, { userId, videoId, videoPlaybackSessionId })
@@ -140,12 +158,12 @@ export class PlaybackService extends ServiceBase {
             .getMany();
     }
 
-    saveUserVideoProgressBridgeAsync = async (
+    private async _saveUserVideoProgressBridgeAsync(
         userId: number,
         videoId: number,
         completedPercentage: number,
         cursorSeconds: number,
-        newCompletionDate?: Date) => {
+        newCompletionDate?: Date) {
 
         const pbd = await this._ormService
             .query(UserVideoProgressBridge, { videoId, userId })
@@ -159,35 +177,19 @@ export class PlaybackService extends ServiceBase {
             ? pbd.completionDate
             : newCompletionDate;
 
-        const videoPlaybackData = {
-            id: pbd?.id,
-            userId,
-            videoId,
-            completedPercentage,
-            completionDate,
-            cursorSeconds
-        } as UserVideoProgressBridge;
-
         await this._ormService
             .getRepository(UserVideoProgressBridge)
-            .save(videoPlaybackData);
-    };
-
-    getMaxWatchedSeconds = async (userId: number, videoId: number) => {
-
-        const ads = await this._ormService
-            .getRepository(VideoProgressView)
-            .findOneOrFail({
-                where: {
-                    userId: userId,
-                    videoId: videoId
-                }
+            .save({
+                id: pbd?.id,
+                userId,
+                videoId,
+                completedPercentage,
+                completionDate,
+                cursorSeconds
             });
-
-        return ads.toSeconds;
     };
 
-    getVideoIsCompletedStateAsync = async (userId: number, videoId: number) => {
+    private async _getVideoIsCompletedStateAsync(userId: number, videoId: number) {
 
         const pbd = await this._ormService
             .query(UserVideoProgressBridge, { userId, videoId })

@@ -1,23 +1,25 @@
+import moment from 'moment';
+import { Course } from '../models/entity/Course';
+import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
 import { Video } from '../models/entity/Video';
 import { ModuleDTO } from '../shared/dtos/ModuleDTO';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
-import { VideoDTO } from '../shared/dtos/VideoDTO';
+import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
+import { VerboseError } from '../shared/types/VerboseError';
+import { PrincipalId } from '../utilities/ActionParams';
+import { instatiateInsertEntity } from '../utilities/misc';
 import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ModuleService } from './ModuleService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlaybackService } from './PlaybackService';
 import { QuestionAnswerService } from './QuestionAnswerService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-import { Course } from '../models/entity/Course';
-import { VerboseError } from '../shared/types/VerboseError';
-import { PrincipalId } from '../utilities/ActionParams';
-import { constraintFn } from '../utilities/misc';
 
 export class PlayerService extends ServiceBase {
 
@@ -51,30 +53,17 @@ export class PlayerService extends ServiceBase {
         this._playbackService = playbackService;
     }
 
+    /**
+     * Gets the player data 
+     */
     getPlayerDataAsync = async (
         principalId: PrincipalId,
-        currentItemCode: string) => {
+        requestedItemCode: string) => {
 
         const userId = principalId.toSQLValue();
 
-        // get current course id
-        const courseId = await this._courseService
-            .getCourseIdByItemCodeAsync(currentItemCode);
-
-        if (!courseId)
-            throw new Error('Cannot find courseId');
-
-        const course = await this._ormService
-            .query(Course, { courseId })
-            .allowDeleted()
-            .where('id', '=', 'courseId')
-            .getSingle();
-
-        if (course.deletionDate)
-            throw new VerboseError('Course has been deleted!', 'deleted');
-
-        // get valid course item 
-        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);
+        // validate request
+        const { courseId, validItemCode } = await this._validatePlayerDataRequest(userId, requestedItemCode);
 
         // set current course 
         await this._userCourseBridgeService
@@ -86,7 +75,7 @@ export class PlayerService extends ServiceBase {
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
-        const videoDTO = itemType === 'video' ? await this.getVideoDTOAsync(userId, itemId) : null;
+        const videoDTO = itemType === 'video' ? await this._getVideoPlayerDataDTOAsync(userId, itemId) : null;
         const examDTO = itemType === 'exam' ? await this._examService.getExamPlayerDTOAsync(userId, itemId) : null;
         const moduleDetailedDTO = itemType === 'module' ? await this._moduleService.getModuleDetailedDTOAsync(itemId) : null;
 
@@ -101,7 +90,7 @@ export class PlayerService extends ServiceBase {
                 .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
 
         // next 
-        const { nextItemCode, nextItemState } = this.getNextItem(modules, validItemCode);
+        const { nextItemCode, nextItemState } = this._getNextItem(modules, validItemCode);
 
         return {
             video: videoDTO,
@@ -110,16 +99,47 @@ export class PlayerService extends ServiceBase {
             answerSessionId: answerSessionId,
             mode: userCourseBridge.courseMode,
             courseId: courseId!,
-            courseItemCode: currentItemCode,
+            courseItemCode: requestedItemCode,
             modules: modules,
             nextItemCode,
             nextItemState
         } as PlayerDataDTO;
     };
 
-    getNextItem(modules: ModuleDTO[], validItemCode: string) {
+    private async _validatePlayerDataRequest(userId: number, requestedItemCode: string) {
 
-        const flat = this.getCourseItemsFlat(modules);
+        // get current course id
+        const courseId = await this._courseService
+            .getCourseIdByItemCodeAsync(requestedItemCode);
+
+        if (!courseId)
+            throw new Error('Cannot find courseId');
+
+        const course = await this._ormService
+            .query(Course, { courseId })
+            .allowDeleted()
+            .where('id', '=', 'courseId')
+            .getSingle();
+
+        if (course.deletionDate)
+            throw new VerboseError('Course has been deleted!', 'deleted');
+
+        // get valid course item 
+        const validItemCode = await this._getValidCourseItemCodeAsync(userId, courseId, requestedItemCode);
+
+        return { validItemCode, courseId }
+    }
+
+    //
+    // PRIVATE
+    //
+
+    /**
+     * Gets the next item in modules list 
+     */
+    private _getNextItem(modules: ModuleDTO[], validItemCode: string) {
+
+        const flat = this._getCourseItemsFlat(modules);
 
         const currentItemIndexInFlatList = flat
             .findIndex(x => x.code === validItemCode);
@@ -137,18 +157,13 @@ export class PlayerService extends ServiceBase {
     /**
      * Finds the closest valid course item code to the target. 
      * This is to ensure a user is not recieving an item they should not access.
-     *
-     * @param {number} userId UserId.
-     * @param {number} courseId CourseId.
-     * @param {string} targetItemCode The code of the target item, if it's accessable for the user, it will be returned.
-     * @return {string} the code of the closest valid itme found in course.
      */
-    getValidCourseItemCodeAsync = async (userId: number, courseId: number, targetItemCode: string) => {
+    private async _getValidCourseItemCodeAsync(userId: number, courseId: number, targetItemCode: string) {
 
         const modules = await this._courseService
             .getCourseModulesAsync(userId, courseId);
 
-        const courseItemsFlat = this.getCourseItemsFlat(modules);
+        const courseItemsFlat = this._getCourseItemsFlat(modules);
 
         const targetItem = courseItemsFlat
             .firstOrNull(x => x.code === targetItemCode);
@@ -170,11 +185,8 @@ export class PlayerService extends ServiceBase {
     /**
      * Returns a list of objects symbolizing the items present in the specified course. 
      * The list is ordered, and can be traversed by list item indicies.
-     *
-     * @param {ModuleDTO[]} modules Modules present in course.
-     * @return a flat list of items in course.
      */
-    getCourseItemsFlat = (modules: ModuleDTO[]) => {
+    private _getCourseItemsFlat(modules: ModuleDTO[]) {
 
         type CourseItemFlatListTyle = {
             code: string,
@@ -207,7 +219,10 @@ export class PlayerService extends ServiceBase {
         return flatList;
     };
 
-    getVideoDTOAsync = async (userId: number, videoId: number) => {
+    /**
+     * Gets teh video watch dto 
+     */
+    private async _getVideoPlayerDataDTOAsync(userId: number, videoId: number) {
 
         const maxWathcedSeconds = await this._playbackService
             .getMaxWatchedSeconds(userId, videoId);
@@ -215,7 +230,39 @@ export class PlayerService extends ServiceBase {
         const video = await this._videoService
             .getVideoPlayerDataAsync(videoId);
 
+        const oldSession = await this._ormService
+            .query(VideoPlaybackSession, { userId, videoId })
+            .where('userId', '=', 'userId')
+            .and('videoId', '=', 'videoId')
+            .getOneOrNull();
+
+        const useOldSession = oldSession && (moment(oldSession.lastUsageDate)
+            .add(5, 'minutes')
+            .toDate() > new Date());
+
+        const videoPlaybackSessionId = useOldSession
+            ? oldSession.id
+            : await this._ormService
+                .create(VideoPlaybackSession, instatiateInsertEntity<VideoPlaybackSession>({
+                    creationDate: new Date(),
+                    lastUsageDate: new Date(),
+                    userId,
+                    videoId
+                }));
+
+        const dto: VideoPlayerDataDTO = {
+            id: video.id,
+            courseId: video.courseId,
+            subTitle: video.subtitle,
+            title: video.title,
+            description: video.description,
+            thumbnailUrl: '',
+            url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
+            questions: video.questions.map(q => toQuestionDTO(q)),
+            maxWatchedSeconds: maxWatchedSeconds
+        } as VideoPlayerDataDTO;
+
         return this._mapperService
-            .map(Video, VideoDTO, video, maxWathcedSeconds);
+            .map(Video, VideoPlayerDataDTO, video, maxWathcedSeconds);
     };
 }

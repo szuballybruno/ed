@@ -149,11 +149,15 @@ export class ORMConnectionService {
     /**
      * Creates a new entity
      */
-    async create<TEntity>(c: ClassType<TEntity>, ent: Partial<TEntity>) {
+    async create<TEntity>(c: ClassType<TEntity>, ent: Partial<TEntity>): Promise<number> {
 
-        return this
+        const entity = ent as any;
+
+        await this
             .getRepository(c)
-            .create(ent as any);
+            .create(entity);
+
+        return entity['id'] as number;
     }
 
     /**

@@ -113,13 +113,85 @@ import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { VideoDTO } from '../../shared/dtos/VideoDTO';
 import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
+import { ClassType } from './advancedTypes/ClassType';
 import { getItemCode } from './encodeService';
+
+type SingleKey<TType, TKeyName extends string> = {
+    [K in keyof TType as TKeyName]: TType[K];
+}
+
+type FilterKeys<TType extends any[], TAllowed> = {
+    [K in keyof TType]: TType[K] extends TAllowed ? TType[K] : never;
+}
+
+type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
+
+type Mutable<T> = {
+    -readonly [K in keyof T]: T[K];
+}
+
+const addM = <TObject, TMapFn extends (...args: any[]) => TObject>(obj: { new(): TObject }, fn: TMapFn): [TObject, Parameters<TMapFn>] => {
+
+}
+
+const asd = addM(UserVideoStatsDTO, (blah: number) => ({} as UserVideoStatsDTO))
+
+// marray
+const marray = [
+    addM(UserVideoStatsDTO, (blah: number) => ({} as UserVideoStatsDTO)),
+    addM(UserCourseStatsDTO, () => ({} as UserCourseStatsDTO)),
+] as const;
+type MarrayType = Mutable<typeof marray>;
+
+type a = FilterKeys<MarrayType, [UserVideoStatsDTO, any]>;
+
+type GetParams<T> = FilterKeys<MarrayType, [T, any]>['0']['1'];
+
+type p = GetParams<UserVideoStatsDTO>;
+
+class XMapper<T> {
+
+    constructor(public mappings: T) {
+
+    }
+
+    mapTo<T>(classType: ClassType<T>, ...params: GetParams<T>) {
+
+    }
+}
+
+const xMapper = new XMapper(marray);
+
+xMapper.mapTo(UserVideoStatsDTO, 1);
+
+
+// class ClassA { }
+// class ClassB { }
+
+// type ToupleTypeAsType = [
+//     boolean,type asd 
+//     [ClassA, () => void],
+//     ClassB,
+// ]
+
+// const arrayDeclaredAsConst = [
+//     [{} as ClassA, () => 1] as [ClassA, () => void],
+//     {} as ClassB,
+//     true as boolean
+// ] as const;
+
+// type ToupleTypeFromConst = typeof arrayDeclaredAsConst;
+
+
+// type ToupleFromTypeFiltered = FilterKeys<ToupleTypeAsType, [ClassA, any]>;
+// type ToupleFromConstFiltered = FilterKeys<ToupleTypeFromConst, [ClassA, any]>;
+
+// type Single = SingleKey<Filtered, 'asd'>;
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -529,25 +601,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             totalSpentTimeSeconds: v.totalSpentSeconds,
             coinBalance: v.coinBalance,
         }));
-
-    mapperService
-        .addMap(Video, VideoDTO, (video, maxWatchedSeconds: number) => {
-
-            navPropNotNull(video.questions);
-            navPropNotNull(video.videoFile);
-
-            return {
-                id: video.id,
-                courseId: video.courseId,
-                subTitle: video.subtitle,
-                title: video.title,
-                description: video.description,
-                thumbnailUrl: '',
-                url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
-                questions: video.questions.map(q => toQuestionDTO(q)),
-                maxWatchedSeconds: maxWatchedSeconds
-            } as VideoDTO;
-        });
 
     mapperService
         .addMap(Video, CourseItemDTO, (video, state: CourseItemStateType) => {

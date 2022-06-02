@@ -13,6 +13,9 @@ export class VideoPlaybackSession {
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
 
+    @Column({ default: () => 'now()', type: 'timestamptz' })
+    lastUsageDate: Date;
+
     // video 
     @Column()
     videoId: number;
