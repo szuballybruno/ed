@@ -1,7 +1,5 @@
 import { ClassType } from "../advancedTypes/ClassType";
-import { FilterKeys } from "./XMapperTypes";
-
-type GetParams<TContainer extends [any, ...any], TKey> = FilterKeys<TContainer, [TKey, any]>['0']['1'];
+import { FilterKeys, GetParameters, MappingType } from "./XMapperTypes";
 
 export class XMapper<TContainer extends [any, ...any]> {
 
@@ -9,11 +7,12 @@ export class XMapper<TContainer extends [any, ...any]> {
 
     }
 
-    mapTo<T>(classType: ClassType<T>, ...params: GetParams<TContainer, T>) {
+    mapTo<T>(classType: ClassType<T>, ...params: GetParameters<TContainer, T>['1']) {
 
     }
 }
 
-export const addMapping = <TObject, TMapFn extends (...args: any[]) => TObject>(obj: { new(): TObject }, fn: TMapFn): [TObject, Parameters<TMapFn>] => {
+export const addMapping = <TObject, TMapFn extends (...args: any[]) => TObject>(obj: { new(): TObject }, fn: TMapFn): MappingType<TObject, TMapFn> => {
 
+    return [];
 }

@@ -120,7 +120,7 @@ import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
 import { addMapping, XMapper } from './XMapperService/XMapperService';
-import { Mutable } from './XMapperService/XMapperTypes';
+import { FilterKeys, GetParameters, Mutable } from './XMapperService/XMapperTypes';
 
 // marray
 const marray = [
@@ -131,32 +131,18 @@ type MarrayType = Mutable<typeof marray>;
 
 const xMapper = new XMapper<MarrayType>(marray as any);
 
+type t = FilterKeys<MarrayType, []>;
+
+// export type Elim<T extends any[]> = [
+//     [K in keyof T as T[K] extends never ? never : K]: string;
+// }
+
+type sd<T extends [any, ...any], I> = GetParameters<T, I>['1'];
+
+type adw = sd<MarrayType, UserVideoStatsDTO>;
+
 xMapper
-    .mapTo(UserVideoStatsDTO, 1);
-
-
-// class ClassA { }
-// class ClassB { }
-
-// type ToupleTypeAsType = [
-//     boolean,type asd 
-//     [ClassA, () => void],
-//     ClassB,
-// ]
-
-// const arrayDeclaredAsConst = [
-//     [{} as ClassA, () => 1] as [ClassA, () => void],
-//     {} as ClassB,
-//     true as boolean
-// ] as const;
-
-// type ToupleTypeFromConst = typeof arrayDeclaredAsConst;
-
-
-// type ToupleFromTypeFiltered = FilterKeys<ToupleTypeAsType, [ClassA, any]>;
-// type ToupleFromConstFiltered = FilterKeys<ToupleTypeFromConst, [ClassA, any]>;
-
-// type Single = SingleKey<Filtered, 'asd'>;
+    .mapTo(UserCourseStatsDTO, 1);
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 

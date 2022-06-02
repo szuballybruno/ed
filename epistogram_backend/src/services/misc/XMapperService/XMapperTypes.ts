@@ -10,3 +10,11 @@ export type FilterKeys<TType extends [any, ...any], TAllowed> = {
 export type Mutable<T> = {
     -readonly [K in keyof T]: T[K];
 }
+
+type Filter<TContainer extends [any, ...any], TSearch> = {
+    [K in keyof TContainer]: TContainer[K] extends TSearch ? TContainer[K] : undefined;
+}
+
+export type MappingType<TObject, TMapFn extends (...args: any[]) => any> = [TObject, Parameters<TMapFn>];
+
+export type GetParameters<T extends [any, ...any], S> = Exclude<Filter<T, [S, any]>[number], undefined>;
