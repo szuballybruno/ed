@@ -250,17 +250,17 @@ export class PlayerService extends ServiceBase {
                     videoId
                 }));
 
-        const dto: VideoPlayerDataDTO = {
-            id: video.id,
-            courseId: video.courseId,
-            subTitle: video.subtitle,
-            title: video.title,
-            description: video.description,
-            thumbnailUrl: '',
-            url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
-            questions: video.questions.map(q => toQuestionDTO(q)),
-            maxWatchedSeconds: maxWatchedSeconds
-        } as VideoPlayerDataDTO;
+        // const dto: VideoPlayerDataDTO = {
+        //     id: video.id,
+        //     courseId: video.courseId,
+        //     subTitle: video.subtitle,
+        //     title: video.title,
+        //     description: video.description,
+        //     thumbnailUrl: '',
+        //     url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
+        //     questions: video.questions.map(q => toQuestionDTO(q)),
+        //     maxWatchedSeconds: maxWatchedSeconds
+        // } as VideoPlayerDataDTO;
 
         return this._mapperService
             .map(Video, VideoPlayerDataDTO, video, maxWathcedSeconds);

@@ -93,6 +93,7 @@ import { UserSessionActivityService } from './services/UserSessionActivityServic
 import { UserStatsService } from './services/UserStatsService';
 import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
+import { UserVideoStatsDTO } from './shared/dtos/UserVideoStatsDTO';
 import './shared/logic/jsExtensions';
 import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
@@ -203,9 +204,14 @@ const main = async () => {
     const commentController = new CommentController(commentService, likeService);
 
     // initialize services 
-    initializeMappings(urlService.getAssetUrl, mapperService);
+    const mapper = initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
+
+    const dto = mapper
+        .mapTo(UserVideoStatsDTO, [1]);
+
+    console.log(dto);
 
     // initialize express
     const turboExpress = new TurboExpressBuilder<ActionParams>()

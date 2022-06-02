@@ -120,31 +120,19 @@ import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { getItemCode } from './encodeService';
 import { addMapping, XMapper } from './XMapperService/XMapperService';
-import { FilterKeys, GetParameters, Mutable } from './XMapperService/XMapperTypes';
-
-// marray
-const marray = [
-    addMapping(UserVideoStatsDTO, (blah: number) => ({} as UserVideoStatsDTO)),
-    addMapping(UserCourseStatsDTO, () => ({} as UserCourseStatsDTO)),
-] as const;
-type MarrayType = Mutable<typeof marray>;
-
-const xMapper = new XMapper<MarrayType>(marray as any);
-
-type t = FilterKeys<MarrayType, []>;
-
-// export type Elim<T extends any[]> = [
-//     [K in keyof T as T[K] extends never ? never : K]: string;
-// }
-
-type sd<T extends [any, ...any], I> = GetParameters<T, I>['1'];
-
-type adw = sd<MarrayType, UserVideoStatsDTO>;
-
-xMapper
-    .mapTo(UserCourseStatsDTO, 1);
+import { Mutable } from './XMapperService/XMapperTypes';
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    // marray
+    const marray = [
+        addMapping(UserVideoStatsDTO, (blah: number) => ({ courseId: blah } as UserVideoStatsDTO)),
+        addMapping(UserCourseStatsDTO, () => ({} as UserCourseStatsDTO)),
+    ] as const;
+
+    const xMapper = new XMapper<Mutable<typeof marray>>();
+
+    xMapper.mapTo(UserCourseStatsDTO, []);
 
     mapperService
         .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {
@@ -943,6 +931,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             scope: x.scope,
             id: x.id
         }));
+
+    return xMapper;
 };
 
 const separationChar = '|';
