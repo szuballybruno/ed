@@ -118,56 +118,21 @@ import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
-import { ClassType } from './advancedTypes/ClassType';
 import { getItemCode } from './encodeService';
-
-type SingleKey<TType, TKeyName extends string> = {
-    [K in keyof TType as TKeyName]: TType[K];
-}
-
-type FilterKeys<TType extends any[], TAllowed> = {
-    [K in keyof TType]: TType[K] extends TAllowed ? TType[K] : never;
-}
-
-type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
-
-type Mutable<T> = {
-    -readonly [K in keyof T]: T[K];
-}
-
-const addM = <TObject, TMapFn extends (...args: any[]) => TObject>(obj: { new(): TObject }, fn: TMapFn): [TObject, Parameters<TMapFn>] => {
-
-}
-
-const asd = addM(UserVideoStatsDTO, (blah: number) => ({} as UserVideoStatsDTO))
+import { addMapping, XMapper } from './XMapperService/XMapperService';
+import { Mutable } from './XMapperService/XMapperTypes';
 
 // marray
 const marray = [
-    addM(UserVideoStatsDTO, (blah: number) => ({} as UserVideoStatsDTO)),
-    addM(UserCourseStatsDTO, () => ({} as UserCourseStatsDTO)),
+    addMapping(UserVideoStatsDTO, (blah: number) => ({} as UserVideoStatsDTO)),
+    addMapping(UserCourseStatsDTO, () => ({} as UserCourseStatsDTO)),
 ] as const;
 type MarrayType = Mutable<typeof marray>;
 
-type a = FilterKeys<MarrayType, [UserVideoStatsDTO, any]>;
+const xMapper = new XMapper<MarrayType>(marray as any);
 
-type GetParams<T> = FilterKeys<MarrayType, [T, any]>['0']['1'];
-
-type p = GetParams<UserVideoStatsDTO>;
-
-class XMapper<T> {
-
-    constructor(public mappings: T) {
-
-    }
-
-    mapTo<T>(classType: ClassType<T>, ...params: GetParams<T>) {
-
-    }
-}
-
-const xMapper = new XMapper(marray);
-
-xMapper.mapTo(UserVideoStatsDTO, 1);
+xMapper
+    .mapTo(UserVideoStatsDTO, 1);
 
 
 // class ClassA { }
