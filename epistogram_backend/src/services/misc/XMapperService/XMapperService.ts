@@ -1,26 +1,36 @@
 import { ClassType } from "../advancedTypes/ClassType";
-import { FilterKeys, GetParameters, MappingType } from "./XMapperTypes";
+import { GetParameters, MappingFunctionType, MappingType } from "./XMapperTypes";
 
-const mappings: [ClassType<any>, (...args: any[]) => any][] = [];
+export class XMapper<TServices extends any[], TContainer extends [any, ...any]> {
 
-export class XMapper<TContainer extends [any, ...any]> {
-
-    constructor() {
+    constructor(private _builder: XMappingsBuilder<TServices>, private _services: TServices) {
 
     }
 
     mapTo<T>(classType: ClassType<T>, params: GetParameters<TContainer, T>['1']) {
 
-        const w = mappings
+        const w = this._builder
+            .mappings
             .single(x => x[0].name === classType.name);
 
-        return w[1](...(params as any));
+        const mappingFn = w[1];
+
+        return mappingFn(this._services)(...(params as any));
     }
 }
 
-export const addMapping = <TObject, TMapFn extends (...args: any[]) => TObject>(obj: ClassType<TObject>, fn: TMapFn): MappingType<TObject, TMapFn> => {
+export class XMappingsBuilder<TServices extends any[]> {
 
-    mappings.push([obj, fn]);
+    mappings: [ClassType<any>, MappingFunctionType<TServices, any>][] = [];
 
-    return null as any;
+    addMapping<TObject, TMapFn extends MappingFunctionType<TServices, TObject>>
+        (obj: ClassType<TObject>, fn: TMapFn) {
+
+        // register function
+        this.mappings
+            .push([obj, fn]);
+
+        // return null as any as Exclude<Parameters<TMapFn>, [UrlService]>;
+        return null as any as MappingType<TObject, TMapFn>;
+    }
 }

@@ -118,21 +118,21 @@ import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
+import { UrlService } from '../UrlService';
 import { getItemCode } from './encodeService';
-import { addMapping, XMapper } from './XMapperService/XMapperService';
+import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
 
+export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
+
+const marray = [
+    epistoMappingsBuilder.addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
+    epistoMappingsBuilder.addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
+] as const;
+
+export type EpistoMappingsType = Mutable<typeof marray>;
+
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
-
-    // marray
-    const marray = [
-        addMapping(UserVideoStatsDTO, (blah: number) => ({ courseId: blah } as UserVideoStatsDTO)),
-        addMapping(UserCourseStatsDTO, () => ({} as UserCourseStatsDTO)),
-    ] as const;
-
-    const xMapper = new XMapper<Mutable<typeof marray>>();
-
-    xMapper.mapTo(UserCourseStatsDTO, []);
 
     mapperService
         .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {
@@ -932,7 +932,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             id: x.id
         }));
 
-    return xMapper;
+    return marray;
 };
 
 const separationChar = '|';

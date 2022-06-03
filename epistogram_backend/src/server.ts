@@ -46,6 +46,7 @@ import { CourseRatingService } from './services/CourseRatingService';
 import { CourseService } from './services/CourseService';
 import { DailyTipService } from './services/DailyTipService';
 import { EmailService } from './services/EmailService';
+import { EpistoMapperService } from './services/EpistoMapperService';
 import { EventService } from './services/EventService';
 import { ExamService } from './services/ExamService';
 import { FileService } from './services/FileService';
@@ -56,7 +57,7 @@ import { MapperService } from './services/MapperService';
 import { createDBSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
-import { initializeMappings } from './services/misc/mappings';
+import { epistoMappingsBuilder, initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
@@ -115,8 +116,10 @@ const main = async () => {
     const dbSchema = createDBSchema();
 
     // services
-    const loggerService = new LoggerService();
+    const urlService = new UrlService(globalConfig);
     const mapperService = new MapperService();
+    const xMapperService = new EpistoMapperService(urlService);
+    const loggerService = new LoggerService();
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
@@ -128,7 +131,6 @@ const main = async () => {
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
     const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
-    const urlService = new UrlService(globalConfig);
     const emailService = new EmailService(globalConfig, urlService);
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
     const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
@@ -204,11 +206,11 @@ const main = async () => {
     const commentController = new CommentController(commentService, likeService);
 
     // initialize services 
-    const mapper = initializeMappings(urlService.getAssetUrl, mapperService);
+    initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
 
-    const dto = mapper
+    const dto = xMapperService
         .mapTo(UserVideoStatsDTO, [1]);
 
     console.log(dto);

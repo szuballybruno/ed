@@ -1,11 +1,4 @@
-
-// type SingleKey<TType, TKeyName extends string> = {
-//     [K in keyof TType as TKeyName]: TType[K];
-// }
-
-export type FilterKeys<TType extends [any, ...any], TAllowed> = {
-    [K in keyof TType]: TType[K] extends TAllowed ? TType[K] : never;
-}
+import { FunctionSignatureAnyArgs } from '../advancedTypes/FunctionSignature';
 
 export type Mutable<T> = {
     -readonly [K in keyof T]: T[K];
@@ -15,6 +8,12 @@ type Filter<TContainer extends [any, ...any], TSearch> = {
     [K in keyof TContainer]: TContainer[K] extends TSearch ? TContainer[K] : undefined;
 }
 
-export type MappingType<TObject, TMapFn extends (...args: any[]) => any> = [TObject, Parameters<TMapFn>];
+export type MappingType<TObject, TMapFn extends FunctionSignatureAnyArgs<any>> = [TObject, Parameters<ReturnType<TMapFn>>];
+
+export type MappingFunctionType<TServices extends any[], TObject> = (services: TServices) => (...args: [...any]) => TObject;
 
 export type GetParameters<T extends [any, ...any], S> = Exclude<Filter<T, [S, any]>[number], undefined>;
+
+export type ConstrainKeys<T, C> = {
+    [K in keyof T]: C;
+}
