@@ -96,6 +96,7 @@ import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserEngagementView } from '../../models/views/UserEngagementView';
+import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
@@ -272,6 +273,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_course_stats_view', UserCourseStatsView],
             ['user_video_practise_progress_view', UserVideoPractiseProgressView],
             ['user_video_stats_view', UserVideoStatsView],
+            ['user_exam_stats_view', UserExamStatsView],
             ['course_item_question_edit_view', CourseItemQuestionEditView],
             ['comment_list_view', CommentListView],
             ['user_spent_time_ratio_view', UserSpentTimeRatioView],
