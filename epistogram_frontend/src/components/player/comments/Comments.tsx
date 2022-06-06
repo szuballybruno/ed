@@ -1,24 +1,23 @@
 import { Flex } from '@chakra-ui/react';
-import { Avatar, Checkbox, Divider } from '@mui/material';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Divider } from '@mui/material';
+import React, { useContext, useState } from 'react';
 import { useComments, useCreateComment, useCreateLike, useDeleteLike } from '../../../services/api/commentApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { CommentCreateDTO } from '../../../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
-import { Environment } from '../../../static/Environemnt';
+import { PagingType } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
 import { CommentAnswerEntry } from './CommentAnswerEntry';
 import { CommentItem } from './CommentItem';
 
 const Comments = (props: {
     currentItemCode: string
+    paging: PagingType<string>
 }) => {
 
-    const { currentItemCode } = props;
+    const { currentItemCode, paging } = props;
 
     const user = useContext(CurrentUserContext);
     const showErrorDialog = useShowErrorDialog();
@@ -98,68 +97,55 @@ const Comments = (props: {
         setCurrentReplyThreadId(comment.threadId);
     };
 
-    return (
-        <Flex
-            flex='1'
-            direction={'column'}
-            minH={600}
-            pb="100px">
-            <EpistoFont
-                style={{
-                    margin: '50px 0 10px 0',
-                    fontWeight: '500'
-                }}
-                fontSize={'fontHuge'}>
+    return <UnderVideoInfoFrame
+        title='Kommentek & Kérdések'
+        paging={paging}>
 
-                {'Kommentek & Kérdések'}
-            </EpistoFont>
-
-            <CommentAnswerEntry
-                handleCreateNewComment={handleCreateNewComment}
-                currentReplyCommentId={null}
-                currentReplyUserFullName={currentReplyUserFullName}
-                setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
+        <CommentAnswerEntry
+            handleCreateNewComment={handleCreateNewComment}
+            currentReplyCommentId={null}
+            currentReplyUserFullName={currentReplyUserFullName}
+            setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
 
 
-            <Divider
-                variant="fullWidth"
-                style={{
-                    margin: '10px 0 20px 0'
-                }} />
+        <Divider
+            variant="fullWidth"
+            style={{
+                margin: '10px 0 20px 0'
+            }} />
 
 
-            {threads
-                .map((thread, index) => {
+        {threads
+            .map((thread, index) => {
 
-                    return <Flex
-                        direction='column'
-                        key={index}>
+                return <Flex
+                    direction='column'
+                    key={index}>
 
-                        {
-                            thread.items
-                                .map((comment, index) => {
-                                    return <CommentItem
-                                        comment={comment}
-                                        handleAnswerComment={handleAnswerComment}
-                                        handleCreateLike={handleCreateLike}
-                                        handleDeleteLike={handleDeleteLike}
-                                        key={index} />;
-                                })
-                        }
+                    {
+                        thread.items
+                            .map((comment, index) => {
+                                return <CommentItem
+                                    comment={comment}
+                                    handleAnswerComment={handleAnswerComment}
+                                    handleCreateLike={handleCreateLike}
+                                    handleDeleteLike={handleDeleteLike}
+                                    key={index} />;
+                            })
+                    }
 
-                        {
-                            currentReplyCommentId
-                            && currentReplyThreadId === thread.threadId
-                            && <CommentAnswerEntry
-                                handleCreateNewComment={handleCreateNewComment}
-                                currentReplyCommentId={currentReplyCommentId}
-                                currentReplyUserFullName={currentReplyUserFullName}
-                                setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
-                        }
-                    </Flex>;
-                })}
-        </Flex>
-    );
+                    {
+                        currentReplyCommentId
+                        && currentReplyThreadId === thread.threadId
+                        && <CommentAnswerEntry
+                            handleCreateNewComment={handleCreateNewComment}
+                            currentReplyCommentId={currentReplyCommentId}
+                            currentReplyUserFullName={currentReplyUserFullName}
+                            setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
+                    }
+                </Flex>;
+            })}
+    </UnderVideoInfoFrame>;
 };
 
 export default Comments;

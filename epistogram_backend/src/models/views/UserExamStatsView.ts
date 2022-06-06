@@ -33,7 +33,7 @@ export class UserExamStatsView {
 
     @XViewColumn()
     @ViewColumn()
-    correctAnswerCount: number;
+    correctAnswerCount: string;
 
     @XViewColumn()
     @ViewColumn()

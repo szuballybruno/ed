@@ -5,7 +5,7 @@ export class UserExamStatsDTO {
     courseId: number;
     correctAnswerRate: number;
     shouldPractiseExam: boolean;
-    correctAnswerCount: number;
+    correctAnswerCount: string;
     examLengthSeconds: number;
     lastCompletionDate: Date;
     averageReactionTime: number;

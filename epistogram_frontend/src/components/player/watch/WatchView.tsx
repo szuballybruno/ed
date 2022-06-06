@@ -1,12 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { Divider, Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
+import { StillWatchingDialogMarker } from '../../../models/types';
 import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
 import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
-import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
 import { VideoDTO } from '../../../shared/dtos/VideoDTO';
-import { StillWatchingDialogMarker } from '../../../models/types';
+import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -16,17 +16,16 @@ import { NavigateToCourseItemActionType } from '../../universal/CourseItemList';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
-import { CourseItemSelector } from './CourseItemSelector';
 import Comments from '../comments/Comments';
 import PlayerDescription from '../description/PlayerDescription';
-import { VideoContent } from '../description/VideoContent';
+import PlayerNotes from '../description/PlayerNotes';
+import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { CourseItemSelector } from './CourseItemSelector';
 import { OverlayDialog } from './OverlayDialog';
 import { usePlaybackWatcher } from './PlaybackWatcherLogic';
 import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
-import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
 const autoplayTimeoutInS = 8;
 
@@ -59,7 +58,7 @@ export const WatchView = (props: {
 
     const { questions } = video;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(['Leírás', 'A kurzus segédanyagai', 'Hozzászólások']);
+    const descCommentPaging = usePaging<string>(['Leírás', 'Hozzászólások', 'Jegyzetek']);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
@@ -83,9 +82,17 @@ export const WatchView = (props: {
     const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
-    const VideoDescription = () => <PlayerDescription description={video!.description} />;
-    const VideoContents = () => <VideoContent />;
-    const VideoComments = () => <Comments currentItemCode={currentItemCode} />;
+    const VideoDescription = () => <PlayerDescription
+        paging={descCommentPaging}
+        description={video!.description} />;
+
+
+    const VideoComments = () => <Comments
+        paging={descCommentPaging}
+        currentItemCode={currentItemCode} />;
+
+    const VideoNotes = () => <PlayerNotes
+        paging={descCommentPaging} />;
 
     // const currentQuestionAnswered = answeredQuestionIds
     //     .some(qid => currentQuestion?.questionId === qid);
@@ -332,10 +339,12 @@ export const WatchView = (props: {
             <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
-                    VideoComments,
                     VideoDescription,
-                    VideoContents,
-                ]}></EpistoPaging>
+                    VideoComments,
+                    VideoNotes,
+                ]}>
+
+            </EpistoPaging>
         </Box>
     </>;
 };

@@ -9,7 +9,7 @@ SELECT DISTINCT ON (e.id)
 		THEN true
 		ELSE false
 	END should_practise_exam,
-	asv.correct_answer_count correct_answer_count,
+	asv.correct_answer_count::text || ' / ' || asv.total_question_count::text correct_answer_count,
 	EXTRACT(EPOCH FROM (ase.end_date - ase.start_date)::time)::int exam_length_seconds,
 	ase.end_date last_completion_date,
 	AVG(ga.elapsed_seconds) average_reaction_time
@@ -37,6 +37,7 @@ GROUP BY
 	u.id, 
 	asv.correct_answer_rate, 
 	asv.correct_answer_count,
+	asv.total_question_count,
 	ase.end_date,
 	ase.start_date
 
