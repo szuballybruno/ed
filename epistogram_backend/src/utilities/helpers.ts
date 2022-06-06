@@ -1,12 +1,10 @@
 import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
+import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
-import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
 import { KeyofConstrained } from './misc';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -25,9 +23,12 @@ export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, 
     };
 };
 
-export const getJoinColumnInverseSide = <TCurrent>() => <TOther>(fn: (other: TOther) => TCurrent): ((other: TOther) => TCurrent) => {
+export const getJoinColumnInverseSide = <TCurrent>() => {
 
-    return fn;
+    return <TOther>(fn: (other: TOther) => TCurrent): ((other: TOther) => TCurrent) => {
+
+        return fn;
+    };
 };
 
 export function replaceAll(originalText: string, searchText: string, replaceText: string) {

@@ -3,7 +3,7 @@ import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CheckCondition, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType } from './XQueryBuilderTypes';
+import { CheckCondition, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
 
 const INDENT = '   ';
@@ -12,7 +12,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
     private _sqlConnectionService: SQLConnectionService;
 
-    constructor(sqlConnectionService: SQLConnectionService) {
+    constructor(sqlConnectionService: SQLConnectionService, private _loggingEnabled: boolean) {
 
         this._sqlConnectionService = sqlConnectionService;
     }
@@ -26,7 +26,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         whereQuery: SimpleExpressionPart<TParams>[],
         params?: TParams): Promise<TEntity> {
 
-        const { fullQuery, sqlParamsList } = this.getFullQuery(classType, whereQuery, params ?? {} as any);
+        const { fullQuery, sqlParamsList } = this._getFullQuery(classType, whereQuery, params ?? {} as any);
 
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
@@ -55,7 +55,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         whereQuery: SimpleExpressionPart<TParams>[],
         params?: TParams): Promise<TEntity | null> {
 
-        const { fullQuery, sqlParamsList } = this.getFullQuery(classType, whereQuery, params ?? {} as any);
+        const { fullQuery, sqlParamsList } = this._getFullQuery(classType, whereQuery, params ?? {} as any);
 
         const rows = await this
             .executeSQLQuery(fullQuery, sqlParamsList);
@@ -77,7 +77,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         params?: TParams) {
 
         const { fullQuery, sqlParamsList } = this
-            .getFullQuery(classType, query, params ?? {} as any);
+            ._getFullQuery(classType, query, params ?? {} as any);
 
         const rows = await this.executeSQLQuery(fullQuery, sqlParamsList);
 
@@ -92,10 +92,13 @@ export class XQueryBuilderCore<TEntity, TParams> {
     /**
      * Returns the full SQL query that can be run against the DB 
      */
-    private getFullQuery(
+    private _getFullQuery(
         classType: ClassType<TEntity>,
         expressionParts: SimpleExpressionPart<TParams>[],
         params: TParams) {
+
+        if (Object.values(params).any((x: any) => x === undefined))
+            throw new Error('One or more params are undefined!');
 
         const tableName = `"${snk(classType.name)}"`;
         const sqlTableRef = `public.${tableName} ${tableName}`;
@@ -272,8 +275,11 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         try {
 
-            log('X SQL Query: ');
-            log(queryLog, { color: ConsoleColor.purple, noStamp: true });
+            if (this._loggingEnabled) {
+
+                log('X SQL Query: ');
+                log(queryLog, { color: ConsoleColor.purple, noStamp: true });
+            }
 
             const values = this.getParamValues(params);
 

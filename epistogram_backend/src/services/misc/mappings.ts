@@ -115,13 +115,39 @@ import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { VideoDTO } from '../../shared/dtos/VideoDTO';
+import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
+import { UrlService } from '../UrlService';
 import { getItemCode } from './encodeService';
+import { XMappingsBuilder } from './XMapperService/XMapperService';
+import { Mutable } from './XMapperService/XMapperTypes';
+
+export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
+
+const marray = [
+    epistoMappingsBuilder.addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
+    epistoMappingsBuilder.addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
+
+    epistoMappingsBuilder
+        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: Video, sessionId: number, maxWatchedSeconds: number) => ({
+            id: video.id,
+            courseId: video.courseId,
+            subTitle: video.subtitle,
+            title: video.title,
+            description: video.description,
+            thumbnailUrl: '',
+            url: assetUrlService.getAssetUrl(video.videoFile.filePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
+            questions: video.questions.map(q => toQuestionDTO(q)),
+            maxWatchedSeconds: maxWatchedSeconds,
+            videoPlaybackSessionId: sessionId
+        }))
+] as const;
+
+export type EpistoMappingsType = Mutable<typeof marray>;
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
@@ -549,25 +575,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Video, VideoDTO, (video, maxWatchedSeconds: number) => {
-
-            navPropNotNull(video.questions);
-            navPropNotNull(video.videoFile);
-
-            return {
-                id: video.id,
-                courseId: video.courseId,
-                subTitle: video.subtitle,
-                title: video.title,
-                description: video.description,
-                thumbnailUrl: '',
-                url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
-                questions: video.questions.map(q => toQuestionDTO(q)),
-                maxWatchedSeconds: maxWatchedSeconds
-            } as VideoDTO;
-        });
-
-    mapperService
         .addMap(Video, CourseItemDTO, (video, state: CourseItemStateType) => {
 
             return {
@@ -957,6 +964,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             scope: x.scope,
             id: x.id
         }));
+
+    return marray;
 };
 
 const separationChar = '|';

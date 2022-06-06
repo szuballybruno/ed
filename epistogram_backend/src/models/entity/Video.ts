@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany } from '../../services/XORM/XORMDecorators';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
 import { Comment } from './Comment';
@@ -9,8 +9,10 @@ import { Question } from './Question';
 import { StorageFile } from './StorageFile';
 import { UserSessionActivity } from './UserSessionActivity';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
-import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
+import { VideoPlaybackSession } from './playback/VideoPlaybackSession';
+import { VideoSeekEvent } from './playback/VideoSeekEvent';
 
 @Entity()
 export class Video {
@@ -85,6 +87,16 @@ export class Video {
     @OneToMany(_ => VideoPlaybackSample, x => x.video)
     @JoinColumn()
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
+
+    // video seek events 
+    @XOneToMany<Video>()(() => VideoSeekEvent, x => x.video)
+    @JoinColumn()
+    videoSeekEvents: Relation<VideoSeekEvent>[];
+
+    // video playback sessions 
+    @OneToMany(_ => VideoPlaybackSession, x => x.video)
+    @JoinColumn()
+    videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 
     // module
     @Column()

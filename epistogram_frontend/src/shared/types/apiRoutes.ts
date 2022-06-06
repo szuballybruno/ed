@@ -169,6 +169,7 @@ export const apiRoutes = {
 
     playback: {
         saveVideoPlaybackSample: '/playback/save-video-playback-sample',
+        saveVideoSeekEvent: '/playback/save-video-seek-event',
     },
 
     course: {

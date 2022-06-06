@@ -1,6 +1,6 @@
 import { QuestionDTO } from './QuestionDTO';
 
-export class VideoDTO {
+export class VideoPlayerDataDTO {
     id: number;
     courseId: number;
     subTitle: string;
@@ -10,4 +10,5 @@ export class VideoDTO {
     description: string;
     questions: QuestionDTO[];
     maxWatchedSeconds: number;
+    videoPlaybackSessionId: number;
 }

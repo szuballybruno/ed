@@ -48,7 +48,7 @@ import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBrid
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
 import { Video } from '../../models/entity/Video';
-import { VideoPlaybackSample } from '../../models/entity/VideoPlaybackSample';
+import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
@@ -149,6 +149,8 @@ import { getUserSeedData } from '../../sql/seed/seed_users';
 import { getVideoSeedData } from '../../sql/seed/seed_videos';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
+import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -351,6 +353,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             StorageFile,
             AnswerSession,
             VideoPlaybackSample,
+            VideoPlaybackSession,
+            VideoSeekEvent,
             TeacherInfo,
             UserCourseBridge,
             PersonalityTraitCategory,
