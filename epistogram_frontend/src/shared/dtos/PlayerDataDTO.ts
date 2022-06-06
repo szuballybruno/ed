@@ -2,10 +2,10 @@ import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
 import { ModuleDetailedDTO } from './ModuleDetailedDTO';
 import { ModuleDTO } from './ModuleDTO';
 import { CourseItemStateType, CourseModeType } from '../types/sharedTypes';
-import { VideoDTO } from './VideoDTO';
+import { VideoPlayerDataDTO } from './VideoDTO';
 
 export type PlayerDataDTO = {
-    video: VideoDTO | null;
+    video: VideoPlayerDataDTO | null;
     exam: ExamPlayerDataDTO | null;
     module: ModuleDetailedDTO;
     answerSessionId: number | null;

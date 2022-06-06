@@ -57,7 +57,7 @@ import { MapperService } from './services/MapperService';
 import { createDBSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
-import { epistoMappingsBuilder, initializeMappings } from './services/misc/mappings';
+import { initializeMappings } from './services/misc/mappings';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './services/misc/middlewareService';
 import { MiscService } from './services/MiscService';
 import { ModuleService } from './services/ModuleService';
@@ -94,7 +94,6 @@ import { UserSessionActivityService } from './services/UserSessionActivityServic
 import { UserStatsService } from './services/UserStatsService';
 import { VideoRatingService } from './services/VideoRatingService';
 import { VideoService } from './services/VideoService';
-import { UserVideoStatsDTO } from './shared/dtos/UserVideoStatsDTO';
 import './shared/logic/jsExtensions';
 import { AuthenticationMiddleware } from './turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './turboMiddleware/AuthorizationMiddleware';
@@ -118,14 +117,14 @@ const main = async () => {
     // services
     const urlService = new UrlService(globalConfig);
     const mapperService = new MapperService();
-    const xMapperService = new EpistoMapperService(urlService);
+    const epistoMapperService = new EpistoMapperService(urlService);
     const loggerService = new LoggerService();
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlConnectionService);
     const userStatsService = new UserStatsService(ormConnectionService, mapperService);
-    const sqlFunctionService = new SQLFunctionsService(sqlConnectionService);
+    const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
     const eventService = new EventService(mapperService, ormConnectionService);
     const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService);
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
@@ -157,7 +156,7 @@ const main = async () => {
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const sampleMergeService = new SampleMergeService();
     const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
-    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService);
+    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, epistoMapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
@@ -209,11 +208,6 @@ const main = async () => {
     initializeMappings(urlService.getAssetUrl, mapperService);
     await dbConnectionService.initializeAsync();
     await dbConnectionService.seedDBAsync();
-
-    const dto = xMapperService
-        .mapTo(UserVideoStatsDTO, [1]);
-
-    console.log(dto);
 
     // initialize express
     const turboExpress = new TurboExpressBuilder<ActionParams>()

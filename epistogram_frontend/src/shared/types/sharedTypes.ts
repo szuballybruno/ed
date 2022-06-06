@@ -57,7 +57,7 @@ export const permissionCodes = [
     'WATCH_COMPANY_COURSES',
 
     // manage company
-    'EDIT_COMPANIES',
+    'EDIT_COMPANY',
     'DELETE_COMPANIES',
     'CREATE_COMPANIES',
     'ASSIGN_ROLES_TO_COMPANY',

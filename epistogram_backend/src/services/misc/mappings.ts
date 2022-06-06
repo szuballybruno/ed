@@ -113,6 +113,7 @@ import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
+import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
@@ -128,6 +129,20 @@ export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 const marray = [
     epistoMappingsBuilder.addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
     epistoMappingsBuilder.addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
+
+    epistoMappingsBuilder
+        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: Video, sessionId: number, maxWatchedSeconds: number) => ({
+            id: video.id,
+            courseId: video.courseId,
+            subTitle: video.subtitle,
+            title: video.title,
+            description: video.description,
+            thumbnailUrl: '',
+            url: assetUrlService.getAssetUrl(video.videoFile.filePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
+            questions: video.questions.map(q => toQuestionDTO(q)),
+            maxWatchedSeconds: maxWatchedSeconds,
+            videoPlaybackSessionId: sessionId
+        }))
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;

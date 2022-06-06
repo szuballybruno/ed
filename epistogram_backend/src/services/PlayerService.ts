@@ -10,6 +10,7 @@ import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { CourseService } from './CourseService';
+import { EpistoMapperService } from './EpistoMapperService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -40,7 +41,8 @@ export class PlayerService extends ServiceBase {
         videoService: VideoService,
         questionAnswerService: QuestionAnswerService,
         mappserService: MapperService,
-        playbackService: PlaybackService) {
+        playbackService: PlaybackService,
+        private _epistoMapper: EpistoMapperService) {
 
         super(mappserService, ormService);
 
@@ -230,39 +232,32 @@ export class PlayerService extends ServiceBase {
         const video = await this._videoService
             .getVideoPlayerDataAsync(videoId);
 
-        const oldSession = await this._ormService
-            .query(VideoPlaybackSession, { userId, videoId })
+        const currentDateMinThreshold = moment(new Date()).subtract(5, 'minutes').toDate();
+
+        const oldSessions = await this._ormService
+            .query(VideoPlaybackSession, { userId, videoId, currentDateMinThreshold })
             .where('userId', '=', 'userId')
             .and('videoId', '=', 'videoId')
-            .getOneOrNull();
+            .and('lastUsageDate', '>', 'currentDateMinThreshold')
+            .getMany();
 
-        const useOldSession = oldSession && (moment(oldSession.lastUsageDate)
-            .add(5, 'minutes')
-            .toDate() > new Date());
+        const oldSession = oldSessions
+            .orderBy(x => x.lastUsageDate)
+            .firstOrNull();
 
-        const videoPlaybackSessionId = useOldSession
+        const videoPlaybackSessionId = oldSession
             ? oldSession.id
             : await this._ormService
-                .create(VideoPlaybackSession, instatiateInsertEntity<VideoPlaybackSession>({
+                .createAsync(VideoPlaybackSession, instatiateInsertEntity<VideoPlaybackSession>({
                     creationDate: new Date(),
                     lastUsageDate: new Date(),
                     userId,
                     videoId
                 }));
 
-        // const dto: VideoPlayerDataDTO = {
-        //     id: video.id,
-        //     courseId: video.courseId,
-        //     subTitle: video.subtitle,
-        //     title: video.title,
-        //     description: video.description,
-        //     thumbnailUrl: '',
-        //     url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
-        //     questions: video.questions.map(q => toQuestionDTO(q)),
-        //     maxWatchedSeconds: maxWatchedSeconds
-        // } as VideoPlayerDataDTO;
+        const dto = this._epistoMapper
+            .mapTo(VideoPlayerDataDTO, [video, videoPlaybackSessionId, maxWathcedSeconds]);
 
-        return this._mapperService
-            .map(Video, VideoPlayerDataDTO, video, maxWathcedSeconds);
+        return dto;
     };
 }

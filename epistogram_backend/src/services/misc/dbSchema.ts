@@ -149,6 +149,7 @@ import { getVideoSeedData } from '../../sql/seed/seed_videos';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
+import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -351,6 +352,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             AnswerSession,
             VideoPlaybackSample,
             VideoPlaybackSession,
+            VideoSeekEvent,
             TeacherInfo,
             UserCourseBridge,
             PersonalityTraitCategory,

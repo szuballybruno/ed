@@ -13,7 +13,7 @@ declare global {
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func: (item: T) => boolean): T;
         first(func?: (item: T) => boolean): T;
-        last(func: (item: T) => boolean): T;
+        last(func?: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
         count(func: (item: T) => boolean): number;
         insert(index: number, newItem: T): Array<T>;
@@ -109,7 +109,9 @@ Array.prototype.firstOrNull = function <T>(func?: (item: T) => boolean) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.last = function <T>(func: (item: T) => T) {
+Array.prototype.last = function <T>(fn?: (item: T) => T) {
+
+    const func = fn ? fn : () => true;
 
     const filtered = this.filter(func);
 

@@ -72,5 +72,5 @@ export type SQLValueType = {
 };
 
 export type ParamConstraintType<TParams> = {
-    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | SQLValueType;
+    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | Date | SQLValueType;
 };

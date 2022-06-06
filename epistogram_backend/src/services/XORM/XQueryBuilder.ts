@@ -132,15 +132,17 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
     private _allowDeleted = false;
     private _sqlConnection: SQLConnectionService;
     private _bracket: SQLBracketType;
+    private _loggingEnabled: boolean;
 
     _expression: SimpleExpressionPart<TParams>[] = [];
 
-    constructor(connection: SQLConnectionService, classType: ClassType<TEntity>, params?: TParams) {
+    constructor(connection: SQLConnectionService, classType: ClassType<TEntity>, loggingEnabled: boolean, params?: TParams) {
 
-        this._connection = new XQueryBuilderCore<TEntity, TParams>(connection);
+        this._connection = new XQueryBuilderCore<TEntity, TParams>(connection, loggingEnabled);
         this._sqlConnection = connection;
         this._mainClassType = classType;
         this._params = params;
+        this._loggingEnabled = loggingEnabled;
     }
 
     selectFrom(fn: (builder: SelectBuilder<TResult>) => void) {
@@ -282,7 +284,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
             .push(leftJoin);
 
         // on, and etc
-        const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._params);
+        const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._loggingEnabled, this._params);
         const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
 
         cond(builder);
@@ -308,7 +310,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
             .push(innerJoin);
 
         // on, and etc
-        const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._params);
+        const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._loggingEnabled, this._params);
         const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
 
         cond(builder);

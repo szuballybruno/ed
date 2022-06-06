@@ -1,8 +1,10 @@
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
+import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
 import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
 import { Video } from '../models/entity/Video';
 import { VideoProgressView } from '../models/views/VideoProgressView';
-import { VideoPlaybackSampleDTO } from '../shared/dtos/VideoPlaybackSampleDTO';
+import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
+import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
 import { PrincipalId } from '../utilities/ActionParams';
 import { CoinAcquireService } from './CoinAcquireService';
@@ -67,6 +69,29 @@ export class PlaybackService extends ServiceBase {
     };
 
     /**
+     * Saves a video seek event
+     */
+    async saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
+
+        const { fromSeconds, toSeconds, videoItemCode, videoPlaybackSessionId } = videoSeekEventDTO;
+        const { itemId, itemType } = readItemCode(videoItemCode);
+
+        if (itemType !== 'video')
+            throw new Error('Wrong item type: ' + itemType);
+
+        await this._ormService
+            .createAsync(VideoSeekEvent, {
+                creationDate: new Date(),
+                fromSeconds: fromSeconds,
+                toSeconds: toSeconds,
+                userId: principalId.toSQLValue(),
+                videoId: itemId,
+                videoPlaybackSessionId: videoPlaybackSessionId,
+                isForward: fromSeconds <= toSeconds
+            });
+    }
+
+    /**
      * Gets the max watched seconds // TODO clarify this
      */
     getMaxWatchedSeconds = async (userId: number, videoId: number) => {
@@ -99,7 +124,36 @@ export class PlaybackService extends ServiceBase {
         const mergedSamples = this._sampleMergeService
             .mergeSamples([currentSample, ...oldSamples]);
 
+        await this._saveMergedSamples(mergedSamples, userId, videoId, videoPlaybackSessionId);
+
         return { mergedSamples };
+    }
+
+    private async _saveMergedSamples(
+        mergedSamples: VideoPlaybackSample[],
+        userId: number,
+        videoId: number,
+        videoPlaybackSessionId: number) {
+
+        await this._ormService
+            .getOrmConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(VideoPlaybackSample)
+            .where("videoId = :videoId", { videoId })
+            .andWhere("userId = :userId", { userId })
+            .execute();
+
+        await this._ormService
+            .createMany(VideoPlaybackSample, mergedSamples
+                .map(x => ({
+                    creationDate: new Date(),
+                    fromSeconds: x.fromSeconds,
+                    toSeconds: x.toSeconds,
+                    userId,
+                    videoId,
+                    videoPlaybackSessionId
+                })));
     }
 
     private async _handleVideoProgressAsync(userId: number, videoId: number, toSeconds: number, mergedSamples: VideoPlaybackSample[]) {

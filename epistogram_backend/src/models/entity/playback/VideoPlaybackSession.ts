@@ -3,6 +3,7 @@ import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORM
 import { User } from '../User';
 import { Video } from '../Video';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoSeekEvent } from './VideoSeekEvent';
 
 @Entity()
 export class VideoPlaybackSession {
@@ -34,6 +35,9 @@ export class VideoPlaybackSession {
 
     // video playback samples
     @XOneToMany<VideoPlaybackSession>()(() => VideoPlaybackSample, x => x.videoPlaybackSession)
-    @XJoinColumn<VideoPlaybackSession>('userId')
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
+
+    // video seek events
+    @XOneToMany<VideoPlaybackSession>()(() => VideoSeekEvent, x => x.videoPlaybackSession)
+    videoSeekEvents: Relation<VideoSeekEvent>[];
 }
