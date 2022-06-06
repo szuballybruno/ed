@@ -2,12 +2,14 @@
 import { Course } from '../models/entity/Course';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { UserCourseStatsView } from '../models/views/UserCourseStatsView';
+import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserStatsView } from '../models/views/UserStatsView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
+import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
@@ -75,6 +77,25 @@ export class UserStatsService {
 
         return this._mapperService
             .mapMany(UserVideoStatsView, UserVideoStatsDTO, stats);
+    }
+
+    /**
+     * Gets the statistics for the users every completed exam
+     * @param userId 
+     * @returns
+     */
+
+    async getUserExamStatsAsync(userId: number, courseId: number) {
+
+        const stats = await this._ormService
+            .getRepository(UserExamStatsView)
+            .createQueryBuilder('uesv')
+            .where('"uesv"."user_id" = :userId', { userId, courseId })
+            .andWhere('"uesv"."course_id" = :courseId')
+            .getMany();
+
+        return this._mapperService
+            .mapMany(UserExamStatsView, UserExamStatsDTO, stats);
     }
 
     /**

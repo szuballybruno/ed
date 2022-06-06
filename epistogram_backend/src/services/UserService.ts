@@ -6,6 +6,7 @@ import { RegistrationType } from '../models/Types';
 import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
+import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
@@ -18,13 +19,6 @@ import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
-import { UserEngagementView } from '../models/views/UserEngagementView';
-import moment from 'moment';
-import { Grouping } from '../shared/logic/jsExtensions';
-import { UserPerformanceView } from '../models/views/UserPerformanceView';
-import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
-import { UserStatsView } from '../models/views/UserStatsView';
-import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 
 export class UserService {
 

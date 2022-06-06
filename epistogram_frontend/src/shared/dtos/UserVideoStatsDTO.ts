@@ -6,7 +6,7 @@ export class UserVideoStatsDTO {
     lengthSeconds: number;
     totalSpentTimeSeconds: number;
     videoReplaysCount: number;
-    isRecommendedForRetry: number;
+    isRecommendedForRetry: boolean;
     lastThreeAnswerAverage: number;
     averageReactionTime: number;
     lastWatchTime: Date;

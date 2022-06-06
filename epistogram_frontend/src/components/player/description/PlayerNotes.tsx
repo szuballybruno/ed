@@ -1,21 +1,19 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { PagingType } from '../../../static/frontendHelpers';
 import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
 
-const PlayerDescription = (props: {
-    description: string
+const PlayerNotes = (props: {
     paging: PagingType<string>
 }) => {
 
-    const { description, paging } = props;
+    const { paging } = props;
 
     return <UnderVideoInfoFrame
-        title='Leírás'
+        title='Jegyzetek'
         paging={paging}>
 
-        {props.description}
+
     </UnderVideoInfoFrame>;
 };
 
-export default PlayerDescription;
+export default PlayerNotes;

@@ -18,7 +18,7 @@ export const EmptyCell = () => <EpistoFont>
 </EpistoFont>;
 
 export const AdminUserCoursesDataGridControl = (props: {
-    handleMoreButton: () => void
+    handleMoreButton: (courseId: number | null) => void
 }) => {
 
     const { handleMoreButton } = props;
@@ -48,15 +48,16 @@ export const AdminUserCoursesDataGridControl = (props: {
             recommendedItemsPerWeek: course.recommendedItemsPerWeek,
             lagBehindPercentage: course.lagBehindPercentage,
             previsionedCompletionDate: course.previsionedCompletionDate,
-            tempomatMode: course.tempomatMode
+            tempomatMode: course.tempomatMode,
+            moreDetails: course.courseId
         } as Partial<UserCourseStatsDTO>;
     });
 
     const rows: Partial<UserCourseStatsDTO>[] = getRowsFromCourses();
 
-    const columnDefGen = <TField extends keyof Partial<UserCourseStatsDTO & { moreDetails: string }>>(
+    const columnDefGen = <TField extends keyof Partial<UserCourseStatsDTO & { moreDetails: number }>>(
         field: TField,
-        columnOptions: OmitProperty<GridColumnType<Partial<UserCourseStatsDTO & { moreDetails: string }>, string | undefined, TField>, 'field'>) => {
+        columnOptions: OmitProperty<GridColumnType<Partial<UserCourseStatsDTO & { moreDetails: number }>, string | undefined, TField>, 'field'>) => {
 
         return {
             field,
@@ -253,7 +254,7 @@ export const AdminUserCoursesDataGridControl = (props: {
                 <EpistoButton
                     variant="outlined"
                     onClick={() => {
-                        handleMoreButton();
+                        handleMoreButton(params.value || null);
                     }} >
 
                     Bővebben

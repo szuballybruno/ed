@@ -19,7 +19,7 @@ export const LearningCourseStats = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    const dialogLogic = useEpistoDialogLogic('sasd');
+    const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
 
 
     const { navigateToPlayer } = useNavigation();
