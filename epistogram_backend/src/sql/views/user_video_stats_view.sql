@@ -8,7 +8,7 @@ SELECT
     -- How much time the user spent with the video
     (
         SELECT
-            SUM(uvppv.playback_duration)
+            SUM(uvppv.playback_duration)::int
         FROM public.user_video_practise_progress_view uvppv
         WHERE uvppv.user_id = u.id
         AND uvppv.video_id = cisv.video_id
@@ -22,7 +22,7 @@ SELECT
                 WHEN COUNT(*) - 1 > 0
                 THEN COUNT(*) - 1
                 ELSE 0
-            END video_repetition_count
+            END::int video_repetition_count
         FROM public.user_video_practise_progress_view uvppv
         WHERE uvppv.user_id = u.id
         AND uvppv.video_id = cisv.video_id
@@ -48,7 +48,7 @@ SELECT
     -- The average of the last 3 video quiz answers
     (
         SELECT
-            AVG(uprv.last_three_answer_average)
+            AVG(uprv.last_three_answer_average)::int
         FROM public.user_practise_recommendation_view uprv
         WHERE uprv.user_id = u.id
         AND uprv.video_id = cisv.video_id

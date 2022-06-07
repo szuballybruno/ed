@@ -28,7 +28,7 @@ export class UserVideoStatsView {
     videoReplaysCount: number;
 
     @ViewColumn()
-    isRecommendedForRetry: number;
+    isRecommendedForRetry: boolean;
 
     @ViewColumn()
     lastThreeAnswerAverage: number;

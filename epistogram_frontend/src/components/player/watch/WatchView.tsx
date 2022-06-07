@@ -19,7 +19,7 @@ import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
 import Comments from '../comments/Comments';
 import PlayerDescription from '../description/PlayerDescription';
-import { VideoContent } from '../description/VideoContent';
+import PlayerNotes from '../description/PlayerNotes';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { CourseItemSelector } from './CourseItemSelector';
 import { OverlayDialog } from './OverlayDialog';
@@ -59,7 +59,7 @@ export const WatchView = (props: {
 
     const { questions } = videoPlayerData;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(['Leírás', 'A kurzus segédanyagai', 'Hozzászólások']);
+    const descCommentPaging = usePaging<string>(['Leírás', 'Hozzászólások', 'Jegyzetek']);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(videoPlayerData.maxWatchedSeconds);
@@ -97,9 +97,18 @@ export const WatchView = (props: {
     const videoPlayerState = useVideoPlayerState(videoPlayerData, isShowingOverlay, maxWatchedSeconds, limitSeek, handleVideoSeekEvent);
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
-    const VideoDescription = () => <PlayerDescription description={videoPlayerData!.description} />;
-    const VideoContents = () => <VideoContent />;
-    const VideoComments = () => <Comments currentItemCode={currentItemCode} />;
+    const VideoDescription = () => <PlayerDescription
+        paging={descCommentPaging}
+        description={video!.description} />;
+
+
+    const VideoComments = () => <Comments
+        paging={descCommentPaging}
+        currentItemCode={currentItemCode} />;
+
+    const VideoNotes = () => <PlayerNotes
+        paging={descCommentPaging} />;
+
 
     // const currentQuestionAnswered = answeredQuestionIds
     //     .some(qid => currentQuestion?.questionId === qid);
@@ -348,10 +357,12 @@ export const WatchView = (props: {
             <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
-                    VideoComments,
                     VideoDescription,
-                    VideoContents,
-                ]}></EpistoPaging>
+                    VideoComments,
+                    VideoNotes,
+                ]}>
+
+            </EpistoPaging>
         </Box>
     </>;
 };

@@ -47,6 +47,7 @@ import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
+import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
@@ -111,6 +112,7 @@ import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
+import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
@@ -148,6 +150,22 @@ const marray = [
 export type EpistoMappingsType = Mutable<typeof marray>;
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(UserExamStatsView, UserExamStatsDTO, (stats) => {
+            return {
+                userId: stats.userId,
+                examId: stats.examId,
+                examTitle: stats.examTitle,
+                courseId: stats.courseId,
+                correctAnswerRate: stats.correctAnswerRate,
+                shouldPractiseExam: stats.shouldPractiseExam,
+                correctAnswerCount: stats.correctAnswerCount,
+                examLengthSeconds: stats.examLengthSeconds,
+                lastCompletionDate: stats.lastCompletionDate,
+                averageReactionTime: stats.averageReactionTime
+            }
+        })
 
     mapperService
         .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {

@@ -6,7 +6,7 @@ import { useShowErrorDialog } from '../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
 import { Environment } from '../../static/Environemnt';
-import { usePaging } from '../../static/frontendHelpers';
+import { epochDates, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -38,8 +38,11 @@ export const ExamQuestions = (props: {
     const progressPercentage = (100 / questions.length) * questionPaging.currentIndex;
     const isSingleAnswerMode = currentQuestion.typeId === QuestionTypeEnum.singleAnswer;
     const hasSelectedAnswer = selectedAnswerIds.length > 0;
+    const [showUpTime, setShowUpTime] = useState<Date>(new Date());
 
     const handleNextAsync = async () => {
+
+        const timeElapsed = epochDates(new Date(), showUpTime);
 
         try {
 
@@ -47,9 +50,10 @@ export const ExamQuestions = (props: {
                 answerSessionId: answerSessionId,
                 answerIds: selectedAnswerIds!,
                 questionId: currentQuestion.questionId,
-                elapsedSeconds: 0
+                elapsedSeconds: timeElapsed
             });
 
+            setShowUpTime(new Date());
             setSelectedAnswerIds([]);
             questionPaging.next();
         } catch (e) {
