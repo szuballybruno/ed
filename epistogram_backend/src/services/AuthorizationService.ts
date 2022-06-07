@@ -17,7 +17,10 @@ export class AuthorizationService {
         permissionCode: PermissionCodeType,
         context?: ContextOptions) {
 
-        const hasPermission = this.hasPermissionAsync(principalId, permissionCode, context);
+        const hasPermission = await this
+            .hasPermissionAsync(principalId, permissionCode, context);
+
+        // console.log(`User: ${principalId.toSQLValue()} Perm: ${permissionCode} ${JSON.stringify(context)} ${hasPermission}`)
 
         if (!hasPermission)
             throw new VerboseError('User has no permission to access resource.', 'no permission');

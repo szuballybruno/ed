@@ -607,7 +607,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 78.433333,
         videoFileId: storageFiles.storage_file_107.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_3.id
     },
     video_85: {
@@ -619,7 +619,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 103.133333,
         videoFileId: storageFiles.storage_file_106.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_3.id
     },
     video_88: {
@@ -631,7 +631,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 144,
         videoFileId: storageFiles.storage_file_112.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_3.id
     },
     video_89: {
@@ -643,7 +643,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 287.333333,
         videoFileId: storageFiles.storage_file_110.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_3.id
     },
     video_90: {
@@ -655,7 +655,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 173.733333,
         videoFileId: storageFiles.storage_file_111.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_3.id
     },
     video_87: {
@@ -667,7 +667,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 292.066667,
         videoFileId: storageFiles.storage_file_108.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_3.id
     },
     video_44: {
@@ -1039,7 +1039,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 98,
         videoFileId: storageFiles.storage_file_114.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_8.id
     },
     video_92: {
@@ -1051,7 +1051,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 64.633333,
         videoFileId: storageFiles.storage_file_113.id,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_7.id
     },
     video_150: {
@@ -1063,7 +1063,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 225.033333,
         videoFileId: storageFiles.storage_file_188.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_144: {
@@ -1075,7 +1075,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 242.733333,
         videoFileId: storageFiles.storage_file_182.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_132: {
@@ -1087,7 +1087,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 254.9,
         videoFileId: storageFiles.storage_file_170.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_145: {
@@ -1099,7 +1099,7 @@ export const getVideoSeedData = (
         orderIndex: 13,
         lengthSeconds: 104.233333,
         videoFileId: storageFiles.storage_file_183.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_133: {
@@ -1111,7 +1111,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 248.533333,
         videoFileId: storageFiles.storage_file_171.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_159: {
@@ -1123,7 +1123,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 188.066667,
         videoFileId: storageFiles.storage_file_196.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_134: {
@@ -1135,7 +1135,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 231.5,
         videoFileId: storageFiles.storage_file_172.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_135: {
@@ -1147,7 +1147,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 152.166667,
         videoFileId: storageFiles.storage_file_173.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_156: {
@@ -1159,7 +1159,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 268,
         videoFileId: storageFiles.storage_file_193.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_152: {
@@ -1171,7 +1171,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 138.6,
         videoFileId: storageFiles.storage_file_189.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_136: {
@@ -1183,7 +1183,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 136.8,
         videoFileId: storageFiles.storage_file_174.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_137: {
@@ -1195,7 +1195,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 123.533333,
         videoFileId: storageFiles.storage_file_175.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_161: {
@@ -1207,7 +1207,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 377.066667,
         videoFileId: storageFiles.storage_file_198.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_138: {
@@ -1219,7 +1219,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 380,
         videoFileId: storageFiles.storage_file_176.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_153: {
@@ -1231,7 +1231,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 260.233333,
         videoFileId: storageFiles.storage_file_190.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_139: {
@@ -1243,7 +1243,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 371.3,
         videoFileId: storageFiles.storage_file_177.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_147: {
@@ -1255,7 +1255,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 345.833333,
         videoFileId: storageFiles.storage_file_185.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_140: {
@@ -1267,7 +1267,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 164.466667,
         videoFileId: storageFiles.storage_file_178.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_148: {
@@ -1279,7 +1279,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 317.3,
         videoFileId: storageFiles.storage_file_186.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_141: {
@@ -1291,7 +1291,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 239.2,
         videoFileId: storageFiles.storage_file_179.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_165: {
@@ -1303,7 +1303,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 283.066667,
         videoFileId: storageFiles.storage_file_201.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_157: {
@@ -1315,7 +1315,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 147.933333,
         videoFileId: storageFiles.storage_file_194.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_142: {
@@ -1327,7 +1327,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 225,
         videoFileId: storageFiles.storage_file_180.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_149: {
@@ -1339,7 +1339,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 290.066667,
         videoFileId: storageFiles.storage_file_187.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_143: {
@@ -1351,7 +1351,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 284.633333,
         videoFileId: storageFiles.storage_file_181.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id
     },
     video_154: {
@@ -1363,7 +1363,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 135.7,
         videoFileId: storageFiles.storage_file_191.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_160: {
@@ -1375,7 +1375,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 254.566667,
         videoFileId: storageFiles.storage_file_197.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_158: {
@@ -1387,7 +1387,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 255,
         videoFileId: storageFiles.storage_file_195.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_155: {
@@ -1399,7 +1399,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 250.866667,
         videoFileId: storageFiles.storage_file_192.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_164: {
@@ -1411,7 +1411,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 256.966667,
         videoFileId: storageFiles.storage_file_200.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_163: {
@@ -1423,7 +1423,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 245.066667,
         videoFileId: storageFiles.storage_file_199.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_166: {
@@ -1435,7 +1435,7 @@ export const getVideoSeedData = (
         orderIndex: 13,
         lengthSeconds: 266.333333,
         videoFileId: storageFiles.storage_file_202.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_167: {
@@ -1447,7 +1447,7 @@ export const getVideoSeedData = (
         orderIndex: 14,
         lengthSeconds: 345.066667,
         videoFileId: storageFiles.storage_file_203.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_168: {
@@ -1459,7 +1459,7 @@ export const getVideoSeedData = (
         orderIndex: 15,
         lengthSeconds: 175,
         videoFileId: storageFiles.storage_file_204.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id
     },
     video_169: {
@@ -1471,7 +1471,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 225.033333,
         videoFileId: storageFiles.storage_file_205.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_170: {
@@ -1483,7 +1483,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 229.033333,
         videoFileId: storageFiles.storage_file_206.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_171: {
@@ -1495,7 +1495,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 382.666667,
         videoFileId: storageFiles.storage_file_207.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_403: {
@@ -1507,7 +1507,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 168.7,
         videoFileId: storageFiles.storage_file_445.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_172: {
@@ -1519,7 +1519,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 124.2,
         videoFileId: storageFiles.storage_file_208.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_205: {
@@ -1531,7 +1531,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 87.5,
         videoFileId: storageFiles.storage_file_242.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_187: {
@@ -1543,7 +1543,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 308.266667,
         videoFileId: storageFiles.storage_file_224.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_173: {
@@ -1555,7 +1555,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 209.3,
         videoFileId: storageFiles.storage_file_209.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_219: {
@@ -1567,7 +1567,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 241.466667,
         videoFileId: storageFiles.storage_file_256.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_174: {
@@ -1579,7 +1579,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 224.5,
         videoFileId: storageFiles.storage_file_210.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_198: {
@@ -1591,7 +1591,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 266.466667,
         videoFileId: storageFiles.storage_file_235.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_188: {
@@ -1603,7 +1603,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 239.866667,
         videoFileId: storageFiles.storage_file_225.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_175: {
@@ -1615,7 +1615,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 268,
         videoFileId: storageFiles.storage_file_211.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_211: {
@@ -1627,7 +1627,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 407.166667,
         videoFileId: storageFiles.storage_file_248.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_176: {
@@ -1639,7 +1639,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 222,
         videoFileId: storageFiles.storage_file_212.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_189: {
@@ -1651,7 +1651,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 179.3,
         videoFileId: storageFiles.storage_file_226.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_206: {
@@ -1663,7 +1663,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 167.4,
         videoFileId: storageFiles.storage_file_243.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_177: {
@@ -1675,7 +1675,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 348,
         videoFileId: storageFiles.storage_file_213.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_199: {
@@ -1687,7 +1687,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 219.633333,
         videoFileId: storageFiles.storage_file_236.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_190: {
@@ -1699,7 +1699,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 227.766667,
         videoFileId: storageFiles.storage_file_227.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_178: {
@@ -1711,7 +1711,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 309,
         videoFileId: storageFiles.storage_file_214.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_214: {
@@ -1723,7 +1723,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 103.033333,
         videoFileId: storageFiles.storage_file_251.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_179: {
@@ -1735,7 +1735,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 144.766667,
         videoFileId: storageFiles.storage_file_215.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_191: {
@@ -1747,7 +1747,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 263.266667,
         videoFileId: storageFiles.storage_file_228.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_180: {
@@ -1759,7 +1759,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 235.233333,
         videoFileId: storageFiles.storage_file_216.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_200: {
@@ -1771,7 +1771,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 119.1,
         videoFileId: storageFiles.storage_file_237.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_217: {
@@ -1783,7 +1783,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 160.966667,
         videoFileId: storageFiles.storage_file_254.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_192: {
@@ -1795,7 +1795,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 317.733333,
         videoFileId: storageFiles.storage_file_229.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_207: {
@@ -1807,7 +1807,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 201.6,
         videoFileId: storageFiles.storage_file_244.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_201: {
@@ -1819,7 +1819,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 222.766667,
         videoFileId: storageFiles.storage_file_238.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_193: {
@@ -1831,7 +1831,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 227.866667,
         videoFileId: storageFiles.storage_file_230.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_183: {
@@ -1843,7 +1843,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 115.033333,
         videoFileId: storageFiles.storage_file_219.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_212: {
@@ -1855,7 +1855,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 294.933333,
         videoFileId: storageFiles.storage_file_249.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_184: {
@@ -1867,7 +1867,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 415.1,
         videoFileId: storageFiles.storage_file_220.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_194: {
@@ -1879,7 +1879,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 320.6,
         videoFileId: storageFiles.storage_file_231.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_40.id
     },
     video_215: {
@@ -1891,7 +1891,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 148.1,
         videoFileId: storageFiles.storage_file_252.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_185: {
@@ -1903,7 +1903,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 309.933333,
         videoFileId: storageFiles.storage_file_222.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_202: {
@@ -1915,7 +1915,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 207.233333,
         videoFileId: storageFiles.storage_file_239.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_195: {
@@ -1927,7 +1927,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 199.766667,
         videoFileId: storageFiles.storage_file_232.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_40.id
     },
     video_186: {
@@ -1939,7 +1939,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 120.633333,
         videoFileId: storageFiles.storage_file_223.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     video_222: {
@@ -1951,7 +1951,7 @@ export const getVideoSeedData = (
         orderIndex: 13,
         lengthSeconds: 163.833333,
         videoFileId: storageFiles.storage_file_259.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_203: {
@@ -1963,7 +1963,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 193.666667,
         videoFileId: storageFiles.storage_file_240.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_196: {
@@ -1975,7 +1975,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 200.1,
         videoFileId: storageFiles.storage_file_233.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_221: {
@@ -1987,7 +1987,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 309.766667,
         videoFileId: storageFiles.storage_file_258.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_208: {
@@ -1999,7 +1999,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 276,
         videoFileId: storageFiles.storage_file_245.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_197: {
@@ -2011,7 +2011,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 227.833333,
         videoFileId: storageFiles.storage_file_234.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_209: {
@@ -2023,7 +2023,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 158.066667,
         videoFileId: storageFiles.storage_file_246.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_204: {
@@ -2035,7 +2035,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 310.066667,
         videoFileId: storageFiles.storage_file_241.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id
     },
     video_181: {
@@ -2047,7 +2047,7 @@ export const getVideoSeedData = (
         orderIndex: 13,
         lengthSeconds: 206.733333,
         videoFileId: storageFiles.storage_file_217.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_182: {
@@ -2059,7 +2059,7 @@ export const getVideoSeedData = (
         orderIndex: 14,
         lengthSeconds: 216.8,
         videoFileId: storageFiles.storage_file_218.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     video_213: {
@@ -2071,7 +2071,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 233.133333,
         videoFileId: storageFiles.storage_file_250.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_210: {
@@ -2083,7 +2083,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 208.966667,
         videoFileId: storageFiles.storage_file_247.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_218: {
@@ -2095,7 +2095,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 260.2,
         videoFileId: storageFiles.storage_file_255.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_216: {
@@ -2107,7 +2107,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 206.066667,
         videoFileId: storageFiles.storage_file_253.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_220: {
@@ -2119,7 +2119,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 393.8,
         videoFileId: storageFiles.storage_file_257.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_223: {
@@ -2131,7 +2131,7 @@ export const getVideoSeedData = (
         orderIndex: 14,
         lengthSeconds: 219.566667,
         videoFileId: storageFiles.storage_file_260.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_224: {
@@ -2143,7 +2143,7 @@ export const getVideoSeedData = (
         orderIndex: 15,
         lengthSeconds: 185.966667,
         videoFileId: storageFiles.storage_file_261.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_225: {
@@ -2155,7 +2155,7 @@ export const getVideoSeedData = (
         orderIndex: 16,
         lengthSeconds: 268.766667,
         videoFileId: storageFiles.storage_file_263.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id
     },
     video_404: {
@@ -2167,7 +2167,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 218.666667,
         videoFileId: storageFiles.storage_file_446.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_227: {
@@ -2179,7 +2179,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 235.066667,
         videoFileId: storageFiles.storage_file_264.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_406: {
@@ -2191,7 +2191,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 129.833333,
         videoFileId: storageFiles.storage_file_448.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_407: {
@@ -2203,7 +2203,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 271.3,
         videoFileId: storageFiles.storage_file_449.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_261: {
@@ -2239,7 +2239,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 187.7,
         videoFileId: storageFiles.storage_file_281.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id
     },
     video_246: {
@@ -2251,7 +2251,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 171.933333,
         videoFileId: storageFiles.storage_file_282.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id
     },
     video_236: {
@@ -2263,7 +2263,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 365.5,
         videoFileId: storageFiles.storage_file_273.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id
     },
     video_237: {
@@ -2275,7 +2275,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 250.533333,
         videoFileId: storageFiles.storage_file_274.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id
     },
     video_238: {
@@ -2287,7 +2287,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 155.2,
         videoFileId: storageFiles.storage_file_275.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id
     },
     video_263: {
@@ -2335,7 +2335,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 321,
         videoFileId: storageFiles.storage_file_272.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id
     },
     video_280: {
@@ -2431,7 +2431,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 317.466667,
         videoFileId: storageFiles.storage_file_276.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_250: {
@@ -2455,7 +2455,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 102.833333,
         videoFileId: storageFiles.storage_file_277.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_260: {
@@ -2479,7 +2479,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 151.433333,
         videoFileId: storageFiles.storage_file_278.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_276: {
@@ -2503,7 +2503,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 205.566667,
         videoFileId: storageFiles.storage_file_279.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_270: {
@@ -2527,7 +2527,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 248.3,
         videoFileId: storageFiles.storage_file_280.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_228: {
@@ -2539,7 +2539,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 181.9,
         videoFileId: storageFiles.storage_file_265.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_229: {
@@ -2551,7 +2551,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 182.2,
         videoFileId: storageFiles.storage_file_266.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_230: {
@@ -2563,7 +2563,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 230.066667,
         videoFileId: storageFiles.storage_file_267.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_231: {
@@ -2575,7 +2575,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 125.7,
         videoFileId: storageFiles.storage_file_268.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_232: {
@@ -2587,7 +2587,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 207.133333,
         videoFileId: storageFiles.storage_file_269.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_233: {
@@ -2599,7 +2599,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 165.2,
         videoFileId: storageFiles.storage_file_270.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_234: {
@@ -2611,7 +2611,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 357.7,
         videoFileId: storageFiles.storage_file_271.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_43.id
     },
     video_266: {
@@ -2635,7 +2635,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 115.3,
         videoFileId: storageFiles.storage_file_447.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_278: {
@@ -2671,7 +2671,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 225.7,
         videoFileId: storageFiles.storage_file_450.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_267: {
@@ -2803,7 +2803,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 166.5,
         videoFileId: storageFiles.storage_file_283.id,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id
     },
     video_285: {
@@ -3547,7 +3547,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 145.933333,
         videoFileId: storageFiles.storage_file_443.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_339: {
@@ -3643,7 +3643,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 75.066667,
         videoFileId: storageFiles.storage_file_416.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_365: {
@@ -3703,7 +3703,7 @@ export const getVideoSeedData = (
         orderIndex: 14,
         lengthSeconds: 132.233333,
         videoFileId: storageFiles.storage_file_423.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_356: {
@@ -3739,7 +3739,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 121.666667,
         videoFileId: storageFiles.storage_file_417.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_357: {
@@ -3763,7 +3763,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 106.866667,
         videoFileId: storageFiles.storage_file_409.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_358: {
@@ -3787,7 +3787,7 @@ export const getVideoSeedData = (
         orderIndex: 22,
         lengthSeconds: 265.033333,
         videoFileId: storageFiles.storage_file_431.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_368: {
@@ -3799,7 +3799,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 231.833333,
         videoFileId: storageFiles.storage_file_410.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_359: {
@@ -3823,7 +3823,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 370.966667,
         videoFileId: storageFiles.storage_file_418.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_360: {
@@ -3919,7 +3919,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 115.733333,
         videoFileId: storageFiles.storage_file_411.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_351: {
@@ -3943,7 +3943,7 @@ export const getVideoSeedData = (
         orderIndex: 18,
         lengthSeconds: 247.466667,
         videoFileId: storageFiles.storage_file_427.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_361: {
@@ -3979,7 +3979,7 @@ export const getVideoSeedData = (
         orderIndex: 15,
         lengthSeconds: 104.433333,
         videoFileId: storageFiles.storage_file_424.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_370: {
@@ -3991,7 +3991,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 81.266667,
         videoFileId: storageFiles.storage_file_412.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_377: {
@@ -4003,7 +4003,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 126.6,
         videoFileId: storageFiles.storage_file_419.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_362: {
@@ -4027,7 +4027,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 189.033333,
         videoFileId: storageFiles.storage_file_413.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_363: {
@@ -4051,7 +4051,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 95.766667,
         videoFileId: storageFiles.storage_file_420.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_372: {
@@ -4063,7 +4063,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 142.433333,
         videoFileId: storageFiles.storage_file_414.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_373: {
@@ -4075,7 +4075,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 189.966667,
         videoFileId: storageFiles.storage_file_415.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_383: {
@@ -4087,7 +4087,7 @@ export const getVideoSeedData = (
         orderIndex: 16,
         lengthSeconds: 126.066667,
         videoFileId: storageFiles.storage_file_425.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_379: {
@@ -4099,7 +4099,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 166.633333,
         videoFileId: storageFiles.storage_file_421.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_388: {
@@ -4111,7 +4111,7 @@ export const getVideoSeedData = (
         orderIndex: 21,
         lengthSeconds: 168.9,
         videoFileId: storageFiles.storage_file_430.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_380: {
@@ -4123,7 +4123,7 @@ export const getVideoSeedData = (
         orderIndex: 13,
         lengthSeconds: 152.433333,
         videoFileId: storageFiles.storage_file_422.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_386: {
@@ -4135,7 +4135,7 @@ export const getVideoSeedData = (
         orderIndex: 19,
         lengthSeconds: 201.433333,
         videoFileId: storageFiles.storage_file_428.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_384: {
@@ -4147,7 +4147,7 @@ export const getVideoSeedData = (
         orderIndex: 17,
         lengthSeconds: 104.566667,
         videoFileId: storageFiles.storage_file_426.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_387: {
@@ -4159,7 +4159,7 @@ export const getVideoSeedData = (
         orderIndex: 20,
         lengthSeconds: 119.933333,
         videoFileId: storageFiles.storage_file_429.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_391: {
@@ -4171,7 +4171,7 @@ export const getVideoSeedData = (
         orderIndex: 24,
         lengthSeconds: 236.2,
         videoFileId: storageFiles.storage_file_433.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_390: {
@@ -4183,7 +4183,7 @@ export const getVideoSeedData = (
         orderIndex: 23,
         lengthSeconds: 175.3,
         videoFileId: storageFiles.storage_file_432.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id
     },
     video_395: {
@@ -4195,7 +4195,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 130.166667,
         videoFileId: storageFiles.storage_file_436.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_396: {
@@ -4207,7 +4207,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 294.166667,
         videoFileId: storageFiles.storage_file_437.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_397: {
@@ -4219,7 +4219,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 64.366667,
         videoFileId: storageFiles.storage_file_438.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_399: {
@@ -4231,7 +4231,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 149.5,
         videoFileId: storageFiles.storage_file_440.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_400: {
@@ -4243,7 +4243,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 122.366667,
         videoFileId: storageFiles.storage_file_441.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_402: {
@@ -4255,7 +4255,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 125.966667,
         videoFileId: storageFiles.storage_file_444.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id
     },
     video_409: {
@@ -4267,7 +4267,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 156.866667,
         videoFileId: storageFiles.storage_file_451.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_434: {
@@ -4279,7 +4279,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 297.9,
         videoFileId: storageFiles.storage_file_471.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_57.id
     },
     video_410: {
@@ -4291,7 +4291,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 278.766667,
         videoFileId: storageFiles.storage_file_452.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_411: {
@@ -4303,7 +4303,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 192.433333,
         videoFileId: storageFiles.storage_file_453.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_443: {
@@ -4315,7 +4315,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 264.933333,
         videoFileId: storageFiles.storage_file_479.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_435: {
@@ -4327,7 +4327,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 278.5,
         videoFileId: storageFiles.storage_file_472.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_57.id
     },
     video_412: {
@@ -4339,7 +4339,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 261.366667,
         videoFileId: storageFiles.storage_file_454.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_413: {
@@ -4351,7 +4351,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 325.866667,
         videoFileId: storageFiles.storage_file_455.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_414: {
@@ -4363,7 +4363,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 227.7,
         videoFileId: storageFiles.storage_file_456.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_457: {
@@ -4375,7 +4375,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 267.866667,
         videoFileId: storageFiles.storage_file_501.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_418: {
@@ -4387,7 +4387,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 154.1,
         videoFileId: storageFiles.storage_file_460.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_415: {
@@ -4399,7 +4399,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 346.833333,
         videoFileId: storageFiles.storage_file_457.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_454: {
@@ -4411,7 +4411,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 161.266667,
         videoFileId: storageFiles.storage_file_489.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_419: {
@@ -4423,7 +4423,7 @@ export const getVideoSeedData = (
         orderIndex: 12,
         lengthSeconds: 216.3,
         videoFileId: storageFiles.storage_file_461.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_416: {
@@ -4435,7 +4435,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 200.1,
         videoFileId: storageFiles.storage_file_458.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_420: {
@@ -4447,7 +4447,7 @@ export const getVideoSeedData = (
         orderIndex: 13,
         lengthSeconds: 279,
         videoFileId: storageFiles.storage_file_462.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_421: {
@@ -4459,7 +4459,7 @@ export const getVideoSeedData = (
         orderIndex: 14,
         lengthSeconds: 287.766667,
         videoFileId: storageFiles.storage_file_463.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_417: {
@@ -4471,7 +4471,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 285.966667,
         videoFileId: storageFiles.storage_file_459.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_445: {
@@ -4483,7 +4483,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 135.466667,
         videoFileId: storageFiles.storage_file_481.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_422: {
@@ -4495,7 +4495,7 @@ export const getVideoSeedData = (
         orderIndex: 15,
         lengthSeconds: 238.333333,
         videoFileId: storageFiles.storage_file_464.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_423: {
@@ -4507,7 +4507,7 @@ export const getVideoSeedData = (
         orderIndex: 16,
         lengthSeconds: 281.3,
         videoFileId: storageFiles.storage_file_465.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_424: {
@@ -4519,7 +4519,7 @@ export const getVideoSeedData = (
         orderIndex: 17,
         lengthSeconds: 206.966667,
         videoFileId: storageFiles.storage_file_466.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_431: {
@@ -4531,7 +4531,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 99.1,
         videoFileId: storageFiles.storage_file_468.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_57.id
     },
     video_447: {
@@ -4543,7 +4543,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 204.266667,
         videoFileId: storageFiles.storage_file_483.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_437: {
@@ -4555,7 +4555,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 245.433333,
         videoFileId: storageFiles.storage_file_473.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_448: {
@@ -4567,7 +4567,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 269.533333,
         videoFileId: storageFiles.storage_file_484.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_438: {
@@ -4579,7 +4579,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 123.366667,
         videoFileId: storageFiles.storage_file_474.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_446: {
@@ -4591,7 +4591,7 @@ export const getVideoSeedData = (
         orderIndex: 11,
         lengthSeconds: 132.366667,
         videoFileId: storageFiles.storage_file_482.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_439: {
@@ -4603,7 +4603,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 146.1,
         videoFileId: storageFiles.storage_file_475.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_449: {
@@ -4615,7 +4615,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 306.5,
         videoFileId: storageFiles.storage_file_485.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_432: {
@@ -4627,7 +4627,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 247.833333,
         videoFileId: storageFiles.storage_file_469.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_57.id
     },
     video_440: {
@@ -4639,7 +4639,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 173.733333,
         videoFileId: storageFiles.storage_file_476.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_451: {
@@ -4651,7 +4651,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 162.733333,
         videoFileId: storageFiles.storage_file_486.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_433: {
@@ -4663,7 +4663,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 277.433333,
         videoFileId: storageFiles.storage_file_470.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_57.id
     },
     video_441: {
@@ -4675,7 +4675,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 100.133333,
         videoFileId: storageFiles.storage_file_477.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_458: {
@@ -4687,7 +4687,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 346.966667,
         videoFileId: storageFiles.storage_file_493.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_455: {
@@ -4699,7 +4699,7 @@ export const getVideoSeedData = (
         orderIndex: 6,
         lengthSeconds: 278.633333,
         videoFileId: storageFiles.storage_file_490.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_442: {
@@ -4711,7 +4711,7 @@ export const getVideoSeedData = (
         orderIndex: 5,
         lengthSeconds: 146.966667,
         videoFileId: storageFiles.storage_file_478.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_464: {
@@ -4723,7 +4723,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 147.766667,
         videoFileId: storageFiles.storage_file_499.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_461: {
@@ -4735,7 +4735,7 @@ export const getVideoSeedData = (
         orderIndex: 1,
         lengthSeconds: 97.833333,
         videoFileId: storageFiles.storage_file_496.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_60.id
     },
     video_456: {
@@ -4747,7 +4747,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 264.466667,
         videoFileId: storageFiles.storage_file_491.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_453: {
@@ -4759,7 +4759,7 @@ export const getVideoSeedData = (
         orderIndex: 4,
         lengthSeconds: 267.5,
         videoFileId: storageFiles.storage_file_488.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_459: {
@@ -4771,7 +4771,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 343.1,
         videoFileId: storageFiles.storage_file_494.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_59.id
     },
     video_463: {
@@ -4783,7 +4783,7 @@ export const getVideoSeedData = (
         orderIndex: 3,
         lengthSeconds: 151.1,
         videoFileId: storageFiles.storage_file_498.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_60.id
     },
     video_460: {
@@ -4795,7 +4795,7 @@ export const getVideoSeedData = (
         orderIndex: 0,
         lengthSeconds: 120.333333,
         videoFileId: storageFiles.storage_file_495.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_60.id
     },
     video_462: {
@@ -4807,7 +4807,7 @@ export const getVideoSeedData = (
         orderIndex: 2,
         lengthSeconds: 239.133333,
         videoFileId: storageFiles.storage_file_497.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_60.id
     },
     video_444: {
@@ -4819,7 +4819,7 @@ export const getVideoSeedData = (
         orderIndex: 9,
         lengthSeconds: 222.866667,
         videoFileId: storageFiles.storage_file_480.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_465: {
@@ -4831,7 +4831,7 @@ export const getVideoSeedData = (
         orderIndex: 10,
         lengthSeconds: 285.966667,
         videoFileId: storageFiles.storage_file_500.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_425: {
@@ -4843,7 +4843,7 @@ export const getVideoSeedData = (
         orderIndex: 18,
         lengthSeconds: 169.833333,
         videoFileId: storageFiles.storage_file_467.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id
     },
     video_466: {
@@ -4855,7 +4855,7 @@ export const getVideoSeedData = (
         orderIndex: 7,
         lengthSeconds: 226.133333,
         videoFileId: storageFiles.storage_file_518.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     },
     video_467: {
@@ -4867,7 +4867,7 @@ export const getVideoSeedData = (
         orderIndex: 8,
         lengthSeconds: 316.633333,
         videoFileId: storageFiles.storage_file_519.id,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id
     }
 

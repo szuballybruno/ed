@@ -41,7 +41,7 @@ export class PlayerService extends ServiceBase {
         questionAnswerService: QuestionAnswerService,
         mappserService: MapperService,
         playbackService: PlaybackService,
-        private _aputhorizationService: AuthorizationService) {
+        private _authorizationService: AuthorizationService) {
 
         super(mappserService, ormService);
 
@@ -117,7 +117,7 @@ export class PlayerService extends ServiceBase {
             throw new Error('Cannot find courseId');
 
         // authorize 
-        await this._aputhorizationService
+        await this._authorizationService
             .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
 
         // get course 
