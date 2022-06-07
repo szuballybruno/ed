@@ -148,7 +148,7 @@ export class EmailService {
         const to = this._config
             .misc
             .isLocalhost
-            ? 'manyoki.bence@epistogram.com'
+            ? 'spengler.manfred@epistogram.com'
             : email.to;
 
         const templatePath = `${__dirname}/../emails/${email.template.name}.html`;

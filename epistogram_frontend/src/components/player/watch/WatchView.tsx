@@ -27,7 +27,7 @@ import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
 
-const autoplayTimeoutInS = 8;
+const autoplayTimeoutInS = 3;
 
 export const WatchView = (props: {
     video: VideoDTO,
