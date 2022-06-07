@@ -21,6 +21,7 @@ import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedT
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
+import { EpistoMapperService } from './EpistoMapperService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -29,7 +30,8 @@ export class RoleService extends QueryServiceBase<Role> {
 
     constructor(
         ormService: ORMConnectionService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        private _epistoMapperService: EpistoMapperService) {
 
         super(mapperService, ormService, Role);
     }
@@ -43,27 +45,8 @@ export class RoleService extends QueryServiceBase<Role> {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return roles
-            .groupBy(x => x.roleId)
-            .map((grouping): RoleAdminListDTO => {
-
-                const viewAsRole = grouping.first;
-
-                return {
-                    roleId: viewAsRole.roleId,
-                    roleName: viewAsRole.roleName,
-                    ownerName: viewAsRole.ownerName,
-                    companyId: viewAsRole.companyId,
-                    companyName: viewAsRole.companyName,
-                    permissions: grouping
-                        .items
-                        .map((viewAsPermission): PermissionListDTO => ({
-                            code: viewAsPermission.permissionCode,
-                            id: viewAsPermission.permissionId,
-                            scope: 'USER' // not used 
-                        }))
-                };
-            });
+        return this._epistoMapperService
+            .mapTo(RoleAdminListDTO, [roles]);
     }
 
     async getAssignablePermissionsAsync(principalId: PrincipalId, courseId: number | null, companyId: number | null) {

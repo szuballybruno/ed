@@ -37,6 +37,7 @@ import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
+import { AuthorizationService } from './services/AuthorizationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
 import { CommentService } from './services/CommentService';
@@ -156,7 +157,8 @@ const main = async () => {
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const sampleMergeService = new SampleMergeService();
     const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
-    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, epistoMapperService);
+    const authorizationService = new AuthorizationService(permissionService, ormConnectionService);
+    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, epistoMapperService, authorizationService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
@@ -168,7 +170,7 @@ const main = async () => {
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
     const commentService = new CommentService(ormConnectionService, mapperService);
     const likeService = new LikeService(ormConnectionService, mapperService);
-    const companyService = new CompanyService(ormConnectionService, mapperService, permissionService);
+    const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -215,7 +217,7 @@ const main = async () => {
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)
         .setTurboMiddleware<void, ActionParams>(new AuthenticationMiddleware(authenticationService, loggerService))
-        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(permissionService))
+        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(authorizationService))
         .setExpressMiddleware(getCORSMiddleware(globalConfig))
         .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
         .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))

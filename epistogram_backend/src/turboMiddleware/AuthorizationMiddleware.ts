@@ -1,14 +1,11 @@
-import { PermissionService } from '../services/PermissionService';
+import { AuthorizationService } from '../services/AuthorizationService';
 import { ActionParams } from '../utilities/ActionParams';
 import { ITurboMiddleware, MiddlewareParams } from '../utilities/XTurboExpress/TurboExpress';
 
 export class AuthorizationMiddleware implements ITurboMiddleware<ActionParams, ActionParams> {
 
-    private _permissionService: PermissionService;
+    constructor(private _authorizationService: AuthorizationService) {
 
-    constructor(permissionService: PermissionService) {
-
-        this._permissionService = permissionService;
     }
 
     async runMiddlewareAsync(params: MiddlewareParams<ActionParams>): Promise<ActionParams> {
@@ -19,7 +16,7 @@ export class AuthorizationMiddleware implements ITurboMiddleware<ActionParams, A
         if (params.options.isUnauthorized)
             return params.inParams;
 
-        await this._permissionService
+        await this._authorizationService
             .checkPermissionAsync(params.inParams.principalId, 'ACCESS_APPLICATION');
 
         return params.inParams;

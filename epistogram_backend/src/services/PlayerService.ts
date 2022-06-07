@@ -9,6 +9,7 @@ import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
+import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
 import { EpistoMapperService } from './EpistoMapperService';
 import { ExamService } from './ExamService';
@@ -42,7 +43,8 @@ export class PlayerService extends ServiceBase {
         questionAnswerService: QuestionAnswerService,
         mappserService: MapperService,
         playbackService: PlaybackService,
-        private _epistoMapper: EpistoMapperService) {
+        private _epistoMapper: EpistoMapperService,
+        private _aputhorizationService: AuthorizationService) {
 
         super(mappserService, ormService);
 
@@ -65,7 +67,7 @@ export class PlayerService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         // validate request
-        const { courseId, validItemCode } = await this._validatePlayerDataRequest(userId, requestedItemCode);
+        const { courseId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
 
         // set current course 
         await this._userCourseBridgeService
@@ -108,7 +110,7 @@ export class PlayerService extends ServiceBase {
         } as PlayerDataDTO;
     };
 
-    private async _validatePlayerDataRequest(userId: number, requestedItemCode: string) {
+    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedItemCode: string) {
 
         // get current course id
         const courseId = await this._courseService
@@ -117,6 +119,11 @@ export class PlayerService extends ServiceBase {
         if (!courseId)
             throw new Error('Cannot find courseId');
 
+        // authorize 
+        await this._aputhorizationService
+            .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+
+        // get course 
         const course = await this._ormService
             .query(Course, { courseId })
             .allowDeleted()
@@ -127,7 +134,7 @@ export class PlayerService extends ServiceBase {
             throw new VerboseError('Course has been deleted!', 'deleted');
 
         // get valid course item 
-        const validItemCode = await this._getValidCourseItemCodeAsync(userId, courseId, requestedItemCode);
+        const validItemCode = await this._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseId, requestedItemCode);
 
         return { validItemCode, courseId }
     }
