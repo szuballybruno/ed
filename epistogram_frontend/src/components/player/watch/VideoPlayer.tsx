@@ -5,10 +5,9 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
-import useEventListener from 'react-use-event-listener';
 import screenfull from 'screenfull';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
-import { VideoDTO } from '../../../shared/dtos/VideoDTO';
+import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { VideoControls } from './VideoControls';
@@ -16,10 +15,11 @@ import { VideoControls } from './VideoControls';
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
 
 export const useVideoPlayerState = (
-    videoItem: VideoDTO,
+    videoItem: VideoPlayerDataDTO,
     isShowingOverlay: boolean,
     maxWatchedSeconds: number,
-    limitSeek: boolean) => {
+    limitSeek: boolean,
+    onSeek?: (fromSeconds: number, toSeconds: number) => void) => {
 
     const { url: videoUrl } = videoItem;
     const playerContainerRef = useRef(null);
@@ -35,7 +35,6 @@ export const useVideoPlayerState = (
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
     const controlsVisible = showControls || !shouldBePlaying || isSeeking;
-    // const [isVideoEnded, setIsVideoEnded] = useState(false);
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
     const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
@@ -56,6 +55,9 @@ export const useVideoPlayerState = (
 
         // @ts-ignore
         playerRef.current.seekTo(seconds);
+
+        if (onSeek)
+            onSeek(playedSeconds, seconds);
     };
 
     const flashVisualOverlay = (visualOverlayType: VisualOverlayType) => {
@@ -208,7 +210,7 @@ export const useVideoPlayerState = (
 export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
 
 export const VideoPlayer = (props: {
-    videoItem: VideoDTO,
+    videoItem: VideoPlayerDataDTO,
     videoPlayerState: VideoPlayerStateType
 } & BoxProps) => {
 

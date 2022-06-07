@@ -7,7 +7,8 @@ import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
-import { ParamConstraintType } from '../XORM/XQueryBuilderTypes';
+import { ParamConstraintType } from '../XORM/XORMTypes';
+import { InsertEntity } from '../../utilities/misc';
 
 export type ORMConnection = DataSource;
 
@@ -17,12 +18,14 @@ export class ORMConnectionService {
     private _schema: XDBMSchemaType;
     private _ormConnection: ORMConnection;
     private _sqlConnectionService: SQLConnectionService;
+    private _loggingEnabled: boolean;
 
     constructor(config: GlobalConfiguration, schema: XDBMSchemaType, sqlConnectionService: SQLConnectionService) {
 
         this._config = config;
         this._schema = schema;
         this._sqlConnectionService = sqlConnectionService;
+        this._loggingEnabled = config.logging.orm;
     }
 
     connectORMAsync = async () => {
@@ -110,14 +113,14 @@ export class ORMConnectionService {
         return {
             query: <TEntity, TParam extends ParamConstraintType<TParam>>(classType: ClassType<TEntity>, params?: TParam) => {
 
-                return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, params);
+                return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, this._loggingEnabled, params);
             }
         };
     }
 
     query<TEntity, TParam extends ParamConstraintType<TParam>, TResult = TEntity>(classType: ClassType<TEntity>, params?: TParam) {
 
-        return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, params);
+        return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, this._loggingEnabled, params);
     }
 
     /**
@@ -149,17 +152,23 @@ export class ORMConnectionService {
     /**
      * Creates a new entity
      */
-    async create<TEntity>(c: ClassType<TEntity>, ent: Partial<TEntity>) {
+    async createAsync<TEntity>(c: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<number> {
 
-        return this
+        const entity = ent as any;
+
+        entity.id = null;
+
+        const res = await this
             .getRepository(c)
-            .create(ent as any);
+            .insert(entity);
+
+        return entity.id as number;
     }
 
     /**
      * Create many entites
      */
-    async createMany<TEntity>(c: ClassType<TEntity>, ent: Partial<TEntity>[]) {
+    async createMany<TEntity>(c: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
 
         return this
             .getRepository(c)

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { usePostVideoPlaybackSample } from '../../../services/api/playbackApiService';
+import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { Environment } from '../../../static/Environemnt';
 import { isBetweenThreshold } from '../../../static/frontendHelpers';
 
@@ -8,7 +8,9 @@ export const usePlaybackWatcher = (
     isPlaying: boolean,
     onVideoWatchedStateChanged: () => void,
     setMaxWatchedSeconds: (maxWatchedSeconds: number) => void,
-    isSamplingEnabled: boolean) => {
+    isSamplingEnabled: boolean,
+    videoItemCode: string,
+    videoPlaybackSessionId: number) => {
 
     // the rate in which new samples are taken
     const sampleRateSeconds = 5;
@@ -24,7 +26,7 @@ export const usePlaybackWatcher = (
     const [lastSampleSeconds, setLastSampleSeconds] = useState(0);
 
     // post funciton
-    const { postVideoPlaybackSampleAsync, videoSamplingResult } = usePostVideoPlaybackSample();
+    const { postVideoPlaybackSample, videoSamplingResult } = PlaybackApiService.usePostVideoPlaybackSample();
 
     const samplePlayedSeconds = () => {
 
@@ -42,7 +44,12 @@ export const usePlaybackWatcher = (
             if (Environment.verboseLogging)
                 console.log(`Watched ${elapsedSeconds}s`);
 
-            postVideoPlaybackSampleAsync(lastSampleSeconds, playedSeconds);
+            postVideoPlaybackSample({
+                fromSeconds: lastSampleSeconds,
+                toSeconds: playedSeconds,
+                videoItemCode,
+                videoPlaybackSessionId
+            });
         }
     };
 
