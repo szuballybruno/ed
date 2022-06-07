@@ -21,7 +21,6 @@ import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedT
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
-import { EpistoMapperService } from './EpistoMapperService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -30,8 +29,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
     constructor(
         ormService: ORMConnectionService,
-        mapperService: MapperService,
-        private _epistoMapperService: EpistoMapperService) {
+        mapperService: MapperService) {
 
         super(mapperService, ormService, Role);
     }
@@ -45,7 +43,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return this._epistoMapperService
+        return this._mapperService
             .mapTo(RoleAdminListDTO, [roles]);
     }
 

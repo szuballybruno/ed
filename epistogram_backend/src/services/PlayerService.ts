@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { Course } from '../models/entity/Course';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
-import { Video } from '../models/entity/Video';
 import { ModuleDTO } from '../shared/dtos/ModuleDTO';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
@@ -11,7 +10,6 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
-import { EpistoMapperService } from './EpistoMapperService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -43,7 +41,6 @@ export class PlayerService extends ServiceBase {
         questionAnswerService: QuestionAnswerService,
         mappserService: MapperService,
         playbackService: PlaybackService,
-        private _epistoMapper: EpistoMapperService,
         private _aputhorizationService: AuthorizationService) {
 
         super(mappserService, ormService);
@@ -262,7 +259,7 @@ export class PlayerService extends ServiceBase {
                     videoId
                 }));
 
-        const dto = this._epistoMapper
+        const dto = this._mapperService
             .mapTo(VideoPlayerDataDTO, [video, videoPlaybackSessionId, maxWathcedSeconds]);
 
         return dto;
