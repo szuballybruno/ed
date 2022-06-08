@@ -25,7 +25,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: null,
-        courseId: courses.course_24.id,
+        courseId: courses.course_google_ads.id,
         moduleId: modules.module_2.id
     },
     exam_9: {
@@ -37,7 +37,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: null,
-        courseId: courses.course_24.id,
+        courseId: courses.course_google_ads.id,
         moduleId: modules.module_2.id
     },
     exam_10: {
@@ -49,7 +49,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: null,
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         moduleId: modules.module_8.id
     },
     exam_15: {
@@ -61,7 +61,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_38.id
     },
     exam_16: {
@@ -73,7 +73,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_39.id
     },
     exam_17: {
@@ -85,7 +85,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_41.id,
     },
     exam_18: {
@@ -97,7 +97,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_42.id,
     },
     exam_20: {
@@ -109,7 +109,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'final',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_44.id,
     },
     exam_21: {
@@ -133,7 +133,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_35.id,
     },
     exam_13: {
@@ -145,7 +145,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_36.id,
     },
     exam_14: {
@@ -157,7 +157,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         moduleId: modules.module_37.id,
     },
     exam_22: {
@@ -229,7 +229,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_54.id,
     },
     exam_28: {
@@ -241,7 +241,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_55.id,
     },
     exam_29: {
@@ -253,7 +253,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_56.id,
     },
     exam_30: {
@@ -265,7 +265,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_57.id,
     },
     exam_31: {
@@ -277,7 +277,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'normal',
         deletionDate: null,
         retakeLimit: 3,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_58.id,
     },
     exam_32: {
@@ -289,11 +289,11 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         type: 'final',
         deletionDate: null,
         retakeLimit: 1,
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         moduleId: modules.module_60.id,
     },
     pretest_exam_33: {
-        courseId: courses.course_24.id,
+        courseId: courses.course_google_ads.id,
         title: 'Pretest exam course 1',
         subtitle: 'Pretest exam course 1 desc',
         description: '',
@@ -329,7 +329,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         deletionDate: null
     },
     pretest_exam_36: {
-        courseId: courses.course_24.id,
+        courseId: courses.course_google_ads.id,
         title: 'Pretest exam course 24',
         subtitle: 'Pretest exam course 24 desc',
         description: '',
@@ -353,7 +353,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         deletionDate: null
     },
     pretest_exam_38: {
-        courseId: courses.course_25.id,
+        courseId: courses.course_linked_in.id,
         title: 'Pretest exam course 25',
         subtitle: 'Pretest exam course 25 desc',
         description: '',
@@ -377,7 +377,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         deletionDate: null
     },
     pretest_exam_40: {
-        courseId: courses.course_17.id,
+        courseId: courses.course_obs.id,
         title: 'OBS',
         subtitle: 'Kezdés',
         description: '',
@@ -389,7 +389,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         deletionDate: null
     },
     pretest_exam_41: {
-        courseId: courses.course_22.id,
+        courseId: courses.course_powerPoint.id,
         title: 'PowerPoint',
         subtitle: 'Kezdés',
         description: '',
@@ -413,7 +413,7 @@ export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeed
         deletionDate: null
     },
     pretest_exam_43: {
-        courseId: courses.course_27.id,
+        courseId: courses.course_excel.id,
         title: 'Microsoft Excel szintfelmérő vizsga',
         subtitle: 'Most kiderítjük, hogy megy neked az Excel, majd ez alapján személyre szabjuk számodra a kurzust.',
         description: '',

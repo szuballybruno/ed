@@ -73,7 +73,7 @@ export const getCourseSeedData = (
             deletionDate: null
         },
 
-        course_24: { //course_4
+        course_google_ads: { //course_4
             modificationDate: new Date('2022-01-14 21:52:38.751267+00'),
             title: 'Google Ads Alapozó',
             shortDescription: '',
@@ -117,7 +117,7 @@ export const getCourseSeedData = (
             deletionDate: null
         },
 
-        course_25: { //course_6
+        course_linked_in: { //course_6
             modificationDate: new Date('2022-01-14 21:54:26.151202+00'),
             title: 'LinkedIn vállalkozásoknak',
             shortDescription: '',
@@ -161,7 +161,7 @@ export const getCourseSeedData = (
             deletionDate: null
         },
 
-        course_17: { //course_8
+        course_obs: { //course_8
             modificationDate: new Date('2022-01-14 21:55:20.139944+00'),
             title: 'OBS alapok',
             shortDescription: '',
@@ -183,7 +183,7 @@ export const getCourseSeedData = (
             deletionDate: null
         },
 
-        course_22: { //course_9
+        course_powerPoint: { //course_9
             modificationDate: new Date('2022-02-11 14:18:39.393758+00'),
             title: 'Microsoft PowerPoint Alapok',
             shortDescription: 'Legyen szó akár előadásról, időzített tanulókártyákról vagy egy fotóalbum animált levetítéséről, a PowerPoint mindegyik feladatra kiváló eszköz.Széleskörű testreszabási lehetőségeinek köszönhetően kreatívan, könnyedén és elegánsan mutathatod be gondolataidat bárkinek. ',
@@ -227,7 +227,7 @@ export const getCourseSeedData = (
             deletionDate: null
         },
 
-        course_27: { //course_11
+        course_excel: { //course_11
             modificationDate: new Date('2022-02-02 11:45:50.036622+00'),
             title: 'Microsoft Excel Alapok',
             shortDescription: 'Formázások, képletek, függvények.Sokunk számára már rájuk gondolni is kellemetlen, dolgozni, pedig végképp nem szeretnénk velük.Office tanfolyamsorozatunk oszlopos tagjaként Excel kurzusunk sallangmentesen, és mindenki számára közérthetően segít megérteni, hogyan használhatjuk hatékonyan a Microsoft zöld táblázatkezelőjét.',

@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { Course } from '../models/entity/Course';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
-import { Video } from '../models/entity/Video';
 import { ModuleDTO } from '../shared/dtos/ModuleDTO';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
@@ -9,8 +8,8 @@ import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
+import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
-import { EpistoMapperService } from './EpistoMapperService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -42,7 +41,7 @@ export class PlayerService extends ServiceBase {
         questionAnswerService: QuestionAnswerService,
         mappserService: MapperService,
         playbackService: PlaybackService,
-        private _epistoMapper: EpistoMapperService) {
+        private _authorizationService: AuthorizationService) {
 
         super(mappserService, ormService);
 
@@ -65,7 +64,7 @@ export class PlayerService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         // validate request
-        const { courseId, validItemCode } = await this._validatePlayerDataRequest(userId, requestedItemCode);
+        const { courseId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
 
         // set current course 
         await this._userCourseBridgeService
@@ -108,7 +107,7 @@ export class PlayerService extends ServiceBase {
         } as PlayerDataDTO;
     };
 
-    private async _validatePlayerDataRequest(userId: number, requestedItemCode: string) {
+    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedItemCode: string) {
 
         // get current course id
         const courseId = await this._courseService
@@ -117,6 +116,11 @@ export class PlayerService extends ServiceBase {
         if (!courseId)
             throw new Error('Cannot find courseId');
 
+        // authorize 
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+
+        // get course 
         const course = await this._ormService
             .query(Course, { courseId })
             .allowDeleted()
@@ -127,7 +131,7 @@ export class PlayerService extends ServiceBase {
             throw new VerboseError('Course has been deleted!', 'deleted');
 
         // get valid course item 
-        const validItemCode = await this._getValidCourseItemCodeAsync(userId, courseId, requestedItemCode);
+        const validItemCode = await this._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseId, requestedItemCode);
 
         return { validItemCode, courseId }
     }
@@ -255,7 +259,7 @@ export class PlayerService extends ServiceBase {
                     videoId
                 }));
 
-        const dto = this._epistoMapper
+        const dto = this._mapperService
             .mapTo(VideoPlayerDataDTO, [video, videoPlaybackSessionId, maxWathcedSeconds]);
 
         return dto;
