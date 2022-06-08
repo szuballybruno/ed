@@ -38,7 +38,9 @@ export const CoinRewardDialog = (props: {
                     style={{ position: 'absolute', width: '100%', height: '100%' }} />
             </Box>
 
-            <EpistoFont classes={['fontDark']}>
+            <EpistoFont
+                color="fontDark">
+
                 {text}
             </EpistoFont>
 
@@ -50,8 +52,10 @@ export const CoinRewardDialog = (props: {
                     {coinRewardAmount}
                 </EpistoFont>
 
-                <EpistoFont classes={['fontDark']}
+                <EpistoFont
+                    color='fontDark'
                     style={{ margin: '0px 0px 4px 4px' }}>
+
                     EpistoCoin
                 </EpistoFont>
 

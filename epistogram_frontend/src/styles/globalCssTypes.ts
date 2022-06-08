@@ -17,7 +17,7 @@ export type Mutable<T> = {
 // ---------------- util END
 
 const sizes = ['px5', 'px10'] as const;
-const colors = ['fontDark', 'fontLight'] as const;
+const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError'] as const;
 const fontSizes = ['small', 'normal', 'large'] as const;
 const fontWeights = ['light', 'normal', 'heavy'] as const;
 
@@ -28,7 +28,8 @@ const globalCSSDeclaraition = {
     },
     color: colors,
     fontSize2: fontSizes,
-    fontWeight: fontWeights
+    fontWeight: fontWeights,
+    roundBorders: 'normal'
 } as const;
 
 type MutableGlobalCSS = Mutable<typeof globalCSSDeclaraition>;

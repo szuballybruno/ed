@@ -114,7 +114,7 @@ export const LoginPasswordResetDialog = (params: {
                 {/* affirmation */}
                 <EpistoFont
                     fontSize="fontSmall"
-                    classes={['fontGrey']}
+                    color="fontGray"
                     style={{
                         marginTop: '20px',
                         padding: '15px',

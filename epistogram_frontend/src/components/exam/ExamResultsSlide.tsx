@@ -136,7 +136,7 @@ export const ExamResultsSlide = (props: {
 
                                     <Flex width={'23%'}>
                                         <EpistoFont
-                                            classes={['roundBorders']}
+                                            roundBorders="normal"
                                             style={{
                                                 padding: '2px 15px',
                                                 backgroundColor: bgColor

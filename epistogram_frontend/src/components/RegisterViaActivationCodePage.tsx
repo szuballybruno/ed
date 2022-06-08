@@ -224,7 +224,7 @@ export const RegisterViaActivationCodePage = () => {
                         height={80}>
 
                         <EpistoFont
-                            classes={['fontGrey']}>
+                            color="fontGray">
 
                             {translatableTexts.registerViaActivationCodePage.dontHaveAccount}
                         </EpistoFont>
@@ -237,8 +237,8 @@ export const RegisterViaActivationCodePage = () => {
                             }}>
 
                             <a href="https://pcworld.hu/elofizetes"
-target="_blank"
-rel="noreferrer">
+                                target="_blank"
+                                rel="noreferrer">
 
                                 {translatableTexts.registerViaActivationCodePage.buySubscription}
                             </a>

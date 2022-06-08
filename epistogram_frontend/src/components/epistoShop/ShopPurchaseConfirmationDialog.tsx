@@ -59,7 +59,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
             w="500px">
 
             <EpistoFont
-                classes={['dividerBorderBottom']}
+                className="dividerBorderBottom"
                 style={{
                     padding: '10px'
                 }}>

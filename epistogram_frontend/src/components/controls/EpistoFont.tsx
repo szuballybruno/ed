@@ -8,7 +8,6 @@ export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal
 
 export const EpistoFont = (params: {
     children: ReactNode,
-    classes?: string[],
     className?: string,
     style?: CSSProperties,
 
@@ -21,13 +20,16 @@ export const EpistoFont = (params: {
     maxFontSize?: number,
     isMultiline?: boolean,
     noLineBreak?: boolean,
+    
+    /**
+     * @deprecated
+     */
     isUppercase?: boolean,
     isAutoFontSize?: boolean,
     tooltip?: string
 } & CSSOptionsType) => {
 
     const {
-        classes,
         className,
         style,
         fontSize,
@@ -44,13 +46,6 @@ export const EpistoFont = (params: {
     } = params;
 
     const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
-    useEffect(() => {
-
-        if (cssOptionClasses === '')
-            return;
-
-        console.log(cssOptionClasses);
-    }, [cssOptionClasses]);
 
     const ref = useRef<HTMLParagraphElement>(null);
 
@@ -98,8 +93,6 @@ export const EpistoFont = (params: {
             .custom(styles['episto-font-main'])
             .if(isString(fontSize), builder => builder
                 .custom(fontSize as string))
-            .if(!!classes, builder => builder
-                .appendList(classes!))
             .if(!!className, builder => builder
                 .custom(className!))
             .build() + ' ' + cssOptionClasses}>

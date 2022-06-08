@@ -76,9 +76,7 @@ const InitialGreetings = () => {
             height="100%">
 
             <EpistoFont
-                classes={[
-                    'fontSmall'
-                ]}
+                fontSize2="small"
                 style={{
                     padding: '20px 20px 10px 10px'
                 }}>
@@ -87,9 +85,7 @@ const InitialGreetings = () => {
             </EpistoFont>
 
             <EpistoFont
-                classes={[
-                    'fontSmall'
-                ]}
+                fontSize2="small"
                 style={{
                     padding: '20px 20px 10px 10px'
                 }}>
@@ -98,9 +94,7 @@ const InitialGreetings = () => {
             </EpistoFont>
 
             <EpistoFont
-                classes={[
-                    'fontSmall'
-                ]}
+                fontSize2="small"
                 style={{
                     padding: '20px 20px 10px 10px'
                 }}>

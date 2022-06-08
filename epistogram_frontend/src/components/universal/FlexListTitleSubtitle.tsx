@@ -9,8 +9,6 @@ export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
     subTitle: string | ReactNode
 }) => {
 
-    console.log(`${title} - ${isSelected}`);
-
     return <Flex direction="column">
 
         <EpistoFont
