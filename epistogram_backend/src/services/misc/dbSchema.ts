@@ -85,7 +85,7 @@ import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserSessionDailyView } from '../../models/views/UserActivityDailyView';
+import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserAnswerView } from '../../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
@@ -263,7 +263,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_inactive_course_view', UserInactiveCourseView],
             ['user_engagement_view', UserEngagementView],
             ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
-            ['user_spent_time_view'],
             ['user_daily_progress_view', UserDailyProgressView],
             ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
             ['user_active_course_view', UserActiveCourseView],

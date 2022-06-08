@@ -6,6 +6,7 @@ import { LoadingStateType } from '../../models/types';
 import { isArray } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
 
 type ErrorType = any | any[];
 
@@ -138,7 +139,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                 direction="column">
 
                 <ErrorOutlineIcon style={{ width: '100px', height: '100px' }}></ErrorOutlineIcon>
-                <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
+                <EpistoHeader>Az alkalmazás betöltése sikertelen</EpistoHeader>
                 <Text maxWidth="300px">{singleError?.message}</Text>
             </Flex>}
 

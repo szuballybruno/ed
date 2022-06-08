@@ -2,6 +2,7 @@ import { Box, css, Flex, FlexProps, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Environment } from '../../static/Environemnt';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamTile = (props: {
     className?: string,
@@ -115,22 +116,21 @@ export const ExamTile = (props: {
                     direction="column"
                     p="10px">
 
-                    <Text
-                        as="text"
-                        color="black">
+                    <EpistoFont>
 
                         {'Irodai alkalmazások'}
-                    </Text>
+                    </EpistoFont>
 
                     <Flex direction="column">
 
-                        <Text
-                            as="h6"
-                            fontWeight={'bold'}
-                            fontSize="large">
+                        <EpistoFont
+                            style={{
+                                fontWeight: 'bold',
+                                fontSize: 'large'
+                            }}>
 
                             {'Menüszalagok használata az Excelben'}
-                        </Text>
+                        </EpistoFont>
                     </Flex>
 
                     <Flex mt={7}>
@@ -151,8 +151,12 @@ export const ExamTile = (props: {
                                 }}
                             />
 
-                            <Text as={'text'}
-                                color={'grey'}>{'52 perc'}</Text>
+                            <EpistoFont
+                                style={{
+                                    color: 'gray'
+                                }}>
+                                {'52 perc'}
+                            </EpistoFont>
                         </Flex>
 
                         <Flex
@@ -170,8 +174,10 @@ export const ExamTile = (props: {
                                     margin: '0 2px 0 4px'
                                 }}
                             />
-                            <Text as={'text'}
-                                color={'grey'}>{'65%-os eredmény'}</Text>
+                            <EpistoFont
+                                style={{ color: 'grey' }}>
+                                {'65%-os eredmény'}
+                            </EpistoFont>
                         </Flex>
                     </Flex>
 
@@ -195,11 +201,9 @@ export const ExamTile = (props: {
                                     margin: '0 2px'
                                 }} />
 
-                            <Text
-                                as="text">
-
+                            <EpistoFont>
                                 {'8.9/10 nehézség'}
-                            </Text>
+                            </EpistoFont>
                         </Flex>
 
                         <Flex
@@ -217,11 +221,9 @@ export const ExamTile = (props: {
                                     margin: '0 2px'
                                 }} />
 
-                            <Text
-                                as="text">
-
+                            <EpistoFont>
                                 {'16/23 helyes válasz'}
-                            </Text>
+                            </EpistoFont>
                         </Flex>
                     </Flex>
                 </Flex>

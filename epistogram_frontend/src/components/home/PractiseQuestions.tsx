@@ -1,5 +1,6 @@
 import { Flex, Text } from '@chakra-ui/layout';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { fontSize } from '@mui/material/node_modules/@mui/system';
 import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
@@ -21,27 +22,34 @@ const NoQuestionsAvailable = () => {
 
         <Flex direction={'column'}>
 
-            <Text as={'text'}
-                p={'20px 20px 10px 10px'}
-                fontSize="13px">
+            <EpistoFont
+                style={{
+                    padding: '20px 20px 10px 10px',
+                    fontSize: '13px'
+                }}>
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
-            </Text>
+            </EpistoFont>
 
-            <Text as={'text'}
-                p={'10px 20px 10px 10px'}
-                fontSize="13px">
+            <EpistoFont
+                style={{
+                    padding: '10px 20px 10px 10px',
+                    fontSize: '13px'
+                }}>
+
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
-                <Text
-                    as="text"
-                    onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
-                    color="var(--epistoTeal)"
-                    fontWeight="bold"
-                    cursor="pointer">
-                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
-                </Text>
-            </Text>
 
+                <EpistoFont
+                    onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
+                    style={{
+                        color: 'var(--epistoTeal)',
+                        fontWeight: 'bold',
+                        cursor: 'pointer'
+                    }}>
+                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
+                </EpistoFont>
+            </EpistoFont>
         </Flex>
+
         <Flex>
             <img
                 src={Environment.getAssetUrl('/images/welcome3D.png')}

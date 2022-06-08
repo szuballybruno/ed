@@ -5,6 +5,7 @@ import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from './SmallStat';
 
@@ -90,11 +91,13 @@ const CourseTile = (props: {
                 flex="5">
 
                 {/* category  */}
-                <Text as="text"
-                    fontSize="13px"
-                    color="grey">
+                <EpistoFont
+                    style={{
+                        fontSize: '13px',
+                        color: 'gray'
+                    }}>
                     {courseSubCategory}
-                </Text>
+                </EpistoFont>
 
                 {/* title */}
                 <Flex direction="column">
