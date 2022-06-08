@@ -139,7 +139,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                 direction="column">
 
                 <ErrorOutlineIcon style={{ width: '100px', height: '100px' }}></ErrorOutlineIcon>
-                <EpistoHeader>Az alkalmazás betöltése sikertelen</EpistoHeader>
+                <EpistoHeader text='Az alkalmazás betöltése sikertelen'></EpistoHeader>
                 <Text maxWidth="300px">{singleError?.message}</Text>
             </Flex>}
 

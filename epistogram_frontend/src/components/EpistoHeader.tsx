@@ -23,8 +23,8 @@ export const EpistoHeader = (props: {
     })();
 
     return <Flex id="epistoHeaderRoot"
-direction="column"
-{...css}>
+        direction="column"
+        {...css}>
 
         <EpistoFont
             fontSize={variant === 'giant'
