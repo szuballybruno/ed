@@ -4,6 +4,7 @@ SELECT
         THEN CONCAT(all_user.last_name, ' ', all_user.first_name) 
     END full_name,
     sf.file_path avatar_url,
+    c.group_id,
     c.id,
     c.text comment_text,
     c.creation_date,

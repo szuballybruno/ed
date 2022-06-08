@@ -178,7 +178,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 avatarUrl: comment.avatarUrl,
                 commentLikeCount: comment.commentLikeCount,
                 isCurrentUserLikedComment: comment.isLike,
-                isQuestion: comment.isQuestion
+                isQuestion: comment.isQuestion,
+                groupId: comment.groupId,
             };
         });
 

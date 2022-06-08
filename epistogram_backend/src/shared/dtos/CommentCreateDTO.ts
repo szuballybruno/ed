@@ -5,4 +5,5 @@ export class CommentCreateDTO {
     isAnonymous: boolean;
     isQuestion: boolean;
     text: string;
+    groupId: number;
 }

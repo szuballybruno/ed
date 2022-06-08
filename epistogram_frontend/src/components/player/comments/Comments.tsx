@@ -1,7 +1,13 @@
 import { Flex } from '@chakra-ui/react';
 import { Avatar, Checkbox, Divider } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useComments, useCreateComment, useCreateLike, useDeleteLike } from '../../../services/api/commentApiService';
+import {
+    useComments,
+    useCreateComment,
+    useCreateLike,
+    useDeleteLike,
+    useUpdateComment
+} from '../../../services/api/commentApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { CommentCreateDTO } from '../../../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
@@ -29,15 +35,23 @@ const Comments = (props: {
 
     const { comments, commentsState, commentsError, refetchComments } = useComments(currentItemCode);
     const { createCommentAsync, createCommentState } = useCreateComment();
+    const { updateCommentAsync } = useUpdateComment();
     const { createLikeAsync, createLikeState } = useCreateLike();
     const { deleteLikeAsync, deleteLikeState } = useDeleteLike();
 
-    const threads = comments
-        .groupBy(x => x.threadId)
-        .map(x => ({
-            threadId: x.first.threadId,
-            items: x.items
-        }));
+
+    const threads = () => {
+        console.log('threads2 ', comments);
+        const groups: number[] = [];
+        const commentGroups: CommentListDTO[] = [];
+        comments.forEach((comment) => {
+            if (!groups.includes(comment.groupId)) {
+                groups.push(comment.groupId);
+                commentGroups.push(comment);
+            }
+        });
+        return comments;
+    };
 
     const handleCreateNewComment = async (
         replyToCommentId: number | null,
@@ -87,15 +101,34 @@ const Comments = (props: {
 
     const handleAnswerComment = (comment: CommentListDTO) => {
 
-        if (comment.parentCommentId)
-
+        if (comment.parentCommentId) {
             setCurrentReplyCommentId(comment.parentCommentId);
+        }
+
         else {
 
             setCurrentReplyCommentId(comment.id);
         }
         setCurrentReplyUserFullName(comment.fullName);
         setCurrentReplyThreadId(comment.threadId);
+    };
+
+    const handleEditComment = async (commentText: string, commentId: number): Promise<void> => {
+
+        const comment = comments.find((comment) => comment.id == commentId) as CommentListDTO;
+
+        const updatedComment: CommentListDTO = {
+            ...comment,
+            id: commentId,
+            commentText,
+        };
+
+        try {
+            await updateCommentAsync(updatedComment);
+            await refetchComments();
+        } catch (e) {
+            showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
+        }
     };
 
     return (
@@ -127,37 +160,36 @@ const Comments = (props: {
                     margin: '10px 0 20px 0'
                 }} />
 
+            <Flex
+                direction='column'
+            >
+                {
 
-            {threads
-                .map((thread, index) => {
+                    threads()
+                        .map((comment, index) => (
+                            <>
+                             <CommentItem
+                                handleEditComment={handleEditComment}
+                                comment={comment}
+                                handleAnswerComment={handleAnswerComment}
+                                handleCreateLike={handleCreateLike}
+                                handleDeleteLike={handleDeleteLike}
+                                key={index} />
 
-                    return <Flex
-                        direction='column'
-                        key={index}>
-
-                        {
-                            thread.items
-                                .map((comment, index) => {
-                                    return <CommentItem
-                                        comment={comment}
-                                        handleAnswerComment={handleAnswerComment}
-                                        handleCreateLike={handleCreateLike}
-                                        handleDeleteLike={handleDeleteLike}
-                                        key={index} />;
-                                })
+                            {
+                                currentReplyCommentId
+                                && currentReplyThreadId === comment.threadId
+                                && <CommentAnswerEntry
+                                    handleCreateNewComment={handleCreateNewComment}
+                                    currentReplyCommentId={currentReplyCommentId}
+                                    currentReplyUserFullName={currentReplyUserFullName}
+                                    setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
+                            }
+                            </>
+                    )
+                        )
                         }
-
-                        {
-                            currentReplyCommentId
-                            && currentReplyThreadId === thread.threadId
-                            && <CommentAnswerEntry
-                                handleCreateNewComment={handleCreateNewComment}
-                                currentReplyCommentId={currentReplyCommentId}
-                                currentReplyUserFullName={currentReplyUserFullName}
-                                setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
-                        }
-                    </Flex>;
-                })}
+        </Flex>
         </Flex>
     );
 };

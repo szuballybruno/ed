@@ -10,4 +10,5 @@ export class CommentListDTO {
     avatarUrl: string;
     commentLikeCount: number;
     isCurrentUserLikedComment: boolean;
+    groupId: number;
 }

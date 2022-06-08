@@ -49,4 +49,7 @@ export class Comment {
     @OneToMany(_ => Like, x => x.user)
     @JoinColumn()
     likes: Relation<Like>[];
+
+    @Column()
+    groupId: number;
 }

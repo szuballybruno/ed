@@ -14,6 +14,15 @@ export const useCreateComment = () => {
     };
 };
 
+export const useUpdateComment = () => {
+    const qr = usePostDataUnsafe<CommentListDTO, void>(apiRoutes.comment.updateComment);
+
+    return {
+        updateCommentAsync: qr.postDataAsync,
+        updateCommentState: qr.state,
+    };
+};
+
 export const useCreateLike = () => {
 
     const qr = usePostDataUnsafe<{ commentId: number }, void>(apiRoutes.comment.createLike);

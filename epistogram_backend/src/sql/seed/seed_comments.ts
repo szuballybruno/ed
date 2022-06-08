@@ -12,7 +12,8 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         isAnonymous: false,
         isQuestion: false,
         videoId: videos.video_132.id,
-        parentCommentId: null
+        parentCommentId: null,
+        groupId: 0,
     },
     excel_comment_2: {
         deletionDate: null,
@@ -22,7 +23,8 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         isAnonymous: false,
         isQuestion: false,
         videoId: videos.video_132.id,
-        parentCommentId: 1
+        parentCommentId: 1,
+        groupId: 1,
     },
     excel_comment_3: {
         deletionDate: null,
@@ -32,7 +34,8 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         isAnonymous: false,
         isQuestion: false,
         videoId: videos.video_132.id,
-        parentCommentId: 1
+        parentCommentId: 1,
+        groupId: 2,
     },
     excel_comment_4: {
         deletionDate: null,
@@ -42,7 +45,8 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         isAnonymous: false,
         isQuestion: false,
         videoId: videos.video_132.id,
-        parentCommentId: null
+        parentCommentId: null,
+        groupId: 3,
     },
     excel_comment_5: {
         deletionDate: null,
@@ -52,8 +56,8 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         isAnonymous: false,
         isQuestion: false,
         videoId: videos.video_132.id,
-        parentCommentId: 4
-
+        parentCommentId: 4,
+        groupId: 4,
     }
 });
 

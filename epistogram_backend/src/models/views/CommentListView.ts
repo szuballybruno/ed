@@ -58,4 +58,8 @@ export class CommentListView {
     @ViewColumn()
     @XViewColumn()
     isQuestion: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
+    groupId: number;
 }

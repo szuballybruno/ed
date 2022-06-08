@@ -5,6 +5,7 @@ import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import {CommentListDTO} from "../shared/dtos/CommentListDTO";
 
 export class CommentController {
 
@@ -32,6 +33,22 @@ export class CommentController {
         return this
             ._commentService
             .createCommentAsync(dto);
+    };
+
+    /**
+     * Add new comment to group
+     */
+    @XControllerAction(apiRoutes.comment.updateComment, { isPost: true })
+    updateCommentAction = async (params: ActionParams) => {
+        const principalId = params.principalId;
+
+        const dto = params
+            .getBody<CommentListDTO>()
+            .data;
+
+        return this
+            ._commentService
+            .updateCommentAsync(dto, principalId);
     };
 
     /**

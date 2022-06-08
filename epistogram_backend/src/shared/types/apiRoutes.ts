@@ -228,6 +228,7 @@ export const apiRoutes = {
 
     comment: {
         createComment: '/comment/create-comment',
+        updateComment: '/comment/update-comment',
         createLike: '/comment/create-like',
         getComments: '/comment/get-comments',
         deleteLike: '/comment/delete-like'
