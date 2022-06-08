@@ -99,7 +99,7 @@ export const WatchView = (props: {
 
     const VideoDescription = () => <PlayerDescription
         paging={descCommentPaging}
-        description={video!.description} />;
+        description={videoPlayerData.description} />;
 
 
     const VideoComments = () => <Comments
