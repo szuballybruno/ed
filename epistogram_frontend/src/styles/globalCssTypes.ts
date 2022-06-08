@@ -1,46 +1,52 @@
-// --------------- util START
-
-type StringLiteralToObjectType<T extends string> = {
-    [K in T as K]: string;
-}
-
 type ToupleToStringLiteral<T extends Array<any>> = T[number];
+type Mutable<T> = { -readonly [K in keyof T]: Mutable<T[K]>; }
 
-
-/**
- * Makes a mutable type out of a readonly one
- */
-export type Mutable<T> = {
-    -readonly [K in keyof T]: Mutable<T[K]>;
+type gct<TObj> = {
+    [K in keyof TObj]?: TObj[K] extends any[] ? ToupleToStringLiteral<TObj[K]> : gct<TObj[K]>;
 }
 
-// ---------------- util END
+// ---------------- GENERIC
 
 const sizes = ['px5', 'px10'] as const;
 const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError'] as const;
 const fontSizes = ['small', 'normal', 'large'] as const;
 const fontWeights = ['light', 'normal', 'heavy'] as const;
 
-const globalCSSDeclaraition = {
+const globalCssGeneric = {
     margin: {
+        all: sizes,
+        horizontal: sizes,
+        vertical: sizes,
         left: sizes,
         right: sizes
     },
+    roundBorders: 'normal',
+    background: colors
+} as const;
+
+export type CSSOptionsType = gct<Mutable<typeof globalCssGeneric>>;
+
+// --------------- FONT
+
+const globalCssFont = {
     color: colors,
     fontSize2: fontSizes,
     fontWeight: fontWeights,
-    roundBorders: 'normal'
 } as const;
 
-type MutableGlobalCSS = Mutable<typeof globalCSSDeclaraition>;
+export type CSSOptionsFont = CSSOptionsType & gct<Mutable<typeof globalCssFont>>;
 
-export type gct<TObj> = {
-    [K in keyof TObj]?: TObj[K] extends any[] ? ToupleToStringLiteral<TObj[K]> : gct<TObj[K]>;
-}
+// --------------- FLEX
 
-export type CSSOptionsType = gct<MutableGlobalCSS>;
+const globalCssFlex = {
+    direction: ['horizontal', 'vertical'],
+    align: ['flex-start', 'center', 'flex-end'],
+    justify: ['flex-start', 'center', 'flex-end'],
+} as const;
 
-// ------------ data 
+export type CSSOptionsFlex = CSSOptionsType & gct<Mutable<typeof globalCssFlex>>;
+
+// --------------- DATA 
 
 const _getCSSClassKeyFromOptions = (obj: any, parentKey: string): string[] => {
 

@@ -1,14 +1,22 @@
 import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { createClassBuiler } from '../../helpers/classBuilder';
 import { isNumber, isString, useCSSOptionClasses } from '../../static/frontendHelpers';
-import { CSSOptionsType } from '../../styles/globalCssTypes';
+import { CSSOptionsFont } from '../../styles/globalCssTypes';
 import styles from './css/EpistoFont.module.css';
 
 export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
 
 export const EpistoFont = (params: {
     children: ReactNode,
+    
+    /**
+     * @deprecated use globalCss
+     */
     className?: string,
+
+    /**
+     * @deprecated use globalCss
+     */
     style?: CSSProperties,
 
     /**
@@ -27,7 +35,7 @@ export const EpistoFont = (params: {
     isUppercase?: boolean,
     isAutoFontSize?: boolean,
     tooltip?: string
-} & CSSOptionsType) => {
+} & CSSOptionsFont) => {
 
     const {
         className,
