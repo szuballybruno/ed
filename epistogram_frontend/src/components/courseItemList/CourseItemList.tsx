@@ -1,88 +1,20 @@
 import { Box, Flex } from '@chakra-ui/react';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { useState, useEffect } from 'react';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
 import { ModuleDTO } from '../../shared/dtos/ModuleDTO';
-import { getRandomInteger } from '../../static/frontendHelpers';
-import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
-import { CollapseItem } from './CollapseItem';
-import { FlexList } from './FlexList';
-import { FlexListItem } from './FlexListItem';
-import { FlexListTitleSubtitle } from './FlexListTitleSubtitle';
+import { CollapseItem } from '../universal/CollapseItem';
+import { FlexList } from '../universal/FlexList';
+import { CourseItemListElement } from './CourseItemListElement';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
-export const CourseItemView = (props: { courseItem: CourseItemDTO }) => {
-
-    const { title, subTitle, state, descriptorCode, shouldRepeatVideo, type } = props.courseItem;
-    const isLocked = state === 'locked';
-    const { navigateToPlayer } = useNavigation();
-
-    const navigate = () => navigateToPlayer(descriptorCode);
-
-    const borderWidth = state === 'current'
-        ? 5
-        : type === 'video'
-            ? 0
-            : 3;
-
-    const borderColor = type === 'exam'
-        ? 'var(--intenseOrange)'
-        : 'var(--epistoTeal)';
-
-    const VideoListSausageIndicator = (props: {
-        color: string
-    }) => {
-
-        const { color: sausageColor } = props;
-
-        return <Flex
-            alignSelf="stretch"
-            className="roundBorders"
-            boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-            p="3px"
-            m="7px 10px 7px 0px"
-            bgColor={sausageColor} />;
-    };
-
-    return <FlexListItem
-        isLocked={isLocked}
-        onClick={navigate}
-        midContent={<Flex align="center">
-
-            {state === 'current' &&
-                <VideoListSausageIndicator
-                    color='var(--deepGreen)' />}
-
-            {state === 'locked' &&
-                <VideoListSausageIndicator
-                    color='grey' />}
-
-            {state === 'available' &&
-                <VideoListSausageIndicator
-                    color='var(--epistoTeal)' />}
-
-            {state === 'completed' &&
-                <VideoListSausageIndicator
-                    color='var(--mildGreen)' />}
-
-            <FlexListTitleSubtitle
-                title={title}
-                subTitle={subTitle} />
-        </Flex>}
-        endContent={shouldRepeatVideo &&
-            <ChipSmall
-                //size='small'
-                text='Ismétlés ajánlott'
-                color='var(--intenseOrange)' />}>
-    </FlexListItem >;
-};
 
 export const CourseItemList = (props: {
     modules: ModuleDTO[]
@@ -219,7 +151,7 @@ export const CourseItemList = (props: {
 
                             {module
                                 .items
-                                .map((courseItem, index) => <CourseItemView
+                                .map((courseItem, index) => <CourseItemListElement
                                     key={index}
                                     courseItem={courseItem} />)}
                         </FlexList>

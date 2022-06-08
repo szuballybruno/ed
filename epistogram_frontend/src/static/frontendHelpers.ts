@@ -10,6 +10,7 @@ import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
 
@@ -23,6 +24,22 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     }
 
     return results;
+};
+
+export const useCSSOptionClasses = (cssOptions: CSSOptionsType) => {
+
+    const cssOptionClasses = useMemo(() => {
+
+        const classNameList = getCSSClassKeyFromOptions(cssOptions);
+
+        return classNameList
+            .join(' ');
+
+    }, [cssOptions]);
+
+    return {
+        cssOptionClasses: cssOptionClasses
+    };
 };
 
 export const useHandleAddRemoveItems = <TItem, TKey>(

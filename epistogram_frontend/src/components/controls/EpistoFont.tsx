@@ -1,6 +1,7 @@
 import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { createClassBuiler } from '../../helpers/classBuilder';
-import { isNumber, isString } from '../../static/frontendHelpers';
+import { isNumber, isString, useCSSOptionClasses } from '../../static/frontendHelpers';
+import { CSSOptionsType } from '../../styles/globalCssTypes';
 import styles from './css/EpistoFont.module.css';
 
 export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
@@ -10,6 +11,10 @@ export const EpistoFont = (params: {
     classes?: string[],
     className?: string,
     style?: CSSProperties,
+
+    /**
+     * @deprecated
+     */
     fontSize?: FontSizeType,
     onClick?: any,
     allowedLines?: number,
@@ -19,7 +24,7 @@ export const EpistoFont = (params: {
     isUppercase?: boolean,
     isAutoFontSize?: boolean,
     tooltip?: string
-}) => {
+} & CSSOptionsType) => {
 
     const {
         classes,
@@ -34,8 +39,18 @@ export const EpistoFont = (params: {
         isUppercase,
         isAutoFontSize,
         children,
-        tooltip
+        tooltip,
+        ...cssOptions
     } = params;
+
+    const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
+    useEffect(() => {
+
+        if (cssOptionClasses === '')
+            return;
+
+        console.log(cssOptionClasses);
+    }, [cssOptionClasses]);
 
     const ref = useRef<HTMLParagraphElement>(null);
 
@@ -87,7 +102,7 @@ export const EpistoFont = (params: {
                 .appendList(classes!))
             .if(!!className, builder => builder
                 .custom(className!))
-            .build()}>
+            .build() + ' ' + cssOptionClasses}>
 
         {children}
     </p>;
