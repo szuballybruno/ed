@@ -1,5 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { CoinAcquireReasonType, CoinTransactionReasonType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
@@ -33,5 +34,5 @@ export class CoinTransactionView {
 
     @ViewColumn()
     @XViewColumn()
-    reason: string;
+    reason: CoinTransactionReasonType;
 }

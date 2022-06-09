@@ -100,6 +100,15 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
+export type CoinTransactionReasonType =
+    'activity' |
+    'shop_item_purchase' |
+    'gifted' |
+    'answer_streak' |
+    'activity_streak' |
+    'correct_answer' |
+    'video_watched';
+
 export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'COMMENT';
 
 export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';

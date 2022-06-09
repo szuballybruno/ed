@@ -1,3 +1,4 @@
+import { CoinTransactionReasonType } from '../types/sharedTypes';
 
 export class CoinTransactionDTO {
     id: number;
@@ -6,5 +7,5 @@ export class CoinTransactionDTO {
     amount: number;
     videoTitle: string;
     questionText: string;
-    reason: string;
+    reason: CoinTransactionReasonType;
 }

@@ -8,7 +8,7 @@ export const EpistoConinInfo = (props: {} & FlexProps) => {
     const { coinBalance } = useCoinBalance();
 
     return <Flex align="center"
-{...props}>
+        {...props}>
 
         {/* coin value  */}
         <EpistoFont

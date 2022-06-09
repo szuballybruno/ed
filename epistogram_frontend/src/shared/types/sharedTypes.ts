@@ -85,7 +85,9 @@ export const permissionCodes = [
     'ACCESS_APPLICATION',
     'MANAGE_SHOP',
     'SET_OWN_EMAIL_ADDRESS',
-    'IS_SIGNUP_MANDATORY'
+    'IS_SIGNUP_MANDATORY',
+    'EDIT_COMMENT',
+    'DELETE_COMMENT'
 ] as const;
 
 export type PermissionCodeType = typeof permissionCodes[number];
@@ -98,7 +100,16 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
-export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE';
+export type CoinTransactionReasonType =
+    'activity' |
+    'shop_item_purchase' |
+    'gifted' |
+    'answer_streak' |
+    'activity_streak' |
+    'correct_answer' |
+    'video_watched';
+
+export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'COMMENT';
 
 export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 
