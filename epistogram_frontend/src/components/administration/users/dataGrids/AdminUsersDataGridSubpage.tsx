@@ -1,11 +1,8 @@
-import { NavigateNextTwoTone } from '@mui/icons-material';
-import { GridRowsProp, GridColDef, DataGrid } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
-import { formatTimespan, isCurrentAppRoute } from '../../../../static/frontendHelpers';
+import { formatTimespan, useIsMatchingCurrentRoute } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { ProfileImage } from '../../../ProfileImage';
 import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
@@ -88,8 +85,10 @@ export const AdminUserDataGridSubpage = (props: {
         }
     ];
 
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
+
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
+        viewSwitchChecked={isMatchingCurrentRoute(applicationRoutes.administrationRoute.usersRoute).isMatchingRoute}
         viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: 'a' })}>
         <DataGrid
             columns={userColumns}

@@ -1,9 +1,8 @@
-import { Box, Flex, FlexProps, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingStateType } from '../../models/types';
-import { isArray } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
@@ -49,7 +48,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         if (!error)
             return error;
 
-        if (isArray(error))
+        if (Array.isArray(error))
             return (error as any[])[0];
 
         return error;
@@ -66,7 +65,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         if (!loadingState)
             return 'idle';
 
-        if (isArray(loadingState)) {
+        if (Array.isArray(loadingState)) {
 
             const loadingStates = loadingState as LoadingStateType[];
 

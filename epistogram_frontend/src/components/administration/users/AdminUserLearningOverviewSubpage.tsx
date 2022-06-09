@@ -11,7 +11,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
-import { isCurrentAppRoute } from '../../../static/frontendHelpers';
+import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -115,12 +115,14 @@ export const AdminUserStatisticsSubpage = (props: {
         }
     ] as ButtonType[];
 
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
+
     return <LoadingFrame
         loadingState={userLearningOverviewDataStatus}
         error={userLearningOverviewDataError}>
 
         <AdminBreadcrumbsHeader
-            viewSwitchChecked={isCurrentAppRoute(usersRoute)}
+            viewSwitchChecked={isMatchingCurrentRoute(usersRoute).isMatchingRoute}
             viewSwitchFunction={() => navigate(usersRoute)}
             subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 

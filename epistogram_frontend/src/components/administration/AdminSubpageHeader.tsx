@@ -31,7 +31,7 @@ export const AdminSubpageHeader = (props: {
     } = props;
 
     const tabMenuItemsList = (tabMenuItems ?? []);
-    const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
     const { navigate } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;

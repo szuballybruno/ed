@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
@@ -8,10 +8,10 @@ import { CompanyAdminIndexPage } from './CompanyAdminIndexPage';
 
 export const CompanyAdminPage = memo(() => {
 
-    const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
     const [companyName, setCompanyName] = useState<string | null>(null);
-    const isEdit = isMatchingCurrentRoute(editRoute).isMatchingRouteExactly;
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
+    const isEdit = useMemo(() => isMatchingCurrentRoute(editRoute).isMatchingRouteExactly, [isMatchingCurrentRoute]);
 
     return (
         <AdminBreadcrumbsHeader

@@ -19,7 +19,7 @@ export const CourseAdministartionFrame = (params: {
     // util
     const { navigate } = useNavigation();
     const courseId = useIntParam('courseId');
-    const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
 
     // http
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList('');
@@ -38,17 +38,17 @@ export const CourseAdministartionFrame = (params: {
 
             const base = applicationRoutes.administrationRoute.coursesRoute;
 
-            if (isMatchingCurrentUrl(base.statisticsCourseRoute).isMatchingRoute)
+            if (isMatchingCurrentRoute(base.statisticsCourseRoute).isMatchingRoute)
                 return base.statisticsCourseRoute;
 
-            if (isMatchingCurrentUrl(base.courseContentRoute).isMatchingRoute)
+            if (isMatchingCurrentRoute(base.courseContentRoute).isMatchingRoute)
                 return base.courseContentRoute;
 
             return base.courseDetailsRoute;
         })();
 
         navigate(url, { courseId });
-    }, [courseId, navigate, isMatchingCurrentUrl, applicationRoutes]);
+    }, [courseId, navigate, isMatchingCurrentRoute, applicationRoutes]);
 
     return (
         <Flex

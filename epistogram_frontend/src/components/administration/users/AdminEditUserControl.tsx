@@ -1,6 +1,6 @@
 import { Box, Divider, Flex } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
@@ -12,7 +12,7 @@ import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
 import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
+import { EventTriggerType, useIsMatchingCurrentRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -149,6 +149,13 @@ export const AdminEditUserControl = (props: {
             setPermissionsChangeSet(data.assignedPermissions);
     }, [setRolesChangeSet, setPermissionsChangeSet]);
 
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
+
+    const isAddRoute = useMemo(() => {
+     
+        return isMatchingCurrentRoute(applicationRoutes.administrationRoute.usersRoute.addRoute).isMatchingRoute;
+    }, [isMatchingCurrentRoute]);
+
     return <Flex direction="column"
         flex="1">
 
@@ -264,7 +271,7 @@ export const AdminEditUserControl = (props: {
                 p="0 10px 10px 10px"
                 minWidth="300px">
 
-                {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
+                {!isAddRoute && (
 
                     <LoadingFrame
                         loadingState={[coinBalanceStatus, giftCoinsToUserState]}
@@ -328,7 +335,7 @@ export const AdminEditUserControl = (props: {
                 )}
 
                 <EditSection
-                    isFirst={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute)}
+                    isFirst={isAddRoute}
                     title="Alkalmazás adatai">
 
                     {/* is teacher */}

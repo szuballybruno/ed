@@ -35,6 +35,7 @@ export const UserSettingsPage = () => {
             <NavigationLinkList
                 routes={[
                     applicationRoutes.settingsRoute.preferencesRoute,
+                    applicationRoutes.settingsRoute.coinTransactionsRoute,
                     applicationRoutes.settingsRoute.featurePreviewRoute,
                     applicationRoutes.settingsRoute.developmentNotesRoute
                 ]} />

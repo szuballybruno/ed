@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
-import React, { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
@@ -8,11 +8,11 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
+import { useEventTrigger, useIsMatchingCurrentRoute, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 import { AdminUserList } from './AdminUserList';
@@ -100,11 +100,13 @@ export const AdminEditUserSubpage = (props: {
             navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users[0].id });
         }
     };
+
     checkIfCurrentUserFromUrl();
 
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
 
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
+        viewSwitchChecked={isMatchingCurrentRoute(applicationRoutes.administrationRoute.usersRoute).isMatchingRoute}
         viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute)}
         breadcrumbDatas={[
             // <BreadcrumbLink

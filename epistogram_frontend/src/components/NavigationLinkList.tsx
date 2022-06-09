@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/layout';
 import { NavLink } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
-import { isCurrentRoute } from '../static/frontendHelpers';
+import { useIsMatchingCurrentRoute } from '../static/frontendHelpers';
 import { EpistoFont } from './controls/EpistoFont';
 
 export const NavigationLinkList = (props: {
@@ -10,12 +10,13 @@ export const NavigationLinkList = (props: {
 }) => {
 
     const { routes } = props;
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
 
     return <Flex direction="column">
         {routes
             .map((route, index) => {
 
-                const isCurrent = isCurrentRoute(route.route.getAbsolutePath());
+                const isCurrent = isMatchingCurrentRoute(route).isMatchingRoute;
 
                 return <NavLink
                     to={route.route.getAbsolutePath()}

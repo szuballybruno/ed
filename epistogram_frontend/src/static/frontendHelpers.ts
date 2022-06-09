@@ -309,7 +309,7 @@ export const useIsMatchingCurrentRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
 
-    return (appRoute: ApplicationRoute) => {
+    const isMatchingCurrentRoute = useCallback((appRoute: ApplicationRoute) => {
 
         if (!appRoute)
             throw new Error('Route is null or undefined!');
@@ -337,12 +337,16 @@ export const useIsMatchingCurrentRoute = () => {
             isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch,
             currentUrl
         };
+    }, [currentUrl]);
+
+    return {
+        isMatchingCurrentRoute
     };
 };
 
 export const useGetCurrentAppRoute = () => {
 
-    const isMatching = useIsMatchingCurrentRoute();
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
 
     const isRouteProp = (x: any) => !!x.route;
 
@@ -361,7 +365,7 @@ export const useGetCurrentAppRoute = () => {
         const matchingRoute = subRoutes
             .firstOrNull((x: any) => {
 
-                const match = isMatching(x);
+                const match = isMatchingCurrentRoute(x);
 
                 return x.route.isMatchMore()
                     ? match.isMatchingRoute
@@ -385,8 +389,8 @@ export const useRedirectOnExactMatch = (opts: {
 
     const { redirectRoute, route, params } = opts;
 
-    const isMatching = useIsMatchingCurrentRoute();
-    const { isMatchingRouteExactly } = isMatching(route);
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
+    const { isMatchingRouteExactly } = isMatchingCurrentRoute(route);
     const { navigate } = useNavigation();
 
     useEffect(() => {
@@ -802,33 +806,6 @@ export const secondsToTime = (e: any) => {
             .padStart(2, '0');
 
     return h !== '00' ? h + ':' + m + ':' + s : m + ':' + s;
-};
-
-export const isArray = (obj: any) => {
-
-    return Array.isArray(obj);
-};
-
-// export const objToArray = (obj: any) => {
-
-//     const properties = [] as any[];
-
-//     for (const key in obj) {
-//         if (Object.prototype.hasOwnProperty.call(obj, key)) {
-
-//             const element = obj[key];
-//             properties.push(element);
-//         }
-//     }
-
-//     return properties;
-// };
-
-export const isCurrentRoute = (route: string) => window.location.pathname === route;
-
-export const isCurrentAppRoute = (route: ApplicationRoute) => {
-
-    return false;
 };
 
 export const getEventValueCallback = (callback: (value: any) => void) => {

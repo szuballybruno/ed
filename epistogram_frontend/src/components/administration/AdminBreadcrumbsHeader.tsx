@@ -100,7 +100,7 @@ export const AdminBreadcrumbsHeader = (props: {
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
     // util
-    const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
+    const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
 
     // http
     const { briefUserData } = useBriefUserData(userId);

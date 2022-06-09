@@ -434,25 +434,25 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
 
             preferencesRoute: {
                 title: translatableTexts.routeTitles.settingsOverview,
-                route: new EpistoRoute('/settings/settings', 'preferences'),
+                route: new EpistoRoute('/settings', '', '*'),
                 icon: <Settings></Settings>,
             },
 
             developmentNotesRoute: {
                 title: translatableTexts.routeTitles.developmentNotes,
-                route: new EpistoRoute('/settings/settings', 'development-notes'),
+                route: new EpistoRoute('/settings', 'development-notes'),
                 icon: <EventNoteIcon />
             },
 
             featurePreviewRoute: {
                 title: translatableTexts.routeTitles.featurePreview,
-                route: new EpistoRoute('/settings/settings', 'feature-preview'),
+                route: new EpistoRoute('/settings', 'feature-preview'),
                 icon: <AutoAwesomeIcon />
             },
 
             coinTransactionsRoute: {
                 title: translatableTexts.routeTitles.coinTransactions,
-                route: new EpistoRoute('/settings/settings', 'coin-transactions'),
+                route: new EpistoRoute('/settings', 'coin-transactions'),
                 icon: <AttachMoneyIcon />
             }
         }

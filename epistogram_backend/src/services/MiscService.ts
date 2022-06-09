@@ -47,13 +47,13 @@ export class MiscService {
             .map(CourseOverviewView, CourseOverviewDataDTO, view);
     }
 
-    async getOverviewPageDTOAsync(userId: PrincipalId) {
+    async getOverviewPageDTOAsync(principalId: PrincipalId) {
 
         const recommendedCourseDTOs = [] as CourseShortDTO[];
         const developmentChartData = this.getDevelopmentChart();
 
         const currentCourseProgress = await this._courseService
-            .getCurrentCourseProgressAsync(userId.toSQLValue());
+            .getCurrentCourseProgressAsync(principalId.toSQLValue());
 
         const overviewPageDTO = {
             tipOfTheDay: this.getTipOfTheDay(),
