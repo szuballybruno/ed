@@ -11,6 +11,7 @@ export const EpistoFlex: React.FC<CSSOptionsFlex> = ({
 
     return (
         <div
+            id={EpistoFlex.name}
             className={classes.epistoFlexDefault + ' ' + cssOptionClasses}>
 
             {children}

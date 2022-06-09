@@ -21,7 +21,9 @@ const globalCssGeneric = {
         right: sizes
     },
     roundBorders: 'normal',
-    background: colors
+    background: colors,
+    height: 'full',
+    width: 'full'
 } as const;
 
 export type CSSOptionsType = gct<Mutable<typeof globalCssGeneric>>;
@@ -41,7 +43,7 @@ export type CSSOptionsFont = CSSOptionsType & gct<Mutable<typeof globalCssFont>>
 const globalCssFlex = {
     direction: ['horizontal', 'vertical'],
     align: ['flex-start', 'center', 'flex-end'],
-    justify: ['flex-start', 'center', 'flex-end'],
+    justify: ['flex-start', 'center', 'flex-end', 'space-between'],
 } as const;
 
 export type CSSOptionsFlex = CSSOptionsType & gct<Mutable<typeof globalCssFlex>>;

@@ -1,60 +1,110 @@
 import { Flex } from '@chakra-ui/layout';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ApplicationRoute } from '../../models/types';
+import { readSidePanelCollapsed, writeSidePanelCollapsed } from '../../services/core/storageService';
+import { EpistoIcons } from '../../static/EpistoIcons';
 import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const NavigationLinkList = ({ routes, isCollapsed, toggleCollapse }: {
+export const useNavigationLinkedListLogic = (noCollapse: boolean) => {
+
+    const [isCollapsedState, setIsCollapsedState] = useState(false);
+
+    const isCollapsed = useMemo(() => noCollapse
+        ? false
+        : isCollapsedState, [isCollapsedState, noCollapse]);
+
+    useEffect(() => {
+
+        setIsCollapsedState(readSidePanelCollapsed());
+    }, []);
+
+    const toggleCollapse = useCallback(() => {
+
+        setIsCollapsedState(!isCollapsed);
+        writeSidePanelCollapsed(!isCollapsed);
+    }, [isCollapsed, setIsCollapsedState]);
+
+    return {
+        isCollapsed,
+        toggleCollapse
+    };
+};
+
+export type NavigationLinkedListLogicType = ReturnType<typeof useNavigationLinkedListLogic>;
+
+export const NavigationLinkList = ({ routes, noCollapse }: {
     routes: ApplicationRoute[],
-    isCollapsed?: boolean,
-    toggleCollapse: () => void
+    noCollapse?: boolean
 }) => {
 
+    const { isCollapsed, toggleCollapse } = useNavigationLinkedListLogic(!!noCollapse);
     const { isMatchingCurrentRoute } = useIsMatchingCurrentRoute();
 
-    return <Flex direction="column">
-        {routes
-            .map((route, index) => {
+    return <EpistoFlex
+        direction="vertical"
+        justify='space-between'
+        height='full'>
 
-                const isCurrent = isMatchingCurrentRoute(route).isMatchingRouteExactly;
+        {/* links */}
+        <EpistoFlex direction='vertical'>
+            {routes
+                .map((route, index) => {
 
-                return <NavLink
-                    to={route.route.getAbsolutePath()}
-                    key={index}>
+                    const isCurrent = isMatchingCurrentRoute(route).isMatchingRouteExactly;
 
-                    <Flex
-                        p="5px 15px"
-                        align="center">
+                    return <NavLink
+                        to={route.route.getAbsolutePath()}
+                        key={index}>
 
-                        {/* icon */}
-                        {route.icon}
-
-                        {/* text */}
                         <Flex
-                            overflow="hidden"
-                            transition="1s"
-                            maxWidth={isCollapsed ? 0 : 999}>
+                            p="5px 15px"
+                            align="center">
 
-                            {!isCollapsed && <EpistoFont
-                                isUppercase
-                                margin={{
-                                    left: 'px10'
-                                }}
-                                fontSize2='normal'
-                                color='mildDeepBlue'
-                                fontWeight={isCurrent ? 'heavy' : undefined}>
+                            {/* icon */}
+                            {route.icon}
 
-                                {route.title}
-                            </EpistoFont>}
+                            {/* text */}
+                            <Flex
+                                overflow="hidden"
+                                transition="0.2s"
+                                maxWidth={isCollapsed ? 0 : 999}>
+
+                                {!isCollapsed && <EpistoFont
+                                    isUppercase
+                                    margin={{
+                                        left: 'px10'
+                                    }}
+                                    noLineBreak
+                                    fontSize2='normal'
+                                    color='mildDeepBlue'
+                                    fontWeight={isCurrent ? 'heavy' : undefined}>
+
+                                    {route.title}
+                                </EpistoFont>}
+                            </Flex>
                         </Flex>
-                    </Flex>
-                </NavLink>;
-            })}
+                    </NavLink>;
+                })}
+        </EpistoFlex>
 
-        <EpistoButton
-            onClick={() => toggleCollapse()}>
-asd
-        </EpistoButton>
-    </Flex>;
+        {/* collapse button */}
+        {!noCollapse && <EpistoFlex
+            margin={{
+                vertical: 'px10'
+            }}
+            justify={isCollapsed ? 'center' : 'flex-start'}>
+
+            <EpistoButton
+                onClick={toggleCollapse}>
+
+                {isCollapsed
+                    ? <EpistoIcons.ExpandRight />
+                    : <EpistoIcons.CollapseLeft />}
+            </EpistoButton>
+        </EpistoFlex>}
+    </EpistoFlex>;
 };

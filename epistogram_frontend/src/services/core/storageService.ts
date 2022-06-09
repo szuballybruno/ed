@@ -21,6 +21,9 @@ export const readVolumeSettings = () => {
     }
 };
 
+export const readSidePanelCollapsed = () => readStorage<string>('side_panel_collapsed') === 'true';
+export const writeSidePanelCollapsed = (isCollapsed: boolean) => writeStorage('side_panel_collapsed', isCollapsed ? 'true' : 'false');
+
 const writeStorage = (key: string, data: any) => {
 
     window.localStorage.setItem(key, data);

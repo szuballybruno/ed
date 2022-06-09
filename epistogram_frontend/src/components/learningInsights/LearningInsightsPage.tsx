@@ -25,6 +25,7 @@ const LearningInsightsPage = () => {
         <LeftPane>
 
             <NavigationLinkList
+                noCollapse
                 routes={[
                     applicationRoutes.learningRoute.overviewRoute,
                     applicationRoutes.learningRoute.myStatisticsRoute,

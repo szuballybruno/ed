@@ -82,7 +82,6 @@ export const AdminPage = () => {
             </Flex>
 
             <NavigationLinkList
-                isCollapsed
                 routes={menuItems} />
         </Flex>
 

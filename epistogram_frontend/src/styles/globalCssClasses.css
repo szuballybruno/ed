@@ -1,5 +1,4 @@
-/* margin */
-
+/* margin all */
 .margin-all-px5 {
     margin: 5px;
 }
@@ -15,6 +14,8 @@
 .margin-all-px25 {
     margin: 25px;
 }
+
+/* margin left */
 .margin-left-px5 {
     margin-left: 5px;
 }
@@ -26,6 +27,12 @@
 }
 .margin-left-px20 {
     margin-left: 20px;
+}
+
+/* margin vertical */
+.margin-vertical-px10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /* font weight */
@@ -120,4 +127,15 @@
 }
 .justify-flex-end {
     justify-content: flex-end;
+}
+.justify-space-between {
+    justify-content: space-between;
+}
+
+/* height / width */
+.width-full {
+    width: 100%;
+}
+.height-full {
+    height: 100%;
 }
