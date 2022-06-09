@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createClassBuiler } from '../../helpers/classBuilder';
 import { isNumber, isString, useCSSOptionClasses } from '../../static/frontendHelpers';
 import { CSSOptionsFont } from '../../styles/globalCssTypes';
@@ -8,7 +8,7 @@ export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal
 
 export const EpistoFont = (params: {
     children: ReactNode,
-    
+
     /**
      * @deprecated use globalCss
      */
@@ -28,7 +28,7 @@ export const EpistoFont = (params: {
     maxFontSize?: number,
     isMultiline?: boolean,
     noLineBreak?: boolean,
-    
+
     /**
      * @deprecated
      */
@@ -54,21 +54,45 @@ export const EpistoFont = (params: {
     } = params;
 
     const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
-
     const ref = useRef<HTMLParagraphElement>(null);
+    const [autoFontSizeListener, setAutoFontSizeListener] = useState<AutoFontSizeListenerType | null>(null);
+    const [autoFontSize, setAutoFontSize] = useState<number | null>(null);
 
-    const autoFontSize = useAutoFontSize(
-        ref,
-        isString(children) ? children as any : '',
-        allowedLines ?? 2,
-        maxFontSize ?? 20,
-        !!isAutoFontSize);
+    // init auto font size
+    useEffect(() => {
 
-    const calcFontSize = isNumber(fontSize)
+        if (!isAutoFontSize)
+            return;
+
+        const listener = createAutoFontSizeListener({
+            ref,
+            text: isString(children) ? children as any : '',
+            allowedLines: allowedLines ?? 2,
+            maxSize: maxFontSize ?? 20,
+            onTextSizeChanged: setAutoFontSize
+        });
+
+        setAutoFontSizeListener(listener);
+    }, [isAutoFontSize]);
+
+    // cleanup auto font size
+    useEffect(() => {
+
+        return () => {
+
+            if (!autoFontSizeListener)
+                return;
+
+            autoFontSizeListener
+                .destroy();
+        };
+    }, [autoFontSizeListener]);
+
+    const calcFontSize = useMemo(() => isNumber(fontSize)
         ? fontSize as number
-        : autoFontSize ?? undefined;
+        : autoFontSize ?? undefined, [fontSize, autoFontSize]);
 
-    const whiteSpace = (() => {
+    const whiteSpace = useMemo(() => (() => {
 
         if (isMultiline)
             return 'pre-line';
@@ -80,7 +104,7 @@ export const EpistoFont = (params: {
             return 'nowrap';
 
         return undefined;
-    })();
+    })(), [isMultiline, isAutoFontSize, noLineBreak]);
 
     // NOTES
     // whiteSpace: "pre-line" is required for new lines
@@ -109,59 +133,53 @@ export const EpistoFont = (params: {
     </p>;
 };
 
-export const useAutoFontSize = (
-    ref: RefObject<HTMLSpanElement> | null,
+export const createAutoFontSizeListener = (opts: {
+    ref: RefObject<HTMLParagraphElement>,
     text: string,
     allowedLines: number,
     maxSize: number,
-    enabled: boolean) => {
+    onTextSizeChanged: (size: number) => void
+}) => {
 
-    const [containerWidth, setContainerWidth] = useState<number | null>(null);
+    const { allowedLines, maxSize, onTextSizeChanged, ref, text } = opts;
 
-    const resizeListener = useCallback(() => {
+    const element = ref.current;
+    if (!element)
+        return;
 
-        if (ref?.current)
-            setContainerWidth(ref?.current.offsetWidth ?? null);
-    }, [ref]);
+    // resize callback
+    const resizeCallback = () => {
 
-    useEffect(() => {
+        const containerWidth = element.offsetWidth;
+        const characterCount = text.length;
+        const offset = 1.9;
+        const calculatedSize = (containerWidth / (characterCount / allowedLines)) * offset;
+        const finalSize = calculatedSize < maxSize ? calculatedSize : maxSize;
 
-        const savedRef = ref?.current;
+        onTextSizeChanged(finalSize);
+    };
 
-        if (!savedRef)
-            return;
+    // create observer
+    const observer = new ResizeObserver(resizeCallback);
 
-        setContainerWidth(savedRef.offsetWidth ?? null);
-        // create observer
-        const observer = new ResizeObserver(resizeListener);
-        observer.observe(savedRef);
+    // destroy
+    const destroy = () => {
 
-        return () => {
+        if (observer) {
 
-            if (observer) {
+            if (element)
+                observer.unobserve(element);
 
-                if (savedRef)
-                    observer.unobserve(savedRef);
+            observer.disconnect();
+        }
+    };
 
-                observer.disconnect();
-            }
-        };
-    }, [ref, resizeListener]);
+    // start observing
+    observer.observe(element);
 
-    // IF DISABLED
-    if (!enabled)
-        return null;
-
-    const characterCount = text.length;
-    const offset = 1.9;
-
-    if (!containerWidth)
-        return undefined;
-
-    const calculatedSize = (containerWidth / (characterCount / allowedLines)) * offset;
-
-    if (calculatedSize > maxSize)
-        return maxSize;
-
-    return calculatedSize;
+    return {
+        destroy
+    };
 };
+
+type AutoFontSizeListenerType = ReturnType<typeof createAutoFontSizeListener>;
