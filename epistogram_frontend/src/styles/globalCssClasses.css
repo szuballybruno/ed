@@ -15,6 +15,18 @@
 .margin-all-px25 {
     margin: 25px;
 }
+.margin-left-px5 {
+    margin-left: 5px;
+}
+.margin-left-px10 {
+    margin-left: 10px;
+}
+.margin-left-px15 {
+    margin-left: 15px;
+}
+.margin-left-px20 {
+    margin-left: 20px;
+}
 
 /* font weight */
 
@@ -53,6 +65,9 @@
 }
 .color-fontError {
     color: var(--mildRed) !important;
+}
+.color-mildDeepBlue {
+    color: var(--mildDeepBlue) !important;
 }
 
 /* background color */

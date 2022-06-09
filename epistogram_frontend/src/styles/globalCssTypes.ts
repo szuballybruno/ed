@@ -8,7 +8,7 @@ type gct<TObj> = {
 // ---------------- GENERIC
 
 const sizes = ['px5', 'px10'] as const;
-const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError'] as const;
+const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError', 'mildDeepBlue'] as const;
 const fontSizes = ['small', 'normal', 'large'] as const;
 const fontWeights = ['light', 'normal', 'heavy'] as const;
 

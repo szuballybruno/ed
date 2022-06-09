@@ -6,7 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
-import { NavigationLinkList } from '../NavigationLinkList';
+import { NavigationLinkList } from '../navigationLinkList/NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
 import { AuthorizationContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
@@ -82,7 +82,7 @@ export const AdminPage = () => {
             </Flex>
 
             <NavigationLinkList
-                isNoText
+                isCollapsed
                 routes={menuItems} />
         </Flex>
 

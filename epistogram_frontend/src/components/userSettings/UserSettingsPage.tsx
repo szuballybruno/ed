@@ -3,7 +3,7 @@ import React from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
-import { NavigationLinkList } from '../NavigationLinkList';
+import { NavigationLinkList } from '../navigationLinkList/NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CoinTransactions } from './CoinTransactions';

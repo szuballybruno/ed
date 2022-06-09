@@ -4,7 +4,7 @@ import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { LearningInsightsOverview } from '../LearningInsightsOverview';
 import { LeftPane } from '../LeftPane';
-import { NavigationLinkList } from '../NavigationLinkList';
+import { NavigationLinkList } from '../navigationLinkList/NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
