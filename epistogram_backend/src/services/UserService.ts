@@ -20,6 +20,30 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 
+class AuthResult {
+
+    private constructor(public success: boolean) {
+
+    }
+
+    static noAuth() {
+
+        return new AuthResult(true);
+    }
+
+    static success() {
+
+        return new AuthResult(true);
+    }
+
+    static failed() {
+
+        return new AuthResult(false);
+    }
+}
+
+const NoAuthorization = true;
+
 export class UserService {
 
     private _ormService: ORMConnectionService;
@@ -150,14 +174,19 @@ export class UserService {
         const userId = principalId.toSQLValue();
 
         // save user 
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                phoneNumber: dto.phoneNumber
-            });
+        return [
+            AuthResult.success(),
+            async () => {
+                await this._ormService
+                    .getRepository(User)
+                    .save({
+                        id: userId,
+                        lastName: dto.lastName,
+                        firstName: dto.firstName,
+                        phoneNumber: dto.phoneNumber
+                    })
+            }
+        ];
     }
 
     /**

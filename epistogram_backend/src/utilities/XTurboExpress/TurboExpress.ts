@@ -21,6 +21,8 @@ export type MiddlewareParams<TInParams> = {
 };
 
 export type ApiActionType<TActionParams> = (params: TActionParams) => Promise<any>;
+export type ControllerActionWithAuth<TActionParams> = [ApiActionType<TActionParams>, ApiActionType<TActionParams>];
+export type ControllerActionType<TActionParams> = ApiActionType<TActionParams> | ControllerActionWithAuth<TActionParams>;
 
 export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
@@ -115,8 +117,15 @@ export class TurboExpressBuilder<TActionParams> {
 
                         logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
+                        const controllerAction = instance[meta.propName];
+
+                        if (controllerAction === undefined
+                            || controllerAction === null
+                            || !(typeof controllerAction === 'function' || Array.isArray(controllerAction)))
+                            throw new Error('Invalid controller action found by key: ' + meta.propName);
+
                         turboExpress
-                            .addAPIEndpoint(path, instance[meta.propName], meta.metadata);
+                            .addAPIEndpoint(path, controllerAction, meta.metadata);
                     });
             });
 
@@ -153,7 +162,20 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
                 .use(x));
     }
 
-    addAPIEndpoint = (path: string, action: ApiActionType<TActionParams>, options?: EndpointOptionsType) => {
+    addAPIEndpoint = (path: string, controllerAction: ControllerActionType<TActionParams>, options?: EndpointOptionsType) => {
+
+        const action: ApiActionType<TActionParams> = async (params) => {
+
+            if (typeof controllerAction === 'function') {
+
+                return await controllerAction(params);
+            }
+            else {
+
+
+            }
+        }
+
 
         // async api action handler 
         const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {

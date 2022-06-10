@@ -48,15 +48,21 @@ export class UserController {
     };
 
     @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })
-    saveUserSimpleAction = async (params: ActionParams) => {
+    saveUserSimpleAction = async (params: ActionParams) => [
+        {
+            companyId: asdawd,
+            code: 'ACCES_SMTHNG'
+        },
+        async () => {
 
-        const dto = params
-            .getBody<UserEditSimpleDTO>(['firstName', 'lastName', 'phoneNumber'])
-            .data;
+            const dto = params
+                .getBody<UserEditSimpleDTO>(['firstName', 'lastName', 'phoneNumber'])
+                .data;
 
-        await this._userService
-            .saveUserSimpleAsync(params.principalId, dto);
-    };
+            await this._userService
+                .saveUserSimpleAsync(params.principalId, dto);
+        }
+    ];
 
     @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
     saveUserAction = async (params: ActionParams) => {

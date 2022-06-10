@@ -28,10 +28,6 @@ export const EpistoFont = (params: {
     maxFontSize?: number,
     isMultiline?: boolean,
     noLineBreak?: boolean,
-
-    /**
-     * @deprecated
-     */
     isUppercase?: boolean,
     isAutoFontSize?: boolean,
     tooltip?: string
