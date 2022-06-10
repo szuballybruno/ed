@@ -11,20 +11,19 @@ import {
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { CommentCreateDTO } from '../../../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
-import { Environment } from '../../../static/Environemnt';
+import { PagingType } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
 import { CommentAnswerEntry } from './CommentAnswerEntry';
 import { CommentItem } from './CommentItem';
 
 const Comments = (props: {
     currentItemCode: string
+    paging: PagingType<string>
 }) => {
 
-    const { currentItemCode } = props;
+    const { currentItemCode, paging } = props;
 
     const user = useContext(CurrentUserContext);
     const showErrorDialog = useShowErrorDialog();
@@ -132,11 +131,10 @@ const Comments = (props: {
     };
 
     return (
-        <Flex
-            flex='1'
-            direction={'column'}
-            minH={600}
-            pb="100px">
+        <UnderVideoInfoFrame
+            title='Kommentek & Kérdések'
+            paging={paging}>
+            >
             <EpistoFont
                 style={{
                     margin: '50px 0 10px 0',
@@ -167,30 +165,30 @@ const Comments = (props: {
 
                     threads()
                         .map((comment, index) => (
-                            <>
-                             <CommentItem
-                                handleEditComment={handleEditComment}
-                                comment={comment}
-                                handleAnswerComment={handleAnswerComment}
-                                handleCreateLike={handleCreateLike}
-                                handleDeleteLike={handleDeleteLike}
-                                key={index} />
+                                <>
+                                    <CommentItem
+                                        handleEditComment={handleEditComment}
+                                        comment={comment}
+                                        handleAnswerComment={handleAnswerComment}
+                                        handleCreateLike={handleCreateLike}
+                                        handleDeleteLike={handleDeleteLike}
+                                        key={index} />
 
-                            {
-                                currentReplyCommentId
-                                && currentReplyThreadId === comment.threadId
-                                && <CommentAnswerEntry
-                                    handleCreateNewComment={handleCreateNewComment}
-                                    currentReplyCommentId={currentReplyCommentId}
-                                    currentReplyUserFullName={currentReplyUserFullName}
-                                    setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
-                            }
-                            </>
-                    )
+                                    {
+                                        currentReplyCommentId
+                                        && currentReplyThreadId === comment.threadId
+                                        && <CommentAnswerEntry
+                                            handleCreateNewComment={handleCreateNewComment}
+                                            currentReplyCommentId={currentReplyCommentId}
+                                            currentReplyUserFullName={currentReplyUserFullName}
+                                            setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
+                                    }
+                                </>
+                            )
                         )
-                        }
-        </Flex>
-        </Flex>
+                }
+            </Flex>
+        </UnderVideoInfoFrame>
     );
 };
 

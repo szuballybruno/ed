@@ -234,7 +234,7 @@ const LoginScreen = () => {
 
                                 <EpistoFont
                                     fontSize="fontSmall"
-                                    classes={['fontGrey']}
+                                    color="fontGray"
                                     style={{
                                         textTransform: 'none',
                                         marginTop: '5px',

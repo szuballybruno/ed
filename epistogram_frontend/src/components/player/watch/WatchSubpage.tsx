@@ -137,7 +137,7 @@ export const WatchSubpage = () => {
                                 courseMode={courseMode}
                                 refetchPlayerData={refetchPlayerData}
                                 answerSessionId={answerSessionId!}
-                                video={video}
+                                videoPlayerData={video}
                                 modules={courseModules}
                                 continueCourse={handleContinueCourse}
                                 navigateToCourseItem={navigateToCourseItem} />}

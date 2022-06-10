@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
 import { UserVideoStatsDTO } from '../../../../shared/dtos/UserVideoStatsDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
+import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
@@ -12,15 +13,15 @@ import { ChipSmall } from '../../courses/ChipSmall';
 import { EmptyCell } from './AdminUserCoursesDataGridControl';
 
 export const AdminUserVideosDataGridControl = (props: {
+    courseId: number | null
     handleMoreButton: () => void
 }) => {
 
-    const { handleMoreButton } = props;
+    const { handleMoreButton, courseId } = props;
 
     const userId = useIntParam('userId')!;
-    const courseId = 11;
 
-    const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(userId, courseId);
+    const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(userId, courseId!);
 
     const userVideos = userVideoStats ?? [];
 
@@ -67,7 +68,7 @@ export const AdminUserVideosDataGridControl = (props: {
             resizable: true,
             renderCell: (params) => params.value !== null
                 ? <EpistoFont>
-                    {params.value}
+                    {secondsToTime(params.value)}
                 </EpistoFont>
                 : <EmptyCell />
         }),
@@ -77,7 +78,7 @@ export const AdminUserVideosDataGridControl = (props: {
             resizable: true,
             renderCell: (params) => params.value !== null
                 ? <EpistoFont>
-                    {params.value}
+                    {secondsToTime(params.value)}
                 </EpistoFont>
                 : <EmptyCell />
 
@@ -97,19 +98,19 @@ export const AdminUserVideosDataGridControl = (props: {
             headerName: 'Ismétlésre ajánlott',
             width: 150,
             resizable: true,
-            renderCell: (params) => params.value !== null
+            renderCell: (params) => params.value === true
                 ? <ChipSmall
                     text={'Ismétlésre ajánlott'}
                     color={'var(--deepOrange)'} />
                 : <EmptyCell />
         }),
         columnDefGen('lastThreeAnswerAverage', {
-            headerName: 'Elvégzett vizsgák',
+            headerName: 'Utolsó három válasz átlaga',
             width: 150,
             resizable: true,
             renderCell: (params) => params.value !== null && params.value !== undefined
                 ? <EpistoFont>
-                    {Math.round(params.value)}
+                    {Math.round(params.value * 100)}%
                 </EpistoFont>
                 : <EmptyCell />
         }),

@@ -16,11 +16,13 @@ import { UserGuidingFrame } from './components/system/UserGuidingFrame';
 import { UnderMaintanence } from './components/UnderMaintanence';
 import { EpistoRoutes, RenderRoute } from './components/universal/EpistoRoutes';
 import { applicationRoutes } from './configuration/applicationRoutes';
-import './index.css';
 import { MainRouting } from './MainRouting';
 import './shared/logic/jsExtensions.ts'; // extensions, important
 import { Environment } from './static/Environemnt';
 import { ArrayBuilder } from './static/frontendHelpers';
+import './styles/globalCssTypes';
+import './styles/index.css';
+import './styles/globalCssClasses.css';
 
 // react query
 const queryClient = new QueryClient();

@@ -8,13 +8,13 @@ export const LearningStatisticsSeciton = (props: {
     children: ReactNode
 }) => {
     return <Flex width="100%"
-maxW="100%"
-direction="column"
-p="20px">
+        maxW="100%"
+        direction="column"
+        p="20px">
 
         <EpistoHeader variant="sub"
-text={props.title}
-pl="0" />
+            text={props.title}
+            pl="0" />
 
         <div className={classes.gridContainer}>
             {props.children}

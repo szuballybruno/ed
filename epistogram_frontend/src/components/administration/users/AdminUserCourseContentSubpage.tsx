@@ -6,7 +6,7 @@ import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { useIntParam } from '../../../static/locationHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminUserCoursesDataGridControl } from './dataGrids/AdminUserCoursesDataGridControl';
@@ -20,29 +20,14 @@ export const AdminUserCourseContentSubpage = (props: {
     const { users, refetchUsersFunction } = props;
 
     const userId = useIntParam('userId')!;
-    const courseId = useIntParam('courseId')!;
 
-    // TODO: Fix useBriefUserData
     const { userEditData } = useEditUserData(userId);
-    const { courseBriefData } = useCourseBriefData(courseId);
 
-    const dialogLogic = useEpistoDialogLogic('sasd');
+    const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
 
     const { navigate } = useNavigation();
 
-    return <AdminBreadcrumbsHeader
-        breadcrumbDatas={[
-            // <BreadcrumbLink
-            //     key={1}
-            //     title="Felhasználók"
-            //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-            // <BreadcrumbLink
-            //     key={2}
-            //     title={userEditData?.lastName + ' ' + userEditData?.firstName}
-            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/' + userId + '/edit'}
-            //     isCurrent />
-        ]}>
+    return <AdminBreadcrumbsHeader>
 
         <AdminUserList
             users={users}
@@ -121,7 +106,7 @@ export const AdminUserCourseContentSubpage = (props: {
 
             <AdminUserCoursesDataGridControl
                 handleMoreButton={
-                    () => dialogLogic.openDialog()
+                    (courseId: number | null) => dialogLogic.openDialog({ params: { courseId: courseId } })
                 } />
         </AdminSubpageHeader >
     </AdminBreadcrumbsHeader >;

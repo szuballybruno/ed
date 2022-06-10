@@ -64,7 +64,7 @@ export class ExamController {
             .getExamEditDataAsync(examId);
     };
 
-    @XControllerAction(apiRoutes.exam.getExamQuestionEditData, { isPost: true })
+    @XControllerAction(apiRoutes.exam.getExamQuestionEditData)
     getExamQuestionEditDataAction = async (params: ActionParams) => {
         const examId = params
             .getQuery<{ examId: number }>()

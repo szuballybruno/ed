@@ -48,7 +48,7 @@ import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBrid
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
 import { Video } from '../../models/entity/Video';
-import { VideoPlaybackSample } from '../../models/entity/VideoPlaybackSample';
+import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
@@ -85,7 +85,7 @@ import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserSessionDailyView } from '../../models/views/UserActivityDailyView';
+import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserAnswerView } from '../../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
@@ -96,6 +96,7 @@ import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserEngagementView } from '../../models/views/UserEngagementView';
+import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
@@ -148,6 +149,8 @@ import { getUserSeedData } from '../../sql/seed/seed_users';
 import { getVideoSeedData } from '../../sql/seed/seed_videos';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
+import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -260,7 +263,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_inactive_course_view', UserInactiveCourseView],
             ['user_engagement_view', UserEngagementView],
             ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
-            ['user_spent_time_view'],
             ['user_daily_progress_view', UserDailyProgressView],
             ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
             ['user_active_course_view', UserActiveCourseView],
@@ -272,6 +274,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_course_stats_view', UserCourseStatsView],
             ['user_video_practise_progress_view', UserVideoPractiseProgressView],
             ['user_video_stats_view', UserVideoStatsView],
+            ['user_exam_stats_view', UserExamStatsView],
             ['course_item_question_edit_view', CourseItemQuestionEditView],
             ['comment_list_view', CommentListView],
             ['user_spent_time_ratio_view', UserSpentTimeRatioView],
@@ -349,6 +352,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             StorageFile,
             AnswerSession,
             VideoPlaybackSample,
+            VideoPlaybackSession,
+            VideoSeekEvent,
             TeacherInfo,
             UserCourseBridge,
             PersonalityTraitCategory,

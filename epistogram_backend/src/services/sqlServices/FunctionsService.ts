@@ -1,5 +1,6 @@
 import { TaskCodeType } from '../../models/Types';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
 
@@ -17,17 +18,22 @@ export type InsertCoinFnParamsType = {
 export class SQLFunctionsService {
 
     private _connectionService: SQLConnectionService;
+    private _loggingEnabled: boolean;
 
-    constructor(conn: SQLConnectionService) {
+    constructor(conn: SQLConnectionService, config: GlobalConfiguration) {
 
         this._connectionService = conn;
+        this._loggingEnabled = config.logging.orm;
     }
 
     execSQLFunctionAsync = async <T>(fnName: string, args: any[], isMultiResult?: boolean) => {
 
-        logObject('');
-        logObject(`Executing SQL funciton (${fnName})... Args: `);
-        logObject(args);
+        if (this._loggingEnabled) {
+
+            logObject('');
+            logObject(`Executing SQL funciton (${fnName})... Args: `);
+            logObject(args);
+        }
 
         // create args indicies
         const argsIndicies = [] as string[];
@@ -48,8 +54,11 @@ export class SQLFunctionsService {
 
             const returnObject = firstRow as T;
 
-            logObject('Return value: ');
-            logObject(returnObject);
+            if (this._loggingEnabled) {
+
+                logObject('Return value: ');
+                logObject(returnObject);
+            }
 
             return returnObject;
         }
@@ -57,8 +66,11 @@ export class SQLFunctionsService {
 
             const fnReturnValue = firstRow[fnName];
 
-            logObject('Return value: ');
-            logObject(fnReturnValue);
+            if (this._loggingEnabled) {
+
+                logObject('Return value: ');
+                logObject(fnReturnValue);
+            }
 
             return fnReturnValue as T;
         }

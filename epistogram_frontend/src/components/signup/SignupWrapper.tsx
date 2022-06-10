@@ -156,8 +156,9 @@ export const SignupWrapper = (props: {
                     {hasDescription && <Box maxWidth="400px">
                         {
                             isString(description!)
-                                ? <EpistoFont isMultiline
-                                    classes={['fontNormal14']}>
+                                ? <EpistoFont
+                                    isMultiline
+                                    fontSize2="normal">
                                     {description!}
                                 </EpistoFont>
                                 : description

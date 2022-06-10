@@ -11,6 +11,7 @@ export class ExamView {
     @ViewColumn()
     @XViewColumn()
     userId: number;
+
     @ViewColumn()
     @XViewColumn()
     examId: number;
@@ -23,33 +24,43 @@ export class ExamView {
     @ViewColumn()
     @XViewColumn()
     title: string;
+    
     @ViewColumn()
     @XViewColumn()
     subtitle: string;
+    
     @ViewColumn()
     @XViewColumn()
     description: string;
+    
     @ViewColumn()
     @XViewColumn()
     thumbnailUrl: string;
+    
     @ViewColumn()
     @XViewColumn()
     orderIndex: number;
+    
     @ViewColumn()
     @XViewColumn()
     isFinalExam: boolean;
+    
     @ViewColumn()
     @XViewColumn()
     courseId: number;
+    
     @ViewColumn()
     @XViewColumn()
     moduleId: number;
+    
     @ViewColumn()
     @XViewColumn()
     retakeLimit: number;
+    
     @ViewColumn()
     @XViewColumn()
     successfulCompletionCount: number;
+    
     @ViewColumn()
     @XViewColumn()
     canRetake: boolean;

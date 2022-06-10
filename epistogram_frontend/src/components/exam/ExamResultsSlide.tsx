@@ -57,18 +57,17 @@ export const ExamResultsSlide = (props: {
         showNextButton={!exam.isFinalExam}>
 
         <Flex direction="column"
-className="whall"
+            className="whall"
             p="20px">
 
             {/* title */}
-            <Text
-                as="text"
+            <EpistoFont
                 className="fontHuge"
                 style={{
                     padding: '20px 0 20px 0'
                 }}>
                 {translatableTexts.exam.resultsTitle}
-            </Text>
+            </EpistoFont>
 
             {/* stats */}
             <ExamResultStats
@@ -78,9 +77,9 @@ className="whall"
 
             {/* results */}
             <Flex id="resultsRoot"
-flex="1"
+                flex="1"
                 overflow="hidden"
-direction="column">
+                direction="column">
 
                 {/* list header */}
                 <Flex
@@ -88,18 +87,16 @@ direction="column">
                     mt="20px"
                     justifyContent={'space-between'}>
 
-                    <Text
-                        as="text"
+                    <EpistoFont
                         className="fontHuge">
                         {translatableTexts.exam.questionsLabel}
-                    </Text>
+                    </EpistoFont>
 
                     <Flex width={'25%'}>
-                        <Text
-                            as="text"
+                        <EpistoFont
                             className="fontHuge">
                             {translatableTexts.exam.answerLabel}
-                        </Text>
+                        </EpistoFont>
                     </Flex>
                 </Flex>
 
@@ -139,7 +136,7 @@ direction="column">
 
                                     <Flex width={'23%'}>
                                         <EpistoFont
-                                            classes={['roundBorders']}
+                                            roundBorders="normal"
                                             style={{
                                                 padding: '2px 15px',
                                                 backgroundColor: bgColor

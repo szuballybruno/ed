@@ -1,7 +1,7 @@
 import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { ActivityStreakView } from '../models/views/ActivityStreakView';
-import { UserSessionDailyView } from '../models/views/UserActivityDailyView';
+import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
 import { trimTimeFromDate } from '../utilities/helpers';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';

@@ -14,10 +14,11 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: '
         boxShadow={variant === 'noShadow' ? 'none' : undefined}
         {...css}>
 
-        <EpistoHeader text={title}
-showDivider={showDivider}
-variant="strongSub"
-m="5px 10px 0 10px" />
+        <EpistoHeader
+            text={title}
+            showDivider={showDivider}
+            variant="strongSub"
+            m="5px 10px 0 10px" />
 
         <Box className="whall">
 

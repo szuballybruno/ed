@@ -67,7 +67,11 @@ export class GlobalConfiguration {
         serviceUserPassword: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_PASSWORD'),
         isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED') === 'true',
         isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED') === 'true',
-        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true'
+        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true',
+    };
+
+    logging = {
+        orm: false
     };
 
     constructor(rootDirectory: string) {

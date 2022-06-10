@@ -41,12 +41,14 @@ import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
+import { RoleListView } from '../../models/views/RoleListView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
+import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
@@ -96,6 +98,7 @@ import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
 import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
+import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleDTO } from '../../shared/dtos/RoleDTO';
 import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
 import { ShopItemBriefData } from '../../shared/dtos/ShopItemBriefData';
@@ -111,17 +114,89 @@ import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
+import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { VideoDTO } from '../../shared/dtos/VideoDTO';
+import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { navPropNotNull, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
+import { UrlService } from '../UrlService';
 import { getItemCode } from './encodeService';
+import { XMappingsBuilder } from './XMapperService/XMapperService';
+import { Mutable } from './XMapperService/XMapperTypes';
+
+export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
+
+const marray = [
+    epistoMappingsBuilder
+        .addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
+
+    epistoMappingsBuilder
+        .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
+
+    epistoMappingsBuilder
+        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: Video, sessionId: number, maxWatchedSeconds: number) => ({
+            id: video.id,
+            courseId: video.courseId,
+            subTitle: video.subtitle,
+            title: video.title,
+            description: video.description,
+            thumbnailUrl: '',
+            url: assetUrlService.getAssetUrl(video.videoFile.filePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
+            questions: video.questions.map(q => toQuestionDTO(q)),
+            maxWatchedSeconds: maxWatchedSeconds,
+            videoPlaybackSessionId: sessionId
+        })),
+
+    epistoMappingsBuilder
+        .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {
+            
+            return roles
+                .groupBy(x => x.roleId)
+                .map((grouping): RoleAdminListDTO => {
+
+                    const viewAsRole = grouping.first;
+
+                    return {
+                        roleId: viewAsRole.roleId,
+                        roleName: viewAsRole.roleName,
+                        ownerName: viewAsRole.ownerName,
+                        companyId: viewAsRole.ownerCompanyId,
+                        companyName: viewAsRole.ownerName,
+                        permissions: grouping
+                            .items
+                            .map((viewAsPermission): PermissionListDTO => ({
+                                code: viewAsPermission.permissionCode,
+                                id: viewAsPermission.permissionId,
+                                scope: 'USER' // not used 
+                            }))
+                    };
+                });
+        })
+] as const;
+
+export type EpistoMappingsType = Mutable<typeof marray>;
 
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
+
+    mapperService
+        .addMap(UserExamStatsView, UserExamStatsDTO, (stats) => {
+            return {
+                userId: stats.userId,
+                examId: stats.examId,
+                examTitle: stats.examTitle,
+                courseId: stats.courseId,
+                correctAnswerRate: stats.correctAnswerRate,
+                shouldPractiseExam: stats.shouldPractiseExam,
+                correctAnswerCount: stats.correctAnswerCount,
+                examLengthSeconds: stats.examLengthSeconds,
+                lastCompletionDate: stats.lastCompletionDate,
+                averageReactionTime: stats.averageReactionTime
+            }
+        })
 
     mapperService
         .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {
@@ -532,25 +607,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Video, VideoDTO, (video, maxWatchedSeconds: number) => {
-
-            navPropNotNull(video.questions);
-            navPropNotNull(video.videoFile);
-
-            return {
-                id: video.id,
-                courseId: video.courseId,
-                subTitle: video.subtitle,
-                title: video.title,
-                description: video.description,
-                thumbnailUrl: '',
-                url: getAssetUrl(video.videoFile.filePath) ?? getAssetUrl('images/videoImage.jpg'),
-                questions: video.questions.map(q => toQuestionDTO(q)),
-                maxWatchedSeconds: maxWatchedSeconds
-            } as VideoDTO;
-        });
-
-    mapperService
         .addMap(Video, CourseItemDTO, (video, state: CourseItemStateType) => {
 
             return {
@@ -940,6 +996,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             scope: x.scope,
             id: x.id
         }));
+
+    return marray;
 };
 
 const separationChar = '|';

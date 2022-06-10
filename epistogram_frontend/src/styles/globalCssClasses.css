@@ -1,0 +1,108 @@
+/* margin */
+
+.margin-all-px5 {
+    margin: 5px;
+}
+.margin-all-px10 {
+    margin: 10px;
+}
+.margin-all-px15 {
+    margin: 15px;
+}
+.margin-all-px20 {
+    margin: 20px;
+}
+.margin-all-px25 {
+    margin: 25px;
+}
+
+/* font weight */
+
+.fontWeight-light {
+    font-weight: 400;
+}
+.fontWeight-mid {
+    font-weight: 500;
+}
+.fontWeight-heavy {
+    font-weight: 600;
+}
+
+/* font size */
+
+.fontSize2-small {
+    font-size: 12px !important;
+}
+.fontSize2-normal {
+    font-size: 14px !important;
+}
+.fontSize2-large {
+    font-size: 16px !important;
+}
+
+/* color */
+
+.color-fontDark {
+    color: #646464 !important;
+}
+.color-fontLight {
+    color: #ffffff !important;
+}
+.color-fontGray {
+    color: var(--intenseGray) !important;
+}
+.color-fontError {
+    color: var(--mildRed) !important;
+}
+
+/* background color */
+
+.background-fontDark {
+    background: #646464 !important;
+}
+.background-fontLight {
+    background: #ffffff !important;
+}
+.background-fontGray {
+    background: var(--intenseGray) !important;
+}
+.background-fontError {
+    background: var(--mildRed) !important;
+}
+
+/* borders */
+
+.roundBorders-normal {
+    border-radius: 6px;
+}
+
+/* direction */
+
+.direction-vertical {
+    flex-direction: column;
+}
+.direction-horizontal {
+    flex-direction: row;
+}
+
+/* align */
+.align-flex-start {
+    align-items: flex-start;
+}
+.align-center {
+    align-items: center;
+}
+.align-flex-end {
+    align-items: flex-end;
+}
+
+/* justify */
+.justify-flex-start {
+    justify-content: flex-start;
+}
+.justify-center {
+    justify-content: center;
+}
+.justify-flex-end {
+    justify-content: flex-end;
+}

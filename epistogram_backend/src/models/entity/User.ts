@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany } from '../../services/XORM/XORMDecorators';
 import { getJoinColumnInverseSide } from '../../utilities/helpers';
 import { RegistrationType } from '../Types';
 import { ActivitySession } from './ActivitySession';
@@ -25,8 +25,10 @@ import { Like } from './Like';
 import { UserCourseBridge } from './UserCourseBridge';
 import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
-import { VideoPlaybackSample } from './VideoPlaybackSample';
+import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
+import { VideoPlaybackSession } from './playback/VideoPlaybackSession';
+import { VideoSeekEvent } from './playback/VideoSeekEvent';
 
 @Entity()
 export class User {
@@ -139,6 +141,11 @@ export class User {
     @JoinColumn()
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
 
+    // video seek events 
+    @XOneToMany<User>()(() => VideoSeekEvent, x => x.user)
+    @JoinColumn()
+    videoSeekEvents: Relation<VideoSeekEvent>[];
+
     // user course bridges 
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
@@ -213,4 +220,9 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
     companyOwnerBridges: Relation<CompanyOwnerBridge>[];
+
+    // video playback samples 
+    @OneToMany(_ => VideoPlaybackSession, x => x.user)
+    @JoinColumn()
+    videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 }

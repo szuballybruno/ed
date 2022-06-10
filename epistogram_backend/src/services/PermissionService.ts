@@ -1,13 +1,16 @@
 import { Permission } from '../models/entity/authorization/Permission';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
-import { PermissionMatrixDTO } from '../shared/dtos/role/PermissionMatrixDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
-import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+
+export type ContextOptions = {
+    companyId?: number,
+    courseId?: number,
+    commentId?: number
+}
 
 export class PermissionService extends QueryServiceBase<Permission> {
 
@@ -17,16 +20,38 @@ export class PermissionService extends QueryServiceBase<Permission> {
 
         super(mapperService, ormService, Permission);
     }
-    async checkPermissionAsync(userId: PrincipalId, permissionsCode: PermissionCodeType): Promise<void>;
-    async checkPermissionAsync(userId: PrincipalId, companyId: number, permissionsCode: PermissionCodeType): Promise<void>;
-    async checkPermissionAsync(userId: PrincipalId, companyId_or_permissionCode: number | PermissionCodeType, permissionsCodeOrUndefined?: PermissionCodeType) {
 
-        const companyId = permissionsCodeOrUndefined ? companyId_or_permissionCode as number : null;
-        const permissionCode = permissionsCodeOrUndefined ? permissionsCodeOrUndefined : companyId_or_permissionCode as PermissionCodeType;
+    async getPermissionAsync(
+        assigneeUserId: number,
+        permissionsCode: PermissionCodeType,
+        context?: ContextOptions) {
 
-        const hasPermission = await this.hasPermissionAsync(userId.toSQLValue(), companyId, permissionCode);
-        if (!hasPermission)
-            throw new VerboseError('User has no permission to access resource.', 'no permission');
+        return await this
+            ._ormService
+            .query(UserPermissionView, {
+                userId: assigneeUserId,
+                permissionsCode,
+                contextCompanyId: context?.companyId ?? null,
+                contextCourseId: context?.courseId ?? null,
+                contextCommentId: context?.commentId ?? null,
+            })
+            .where('assigneeUserId', '=', 'userId')
+            .and('permissionCode', '=', 'permissionsCode')
+            .and('contextCompanyId', '=', 'contextCompanyId')
+            .and('contextCourseId', '=', 'contextCourseId')
+            .and('contextCommentId', '=', 'contextCommentId')
+            .getOneOrNull();
+    }
+
+    async getPermissionsAsync() {
+
+        const permissions = await this
+            ._ormService
+            .query(Permission)
+            .getMany();
+
+        return this._mapperService
+            .mapMany(Permission, PermissionListDTO, permissions);
     }
 
     async getPermissionMatrixAsync(userId: number, contextCompanyId: number) {
@@ -41,6 +66,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .getMany();
 
         return perms
+        
             .groupBy(x => x.permissionCode)
             .map(x => x.first.permissionCode);
 
@@ -49,29 +75,5 @@ export class PermissionService extends QueryServiceBase<Permission> {
         //         code: x.permissionCode,
         //         companyId: x.contextCompanyId
         //     }));
-    }
-
-    async hasPermissionAsync(userId: number, companyId: number | null, permissionsCode: PermissionCodeType) {
-
-        const permission = await this
-            ._ormService
-            .query(UserPermissionView, { userId, companyId, permissionsCode })
-            .where('assigneeUserId', '=', 'userId')
-            .and('contextCompanyId', '=', 'companyId')
-            .and('permissionCode', '=', 'permissionsCode')
-            .getOneOrNull();
-
-        return !!permission;
-    }
-
-    async getPermissionsAsync() {
-
-        const permissions = await this
-            ._ormService
-            .query(Permission)
-            .getMany();
-
-        return this._mapperService
-            .mapMany(Permission, PermissionListDTO, permissions);
     }
 }

@@ -10,36 +10,41 @@ export const getCourseAccessBridgeSeedData = (
         // pcworld
         pw_course_17: {
             companyId: companies.PCWorld.id,
-            courseId: courses.course_17.id,
+            courseId: courses.course_obs.id,
             userId: null
         },
         pw_course_22: {
             companyId: companies.PCWorld.id,
-            courseId: courses.course_22.id,
+            courseId: courses.course_powerPoint.id,
             userId: null
         },
         pw_course_27: {
             companyId: companies.PCWorld.id,
-            courseId: courses.course_27.id,
+            courseId: courses.course_excel.id,
             userId: null
         },
 
         // episto
         episto_course_17: {
             companyId: companies.EpistoGram.id,
-            courseId: courses.course_17.id,
+            courseId: courses.course_obs.id,
             userId: null
         },
         episto_course_25: {
             companyId: companies.EpistoGram.id,
-            courseId: courses.course_25.id,
+            courseId: courses.course_linked_in.id,
             userId: null
         },
 
         // henkel
         henkel_course_24: {
             companyId: companies.Henkel.id,
-            courseId: courses.course_24.id,
+            courseId: courses.course_google_ads.id,
+            userId: null
+        },
+        henkel_course_24a: {
+            companyId: companies.Henkel.id,
+            courseId: courses.course_excel.id,
             userId: null
         }
     });

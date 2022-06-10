@@ -1,30 +1,26 @@
 import { Company } from '../models/entity/Company';
-import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
+import { User } from '../models/entity/User';
+import { CompanyView } from '../models/views/CompanyView';
+import { UserPermissionView } from '../models/views/UserPermissionView';
+import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
 import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
+import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
+import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
+import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { PrincipalId } from '../utilities/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { CompanyView } from '../models/views/CompanyView';
-import { User } from '../models/entity/User';
-import { UserPermissionView } from '../models/views/UserPermissionView';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
-import { PrincipalId } from '../utilities/ActionParams';
-import { PermissionService } from './PermissionService';
-import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
-import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
 
 export class CompanyService extends QueryServiceBase<Company> {
-
-    private _permissionService: PermissionService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        permissionService: PermissionService) {
+        private _authoirzationService: AuthorizationService) {
 
         super(mapperService, ormService, Company);
-
-        this._permissionService = permissionService;
     }
 
     async getPrincipalCompaniesAsync(principalId: PrincipalId) {
@@ -87,8 +83,8 @@ export class CompanyService extends QueryServiceBase<Company> {
 
     async getCompanyEditDataAsync(principalId: PrincipalId, companyId: number) {
 
-        await this._permissionService
-            .checkPermissionAsync(principalId, companyId, 'EDIT_COMPANY');
+        await this._authoirzationService
+            .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId });
 
         const comp = await this._ormService
             .query(Company, { companyId })
@@ -101,7 +97,7 @@ export class CompanyService extends QueryServiceBase<Company> {
 
     async createCompanyAsync(principalId: PrincipalId) {
 
-        await this._permissionService
+        await this._authoirzationService
             .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
         await this.createAsync({
@@ -111,7 +107,7 @@ export class CompanyService extends QueryServiceBase<Company> {
 
     async deleteCompanyAsync(principalId: PrincipalId, companyId: number) {
 
-        await this._permissionService
+        await this._authoirzationService
             .checkPermissionAsync(principalId, 'DELETE_COMPANIES');
 
         await this._ormService

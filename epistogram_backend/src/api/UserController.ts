@@ -84,10 +84,11 @@ export class UserController {
     @XControllerAction(apiRoutes.user.getBriefUserData)
     getBriefUserDataAction = async (params: ActionParams) => {
 
-        const userId = params.getQuery()
+        const userId = params
+            .getQuery()
             .getValue(x => x.userId, 'int');
 
-        await this._userService
+        return await this._userService
             .getBriefUserDataAsync(params.principalId, userId);
     };
 

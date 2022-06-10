@@ -105,7 +105,7 @@ export const CourseDetailsTeacherSection = (props: {
                                 src={Environment.getAssetUrl('/course_page_icons/teacher_award.svg')} />
 
                             <EpistoFont
-                                classes={['fontLight']}>
+                                color='fontLight'>
 
                                 {badge}
                             </EpistoFont>

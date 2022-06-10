@@ -1,5 +1,7 @@
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
+import { JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { toSQLSnakeCasing } from '../../utilities/helpers';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
 const X_VIEW_COLUMN_METADATA_KEY = 'X_VIEW_COLUMN_METADATA_KEY';
@@ -29,6 +31,31 @@ export const XViewColumn = () => {
             .regMetadata(className, propertyKey, X_VIEW_COLUMN_METADATA_KEY);
     };
 };
+
+export const XOneToMany = <TCurrentEntity>() => {
+
+    return <TRelationEntity>(
+        getRelationEntity: () => ClassType<TRelationEntity>,
+        getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity): PropertyDecorator => {
+
+        return OneToMany(getRelationEntity as any, getRelationProp);
+    }
+}
+
+export const XManyToOne = <TCurrentEntity>() => {
+
+    return <TRelationEntity>(
+        getRelationEntity: () => ClassType<TRelationEntity>,
+        getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
+
+        return ManyToOne(getRelationEntity as any, getRelationProp);
+    }
+};
+
+export const XJoinColumn = <TCurrentEntity>(key: keyof TCurrentEntity) => {
+
+    return JoinColumn({ name: toSQLSnakeCasing(key as string) });
+}
 
 export const getXViewColumnNames = <T>(classType: ClassType<T>) => {
 

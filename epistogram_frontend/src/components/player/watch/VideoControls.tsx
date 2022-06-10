@@ -132,19 +132,19 @@ export const VideoControls = (props: {
 
                 if (isMuted)
                     return <VolumeOffIcon className="square25"
-style={{ color: 'white' }}></VolumeOffIcon>;
+                        style={{ color: 'white' }}></VolumeOffIcon>;
 
                 if (volume > 0.7)
                     return <VolumeUpIcon className="square25"
-style={{ color: 'white' }}></VolumeUpIcon>;
+                        style={{ color: 'white' }}></VolumeUpIcon>;
 
                 if (volume <= 0.7 && volume >= 0.3)
                     return <VolumeDownIcon className="square25"
-style={{ color: 'white' }}></VolumeDownIcon>;
+                        style={{ color: 'white' }}></VolumeDownIcon>;
 
                 if (volume < 0.3)
                     return <VolumeMuteIcon className="square25"
-style={{ color: 'white' }}></VolumeMuteIcon>;
+                        style={{ color: 'white' }}></VolumeMuteIcon>;
             })()}
         </EpistoButton>
 

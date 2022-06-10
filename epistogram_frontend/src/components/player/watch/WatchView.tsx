@@ -1,37 +1,37 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { Divider, Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Divider } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
+import { StillWatchingDialogMarker } from '../../../models/types';
+import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
 import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
+import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
 import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
-import { VideoDTO } from '../../../shared/dtos/VideoDTO';
-import { StillWatchingDialogMarker } from '../../../models/types';
 import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoHeader } from '../../EpistoHeader';
-import { NavigateToCourseItemActionType } from '../../universal/CourseItemList';
+import { NavigateToCourseItemActionType } from '../../courseItemList/CourseItemList';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
-import { CourseItemSelector } from './CourseItemSelector';
 import Comments from '../comments/Comments';
 import PlayerDescription from '../description/PlayerDescription';
-import { VideoContent } from '../description/VideoContent';
+import PlayerNotes from '../description/PlayerNotes';
+import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { CourseItemSelector } from './CourseItemSelector';
 import { OverlayDialog } from './OverlayDialog';
 import { usePlaybackWatcher } from './PlaybackWatcherLogic';
 import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
-import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
 const autoplayTimeoutInS = 8;
 
 export const WatchView = (props: {
-    video: VideoDTO,
+    videoPlayerData: VideoPlayerDataDTO,
     answerSessionId: number,
     modules: ModuleDTO[],
     courseMode: CourseModeType,
@@ -47,7 +47,7 @@ export const WatchView = (props: {
     const {
         nextItemState,
         currentItemCode,
-        video,
+        videoPlayerData,
         modules,
         answerSessionId,
         courseMode,
@@ -57,13 +57,27 @@ export const WatchView = (props: {
         refetchPlayerData
     } = props;
 
-    const { questions } = video;
+    const { questions } = videoPlayerData;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(['Leírás', 'A kurzus segédanyagai', 'Hozzászólások']);
+    const descCommentPaging = usePaging<string>(['Leírás', 'Hozzászólások', 'Jegyzetek']);
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
-    const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
+    const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(videoPlayerData.maxWatchedSeconds);
     const reactTimer = useReactTimer(continueCourse, autoplayTimeoutInS * 1000);
+    const videoPlaybackSessionId = videoPlayerData.videoPlaybackSessionId;
+
+    // http
+    const { postVideoSeekEvent } = PlaybackApiService.usePostVideoSeekEvent();
+
+    const handleVideoSeekEvent = useCallback((fromSeconds: number, toSeconds: number) => {
+
+        postVideoSeekEvent({
+            fromSeconds,
+            toSeconds,
+            videoItemCode: currentItemCode,
+            videoPlaybackSessionId
+        });
+    }, [currentItemCode, videoPlaybackSessionId]);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -80,12 +94,21 @@ export const WatchView = (props: {
     // video player
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const limitSeek = courseMode === 'beginner';
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
+    const videoPlayerState = useVideoPlayerState(videoPlayerData, isShowingOverlay, maxWatchedSeconds, limitSeek, handleVideoSeekEvent);
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
-    const VideoDescription = () => <PlayerDescription description={video!.description} />;
-    const VideoContents = () => <VideoContent />;
-    const VideoComments = () => <Comments currentItemCode={currentItemCode} />;
+    const VideoDescription = () => <PlayerDescription
+        paging={descCommentPaging}
+        description={videoPlayerData.description} />;
+
+
+    const VideoComments = () => <Comments
+        paging={descCommentPaging}
+        currentItemCode={currentItemCode} />;
+
+    const VideoNotes = () => <PlayerNotes
+        paging={descCommentPaging} />;
+
 
     // const currentQuestionAnswered = answeredQuestionIds
     //     .some(qid => currentQuestion?.questionId === qid);
@@ -192,7 +215,9 @@ export const WatchView = (props: {
         isPlaying,
         handleVideoCompletedStateChanged,
         setMaxWatchedSeconds,
-        !isSeeking);
+        !isSeeking,
+        currentItemCode,
+        videoPlaybackSessionId);
 
     return <>
 
@@ -202,7 +227,7 @@ export const WatchView = (props: {
                 //height="calc((var(--playerWidth) - 420px) / 1.80)" 
                 className="largeSoftShadow"
                 zIndex="5"
-                videoItem={video}
+                videoItem={videoPlayerData}
                 videoPlayerState={videoPlayerState}>
 
                 {/* next video */}
@@ -309,15 +334,15 @@ export const WatchView = (props: {
                             fontWeight: 500
                         }}>
 
-                        {video!.title}
+                        {videoPlayerData!.title}
                     </EpistoFont>
 
                     <EpistoHeader variant="sub"
-                        text={video!.subTitle} />
+                        text={videoPlayerData!.subTitle} />
                 </Flex>
 
                 {/* ratings */}
-                <VideoRating videoId={video!.id} />
+                <VideoRating videoId={videoPlayerData!.id} />
             </Flex>
 
             <Divider
@@ -332,10 +357,12 @@ export const WatchView = (props: {
             <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
-                    VideoComments,
                     VideoDescription,
-                    VideoContents,
-                ]}></EpistoPaging>
+                    VideoComments,
+                    VideoNotes,
+                ]}>
+
+            </EpistoPaging>
         </Box>
     </>;
 };

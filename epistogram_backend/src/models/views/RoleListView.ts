@@ -15,11 +15,11 @@ export class RoleListView {
 
     @ViewColumn()
     @XViewColumn()
-    companyId: number;
+    ownerCompanyId: number;
 
     @ViewColumn()
     @XViewColumn()
-    companyName: string;
+    ownerName: string;
 
     @ViewColumn()
     @XViewColumn()
@@ -33,14 +33,6 @@ export class RoleListView {
     @ViewColumn()
     @XViewColumn()
     roleName: string;
-
-    @ViewColumn()
-    @XViewColumn()
-    isCompanyOwned: boolean;
-
-    @ViewColumn()
-    @XViewColumn()
-    ownerName: string;
 
     @ViewColumn()
     @XViewColumn()

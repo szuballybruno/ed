@@ -43,27 +43,8 @@ export class RoleService extends QueryServiceBase<Role> {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return roles
-            .groupBy(x => x.roleId)
-            .map((grouping): RoleAdminListDTO => {
-
-                const viewAsRole = grouping.first;
-
-                return {
-                    roleId: viewAsRole.roleId,
-                    roleName: viewAsRole.roleName,
-                    ownerName: viewAsRole.ownerName,
-                    companyId: viewAsRole.companyId,
-                    companyName: viewAsRole.companyName,
-                    permissions: grouping
-                        .items
-                        .map((viewAsPermission): PermissionListDTO => ({
-                            code: viewAsPermission.permissionCode,
-                            id: viewAsPermission.permissionId,
-                            scope: 'USER' // not used 
-                        }))
-                };
-            });
+        return this._mapperService
+            .mapTo(RoleAdminListDTO, [roles]);
     }
 
     async getAssignablePermissionsAsync(principalId: PrincipalId, courseId: number | null, companyId: number | null) {

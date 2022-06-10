@@ -14,7 +14,7 @@ import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CourseItemList } from '../../universal/CourseItemList';
+import { CourseItemList } from '../../courseItemList/CourseItemList';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
