@@ -20,6 +20,7 @@ export const RatingStars = (props: {
         <Flex>
             {iterate(5, (index) => (
                 <img
+                    key={index}
                     onMouseEnter={() => { setIsHovered({ hovered: true, index: index }); }}
                     onMouseLeave={() => setIsHovered({ hovered: false, index: 0 })}
                     onClick={() => setSelectedIndex(index)}

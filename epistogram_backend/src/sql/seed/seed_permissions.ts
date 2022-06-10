@@ -175,6 +175,14 @@ export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>(
     IS_SIGNUP_MANDATORY: {
         code: 'IS_SIGNUP_MANDATORY',
         scope: 'USER'
+    },
+    EDIT_COMMENT: {
+        code: 'EDIT_COMMENT',
+        scope: 'COMMENT'
+    },
+    DELETE_COMMENT: {
+        code: 'DELETE_COMMENT',
+        scope: 'COMMENT'
     }
 });
 

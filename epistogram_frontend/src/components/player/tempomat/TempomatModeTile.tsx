@@ -1,7 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react';
-import { height } from '@mui/system';
-import { ReactNode } from 'react';
-import { ClassBuilder } from '../../../helpers/classBuilder';
+import { Flex } from '@chakra-ui/react';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { TempomatModeImage } from './TempomatModeImage';

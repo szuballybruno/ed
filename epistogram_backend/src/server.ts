@@ -37,6 +37,7 @@ import { VideoController } from './api/VideoController';
 import { VideoRatingController } from './api/VideoRatingController';
 import { ActivationCodeService } from './services/ActivationCodeService';
 import { AuthenticationService } from './services/AuthenticationService';
+import { AuthorizationService } from './services/AuthorizationService';
 import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
 import { CommentService } from './services/CommentService';
@@ -46,7 +47,6 @@ import { CourseRatingService } from './services/CourseRatingService';
 import { CourseService } from './services/CourseService';
 import { DailyTipService } from './services/DailyTipService';
 import { EmailService } from './services/EmailService';
-import { EpistoMapperService } from './services/EpistoMapperService';
 import { EventService } from './services/EventService';
 import { ExamService } from './services/ExamService';
 import { FileService } from './services/FileService';
@@ -116,8 +116,7 @@ const main = async () => {
 
     // services
     const urlService = new UrlService(globalConfig);
-    const mapperService = new MapperService();
-    const epistoMapperService = new EpistoMapperService(urlService);
+    const mapperService = new MapperService(urlService);
     const loggerService = new LoggerService();
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(globalConfig);
@@ -156,7 +155,8 @@ const main = async () => {
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const sampleMergeService = new SampleMergeService();
     const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
-    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, epistoMapperService);
+    const authorizationService = new AuthorizationService(permissionService, ormConnectionService);
+    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, authorizationService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
@@ -168,7 +168,7 @@ const main = async () => {
     const userProgressService = new UserProgressService(mapperService, ormConnectionService);
     const commentService = new CommentService(ormConnectionService, mapperService);
     const likeService = new LikeService(ormConnectionService, mapperService);
-    const companyService = new CompanyService(ormConnectionService, mapperService, permissionService);
+    const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -215,7 +215,7 @@ const main = async () => {
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)
         .setTurboMiddleware<void, ActionParams>(new AuthenticationMiddleware(authenticationService, loggerService))
-        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(permissionService))
+        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(authorizationService))
         .setExpressMiddleware(getCORSMiddleware(globalConfig))
         .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
         .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))

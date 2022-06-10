@@ -61,14 +61,13 @@ export const ExamResultsSlide = (props: {
             p="20px">
 
             {/* title */}
-            <Text
-                as="text"
+            <EpistoFont
                 className="fontHuge"
                 style={{
                     padding: '20px 0 20px 0'
                 }}>
                 {translatableTexts.exam.resultsTitle}
-            </Text>
+            </EpistoFont>
 
             {/* stats */}
             <ExamResultStats
@@ -88,18 +87,16 @@ export const ExamResultsSlide = (props: {
                     mt="20px"
                     justifyContent={'space-between'}>
 
-                    <Text
-                        as="text"
+                    <EpistoFont
                         className="fontHuge">
                         {translatableTexts.exam.questionsLabel}
-                    </Text>
+                    </EpistoFont>
 
                     <Flex width={'25%'}>
-                        <Text
-                            as="text"
+                        <EpistoFont
                             className="fontHuge">
                             {translatableTexts.exam.answerLabel}
-                        </Text>
+                        </EpistoFont>
                     </Flex>
                 </Flex>
 
@@ -139,7 +136,7 @@ export const ExamResultsSlide = (props: {
 
                                     <Flex width={'23%'}>
                                         <EpistoFont
-                                            classes={['roundBorders']}
+                                            roundBorders="normal"
                                             style={{
                                                 padding: '2px 15px',
                                                 backgroundColor: bgColor

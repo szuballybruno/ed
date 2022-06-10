@@ -30,6 +30,10 @@ export class UserPermissionView {
 
     @ViewColumn()
     @XViewColumn()
+    contextCommentId: number | null;
+
+    @ViewColumn()
+    @XViewColumn()
     permissionId: number;
 
     @ViewColumn()

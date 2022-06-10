@@ -1,6 +1,9 @@
 import { ClassType } from './misc/advancedTypes/ClassType';
+import { epistoMappingsBuilder, EpistoMappingsType } from './misc/mappings';
+import { XMapper } from './misc/XMapperService/XMapperService';
+import { UrlService } from './UrlService';
 
-export class MapperService {
+export class MapperService extends XMapper<[UrlService], EpistoMappingsType> {
 
     private _mapperFunctions: {
         fromTypeName: string;
@@ -8,11 +11,16 @@ export class MapperService {
         func: (from: any, params?: any) => any;
     }[];
 
-    constructor() {
+    constructor(urlService: UrlService) {
+
+        super(epistoMappingsBuilder, [urlService]);
 
         this._mapperFunctions = [];
     }
 
+    /**
+     * @deprecated The method should not be used, see: {@link EpistoMapperService}
+     */
     addMap<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, func: (from: TFrom, params?: any) => TTo) {
 
         const mapping = this._mapperFunctions
@@ -29,6 +37,9 @@ export class MapperService {
             });
     }
 
+    /**
+     * @deprecated The method should not be used, see: {@link EpistoMapperService}
+     */
     map<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObj: TFrom, params?: any): TTo {
 
         const mapping = this._mapperFunctions
@@ -40,6 +51,9 @@ export class MapperService {
         return mapping.func(fromObj, params);
     }
 
+    /**
+     * @deprecated The method should not be used, see: {@link EpistoMapperService}
+     */
     mapMany<TFrom, TTo>(fromType: ClassType<TFrom>, toType: ClassType<TTo>, fromObjects: TFrom[]): TTo[] {
 
         return fromObjects

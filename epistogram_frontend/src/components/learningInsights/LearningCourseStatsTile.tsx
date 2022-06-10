@@ -5,6 +5,7 @@ import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from '../universal/SmallStat';
 
@@ -101,21 +102,23 @@ export const LearningCourseStatsTile = (props: {
             direction="column">
 
             {/* category  */}
-            <Text
-                as="text"
-                color="grey">
+            <EpistoFont
+                style={{
+                    color: 'grey'
+                }}>
 
                 {subCategoryName}
-            </Text>
+            </EpistoFont>
 
             {/* title */}
-            <Text
-                as="h6"
-                fontWeight={'bold'}
-                fontSize="large">
+            <EpistoFont
+                style={{
+                    fontWeight: 'bold',
+                    fontSize: 'large'
+                }}>
 
                 {title}
-            </Text>
+            </EpistoFont>
 
             {/* small stats */}
             <Flex mt={7}

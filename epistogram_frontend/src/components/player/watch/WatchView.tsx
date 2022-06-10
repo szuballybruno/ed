@@ -13,7 +13,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoHeader } from '../../EpistoHeader';
-import { NavigateToCourseItemActionType } from '../../universal/CourseItemList';
+import { NavigateToCourseItemActionType } from '../../courseItemList/CourseItemList';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';

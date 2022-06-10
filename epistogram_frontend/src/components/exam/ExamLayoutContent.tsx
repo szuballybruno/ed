@@ -1,5 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import React, { CSSProperties, ReactNode } from 'react';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
@@ -37,11 +38,9 @@ export const ExamLayoutContent = (props: {
                     src="https://static.thenounproject.com/png/92068-200.png"
                     className="tinyShadow" />
 
-                <Text
-                    as="text"
-                    fontSize={'1.3rem'}>
+                <EpistoFont>
                     {title}
-                </Text>
+                </EpistoFont>
             </Flex>
 
             {/* answers */}

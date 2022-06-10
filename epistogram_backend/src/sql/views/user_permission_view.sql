@@ -66,11 +66,8 @@ watch_course_permissions AS
 (
 	SELECT 
 		u.id assignee_user_id,
-		NULL::int context_company_id,
 		cab.course_id context_course_id,
-		NULL::int role_id,
-		pe2.id permission_id,
-		NULL::int assignment_bridge_id
+		pe2.id permission_id
 	FROM public.user u
 	
 	INNER JOIN inherited_or_assigned_permissions ioap
@@ -91,9 +88,8 @@ user_god_permissions AS (
 		u.id assignee_user_id,
 		co.id context_company_id,
 		cour.id context_course_id,
-		NULL::int role_id,
-		pe.id permission_id,
-		NULL::int assignment_bridge_id
+		comm.id context_comment_id,
+		pe.id permission_id
 	FROM public.permission pe
 
 	LEFT JOIN public.company co
@@ -101,6 +97,9 @@ user_god_permissions AS (
 	
 	LEFT JOIN public.course cour
 	ON pe.scope = 'COURSE'
+	
+	LEFT JOIN public.comment comm
+	ON pe.scope = 'COMMENT'
 	
 	INNER JOIN public.user u
 	ON u.is_god = true
@@ -111,32 +110,85 @@ user_god_permissions AS (
 		cour.id,
 		pe.id
 ),
+comment_permissions AS 
+(
+	SELECT 
+		co.user_id assignee_user_id,
+		co.id context_comment_id,
+		pe.id permission_id
+	FROM public.comment co
+	
+	LEFT JOIN public.permission pe
+	ON pe.code = 'EDIT_COMMENT' 
+	OR pe.code = 'DELETE_COMMENT'
+),
 all_permissions AS 
 (
+	SELECT
+		cp.assignee_user_id,
+		NULL::int context_company_id,
+		NULL::int context_course_id,
+		cp.context_comment_id,
+		NULL::int role_id,
+		cp.permission_id,
+		NULL::int assignment_bridge_id 
+	FROM comment_permissions cp
+	
+	UNION
+	
 	-- permissions assigned to user 
-	SELECT ioa.*
+	SELECT 
+		ioa.assignee_user_id,
+		ioa.context_company_id,
+		ioa.context_course_id,
+		NULL::int context_comment_id,
+		ioa.role_id,
+		ioa.permission_id,
+		ioa.assignment_bridge_id
 	FROM inherited_or_assigned_permissions ioa
 
 	UNION
 
 	-- god permissions only the best of us can have
-	SELECT ugp.*
+	SELECT 
+		ugp.assignee_user_id,
+		ugp.context_company_id,
+		ugp.context_course_id,
+		ugp.context_comment_id,
+		NULL::int role_id,
+		ugp.permission_id,
+		NULL::int assignment_bridge_id
 	FROM user_god_permissions ugp
 
 	UNION
 
 	-- watch course permissions 
-	SELECT wcp.*
+	SELECT 
+		wcp.assignee_user_id,
+		NULL::int context_company_id,
+		wcp.context_course_id,
+		NULL::int context_comment_id,
+		NULL::int role_id,
+		wcp.permission_id,
+		NULL::int assignment_bridge_id
 	FROM watch_course_permissions wcp
 ),
 v AS 
 (
 	SELECT
 		u.id assignee_user_id,
+		
+		-- context company
 		co.id context_company_id,
 		co.name context_company_name,
+		
+		-- context course 
 		cour.id context_course_id,
 		cour.title context_course_name,
+		
+		-- context course 
+		ap.context_comment_id,
+	
 		pe.id permission_id,
 		pe.code permission_code,
 		pe.scope permission_scope,
@@ -166,4 +218,4 @@ v AS
 		ap.context_course_id,
 		pe.id
 )
-SELECT * FROM v --inherited_or_assigned_permissions ioap
+SELECT * FROM v

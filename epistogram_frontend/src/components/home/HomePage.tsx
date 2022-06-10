@@ -7,10 +7,10 @@ import { useNavigation } from '../../services/core/navigatior';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { CourseItemListElement } from '../courseItemList/CourseItemListElement';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { LoadingFrame } from '../system/LoadingFrame';
-import { CourseItemView } from '../universal/CourseItemList';
 import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
@@ -18,7 +18,6 @@ import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { HomePageCourseStats } from './HomePageCourseStats';
 import { HomePageUserStats } from './HomePageUserStats';
 import { PractiseQuestions } from './PractiseQuestions';
-import { RecommendedQuota } from './RecommendedQuota';
 
 const HomePage = () => {
 
@@ -56,7 +55,7 @@ const HomePage = () => {
 
                         {(pageDTO.currentCourseProgress.nextItems ?? [])
                             .map((x, index) => (
-                                <CourseItemView
+                                <CourseItemListElement
                                     key={index}
                                     courseItem={x} />
                             ))}
@@ -76,7 +75,9 @@ const HomePage = () => {
                             m="7px 10px 7px 0px"
                             bgColor={'var(--epistoTeal)'} />
 
-                        <FlexListTitleSubtitle title={translatableTexts.homePage.availableCoursesLinkTitle}
+                        <FlexListTitleSubtitle
+                            isSelected={false}
+                            title={translatableTexts.homePage.availableCoursesLinkTitle}
                             subTitle={translatableTexts.homePage.availableCoursesText} />
                     </Flex>} />}
             </LeftPane>

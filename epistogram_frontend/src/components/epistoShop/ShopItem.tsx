@@ -85,12 +85,10 @@ export const ShopItem = (props: {
                 }} />
 
                 <EpistoFont
-                    classes={['fontLight']}
+                    color="fontLight"
                     isUppercase
                     fontSize="fontSmall"
-                    style={{
-                        fontWeight: 500
-                    }}>
+                    fontWeight="normal">
 
                     Megvásárolva
                 </EpistoFont>
@@ -133,8 +131,10 @@ export const ShopItem = (props: {
                 p="10px" >
 
                 {/* category  */}
-                <EpistoFont classes={['fontGrey']}
+                <EpistoFont
+                    color='fontGray'
                     fontSize="fontSmall">
+
                     {shopItemCategoryName}
                 </EpistoFont>
 

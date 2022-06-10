@@ -41,6 +41,7 @@ import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
+import { RoleListView } from '../../models/views/RoleListView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
@@ -97,6 +98,7 @@ import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
 import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
+import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleDTO } from '../../shared/dtos/RoleDTO';
 import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
 import { ShopItemBriefData } from '../../shared/dtos/ShopItemBriefData';
@@ -129,8 +131,11 @@ import { Mutable } from './XMapperService/XMapperTypes';
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
-    epistoMappingsBuilder.addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
-    epistoMappingsBuilder.addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
+    epistoMappingsBuilder
+        .addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
+
+    epistoMappingsBuilder
+        .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
 
     epistoMappingsBuilder
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: Video, sessionId: number, maxWatchedSeconds: number) => ({
@@ -144,7 +149,33 @@ const marray = [
             questions: video.questions.map(q => toQuestionDTO(q)),
             maxWatchedSeconds: maxWatchedSeconds,
             videoPlaybackSessionId: sessionId
-        }))
+        })),
+
+    epistoMappingsBuilder
+        .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {
+            
+            return roles
+                .groupBy(x => x.roleId)
+                .map((grouping): RoleAdminListDTO => {
+
+                    const viewAsRole = grouping.first;
+
+                    return {
+                        roleId: viewAsRole.roleId,
+                        roleName: viewAsRole.roleName,
+                        ownerName: viewAsRole.ownerName,
+                        companyId: viewAsRole.ownerCompanyId,
+                        companyName: viewAsRole.ownerName,
+                        permissions: grouping
+                            .items
+                            .map((viewAsPermission): PermissionListDTO => ({
+                                code: viewAsPermission.permissionCode,
+                                id: viewAsPermission.permissionId,
+                                scope: 'USER' // not used 
+                            }))
+                    };
+                });
+        })
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;
