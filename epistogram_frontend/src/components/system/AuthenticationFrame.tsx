@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -63,6 +63,19 @@ const AuthFirewall = (props: PropsWithChildren & {
     const { hasPermission } = useContext(AuthorizationContext);
     const isUnauthorized = !!currentRoute.isUnauthorized;
 
+    // check for error before render, redirect to login if necessary
+    useEffect(() => {
+
+        // error
+        if (authState === 'error') {
+
+            if (Environment.loggingSettings.auth)
+                console.log(`Auth state: ${authState}. Redirecting to login.`);
+
+            navigate(loginRoute);
+        }
+    }, [authState]);
+
     if (Environment.loggingSettings.auth)
         console.log(`Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 
@@ -73,21 +86,6 @@ const AuthFirewall = (props: PropsWithChildren & {
             console.log(`Auth state: ${authState}. Rendering empty div until loaded.`);
 
         return <div></div>;
-    }
-
-    // error
-    if (authState === 'error') {
-
-        if (Environment.loggingSettings.auth)
-            console.log(`Auth state: ${authState}. Rendering error page.`);
-
-        return <Flex
-            className="whall"
-            align="center"
-            justify="center">
-
-            Error!
-        </Flex>;
     }
 
     // check authentication 

@@ -152,8 +152,39 @@ const marray = [
         })),
 
     epistoMappingsBuilder
+        .addMapping(SignupDataDTO, ([assetUrlService]) => (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
+
+            return {
+                questions: questions
+                    .groupBy(x => x.questionId)
+                    .map(questionGrouping => {
+
+                        const viewAsQuestion = questionGrouping.items.first();
+
+                        return {
+                            questionId: viewAsQuestion.questionId,
+                            questionText: viewAsQuestion.questionText,
+                            imageUrl: assetUrlService.getAssetUrl(viewAsQuestion.imageUrl),
+                            typeId: viewAsQuestion.typeId,
+                            answers: questionGrouping
+                                .items
+                                .map(viewAsAnswer => {
+
+                                    return {
+                                        answerId: viewAsAnswer.answerId,
+                                        answerText: viewAsAnswer.answerText,
+                                        isGiven: viewAsAnswer.isGivenAnswer
+                                    } as SignupAnswerDTO;
+                                })
+                        } as SignupQuestionDTO;
+                    }),
+                isCompleted: isCompletedSignup
+            } as SignupDataDTO;
+        }),
+
+    epistoMappingsBuilder
         .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {
-            
+
             return roles
                 .groupBy(x => x.roleId)
                 .map((grouping): RoleAdminListDTO => {
@@ -1113,36 +1144,6 @@ export const toQuestionDTO = (q: Question) => {
             .map(x => toAnswerDTO(x))
 
     } as QuestionDTO;
-};
-
-export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
-
-    return {
-        questions: questions
-            .groupBy(x => x.questionId)
-            .map(questionGrouping => {
-
-                const viewAsQuestion = questionGrouping.items.first();
-
-                return {
-                    questionId: viewAsQuestion.questionId,
-                    questionText: viewAsQuestion.questionText,
-                    imageUrl: viewAsQuestion.imageUrl,
-                    typeId: viewAsQuestion.typeId,
-                    answers: questionGrouping
-                        .items
-                        .map(viewAsAnswer => {
-
-                            return {
-                                answerId: viewAsAnswer.answerId,
-                                answerText: viewAsAnswer.answerText,
-                                isGiven: viewAsAnswer.isGivenAnswer
-                            } as SignupAnswerDTO;
-                        })
-                } as SignupQuestionDTO;
-            }),
-        isCompleted: isCompletedSignup
-    } as SignupDataDTO;
 };
 
 export const toAnswerDTO = (a: Answer) => {

@@ -151,7 +151,7 @@ export class EmailService {
             ? 'spengler.manfred@epistogram.com'
             : email.to;
 
-        const templatePath = `${__dirname}/../emails/${email.template.name}.html`;
+        const templatePath = `${this._config.rootDirectory}/emails/${email.template.name}.html`;
         const templateHtml = readFileSync(templatePath, 'utf8');
         let replacedHtml = '' + templateHtml;
 

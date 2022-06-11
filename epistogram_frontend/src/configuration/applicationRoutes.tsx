@@ -112,6 +112,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         registrationRoute: {
             title: translatableTexts.routeTitles.registration,
             route: new EpistoRoute('/', 'registration'),
+            isUnauthorized: true,
         },
 
         signupRoute: {

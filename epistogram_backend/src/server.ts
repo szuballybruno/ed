@@ -131,14 +131,13 @@ const main = async () => {
     const activationCodeService = new ActivationCodeService(ormConnectionService);
     const emailService = new EmailService(globalConfig, urlService);
     const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
-    const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService);
+    const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService, mapperService);
     const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
     const roleService = new RoleService(ormConnectionService, mapperService);
     const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService);
     const tokenService = new TokenService(globalConfig);
     const permissionService = new PermissionService(ormConnectionService, mapperService);
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService, permissionService);
-    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, tokenService, ormConnectionService, roleService, mapperService);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
@@ -156,6 +155,7 @@ const main = async () => {
     const sampleMergeService = new SampleMergeService();
     const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
     const authorizationService = new AuthorizationService(permissionService, ormConnectionService);
+    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, authorizationService, tokenService, ormConnectionService, roleService, mapperService);
     const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, authorizationService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
