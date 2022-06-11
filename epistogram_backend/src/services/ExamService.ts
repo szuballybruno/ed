@@ -1,6 +1,6 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { ExamData } from '../models/entity/exam/ExamData';
-import { Question } from '../models/entity/question/Question';
+import { QuestionData } from '../models/entity/question/QuestionData';
 import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
@@ -256,7 +256,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         // inspect questions
         const questions = await this._ormService
-            .getRepository(Question)
+            .getRepository(QuestionData)
             .createQueryBuilder('q')
             .withDeleted()
             .leftJoinAndSelect('q.exam', 'e')

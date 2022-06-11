@@ -4,6 +4,7 @@ import { CourseVersion } from '../course/CourseVersion';
 import { ExamVersion } from '../exam/ExamVersion';
 import { VideoVersion } from '../video/VideoVersion';
 import { Module } from './Module';
+import { ModuleData } from './ModuleData';
 
 @Entity()
 export class ModuleVersion {
@@ -18,7 +19,6 @@ export class ModuleVersion {
     // course 
     @Column({ nullable: true })
     courseVersionId: number | null;
-
     @XManyToOne<ModuleVersion>()(CourseVersion, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('courseVersionId')
     courseVersion: Relation<CourseVersion>;
@@ -26,10 +26,16 @@ export class ModuleVersion {
     // module
     @Column()
     moduleId: number;
-
     @XManyToOne<ModuleVersion>()(Module, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleId')
     module: Module;
+
+    // module data
+    @Column()
+    moduleDataId: number;
+    @XManyToOne<ModuleVersion>()(ModuleData, x => x.moduleVersions)
+    @XJoinColumn<ModuleVersion>('moduleDataId')
+    moduleData: ModuleData;
 
     //
     // TO MANY

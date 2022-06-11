@@ -11,6 +11,7 @@ import { UserSessionActivity } from '../UserSessionActivity';
 import { UserVideoProgressBridge } from '../UserVideoProgressBridge';
 import { VideoRating } from '../VideoRating';
 import { Video } from './Video';
+import { VideoData } from './VideoData';
 
 @Entity()
 export class VideoVersion {
@@ -75,4 +76,11 @@ export class VideoVersion {
     @XManyToOne<VideoVersion>()(Video, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoId')
     video: Video;
+
+    // video data
+    @Column()
+    videoDataId: number;
+    @XManyToOne<VideoVersion>()(VideoData, x => x.videoVersions)
+    @XJoinColumn<VideoVersion>('videoDataId')
+    videoData: VideoData;
 }

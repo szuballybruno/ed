@@ -4,7 +4,7 @@ import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
 import { GivenAnswerStreak } from './GivenAnswerStreak';
-import { Question } from './question/Question';
+import { QuestionData } from './question/QuestionData';
 
 @Entity()
 export class GivenAnswer {
@@ -32,9 +32,9 @@ export class GivenAnswer {
     @Column()
     questionId: number;
 
-    @ManyToOne(_ => Question, x => x.givenAnswers)
+    @ManyToOne(_ => QuestionData, x => x.givenAnswers)
     @JoinColumn({ name: 'question_id' })
-    question: Question;
+    question: QuestionData;
 
     // answer session
     @Column()

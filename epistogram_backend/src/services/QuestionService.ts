@@ -1,7 +1,7 @@
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerGivenAnswerBridge } from '../models/entity/AnswerGivenAnswerBridge';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
-import { Question } from '../models/entity/question/Question';
+import { QuestionData } from '../models/entity/question/QuestionData';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
@@ -25,7 +25,7 @@ export class QuestionService {
         examId?: number) => {
 
         const questionRepo = this._ormService
-            .getRepository(Question);
+            .getRepository(QuestionData);
 
         // delete quesitons 
         const existingQuestions = videoId
@@ -57,7 +57,7 @@ export class QuestionService {
                 questionText: x.questionText,
                 orderIndex: x.orderIndex,
                 showUpTimeSeconds: x.showUpTimeSeconds
-            } as Question));
+            } as QuestionData));
 
         if (updateQuestions.length > 0)
             await questionRepo
@@ -72,7 +72,7 @@ export class QuestionService {
                 orderIndex: x.orderIndex,
                 videoId,
                 examId
-            } as Question));
+            } as QuestionData));
 
         if (insertQuestions.length > 0)
             await questionRepo
@@ -99,7 +99,7 @@ export class QuestionService {
 
         // delete questions
         await this._ormService
-            .getRepository(Question)
+            .getRepository(QuestionData)
             .softDelete(quesitonIds);
     };
 
@@ -132,7 +132,7 @@ export class QuestionService {
 
         // save quesiton data
         await this._ormService
-            .getRepository(Question)
+            .getRepository(QuestionData)
             .save({
                 id: dto.questionId,
                 questionText: dto.questionText,
@@ -205,7 +205,7 @@ export class QuestionService {
 
                 const updateDto = mapMutationToPartialObject(updateMut);
 
-                const question: Partial<Question> = {
+                const question: Partial<QuestionData> = {
                     id: updateMut.key,
                     videoId: updateDto.videoId || undefined,
                     examId: updateDto.examId || undefined,
@@ -218,7 +218,7 @@ export class QuestionService {
 
         // insert new questions
         await this._ormService
-            .getRepository(Question)
+            .getRepository(QuestionData)
             .insert(newQuestions.map(x => x.question));
 
         // newly added questions new answers
@@ -251,7 +251,7 @@ export class QuestionService {
 
                 const updateDto = mapMutationToPartialObject(updateMut);
 
-                const question: Partial<Question> = {
+                const question: Partial<QuestionData> = {
                     id: updateMut.key,
                     questionText: updateDto.questionText,
                     showUpTimeSeconds: updateDto.questionShowUpTimeSeconds
@@ -261,7 +261,7 @@ export class QuestionService {
             });
 
         await this._ormService
-            .save(Question, questions);
+            .save(QuestionData, questions);
     }
 
     async saveUpdatedAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {

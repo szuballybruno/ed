@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Question } from './question/Question';
+import { QuestionData } from './question/QuestionData';
 
 @Entity()
 export class QuestionType {
@@ -11,7 +11,7 @@ export class QuestionType {
     name: string;
 
     // questions
-    @OneToMany(_ => Question, x => x.type)
+    @OneToMany(_ => QuestionData, x => x.type)
     @JoinColumn()
-    questions: Question[];
+    questions: QuestionData[];
 }

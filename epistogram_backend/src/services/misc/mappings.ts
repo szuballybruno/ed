@@ -11,7 +11,7 @@ import { Event } from '../../models/entity/Event';
 import { ExamData } from '../../models/entity/exam/ExamData';
 import { JobTitle } from '../../models/entity/JobTitle';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
-import { Question } from '../../models/entity/question/Question';
+import { QuestionData } from '../../models/entity/question/QuestionData';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
@@ -258,7 +258,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(Question, QuestionEditDataDTO, question => ({
+        .addMap(QuestionData, QuestionEditDataDTO, question => ({
             questionId: question.id,
             questionText: question.questionText,
             answers: question.answers
@@ -784,7 +784,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: Question[]) => {
+        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionData[]) => {
 
             return {
                 id: exam.examId,
@@ -1098,7 +1098,7 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
     } as ResultAnswerDTO;
 };
 
-export const toQuestionDTO = (q: Question) => {
+export const toQuestionDTO = (q: QuestionData) => {
 
     navPropNotNull(q.answers);
 

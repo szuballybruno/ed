@@ -7,6 +7,7 @@ import { QuestionVersion } from '../question/QuestionVersion';
 import { UserExamProgressBridge } from '../UserExamProgressBridge';
 import { UserSessionActivity } from '../UserSessionActivity';
 import { Exam } from './Exam';
+import { ExamData } from './ExamData';
 
 @Entity()
 export class ExamVersion {
@@ -33,6 +34,12 @@ export class ExamVersion {
     // 
     // TO ONE
     //
+
+    @Column()
+    examDataId: number;
+    @XManyToOne<ExamVersion>()(ExamData, x => x.examVersions)
+    @XJoinColumn<ExamVersion>('examDataId')
+    examData: ExamData;
 
     // module
     @Column({ type: 'int', nullable: true })

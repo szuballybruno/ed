@@ -1,4 +1,4 @@
-import { Question } from '../models/entity/question/Question';
+import { QuestionData } from '../models/entity/question/QuestionData';
 import { toAnswerEditDTO } from '../services/misc/mappings';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
@@ -44,7 +44,7 @@ export class QuestionController {
             .getValue(x => x.questionId, 'int');
 
         const question = await this._ormService
-            .getRepository(Question)
+            .getRepository(QuestionData)
             .createQueryBuilder('q')
             .leftJoinAndSelect('q.answers', 'qa')
             .where('q.id = :questionId', { questionId })

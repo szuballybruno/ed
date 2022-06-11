@@ -34,7 +34,7 @@ import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCa
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
-import { Question } from '../../models/entity/question/Question';
+import { QuestionData } from '../../models/entity/question/QuestionData';
 import { QuestionType } from '../../models/entity/QuestionType';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
@@ -183,7 +183,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], VideoData)
         .add(getCommentsSeedData, [getVideoSeedData, getUserSeedData], Comment)
         .add(getExamSeedData, [getModuleSeedData, getCourseSeedData], ExamData)
-        .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], Question)
+        .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], QuestionData)
         .add(getAnswersSeed, [getSeedQuestions], AnswerData)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
@@ -347,7 +347,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             GivenAnswer,
             CompanyOwnerBridge,
             AnswerGivenAnswerBridge,
-            Question,
+            QuestionData,
             AnswerData,
             StorageFile,
             AnswerSession,

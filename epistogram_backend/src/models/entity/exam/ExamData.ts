@@ -1,6 +1,7 @@
 import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { ExamType } from '../../../shared/types/sharedTypes';
+import { ExamVersion } from './ExamVersion';
 
 @Entity()
 export class ExamData {
@@ -32,4 +33,11 @@ export class ExamData {
 
     @Column({ type: 'integer', nullable: true })
     retakeLimit: number | null;
+
+    // 
+    // TO MANY
+    // 
+
+    @XOneToMany<ExamData>()(ExamVersion, x => x.examData)
+    examVersions: ExamVersion[];
 }

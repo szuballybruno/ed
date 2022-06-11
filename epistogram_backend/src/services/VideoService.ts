@@ -16,7 +16,7 @@ import { UrlService } from './UrlService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
-import { Question } from '../models/entity/question/Question';
+import { QuestionData } from '../models/entity/question/QuestionData';
 import { withValue } from '../utilities/helpers';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { X509Certificate } from 'crypto';

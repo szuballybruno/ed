@@ -14,6 +14,6 @@ export class Exam {
     examVersions: ExamVersion[];
 
     // user session activity
-    @XOneToMany<ExamVersion>()(UserSessionActivity, x => x.exam)
+    @XOneToMany<Exam>()(UserSessionActivity, x => x.exam)
     userSessionActivities: UserSessionActivity[];
 }

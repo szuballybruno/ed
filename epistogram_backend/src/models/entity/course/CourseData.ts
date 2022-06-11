@@ -1,9 +1,10 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
 import { CourseCategory } from '../CourseCategory';
 import { StorageFile } from '../StorageFile';
 import { User } from '../User';
+import { CourseVersion } from './CourseVersion';
 
 @Entity()
 export class CourseData {
@@ -56,6 +57,13 @@ export class CourseData {
 
     @Column({ default: 'public', type: 'text' })
     visibility: CourseVisibilityType;
+
+    //
+    // TO MANY
+    //
+
+    @XOneToMany<CourseData>()(CourseVersion, x => x.courseData)
+    courseVersions: CourseVersion[];
 
     //
     // TO ONE
