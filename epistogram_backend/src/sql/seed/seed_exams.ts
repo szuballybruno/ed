@@ -1,4 +1,4 @@
-import { Exam } from '../../models/entity/Exam';
+import { Exam } from '../../models/entity/exam/Exam';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CourseSeedDataType } from './seed_courses';
 import { ModuleSeedDataType } from './seed_modules';

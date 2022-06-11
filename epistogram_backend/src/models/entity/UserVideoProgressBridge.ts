@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { User } from './User';
-import { Video } from './Video';
+import { Video } from './video/Video';
 
 @Entity()
 export class UserVideoProgressBridge {

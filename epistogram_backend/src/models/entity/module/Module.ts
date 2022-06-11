@@ -1,12 +1,12 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
-import { Course } from './Course';
-import { Exam } from './Exam';
-import { StorageFile } from './StorageFile';
-import { Video } from './Video';
+import { IsDeletedFlag } from '../../../services/XORM/XORMDecorators';
+import { Course } from '../Course';
+import { Exam } from '../exam/Exam';
+import { StorageFile } from '../StorageFile';
+import { Video } from '../video/Video';
 
 @Entity()
-export class CourseModule {
+export class Module {
 
     @PrimaryGeneratedColumn()
     id: number;

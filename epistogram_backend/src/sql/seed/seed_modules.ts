@@ -1,9 +1,9 @@
 
-import { CourseModule } from '../../models/entity/CourseModule';
+import { Module } from '../../models/entity/module/Module';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CourseSeedDataType } from './seed_courses';
 
-export const getModuleSeedData = (courses: CourseSeedDataType) => getSeedList<CourseModule>()({
+export const getModuleSeedData = (courses: CourseSeedDataType) => getSeedList<Module>()({
 
     module_1: {
         deletionDate: null,

@@ -1,5 +1,5 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { Exam } from '../models/entity/Exam';
+import { Exam } from '../models/entity/exam/Exam';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';

@@ -1,7 +1,7 @@
 import { Answer } from '../models/entity/Answer';
 import { AnswerGivenAnswerBridge } from '../models/entity/AnswerGivenAnswerBridge';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
-import { Question } from '../models/entity/Question';
+import { Question } from '../models/entity/question/Question';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';

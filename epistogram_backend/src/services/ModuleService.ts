@@ -1,8 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
 import { Course } from '../models/entity/Course';
-import { CourseModule } from '../models/entity/CourseModule';
-import { Exam } from '../models/entity/Exam';
-import { Video } from '../models/entity/Video';
+import { Module } from '../models/entity/module/Module';
+import { Exam } from '../models/entity/exam/Exam';
+import { Video } from '../models/entity/video/Video';
 import { ModuleView } from '../models/views/ModuleView';
 import { AdminModuleShortDTO } from '../shared/dtos/AdminModuleShortDTO';
 import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
@@ -47,14 +47,14 @@ export class ModuleService {
     getModuleDetailedDTOAsync = async (moduleId: number) => {
 
         const module = await this._ormService
-            .getRepository(CourseModule)
+            .getRepository(Module)
             .createQueryBuilder('mo')
             .where('mo.id = :moduleId', { moduleId })
             .leftJoinAndSelect('mo.imageFile', 'if')
             .getOneOrFail();
 
         return this._mapperService
-            .map(CourseModule, ModuleDetailedDTO, module);
+            .map(Module, ModuleDetailedDTO, module);
     };
 
     deleteModulesAsync = async (moduleIds: number[]) => {
@@ -80,13 +80,13 @@ export class ModuleService {
 
         // delete modules
         await this._ormService
-            .softDelete(CourseModule, moduleIds);
+            .softDelete(Module, moduleIds);
     };
 
     createModuleAsync = async (dto: ModuleCreateDTO) => {
 
         await this._ormService
-            .getRepository(CourseModule)
+            .getRepository(Module)
             .insert({
                 courseId: dto.courseId,
                 name: dto.name,
@@ -98,14 +98,14 @@ export class ModuleService {
     getModuleEditDataAsync = async (moduleId: number) => {
 
         const module = await this._ormService
-            .getRepository(CourseModule)
+            .getRepository(Module)
             .createQueryBuilder('mo')
             .where('mo.id = :moduleId', { moduleId })
             .leftJoinAndSelect('mo.imageFile', 'if')
             .getOneOrFail();
 
         return this._mapperService
-            .map(CourseModule, ModuleAdminEditDTO, module);
+            .map(Module, ModuleAdminEditDTO, module);
     };
 
     saveModuleAsync = async (dto: ModuleAdminEditDTO, file?: UploadedFile) => {
@@ -113,7 +113,7 @@ export class ModuleService {
         const moduleId = dto.id;
 
         await this._ormService
-            .getRepository(CourseModule)
+            .getRepository(Module)
             .save({
                 id: dto.id,
                 name: dto.name,
@@ -124,17 +124,17 @@ export class ModuleService {
         if (file) {
 
             const getModuleAsync = () => this._ormService
-                .getSingleById(CourseModule, moduleId);
+                .getSingleById(Module, moduleId);
 
             const setModuleThumbnailIdAsync = (fileId: number) => this._ormService
-                .getRepository(CourseModule)
+                .getRepository(Module)
                 .save({
                     id: moduleId,
                     imageFileId: fileId
                 });
 
             await this._fileService
-                .uploadAssigendFileAsync<CourseModule>(
+                .uploadAssigendFileAsync<Module>(
                     this._fileService.getFilePath('module_images', 'module_image', dto.id, 'jpg'),
                     getModuleAsync,
                     setModuleThumbnailIdAsync,

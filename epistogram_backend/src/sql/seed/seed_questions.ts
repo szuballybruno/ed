@@ -1,4 +1,4 @@
-import { Question } from '../../models/entity/Question';
+import { Question } from '../../models/entity/question/Question';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { ExamSeedDataType } from './seed_exams';
 import { PersonalityTraitCategoriesSeedType } from './seed_personality_trait_categories';

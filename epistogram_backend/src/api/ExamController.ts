@@ -1,5 +1,5 @@
 import { Course } from '../models/entity/Course';
-import { Exam } from '../models/entity/Exam';
+import { Exam } from '../models/entity/exam/Exam';
 import { ExamService } from '../services/ExamService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';

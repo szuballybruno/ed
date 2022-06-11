@@ -1,5 +1,5 @@
 import { StorageFile } from '../models/entity/StorageFile';
-import { Video } from '../models/entity/Video';
+import { Video } from '../models/entity/video/Video';
 import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
@@ -16,7 +16,7 @@ import { UrlService } from './UrlService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
-import { Question } from '../models/entity/Question';
+import { Question } from '../models/entity/question/Question';
 import { withValue } from '../utilities/helpers';
 import { Answer } from '../models/entity/Answer';
 import { X509Certificate } from 'crypto';

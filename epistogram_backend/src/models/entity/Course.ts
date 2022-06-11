@@ -5,15 +5,15 @@ import { CourseVisibilityType } from '../../shared/types/sharedTypes';
 import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
 import { CourseAccessBridge } from './CourseAccessBridge';
 import { CourseCategory } from './CourseCategory';
-import { CourseModule } from './CourseModule';
+import { Module } from './module/Module';
 import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
-import { Exam } from './Exam';
+import { Exam } from './exam/Exam';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
 import { ShopItem } from './ShopItem';
 import { StorageFile } from './StorageFile';
 import { User } from './User';
 import { UserCourseBridge } from './UserCourseBridge';
-import { Video } from './Video';
+import { Video } from './video/Video';
 
 @Entity()
 export class Course {
@@ -83,11 +83,6 @@ export class Course {
     @JoinColumn({ name: 'sub_category_id' })
     subCategory: CourseCategory;
 
-    // videos 
-    @OneToMany(type => Video, video => video.course, { cascade: true })
-    @JoinColumn()
-    videos: Video[];
-
     // exams
     @OneToMany(type => Exam, exam => exam.course, { cascade: true })
     @JoinColumn()
@@ -115,7 +110,7 @@ export class Course {
     userCourseBridges: UserCourseBridge[];
 
     // modules 
-    @OneToMany(_ => CourseModule, x => x.course)
+    @OneToMany(_ => Module, x => x.course)
     @JoinColumn()
     modules: Module[];
 

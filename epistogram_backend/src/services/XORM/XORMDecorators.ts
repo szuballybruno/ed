@@ -1,6 +1,6 @@
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
-import { JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
@@ -32,27 +32,37 @@ export const XViewColumn = () => {
     };
 };
 
-export const XOneToMany = <TCurrentEntity>() => {
+export const XOneToMany = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
-        getRelationEntity: () => ClassType<TRelationEntity>,
+        classType: ClassType<TRelationEntity>,
         getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity): PropertyDecorator => {
 
-        return OneToMany(getRelationEntity as any, getRelationProp);
+        return OneToMany((() => classType) as any, getRelationProp);
     }
 }
 
-export const XManyToOne = <TCurrentEntity>() => {
+export const XManyToOne = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
-        getRelationEntity: () => ClassType<TRelationEntity>,
+        getRelationEntity: ClassType<TRelationEntity>,
         getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
 
-        return ManyToOne(getRelationEntity as any, getRelationProp);
+        return ManyToOne((() => getRelationEntity) as any, getRelationProp);
     }
 };
 
-export const XJoinColumn = <TCurrentEntity>(key: keyof TCurrentEntity) => {
+// export const XOneToOne = <TCurrentEntity = never>() => {
+
+//     return <TRelationEntity>(
+//         getRelationEntity: () => ClassType<TRelationEntity>,
+//         getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
+
+//         return OneToOne(getRelationEntity as any, getRelationProp);
+//     }
+// }
+
+export const XJoinColumn = <TCurrentEntity = never>(key: keyof TCurrentEntity) => {
 
     return JoinColumn({ name: toSQLSnakeCasing(key as string) });
 }

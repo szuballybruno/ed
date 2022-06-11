@@ -4,7 +4,7 @@ import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
 import { GivenAnswerStreak } from './GivenAnswerStreak';
-import { Question } from './Question';
+import { Question } from './question/Question';
 
 @Entity()
 export class GivenAnswer {

@@ -4,20 +4,20 @@ import { Role } from '../../models/entity/authorization/Role';
 import { Company } from '../../models/entity/Company';
 import { Course } from '../../models/entity/Course';
 import { CourseCategory } from '../../models/entity/CourseCategory';
-import { CourseModule } from '../../models/entity/CourseModule';
+import { Module } from '../../models/entity/module/Module';
 import { DailyTip } from '../../models/entity/DailyTip';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
-import { Exam } from '../../models/entity/Exam';
+import { Exam } from '../../models/entity/exam/Exam';
 import { JobTitle } from '../../models/entity/JobTitle';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
-import { Question } from '../../models/entity/Question';
+import { Question } from '../../models/entity/question/Question';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { User } from '../../models/entity/User';
-import { Video } from '../../models/entity/Video';
+import { Video } from '../../models/entity/video/Video';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
@@ -273,7 +273,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseModule, ModuleDetailedDTO, courseModule => ({
+        .addMap(Module, ModuleDetailedDTO, courseModule => ({
             id: courseModule.id,
             name: courseModule.name,
             description: courseModule.description,
@@ -283,7 +283,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseModule, ModuleAdminEditDTO, courseModule => ({
+        .addMap(Module, ModuleAdminEditDTO, courseModule => ({
             id: courseModule.id,
             name: courseModule.name,
             description: courseModule.description,

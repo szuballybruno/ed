@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AnswerSessionType } from '../../shared/types/sharedTypes';
-import { Exam } from './Exam';
+import { Exam } from './exam/Exam';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
-import { Video } from './Video';
+import { Video } from './video/Video';
 
 @Entity()
 export class AnswerSession {

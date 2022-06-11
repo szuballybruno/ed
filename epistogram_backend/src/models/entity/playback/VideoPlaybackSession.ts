@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { User } from '../User';
-import { Video } from '../Video';
+import { Video } from '../video/Video';
 import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoSeekEvent } from './VideoSeekEvent';
 

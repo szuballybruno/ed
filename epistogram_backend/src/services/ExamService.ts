@@ -1,6 +1,6 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { Exam } from '../models/entity/Exam';
-import { Question } from '../models/entity/Question';
+import { Exam } from '../models/entity/exam/Exam';
+import { Question } from '../models/entity/question/Question';
 import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';

@@ -1,4 +1,4 @@
-import { Question } from '../models/entity/Question';
+import { Question } from '../models/entity/question/Question';
 import { toAnswerEditDTO } from '../services/misc/mappings';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';

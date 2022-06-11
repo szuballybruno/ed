@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Video } from '../models/entity/Video';
+import { Video } from '../models/entity/video/Video';
 import { MapperService } from '../services/MapperService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { QuestionService } from '../services/QuestionService';

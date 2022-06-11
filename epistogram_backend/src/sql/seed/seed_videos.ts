@@ -1,4 +1,4 @@
-import { Video } from '../../models/entity/Video';
+import { Video } from '../../models/entity/video/Video';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CourseSeedDataType } from './seed_courses';
 import { StorageFileSeedDataType } from './seed_storage_file';

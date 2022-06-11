@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToO
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 import { User } from './User';
 import { Like as Like } from './Like';
-import { Video } from './Video';
+import { Video } from './video/Video';
 
 @Entity()
 export class Comment {

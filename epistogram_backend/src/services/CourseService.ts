@@ -2,11 +2,11 @@ import { UploadedFile } from 'express-fileupload';
 import { DeepPartial } from 'typeorm';
 import { Course } from '../models/entity/Course';
 import { CourseCategory } from '../models/entity/CourseCategory';
-import { CourseModule } from '../models/entity/CourseModule';
-import { Exam } from '../models/entity/Exam';
+import { Module } from '../models/entity/module/Module';
+import { Exam } from '../models/entity/exam/Exam';
 import { User } from '../models/entity/User';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
-import { Video } from '../models/entity/Video';
+import { Video } from '../models/entity/video/Video';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
@@ -423,7 +423,7 @@ export class CourseService {
             return (await this._examService.getExamByIdAsync(itemId)).courseId;
 
         return (await this._ormService
-            .getSingleById(CourseModule, itemId))
+            .getSingleById(Module, itemId))
             .courseId;
     }
 
@@ -504,7 +504,7 @@ export class CourseService {
             .getMany();
 
         const modules = await this._ormService
-            .getRepository(CourseModule)
+            .getRepository(Module)
             .createQueryBuilder('mo')
             .where('mo.courseId = :courseId', { courseId })
             .getMany();

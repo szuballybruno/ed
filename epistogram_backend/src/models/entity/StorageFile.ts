@@ -1,9 +1,11 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XOneToMany } from '../../services/XORM/XORMDecorators';
 import { Course } from './Course';
-import { CourseModule } from './CourseModule';
+import { Module } from './module/Module';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
-import { Video } from './Video';
+import { Video } from './video/Video';
+import { VideoFile } from './video/VideoFile';
 
 @Entity()
 export class StorageFile {
@@ -14,9 +16,12 @@ export class StorageFile {
     @Column()
     filePath: string;
 
-    // videos
-    @OneToMany(type => Video, v => v.videoFile)
-    @JoinColumn()
+    // video files
+    @XOneToMany<StorageFile>()(VideoFile, v => v.storageFile)
+    videoFiles: VideoFile[];
+
+    // videos 
+    @XOneToMany<StorageFile>()(Video, x => x.thumbnailFile)
     videos: Video[];
 
     // users
@@ -35,6 +40,6 @@ export class StorageFile {
     shopItems: ShopItem[];
 
     // course module 
-    @OneToOne(_ => CourseModule, x => x.imageFile)
-    courseModule: Relation<CourseModule>;
+    @OneToOne(_ => Module, x => x.imageFile)
+    courseModule: Relation<Module>;
 }

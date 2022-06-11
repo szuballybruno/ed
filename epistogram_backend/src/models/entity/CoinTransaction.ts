@@ -5,7 +5,7 @@ import { GivenAnswer } from './GivenAnswer';
 import { GivenAnswerStreak } from './GivenAnswerStreak';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
-import { Video } from './Video';
+import { Video } from './video/Video';
 
 @Entity()
 export class CoinTransaction {

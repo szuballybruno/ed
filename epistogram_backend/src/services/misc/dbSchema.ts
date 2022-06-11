@@ -16,7 +16,7 @@ import { Company } from '../../models/entity/Company';
 import { Course } from '../../models/entity/Course';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../../models/entity/CourseCategory';
-import { CourseModule } from '../../models/entity/CourseModule';
+import { Module } from '../../models/entity/module/Module';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from '../../models/entity/courseRating/CourseRatingQuestionUserAnswer';
@@ -24,7 +24,7 @@ import { DailyTip } from '../../models/entity/DailyTip';
 import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
-import { Exam } from '../../models/entity/Exam';
+import { Exam } from '../../models/entity/exam/Exam';
 import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
 import { Group } from '../../models/entity/Group';
@@ -34,7 +34,7 @@ import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCa
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
-import { Question } from '../../models/entity/Question';
+import { Question } from '../../models/entity/question/Question';
 import { QuestionType } from '../../models/entity/QuestionType';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
@@ -47,7 +47,7 @@ import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
 import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
-import { Video } from '../../models/entity/Video';
+import { Video } from '../../models/entity/video/Video';
 import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
@@ -178,7 +178,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
         .add(getAnswerSessionSeedData, [getUserSeedData], AnswerSession)
         .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], Course)
-        .add(getModuleSeedData, [getCourseSeedData], CourseModule)
+        .add(getModuleSeedData, [getCourseSeedData], Module)
         .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
         .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], Video)
         .add(getCommentsSeedData, [getVideoSeedData, getUserSeedData], Comment)
@@ -368,7 +368,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             DailyTipOccurrence,
             QuestionType,
             UserSessionActivity,
-            CourseModule,
+            Module,
             CoinTransaction,
             GivenAnswerStreak,
             ActivitySession,

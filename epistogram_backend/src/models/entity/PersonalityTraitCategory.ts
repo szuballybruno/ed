@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DailyTip } from './DailyTip';
-import { Question } from './Question';
+import { Question } from './question/Question';
 
 @Entity()
 export class PersonalityTraitCategory {

@@ -1,7 +1,7 @@
 import { Course } from '../models/entity/Course';
-import { Exam } from '../models/entity/Exam';
+import { Exam } from '../models/entity/exam/Exam';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
-import { Video } from '../models/entity/Video';
+import { Video } from '../models/entity/video/Video';
 import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';

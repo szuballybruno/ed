@@ -1,7 +1,7 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
-import { Question } from './Question';
+import { Question } from './question/Question';
 
 @Entity()
 export class Answer {

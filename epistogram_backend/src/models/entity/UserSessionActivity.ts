@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { ActivitySession } from './ActivitySession';
-import { Exam } from './Exam';
-import { Video } from './Video';
+import { Exam } from './exam/Exam';
+import { Video } from './video/Video';
 
 @Entity()
 export class UserSessionActivity {
