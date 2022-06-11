@@ -1,7 +1,7 @@
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
 import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
-import { Video } from '../models/entity/video/Video';
+import { VideoData } from '../models/entity/video/VideoData';
 import { VideoProgressView } from '../models/views/VideoProgressView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
 import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
@@ -187,7 +187,7 @@ export class PlaybackService extends ServiceBase {
             return 0;
 
         const video = await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .createQueryBuilder('v')
             .where('v.id = :videoId', { videoId })
             .getOneOrFail();

@@ -1,12 +1,12 @@
 import { UploadedFile } from 'express-fileupload';
 import { DeepPartial } from 'typeorm';
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { CourseCategory } from '../models/entity/CourseCategory';
-import { Module } from '../models/entity/module/Module';
-import { Exam } from '../models/entity/exam/Exam';
+import { ModuleData } from '../models/entity/module/ModuleData';
+import { ExamData } from '../models/entity/exam/ExamData';
 import { User } from '../models/entity/User';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
-import { Video } from '../models/entity/video/Video';
+import { VideoData } from '../models/entity/video/VideoData';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
@@ -87,7 +87,7 @@ export class CourseService {
     async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: number) {
 
         const courses = await this._ormService
-            .query(Course)
+            .query(CourseData)
             .getMany();
 
         return courses
@@ -144,10 +144,10 @@ export class CourseService {
     async getCourseBriefDataAsync(courseId: number) {
 
         const course = await this._ormService
-            .getSingleById(Course, courseId);
+            .getSingleById(CourseData, courseId);
 
         return this._mapperService
-            .map(Course, CourseBriefData, course);
+            .map(CourseData, CourseBriefData, course);
     }
 
     /**
@@ -200,10 +200,10 @@ export class CourseService {
             humanSkillBenefitsDescription: '',
             requirementsDescription: '',
             skillBenefits: ''
-        } as Course;
+        } as CourseData;
 
         await this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .insert(newCourse);
 
         await this._pretestService
@@ -220,7 +220,7 @@ export class CourseService {
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
-            .innerJoin(Course, x => x
+            .innerJoin(CourseData, x => x
                 .on('id', '=', 'courseId', CourseLearningStatsView)
                 .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
@@ -327,17 +327,17 @@ export class CourseService {
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
 
         const getCourseAsync = () => this._ormService
-            .getSingleById(Course, courseId);
+            .getSingleById(CourseData, courseId);
 
         const setCourseThumbnailIdAsync = (thumbnailFileId: number) => this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .save({
                 id: courseId,
                 coverFileId: thumbnailFileId
             });
 
         return this._fileService
-            .uploadAssigendFileAsync<Course>(
+            .uploadAssigendFileAsync<CourseData>(
                 this._fileService.getFilePath('courseCoverImages', 'courseCoverImage', courseId, 'jpg'),
                 getCourseAsync,
                 setCourseThumbnailIdAsync,
@@ -423,7 +423,7 @@ export class CourseService {
             return (await this._examService.getExamByIdAsync(itemId)).courseId;
 
         return (await this._ormService
-            .getSingleById(Module, itemId))
+            .getSingleById(ModuleData, itemId))
             .courseId;
     }
 
@@ -466,7 +466,7 @@ export class CourseService {
 
         // save basic info
         await this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .save({
                 id: dto.courseId,
                 title: dto.title,
@@ -504,7 +504,7 @@ export class CourseService {
             .getMany();
 
         const modules = await this._ormService
-            .getRepository(Module)
+            .getRepository(ModuleData)
             .createQueryBuilder('mo')
             .where('mo.courseId = :courseId', { courseId })
             .getMany();
@@ -554,7 +554,7 @@ export class CourseService {
 
                 const updateDto = mapMutationToPartialObject(updateMut);
 
-                const video: Partial<Video> = {
+                const video: Partial<VideoData> = {
                     id: updateMut.itemId,
                     moduleId: updateDto.moduleId,
                     title: updateDto.itemTitle,
@@ -572,7 +572,7 @@ export class CourseService {
 
                 const updateDto = mapMutationToPartialObject(updateMut);
 
-                const exam: Partial<Exam> = {
+                const exam: Partial<ExamData> = {
                     id: updateMut.itemId,
                     moduleId: updateDto.moduleId,
                     title: updateDto.itemTitle,
@@ -584,10 +584,10 @@ export class CourseService {
             });
 
         await this._ormService
-            .save(Video, videos);
+            .save(VideoData, videos);
 
         await this._ormService
-            .save(Exam, exams);
+            .save(ExamData, exams);
     }
 
     private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
@@ -632,7 +632,7 @@ export class CourseService {
         const newVideos = mutations
             .filter(x => x.action === 'add')
             .filter(x => checkMutationItemType(x, 'video'))
-            .map((x): Partial<Video> => {
+            .map((x): Partial<VideoData> => {
 
                 const mutObject = mapMutationToPartialObject(x);
 
@@ -651,7 +651,7 @@ export class CourseService {
         const newExams = mutations
             .filter(x => x.action === 'add')
             .filter(x => checkMutationItemType(x, 'exam'))
-            .map((x): Partial<Exam> => {
+            .map((x): Partial<ExamData> => {
 
                 const mutObject = mapMutationToPartialObject(x);
 
@@ -697,7 +697,7 @@ export class CourseService {
 
 
         await this._ormService
-            .softDelete(Course, [courseId]);
+            .softDelete(CourseData, [courseId]);
     }
 
     /**

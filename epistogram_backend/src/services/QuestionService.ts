@@ -1,4 +1,4 @@
-import { Answer } from '../models/entity/Answer';
+import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerGivenAnswerBridge } from '../models/entity/AnswerGivenAnswerBridge';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { Question } from '../models/entity/question/Question';
@@ -91,7 +91,7 @@ export class QuestionService {
 
         // delete answers 
         const answers = await this._ormService
-            .query(Answer, { quesitonIds })
+            .query(AnswerData, { quesitonIds })
             .where('questionId', '=', 'quesitonIds')
             .getMany();
 
@@ -123,7 +123,7 @@ export class QuestionService {
 
         // delete answers 
         await this._ormService
-            .softDelete(Answer, answerIds);
+            .softDelete(AnswerData, answerIds);
     };
 
     saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {
@@ -147,7 +147,7 @@ export class QuestionService {
 
         // delete answers 
         const questionAnswers = await this._ormService
-            .getRepository(Answer)
+            .getRepository(AnswerData)
             .find({
                 where: {
                     questionId
@@ -160,7 +160,7 @@ export class QuestionService {
 
         if (deletedAnswerIds.length > 0)
             await this._ormService
-                .getRepository(Answer)
+                .getRepository(AnswerData)
                 .delete(deletedAnswerIds);
 
         // update answers
@@ -170,11 +170,11 @@ export class QuestionService {
                 id: x.id,
                 text: x.text,
                 isCorrect: x.isCorrect,
-            } as Answer));
+            } as AnswerData));
 
         if (updateAnswers.length > 0)
             await this._ormService
-                .getRepository(Answer)
+                .getRepository(AnswerData)
                 .save(updateAnswers);
 
         // insert questions 
@@ -185,11 +185,11 @@ export class QuestionService {
                 text: x.text,
                 isCorrect: x.isCorrect,
                 questionId
-            } as Answer));
+            } as AnswerData));
 
         if (insertAnswers.length > 0)
             await this._ormService
-                .getRepository(Answer)
+                .getRepository(AnswerData)
                 .insert(insertAnswers);
     };
 
@@ -231,12 +231,12 @@ export class QuestionService {
                     .map(x => ({
                         ...x,
                         questionId: savedQuestion.question.id
-                    })) as Partial<Answer>[];
+                    })) as Partial<AnswerData>[];
             });
 
         // insert new answers where the question was new
         await this._ormService
-            .getRepository(Answer)
+            .getRepository(AnswerData)
             .insert(newAnswers);
     }
 
@@ -275,7 +275,7 @@ export class QuestionService {
             .flatMap(y => y.fieldMutators
                 .flat()
                 .filter(x => x.field === 'answers')
-                .flatMap(x => x.value as Partial<Answer>)
+                .flatMap(x => x.value as Partial<AnswerData>)
                 .flatMap(x => {
                     return {
                         ...x,
@@ -283,10 +283,10 @@ export class QuestionService {
                     };
                 })
             )
-            .filter(x => x.id! > 0) as Partial<Answer>[];
+            .filter(x => x.id! > 0) as Partial<AnswerData>[];
 
         await this._ormService
-            .save(Answer, existingAnswers);
+            .save(AnswerData, existingAnswers);
     }
 
     async saveNewAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
@@ -300,7 +300,7 @@ export class QuestionService {
             .flatMap(y => y.fieldMutators
                 .flat()
                 .filter(x => x.field === 'answers')
-                .flatMap(x => x.value as Partial<Answer>)
+                .flatMap(x => x.value as Partial<AnswerData>)
                 .filter(x => x.text)
                 .flatMap(x => {
                     return {
@@ -309,10 +309,10 @@ export class QuestionService {
                     };
                 })
             )
-            .filter(x => x.id! < 0) as Partial<Answer>[];
+            .filter(x => x.id! < 0) as Partial<AnswerData>[];
 
         await this._ormService
-            .getRepository(Answer)
+            .getRepository(AnswerData)
             .insert(newAnswers);
     }
 }

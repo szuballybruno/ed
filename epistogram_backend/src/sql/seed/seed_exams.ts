@@ -1,9 +1,9 @@
-import { Exam } from '../../models/entity/exam/Exam';
+import { ExamData } from '../../models/entity/exam/ExamData';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CourseSeedDataType } from './seed_courses';
 import { ModuleSeedDataType } from './seed_modules';
 
-export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeedDataType) => getSeedList<Exam>()({
+export const getExamSeedData = (modules: ModuleSeedDataType, courses: CourseSeedDataType) => getSeedList<ExamData>()({
     signup_exam: {
         courseId: null,
         description: null,

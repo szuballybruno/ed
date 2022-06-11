@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Course } from '../Course';
+import { CourseData } from '../course/CourseData';
 import { CourseRatingQuestion } from './CourseRatingQuestion';
 
 @Entity()

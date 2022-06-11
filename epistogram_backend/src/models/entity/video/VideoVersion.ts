@@ -1,17 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { AnswerSession } from '../AnswerSession';
-import { CoinTransaction } from '../CoinTransaction';
 import { Comment } from '../Comment';
-import { Module } from '../module/Module';
+import { ModuleVersion } from '../module/ModuleVersion';
 import { VideoPlaybackSample } from '../playback/VideoPlaybackSample';
 import { VideoPlaybackSession } from '../playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../playback/VideoSeekEvent';
-import { Question } from '../question/Question';
 import { QuestionVersion } from '../question/QuestionVersion';
 import { UserSessionActivity } from '../UserSessionActivity';
 import { UserVideoProgressBridge } from '../UserVideoProgressBridge';
 import { VideoRating } from '../VideoRating';
+import { Video } from './Video';
 
 @Entity()
 export class VideoVersion {
@@ -51,10 +50,6 @@ export class VideoVersion {
     @XOneToMany<VideoVersion>()(VideoPlaybackSession, x => x.videoVersion)
     videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 
-    // coin acquires 
-    @XOneToMany<VideoVersion>()(CoinTransaction, x => x.videoVersion)
-    coinAcquires: Relation<CoinTransaction>[];
-
     // ratings
     @XOneToMany<VideoVersion>()(VideoRating, x => x.videoVersion)
     videoRatings: Relation<VideoRating>[];
@@ -69,9 +64,15 @@ export class VideoVersion {
 
     // module
     @Column()
-    moduleId: number;
+    moduleVersionId: number;
+    @XManyToOne<VideoVersion>()(ModuleVersion, x => x.videoVersions)
+    @XJoinColumn<VideoVersion>('moduleVersionId')
+    moduleVersion: Relation<ModuleVersion>;
 
-    @XManyToOne<VideoVersion>()(Module, x => x.videoVersions)
-    @XJoinColumn<VideoVersion>('moduleId')
-    module: Relation<Module>;
+    // video 
+    @Column()
+    videoId: number;
+    @XManyToOne<VideoVersion>()(Video, x => x.videoVersions)
+    @XJoinColumn<VideoVersion>('videoId')
+    video: Video;
 }

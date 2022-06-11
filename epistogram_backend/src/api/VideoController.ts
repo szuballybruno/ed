@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Video } from '../models/entity/video/Video';
+import { VideoData } from '../models/entity/video/VideoData';
 import { MapperService } from '../services/MapperService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { QuestionService } from '../services/QuestionService';
@@ -43,7 +43,7 @@ export class VideoController {
 
         // update vidoeo data
         await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .save({
                 id: videoId,
                 title: body.getValue(x => x.title, 'string'),
@@ -63,7 +63,7 @@ export class VideoController {
             .getValue(x => x.videoId, 'int');
 
         const video = await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .createQueryBuilder('v')
             .leftJoinAndSelect('v.videoFile', 'vf')
             .leftJoinAndSelect('v.questions', 'vq')
@@ -72,7 +72,7 @@ export class VideoController {
             .getOneOrFail();
 
         return this._mapperService
-            .map(Video, VideoEditDTO, video);
+            .map(VideoData, VideoEditDTO, video);
     };
 
     @XControllerAction(apiRoutes.video.getVideoQuestionEditData)

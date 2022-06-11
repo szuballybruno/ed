@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne } from '../../../services/XORM/XORMDecorators';
 import { User } from '../User';
-import { Video } from '../video/Video';
+import { VideoData } from '../video/VideoData';
 import { VideoPlaybackSession } from './VideoPlaybackSession';
 
 @Entity()
@@ -26,9 +26,9 @@ export class VideoSeekEvent {
     @Column()
     videoId: number;
 
-    @XManyToOne<VideoSeekEvent>()(() => Video, x => x.videoSeekEvents)
+    @XManyToOne<VideoSeekEvent>()(() => VideoData, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('videoId')
-    video: Relation<Video>;
+    video: Relation<VideoData>;
 
     // user
     @Column()

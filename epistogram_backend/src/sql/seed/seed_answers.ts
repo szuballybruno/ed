@@ -1,8 +1,8 @@
-import { Answer } from '../../models/entity/Answer';
+import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { SeedQuestionsType } from './seed_questions';
 
-export const getAnswersSeed = (questions: SeedQuestionsType) => getSeedList<Answer>()({
+export const getAnswersSeed = (questions: SeedQuestionsType) => getSeedList<AnswerData>()({
 
     // SECTION 1
     // 1.1 answers

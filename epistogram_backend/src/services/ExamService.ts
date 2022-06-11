@@ -1,5 +1,5 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { Exam } from '../models/entity/exam/Exam';
+import { ExamData } from '../models/entity/exam/ExamData';
 import { Question } from '../models/entity/question/Question';
 import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
@@ -22,7 +22,7 @@ import { QuestionService } from './QuestionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 
-export class ExamService extends QueryServiceBase<Exam> {
+export class ExamService extends QueryServiceBase<ExamData> {
 
     private _userCourseBridgeService: UserCourseBridgeService;
     private _userSessionActivityService: UserSessionActivityService;
@@ -37,7 +37,7 @@ export class ExamService extends QueryServiceBase<Exam> {
         questionsService: QuestionService,
         mapperService: MapperService) {
 
-        super(mapperService, ormService, Exam);
+        super(mapperService, ormService, ExamData);
 
         this._userCourseBridgeService = userCourseBridgeService;
         this._userSessionActivityService = userSessionActivityService;
@@ -49,10 +49,10 @@ export class ExamService extends QueryServiceBase<Exam> {
     /**
      * Creates a new exam
      */
-    async createExamAsync(exam: Exam) {
+    async createExamAsync(exam: ExamData) {
 
         await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .insert(exam);
     }
 
@@ -90,7 +90,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     async getExamQuestionsAsync(examId: number) {
 
         const exam = await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .createQueryBuilder('e')
             .where('e.id = :examId', { examId })
             .leftJoinAndSelect('e.questions', 'q')
@@ -109,7 +109,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     async getExamEditDataAsync(examId: number) {
 
         const exam = await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .createQueryBuilder('e')
             .leftJoinAndSelect('e.questions', 'eq')
             .leftJoinAndSelect('eq.answers', 'eqa')
@@ -117,7 +117,7 @@ export class ExamService extends QueryServiceBase<Exam> {
             .getOneOrFail();
 
         return this._mapperService
-            .map(Exam, ExamEditDataDTO, exam);
+            .map(ExamData, ExamEditDataDTO, exam);
     }
 
     /**
@@ -165,7 +165,7 @@ export class ExamService extends QueryServiceBase<Exam> {
         const examId = dto.id;
 
         const examBeforeSave = await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .createQueryBuilder('e')
             .leftJoinAndSelect('e.module', 'mo')
             .where('e.id = :examId', { examId })
@@ -179,7 +179,7 @@ export class ExamService extends QueryServiceBase<Exam> {
 
             // get all exams in course 
             const previousFinalExam = await this._ormService
-                .getRepository(Exam)
+                .getRepository(ExamData)
                 .createQueryBuilder('e')
                 .leftJoinAndSelect('e.module', 'mo')
                 .leftJoinAndSelect('mo.course', 'co')
@@ -189,16 +189,16 @@ export class ExamService extends QueryServiceBase<Exam> {
 
             // set all exams to non final 
             await this._ormService
-                .getRepository(Exam)
+                .getRepository(ExamData)
                 .save(previousFinalExam
                     .map(x => ({
                         id: x.id,
                         type: 'normal'
-                    } as Exam)));
+                    } as ExamData)));
         }
 
         await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .save({
                 id: examId,
                 title: dto.title,
@@ -236,7 +236,7 @@ export class ExamService extends QueryServiceBase<Exam> {
     getExamByIdAsync = (examId: number) => {
 
         return this._ormService
-            .getSingleById(Exam, examId);
+            .getSingleById(ExamData, examId);
     };
 
     /**
@@ -371,7 +371,7 @@ export class ExamService extends QueryServiceBase<Exam> {
 
         // delete exam
         await this._ormService
-            .softDelete(Exam, examIds);
+            .softDelete(ExamData, examIds);
     };
 
     /**

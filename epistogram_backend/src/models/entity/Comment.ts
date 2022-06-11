@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToO
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 import { User } from './User';
 import { Like as Like } from './Like';
-import { Video } from './video/Video';
+import { VideoData } from './video/VideoData';
 
 @Entity()
 export class Comment {
@@ -42,8 +42,8 @@ export class Comment {
     videoId: number;
 
     @JoinColumn({ name: 'video_id' })
-    @ManyToOne(_ => Video, x => x.comments)
-    video: Relation<Video>;
+    @ManyToOne(_ => VideoData, x => x.comments)
+    video: Relation<VideoData>;
 
     // likes
     @OneToMany(_ => Like, x => x.user)

@@ -1,4 +1,4 @@
-import { Course } from '../../models/entity/Course';
+import { CourseData } from '../../models/entity/course/CourseData';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CourseCategoriesSeedDataType } from './seed_course_categories';
 import { StorageFileSeedDataType } from './seed_storage_file';
@@ -7,7 +7,7 @@ import { UserSeedDataType } from './seed_users';
 export const getCourseSeedData = (
     courseCategories: CourseCategoriesSeedDataType,
     storageFiles: StorageFileSeedDataType,
-    users: UserSeedDataType) => getSeedList<Course>()({
+    users: UserSeedDataType) => getSeedList<CourseData>()({
 
         course_4: { //course_1
             modificationDate: new Date('2022-01-15 14:18:32.55715+00'),

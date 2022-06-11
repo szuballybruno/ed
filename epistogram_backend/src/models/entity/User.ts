@@ -10,7 +10,7 @@ import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { CoinTransaction } from './CoinTransaction';
 import { Comment } from './Comment';
 import { Company } from './Company';
-import { Course } from './Course';
+import { CourseData } from './course/CourseData';
 import { CourseAccessBridge } from './CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
@@ -122,9 +122,9 @@ export class User {
     tasks: Relation<Task>[];
 
     // teacher
-    @OneToMany(() => Course, course => course.teacher)
+    @OneToMany(() => CourseData, course => course.teacher)
     @JoinColumn()
-    teachedCourses: Relation<Course>[];
+    teachedCourses: Relation<CourseData>[];
 
     // comment
     @OneToMany(() => Comment, comment => comment.user)

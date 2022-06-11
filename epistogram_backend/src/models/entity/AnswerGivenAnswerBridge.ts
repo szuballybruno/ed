@@ -1,6 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
-import { Answer } from './Answer';
+import { AnswerData } from './answer/AnswerData';
 import { GivenAnswer } from './GivenAnswer';
 
 @Entity()
@@ -25,7 +25,7 @@ export class AnswerGivenAnswerBridge {
     @Column()
     answerId: number;
 
-    @ManyToOne(_ => Answer, answer => answer.givenAnswerBridges)
+    @ManyToOne(_ => AnswerData, answer => answer.givenAnswerBridges)
     @JoinColumn({ name: 'answer_id' })
-    answer: Relation<Answer>;
+    answer: Relation<AnswerData>;
 }

@@ -1,6 +1,6 @@
-import { Video } from './entity/video/Video';
+import { VideoData } from './entity/video/VideoData';
 
 export type VideoWatchedPercent = {
-    video: Video;
+    video: VideoData;
     watchedPercent: number;
 }

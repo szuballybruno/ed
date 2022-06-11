@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { StorageFile } from '.././StorageFile';
-import { Video } from './Video';
+import { VideoData } from './VideoData';
 
 @Entity()
 export class VideoFile {
@@ -21,6 +21,6 @@ export class VideoFile {
     storageFile: Relation<StorageFile>;
 
     // videos 
-    @XOneToMany<VideoFile>()(Video, x => x.videoFile)
-    videos: Video[];
+    @XOneToMany<VideoFile>()(VideoData, x => x.videoFile)
+    videos: VideoData[];
 }

@@ -1,10 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { XJoinColumn, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { AnswerSession } from '../AnswerSession';
-import { Module } from '../module/Module';
+import { ModuleData } from '../module/ModuleData';
+import { ModuleVersion } from '../module/ModuleVersion';
 import { QuestionVersion } from '../question/QuestionVersion';
 import { UserExamProgressBridge } from '../UserExamProgressBridge';
 import { UserSessionActivity } from '../UserSessionActivity';
+import { Exam } from './Exam';
 
 @Entity()
 export class ExamVersion {
@@ -20,10 +22,6 @@ export class ExamVersion {
     @XOneToMany<ExamVersion>()(QuestionVersion, x => x.examVersion)
     questionVersions: QuestionVersion[];
 
-    // user session activity
-    @XOneToMany<ExamVersion>()(UserSessionActivity, x => x.examVersion)
-    userSessionActivities: UserSessionActivity[];
-
     // answer sessions
     @XOneToMany<ExamVersion>()(AnswerSession, x => x.examVersion)
     answerSessions: AnswerSession[];
@@ -38,9 +36,15 @@ export class ExamVersion {
 
     // module
     @Column({ type: 'int', nullable: true })
-    moduleId: number | null;
+    moduleVersionId: number | null;
+    @ManyToOne(_ => ModuleVersion, x => x.examVersions)
+    @XJoinColumn<ExamVersion>('moduleVersionId')
+    moduleVersion: ModuleVersion;
 
-    @ManyToOne(_ => Module, x => x.examVersions)
-    @XJoinColumn<ExamVersion>('moduleId')
-    module: Module | null;
+    // exam
+    @Column()
+    examId: number;
+    @XManyToOne<ExamVersion>()(Exam, x => x.examVersions)
+    @XJoinColumn<ExamVersion>('examId')
+    exam: Exam;
 }

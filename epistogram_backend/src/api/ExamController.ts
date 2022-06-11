@@ -1,5 +1,5 @@
-import { Course } from '../models/entity/Course';
-import { Exam } from '../models/entity/exam/Exam';
+import { CourseData } from '../models/entity/course/CourseData';
+import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamService } from '../services/ExamService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
@@ -102,7 +102,7 @@ export class ExamController {
             .data;
 
         const course = await this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .createQueryBuilder('c')
             .leftJoinAndSelect('c.videos', 'v')
             .leftJoinAndSelect('c.exams', 'e')
@@ -118,10 +118,10 @@ export class ExamController {
             title: dto.title,
             subtitle: dto.subtitle,
             orderIndex: courseItemsLength
-        } as Exam;
+        } as ExamData;
 
         await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .insert(newExam);
 
         return {

@@ -1,4 +1,4 @@
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
@@ -26,7 +26,7 @@ export class UserProgressService extends ServiceBase {
 
         const views = await this._ormService
             .query(UserActiveCourseView, { userId })
-            .leftJoin(Course, x => x
+            .leftJoin(CourseData, x => x
                 .on('id', '=', 'courseId', UserActiveCourseView)
                 .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')

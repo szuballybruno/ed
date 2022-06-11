@@ -1,8 +1,10 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XJoinColumn, XManyToOne } from '../../services/XORM/XORMDecorators';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { ActivitySession } from './ActivitySession';
 import { Exam } from './exam/Exam';
-import { Video } from './video/Video';
+import { ExamData } from './exam/ExamData';
+import { VideoData } from './video/VideoData';
 
 @Entity()
 export class UserSessionActivity {
@@ -20,16 +22,15 @@ export class UserSessionActivity {
     @Column({ nullable: true })
     videoId: number;
 
-    @ManyToOne(() => Video, v => v.questions)
+    @ManyToOne(() => VideoData, v => v.questions)
     @JoinColumn({ name: 'video_id' })
-    video: Relation<Video>;
+    video: Relation<VideoData>;
 
     // exam 
     @Column({ nullable: true })
     examId: number | null;
-
-    @ManyToOne(_ => Exam, e => e.questions)
-    @JoinColumn({ name: 'exam_id' })
+    @XManyToOne<UserSessionActivity>()(Exam, e => e.userSessionActivities)
+    @XJoinColumn<UserSessionActivity>('examId')
     exam: Relation<Exam> | null;
 
     // user

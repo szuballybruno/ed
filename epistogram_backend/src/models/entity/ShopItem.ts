@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CoinTransaction } from './CoinTransaction';
-import { Course } from './Course';
+import { Course } from './course/Course';
+import { CourseData } from './course/CourseData';
 import { DiscountCode } from './DiscountCode';
 import { ShopItemCategory } from './ShopItemCategory';
 import { StorageFile } from './StorageFile';
@@ -48,7 +49,7 @@ export class ShopItem {
 
     @ManyToOne(_ => Course, x => x.shopItems)
     @JoinColumn({ name: 'course_id' })
-    course: Course | null;
+    course: Course;
 
     // coin acquires 
     @JoinColumn()

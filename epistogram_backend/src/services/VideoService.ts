@@ -1,5 +1,5 @@
 import { StorageFile } from '../models/entity/StorageFile';
-import { Video } from '../models/entity/video/Video';
+import { VideoData } from '../models/entity/video/VideoData';
 import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
@@ -18,13 +18,13 @@ import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { Question } from '../models/entity/question/Question';
 import { withValue } from '../utilities/helpers';
-import { Answer } from '../models/entity/Answer';
+import { AnswerData } from '../models/entity/answer/AnswerData';
 import { X509Certificate } from 'crypto';
 import { CourseController } from '../api/CourseController';
 import { Index } from 'typeorm';
 import { PrincipalId } from '../utilities/ActionParams';
 
-export class VideoService extends QueryServiceBase<Video> {
+export class VideoService extends QueryServiceBase<VideoData> {
 
     private _userCourseBridgeService: UserCourseBridgeService;
     private _questionAnswerService: QuestionAnswerService;
@@ -41,7 +41,7 @@ export class VideoService extends QueryServiceBase<Video> {
         assetUrlService: UrlService,
         mapperService: MapperService) {
 
-        super(mapperService, ormConnection, Video);
+        super(mapperService, ormConnection, VideoData);
 
         this._questionAnswerService = questionAnswerService;
         this._userCourseBridgeService = userCourseBridgeService;
@@ -63,7 +63,7 @@ export class VideoService extends QueryServiceBase<Video> {
             .answerQuestionAsync(userId.toSQLValue(), answerSessionId, questionId, answerIds, false, elapsedSeconds);
     };
 
-    insertVideoAsync = async (video: Video, filePath?: string) => {
+    insertVideoAsync = async (video: VideoData, filePath?: string) => {
 
         if (video.id)
             throw new Error('Cannot insert with id!');
@@ -84,14 +84,14 @@ export class VideoService extends QueryServiceBase<Video> {
         }
 
         await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .save(video);
     };
 
     setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {
 
         await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .save({
                 id: videoId,
                 videoFileId: videoFileId
@@ -161,7 +161,7 @@ export class VideoService extends QueryServiceBase<Video> {
 
         // delete video
         await this._ormService
-            .softDelete(Video, videoIds);
+            .softDelete(VideoData, videoIds);
     }
 
     uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
@@ -171,7 +171,7 @@ export class VideoService extends QueryServiceBase<Video> {
             .getFilePath('videos', 'video', videoId, 'mp4');
 
         await this._fileService
-            .uploadAssigendFileAsync<Video>(
+            .uploadAssigendFileAsync<VideoData>(
                 filePath,
                 () => this.getVideoByIdAsync(videoId),
                 (fileId) => this.setVideoFileIdAsync(videoId, fileId),
@@ -185,7 +185,7 @@ export class VideoService extends QueryServiceBase<Video> {
         const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
 
         await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .save({
                 id: videoId,
                 lengthSeconds: lengthSeconds
@@ -195,7 +195,7 @@ export class VideoService extends QueryServiceBase<Video> {
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
 
         await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .save({
                 id: videoId,
                 thumbnailFileId: thumbnailFileId
@@ -205,7 +205,7 @@ export class VideoService extends QueryServiceBase<Video> {
     getVideoByIdAsync = async (videoId: number) => {
 
         const video = await this._ormService
-            .getSingleById(Video, videoId);
+            .getSingleById(VideoData, videoId);
 
         return video;
     };
@@ -213,7 +213,7 @@ export class VideoService extends QueryServiceBase<Video> {
     getVideoPlayerDataAsync = async (videoId: number) => {
 
         const video = await this._ormService
-            .getRepository(Video)
+            .getRepository(VideoData)
             .createQueryBuilder('v')
             .where('v.id = :videoId', { videoId })
             .leftJoinAndSelect('v.videoFile', 'vf')

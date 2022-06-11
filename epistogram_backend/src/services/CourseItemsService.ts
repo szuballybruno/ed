@@ -1,4 +1,4 @@
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { CourseItemListDTO } from '../shared/dtos/CourseItemListDTO';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -17,7 +17,7 @@ export class CourseItemsService {
     getCourseItemDTOs = async (courseId: number) => {
 
         const course = await this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .createQueryBuilder('c')
             .leftJoinAndSelect('c.videos', 'v')
             .leftJoinAndSelect('c.exams', 'e')
@@ -25,6 +25,6 @@ export class CourseItemsService {
             .getOneOrFail();
 
         return this._mapperService
-            .map(Course, CourseItemListDTO, course);
+            .map(CourseData, CourseItemListDTO, course);
     };
 }

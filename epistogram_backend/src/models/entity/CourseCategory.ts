@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Course } from './Course';
+import { CourseData } from './course/CourseData';
 
 @Entity()
 export class CourseCategory {
@@ -24,12 +24,12 @@ export class CourseCategory {
     childCategories: CourseCategory[];
 
     // courses
-    @OneToMany(_ => Course, x => x.category)
+    @OneToMany(_ => CourseData, x => x.category)
     @JoinColumn()
-    categoryCourses: Course[];
+    categoryCourses: CourseData[];
 
     // courses
-    @OneToMany(_ => Course, x => x.subCategory)
+    @OneToMany(_ => CourseData, x => x.subCategory)
     @JoinColumn()
-    subCategoryCourses: Course[];
+    subCategoryCourses: CourseData[];
 }

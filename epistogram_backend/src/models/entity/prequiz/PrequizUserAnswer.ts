@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Course } from '../course/Course';
+import { User } from '../User';
 import { PrequizAnswer } from './PrequizAnswer';
 import { PrequizQuestion } from './PrequizQuestion';
-import { User } from '../User';
-import { Course } from '../Course';
 
 @Entity()
 export class PrequizUserAnswer {

@@ -1,5 +1,5 @@
 
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { UserCourseStatsView } from '../models/views/UserCourseStatsView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
@@ -114,7 +114,7 @@ export class UserStatsService {
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
-            .innerJoin(Course, x => x
+            .innerJoin(CourseData, x => x
                 .on('id', '=', 'courseId', CourseLearningStatsView)
                 .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')

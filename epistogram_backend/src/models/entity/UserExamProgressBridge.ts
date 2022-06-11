@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { Exam } from './exam/Exam';
+import { ExamData } from './exam/ExamData';
 import { User } from './User';
 
 @Entity()
@@ -24,6 +24,6 @@ export class UserExamProgressBridge {
     examId: number;
 
     @JoinColumn({ name: 'exam_id' })
-    @ManyToOne(_ => Exam, x => x.userProgressBridges)
-    exam: Relation<Exam>;
+    @ManyToOne(_ => ExamData, x => x.userProgressBridges)
+    exam: Relation<ExamData>;
 }

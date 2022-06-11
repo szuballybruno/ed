@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
 import { ModuleDTO } from '../shared/dtos/ModuleDTO';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
@@ -122,7 +122,7 @@ export class PlayerService extends ServiceBase {
 
         // get course 
         const course = await this._ormService
-            .query(Course, { courseId })
+            .query(CourseData, { courseId })
             .allowDeleted()
             .where('id', '=', 'courseId')
             .getSingle();

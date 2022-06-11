@@ -1,5 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { DiscountCode } from '../models/entity/DiscountCode';
 import { ShopItem } from '../models/entity/ShopItem';
 import { ShopItemCategory } from '../models/entity/ShopItemCategory';
@@ -202,14 +202,14 @@ export class ShopService {
     async getPrivateCourseListAsync() {
 
         const courses = await this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .createQueryBuilder('co')
             .leftJoinAndSelect('co.coverFile', 'cf')
             .where('co.visibility = \'private\'')
             .getMany();
 
         return this._mapperService
-            .mapMany(Course, CourseShopItemListDTO, courses);
+            .mapMany(CourseData, CourseShopItemListDTO, courses);
     }
 
     async saveShopItemAsync(dto: ShopItemEditDTO, coverFile?: UploadedFile) {

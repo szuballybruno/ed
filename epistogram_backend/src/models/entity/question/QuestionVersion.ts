@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { XJoinColumn, XManyToOne, XOneToMany } from "../../../services/XORM/XORMDecorators";
-import { Answer } from "../Answer";
+import { AnswerVersion } from "../answer/AnswerVersion";
 import { ExamVersion } from "../exam/ExamVersion";
 import { GivenAnswer } from "../GivenAnswer";
 import { VideoVersion } from "../video/VideoVersion";
@@ -16,8 +16,8 @@ export class QuestionVersion {
     //
 
     // answers
-    @XOneToMany<QuestionVersion>()(Answer, x => x.questionVersions)
-    answers: Answer[];
+    @XOneToMany<QuestionVersion>()(AnswerVersion, x => x.questionVersion)
+    answerVersions: AnswerVersion[];
 
     // given answers
     @XOneToMany<QuestionVersion>()(GivenAnswer, x => x.questionVersions)

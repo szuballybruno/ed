@@ -1,14 +1,14 @@
-import { Answer } from '../../models/entity/Answer';
+import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
 import { Company } from '../../models/entity/Company';
-import { Course } from '../../models/entity/Course';
+import { CourseData } from '../../models/entity/course/CourseData';
 import { CourseCategory } from '../../models/entity/CourseCategory';
-import { Module } from '../../models/entity/module/Module';
+import { ModuleData } from '../../models/entity/module/ModuleData';
 import { DailyTip } from '../../models/entity/DailyTip';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
-import { Exam } from '../../models/entity/exam/Exam';
+import { ExamData } from '../../models/entity/exam/ExamData';
 import { JobTitle } from '../../models/entity/JobTitle';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { Question } from '../../models/entity/question/Question';
@@ -17,7 +17,7 @@ import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { User } from '../../models/entity/User';
-import { Video } from '../../models/entity/video/Video';
+import { VideoData } from '../../models/entity/video/VideoData';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
@@ -138,7 +138,7 @@ const marray = [
         .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
 
     epistoMappingsBuilder
-        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: Video, sessionId: number, maxWatchedSeconds: number) => ({
+        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: VideoData, sessionId: number, maxWatchedSeconds: number) => ({
             id: video.id,
             courseId: video.courseId,
             subTitle: video.subtitle,
@@ -273,7 +273,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Module, ModuleDetailedDTO, courseModule => ({
+        .addMap(ModuleData, ModuleDetailedDTO, courseModule => ({
             id: courseModule.id,
             name: courseModule.name,
             description: courseModule.description,
@@ -283,7 +283,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Module, ModuleAdminEditDTO, courseModule => ({
+        .addMap(ModuleData, ModuleAdminEditDTO, courseModule => ({
             id: courseModule.id,
             name: courseModule.name,
             description: courseModule.description,
@@ -606,7 +606,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Video, CourseItemDTO, (video, state: CourseItemStateType) => {
+        .addMap(VideoData, CourseItemDTO, (video, state: CourseItemStateType) => {
 
             return {
                 id: video.id,
@@ -621,7 +621,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(Exam, CourseItemDTO, (exam, state: CourseItemStateType) => {
+        .addMap(ExamData, CourseItemDTO, (exam, state: CourseItemStateType) => {
 
             return {
                 id: exam.id,
@@ -636,16 +636,16 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(Course, CourseItemListDTO, course => {
+        .addMap(CourseData, CourseItemListDTO, course => {
 
             navPropNotNull(course.videos);
             navPropNotNull(course.exams);
 
             const videoCourseItemDTOs = mapperService
-                .mapMany(Video, CourseItemDTO, course.videos);
+                .mapMany(VideoData, CourseItemDTO, course.videos);
 
             const examCourseItemDTOs = mapperService
-                .mapMany(Exam, CourseItemDTO, course.exams);
+                .mapMany(ExamData, CourseItemDTO, course.exams);
 
             const courseItemDTOs = videoCourseItemDTOs
                 .concat(examCourseItemDTOs)
@@ -721,7 +721,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(Video, VideoEditDTO, video => {
+        .addMap(VideoData, VideoEditDTO, video => {
 
             return {
                 id: video.id,
@@ -768,7 +768,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(Exam, ExamEditDataDTO, exam => {
+        .addMap(ExamData, ExamEditDataDTO, exam => {
 
             return {
                 id: exam.id,
@@ -857,13 +857,13 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(Course, CourseBriefData, course => ({
+        .addMap(CourseData, CourseBriefData, course => ({
             id: course.id,
             title: course.title
         }));
 
     mapperService
-        .addMap(Course, CourseShopItemListDTO, course => ({
+        .addMap(CourseData, CourseShopItemListDTO, course => ({
             id: course.id,
             title: course.title,
             coverImagePath: course.coverFile
@@ -1145,7 +1145,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
     } as SignupDataDTO;
 };
 
-export const toAnswerDTO = (a: Answer) => {
+export const toAnswerDTO = (a: AnswerData) => {
 
     return {
         answerId: a.id,
@@ -1153,7 +1153,7 @@ export const toAnswerDTO = (a: Answer) => {
     } as AnswerDTO;
 };
 
-export const toAnswerEditDTO = (a: Answer) => {
+export const toAnswerEditDTO = (a: AnswerData) => {
 
     return {
         id: a.id,

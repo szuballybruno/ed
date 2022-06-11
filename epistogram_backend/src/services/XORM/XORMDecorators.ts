@@ -1,6 +1,6 @@
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
-import { JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from 'typeorm';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
@@ -36,7 +36,7 @@ export const XOneToMany = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
         classType: ClassType<TRelationEntity>,
-        getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity): PropertyDecorator => {
+        getRelationProp: (relationEntity: TRelationEntity) => Relation<TCurrentEntity> | TCurrentEntity | null): PropertyDecorator => {
 
         return OneToMany((() => classType) as any, getRelationProp);
     }

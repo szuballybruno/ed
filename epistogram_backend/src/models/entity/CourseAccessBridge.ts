@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { getJoinColumnName } from '../../utilities/helpers';
 import { Company } from './Company';
-import { Course } from './Course';
+import { Course } from './course/Course';
 import { User } from './User';
 
 @Entity()

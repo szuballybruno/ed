@@ -1,7 +1,7 @@
-import { Course } from '../models/entity/Course';
-import { Exam } from '../models/entity/exam/Exam';
+import { CourseData } from '../models/entity/course/CourseData';
+import { ExamData } from '../models/entity/exam/ExamData';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
-import { Video } from '../models/entity/video/Video';
+import { VideoData } from '../models/entity/video/VideoData';
 import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
@@ -143,7 +143,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const courseBridge = await this._ormService
             .query(UserCourseBridge, { userId })
-            .leftJoin(Course, x => x
+            .leftJoin(CourseData, x => x
                 .on('id', '=', 'courseId', UserCourseBridge)
                 .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
@@ -225,14 +225,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         // unset user current course item
         const item = isExam
             ? await this._ormService
-                .getSingleById(Exam, examId!)
+                .getSingleById(ExamData, examId!)
 
             : await this._ormService
-                .getSingleById(Video, videoId!);
+                .getSingleById(VideoData, videoId!);
 
         const currentItemDTO = isExam
-            ? this._mapperService.map(Exam, CourseItemDTO, item)
-            : this._mapperService.map(Video, CourseItemDTO, item);
+            ? this._mapperService.map(ExamData, CourseItemDTO, item)
+            : this._mapperService.map(VideoData, CourseItemDTO, item);
 
         const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? 'exam' : 'video');
 

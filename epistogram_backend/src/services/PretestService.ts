@@ -1,5 +1,5 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { Exam } from '../models/entity/exam/Exam';
+import { ExamData } from '../models/entity/exam/ExamData';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
@@ -39,7 +39,7 @@ export class PretestService {
             title: '',
             type: 'pretest',
             subtitle: ''
-        } as Exam;
+        } as ExamData;
 
         await this._examService
             .createExamAsync(newExam);
@@ -55,7 +55,7 @@ export class PretestService {
 
         // pretest exam 
         const pretestExam = await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .findOneOrFail({
                 where: {
                     courseId,
@@ -132,7 +132,7 @@ export class PretestService {
     async getPretestExamIdAsync(courseId: number) {
 
         const exam = await this._ormService
-            .getRepository(Exam)
+            .getRepository(ExamData)
             .findOneOrFail({
                 where: {
                     courseId,

@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { CourseModeType, CourseStageNameType, TempomatModeType } from '../../shared/types/sharedTypes';
-import { Course } from './Course';
+import { Course } from './course/Course';
+import { CourseData } from './course/CourseData';
 import { User } from './User';
 
 @Entity()

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { User } from './User';
-import { Video } from './video/Video';
+import { VideoData } from './video/VideoData';
 
 @Entity()
 export class VideoRating {
@@ -18,9 +18,9 @@ export class VideoRating {
     @Column()
     videoId: number;
 
-    @ManyToOne(_ => Video, x => x.videoPlaybackSamples)
+    @ManyToOne(_ => VideoData, x => x.videoPlaybackSamples)
     @JoinColumn({ name: 'video_id' })
-    video: Relation<Video>;
+    video: Relation<VideoData>;
 
     // user
     @Column()

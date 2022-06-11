@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AnswerSessionType } from '../../shared/types/sharedTypes';
-import { Exam } from './exam/Exam';
+import { ExamData } from './exam/ExamData';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
-import { Video } from './video/Video';
+import { VideoData } from './video/VideoData';
 
 @Entity()
 export class AnswerSession {
@@ -29,17 +29,17 @@ export class AnswerSession {
     @Column({ nullable: true })
     examId: number | null;
 
-    @ManyToOne(_ => Exam, e => e.answerSessions)
+    @ManyToOne(_ => ExamData, e => e.answerSessions)
     @JoinColumn({ name: 'exam_id' })
-    exam: Exam | null;
+    exam: ExamData | null;
 
     // video 
     @Column({ nullable: true })
     videoId: number | null;
 
-    @ManyToOne(_ => Video, e => e.answerSessions)
+    @ManyToOne(_ => VideoData, e => e.answerSessions)
     @JoinColumn({ name: 'video_id' })
-    video: Video | null;
+    video: VideoData | null;
 
     // user 
     @Column({ nullable: true })

@@ -1,5 +1,5 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { RegistrationType } from '../models/Types';
@@ -354,7 +354,7 @@ export class UserService {
         // TODO permissions
 
         const connectedCourses = await this._ormService
-            .getRepository(Course)
+            .getRepository(CourseData)
             .find({
                 where: {
                     teacherId: deletedUserId

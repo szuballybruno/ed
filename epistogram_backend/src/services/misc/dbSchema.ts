@@ -1,7 +1,7 @@
 import { ActivationCode } from '../../models/entity/ActivationCode';
 import { ActivitySession } from '../../models/entity/ActivitySession';
 import { ActivityStreak } from '../../models/entity/ActivityStreak';
-import { Answer } from '../../models/entity/Answer';
+import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { AnswerGivenAnswerBridge } from '../../models/entity/AnswerGivenAnswerBridge';
 import { AnswerSession } from '../../models/entity/AnswerSession';
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
@@ -13,10 +13,10 @@ import { RolePermissionBridge } from '../../models/entity/authorization/RolePerm
 import { CoinTransaction } from '../../models/entity/CoinTransaction';
 import { Comment } from '../../models/entity/Comment';
 import { Company } from '../../models/entity/Company';
-import { Course } from '../../models/entity/Course';
+import { CourseData } from '../../models/entity/course/CourseData';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../../models/entity/CourseCategory';
-import { Module } from '../../models/entity/module/Module';
+import { ModuleData } from '../../models/entity/module/ModuleData';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from '../../models/entity/courseRating/CourseRatingQuestionUserAnswer';
@@ -24,7 +24,7 @@ import { DailyTip } from '../../models/entity/DailyTip';
 import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
-import { Exam } from '../../models/entity/exam/Exam';
+import { ExamData } from '../../models/entity/exam/ExamData';
 import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
 import { Group } from '../../models/entity/Group';
@@ -47,7 +47,7 @@ import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
 import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
-import { Video } from '../../models/entity/video/Video';
+import { VideoData } from '../../models/entity/video/VideoData';
 import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
@@ -177,14 +177,14 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
         .add(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
         .add(getAnswerSessionSeedData, [getUserSeedData], AnswerSession)
-        .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], Course)
-        .add(getModuleSeedData, [getCourseSeedData], Module)
+        .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
+        .add(getModuleSeedData, [getCourseSeedData], ModuleData)
         .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
-        .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], Video)
+        .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], VideoData)
         .add(getCommentsSeedData, [getVideoSeedData, getUserSeedData], Comment)
-        .add(getExamSeedData, [getModuleSeedData, getCourseSeedData], Exam)
+        .add(getExamSeedData, [getModuleSeedData, getCourseSeedData], ExamData)
         .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], Question)
-        .add(getAnswersSeed, [getSeedQuestions], Answer)
+        .add(getAnswersSeed, [getSeedQuestions], AnswerData)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
@@ -335,20 +335,20 @@ export const createDBSchema = (): XDBMSchemaType => {
 
         entities: [
             ActivationCode,
-            Course,
+            CourseData,
             Group,
             CourseCategory,
-            Exam,
+            ExamData,
             Company,
             User,
-            Video,
+            VideoData,
             PermissionAssignmentBridge,
             Task,
             GivenAnswer,
             CompanyOwnerBridge,
             AnswerGivenAnswerBridge,
             Question,
-            Answer,
+            AnswerData,
             StorageFile,
             AnswerSession,
             VideoPlaybackSample,
@@ -368,7 +368,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             DailyTipOccurrence,
             QuestionType,
             UserSessionActivity,
-            Module,
+            ModuleData,
             CoinTransaction,
             GivenAnswerStreak,
             ActivitySession,

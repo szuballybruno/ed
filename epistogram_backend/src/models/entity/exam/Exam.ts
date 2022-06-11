@@ -1,6 +1,7 @@
-import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../../services/XORM/XORMDecorators';
-import { ExamType } from '../../../shared/types/sharedTypes';
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { UserSessionActivity } from '../UserSessionActivity';
+import { ExamVersion } from './ExamVersion';
 
 @Entity()
 export class Exam {
@@ -8,28 +9,11 @@ export class Exam {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @IsDeletedFlag()
-    @DeleteDateColumn()
-    deletionDate: Date | null;
+    // exam versions
+    @XOneToMany<Exam>()(ExamVersion, x => x.exam)
+    examVersions: ExamVersion[];
 
-    @Column()
-    title: string;
-
-    @Column()
-    type: ExamType;
-
-    @Column({ type: 'text', nullable: true })
-    subtitle: string | null;
-
-    @Column({ type: 'text', nullable: true })
-    description: string | null;
-
-    @Column({ type: 'text', nullable: true })
-    thumbnailUrl: string | null;
-
-    @Column({ type: 'int', nullable: true })
-    orderIndex: number | null;
-
-    @Column({ type: 'integer', nullable: true })
-    retakeLimit: number | null;
+    // user session activity
+    @XOneToMany<ExamVersion>()(UserSessionActivity, x => x.exam)
+    userSessionActivities: UserSessionActivity[];
 }
