@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/react';
-import { Avatar, Checkbox, Divider } from '@mui/material';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import {Flex} from '@chakra-ui/react';
+import {Avatar, Checkbox, Divider} from '@mui/material';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
     useComments,
     useCreateComment,
@@ -8,49 +8,35 @@ import {
     useDeleteLike,
     useUpdateComment
 } from '../../../services/api/commentApiService';
-import { useShowErrorDialog } from '../../../services/core/notifications';
-import { CommentCreateDTO } from '../../../shared/dtos/CommentCreateDTO';
-import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
-import { PagingType } from '../../../static/frontendHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
-import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
-import { CommentAnswerEntry } from './CommentAnswerEntry';
-import { CommentItem } from './CommentItem';
+import {useShowErrorDialog} from '../../../services/core/notifications';
+import {CommentCreateDTO} from '../../../shared/dtos/CommentCreateDTO';
+import {CommentListDTO} from '../../../shared/dtos/CommentListDTO';
+import {PagingType} from '../../../static/frontendHelpers';
+import {translatableTexts} from '../../../static/translatableTexts';
+import {CurrentUserContext} from '../../system/AuthenticationFrame';
+import {UnderVideoInfoFrame} from '../watch/UnderVideoInfoFrame';
+import {CommentAnswerEntry} from './CommentAnswerEntry';
+import {CommentItem} from './CommentItem';
+import {EpistoFont} from '../../controls/EpistoFont';
 
 const Comments = (props: {
     currentItemCode: string
     paging: PagingType<string>
 }) => {
 
-    const { currentItemCode, paging } = props;
+    const {currentItemCode, paging} = props;
 
     const user = useContext(CurrentUserContext);
     const showErrorDialog = useShowErrorDialog();
 
     const [currentReplyCommentId, setCurrentReplyCommentId] = useState<number | null>(null);
-    const [currentReplyThreadId, setCurrentReplyThreadId] = useState<number | null>(null);
     const [currentReplyUserFullName, setCurrentReplyUserFullName] = useState<string | null>(null);
 
-    const { comments, commentsState, commentsError, refetchComments } = useComments(currentItemCode);
-    const { createCommentAsync, createCommentState } = useCreateComment();
-    const { updateCommentAsync } = useUpdateComment();
-    const { createLikeAsync, createLikeState } = useCreateLike();
-    const { deleteLikeAsync, deleteLikeState } = useDeleteLike();
-
-
-    const threads = () => {
-        console.log('threads2 ', comments);
-        const groups: number[] = [];
-        const commentGroups: CommentListDTO[] = [];
-        comments.forEach((comment) => {
-            if (!groups.includes(comment.groupId)) {
-                groups.push(comment.groupId);
-                commentGroups.push(comment);
-            }
-        });
-        return comments;
-    };
+    const {comments, commentsState, commentsError, refetchComments} = useComments(currentItemCode);
+    const {createCommentAsync, createCommentState} = useCreateComment();
+    const {updateCommentAsync} = useUpdateComment();
+    const {createLikeAsync, createLikeState} = useCreateLike();
+    const {deleteLikeAsync, deleteLikeState} = useDeleteLike();
 
     const handleCreateNewComment = async (
         replyToCommentId: number | null,
@@ -81,7 +67,7 @@ const Comments = (props: {
     const handleCreateLike = async (commentId: number) => {
 
         try {
-            await createLikeAsync({ commentId: commentId });
+            await createLikeAsync({commentId: commentId});
             await refetchComments();
         } catch (e) {
             showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
@@ -91,7 +77,7 @@ const Comments = (props: {
     const handleDeleteLike = async (commentId: number) => {
 
         try {
-            await deleteLikeAsync({ commentId: commentId });
+            await deleteLikeAsync({commentId: commentId});
             await refetchComments();
         } catch (e) {
             showErrorDialog(translatableTexts.registrationPage.unknownErrorTryAgain);
@@ -102,23 +88,19 @@ const Comments = (props: {
 
         if (comment.parentCommentId) {
             setCurrentReplyCommentId(comment.parentCommentId);
-        }
+        } else {
 
-        else {
-
-            setCurrentReplyCommentId(comment.id);
+            setCurrentReplyCommentId(comment.commentId);
         }
         setCurrentReplyUserFullName(comment.fullName);
-        setCurrentReplyThreadId(comment.threadId);
     };
 
     const handleEditComment = async (commentText: string, commentId: number): Promise<void> => {
 
-        const comment = comments.find((comment) => comment.id == commentId) as CommentListDTO;
+        const comment = comments.find((comment) => comment.commentId == commentId) as CommentListDTO;
 
         const updatedComment: CommentListDTO = {
             ...comment,
-            id: commentId,
             commentText,
         };
 
@@ -134,7 +116,6 @@ const Comments = (props: {
         <UnderVideoInfoFrame
             title='Kommentek & Kérdések'
             paging={paging}>
-            >
             <EpistoFont
                 style={{
                     margin: '50px 0 10px 0',
@@ -149,21 +130,21 @@ const Comments = (props: {
                 handleCreateNewComment={handleCreateNewComment}
                 currentReplyCommentId={null}
                 currentReplyUserFullName={currentReplyUserFullName}
-                setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
+                setCurrentReplyUserFullName={setCurrentReplyUserFullName}/>
 
 
             <Divider
                 variant="fullWidth"
                 style={{
                     margin: '10px 0 20px 0'
-                }} />
+                }}/>
 
             <Flex
                 direction='column'
             >
                 {
 
-                    threads()
+                    comments
                         .map((comment, index) => (
                                 <>
                                     <CommentItem
@@ -172,17 +153,7 @@ const Comments = (props: {
                                         handleAnswerComment={handleAnswerComment}
                                         handleCreateLike={handleCreateLike}
                                         handleDeleteLike={handleDeleteLike}
-                                        key={index} />
-
-                                    {
-                                        currentReplyCommentId
-                                        && currentReplyThreadId === comment.threadId
-                                        && <CommentAnswerEntry
-                                            handleCreateNewComment={handleCreateNewComment}
-                                            currentReplyCommentId={currentReplyCommentId}
-                                            currentReplyUserFullName={currentReplyUserFullName}
-                                            setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
-                                    }
+                                        key={index}/>
                                 </>
                             )
                         )

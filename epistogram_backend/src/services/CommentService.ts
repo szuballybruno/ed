@@ -71,7 +71,7 @@ export class CommentService extends QueryServiceBase<Comment> {
 
         const commentAddToGroup = await this
             ._ormService
-            .query(Comment, { commentId: comment.id })
+            .query(Comment, { commentId: comment.commentId })
             .where('id', '=', 'commentId')
             .getOneOrNull();
 
@@ -95,15 +95,12 @@ export class CommentService extends QueryServiceBase<Comment> {
 
         const userComments = await this
             ._ormService
-            .getRepository(CommentListView)
-            .createQueryBuilder('clv')
-            .where('clv.videoId = :videoId', { videoId })
-            .andWhere('clv.currentUserId = :currentUserId', { currentUserId: currentUserId.toSQLValue() })
-            .distinctOn(['clv.groupId'])
+            .query(CommentListView, { videoId })
+            .where('videoId', '=', 'videoId')
             .getMany();
 
         return this
             ._mapperService
-            .mapMany(CommentListView, CommentListDTO, userComments);
+            .mapTo(CommentListDTO, [userComments]);
     };
 }

@@ -175,6 +175,26 @@ const marray = [
                             }))
                     };
                 });
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(CommentListDTO, () => (commentList: CommentListView[]) => {
+
+            const mapToDTO = (comment: CommentListView, childComments?: CommentListDTO[]): CommentListDTO => ({
+               ...comment,
+                childComments,
+            });
+
+            return commentList
+                .filter((comment) => !comment.parentCommentId)
+                .map((parentComment) => {
+
+                    const childComments = commentList
+                        .filter((comment) => parentComment.commentId === comment.commentId)
+                        .map((comment) => mapToDTO(comment));
+
+                    return mapToDTO(parentComment, childComments);
+                })
         })
 ] as const;
 
@@ -236,25 +256,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 lagBehindPercentage: stats.lagBehindPercentage,
                 previsionedCompletionDate: stats.previsionedCompletionDate,
                 tempomatMode: stats.tempomatMode,
-            };
-        });
-
-    mapperService
-        .addMap(CommentListView, CommentListDTO, (comment) => {
-
-            return {
-                id: comment.id,
-                userId: comment.userId,
-                threadId: comment.threadId,
-                fullName: comment.fullName,
-                commentText: comment.commentText,
-                creationDate: comment.creationDate,
-                parentCommentId: comment.parentCommentId,
-                avatarUrl: comment.avatarUrl,
-                commentLikeCount: comment.commentLikeCount,
-                isCurrentUserLikedComment: comment.isLike,
-                isQuestion: comment.isQuestion,
-                groupId: comment.groupId,
             };
         });
 

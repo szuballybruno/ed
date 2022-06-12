@@ -9,15 +9,11 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
+    commentId: number;
 
     @ViewColumn()
     @XViewColumn()
     videoId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    threadId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -53,13 +49,9 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    isLike: boolean;
+    currentUserLiked: boolean;
 
     @ViewColumn()
     @XViewColumn()
     isQuestion: boolean;
-
-    @ViewColumn()
-    @XViewColumn()
-    groupId: number;
 }
