@@ -108,7 +108,7 @@ jobs:
           echo FRONTEND_DOMAIN = run.app >> config/config.env
           echo ENVIRONMENT_NAME = demo >> config/config.env
           echo HOST_PORT = 5000 >> config/config.env
-          echo JWT_SIGN_SECRET = adsasdsd >> config/config.env
+          echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> config/config.env
           echo IS_HOSTED_ON_GCP = true >> config/config.env
           echo IS_LOCALHOST = false >> config/config.env
           echo VIDEO_COMPLETED_PERCENTAGE = 5 >> config/config.env
@@ -116,16 +116,16 @@ jobs:
           echo FILE_STORAGE_URL = https://storage.googleapis.com/epistogram_bucket_demo >> config/config.env
           echo FILE_STORAGE_BUCKET_NAME = epistogram_bucket_demo >> config/config.env
           echo \# ---- mail >> config/config.env
-          echo MAIL_TOKEN_SECRET = AROWILLSAVETHEMAIL >> config/config.env
+          echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> config/config.env
           echo MAIL_HOST = smtp.sendgrid.net >> config/config.env
-          echo MAIL_SENDER_MAIL = apikey >> config/config.env
-          echo MAIL_SENDER_PASSWORD = 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 >> config/config.env
+          echo MAIL_SENDER_MAIL = ${{secrets.MAIL_SENDER_MAIL}} >> config/config.env
+          echo MAIL_SENDER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> config/config.env
           echo \# ---- database >> config/config.env
           echo DB_NAME = epistogram_DEMO >> config/config.env
-          echo DB_HOST_ADDRESS = 34.118.107.79 >> config/config.env
-          echo DB_PORT = 5432 >> config/config.env
-          echo DB_SERVICE_USER_NAME = dev_service_user >> config/config.env
-          echo DB_SERVICE_USER_PASSWORD = epistogram >> config/config.env
+          echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> config/config.env
+          echo DB_PORT = ${{secrets.DB_PORT}} >> config/config.env
+          echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> config/config.env
+          echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> config/config.env
           echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
           echo IS_DANGEROUS_DB_PURGE_ENABLED = true >> config/config.env
         working-directory: ./epistogram_backend

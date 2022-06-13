@@ -31,7 +31,7 @@ export type EnvConfigBaseType = {
     database: {
         DB_NAME: string;
         DB_HOST_ADDRESS: string;
-        DB_PORT: number;
+        DB_PORT: string;
         DB_SERVICE_USER_NAME: string;
         DB_SERVICE_USER_PASSWORD: string;
         DB_IS_ORM_LOGGING_ENABLED: boolean;
@@ -49,6 +49,25 @@ export type EnvConfigBaseType = {
 export type EnvConfigType = EnvConfigBaseType & {
     GEN_ENV_SCRIPT: string;
 };
+
+const getSecret = (key: string) => '${{secrets.' + key + '}}';
+
+const secrets = {
+
+    // misc
+    JWT_SIGN_SECRET: getSecret('JWT_SIGN_SECRET'),
+
+    // mail
+    MAIL_TOKEN_SECRET: getSecret('MAIL_TOKEN_SECRET'),
+    MAIL_SENDER_MAIL: getSecret('MAIL_SENDER_MAIL'),
+    MAIL_SENDER_PASSWORD: getSecret('MAIL_SENDER_PASSWORD'),
+
+    // DB
+    DB_HOST_ADDRESS: getSecret('DB_HOST_ADDRESS'),
+    DB_PORT: getSecret('DB_PORT'),
+    DB_SERVICE_USER_NAME: getSecret('DB_SERVICE_USER_NAME'),
+    DB_SERVICE_USER_PASSWORD: getSecret('DB_SERVICE_USER_PASSWORD'),
+}
 
 const getBaseConfig = (
     branchName: BranchNameType,
@@ -69,7 +88,7 @@ const getBaseConfig = (
             FRONTEND_DOMAIN: 'run.app',
             ENVIRONMENT_NAME: envName,
             HOST_PORT: 5000,
-            JWT_SIGN_SECRET: 'adsasdsd',
+            JWT_SIGN_SECRET: secrets.JWT_SIGN_SECRET, // 'adsasdsd',
             IS_HOSTED_ON_GCP: true,
             IS_LOCALHOST: false,
             VIDEO_COMPLETED_PERCENTAGE: 5,
@@ -81,18 +100,18 @@ const getBaseConfig = (
         },
 
         mail: {
-            MAIL_TOKEN_SECRET: 'AROWILLSAVETHEMAIL',
+            MAIL_TOKEN_SECRET: secrets.MAIL_TOKEN_SECRET, //'AROWILLSAVETHEMAIL',
             MAIL_HOST: 'smtp.sendgrid.net',
-            MAIL_SENDER_MAIL: 'apikey',
-            MAIL_SENDER_PASSWORD: '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',
+            MAIL_SENDER_MAIL: secrets.MAIL_SENDER_MAIL, // 'apikey',
+            MAIL_SENDER_PASSWORD: secrets.MAIL_SENDER_PASSWORD, // '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',
         },
 
         database: {
             DB_NAME: `epistogram_${envName.toUpperCase()}`,
-            DB_HOST_ADDRESS: '34.118.107.79',
-            DB_PORT: 5432,
-            DB_SERVICE_USER_NAME: 'dev_service_user',
-            DB_SERVICE_USER_PASSWORD: 'epistogram',
+            DB_HOST_ADDRESS: secrets.DB_HOST_ADDRESS, //'34.118.107.79',
+            DB_PORT: secrets.DB_PORT, //5432,
+            DB_SERVICE_USER_NAME: secrets.DB_SERVICE_USER_NAME, // 'dev_service_user',
+            DB_SERVICE_USER_PASSWORD: secrets.DB_SERVICE_USER_PASSWORD, // 'epistogram',
             DB_IS_ORM_LOGGING_ENABLED: true,
             IS_DANGEROUS_DB_PURGE_ENABLED: false,
         }
@@ -135,7 +154,7 @@ export const localConfig = getBaseConfig('local', 'local', 'local', config => {
 
     config.database.DB_NAME = 'localhostDB';
     config.database.DB_HOST_ADDRESS = 'localhost';
-    config.database.DB_PORT = 7000;
+    config.database.DB_PORT = '7000';
     config.database.DB_SERVICE_USER_PASSWORD = 'admin';
     config.database.DB_IS_ORM_LOGGING_ENABLED = false;
 });
