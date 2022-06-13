@@ -1,8 +1,8 @@
-import { QuestionData } from '../models/entity/question/QuestionData';
-import { toAnswerEditDTO } from '../services/misc/mappings';
+import { QuestionEditDataView } from '../models/views/QuestionEditDataView';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { QuestionService } from '../services/QuestionService';
+import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
@@ -43,21 +43,29 @@ export class QuestionController {
             .getQuery()
             .getValue(x => x.questionId, 'int');
 
-        const question = await this._ormService
-            .getRepository(QuestionData)
-            .createQueryBuilder('q')
-            .leftJoinAndSelect('q.answers', 'qa')
-            .where('q.id = :questionId', { questionId })
-            .getOneOrFail();
+        const questions = await this._ormService
+            .query(QuestionEditDataView, { questionId })
+            .where('questionId', '=', 'questionId')
+            .getMany();
+
+        const questionGroup = questions
+            .groupBy(x => x.questionId)
+            .single(x => true);
 
         return {
-            videoId: question.videoId,
-            examId: question.examId,
-            questionId: question.id,
-            questionText: question.questionText,
-            questionShowUpTimeSeconds: question.showUpTimeSeconds,
-            typeId: question.typeId,
-            answers: (question.answers ?? []).map(x => toAnswerEditDTO(x))
+            videoId: questionGroup.first.videoId,
+            examId: questionGroup.first.examId,
+            questionId: questionGroup.first.questionId,
+            questionText: questionGroup.first.questionText,
+            questionShowUpTimeSeconds: questionGroup.first.showUpTimeSeconds,
+            typeId: questionGroup.first.typeId,
+            answers: questionGroup
+                .items
+                .map((a): AnswerEditDTO => ({
+                    id: a.answerId,
+                    isCorrect: a.answerIsCorrect,
+                    text: a.answerText
+                }))
         } as QuestionEditDataDTO;
     };
 

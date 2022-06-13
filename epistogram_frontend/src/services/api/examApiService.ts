@@ -55,20 +55,6 @@ export const useDeleteExam = () => {
     };
 };
 
-export const useCreateExam = () => {
-
-    const qr = usePostDataUnsafe<CreateExamDTO, IdResultDTO>(apiRoutes.exam.createExam);
-
-    return {
-        createExamAsync: (moduleId: number) => qr.postDataAsync({
-            moduleId,
-            subtitle: '',
-            title: ''
-        }),
-        createExamState: qr.state,
-    };
-};
-
 export const useSaveExam = () => {
 
     const qr = usePostDataUnsafe<ExamEditDataDTO, void>(apiRoutes.exam.saveExam);

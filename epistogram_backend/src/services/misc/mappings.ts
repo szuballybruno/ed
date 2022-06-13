@@ -1153,15 +1153,6 @@ export const toAnswerDTO = (a: AnswerData) => {
     } as AnswerDTO;
 };
 
-export const toAnswerEditDTO = (a: AnswerData) => {
-
-    return {
-        id: a.id,
-        isCorrect: a.isCorrect,
-        text: a.text
-    } as AnswerEditDTO;
-};
-
 export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
 
     return {

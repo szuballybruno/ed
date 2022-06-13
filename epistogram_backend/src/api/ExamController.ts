@@ -94,41 +94,6 @@ export class ExamController {
             .saveExamAsync(dto.data);
     };
 
-    @XControllerAction(apiRoutes.exam.createExam, { isPost: true })
-    createExamAction = async (params: ActionParams) => {
-
-        const dto = params
-            .getBody<CreateExamDTO>(['moduleId', 'subtitle', 'title'])
-            .data;
-
-        const course = await this._ormService
-            .getRepository(CourseData)
-            .createQueryBuilder('c')
-            .leftJoinAndSelect('c.videos', 'v')
-            .leftJoinAndSelect('c.exams', 'e')
-            .leftJoinAndSelect('c.modules', 'm')
-            .where('m.id = :moduleId', { moduleId: dto.moduleId })
-            .getOneOrFail();
-
-        const courseItemsLength = course.videos.length + course.exams.length;
-
-        const newExam = {
-            courseId: course.id,
-            moduleId: dto.moduleId,
-            title: dto.title,
-            subtitle: dto.subtitle,
-            orderIndex: courseItemsLength
-        } as ExamData;
-
-        await this._ormService
-            .getRepository(ExamData)
-            .insert(newExam);
-
-        return {
-            id: newExam.id
-        } as IdResultDTO;
-    };
-
     @XControllerAction(apiRoutes.exam.deleteExam, { isPost: true })
     deleteExamAction = async (params: ActionParams) => {
 
