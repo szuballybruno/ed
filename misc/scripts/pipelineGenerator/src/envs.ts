@@ -1,0 +1,142 @@
+
+type BranchNameType = 'local' | 'main' | 'demo' | 'dev';
+type EnvNameType = 'local' | 'prod' | 'demo' | 'dev';
+type DomainPrefixType = 'local' | 'app' | 'demo' | 'dev';
+
+export type EnvConfigBaseType = {
+
+    misc: {
+        FRONTEND_URL: string;
+        FRONTEND_DOMAIN: string;
+        ENVIRONMENT_NAME: string;
+        HOST_PORT: number;
+        JWT_SIGN_SECRET: string;
+        IS_HOSTED_ON_GCP: boolean;
+        IS_LOCALHOST: boolean;
+        VIDEO_COMPLETED_PERCENTAGE: number;
+    },
+
+    fileStorage: {
+        FILE_STORAGE_URL: string;
+        FILE_STORAGE_BUCKET_NAME: string;
+    },
+
+    mail: {
+        MAIL_TOKEN_SECRET: string;
+        MAIL_HOST: string;
+        MAIL_SENDER_MAIL: string;
+        MAIL_SENDER_PASSWORD: string;
+    },
+
+    database: {
+        DB_NAME: string;
+        DB_HOST_ADDRESS: string;
+        DB_PORT: number;
+        DB_SERVICE_USER_NAME: string;
+        DB_SERVICE_USER_PASSWORD: string;
+        DB_IS_ORM_LOGGING_ENABLED: boolean;
+        IS_DANGEROUS_DB_PURGE_ENABLED: boolean;
+    },
+
+    gcp: {
+        BACKEND_URL: string;
+        BRANCH_NAME: BranchNameType;
+        MIN_INSTANCE_COUNT: number;
+        IS_UNDER_MAINTENANCE: boolean;
+    }
+};
+
+export type EnvConfigType = EnvConfigBaseType & {
+    GEN_ENV_SCRIPT: string;
+};
+
+const getBaseConfig = (
+    branchName: BranchNameType,
+    domainPrefix: DomainPrefixType,
+    envName: EnvNameType,
+    override: (config: EnvConfigBaseType) => void): EnvConfigBaseType => {
+
+    const config = ({
+        gcp: {
+            BRANCH_NAME: branchName,
+            BACKEND_URL: `api.${domainPrefix}.epistogram.com`,
+            MIN_INSTANCE_COUNT: 0,
+            IS_UNDER_MAINTENANCE: false,
+        },
+
+        misc: {
+            FRONTEND_URL: `https://${domainPrefix}.epistogram.com`,
+            FRONTEND_DOMAIN: 'run.app',
+            ENVIRONMENT_NAME: envName,
+            HOST_PORT: 5000,
+            JWT_SIGN_SECRET: 'adsasdsd',
+            IS_HOSTED_ON_GCP: true,
+            IS_LOCALHOST: false,
+            VIDEO_COMPLETED_PERCENTAGE: 5,
+        },
+
+        fileStorage: {
+            FILE_STORAGE_URL: `https://storage.googleapis.com/epistogram_bucket_${envName}`,
+            FILE_STORAGE_BUCKET_NAME: `epistogram_bucket_${envName}`,
+        },
+
+        mail: {
+            MAIL_TOKEN_SECRET: 'AROWILLSAVETHEMAIL',
+            MAIL_HOST: 'smtp.sendgrid.net',
+            MAIL_SENDER_MAIL: 'apikey',
+            MAIL_SENDER_PASSWORD: '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',
+        },
+
+        database: {
+            DB_NAME: `epistogram_${envName.toUpperCase()}`,
+            DB_HOST_ADDRESS: '34.118.107.79',
+            DB_PORT: 5432,
+            DB_SERVICE_USER_NAME: 'dev_service_user',
+            DB_SERVICE_USER_PASSWORD: 'epistogram',
+            DB_IS_ORM_LOGGING_ENABLED: true,
+            IS_DANGEROUS_DB_PURGE_ENABLED: false,
+        }
+    });
+
+    override(config);
+
+    return config;
+};
+
+export const environemnts: EnvConfigBaseType[] = [
+
+    // prod
+    getBaseConfig('main', 'app', 'prod', config => {
+
+        config.gcp.MIN_INSTANCE_COUNT = 1;
+    }),
+
+    // demo
+    getBaseConfig('demo', 'demo', 'demo', config => {
+
+        config.database.IS_DANGEROUS_DB_PURGE_ENABLED = true;
+    }),
+
+    // dev
+    getBaseConfig('dev', 'dev', 'dev', config => {
+
+        config.database.IS_DANGEROUS_DB_PURGE_ENABLED = true;
+    })
+];
+
+export const localConfig = getBaseConfig('local', 'local', 'local', config => {
+
+    config.database.IS_DANGEROUS_DB_PURGE_ENABLED = true;
+
+    config.misc.FRONTEND_URL = 'http://localhost:3000';
+
+    config.misc.IS_HOSTED_ON_GCP = false;
+    config.misc.IS_LOCALHOST = true;
+
+    config.database.DB_NAME = 'localhostDB';
+    config.database.DB_HOST_ADDRESS = 'localhost';
+    config.database.DB_PORT = 7000;
+    config.database.DB_SERVICE_USER_PASSWORD = 'admin';
+    config.database.DB_IS_ORM_LOGGING_ENABLED = false;
+});
+
