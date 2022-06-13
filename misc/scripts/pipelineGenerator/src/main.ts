@@ -42,12 +42,12 @@ const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string) => 
 
     const echo = (line: string, op: '>' | '>>' = '>>') => `echo ${line} ${op} ${configPath}`;
 
-    return echo('# ---- CONFIG FILE ---', '>') + '\n' + Object
+    return echo('\\# ---- CONFIG FILE ---', '>') + '\n' + Object
         .keys(environemnt)
         .flatMap(groupKey => {
 
-            const groupComment = `\n@REM ${groupKey}\n`;
-            const groupCommentEcho = echo(`# ---- ${groupKey}`) + '\n';
+            const groupComment = `\n\\@REM ${groupKey}\n`;
+            const groupCommentEcho = echo(`\\# ---- ${groupKey}`) + '\n';
 
             return groupComment + groupCommentEcho + Object
                 .keys(environemnt[groupKey])
