@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { EnvConfigBaseType, EnvConfigType, environemnts, localConfig } from './envs';
+import { EnvConfigBaseType, environemnts, localConfig } from './envs';
 
 const replaceAll = (str: string, find: string, replace: string) => {
 
@@ -29,14 +29,9 @@ const isGenc = process.argv.some(x => x === '--genc');
 const rootDir = __dirname;
 const pipelineTemplateFilePath = rootDir + "/../template/pipelineTemplate.yml";
 const outputDirectoryPath = rootDir + "/../../../../.github/workflows";
-const backendConfigEnvPath = rootDir + "/../../../../epistogram_backend/config.env";
+const backendConfigEnvPath = rootDir + "/../../../../epistogram_backend/config/config.env";
 const localConfigGenOutDir = rootDir + "/../out/configGen.bat";
 const pipelineText = fs.readFileSync(pipelineTemplateFilePath, 'utf8');
-
-// clear out dir
-removeAllFilesInFolder(outputDirectoryPath);
-
-const getOutPipelinePath = (branchName: string) => `${outputDirectoryPath}/${branchName}_pipeline.yml`;
 
 const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string, indent: string) => {
 
@@ -65,6 +60,11 @@ if (isGenc) {
 
 // gen pipelines
 else {
+
+    const getOutPipelinePath = (branchName: string) => `${outputDirectoryPath}/${branchName}_pipeline.yml`;
+
+    // clear out dir
+    removeAllFilesInFolder(outputDirectoryPath);
 
     const envGroupKeys = Object
         .keys(environemnts[0]);

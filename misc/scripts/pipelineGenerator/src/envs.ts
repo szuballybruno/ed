@@ -152,9 +152,13 @@ export const localConfig = getBaseConfig('local', 'local', 'local', config => {
     config.misc.IS_HOSTED_ON_GCP = false;
     config.misc.IS_LOCALHOST = true;
 
+    config.fileStorage.FILE_STORAGE_BUCKET_NAME = 'epistogram_bucket_dev';
+    config.fileStorage.FILE_STORAGE_URL = 'https://storage.googleapis.com/epistogram_bucket_dev';
+
     config.database.DB_NAME = 'localhostDB';
     config.database.DB_HOST_ADDRESS = 'localhost';
     config.database.DB_PORT = '7000';
+    config.database.DB_SERVICE_USER_NAME = 'dev_service_user';
     config.database.DB_SERVICE_USER_PASSWORD = 'admin';
     config.database.DB_IS_ORM_LOGGING_ENABLED = false;
 });
