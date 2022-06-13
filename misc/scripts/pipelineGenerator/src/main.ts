@@ -38,20 +38,20 @@ removeAllFilesInFolder(outputDirectoryPath);
 
 const getOutPipelinePath = (branchName: string) => `${outputDirectoryPath}/${branchName}_pipeline.yml`;
 
-const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string) => {
+const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string, indent: string) => {
 
     const echo = (line: string, op: '>' | '>>' = '>>') => `echo ${line} ${op} ${configPath}`;
 
-    return echo('\\# ---- CONFIG FILE ---', '>') + '\n' + Object
+    return indent + echo('\\# ---- CONFIG FILE ---', '>') + '\n' + Object
         .keys(environemnt)
         .flatMap(groupKey => {
 
-            const groupComment = `\n\\@REM ${groupKey}\n`;
-            const groupCommentEcho = echo(`\\# ---- ${groupKey}`) + '\n';
+            const groupComment = indent + `\n\\@REM ${groupKey}\n`;
+            const groupCommentEcho = indent + echo(`\\# ---- ${groupKey}`) + '\n';
 
             return groupComment + groupCommentEcho + Object
                 .keys(environemnt[groupKey])
-                .map(key => echo(`${key} = ${environemnt[groupKey][key]}`))
+                .map(key => indent + echo(`${key} = ${environemnt[groupKey][key]}`))
                 .join('\n')
         })
         .join('\n');
@@ -60,7 +60,7 @@ const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string) => 
 // gen local config
 if (isGenc) {
 
-    const localScript = getSetEnvScript(localConfig, backendConfigEnvPath);
+    const localScript = getSetEnvScript(localConfig, backendConfigEnvPath, '');
     writeFile(localConfigGenOutDir, localScript);
 }
 
@@ -81,7 +81,7 @@ else {
             let replaced = pipelineText;
 
             replaceValues
-                .concat([['$GEN_ENV_SCRIPT$', getSetEnvScript(environemnt, 'config/config.env')]])
+                .concat([['$GEN_ENV_SCRIPT$', getSetEnvScript(environemnt, 'config/config.env', '          ')]])
                 .forEach(x => {
 
                     const [tag, value] = x;
