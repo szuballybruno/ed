@@ -20,7 +20,7 @@ RUN npx tsc
 # copy runtime dependnecy files, 
 # note, these are not built and copied to the /build
 # folder by the compiler, since these are not source files. 
-COPY config.env ./config.env
+COPY /config ./config
 COPY /src/emails ./build/emails
 COPY /src/sql ./build/sql
 
