@@ -94,15 +94,15 @@ jobs:
       - name: Generate config.env file
         run: |
           echo \# ---- CONFIG FILE --- > config/config.env
-          
-\@REM gcp
+
+          \@REM gcp
           echo \# ---- gcp >> config/config.env
           echo BRANCH_NAME = demo >> config/config.env
           echo BACKEND_URL = api.demo.epistogram.com >> config/config.env
           echo MIN_INSTANCE_COUNT = 0 >> config/config.env
           echo IS_UNDER_MAINTENANCE = false >> config/config.env
-          
-\@REM misc
+
+          \@REM misc
           echo \# ---- misc >> config/config.env
           echo FRONTEND_URL = https://demo.epistogram.com >> config/config.env
           echo FRONTEND_DOMAIN = run.app >> config/config.env
@@ -112,20 +112,20 @@ jobs:
           echo IS_HOSTED_ON_GCP = true >> config/config.env
           echo IS_LOCALHOST = false >> config/config.env
           echo VIDEO_COMPLETED_PERCENTAGE = 5 >> config/config.env
-          
-\@REM fileStorage
+
+          \@REM fileStorage
           echo \# ---- fileStorage >> config/config.env
           echo FILE_STORAGE_URL = https://storage.googleapis.com/epistogram_bucket_demo >> config/config.env
           echo FILE_STORAGE_BUCKET_NAME = epistogram_bucket_demo >> config/config.env
-          
-\@REM mail
+
+          \@REM mail
           echo \# ---- mail >> config/config.env
           echo MAIL_TOKEN_SECRET = AROWILLSAVETHEMAIL >> config/config.env
           echo MAIL_HOST = smtp.sendgrid.net >> config/config.env
           echo MAIL_SENDER_MAIL = apikey >> config/config.env
           echo MAIL_SENDER_PASSWORD = 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 >> config/config.env
-          
-\@REM database
+
+          \@REM database
           echo \# ---- database >> config/config.env
           echo DB_NAME = epistogram_DEMO >> config/config.env
           echo DB_HOST_ADDRESS = 34.118.107.79 >> config/config.env

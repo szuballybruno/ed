@@ -46,7 +46,7 @@ const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string, ind
         .keys(environemnt)
         .flatMap(groupKey => {
 
-            const groupComment = indent + `\n\\@REM ${groupKey}\n`;
+            const groupComment = `\n${indent}\\@REM ${groupKey}\n`;
             const groupCommentEcho = indent + echo(`\\# ---- ${groupKey}`) + '\n';
 
             return groupComment + groupCommentEcho + Object
