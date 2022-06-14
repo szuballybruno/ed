@@ -163,6 +163,13 @@ import { Course } from '../../models/entity/course/Course';
 import { getCourseSeedData } from '../../sql/seed/seed_courses';
 import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
 import { CourseVersion } from '../../models/entity/course/CourseVersion';
+import { ExamVersion } from '../../models/entity/exam/ExamVersion';
+import { Exam } from '../../models/entity/exam/Exam';
+import { AnswerVersion } from '../../models/entity/answer/AnswerVersion';
+import { Answer } from '../../models/entity/answer/Answer';
+import { VideoFile } from '../../models/entity/video/VideoFile';
+import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
+import { Question } from '../../models/entity/question/Question';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -198,14 +205,14 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getModuleDatasSeedData, [getCourseDatasSeedData], ModuleData)
         .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
         .add(getCourseVersionsSeedData, [getCourseDatasSeedData, getCourseSeedData], CourseVersion)
-        .add(getVideoDataSeedData, [getCourseDatasSeedData, getModuleDatasSeedData, getStorageFileSeedData], VideoData)
+        .add(getVideoDataSeedData, [getStorageFileSeedData], VideoData)
         .add(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
         .add(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
         .add(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
         .add(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
-        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseDatasSeedData], CourseAccessBridge)
+        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
-        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseDatasSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
+        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
         .build();
 
     const seedScripts = injector
@@ -352,8 +359,21 @@ export const createDBSchema = (): XDBMSchemaType => {
         ],
 
         entities: [
+            VideoVersion,
+            Video,
+            ExamVersion,
+            Exam,
+            ModuleVersion,
+            Module,
+            CourseVersion,
+            Course,
+            AnswerVersion,
+            Answer,
+            QuestionVersion,
+            Question,
             ActivationCode,
             CourseData,
+            VideoFile,
             Group,
             CourseCategory,
             ExamData,

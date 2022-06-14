@@ -1,11 +1,12 @@
 
 import { ModuleVersion } from '../../models/entity/module/ModuleVersion';
 import { getSeedList } from '../../services/sqlServices/SeedService';
+import { CourseVersionsSeedDataType } from './seed_course_versions';
 import { ModulesSeedDataType } from './seed_modules';
 import { ModuleDatasSeedDataType } from './seed_module_datas';
 
 export const getModuleVersionsSeedData = (
-    courseVersions: any,
+    courseVersions: CourseVersionsSeedDataType,
     moduleDatas: ModuleDatasSeedDataType,
     modules: ModulesSeedDataType
     ) => getSeedList<ModuleVersion>()({
@@ -17,13 +18,13 @@ export const getModuleVersionsSeedData = (
     },
     
     module_version_4: {
-        courseVersionId: courseVersions.course_version_10.id,
+        courseVersionId: courseVersions.course_version_cyber.id,
         moduleDataId: moduleDatas.module_data_4.id,
         moduleId: modules.module_4.id
     },
     
     module_version_2: {
-        courseVersionId: courseVersions.course_version_4.id,
+        courseVersionId: courseVersions.course_version_canva.id,
         moduleDataId: moduleDatas.module_data_2.id,
         moduleId: modules.module_2.id
     },
@@ -107,49 +108,49 @@ export const getModuleVersionsSeedData = (
     },
     
     module_version_45: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_45.id,
         moduleId: modules.module_45.id
     },
     
     module_version_47: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_47.id,
         moduleId: modules.module_47.id
     },
     
     module_version_48: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_48.id,
         moduleId: modules.module_48.id
     },
     
     module_version_49: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_49.id,
         moduleId: modules.module_49.id
     },
     
     module_version_50: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_50.id,
         moduleId: modules.module_50.id
     },
     
     module_version_51: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_51.id,
         moduleId: modules.module_51.id
     },
     
     module_version_52: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_52.id,
         moduleId: modules.module_52.id
     },
     
     module_version_53: {
-        courseVersionId: courseVersions.course_version_28.id,
+        courseVersionId: courseVersions.course_version_word.id,
         moduleDataId: moduleDatas.module_data_53.id,
         moduleId: modules.module_53.id
     },

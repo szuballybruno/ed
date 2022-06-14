@@ -17,7 +17,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'module',
         description: 'description',
         orderIndex: 0,
-        courseId: courses.course_10.id,
         imageFileId: null
     },
     module_data_2: {
@@ -25,7 +24,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Bevezetés az Excelbe',
         description: 'Excel tanfolyamunk első moduljában az alapvető fogalmakkal, a menürendszerrel, valamint a kezelőszervekkel ismerkedhetsz meg.',
         orderIndex: 0,
-        courseId: courses.course_4.id,
         imageFileId: null
     },
     module_data_3: {
@@ -33,7 +31,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'OBS használata percek alatt',
         description: 'Ebben a modulban megtanulhatod, hogyan állítsd be villámgyorsan az OBS-t úgy, hogy hatékony erőforrás-kezelés mellett is csúcsminőségű felvételeket tudj készíteni, és akkor se érjen probléma, ha esetleg közben valamiért megszakadna a videó.',
         orderIndex: 0,
-        courseId: courses.course_obs.id,
         imageFileId: null
     },
     module_data_7: {
@@ -41,7 +38,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Finomságok az OBS-el',
         description: 'Zajszűrés, hangeffektek, az OBS-nek ez sem jelent problémát!',
         orderIndex: 1,
-        courseId: courses.course_obs.id,
         imageFileId: null
     },
     module_data_8: {
@@ -49,7 +45,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Első felvételünk, vizsga',
         description: 'Készítsd el első felvételed OBS-el!',
         orderIndex: 2,
-        courseId: courses.course_obs.id,
         imageFileId: null
     },
     module_data_35: {
@@ -57,7 +52,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Első lépések',
         description: '',
         orderIndex: 0,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_36: {
@@ -65,7 +59,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Ismerkedés a függvényekkel',
         description: '',
         orderIndex: 1,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_37: {
@@ -73,7 +66,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'A formázás alapjai',
         description: '',
         orderIndex: 2,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_38: {
@@ -81,7 +73,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Leggyakoribb függvények és azok használata',
         description: '',
         orderIndex: 3,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_39: {
@@ -89,7 +80,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Segítség az adatkezelésben',
         description: '',
         orderIndex: 4,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_40: {
@@ -97,7 +87,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Munka másokkal',
         description: '',
         orderIndex: 5,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_41: {
@@ -105,7 +94,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Formázás felsőfokon',
         description: '',
         orderIndex: 6,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_42: {
@@ -113,7 +101,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Munka nagy mennyiségű adattal',
         description: '',
         orderIndex: 7,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_43: {
@@ -121,7 +108,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Kreatív adatábrázolás',
         description: '',
         orderIndex: 8,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_44: {
@@ -129,7 +115,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Ismerkedés a haladó funkciókkal',
         description: '',
         orderIndex: 9,
-        courseId: courses.course_excel.id,
         imageFileId: null
     },
     module_data_45: {
@@ -137,7 +122,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Első lépések',
         description: '',
         orderIndex: 0,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_47: {
@@ -145,7 +129,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Formázás - Hogyan készíthetünk letisztult dokumentumokat?',
         description: '',
         orderIndex: 1,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_48: {
@@ -153,7 +136,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Gyorsabb munka a gyakorlatban',
         description: '',
         orderIndex: 2,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_49: {
@@ -161,7 +143,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Munka másokkal, dokumentumunk védelme',
         description: '',
         orderIndex: 3,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_50: {
@@ -169,7 +150,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Szövegírás, elrendezés, ellenőrzés',
         description: '',
         orderIndex: 4,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_51: {
@@ -177,7 +157,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Képek, vizuális eszközök használata',
         description: '',
         orderIndex: 5,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_52: {
@@ -185,7 +164,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Táblázatok a Wordben',
         description: '',
         orderIndex: 6,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_53: {
@@ -193,7 +171,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Példák a gyakorlati alkalmazásra',
         description: '',
         orderIndex: 7,
-        courseId: courses.course_28.id,
         imageFileId: null
     },
     module_data_54: {
@@ -201,7 +178,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Első lépések',
         description: '',
         orderIndex: 0,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
     module_data_55: {
@@ -209,7 +185,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Szöveg és tartalom formázása',
         description: '',
         orderIndex: 1,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
     module_data_56: {
@@ -217,7 +192,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Képek, vizuális eszközök használata',
         description: '',
         orderIndex: 2,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
     module_data_57: {
@@ -225,7 +199,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Videók és hanganyagok használata a PowerPointon belül',
         description: '',
         orderIndex: 3,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
     module_data_58: {
@@ -233,7 +206,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Prezentáció rendszerezése, segítség az előadás során',
         description: '',
         orderIndex: 4,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
     module_data_59: {
@@ -241,7 +213,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Prezentáció további testreszabása és effektusok',
         description: '',
         orderIndex: 5,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
     module_data_60: {
@@ -249,7 +220,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         name: 'Tartalom ellenőrzése és közös munka',
         description: '',
         orderIndex: 6,
-        courseId: courses.course_powerPoint.id,
         imageFileId: null
     },
 });

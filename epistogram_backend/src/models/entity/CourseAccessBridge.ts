@@ -13,7 +13,6 @@ export class CourseAccessBridge {
     // course
     @Column()
     courseId: number;
-
     @ManyToOne(_ => Course, course => course.userAccessBridges)
     @JoinColumn({ name: 'course_id' })
     course: Relation<Course>;
@@ -21,7 +20,6 @@ export class CourseAccessBridge {
     // user 
     @Column({ type: 'int', nullable: true })
     userId: number | null;
-
     @ManyToOne(_ => User, x => x.courseAccessBridges)
     @JoinColumn(getJoinColumnName(CourseAccessBridge, 'userId'))
     user: Relation<User>;
@@ -29,7 +27,6 @@ export class CourseAccessBridge {
     // company 
     @Column({ type: 'int', nullable: true })
     companyId: number | null;
-
     @ManyToOne(_ => Company, x => x.courseAccessBridges)
     @JoinColumn(getJoinColumnName(CourseAccessBridge, 'companyId'))
     company: Relation<Company>;

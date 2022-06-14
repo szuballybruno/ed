@@ -1,13 +1,13 @@
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
-import { CourseDatasSeedDataType } from './seed_course_datas';
+import { CourseSeedDataType } from './seed_courses';
 import { PermissionsSeedDataType } from './seed_permissions';
 import { UserSeedDataType } from './seed_users';
 
 export const getPermissionAssignmentBridgeSeedData = (
     companies: CompaniesSeedDataType,
-    courses: CourseDatasSeedDataType,
+    courses: CourseSeedDataType,
     permissionList: PermissionsSeedDataType,
     users: UserSeedDataType) => getSeedList<PermissionAssignmentBridge>()({
 
@@ -49,7 +49,7 @@ export const getPermissionAssignmentBridgeSeedData = (
             assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: null,
-            contextCourseId: courses.course_28.id,
+            contextCourseId: courses.course_word.id,
         },
         user_2_watch_comp_course_perm: {
             permissionId: permissionList.WATCH_COMPANY_COURSES.id,
@@ -65,7 +65,7 @@ export const getPermissionAssignmentBridgeSeedData = (
             assigneeUserId: users.almostGod.id,
             assigneeGroupId: null,
             contextCompanyId: null,
-            contextCourseId: courses.course_28.id,
+            contextCourseId: courses.course_word.id,
         },
         kovkrisz_access_app: {
             permissionId: permissionList.ACCESS_APPLICATION.id,
