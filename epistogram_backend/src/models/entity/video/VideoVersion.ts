@@ -36,7 +36,7 @@ export class VideoVersion {
     comments: Comment[];
 
     // answer sessions
-    @XOneToMany<VideoVersion>()(AnswerSession, as => as.videoVersion)
+    @XOneToMany<VideoVersion>()(AnswerSession, x => x.videoVersion)
     answerSessions: Relation<AnswerSession>[];
 
     // video playback samples 

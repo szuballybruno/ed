@@ -137,19 +137,19 @@ const marray = [
     epistoMappingsBuilder
         .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
 
-    epistoMappingsBuilder
-        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: VideoData, sessionId: number, maxWatchedSeconds: number) => ({
-            id: video.id,
-            courseId: video.courseId,
-            subTitle: video.subtitle,
-            title: video.title,
-            description: video.description,
-            thumbnailUrl: '',
-            url: assetUrlService.getAssetUrl(video.videoFile.filePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
-            questions: video.questions.map(q => toQuestionDTO(q)),
-            maxWatchedSeconds: maxWatchedSeconds,
-            videoPlaybackSessionId: sessionId
-        })),
+    // epistoMappingsBuilder
+    //     .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: VideoData, sessionId: number, maxWatchedSeconds: number) => ({
+    //         id: video.id,
+    //         courseId: video.courseId,
+    //         subTitle: video.subtitle,
+    //         title: video.title,
+    //         description: video.description,
+    //         thumbnailUrl: '',
+    //         url: assetUrlService.getAssetUrl(video.videoFile.filePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
+    //         questions: video.questions.map(q => toQuestionDTO(q)),
+    //         maxWatchedSeconds: maxWatchedSeconds,
+    //         videoPlaybackSessionId: sessionId
+    //     })),
 
     epistoMappingsBuilder
         .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {
@@ -257,13 +257,13 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             };
         });
 
-    mapperService
-        .addMap(QuestionData, QuestionEditDataDTO, question => ({
-            questionId: question.id,
-            questionText: question.questionText,
-            answers: question.answers
-                .map(answer => toAnswerEditDTO(answer))
-        }));
+    // mapperService
+    //     .addMap(QuestionData, QuestionEditDataDTO, question => ({
+    //         questionId: question.id,
+    //         questionText: question.questionText,
+    //         answers: question.answers
+    //             .map(answer => toAnswerEditDTO(answer))
+    //     }));
 
     mapperService
         .addMap(ModuleView, AdminModuleShortDTO, view => ({
@@ -635,26 +635,26 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             } as CourseItemDTO;
         });
 
-    mapperService
-        .addMap(CourseData, CourseItemListDTO, course => {
+    // mapperService
+    //     .addMap(CourseData, CourseItemListDTO, course => {
 
-            navPropNotNull(course.videos);
-            navPropNotNull(course.exams);
+    //         navPropNotNull(course.videos);
+    //         navPropNotNull(course.exams);
 
-            const videoCourseItemDTOs = mapperService
-                .mapMany(VideoData, CourseItemDTO, course.videos);
+    //         const videoCourseItemDTOs = mapperService
+    //             .mapMany(VideoData, CourseItemDTO, course.videos);
 
-            const examCourseItemDTOs = mapperService
-                .mapMany(ExamData, CourseItemDTO, course.exams);
+    //         const examCourseItemDTOs = mapperService
+    //             .mapMany(ExamData, CourseItemDTO, course.exams);
 
-            const courseItemDTOs = videoCourseItemDTOs
-                .concat(examCourseItemDTOs)
-                .orderBy(x => x.orderIndex);
+    //         const courseItemDTOs = videoCourseItemDTOs
+    //             .concat(examCourseItemDTOs)
+    //             .orderBy(x => x.orderIndex);
 
-            return {
-                courseItems: courseItemDTOs
-            } as CourseItemListDTO;
-        });
+    //         return {
+    //             courseItems: courseItemDTOs
+    //         } as CourseItemListDTO;
+    //     });
 
     mapperService
         .addMap(DailyTipView, DailyTipDTO, view => {
@@ -720,25 +720,25 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             } as CourseAdminListItemDTO;
         });
 
-    mapperService
-        .addMap(VideoData, VideoEditDTO, video => {
+    // mapperService
+    //     .addMap(VideoData, VideoEditDTO, video => {
 
-            return {
-                id: video.id,
-                title: video.title,
-                description: video.description,
-                subtitle: video.subtitle,
-                videoLengthSeconds: video.lengthSeconds,
+    //         return {
+    //             id: video.id,
+    //             title: video.title,
+    //             description: video.description,
+    //             subtitle: video.subtitle,
+    //             videoLengthSeconds: video.lengthSeconds,
 
-                questions: video
-                    .questions
-                    .map(x => toQuestionDTO(x)),
+    //             questions: video
+    //                 .questions
+    //                 .map(x => toQuestionDTO(x)),
 
-                videoFileUrl: video.videoFile
-                    ? getAssetUrl(video.videoFile.filePath)
-                    : null
-            } as VideoEditDTO;
-        });
+    //             videoFileUrl: video.videoFile
+    //                 ? getAssetUrl(video.videoFile.filePath)
+    //                 : null
+    //         } as VideoEditDTO;
+    //     });
 
     mapperService
         .addMap(TeacherInfo, TeacherInfoEditDTO, x => ({
@@ -767,41 +767,41 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             } as CourseItemDTO;
         });
 
-    mapperService
-        .addMap(ExamData, ExamEditDataDTO, exam => {
+    // mapperService
+    //     .addMap(ExamData, ExamEditDataDTO, exam => {
 
-            return {
-                id: exam.id,
-                title: exam.title,
-                courseId: exam.courseId,
-                subTitle: exam.subtitle,
-                isFinalExam: exam.type === 'final',
-                reatakeLimit: exam.retakeLimit,
-                questions: exam
-                    .questions
-                    .map(x => toQuestionDTO(x))
-            } as ExamEditDataDTO;
-        });
+    //         return {
+    //             id: exam.id,
+    //             title: exam.title,
+    //             courseId: exam.courseId,
+    //             subTitle: exam.subtitle,
+    //             isFinalExam: exam.type === 'final',
+    //             reatakeLimit: exam.retakeLimit,
+    //             questions: exam
+    //                 .questions
+    //                 .map(x => toQuestionDTO(x))
+    //         } as ExamEditDataDTO;
+    //     });
 
-    mapperService
-        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionData[]) => {
+    // mapperService
+    //     .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionData[]) => {
 
-            return {
-                id: exam.examId,
-                courseId: exam.courseId,
-                subTitle: exam.subtitle,
-                title: exam.title,
-                thumbnailUrl: exam.thumbnailUrl,
-                isFinalExam: exam.isFinalExam,
-                canTakeAgain: exam.canRetake,
-                correctAnswerCount: exam.correctAnswerCount,
-                correctAnswerRate: exam.correctAnswerRate,
-                isCompletedPreviously: exam.isCompletedPreviously,
-                totalQuestionCount: exam.totalQuestionCount,
-                questions: questions
-                    .map(x => toQuestionDTO(x)),
-            } as ExamPlayerDataDTO;
-        });
+    //         return {
+    //             id: exam.examId,
+    //             courseId: exam.courseId,
+    //             subTitle: exam.subtitle,
+    //             title: exam.title,
+    //             thumbnailUrl: exam.thumbnailUrl,
+    //             isFinalExam: exam.isFinalExam,
+    //             canTakeAgain: exam.canRetake,
+    //             correctAnswerCount: exam.correctAnswerCount,
+    //             correctAnswerRate: exam.correctAnswerRate,
+    //             isCompletedPreviously: exam.isCompletedPreviously,
+    //             totalQuestionCount: exam.totalQuestionCount,
+    //             questions: questions
+    //                 .map(x => toQuestionDTO(x)),
+    //         } as ExamPlayerDataDTO;
+    //     });
 
     mapperService
         .addMap(ShopItem, ShopItemAdminShortDTO, x => ({
@@ -1098,22 +1098,22 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
     } as ResultAnswerDTO;
 };
 
-export const toQuestionDTO = (q: QuestionData) => {
+// export const toQuestionDTO = (q: QuestionData) => {
 
-    navPropNotNull(q.answers);
+//     navPropNotNull(q.answers);
 
-    return {
-        questionId: q.id,
-        orderIndex: q.orderIndex,
-        questionText: q.questionText,
-        imageUrl: q.imageUrl,
-        showUpTimeSeconds: q.showUpTimeSeconds,
-        typeId: q.typeId,
-        answers: q.answers
-            .map(x => toAnswerDTO(x))
+//     return {
+//         questionId: q.id,
+//         orderIndex: q.orderIndex,
+//         questionText: q.questionText,
+//         imageUrl: q.imageUrl,
+//         showUpTimeSeconds: q.showUpTimeSeconds,
+//         typeId: q.typeId,
+//         answers: q.answers
+//             .map(x => toAnswerDTO(x))
 
-    } as QuestionDTO;
-};
+//     } as QuestionDTO;
+// };
 
 export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
 

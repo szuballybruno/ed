@@ -43,6 +43,7 @@ export function replaceAll(originalText: string, searchText: string, replaceText
 export const throwNotImplemented = () => {
 
     throw new Error('Not implemented!');
+    return {} as any;
 };
 
 export const toSQLSnakeCasing = (name: string) => {

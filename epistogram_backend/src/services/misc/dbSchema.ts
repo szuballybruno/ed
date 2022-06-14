@@ -44,7 +44,7 @@ import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
 import { User } from '../../models/entity/User';
 import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
-import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
+import { ExamCompletion } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
 import { VideoData } from '../../models/entity/video/VideoData';
@@ -146,7 +146,7 @@ import { getStorageFileSeedData } from '../../sql/seed/seed_storage_file';
 import { getTeacherInfoSeedData } from '../../sql/seed/seed_teacher_info';
 import { getTempomatAdjustmentValueSeedData } from '../../sql/seed/seed_tempomat_adjustment_values';
 import { getUserSeedData } from '../../sql/seed/seed_users';
-import { getVideoSeedData } from '../../sql/seed/seed_videos';
+import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
@@ -180,10 +180,10 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
         .add(getModuleSeedData, [getCourseSeedData], ModuleData)
         .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
-        .add(getVideoSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], VideoData)
-        .add(getCommentsSeedData, [getVideoSeedData, getUserSeedData], Comment)
+        .add(getVideoDataSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], VideoData)
+        .add(getCommentsSeedData, [getVideoDataSeedData, getUserSeedData], Comment)
         .add(getExamSeedData, [getModuleSeedData, getCourseSeedData], ExamData)
-        .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], QuestionData)
+        .add(getSeedQuestions, [getVideoDataSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], QuestionData)
         .add(getAnswersSeed, [getSeedQuestions], AnswerData)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
@@ -387,7 +387,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             CourseRatingQuestion,
             CourseRatingQuestionUserAnswer,
             UserVideoProgressBridge,
-            UserExamProgressBridge,
+            ExamCompletion,
             TempomatAdjustmentValue
         ],
     };

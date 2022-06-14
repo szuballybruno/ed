@@ -5,6 +5,7 @@ import { ActivitySession } from './ActivitySession';
 import { Exam } from './exam/Exam';
 import { ExamData } from './exam/ExamData';
 import { VideoData } from './video/VideoData';
+import { VideoVersion } from './video/VideoVersion';
 
 @Entity()
 export class UserSessionActivity {
@@ -20,11 +21,10 @@ export class UserSessionActivity {
 
     // video 
     @Column({ nullable: true })
-    videoId: number;
-
-    @ManyToOne(() => VideoData, v => v.questions)
-    @JoinColumn({ name: 'video_id' })
-    video: Relation<VideoData>;
+    videoVersionId: number;
+    @XManyToOne<UserSessionActivity>()(VideoVersion, x => x.userSessionActivities)
+    @XJoinColumn<UserSessionActivity>('videoVersionId')
+    videoVersion: Relation<VideoVersion>;
 
     // exam 
     @Column({ nullable: true })

@@ -4,7 +4,7 @@ import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
-import { getFullName } from '../utilities/helpers';
+import { getFullName, throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { EmailService } from './EmailService';
@@ -133,37 +133,38 @@ export class RegistrationService extends ServiceBase {
         firstName: string,
         lastName: string) => {
 
-        // verify public reg token
-        this._tokenService.verifyPublicRegistrationToken(publicRegToken);
+        return throwNotImplemented();
+        // // verify public reg token
+        // this._tokenService.verifyPublicRegistrationToken(publicRegToken);
 
-        // get new password 
-        const generatedPassword = this.getDefaultPassword();
+        // // get new password 
+        // const generatedPassword = this.getDefaultPassword();
 
-        // create user 
-        const user = await this._userService
-            .createUserAsync({
-                email,
-                firstName,
-                lastName,
-                registrationType: 'PublicRegistrationToken',
-                password: generatedPassword
-            });
+        // // create user 
+        // const user = await this._userService
+        //     .createUserAsync({
+        //         email,
+        //         firstName,
+        //         lastName,
+        //         registrationType: 'PublicRegistrationToken',
+        //         password: generatedPassword
+        //     });
 
-        const userId = user.id;
+        // const userId = user.id;
 
-        // send mail
-        await this._emailService
-            .sendSuccessfulRegistrationEmailAsync(user, generatedPassword);
+        // // send mail
+        // await this._emailService
+        //     .sendSuccessfulRegistrationEmailAsync(user, generatedPassword);
 
-        // get auth tokens 
-        const tokens = await this._authenticationService
-            .getUserLoginTokens(user);
+        // // get auth tokens 
+        // const tokens = await this._authenticationService
+        //     .getUserLoginTokens(user);
 
-        // set user current refresh token 
-        await this._userService
-            .setUserActiveRefreshToken(userId, tokens.refreshToken);
+        // // set user current refresh token 
+        // await this._userService
+        //     .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
-        return tokens;
+        // return tokens;
     };
 
     /**
@@ -229,37 +230,38 @@ export class RegistrationService extends ServiceBase {
         },
         noEmailNotification?: boolean) {
 
-        const email = options.email;
+        throwNotImplemented();
+        // const email = options.email;
 
-        // create invitation token
-        const invitationToken = this._tokenService
-            .createInvitationToken(email);
+        // // create invitation token
+        // const invitationToken = this._tokenService
+        //     .createInvitationToken(email);
 
-        // create user 
-        const createdUser = await this._userService
-            .createUserAsync({
-                email,
-                firstName: options.firstName,
-                lastName: options.lastName,
-                companyId: options.companyId,
-                roleId: options.roleId,
-                jobTitleId: options.jobTitleId,
-                registrationType: 'Invitation',
-                password: 'guest',
-                invitationToken,
-                isGod: options.isGod
-            });
+        // // create user 
+        // const createdUser = await this._userService
+        //     .createUserAsync({
+        //         email,
+        //         firstName: options.firstName,
+        //         lastName: options.lastName,
+        //         companyId: options.companyId,
+        //         roleId: options.roleId,
+        //         jobTitleId: options.jobTitleId,
+        //         registrationType: 'Invitation',
+        //         password: 'guest',
+        //         invitationToken,
+        //         isGod: options.isGod
+        //     });
 
-        // send email
-        if (!noEmailNotification) {
+        // // send email
+        // if (!noEmailNotification) {
 
-            log('Sending mail... to: ' + email);
+        //     log('Sending mail... to: ' + email);
 
-            await this._emailService
-                .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));
-        }
+        //     await this._emailService
+        //         .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));
+        // }
 
-        return { invitationToken, createdUser };
+        // return { invitationToken, createdUser };
     }
 
     /**

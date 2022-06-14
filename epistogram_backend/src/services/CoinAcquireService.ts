@@ -2,7 +2,7 @@ import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { ActivityStreakView } from '../models/views/ActivityStreakView';
 import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
-import { trimTimeFromDate } from '../utilities/helpers';
+import { throwNotImplemented, trimTimeFromDate } from '../utilities/helpers';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -64,25 +64,26 @@ export class CoinAcquireService {
      */
     acquireQuestionAnswerCoinsAsync = async (userId: number, givenAnswerId: number) => {
 
-        // do not reward user if the question is already answered 
-        // correctly and a coin is previously acquired for that 
-        const newGivenAnswer = await this._ormService
-            .getSingleById(GivenAnswer, givenAnswerId);
+        throwNotImplemented();
+        // // do not reward user if the question is already answered 
+        // // correctly and a coin is previously acquired for that 
+        // const newGivenAnswer = await this._ormService
+        //     .getSingleById(GivenAnswer, givenAnswerId);
 
-        const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
-            .getCoinsForQuestionAsync(userId, newGivenAnswer.questionId);
+        // const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
+        //     .getCoinsForQuestionAsync(userId, newGivenAnswer.questionId);
 
-        if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
-            return null;
+        // if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
+        //     return null;
 
-        // insert coin
-        await this._coinTransactionService
-            .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.questionCorrectAnswer, givenAnswerId });
+        // // insert coin
+        // await this._coinTransactionService
+        //     .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.questionCorrectAnswer, givenAnswerId });
 
-        return {
-            reason: 'correct_answer',
-            amount: this._coinRewardAmounts.questionCorrectAnswer
-        } as CoinAcquireResultDTO;
+        // return {
+        //     reason: 'correct_answer',
+        //     amount: this._coinRewardAmounts.questionCorrectAnswer
+        // } as CoinAcquireResultDTO;
     };
 
     /**

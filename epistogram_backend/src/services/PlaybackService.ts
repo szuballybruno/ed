@@ -2,11 +2,14 @@ import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSamp
 import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
 import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
 import { VideoData } from '../models/entity/video/VideoData';
+import { VideoFile } from '../models/entity/video/VideoFile';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { VideoProgressView } from '../models/views/VideoProgressView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
 import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
 import { PrincipalId } from '../utilities/ActionParams';
+import { throwNotImplemented } from '../utilities/helpers';
 import { CoinAcquireService } from './CoinAcquireService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -39,33 +42,34 @@ export class PlaybackService extends ServiceBase {
      */
     saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
 
-        const userId = principalId.toSQLValue();
-        const { videoPlaybackSessionId, videoItemCode, fromSeconds, toSeconds } = dto;
+        throwNotImplemented();
+        // const userId = principalId.toSQLValue();
+        // const { videoPlaybackSessionId, videoItemCode, fromSeconds, toSeconds } = dto;
 
-        // get videoId, check item code
-        const { itemId: videoId, itemType } = readItemCode(videoItemCode);
-        if (itemType !== 'video')
-            throw new Error('Current item is not of type: video!');
+        // // get videoId, check item code
+        // const { itemId: videoId, itemType } = readItemCode(videoItemCode);
+        // if (itemType !== 'video')
+        //     throw new Error('Current item is not of type: video!');
 
-        // handle sample merge
-        const { mergedSamples } = await this
-            ._handleSampleMerge(userId, videoId, videoPlaybackSessionId, fromSeconds, toSeconds);
+        // // handle sample merge
+        // const { mergedSamples } = await this
+        //     ._handleSampleMerge(userId, videoId, videoPlaybackSessionId, fromSeconds, toSeconds);
 
-        // handle video progress
-        const { isFirstCompletion } = await this
-            ._handleVideoProgressAsync(userId, videoId, toSeconds, mergedSamples);
+        // // handle video progress
+        // const { isFirstCompletion } = await this
+        //     ._handleVideoProgressAsync(userId, videoId, toSeconds, mergedSamples);
 
-        // save user activity of video watching
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'video', videoId);
+        // // save user activity of video watching
+        // await this._userSessionActivityService
+        //     .saveUserSessionActivityAsync(userId, 'video', videoId);
 
-        // get max watched seconds
-        const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
+        // // get max watched seconds
+        // const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoId);
 
-        return {
-            isWatchedStateChanged: isFirstCompletion,
-            maxWathcedSeconds
-        } as VideoSamplingResultDTO;
+        // return {
+        //     isWatchedStateChanged: isFirstCompletion,
+        //     maxWathcedSeconds
+        // } as VideoSamplingResultDTO;
     };
 
     /**
@@ -85,7 +89,7 @@ export class PlaybackService extends ServiceBase {
                 fromSeconds: fromSeconds,
                 toSeconds: toSeconds,
                 userId: principalId.toSQLValue(),
-                videoId: itemId,
+                videoVersionId: itemId,
                 videoPlaybackSessionId: videoPlaybackSessionId,
                 isForward: fromSeconds <= toSeconds
             });
@@ -144,53 +148,67 @@ export class PlaybackService extends ServiceBase {
             .andWhere("userId = :userId", { userId })
             .execute();
 
-        await this._ormService
-            .createMany(VideoPlaybackSample, mergedSamples
-                .map(x => ({
-                    creationDate: new Date(),
-                    fromSeconds: x.fromSeconds,
-                    toSeconds: x.toSeconds,
-                    userId,
-                    videoId,
-                    videoPlaybackSessionId
-                })));
+        throwNotImplemented();
+        // await this._ormService
+        //     .createMany(VideoPlaybackSample, mergedSamples
+        //         .map(x => ({
+        //             creationDate: new Date(),
+        //             fromSeconds: x.fromSeconds,
+        //             toSeconds: x.toSeconds,
+        //             userId,
+        //             videoId,
+        //             videoPlaybackSessionId
+        //         })));
     }
 
     private async _handleVideoProgressAsync(userId: number, videoId: number, toSeconds: number, mergedSamples: VideoPlaybackSample[]) {
 
+        throwNotImplemented();
         // calucate watched percent
-        const watchedPercent = await this
-            ._getVideoWatchedPercentAsync(videoId, mergedSamples);
+        // const watchedPercent = await this
+        //     ._getVideoWatchedPercentAsync(videoId, mergedSamples);
 
-        const isCompleted = watchedPercent > this._config.misc.videoCompletedPercentage;
-        const isCompletedBefore = await this._getVideoIsCompletedStateAsync(userId, videoId);
-        const isFirstCompletion = isCompleted && !isCompletedBefore;
-        const completionDate = isFirstCompletion ? new Date() : undefined;
+        // const isCompleted = watchedPercent > this._config.misc.videoCompletedPercentage;
+        // const isCompletedBefore = await this._getVideoIsCompletedStateAsync(userId, videoId);
+        // const isFirstCompletion = isCompleted && !isCompletedBefore;
+        // const completionDate = isFirstCompletion ? new Date() : undefined;
 
-        // save user video progress bridge
-        await this._saveUserVideoProgressBridgeAsync(userId, videoId, watchedPercent, toSeconds, completionDate);
+        // // save user video progress bridge
+        // await this._saveUserVideoProgressBridgeAsync(userId, videoId, watchedPercent, toSeconds, completionDate);
 
-        // if is watched state changed 
-        // reward user with episto coins
-        if (isFirstCompletion) {
+        // // if is watched state changed 
+        // // reward user with episto coins
+        // if (isFirstCompletion) {
 
-            await this._coinAcquireService
-                .acquireVideoWatchedCoinsAsync(userId, videoId);
-        }
+        //     await this._coinAcquireService
+        //         .acquireVideoWatchedCoinsAsync(userId, videoId);
+        // }
 
-        return { isFirstCompletion };
+        // return { isFirstCompletion };
     }
 
-    private async _getVideoWatchedPercentAsync(videoId: number, samples: VideoPlaybackSample[]) {
+    private async _getVideoWatchedPercentAsync(videoVersionId: number, samples: VideoPlaybackSample[]) {
 
         if (samples.length === 0)
             return 0;
 
+        type ResType = {
+            lengthSeconds: number;
+        }
+
         const video = await this._ormService
-            .getRepository(VideoData)
-            .createQueryBuilder('v')
-            .where('v.id = :videoId', { videoId })
-            .getOneOrFail();
+            .withResType<ResType>()
+            .query(VideoVersion, { videoVersionId })
+            .selectFrom(x => x
+                .columns(VideoFile, {
+                    lengthSeconds: 'lengthSeconds'
+                }))
+            .where('id', '=', 'videoVersionId')
+            .leftJoin(VideoData, x => x
+                .on('id', '=', 'videoVersionId'))
+            .leftJoin(VideoFile, x => x
+                .on('id', '=', 'videoFileId', VideoData))
+            .getSingle();
 
         if (video.lengthSeconds === 0)
             return 0;
@@ -204,12 +222,13 @@ export class PlaybackService extends ServiceBase {
 
     private async _getVideoPlaybackSamples(userId: number, videoId: number, videoPlaybackSessionId: number) {
 
-        return this._ormService
-            .query(VideoPlaybackSample, { userId, videoId, videoPlaybackSessionId })
-            .where('videoId', '=', 'videoId')
-            .and('userId', '=', 'userId')
-            .and('videoPlaybackSessionId', '=', 'videoPlaybackSessionId')
-            .getMany();
+        // return this._ormService
+        //     .query(VideoPlaybackSample, { userId, videoId, videoPlaybackSessionId })
+        //     .where('videoId', '=', 'videoId')
+        //     .and('userId', '=', 'userId')
+        //     .and('videoPlaybackSessionId', '=', 'videoPlaybackSessionId')
+        //     .getMany();
+        return throwNotImplemented();
     }
 
     private async _saveUserVideoProgressBridgeAsync(
@@ -219,38 +238,40 @@ export class PlaybackService extends ServiceBase {
         cursorSeconds: number,
         newCompletionDate?: Date) {
 
-        const pbd = await this._ormService
-            .query(UserVideoProgressBridge, { videoId, userId })
-            .where('videoId', '=', 'videoId')
-            .and('userId', '=', 'userId')
-            .getOneOrNull();
+        throwNotImplemented();
+        // const pbd = await this._ormService
+        //     .query(UserVideoProgressBridge, { videoId, userId })
+        //     .where('videoId', '=', 'videoId')
+        //     .and('userId', '=', 'userId')
+        //     .getOneOrNull();
 
-        // if already set, do not modify
-        // otherwise use the input param 
-        const completionDate = pbd?.completionDate
-            ? pbd.completionDate
-            : newCompletionDate;
+        // // if already set, do not modify
+        // // otherwise use the input param 
+        // const completionDate = pbd?.completionDate
+        //     ? pbd.completionDate
+        //     : newCompletionDate;
 
-        await this._ormService
-            .getRepository(UserVideoProgressBridge)
-            .save({
-                id: pbd?.id,
-                userId,
-                videoId,
-                completedPercentage,
-                completionDate,
-                cursorSeconds
-            });
+        // await this._ormService
+        //     .getRepository(UserVideoProgressBridge)
+        //     .save({
+        //         id: pbd?.id,
+        //         userId,
+        //         videoId,
+        //         completedPercentage,
+        //         completionDate,
+        //         cursorSeconds
+        //     });
     };
 
     private async _getVideoIsCompletedStateAsync(userId: number, videoId: number) {
 
-        const pbd = await this._ormService
-            .query(UserVideoProgressBridge, { userId, videoId })
-            .where('videoId', '=', 'videoId')
-            .and('userId', '=', 'userId')
-            .getOneOrNull();
+        throwNotImplemented();
+        // const pbd = await this._ormService
+        //     .query(UserVideoProgressBridge, { userId, videoId })
+        //     .where('videoId', '=', 'videoId')
+        //     .and('userId', '=', 'userId')
+        //     .getOneOrNull();
 
-        return !!pbd?.completionDate;
+        // return !!pbd?.completionDate;
     };
 }

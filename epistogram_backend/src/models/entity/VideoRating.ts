@@ -1,6 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XJoinColumn, XManyToOne } from '../../services/XORM/XORMDecorators';
 import { User } from './User';
 import { VideoData } from './video/VideoData';
+import { VideoVersion } from './video/VideoVersion';
 
 @Entity()
 export class VideoRating {
@@ -16,17 +18,15 @@ export class VideoRating {
 
     // video 
     @Column()
-    videoId: number;
-
-    @ManyToOne(_ => VideoData, x => x.videoPlaybackSamples)
-    @JoinColumn({ name: 'video_id' })
-    video: Relation<VideoData>;
+    videoVersionId: number;
+    @XManyToOne<VideoRating>()(VideoVersion, x => x.videoRatings)
+    @XJoinColumn<VideoRating>('videoVersionId')
+    videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
     userId: number;
-
-    @ManyToOne(_ => User, x => x.videoPlaybackSamples)
-    @JoinColumn({ name: 'user_id' })
+    @XManyToOne<VideoRating>()(User, x => x.videoRatings)
+    @XJoinColumn<VideoRating>('userId')
     user: Relation<User>;
 }

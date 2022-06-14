@@ -5,6 +5,7 @@ import { VideoData } from '../models/entity/video/VideoData';
 import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
+import { throwNotImplemented } from '../utilities/helpers';
 import { CourseItemsService } from './CourseItemsService';
 import { MapperService } from './MapperService';
 import { getItemCode } from './misc/encodeService';
@@ -220,66 +221,67 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {
 
-        const isExam = !!examId;
+        throwNotImplemented();
+        // const isExam = !!examId;
 
-        // unset user current course item
-        const item = isExam
-            ? await this._ormService
-                .getSingleById(ExamData, examId!)
+        // // unset user current course item
+        // const item = isExam
+        //     ? await this._ormService
+        //         .getSingleById(ExamData, examId!)
 
-            : await this._ormService
-                .getSingleById(VideoData, videoId!);
+        //     : await this._ormService
+        //         .getSingleById(VideoData, videoId!);
 
-        const currentItemDTO = isExam
-            ? this._mapperService.map(ExamData, CourseItemDTO, item)
-            : this._mapperService.map(VideoData, CourseItemDTO, item);
+        // const currentItemDTO = isExam
+        //     ? this._mapperService.map(ExamData, CourseItemDTO, item)
+        //     : this._mapperService.map(VideoData, CourseItemDTO, item);
 
-        const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? 'exam' : 'video');
+        // const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? 'exam' : 'video');
 
-        const courseId = item.courseId;
+        // const courseId = item.courseId;
 
-        const courseItemListDTO = await this._courseItemsService
-            .getCourseItemDTOs(courseId!);
+        // const courseItemListDTO = await this._courseItemsService
+        //     .getCourseItemDTOs(courseId!);
 
-        const prevIndex = courseItemListDTO
-            .courseItems
-            .findIndex(x => x.descriptorCode === currentItemDTO.descriptorCode) - 1;
+        // const prevIndex = courseItemListDTO
+        //     .courseItems
+        //     .findIndex(x => x.descriptorCode === currentItemDTO.descriptorCode) - 1;
 
-        const courseItemsWithoutCurrent = courseItemListDTO
-            .courseItems
-            .filter(x => x.descriptorCode !== currentItemDTO.descriptorCode);
+        // const courseItemsWithoutCurrent = courseItemListDTO
+        //     .courseItems
+        //     .filter(x => x.descriptorCode !== currentItemDTO.descriptorCode);
 
-        const previousCourseItem = prevIndex > 0
-            ? courseItemListDTO.courseItems[prevIndex - 1]
-            : courseItemsWithoutCurrent.length > 0
-                ? courseItemsWithoutCurrent[0]
-                : null;
+        // const previousCourseItem = prevIndex > 0
+        //     ? courseItemListDTO.courseItems[prevIndex - 1]
+        //     : courseItemsWithoutCurrent.length > 0
+        //         ? courseItemsWithoutCurrent[0]
+        //         : null;
 
-        // update bridges
-        const courseBridges = await this._ormService
-            .getRepository(UserCourseBridge)
-            .find({
-                where: {
-                    currentItemCode: currentItemCode,
-                    courseId: courseId!
-                }
-            });
+        // // update bridges
+        // const courseBridges = await this._ormService
+        //     .getRepository(UserCourseBridge)
+        //     .find({
+        //         where: {
+        //             currentItemCode: currentItemCode,
+        //             courseId: courseId!
+        //         }
+        //     });
 
-        courseBridges
-            .forEach(x => x.currentItemCode = previousCourseItem?.descriptorCode ?? null);
+        // courseBridges
+        //     .forEach(x => x.currentItemCode = previousCourseItem?.descriptorCode ?? null);
 
-        await this._ormService
-            .getRepository(UserCourseBridge)
-            .save(courseBridges);
+        // await this._ormService
+        //     .getRepository(UserCourseBridge)
+        //     .save(courseBridges);
 
-        // remove current course bridge
-        if (!previousCourseItem)
-            await this._ormService
-                .getOrmConnection()
-                .createQueryBuilder()
-                .delete()
-                .from(UserCourseBridge)
-                .where('courseId = :courseId', { courseId })
-                .execute();
+        // // remove current course bridge
+        // if (!previousCourseItem)
+        //     await this._ormService
+        //         .getOrmConnection()
+        //         .createQueryBuilder()
+        //         .delete()
+        //         .from(UserCourseBridge)
+        //         .where('courseId = :courseId', { courseId })
+        //         .execute();
     };
 }

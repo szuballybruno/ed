@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { ExamData } from './exam/ExamData';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XJoinColumn, XManyToOne } from '../../services/XORM/XORMDecorators';
+import { ExamVersion } from './exam/ExamVersion';
 import { User } from './User';
 
 @Entity()
-export class UserExamProgressBridge {
+export class ExamCompletion {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -14,16 +15,14 @@ export class UserExamProgressBridge {
     // user 
     @Column()
     userId: number;
-
-    @JoinColumn({ name: 'user_id' })
-    @ManyToOne(_ => User, x => x.examProgressBridges)
+    @XManyToOne<ExamCompletion>()(User, x => x.examProgressBridges)
+    @XJoinColumn<ExamCompletion>('userId')
     user: Relation<User>;
 
-    // video 
+    // exam version
     @Column()
-    examId: number;
-
-    @JoinColumn({ name: 'exam_id' })
-    @ManyToOne(_ => ExamData, x => x.userProgressBridges)
-    exam: Relation<ExamData>;
+    examVersionId: number;
+    @XManyToOne<ExamCompletion>()(ExamVersion, x => x.userProgressBridges)
+    @XJoinColumn<ExamCompletion>('examVersionId')
+    examVersion: Relation<ExamVersion>;
 }

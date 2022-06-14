@@ -20,7 +20,7 @@ export class VideoRatingService {
             .getRepository(VideoRating)
             .findOne({
                 where: {
-                    videoId: dto.videoId,
+                    videoVersionId: dto.videoId,
                     userId
                 }
             });
@@ -43,7 +43,7 @@ export class VideoRatingService {
             .getRepository(VideoRating)
             .findOne({
                 where: {
-                    videoId: dto.videoId,
+                    videoVersionId: dto.videoId,
                     userId
                 }
             });
@@ -67,7 +67,7 @@ export class VideoRatingService {
             .findOne({
                 where: {
                     userId,
-                    videoId
+                    videoVersionId: videoId
                 }
             });
 

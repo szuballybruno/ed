@@ -14,6 +14,7 @@ import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VideoService } from './VideoService';
+import { throwNotImplemented } from '../utilities/helpers';
 
 export class ModuleService {
 
@@ -85,14 +86,15 @@ export class ModuleService {
 
     createModuleAsync = async (dto: ModuleCreateDTO) => {
 
-        await this._ormService
-            .getRepository(ModuleData)
-            .insert({
-                courseId: dto.courseId,
-                name: dto.name,
-                orderIndex: dto.orderIndex,
-                description: ''
-            });
+        throwNotImplemented();
+        // await this._ormService
+        //     .getRepository(ModuleData)
+        //     .insert({
+        //         courseId: dto.courseId,
+        //         name: dto.name,
+        //         orderIndex: dto.orderIndex,
+        //         description: ''
+        //     });
     };
 
     getModuleEditDataAsync = async (moduleId: number) => {

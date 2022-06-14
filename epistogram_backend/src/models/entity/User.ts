@@ -23,7 +23,7 @@ import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
 import { Like } from './Like';
 import { UserCourseBridge } from './UserCourseBridge';
-import { UserExamProgressBridge } from './UserExamProgressBridge';
+import { ExamCompletion } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
@@ -142,7 +142,7 @@ export class User {
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
 
     // video seek events 
-    @XOneToMany<User>()(() => VideoSeekEvent, x => x.user)
+    @XOneToMany<User>()(VideoSeekEvent, x => x.user)
     @JoinColumn()
     videoSeekEvents: Relation<VideoSeekEvent>[];
 
@@ -208,8 +208,8 @@ export class User {
 
     // videoProgressBridges
     @JoinColumn()
-    @OneToMany(_ => UserExamProgressBridge, x => x.user)
-    examProgressBridges: Relation<UserExamProgressBridge>[];
+    @OneToMany(_ => ExamCompletion, x => x.user)
+    examProgressBridges: Relation<ExamCompletion>[];
 
     // role assingments
     @JoinColumn()

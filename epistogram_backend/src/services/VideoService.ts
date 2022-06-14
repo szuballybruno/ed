@@ -17,7 +17,7 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { QuestionData } from '../models/entity/question/QuestionData';
-import { withValue } from '../utilities/helpers';
+import { throwNotImplemented, withValue } from '../utilities/helpers';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { X509Certificate } from 'crypto';
 import { CourseController } from '../api/CourseController';
@@ -65,27 +65,28 @@ export class VideoService extends QueryServiceBase<VideoData> {
 
     insertVideoAsync = async (video: VideoData, filePath?: string) => {
 
-        if (video.id)
-            throw new Error('Cannot insert with id!');
+        throwNotImplemented();
+        // if (video.id)
+        //     throw new Error('Cannot insert with id!');
 
-        if (filePath) {
-            const videoFileUrl = this._assetUrlService
-                .getAssetUrl(filePath)!;
+        // if (filePath) {
+        //     const videoFileUrl = this._assetUrlService
+        //         .getAssetUrl(filePath)!;
 
-            video.videoFile = {
-                filePath: filePath
-            } as StorageFile;
+        //     video.videoFile = {
+        //         filePath: filePath
+        //     } as StorageFile;
 
-            video.lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
-        }
-        else {
+        //     video.lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+        // }
+        // else {
 
-            video.lengthSeconds = 0;
-        }
+        //     video.lengthSeconds = 0;
+        // }
 
-        await this._ormService
-            .getRepository(VideoData)
-            .save(video);
+        // await this._ormService
+        //     .getRepository(VideoData)
+        //     .save(video);
     };
 
     setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {

@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XJoinColumn, XManyToOne } from '../../services/XORM/XORMDecorators';
 import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
 import { GivenAnswerStreak } from './GivenAnswerStreak';
-import { QuestionData } from './question/QuestionData';
+import { QuestionVersion } from './question/QuestionVersion';
 
 @Entity()
 export class GivenAnswer {
@@ -28,34 +28,39 @@ export class GivenAnswer {
     @Column({ default: false })
     isPractiseAnswer: boolean;
 
-    // question
-    @Column()
-    questionId: number;
+    //
+    // TO ONE
+    //
 
-    @ManyToOne(_ => QuestionData, x => x.givenAnswers)
-    @JoinColumn({ name: 'question_id' })
-    question: QuestionData;
+    // question version
+    @Column()
+    questionVersionId: number;
+    @XManyToOne<GivenAnswer>()(QuestionVersion, x => x.givenAnswers)
+    @XJoinColumn<GivenAnswer>('questionVersionId')
+    questionVersion: QuestionVersion;
 
     // answer session
     @Column()
     answerSessionId: number;
-
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
     @JoinColumn({ name: 'answer_session_id' })
     answerSession: AnswerSession;
+
+    // givenAnswerStreakBridges
+    @Column({ nullable: true, type: 'integer' })
+    givenAnswerStreakId: number | null;
+    @JoinColumn({ name: 'given_answer_streak_id' })
+    @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
+    givenAnswerStreak: GivenAnswerStreak;
+
+    //
+    // TO MANY
+    //
 
     // answer bridges
     @OneToMany(_ => AnswerGivenAnswerBridge, x => x.givenAnswer)
     @JoinColumn()
     answerBridges: AnswerGivenAnswerBridge[];
-
-    // givenAnswerStreakBridges
-    @Column({ nullable: true, type: 'integer' })
-    givenAnswerStreakId: number | null;
-
-    @JoinColumn({ name: 'given_answer_streak_id' })
-    @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
-    givenAnswerStreak: GivenAnswerStreak;
 
     // coin acquires 
     @JoinColumn()

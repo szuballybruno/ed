@@ -22,7 +22,7 @@ export class QuestionVersion {
     answerVersions: AnswerVersion[];
 
     // given answers
-    @XOneToMany<QuestionVersion>()(GivenAnswer, x => x.questionVersions)
+    @XOneToMany<QuestionVersion>()(GivenAnswer, x => x.questionVersion)
     givenAnswers: GivenAnswer[];
 
     //

@@ -6,6 +6,7 @@ import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { PrincipalId } from '../utilities/ActionParams';
+import { throwNotImplemented } from '../utilities/helpers';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
@@ -33,70 +34,73 @@ export class PretestService {
 
     async createPretestExamAsync(courseId: number) {
 
-        const newExam = {
-            courseId,
-            orderIndex: 0,
-            title: '',
-            type: 'pretest',
-            subtitle: ''
-        } as ExamData;
+        throwNotImplemented();
+        // const newExam = {
+        //     courseId,
+        //     orderIndex: 0,
+        //     title: '',
+        //     type: 'pretest',
+        //     subtitle: ''
+        // } as ExamData;
 
-        await this._examService
-            .createExamAsync(newExam);
+        // await this._examService
+        //     .createExamAsync(newExam);
 
-        return newExam.id;
+        // return newExam.id;
     }
 
     async getPretestDataAsync(userId: PrincipalId, courseId: number) {
 
-        // set course as started, and stage to pretest
-        await this._courseBridgeService
-            .setCurrentCourse(userId.toSQLValue(), courseId, 'pretest', null);
+        throwNotImplemented();
+        // // set course as started, and stage to pretest
+        // await this._courseBridgeService
+        //     .setCurrentCourse(userId.toSQLValue(), courseId, 'pretest', null);
 
-        // pretest exam 
-        const pretestExam = await this._ormService
-            .getRepository(ExamData)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    type: 'pretest'
-                }
-            });
+        // // pretest exam 
+        // const pretestExam = await this._ormService
+        //     .getRepository(ExamData)
+        //     .findOneOrFail({
+        //         where: {
+        //             courseId,
+        //             type: 'pretest'
+        //         }
+        //     });
 
-        const pretestExamDTO = await this._examService
-            .getExamPlayerDTOAsync(userId.toSQLValue(), pretestExam.id);
+        // const pretestExamDTO = await this._examService
+        //     .getExamPlayerDTOAsync(userId.toSQLValue(), pretestExam.id);
 
-        // answer session
-        let answerSession = await this._ormService
-            .getRepository(AnswerSession)
-            .findOne({
-                where: {
-                    userId: userId.toSQLValue(),
-                    examId: pretestExam.id,
-                    type: 'pretest'
-                }
-            });
+        // // answer session
+        // let answerSession = await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .findOne({
+        //         where: {
+        //             userId: userId.toSQLValue(),
+        //             examId: pretestExam.id,
+        //             type: 'pretest'
+        //         }
+        //     });
 
-        if (!answerSession) {
+        // if (!answerSession) {
 
-            answerSession = instatiateInsertEntity<AnswerSession>({
-                userId: userId.toSQLValue(),
-                examId: pretestExam.id,
-                type: 'pretest',
-                videoId: null,
-                startDate: null,
-                endDate: null
-            });
+        //     answerSession = instatiateInsertEntity<AnswerSession>({
+        //         userId: userId.toSQLValue(),
+        //         examId: pretestExam.id,
+        //         type: 'pretest',
+        //         videoId: null,
+        //         startDate: null,
+        //         endDate: null
+        //     });
 
-            await this._ormService
-                .getRepository(AnswerSession)
-                .insert(answerSession);
-        }
+        //     await this._ormService
+        //         .getRepository(AnswerSession)
+        //         .insert(answerSession);
+        // }
 
-        return {
-            answerSessionId: answerSession.id,
-            exam: pretestExamDTO
-        } as PretestDataDTO;
+        // return {
+        //     answerSessionId: answerSession.id,
+        //     exam: pretestExamDTO
+        // } as PretestDataDTO;
+        return {} as PretestDataDTO;
     }
 
     async getPretestResultsAsync(principalId: PrincipalId, courseId: number) {
@@ -131,17 +135,18 @@ export class PretestService {
 
     async getPretestExamIdAsync(courseId: number) {
 
-        const exam = await this._ormService
-            .getRepository(ExamData)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    type: 'pretest'
-                }
-            });
+        throwNotImplemented();
+        // const exam = await this._ormService
+        //     .getRepository(ExamData)
+        //     .findOneOrFail({
+        //         where: {
+        //             courseId,
+        //             type: 'pretest'
+        //         }
+        //     });
 
-        return {
-            id: exam.id
-        } as IdResultDTO;
+        // return {
+        //     id: exam.id
+        // } as IdResultDTO;
     }
 }

@@ -41,7 +41,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             text: text,
             userId: userId,
             parentCommentId: replyToCommentId,
-            videoId: videoId
+            videoVersionId: videoId
         } as Comment;
 
         return await this

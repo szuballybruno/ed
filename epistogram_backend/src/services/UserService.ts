@@ -12,7 +12,7 @@ import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
-import { getFullName, toFullName } from '../utilities/helpers';
+import { getFullName, throwNotImplemented, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
@@ -250,58 +250,59 @@ export class UserService {
         isGod?: boolean
     }) => {
 
-        const regType = opts.registrationType;
+        throwNotImplemented();
+        // const regType = opts.registrationType;
 
-        // does user already exist?
-        const existingUser = await this.getUserByEmailAsync(opts.email);
-        if (existingUser)
-            throw new VerboseError('User already exists. Email: ' + opts.email, 'email_taken');
+        // // does user already exist?
+        // const existingUser = await this.getUserByEmailAsync(opts.email);
+        // if (existingUser)
+        //     throw new VerboseError('User already exists. Email: ' + opts.email, 'email_taken');
 
-        // hash user password 
-        const hashedPassword = await this._hashService
-            .hashPasswordAsync(opts.password);
+        // // hash user password 
+        // const hashedPassword = await this._hashService
+        //     .hashPasswordAsync(opts.password);
 
-        // set default user fileds
-        const user = {
-            email: opts.email,
-            firstName: opts.firstName,
-            lastName: opts.lastName,
-            jobTitleId: opts.jobTitleId,
-            phoneNumber: opts.phoneNumber,
-            companyId: opts.companyId,
-            password: hashedPassword,
-            isInvitationAccepted: false,
-            isTrusted: regType === 'Invitation',
-            registrationType: regType,
-            invitationToken: opts.invitationToken,
-            isGod: !!opts.isGod
-        } as User;
+        // // set default user fileds
+        // const user = {
+        //     email: opts.email,
+        //     firstName: opts.firstName,
+        //     lastName: opts.lastName,
+        //     jobTitleId: opts.jobTitleId,
+        //     phoneNumber: opts.phoneNumber,
+        //     companyId: opts.companyId,
+        //     password: hashedPassword,
+        //     isInvitationAccepted: false,
+        //     isTrusted: regType === 'Invitation',
+        //     registrationType: regType,
+        //     invitationToken: opts.invitationToken,
+        //     isGod: !!opts.isGod
+        // } as User;
 
-        // insert user
-        await this._ormService
-            .getRepository(User)
-            .insert(user);
+        // // insert user
+        // await this._ormService
+        //     .getRepository(User)
+        //     .insert(user);
 
-        const userId = user.id;
+        // const userId = user.id;
 
-        // insert signup answer session
-        await this._ormService
-            .getRepository(AnswerSession)
-            .insert({
-                examId: 1, // 1 always points to signup exam 
-                type: 'signup',
-                userId: userId
-            });
+        // // insert signup answer session
+        // await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .insert({
+        //         examId: 1, // 1 always points to signup exam 
+        //         type: 'signup',
+        //         userId: userId
+        //     });
 
-        // insert practise answer session
-        await this._ormService
-            .getRepository(AnswerSession)
-            .insert({
-                userId: userId,
-                type: 'practise'
-            });
+        // // insert practise answer session
+        // await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .insert({
+        //         userId: userId,
+        //         type: 'practise'
+        //     });
 
-        return user;
+        // return user;
     };
 
     /**

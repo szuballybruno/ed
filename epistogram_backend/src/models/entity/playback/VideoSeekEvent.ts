@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { XJoinColumn, XManyToOne } from '../../../services/XORM/XORMDecorators';
 import { User } from '../User';
 import { VideoData } from '../video/VideoData';
+import { VideoVersion } from '../video/VideoVersion';
 import { VideoPlaybackSession } from './VideoPlaybackSession';
 
 @Entity()
@@ -10,7 +11,7 @@ export class VideoSeekEvent {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
+    @CreateDateColumn({ default: 'now()', type: 'timestamptz' })
     creationDate: Date;
 
     @Column({ type: 'double precision' })
@@ -22,27 +23,28 @@ export class VideoSeekEvent {
     @Column()
     isForward: boolean;
 
+    //
+    // TO ONE
+    //
+
     // video 
     @Column()
-    videoId: number;
-
-    @XManyToOne<VideoSeekEvent>()(() => VideoData, x => x.videoSeekEvents)
-    @XJoinColumn<VideoSeekEvent>('videoId')
-    video: Relation<VideoData>;
+    videoVersionId: number;
+    @XManyToOne<VideoSeekEvent>()(VideoVersion, x => x.videoSeekEvents)
+    @XJoinColumn<VideoSeekEvent>('videoVersionId')
+    videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
     userId: number;
-
-    @XManyToOne<VideoSeekEvent>()(() => User, x => x.videoSeekEvents)
+    @XManyToOne<VideoSeekEvent>()(User, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('userId')
     user: Relation<User>;
 
     // playback session
     @Column()
     videoPlaybackSessionId: number;
-
-    @XManyToOne<VideoSeekEvent>()(() => VideoPlaybackSession, x => x.videoSeekEvents)
+    @XManyToOne<VideoSeekEvent>()(VideoPlaybackSession, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('videoPlaybackSessionId')
     videoPlaybackSession: Relation<VideoPlaybackSession>;
 }

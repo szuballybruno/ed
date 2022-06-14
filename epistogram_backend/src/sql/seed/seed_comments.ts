@@ -1,9 +1,9 @@
 import { Comment } from '../../models/entity/Comment';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { UserSeedDataType } from './seed_users';
-import { VideoSeedDataType } from './seed_videos';
+import { VideoDataSeedDataType } from './seed_video_datas';
 
-export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDataType) => getSeedList<Comment>()({
+export const getCommentsSeedData = (videos: VideoDataSeedDataType, users: UserSeedDataType) => getSeedList<Comment>()({
     excel_comment_1: {
         deletionDate: null,
         creationDate: new Date(Date.now()),
@@ -11,7 +11,7 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         userId: users.god.id,
         isAnonymous: false,
         isQuestion: false,
-        videoId: videos.video_132.id,
+        videoVersionId: videos.video_132.id,
         parentCommentId: null
     },
     excel_comment_2: {
@@ -21,7 +21,7 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         userId: users.almostGod.id,
         isAnonymous: false,
         isQuestion: false,
-        videoId: videos.video_132.id,
+        videoVersionId: videos.video_132.id,
         parentCommentId: 1
     },
     excel_comment_3: {
@@ -31,7 +31,7 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         userId: users.user_4.id,
         isAnonymous: false,
         isQuestion: false,
-        videoId: videos.video_132.id,
+        videoVersionId: videos.video_132.id,
         parentCommentId: 1
     },
     excel_comment_4: {
@@ -41,7 +41,7 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         userId: users.user_5.id,
         isAnonymous: false,
         isQuestion: false,
-        videoId: videos.video_132.id,
+        videoVersionId: videos.video_132.id,
         parentCommentId: null
     },
     excel_comment_5: {
@@ -51,7 +51,7 @@ export const getCommentsSeedData = (videos: VideoSeedDataType, users: UserSeedDa
         userId: users.user_6.id,
         isAnonymous: false,
         isQuestion: false,
-        videoId: videos.video_132.id,
+        videoVersionId: videos.video_132.id,
         parentCommentId: 4
 
     }

@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne } from '../../../services/XORM/XORMDecorators';
 import { User } from '../User';
-import { VideoData } from '../video/VideoData';
+import { VideoVersion } from '../video/VideoVersion';
 import { VideoPlaybackSession } from './VideoPlaybackSession';
 
 @Entity()
@@ -19,27 +19,28 @@ export class VideoPlaybackSample {
     @Column({ type: 'double precision' })
     toSeconds: number;
 
+    //
+    // TO ONE
+    //
+
     // video 
     @Column()
-    videoId: number;
-
-    @XManyToOne<VideoPlaybackSample>()(() => VideoData, x => x.videoPlaybackSamples)
-    @XJoinColumn<VideoPlaybackSample>('videoId')
-    video: Relation<VideoData>;
+    videoVersionId: number;
+    @XManyToOne<VideoPlaybackSample>()(VideoVersion, x => x.videoPlaybackSamples)
+    @XJoinColumn<VideoPlaybackSample>('videoVersionId')
+    videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
     userId: number;
-
-    @XManyToOne<VideoPlaybackSample>()(() => User, x => x.videoPlaybackSamples)
+    @XManyToOne<VideoPlaybackSample>()(User, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('userId')
     user: Relation<User>;
 
     // playback session
     @Column()
     videoPlaybackSessionId: number;
-
-    @XManyToOne<VideoPlaybackSample>()(() => VideoPlaybackSession, x => x.videoPlaybackSamples)
+    @XManyToOne<VideoPlaybackSample>()(VideoPlaybackSession, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('videoPlaybackSessionId')
     videoPlaybackSession: Relation<VideoPlaybackSession>;
 }

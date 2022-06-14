@@ -48,6 +48,7 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 import { PrincipalId } from '../utilities/ActionParams';
 import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
+import { throwNotImplemented } from '../utilities/helpers';
 
 export class CourseService {
 
@@ -414,17 +415,18 @@ export class CourseService {
      */
     async getCourseIdByItemCodeAsync(descriptorCode: string) {
 
-        const { itemId, itemType } = readItemCode(descriptorCode);
+        throwNotImplemented();
+        // const { itemId, itemType } = readItemCode(descriptorCode);
 
-        if (itemType === 'video')
-            return (await this._videoService.getVideoByIdAsync(itemId)).courseId;
+        // if (itemType === 'video')
+        //     return (await this._videoService.getVideoByIdAsync(itemId)).courseId;
 
-        if (itemType === 'exam')
-            return (await this._examService.getExamByIdAsync(itemId)).courseId;
+        // if (itemType === 'exam')
+        //     return (await this._examService.getExamByIdAsync(itemId)).courseId;
 
-        return (await this._ormService
-            .getSingleById(ModuleData, itemId))
-            .courseId;
+        // return (await this._ormService
+        //     .getSingleById(ModuleData, itemId))
+        //     .courseId;
     }
 
     /**
@@ -542,52 +544,53 @@ export class CourseService {
 
     private async saveUpdatedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
 
-        const updateMuts = mutations
-            .filter(x => x.action === 'update')
-            .map(x => ({ ...x, ...readItemCode(x.key) }))
-            .groupBy(x => x.itemType);
+        throwNotImplemented();
+        // const updateMuts = mutations
+        //     .filter(x => x.action === 'update')
+        //     .map(x => ({ ...x, ...readItemCode(x.key) }))
+        //     .groupBy(x => x.itemType);
 
-        const videos = updateMuts
-            .filter(x => x.key === 'video')
-            .flatMap(x => x.items)
-            .map(updateMut => {
+        // const videos = updateMuts
+        //     .filter(x => x.key === 'video')
+        //     .flatMap(x => x.items)
+        //     .map(updateMut => {
 
-                const updateDto = mapMutationToPartialObject(updateMut);
+        //         const updateDto = mapMutationToPartialObject(updateMut);
 
-                const video: Partial<VideoData> = {
-                    id: updateMut.itemId,
-                    moduleId: updateDto.moduleId,
-                    title: updateDto.itemTitle,
-                    subtitle: updateDto.itemSubtitle,
-                    orderIndex: updateDto.itemOrderIndex
-                };
+        //         const video: Partial<VideoData> = {
+        //             id: updateMut.itemId,
+        //             moduleId: updateDto.moduleId,
+        //             title: updateDto.itemTitle,
+        //             subtitle: updateDto.itemSubtitle,
+        //             orderIndex: updateDto.itemOrderIndex
+        //         };
 
-                return video;
-            });
+        //         return video;
+        //     });
 
-        const exams = updateMuts
-            .filter(x => x.key === 'exam')
-            .flatMap(x => x.items)
-            .map(updateMut => {
+        // const exams = updateMuts
+        //     .filter(x => x.key === 'exam')
+        //     .flatMap(x => x.items)
+        //     .map(updateMut => {
 
-                const updateDto = mapMutationToPartialObject(updateMut);
+        //         const updateDto = mapMutationToPartialObject(updateMut);
 
-                const exam: Partial<ExamData> = {
-                    id: updateMut.itemId,
-                    moduleId: updateDto.moduleId,
-                    title: updateDto.itemTitle,
-                    subtitle: updateDto.itemSubtitle,
-                    orderIndex: updateDto.itemOrderIndex
-                };
+        //         const exam: Partial<ExamData> = {
+        //             id: updateMut.itemId,
+        //             moduleId: updateDto.moduleId,
+        //             title: updateDto.itemTitle,
+        //             subtitle: updateDto.itemSubtitle,
+        //             orderIndex: updateDto.itemOrderIndex
+        //         };
 
-                return exam;
-            });
+        //         return exam;
+        //     });
 
-        await this._ormService
-            .save(VideoData, videos);
+        // await this._ormService
+        //     .save(VideoData, videos);
 
-        await this._ormService
-            .save(ExamData, exams);
+        // await this._ormService
+        //     .save(ExamData, exams);
     }
 
     private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
@@ -617,60 +620,61 @@ export class CourseService {
 
     private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
 
-        const checkMutationItemType = (
-            mutation: Mutation<CourseContentItemAdminDTO, 'itemCode'>,
-            itemType: CourseItemType) => {
+        throwNotImplemented();
+        // const checkMutationItemType = (
+        //     mutation: Mutation<CourseContentItemAdminDTO, 'itemCode'>,
+        //     itemType: CourseItemType) => {
 
-            return mutation
-                .fieldMutators
-                .some(fm => fm.field === 'itemType' && fm.value === itemType);
-        };
+        //     return mutation
+        //         .fieldMutators
+        //         .some(fm => fm.field === 'itemType' && fm.value === itemType);
+        // };
 
-        //
-        // insert new videos
-        //
-        const newVideos = mutations
-            .filter(x => x.action === 'add')
-            .filter(x => checkMutationItemType(x, 'video'))
-            .map((x): Partial<VideoData> => {
+        // //
+        // // insert new videos
+        // //
+        // const newVideos = mutations
+        //     .filter(x => x.action === 'add')
+        //     .filter(x => checkMutationItemType(x, 'video'))
+        //     .map((x): Partial<VideoData> => {
 
-                const mutObject = mapMutationToPartialObject(x);
+        //         const mutObject = mapMutationToPartialObject(x);
 
-                return {
-                    courseId: mutObject.courseId,
-                    moduleId: mutObject.moduleId,
-                    title: mutObject.itemTitle,
-                    subtitle: mutObject.itemSubtitle,
-                    orderIndex: mutObject.itemOrderIndex,
-                    description: '',
-                    lengthSeconds: 0
-                };
-            });
+        //         return {
+        //             courseId: mutObject.courseId,
+        //             moduleId: mutObject.moduleId,
+        //             title: mutObject.itemTitle,
+        //             subtitle: mutObject.itemSubtitle,
+        //             orderIndex: mutObject.itemOrderIndex,
+        //             description: '',
+        //             lengthSeconds: 0
+        //         };
+        //     });
 
-        // insert new videos
-        const newExams = mutations
-            .filter(x => x.action === 'add')
-            .filter(x => checkMutationItemType(x, 'exam'))
-            .map((x): Partial<ExamData> => {
+        // // insert new videos
+        // const newExams = mutations
+        //     .filter(x => x.action === 'add')
+        //     .filter(x => checkMutationItemType(x, 'exam'))
+        //     .map((x): Partial<ExamData> => {
 
-                const mutObject = mapMutationToPartialObject(x);
+        //         const mutObject = mapMutationToPartialObject(x);
 
-                return {
-                    courseId: mutObject.courseId,
-                    moduleId: mutObject.moduleId,
-                    title: mutObject.itemTitle,
-                    subtitle: mutObject.itemSubtitle,
-                    orderIndex: mutObject.itemOrderIndex,
-                    description: '',
-                    type: 'normal'
-                };
-            });
+        //         return {
+        //             courseId: mutObject.courseId,
+        //             moduleId: mutObject.moduleId,
+        //             title: mutObject.itemTitle,
+        //             subtitle: mutObject.itemSubtitle,
+        //             orderIndex: mutObject.itemOrderIndex,
+        //             description: '',
+        //             type: 'normal'
+        //         };
+        //     });
 
-        await this._examService
-            .insertBulkAsync(newExams);
+        // await this._examService
+        //     .insertBulkAsync(newExams);
 
-        await this._videoService
-            .insertBulkAsync(newVideos);
+        // await this._videoService
+        //     .insertBulkAsync(newVideos);
     }
 
     /**

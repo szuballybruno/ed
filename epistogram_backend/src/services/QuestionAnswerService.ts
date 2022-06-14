@@ -5,6 +5,7 @@ import { CoinAcquireService } from './CoinAcquireService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { throwNotImplemented } from '../utilities/helpers';
 
 export class QuestionAnswerService {
 
@@ -27,17 +28,18 @@ export class QuestionAnswerService {
         examId?: number | null,
         videoId?: number | null) => {
 
-        const session = {
-            examId: examId,
-            videoId: videoId,
-            userId: userId
-        } as AnswerSession;
+        throwNotImplemented();
+        // const session = {
+        //     examId: examId,
+        //     videoVersionId: videoId,
+        //     userId: userId
+        // } as AnswerSession;
 
-        await this._ormService
-            .getRepository(AnswerSession)
-            .insert(session);
+        // await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .insert(session);
 
-        return session.id;
+        // return session.id;
     };
 
     answerQuestionAsync = async (
@@ -49,40 +51,41 @@ export class QuestionAnswerService {
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) => {
 
-        const {
-            correctAnswerIds,
-            givenAnswerId,
-            isCorrect,
-            streakLength,
-            streakId
-        } = await this._sqlFunctionsService
-            .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
+        throwNotImplemented();
+        // const {
+        //     correctAnswerIds,
+        //     givenAnswerId,
+        //     isCorrect,
+        //     streakLength,
+        //     streakId
+        // } = await this._sqlFunctionsService
+        //     .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
 
-        let coinAcquires = null as null | {
-            normal: CoinAcquireResultDTO | null,
-            bonus: CoinAcquireResultDTO | null
-        };
+        // let coinAcquires = null as null | {
+        //     normal: CoinAcquireResultDTO | null,
+        //     bonus: CoinAcquireResultDTO | null
+        // };
 
-        // if answer is correct give coin rewards 
-        if (isCorrect && !isExamQuestion) {
+        // // if answer is correct give coin rewards 
+        // if (isCorrect && !isExamQuestion) {
 
-            const acquire = await this._coinAcquireService
-                .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
+        //     const acquire = await this._coinAcquireService
+        //         .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
 
-            const streakAcquire = await this._coinAcquireService
-                .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
+        //     const streakAcquire = await this._coinAcquireService
+        //         .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
 
-            coinAcquires = {
-                normal: acquire,
-                bonus: streakAcquire
-            };
-        }
+        //     coinAcquires = {
+        //         normal: acquire,
+        //         bonus: streakAcquire
+        //     };
+        // }
 
-        return {
-            correctAnswerIds: correctAnswerIds,
-            givenAnswerIds: answerIds,
-            isCorrect: isCorrect,
-            coinAcquires
-        } as AnswerResultDTO;
+        // return {
+        //     correctAnswerIds: correctAnswerIds,
+        //     givenAnswerIds: answerIds,
+        //     isCorrect: isCorrect,
+        //     coinAcquires
+        // } as AnswerResultDTO;
     };
 }
