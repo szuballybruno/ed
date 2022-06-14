@@ -10,10 +10,10 @@ export class Video {
     id: number;
 
     // video versions 
-    @XOneToMany<Video>()(VideoVersion, x => x.video)
+    @XOneToMany<Video>()(() => VideoVersion, x => x.video)
     videoVersions: VideoVersion[];
 
     // coin acquires 
-    @XOneToMany<Video>()(CoinTransaction, x => x.video)
+    @XOneToMany<Video>()(() => CoinTransaction, x => x.video)
     coinAcquires: Relation<CoinTransaction>[];
 }

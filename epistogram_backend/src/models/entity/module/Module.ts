@@ -8,6 +8,6 @@ export class Module {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @XOneToMany<Module>()(ModuleVersion, x => x.module)
+    @XOneToMany<Module>()(() => ModuleVersion, x => x.module)
     moduleVersions: ModuleVersion[];
 }

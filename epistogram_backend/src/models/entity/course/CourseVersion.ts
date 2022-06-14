@@ -15,7 +15,7 @@ export class CourseVersion {
     //
 
     // modules 
-    @XOneToMany<CourseVersion>()(ModuleVersion, x => x.courseVersion)
+    @XOneToMany<CourseVersion>()(() => ModuleVersion, x => x.courseVersion)
     moduleVersions: ModuleVersion[];
 
     //
@@ -25,13 +25,13 @@ export class CourseVersion {
     // course 
     @Column()
     courseId: number;
-    @XManyToOne<CourseVersion>()(Course, x => x.courseVersions)
+    @XManyToOne<CourseVersion>()(() => Course, x => x.courseVersions)
     @XJoinColumn<CourseVersion>('courseId')
     course: Course;
 
     @Column()
     courseDataId: number;
-    @XManyToOne<CourseVersion>()(CourseData, x => x.courseVersions)
+    @XManyToOne<CourseVersion>()(() => CourseData, x => x.courseVersions)
     @XJoinColumn<CourseVersion>('courseDataId')
     courseData: CourseData;
 }

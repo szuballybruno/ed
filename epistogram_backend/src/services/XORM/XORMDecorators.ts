@@ -1,12 +1,13 @@
-import { ClassType } from '../misc/advancedTypes/ClassType';
-import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
-import { JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from 'typeorm';
+import { JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
+import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
+import { ClassType } from '../misc/advancedTypes/ClassType';
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
 const X_VIEW_COLUMN_METADATA_KEY = 'X_VIEW_COLUMN_METADATA_KEY';
 
 type CheckType = 'null' | 'bool';
+type RelationInputType<TRelationEntity> = (() => ClassType<TRelationEntity>);
 
 export const IsDeletedFlag = (checkType?: CheckType) => {
 
@@ -35,32 +36,22 @@ export const XViewColumn = () => {
 export const XOneToMany = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
-        classType: ClassType<TRelationEntity>,
+        getRelationEntity: RelationInputType<TRelationEntity>,
         getRelationProp: (relationEntity: TRelationEntity) => Relation<TCurrentEntity> | TCurrentEntity | null): PropertyDecorator => {
 
-        return OneToMany((() => classType) as any, getRelationProp);
+        return OneToMany((getRelationEntity) as any, getRelationProp);
     }
 }
 
 export const XManyToOne = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
-        getRelationEntity: ClassType<TRelationEntity>,
+        getRelationEntity: RelationInputType<TRelationEntity>,
         getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
 
-        return ManyToOne((() => getRelationEntity) as any, getRelationProp);
+        return ManyToOne((getRelationEntity) as any, getRelationProp);
     }
 };
-
-// export const XOneToOne = <TCurrentEntity = never>() => {
-
-//     return <TRelationEntity>(
-//         getRelationEntity: () => ClassType<TRelationEntity>,
-//         getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
-
-//         return OneToOne(getRelationEntity as any, getRelationProp);
-//     }
-// }
 
 export const XJoinColumn = <TCurrentEntity = never>(key: keyof TCurrentEntity) => {
 

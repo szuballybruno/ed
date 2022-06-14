@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany } from '../../services/XORM/XORMDecorators';
 import { getJoinColumnInverseSide } from '../../utilities/helpers';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
@@ -54,12 +54,12 @@ export class Company {
 
     // companyOwnerBridges
     @JoinColumn()
-    @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<Company>()(x => x.company))
+    @XOneToMany<Company>()(() => CompanyOwnerBridge, x => x.company)
     companyOwnerBridges: CompanyOwnerBridge[];
 
     // ownedRoles
     @JoinColumn()
-    @OneToMany(_ => Role, getJoinColumnInverseSide<Company>()(x => x.company))
+    @XOneToMany<Company>()(() => Role, x => x.company)
     ownedRoles: Role[];
 
     // course access bridges

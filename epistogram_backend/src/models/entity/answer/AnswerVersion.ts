@@ -14,23 +14,23 @@ export class AnswerVersion {
     // question 
     @Column()
     questionVersionId: number;
-    @XManyToOne<AnswerVersion>()(QuestionVersion, x => x.answerVersions)
+    @XManyToOne<AnswerVersion>()(() => QuestionVersion, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('questionVersionId')
     questionVersion: QuestionVersion;
 
     @Column()
     answerId: number;
-    @XManyToOne<AnswerVersion>()(Answer, x => x.answerVersions)
+    @XManyToOne<AnswerVersion>()(() => Answer, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('answerId')
     answer: Answer;
 
     @Column()
     answerDataId: number;
-    @XManyToOne<AnswerVersion>()(AnswerData, x => x.answerVersions)
+    @XManyToOne<AnswerVersion>()(() => AnswerData, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('answerDataId')
     answerData: AnswerData;
 
     // given answer bridges
-    @XOneToMany<AnswerVersion>()(AnswerGivenAnswerBridge, x => x.answerVersion)
+    @XOneToMany<AnswerVersion>()(() => AnswerGivenAnswerBridge, x => x.answerVersion)
     givenAnswerBridges: AnswerGivenAnswerBridge[];
 }

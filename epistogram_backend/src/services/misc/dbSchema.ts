@@ -115,27 +115,27 @@ import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoProgressView } from '../../models/views/VideoProgressView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
-import { getAnswersSeed } from '../../sql/seed/seed_answers';
+import { getAnswerDatasSeedData } from '../../sql/seed/seed_answer_datas';
 import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
 import { getCommentsSeedData } from '../../sql/seed/seed_comments';
 import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
 import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
-import { getCourseSeedData } from '../../sql/seed/seed_courses';
+import { getCourseDatasSeedData } from '../../sql/seed/seed_course_datas';
 import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
 import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
 import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
 import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
 import { getDailyTipsSeed } from '../../sql/seed/seed_daily_tips';
 import { getDiscountCodesSeedData } from '../../sql/seed/seed_discount_codes';
-import { getExamSeedData } from '../../sql/seed/seed_exams';
+import { getExamDatasSeedData } from '../../sql/seed/seed_exam_datas';
 import { getJobTitlesSeedData } from '../../sql/seed/seed_job_titles';
-import { getModuleSeedData } from '../../sql/seed/seed_modules';
+import { getModuleDatasSeedData } from '../../sql/seed/seed_module_datas';
 import { getPermissionsSeedData } from '../../sql/seed/seed_permissions';
 import { getPermissionAssignmentBridgeSeedData } from '../../sql/seed/seed_permission_assignment_bridges';
 import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personality_trait_categories';
 import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
 import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
-import { getSeedQuestions } from '../../sql/seed/seed_questions';
+import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
 import { getRolesSeedData } from '../../sql/seed/seed_roles';
 import { getRoleAssignmentBridgeSeedData } from '../../sql/seed/seed_role_assignment_bridges';
@@ -151,6 +151,18 @@ import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
+import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
+import { VideoVersion } from '../../models/entity/video/VideoVersion';
+import { getVideosSeedData } from '../../sql/seed/seed_videos';
+import { getModuleVersionsSeedData } from '../../sql/seed/seed_module_versions';
+import { Video } from '../../models/entity/video/Video';
+import { ModuleVersion } from '../../models/entity/module/ModuleVersion';
+import { getModulesSeedData } from '../../sql/seed/seed_modules';
+import { Module } from '../../models/entity/module/Module';
+import { Course } from '../../models/entity/course/Course';
+import { getCourseSeedData } from '../../sql/seed/seed_courses';
+import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
+import { CourseVersion } from '../../models/entity/course/CourseVersion';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -161,10 +173,15 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getCompaniesSeedData, [], Company)
         .add(getStorageFileSeedData, [], StorageFile)
         .add(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
+        .add(getQuestionDatasSeedData, [getPersonalityTraitCategoriesSeed], QuestionData)
         .add(getCourseCategoriesSeedData, [], CourseCategory)
         .add(getCourseRatingGroupSeedData, [], CourseRatingGroup)
         .add(getShopItemCategoriesSeedData, [], ShopItemCategory)
         .add(getPrequizQuestionsSeedData, [], PrequizQuestion)
+        .add(getExamDatasSeedData, [], ExamData)
+        .add(getVideosSeedData, [], Video)
+        .add(getModulesSeedData, [], Module)
+        .add(getCourseSeedData, [], Course)
         .add(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
         .add(getRolesSeedData, [getCompaniesSeedData], Role)
         .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
@@ -177,17 +194,18 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
         .add(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
         .add(getAnswerSessionSeedData, [getUserSeedData], AnswerSession)
-        .add(getCourseSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
-        .add(getModuleSeedData, [getCourseSeedData], ModuleData)
+        .add(getCourseDatasSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
+        .add(getModuleDatasSeedData, [getCourseDatasSeedData], ModuleData)
         .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
-        .add(getVideoDataSeedData, [getCourseSeedData, getModuleSeedData, getStorageFileSeedData], VideoData)
-        .add(getCommentsSeedData, [getVideoDataSeedData, getUserSeedData], Comment)
-        .add(getExamSeedData, [getModuleSeedData, getCourseSeedData], ExamData)
-        .add(getSeedQuestions, [getVideoDataSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], QuestionData)
-        .add(getAnswersSeed, [getSeedQuestions], AnswerData)
-        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
+        .add(getCourseVersionsSeedData, [getCourseDatasSeedData, getCourseSeedData], CourseVersion)
+        .add(getVideoDataSeedData, [getCourseDatasSeedData, getModuleDatasSeedData, getStorageFileSeedData], VideoData)
+        .add(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
+        .add(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
+        .add(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
+        .add(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
+        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseDatasSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
-        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
+        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseDatasSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
         .build();
 
     const seedScripts = injector

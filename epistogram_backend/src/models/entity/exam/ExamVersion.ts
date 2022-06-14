@@ -20,15 +20,15 @@ export class ExamVersion {
     //
 
     // questions 
-    @XOneToMany<ExamVersion>()(QuestionVersion, x => x.examVersion)
+    @XOneToMany<ExamVersion>()(() => QuestionVersion, x => x.examVersion)
     questionVersions: QuestionVersion[];
 
     // answer sessions
-    @XOneToMany<ExamVersion>()(AnswerSession, x => x.examVersion)
+    @XOneToMany<ExamVersion>()(() => AnswerSession, x => x.examVersion)
     answerSessions: AnswerSession[];
 
     // userProgressBridges
-    @XOneToMany<ExamVersion>()(ExamCompletion, x => x.examVersion)
+    @XOneToMany<ExamVersion>()(() => ExamCompletion, x => x.examVersion)
     userProgressBridges: ExamCompletion[];
 
     // 
@@ -37,7 +37,7 @@ export class ExamVersion {
 
     @Column()
     examDataId: number;
-    @XManyToOne<ExamVersion>()(ExamData, x => x.examVersions)
+    @XManyToOne<ExamVersion>()(() => ExamData, x => x.examVersions)
     @XJoinColumn<ExamVersion>('examDataId')
     examData: ExamData;
 
@@ -51,7 +51,7 @@ export class ExamVersion {
     // exam
     @Column()
     examId: number;
-    @XManyToOne<ExamVersion>()(Exam, x => x.examVersions)
+    @XManyToOne<ExamVersion>()(() => Exam, x => x.examVersions)
     @XJoinColumn<ExamVersion>('examId')
     exam: Exam;
 }

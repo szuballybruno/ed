@@ -19,6 +19,6 @@ export class AnswerData {
     isCorrect: boolean | null;
 
     // answer versions 
-    @XOneToMany<AnswerData>()(AnswerVersion, x => x.answerData)
+    @XOneToMany<AnswerData>()(() => AnswerVersion, x => x.answerData)
     answerVersions: AnswerVersion[];
 }

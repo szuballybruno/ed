@@ -15,14 +15,14 @@ export class ExamCompletion {
     // user 
     @Column()
     userId: number;
-    @XManyToOne<ExamCompletion>()(User, x => x.examProgressBridges)
+    @XManyToOne<ExamCompletion>()(() => User, x => x.examProgressBridges)
     @XJoinColumn<ExamCompletion>('userId')
     user: Relation<User>;
 
     // exam version
     @Column()
     examVersionId: number;
-    @XManyToOne<ExamCompletion>()(ExamVersion, x => x.userProgressBridges)
+    @XManyToOne<ExamCompletion>()(() => ExamVersion, x => x.userProgressBridges)
     @XJoinColumn<ExamCompletion>('examVersionId')
     examVersion: Relation<ExamVersion>;
 }

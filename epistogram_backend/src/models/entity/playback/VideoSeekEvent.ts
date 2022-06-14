@@ -30,21 +30,21 @@ export class VideoSeekEvent {
     // video 
     @Column()
     videoVersionId: number;
-    @XManyToOne<VideoSeekEvent>()(VideoVersion, x => x.videoSeekEvents)
+    @XManyToOne<VideoSeekEvent>()(() => VideoVersion, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
     userId: number;
-    @XManyToOne<VideoSeekEvent>()(User, x => x.videoSeekEvents)
+    @XManyToOne<VideoSeekEvent>()(() => User, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('userId')
     user: Relation<User>;
 
     // playback session
     @Column()
     videoPlaybackSessionId: number;
-    @XManyToOne<VideoSeekEvent>()(VideoPlaybackSession, x => x.videoSeekEvents)
+    @XManyToOne<VideoSeekEvent>()(() => VideoPlaybackSession, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('videoPlaybackSessionId')
     videoPlaybackSession: Relation<VideoPlaybackSession>;
 }

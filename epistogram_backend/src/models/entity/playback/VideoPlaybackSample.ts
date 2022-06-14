@@ -26,21 +26,21 @@ export class VideoPlaybackSample {
     // video 
     @Column()
     videoVersionId: number;
-    @XManyToOne<VideoPlaybackSample>()(VideoVersion, x => x.videoPlaybackSamples)
+    @XManyToOne<VideoPlaybackSample>()(() => VideoVersion, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
     userId: number;
-    @XManyToOne<VideoPlaybackSample>()(User, x => x.videoPlaybackSamples)
+    @XManyToOne<VideoPlaybackSample>()(() => User, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('userId')
     user: Relation<User>;
 
     // playback session
     @Column()
     videoPlaybackSessionId: number;
-    @XManyToOne<VideoPlaybackSample>()(VideoPlaybackSession, x => x.videoPlaybackSamples)
+    @XManyToOne<VideoPlaybackSample>()(() => VideoPlaybackSession, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('videoPlaybackSessionId')
     videoPlaybackSession: Relation<VideoPlaybackSession>;
 }

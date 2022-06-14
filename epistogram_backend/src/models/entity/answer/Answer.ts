@@ -9,6 +9,6 @@ export class Answer {
     id: number;
 
     // answer versions 
-    @XOneToMany<Answer>()(AnswerVersion, x => x.answer)
+    @XOneToMany<Answer>()(() => AnswerVersion, x => x.answer)
     answerVersions: AnswerVersion[];
 }

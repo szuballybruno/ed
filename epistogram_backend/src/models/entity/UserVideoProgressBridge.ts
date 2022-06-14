@@ -29,7 +29,7 @@ export class UserVideoProgressBridge {
     // video version 
     @Column()
     videoVersionId: number;
-    @XManyToOne<UserVideoProgressBridge>()(VideoVersion, x => x.userProgressBridges)
+    @XManyToOne<UserVideoProgressBridge>()(() => VideoVersion, x => x.userProgressBridges)
     @XJoinColumn<UserVideoProgressBridge>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
 }

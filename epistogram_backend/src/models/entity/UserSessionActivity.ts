@@ -22,14 +22,14 @@ export class UserSessionActivity {
     // video 
     @Column({ nullable: true })
     videoVersionId: number;
-    @XManyToOne<UserSessionActivity>()(VideoVersion, x => x.userSessionActivities)
+    @XManyToOne<UserSessionActivity>()(() => VideoVersion, x => x.userSessionActivities)
     @XJoinColumn<UserSessionActivity>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
 
     // exam 
     @Column({ nullable: true })
     examId: number | null;
-    @XManyToOne<UserSessionActivity>()(Exam, e => e.userSessionActivities)
+    @XManyToOne<UserSessionActivity>()(() => Exam, e => e.userSessionActivities)
     @XJoinColumn<UserSessionActivity>('examId')
     exam: Relation<Exam> | null;
 

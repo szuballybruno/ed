@@ -49,6 +49,6 @@ export class QuestionData {
     //
 
     // question versions 
-    @XOneToMany<QuestionData>()(QuestionVersion, x => x.questionData)
+    @XOneToMany<QuestionData>()(() => QuestionVersion, x => x.questionData)
     questionVersions: QuestionVersion[];
 }

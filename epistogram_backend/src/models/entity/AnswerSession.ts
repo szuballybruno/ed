@@ -39,14 +39,14 @@ export class AnswerSession {
     // exam
     @Column({ nullable: true })
     examVersionId: number | null;
-    @XManyToOne<AnswerSession>()(ExamVersion, e => e.answerSessions)
+    @XManyToOne<AnswerSession>()(() => ExamVersion, e => e.answerSessions)
     @XJoinColumn<AnswerSession>('examVersionId')
     examVersion: ExamVersion | null;
 
     // video 
     @Column({ nullable: true })
     videoVersionId: number | null;
-    @XManyToOne<AnswerSession>()(VideoVersion, x => x.answerSessions)
+    @XManyToOne<AnswerSession>()(() => VideoVersion, x => x.answerSessions)
     @XJoinColumn<AnswerSession>('videoVersionId')
     videoVersion: VideoVersion | null;
 

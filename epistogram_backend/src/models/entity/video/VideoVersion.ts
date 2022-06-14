@@ -24,39 +24,39 @@ export class VideoVersion {
     //
 
     // questions
-    @XOneToMany<VideoVersion>()(QuestionVersion, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => QuestionVersion, x => x.videoVersion)
     questionVersions: Relation<QuestionVersion>[];
 
     // user session activity
-    @XOneToMany<VideoVersion>()(UserSessionActivity, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => UserSessionActivity, x => x.videoVersion)
     userSessionActivities: UserSessionActivity[];
 
     // comment
-    @XOneToMany<VideoVersion>()(Comment, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => Comment, x => x.videoVersion)
     comments: Comment[];
 
     // answer sessions
-    @XOneToMany<VideoVersion>()(AnswerSession, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => AnswerSession, x => x.videoVersion)
     answerSessions: Relation<AnswerSession>[];
 
     // video playback samples 
-    @XOneToMany<VideoVersion>()(VideoPlaybackSample, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => VideoPlaybackSample, x => x.videoVersion)
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
 
     // video seek events 
-    @XOneToMany<VideoVersion>()(VideoSeekEvent, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => VideoSeekEvent, x => x.videoVersion)
     videoSeekEvents: Relation<VideoSeekEvent>[];
 
     // video playback sessions 
-    @XOneToMany<VideoVersion>()(VideoPlaybackSession, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => VideoPlaybackSession, x => x.videoVersion)
     videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 
     // ratings
-    @XOneToMany<VideoVersion>()(VideoRating, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => VideoRating, x => x.videoVersion)
     videoRatings: Relation<VideoRating>[];
 
     // userProgressBridges
-    @XOneToMany<VideoVersion>()(UserVideoProgressBridge, x => x.videoVersion)
+    @XOneToMany<VideoVersion>()(() => UserVideoProgressBridge, x => x.videoVersion)
     userProgressBridges: Relation<UserVideoProgressBridge>[];
 
     //
@@ -66,21 +66,21 @@ export class VideoVersion {
     // module
     @Column()
     moduleVersionId: number;
-    @XManyToOne<VideoVersion>()(ModuleVersion, x => x.videoVersions)
+    @XManyToOne<VideoVersion>()(() => ModuleVersion, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('moduleVersionId')
     moduleVersion: Relation<ModuleVersion>;
 
     // video 
     @Column()
     videoId: number;
-    @XManyToOne<VideoVersion>()(Video, x => x.videoVersions)
+    @XManyToOne<VideoVersion>()(() => Video, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoId')
     video: Video;
 
     // video data
     @Column()
     videoDataId: number;
-    @XManyToOne<VideoVersion>()(VideoData, x => x.videoVersions)
+    @XManyToOne<VideoVersion>()(() => VideoData, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoDataId')
     videoData: VideoData;
 }

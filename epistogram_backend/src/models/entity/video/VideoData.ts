@@ -33,14 +33,14 @@ export class VideoData {
     // video file
     @Column({ nullable: true })
     videoFileId: number;
-    @XManyToOne<VideoData>()(VideoFile, x => x.videos)
+    @XManyToOne<VideoData>()(() => VideoFile, x => x.videos)
     @XJoinColumn<VideoData>('videoFileId')
     videoFile: Relation<VideoFile>;
 
     // thumbnail file
     @Column({ nullable: true })
     thumbnailFileId: number | null;
-    @XManyToOne<VideoData>()(StorageFile, x => x.videos)
+    @XManyToOne<VideoData>()(() => StorageFile, x => x.videos)
     @XJoinColumn<VideoData>('thumbnailFileId')
     thumbnailFile: Relation<StorageFile>;
 
@@ -49,6 +49,6 @@ export class VideoData {
     //
 
     // video versions 
-    @XOneToMany<VideoData>()(VideoVersion, x => x.videoData)
+    @XOneToMany<VideoData>()(() => VideoVersion, x => x.videoData)
     videoVersions: VideoVersion[];
 }

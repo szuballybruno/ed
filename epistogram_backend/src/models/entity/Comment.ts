@@ -43,7 +43,7 @@ export class Comment {
     videoVersionId: number;
 
     @JoinColumn({ name: 'video_id' })
-    @XManyToOne<Comment>()(VideoVersion, x => x.comments)
+    @XManyToOne<Comment>()(() => VideoVersion, x => x.comments)
     videoVersion: Relation<VideoVersion>;
 
     // likes

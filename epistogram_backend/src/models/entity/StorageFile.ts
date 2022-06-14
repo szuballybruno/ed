@@ -17,11 +17,11 @@ export class StorageFile {
     filePath: string;
 
     // video files
-    @XOneToMany<StorageFile>()(VideoFile, v => v.storageFile)
+    @XOneToMany<StorageFile>()(() => VideoFile, v => v.storageFile)
     videoFiles: VideoFile[];
 
     // videos 
-    @XOneToMany<StorageFile>()(VideoData, x => x.thumbnailFile)
+    @XOneToMany<StorageFile>()(() => VideoData, x => x.thumbnailFile)
     videos: VideoData[];
 
     // users

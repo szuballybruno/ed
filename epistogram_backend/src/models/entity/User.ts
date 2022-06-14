@@ -142,7 +142,7 @@ export class User {
     videoPlaybackSamples: Relation<VideoPlaybackSample>[];
 
     // video seek events 
-    @XOneToMany<User>()(VideoSeekEvent, x => x.user)
+    @XOneToMany<User>()(() => VideoSeekEvent, x => x.user)
     @JoinColumn()
     videoSeekEvents: Relation<VideoSeekEvent>[];
 
@@ -218,7 +218,7 @@ export class User {
 
     // companyOwnerBridges
     @JoinColumn()
-    @OneToMany(_ => CompanyOwnerBridge, getJoinColumnInverseSide<User>()(x => x.user))
+    @OneToMany(_ => CompanyOwnerBridge, x => x.user)
     companyOwnerBridges: Relation<CompanyOwnerBridge>[];
 
     // video playback samples 

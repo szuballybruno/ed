@@ -16,11 +16,11 @@ export class VideoFile {
     @Column({ nullable: true })
     storageFileId: number;
 
-    @XManyToOne<VideoFile>()(StorageFile, s => s.videoFiles)
+    @XManyToOne<VideoFile>()(() => StorageFile, s => s.videoFiles)
     @XJoinColumn<VideoFile>('storageFileId')
     storageFile: Relation<StorageFile>;
 
     // videos 
-    @XOneToMany<VideoFile>()(VideoData, x => x.videoFile)
+    @XOneToMany<VideoFile>()(() => VideoData, x => x.videoFile)
     videos: VideoData[];
 }

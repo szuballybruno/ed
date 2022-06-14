@@ -19,21 +19,21 @@ export class ModuleVersion {
     // course 
     @Column({ nullable: true })
     courseVersionId: number | null;
-    @XManyToOne<ModuleVersion>()(CourseVersion, x => x.moduleVersions)
+    @XManyToOne<ModuleVersion>()(() => CourseVersion, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('courseVersionId')
     courseVersion: Relation<CourseVersion>;
 
     // module
     @Column()
     moduleId: number;
-    @XManyToOne<ModuleVersion>()(Module, x => x.moduleVersions)
+    @XManyToOne<ModuleVersion>()(() => Module, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleId')
     module: Module;
 
     // module data
     @Column()
     moduleDataId: number;
-    @XManyToOne<ModuleVersion>()(ModuleData, x => x.moduleVersions)
+    @XManyToOne<ModuleVersion>()(() => ModuleData, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleDataId')
     moduleData: ModuleData;
 
@@ -42,10 +42,10 @@ export class ModuleVersion {
     //
 
     // exams
-    @XOneToMany<ModuleVersion>()(ExamVersion, x => x.moduleVersion)
+    @XOneToMany<ModuleVersion>()(() => ExamVersion, x => x.moduleVersion)
     examVersions: ExamVersion[];
 
     // videos
-    @XOneToMany<ModuleVersion>()(VideoVersion, x => x.moduleVersion)
+    @XOneToMany<ModuleVersion>()(() => VideoVersion, x => x.moduleVersion)
     videoVersions: VideoVersion[];
 }

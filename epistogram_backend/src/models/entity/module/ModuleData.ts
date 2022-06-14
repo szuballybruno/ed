@@ -37,6 +37,6 @@ export class ModuleData {
     // TO MANY 
     //
 
-    @XOneToMany<ModuleData>()(ModuleVersion, x => x.moduleData)
+    @XOneToMany<ModuleData>()(() => ModuleVersion, x => x.moduleData)
     moduleVersions: ModuleVersion[];
 }

@@ -1,10 +1,10 @@
 import { VideoData } from '../../models/entity/video/VideoData';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import { CourseSeedDataType } from './seed_courses';
+import { CourseDatasSeedDataType } from './seed_course_datas';
 import { StorageFileSeedDataType } from './seed_storage_file';
 
 export const getVideoDataSeedData = (
-    courses: CourseSeedDataType,
+    courses: CourseDatasSeedDataType,
     modules: any,
     storageFiles: StorageFileSeedDataType
 ) => getSeedList<VideoData>()({

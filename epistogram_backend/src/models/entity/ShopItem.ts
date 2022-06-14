@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { CoinTransaction } from './CoinTransaction';
 import { Course } from './course/Course';
 import { CourseData } from './course/CourseData';
@@ -49,7 +49,7 @@ export class ShopItem {
 
     @ManyToOne(_ => Course, x => x.shopItems)
     @JoinColumn({ name: 'course_id' })
-    course: Course;
+    course: Relation<Course>;
 
     // coin acquires 
     @JoinColumn()

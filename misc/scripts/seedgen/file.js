@@ -1,20 +1,6 @@
-const gen = (template) => {
-    const obj = {};
-    for (let index = 0; index < 1000; index++) {
-
-        const key = `${template}${index}`;
-        obj[key] = { id: key }
-    }
-
-    return obj;
-}
+import { gen } from './util.js';
 
 const storageFiles = gen('storage_file_');
-
-const courses = gen('course_');
-courses.course_obs = { id: 0 };
-courses.course_excel = { id: 0 };
-courses.course_powerPoint = { id: 0 };
 
 const modules = gen('module_');
 

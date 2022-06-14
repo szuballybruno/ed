@@ -19,14 +19,14 @@ export class VideoRating {
     // video 
     @Column()
     videoVersionId: number;
-    @XManyToOne<VideoRating>()(VideoVersion, x => x.videoRatings)
+    @XManyToOne<VideoRating>()(() => VideoVersion, x => x.videoRatings)
     @XJoinColumn<VideoRating>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
     userId: number;
-    @XManyToOne<VideoRating>()(User, x => x.videoRatings)
+    @XManyToOne<VideoRating>()(() => User, x => x.videoRatings)
     @XJoinColumn<VideoRating>('userId')
     user: Relation<User>;
 }

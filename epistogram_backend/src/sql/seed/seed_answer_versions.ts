@@ -1,3 +1,14 @@
+import { AnswerVersion } from '../../models/entity/answer/AnswerVersion';
+import { getSeedList } from '../../services/sqlServices/SeedService';
+import { AnswersSeedDataType } from './seed_answers';
+import { AnswerDatasSeedDataType } from './seed_answer_datas';
+import { SeedQuestionVersionType } from './seed_question_versions';
+
+export const getAnswerVersionsSeedData = (
+    answers: AnswersSeedDataType,
+    answerDatas: AnswerDatasSeedDataType,
+    questionVersions: SeedQuestionVersionType
+) => getSeedList<AnswerVersion>()({
 
     answer_version_1: {
         answerId: answers.answer_1.id,
@@ -12616,4 +12627,6 @@
         answerDataId: answerDatas.answer_data_2200.id,
         questionVersionId: questionVersions.question_version_587.id,
     },
-    
+});
+
+export type AnswerVersionsSeedDataType = ReturnType<typeof getAnswerVersionsSeedData>;

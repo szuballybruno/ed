@@ -1,4 +1,4 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm';
 import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
 import { CourseCategory } from '../CourseCategory';
@@ -62,7 +62,7 @@ export class CourseData {
     // TO MANY
     //
 
-    @XOneToMany<CourseData>()(CourseVersion, x => x.courseData)
+    @XOneToMany<CourseData>()(() => CourseVersion, x => x.courseData)
     courseVersions: CourseVersion[];
 
     //
@@ -75,7 +75,7 @@ export class CourseData {
 
     @ManyToOne(() => CourseCategory, x => x.categoryCourses)
     @JoinColumn({ name: 'category_id' })
-    category: CourseCategory;
+    category: Relation<CourseCategory>;
 
     // course sub category
     @Column()
@@ -91,7 +91,7 @@ export class CourseData {
 
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
     @JoinColumn({ name: 'teacher_id' })
-    teacher: User;
+    teacher: Relation<User>;
 
     // coverFile
     @Column({ nullable: true })
@@ -99,5 +99,5 @@ export class CourseData {
 
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
     @JoinColumn({ name: 'cover_file_id' })
-    coverFile: StorageFile;
+    coverFile: Relation<StorageFile>;
 }

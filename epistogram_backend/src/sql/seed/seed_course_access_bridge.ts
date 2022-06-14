@@ -1,11 +1,11 @@
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
-import { CourseSeedDataType } from './seed_courses';
+import { CourseDatasSeedDataType } from './seed_course_datas';
 
 export const getCourseAccessBridgeSeedData = (
     companies: CompaniesSeedDataType,
-    courses: CourseSeedDataType) => getSeedList<CourseAccessBridge>()({
+    courses: CourseDatasSeedDataType) => getSeedList<CourseAccessBridge>()({
 
         // pcworld
         pw_course_17: {

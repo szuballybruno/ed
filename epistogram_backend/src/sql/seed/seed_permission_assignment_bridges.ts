@@ -1,13 +1,13 @@
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
-import { CourseSeedDataType } from './seed_courses';
+import { CourseDatasSeedDataType } from './seed_course_datas';
 import { PermissionsSeedDataType } from './seed_permissions';
 import { UserSeedDataType } from './seed_users';
 
 export const getPermissionAssignmentBridgeSeedData = (
     companies: CompaniesSeedDataType,
-    courses: CourseSeedDataType,
+    courses: CourseDatasSeedDataType,
     permissionList: PermissionsSeedDataType,
     users: UserSeedDataType) => getSeedList<PermissionAssignmentBridge>()({
 

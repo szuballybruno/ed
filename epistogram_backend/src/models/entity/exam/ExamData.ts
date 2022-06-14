@@ -38,6 +38,6 @@ export class ExamData {
     // TO MANY
     // 
 
-    @XOneToMany<ExamData>()(ExamVersion, x => x.examData)
+    @XOneToMany<ExamData>()(() => ExamVersion, x => x.examData)
     examVersions: ExamVersion[];
 }

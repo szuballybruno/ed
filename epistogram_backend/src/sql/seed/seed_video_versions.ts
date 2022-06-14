@@ -1,12 +1,13 @@
 import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { getSeedList } from '../../services/sqlServices/SeedService';
+import { ModulesVersionsSeedDataType } from './seed_module_versions';
 import { VideosSeedDataType } from './seed_videos';
 import { VideoDataSeedDataType } from './seed_video_datas';
 
 export const getVideoVersionSeedData = (
     videoDatas: VideoDataSeedDataType,
     videos: VideosSeedDataType,
-    moduleVersions: any
+    moduleVersions: ModulesVersionsSeedDataType
 ) => getSeedList<VideoVersion>()({
 
     video_60: {
