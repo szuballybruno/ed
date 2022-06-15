@@ -13,6 +13,31 @@ assigned_courses AS
 	
 	INNER JOIN public.course co
 	ON co.id = upv.context_course_id
+),
+course_state_view AS
+(
+	SELECT 
+		course.id course_id,
+		user.id user_id,
+		ucb.id IS NOT NULL is_started,
+		ecv.has_successful_session is_completed
+	FROM public.course 
+
+	LEFT JOIN public.user
+	ON 1 = 1
+
+	LEFT JOIN public.exam_completed_view ecv
+	ON ecv.course_id = course.id
+		AND ecv.user_id = user.id
+		AND ecv.is_final_exam = true
+		
+	LEFT JOIN public.user_course_bridge ucb
+	ON ucb.user_id = user.id
+		AND ucb.course_id = course.id
+		
+	ORDER BY 
+		user.id,
+		course.id
 )
 SELECT 
 	u.id user_id,
@@ -50,7 +75,7 @@ ON first_civ.course_id = co.id
 	AND first_civ.item_is_deleted = false
 	AND first_civ.item_type != 'pretest'
 
-LEFT JOIN public.course_state_view csv
+LEFT JOIN course_state_view csv
 ON csv.course_id = co.id 
 	AND csv.user_id = u.id 
 

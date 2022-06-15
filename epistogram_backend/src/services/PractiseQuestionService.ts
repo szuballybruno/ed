@@ -73,8 +73,8 @@ export class PractiseQuestionService extends ServiceBase {
     getUserPractiseAnswerSession = async (userId: number) => {
 
         return this._ormService
-            .query(AnswerSession, { practiseType: 'practise', userId })
-            .where('type', '=', 'practiseType')
+            .query(AnswerSession, { userId })
+            .where('isPractise', '=', 'true')
             .and('userId', '=', 'userId')
             .getSingle();
     };

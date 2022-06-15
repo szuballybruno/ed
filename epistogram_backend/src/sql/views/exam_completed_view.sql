@@ -1,9 +1,9 @@
 SELECT 
 	u.id user_id,
-	e.id exam_id,
-	e.course_id course_id,
-	e.type = 'final' is_final_exam,
-	e.order_index order_index,
+	ev.id exam_version_id,
+	mv.course_version_id,
+	ed.is_final is_final_exam,
+	ed.order_index order_index,
 	SUM (asv.is_completed::int) completed_session_count,
 	SUM (asv.is_completed::int) > 0 has_completed_session,
 	
@@ -11,22 +11,26 @@ SELECT
 	SUM (asv.is_successful::int) > 0 has_successful_session,
 	
 	SUM (asv.is_successful::int) = 1 single_successful_session
-FROM public.exam e
+FROM public.exam_version ev
 
-LEFT JOIN public.user u
-ON 1 = 1
+LEFT JOIN public.exam_data ed
+ON ed.id = ev.exam_data_id
 
-LEFT JOIN public.answer_session_view asv
-ON asv.exam_id = e.id
-	AND asv.user_id = u.id
+CROSS JOIN public.user u
+
+LEFT JOIN public.answer_session_evaluation_view asv
+ON asv.exam_version_id = ev.id AND asv.user_id = u.id
+
+LEFT JOIN public.module_version mv
+ON mv.id = ev.module_version_id
 
 GROUP BY
-	e.id,
+	ev.id,
 	u.id,
-	e.course_id,
-	e.order_index,
-	e.type
+	mv.course_version_id,
+	ed.order_index,
+	ed.is_final
 	
 ORDER BY 
 	u.id,
-	e.id
+	ev.id

@@ -9,7 +9,7 @@ SELECT
 	) total_course_item_count,
 	(
 		SELECT COUNT(course_id)::integer
-		FROM public.course_item_state_view cisv
+		FROM public.course_item_playlist_view cisv
 		WHERE cisv.course_id = cv.id 
 			AND cisv.user_id = cv.user_id
 			AND cisv.state = 'completed' 
@@ -21,7 +21,7 @@ SELECT
 	) total_video_count,
 	(
 		SELECT COUNT(course_id)::integer
-		FROM public.course_item_state_view cisv
+		FROM public.course_item_playlist_view cisv
 		WHERE cisv.course_id = cv.id 
 			AND cisv.user_id = cv.user_id
 			AND cisv.state = 'completed' 

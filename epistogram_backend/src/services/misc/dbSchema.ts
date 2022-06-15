@@ -61,7 +61,6 @@ import { CourseAdminContentView } from '../../models/views/CourseAdminContentVie
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
-import { CourseItemAllView } from '../../models/views/CourseItemAllView';
 import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
 import { CourseItemStateView } from '../../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
@@ -69,7 +68,6 @@ import { CourseModuleOverviewView } from '../../models/views/CourseModuleOvervie
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
-import { CourseStateView } from '../../models/views/CourseStateView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamResultView } from '../../models/views/ExamResultView';
@@ -113,7 +111,7 @@ import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomat
 import { UserVideoPractiseProgressView } from '../../models/views/UserVideoPractiseProgressView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
-import { VideoProgressView } from '../../models/views/VideoProgressView';
+import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
 import { getAnswerDatasSeedData } from '../../sql/seed/seed_answer_datas';
 import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
@@ -226,14 +224,14 @@ export const createDBSchema = (): XDBMSchemaType => {
         seedScripts,
 
         views: [
+            ['video_version_view'],
             ['answer_session_view', AnswerSessionView],
+            ['answer_session_evaluation_view'],
             ['exam_completed_view', ExamCompletedView],
-            ['video_progress_view', VideoProgressView],
+            ['video_cursor_seconds_view', VideoCursorSecondsView],
             ['course_item_view'],
             ['user_practise_recommendation_view', UserPractiseRecommendationView],
-            ['course_item_state_view', CourseItemStateView],
-            ['course_state_view', CourseStateView],
-            ['course_item_all_view', CourseItemAllView],
+            ['course_item_playlist_view', CourseItemStateView],
             ['signup_question_view', SignupQuestionView],
             ['user_role_view', UserRoleView],
             ['latest_given_answer_view'],

@@ -4,7 +4,7 @@ import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridg
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
-import { VideoProgressView } from '../models/views/VideoProgressView';
+import { VideoCursorSecondsView } from '../models/views/VideoCursorSecondsView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
 import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
@@ -101,7 +101,7 @@ export class PlaybackService extends ServiceBase {
     getMaxWatchedSeconds = async (userId: number, videoId: number) => {
 
         const ads = await this._ormService
-            .query(VideoProgressView, { userId, videoId })
+            .query(VideoCursorSecondsView, { userId, videoId })
             .where('userId', '=', 'userId')
             .and('videoId', '=', 'videoId')
             .getSingle();

@@ -1,11 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { XJoinColumn, XManyToOne } from '../../services/XORM/XORMDecorators';
-import { AnswerSessionType } from '../../shared/types/sharedTypes';
-import { ExamData } from './exam/ExamData';
 import { ExamVersion } from './exam/ExamVersion';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
-import { VideoData } from './video/VideoData';
 import { VideoVersion } from './video/VideoVersion';
 
 @Entity()
@@ -20,8 +17,8 @@ export class AnswerSession {
     @Column({ nullable: true, type: 'timestamptz' })
     endDate: Date | null;
 
-    @Column({ default: 'exam' as AnswerSessionType })
-    type: AnswerSessionType;
+    @Column()
+    isPractise: boolean;
 
     //
     // TO MANY

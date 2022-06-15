@@ -75,7 +75,7 @@ SELECT
     
 FROM public.user u
 
-LEFT JOIN course_item_state_view cisv
+LEFT JOIN course_item_playlist_view cisv
 ON cisv.user_id = u.id
 
 LEFT JOIN public.video v

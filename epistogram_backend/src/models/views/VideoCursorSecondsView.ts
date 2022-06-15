@@ -5,7 +5,11 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class CourseStateView {
+export class VideoCursorSecondsView {
+
+    @ViewColumn()
+    @XViewColumn()
+    videoId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -13,13 +17,5 @@ export class CourseStateView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    isCompleted: boolean;
-
-    @ViewColumn()
-    @XViewColumn()
-    isStarted: boolean;
+    toSeconds: number;
 }
