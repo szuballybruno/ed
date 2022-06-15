@@ -8,6 +8,7 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { CourseItemsService } from './CourseItemsService';
 import { MapperService } from './MapperService';
 import { getItemCode } from './misc/encodeService';
+import { log } from './misc/logger';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -134,6 +135,66 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 id: userCourseBridge.id,
                 courseMode: mode
             } as UserCourseBridge);
+    }
+    /**
+     * Sets the course mode (beginner / advanced).
+     * 
+     * @param userId 
+     * @param courseId 
+     * @param mode 
+     */
+    async setCourseStartDateAsync(userId: PrincipalId, courseId: number) {
+
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+
+        if (!userCourseBridge)
+            throw new Error('User course bridge not found!');
+
+        await this._ormService
+            .getRepository(UserCourseBridge)
+            .save({
+                courseId: courseId,
+                userId: userId.toSQLValue(),
+                id: userCourseBridge.id,
+                startDate: new Date(Date.now())
+            } as UserCourseBridge);
+    }
+
+    async setRequiredCompletionDateAsync(userId: PrincipalId, courseId: number, requiredCompletionDate: string) {
+
+        const userCourseBridge = await this
+            .getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+
+        if (userCourseBridge) {
+
+            log('User course bridge exists, updating deadline...')
+
+            return this.updateAsync({
+                id: userCourseBridge.id,
+                requiredCompletionDate: new Date(requiredCompletionDate)
+            })
+        }
+
+        try {
+
+            log('User course bridge is not exists, creating...')
+
+            await this.createNewCourseBridge(courseId, userId.toSQLValue(), null, 'created')
+        } catch (e) {
+
+            throw new Error('C')
+        }
+
+        const newUserCourseBridge = await this
+            .getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+
+        if (!newUserCourseBridge)
+            throw new Error('Failed to find new course bridge')
+
+        return this.updateAsync({
+            id: newUserCourseBridge.id,
+            requiredCompletionDate: new Date(requiredCompletionDate)
+        })
     }
 
     /**

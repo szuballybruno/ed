@@ -12,6 +12,9 @@ export class UserCourseBridge {
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
 
+    @Column({ type: 'timestamptz', nullable: true })
+    startDate: Date | null;
+
     @Column({ type: 'text', default: 'beginner' })
     courseMode: CourseModeType;
 
@@ -27,8 +30,11 @@ export class UserCourseBridge {
     @Column({ type: 'text' })
     tempomatMode: TempomatModeType;
 
-    @Column({ type: 'timestamptz', nullable: true  })
+    @Column({ type: 'timestamptz', nullable: true })
     previsionedCompletionDate: Date;
+
+    @Column({ type: 'timestamptz', nullable: true })
+    requiredCompletionDate: Date | null;
 
     // user
     @Column()

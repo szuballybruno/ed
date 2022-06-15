@@ -46,7 +46,7 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
+import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserStatsView } from '../../models/views/UserStatsView';
@@ -135,9 +135,6 @@ const marray = [
         .addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
 
     epistoMappingsBuilder
-        .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
-
-    epistoMappingsBuilder
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: Video, sessionId: number, maxWatchedSeconds: number) => ({
             id: video.id,
             courseId: video.courseId,
@@ -180,6 +177,34 @@ const marray = [
                     }),
                 isCompleted: isCompletedSignup
             } as SignupDataDTO;
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(UserCourseStatsDTO, ([assetUrlService]) => (stats: UserCourseStatsViewWithTempomatData[]) => {
+            return stats.map(x => {
+                return {
+                    userId: x.userId,
+                    courseId: x.courseId,
+                    courseName: x.title,
+                    thumbnailImageUrl: assetUrlService.getAssetUrl(x.coverFilePath),
+                    startDate: x.startDate,
+                    differenceFromAveragePerformancePercentage: x.differenceFromAveragePerformancePercentage,
+                    courseProgressPercentage: x.courseProgressPercentage,
+                    performancePercentage: x.performancePercentage,
+                    completedVideoCount: x.completedVideoCount,
+                    completedExamCount: x.completedExamCount,
+                    totalSpentSeconds: x.totalSpentSeconds,
+                    averagePerformanceOnCourse: x.averagePerformanceOnCourse,
+                    answeredVideoQuestionCount: x.answeredVideoQuestionCount,
+                    answeredPractiseQuestionCount: x.answeredPractiseQuestionCount,
+                    isFinalExamCompleted: x.isFinalExamCompleted,
+                    recommendedItemsPerWeek: x.recommendedItemsPerWeek,
+                    lagBehindPercentage: x.lagBehindPercentage,
+                    previsionedCompletionDate: x.previsionedCompletionDate,
+                    requiredCompletionDate: x.requiredCompletionDate,
+                    tempomatMode: x.tempomatMode,
+                };
+            })
         }),
 
     epistoMappingsBuilder
@@ -245,30 +270,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 lastWatchTime: stats.lastWatchTime
             }
         })
-
-    mapperService
-        .addMap(UserCourseStatsView, UserCourseStatsDTO, (stats) => {
-            return {
-                userId: stats.userId,
-                courseId: stats.courseId,
-                courseName: stats.title,
-                thumbnailImageUrl: getAssetUrl(stats.coverFilePath),
-                differenceFromAveragePerformancePercentage: stats.differenceFromAveragePerformancePercentage,
-                courseProgressPercentage: stats.courseProgressPercentage,
-                performancePercentage: stats.performancePercentage,
-                completedVideoCount: stats.completedVideoCount,
-                completedExamCount: stats.completedExamCount,
-                totalSpentSeconds: stats.totalSpentSeconds,
-                averagePerformanceOnCourse: stats.averagePerformanceOnCourse,
-                answeredVideoQuestionCount: stats.answeredVideoQuestionCount,
-                answeredPractiseQuestionCount: stats.answeredPractiseQuestionCount,
-                isFinalExamCompleted: stats.isFinalExamCompleted,
-                recommendedItemsPerWeek: stats.recommendedItemsPerWeek,
-                lagBehindPercentage: stats.lagBehindPercentage,
-                previsionedCompletionDate: stats.previsionedCompletionDate,
-                tempomatMode: stats.tempomatMode,
-            };
-        });
 
     mapperService
         .addMap(CommentListView, CommentListDTO, (comment) => {

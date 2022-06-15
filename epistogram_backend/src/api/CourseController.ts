@@ -143,6 +143,21 @@ export class CourseController {
             .setCourseModeAsync(params.principalId, courseId, courseMode);
     };
 
+    @XControllerAction(apiRoutes.course.setRequiredCompletionDate, { isPost: true })
+    setRequiredCompletionDate = async (params: ActionParams) => {
+
+        const dto = params
+            .getBody<{ courseId: number, requiredCourseCompletionDate: string }>();
+
+        const courseId = dto.getValue(x => x.courseId, 'int');
+        const requiredCourseCompletionDate = dto.getValue(x => x.requiredCourseCompletionDate, 'string');
+
+        console.log(requiredCourseCompletionDate)
+
+        return this._userCourseBridgeService
+            .setRequiredCompletionDateAsync(params.principalId, courseId, requiredCourseCompletionDate);
+    };
+
     @XControllerAction(apiRoutes.course.getCourseProgressShort)
     getCourseProgressShortAction = async (params: ActionParams) => {
 

@@ -42,10 +42,6 @@ export const apiRoutes = {
         getRoleAssignCompanies: '/companies/get-role-assign-companies',
     },
 
-    scheduledJobs: {
-        evaluateUserProgress: '/scheduledjobs/evaluate-user-progress'
-    },
-
     teacherInfo: {
         getTeacherInfo: '/teacherinfo/get-teacher-info',
         saveTeacherInfo: '/teacherinfo/save-teacher-info'
@@ -186,6 +182,7 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
+        setRequiredCompletionDate: '/course/set-required-completion-date',
         getCourseProgressData: '/course/get-course-progress-data',
         getCourseProgressShort: '/course/get-course-progress-short'
     },

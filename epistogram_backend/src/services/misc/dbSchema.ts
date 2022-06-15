@@ -31,6 +31,9 @@ import { Group } from '../../models/entity/Group';
 import { JobTitle } from '../../models/entity/JobTitle';
 import { Like } from '../../models/entity/Like';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
+import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
+import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
+import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
@@ -48,7 +51,6 @@ import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBrid
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
 import { Video } from '../../models/entity/Video';
-import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
@@ -84,14 +86,13 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
+import { TempomatCalculationDataView } from '../../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserAnswerView } from '../../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
-import { UserCourseRecommendedItemQuotaView } from '../../models/views/UserCourseRecommendedItemQuotaView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
@@ -106,10 +107,10 @@ import { UserReactionTimeView } from '../../models/views/UserReactionTimeView';
 import { UserRoleAssignCompanyView } from '../../models/views/UserRoleAssignCompanyView';
 import { UserRoleView } from '../../models/views/UserRoleView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
+import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserStatsView } from '../../models/views/UserStatsView';
-import { UserTempomatAdjustmentValueView } from '../../models/views/UserTempomatAdjustmentValueView';
 import { UserVideoPractiseProgressView } from '../../models/views/UserVideoPractiseProgressView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
@@ -135,6 +136,7 @@ import { getPermissionAssignmentBridgeSeedData } from '../../sql/seed/seed_permi
 import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personality_trait_categories';
 import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
 import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
+import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_answer';
 import { getSeedQuestions } from '../../sql/seed/seed_questions';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
 import { getRolesSeedData } from '../../sql/seed/seed_roles';
@@ -146,11 +148,11 @@ import { getStorageFileSeedData } from '../../sql/seed/seed_storage_file';
 import { getTeacherInfoSeedData } from '../../sql/seed/seed_teacher_info';
 import { getTempomatAdjustmentValueSeedData } from '../../sql/seed/seed_tempomat_adjustment_values';
 import { getUserSeedData } from '../../sql/seed/seed_users';
+import { getUserCourseBridgeSeedData } from '../../sql/seed/seed_user_course_bridges';
+import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_video_progress_bridges';
 import { getVideoSeedData } from '../../sql/seed/seed_videos';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
-import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
-import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -186,8 +188,11 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getSeedQuestions, [getVideoSeedData, getExamSeedData, getPersonalityTraitCategoriesSeed], Question)
         .add(getAnswersSeed, [getSeedQuestions], Answer)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
+        .add(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideoSeedData], UserCourseBridge)
+        .add(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoSeedData], UserVideoProgressBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
+        .add(getPrequizUserAnswerSeedData, [getUserSeedData, getCourseSeedData, getPrequizQuestionsSeedData, getPrequizAnswersSeedData], PrequizUserAnswer)
         .build();
 
     const seedScripts = injector
@@ -269,12 +274,11 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
             ['user_course_progress_actual'],
             ['user_course_progress_view', UserCourseProgressView],
-            ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
-            ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
-            ['user_course_stats_view', UserCourseStatsView],
             ['user_video_practise_progress_view', UserVideoPractiseProgressView],
             ['user_video_stats_view', UserVideoStatsView],
             ['user_exam_stats_view', UserExamStatsView],
+            ['tempomat_calculation_data_view', TempomatCalculationDataView],
+            ['user_course_stats_view', UserCourseStatsView],
             ['course_item_question_edit_view', CourseItemQuestionEditView],
             ['comment_list_view', CommentListView],
             ['user_spent_time_ratio_view', UserSpentTimeRatioView],

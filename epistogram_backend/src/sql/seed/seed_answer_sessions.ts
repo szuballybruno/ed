@@ -1,5 +1,6 @@
 import { AnswerSession } from '../../models/entity/AnswerSession';
 import { getSeedList } from '../../services/sqlServices/SeedService';
+import { ExamSeedDataType } from './seed_exams';
 import { UserSeedDataType } from './seed_users';
 
 export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList<AnswerSession>()({

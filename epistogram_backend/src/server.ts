@@ -25,7 +25,6 @@ import { PretestController } from './api/PretestController';
 import { QuestionController } from './api/QuestionController';
 import { RegistrationController } from './api/RegistrationController';
 import { RoleController } from './api/RoleController';
-import { ScheduledJobTriggerController } from './api/ScheduledJobTriggerController';
 import { ShopController } from './api/ShopController';
 import { SignupController } from './api/SignupController';
 import { TeacherInfoController } from './api/TeacherInfoController';
@@ -109,6 +108,8 @@ const main = async () => {
     log('------------- APPLICATION STARTED ----------------');
     log('');
 
+
+
     const globalConfig = GlobalConfiguration
         .initGlobalConfig(getCurrentDir());
 
@@ -122,7 +123,6 @@ const main = async () => {
     const sqlConnectionService = new SQLConnectionService(globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlConnectionService);
-    const userStatsService = new UserStatsService(ormConnectionService, mapperService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
     const eventService = new EventService(mapperService, ormConnectionService);
     const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService);
@@ -163,9 +163,10 @@ const main = async () => {
     const videoRatingService = new VideoRatingService(ormConnectionService);
     const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
     const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, loggerService, eventService);
-    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, tempomatService);
+    const userStatsService = new UserStatsService(ormConnectionService, mapperService, tempomatService);
+    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService);
     const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
-    const userProgressService = new UserProgressService(mapperService, ormConnectionService);
+    const userProgressService = new UserProgressService(mapperService, ormConnectionService, tempomatService);
     const commentService = new CommentService(ormConnectionService, mapperService);
     const likeService = new LikeService(ormConnectionService, mapperService);
     const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
@@ -199,7 +200,6 @@ const main = async () => {
     const userProgressController = new UserProgressController(userProgressService);
     const playbackController = new PlaybackController(playbackService);
     const tempomatController = new TempomatController(tempomatService);
-    const scheduledJobTriggerController = new ScheduledJobTriggerController(tempomatService);
     const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
     const commentController = new CommentController(commentService, likeService);
@@ -230,7 +230,6 @@ const main = async () => {
         .addController(ZAuthenticationController, authenticationController)
         .addController(ExamController, examController)
         .addController(RegistrationController, registrationController)
-        .addController(ScheduledJobTriggerController, scheduledJobTriggerController)
         .addController(TempomatController, tempomatController)
         .addController(DailyTipController, dailyTipController)
         .addController(PersonalityAssessmentController, personalityAssessmentController)

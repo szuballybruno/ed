@@ -5,6 +5,7 @@ export class UserCourseStatsDTO {
     courseId: number;
     thumbnailImageUrl: string;
     courseName: string;
+    startDate: Date;
     differenceFromAveragePerformancePercentage: number;
     courseProgressPercentage: number;
     performancePercentage: number;
@@ -18,5 +19,6 @@ export class UserCourseStatsDTO {
     recommendedItemsPerWeek: number;
     lagBehindPercentage: number;
     previsionedCompletionDate: Date;
+    requiredCompletionDate: Date;
     tempomatMode: TempomatModeType;
 }

@@ -104,7 +104,7 @@ export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'COMMENT';
 
 export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
 
-export type CourseStageNameType = 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
+export type CourseStageNameType = 'created' | 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
 
 export type TempomatModeType = 'auto' | 'light' | 'balanced' | 'strict';
 

@@ -18,6 +18,15 @@ FROM (
             WHERE sf.id = c.cover_file_id
         ) cover_file_path,
 
+        -- cover file path
+        (
+            SELECT
+                ucb.start_date
+            FROM public.user_course_bridge ucb
+            WHERE ucb.user_id = clsv.user_id
+            AND ucb.course_id = c.id
+        ) start_date,
+
         clsv.user_id user_id,
         
         -- course progress percentage
@@ -161,45 +170,19 @@ FROM (
             THEN FALSE
         END is_final_exam_completed,
         
-        -- recommended course items per week
-        (
-            SELECT
-                ucriqv.recommended_items_per_week::int
-            FROM user_course_recommended_item_quota_view ucriqv
-            WHERE
-                ucriqv.user_id = clsv.user_id
-                AND ucriqv.course_id = c.id
-        ) recommended_items_per_week,
-        
-        -- current lag behind percentage
-        (
-            SELECT ucpv.lag_behind_percentage
-            FROM user_course_progress_view ucpv
-            WHERE
-                ucpv.user_id = clsv.user_id
-                AND ucpv.course_id = c.id
-        ) lag_behind_percentage,
-        
-        -- previsioned course completion date
-        (
-            SELECT previsioned_completion_date
-            FROM user_course_completion_original_estimation_view uccoev
-            WHERE
-                uccoev.user_id = clsv.user_id
-                AND uccoev.course_id = c.id
-        ) previsioned_completion_date,
-        
-        -- current course tempomat mode
-        (
-            SELECT ucpv.tempomat_mode
-            FROM user_course_progress_view ucpv
-            WHERE
-                ucpv.user_id = clsv.user_id
-                AND ucpv.course_id = c.id
-        ) tempomat_mode
+        tcdv.required_completion_date,
+        tcdv.tempomat_adjustment_value,
+        tcdv.tempomat_mode,
+        tcdv.original_previsioned_completion_date,
+        tcdv.total_item_count,
+        tcdv.total_completed_item_count
     
     FROM public.course c
     
     LEFT JOIN public.course_learning_stats_view clsv
     ON clsv.course_id = c.id
+
+    LEFT JOIN public.tempomat_calculation_data_view tcdv
+    ON tcdv.user_id = clsv.user_id
+    AND tcdv.course_id = c.id
 ) sq

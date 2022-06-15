@@ -47,6 +47,16 @@ export const useSetCourseMode = () => {
     };
 };
 
+export const useSetRequiredCompletionDate = () => {
+
+    const qr = usePostDataUnsafe<{ courseId: number, requiredCourseCompletionDate: string }, void>(apiRoutes.course.setRequiredCompletionDate);
+
+    return {
+        setRequiredCourseCompletionDateAsync: qr.postDataAsync,
+        setRequiredCourseCompletionDateState: qr.state
+    };
+};
+
 export const useCourseDetailsEditData = (courseId: number) => {
 
     const qr = useReactQuery2<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });

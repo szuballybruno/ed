@@ -1,6 +1,6 @@
 import { SignupQuestionDTO } from './SignupQuestionDTO';
 
-export type SignupDataDTO = {
+export class SignupDataDTO {
     questions: SignupQuestionDTO[];
     isCompleted: boolean;
 }

@@ -1,16 +1,16 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { CourseModeType } from '../../../shared/types/sharedTypes';
 import { useSetCourseMode } from '../../../services/api/courseApiService';
 import { usePretestResults } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { CourseModeType } from '../../../shared/types/sharedTypes';
+import { Environment } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoGrid } from '../../controls/EpistoGrid';
-import { Environment } from '../../../static/Environemnt';
+import StatisticsCard from '../../statisticsCard/StatisticsCard';
+import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestResultsSubpage = () => {
 
