@@ -1,87 +1,118 @@
-SELECT 
-	"subquery".*,
-	"q"."question_text",
-	"q"."type_id" AS "question_type_id",
-	"a"."id" AS "answer_id",
-	"a"."text" AS "answer_text"
-FROM (
+WITH
+practise_question_ids AS 
+(
 	SELECT 
-	"u"."id" AS "user_id",
-	"q"."id" AS "question_id",
-	MAX("ga"."id") AS "latest_given_answer_id",
-	COUNT ("ga"."id") AS "given_answer_count",
-	SUM ("ga"."is_practise_answer"::INT) AS "practise_answer_count"
-	FROM public."question" AS "q"
+		qv.question_id, 
+		ase.user_id,
+		MAX(ga.id) latest_given_answer_id
+	FROM public.question_version qv
 
-	LEFT JOIN public."user" AS "u"
-	ON 1 = 1
+	INNER JOIN public.given_answer ga
+	ON ga.question_version_id = qv.id
 
-	LEFT JOIN public."given_answer" AS "ga"
-	ON "ga"."question_id" = "q"."id"
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
 
-	INNER JOIN public."answer_session" AS "as"
-	ON "as"."id" = "ga"."answer_session_id"
-		AND "as"."user_id" = "u"."id"
-
-	WHERE 
-		"q"."exam_id" IS NULL
-
+	WHERE qv.video_version_id IS NOT NULL
+	
 	GROUP BY 
-		"u"."id",
-		"q"."id"
-
-	ORDER BY 
-		"u"."id",
-		"q"."id"
-) AS "subquery"
-
-LEFT JOIN public."given_answer" AS "ga"
-ON "ga"."id" = "subquery"."latest_given_answer_id"
-
-LEFT JOIN public."question" AS "q"
-ON "q"."id" = "subquery"."question_id"
-
-LEFT JOIN public."answer" AS "a"
-ON "a"."question_id" = "q"."id"
-
-WHERE 
+		qv.question_id, 
+		ase.user_id
+),
+practise_question_counts AS 
 (
-	"subquery"."practise_answer_count" < 2
-)
-AND 
+	SELECT 
+		pqi.question_id,
+		pqi.user_id,
+		COUNT(ga.id) practise_answer_count
+	FROM practise_question_ids pqi
+	
+	LEFT JOIN public.question_version qv
+	ON qv.question_id = pqi.question_id
+	
+	LEFT JOIN public.given_answer ga
+	ON ga.question_version_id = qv.id
+	
+	INNER JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
+	AND ase.is_practise
+	
+	GROUP BY 
+		pqi.question_id,
+		pqi.user_id
+),
+practise_questions AS
 (
+	SELECT 
+		pqi.question_id, 
+		pqi.user_id
+	FROM practise_question_ids pqi
+	
+	LEFT JOIN practise_question_counts pqc
+	ON pqc.question_id = pqi.question_id
+	AND pqc.user_id = pqi.user_id
+	
+	LEFT JOIN public.given_answer ga
+	ON ga.id = pqi.latest_given_answer_id
+	
+	WHERE (pqc.practise_answer_count < 2) AND 
 	(
-		-- incorrect video answer 
-		"ga"."is_practise_answer" = false 
-		AND  
-		"ga"."is_correct" IS DISTINCT FROM true
-		AND 
-		"ga"."creation_date" + INTERVAL '5 MINUTES' < NOW() 
+		(
+			-- incorrect video answer 
+			ga.is_practise_answer = false 
+			AND  
+			ga.is_correct IS DISTINCT FROM true
+			AND 
+			ga.creation_date + INTERVAL '5 MINUTES' < NOW() 
+		)
+		OR
+		(
+			-- correct video answer 
+			ga.is_practise_answer = false 
+			AND  
+			ga.is_correct = true 
+			AND 
+			ga.creation_date + INTERVAL '20 MINUTES' < NOW() 
+		)
+		OR
+		(
+			-- incorrect practise answer 
+			ga.is_practise_answer = true 
+			AND  
+			ga.is_correct IS DISTINCT FROM true
+			AND 
+			ga.creation_date + INTERVAL '60 MINUTES' < NOW() 
+		)
 	)
-	OR
-	(
-		-- correct video answer 
-		"ga"."is_practise_answer" = false 
-		AND  
-		"ga"."is_correct" = true 
-		AND 
-		"ga"."creation_date" + INTERVAL '20 MINUTES' < NOW() 
-	)
-	OR
-	(
-		-- incorrect practise answer 
-		"ga"."is_practise_answer" = true 
-		AND  
-		"ga"."is_correct" IS DISTINCT FROM true
-		AND 
-		"ga"."creation_date" + INTERVAL '60 MINUTES' < NOW() 
-	)
+),
+latest_question_version AS 
+(
+	SELECT MAX(qv.id) version_id, qv.question_id
+	FROM public.question_version qv
+	GROUP BY qv.question_id
 )
+SELECT
+	qv.id question_version_id,
+	qd.question_text,
+	qd.type_id question_type_id,
+	av.id answer_id,
+	ad.text answer_text
+FROM practise_questions pq
 
-ORDER BY 
-	"subquery"."user_id",
-	"subquery"."question_id",
-	"a"."id"
+LEFT JOIN latest_question_version lqv
+ON lqv.question_id = pq.question_id
+
+LEFT JOIN public.question_version qv
+ON qv.id = lqv.version_id
+
+LEFT JOIN public.question_data qd
+ON qd.id = qv.question_data_id
+
+LEFT JOIN public.answer_version av
+ON av.question_version_id = qv.id
+
+LEFT JOIN public.answer_data ad
+ON ad.id = av.answer_data_id
 
 
 

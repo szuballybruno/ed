@@ -1,4 +1,10 @@
 WITH 
+latest_course_version AS
+(
+	SELECT MAX(cv.id) version_id, cv.course_id
+	FROM public.course_version cv
+	GROUP BY cv.course_id
+),
 user_assigned_permissions AS 
 (
 	SELECT 
@@ -183,8 +189,8 @@ v AS
 		co.name context_company_name,
 		
 		-- context course 
-		cour.id context_course_id,
-		cour.title context_course_name,
+		ap.context_course_id,
+		cd.title context_course_name,
 		
 		-- context course 
 		ap.context_comment_id,
@@ -206,8 +212,14 @@ v AS
 	LEFT JOIN public.company co
 	ON co.id = ap.context_company_id
 
-	LEFT JOIN public.course cour
-	ON cour.id = ap.context_course_id
+	LEFT JOIN latest_course_version lcv
+	ON lcv.course_id = ap.context_course_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcv.version_id
+	
+	LEFT JOIN public.course_data cd
+	ON cd.id = cv.course_data_id
 
 	LEFT JOIN public.role parent_ro
 	ON parent_ro.id = ap.role_id
