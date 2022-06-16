@@ -3,6 +3,7 @@ import { XJoinColumn, XManyToOne, XOneToMany } from "../../../services/XORM/XORM
 import { AnswerVersion } from "../answer/AnswerVersion";
 import { ExamVersion } from "../exam/ExamVersion";
 import { GivenAnswer } from "../GivenAnswer";
+import { PersonalityTraitCategory } from "../PersonalityTraitCategory";
 import { VideoVersion } from "../video/VideoVersion";
 import { Question } from "./Question";
 import { QuestionData } from "./QuestionData";
@@ -56,4 +57,11 @@ export class QuestionVersion {
     @XManyToOne<QuestionVersion>()(() => QuestionData, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionDataId')
     questionData: QuestionData;
+
+    // category
+    @Column({ nullable: true })
+    personalityTraitCategoryId: number | null;
+    @XManyToOne<QuestionVersion>()(() => PersonalityTraitCategory, x => x.questionVersions)
+    @XJoinColumn<QuestionVersion>('personalityTraitCategoryId')
+    personalityTraitCategory: PersonalityTraitCategory | null;
 }

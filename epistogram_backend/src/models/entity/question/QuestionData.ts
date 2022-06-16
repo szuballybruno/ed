@@ -30,13 +30,6 @@ export class QuestionData {
     // TO ONE 
     //
 
-    // category
-    @Column({ nullable: true })
-    personalityTraitCategoryId: number | null;
-    @ManyToOne(_ => PersonalityTraitCategory, x => x.questions)
-    @JoinColumn({ name: 'personality_trait_category_id' })
-    personalityTraitCategory: PersonalityTraitCategory | null;
-
     // type 
     @Column({ default: 1 })
     typeId: number;

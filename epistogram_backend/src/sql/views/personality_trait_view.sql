@@ -1,3 +1,41 @@
+WITH 
+latest_question_versions AS
+(
+	SELECT MAX(qv.id) version_id, qv.question_id
+	FROM public.question_version qv
+	GROUP BY qv.question_id
+),
+asd AS
+(
+	SELECT
+		u.id user_id,
+		u.email,
+		ptc.id personality_trait_category_id,
+		COUNT(lgav.id) given_answer_count,
+		COALESCE(SUM((lgav.is_correct IS NOT DISTINCT FROM true)::int), 0)::int max_score,
+		COALESCE(SUM((lgav.is_correct IS NOT DISTINCT FROM false)::int), 0)::int min_score
+	FROM public.personality_trait_category ptc
+	
+	CROSS JOIN public.user u
+	
+	LEFT JOIN public.question q
+	ON q.personality_trait_category_id = ptc.id
+	
+	LEFT JOIN 
+	
+	
+	LEFT JOIN public.latest_given_answer_view lgav
+	ON lgav.question_version_id = q.id 
+	AND lgav.user_id = u.id
+	
+	GROUP BY 
+		u.id,
+		ptc.id
+	
+	ORDER BY 
+		u.id,
+		ptc.id
+)
 SELECT 
 	u.id user_id,
 	ptc.id personality_trait_category_id,
@@ -22,37 +60,9 @@ CROSS JOIN public.user u
 
 LEFT JOIN 
 (
-	SELECT
-		u.id user_id,
-		u.email,
-		ptc.id personality_trait_category_id,
-		COUNT(lgav.id) given_answer_count,
-		COALESCE(SUM((lgav.is_correct IS NOT DISTINCT FROM true)::int), 0)::int max_score,
-		COALESCE(SUM((lgav.is_correct IS NOT DISTINCT FROM false)::int), 0)::int min_score
-	FROM public.personality_trait_category ptc
 	
-	CROSS JOIN public.user u
-	
-	LEFT JOIN public.question q
-	ON q.personality_trait_category_id = ptc.id
-	
-	LEFT JOIN public.latest_given_answer_view lgav
-	ON lgav.question_id = q.id 
-		AND lgav.user_id = u.id
-	
--- 	LEFT JOIN public.answer_session ase
--- 	ON ase.id = ga.answer_session_id AND ase.user_id = u.id
-	
--- 	WHERE q.personality_trait_category_id IS NOT NULL
-	
-	GROUP BY 
-		u.id,
-		ptc.id
-	
-	ORDER BY 
-		u.id,
-		ptc.id
 ) ptca
-ON ptca.personality_trait_category_id = ptc.id AND ptca.user_id = u.id
+ON ptca.personality_trait_category_id = ptc.id 
+AND ptca.user_id = u.id
 
 ORDER BY u.id, ptc.id

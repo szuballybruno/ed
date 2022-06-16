@@ -168,6 +168,10 @@ import { Answer } from '../../models/entity/answer/Answer';
 import { VideoFile } from '../../models/entity/video/VideoFile';
 import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
 import { Question } from '../../models/entity/question/Question';
+import { getQuestionSeedData } from '../../sql/seed/seed_questions';
+import { getSeedQuestionVersions } from '../../sql/seed/seed_question_versions';
+import { getExamVersionsSeedData } from '../../sql/seed/seed_exam_versions';
+import { getExamSeedData } from '../../sql/seed/seed_exams';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -178,15 +182,17 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getCompaniesSeedData, [], Company)
         .add(getStorageFileSeedData, [], StorageFile)
         .add(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
-        .add(getQuestionDatasSeedData, [getPersonalityTraitCategoriesSeed], QuestionData)
+        .add(getQuestionDatasSeedData, [], QuestionData)
         .add(getCourseCategoriesSeedData, [], CourseCategory)
         .add(getCourseRatingGroupSeedData, [], CourseRatingGroup)
         .add(getShopItemCategoriesSeedData, [], ShopItemCategory)
         .add(getPrequizQuestionsSeedData, [], PrequizQuestion)
         .add(getExamDatasSeedData, [], ExamData)
         .add(getVideosSeedData, [], Video)
+        .add(getExamSeedData, [], Exam)
         .add(getModulesSeedData, [], Module)
         .add(getCourseSeedData, [], Course)
+        .add(getQuestionSeedData, [], Question)
         .add(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
         .add(getRolesSeedData, [getCompaniesSeedData], Role)
         .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
@@ -206,7 +212,9 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getVideoDataSeedData, [getStorageFileSeedData], VideoData)
         .add(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
         .add(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
+        .add(getExamVersionsSeedData, [getModuleVersionsSeedData, getExamDatasSeedData, getExamSeedData], ExamVersion)
         .add(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
+        .add(getSeedQuestionVersions, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
         .add(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)

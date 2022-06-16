@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DailyTip } from './DailyTip';
 import { QuestionData } from './question/QuestionData';
+import { QuestionVersion } from './question/QuestionVersion';
 
 @Entity()
 export class PersonalityTraitCategory {
@@ -24,9 +25,9 @@ export class PersonalityTraitCategory {
     maxDescription: string;
 
     // questions
-    @OneToMany(_ => QuestionData, x => x.personalityTraitCategory)
+    @OneToMany(_ => QuestionVersion, x => x.personalityTraitCategory)
     @JoinColumn()
-    questions: QuestionData[];
+    questionVersions: QuestionVersion[];
 
     // daily tips 
     @OneToMany(_ => DailyTip, x => x.personalityTraitCategory)
