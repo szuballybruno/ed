@@ -3,6 +3,7 @@ import { oldexams } from './oldexams.js';
 import fs from 'fs';
 import { oldquestions } from './oldquestions.js';
 import { oldanswers } from './oldanswers.js';
+import { videodatas } from './videodatas.js';
 
 // const vvs = Object.keys(videos)
 //     // .filter((_, i) => i < 10)
@@ -103,26 +104,38 @@ import { oldanswers } from './oldanswers.js';
 //     });
 
 
-const vvs = Object.keys(oldanswers)
-    .map(key => {
+// const vvs = Object.keys(oldanswers)
+//     .map(key => {
 
-        const id = key
-            .replace('answer_', '');
+//         const id = key
+//             .replace('answer_', '');
 
-        const versionKey = 'answer_version_' + id;
-        const dataKey = 'answer_data_' + id;
-        const entityKey = 'answer_' + id;
+//         const versionKey = 'answer_version_' + id;
+//         const dataKey = 'answer_data_' + id;
+//         const entityKey = 'answer_' + id;
 
-        const obj = oldanswers[key];
-        const quesitonKey = obj.questionId.replace('question_', 'question_version_');
+//         const obj = oldanswers[key];
+//         const quesitonKey = obj.questionId.replace('question_', 'question_version_');
 
-        return `
-    ${versionKey}: {
-        answerId: answers.${entityKey}.id,
-        answerDataId: answerDatas.${dataKey}.id,
-        questionVersionId: questionVersions.${quesitonKey}.id,
-    },
-    `;
+//         return `
+//     ${versionKey}: {
+//         answerId: answers.${entityKey}.id,
+//         answerDataId: answerDatas.${dataKey}.id,
+//         questionVersionId: questionVersions.${quesitonKey}.id,
+//     },
+//     `;
+//     });
+
+let datas = fs.readFileSync('./videodatas.js', 'utf-8')
+
+Object
+    .keys(videodatas)
+    .forEach(key => {
+
+        const ads = videodatas[key];
+        const fvid = ads.videoFileId;
+
+        datas = datas.replace(fvid, key);
     });
 
-fs.writeFileSync('./out.js', vvs.join(''), 'utf-8')
+fs.writeFileSync('./out.js', datas, 'utf-8')
