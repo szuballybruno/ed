@@ -1,5 +1,5 @@
-import { log, logError } from './logger';
 import dotenv from 'dotenv';
+import { log } from './logger';
 
 type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
 
@@ -141,7 +141,7 @@ export class GlobalConfiguration {
         log('Loading config.env...');
 
         dotenv
-            .config({ path: 'config.env' });
+            .config({ path: 'config/config.env' });
 
         const globalConfig = new GlobalConfiguration(rootDirectory);
 
