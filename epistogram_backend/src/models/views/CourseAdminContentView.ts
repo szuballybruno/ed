@@ -25,9 +25,9 @@ export class CourseAdminContentView {
     @XViewColumn()
 	moduleId: number;
 
-    @ViewColumn()
-    @XViewColumn()
-	moduleCode: string;
+    // @ViewColumn()
+    // @XViewColumn()
+	// moduleCode: string;
 
     @ViewColumn()
     @XViewColumn()
@@ -41,11 +41,6 @@ export class CourseAdminContentView {
     @XViewColumn()
 	itemId: number;
 
-    @IsDeletedFlag('bool')
-    @ViewColumn()
-    @XViewColumn()
-    itemIsDeleted: boolean;
-
     @ViewColumn()
     @XViewColumn()
 	itemOrderIndex: number;
@@ -58,9 +53,13 @@ export class CourseAdminContentView {
     @XViewColumn()
 	itemSubtitle: string;
 
+    // @ViewColumn()
+    // @XViewColumn()
+	// itemCode: string;
+
     @ViewColumn()
     @XViewColumn()
-	itemCode: string;
+	versionCode: string;
 
     @ViewColumn()
     @XViewColumn()

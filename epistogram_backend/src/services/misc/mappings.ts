@@ -427,7 +427,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         });
 
     mapperService
-        .addMap(CourseAdminContentView, CourseContentItemAdminDTO, x => {
+        .addMap(CourseAdminContentView, CourseContentItemAdminDTO, (x): CourseContentItemAdminDTO => {
 
             const getIssueList = (issues: string) => issues
                 .split('\n')
@@ -453,12 +453,13 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             return {
                 courseId: x.courseId,
                 examId: x.examId,
-                itemCode: x.itemCode,
+                // itemCode: x.itemCode,
+                versionCode: x.versionCode,
                 itemId: x.itemId,
                 itemOrderIndex: x.itemOrderIndex,
                 itemSubtitle: x.itemSubtitle,
                 itemTitle: x.itemTitle,
-                moduleCode: x.moduleCode,
+                // moduleCode: x.moduleCode,
                 moduleId: x.moduleId,
                 moduleName: x.moduleName,
                 moduleOrderIndex: x.moduleOrderIndex,

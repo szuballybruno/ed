@@ -12,7 +12,8 @@ items_combined AS
 		vd.order_index item_order_index,
 		vd.title item_title,
 		vd.subtitle item_subtitle,
-		'video' item_type
+		'video' item_type,
+		'video_version@' || vv.id version_code
 	FROM public.video_version vv
 	
 	LEFT JOIN public.module_version mv
@@ -43,7 +44,8 @@ items_combined AS
 				THEN 'pretest'
 				ELSE 'exam'
 			END 
-		END item_type
+		END item_type,
+		'exam_version@' || ev.id version_code
 	FROM public.exam_version ev
 	
 	LEFT JOIN public.module_version mv
@@ -68,7 +70,8 @@ SELECT
 	ic.item_order_index,
 	ic.item_title,
 	ic.item_subtitle,
-	ic.item_type
+	ic.item_type,
+	ic.version_code
 FROM public.course_version cv
 
 LEFT JOIN public.module_version mv

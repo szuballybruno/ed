@@ -6,14 +6,15 @@ export class CourseContentItemAdminDTO {
 	moduleName: string;
 	moduleOrderIndex: number;
 	moduleId: number;
-	moduleCode: string;
+	// moduleCode: string;
 	videoId: number;
 	examId: number;
 	itemId: number;
 	itemOrderIndex: number;
 	itemTitle: string;
 	itemSubtitle: string;
-	itemCode: string;
+	// itemCode: string;
+	versionCode: string;
 	errors: CourseContentItemIssueDTO[];
 	warnings: CourseContentItemIssueDTO[];
 	videoLength: number;

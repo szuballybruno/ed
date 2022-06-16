@@ -497,9 +497,8 @@ export class CourseService {
     async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
 
         const views = await this._ormService
-            .query(CourseAdminContentView, { courseId, loadDeleted })
+            .query(CourseAdminContentView, { courseId })
             .where('courseId', '=', 'courseId')
-            .and('itemIsDeleted', '!=', 'loadDeleted')
             .getMany();
 
         const modules = await this._ormService
@@ -527,7 +526,7 @@ export class CourseService {
     /**
      * Saves the course content 
      */
-    async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+    async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         // update items 
         await this.saveUpdatedCourseItems(mutations);
@@ -539,7 +538,7 @@ export class CourseService {
         await this.saveDeletedCourseItems(mutations);
     }
 
-    private async saveUpdatedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+    private async saveUpdatedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         throwNotImplemented();
         // const updateMuts = mutations
@@ -590,7 +589,7 @@ export class CourseService {
         //     .save(ExamData, exams);
     }
 
-    private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+    private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         const itemCodes = mutations
             .filter(x => x.action === 'delete')
@@ -615,11 +614,11 @@ export class CourseService {
             .softDeleteVideosAsync(deletedVideoIds, true);
     }
 
-    private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'itemCode'>[]) {
+    private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         throwNotImplemented();
         // const checkMutationItemType = (
-        //     mutation: Mutation<CourseContentItemAdminDTO, 'itemCode'>,
+        //     mutation: Mutation<CourseContentItemAdminDTO, 'versionCode'>,
         //     itemType: CourseItemType) => {
 
         //     return mutation
