@@ -23,7 +23,8 @@ export const useUserCourseStats = (userId: number) => {
     return {
         userCourseStats: queryRes.data,
         userCourseStatsStatus: queryRes.state,
-        userCourseStatsError: queryRes.error
+        userCourseStatsError: queryRes.error,
+        refetchUserCourseStats: queryRes.refetch
     };
 };
 

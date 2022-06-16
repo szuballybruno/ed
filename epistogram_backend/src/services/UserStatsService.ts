@@ -80,7 +80,9 @@ export class UserStatsService {
                 const lagBehindPercentage = this._tempomatService
                     .calculateLagBehindPercentage(
                         x.startDate,
-                        x.originalPrevisionedCompletionDate,
+                        x.requiredCompletionDate
+                            ? x.requiredCompletionDate
+                            : x.originalPrevisionedCompletionDate,
                         previsionedCompletionDate
                     )
 

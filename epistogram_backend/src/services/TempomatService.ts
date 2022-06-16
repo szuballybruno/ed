@@ -348,28 +348,36 @@ export class TempomatService extends ServiceBase {
         adjustmentCorrection?: number
     ) => {
 
-        switch (tempomatMode as TempomatModeType) {
+        const getNewPrevisionedDate = () => {
+            switch (tempomatMode as TempomatModeType) {
 
-            case 'light':
+                case 'light':
 
-                return addDays(originalPrevisionedCompletionDate, lagBehindDays);
-            case 'balanced':
+                    return addDays(originalPrevisionedCompletionDate, lagBehindDays);
+                case 'balanced':
 
-                if (!adjustmentCorrection)
-                    throw new Error('No adjustment correction provided')
+                    if (!adjustmentCorrection)
+                        throw new Error('No adjustment correction provided')
 
-                return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
-            case 'strict':
+                    return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
+                case 'strict':
 
-                return originalPrevisionedCompletionDate
-            case 'auto':
+                    return originalPrevisionedCompletionDate
+                case 'auto':
 
-                if (!adjustmentCorrection)
-                    throw new Error('No adjustment correction provided')
+                    if (!adjustmentCorrection)
+                        throw new Error('No adjustment correction provided')
 
-                return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
-            default:
-                throw new Error('Tempomat mode doesn\'t exists')
+                    return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
+                default:
+                    throw new Error('Tempomat mode doesn\'t exists')
+            }
         }
+
+        const newPrevisionedDate = getNewPrevisionedDate()
+
+        return newPrevisionedDate >= originalPrevisionedCompletionDate
+            ? newPrevisionedDate
+            : originalPrevisionedCompletionDate
     }
 }

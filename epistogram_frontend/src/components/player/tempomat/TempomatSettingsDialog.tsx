@@ -12,7 +12,7 @@ import { TempomatModeTile } from './TempomatModeTile';
 export const TempomatSettingsDialog = (props: {
     tempomatDialogLogic: EpistoDialogLogicType,
     courseId: number,
-    onTempomatModeChanged: () => void,
+    onTempomatModeChanged: () => Promise<void>,
     tempomatMode: TempomatModeType
 }) => {
 
@@ -27,7 +27,7 @@ export const TempomatSettingsDialog = (props: {
         try {
 
             await setTempomatMode({ mode, courseId });
-            onTempomatModeChanged();
+            await onTempomatModeChanged();
         }
         catch (e) {
 

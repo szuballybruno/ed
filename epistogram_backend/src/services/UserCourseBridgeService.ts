@@ -160,41 +160,46 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             } as UserCourseBridge);
     }
 
-    async setRequiredCompletionDateAsync(userId: PrincipalId, courseId: number, requiredCompletionDate: string) {
+    /**
+     * Sets the requiredCompletionDate for a course. Either updates the
+     * existing userCourseBridge, or creates a new one.
+     * 
+     * @param principalId 
+     * @param courseId 
+     * @param requiredCompletionDate 
+     * @returns 
+     */
+    async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: number, requiredCompletionDate: string) {
+
+        const userId = principalId.toSQLValue();
 
         const userCourseBridge = await this
-            .getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+            .getUserCourseBridgeAsync(userId, courseId);
 
         if (userCourseBridge) {
 
             log('User course bridge exists, updating deadline...')
 
-            return this.updateAsync({
-                id: userCourseBridge.id,
-                requiredCompletionDate: new Date(requiredCompletionDate)
-            })
+            return this.updateCompletionDate(userCourseBridge.id, new Date(requiredCompletionDate));
         }
 
         try {
 
             log('User course bridge is not exists, creating...')
 
-            await this.createNewCourseBridge(courseId, userId.toSQLValue(), null, 'created')
+            await this.createNewCourseBridge(courseId, userId, null, 'created')
         } catch (e) {
 
-            throw new Error('C')
+            throw new Error('Failed to create new user course bridge')
         }
 
         const newUserCourseBridge = await this
-            .getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+            .getUserCourseBridgeAsync(userId, courseId);
 
         if (!newUserCourseBridge)
-            throw new Error('Failed to find new course bridge')
+            throw new Error('Failed to find new user course bridge')
 
-        return this.updateAsync({
-            id: newUserCourseBridge.id,
-            requiredCompletionDate: new Date(requiredCompletionDate)
-        })
+        return this.updateCompletionDate(newUserCourseBridge.id, new Date(requiredCompletionDate));
     }
 
     /**
@@ -343,4 +348,12 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 .where('courseId = :courseId', { courseId })
                 .execute();
     };
+
+    private updateCompletionDate = async (userCourseBridgeId: number, requiredCompletionDate: Date) => {
+        return this.updateAsync({
+            id: userCourseBridgeId,
+            requiredCompletionDate: requiredCompletionDate,
+            tempomatMode: 'strict' // Automatically updating tempomat mode to strict
+        })
+    }
 }

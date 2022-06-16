@@ -30,6 +30,24 @@ export const getUserVideoProgressBridgeSeedData = (users: UserSeedDataType, vide
         cursorSeconds: videos.video_134.lengthSeconds - 40,
         userId: users.god.id,
         videoId: videos.video_134.id
+    },
+
+    // 4: 'Endre, fourth excel video, completed a day after the second'
+    user_video_progress_bridge_4: {
+        completedPercentage: 89,
+        completionDate: new Date(Date.now() - (5040 * 60 * 1000)), // current date - 3 days 12 hours 10 minutes
+        cursorSeconds: videos.video_135.lengthSeconds - 40,
+        userId: users.god.id,
+        videoId: videos.video_135.id
+    },
+
+    // 5: 'Endre, fifth excel video, completed short after the fourth'
+    user_video_progress_bridge_5: {
+        completedPercentage: 89,
+        completionDate: new Date(Date.now() - (5030 * 60 * 1000)), // current date - 3 days 02 hours 10 minutes
+        cursorSeconds: videos.video_136.lengthSeconds - 40,
+        userId: users.god.id,
+        videoId: videos.video_136.id
     }
 
 });

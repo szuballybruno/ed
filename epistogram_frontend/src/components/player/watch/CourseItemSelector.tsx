@@ -61,6 +61,11 @@ export const CourseItemSelector = (props: {
             });
     };
 
+    const onTempomatModeChanged = async () => {
+        await refetchTempomatMode();
+        await refetchRecommendedItemQuota();
+    };
+
     const setCourseMode = async (mode: CourseModeType) => {
 
         try {
@@ -86,7 +91,7 @@ export const CourseItemSelector = (props: {
 
         {/* Tempomat info dialog */}
         <TempomatSettingsDialog
-            onTempomatModeChanged={refetchTempomatMode}
+            onTempomatModeChanged={onTempomatModeChanged}
             tempomatMode={tempomatMode ?? 'auto'}
             courseId={courseId}
             tempomatDialogLogic={tempomatDialogLogic} />
@@ -110,26 +115,27 @@ export const CourseItemSelector = (props: {
             height="100px">
 
             {/* tempomat tempo  */}
-            <Flex
+            {!recommendedItemQuota?.isDeadlineSet && <Flex
                 flex="1">
 
                 <TempomatTempoInfo
                     tempomatMode={tempomatMode ?? 'auto'}
                     onClick={() => tempomatDialogLogic.openDialog()} />
-            </Flex>
+            </Flex>}
 
-            <Divider
+            {!recommendedItemQuota?.isDeadlineSet && <Divider
                 flexBasis="1px"
                 mx="10px"
                 height="calc(100% - 20px)"
                 orientation="vertical"
-                background="grey" />
+                background="grey" />}
 
             {/* daily recommended video count */}
             <Flex flex="1">
 
                 <RecommendedItemQuota
                     isDaily
+                    isDeadlineSet={recommendedItemQuota?.isDeadlineSet ?? false}
                     completedCount={recommendedItemQuota?.completedToday ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
             </Flex>

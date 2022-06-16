@@ -41,6 +41,8 @@ export const AdminUserCourseContentSubpage = (props: {
             courseId: courseId!,
             requiredCourseCompletionDate: requiredCompletionDate!.toISOString()
         });
+
+
     };
 
     return <AdminBreadcrumbsHeader>

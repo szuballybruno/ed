@@ -152,8 +152,6 @@ export class CourseController {
         const courseId = dto.getValue(x => x.courseId, 'int');
         const requiredCourseCompletionDate = dto.getValue(x => x.requiredCourseCompletionDate, 'string');
 
-        console.log(requiredCourseCompletionDate)
-
         return this._userCourseBridgeService
             .setRequiredCompletionDateAsync(params.principalId, courseId, requiredCourseCompletionDate);
     };

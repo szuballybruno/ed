@@ -93,6 +93,7 @@ export class UserProgressService extends ServiceBase {
             .getOne();
 
         return {
+            isDeadlineSet: !!tempomatCalculationData.requiredCompletionDate,
             recommendedItemsPerDay: recommendedItemsPerDay ?? 0,
             recommendedItemsPerWeek: recommendedItemsPerDay ? recommendedItemsPerDay * 7 : 0,
             completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
@@ -104,15 +105,24 @@ export class UserProgressService extends ServiceBase {
 
         const userId = principalId.toSQLValue();
 
-        const estimationView = await this
-            ._ormService
-            .getRepository(UserCourseCompletionCurrentView)
+        const tempomatCalculationData = await this._ormService
+            .getRepository(TempomatCalculationDataView)
             .findOneOrFail({
                 where: {
                     courseId,
                     userId
                 }
             });
+
+        const previsionedCompletionDate = this._tempomatService
+            .calculatePrevisionedDate(
+                tempomatCalculationData.originalPrevisionedCompletionDate,
+                tempomatCalculationData.totalItemCount,
+                tempomatCalculationData.totalCompletedItemCount,
+                tempomatCalculationData.startDate,
+                tempomatCalculationData.tempomatMode,
+                tempomatCalculationData.tempomatAdjustmentValue
+            )
 
         const dailyViews = await this._ormService
             .getRepository(UserDailyCourseItemProgressView)
@@ -121,13 +131,10 @@ export class UserProgressService extends ServiceBase {
             .andWhere('udcipv.userId = :userId', { userId })
             .getMany();
 
-        const actualPrevisionedDate = await this._tempomatService
-            .calculatePrevisionedDateAsync(principalId.toSQLValue(), courseId)
-
         const dto = {
-            estimatedCompletionDate: actualPrevisionedDate,
-            estimatedLengthInDays: actualPrevisionedDate ? dateDiffInDays(estimationView.startDate, actualPrevisionedDate) : null,
-            startDate: estimationView.startDate,
+            estimatedCompletionDate: previsionedCompletionDate,
+            estimatedLengthInDays: previsionedCompletionDate ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate) : null,
+            startDate: tempomatCalculationData.startDate,
             days: dailyViews
                 .map((x, index) => {
 

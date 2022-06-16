@@ -29,7 +29,7 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const userId = useIntParam('userId')!;
 
-    const { userCourseStats, userCourseStatsStatus, userCourseStatsError } = useUserCourseStats(userId);
+    const { userCourseStats, userCourseStatsStatus, userCourseStatsError, refetchUserCourseStats } = useUserCourseStats(userId);
 
     const userCourses = userCourseStats ?? [];
 
@@ -285,6 +285,7 @@ export const AdminUserCoursesDataGridControl = (props: {
                 onChange={(value: DateTime | null) => {
                     console.log(value?.toJSDate());
                     handleSaveRequiredCompletionDate(params.value?.courseId || null, value ? value.toJSDate() : null);
+                    refetchUserCourseStats();
                 }}
                 renderInput={(textFieldParams) => {
 

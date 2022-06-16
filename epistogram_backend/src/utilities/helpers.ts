@@ -235,7 +235,7 @@ export const addDays = (date: Date, number: number) => {
  * @returns 
  */
 export const relativeDiffInPercentage = (a: number, b: number) => {
-    return 100 * Math.abs((a - b) / ((a + b) / 2));
+    return -100 * (a - b) / ((a + b) / 2);
 }
 
 export const navPropNotNull = (prop: any) => {
