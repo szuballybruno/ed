@@ -119,7 +119,7 @@ export const mapToRowSchema = (
             .single(x => x.id === item.moduleId);
 
     return ({
-        rowKey: item.itemCode,
+        rowKey: item.versionCode,
         rowNumber: rowNumber,
         itemOrderIndex: isPretest ? '-' : item.itemOrderIndex + '',
         itemTitle: item.itemTitle,

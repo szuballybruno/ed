@@ -22,4 +22,16 @@ export class AnswerSessionView {
     @ViewColumn()
     @XViewColumn()
     isSuccessful: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
+    isCompleted: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
+    totalQuestionCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    correctQuestionCount: number;
 }

@@ -5,6 +5,24 @@ SELECT
 	ase.video_version_id,
     ase.start_date,
     ase.end_date,
+	ase.is_completed,
+	(
+		SELECT 
+			COUNT(*)
+		FROM public.question_version qv
+		
+		LEFT JOIN public.given_answer ga
+		ON ga.question_version_id = qv.id
+
+		WHERE ga.answer_session_id = ase.id
+	) total_question_count,
+	(
+		SELECT 
+			SUM(ga.is_correct::int)
+		FROM public.given_answer ga
+
+		WHERE ga.answer_session_id = ase.id
+	) correct_answer_count,
 	CASE WHEN ase.is_practise
 		THEN 'practise'
 		ELSE CASE WHEN e.id = 0

@@ -18,28 +18,32 @@ FROM
 
 		-- completed video count 
 		(
-			SELECT COUNT(uvpb.completion_date)::int
+			SELECT 
+				COUNT(uvpb.completion_date)::int
 			FROM public.user_video_progress_bridge uvpb
 			WHERE uvpb.user_id = u.id
 		) completed_video_count,
 
 		-- completed_exam_count
 		(
-			SELECT SUM (ecv.has_completed_session::int)::int
+			SELECT 
+				SUM (ecv.has_completed_session::int)::int
 			FROM public.exam_completed_view ecv
 			WHERE ecv.user_id = u.id
 		) completed_exam_count,
 
 		-- completed_exam_count
 		(
-			SELECT SUM (ecv.has_successful_session::int)::int
+			SELECT 
+				SUM (ecv.has_successful_session::int)::int
 			FROM public.exam_completed_view ecv
 			WHERE ecv.user_id = u.id
 		) successful_exam_count,
 
 		-- total watch time
 		(
-			SELECT SUM (vpsv.total_playback_duration)::double precision
+			SELECT 
+				SUM (vpsv.total_playback_duration)::double precision
 			FROM public.video_playback_sample_view vpsv
 			WHERE vpsv.user_id = u.id 
 		) total_video_playback_seconds,
@@ -52,10 +56,10 @@ FROM
 			LEFT JOIN public.answer_session ase
 			ON ase.id = ga.answer_session_id
 
-			LEFT JOIN public.question q
-			ON q.id = ga.question_id
+			LEFT JOIN public.question_version qv
+			ON qv.id = ga.question_version_id
 
-			WHERE ase.user_id = u.id AND q.video_id IS NOT NULL
+			WHERE ase.user_id = u.id AND qv.video_version_id IS NOT NULL
 		) total_given_answer_count,
 
 		-- total correct given answer count
@@ -66,11 +70,11 @@ FROM
 			LEFT JOIN public.answer_session ase
 			ON ase.id = ga.answer_session_id
 
-			LEFT JOIN public.question q
-			ON q.id = ga.question_id
+			LEFT JOIN public.question_version qv
+			ON qv.id = ga.question_version_id
 
 			WHERE ase.user_id = u.id 
-				AND q.video_id IS NOT NULL
+				AND qv.video_version_id IS NOT NULL
 				AND ga.is_correct = true 
 		) total_correct_given_answer_count,
 	
@@ -92,12 +96,17 @@ FROM
 	
 		-- avg session success rate
 		(
-			SELECT AVG(asv.correct_answer_rate)::int
+			SELECT 
+				AVG(ga.is_correct::int)::int
 			FROM public.answer_session_view asv
+			
+			LEFT JOIN public.given_answer ga
+			ON ga.answer_session_id = asv.answer_session_id
 			
 			WHERE asv.user_id = u.id 
 				AND asv.answer_session_id IS NOT NULL
-				AND asv.exam_id IS DISTINCT FROM 1
+				AND asv.exam_version_id IS DISTINCT FROM 1
+			GROUP BY asv.answer_session_id
 		) total_answer_session_success_rate
 	FROM public.user u
 

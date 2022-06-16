@@ -79,11 +79,11 @@ SELECT
 		LEFT JOIN public.exam_latest_success_rate_view elsv
 		ON elsv.user_id = cv.user_id AND elsv.exam_id = ex.id
 		
-		WHERE ex.course_id = cv.id AND ex.type = 'final'
+		WHERE ex.course_id = cv.course_id AND ex.type = 'final'
 	) final_exam_success_rate
 FROM public.available_course_view cv
 
 LEFT JOIN public.course_spent_time_view cstv
-ON cstv.user_id = cv.user_id AND cstv.course_id = cv.id
+ON cstv.user_id = cv.user_id AND cstv.course_id = cv.course_id
 
 -- WHERE cv.is_started = true OR cv.is_completed = true

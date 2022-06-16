@@ -20,6 +20,9 @@ export class AnswerSession {
     @Column()
     isPractise: boolean;
 
+    @Column()
+    isCompleted: boolean;
+
     //
     // TO MANY
     //

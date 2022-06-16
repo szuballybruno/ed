@@ -19,9 +19,7 @@ export type TaskObjectiveType = 'video' | 'playlist' | 'course' | 'exam';
 export type TaskPriorityType = 'normal' | 'important' | 'urgent';
 export type TaskStatusType = 'assigned' | 'inProgress' | 'submitted' | 'rejected' | 'completed';
 
-export type ExamType = 'signup' | 'normal' | 'pretest' | 'final';
-
-export type CourseItemType = ExamType | 'video' | 'exam' | 'module';
+export type CourseItemType = 'signup' | 'pretest' | 'video' | 'exam' | 'module' | 'final';
 
 export type CourseItemStateType = 'completed' | 'locked' | 'current' | 'available';
 
@@ -85,7 +83,9 @@ export const permissionCodes = [
     'ACCESS_APPLICATION',
     'MANAGE_SHOP',
     'SET_OWN_EMAIL_ADDRESS',
-    'IS_SIGNUP_MANDATORY'
+    'IS_SIGNUP_MANDATORY',
+    'EDIT_COMMENT',
+    'DELETE_COMMENT'
 ] as const;
 
 export type PermissionCodeType = typeof permissionCodes[number];
@@ -98,9 +98,9 @@ export type CoinAcquireReasonType =
     'answer_streak_10' |
     'correct_answer';
 
-export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE';
+export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'COMMENT';
 
-export type AnswerSessionType = 'signup' | 'normal' | 'practise' | 'pretest';
+export type AnswerSessionType = 'signup' | 'exam' | 'practise' | 'pretest' | 'video';
 
 export type CourseStageNameType = 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
 

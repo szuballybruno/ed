@@ -55,7 +55,7 @@ export const AdminCourseContentSubpage = () => {
     const modules = courseContentAdminData?.modules ?? [];
     const originalItems = courseContentAdminData?.items ?? [];
 
-    const getItemKey = useCallback((row: ItemType) => row.itemCode, []);
+    const getItemKey = useCallback((row: ItemType) => row.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
 
     const preprocessItems = useCallback((items: ItemType[]) => {
@@ -86,7 +86,7 @@ export const AdminCourseContentSubpage = () => {
         resetMutations,
         addOnMutationHandlers,
         mutatedData: mutatedItems
-    } = useXListMutator<ItemType, 'itemCode', string>(originalItems, 'itemCode', mutationEndCallback);
+    } = useXListMutator<ItemType, 'versionCode', string>(originalItems, 'versionCode', mutationEndCallback);
 
     // set preprocessed items, 
     // this works as a sort of caching
@@ -221,7 +221,7 @@ export const AdminCourseContentSubpage = () => {
             .length;
 
         const newId = getVirtualId();
-        const newItemCode = `new_${type}_${newId}`;
+        const newVersionCode = `new_${type}_${newId}`;
 
         const dto: CourseContentItemAdminDTO = {
             itemType: type === 'exam' ? 'exam' : 'video',
@@ -231,18 +231,17 @@ export const AdminCourseContentSubpage = () => {
             courseId,
             warnings: [],
             errors: [],
-            itemCode: newItemCode,
+            versionCode: newVersionCode,
             itemId: newId,
             examId: type === 'exam' ? newId : -1,
             videoId: type === 'exam' ? -1 : newId,
             moduleId: moduleInfo.id,
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,
-            moduleCode: '',
             videoLength: 0
         };
 
-        addRow(newItemCode, dto);
+        addRow(newVersionCode, dto);
         closeAddPopper();
     };
 

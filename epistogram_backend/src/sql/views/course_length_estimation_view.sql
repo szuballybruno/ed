@@ -4,23 +4,37 @@ SELECT
 FROM
 (
 	SELECT 
-		co.id course_id,
+		cv.id course_id,
 		(
-			SELECT COALESCE(SUM(v.length_seconds), 0)::int
+			SELECT 
+				COALESCE(SUM(vf.length_seconds), 0)::int
+			FROM public.video_version vv
 
-			FROM public.video v 
+			LEFT JOIN public.module_version mv
+			ON mv.course_version_id = cv.id AND mv.id = vv.module_version_id
+			
+			LEFT JOIN public.video_data vd
+			ON vd.id = vv.video_data_id
+			
+			LEFT JOIN public.video_file vf
+			ON vf.id = vd.video_file_id
 
-			LEFT JOIN public.course_module cm
-			ON cm.course_id = co.id AND cm.id = v.module_id
-
-			WHERE cm.course_id = co.id
+			WHERE mv.course_version_id = cv.id
 		) total_video_seconds,
 		(
 			SELECT 
 				COUNT(1)::int * 20 total_exam_seconds 
-			FROM public.exam e
+			FROM public.exam_version ev
 			
-			WHERE e.type = 'normal' AND e.course_id = co.id
+			LEFT JOIN public.exam e
+			ON e.id = ev.exam_id
+			
+			LEFT JOIN public.module_version mv
+			ON mv.course_version_id = cv.id AND mv.id = ev.module_version_id
+			
+			WHERE e.is_pretest = false
+			AND e.is_signup = false
+			AND mv.course_version_id = cv.id
 		)
-	FROM public.course co
+	FROM public.course_version cv
 ) sq

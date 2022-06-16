@@ -90,6 +90,7 @@ SELECT
 	civ.item_subtitle,
 -- 	civ.item_code,
 	civ.item_type,
+	civ.version_code,
 	CONCAT_WS(
 		CHR(10), 
 		CASE WHEN it.issue_questions_missing THEN 'questions_missing' END, 

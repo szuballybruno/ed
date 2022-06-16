@@ -4,14 +4,13 @@ import { Role } from '../../models/entity/authorization/Role';
 import { Company } from '../../models/entity/Company';
 import { CourseData } from '../../models/entity/course/CourseData';
 import { CourseCategory } from '../../models/entity/CourseCategory';
-import { ModuleData } from '../../models/entity/module/ModuleData';
 import { DailyTip } from '../../models/entity/DailyTip';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
 import { ExamData } from '../../models/entity/exam/ExamData';
 import { JobTitle } from '../../models/entity/JobTitle';
+import { ModuleData } from '../../models/entity/module/ModuleData';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
-import { QuestionData } from '../../models/entity/question/QuestionData';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
@@ -36,7 +35,6 @@ import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
-import { ExamView } from '../../models/views/ExamView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
@@ -57,7 +55,6 @@ import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContent
 import { CourseContentItemIssueDTO } from '../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { AdminModuleShortDTO } from '../../shared/dtos/AdminModuleShortDTO';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
-import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
@@ -67,7 +64,6 @@ import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
 import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
-import { CourseItemListDTO } from '../../shared/dtos/CourseItemListDTO';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
@@ -80,8 +76,6 @@ import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
 import { DiscountCodeDTO } from '../../shared/dtos/DiscountCodeDTO';
 import { EventDTO } from '../../shared/dtos/EventDTO';
-import { ExamEditDataDTO } from '../../shared/dtos/ExamEditDataDTO';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { ExamQuestionEditDTO } from '../../shared/dtos/ExamQuestionEditDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
@@ -94,8 +88,6 @@ import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityT
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
-import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
 import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
@@ -117,11 +109,9 @@ import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
-import { VideoEditDTO } from '../../shared/dtos/VideoEditDTO';
 import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
-import { navPropNotNull, toFullName } from '../../utilities/helpers';
+import { toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
 import { getItemCode } from './encodeService';
@@ -455,7 +445,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 examId: x.examId,
                 // itemCode: x.itemCode,
                 versionCode: x.versionCode,
-                itemId: x.itemId,
                 itemOrderIndex: x.itemOrderIndex,
                 itemSubtitle: x.itemSubtitle,
                 itemTitle: x.itemTitle,

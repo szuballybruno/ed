@@ -1,12 +1,11 @@
 import { UploadedFile } from 'express-fileupload';
-import { DeepPartial } from 'typeorm';
 import { CourseData } from '../models/entity/course/CourseData';
+import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../models/entity/CourseCategory';
 import { ModuleData } from '../models/entity/module/ModuleData';
-import { ExamData } from '../models/entity/exam/ExamData';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { User } from '../models/entity/User';
-import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
-import { VideoData } from '../models/entity/video/VideoData';
+import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
@@ -15,40 +14,35 @@ import { CourseItemStateView } from '../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
-import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseModuleShortDTO } from '../shared/dtos/admin/CourseModuleShortDTO';
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
-import { CourseContentEditDataDTO } from '../shared/dtos/CourseContentEditDataDTO';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
 import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
+import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleDTO } from '../shared/dtos/ModuleDTO';
-import { FieldMutation } from '../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
-import { CourseItemType } from '../shared/types/sharedTypes';
+import { PrincipalId } from '../utilities/ActionParams';
+import { throwNotImplemented } from '../utilities/helpers';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { createCharSeparatedList } from './misc/mappings';
-import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { ModuleService } from './ModuleService';
-import { PretestService } from './PretestService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PretestService } from './PretestService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-import { PrincipalId } from '../utilities/ActionParams';
-import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
-import { throwNotImplemented } from '../utilities/helpers';
 
 export class CourseService {
 
@@ -490,7 +484,7 @@ export class CourseService {
     }
 
     /**
-     * Gets the course content edit DTO.
+     * Gets the course content edit DTO. TODO: REVIEW COURSEID OR COURSE_VERSION_ID
      * @param courseId 
      * @returns 
      */
@@ -503,8 +497,9 @@ export class CourseService {
 
         const modules = await this._ormService
             .getRepository(ModuleData)
-            .createQueryBuilder('mo')
-            .where('mo.courseId = :courseId', { courseId })
+            .createQueryBuilder('md')
+            .leftJoin(ModuleVersion, 'mv', 'mv.moduleDataId = md.id')
+            .where('mv.courseVersionId = :courseId', { courseId })
             .getMany();
 
         const moduleDtos = modules

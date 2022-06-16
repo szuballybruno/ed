@@ -15,63 +15,63 @@ export class CourseAdminContentView {
 
     @ViewColumn()
     @XViewColumn()
-	moduleName: string;
+    moduleName: string;
 
     @ViewColumn()
     @XViewColumn()
-	moduleOrderIndex: number;
+    moduleOrderIndex: number;
 
     @ViewColumn()
     @XViewColumn()
-	moduleId: number;
+    moduleId: number;
 
     // @ViewColumn()
     // @XViewColumn()
-	// moduleCode: string;
+    // moduleCode: string;
 
     @ViewColumn()
     @XViewColumn()
-	videoId: number;
+    videoId: number;
 
     @ViewColumn()
     @XViewColumn()
-	examId: number;
+    examId: number;
+
+    /* @ViewColumn()
+    @XViewColumn()
+    itemId: number; */
 
     @ViewColumn()
     @XViewColumn()
-	itemId: number;
+    itemOrderIndex: number;
 
     @ViewColumn()
     @XViewColumn()
-	itemOrderIndex: number;
+    itemTitle: string;
 
     @ViewColumn()
     @XViewColumn()
-	itemTitle: string;
-
-    @ViewColumn()
-    @XViewColumn()
-	itemSubtitle: string;
+    itemSubtitle: string;
 
     // @ViewColumn()
     // @XViewColumn()
-	// itemCode: string;
+    // itemCode: string;
 
     @ViewColumn()
     @XViewColumn()
-	versionCode: string;
+    versionCode: string;
 
     @ViewColumn()
     @XViewColumn()
-	errors: string;
+    errors: string;
 
     @ViewColumn()
     @XViewColumn()
-	warnings: string;
+    warnings: string;
 
     @ViewColumn()
     @XViewColumn()
-	videoLength: number;
+    videoLength: number;
 
     @ViewColumn()
     @XViewColumn()

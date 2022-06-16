@@ -9,7 +9,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.god.id
+        userId: users.god.id,
+        isCompleted: false
     },
     answer_session_2: {
         startDate: null,
@@ -17,7 +18,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.almostGod.id
+        userId: users.almostGod.id,
+        isCompleted: false
     },
     answer_session_3: {
         startDate: null,
@@ -25,7 +27,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_3.id
+        userId: users.user_3.id,
+        isCompleted: false
     },
     answer_session_4: {
         startDate: null,
@@ -33,7 +36,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_4.id
+        userId: users.user_4.id,
+        isCompleted: false
     },
     answer_session_5: {
         startDate: null,
@@ -41,7 +45,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_5.id
+        userId: users.user_5.id,
+        isCompleted: false
     },
     answer_session_6: {
         startDate: null,
@@ -49,7 +54,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_6.id
+        userId: users.user_6.id,
+        isCompleted: false
     },
     answer_session_7: {
         startDate: null,
@@ -57,7 +63,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_7.id
+        userId: users.user_7.id,
+        isCompleted: false
     },
     answer_session_8: {
         startDate: null,
@@ -65,7 +72,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_8.id
+        userId: users.user_8.id,
+        isCompleted: false
     },
     answer_session_9: {
         startDate: null,
@@ -73,7 +81,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_9.id
+        userId: users.user_9.id,
+        isCompleted: false
     },
     answer_session_10: {
         startDate: null,
@@ -81,7 +90,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_10.id
+        userId: users.user_10.id,
+        isCompleted: false
     },
     answer_session_11: {
         startDate: null,
@@ -89,7 +99,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_11.id
+        userId: users.user_11.id,
+        isCompleted: false
     },
     answer_session_12: {
         startDate: null,
@@ -97,7 +108,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_12.id
+        userId: users.user_12.id,
+        isCompleted: false
     },
     answer_session_13: {
         startDate: null,
@@ -105,7 +117,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_13.id
+        userId: users.user_13.id,
+        isCompleted: false
     },
     answer_session_14: {
         startDate: null,
@@ -113,7 +126,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_14.id
+        userId: users.user_14.id,
+        isCompleted: false
     },
     answer_session_15: {
         startDate: null,
@@ -121,7 +135,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_15.id
+        userId: users.user_15.id,
+        isCompleted: false
     },
     answer_session_16: {
         startDate: null,
@@ -129,7 +144,8 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType) => getSeedList
         isPractise: true,
         examVersionId: null,
         videoVersionId: null,
-        userId: users.user_kovacskrisz.id
+        userId: users.user_kovacskrisz.id,
+        isCompleted: false
     }
 });
 

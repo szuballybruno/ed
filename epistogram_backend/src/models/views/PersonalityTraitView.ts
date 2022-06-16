@@ -8,46 +8,46 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
 export class PersonalityTraitView {
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	userId: number;
 
 	@ViewColumn()
-    @XViewColumn()
-	personalityTraitCategoryId: number;
+	@XViewColumn()
+	traitCategoryId: number;
 
 	@ViewColumn()
-    @XViewColumn()
-	taritCategoryTitle: string;
+	@XViewColumn()
+	traitCategoryTitle: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	minLabel: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	maxLabel: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	minDescription: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	maxDescription: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	minScore: number;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	maxScore: number;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	activeLabel: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	activeDescription: string;
 }

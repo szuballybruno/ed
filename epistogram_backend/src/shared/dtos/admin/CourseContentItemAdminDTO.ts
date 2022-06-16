@@ -9,7 +9,7 @@ export class CourseContentItemAdminDTO {
 	// moduleCode: string;
 	videoId: number;
 	examId: number;
-	itemId: number;
+	// itemId: number;
 	itemOrderIndex: number;
 	itemTitle: string;
 	itemSubtitle: string;

@@ -122,7 +122,7 @@ export class PersonalityAssessmentService {
         return personalityTraits
             .map(x => ({
                 activeDescription: x.activeDescription,
-                categoryTitle: x.taritCategoryTitle
+                categoryTitle: x.traitCategoryTitle
             }) as PersonalityCategoryTraitDTO);
     };
 
