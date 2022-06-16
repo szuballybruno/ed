@@ -17,10 +17,6 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
-
-    @ViewColumn()
-    @XViewColumn()
     fullName: string | null;
 
     @ViewColumn()

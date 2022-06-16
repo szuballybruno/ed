@@ -12,23 +12,26 @@ export const CommentAnswerEntry = (props: {
         replyToCommentId: number | null,
         isAnonymous: boolean,
         isQuestion: boolean,
-        text: string
+        text: string,
+        parentCommentId?: number,
     ) => void,
     currentReplyCommentId: number | null,
     currentReplyUserFullName: string | null,
     setCurrentReplyUserFullName: React.Dispatch<React.SetStateAction<string | null>>,
+    parentCommentId?: number,
 }) => {
 
     const {
         handleCreateNewComment,
         currentReplyCommentId,
         currentReplyUserFullName,
-        setCurrentReplyUserFullName
+        setCurrentReplyUserFullName,
+        parentCommentId
     } = props;
 
     const user = useContext(CurrentUserContext);
 
-    const [comment, setComment] = useState('');
+    const [commentText, setCommentText] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [isQuestion, setIsQuestion] = useState(false);
     const [isStartedEditing, setIsStartedEditing] = useState(false);
@@ -39,9 +42,10 @@ export const CommentAnswerEntry = (props: {
             currentReplyCommentId,
             isAnonymous,
             isQuestion,
-            comment
+            commentText,
+            parentCommentId,
         );
-        setComment('');
+        setCommentText('');
         setCurrentReplyUserFullName(null);
         setIsQuestion(false);
         setIsAnonymous(false);
@@ -77,13 +81,13 @@ export const CommentAnswerEntry = (props: {
                     flex: 1
                 }}
                 onInput={() => setIsStartedEditing(true)}
-                value={comment}
-                setValue={setComment}
+                value={commentText}
+                setValue={setCommentText}
                 placeholder={currentReplyCommentId ? 'Ide írd a válaszodat' : 'Ide írd a kommentedet/kérdésedet'} />
         </Flex>
 
 
-        {isStartedEditing && comment &&
+        {isStartedEditing && commentText &&
             <Flex
                 justify="space-between"
                 align="center"

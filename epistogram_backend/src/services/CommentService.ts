@@ -28,7 +28,8 @@ export class CommentService extends QueryServiceBase<Comment> {
             isAnonymous,
             isQuestion,
             replyToCommentId,
-            userId
+            userId,
+            parentCommentId,
         } = comment;
 
         const itemCodeData = readItemCode(itemCode);
@@ -47,27 +48,25 @@ export class CommentService extends QueryServiceBase<Comment> {
         const highestGroupId = (commentWithHighestGroupId?.groupId) ? (commentWithHighestGroupId?.groupId) + 1 : 0;
 
         const newComment = {
-            isAnonymous: isAnonymous,
-            isQuestion: isQuestion,
-            text: text,
-            userId: userId,
-            parentCommentId: replyToCommentId,
+            isAnonymous,
+            isQuestion,
+            text,
+            userId,
+            parentCommentId: parentCommentId ? parentCommentId : replyToCommentId,
             videoId: videoId,
+            creationDate: new Date(),
+            deletionDate: null,
             groupId: highestGroupId,
         };
 
-        return await this
+        await this
             ._ormService
-            .getRepository(Comment)
-            .insert(newComment);
-    };
+            .createAsync(Comment, newComment);
+
+        return newComment;
+    }
 
     updateCommentAsync = async (comment: CommentListDTO, currentUserId: PrincipalId) => {
-
-        //TODO: Check if the user have a permission not because he owns the comment but he is administrator.
-        /*if (currentUserId as unknown as number !== comment.userId) {
-            throw new Error("This comment is not owned by the current user.");
-        }*/
 
         const commentAddToGroup = await this
             ._ormService
@@ -75,20 +74,20 @@ export class CommentService extends QueryServiceBase<Comment> {
             .where('id', '=', 'commentId')
             .getOneOrNull();
 
-        const newGroupComment = {
+        const commentGroupId = commentAddToGroup?.groupId ? commentAddToGroup?.groupId : 0;
+
+        const updatedComment = {
             ...commentAddToGroup,
             text: comment.commentText,
-        }
-
-        if (!newGroupComment)
-            throw new Error('This user haven\'t liked this comment yet.');
+            groupId: commentGroupId,
+        } as Comment
 
         await this
             ._ormService
             .getRepository(Comment)
-            .insert(newGroupComment);
+            .insert(updatedComment);
 
-        return newGroupComment;
+        return updatedComment;
     };
 
     getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {

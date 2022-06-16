@@ -127,6 +127,18 @@ import { UrlService } from '../UrlService';
 import { getItemCode } from './encodeService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
+import {Comment} from "../../models/entity/Comment";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    JoinColumn,
+    ManyToOne, OneToMany,
+    PrimaryGeneratedColumn,
+    Relation
+} from "typeorm";
+import {IsDeletedFlag} from "../XORM/XORMDecorators";
+import {Like} from "../../models/entity/Like";
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -177,11 +189,12 @@ const marray = [
                 });
         }),
 
+
     epistoMappingsBuilder
         .addArrayMapping(CommentListDTO, () => (commentList: CommentListView[]) => {
 
             const mapToDTO = (comment: CommentListView, childComments?: CommentListDTO[]): CommentListDTO => ({
-               ...comment,
+                ...comment,
                 childComments,
             });
 
@@ -190,12 +203,77 @@ const marray = [
                 .map((parentComment) => {
 
                     const childComments = commentList
-                        .filter((comment) => parentComment.commentId === comment.commentId)
+                        .filter((comment) => parentComment.commentId === comment.parentCommentId)
                         .map((comment) => mapToDTO(comment));
 
                     return mapToDTO(parentComment, childComments);
                 })
-        })
+        }),
+
+   /* epistoMappingsBuilder
+        .addArrayMapping(CommentListDTO, () => (commentList: CommentListView[]) => {
+
+            const mapToDTO = (comment: CommentListView, childComments?: CommentListDTO[]): CommentListDTO => ({
+                ...comment,
+                childComments,
+            });
+
+            const commentListDTOS: CommentListDTO[] = [];
+            let pushCounter = 0;
+
+            // push roots
+            commentList.forEach((comment) => {
+                    if (!comment.parentCommentId) {
+                        commentListDTOS.push(mapToDTO(comment, []));
+                        pushCounter++;
+                    }
+                }
+            );
+
+            // get element recursively
+            function getCommentsById(commentId: number, commentList: CommentListDTO[] = []): CommentListDTO {
+                let foundElem: CommentListDTO = {} as CommentListDTO;
+
+                commentList.forEach((oneComment) => {
+                    if (oneComment.commentId === commentId) {
+                        foundElem = oneComment;
+                    } else {
+                        foundElem =  getCommentsById(commentId, oneComment.childComments);
+                    }
+                });
+
+                return foundElem;
+            }
+
+            // while we have unpushed comments
+            while (pushCounter !== commentList.length) {
+                // find one comment we can push, the parent is already pushed
+                const elemToPush = commentList.find((comment) => {
+                    const parentCommentId = comment.parentCommentId;
+                    return !!parentCommentId && getCommentsById(parentCommentId, commentListDTOS);
+                })!;
+                const parentElem = getCommentsById(elemToPush.parentCommentId, commentListDTOS);
+                parentElem?.childComments?.push(mapToDTO(elemToPush, []));
+                pushCounter++;
+                elemToPush.parentCommentId = 0;
+            }
+
+            return commentListDTOS;
+        }),*/
+
+   /* epistoMappingsBuilder.addMapping(Comment, () => (comment: CommentListDTO, ) => ({
+        id: comment.commentId,
+        creationDate: comment.creationDate,
+        text: comment.commentText,
+        isQuestion: comment.isQuestion,
+        isAnonymous: false,
+        parentCommentId: comment.parentCommentId,
+        userId: comment.currentUserId,
+        videoId: comment.videoId,
+        likes: comment.commentLikeCount,
+        deletionDate: null,
+        user:
+    }))*/
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;
