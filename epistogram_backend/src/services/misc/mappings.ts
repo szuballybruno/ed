@@ -153,7 +153,7 @@ const marray = [
 
     epistoMappingsBuilder
         .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {
-            
+
             return roles
                 .groupBy(x => x.roleId)
                 .map((grouping): RoleAdminListDTO => {
@@ -678,7 +678,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 : null;
 
             return {
-                courseId: course.id,
+                courseId: course.courseId,
                 title: course.title,
                 categoryName: course.categoryName,
                 subCategoryName: course.subCategoryName,
@@ -699,7 +699,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 title: view.title,
-                courseId: view.id,
+                courseId: view.courseId,
                 videosCount: view.videoCount,
                 examCount: view.examCount,
                 thumbnailImageURL,
@@ -944,7 +944,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(PretestResultView, PretestResultDTO, (x, cv: AvailableCourseView) => ({
             isCompleted: x.isCompleted,
             correctAnswerRate: x.correctAnswerRate,
-            firstItemCode: cv.firstItemCode
+            firstItemCode: ''//cv.firstItemCode
         }));
 
     mapperService

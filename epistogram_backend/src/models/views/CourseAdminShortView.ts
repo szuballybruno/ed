@@ -10,7 +10,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
+    courseId: number;
 
     @IsDeletedFlag('bool')
     @ViewColumn()

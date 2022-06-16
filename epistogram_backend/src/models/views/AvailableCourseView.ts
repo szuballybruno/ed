@@ -11,12 +11,7 @@ export class AvailableCourseView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
-
-    @IsDeletedFlag('bool')
-    @ViewColumn()
-    @XViewColumn()
-    isDeleted: boolean;
+    courseId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -26,9 +21,9 @@ export class AvailableCourseView {
     @XViewColumn()
     canView: boolean;
 
-    @ViewColumn()
-    @XViewColumn()
-    teacherId: number;
+    // @ViewColumn()
+    // @XViewColumn()
+    // teacherId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -38,9 +33,9 @@ export class AvailableCourseView {
     @XViewColumn()
     isStarted: boolean;
 
-    @ViewColumn()
-    @XViewColumn()
-    firstItemCode: string;
+    // @ViewColumn()
+    // @XViewColumn()
+    // firstItemCode: string;
 
     @ViewColumn()
     @XViewColumn()

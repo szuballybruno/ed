@@ -2,8 +2,8 @@ CREATE OR REPLACE FUNCTION "save_user_session_activity"
 (
 	param_user_id int,
 	param_activity_type text,
-	param_video_id int,
-	param_exam_id int
+	param_video_version_id int,
+	param_exam_version_id int
 )
 RETURNS integer 
 AS $$ 
@@ -116,16 +116,16 @@ BEGIN
 		creation_date,
 		type,
 		activity_session_id,
-		video_id,
-		exam_id
+		video_version_id,
+		exam_version_id
 	)
 	VALUES 
 	(
 		DEFAULT,
 		param_activity_type,
 		var_previous_session_id,
-		param_video_id,
-		param_exam_id
+		param_video_version_id,
+		param_exam_version_id
 	);
 	
 	RETURN var_previous_session_id;

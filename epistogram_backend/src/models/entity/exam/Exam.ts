@@ -18,8 +18,4 @@ export class Exam {
     // exam versions
     @XOneToMany<Exam>()(() => ExamVersion, x => x.exam)
     examVersions: ExamVersion[];
-
-    // user session activity
-    @XOneToMany<Exam>()(() => UserSessionActivity, x => x.exam)
-    userSessionActivities: UserSessionActivity[];
 }

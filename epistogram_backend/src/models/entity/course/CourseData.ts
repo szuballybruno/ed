@@ -1,5 +1,5 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm';
+import { XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
 import { CourseCategory } from '../CourseCategory';
 import { StorageFile } from '../StorageFile';
@@ -14,10 +14,6 @@ export class CourseData {
 
     @UpdateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     modificationDate: Date;
-
-    @IsDeletedFlag()
-    @DeleteDateColumn()
-    deletionDate: Date | null;
 
     @Column()
     title: string;

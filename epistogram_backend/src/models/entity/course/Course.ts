@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';
 import { CourseAccessBridge } from '../CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from '../courseRating/CourseRatingQuestionUserAnswer';
@@ -14,6 +14,16 @@ export class Course {
     @PrimaryGeneratedColumn()
     id: number;
     
+    // deleted flag - deletion is associated 
+    // with the high level course entity,
+    // if an old version of the course is referenced,
+    // deletion date is ignored,
+    // but when looking at the latest state, 
+    // it will not be shown 
+    @IsDeletedFlag()
+    @DeleteDateColumn()
+    deletionDate: Date | null;
+
     // shop items
     @XOneToMany<Course>()(() => ShopItem, x => x.course)
     shopItems: ShopItem[];

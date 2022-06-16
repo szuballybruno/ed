@@ -114,9 +114,6 @@ export class UserStatsService {
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
-            .innerJoin(CourseData, x => x
-                .on('id', '=', 'courseId', CourseLearningStatsView)
-                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
             .getMany();
 

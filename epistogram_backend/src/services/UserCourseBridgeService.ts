@@ -1,3 +1,4 @@
+import { Course } from '../models/entity/course/Course';
 import { CourseData } from '../models/entity/course/CourseData';
 import { ExamData } from '../models/entity/exam/ExamData';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
@@ -144,9 +145,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const courseBridge = await this._ormService
             .query(UserCourseBridge, { userId })
-            .leftJoin(CourseData, x => x
-                .on('id', '=', 'courseId', UserCourseBridge)
-                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
             .getOneOrNull();

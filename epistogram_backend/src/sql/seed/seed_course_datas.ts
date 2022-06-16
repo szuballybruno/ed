@@ -28,7 +28,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_5.id,
-            deletionDate: null
         },
         course_data_cyber: {
             modificationDate: new Date('2022-01-15 16:02:23.130322+00'),
@@ -49,7 +48,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_21.id,
-            deletionDate: null
         },
         course_data_insta: {
             modificationDate: new Date('2022-01-14 21:52:26.140736+00'),
@@ -70,7 +68,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_10.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_163.id,
-            deletionDate: null
         },
 
         course_data_google_ads: {
@@ -92,7 +89,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_4.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_165.id,
-            deletionDate: null
         },
 
         course_data_python: {
@@ -114,7 +110,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_3.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_167.id,
-            deletionDate: null
         },
 
         course_data_linked_in: {
@@ -136,7 +131,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_10.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_166.id,
-            deletionDate: null
         },
 
         course_data_word: {
@@ -158,7 +152,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_326.id,
-            deletionDate: null
         },
 
         course_data_obs: {
@@ -180,7 +173,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_9.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_162.id,
-            deletionDate: null
         },
 
         course_data_powerPoint: {
@@ -202,7 +194,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_161.id,
-            deletionDate: null
         },
 
         course_data_uj: {
@@ -224,7 +215,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_1.id,
             teacherId: users.god.id,
             coverFileId: null,
-            deletionDate: null
         },
 
         course_data_excel: {
@@ -246,7 +236,6 @@ export const getCourseDatasSeedData = (
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
             coverFileId: storageFiles.storage_file_302.id,
-            deletionDate: null
         }
     });
 

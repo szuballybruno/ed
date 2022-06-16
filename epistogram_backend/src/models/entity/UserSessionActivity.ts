@@ -4,6 +4,7 @@ import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { ActivitySession } from './ActivitySession';
 import { Exam } from './exam/Exam';
 import { ExamData } from './exam/ExamData';
+import { ExamVersion } from './exam/ExamVersion';
 import { VideoData } from './video/VideoData';
 import { VideoVersion } from './video/VideoVersion';
 
@@ -28,10 +29,10 @@ export class UserSessionActivity {
 
     // exam 
     @Column({ nullable: true })
-    examId: number | null;
-    @XManyToOne<UserSessionActivity>()(() => Exam, e => e.userSessionActivities)
-    @XJoinColumn<UserSessionActivity>('examId')
-    exam: Relation<Exam> | null;
+    examVersionId: number | null;
+    @XManyToOne<UserSessionActivity>()(() => ExamVersion, x => x.userSessionActivities)
+    @XJoinColumn<UserSessionActivity>('examVersionId')
+    examVersion: Relation<ExamVersion> | null;
 
     // user
     @Column()

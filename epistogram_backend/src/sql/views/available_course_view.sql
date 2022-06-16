@@ -46,17 +46,11 @@ course_state_view AS
 	ORDER BY 
 		u.id,
 		co.id
-),
-latest_course_version AS 
-(
-	SELECT MAX(cv.id) version_id, cv.course_id
-	FROM public.course_version cv
-	GROUP BY cv.course_id
 )
 SELECT 
 	u.id user_id,
 	co.id course_id,
--- 	co.deletion_date IS NOT NULL is_deleted,
+	cd.title,
 	true can_view,
 	sf.file_path file_path,
 	csv.is_completed is_completed,
@@ -71,14 +65,13 @@ SELECT
 	END continue_item_code,
 	ucb.stage_name stage_name,
 	teacher.first_name teacher_first_name,
-	teacher.last_name teacher_last_name,
-	co.*
+	teacher.last_name teacher_last_name
 FROM assigned_courses ac 
 
 LEFT JOIN public.course co
 ON co.id = ac.course_id
 
-LEFT JOIN latest_course_version lcv
+LEFT JOIN public.latest_course_version_view lcv
 ON lcv.course_id = co.id
 
 LEFT JOIN public.course_version cv
@@ -115,6 +108,8 @@ ON csc.id = cd.sub_category_id
 	
 LEFT JOIN public.user teacher
 ON teacher.id = cd.teacher_id
+	 
+WHERE co.deletion_date IS NULL 
 	 
 ORDER BY 
 	u.id,

@@ -124,7 +124,7 @@ export class PretestService {
             .getRepository(AvailableCourseView)
             .findOneOrFail({
                 where: {
-                    id: courseId,
+                    courseId: courseId,
                     userId
                 }
             });

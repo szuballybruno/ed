@@ -1,6 +1,6 @@
 SELECT 
 	vps.id,
-	vps.video_id,
+	vps.video_version_id,
 	vps.user_id,
 	vps.from_seconds,
 	vps.to_seconds,

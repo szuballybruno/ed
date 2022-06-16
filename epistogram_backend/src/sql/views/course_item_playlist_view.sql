@@ -23,12 +23,6 @@ completed_items AS
 	SELECT ecv.user_id, NULL::int video_version_id, ecv.exam_version_id, true is_completed
 	FROM exam_completed_view ecv
 ),
-latest_course_version_ids AS 
-(
-	SELECT MAX(cv.id) version_id, course_id
-	FROM public.course_version cv
-	GROUP BY cv.course_id
-),
 latest_course_items AS 
 (
 	SELECT 
@@ -38,7 +32,7 @@ latest_course_items AS
 			THEN (SELECT encode((civ.video_id || '@video')::bytea, 'base64')) 
 			ELSE (SELECT encode((civ.exam_id || '@exam')::bytea, 'base64'))
 		END item_code
-	FROM latest_course_version_ids lcvi
+	FROM public.latest_course_version_view lcvi
 	
 	LEFT JOIN public.course_item_view civ
 	ON civ.course_version_id = lcvi.version_id

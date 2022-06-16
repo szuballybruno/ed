@@ -1,10 +1,4 @@
 WITH 
-latest_course_version AS
-(
-	SELECT MAX(cv.id) version_id, cv.course_id
-	FROM public.course_version cv
-	GROUP BY cv.course_id
-),
 user_assigned_permissions AS 
 (
 	SELECT 
@@ -212,7 +206,7 @@ v AS
 	LEFT JOIN public.company co
 	ON co.id = ap.context_company_id
 
-	LEFT JOIN latest_course_version lcv
+	LEFT JOIN public.latest_course_version_view lcv
 	ON lcv.course_id = ap.context_course_id
 	
 	LEFT JOIN public.course_version cv

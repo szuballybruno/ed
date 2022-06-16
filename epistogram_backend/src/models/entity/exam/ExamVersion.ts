@@ -31,6 +31,10 @@ export class ExamVersion {
     @XOneToMany<ExamVersion>()(() => ExamCompletion, x => x.examVersion)
     userProgressBridges: ExamCompletion[];
 
+    // user session activity
+    @XOneToMany<ExamVersion>()(() => UserSessionActivity, x => x.examVersion)
+    userSessionActivities: UserSessionActivity[];
+
     // 
     // TO ONE
     //

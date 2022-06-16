@@ -109,7 +109,7 @@ export class ShopService {
                 .getCourseViewAsync(userId, shopItemView.courseId);
 
             return {
-                firstItemCode: courseView.firstItemCode,
+                firstItemCode: '',
                 discountCode: null
             };
         }

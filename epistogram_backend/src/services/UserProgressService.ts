@@ -26,9 +26,6 @@ export class UserProgressService extends ServiceBase {
 
         const views = await this._ormService
             .query(UserActiveCourseView, { userId })
-            .leftJoin(CourseData, x => x
-                .on('id', '=', 'courseId', UserActiveCourseView)
-                .and('deletionDate', 'IS', 'NULL'))
             .where('userId', '=', 'userId')
             .getMany();
 
