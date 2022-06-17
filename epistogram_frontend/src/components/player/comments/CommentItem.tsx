@@ -1,21 +1,13 @@
-import {Flex, Divider, Avatar} from '@chakra-ui/react';
-import {ThumbUpAlt} from '@mui/icons-material';
-import {CommentListDTO} from '../../../shared/dtos/CommentListDTO';
-import {dateTimeToString, toDateStringFormatted} from '../../../static/frontendHelpers';
-import {ChipSmall} from '../../administration/courses/ChipSmall';
-import {EpistoButton} from '../../controls/EpistoButton';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {CommentAnswerEntry} from './CommentAnswerEntry';
-import React, {useState} from 'react';
-import {EpistoEntry} from '../../controls/EpistoEntry';
-import EpistoDropdownMenu from '../../epistoDropdown/EpistoDropdownMenu';
+import { Flex } from '@chakra-ui/react';
+import { Avatar, Checkbox } from '@mui/material';
+import { useContext, useState } from 'react';
+import { Environment } from '../../../static/Environemnt';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
-export const CommentItem = (props: {
-    comment: CommentListDTO,
-    handleEditComment: (commentText: string, commentId: number) => void,
-    handleAnswerComment: (comment: CommentListDTO) => void,
-    handleCreateLike: (commentId: number) => void,
-    handleDeleteLike: (commentId: number) => void,
+export const CommentAnswerEntry = (props: {
     handleCreateNewComment: (
         replyToCommentId: number | null,
         isAnonymous: boolean,
@@ -26,221 +18,126 @@ export const CommentItem = (props: {
     currentReplyCommentId: number | null,
     currentReplyUserFullName: string | null,
     setCurrentReplyUserFullName: React.Dispatch<React.SetStateAction<string | null>>,
+    parentCommentId?: number,
 }) => {
 
     const {
-        comment,
-        handleEditComment,
-        handleAnswerComment,
-        handleCreateLike,
-        handleDeleteLike,
         handleCreateNewComment,
+        currentReplyCommentId,
         currentReplyUserFullName,
         setCurrentReplyUserFullName,
-        currentReplyCommentId,
+        parentCommentId
     } = props;
 
-    const {
-        fullName,
-        commentText,
-        creationDate,
-        parentCommentId,
-        avatarUrl,
-        commentLikeCount,
-        isQuestion
-    } = comment;
+    const user = useContext(CurrentUserContext);
 
-    const [isEditMode, setIsEditMode] = useState<boolean>(false);
-    const [editCommentText, setEditCommentText] = useState<string>(commentText);
-    const [isReplyMode, setIsReplyMode] = useState<boolean>(false);
+    const [commentText, setCommentText] = useState('');
+    const [isAnonymous, setIsAnonymous] = useState(false);
+    const [isQuestion, setIsQuestion] = useState(false);
+    const [isStartedEditing, setIsStartedEditing] = useState(false);
 
-    const handleLikeButton = (commentId: number, isCurrentUserLikedComment: boolean) => {
-        if (!isCurrentUserLikedComment) {
-            handleCreateLike(commentId);
-        } else {
-            handleDeleteLike(commentId);
-        }
+
+    const handleNewComment = async () => {
+        await handleCreateNewComment(
+            currentReplyCommentId,
+            isAnonymous,
+            isQuestion,
+            commentText,
+            parentCommentId,
+        );
+        setCommentText('');
+        setCurrentReplyUserFullName(null);
+        setIsQuestion(false);
+        setIsAnonymous(false);
     };
 
-    const handleEdit = () => {
-        setIsEditMode(true);
-    };
+    return <Flex
+        direction="column"
+        marginLeft={currentReplyCommentId ? '45px' : 0}
+        marginTop={currentReplyCommentId ? '10px' : 0}>
 
-    const handleSave = () => {
-        handleEditComment(editCommentText, comment.commentId);
-        setIsEditMode(false);
-    };
-
-    return (
         <Flex
-            mt="30px"
-            pl={parentCommentId ? '20px' : undefined}>
+            flex='1'
+            align='center'>
 
-            {parentCommentId &&
-                <Divider
-                    variant="fullWidth"
-                    orientation="vertical" />}
 
+            <Avatar
+                alt={user.lastName + ' ' + user.firstName}
+                style={{
+                    margin: '0 15px 0 0'
+                }}
+                src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
+
+            <EpistoEntry
+                isMultiline
+                label={currentReplyCommentId
+                    ? currentReplyUserFullName
+                        ? `Válasz  ${currentReplyUserFullName} felhasználónak`
+                        : ''
+                    : ''}
+                labelVariant='top'
+                style={{
+                    marginTop: -7,
+                    flex: 1
+                }}
+                onInput={() => setIsStartedEditing(true)}
+                value={commentText}
+                setValue={setCommentText}
+                placeholder={currentReplyCommentId ? 'Ide írd a válaszodat' : 'Ide írd a kommentedet/kérdésedet'} />
+        </Flex>
+
+
+        {isStartedEditing && commentText &&
             <Flex
-                p="20px"
-                h='80px'>
+                justify="space-between"
+                align="center"
+                m="10px 0">
 
-                <Avatar
-                    alt="Surányi Ildikó"
-                    src={avatarUrl} />
-            </Flex>
+                <Flex direction="column">
 
-            <Flex
-                flex='1'
-                direction="column">
+                    {!currentReplyCommentId &&
+                        <Flex align="center">
 
-                <Flex
-                    flex='1'
-                    justify="space-between"
-                    align="center">
+                            <Checkbox
+                                onChange={() =>
+                                    setIsQuestion(p => !p)
+                                } />
 
-                    <EpistoFont
-                        style={{
-                            margin: 0,
-                            fontWeight: '600',
-                            textAlign: 'left'
-                        }}>
+                            <EpistoFont>
+                                Ez egy kérdés
+                            </EpistoFont>
+                        </Flex>}
 
-                        {fullName || 'Anoním felhasználó'}
-                    </EpistoFont>
+                    <Flex align="center">
 
-                            {fullName || 'Anoním felhasználó'}
-                        </h4>
+                        <Checkbox
+                            onChange={() =>
+                                setIsAnonymous(p => !p)
+                            } />
 
-                        <EpistoFont
-                            fontSize={'fontSmall'}
-                            style={{
-                                textAlign: 'left',
-                                color: 'gray',
-                                margin: '0 10px'
-                            }}>
-
-                            {new Date(creationDate)
-                                .toLocaleString(
-                                    'hu-hu',
-                                    {
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    }
-                                )
-                            }
+                        <EpistoFont>
+                            Anoním közzététel
                         </EpistoFont>
-
-                        {isQuestion && <ChipSmall
-                            text={'Kérdés'}
-                            style={{
-                                marginLeft: 10
-                            }}
-                            color={'var(--intenseOrange)'} />}
                     </Flex>
                 </Flex>
 
-            {/* Edit mode */}
-            <Flex>
-                {isEditMode ? <EpistoEntry
-                        isMultiline
-                        labelVariant='top'
+                <Flex>
+                    <EpistoButton
+                        variant="outlined"
                         style={{
-                            marginTop: -7,
-                            flex: 1
+                            marginRight: 10
                         }}
-                        value={editCommentText}
-                        setValue={setEditCommentText}
-                        placeholder={commentText}/>
-                    : <EpistoFont
-                        style={{
-                            textAlign: 'left'
-                        }}>
-                        {commentText}
-                    </EpistoFont>}
+                        onClick={() => setIsStartedEditing(false)}>
 
-                <EpistoDropdownMenu menuItems={
-                    [{
-                        name: 'edit',
-                        onClick: handleEdit,
-                    }]
-                }/>
-            </Flex>
+                        Mégsem
+                    </EpistoButton>
+                    <EpistoButton
+                        variant="colored"
+                        onClick={() => handleNewComment()}>
 
-
-            {/* Write a new comment to existing one */}
-            {isReplyMode && <CommentAnswerEntry
-                handleCreateNewComment={handleCreateNewComment}
-                currentReplyCommentId={currentReplyCommentId}
-                currentReplyUserFullName={currentReplyUserFullName}
-                setCurrentReplyUserFullName={setCurrentReplyUserFullName}
-                parentCommentId={parentCommentId}
-            />
-            }
-
-            <Flex
-                flex='1'>
-
-                {isEditMode
-                    ? <>
-                        <EpistoButton
-                            onClick={() => handleSave()}
-                            className="fontSmall"
-                            style={{
-                                color: comment.currentUserLiked ? 'blue' : 'grey'
-                            }}>
-                            Mentés
-                        </EpistoButton>
-
-                        <EpistoButton
-                            onClick={() => setIsEditMode(false)}
-                            className="fontExtraSmall"
-                            style={{
-                                color: 'grey',
-                                marginTop: 3
-                            }}>
-
-                            Mégse
-                        </EpistoButton>
-                    </>
-                    : <>
-                        <EpistoButton
-                            onClick={() => handleLikeButton(comment.commentId, comment.currentUserLiked)}
-                            className="fontSmall"
-                            style={{
-                                color: comment.currentUserLiked ? 'blue' : 'grey'
-                            }}>
-
-                            <ThumbUpAlt
-                                style={{
-                                    height: 20,
-                                    width: 20,
-                                    marginRight: 5,
-                                    color: comment.currentUserLiked ? 'blue' : 'grey'
-                                }}/>
-
-                            {commentLikeCount}
-                        </EpistoButton>
-
-                        <EpistoButton
-                            onClick={() => {
-                                setIsReplyMode(true);
-                                handleAnswerComment(comment);
-                            }}
-                            className="fontExtraSmall"
-                            style={{
-                                color: 'grey',
-                                marginTop: 3
-                            }}>
-
-                            Válasz
-                        </EpistoButton>
-                    </>
-                }
-            </Flex>
-        </Flex>
-    </Flex>
-        ;
+                        Közzététel
+                    </EpistoButton>
+                </Flex>
+            </Flex>}
+    </Flex>;
 };

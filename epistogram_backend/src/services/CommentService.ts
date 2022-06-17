@@ -40,11 +40,6 @@ export class CommentService extends QueryServiceBase<Comment> {
             .limit(1)
             .getOne();
 
-<<<<<<< HEAD
-        const highestGroupId = commentWithHighestGroupId?.groupId
-            ? commentWithHighestGroupId?.groupId + 1
-            : 0;
-=======
         const highestGroupId = (commentWithHighestGroupId?.groupId) ? (commentWithHighestGroupId?.groupId) + 1 : 0;
 
         const newComment = {
@@ -53,31 +48,15 @@ export class CommentService extends QueryServiceBase<Comment> {
             text,
             userId,
             parentCommentId: parentCommentId ? parentCommentId : replyToCommentId,
-            videoId: videoId,
+            videoId: itemId,
             creationDate: new Date(),
             deletionDate: null,
             groupId: highestGroupId,
         };
->>>>>>> 5e0dea96e2187db8135af4a98cc7e359742e7d0a
 
         await this
             ._ormService
-<<<<<<< HEAD
-            .createAsync(Comment, {
-                isAnonymous: isAnonymous,
-                isQuestion: isQuestion,
-                text: text,
-                userId: userId,
-                parentCommentId: replyToCommentId,
-                videoId: itemId,
-                groupId: highestGroupId,
-                creationDate: new Date(),
-                deletionDate: null
-            });
-    };
-=======
             .createAsync(Comment, newComment);
->>>>>>> 5e0dea96e2187db8135af4a98cc7e359742e7d0a
 
         return newComment;
     }
@@ -86,43 +65,20 @@ export class CommentService extends QueryServiceBase<Comment> {
 
         // TODO
 
-<<<<<<< HEAD
-        // const commentAddToGroup = await this
-        //     ._ormService
-        //     .query(Comment, { commentId: comment.commentId })
-        //     .where('id', '=', 'commentId')
-        //     .getOneOrNull();
+        // const commentGroupId = commentAddToGroup?.groupId ? commentAddToGroup?.groupId : 0;
 
-        // const newGroupComment = {
+        // const updatedComment = {
         //     ...commentAddToGroup,
         //     text: comment.commentText,
-        // }
-
-        // if (!newGroupComment)
-        //     throw new Error('This user haven\'t liked this comment yet.');
+        //     groupId: commentGroupId,
+        // } as Comment
 
         // await this
         //     ._ormService
         //     .getRepository(Comment)
-        //     .insert(newGroupComment);
+        //     .insert(updatedComment);
 
-        // return newGroupComment;
-=======
-        const commentGroupId = commentAddToGroup?.groupId ? commentAddToGroup?.groupId : 0;
-
-        const updatedComment = {
-            ...commentAddToGroup,
-            text: comment.commentText,
-            groupId: commentGroupId,
-        } as Comment
-
-        await this
-            ._ormService
-            .getRepository(Comment)
-            .insert(updatedComment);
-
-        return updatedComment;
->>>>>>> 5e0dea96e2187db8135af4a98cc7e359742e7d0a
+        // return updatedComment;
     };
 
     getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {
