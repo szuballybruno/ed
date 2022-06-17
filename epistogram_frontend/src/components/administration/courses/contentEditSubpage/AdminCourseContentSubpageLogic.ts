@@ -1,6 +1,7 @@
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
+import { CourseItemListDTO } from '../../../../shared/dtos/CourseItemListDTO';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { formatTime } from '../../../../static/frontendHelpers';
 
@@ -40,6 +41,7 @@ export type RowSchema = {
         itemSubtitle: boolean;
         moduleId: boolean;
     };
+    data: CourseContentItemAdminDTO;
 };
 
 const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
@@ -116,7 +118,7 @@ export const mapToRowSchema = (
             orderIndex: -1
         } as CourseModuleShortDTO
         : modules
-            .single(x => x.id === item.moduleId);
+            .single(x => x.id === item.moduleVersionId);
 
     return ({
         rowKey: item.versionCode,
@@ -157,13 +159,14 @@ export const mapToRowSchema = (
                 ? 'var(--intenseRed)'
                 : 'var(--intenseGreen)'
         },
-        quickMenu: item.itemId,
+        quickMenu: item.videoVersionId || item.examVersionId,
         videoFile: 'vf',
         changedProperties: {
             itemOrderIndex: isModified(key, 'itemOrderIndex'),
             itemTitle: isModified(key, 'itemTitle'),
             itemSubtitle: isModified(key, 'itemSubtitle'),
-            moduleId: isModified(key, 'moduleId'),
-        }
+            moduleId: isModified(key, 'moduleVersionId'),
+        },
+        data: item
     });
 };

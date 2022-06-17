@@ -1,5 +1,5 @@
 export type AnswerEditDTO = {
-    id: number;
+    answerVersionId: number;
     text: string;
     isCorrect: boolean;
 }

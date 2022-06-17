@@ -1,0 +1,171 @@
+import { Flex } from '@chakra-ui/react';
+import { Add } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
+import { getVirtualId } from '../../../../services/core/idService';
+import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
+import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
+import { iterate } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
+import { useXListMutator } from '../../../lib/XMutator/XMutator';
+import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
+import { QuestionEditItem } from './QuestionEditItem';
+import { EditQuestionFnType } from './VideoEditDialog';
+import { VideoEditDialogParams } from './VideoEditDialogTypes';
+
+export const VideoEditor = ({
+    videoVersionId,
+    dialogLogic
+}: {
+    dialogLogic: EpistoDialogLogicType<VideoEditDialogParams>,
+    videoVersionId: number
+}) => {
+
+    const videoQuestionEditData = null as any;
+
+    // http
+    const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
+        .useCourseItemEditData(videoVersionId, null);
+
+    // computed
+    const videoUrl = videoQuestionEditData?.videoUrl || '';
+    const videoTitle = videoQuestionEditData?.title || '';
+    const courseName = videoQuestionEditData?.courseName || '';
+
+    const questions = videoQuestionEditData?.questions ?? [];
+
+    const {
+        mutatedData,
+        add: addQuestion,
+        mutate: mutateQuestion,
+        remove: removeQuestion,
+        isMutated: isQuestionModified,
+        isAnyMutated: isAnyQuestionsMutated,
+        mutations,
+        resetMutations,
+        addOnMutationHandlers
+    } = useXListMutator<QuestionEditDataDTO, 'questionVersionId', number>(questions, 'questionVersionId', () => console.log(''));
+
+    // mutation handlers
+    const handleMutateQuestion: EditQuestionFnType = (key, field, value) => {
+
+        mutateQuestion({ key, field: field as any, newValue: value });
+    };
+
+    const handleAddQuestion = () => {
+
+        const newId = getVirtualId();
+
+        const dto: QuestionEditDataDTO = {
+            questionVersionId: newId,
+            questionText: '',
+            questionShowUpTimeSeconds: 0,
+            answers: iterate(4, (index) => ({
+                answerVersionId: 0 - index,
+                text: '',
+                isCorrect: false
+            } as AnswerEditDTO))
+        };
+
+        addQuestion(newId, dto);
+    };
+
+    // const handleSaveQuestionsAsync = async () => {
+
+    //     try {
+
+    //         await saveVideoQuestionEditData(mutations as any);
+    //         resetMutations();
+    //         logic.closeDialog();
+    //     }
+    //     catch (e) {
+
+    //         showError(e);
+    //     }
+    // };
+
+
+    const [playedSeconds, setPlayedSeconds] = useState(0);
+
+    const handleQuestionShowUpTime = (key: number) => {
+
+        handleMutateQuestion(key, 'questionShowUpTimeSeconds', playedSeconds);
+        return playedSeconds;
+    };
+
+    return <Flex
+        direction="row"
+        height="auto"
+        flex="1"
+        p="20px">
+
+        <Flex
+            align="flex-start"
+            m="0 5px 30px 0"
+            position="sticky"
+            maxH="400px"
+            top="115"
+            flex="1">
+
+            <Flex
+                className="mildShadow"
+                flex="1">
+
+                <EpistoReactPlayer
+                    width="100%"
+                    height="calc(56.25 / 100)"
+                    controls
+                    onProgress={x => setPlayedSeconds(x.playedSeconds)}
+                    progressInterval={100}
+                    style={{
+                        borderRadius: 7,
+                        overflow: 'hidden'
+                    }}
+                    url={videoUrl} />
+            </Flex>
+        </Flex>
+
+        <Flex
+            direction="column"
+            flex="1"
+            mt="5px"
+            p="0 20px 100px 20px">
+
+            {/* questions list */}
+            {questions
+                .map((question, index) => (
+
+                    <QuestionEditItem
+                        key={index}
+                        question={question} />
+                ))}
+
+            <EpistoButton
+                variant="outlined"
+                onClick={() => handleAddQuestion()}
+                style={{
+                    margin: '10px 0',
+                    borderColor: 'var(--epistoTeal)',
+                    color: 'var(--epistoTeal)'
+                }}>
+
+                <Add />
+            </EpistoButton>
+        </Flex>
+
+        <EpistoButton
+            isDisabled={!isAnyQuestionsMutated}
+            onClick={() => { console.log('asd'); }}
+            variant="colored"
+            style={{
+                position: 'absolute',
+                bottom: 20,
+                width: 'calc(100% - 40px)'
+            }}>
+
+            {translatableTexts.misc.save}
+        </EpistoButton>
+    </Flex >;
+};

@@ -4,19 +4,18 @@ import { ExamData } from '../models/entity/exam/ExamData';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { ExamCompletion } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
-import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
+import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamView } from '../models/views/ExamView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
-import { toExamQuestionEditDTO, toExamResultDTO } from './misc/mappings';
+import { toExamResultDTO } from './misc/mappings';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
@@ -102,120 +101,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         return [] as any;
     }
-
-    /**
-     * Get edit data for the exam.
-     * 
-     * @param examId 
-     * @returns 
-     */
-    async getExamEditDataAsync(examId: number) {
-
-        const exam = await this._ormService
-            .getRepository(ExamData)
-            .createQueryBuilder('e')
-            .leftJoinAndSelect('e.questions', 'eq')
-            .leftJoinAndSelect('eq.answers', 'eqa')
-            .where('e.id = :examId', { examId })
-            .getOneOrFail();
-
-        return this._mapperService
-            .map(ExamData, ExamEditDataDTO, exam);
-    }
-
-    /**
-     * Get question edit data for the exam.
-     * 
-     * @param examId 
-     * @returns 
-     */
-    async getExamQuestionEditDataAsync(
-        examId: number
-    ) {
-
-        const questionEditView = await this._ormService
-            .getRepository(CourseItemQuestionEditView)
-            .createQueryBuilder('eq')
-            .where('eq.examId = :examId', { examId })
-            .getMany();
-
-        const examQuestionEditDTO = toExamQuestionEditDTO(questionEditView);
-
-        return examQuestionEditDTO;
-    }
-
-    /**
-     * Saves the question edit data for the exam.
-     * 
-     * @param mutations
-     * @returns 
-     */
-    async saveExamQuestionEditDataAsync(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
-
-        await this._questionsService.saveNewQuestionsAndAnswers(mutations);
-        await this._questionsService.saveUpdatedQuestions(mutations);
-        await this._questionsService.saveUpdatedAnswers(mutations);
-        await this._questionsService.saveNewAnswers(mutations);
-    }
-
-    /**
-     * Save the exam.
-     * 
-     * @param dto 
-     */
-    async saveExamAsync(dto: ExamEditDataDTO) {
-
-        throwNotImplemented();
-        // const examId = dto.id;
-
-        // const examBeforeSave = await this._ormService
-        //     .getRepository(ExamData)
-        //     .createQueryBuilder('e')
-        //     .leftJoinAndSelect('e.module', 'mo')
-        //     .where('e.id = :examId', { examId })
-        //     .getOneOrFail();
-
-        // const courseId = examBeforeSave.module?.courseId ?? dto.courseId;
-
-        // // if this exam was not a final exam previously, 
-        // // but now it is, set every other exam in the course as non final exam
-        // if (dto.isFinalExam && examBeforeSave.type !== 'final') {
-
-        //     // get all exams in course 
-        //     const previousFinalExam = await this._ormService
-        //         .getRepository(ExamData)
-        //         .createQueryBuilder('e')
-        //         .leftJoinAndSelect('e.module', 'mo')
-        //         .leftJoinAndSelect('mo.course', 'co')
-        //         .where('co.id = :courseId', { courseId })
-        //         .andWhere('e.type = \'final\'')
-        //         .getMany();
-
-        //     // set all exams to non final 
-        //     await this._ormService
-        //         .getRepository(ExamData)
-        //         .save(previousFinalExam
-        //             .map(x => ({
-        //                 id: x.id,
-        //                 type: 'normal'
-        //             } as ExamData)));
-        // }
-
-        // await this._ormService
-        //     .getRepository(ExamData)
-        //     .save({
-        //         id: examId,
-        //         title: dto.title,
-        //         subtitle: dto.subTitle,
-        //         courseId: dto.courseId,
-        //         isFinalExam: dto.isFinalExam,
-        //         retakeLimit: dto.reatakeLimit
-        //     });
-
-        // await this._questionsService
-        //     .saveAssociatedQuestionsAsync(dto.questions, undefined, examId);
-    }
-
+    
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
      * 

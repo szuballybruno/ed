@@ -1,24 +1,21 @@
 import { Flex } from '@chakra-ui/react';
 import { Delete } from '@mui/icons-material';
 import { Checkbox } from '@mui/material';
-import { ClassBuilder } from '../../../helpers/classBuilder';
-import { QuestionEditDataDTO } from '../../../shared/dtos/QuestionEditDataDTO';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EditQuestionFnType } from './VideoEditDialog';
+import { ClassBuilder } from '../../../../helpers/classBuilder';
+import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EditQuestionFnType } from '../videoEditDialog/VideoEditDialog';
 
-export const AdminExamQuestionRow = (props: {
+export const AdminExamQuestionRow = ({
+    rowIndex,
+    question,
+    columnCount
+}: {
     rowIndex: number,
     question: QuestionEditDataDTO,
-    handleMutateQuestion: EditQuestionFnType,
     columnCount: number
 }) => {
-    const {
-        rowIndex,
-        question,
-        handleMutateQuestion,
-        columnCount
-    } = props;
 
     return <Flex
         flex='1'
@@ -43,7 +40,7 @@ export const AdminExamQuestionRow = (props: {
                 isMultiline
                 value={question.questionText}
                 setValue={(questionText) => {
-                    handleMutateQuestion(question.questionId, 'questionText', questionText);
+                    // handleMutateQuestion(question.questionId, 'questionText', questionText);
                 }} />
         </Flex>
 
@@ -69,11 +66,11 @@ export const AdminExamQuestionRow = (props: {
                         <Checkbox
                             checked={answer.isCorrect}
                             onChange={() => {
-                                handleMutateQuestion(question.questionId, 'answers', question.answers.map(
-                                    el => el.id === answer.id
-                                        ? { ...el, isCorrect: !answer.isCorrect }
-                                        : el
-                                ));
+                                // handleMutateQuestion(question.questionId, 'answers', question.answers.map(
+                                //     el => el.id === answer.id
+                                //         ? { ...el, isCorrect: !answer.isCorrect }
+                                //         : el
+                                // ));
                             }}
                             style={{
                                 color: answer.isCorrect
@@ -83,11 +80,11 @@ export const AdminExamQuestionRow = (props: {
 
                         <EpistoEntry
                             setValue={(answerText) => {
-                                handleMutateQuestion(question.questionId, 'answers', question.answers.map(
-                                    el => el.id === answer.id
-                                        ? { ...el, text: answerText }
-                                        : el
-                                ));
+                                // handleMutateQuestion(question.questionId, 'answers', question.answers.map(
+                                //     el => el.id === answer.id
+                                //         ? { ...el, text: answerText }
+                                //         : el
+                                // ));
                             }}
                             style={{
                                 margin: '10px 0',

@@ -18,28 +18,27 @@ export const AdminCourseList = memo((props: {
     // props
     const { courses, noOverflow, onCourseClick } = props;
 
+    const isMinimized = true;
+
     // util
     const courseId = useIntParam('courseId');
 
     return <Flex
         className="roundBorders"
         direction="column"
-        minW="350px"
-        flexBasis="350px"
         mr="5px"
-        background="var(--transparentWhite90)">
+        background="var(--transparentWhite90)"
+        minWidth="95px">
 
-        <EpistoSearch
+        {!isMinimized && <EpistoSearch
             background="white"
             boxShadow="inset 0px -2px 10px -5px #33333315"
-            borderRadius="7px 0 0 0" />
+            borderRadius="7px 0 0 0" />}
 
         {/* List of courses */}
         <ForceNoOverflowY disabled={!noOverflow}>
             <FlexList
                 flex="1"
-                pb="300px"
-                flexBasis="350px"
                 mt="5px"
                 className="roundBorders"
                 background="var(--transparentWhite70)">
@@ -53,24 +52,28 @@ export const AdminCourseList = memo((props: {
                             align="center"
                             mb="1"
                             thumbnailContent={
-                                <Image
-                                    src={course.thumbnailImageURL}
-                                    objectFit="cover"
+                                <Flex
                                     className="roundBorders"
                                     style={{
-                                        height: 72,
-                                        width: 128
+                                        height: '40px',
+                                        width: '80px'
                                     }}
-                                />
+                                    overflow="hidden">
+
+                                    <Image
+                                        src={course.thumbnailImageURL}
+                                        objectFit="cover"
+                                        className="whall" />
+                                </Flex>
                             }
-                            midContent={
-                                <FlexListTitleSubtitle
+                            midContent={isMinimized
+                                ? undefined
+                                : <FlexListTitleSubtitle
                                     title={course.title}
                                     subTitle={''}
                                     isSelected={course.courseId === courseId}
                                 />
-                            }
-                        />;
+                            } />;
                     })}
             </FlexList>
         </ForceNoOverflowY>

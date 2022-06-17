@@ -26,7 +26,7 @@ import { CourseAdminContentView } from '../../models/views/CourseAdminContentVie
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
-import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
+import { CourseItemEditView } from '../../models/views/CourseItemEditView';
 import { CourseItemStateView } from '../../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
@@ -55,6 +55,7 @@ import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContent
 import { CourseContentItemIssueDTO } from '../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { AdminModuleShortDTO } from '../../shared/dtos/AdminModuleShortDTO';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
+import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
@@ -64,6 +65,7 @@ import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
 import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
+import { CourseItemEditDTO } from '../../shared/dtos/CourseItemEditDTO';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
@@ -76,7 +78,6 @@ import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
 import { DiscountCodeDTO } from '../../shared/dtos/DiscountCodeDTO';
 import { EventDTO } from '../../shared/dtos/EventDTO';
-import { ExamQuestionEditDTO } from '../../shared/dtos/ExamQuestionEditDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
@@ -109,7 +110,6 @@ import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { VideoQuestionEditDTO } from '../../shared/dtos/VideoQuestionEditDTO';
 import { CourseItemStateType } from '../../shared/types/sharedTypes';
 import { toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
@@ -165,6 +165,52 @@ const marray = [
                             }))
                     };
                 });
+        }),
+
+    epistoMappingsBuilder
+        .addMapping(CourseItemEditDTO, ([urlService]) => (views: CourseItemEditView[]) => {
+
+            const viewAsItem = views
+                .first();
+
+            const videoFileUrl = urlService
+                .getAssetUrlNullable(viewAsItem.videoFilePath);
+
+            // map item
+            const dto: CourseItemEditDTO = {
+                examVersionId: viewAsItem.examVersionId,
+                videoVersionId: viewAsItem.videoVersionId,
+                title: viewAsItem.title,
+                subtitle: viewAsItem.subtitle,
+                videoLengthSeconds: viewAsItem.videoLengthSeconds,
+                videoUrl: videoFileUrl,
+
+                // map questions 
+                questions: views
+                    .groupBy(x => x.questionVersionId)
+                    .map(questionGroup => {
+
+                        const viewAsQuestion = questionGroup
+                            .first;
+
+                        return {
+                            questionVersionId: viewAsQuestion.questionVersionId,
+                            questionText: viewAsQuestion.questionText,
+                            questionShowUpTimeSeconds: viewAsQuestion.questionShowUpTimeSeconds,
+
+                            // map answers 
+                            answers: questionGroup
+                                .items
+                                .map((viewAsAnswer): AnswerEditDTO => ({
+                                    answerVersionId: viewAsAnswer.answerVersionId,
+                                    text: viewAsAnswer.answerText,
+                                    isCorrect: viewAsAnswer.answerIsCorrect
+                                }))
+                        };
+                    })
+            };
+
+            return dto;
         })
 ] as const;
 
@@ -442,17 +488,17 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
             return {
                 courseId: x.courseId,
-                examId: x.examId,
+                examVersionId: x.examId,
                 // itemCode: x.itemCode,
                 versionCode: x.versionCode,
                 itemOrderIndex: x.itemOrderIndex,
                 itemSubtitle: x.itemSubtitle,
                 itemTitle: x.itemTitle,
                 // moduleCode: x.moduleCode,
-                moduleId: x.moduleId,
+                moduleVersionId: x.moduleId,
                 moduleName: x.moduleName,
                 moduleOrderIndex: x.moduleOrderIndex,
-                videoId: x.videoId,
+                videoVersionId: x.videoId,
                 errors,
                 warnings,
                 videoLength: x.videoLength,
@@ -1153,85 +1199,5 @@ export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
                 .map(x => toCourseCategoryDTO(x))
             : []
     } as CourseCategoryDTO;
-};
-
-export const toVideoQuestionEditDTO = (
-    ci: CourseItemQuestionEditView[],
-    getAssetUrl: (path: string) => string
-): VideoQuestionEditDTO => {
-
-    const questionGroup = ci
-        .groupBy(x => x.questionId);
-
-    const {
-        videoId,
-        videoTitle,
-        videoSubtitle,
-        courseTitle,
-        videoFilePath,
-        videoLengthSeconds,
-    } = questionGroup.first().first;
-
-    const videoFileUrl = getAssetUrl(videoFilePath);
-
-    return {
-        id: videoId,
-        title: videoTitle,
-        subtitle: videoSubtitle,
-        courseName: courseTitle,
-        videoLengthSeconds: videoLengthSeconds,
-        videoUrl: videoFileUrl,
-        questions: questionGroup
-            .map(q => {
-
-                return {
-                    videoId: q.first.videoId,
-                    examId: null,
-                    questionId: q.first.questionId,
-                    questionText: q.first.questionText,
-                    questionShowUpTimeSeconds: q.first.questionShowUpTimeSeconds,
-                    answers: q.items.map(qi => ({
-                        id: qi.answerId,
-                        text: qi.answerText,
-                        isCorrect: qi.answerIsCorrect
-                    }))
-                };
-            })
-    };
-};
-
-export const toExamQuestionEditDTO = (
-    ci: CourseItemQuestionEditView[]
-): ExamQuestionEditDTO => {
-
-    const questionGroup = ci
-        .groupBy(x => x.questionId);
-
-    const {
-        examId,
-        examTitle,
-        courseTitle
-    } = questionGroup.first().first;
-
-    return {
-        id: examId,
-        courseName: courseTitle,
-        title: examTitle,
-        questions: questionGroup
-            .map(q => {
-
-                return {
-                    videoId: null,
-                    examId: q.first.examId,
-                    questionId: q.first.questionId,
-                    questionText: q.first.questionText,
-                    answers: q.items.map(qi => ({
-                        id: qi.answerId,
-                        text: qi.answerText,
-                        isCorrect: qi.answerIsCorrect
-                    }))
-                };
-            })
-    };
 };
 

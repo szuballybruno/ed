@@ -1,12 +1,10 @@
 import { StorageFile } from '../models/entity/StorageFile';
 import { VideoData } from '../models/entity/video/VideoData';
-import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
+import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { VideoQuestionEditDTO } from '../shared/dtos/VideoQuestionEditDTO';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { toVideoQuestionEditDTO } from './misc/mappings';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { getVideoLengthSecondsAsync } from './misc/videoDurationService';
 import { QuestionAnswerService } from './QuestionAnswerService';
@@ -23,6 +21,9 @@ import { X509Certificate } from 'crypto';
 import { CourseController } from '../api/CourseController';
 import { Index } from 'typeorm';
 import { PrincipalId } from '../utilities/ActionParams';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import fs from 'fs';
+import { UploadedFile } from 'express-fileupload';
 
 export class VideoService extends QueryServiceBase<VideoData> {
 
@@ -39,7 +40,8 @@ export class VideoService extends QueryServiceBase<VideoData> {
         fileService: FileService,
         questionsService: QuestionService,
         assetUrlService: UrlService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        private _globalConfig: GlobalConfiguration) {
 
         super(mapperService, ormConnection, VideoData);
 
@@ -165,34 +167,6 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .softDelete(VideoData, videoIds);
     }
 
-    uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
-
-        // upload file
-        const filePath = this._fileService
-            .getFilePath('videos', 'video', videoId, 'mp4');
-
-        await this._fileService
-            .uploadAssigendFileAsync<VideoData>(
-                filePath,
-                () => this.getVideoByIdAsync(videoId),
-                (fileId) => this.setVideoFileIdAsync(videoId, fileId),
-                (entity) => entity.videoFileId,
-                videoFileBuffer);
-
-        // set video length
-        const videoFileUrl = this._assetUrlService
-            .getAssetUrl(filePath);
-
-        const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
-
-        await this._ormService
-            .getRepository(VideoData)
-            .save({
-                id: videoId,
-                lengthSeconds: lengthSeconds
-            });
-    };
-
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
 
         await this._ormService
@@ -225,28 +199,88 @@ export class VideoService extends QueryServiceBase<VideoData> {
         return video;
     };
 
-    getVideoQuestionEditDataAsync = async (
-        videoId?: number
-    ) => {
+    uploadVideoFileChunksAsync = async (
+        videoId: number,
+        chunkIndex: number,
+        chunksCount: number,
+        getFile: () => UploadedFile | undefined) => {
 
-        const questionEditView = await this._ormService
-            .getRepository(CourseItemQuestionEditView)
-            .createQueryBuilder('vq')
-            .where('vq.videoId = :videoId', { videoId })
-            .getMany();
+        const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
+        const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
-        const videoQuestionEditDTO = toVideoQuestionEditDTO(questionEditView, this._assetUrlService.getAssetUrl);
+        try {
 
-        return videoQuestionEditDTO;
+            if (chunkIndex !== 0 && !fs.existsSync(filePath))
+                throw new Error('Trying to append file that does not exist!');
+
+            const file = getFile();
+            if (!file)
+                throw new Error('File chunk data not sent!');
+
+            console.log('Recieved file chunk: #' + chunkIndex);
+
+            // create temp folder 
+            if (!fs.existsSync(tempFolder)) {
+                fs.mkdirSync(tempFolder);
+            }
+
+            // create & append file
+            if (chunkIndex === 0) {
+
+                fs.writeFileSync(filePath, file.data);
+            }
+            else {
+
+                fs.appendFileSync(filePath, file.data);
+            }
+
+            // upload is done 
+            if (chunkIndex + 1 === chunksCount) {
+
+                console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
+
+                // read tmp file 
+                const fullFile = fs.readFileSync(filePath);
+
+                // delete tmp file 
+                fs.rmSync(filePath);
+
+                // upload to cloud 
+                await this._uploadVideoFileAsync(videoId, fullFile);
+            }
+        }
+        catch (e) {
+
+            fs.unlinkSync(filePath);
+            throw e;
+        }
     };
 
-    async saveVideoQuestionEditDataAsync(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
+    private _uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
 
-        await this._questionsService.saveNewQuestionsAndAnswers(mutations);
-        await this._questionsService.saveUpdatedQuestions(mutations);
-        await this._questionsService.saveUpdatedAnswers(mutations);
-        await this._questionsService.saveNewAnswers(mutations);
-    }
+        // upload file
+        const filePath = this._fileService
+            .getFilePath('videos', 'video', videoId, 'mp4');
 
+        await this._fileService
+            .uploadAssigendFileAsync<VideoData>(
+                filePath,
+                () => this.getVideoByIdAsync(videoId),
+                (fileId) => this.setVideoFileIdAsync(videoId, fileId),
+                (entity) => entity.videoFileId,
+                videoFileBuffer);
 
+        // set video length
+        const videoFileUrl = this._assetUrlService
+            .getAssetUrl(filePath);
+
+        const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+
+        await this._ormService
+            .getRepository(VideoData)
+            .save({
+                id: videoId,
+                lengthSeconds: lengthSeconds
+            });
+    };
 }

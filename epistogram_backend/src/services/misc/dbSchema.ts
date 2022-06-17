@@ -61,7 +61,7 @@ import { CourseAdminContentView } from '../../models/views/CourseAdminContentVie
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
-import { CourseItemQuestionEditView } from '../../models/views/CourseItemQuestionEditView';
+import { CourseItemEditView } from '../../models/views/CourseItemEditView';
 import { CourseItemStateView } from '../../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
@@ -270,6 +270,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['course_questions_success_view'],
             ['exam_latest_success_rate_view'],
             ['course_spent_time_view'],
+            ['course_item_edit_view', CourseItemEditView]
             // ['course_item_count_view'],
             // ['course_learning_stats_view', CourseLearningStatsView],
             // ['course_progress_view', CourseProgressView],

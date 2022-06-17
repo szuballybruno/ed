@@ -74,6 +74,10 @@ export const apiRoutes = {
         loginUser: '/authentication/login-user',
     },
 
+    courseItem: {
+        getCourseItemEditData: '/courseitem/get-course-item-edit-data'
+    },
+
     personalityAssessment: {
         getPersonalityTraitCategories: '/personalityassessment/get-personality-trait-categories',
         getPersonalityTraitCategoryDetails: '/personalityassessment/get-personality-trait-category-details'
@@ -199,30 +203,16 @@ export const apiRoutes = {
     },
 
     video: {
-        createVideo: '/video/create-video',
-        deleteVideo: '/video/delete-video',
         uploadVideoFile: '/video/upload-video-file',
         uploadVideoFileChunks: '/video/upload-video-file-chunks',
-        saveVideo: '/video/save-video',
-        getVideoEditData: '/video/get-video-edit-data',
-        getVideoQuestionEditData: '/video/get-video-question-edit-data',
-        saveVideoQuestionEditData: '/video/save-video-question-edit-data'
     },
 
     questions: {
-        getQuestionEditData: '/questions/get-question-edit-data',
-        saveQuestion: '/questions/save-question',
         answerPractiseQuestion: '/questions/answer-practise-question',
         getPractiseQuestions: '/questions/get-practise-question',
     },
 
     exam: {
-        getExamEditData: '/exam/get-exam-edit-data',
-        getExamQuestionEditData: '/exam/get-exam-question-edit-data',
-        saveExamQuestionEditData: '/exam/save-exam-question-edit-data',
-        saveExam: '/exam/save-exam',
-        createExam: '/exam/create-exam',
-        deleteExam: '/exam/delete-exam',
         answerExamQuestion: '/exam/answer-exam-question',
         getExamResults: '/exam/get-exam-results',
         startExam: '/exam/start-exam'

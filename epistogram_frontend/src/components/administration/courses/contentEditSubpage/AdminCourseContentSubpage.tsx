@@ -15,15 +15,17 @@ import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { ExamEditDialog } from '../ExamEditDialog';
+import { ExamEditDialog } from '../examEditDialog/ExamEditDialog';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
-import { VideoEditDialog } from '../VideoEditDialog';
+import { VideoEditDialog } from '../videoEditDialog/VideoEditDialog';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { Flex } from '@chakra-ui/react';
 import { ForceNoOverflowY } from '../../../controls/ForceNoOverflowY';
+import { VideoEditDialogParams } from '../videoEditDialog/VideoEditDialogTypes';
+import { ExamEditDialogParams } from '../examEditDialog/ExamEditDialogTypes';
 
 type ItemType = CourseContentItemAdminDTO;
 
@@ -35,8 +37,8 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic<{ videoId: number }>('video_edit_dialog');
-    const examEditDialogLogic = useEpistoDialogLogic<{ examId: number }>('exam_edit_dialog');
+    const videoEditDialogLogic = useEpistoDialogLogic<VideoEditDialogParams>('video_edit_dialog');
+    const examEditDialogLogic = useEpistoDialogLogic<ExamEditDialogParams>('exam_edit_dialog');
     const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog');
     const isAnySelected = !!courseId && (courseId != -1);
 
@@ -132,7 +134,7 @@ export const AdminCourseContentSubpage = () => {
                 const isNewSmaller = newItemOrderIndex < item!.itemOrderIndex;
 
                 const orderedItems = mutatedItems
-                    .filter(row => row.moduleId === item!.moduleId)
+                    .filter(row => row.moduleVersionId === item!.moduleVersionId)
                     .orderBy(row => {
 
                         if (getItemKey(row) === key)
@@ -148,18 +150,18 @@ export const AdminCourseContentSubpage = () => {
         },
         {
             action: 'update',
-            field: 'moduleId',
+            field: 'moduleVersionId',
             callback: ({ key, item, newValue }) => {
 
-                const oldModuleId = item!.moduleId;
+                const oldModuleId = item!.moduleVersionId;
                 const newModuleId = newValue as number;
 
                 const oldModuleItems = mutatedItems
-                    .filter(x => x.moduleId === oldModuleId && getItemKey(x) !== key)
+                    .filter(x => x.moduleVersionId === oldModuleId && getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
 
                 const newModuleItems = mutatedItems
-                    .filter(x => x.moduleId === newModuleId || getItemKey(x) === key)
+                    .filter(x => x.moduleVersionId === newModuleId || getItemKey(x) === key)
                     .orderBy(x => getItemKey(x) === key ? -1 : x.itemOrderIndex);
 
                 setNewOrderIndices(oldModuleItems, key);
@@ -171,7 +173,7 @@ export const AdminCourseContentSubpage = () => {
             callback: ({ item, key }) => {
 
                 const moduleItems = mutatedItems
-                    .filter(x => x.moduleId === item!.moduleId)
+                    .filter(x => x.moduleVersionId === item!.moduleVersionId)
                     .filter(x => getItemKey(x) !== key)
                     .orderBy(x => x.itemOrderIndex);
 
@@ -186,13 +188,25 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: 'video' | 'exam' | 'module', itemId?: number) => {
+    const openDialog = (type: 'video' | 'exam' | 'module', data?: CourseContentItemAdminDTO) => {
 
         if (type === 'video')
-            videoEditDialogLogic.openDialog({ params: { videoId: itemId! } });
+            videoEditDialogLogic.openDialog({
+                params: {
+                    videoVersionId: data!.videoVersionId,
+                    courseName: 'Course name',
+                    videoTitle: data!.itemTitle
+                }
+            });
 
         if (type === 'exam')
-            examEditDialogLogic.openDialog({ params: { examId: itemId! } });
+            examEditDialogLogic.openDialog({
+                params: {
+                    examVersionId: data!.examVersionId,
+                    courseName: 'Course name',
+                    examTitle: data!.itemTitle
+                }
+            });
 
         if (type === 'module')
             moduleEditDialogLogic.openDialog();
@@ -201,15 +215,15 @@ export const AdminCourseContentSubpage = () => {
 
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleId = modules[0].id;
+        const moduleVersionId = modules[0].id;
 
         const foundModule = mutatedItems
-            .firstOrNull(x => x.moduleId === moduleId);
+            .firstOrNull(x => x.moduleVersionId === moduleVersionId);
 
         const moduleInfo = foundModule
             ? {
                 name: foundModule.moduleName,
-                id: foundModule.moduleId,
+                id: foundModule.moduleVersionId,
                 orderIndex: foundModule.moduleOrderIndex
             }
             : {
@@ -219,7 +233,7 @@ export const AdminCourseContentSubpage = () => {
             };
 
         const itemOrderIndex = mutatedItems
-            .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
+            .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
             .length;
 
         const newId = getVirtualId();
@@ -234,10 +248,9 @@ export const AdminCourseContentSubpage = () => {
             warnings: [],
             errors: [],
             versionCode: newVersionCode,
-            itemId: newId,
-            examId: type === 'exam' ? newId : -1,
-            videoId: type === 'exam' ? -1 : newId,
-            moduleId: moduleInfo.id,
+            examVersionId: type === 'exam' ? newId : -1,
+            videoVersionId: type === 'exam' ? -1 : newId,
+            moduleVersionId: moduleInfo.id,
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,
             videoLength: 0
@@ -317,8 +330,8 @@ export const AdminCourseContentSubpage = () => {
 
                 {/* dialogs */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
-                <VideoEditDialog logic={videoEditDialogLogic} />
-                <ExamEditDialog logic={examEditDialogLogic} />
+                <VideoEditDialog dialogLogic={videoEditDialogLogic} />
+                <ExamEditDialog dialogLogic={examEditDialogLogic} />
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}

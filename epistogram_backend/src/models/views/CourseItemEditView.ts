@@ -1,48 +1,39 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { AnswerData } from '../entity/answer/AnswerData';
 
 @ViewEntity({
     synchronize: false,
     expression: ''
 })
-export class CourseItemQuestionEditView {
+export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    videoId: number;
+    examVersionId: number;
 
     @ViewColumn()
     @XViewColumn()
-    videoTitle: string;
+    videoVersionId: number;
 
     @ViewColumn()
     @XViewColumn()
-    videoSubtitle: string;
+    title: string;
 
     @ViewColumn()
     @XViewColumn()
-    videoFilePath: string;
+    subtitle: string;
 
     @ViewColumn()
     @XViewColumn()
-    videoLengthSeconds: number;
+    videoLengthSeconds: number | null;
 
     @ViewColumn()
     @XViewColumn()
-    courseTitle: string;
+    videoFilePath: string | null;
 
     @ViewColumn()
     @XViewColumn()
-    examId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    examTitle: string;
-
-    @ViewColumn()
-    @XViewColumn()
-    questionId: number;
+    questionVersionId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -54,7 +45,7 @@ export class CourseItemQuestionEditView {
 
     @ViewColumn()
     @XViewColumn()
-    answerId: number;
+    answerVersionId: number;
 
     @ViewColumn()
     @XViewColumn()

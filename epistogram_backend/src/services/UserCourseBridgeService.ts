@@ -7,7 +7,7 @@ import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
-import { CourseItemsService } from './CourseItemsService';
+import { CourseItemService } from './CourseItemService';
 import { MapperService } from './MapperService';
 import { getItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
@@ -15,10 +15,10 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
-    private _courseItemsService: CourseItemsService;
+    private _courseItemsService: CourseItemService;
 
     constructor(
-        courseItemsService: CourseItemsService,
+        courseItemsService: CourseItemService,
         ormService: ORMConnectionService,
         mapperService: MapperService) {
 

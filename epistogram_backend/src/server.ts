@@ -8,6 +8,7 @@ import { CoinTransactionsController } from './api/CoinTransactionsController';
 import { CommentController } from './api/CommentController';
 import { CompanyController } from './api/CompanyController';
 import { CourseController } from './api/CourseController';
+import { CourseItemController } from './api/CourseItemController';
 import { CourseRatingController } from './api/CourseRatingController';
 import { DailyTipController } from './api/DailyTipController';
 import { EventController } from './api/EventController';
@@ -42,7 +43,7 @@ import { CoinAcquireService } from './services/CoinAcquireService';
 import { CoinTransactionService } from './services/CoinTransactionService';
 import { CommentService } from './services/CommentService';
 import { CompanyService } from './services/CompanyService';
-import { CourseItemsService } from './services/CourseItemsService';
+import { CourseItemService } from './services/CourseItemService';
 import { CourseRatingService } from './services/CourseRatingService';
 import { CourseService } from './services/CourseService';
 import { DailyTipService } from './services/DailyTipService';
@@ -142,13 +143,13 @@ const main = async () => {
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
-    const courseItemsService = new CourseItemsService(ormConnectionService, mapperService);
+    const courseItemsService = new CourseItemService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);
     const questionService = new QuestionService(ormConnectionService);
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
     const storageService = new StorageService(globalConfig);
     const fileService = new FileService(userService, storageService, ormConnectionService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService, globalConfig);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
     const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
@@ -169,6 +170,7 @@ const main = async () => {
     const commentService = new CommentService(ormConnectionService, mapperService);
     const likeService = new LikeService(ormConnectionService, mapperService);
     const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
+    const courseItemService = new CourseItemService(ormConnectionService, mapperService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);
@@ -187,7 +189,7 @@ const main = async () => {
     const playerController = new PlayerController(courseService, playerService, videoService);
     const courseController = new CourseController(courseService, userCourseBridgeService);
     const moduleController = new ModuleController(moduleService);
-    const videoController = new VideoController(videoService, questionService, ormConnectionService, globalConfig, mapperService);
+    const videoController = new VideoController(videoService);
     const questionController = new QuestionController(practiseQuestionService, questionService, ormConnectionService);
     const examController = new ExamController(examService, ormConnectionService);
     const shopController = new ShopController(shopService);
@@ -203,6 +205,7 @@ const main = async () => {
     const companyController = new CompanyController(companyService);
     const roleController = new RoleController(roleService);
     const commentController = new CommentController(commentService, likeService);
+    const coruseItemController = new CourseItemController(courseItemService);
 
     // initialize services 
     initializeMappings(urlService.getAssetUrl, mapperService);
@@ -223,6 +226,7 @@ const main = async () => {
         .setExpressMiddleware(getUnderMaintanenceMiddleware(globalConfig))
         .addController(MiscController, miscController)
         .addController(UserController, userController)
+        .addController(CourseItemController, coruseItemController)
         .addController(PermissionController, permissionController)
         .addController(RoleController, roleController)
         .addController(CompanyController, companyController)

@@ -106,46 +106,6 @@ export class QuestionService {
         //     .softDelete(quesitonIds);
     };
 
-    softDeleteGivenAnswers = async (givenAnswerIds: number[]) => {
-
-        // delete given answer bridges
-        const givenAnswerBridges = await this._ormService
-            .query(AnswerGivenAnswerBridge, { givenAnswerIds })
-            .where('givenAnswerId', '=', 'givenAnswerIds')
-            .getMany();
-
-        await this._ormService
-            .softDelete(AnswerGivenAnswerBridge, givenAnswerBridges.map(x => x.id));
-
-        // delete given answers 
-        await this._ormService
-            .softDelete(GivenAnswer, givenAnswerIds);
-    };
-
-    softDeleteAnswersAsync = async (answerIds: number[]) => {
-
-        // delete answers 
-        await this._ormService
-            .softDelete(AnswerData, answerIds);
-    };
-
-    saveQuestionAsync = async (questionId: number, dto: QuestionEditDataDTO) => {
-
-        const isMultiAnswer = dto.answers.filter(x => x.isCorrect).length > 1;
-
-        // save quesiton data
-        await this._ormService
-            .getRepository(QuestionData)
-            .save({
-                id: dto.questionId,
-                questionText: dto.questionText,
-                typeId: isMultiAnswer ? QuestionTypeEnum.multipleAnswers : QuestionTypeEnum.singleAnswer
-            });
-
-        // save answers
-        await this.saveAssociatedAnswersAsync(questionId, dto.answers);
-    };
-
     saveAssociatedAnswersAsync = async (questionId: number, answers: AnswerEditDTO[]) => {
 
         throwNotImplemented();
@@ -197,7 +157,7 @@ export class QuestionService {
         //         .insert(insertAnswers);
     };
 
-    async saveNewQuestionsAndAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
+    async saveNewQuestionsAndAnswers(mutations: any) {
 
         throwNotImplemented();
         // const addMuts = mutations
@@ -245,79 +205,79 @@ export class QuestionService {
         //     .insert(newAnswers);
     }
 
-    async saveUpdatedQuestions(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
+    async saveUpdatedQuestions(mutations: any) {
 
-        const updateMuts = mutations
-            .filter(x => x.action === 'update');
+        // const updateMuts = mutations
+        //     .filter(x => x.action === 'update');
 
-        const questions = updateMuts
-            .filter(x => x.key > 0)
-            .map(updateMut => {
+        // const questions = updateMuts
+        //     .filter(x => x.key > 0)
+        //     .map(updateMut => {
 
-                const updateDto = mapMutationToPartialObject(updateMut);
+        //         const updateDto = mapMutationToPartialObject(updateMut);
 
-                const question: Partial<QuestionData> = {
-                    id: updateMut.key,
-                    questionText: updateDto.questionText,
-                    showUpTimeSeconds: updateDto.questionShowUpTimeSeconds
-                };
+        //         const question: Partial<QuestionData> = {
+        //             id: updateMut.key,
+        //             questionText: updateDto.questionText,
+        //             showUpTimeSeconds: updateDto.questionShowUpTimeSeconds
+        //         };
 
-                return question;
-            });
+        //         return question;
+        //     });
 
-        await this._ormService
-            .save(QuestionData, questions);
+        // await this._ormService
+        //     .save(QuestionData, questions);
     }
 
-    async saveUpdatedAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
+    async saveUpdatedAnswers(mutations: any) {
 
-        const updateMuts = mutations
-            .filter(x => x.action === 'update');
+        // const updateMuts = mutations
+        //     .filter(x => x.action === 'update');
 
-        // existing questions existing answers
-        const existingAnswers = updateMuts
-            .filter(x => x.key > 0)
-            .flatMap(y => y.fieldMutators
-                .flat()
-                .filter(x => x.field === 'answers')
-                .flatMap(x => x.value as Partial<AnswerData>)
-                .flatMap(x => {
-                    return {
-                        ...x,
-                        questionId: y.key
-                    };
-                })
-            )
-            .filter(x => x.id! > 0) as Partial<AnswerData>[];
+        // // existing questions existing answers
+        // const existingAnswers = updateMuts
+        //     .filter(x => x.key > 0)
+        //     .flatMap(y => y.fieldMutators
+        //         .flat()
+        //         .filter(x => x.field === 'answers')
+        //         .flatMap(x => x.value as Partial<AnswerData>)
+        //         .flatMap(x => {
+        //             return {
+        //                 ...x,
+        //                 questionId: y.key
+        //             };
+        //         })
+        //     )
+        //     .filter(x => x.id! > 0) as Partial<AnswerData>[];
 
-        await this._ormService
-            .save(AnswerData, existingAnswers);
+        // await this._ormService
+        //     .save(AnswerData, existingAnswers);
     }
 
-    async saveNewAnswers(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
+    async saveNewAnswers(mutations: any) {
 
-        const updateMuts = mutations
-            .filter(x => x.action === 'update');
+        // const updateMuts = mutations
+        //     .filter(x => x.action === 'update');
 
-        // existing questions new answers
-        const newAnswers = updateMuts
-            .filter(x => x.key > 0)
-            .flatMap(y => y.fieldMutators
-                .flat()
-                .filter(x => x.field === 'answers')
-                .flatMap(x => x.value as Partial<AnswerData>)
-                .filter(x => x.text)
-                .flatMap(x => {
-                    return {
-                        ...x,
-                        questionId: y.key
-                    };
-                })
-            )
-            .filter(x => x.id! < 0) as Partial<AnswerData>[];
+        // // existing questions new answers
+        // const newAnswers = updateMuts
+        //     .filter(x => x.key > 0)
+        //     .flatMap(y => y.fieldMutators
+        //         .flat()
+        //         .filter(x => x.field === 'answers')
+        //         .flatMap(x => x.value as Partial<AnswerData>)
+        //         .filter(x => x.text)
+        //         .flatMap(x => {
+        //             return {
+        //                 ...x,
+        //                 questionId: y.key
+        //             };
+        //         })
+        //     )
+        //     .filter(x => x.id! < 0) as Partial<AnswerData>[];
 
-        await this._ormService
-            .getRepository(AnswerData)
-            .insert(newAnswers);
+        // await this._ormService
+        //     .getRepository(AnswerData)
+        //     .insert(newAnswers);
     }
 }

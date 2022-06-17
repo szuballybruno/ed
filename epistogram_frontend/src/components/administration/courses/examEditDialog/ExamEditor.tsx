@@ -5,28 +5,21 @@ import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
-import { AdminExamQuestionRow } from '../AdminExamQuestionRow';
-import { EditQuestionFnType } from '../VideoEditDialog';
+import { AdminExamQuestionRow } from './AdminExamQuestionRow';
+import { EditQuestionFnType } from '../videoEditDialog/VideoEditDialog';
+import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 
-export const AdminExamQuestionsModalPage = (props: {
-    questions: QuestionEditDataDTO[],
-    handleAddQuestion: () => void,
-    handleMutateQuestion: EditQuestionFnType,
-    handleSaveQuestions: () => void,
-    examQuestionEditDataState: LoadingStateType,
-    examQuestionEditDataError: any,
-    isAnyQuestionsMutated: boolean
+export const ExamEditor = ({
+    examVersionId
+}: {
+    examVersionId: number
 }) => {
 
-    const {
-        questions,
-        handleAddQuestion,
-        handleMutateQuestion,
-        handleSaveQuestions,
-        examQuestionEditDataState,
-        examQuestionEditDataError,
-        isAnyQuestionsMutated
-    } = props;
+    // http
+    const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
+        .useCourseItemEditData(null, examVersionId);
+
+    const questions = courseItemEditData?.questions ?? [];
 
     const getColumnCountFromAnswers = (questions: QuestionEditDataDTO[]): number => {
         const questionWithMostAnswer = questions
@@ -53,8 +46,7 @@ export const AdminExamQuestionsModalPage = (props: {
     };
 
     return <LoadingFrame
-        loadingState={getLoadingState(examQuestionEditDataState, questions)}
-        error={examQuestionEditDataError}
+        loadingState={'success'}
         flex='1'
         direction='column'
         className="roundBorders largeSoftShadow"
@@ -93,6 +85,7 @@ export const AdminExamQuestionsModalPage = (props: {
             direction='column'
             overflowY='scroll'>
 
+            {/* questions list  */}
             {questions
                 .map((question, index) => {
 
@@ -100,13 +93,11 @@ export const AdminExamQuestionsModalPage = (props: {
                         key={index}
                         question={question}
                         rowIndex={index}
-                        handleMutateQuestion={handleMutateQuestion}
                         columnCount={getColumnCountFromAnswers(questions)} />;
-
                 })}
 
             <EpistoButton
-                onClick={handleAddQuestion}
+                onClick={() => 1}
                 variant='outlined'
                 style={{
                     flex: '1',
@@ -116,8 +107,8 @@ export const AdminExamQuestionsModalPage = (props: {
                 <Add />
             </EpistoButton>
             <EpistoButton
-                isDisabled={!isAnyQuestionsMutated}
-                onClick={handleSaveQuestions}
+                isDisabled={false}
+                onClick={() => 1}
                 variant="colored"
                 style={{
                     flex: '1',
