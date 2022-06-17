@@ -1,7 +1,6 @@
 export class CommentListDTO {
     commentId: number;
     videoId: number;
-    userId: number;
     fullName: string | null;
     commentText: string;
     creationDate: Date;

@@ -42,7 +42,8 @@ const Comments = (props: {
         replyToCommentId: number | null,
         isAnonymous: boolean,
         isQuestion: boolean,
-        text: string
+        text: string,
+        parentCommentId?: number,
     ) => {
 
         const newComment = {
@@ -51,7 +52,8 @@ const Comments = (props: {
             replyToCommentId,
             isAnonymous,
             isQuestion,
-            text
+            text,
+            parentCommentId,
         } as CommentCreateDTO;
 
         try {
@@ -85,13 +87,7 @@ const Comments = (props: {
     };
 
     const handleAnswerComment = (comment: CommentListDTO) => {
-
-        if (comment.parentCommentId) {
-            setCurrentReplyCommentId(comment.parentCommentId);
-        } else {
-
-            setCurrentReplyCommentId(comment.commentId);
-        }
+        setCurrentReplyCommentId(comment.commentId);
         setCurrentReplyUserFullName(comment.fullName);
     };
 
@@ -112,6 +108,27 @@ const Comments = (props: {
         }
     };
 
+  /*  const ChildComponentRender = (comment?: CommentListDTO[]) => {
+        return comment?.length && comment.map((childComment) => (
+            <>
+            <CommentItem
+                setCurrentReplyUserFullName={setCurrentReplyUserFullName}
+                currentReplyUserFullName={currentReplyUserFullName}
+                currentReplyCommentId={currentReplyCommentId}
+                handleCreateNewComment={handleCreateNewComment}
+                handleEditComment={handleEditComment}
+                comment={childComment}
+                handleAnswerComment={handleAnswerComment}
+                handleCreateLike={handleCreateLike}
+                handleDeleteLike={handleDeleteLike}
+                key={childComment.commentId}
+            />
+                { ChildComponentRender(childComment?.childComments) }
+            </>
+    ));
+    };*/
+
+
     return (
         <UnderVideoInfoFrame
             title='Kommentek & Kérdések'
@@ -130,7 +147,8 @@ const Comments = (props: {
                 handleCreateNewComment={handleCreateNewComment}
                 currentReplyCommentId={null}
                 currentReplyUserFullName={currentReplyUserFullName}
-                setCurrentReplyUserFullName={setCurrentReplyUserFullName}/>
+                setCurrentReplyUserFullName={setCurrentReplyUserFullName}
+            />
 
 
             <Divider
@@ -148,12 +166,29 @@ const Comments = (props: {
                         .map((comment, index) => (
                                 <>
                                     <CommentItem
+                                        setCurrentReplyUserFullName={setCurrentReplyUserFullName}
+                                        currentReplyUserFullName={currentReplyUserFullName}
+                                        currentReplyCommentId={currentReplyCommentId}
+                                        handleCreateNewComment={handleCreateNewComment}
                                         handleEditComment={handleEditComment}
                                         comment={comment}
                                         handleAnswerComment={handleAnswerComment}
                                         handleCreateLike={handleCreateLike}
                                         handleDeleteLike={handleDeleteLike}
                                         key={index}/>
+                                    {comment?.childComments?.map((oneChildComment) => (
+                                        <CommentItem
+                                            setCurrentReplyUserFullName={setCurrentReplyUserFullName}
+                                            currentReplyUserFullName={currentReplyUserFullName}
+                                            currentReplyCommentId={currentReplyCommentId}
+                                            handleCreateNewComment={handleCreateNewComment}
+                                            handleEditComment={handleEditComment}
+                                            comment={oneChildComment}
+                                            handleAnswerComment={handleAnswerComment}
+                                            handleCreateLike={handleCreateLike}
+                                            handleDeleteLike={handleDeleteLike}
+                                            key={index}/>
+                                    ))}
                                 </>
                             )
                         )

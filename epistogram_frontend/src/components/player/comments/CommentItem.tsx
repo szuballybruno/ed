@@ -1,18 +1,31 @@
-import { Avatar, Divider, Flex } from '@chakra-ui/react';
-import { ThumbUpAlt } from '@mui/icons-material';
-import { useState } from 'react';
-import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
-import { ChipSmall } from '../../administration/courses/ChipSmall';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoFont } from '../../controls/EpistoFont';
+import {Flex, Divider, Avatar} from '@chakra-ui/react';
+import {ThumbUpAlt} from '@mui/icons-material';
+import {CommentListDTO} from '../../../shared/dtos/CommentListDTO';
+import {dateTimeToString, toDateStringFormatted} from '../../../static/frontendHelpers';
+import {ChipSmall} from '../../administration/courses/ChipSmall';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {CommentAnswerEntry} from './CommentAnswerEntry';
+import React, {useState} from 'react';
+import {EpistoEntry} from '../../controls/EpistoEntry';
+import EpistoDropdownMenu from '../../epistoDropdown/EpistoDropdownMenu';
 
 export const CommentItem = (props: {
     comment: CommentListDTO,
     handleEditComment: (commentText: string, commentId: number) => void,
     handleAnswerComment: (comment: CommentListDTO) => void,
     handleCreateLike: (commentId: number) => void,
-    handleDeleteLike: (commentId: number) => void
+    handleDeleteLike: (commentId: number) => void,
+    handleCreateNewComment: (
+        replyToCommentId: number | null,
+        isAnonymous: boolean,
+        isQuestion: boolean,
+        text: string,
+        parentCommentId?: number,
+    ) => void,
+    currentReplyCommentId: number | null,
+    currentReplyUserFullName: string | null,
+    setCurrentReplyUserFullName: React.Dispatch<React.SetStateAction<string | null>>,
 }) => {
 
     const {
@@ -21,6 +34,10 @@ export const CommentItem = (props: {
         handleAnswerComment,
         handleCreateLike,
         handleDeleteLike,
+        handleCreateNewComment,
+        currentReplyUserFullName,
+        setCurrentReplyUserFullName,
+        currentReplyCommentId,
     } = props;
 
     const {
@@ -82,15 +99,15 @@ export const CommentItem = (props: {
                     justify="space-between"
                     align="center">
 
-                    <Flex
-                        align={'center'}>
+                    <EpistoFont
+                        style={{
+                            margin: 0,
+                            fontWeight: '600',
+                            textAlign: 'left'
+                        }}>
 
-                        <h4
-                            style={{
-                                margin: 0,
-                                fontWeight: '600',
-                                textAlign: 'left'
-                            }}>
+                        {fullName || 'Anoním felhasználó'}
+                    </EpistoFont>
 
                             {fullName || 'Anoním felhasználó'}
                         </h4>
@@ -125,42 +142,49 @@ export const CommentItem = (props: {
                     </Flex>
                 </Flex>
 
-                {/* Edit mode */}
-                {isEditMode && <EpistoEntry
-                    isMultiline
-                    labelVariant='top'
-                    style={{
-                        marginTop: -7,
-                        flex: 1
-                    }}
-                    value={editCommentText}
-                    setValue={setEditCommentText}
-                    placeholder={commentText} />
-                }
+            {/* Edit mode */}
+            <Flex>
+                {isEditMode ? <EpistoEntry
+                        isMultiline
+                        labelVariant='top'
+                        style={{
+                            marginTop: -7,
+                            flex: 1
+                        }}
+                        value={editCommentText}
+                        setValue={setEditCommentText}
+                        placeholder={commentText}/>
+                    : <EpistoFont
+                        style={{
+                            textAlign: 'left'
+                        }}>
+                        {commentText}
+                    </EpistoFont>}
 
-                {/* Display mode */}
-                <EpistoFont
-                    style={{
-                        textAlign: 'left'
-                    }}>
-                    {commentText}
-                </EpistoFont>
+                <EpistoDropdownMenu menuItems={
+                    [{
+                        name: 'edit',
+                        onClick: handleEdit,
+                    }]
+                }/>
+            </Flex>
 
-                {/* Write a new comment to existing one */}
-                {{/*isReplyMode && <CommentAnswerEntry
-                commentToReply={comment}
+
+            {/* Write a new comment to existing one */}
+            {isReplyMode && <CommentAnswerEntry
                 handleCreateNewComment={handleCreateNewComment}
                 currentReplyCommentId={currentReplyCommentId}
                 currentReplyUserFullName={currentReplyUserFullName}
-                setCurrentReplyUserFullName={setCurrentReplyUserFullName}/>
-            */}}
+                setCurrentReplyUserFullName={setCurrentReplyUserFullName}
+                parentCommentId={parentCommentId}
+            />
+            }
 
+            <Flex
+                flex='1'>
 
-                <Flex
-                    flex='1'>
-
-                    {/* EDIT MODE  */}
-                    {isEditMode && <>
+                {isEditMode
+                    ? <>
                         <EpistoButton
                             onClick={() => handleSave()}
                             className="fontSmall"
@@ -180,10 +204,8 @@ export const CommentItem = (props: {
 
                             Mégse
                         </EpistoButton>
-                    </>}
-
-                    {/* DISPLAY MODE */}
-                    {!isEditMode && <>
+                    </>
+                    : <>
                         <EpistoButton
                             onClick={() => handleLikeButton(comment.commentId, comment.currentUserLiked)}
                             className="fontSmall"
@@ -197,13 +219,16 @@ export const CommentItem = (props: {
                                     width: 20,
                                     marginRight: 5,
                                     color: comment.currentUserLiked ? 'blue' : 'grey'
-                                }} />
+                                }}/>
 
                             {commentLikeCount}
                         </EpistoButton>
 
                         <EpistoButton
-                            onClick={() => handleAnswerComment(comment)}
+                            onClick={() => {
+                                setIsReplyMode(true);
+                                handleAnswerComment(comment);
+                            }}
                             className="fontExtraSmall"
                             style={{
                                 color: 'grey',
@@ -212,20 +237,10 @@ export const CommentItem = (props: {
 
                             Válasz
                         </EpistoButton>
-                    </>}
-
-                    <EpistoButton
-                        onClick={() => handleEdit()}
-                        className="fontExtraSmall"
-                        style={{
-                            color: 'grey',
-                            marginTop: 3
-                        }}>
-
-                        Módosít
-                    </EpistoButton>
-                </Flex>
+                    </>
+                }
             </Flex>
         </Flex>
-    );
+    </Flex>
+        ;
 };

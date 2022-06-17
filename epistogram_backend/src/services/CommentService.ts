@@ -25,7 +25,8 @@ export class CommentService extends QueryServiceBase<Comment> {
             isAnonymous,
             isQuestion,
             replyToCommentId,
-            userId
+            userId,
+            parentCommentId,
         } = comment;
 
         const { itemId, itemType } = readItemCode(itemCode);
@@ -39,12 +40,29 @@ export class CommentService extends QueryServiceBase<Comment> {
             .limit(1)
             .getOne();
 
+<<<<<<< HEAD
         const highestGroupId = commentWithHighestGroupId?.groupId
             ? commentWithHighestGroupId?.groupId + 1
             : 0;
+=======
+        const highestGroupId = (commentWithHighestGroupId?.groupId) ? (commentWithHighestGroupId?.groupId) + 1 : 0;
 
-        return await this
+        const newComment = {
+            isAnonymous,
+            isQuestion,
+            text,
+            userId,
+            parentCommentId: parentCommentId ? parentCommentId : replyToCommentId,
+            videoId: videoId,
+            creationDate: new Date(),
+            deletionDate: null,
+            groupId: highestGroupId,
+        };
+>>>>>>> 5e0dea96e2187db8135af4a98cc7e359742e7d0a
+
+        await this
             ._ormService
+<<<<<<< HEAD
             .createAsync(Comment, {
                 isAnonymous: isAnonymous,
                 isQuestion: isQuestion,
@@ -57,16 +75,18 @@ export class CommentService extends QueryServiceBase<Comment> {
                 deletionDate: null
             });
     };
+=======
+            .createAsync(Comment, newComment);
+>>>>>>> 5e0dea96e2187db8135af4a98cc7e359742e7d0a
+
+        return newComment;
+    }
 
     updateCommentAsync = async (comment: CommentListDTO, currentUserId: PrincipalId) => {
 
-        //TODO: Check if the user have a permission not because he owns the comment but he is administrator.
-        /*if (currentUserId as unknown as number !== comment.userId) {
-            throw new Error("This comment is not owned by the current user.");
-        }*/
-
         // TODO
 
+<<<<<<< HEAD
         // const commentAddToGroup = await this
         //     ._ormService
         //     .query(Comment, { commentId: comment.commentId })
@@ -87,6 +107,22 @@ export class CommentService extends QueryServiceBase<Comment> {
         //     .insert(newGroupComment);
 
         // return newGroupComment;
+=======
+        const commentGroupId = commentAddToGroup?.groupId ? commentAddToGroup?.groupId : 0;
+
+        const updatedComment = {
+            ...commentAddToGroup,
+            text: comment.commentText,
+            groupId: commentGroupId,
+        } as Comment
+
+        await this
+            ._ormService
+            .getRepository(Comment)
+            .insert(updatedComment);
+
+        return updatedComment;
+>>>>>>> 5e0dea96e2187db8135af4a98cc7e359742e7d0a
     };
 
     getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {
