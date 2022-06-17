@@ -4,17 +4,19 @@ import React, { memo } from 'react';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
+import { ForceNoOverflowY } from '../../controls/ForceNoOverflowY';
 import { FlexList } from '../../universal/FlexList';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
 export const AdminCourseList = memo((props: {
     onCourseClick: (courseId: number) => void,
-    courses: CourseAdminListItemDTO[]
+    courses: CourseAdminListItemDTO[],
+    noOverflow?: boolean
 }) => {
 
     // props
-    const { courses, onCourseClick } = props;
+    const { courses, noOverflow, onCourseClick } = props;
 
     // util
     const courseId = useIntParam('courseId');
@@ -33,42 +35,45 @@ export const AdminCourseList = memo((props: {
             borderRadius="7px 0 0 0" />
 
         {/* List of courses */}
-        <FlexList flex={1}
-            pb="300px"
-            flexBasis="350px"
-            mt="5px"
-            className="roundBorders"
-            background="var(--transparentWhite70)">
+        <ForceNoOverflowY disabled={!noOverflow}>
+            <FlexList
+                flex="1"
+                pb="300px"
+                flexBasis="350px"
+                mt="5px"
+                className="roundBorders"
+                background="var(--transparentWhite70)">
 
-            {courses
-                .map((course, index) => {
+                {courses
+                    .map((course, index) => {
 
-                    return <FlexListItem
-                        key={index}
-                        onClick={() => onCourseClick(course.courseId)}
-                        align="center"
-                        mb="1"
-                        thumbnailContent={
-                            <Image
-                                src={course.thumbnailImageURL}
-                                objectFit="cover"
-                                className="roundBorders"
-                                style={{
-                                    height: 72,
-                                    width: 128
-                                }}
-                            />
-                        }
-                        midContent={
-                            <FlexListTitleSubtitle
-                                title={course.title}
-                                subTitle={''}
-                                isSelected={course.courseId === courseId}
-                            />
-                        }
-                    />;
-                })}
-        </FlexList>
+                        return <FlexListItem
+                            key={index}
+                            onClick={() => onCourseClick(course.courseId)}
+                            align="center"
+                            mb="1"
+                            thumbnailContent={
+                                <Image
+                                    src={course.thumbnailImageURL}
+                                    objectFit="cover"
+                                    className="roundBorders"
+                                    style={{
+                                        height: 72,
+                                        width: 128
+                                    }}
+                                />
+                            }
+                            midContent={
+                                <FlexListTitleSubtitle
+                                    title={course.title}
+                                    subTitle={''}
+                                    isSelected={course.courseId === courseId}
+                                />
+                            }
+                        />;
+                    })}
+            </FlexList>
+        </ForceNoOverflowY>
     </Flex>;
 }, (prev, next) => {
 

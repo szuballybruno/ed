@@ -74,6 +74,7 @@ export const AdminSubpageHeader = (props: {
     const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath();
 
     return <Flex
+        id={AdminSubpageHeader.name}
         direction={'column'}
         className="whall roundBorders"
         background={!isInverseBackground ? 'var(--transparentWhite70)' : undefined}

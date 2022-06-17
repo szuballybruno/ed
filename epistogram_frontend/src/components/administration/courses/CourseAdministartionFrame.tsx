@@ -11,10 +11,11 @@ import { AdminCourseList } from './AdminCourseList';
 
 export const CourseAdministartionFrame = (params: {
     children?: ReactNode,
-    isAnySelected: boolean
+    isAnySelected: boolean,
+    noHeightOverflow?: boolean
 }) => {
 
-    const { children, isAnySelected } = params;
+    const { children, isAnySelected, noHeightOverflow } = params;
 
     // util
     const { navigate } = useNavigation();
@@ -52,14 +53,16 @@ export const CourseAdministartionFrame = (params: {
 
     return (
         <Flex
-            id="CourseAdministartionFrame"
-            className="whall">
+            id={CourseAdministartionFrame.name}
+            flex="1"
+            overflowY="scroll">
 
             {/* header */}
             <AdminBreadcrumbsHeader>
 
                 {/* course list */}
                 <AdminCourseList
+                    noOverflow={noHeightOverflow}
                     onCourseClick={navToCourse}
                     courses={courses} />
 

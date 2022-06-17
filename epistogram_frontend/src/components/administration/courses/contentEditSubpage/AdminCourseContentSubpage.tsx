@@ -22,6 +22,8 @@ import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
+import { Flex } from '@chakra-ui/react';
+import { ForceNoOverflowY } from '../../../controls/ForceNoOverflowY';
 
 type ItemType = CourseContentItemAdminDTO;
 
@@ -280,10 +282,10 @@ export const AdminCourseContentSubpage = () => {
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentAdminDataState]}
         error={courseContentAdminDataError}
-        className="whall">
+        flex="1">
 
-        {/* frame */}
         <CourseAdministartionFrame
+            noHeightOverflow
             isAnySelected={isAnySelected}>
 
             {/* Right side content */}
@@ -330,18 +332,23 @@ export const AdminCourseContentSubpage = () => {
                     onClose={closeAddPopper} />
 
                 {/* data grid */}
-                <EpistoDataGrid
-                    columns={gridColumns}
-                    rows={preprocessedItems}
-                    handleEdit={handleEdit}
-                    getKey={getRowKey}
-                    initialState={{
-                        pinnedColumns: {
-                            left: ['rowNumber', 'itemTitle'],
-                            right: ['quickMenu']
-                        }
-                    }} />
+                <Flex
+                    flex="1"
+                    overflow="hidden">
+
+                    <EpistoDataGrid
+                        columns={gridColumns}
+                        rows={preprocessedItems}
+                        handleEdit={handleEdit}
+                        getKey={getRowKey}
+                        initialState={{
+                            pinnedColumns: {
+                                left: ['rowNumber', 'itemTitle'],
+                                right: ['quickMenu']
+                            }
+                        }} />
+                </Flex>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
-    </LoadingFrame >;
+    </LoadingFrame>;
 };

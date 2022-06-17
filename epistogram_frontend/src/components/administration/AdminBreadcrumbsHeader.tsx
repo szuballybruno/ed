@@ -130,8 +130,8 @@ export const AdminBreadcrumbsHeader = (props: {
         : null;
 
     return <Flex
+        id={AdminBreadcrumbsHeader.name}
         flex="1"
-        mb="20px"
         direction={'column'}>
 
         <Flex
