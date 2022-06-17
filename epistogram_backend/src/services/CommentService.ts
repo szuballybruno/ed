@@ -1,5 +1,4 @@
 import { Comment } from '../models/entity/Comment';
-import { User } from '../models/entity/User';
 import { CommentListView } from '../models/views/CommentListView';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../shared/dtos/CommentListDTO';
@@ -8,8 +7,6 @@ import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import {Like} from "../models/entity/Like";
-import {instatiateInsertEntity} from "../utilities/misc";
 
 export class CommentService extends QueryServiceBase<Comment> {
 
@@ -31,35 +28,34 @@ export class CommentService extends QueryServiceBase<Comment> {
             userId
         } = comment;
 
-        const itemCodeData = readItemCode(itemCode);
+        const { itemId, itemType } = readItemCode(itemCode);
+        if (itemType !== 'video')
+            throw new Error('Item is not video!');
 
-        const videoId = itemCodeData.itemType === 'video'
-            ? itemCodeData.itemId
-            : 0;
-
-        const allComment = this._ormService.getRepository(Comment);
-        const commentWithHighestGroupId = await allComment
-            .createQueryBuilder('comment')
-            .orderBy('comment.group_id', "DESC")
+        const commentWithHighestGroupId = await this._ormService
+            .getRepository(Comment)
+            .createQueryBuilder('c')
+            .orderBy('c.group_id', "DESC")
             .limit(1)
             .getOne();
 
-        const highestGroupId = (commentWithHighestGroupId?.groupId) ? (commentWithHighestGroupId?.groupId) + 1 : 0;
-
-        const newComment = {
-            isAnonymous: isAnonymous,
-            isQuestion: isQuestion,
-            text: text,
-            userId: userId,
-            parentCommentId: replyToCommentId,
-            videoId: videoId,
-            groupId: highestGroupId,
-        };
+        const highestGroupId = commentWithHighestGroupId?.groupId
+            ? commentWithHighestGroupId?.groupId + 1
+            : 0;
 
         return await this
             ._ormService
-            .getRepository(Comment)
-            .insert(newComment);
+            .createAsync(Comment, {
+                isAnonymous: isAnonymous,
+                isQuestion: isQuestion,
+                text: text,
+                userId: userId,
+                parentCommentId: replyToCommentId,
+                videoId: itemId,
+                groupId: highestGroupId,
+                creationDate: new Date(),
+                deletionDate: null
+            });
     };
 
     updateCommentAsync = async (comment: CommentListDTO, currentUserId: PrincipalId) => {
@@ -69,34 +65,37 @@ export class CommentService extends QueryServiceBase<Comment> {
             throw new Error("This comment is not owned by the current user.");
         }*/
 
-        const commentAddToGroup = await this
-            ._ormService
-            .query(Comment, { commentId: comment.commentId })
-            .where('id', '=', 'commentId')
-            .getOneOrNull();
+        // TODO
 
-        const newGroupComment = {
-            ...commentAddToGroup,
-            text: comment.commentText,
-        }
+        // const commentAddToGroup = await this
+        //     ._ormService
+        //     .query(Comment, { commentId: comment.commentId })
+        //     .where('id', '=', 'commentId')
+        //     .getOneOrNull();
 
-        if (!newGroupComment)
-            throw new Error('This user haven\'t liked this comment yet.');
+        // const newGroupComment = {
+        //     ...commentAddToGroup,
+        //     text: comment.commentText,
+        // }
 
-        await this
-            ._ormService
-            .getRepository(Comment)
-            .insert(newGroupComment);
+        // if (!newGroupComment)
+        //     throw new Error('This user haven\'t liked this comment yet.');
 
-        return newGroupComment;
+        // await this
+        //     ._ormService
+        //     .getRepository(Comment)
+        //     .insert(newGroupComment);
+
+        // return newGroupComment;
     };
 
     getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {
 
         const userComments = await this
             ._ormService
-            .query(CommentListView, { videoId })
+            .query(CommentListView, { videoId, currentUserId })
             .where('videoId', '=', 'videoId')
+            .and('currentUserId', '=', 'currentUserId')
             .getMany();
 
         return this
