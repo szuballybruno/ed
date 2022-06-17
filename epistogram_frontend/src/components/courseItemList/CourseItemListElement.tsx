@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/react';
+import { Replay, ReplayCircleFilled } from '@mui/icons-material';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
 import { ChipSmall } from '../administration/courses/ChipSmall';
@@ -52,9 +53,12 @@ export const CourseItemListElement = (props: { courseItem: CourseItemDTO }) => {
                     subTitle={subTitle} />
             </Flex>}
             endContent={shouldRepeatVideo &&
-                <ChipSmall
-                    text='Ismétlés ajánlott'
-                    color='var(--intenseOrange)' />}>
-        </FlexListItem>
+                <ReplayCircleFilled
+                    style={{
+                        fontWeight: 'bold',
+                        color: 'var(--intenseOrange)'
+                    }} />
+            }>
+        </FlexListItem >
     );
 };

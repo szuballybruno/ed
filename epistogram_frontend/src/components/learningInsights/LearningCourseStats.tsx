@@ -105,6 +105,41 @@ export const LearningCourseStats = () => {
             }}
             dialogLogic={dialogLogic} />
 
+        {/* in progress courses  */}
+        <DashboardSection width="100%"
+            variant="noShadow"
+            title="Folyamatban lévő kurzusaim">
+            {isAnyCoursesInProgress
+                ? <EpistoGrid
+                    minColumnWidth="250px"
+                    auto="fill"
+                    gap="10px"
+                    p="10px">
+                    {inProgressCourses
+                        .map((course, index) => {
+                            return <LearningCourseStatsTile
+                                actionButtons={[{
+                                    children: 'Részletek',
+                                    onClick: () => dialogLogic.openDialog()
+                                }, {
+                                    children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
+                                    variant: 'colored',
+                                    onClick: () => handleStartCourse(course)
+                                }]}
+                                key={index}
+                                course={course} />;
+                        })
+                    }
+                </EpistoGrid>
+                : <Flex p="100px">
+
+                    <EpistoFont fontSize="fontHuge">
+
+                        Még nem kezdtel el egyetlen kurzust sem.
+                    </EpistoFont>
+                </Flex>}
+        </DashboardSection>
+
         {/* completed courses */}
         <DashboardSection
             width="100%"
@@ -141,40 +176,5 @@ export const LearningCourseStats = () => {
                     </EpistoFont>
                 </Flex>}
         </DashboardSection >
-
-        {/* in progress courses  */}
-        <DashboardSection width="100%"
-            variant="noShadow"
-            title="Folyamatban lévő kurzusaim">
-            {isAnyCoursesInProgress
-                ? <EpistoGrid
-                    minColumnWidth="250px"
-                    auto="fill"
-                    gap="10px"
-                    p="10px">
-                    {inProgressCourses
-                        .map((course, index) => {
-                            return <LearningCourseStatsTile
-                                actionButtons={[{
-                                    children: 'Részletek',
-                                    onClick: () => dialogLogic.openDialog()
-                                }, {
-                                    children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
-                                    variant: 'colored',
-                                    onClick: () => handleStartCourse(course)
-                                }]}
-                                key={index}
-                                course={course} />;
-                        })
-                    }
-                </EpistoGrid>
-                : <Flex p="100px">
-
-                    <EpistoFont fontSize="fontHuge">
-
-                        Még nem kezdtel el egyetlen kurzust sem.
-                    </EpistoFont>
-                </Flex>}
-        </DashboardSection>
     </LoadingFrame>;
 };

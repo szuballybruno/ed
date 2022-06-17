@@ -12,6 +12,7 @@ import { AuthorizationContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
+import { DebugPage } from './debug/DebugPage';
 import { AdminHomeDetails } from './home/AdminHomeDetails';
 import { AdminHomeOverview } from './home/AdminHomeOverview';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
@@ -35,6 +36,7 @@ export const AdminPage = () => {
         .addIf(hasPermission('ACCESS_ADMIN'), administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.companiesRoute)
         .add(administrationRoutes.rolesRoute)
+        .add(administrationRoutes.debugRoute)
         .getArray();
 
     useEffect(() => {
@@ -161,6 +163,11 @@ export const AdminPage = () => {
                     {
                         route: administrationRoutes.rolesRoute,
                         element: <RoleAdminPage />
+                    },
+
+                    {
+                        route: administrationRoutes.debugRoute,
+                        element: <DebugPage />
                     }
 
                     // statistics

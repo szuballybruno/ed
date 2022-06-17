@@ -1,4 +1,4 @@
-import { AdminPanelSettings, Business, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
+import { AdminPanelSettings, Build, Business, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -80,10 +80,12 @@ export type ApplicationRoutesType = {
             indexRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ roleId: number }>;
         };
+        debugRoute: ApplicationRoute & {
+            indexRoute: ApplicationRoute;
+        };
     };
     settingsRoute: ApplicationRoute & {
         preferencesRoute: ApplicationRoute;
-        developmentNotesRoute: ApplicationRoute;
         featurePreviewRoute: ApplicationRoute;
         coinTransactionsRoute: ApplicationRoute;
     };
@@ -425,6 +427,18 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                     title: 'Role edit',
                     route: new EpistoRoute('/administration/roles', '/:roleId/edit')
                 },
+            },
+
+            debugRoute: {
+                title: 'Debug',
+                route: new EpistoRoute('/administration', 'debug'),
+                icon: <Build
+                    className='fontXXL'
+                    color='secondary' />,
+                indexRoute: {
+                    title: 'Debug',
+                    route: new EpistoRoute('/administration/roles', '/')
+                },
             }
         },
 
@@ -437,12 +451,6 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 title: translatableTexts.routeTitles.settingsOverview,
                 route: new EpistoRoute('/settings/settings', 'preferences'),
                 icon: <Settings></Settings>,
-            },
-
-            developmentNotesRoute: {
-                title: translatableTexts.routeTitles.developmentNotes,
-                route: new EpistoRoute('/settings/settings', 'development-notes'),
-                icon: <EventNoteIcon />
             },
 
             featurePreviewRoute: {

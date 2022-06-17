@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -13,7 +14,19 @@ export const ErrorDialogFrame = (props: {
     const { children } = props;
 
     return <>
-        <EpistoDialog logic={dialogLogic}></EpistoDialog>
+        <EpistoDialog
+
+            closeButtonType='top'
+            title={dialogLogic.title}
+            logic={dialogLogic}>
+
+            <Flex
+                p='15px'
+                width='400px'>
+
+                {dialogLogic.description}
+            </Flex>
+        </EpistoDialog>
 
         <ErrorDialogContext.Provider value={dialogLogic}>
             {children}

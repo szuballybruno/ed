@@ -31,10 +31,10 @@ export const useShowErrorDialog = () => {
 
         errorDialogLogic
             .openDialog({
-                title: title ?? 'Hiba',
+                title: title ?? 'Ismeretlen hiba',
                 description: descriptionOrError?.message
                     ?? descriptionOrError
-                    ?? 'Ismeretlen hiba, kerlek probald ujra kesobb!.'
+                    ?? 'Ismeretlen hiba történt, kérlek próbáld újra később!'
             });
     }, [errorDialogLogic]);
 

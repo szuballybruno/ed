@@ -6,6 +6,7 @@ import { defaultCharts } from '../../static/defaultChartOptions';
 import { Environment } from '../../static/Environemnt';
 import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../universal/charts/base_charts/EpistoBarChart';
 import { LearningStatisticsSeciton } from './LearningStatisticsSeciton';
@@ -107,6 +108,33 @@ export const LearningStatistics = (props: {
 
     // http
     const { userStats } = useUserStats(userId);
+
+    const statsss = [
+        {
+            title: 'Haladásom'
+        }, {
+            title: 'Ismétlésre ajánlott videók',
+            suffix: 'db'
+        }, {
+            title: 'Ismétlésre ajánlott kérdések',
+            suffix: 'db'
+        }, {
+            title: 'Megtekintett videók száma',
+            suffix: 'db'
+        }, {
+            title: 'Aktívan eltöltött idő',
+            suffix: 'óra'
+        }, {
+            title: 'Megválaszolt kérdések száma',
+            suffix: 'db'
+        }, {
+            title: 'Helyes válaszok aránya',
+            suffix: '%'
+        }, {
+            title: 'Céges rangsor',
+            suffix: '%'
+        }
+    ];
 
     const statistics = [
         {
@@ -377,13 +405,22 @@ export const LearningStatistics = (props: {
         }
     ] as StatisticsGroupType[];
 
-    return <Flex
-        direction="column"
+    return <EpistoGrid
         width="100%"
-        flex="1"
-        minWidth={isSmallerThan1400 ? '1060px' : undefined}>
+        minWidth={isSmallerThan1400 ? '1060px' : undefined}
+        pt='10px'
+        minColumnWidth={'250px'}
+        gap={'10px'}
+        auto={'fill'}>
 
-        {statistics
+        {statsss.map((stat, index) => {
+            return <StatisticsCard
+                h='140px'
+                key={index}
+                {...stat} />;
+        })}
+
+        {/*  {statistics
             .map((statisticSectionData, index) => {
 
                 return <LearningStatisticsSeciton
@@ -399,6 +436,6 @@ export const LearningStatistics = (props: {
                                 {...item} />;
                         })}
                 </LearningStatisticsSeciton>;
-            })}
-    </Flex>;
+            })} */}
+    </EpistoGrid>;
 };

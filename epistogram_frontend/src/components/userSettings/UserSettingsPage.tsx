@@ -9,22 +9,6 @@ import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CoinTransactions } from './CoinTransactions';
 import { Preferences } from './Preferences';
 
-const FeaturePreview = () => {
-
-    return <Flex className="whall">
-        <iframe src="https://epistogram.com/upcoming-features"
-            className="whall"></iframe>
-    </Flex>;
-};
-
-const DevelopmentNotes = () => {
-
-    return <Flex className="whall">
-        <iframe src="https://epistogram.com/release-notes"
-            className="whall"></iframe>
-    </Flex>;
-};
-
 export const UserSettingsPage = () => {
 
     return <PageRootContainer>
@@ -34,9 +18,7 @@ export const UserSettingsPage = () => {
 
             <NavigationLinkList
                 routes={[
-                    applicationRoutes.settingsRoute.preferencesRoute,
-                    applicationRoutes.settingsRoute.featurePreviewRoute,
-                    applicationRoutes.settingsRoute.developmentNotesRoute
+                    applicationRoutes.settingsRoute.preferencesRoute
                 ]} />
         </LeftPane>
 
@@ -50,14 +32,6 @@ export const UserSettingsPage = () => {
                     {
                         route: applicationRoutes.settingsRoute.coinTransactionsRoute,
                         element: <CoinTransactions />,
-                    },
-                    {
-                        route: applicationRoutes.settingsRoute.featurePreviewRoute,
-                        element: <FeaturePreview />,
-                    },
-                    {
-                        route: applicationRoutes.settingsRoute.developmentNotesRoute,
-                        element: <DevelopmentNotes />,
                     }
                 ]} />
         </ContentPane>

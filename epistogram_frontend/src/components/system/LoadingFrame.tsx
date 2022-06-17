@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps, Heading, Text } from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import CircularProgress from '@mui/material/CircularProgress';
+import { LinearProgress } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingStateType } from '../../models/types';
 import { isArray } from '../../static/frontendHelpers';
@@ -40,7 +40,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     const setNewTimeout = useCallback((fn: () => void) => {
 
         cancelTimeout();
-        timeoutRef.current = setTimeout(fn, 2000);
+        timeoutRef.current = setTimeout(fn, 1); // temp set to 1
     }, [cancelTimeout]);
 
     // error 
@@ -125,12 +125,11 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             justify="center"
             align="center"
             overflow="hidden"
-            position="absolute"
+            position="fixed"
+            zIndex='1000'
             width="100%"
-            height="100%"
             top="0"
             left="0"
-            bg="var(--gradientBlueBackground)"
             p="30px">
 
             {/* error */}
@@ -146,18 +145,17 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             {/* loading */}
             {currentLoadingState === 'loading' && <Flex
                 id="loadingDisplayContainer"
-                direction="column"
-                justify="center"
-                align="center">
+                position='fixed'
+                top='0'
+                width='100%'
+                height='3px'>
 
-                <CircularProgress style={{ 'color': 'black' }}
-                    size={50} />
-
-                <Box pt="20px">
-                    <EpistoFont>
-                        {translatableTexts.misc.loading}
-                    </EpistoFont>
-                </Box>
+                <LinearProgress
+                    style={{
+                        color: 'black',
+                        height: 3,
+                        width: '100%'
+                    }} />
             </Flex>}
         </Flex>}
     </Flex>;

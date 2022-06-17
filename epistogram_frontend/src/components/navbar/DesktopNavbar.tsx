@@ -4,18 +4,13 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { AuthorizationContext } from '../system/AuthenticationFrame';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
-
-const menuItems = [
-    applicationRoutes.homeRoute,
-    applicationRoutes.availableCoursesRoute,
-    applicationRoutes.learningRoute,
-] as ApplicationRoute[];
 
 export const DesktopNavbar = (props: {
     currentCourseItemCode: string | null
@@ -36,6 +31,30 @@ export const DesktopNavbar = (props: {
 
     const isLowHeight = !!_isLowHeight;
     const isMinimalMode = !!_isMinimalMode;
+
+    const { hasPermission } = useContext(AuthorizationContext)!;
+
+    const menuItems = new ArrayBuilder<ApplicationRoute>()
+        .addIf(hasPermission('ACCESS_ADMIN'), {
+            title: applicationRoutes.administrationRoute.title,
+            route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route
+        })
+        .add({
+            title: applicationRoutes.homeRoute.title,
+            route: applicationRoutes.homeRoute.route,
+            icon: applicationRoutes.homeRoute.icon
+        })
+        .add({
+            title: applicationRoutes.availableCoursesRoute.title,
+            route: applicationRoutes.availableCoursesRoute.route,
+            icon: applicationRoutes.availableCoursesRoute.icon
+        })
+        .add({
+            title: applicationRoutes.learningRoute.title,
+            route: applicationRoutes.learningRoute.route,
+            icon: applicationRoutes.learningRoute.icon
+        })
+        .getArray();
 
     const { navigateToPlayer, navigate } = useNavigation();
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);

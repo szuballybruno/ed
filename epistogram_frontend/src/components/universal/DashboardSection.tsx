@@ -20,9 +20,6 @@ export const DashboardSection = (props: FlexProps & { title: string, variant?: '
             variant="strongSub"
             m="5px 10px 0 10px" />
 
-        <Box className="whall">
-
-            {children}
-        </Box>
+        {children}
     </FlexFloat>;
 };
