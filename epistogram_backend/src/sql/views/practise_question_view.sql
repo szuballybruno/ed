@@ -4,6 +4,7 @@ practise_question_ids AS
 	SELECT 
 		qv.question_id, 
 		ase.user_id,
+		COUNT(ga.id) given_answer_count,
 		MAX(ga.id) latest_given_answer_id
 	FROM public.question_version qv
 
@@ -45,7 +46,9 @@ practise_questions AS
 (
 	SELECT 
 		pqi.question_id, 
-		pqi.user_id
+		pqi.user_id,
+		pqi.given_answer_count,
+		pqi.latest_given_answer_id
 	FROM practise_question_ids pqi
 	
 	LEFT JOIN practise_question_counts pqc
@@ -87,7 +90,9 @@ practise_questions AS
 ),
 latest_question_version AS 
 (
-	SELECT MAX(qv.id) version_id, qv.question_id
+	SELECT 
+		MAX(qv.id) version_id, 
+		qv.question_id
 	FROM public.question_version qv
 	GROUP BY qv.question_id
 )
@@ -96,7 +101,10 @@ SELECT
 	qd.question_text,
 	qd.type_id question_type_id,
 	av.id answer_id,
-	ad.text answer_text
+	ad.text answer_text,
+	pq.user_id,
+	pq.latest_given_answer_id,
+	pq.given_answer_count
 FROM practise_questions pq
 
 LEFT JOIN latest_question_version lqv

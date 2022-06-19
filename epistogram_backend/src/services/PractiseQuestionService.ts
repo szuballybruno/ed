@@ -40,13 +40,13 @@ export class PractiseQuestionService extends ServiceBase {
             return null;
 
         const questionGroup = questionViews
-            .groupBy(x => x.questionId)
+            .groupBy(x => x.questionVersionId)
             .first();
 
         const viewAsQuesiton = questionGroup.items.first();
 
         const questionDTO = {
-            questionId: viewAsQuesiton.questionId,
+            questionVersionId: viewAsQuesiton.questionVersionId,
             questionText: viewAsQuesiton.questionText,
             typeId: viewAsQuesiton.questionTypeId,
             answers: questionGroup

@@ -9,7 +9,7 @@ export class PractiseQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: number;
+    questionVersionId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -23,9 +23,9 @@ export class PractiseQuestionView {
     @XViewColumn()
     givenAnswerCount: number;
 
-    @ViewColumn()
-    @XViewColumn()
-    practiseAnswerCount: number;
+    /*     @ViewColumn()
+        @XViewColumn()
+        practiseAnswerCount: number; */
 
     @ViewColumn()
     @XViewColumn()
