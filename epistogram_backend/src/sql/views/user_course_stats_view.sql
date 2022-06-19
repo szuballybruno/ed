@@ -7,15 +7,15 @@ SELECT
     sq.performance_percentage - sq.average_performance_on_course difference_from_average_performance_percentage
 FROM (
     SELECT
-        c.id course_id,
-        c.title,
+        co.id course_id,
+        cd.title,
 
         -- cover file path
         (
             SELECT
                 sf.file_path
             FROM public.storage_file sf
-            WHERE sf.id = c.cover_file_id
+            WHERE sf.id = cd.cover_file_id
         ) cover_file_path,
 
         clsv.user_id user_id,
@@ -31,7 +31,7 @@ FROM (
             FROM public.user_performance_view upv
             WHERE
                 upv.user_id = clsv.user_id
-                AND upv.course_id = c.id
+                AND upv.course_id = co.id
         ) performance_percentage,
         
         -- completed video count
@@ -48,14 +48,18 @@ FROM (
                     SELECT COUNT(*)::int
                     FROM public.exam_completed_view ecv
     
-                    LEFT JOIN public.exam e
-                    ON e.id = ecv.exam_id
+                    LEFT JOIN public.exam_version ev
+                    ON ev.id = ecv.exam_version_id
+					
+					LEFT JOIN public.exam ex
+					ON ex.id = ev.exam_id
     
                     WHERE
-                        ecv.course_id = c.id
+                        ecv.course_version_id = co.id
                         AND ecv.user_id = clsv.user_id
                         AND ecv.completed_session_count > 0
-                        AND e.type = 'normal'
+                        AND ex.is_pretest IS FALSE
+						AND ex.is_signup IS FALSE
                 )
             END
         ) completed_exam_count,
@@ -71,7 +75,7 @@ FROM (
             SELECT
                 AVG(performance_percentage)
             FROM public.user_performance_view upv
-            WHERE upv.course_id = c.id
+            WHERE upv.course_id = co.id
         ) average_performance_on_course,
         
         -- answered video questions count
@@ -79,27 +83,32 @@ FROM (
             CASE
                 WHEN clsv.is_started
                 THEN (
-                    SELECT COUNT(*)::int
+                    SELECT 
+						COUNT(*)::int
                     FROM public.given_answer ga
     
-                    LEFT JOIN public.answer_session ase
-                    ON ase.id = ga.answer_session_id
+                    LEFT JOIN public.answer_session_view asv
+                    ON asv.answer_session_id = ga.answer_session_id
+					
+					LEFT JOIN public.video_version vv
+					ON vv.id = asv.video_version_id
+					
+					LEFT JOIN public.exam_version ev
+					ON ev.id = asv.exam_version_id
     
-                    LEFT JOIN public.video v
-                    ON v.id = ase.video_id
-    
-                    LEFT JOIN public.exam e
-                    ON e.id = ase.exam_id
-    
-                    LEFT JOIN public.course c2
-                    ON c2.id = v.course_id OR c2.id = e.course_id
+                    LEFT JOIN public.module_version mv
+					ON mv.id = vv.module_version_id
+					OR mv.id = ev.module_version_id
+					
+					LEFT JOIN public.course_version cv
+					ON cv.id = mv.course_version_id
     
                     WHERE
                         is_practise_answer IS FALSE
-                        AND ase.user_id = clsv.user_id
-                        AND ase.video_id IS NOT NULL
-                        AND ase.exam_id IS NULL
-                        AND c2.id = c.id
+                        AND asv.user_id = clsv.user_id
+                        AND asv.video_version_id IS NOT NULL
+                        AND asv.exam_version_id IS NULL
+                        AND cv.course_id = co.id
                 )
             END
         ) answered_video_question_count,
@@ -110,25 +119,31 @@ FROM (
                 WHEN clsv.is_started
                 THEN
                 (
-                    SELECT COUNT(ga.is_correct)::int
+                    SELECT 
+						COUNT(*)::int
                     FROM public.given_answer ga
     
-                    LEFT JOIN public.answer_session ase
-                    ON ase.id = ga.answer_session_id
+                    LEFT JOIN public.answer_session_view asv
+                    ON asv.answer_session_id = ga.answer_session_id
     
-                    LEFT JOIN public.video v
-                    ON v.id = ase.video_id
+                   LEFT JOIN public.video_version vv
+					ON vv.id = asv.video_version_id
+					
+					LEFT JOIN public.exam_version ev
+					ON ev.id = asv.exam_version_id
     
-                    LEFT JOIN public.exam e
-                    ON e.id = ase.exam_id
-    
-                    LEFT JOIN public.course c2
-                    ON c2.id = v.course_id OR c2.id = e.course_id
+                    LEFT JOIN public.module_version mv
+					ON mv.id = vv.module_version_id
+					OR mv.id = ev.module_version_id
+					
+					LEFT JOIN public.course_version cv
+					ON cv.id = mv.course_version_id
     
                     WHERE
-                        is_practise_answer IS TRUE
-                        AND ase.user_id = clsv.user_id
-                        AND c2.id = c.id
+						asv.answer_session_type = 'practise'
+                        AND is_practise_answer IS TRUE
+                        AND asv.user_id = clsv.user_id
+                        AND cv.course_id = co.id
                 )
             END
         ) answered_practise_question_count,
@@ -142,11 +157,12 @@ FROM (
                     SELECT
                         COUNT(uprv.total_given_answer_count)::int
                     FROM public.user_practise_recommendation_view uprv
+					
                     WHERE
                         uprv.total_given_answer_count = 3
-                        AND uprv.last_three_answer_average < 0.66
+                        AND uprv.is_recommended_for_practise IS TRUE
                         AND uprv.user_id = clsv.user_id
-                        AND uprv.course_id = c.id
+                        AND uprv.course_version_id = cv.id
                 )
             END
         ) recommended_videos_for_practise,
@@ -168,7 +184,7 @@ FROM (
             FROM user_course_recommended_item_quota_view ucriqv
             WHERE
                 ucriqv.user_id = clsv.user_id
-                AND ucriqv.course_id = c.id
+                AND ucriqv.course_id = co.id
         ) recommended_items_per_week,
         
         -- current lag behind percentage
@@ -177,7 +193,7 @@ FROM (
             FROM user_course_progress_view ucpv
             WHERE
                 ucpv.user_id = clsv.user_id
-                AND ucpv.course_id = c.id
+                AND ucpv.course_id = co.id
         ) lag_behind_percentage,
         
         -- previsioned course completion date
@@ -186,7 +202,7 @@ FROM (
             FROM user_course_completion_original_estimation_view uccoev
             WHERE
                 uccoev.user_id = clsv.user_id
-                AND uccoev.course_id = c.id
+                AND uccoev.course_id = co.id
         ) previsioned_completion_date,
         
         -- current course tempomat mode
@@ -195,11 +211,17 @@ FROM (
             FROM user_course_progress_view ucpv
             WHERE
                 ucpv.user_id = clsv.user_id
-                AND ucpv.course_id = c.id
+                AND ucpv.course_id = co.id
         ) tempomat_mode
     
-    FROM public.course c
+    FROM public.course co
+	
+	LEFT JOIN public.course_version cv
+	ON cv.course_id = co.id
+	
+	LEFT JOIN public.course_data cd
+	ON cd.id = cv.course_data_id
     
     LEFT JOIN public.course_learning_stats_view clsv
-    ON clsv.course_id = c.id
+    ON clsv.course_id = co.id
 ) sq

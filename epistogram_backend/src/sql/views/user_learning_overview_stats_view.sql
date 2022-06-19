@@ -55,37 +55,31 @@ FROM
 
 		-- total given correct answer count on video and practise questions D
 		(
-			SELECT COUNT (ga.id)::int 
+			SELECT 
+				COUNT (ga.id)::int 
 			FROM public.given_answer ga
 
-			LEFT JOIN public.answer_session ase
-			ON ase.id = ga.answer_session_id
-
-			LEFT JOIN public.question q
-			ON q.id = ga.question_id
-
-			WHERE ase.user_id = u.id 
-			AND q.video_id IS NOT NULL
-			AND ase.video_id IS NOT NULL
-			OR ga.is_practise_answer IS true
+			LEFT JOIN public.answer_session_view asv
+			ON asv.answer_session_id = ga.answer_session_id
+			AND (asv.answer_session_type = 'video' 
+				 OR asv.answer_session_type = 'practise')
+			
+			WHERE asv.user_id = u.id 
 		) answered_video_and_practise_quiz_questions,
 
 		-- total given answer count on video and practise questions D
 		(
-			SELECT COUNT (ga.id)::int 
+			SELECT 
+				COUNT (ga.id)::int 
 			FROM public.given_answer ga
 
-			LEFT JOIN public.answer_session ase
-			ON ase.id = ga.answer_session_id
-
-			LEFT JOIN public.question q
-			ON q.id = ga.question_id
-
-			WHERE ase.user_id = u.id 
-			AND q.video_id IS NOT NULL
-			AND ga.is_correct IS true
-			AND ase.video_id IS NOT NULL
-			OR ga.is_practise_answer IS true
+			LEFT JOIN public.answer_session_view asv
+			ON asv.answer_session_id = ga.answer_session_id
+			AND (asv.answer_session_type = 'video' 
+				 OR asv.answer_session_type = 'practise')
+			
+			WHERE asv.user_id = u.id 
+			AND ga.is_correct
 		) correct_answered_video_and_practise_quiz_questions,
 
 		-- average watched videos per day
@@ -118,8 +112,7 @@ FROM
 			SELECT 
 				COUNT(uprv.total_given_answer_count)::int
 			FROM public.user_practise_recommendation_view uprv
-			WHERE uprv.total_given_answer_count = 3
-			AND uprv.last_three_answer_average < 0.66
+			WHERE uprv.is_recommended_for_practise IS TRUE
 		) videos_to_be_repeated_count
 
 	FROM public.user u

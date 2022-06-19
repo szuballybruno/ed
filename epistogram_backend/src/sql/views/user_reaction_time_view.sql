@@ -2,28 +2,25 @@
 WITH user_exam AS (
     SELECT
         u.id user_id,
-        ase.exam_id,
-        ase.id answer_session_id,
-        EXTRACT(SECONDS FROM ase.end_date - ase.start_date) exam_length_seconds,
+        ev.exam_id,
+        asv.answer_session_id answer_session_id,
+        EXTRACT(SECONDS FROM asv.end_date - asv.start_date) exam_length_seconds,
             COALESCE(erv.correct_given_answer_count::double precision, 0) /
             COALESCE(erv.question_count, 0) exam_correct_answer_rate
     FROM public.user u
     
-    LEFT JOIN public.answer_session ase
-    ON ase.user_id = u.id
+    LEFT JOIN public.answer_session_view asv
+    ON asv.user_id = u.id
+	
+	LEFT JOIN public.exam_version ev
+	ON ev.id = asv.exam_version_id
     
     LEFT JOIN public.exam_result_view erv
-    ON erv.answer_session_id = ase.id
+    ON erv.answer_session_id = asv.answer_session_id
     
     WHERE
-        ase.type = 'exam'
+        asv.answer_session_type = 'exam'
         AND end_date IS NOT NULL
-    
-    GROUP BY
-        u.id,
-        ase.id,
-        erv.question_count,
-        erv.correct_given_answer_count
 ),
 
 -- single and all users exam completion length averages
@@ -90,22 +87,14 @@ user_answers AS (
         ga.is_correct given_answer_is_correct,
         ga.elapsed_seconds,
         ga.answer_session_id,
-        ase.user_id,
-        ase.start_date,
-        ase.end_date,
-        CASE
-            WHEN (is_practise_answer IS TRUE)
-                THEN 'practise'
-            WHEN (ase.video_id IS NOT NULL AND ase.exam_id IS NULL)
-                THEN 'video'
-            WHEN (ase.exam_id IS NOT NULL AND ase.video_id IS NULL AND ase.type = 'exam')
-                THEN 'exam'
-            ELSE NULL
-        END given_answer_type
+        asv.user_id,
+        asv.start_date,
+        asv.end_date,
+        asv.answer_session_type
     FROM public.given_answer ga
     
-    LEFT JOIN public.answer_session AS ase
-    ON ase.id = ga.answer_session_id
+    LEFT JOIN public.answer_session_view AS asv
+    ON asv.answer_session_id = ga.answer_session_id
 ),
 
 

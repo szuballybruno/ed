@@ -1,6 +1,6 @@
 SELECT 
 	clsv.user_id,
-	clsv.id course_id,
+	clsv.course_id course_id,
 	clsv.title course_title,
 	clsv.total_course_item_count,
 	clsv.completed_course_item_count,

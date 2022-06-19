@@ -1,14 +1,22 @@
 WITH pretest_asvs AS 
 (
 	SELECT 
-		e.course_id,
+		cv.course_id,
 		asv.user_id,
 		asv.is_completed,
-		asv.correct_answer_rate
+		0 correct_answer_rate
 	FROM public.answer_session_view asv
-	LEFT JOIN public.exam e
-	ON e.id = asv.exam_id
-	WHERE e.type = 'pretest'
+	
+	LEFT JOIN public.exam_version ev
+	ON ev.id = asv.exam_version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = ev.module_version_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	WHERE asv.answer_session_type = 'pretest'
 )
 
 SELECT  

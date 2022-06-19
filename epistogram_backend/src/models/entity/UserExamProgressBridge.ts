@@ -4,7 +4,7 @@ import { ExamVersion } from './exam/ExamVersion';
 import { User } from './User';
 
 @Entity()
-export class ExamCompletion {
+export class UserExamProgressBridge {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -15,14 +15,14 @@ export class ExamCompletion {
     // user 
     @Column()
     userId: number;
-    @XManyToOne<ExamCompletion>()(() => User, x => x.examProgressBridges)
-    @XJoinColumn<ExamCompletion>('userId')
+    @XManyToOne<UserExamProgressBridge>()(() => User, x => x.examProgressBridges)
+    @XJoinColumn<UserExamProgressBridge>('userId')
     user: Relation<User>;
 
     // exam version
     @Column()
     examVersionId: number;
-    @XManyToOne<ExamCompletion>()(() => ExamVersion, x => x.userProgressBridges)
-    @XJoinColumn<ExamCompletion>('examVersionId')
+    @XManyToOne<UserExamProgressBridge>()(() => ExamVersion, x => x.userProgressBridges)
+    @XJoinColumn<UserExamProgressBridge>('examVersionId')
     examVersion: Relation<ExamVersion>;
 }

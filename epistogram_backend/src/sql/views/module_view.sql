@@ -1,22 +1,22 @@
 SELECT
-	cm.*,
+	mo.*,
 	sq.item_count item_count
 FROM 
 (
 	SELECT 
-		cm.id module_id,
-		COUNT(civ.item_id)::int item_count
-	FROM public.course_module cm
+		mo.id module_id,
+		COUNT(civ.video_id)::int + COUNT(civ.exam_id) item_count
+	FROM public.module mo
 
 	LEFT JOIN public.course_item_view civ
-	ON civ.module_id = cm.id
+	ON civ.module_id = mo.id
 
 	GROUP BY
-		cm.id
+		mo.id
 
 	ORDER BY
-		cm.id
+		mo.id
 ) sq
 
-LEFT JOIN public.course_module cm
-ON cm.id = sq.module_id
+LEFT JOIN public.module mo
+ON mo.id = sq.module_id

@@ -18,6 +18,10 @@ export class UserPractiseRecommendationView {
 
     @ViewColumn()
     @XViewColumn()
+    courseVersionId: number;
+
+    @ViewColumn()
+    @XViewColumn()
     totalGivenAnswerCount: number;
 
     @ViewColumn()

@@ -4,7 +4,7 @@ import { AnswerSession } from '../AnswerSession';
 import { ModuleData } from '../module/ModuleData';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { QuestionVersion } from '../question/QuestionVersion';
-import { ExamCompletion } from '../UserExamProgressBridge';
+import { UserExamProgressBridge } from '../UserExamProgressBridge';
 import { UserSessionActivity } from '../UserSessionActivity';
 import { Exam } from './Exam';
 import { ExamData } from './ExamData';
@@ -28,8 +28,8 @@ export class ExamVersion {
     answerSessions: AnswerSession[];
 
     // userProgressBridges
-    @XOneToMany<ExamVersion>()(() => ExamCompletion, x => x.examVersion)
-    userProgressBridges: ExamCompletion[];
+    @XOneToMany<ExamVersion>()(() => UserExamProgressBridge, x => x.examVersion)
+    userProgressBridges: UserExamProgressBridge[];
 
     // user session activity
     @XOneToMany<ExamVersion>()(() => UserSessionActivity, x => x.examVersion)

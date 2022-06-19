@@ -1,35 +1,30 @@
-SELECT 
+SELECT
 	ct.id,
-	COALESCE(vm.course_id, qv.course_id) course_id,
 	ct.user_id,
-	ct.amount
-FROM coin_transaction ct
+	co.id course_id,
+	SUM(ct.amount)::int amount
+FROM public.course co
 
-LEFT JOIN public.video v 
-ON v.id = ct.video_id
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
 
-LEFT JOIN public.course_module vm
-ON vm.id = v.module_id
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = cv.id
+
+LEFT JOIN public.video_version vv
+ON vv.module_version_id = mv.id
+
+LEFT JOIN public.exam_version ev
+ON ev.module_version_id = mv.id
+
+LEFT JOIN public.question_version qv
+ON qv.video_version_id = vv.id 
+AND qv.exam_version_id = ev.id
 
 LEFT JOIN public.given_answer ga
-ON ga.id = ct.given_answer_id 
+ON ga.question_version_id = qv.id
 
-LEFT JOIN (
-	SELECT q.id, COALESCE(em.course_id, vm.course_id) course_id
-	FROM public.question q
-	
-	LEFT JOIN public.video v
-	ON q.video_id = v.id
-	
-	LEFT JOIN public.exam e
-	ON q.exam_id = e.id
-	
-	LEFT JOIN public.course_module vm
-	ON vm.id = v.module_id 
-	
-	LEFT JOIN public.course_module em
-	ON em.id = e.module_id 
-	
-	WHERE q.exam_id IS DISTINCT FROM 1
-) qv
-ON qv.id = ga.question_id
+LEFT JOIN public.coin_transaction ct
+ON ct.given_answer_id = ga.id
+
+GROUP BY co.id, ct.user_id, ct.id

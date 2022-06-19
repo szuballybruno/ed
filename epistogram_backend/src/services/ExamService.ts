@@ -2,7 +2,7 @@ import { AnswerSession } from '../models/entity/AnswerSession';
 import { Exam } from '../models/entity/exam/Exam';
 import { ExamData } from '../models/entity/exam/ExamData';
 import { QuestionData } from '../models/entity/question/QuestionData';
-import { ExamCompletion } from '../models/entity/UserExamProgressBridge';
+import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { ExamResultView } from '../models/views/ExamResultView';
@@ -101,7 +101,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         return [] as any;
     }
-    
+
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
      * 

@@ -1,7 +1,9 @@
 import { ActivationCode } from '../../models/entity/ActivationCode';
 import { ActivitySession } from '../../models/entity/ActivitySession';
 import { ActivityStreak } from '../../models/entity/ActivityStreak';
+import { Answer } from '../../models/entity/answer/Answer';
 import { AnswerData } from '../../models/entity/answer/AnswerData';
+import { AnswerVersion } from '../../models/entity/answer/AnswerVersion';
 import { AnswerGivenAnswerBridge } from '../../models/entity/AnswerGivenAnswerBridge';
 import { AnswerSession } from '../../models/entity/AnswerSession';
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
@@ -13,10 +15,11 @@ import { RolePermissionBridge } from '../../models/entity/authorization/RolePerm
 import { CoinTransaction } from '../../models/entity/CoinTransaction';
 import { Comment } from '../../models/entity/Comment';
 import { Company } from '../../models/entity/Company';
+import { Course } from '../../models/entity/course/Course';
 import { CourseData } from '../../models/entity/course/CourseData';
+import { CourseVersion } from '../../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../../models/entity/CourseCategory';
-import { ModuleData } from '../../models/entity/module/ModuleData';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from '../../models/entity/courseRating/CourseRatingQuestionUserAnswer';
@@ -24,17 +27,27 @@ import { DailyTip } from '../../models/entity/DailyTip';
 import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
+import { Exam } from '../../models/entity/exam/Exam';
 import { ExamData } from '../../models/entity/exam/ExamData';
+import { ExamVersion } from '../../models/entity/exam/ExamVersion';
 import { GivenAnswer } from '../../models/entity/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
 import { Group } from '../../models/entity/Group';
 import { JobTitle } from '../../models/entity/JobTitle';
 import { Like } from '../../models/entity/Like';
+import { Module } from '../../models/entity/module/Module';
+import { ModuleData } from '../../models/entity/module/ModuleData';
+import { ModuleVersion } from '../../models/entity/module/ModuleVersion';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
+import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
+import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
+import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
+import { Question } from '../../models/entity/question/Question';
 import { QuestionData } from '../../models/entity/question/QuestionData';
+import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
 import { QuestionType } from '../../models/entity/QuestionType';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
@@ -44,11 +57,13 @@ import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
 import { User } from '../../models/entity/User';
 import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
-import { ExamCompletion } from '../../models/entity/UserExamProgressBridge';
+import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
+import { Video } from '../../models/entity/video/Video';
 import { VideoData } from '../../models/entity/video/VideoData';
-import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
+import { VideoFile } from '../../models/entity/video/VideoFile';
+import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
@@ -83,7 +98,6 @@ import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserAnswerView } from '../../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
@@ -104,6 +118,7 @@ import { UserReactionTimeView } from '../../models/views/UserReactionTimeView';
 import { UserRoleAssignCompanyView } from '../../models/views/UserRoleAssignCompanyView';
 import { UserRoleView } from '../../models/views/UserRoleView';
 import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
+import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserStatsView } from '../../models/views/UserStatsView';
@@ -118,23 +133,31 @@ import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
 import { getCommentsSeedData } from '../../sql/seed/seed_comments';
 import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
 import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
-import { getCourseDatasSeedData } from '../../sql/seed/seed_course_datas';
+import { getCourseSeedData } from '../../sql/seed/seed_courses';
 import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
 import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
+import { getCourseDatasSeedData } from '../../sql/seed/seed_course_datas';
 import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
 import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
+import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
 import { getDailyTipsSeed } from '../../sql/seed/seed_daily_tips';
 import { getDiscountCodesSeedData } from '../../sql/seed/seed_discount_codes';
+import { getExamSeedData } from '../../sql/seed/seed_exams';
 import { getExamDatasSeedData } from '../../sql/seed/seed_exam_datas';
+import { getExamVersionsSeedData } from '../../sql/seed/seed_exam_versions';
 import { getJobTitlesSeedData } from '../../sql/seed/seed_job_titles';
+import { getModulesSeedData } from '../../sql/seed/seed_modules';
 import { getModuleDatasSeedData } from '../../sql/seed/seed_module_datas';
+import { getModuleVersionsSeedData } from '../../sql/seed/seed_module_versions';
 import { getPermissionsSeedData } from '../../sql/seed/seed_permissions';
 import { getPermissionAssignmentBridgeSeedData } from '../../sql/seed/seed_permission_assignment_bridges';
 import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personality_trait_categories';
 import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
 import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
+import { getQuestionSeedData } from '../../sql/seed/seed_questions';
 import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
+import { getSeedQuestionVersions } from '../../sql/seed/seed_question_versions';
 import { getRolesSeedData } from '../../sql/seed/seed_roles';
 import { getRoleAssignmentBridgeSeedData } from '../../sql/seed/seed_role_assignment_bridges';
 import { getRolePermissionBridgeSeedData } from '../../sql/seed/seed_role_permission_bridges';
@@ -144,35 +167,12 @@ import { getStorageFileSeedData } from '../../sql/seed/seed_storage_file';
 import { getTeacherInfoSeedData } from '../../sql/seed/seed_teacher_info';
 import { getTempomatAdjustmentValueSeedData } from '../../sql/seed/seed_tempomat_adjustment_values';
 import { getUserSeedData } from '../../sql/seed/seed_users';
+import { getVideosSeedData } from '../../sql/seed/seed_videos';
 import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
+import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
+import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
-import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
-import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
-import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
-import { VideoVersion } from '../../models/entity/video/VideoVersion';
-import { getVideosSeedData } from '../../sql/seed/seed_videos';
-import { getModuleVersionsSeedData } from '../../sql/seed/seed_module_versions';
-import { Video } from '../../models/entity/video/Video';
-import { ModuleVersion } from '../../models/entity/module/ModuleVersion';
-import { getModulesSeedData } from '../../sql/seed/seed_modules';
-import { Module } from '../../models/entity/module/Module';
-import { Course } from '../../models/entity/course/Course';
-import { getCourseSeedData } from '../../sql/seed/seed_courses';
-import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
-import { CourseVersion } from '../../models/entity/course/CourseVersion';
-import { ExamVersion } from '../../models/entity/exam/ExamVersion';
-import { Exam } from '../../models/entity/exam/Exam';
-import { AnswerVersion } from '../../models/entity/answer/AnswerVersion';
-import { Answer } from '../../models/entity/answer/Answer';
-import { VideoFile } from '../../models/entity/video/VideoFile';
-import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
-import { Question } from '../../models/entity/question/Question';
-import { getQuestionSeedData } from '../../sql/seed/seed_questions';
-import { getSeedQuestionVersions } from '../../sql/seed/seed_question_versions';
-import { getExamVersionsSeedData } from '../../sql/seed/seed_exam_versions';
-import { getExamSeedData } from '../../sql/seed/seed_exams';
-import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -270,56 +270,55 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['course_questions_success_view'],
             ['exam_latest_success_rate_view'],
             ['course_spent_time_view'],
-            ['course_item_edit_view', CourseItemEditView]
-            // ['course_item_count_view'],
-            // ['course_learning_stats_view', CourseLearningStatsView],
-            // ['course_progress_view', CourseProgressView],
-            // ['course_module_overview_view', CourseModuleOverviewView],
-            // ['course_details_view', CourseDetailsView],
-            // ['exam_view', ExamView],
-            // ['coin_acquire_per_course_view'],
-            // ['course_overview_view', CourseOverviewView],
-            // ['personality_trait_category_view', PersonalityTraitCategoryView],
-            // ['course_item_completed_view'],
-            // ['user_latest_activity_view'],
-            // ['admin_user_list_view', AdminUserListView],
-            // ['prequiz_question_view', PrequizQuestionView],
-            // ['pretest_result_view', PretestResultView],
-            // ['course_rating_question_view', CourseRatingQuestionView],
-            // ['user_prequiz_answers_view'],
-            // ['user_course_bridge_view', UserCourseBridgeView],
-            // ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
-            // ['user_course_completion_current_view', UserCourseCompletionCurrentView],
-            // ['user_answer_view', UserAnswerView],
-            // ['user_performance_answer_group_view', UserPerformanceAnswerGroupView],
-            // ['user_reaction_time_view', UserReactionTimeView],
-            // ['user_performance_view', UserPerformanceView],
-            // ['user_session_block_view', UserSessionBlockView],
-            // ['user_inactive_course_view', UserInactiveCourseView],
-            // ['user_engagement_view', UserEngagementView],
-            // ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
-            // ['user_daily_progress_view', UserDailyProgressView],
-            // ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
-            // ['user_active_course_view', UserActiveCourseView],
-            // ['user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
-            // ['user_course_progress_actual'],
-            // ['user_course_progress_view', UserCourseProgressView],
-            // ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
-            // ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
-            // ['user_course_stats_view', UserCourseStatsView],
-            // ['user_video_practise_progress_view', UserVideoPractiseProgressView],
-            // ['user_video_stats_view', UserVideoStatsView],
-            // ['user_exam_stats_view', UserExamStatsView],
-            // ['course_item_question_edit_view', CourseItemQuestionEditView],
-            // ['comment_list_view', CommentListView],
-            // ['user_spent_time_ratio_view', UserSpentTimeRatioView],
-            // ['module_view', ModuleView],
-            // ['role_list_view'],
-            // ['company_view'],
-            // ['assignable_permission_view'],
-            // ['assignable_role_view'],
-            // ['user_assigned_auth_item_view'],
-            // ['user_role_assign_company_view', UserRoleAssignCompanyView]
+            ['course_item_edit_view', CourseItemEditView],
+            ['course_item_count_view'],
+            ['course_learning_stats_view', CourseLearningStatsView],
+            ['course_progress_view', CourseProgressView],
+            ['course_module_overview_view', CourseModuleOverviewView],
+            ['course_details_view', CourseDetailsView],
+            ['exam_view', ExamView],
+            ['coin_acquire_per_course_view'],
+            ['course_overview_view', CourseOverviewView],
+            ['personality_trait_category_view', PersonalityTraitCategoryView],
+            ['course_item_completed_view'],
+            ['user_latest_activity_view'],
+            ['admin_user_list_view', AdminUserListView],
+            ['prequiz_question_view', PrequizQuestionView],
+            ['pretest_result_view', PretestResultView],
+            ['course_rating_question_view', CourseRatingQuestionView],
+            ['user_prequiz_answers_view'],
+            ['user_course_bridge_view', UserCourseBridgeView],
+            ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
+            ['user_course_completion_current_view', UserCourseCompletionCurrentView],
+            ['user_answer_view', UserAnswerView],
+            ['user_performance_answer_group_view', UserPerformanceAnswerGroupView],
+            ['user_reaction_time_view', UserReactionTimeView],
+            ['user_performance_view', UserPerformanceView],
+            ['user_session_block_view', UserSessionBlockView],
+            ['user_inactive_course_view', UserInactiveCourseView],
+            ['user_engagement_view', UserEngagementView],
+            ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
+            ['user_daily_progress_view', UserDailyProgressView],
+            ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
+            ['user_active_course_view', UserActiveCourseView],
+            ['user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
+            ['user_course_progress_actual'],
+            ['user_course_progress_view', UserCourseProgressView],
+            ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
+            ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
+            ['user_course_stats_view', UserCourseStatsView],
+            ['user_video_practise_progress_view', UserVideoPractiseProgressView],
+            ['user_video_stats_view', UserVideoStatsView],
+            ['user_exam_stats_view', UserExamStatsView],
+            ['comment_list_view', CommentListView],
+            ['user_spent_time_ratio_view', UserSpentTimeRatioView],
+            ['module_view', ModuleView],
+            ['role_list_view'],
+            ['company_view'],
+            ['assignable_permission_view'],
+            ['assignable_role_view'],
+            ['user_assigned_auth_item_view'],
+            ['user_role_assign_company_view', UserRoleAssignCompanyView]
         ],
 
         functionScripts: [
@@ -431,7 +430,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             CourseRatingQuestion,
             CourseRatingQuestionUserAnswer,
             UserVideoProgressBridge,
-            ExamCompletion,
+            UserExamProgressBridge,
             TempomatAdjustmentValue
         ],
     };

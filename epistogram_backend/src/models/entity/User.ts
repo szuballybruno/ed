@@ -23,7 +23,7 @@ import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
 import { Like } from './Like';
 import { UserCourseBridge } from './UserCourseBridge';
-import { ExamCompletion } from './UserExamProgressBridge';
+import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
@@ -208,8 +208,8 @@ export class User {
 
     // videoProgressBridges
     @JoinColumn()
-    @OneToMany(_ => ExamCompletion, x => x.user)
-    examProgressBridges: Relation<ExamCompletion>[];
+    @OneToMany(_ => UserExamProgressBridge, x => x.user)
+    examProgressBridges: Relation<UserExamProgressBridge>[];
 
     // role assingments
     @JoinColumn()

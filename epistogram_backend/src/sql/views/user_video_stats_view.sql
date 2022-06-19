@@ -2,8 +2,8 @@ SELECT
     u.id user_id,
     cisv.video_id,
     cisv.course_id,
-    v.length_seconds,
-    v.title video_title,
+    vf.length_seconds,
+    vd.title video_title,
     
     -- How much time the user spent with the video
     (
@@ -41,17 +41,27 @@ SELECT
             END
         FROM public.user_practise_recommendation_view uprv
         WHERE uprv.user_id = u.id
-        AND uprv.video_id = cisv.video_id
-        AND uprv.last_three_answer_average < 0.66
+        AND uprv.video_version_id = vv.id
+        AND uprv.is_recommended_for_practise
     ) is_recommended_for_retry,
 
     -- The average of the last 3 video quiz answers
     (
         SELECT
-            AVG(uprv.last_three_answer_average)::int
-        FROM public.user_practise_recommendation_view uprv
-        WHERE uprv.user_id = u.id
-        AND uprv.video_id = cisv.video_id
+            AVG(ga.is_correct::int)::int
+        FROM public.given_answer ga
+		
+		LEFT JOIN public.answer_session_view asv
+		ON asv.answer_session_id = ga.answer_session_id
+		AND asv.user_id = u.id
+		
+		LEFT JOIN public.video_version vv
+		ON vv.id = asv.video_version_id
+		AND vv.video_id = cisv.video_id
+		
+		GROUP BY asv.start_date
+		
+        ORDER BY asv.start_date
     ) last_three_answer_average,
 
     -- The average reaction time for the video quiz questions
@@ -81,16 +91,25 @@ ON cisv.user_id = u.id
 LEFT JOIN public.video v
 ON v.id = cisv.video_id
 
+LEFT JOIN public.video_version vv
+ON vv.video_id = v.id
+
+LEFT JOIN public.video_data vd
+ON vd.id = vv.video_data_id
+
+LEFT JOIN public.video_file vf
+ON vf.id = vd.video_file_id
+
 LEFT JOIN public.video_playback_sample_view vpsv
-ON vpsv.video_id = v.id
+ON vpsv.video_version_id = vv.id
 AND vpsv.user_id = u.id
 
-WHERE
-    is_completed IS TRUE
+WHERE cisv.item_state = 'completed'
 
 GROUP BY
     u.id,
+	vv.id,
     cisv.video_id,
     cisv.course_id,
-    v.length_seconds,
-    v.title
+    vf.length_seconds,
+    vd.title

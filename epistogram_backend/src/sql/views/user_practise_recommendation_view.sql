@@ -69,10 +69,17 @@ video_is_recommended AS
 SELECT 
     vv.id video_version_id,
     vir.user_id,
+	cv.id course_version_id,
     ac.total_given_answer_count::int,
     ac.total_correct_answer_count::int,
     vir.is_recommended is_recommended_for_practise
 FROM public.video_version vv
+
+LEFT JOIN public.module_version mv
+ON mv.id = vv.module_version_id
+
+LEFT JOIN public.course_version cv
+ON cv.id = mv.course_version_id
 	
 LEFT JOIN video_is_recommended vir
 ON vir.video_version_id = vv.id
