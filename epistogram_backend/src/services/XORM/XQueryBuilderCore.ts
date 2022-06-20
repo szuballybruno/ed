@@ -140,20 +140,36 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     private _getSQLParamsList(params: TParams) {
 
+        let counter = 1;
+
         return getKeys(params)
             .filter(key => params[key] !== undefined)
-            .map((key, index): SQLParamType<TParams, keyof TParams> => {
+            .map((key): SQLParamType<TParams, keyof TParams> => {
 
+                // get param value 
                 const rawValue = params[key] as any;
-
                 const value = rawValue?.toSQLValue
                     ? rawValue.toSQLValue()
                     : rawValue;
 
+                // check if value is of a special type 
+                const valueIsNull = value === null;
                 const isArray = value && Array.isArray(value);
+
+                // special token strings are required if 
+                // value is is array,
+                // or value is null
                 const token = isArray
-                    ? `ANY($${index + 1}::int[])`
-                    : `$${index + 1}`;
+                    ? `ANY($${counter}::int[])`
+                    : valueIsNull
+                        ? `$null`
+                        : `$${counter}`;
+
+                // only increment token if value is not null, 
+                // since null values will be filtered out before 
+                // executing sql query 
+                if (!valueIsNull)
+                    counter++;
 
                 return ({
                     token: token,
@@ -238,44 +254,53 @@ export class XQueryBuilderCore<TEntity, TParams> {
         // where condition
         else {
 
-            const cond = espressionPart as CheckExpression<TEntity, TParams>;
-            const { code, type, entityA, entityB, keyA, keyB, op, bracket } = cond;
-
-            const tableAName: string = this._toSQLTableName(entityA);
-            const snakeColumn: string = this._toSQLSnakeCasing(keyA as string);
-            const fullValueA = `${tableAName}.${snakeColumn}`;
-
-            const bracketProc = bracket ? '(' : '';
-
-            const { tokenValue } = ((): { tokenValue: string, paramsValue?: any } => {
-
-                // where condition right side is a 'static value' 
-                if (type === 'STATIC_VALUE')
-                    return { tokenValue: keyB as SQLStaticValueType };
-
-                // where condition right side is a 'ref to another entity' 
-                if (type === 'ENTITY_REF')
-                    return { tokenValue: `${this._toSQLTableName(entityB!)}.${this._toSQLSnakeCasing(keyB as string)}` };
-
-                // where condition right side is a 'params value'
-                if (sqlParamsList.length === 0)
-                    throw new Error('Where condition is expecting a parameter, but the params list is empty!');
-
-                const param = sqlParamsList
-                    .single(x => x.paramName === keyB);
-
-                return { tokenValue: param.paramValue === null ? 'NULL' : param.token };
-            })();
-
-            const operator: OperationType = tokenValue === 'NULL'
-                ? 'IS'
-                : op;
-
-            const linebreak = code === 'WHERE' ? '\n' : '';
-            const tab = code === 'AND' || code === 'OR' ? INDENT : '';
-
-            return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${tokenValue}`;
+            return this._compileCheckExpression(espressionPart, sqlParamsList);
         }
+    }
+
+    /**
+     * Compiles a CheckExpression to SQL query
+     */
+    private _compileCheckExpression(
+        expression: CheckExpression<TEntity, TParams>,
+        sqlParamsList: SQLParamType<TParams, keyof TParams>[]): string {
+
+        const { code, type, entityA, entityB, keyA, keyB, op, bracket } = expression;
+
+        const tableAName: string = this._toSQLTableName(entityA);
+        const snakeColumn: string = this._toSQLSnakeCasing(keyA as string);
+        const fullValueA = `${tableAName}.${snakeColumn}`;
+
+        const bracketProc = bracket ? '(' : '';
+
+        const { tokenValue } = ((): { tokenValue: string, paramsValue?: any } => {
+
+            // where condition right side is a 'static value' 
+            if (type === 'STATIC_VALUE')
+                return { tokenValue: keyB as SQLStaticValueType };
+
+            // where condition right side is a 'ref to another entity' 
+            if (type === 'ENTITY_REF')
+                return { tokenValue: `${this._toSQLTableName(entityB!)}.${this._toSQLSnakeCasing(keyB as string)}` };
+
+            // where condition right side is a 'params value'
+            if (sqlParamsList.length === 0)
+                throw new Error('Where condition is expecting a parameter, but the params list is empty!');
+
+            const param = sqlParamsList
+                .single(x => x.paramName === keyB);
+
+            return { tokenValue: param.paramValue === null ? 'NULL' : param.token };
+        })();
+
+        const operator: OperationType = tokenValue === 'NULL'
+            ? 'IS'
+            : op;
+
+        const linebreak = code === 'WHERE' ? '\n' : '';
+        const tab = code === 'AND' || code === 'OR' ? INDENT : '';
+
+        return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${tokenValue}`;
     }
 
     private _toSQLTableName<T>(classType: ClassType<T>) {

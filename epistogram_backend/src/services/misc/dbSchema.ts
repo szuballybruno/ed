@@ -128,8 +128,10 @@ import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
+import { getAnswersSeedData } from '../../sql/seed/seed_answers';
 import { getAnswerDatasSeedData } from '../../sql/seed/seed_answer_datas';
 import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
+import { getAnswerVersionsSeedData } from '../../sql/seed/seed_answer_versions';
 import { getCommentsSeedData } from '../../sql/seed/seed_comments';
 import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
 import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
@@ -194,6 +196,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getModulesSeedData, [], Module)
         .add(getCourseSeedData, [], Course)
         .add(getQuestionSeedData, [], Question)
+        .add(getAnswersSeedData, [], Answer)
         .add(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
         .add(getRolesSeedData, [getCompaniesSeedData], Role)
         .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
@@ -218,6 +221,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
         .add(getSeedQuestionVersions, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
         .add(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
+        .add(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getSeedQuestionVersions], AnswerVersion)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)

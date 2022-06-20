@@ -1,23 +1,23 @@
 import { Flex } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
-import { LoadingStateType } from '../../../../models/types';
+import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
-import { AdminExamQuestionRow } from './AdminExamQuestionRow';
-import { EditQuestionFnType } from '../videoEditDialog/VideoEditDialog';
-import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
+import { QuestionsEditGrid } from '../QuestionsEditGrid';
 
 export const ExamEditor = ({
-    examVersionId
+    examVersionId,
+    endabled
 }: {
-    examVersionId: number
+    examVersionId: number,
+    endabled: boolean
 }) => {
 
     // http
     const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
-        .useCourseItemEditData(null, examVersionId);
+        .useCourseItemEditData(null, examVersionId, endabled);
 
     const questions = courseItemEditData?.questions ?? [];
 
@@ -35,88 +35,49 @@ export const ExamEditor = ({
         return questionWithMostAnswer?.answers.length || 4;
     };
 
-    const getLoadingState = (
-        examQuestionEditDataState: LoadingStateType,
-        questions: QuestionEditDataDTO[]
-    ): LoadingStateType => {
-        if (questions.length === 0 && examQuestionEditDataState !== ('error' || 'idle'))
-            return 'loading';
-
-        return examQuestionEditDataState;
-    };
-
     return <LoadingFrame
         loadingState={'success'}
         flex='1'
         direction='column'
         className="roundBorders largeSoftShadow"
         justify='flex-start'
-        p="20px 20px 100px 20px"
         overflowY='scroll'
         style={{
+            padding: '10px',
             background: 'var(--transparentWhite90)'
         }}>
 
-        <Flex>
-
-            <Flex
-                flex="1"
-                h='40px'
-                align='center'
-                px='11px'
-                style={{
-                    fontWeight: 'bold'
-                }}>
-
-                Kérdés
-            </Flex>
-
-            <Flex
-                flex={getColumnCountFromAnswers(questions)}
-                align='center'
-                fontWeight='bold'>
-
-                Válaszok
-            </Flex>
-        </Flex>
-
         <Flex
             flex='1'
-            direction='column'
-            overflowY='scroll'>
+            direction='column'>
 
             {/* questions list  */}
-            {questions
-                .map((question, index) => {
+            <QuestionsEditGrid
+                questions={questions} />
 
-                    return <AdminExamQuestionRow
-                        key={index}
-                        question={question}
-                        rowIndex={index}
-                        columnCount={getColumnCountFromAnswers(questions)} />;
-                })}
+            {/* buttons */}
+            <Flex
+                width="100%"
+                marginTop="10px"
+                justify="flex-end">
 
-            <EpistoButton
-                onClick={() => 1}
-                variant='outlined'
-                style={{
-                    flex: '1',
-                    margin: '10px 0 0 0'
-                }}>
+                {/* add */}
+                <EpistoButton
+                    onClick={() => 1}
+                    variant='outlined'>
 
-                <Add />
-            </EpistoButton>
-            <EpistoButton
-                isDisabled={false}
-                onClick={() => 1}
-                variant="colored"
-                style={{
-                    flex: '1',
-                    margin: '10px 0'
-                }}>
+                    <Add />
+                </EpistoButton>
 
-                {translatableTexts.misc.save}
-            </EpistoButton>
+                {/* save */}
+                <EpistoButton
+                    isDisabled={false}
+                    onClick={() => 1}
+                    variant="colored">
+
+                    {translatableTexts.misc.save}
+                </EpistoButton>
+            </Flex>
         </Flex>
-    </LoadingFrame >;
+    </LoadingFrame>;
 };

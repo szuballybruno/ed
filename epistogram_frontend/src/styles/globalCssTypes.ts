@@ -7,10 +7,12 @@ type gct<TObj> = {
 
 // ---------------- GENERIC
 
-const sizes = ['px5', 'px10'] as const;
-const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError'] as const;
+const sizes = ['px5', 'px10', 'px15', 'px20'] as const;
+const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError', 'deepBlue'] as const;
 const fontSizes = ['small', 'normal', 'large'] as const;
 const fontWeights = ['light', 'normal', 'heavy'] as const;
+const widths = ['stretch'] as const;
+const heights = ['stretch'] as const;
 
 const globalCssGeneric = {
     margin: {
@@ -21,7 +23,9 @@ const globalCssGeneric = {
         right: sizes
     },
     roundBorders: 'normal',
-    background: colors
+    background: colors,
+    width: widths,
+    height: heights
 } as const;
 
 export type CSSOptionsType = gct<Mutable<typeof globalCssGeneric>>;

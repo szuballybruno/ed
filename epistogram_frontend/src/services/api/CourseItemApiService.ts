@@ -4,9 +4,9 @@ import { useReactQuery2 } from '../../static/frontendHelpers';
 
 export const CourseItemApiService = {
 
-    useCourseItemEditData: (videoVersionId: number | null, examVersionId: number | null) => {
+    useCourseItemEditData: (videoVersionId: number | null, examVersionId: number | null, endabled: boolean) => {
 
-        const qr = useReactQuery2<CourseItemEditDTO>(apiRoutes.courseItem.getCourseItemEditData, { videoVersionId, examVersionId });
+        const qr = useReactQuery2<CourseItemEditDTO>(apiRoutes.courseItem.getCourseItemEditData, { videoVersionId, examVersionId }, endabled);
 
         return {
             courseItemEditData: qr.data,

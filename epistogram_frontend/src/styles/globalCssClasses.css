@@ -16,6 +16,19 @@
     margin: 25px;
 }
 
+.margin-left-px5 {
+    margin-left: 5px;
+}
+.margin-left-px10 {
+    margin-left: 10px;
+}
+.margin-left-px15 {
+    margin-left: 15px;
+}
+.margin-left-px20 {
+    margin-left: 20px;
+}
+
 /* font weight */
 
 .fontWeight-light {
@@ -69,6 +82,9 @@
 .background-fontError {
     background: var(--mildRed) !important;
 }
+.background-deepBlue {
+    background: var(--deepBlue) !important;
+}
 
 /* borders */
 
@@ -105,4 +121,14 @@
 }
 .justify-flex-end {
     justify-content: flex-end;
+}
+
+/* width */
+.width-stretch {
+    width: 100%;
+}
+
+/* height */
+.height-stretch {
+    height: 100%;
 }

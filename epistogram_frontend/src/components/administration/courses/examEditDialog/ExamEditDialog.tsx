@@ -16,7 +16,8 @@ export const ExamEditDialog = (props: {
     const paging = usePaging<EditDialogSubpage>([
         {
             content: () => <ExamEditor
-                examVersionId={examVersionId} />,
+                examVersionId={examVersionId}
+                endabled={dialogLogic.isOpen} />,
             title: 'Kérdések',
         },
         {

@@ -11,30 +11,28 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
+import { QuestionsEditGrid } from '../QuestionsEditGrid';
 import { QuestionEditItem } from './QuestionEditItem';
 import { EditQuestionFnType } from './VideoEditDialog';
 import { VideoEditDialogParams } from './VideoEditDialogTypes';
 
 export const VideoEditor = ({
     videoVersionId,
-    dialogLogic
+    enabled
 }: {
-    dialogLogic: EpistoDialogLogicType<VideoEditDialogParams>,
+    enabled: boolean,
     videoVersionId: number
 }) => {
 
-    const videoQuestionEditData = null as any;
-
     // http
     const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
-        .useCourseItemEditData(videoVersionId, null);
+        .useCourseItemEditData(videoVersionId, null, enabled);
 
-    // computed
-    const videoUrl = videoQuestionEditData?.videoUrl || '';
-    const videoTitle = videoQuestionEditData?.title || '';
-    const courseName = videoQuestionEditData?.courseName || '';
+    // const videoTitle = videoQuestionEditData?.title || '';
+    // const courseName = videoQuestionEditData?.courseName || '';
 
-    const questions = videoQuestionEditData?.questions ?? [];
+    const videoUrl = courseItemEditData?.videoUrl ?? '';
+    const questions = courseItemEditData?.questions ?? [];
 
     const {
         mutatedData,
@@ -96,76 +94,33 @@ export const VideoEditor = ({
     };
 
     return <Flex
-        direction="row"
-        height="auto"
+        direction="column"
         flex="1"
-        p="20px">
+        padding="10px">
 
+        {/* video preview */}
         <Flex
-            align="flex-start"
-            m="0 5px 30px 0"
-            position="sticky"
-            maxH="400px"
-            top="115"
-            flex="1">
+            className="mildShadow"
+            height="300px">
 
-            <Flex
-                className="mildShadow"
-                flex="1">
-
-                <EpistoReactPlayer
-                    width="100%"
-                    height="calc(56.25 / 100)"
-                    controls
-                    onProgress={x => setPlayedSeconds(x.playedSeconds)}
-                    progressInterval={100}
-                    style={{
-                        borderRadius: 7,
-                        overflow: 'hidden'
-                    }}
-                    url={videoUrl} />
-            </Flex>
-        </Flex>
-
-        <Flex
-            direction="column"
-            flex="1"
-            mt="5px"
-            p="0 20px 100px 20px">
-
-            {/* questions list */}
-            {questions
-                .map((question, index) => (
-
-                    <QuestionEditItem
-                        key={index}
-                        question={question} />
-                ))}
-
-            <EpistoButton
-                variant="outlined"
-                onClick={() => handleAddQuestion()}
+            <EpistoReactPlayer
+                width="100%"
+                height="calc(56.25 / 100)"
+                controls
+                onProgress={x => setPlayedSeconds(x.playedSeconds)}
+                progressInterval={100}
                 style={{
-                    margin: '10px 0',
-                    borderColor: 'var(--epistoTeal)',
-                    color: 'var(--epistoTeal)'
-                }}>
-
-                <Add />
-            </EpistoButton>
+                    borderRadius: 7,
+                    overflow: 'hidden'
+                }}
+                url={videoUrl} />
         </Flex>
 
-        <EpistoButton
-            isDisabled={!isAnyQuestionsMutated}
-            onClick={() => { console.log('asd'); }}
-            variant="colored"
-            style={{
-                position: 'absolute',
-                bottom: 20,
-                width: 'calc(100% - 40px)'
-            }}>
+        {/* questions list */}
+        <Flex flex="1">
 
-            {translatableTexts.misc.save}
-        </EpistoButton>
-    </Flex >;
+            <QuestionsEditGrid
+                questions={questions} />
+        </Flex>
+    </Flex>;
 };

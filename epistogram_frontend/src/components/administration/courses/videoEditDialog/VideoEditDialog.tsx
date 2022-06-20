@@ -20,7 +20,7 @@ export const VideoEditDialog = (props: {
     const paging = usePaging<EditDialogSubpage>([
         {
             content: () => <VideoEditor
-                dialogLogic={dialogLogic}
+                enabled={dialogLogic.isOpen}
                 videoVersionId={videoVersionId} />,
             title: 'Kérdések'
         },
