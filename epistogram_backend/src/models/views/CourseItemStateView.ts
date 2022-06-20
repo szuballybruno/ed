@@ -6,7 +6,7 @@ import { CourseItemStateType, CourseItemType, CourseModeType } from '../../share
     synchronize: false,
     expression: ''
 })
-export class CourseItemStateView {
+export class CourseItemPlaylistView {
 
     @ViewColumn()
     @XViewColumn()
@@ -24,9 +24,9 @@ export class CourseItemStateView {
     @XViewColumn()
     examId: number;
 
-    @ViewColumn()
-    @XViewColumn()
-    itemId: number;
+    /*  @ViewColumn()
+     @XViewColumn()
+     itemId: number; */
 
     @ViewColumn()
     @XViewColumn()
@@ -63,24 +63,20 @@ export class CourseItemStateView {
     @ViewColumn()
     @XViewColumn()
     itemCode: string;
+    /* 
+        @ViewColumn()
+        @XViewColumn()
+        courseMode: CourseModeType;
+     */
+    @ViewColumn()
+    @XViewColumn()
+    moduleIsCurrent: boolean;
 
     @ViewColumn()
     @XViewColumn()
-    isCompleted: boolean;
+    itemState: CourseItemStateType;
 
     @ViewColumn()
     @XViewColumn()
-    courseMode: CourseModeType;
-
-    @ViewColumn()
-    @XViewColumn()
-    isModuleCurrent: boolean;
-
-    @ViewColumn()
-    @XViewColumn()
-    state: CourseItemStateType;
-
-    @ViewColumn()
-    @XViewColumn()
-    shouldRepeatVideo: boolean;
+    isRecommendedForPractise: boolean;
 }

@@ -77,7 +77,7 @@ import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedV
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { CourseItemStateView } from '../../models/views/CourseItemStateView';
+import { CourseItemPlaylistView } from '../../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
@@ -246,7 +246,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['video_cursor_seconds_view', VideoCursorSecondsView],
             ['course_item_view'],
             ['user_practise_recommendation_view', UserPractiseRecommendationView],
-            ['course_item_playlist_view', CourseItemStateView],
+            ['course_item_playlist_view', CourseItemPlaylistView],
             ['signup_question_view', SignupQuestionView],
             ['user_role_view', UserRoleView],
             ['latest_given_answer_view'],

@@ -27,7 +27,7 @@ import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedV
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { CourseItemStateView } from '../../models/views/CourseItemStateView';
+import { CourseItemPlaylistView } from '../../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
@@ -387,12 +387,11 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 : getAssetUrl('/images/defaultCourseCover.jpg');
 
             return {
-                courseId: x.id,
+                courseId: x.courseId,
                 title: x.title,
                 categoryName: x.categoryName,
                 subCategoryName: x.subCategoryName,
                 currentItemCode: x.currentItemCode,
-                firstItemCode: x.firstItemCode,
                 teacherName: toFullName(x.teacherFirstName, x.teacherLastName),
                 thumbnailImageURL: thumbnailImageURL,
                 isComplete: x.isCompleted,
@@ -789,17 +788,17 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(CourseItemStateView, CourseItemDTO, courseItemView => {
+        .addMap(CourseItemPlaylistView, CourseItemDTO, courseItemView => {
 
             return {
-                id: courseItemView.itemId,
+                id: courseItemView.videoId || courseItemView.examId,
                 subTitle: courseItemView.itemSubtitle,
                 title: courseItemView.itemTitle,
                 orderIndex: courseItemView.itemOrderIndex,
-                state: courseItemView.state,
+                state: courseItemView.itemState,
                 descriptorCode: courseItemView.itemCode,
                 type: courseItemView.itemType === 'video' ? 'video' : 'exam',
-                shouldRepeatVideo: courseItemView.shouldRepeatVideo
+                shouldRepeatVideo: courseItemView.isRecommendedForPractise
             } as CourseItemDTO;
         });
 

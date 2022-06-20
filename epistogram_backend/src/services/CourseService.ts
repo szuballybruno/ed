@@ -10,7 +10,7 @@ import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
-import { CourseItemStateView } from '../models/views/CourseItemStateView';
+import { CourseItemPlaylistView } from '../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
@@ -362,10 +362,10 @@ export class CourseService {
     async getCourseModulesAsync(userId: number, courseId: number) {
 
         const views = await this._ormService
-            .getRepository(CourseItemStateView)
-            .createQueryBuilder('cisv')
-            .where('cisv.courseId = :courseId', { courseId })
-            .andWhere('cisv.userId = :userId', { userId: userId })
+            .getRepository(CourseItemPlaylistView)
+            .createQueryBuilder('cipv')
+            .where('cipv.courseId = :courseId', { courseId })
+            .andWhere('cipv.userId = :userId', { userId: userId })
             .getMany();
 
         const modules = views
@@ -373,11 +373,11 @@ export class CourseService {
             .map(x => {
 
                 const viewAsModule = x.items.first();
-                const isLockedModule = x.items[0]?.state === 'locked';
-                const isCompletedModule = x.items.all(x => x.state === 'completed');
-                const isCurrentModule = x.items.some(x => x.state === 'current') || viewAsModule.isModuleCurrent;
+                const isLockedModule = x.items[0]?.itemState === 'locked';
+                const isCompletedModule = x.items.all(x => x.itemState === 'completed');
+                const isCurrentModule = x.items.some(x => x.itemState === 'current') || viewAsModule.moduleIsCurrent;
                 const items = this._mapperService
-                    .mapMany(CourseItemStateView, CourseItemDTO, x.items);
+                    .mapMany(CourseItemPlaylistView, CourseItemDTO, x.items);
 
                 return {
                     id: viewAsModule.moduleId,

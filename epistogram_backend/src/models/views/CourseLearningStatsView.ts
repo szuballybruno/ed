@@ -9,10 +9,6 @@ export class CourseLearningStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
-
-    @ViewColumn()
-    @XViewColumn()
     userId: number;
 
     @ViewColumn()
@@ -39,9 +35,9 @@ export class CourseLearningStatsView {
     @XViewColumn()
     currentItemCode: string;
 
-    @ViewColumn()
-    @XViewColumn()
-    firstItemCode: string;
+    /*     @ViewColumn()
+        @XViewColumn()
+        firstItemCode: string; */
 
     @ViewColumn()
     @XViewColumn()

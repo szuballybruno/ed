@@ -7,7 +7,7 @@ export class CourseLearningDTO {
     categoryName: string;
     subCategoryName: string;
     currentItemCode: string;
-    firstItemCode: string;
+    // firstItemCode: string;
     isComplete: boolean;
     totalSpentSeconds: number;
     totalCourseItemCount: number;
