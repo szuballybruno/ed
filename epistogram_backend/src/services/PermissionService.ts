@@ -66,7 +66,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .getMany();
 
         return perms
-        
+
             .groupBy(x => x.permissionCode)
             .map(x => x.first.permissionCode);
 

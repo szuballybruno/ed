@@ -2,101 +2,24 @@ import { ClassType } from '../misc/advancedTypes/ClassType';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckCondition, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType } from './XORMTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, CheckExpressionType } from './XORMTypes';
 
-const getCheckCondition = <TEntityA, TEntityB, TParams>(
-    code: 'AND' | 'WHERE' | 'ON' | 'OR',
-    keyA: keyof TEntityA,
-    op: OperationType,
-    keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
-    params: TParams | undefined,
-    bracket: SQLBracketType,
-    classTypeA: ClassType<TEntityA>,
-    classTypeB?: ClassType<TEntityB>): CheckCondition<TEntityA, TEntityB> | CheckCondition<TEntityA, TParams> => {
+// class JoinBuilder<TEntity, TParams extends ParamConstraintType<TParams>> {
 
-    const isSimple = !classTypeB;
+//     private _builder: XQueryBuilder<TEntity, TParams>;
+//     private _entityClassType: ClassType<TEntity>;
+//     private _params: TParams | undefined;
 
-    const getOp = (op: OperationType, par: keyof TParams | SQLStaticValueType): [OperationType, SQLStaticValueType | keyof TParams] => {
+//     constructor(
+//         entityClassType: ClassType<TEntity>,
+//         builder: XQueryBuilder<TEntity, TParams>,
+//         params: TParams | undefined) {
 
-        return (params as any)[par] === null
-            ? ['IS' as OperationType, 'NULL' as SQLStaticValueType]
-            : [op, par];
-    };
-
-    if (isSimple) {
-
-        const [op2, par2] = getOp(op, keyB as keyof TParams | SQLStaticValueType);
-
-        const cond: CheckCondition<TEntityA, TParams> = {
-            code,
-            entityA: classTypeA,
-            keyA: keyA,
-            op: op2,
-            keyB: par2,
-            bracket
-        };
-
-        return cond;
-    }
-    else {
-
-        const cond: CheckCondition<TEntityA, TEntityB> = {
-            code,
-            entityA: classTypeA,
-            entityB: classTypeB,
-            keyA: keyA,
-            op: op,
-            keyB: keyB as keyof TEntityB | SQLStaticValueType,
-            bracket
-        };
-
-        return cond;
-    }
-};
-
-class JoinBuilder<TEntity, TParams extends ParamConstraintType<TParams>> {
-
-    private _builder: XQueryBuilder<TEntity, TParams>;
-    private _entityClassType: ClassType<TEntity>;
-    private _params: TParams | undefined;
-
-    constructor(
-        entityClassType: ClassType<TEntity>,
-        builder: XQueryBuilder<TEntity, TParams>,
-        params: TParams | undefined) {
-
-        this._builder = builder;
-        this._entityClassType = entityClassType;
-        this._params = params;
-    }
-
-    on(
-        keyA: keyof TEntity,
-        op: OperationType,
-        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams>;
-
-    on<TOtherEntity>(
-        keyA: keyof TEntity,
-        op: OperationType,
-        keyB: keyof TOtherEntity,
-        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams>
-
-    on<TOtherEntity>(
-        keyA: keyof TEntity,
-        op: OperationType,
-        keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
-        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams> {
-
-        const cond = getCheckCondition('ON', keyA, op, keyB, this._params, null, this._entityClassType, classTypeOther);
-
-        this
-            ._builder
-            ._expression
-            .push(cond);
-
-        return this._builder;
-    }
-}
+//         this._builder = builder;
+//         this._entityClassType = entityClassType;
+//         this._params = params;
+//     }
+// }
 
 type SelectBuilderBackrefType<TResult> = {
     columnSelects: SelectColumnsType<any, TResult>[]
@@ -192,7 +115,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
                 keyA: keyA,
                 op: op,
                 keyB: keyB
-            } as CheckCondition<TEntity, TParams>);
+            } as CheckExpression<TEntity, TParams>);
 
         return this;
     }
@@ -231,10 +154,10 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
         classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult> {
 
-        const cond = getCheckCondition('AND', keyA, op, keyB, this._params, this._bracket, this._mainClassType, classTypeOther);
+        const cond = this.getCheckCondition('AND', keyA, op, keyB, this._bracket, this._mainClassType, classTypeOther);
 
         // clear bracket 
-        this.clearBracket();
+        this._clearBracket();
 
         this._expression
             .push(cond);
@@ -259,10 +182,10 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
         classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult> {
 
-        const cond = getCheckCondition('OR', keyA, op, keyB, this._params, this._bracket, this._mainClassType, classTypeOther);
+        const cond = this.getCheckCondition('OR', keyA, op, keyB, this._bracket, this._mainClassType, classTypeOther);
 
         // clear bracket 
-        this.clearBracket();
+        this._clearBracket();
 
         this._expression
             .push(cond);
@@ -270,9 +193,35 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         return this;
     }
 
+    on(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | SQLStaticValueType): XQueryBuilder<TEntity, TParams, TResult>;
+
+    on<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TOtherEntity,
+        classTypeOther: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult>
+
+    on<TOtherEntity>(
+        keyA: keyof TEntity,
+        op: OperationType,
+        keyB: keyof TParams | keyof TOtherEntity | SQLStaticValueType,
+        classTypeOther?: ClassType<TOtherEntity>): XQueryBuilder<TEntity, TParams, TResult> {
+
+        const cond = this.getCheckCondition('ON', keyA, op, keyB, null, this._mainClassType, classTypeOther);
+
+        this
+            ._expression
+            .push(cond);
+
+        return this;
+    }
+
     leftJoin<TJoinEntity>(
         joinEntity: ClassType<TJoinEntity>,
-        cond: (builder: JoinBuilder<TJoinEntity, TParams>) => void) {
+        cond: (builder: XQueryBuilder<TJoinEntity, TParams>) => void) {
 
         // left join 
         const leftJoin: LeftJoinCondition<TJoinEntity> = {
@@ -285,9 +234,8 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
 
         // on, and etc
         const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._loggingEnabled, this._params);
-        const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
 
-        cond(builder);
+        cond(queryBuilder);
 
         this._expression = this._expression
             .concat(queryBuilder._expression);
@@ -298,7 +246,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
 
     innerJoin<TJoinEntity>(
         joinEntity: ClassType<TJoinEntity>,
-        cond: (builder: JoinBuilder<TJoinEntity, TParams>) => XQueryBuilder<TJoinEntity, TParams>) {
+        cond: (builder: XQueryBuilder<TJoinEntity, TParams>) => XQueryBuilder<TJoinEntity, TParams>) {
 
         // inner join 
         const innerJoin: InnerJoinCondition<TJoinEntity> = {
@@ -311,9 +259,9 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
 
         // on, and etc
         const queryBuilder = new XQueryBuilder(this._sqlConnection, joinEntity, this._loggingEnabled, this._params);
-        const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
+        // const builder = new JoinBuilder<TJoinEntity, TParams>(joinEntity, queryBuilder, this._params);
 
-        cond(builder);
+        cond(queryBuilder);
 
         this._expression = this._expression
             .concat(queryBuilder._expression);
@@ -339,9 +287,36 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         return this;
     }
 
+    private getCheckCondition<TEntityA, TEntityB, TParams>(
+        code: 'AND' | 'WHERE' | 'ON' | 'OR',
+        keyA: keyof TEntityA,
+        op: OperationType,
+        keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
+        bracket: SQLBracketType,
+        classTypeA: ClassType<TEntityA>,
+        classTypeB?: ClassType<TEntityB>): CheckExpression<TEntityA, TParams, TEntityB> {
+
+        const hasEntityRef = !classTypeB;
+
+        const expression: CheckExpression<TEntityA, TParams, TEntityB> = {
+            code,
+            type: this._getCheckExpressionType(keyB, classTypeB),
+            entityA: classTypeA,
+            keyA: keyA,
+            op: op,
+            keyB: keyB as keyof TParams | SQLStaticValueType,
+            bracket,
+        };
+
+        if (hasEntityRef)
+            expression.entityB = classTypeB;
+
+        return expression;
+    };
+
     async getSingle(): Promise<TResult> {
 
-        this.addDeletedCheck();
+        this._addDeletedCheck();
 
         const single = await this._connection
             .getSingle(this._mainClassType, this._expression, this._params);
@@ -351,7 +326,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
 
     async getOneOrNull(): Promise<TResult | null> {
 
-        this.addDeletedCheck();
+        this._addDeletedCheck();
 
         const oneOrNull = await this._connection
             .getOneOrNull(this._mainClassType, this._expression, this._params);
@@ -361,7 +336,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
 
     async getMany(): Promise<TResult[]> {
 
-        this.addDeletedCheck();
+        this._addDeletedCheck();
 
         const rows = await this._connection
             .getMany(this._mainClassType, this._expression, this._params);
@@ -369,12 +344,30 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         return rows as any as TResult[];
     }
 
-    private clearBracket() {
+    //
+    // ----------- PRIVATE 
+    //
+
+    private _getCheckExpressionType(keyB: any, classTypeB?: ClassType<any>): CheckExpressionType {
+
+        return classTypeB
+            ? 'ENTITY_REF'
+            : this._isSQLStaticValue(keyB)
+                ? 'STATIC_VALUE'
+                : 'PARAMS';
+    }
+
+    private _isSQLStaticValue(value: string) {
+
+        return value === 'NULL' || value === 'false' || value === 'true';
+    }
+
+    private _clearBracket() {
 
         this._bracket = null;
     }
 
-    private addDeletedCheck() {
+    private _addDeletedCheck() {
 
         if (this._allowDeleted)
             return;
@@ -388,13 +381,14 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
 
         const isInsert = whereIndex !== -1;
 
-        const getDelChck = (): CheckCondition<TEntity, TParams> => {
+        const getDelChck = (): CheckExpression<TEntity, TParams> => {
 
             const clauseName = isInsert ? 'AND' : 'WHERE';
             const isNullCheck = deletionPropertyData.checkType === 'null';
 
             return {
                 code: clauseName,
+                type: 'STATIC_VALUE',
                 entityA: this._mainClassType,
                 keyA: deletionPropertyData.propName,
                 op: isNullCheck ? 'IS' : '=',
@@ -408,10 +402,5 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
                 .insert(whereIndex + 1, getDelChck())
             : this._expression
                 .push(getDelChck());
-    }
-
-    private getParamValue(key: any) {
-
-        return (this._params as any)[key];
     }
 }

@@ -12,14 +12,17 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
 export type SQLBracketType = null | '(' | ')';
+export type CheckExpressionType = 'PARAMS' | 'STATIC_VALUE' | 'ENTITY_REF';
 
-export type CheckCondition<TEntityA, TEntityB> = {
+
+export type CheckExpression<TEntityA, TParams, TEntityB = void> = {
     code: 'WHERE' | 'AND' | 'ON' | 'OR',
+    type: CheckExpressionType,
     entityA: ClassType<TEntityA>,
     entityB?: ClassType<TEntityB>,
     keyA: keyof TEntityA,
     op: OperationType,
-    keyB: keyof TEntityB | SQLStaticValueType,
+    keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
     bracket: SQLBracketType
 };
 
@@ -50,13 +53,15 @@ export type ClosingBracketCondition = {
 
 export type ExpressionPart<TEntity, TParams> =
     SelectCondition<TEntity> |
-    CheckCondition<any, any> |
+    CheckExpression<any, any, any> |
     LeftJoinCondition<any> |
     CrossJoinCondition<TEntity> |
     InnerJoinCondition<any> |
     ClosingBracketCondition;
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
+
+export type XOrmExpression = SimpleExpressionPart<any>[];
 
 export type ColumnSelectObjType<TEntity, TRes> = '*' | {
     [K in keyof Partial<TRes>]: keyof TEntity;

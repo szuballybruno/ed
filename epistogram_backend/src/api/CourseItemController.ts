@@ -13,7 +13,7 @@ export class CourseItemController {
     getCourseItemEditDataAction = async (params: ActionParams) => {
 
         const bod = params
-            .getBody();
+            .getQuery();
 
         const videoVersionId = bod
             .getValueOrNull(x => x.videoVersionId, 'int')

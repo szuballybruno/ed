@@ -71,7 +71,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        orm: false
+        orm: true
     };
 
     constructor(rootDirectory: string) {

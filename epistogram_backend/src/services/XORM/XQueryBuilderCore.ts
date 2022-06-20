@@ -3,18 +3,16 @@ import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CheckCondition, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType } from './XORMTypes';
+import { CheckExpression, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
 
 const INDENT = '   ';
 
 export class XQueryBuilderCore<TEntity, TParams> {
 
-    private _sqlConnectionService: SQLConnectionService;
-
-    constructor(sqlConnectionService: SQLConnectionService, private _loggingEnabled: boolean) {
-
-        this._sqlConnectionService = sqlConnectionService;
+    constructor(
+        private _sqlConnectionService: SQLConnectionService,
+        private _loggingEnabled: boolean) {
     }
 
     /**
@@ -23,16 +21,19 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async getSingle(
         classType: ClassType<TEntity>,
-        whereQuery: SimpleExpressionPart<TParams>[],
+        expression: XOrmExpression,
         params?: TParams): Promise<TEntity> {
 
-        const { fullQuery, sqlParamsList } = this._getFullQuery(classType, whereQuery, params ?? {} as any);
+        // compile expression
+        const { sqlQuery, sqlParams } = this
+            ._compileExpressionToSQLQuery(classType, expression, params ?? {} as any);
 
-        const rows = await this
-            .executeSQLQuery(fullQuery, sqlParamsList);
+        // execute query and get result rows
+        const resultRows = await this
+            ._executeSQLQuery(sqlQuery, sqlParams);
 
-        const errorEndingQueryLog = this.getSQLQueryLog(fullQuery, sqlParamsList);
-        const rowCount = rows.length;
+        const errorEndingQueryLog = this._getSQLQueryLog(sqlQuery, sqlParams);
+        const rowCount = resultRows.length;
 
         if (rowCount === 0)
             throw new Error(`SQL single query failed, 0 rows has been returned.\n${errorEndingQueryLog} `);
@@ -40,9 +41,9 @@ export class XQueryBuilderCore<TEntity, TParams> {
         if (rowCount > 1)
             throw new Error(`SQL single query failed, more than 1 rows has been returned.\n${errorEndingQueryLog} `);
 
-        const resultRow = rows[0];
+        const resultRow = resultRows[0];
 
-        this.checkColumnMappingIntegrity(resultRow, classType);
+        this._checkColumnMappingIntegrity(resultRow, classType);
 
         return resultRow;
     }
@@ -52,18 +53,21 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async getOneOrNull(
         classType: ClassType<TEntity>,
-        whereQuery: SimpleExpressionPart<TParams>[],
+        expression: XOrmExpression,
         params?: TParams): Promise<TEntity | null> {
 
-        const { fullQuery, sqlParamsList } = this._getFullQuery(classType, whereQuery, params ?? {} as any);
+        // compile expression
+        const { sqlQuery, sqlParams } = this
+            ._compileExpressionToSQLQuery(classType, expression, params ?? {} as any);
 
-        const rows = await this
-            .executeSQLQuery(fullQuery, sqlParamsList);
+        // execute query and get result rows
+        const resultRows = await this
+            ._executeSQLQuery(sqlQuery, sqlParams);
 
-        const row = rows[0] ?? null;
+        const row = resultRows[0] ?? null;
 
         if (row)
-            this.checkColumnMappingIntegrity(row, classType);
+            this._checkColumnMappingIntegrity(row, classType);
 
         return row;
     }
@@ -73,18 +77,21 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async getMany(
         classType: ClassType<TEntity>,
-        query: SimpleExpressionPart<TParams>[],
+        query: XOrmExpression,
         params?: TParams) {
 
-        const { fullQuery, sqlParamsList } = this
-            ._getFullQuery(classType, query, params ?? {} as any);
+        // compile expression
+        const { sqlQuery, sqlParams } = this
+            ._compileExpressionToSQLQuery(classType, query, params ?? {} as any);
 
-        const rows = await this.executeSQLQuery(fullQuery, sqlParamsList);
+        // execute query and get result rows
+        const resultRows = await this
+            ._executeSQLQuery(sqlQuery, sqlParams);
 
-        if (rows.length > 0)
-            this.checkColumnMappingIntegrity(rows[0], classType);
+        if (resultRows.length > 0)
+            this._checkColumnMappingIntegrity(resultRows[0], classType);
 
-        return rows;
+        return resultRows;
     }
 
     // ----- PRIVATE ----- //
@@ -92,39 +99,77 @@ export class XQueryBuilderCore<TEntity, TParams> {
     /**
      * Returns the full SQL query that can be run against the DB 
      */
-    private _getFullQuery(
+    private _compileExpressionToSQLQuery(
         classType: ClassType<TEntity>,
-        expressionParts: SimpleExpressionPart<TParams>[],
-        params: TParams) {
-
-        if (Object.values(params).any((x: any) => x === undefined))
-            throw new Error('One or more params are undefined!');
+        expressionParts: XOrmExpression,
+        params: TParams): { sqlQuery: string, sqlParams: any[] } {
 
         const tableName = `"${snk(classType.name)}"`;
         const sqlTableRef = `public.${tableName} ${tableName}`;
-        const sqlParamsList = this.getSQLParamsList(params);
 
+        // get processed params list 
+        const sqlParamsList = this
+            ._getSQLParamsList(params);
+
+        // compile all expression parts
         const queryAsString = expressionParts
-            .map(x => this.getCondition(x, sqlParamsList, sqlTableRef))
+            .map(x => this._compileExpressionPart(x, sqlParamsList, sqlTableRef))
             .join('');
 
         const isExplicitSelect = queryAsString
             .startsWith('SELECT');
 
-        const fullQuery = isExplicitSelect
+        const sqlQuery = isExplicitSelect
             ? queryAsString
             : `SELECT * FROM  ${sqlTableRef}${queryAsString}`;
 
+        // filter out null params since they're embedded in the sql query now
+        // as static values, ther's no need to supply them
+        const sqlParams = sqlParamsList
+            .filter(x => x.paramValue !== null);
+
         return {
-            sqlParamsList,
-            fullQuery
+            sqlParams,
+            sqlQuery
         };
     }
 
-    private getCondition(
+    /**
+     * Filters out undefined params. 
+     * Transforms params into raw sql value - sql $ token pairs
+     */
+    private _getSQLParamsList(params: TParams) {
+
+        return getKeys(params)
+            .filter(key => params[key] !== undefined)
+            .map((key, index): SQLParamType<TParams, keyof TParams> => {
+
+                const rawValue = params[key] as any;
+
+                const value = rawValue?.toSQLValue
+                    ? rawValue.toSQLValue()
+                    : rawValue;
+
+                const isArray = value && Array.isArray(value);
+                const token = isArray
+                    ? `ANY($${index + 1}::int[])`
+                    : `$${index + 1}`;
+
+                return ({
+                    token: token,
+                    paramName: key,
+                    paramValue: value
+                });
+            });
+    }
+
+    /**
+     * Turns an 'ExpressionPart' into SQL query 
+     */
+    private _compileExpressionPart(
         espressionPart: SimpleExpressionPart<TParams>,
         sqlParamsList: SQLParamType<TParams, keyof TParams>[],
-        sqlTableRef: string) {
+        sqlTableRef: string): string {
 
         // select condition
         if (espressionPart.code === 'SELECT') {
@@ -134,18 +179,18 @@ export class XQueryBuilderCore<TEntity, TParams> {
             const text = ((): string => {
 
                 if (selectCond.entity)
-                    return `"${this.toSQLSnakeCasing(selectCond.entity.name)}".*`;
+                    return `"${this._toSQLSnakeCasing(selectCond.entity.name)}".*`;
 
                 if (selectCond.columnSelects) {
 
                     const getSelectColumns = (x: SelectColumnsType<any, any>) => INDENT + getKeyValues(x.columnSelectObj)
-                        .map(kv => `"${this.toSQLSnakeCasing(x.classType.name)}".${this.toSQLSnakeCasing(kv.value)} ${this.toSQLSnakeCasing(kv.key as string)}`)
+                        .map(kv => `"${this._toSQLSnakeCasing(x.classType.name)}".${this._toSQLSnakeCasing(kv.value)} ${this._toSQLSnakeCasing(kv.key as string)}`)
                         .join(', ');
 
                     return selectCond
                         .columnSelects
                         .map(x => x.columnSelectObj === '*'
-                            ? `${INDENT}"${this.toSQLSnakeCasing(x.classType.name)}".*`
+                            ? `${INDENT}"${this._toSQLSnakeCasing(x.classType.name)}".*`
                             : getSelectColumns(x))
                         .join(',\n');
                 }
@@ -161,7 +206,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         else if (espressionPart.code === 'LEFT JOIN') {
 
             const joinCond = espressionPart as LeftJoinCondition<any>;
-            const joinTableName = this.toSQLTableName(joinCond.classType);
+            const joinTableName = this._toSQLTableName(joinCond.classType);
 
             return `\n\nLEFT JOIN ${joinTableName}`;
         }
@@ -170,7 +215,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         else if (espressionPart.code === 'INNER JOIN') {
 
             const joinCond = espressionPart as InnerJoinCondition<any>;
-            const joinTableName = this.toSQLTableName(joinCond.classType);
+            const joinTableName = this._toSQLTableName(joinCond.classType);
 
             return `\n\nINNER JOIN ${joinTableName}`;
         }
@@ -179,7 +224,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         else if (espressionPart.code === 'CROSS JOIN') {
 
             const joinCond = espressionPart as CrossJoinCondition<any>;
-            const joinTableName = this.toSQLTableName(joinCond.classType);
+            const joinTableName = this._toSQLTableName(joinCond.classType);
 
             return `\n\nCROSS JOIN ${joinTableName}`;
         }
@@ -193,73 +238,57 @@ export class XQueryBuilderCore<TEntity, TParams> {
         // where condition
         else {
 
-            const cond = espressionPart as CheckCondition<TEntity, TParams>;
-            const { code, entityA, entityB, keyA, keyB, op, bracket } = cond;
-            const isRefOther = !!entityB;
+            const cond = espressionPart as CheckExpression<TEntity, TParams>;
+            const { code, type, entityA, entityB, keyA, keyB, op, bracket } = cond;
 
-            const tableAName: string = this.toSQLTableName(entityA);
-            const snakeColumn: string = this.toSQLSnakeCasing(keyA as string);
+            const tableAName: string = this._toSQLTableName(entityA);
+            const snakeColumn: string = this._toSQLSnakeCasing(keyA as string);
             const fullValueA = `${tableAName}.${snakeColumn}`;
 
-            const operator: OperationType = op;
             const bracketProc = bracket ? '(' : '';
 
-            const fullValueB = (() => {
+            const { tokenValue } = ((): { tokenValue: string, paramsValue?: any } => {
 
-                if (this.isSQLStaticValue(keyB as string))
-                    return keyB as SQLStaticValueType;
+                // where condition right side is a 'static value' 
+                if (type === 'STATIC_VALUE')
+                    return { tokenValue: keyB as SQLStaticValueType };
 
-                if (isRefOther)
-                    return `${this.toSQLTableName(entityB)}.${this.toSQLSnakeCasing(keyB as string)}`;
+                // where condition right side is a 'ref to another entity' 
+                if (type === 'ENTITY_REF')
+                    return { tokenValue: `${this._toSQLTableName(entityB!)}.${this._toSQLSnakeCasing(keyB as string)}` };
 
-                return sqlParamsList
-                    .single(x => x.paramName === keyB)
-                    .token;
+                // where condition right side is a 'params value'
+                if (sqlParamsList.length === 0)
+                    throw new Error('Where condition is expecting a parameter, but the params list is empty!');
+
+                const param = sqlParamsList
+                    .single(x => x.paramName === keyB);
+
+                return { tokenValue: param.paramValue === null ? 'NULL' : param.token };
             })();
+
+            const operator: OperationType = tokenValue === 'NULL'
+                ? 'IS'
+                : op;
 
             const linebreak = code === 'WHERE' ? '\n' : '';
             const tab = code === 'AND' || code === 'OR' ? INDENT : '';
 
-            return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${fullValueB}`;
+            return `${linebreak}\n${tab}${code} ${bracketProc}${fullValueA} ${operator} ${tokenValue}`;
         }
     }
 
-    private toSQLTableName<T>(classType: ClassType<T>) {
+    private _toSQLTableName<T>(classType: ClassType<T>) {
 
-        return this.escapeTableName(this.toSQLSnakeCasing(classType.name));
+        return this._escapeTableName(this._toSQLSnakeCasing(classType.name));
     }
 
-    private getSQLParamsList(params: TParams) {
-
-        return getKeys(params)
-            .filter(key => params[key] !== null)
-            .map((key, index): SQLParamType<TParams, keyof TParams> => {
-
-                const rawValue = params[key] as any;
-
-                const value = rawValue.toSQLValue
-                    ? rawValue.toSQLValue()
-                    : rawValue;
-
-                const isArray = Array.isArray(value);
-                const token = isArray
-                    ? `ANY($${index + 1}::int[])`
-                    : `$${index + 1}`;
-
-                return ({
-                    token: token,
-                    paramName: key,
-                    paramValue: value
-                });
-            });
-    }
-
-    private escapeTableName(name: string) {
+    private _escapeTableName(name: string) {
 
         return `"${name}"`;
     }
 
-    private toSQLSnakeCasing(str: string) {
+    private _toSQLSnakeCasing(str: string) {
 
         return snk(str);
     }
@@ -267,11 +296,11 @@ export class XQueryBuilderCore<TEntity, TParams> {
     /**
      * Executes an SQL query against the DB and returns the results. 
      */
-    private async executeSQLQuery(
+    private async _executeSQLQuery(
         query: string,
         params?: SQLParamType<TParams, keyof TParams>[]) {
 
-        const queryLog = this.getSQLQueryLog(query, params);
+        const queryLog = this._getSQLQueryLog(query, params);
 
         try {
 
@@ -281,7 +310,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
                 log(queryLog, { color: ConsoleColor.purple, noStamp: true });
             }
 
-            const values = this.getParamValues(params);
+            const values = this._getParamValues(params);
 
             const res = await this._sqlConnectionService
                 .executeSQLAsync(query, values);
@@ -293,7 +322,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
                     const obj = {} as any;
 
                     getKeys(row)
-                        .forEach(key => obj[this.snakeToCamelCase(key as string)] = row[key]);
+                        .forEach(key => obj[this._snakeToCamelCase(key as string)] = row[key]);
 
                     return obj as TEntity;
                 });
@@ -306,18 +335,13 @@ export class XQueryBuilderCore<TEntity, TParams> {
         }
     }
 
-    private isSQLStaticValue(value: string) {
-
-        return value === 'NULL' || value === 'false' || value === 'true';
-    }
-
-    private getParamValues(params?: SQLParamType<TParams, keyof TParams>[]): any[] {
+    private _getParamValues(params?: SQLParamType<TParams, keyof TParams>[]): any[] {
 
         return (params ?? [])
-            .map(x => this.getParamValue(x));
+            .map(x => this._getParamValue(x));
     }
 
-    private getParamValue(param: SQLParamType<TParams, keyof TParams>): any {
+    private _getParamValue(param: SQLParamType<TParams, keyof TParams>): any {
 
         return param.paramValue;
     }
@@ -325,21 +349,21 @@ export class XQueryBuilderCore<TEntity, TParams> {
     /**
      * Returns a sophisticated SQL query error string.
      */
-    private getSQLQueryLog(query: string, params?: SQLParamType<TParams, keyof TParams>[]) {
+    private _getSQLQueryLog(query: string, params?: SQLParamType<TParams, keyof TParams>[]) {
 
         const paramPairs = (params ?? [])
-            .map((param) => `${param.token}: ${this.getParamValue(param)}`);
+            .map((param) => `${param.token}: ${this._getParamValue(param)}`);
 
         return `${query}\nValues: ${paramPairs.join(', ')}`;
     }
 
-    private snakeToCamelCase(snakeCaseString: string) {
+    private _snakeToCamelCase(snakeCaseString: string) {
 
         return snakeCaseString
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
     }
 
-    private checkColumnMappingIntegrity<T>(row: any, entitySignature: ClassType<T>) {
+    private _checkColumnMappingIntegrity<T>(row: any, entitySignature: ClassType<T>) {
 
         const rowKeys = Object.keys(row);
         const columnNames = getXViewColumnNames(entitySignature);
