@@ -102,6 +102,14 @@ export const formatTimespan = (seconds: number) => {
     return formattedSpentTime;
 };
 
+export const formatSeconds = (seconds: number) => {
+
+    const minutes = Math.floor(seconds / 60);
+    const subseconds = seconds - (minutes * 60);
+
+    return `${minutes === 0 ? '' : minutes + 'm '}${subseconds}s`;
+};
+
 export const areArraysEqual = <T>(arrA: T[], arrB: T[]) => {
 
     if (arrA.length !== arrB.length)

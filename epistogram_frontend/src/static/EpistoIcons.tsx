@@ -1,4 +1,4 @@
-import { Add, Delete } from '@mui/icons-material';
+import { Add, Delete, Timer } from '@mui/icons-material';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -10,5 +10,6 @@ export const EpistoIcons = {
     New: FiberNewIcon,
     Minus: RemoveIcon,
     ArrowCircleUp: ArrowCircleUpIcon,
-    Add: Add
+    Add: Add,
+    Timer: Timer
 };

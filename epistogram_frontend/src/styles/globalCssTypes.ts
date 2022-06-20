@@ -25,7 +25,8 @@ const globalCssGeneric = {
     roundBorders: 'normal',
     background: colors,
     width: widths,
-    height: heights
+    height: heights,
+    flex: '1'
 } as const;
 
 export type CSSOptionsType = gct<Mutable<typeof globalCssGeneric>>;

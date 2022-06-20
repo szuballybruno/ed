@@ -1,13 +1,10 @@
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { usePaging } from '../../../../static/frontendHelpers';
-import { } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { VideoEditDialogParams } from './VideoEditDialogTypes';
 import { VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
-
-export type EditQuestionFnType = <TField extends keyof QuestionEditDataDTO, >(key: number, field: TField, value: QuestionEditDataDTO[TField]) => void;
 
 export const VideoEditDialog = (props: {
     dialogLogic: EpistoDialogLogicType<VideoEditDialogParams>

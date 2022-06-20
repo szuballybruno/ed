@@ -354,6 +354,7 @@ export const AdminCourseContentSubpage = () => {
                         rows={preprocessedItems}
                         handleEdit={handleEdit}
                         getKey={getRowKey}
+                        hideFooter
                         initialState={{
                             pinnedColumns: {
                                 left: ['rowNumber', 'itemTitle'],

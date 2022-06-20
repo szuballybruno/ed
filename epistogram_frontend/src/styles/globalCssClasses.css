@@ -3,15 +3,19 @@
 .margin-all-px5 {
     margin: 5px;
 }
+
 .margin-all-px10 {
     margin: 10px;
 }
+
 .margin-all-px15 {
     margin: 15px;
 }
+
 .margin-all-px20 {
     margin: 20px;
 }
+
 .margin-all-px25 {
     margin: 25px;
 }
@@ -19,12 +23,15 @@
 .margin-left-px5 {
     margin-left: 5px;
 }
+
 .margin-left-px10 {
     margin-left: 10px;
 }
+
 .margin-left-px15 {
     margin-left: 15px;
 }
+
 .margin-left-px20 {
     margin-left: 20px;
 }
@@ -34,9 +41,11 @@
 .fontWeight-light {
     font-weight: 400;
 }
+
 .fontWeight-mid {
     font-weight: 500;
 }
+
 .fontWeight-heavy {
     font-weight: 600;
 }
@@ -46,9 +55,11 @@
 .fontSize2-small {
     font-size: 12px !important;
 }
+
 .fontSize2-normal {
     font-size: 14px !important;
 }
+
 .fontSize2-large {
     font-size: 16px !important;
 }
@@ -58,12 +69,15 @@
 .color-fontDark {
     color: #646464 !important;
 }
+
 .color-fontLight {
     color: #ffffff !important;
 }
+
 .color-fontGray {
     color: var(--intenseGray) !important;
 }
+
 .color-fontError {
     color: var(--mildRed) !important;
 }
@@ -73,15 +87,19 @@
 .background-fontDark {
     background: #646464 !important;
 }
+
 .background-fontLight {
     background: #ffffff !important;
 }
+
 .background-fontGray {
     background: var(--intenseGray) !important;
 }
+
 .background-fontError {
     background: var(--mildRed) !important;
 }
+
 .background-deepBlue {
     background: var(--deepBlue) !important;
 }
@@ -97,6 +115,7 @@
 .direction-vertical {
     flex-direction: column;
 }
+
 .direction-horizontal {
     flex-direction: row;
 }
@@ -105,9 +124,11 @@
 .align-flex-start {
     align-items: flex-start;
 }
+
 .align-center {
     align-items: center;
 }
+
 .align-flex-end {
     align-items: flex-end;
 }
@@ -116,9 +137,11 @@
 .justify-flex-start {
     justify-content: flex-start;
 }
+
 .justify-center {
     justify-content: center;
 }
+
 .justify-flex-end {
     justify-content: flex-end;
 }
@@ -131,4 +154,9 @@
 /* height */
 .height-stretch {
     height: 100%;
+}
+
+/* flex */
+.flex-1 {
+    flex: 1
 }
