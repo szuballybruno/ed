@@ -1,7 +1,6 @@
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
+import { Mutation } from '../../../../shared/dtos/mutations/Mutation';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
-
-type EditQuestionFnType = <TField extends keyof QuestionEditDataDTO, >(key: number, field: TField, value: QuestionEditDataDTO[TField]) => void;
 
 export type RowSchema = {
 
@@ -22,3 +21,5 @@ export type RowSchema = {
     text: string;
     isCorrect: boolean;
 };
+
+export type QuestionMutationsType = Mutation<QuestionEditDataDTO, 'questionVersionId'>[];
