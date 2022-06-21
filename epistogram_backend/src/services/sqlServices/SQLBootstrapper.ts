@@ -206,7 +206,7 @@ export class SQLBootstrapperService {
         return `CREATE VIEW ${viewName}\nAS\n${sql}`;
     };
 
-    private readSQLFile = (folderName: string, fileName: string) => {
+    private readSQLFile = (folderName: string, fileName: string, subFolder?: string) => {
 
         return readFileSync(this._configuration.getRootRelativePath(`/sql/${folderName}/${fileName}.sql`), 'utf8');
     };
