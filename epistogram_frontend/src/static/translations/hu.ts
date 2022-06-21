@@ -18,6 +18,8 @@ export const huTranslation: TranslationType = {
             details: 'Részletek',
             loading: 'Betöltés...',
             unknown: 'Ismeretlen',
+            ok: 'Ok',
+            reset: 'Visszaallitas',
 
             firstName: 'Keresztnév',
             lastName: 'Vezetéknév',

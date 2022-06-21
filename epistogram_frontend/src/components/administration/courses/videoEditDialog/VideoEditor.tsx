@@ -2,7 +2,8 @@ import { Flex } from '@chakra-ui/react';
 import { useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
-import { QuestionsEditGrid } from '../QuestionsEditGrid';
+import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
+import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
 
 export const VideoEditor = ({
     videoVersionId,
@@ -23,6 +24,8 @@ export const VideoEditor = ({
 
     const videoUrl = courseItemEditData?.videoUrl ?? '';
     const questions = courseItemEditData?.questions ?? [];
+
+    const logic = useQuestionEditGridLogic(questions, true, getPlayedSeconds);
 
     return <Flex
         direction="column"
@@ -51,9 +54,7 @@ export const VideoEditor = ({
         <Flex flex="1">
 
             <QuestionsEditGrid
-                getPlayedSeconds={getPlayedSeconds}
-                showTiming
-                questions={questions} />
+                logic={logic} />
         </Flex>
     </Flex>;
 };

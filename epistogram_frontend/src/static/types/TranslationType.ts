@@ -16,6 +16,8 @@ export type TranslationType = {
             details: string;
             loading: string;
             unknown: string;
+            ok: string;
+            reset: string;
 
             firstName: string;
             lastName: string;

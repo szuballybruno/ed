@@ -1,11 +1,10 @@
 import { Flex } from '@chakra-ui/react';
-import { Add } from '@mui/icons-material';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
-import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
-import { QuestionsEditGrid } from '../QuestionsEditGrid';
+import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
+import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
 
 export const ExamEditor = ({
     examVersionId,
@@ -21,19 +20,7 @@ export const ExamEditor = ({
 
     const questions = courseItemEditData?.questions ?? [];
 
-    const getColumnCountFromAnswers = (questions: QuestionEditDataDTO[]): number => {
-        const questionWithMostAnswer = questions
-            .find(x => {
-                let maxLength;
-
-                if (x.answers.length > maxLength)
-                    maxLength = x.answers.length;
-
-                return maxLength;
-            });
-
-        return questionWithMostAnswer?.answers.length || 4;
-    };
+    const logic = useQuestionEditGridLogic(questions);
 
     return <LoadingFrame
         loadingState={'success'}
@@ -53,7 +40,7 @@ export const ExamEditor = ({
 
             {/* questions list  */}
             <QuestionsEditGrid
-                questions={questions} />
+                logic={logic} />
 
             {/* buttons */}
             <Flex
@@ -61,21 +48,23 @@ export const ExamEditor = ({
                 marginTop="10px"
                 justify="flex-end">
 
-                {/* add */}
+                {/* reset */}
                 <EpistoButton
-                    onClick={() => 1}
-                    variant='outlined'>
+                    isDisabled={!logic.isAnyMutated}
+                    onClick={logic.resetMutations}
+                    variant="outlined">
 
-                    <Add />
+                    {translatableTexts.misc.reset}
                 </EpistoButton>
 
-                {/* save */}
+                {/* ok */}
                 <EpistoButton
-                    isDisabled={false}
+                    margin={{ left: 'px10' }}
+                    isDisabled={!logic.isAnyMutated}
                     onClick={() => 1}
                     variant="colored">
 
-                    {translatableTexts.misc.save}
+                    {translatableTexts.misc.ok}
                 </EpistoButton>
             </Flex>
         </Flex>

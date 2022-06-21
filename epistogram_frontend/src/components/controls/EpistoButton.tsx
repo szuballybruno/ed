@@ -1,5 +1,7 @@
 import { Button, ButtonProps } from '@mui/material';
 import { CSSProperties, forwardRef, ReactNode } from 'react';
+import { useCSSOptionClasses } from '../../static/frontendHelpers';
+import { CSSOptionsType } from '../../styles/globalCssTypes';
 
 export type EpistoButtonPropsType = {
     children?: string | ReactNode,
@@ -17,7 +19,7 @@ export type EpistoButtonPropsType = {
     buttonProps?: ButtonProps,
     name?: string
     type?: 'button' | 'submit' | 'reset' | undefined
-};
+} & CSSOptionsType;
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
 
@@ -35,8 +37,11 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         isDisabled,
         name,
         type,
-        onClickNoPropagation
+        onClickNoPropagation,
+        ...cssOptions
     } = props;
+
+    const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
 
     const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
 
@@ -71,7 +76,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         color="primary"
         ref={ref}
         disabled={isDisabled}
-        className={`${className} fontNormal14`}
+        className={`${className} fontNormal14 ${cssOptionClasses}`}
         type={type}
         style={{
             overflow: 'hidden',
@@ -97,7 +102,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             ...style
         }}
         {...buttonProps}>
-        
+
         {icon && <div
             style={{
                 marginRight: '5px'
