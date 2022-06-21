@@ -40,7 +40,7 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     renderCell?: (params: RenderCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     renderEditCell?: (params: RenderEditCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     width?: number;
-    editHandler?: (params: { rowKey: TKey, value: TRow[TField] }) => void;
+    editHandler?: (params: { rowKey: TKey, value: TRow[TField], row: TRow }) => void;
     resizable?: boolean;
     type?: 'int'
 };
@@ -59,7 +59,7 @@ const mapColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TS
     const def: GridColDef = {
         ...others,
         field: field as any,
-        editable: !!editHandler || !!renderEditCell
+        editable: !!editHandler
     };
 
     if (renderCell)
@@ -183,7 +183,13 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                     ? parseInt(value as any)
                     : value;
 
-                column.editHandler!({ rowKey, value: val });
+                const row = rows
+                    .single(x => getKey(x) === rowKey);
+
+                if (!column.editHandler)
+                    throw new Error('Trying to edit a cell but it has no edit handler!');
+
+                column.editHandler({ rowKey, value: val, row });
 
                 //     const writeField = 
 

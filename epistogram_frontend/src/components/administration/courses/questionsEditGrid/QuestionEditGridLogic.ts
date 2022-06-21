@@ -1,9 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
-import { iterate } from '../../../../static/frontendHelpers';
-import { useXListMutator } from '../../../lib/XMutator/XMutator';
+import { iterate, useForceUpdate } from '../../../../static/frontendHelpers';
+import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridLogic = (
@@ -11,18 +11,37 @@ export const useQuestionEditGridLogic = (
     showTiming?: boolean,
     getPlayedSeconds?: () => number) => {
 
-    const {
-        mutatedData: mutatedQuestions,
-        add: addQuestion,
-        mutate: mutateQuestion,
-        remove: removeQuestion,
-        isAnyMutated,
-        mutations,
-        resetMutations,
-        addOnMutationHandlers
-    } = useXListMutator<QuestionEditDataDTO, 'questionVersionId', number>(questions, 'questionVersionId', () => console.log(''));
+    // const {
+    //     mutatedData: mutatedQuestions,
+    //     add: addQuestion,
+    //     mutate: mutateQuestion,
+    //     remove: removeQuestion,
+    //     isAnyMutated,
+    //     mutations,
+    //     resetMutations,
+    //     addOnMutationHandlers
+    // } = useXListMutator<QuestionEditDataDTO, 'questionVersionId', number>(questions, 'questionVersionId', () => console.log(''));
 
-    console.log(mutations);
+    const forceUpdate = useForceUpdate();
+
+    const mutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', number>({
+        keyPropertyName: 'questionVersionId',
+        onMutatedItems: () => {
+            console.log('---------------- mut ------------------');
+            forceUpdate();
+        }
+    }));
+
+    useEffect(() => {
+
+        if (questions.length === 0)
+            return;
+
+        console.log('setting original items');
+        mutatorRef
+            .current
+            .setOriginalItems(questions);
+    }, [questions.length]);
 
     //
     // add question
@@ -41,17 +60,19 @@ export const useQuestionEditGridLogic = (
             answers
         };
 
-        addQuestion(question.questionVersionId, question);
-    }, [addQuestion]);
+        mutatorRef.current.add(question.questionVersionId, question);
+    }, []);
 
     //
     // rows
     const questionRows = useMemo((): RowSchema[] => {
 
-        if (mutatedQuestions.length === 0)
+        if (mutatorRef.current.mutatedItems.length === 0)
             return [];
 
-        return mutatedQuestions
+        return mutatorRef
+            .current
+            .mutatedItems
             .flatMap((question): RowSchema[] => {
 
                 const headerRow = {
@@ -60,24 +81,26 @@ export const useQuestionEditGridLogic = (
                     questionEditDTO: question,
                     questionShowUpTimeSeconds: question.questionShowUpTimeSeconds,
                     questionText: question.questionText,
-                    questionVersionId: question.questionVersionId
+                    questionVersionId: question.questionVersionId,
+                    itemText: question.questionText
                 } as RowSchema;
 
                 const answerRows = question
                     .answers
-                    .map((answer): Partial<RowSchema> => ({
+                    .map((answer): RowSchema => ({
+                        ...headerRow,
                         isQuestionHeader: false,
                         rowKey: `${question.questionVersionId}-${answer.answerVersionId}`,
-                        questionEditDTO: question,
                         answerEditDTO: answer,
                         answerVersionId: answer.answerVersionId,
                         isCorrect: answer.isCorrect,
-                        text: answer.text
+                        text: answer.text,
+                        itemText: answer.text,
                     })) as RowSchema[];
 
                 return [headerRow, ...answerRows];
             });
-    }, [mutatedQuestions]);
+    }, [mutatorRef.current.mutatedItems]);
 
     //
     // get key
@@ -85,15 +108,15 @@ export const useQuestionEditGridLogic = (
 
     return {
         questionRows,
-        showTiming, 
-        isAnyMutated,
-        mutatedQuestions,
+        showTiming,
+        isAnyMutated: mutatorRef.current.isAnyMutated,
+        mutatedQuestions: mutatorRef.current.mutatedItems,
         getKey,
         handleAddQuestion,
-        removeQuestion, 
-        getPlayedSeconds, 
-        mutateQuestion,
-        resetMutations
+        removeQuestion: mutatorRef.current.remove,
+        getPlayedSeconds,
+        mutateQuestion: mutatorRef.current.mutate,
+        resetMutations: mutatorRef.current.resetMutations
     };
 };
 

@@ -1,5 +1,7 @@
 import { Flex } from '@chakra-ui/react';
+import { useEffect, useMemo } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
+import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
@@ -18,9 +20,18 @@ export const ExamEditor = ({
     const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
         .useCourseItemEditData(null, examVersionId, endabled);
 
-    const questions = courseItemEditData?.questions ?? [];
+    const questions = useMemo(() => {
+
+        console.log('------ sadadwwdw');
+        return courseItemEditData?.questions ?? [];
+    }, [courseItemEditData]);
 
     const logic = useQuestionEditGridLogic(questions);
+
+    useEffect(() => {
+
+        console.log('questions changed!');
+    }, [questions]);
 
     return <LoadingFrame
         loadingState={'success'}

@@ -874,8 +874,14 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 };
 
 export const useForceUpdate = () => {
+    
     const [, setValue] = useState(0); // integer state
     return () => setValue(value => value + 1); // update the state to force render
+};
+
+export const clone = <T>(item: T) => {
+
+    return JSON.parse(JSON.stringify(item)) as T;
 };
 
 export const setPageTitle = (title: string) => {

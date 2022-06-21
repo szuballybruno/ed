@@ -10,6 +10,7 @@ export type RowSchema = {
     rowKey: string;
     questionEditDTO: QuestionEditDataDTO;
     answerEditDTO: AnswerEditDTO;
+    itemText: string;
 
     // question fileds
     questionVersionId: number;
