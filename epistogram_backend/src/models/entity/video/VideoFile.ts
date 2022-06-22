@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { StorageFile } from '.././StorageFile';
 import { VideoData } from './VideoData';
 
@@ -7,18 +7,24 @@ import { VideoData } from './VideoData';
 export class VideoFile {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column({ type: 'double precision' })
+    @XViewColumn()
     lengthSeconds: number;
 
-    // video file
-    @Column({ nullable: true })
-    storageFileId: number;
+    // TO ONE 
 
+    // storage file
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
+    storageFileId: number;
     @XManyToOne<VideoFile>()(() => StorageFile, s => s.videoFiles)
     @XJoinColumn<VideoFile>('storageFileId')
     storageFile: Relation<StorageFile>;
+
+    // TO MANY
 
     // videos 
     @XOneToMany<VideoFile>()(() => VideoData, x => x.videoFile)

@@ -1,6 +1,14 @@
+import { Video } from '../models/entity/video/Video';
+import { VideoData } from '../models/entity/video/VideoData';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { CourseItemEditView } from '../models/views/CourseItemEditView';
+import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { CourseItemType } from '../shared/types/sharedTypes';
+import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
+import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class CourseItemService {
@@ -31,5 +39,98 @@ export class CourseItemService {
 
         return this._mapperService
             .mapTo(CourseItemEditDTO, [views]);
+    }
+
+    /**
+     * Inserts new course items
+     * attached to a CourseVersion
+     */
+    async saveNewCourseItemsAsync(
+        moduleMigrations: VersionMigrationResult[],
+        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+
+        const filterMutations = (
+            itemType: CourseItemType) => {
+
+            return mutations
+                .filter(x => x.action === 'add')
+                .filter(x => XMutatorHelpers
+                    .anyField(x)('itemType', itemType))
+        };
+
+        await this
+            ._createNewVideosAsync(filterMutations('video'), moduleMigrations);
+    }
+
+    /**
+     * Creates new videos from 
+     * video ADD mutations  
+     */
+    private async _createNewVideosAsync(
+        videoMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+        moduleMigrations: VersionMigrationResult[]) {
+
+        //
+        // CREATE VIDEO DATAS
+        const videoDatas = videoMutations
+            .map((x) => {
+
+                const videoData = XMutatorHelpers
+                    .mapMutationToPartialObject(x);
+
+                if (!videoData.itemOrderIndex)
+                    throw new Error('itemOrderIndex is null or undefiend');
+
+                const newVideoData: InsertEntity<VideoData> = {
+                    title: videoData.itemTitle ?? '',
+                    subtitle: videoData.itemSubtitle ?? '',
+                    orderIndex: videoData.itemOrderIndex,
+                    description: '',
+                    thumbnailFileId: null,
+                    videoFileId: null
+                };
+
+                return newVideoData;
+            });
+
+        const videoDataIds = await this._ormService
+            .createManyAsync(VideoData, videoDatas);
+
+        //
+        // CREATE VIDEOS 
+        const videos = videoMutations
+            .map(x => {
+
+                const video: InsertEntity<Video> = {};
+                return video;
+            });
+
+        const videoIds = await this._ormService
+            .createManyAsync(Video, videos);
+
+        //
+        // CREATE VIDEO VERSIONS 
+        const videoVersions = videoMutations
+            .map((x, i) => {
+
+                const videoDataId = videoDataIds[i];
+                const videoId = videoIds[i];
+                const oldModuleVersionId = XMutatorHelpers
+                    .getFieldValueOrFail(x)('moduleVersionId');
+
+                const newModuleVersionId = VersionMigrationHelpers
+                    .getNewVersionId(moduleMigrations, oldModuleVersionId);
+
+                const videoVersion: InsertEntity<VideoVersion> = {
+                    moduleVersionId: newModuleVersionId,
+                    videoDataId: videoDataId,
+                    videoId: videoId
+                };
+
+                return videoVersion;
+            });
+
+        await this._ormService
+            .createManyAsync(VideoVersion, videoVersions);
     }
 }

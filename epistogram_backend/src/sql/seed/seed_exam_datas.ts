@@ -9,8 +9,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         subtitle: null,
         thumbnailUrl: null,
         title: '[signup exam]',
-        isFinal: false,
-        deletionDate: null
+        isFinal: false
     },
     exam_data_8: {
         title: 'Első lépések témazáró',
@@ -19,7 +18,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 15,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: null,
     },
     exam_data_9: {
@@ -29,7 +27,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 25,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: null,
     },
     exam_data_10: {
@@ -39,7 +36,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 1,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: null,
     },
     exam_data_15: {
@@ -49,7 +45,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 15,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_16: {
@@ -59,7 +54,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 11,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_17: {
@@ -69,7 +63,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 12,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_18: {
@@ -79,7 +72,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 17,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_20: {
@@ -89,7 +81,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 118,
         isFinal: true,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_21: {
@@ -99,7 +90,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 18,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_12: {
@@ -109,7 +99,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 14,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_13: {
@@ -119,7 +108,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 9,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_14: {
@@ -129,7 +117,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 16,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_22: {
@@ -139,7 +126,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 29,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_23: {
@@ -149,7 +135,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 17,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_24: {
@@ -159,7 +144,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 18,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_25: {
@@ -169,7 +153,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 18,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_26: {
@@ -179,7 +162,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 123,
         isFinal: true,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_27: {
@@ -189,7 +171,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 25,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_28: {
@@ -199,7 +180,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 13,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_29: {
@@ -209,7 +189,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 19,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_30: {
@@ -219,7 +198,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 5,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_31: {
@@ -229,7 +207,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 12,
         isFinal: false,
-        deletionDate: null,
         retakeLimit: 3,
     },
     exam_data_32: {
@@ -239,7 +216,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         thumbnailUrl: null,
         orderIndex: 4,
         isFinal: true,
-        deletionDate: null,
         retakeLimit: 1,
     },
     pretest_exam_data_33: {
@@ -249,8 +225,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_34: {
         title: 'Pretest exam course 10',
@@ -259,8 +234,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_35: {
         title: 'Pretest exam course 23',
@@ -269,8 +243,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_36: {
         title: 'Pretest exam course 24',
@@ -279,8 +252,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_37: {
         title: 'Pretest exam course 26',
@@ -289,8 +261,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_38: {
         title: 'Pretest exam course 25',
@@ -299,8 +270,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_39: {
         title: 'Word',
@@ -309,8 +279,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_40: {
         title: 'OBS',
@@ -319,8 +288,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_41: {
         title: 'PowerPoint',
@@ -329,8 +297,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_42: {
         title: 'Pretest exam course 29',
@@ -339,8 +306,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     },
     pretest_exam_data_43: {
         title: 'Microsoft Excel szintfelmérő vizsga',
@@ -349,8 +315,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
-        thumbnailUrl: null,
-        deletionDate: null
+        thumbnailUrl: null
     }
 });
 

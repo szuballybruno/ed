@@ -1,5 +1,5 @@
 import { DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';
 import { CourseAccessBridge } from '../CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from '../courseRating/CourseRatingQuestionUserAnswer';
@@ -12,8 +12,9 @@ import { CourseVersion } from './CourseVersion';
 export class Course {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
-    
+
     // deleted flag - deletion is associated 
     // with the high level course entity,
     // if an old version of the course is referenced,
@@ -23,6 +24,8 @@ export class Course {
     @IsDeletedFlag()
     @DeleteDateColumn()
     deletionDate: Date | null;
+
+    // TO MANY
 
     // shop items
     @XOneToMany<Course>()(() => ShopItem, x => x.course)
@@ -35,11 +38,11 @@ export class Course {
     // courseAccessBridges
     @XOneToMany<Course>()(() => CourseAccessBridge, x => x.course)
     userAccessBridges: CourseAccessBridge[];
-    
+
     // contextPermissionAssignmentBridges
     @XOneToMany<Course>()(() => PermissionAssignmentBridge, x => x.contextCourse)
     contextPermissionAssignmentBridges: PermissionAssignmentBridge[];
-    
+
     // prequiz questions
     @XOneToMany<Course>()(() => PrequizUserAnswer, x => x.course)
     prequizUserAnswers: PrequizUserAnswer[];

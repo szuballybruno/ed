@@ -22,7 +22,6 @@ item_count AS
 )
 SELECT 
 	mv.module_id,
-	md.deletion_date deletion_date,
 	md.name module_name,
 	md.description description,
 	md.order_index order_index,

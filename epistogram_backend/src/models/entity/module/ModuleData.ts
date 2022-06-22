@@ -1,5 +1,5 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { StorageFile } from '../StorageFile';
 import { ModuleVersion } from './ModuleVersion';
 
@@ -7,22 +7,23 @@ import { ModuleVersion } from './ModuleVersion';
 export class ModuleData {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
-    @IsDeletedFlag()
-    @DeleteDateColumn()
-    deletionDate: Date | null;
-
     @Column()
+    @XViewColumn()
     name: string;
 
     @Column()
+    @XViewColumn()
     description: string;
 
     @Column()
+    @XViewColumn()
     orderIndex: number;
 
     @Column()
+    @XViewColumn()
     isPretestModule: boolean;
 
     // 
@@ -31,6 +32,7 @@ export class ModuleData {
 
     // image file 
     @Column({ nullable: true, type: 'integer' })
+    @XViewColumn()
     imageFileId: number | null;
     @OneToOne(_ => StorageFile, x => x.courseModule)
     @JoinColumn({ name: 'image_file_id' })

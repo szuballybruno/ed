@@ -1,16 +1,21 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { User } from './User';
 
 @Entity()
 export class JobTitle {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column()
+    @XViewColumn()
     name: string;
 
-    // user 
+    // TO MANY
+
+    // users
     @OneToMany(_ => User, x => x.jobTitle)
     @JoinColumn()
     users: User[];

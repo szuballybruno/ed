@@ -24,3 +24,15 @@ export type KeyofConstrained<TOriginal, TConstraint> = keyof {
 }
 
 export const instatiateInsertEntity = <T>(entity: InsertEntity<T>) => entity as T;
+
+export type VersionMigrationResult = { oldVersionId: number, newVersionId: number };
+
+export const VersionMigrationHelpers = {
+
+    getNewVersionId: (migrations: VersionMigrationResult[], oldVersionId: number) => {
+
+        return migrations
+            .single(x => x.oldVersionId === oldVersionId)
+            .newVersionId;
+    }
+}

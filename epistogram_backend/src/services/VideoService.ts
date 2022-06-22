@@ -13,7 +13,6 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { UrlService } from './UrlService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
-import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { throwNotImplemented, withValue } from '../utilities/helpers';
 import { AnswerData } from '../models/entity/answer/AnswerData';

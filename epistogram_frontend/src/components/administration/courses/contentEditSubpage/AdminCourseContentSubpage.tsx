@@ -265,11 +265,11 @@ export const AdminCourseContentSubpage = () => {
         closeAddPopper();
     };
 
-    const handleSaveAsync = async () => {
+    const handleSaveAsync = useCallback(async () => {
 
         try {
 
-            await saveCourseDataAsync(mutations);
+            await saveCourseDataAsync({ courseId, mutations });
             resetMutations();
             refetchCourseContentAdminData();
         }
@@ -277,7 +277,7 @@ export const AdminCourseContentSubpage = () => {
 
             showError(e);
         }
-    };
+    }, [mutations]);
 
     const gridColumns = useGridColumnDefinitions(modules, openDialog, removeRow, mutateRow);
 

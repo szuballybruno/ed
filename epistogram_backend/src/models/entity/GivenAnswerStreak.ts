@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CoinTransaction } from './CoinTransaction';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
@@ -7,17 +8,24 @@ import { User } from './User';
 export class GivenAnswerStreak {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column()
+    @XViewColumn()
     isFinalized: boolean;
 
-    // user 
-    userId: number;
+    // TO ONE
 
+    // user 
+    @Column()
+    @XViewColumn()
+    userId: number;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
+
+    // TO MANY
 
     // given answers
     @JoinColumn()

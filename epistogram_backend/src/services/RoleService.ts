@@ -186,7 +186,7 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
 
         await this._ormService
-            .createMany(RoleAssignmentBridge, newBridges);
+            .createManyAsync(RoleAssignmentBridge, newBridges);
 
         // DEASSING
         const roleBridgeIdsToDeassign = assignedRoles
@@ -223,7 +223,7 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
 
         await this._ormService
-            .createMany(PermissionAssignmentBridge, permBridges);
+            .createManyAsync(PermissionAssignmentBridge, permBridges);
     }
 
     async createRoleAsync(principalId: PrincipalId, dto: RoleCreateDTO) {

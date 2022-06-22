@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { DailyTip } from './DailyTip';
 import { QuestionData } from './question/QuestionData';
 import { QuestionVersion } from './question/QuestionVersion';
@@ -7,22 +8,30 @@ import { QuestionVersion } from './question/QuestionVersion';
 export class PersonalityTraitCategory {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column()
+    @XViewColumn()
     title: string;
 
     @Column()
+    @XViewColumn()
     minLabel: string;
 
     @Column()
+    @XViewColumn()
     maxLabel: string;
 
     @Column()
+    @XViewColumn()
     minDescription: string;
 
     @Column()
+    @XViewColumn()
     maxDescription: string;
+
+    // TO MANY
 
     // questions
     @OneToMany(_ => QuestionVersion, x => x.personalityTraitCategory)

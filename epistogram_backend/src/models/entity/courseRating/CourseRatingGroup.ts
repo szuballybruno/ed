@@ -1,15 +1,19 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { CourseData } from '../course/CourseData';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { CourseRatingQuestion } from './CourseRatingQuestion';
 
 @Entity()
 export class CourseRatingGroup {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column()
+    @XViewColumn()
     name: string;
+
+    // TO MANY
 
     // courseRatingQuestions
     @JoinColumn()
