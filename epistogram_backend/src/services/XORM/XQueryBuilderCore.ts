@@ -43,9 +43,6 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const resultRow = resultRows[0];
 
-        if (!isExplicitSelect)
-            this._checkColumnMappingIntegrity(resultRow, classType);
-
         return resultRow;
     }
 
@@ -67,9 +64,6 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const row = resultRows[0] ?? null;
 
-        if (!isExplicitSelect && row)
-            this._checkColumnMappingIntegrity(row, classType);
-
         return row;
     }
 
@@ -88,9 +82,6 @@ export class XQueryBuilderCore<TEntity, TParams> {
         // execute query and get result rows
         const resultRows = await this
             ._executeSQLQuery(sqlQuery, sqlParams);
-
-        if (!isExplicitSelect && resultRows.length > 0)
-            this._checkColumnMappingIntegrity(resultRows[0], classType);
 
         return resultRows;
     }
@@ -388,23 +379,5 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         return snakeCaseString
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-    }
-
-    private _checkColumnMappingIntegrity<T>(row: any, entitySignature: ClassType<T>) {
-
-        const rowKeys = Object.keys(row);
-        const columnNames = getXViewColumnNames(entitySignature);
-
-        if (columnNames.length === 0)
-            return;
-
-        const missingColumns = columnNames
-            .filter(columnName => !rowKeys
-                .any(rowKey => rowKey === columnName));
-
-        if (missingColumns.length === 0)
-            return;
-
-        throw new Error(`Column mapping mismatch in ${entitySignature.name}, columns are missing from the returned row(s): [${missingColumns.join(', ')}]`);
     }
 }
