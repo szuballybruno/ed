@@ -88,7 +88,7 @@ import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
 import { LatestExamView } from '../../models/views/LatestExamView';
-import { ExamDataView } from '../../models/views/ExamDataView';
+import { QuestionDataView } from '../../models/views/QuestionDataView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
@@ -178,6 +178,9 @@ import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
+import { VideoVersionView } from '../../models/views/VideoVersionView';
+import { ExamVersionView } from '../../models/views/ExamVersionView';
+import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -272,7 +275,9 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'user_session_view', UserSessionView],
             ['basic', 'video_cursor_seconds_view', VideoCursorSecondsView],
             ['basic', 'video_playback_sample_view'],
-            ['basic', 'video_version_view'],
+            ['basic', 'video_version_view', VideoVersionView],
+            ['basic', 'exam_version_view', ExamVersionView],
+            ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view
             ['common', 'answer_session_evaluation_view'], // 3 | 1 answer_session_view
             ['common', 'exam_completed_view', ExamCompletedView], // 6 | 1 answer_session_evaluation_view
@@ -284,7 +289,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'exam_latest_success_rate_view'], // 1 course_learning_stats_view
             ['common', 'course_spent_time_view'], // 2 course_learning_stats_view, user_spent_time_ratio_view
             ['common', 'course_item_count_view'], // 6
-            ['common', 'exam_data_view', ExamDataView], // 0 | latest_question_view
+            ['common', 'question_data_view', QuestionDataView], // 0 | latest_question_view
             ['common', 'user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView], // 1 user_course_stats_view
             ['common', 'user_course_completion_current_view', UserCourseCompletionCurrentView], // 2 user_course_progress_view, user_course_recommended_item_quota_view
             ['common', 'user_answer_view', UserAnswerView], // 2 user_performance_answer_group_view, user_video_stats_view

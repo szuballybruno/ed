@@ -78,7 +78,7 @@ export class PlaybackService extends ServiceBase {
     async saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
 
         const { fromSeconds, toSeconds, videoItemCode, videoPlaybackSessionId } = videoSeekEventDTO;
-        const { itemId, itemType } = readItemCode(videoItemCode);
+        const { itemVersionId, itemType } = readItemCode(videoItemCode);
 
         if (itemType !== 'video')
             throw new Error('Wrong item type: ' + itemType);
@@ -89,7 +89,7 @@ export class PlaybackService extends ServiceBase {
                 fromSeconds: fromSeconds,
                 toSeconds: toSeconds,
                 userId: principalId.toSQLValue(),
-                videoVersionId: itemId,
+                videoVersionId: itemVersionId,
                 videoPlaybackSessionId: videoPlaybackSessionId,
                 isForward: fromSeconds <= toSeconds
             });
@@ -98,12 +98,12 @@ export class PlaybackService extends ServiceBase {
     /**
      * Gets the max watched seconds // TODO clarify this
      */
-    getMaxWatchedSeconds = async (userId: number, videoId: number) => {
+    getMaxWatchedSeconds = async (userId: number, videoVersionId: number) => {
 
         const ads = await this._ormService
-            .query(VideoCursorSecondsView, { userId, videoId })
+            .query(VideoCursorSecondsView, { userId, videoVersionId })
             .where('userId', '=', 'userId')
-            .and('videoId', '=', 'videoId')
+            .and('videoVersionId', '=', 'videoVersionId')
             .getSingle();
 
         return ads.toSeconds;

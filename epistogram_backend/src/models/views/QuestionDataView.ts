@@ -6,11 +6,15 @@ import { XViewColumn } from "../../services/XORM/XORMDecorators";
     expression: ''
 })
 
-export class ExamDataView {
+export class QuestionDataView {
 
     @ViewColumn()
     @XViewColumn()
     questionId: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    videoVersionId: number;
 
     @ViewColumn()
     @XViewColumn()

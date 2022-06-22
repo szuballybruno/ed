@@ -11,9 +11,14 @@ export class ExamResultView {
     @XViewColumn()
     userId: number;
 
+
     @ViewColumn()
     @XViewColumn()
     examId: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    examVersionId: number;
 
     @ViewColumn()
     @XViewColumn()

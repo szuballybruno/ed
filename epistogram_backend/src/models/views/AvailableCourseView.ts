@@ -33,9 +33,9 @@ export class AvailableCourseView {
     @XViewColumn()
     isStarted: boolean;
 
-    // @ViewColumn()
-    // @XViewColumn()
-    // firstItemCode: string;
+    @ViewColumn()
+    @XViewColumn()
+    firstItemCode: string;
 
     @ViewColumn()
     @XViewColumn()

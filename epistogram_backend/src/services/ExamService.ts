@@ -5,7 +5,7 @@ import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge'
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamView } from '../models/views/ExamView';
-import { ExamDataView } from '../models/views/ExamDataView';
+import { QuestionDataView } from '../models/views/QuestionDataView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
 import { PrincipalId } from '../utilities/ActionParams';
@@ -19,6 +19,7 @@ import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
+import { ExamVersionView } from '../models/views/ExamVersionView';
 
 export class ExamService extends QueryServiceBase<ExamData> {
 
@@ -70,7 +71,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .getSingle();
 
         const questions = await this
-            ._getExamDataAsync(examView.examVersionId);
+            ._getQuestionDataByExamVersionId(examView.examVersionId);
 
         if (questions.length === 0)
             throw new Error('Exam has no questions assigend.');
@@ -85,16 +86,16 @@ export class ExamService extends QueryServiceBase<ExamData> {
      * @param examVersionId 
      * @returns 
      */
-    private async _getExamDataAsync(examVersionId: number) {
+    private async _getQuestionDataByExamVersionId(examVersionId: number) {
 
-        const examQuestions = await this._ormService
-            .query(ExamDataView, { examVersionId })
+        const questionData = await this._ormService
+            .query(QuestionDataView, { examVersionId })
             .where('examVersionId', '=', 'examVersionId')
             .getMany()
 
-        console.log(examQuestions)
+        console.log(questionData)
 
-        return examQuestions
+        return questionData
     }
 
     /**
@@ -121,7 +122,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     getExamByIdAsync = (examId: number) => {
 
         return this._ormService
-            .getSingleById(ExamData, examId);
+            .getSingleById(ExamVersionView, examId);
     };
 
     /**
@@ -273,7 +274,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         const currentItemCode = await this._userCourseBridgeService
             .getCurrentItemCodeOrFailAsync(userId.toSQLValue());
 
-        const { itemId: currentExamId, itemType } = readItemCode(currentItemCode);
+        const { itemVersionId, itemType } = readItemCode(currentItemCode);
 
         if (itemType !== 'exam')
             throw new Error('Current item is not an exam!');
@@ -282,7 +283,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .getRepository(ExamResultView)
             .find({
                 where: {
-                    examId: currentExamId,
+                    examVersionId: itemVersionId,
                     userId: userId.toSQLValue(),
                     answerSessionId: answerSessionId
                 }

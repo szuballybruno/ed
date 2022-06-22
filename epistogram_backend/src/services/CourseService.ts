@@ -404,20 +404,19 @@ export class CourseService {
      * @param descriptorCode 
      * @returns 
      */
-    async getCourseIdByItemCodeAsync(descriptorCode: string) {
+    async getCourseVersionIdByItemCodeAsync(descriptorCode: string) {
 
-        throwNotImplemented();
-        // const { itemId, itemType } = readItemCode(descriptorCode);
+        const { itemVersionId, itemType } = readItemCode(descriptorCode);
 
-        // if (itemType === 'video')
-        //     return (await this._videoService.getVideoByIdAsync(itemId)).courseId;
+        if (itemType === 'video')
+            return (await this._videoService.getVideoByVersionIdAsync(itemVersionId)).courseVersionId;
 
-        // if (itemType === 'exam')
-        //     return (await this._examService.getExamByIdAsync(itemId)).courseId;
+        if (itemType === 'exam')
+            return (await this._examService.getExamByIdAsync(itemVersionId)).courseVersionId;
 
-        // return (await this._ormService
-        //     .getSingleById(ModuleData, itemId))
-        //     .courseId;
+        return (await this._ormService
+            .getSingleById(ModuleVersion, itemVersionId))
+            .courseVersionId;
     }
 
     /**
@@ -595,12 +594,12 @@ export class CourseService {
         const deletedExamIds = itemCodes
             .filter(x => x.key === 'exam')
             .flatMap(x => x.items)
-            .map(x => x.itemId);
+            .map(x => x.itemVersionId);
 
         const deletedVideoIds = itemCodes
             .filter(x => x.key === 'video')
             .flatMap(x => x.items)
-            .map(x => x.itemId);
+            .map(x => x.itemVersionId);
 
         this._examService
             .softDeleteExamsAsync(deletedExamIds, true);

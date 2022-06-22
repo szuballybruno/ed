@@ -1,15 +1,9 @@
-import { Course } from '../models/entity/course/Course';
-import { CourseData } from '../models/entity/course/CourseData';
-import { ExamData } from '../models/entity/exam/ExamData';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
-import { VideoData } from '../models/entity/video/VideoData';
-import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { CourseItemService } from './CourseItemService';
 import { MapperService } from './MapperService';
-import { getItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 

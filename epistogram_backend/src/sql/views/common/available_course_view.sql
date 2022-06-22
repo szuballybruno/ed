@@ -58,7 +58,10 @@ SELECT
 	cc.name category_name,
 	csc.name sub_category_name,
 	ucb.current_item_code current_item_code,
---     first_civ.item_code first_item_code,
+	CASE WHEN first_civ.video_id IS NOT NULL
+		THEN (SELECT encode((first_civ.video_id || '@video')::bytea, 'base64')) 
+		ELSE (SELECT encode((first_civ.exam_id || '@exam')::bytea, 'base64'))
+	END first_item_code,
 	CASE WHEN ucb.current_item_code IS NULL 
 		THEN NULL --first_civ.item_code 
 		ELSE ucb.current_item_code 
@@ -87,7 +90,7 @@ ON u.id = ac.user_id
 LEFT JOIN public.course_item_view first_civ
 ON first_civ.course_version_id = cv.id
 AND first_civ.item_order_index = 0
-AND first_civ.module_order_index = 0 
+AND first_civ.module_order_index = 1 
 AND first_civ.item_type != 'pretest'
 
 LEFT JOIN course_state_view csv

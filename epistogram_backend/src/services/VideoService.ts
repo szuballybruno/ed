@@ -24,6 +24,12 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import fs from 'fs';
 import { UploadedFile } from 'express-fileupload';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { Video } from '../models/entity/video/Video';
+import { VideoVersionView } from '../models/views/VideoVersionView';
+import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
+import { QuestionDataView } from '../models/views/QuestionDataView';
+import { VideoFile } from '../models/entity/video/VideoFile';
 
 export class VideoService extends QueryServiceBase<VideoData> {
 
@@ -91,13 +97,22 @@ export class VideoService extends QueryServiceBase<VideoData> {
         //     .save(video);
     };
 
-    setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {
+    setVideoFileIdAsync = async (videoVersionId: number, storageFileId: number) => {
+
+        const videoVersion = await this._ormService
+            .query(VideoVersion, { videoVersionId })
+            .leftJoin(VideoData, x => x
+                .on('id', '=', 'videoDataId', VideoVersion))
+            .leftJoin(VideoFile, x => x
+                .on('id', '=', 'videoFileId', VideoData))
+            .where('id', '=', 'videoVersionId')
+            .getSingle()
 
         await this._ormService
-            .getRepository(VideoData)
+            .getRepository(VideoFile)
             .save({
-                id: videoId,
-                videoFileId: videoFileId
+                id: videoVersion.videoData.videoFileId,
+                storageFileId: storageFileId
             });
     };
 
@@ -177,26 +192,43 @@ export class VideoService extends QueryServiceBase<VideoData> {
             });
     };
 
-    getVideoByIdAsync = async (videoId: number) => {
+
+    /**
+     * Get questions for a particular video.
+     * 
+     * @param videoVersionId 
+     * @returns 
+     */
+    async _getQuestionDataByVideoVersionId(videoVersionId: number) {
+
+        const questionData = await this._ormService
+            .query(QuestionDataView, { videoVersionId })
+            .where('videoVersionId', '=', 'videoVersionId')
+            .getMany()
+
+        console.log(questionData)
+
+        return questionData
+    }
+
+    getVideoByVersionIdAsync = async (videoVersionId: number) => {
 
         const video = await this._ormService
-            .getSingleById(VideoData, videoId);
+            .query(VideoPlayerDataView, { videoVersionId })
+            .where('videoVersionId', '=', 'videoVersionId')
+            .getSingle();
 
         return video;
     };
 
-    getVideoPlayerDataAsync = async (videoId: number) => {
+    getVideoPlayerDataAsync = async (videoVersionId: number) => {
 
-        const video = await this._ormService
-            .getRepository(VideoData)
-            .createQueryBuilder('v')
-            .where('v.id = :videoId', { videoId })
-            .leftJoinAndSelect('v.videoFile', 'vf')
-            .leftJoinAndSelect('v.questions', 'q')
-            .leftJoinAndSelect('q.answers', 'a')
-            .getOneOrFail();
+        const videoPlayerData = await this._ormService
+            .query(VideoPlayerDataView, { videoVersionId })
+            .where('videoVersionId', '=', 'videoVersionId')
+            .getSingle()
 
-        return video;
+        return videoPlayerData;
     };
 
     uploadVideoFileChunksAsync = async (
@@ -256,18 +288,28 @@ export class VideoService extends QueryServiceBase<VideoData> {
         }
     };
 
-    private _uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
+    private _uploadVideoFileAsync = async (videoVersionId: number, videoFileBuffer: Buffer) => {
 
         // upload file
         const filePath = this._fileService
-            .getFilePath('videos', 'video', videoId, 'mp4');
+            .getFilePath('videos', 'video', videoVersionId, 'mp4');
+
+        const getVideoFile = async () => this._ormService
+            .withResType<VideoFile>()
+            .query(VideoVersion, { videoVersionId })
+            .select(VideoFile)
+            .leftJoin(VideoData, x => x
+                .on('id', '=', 'videoDataId', VideoVersion))
+            .leftJoin(VideoFile, x => x
+                .on('id', '=', 'videoFileId', VideoData))
+            .getSingle()
 
         await this._fileService
-            .uploadAssigendFileAsync<VideoData>(
+            .uploadAssigendFileAsync<VideoFile>(
                 filePath,
-                () => this.getVideoByIdAsync(videoId),
-                (fileId) => this.setVideoFileIdAsync(videoId, fileId),
-                (entity) => entity.videoFileId,
+                () => getVideoFile(),
+                (fileId) => this.setVideoFileIdAsync(videoVersionId, fileId),
+                (entity) => entity.storageFileId,
                 videoFileBuffer);
 
         // set video length
@@ -279,7 +321,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         await this._ormService
             .getRepository(VideoData)
             .save({
-                id: videoId,
+                id: videoVersionId,
                 lengthSeconds: lengthSeconds
             });
     };

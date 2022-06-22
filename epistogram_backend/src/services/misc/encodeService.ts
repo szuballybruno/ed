@@ -16,7 +16,7 @@ export const readItemCode = (encoded: string) => {
     const type = withValue(splitted[1]) as CourseItemType;
 
     return {
-        itemId: id,
+        itemVersionId: id,
         itemType: type
     };
 };

@@ -1,8 +1,8 @@
 import { QuestionDTO } from './QuestionDTO';
 
 export class VideoPlayerDataDTO {
-    id: number;
-    courseId: number;
+    videoVersionId: number;
+    courseVersionId: number;
     subTitle: string;
     title: string;
     thumbnailUrl: string;

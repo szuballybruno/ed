@@ -36,7 +36,7 @@ import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestio
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
-import { ExamDataView } from '../../models/views/ExamDataView';
+import { QuestionDataView as QuestionDataView } from '../../models/views/QuestionDataView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
@@ -121,6 +121,8 @@ import { UrlService } from '../UrlService';
 import { getItemCode } from './encodeService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
+import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
+import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -131,19 +133,24 @@ const marray = [
     epistoMappingsBuilder
         .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
 
-    // epistoMappingsBuilder
-    //     .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (video: VideoData, sessionId: number, maxWatchedSeconds: number) => ({
-    //         id: video.id,
-    //         courseId: video.courseId,
-    //         subTitle: video.subtitle,
-    //         title: video.title,
-    //         description: video.description,
-    //         thumbnailUrl: '',
-    //         url: assetUrlService.getAssetUrl(video.videoFile.filePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
-    //         questions: video.questions.map(q => toQuestionDTO(q)),
-    //         maxWatchedSeconds: maxWatchedSeconds,
-    //         videoPlaybackSessionId: sessionId
-    //     })),
+    epistoMappingsBuilder
+        .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (
+            playerData: VideoPlayerDataView,
+            videoQuestions: QuestionDataView[],
+            videoPlaybackSessionId,
+            maxWatchedSeconds
+        ) => ({
+            videoVersionId: playerData.videoVersionId,
+            courseVersionId: playerData.courseVersionId,
+            subTitle: playerData.subtitle,
+            title: playerData.title,
+            description: playerData.description,
+            thumbnailUrl: '',
+            url: assetUrlService.getAssetUrl(playerData.videoFilePath) ?? assetUrlService.getAssetUrl('images/videoImage.jpg'),
+            questions: toQuestionDTO(videoQuestions),
+            maxWatchedSeconds: maxWatchedSeconds,
+            videoPlaybackSessionId: videoPlaybackSessionId
+        })),
 
     epistoMappingsBuilder
         .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {
@@ -823,7 +830,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
     //     });
 
     mapperService
-        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: ExamDataView[]) => {
+        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionDataView[]) => {
 
             return {
                 id: exam.examId,
@@ -982,7 +989,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(PretestResultView, PretestResultDTO, (x, cv: AvailableCourseView) => ({
             isCompleted: x.isCompleted,
             correctAnswerRate: x.correctAnswerRate,
-            firstItemCode: ''//cv.firstItemCode
+            firstItemCode: cv.firstItemCode
         }));
 
     mapperService
@@ -1136,7 +1143,7 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
     } as ResultAnswerDTO;
 };
 
-export const toQuestionDTO = (lqav: ExamDataView[]) => {
+export const toQuestionDTO = (lqav: QuestionDataView[]) => {
 
     return lqav
         .groupBy(x => x.questionId)

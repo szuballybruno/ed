@@ -27,11 +27,11 @@ export class FileService {
     uploadAvatarFileAsync = async (principalId: PrincipalId, file: UploadedFile) => {
 
         const userId = principalId.toSQLValue();
-        
+
         //TODO: Create a validation function
         if (!['image/png', 'image/jpeg'].includes(file.mimetype))
             throw new VerboseError('File upload failed: Only jpeg or png', 'bad request');
-        
+
         await this.uploadAssigendFileAsync<User>(
             this.getFilePath('userAvatars', 'user_avatar', userId, 'png'),
             () => this._userService.getUserById(userId),

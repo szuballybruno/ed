@@ -31,8 +31,8 @@ export class CommentService extends QueryServiceBase<Comment> {
 
         const itemCodeData = readItemCode(itemCode);
 
-        const videoId = itemCodeData.itemType === 'video'
-            ? itemCodeData.itemId
+        const videoVersionId = itemCodeData.itemType === 'video'
+            ? itemCodeData.itemVersionId
             : 0;
 
         const newComment = {
@@ -41,7 +41,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             text: text,
             userId: userId,
             parentCommentId: replyToCommentId,
-            videoVersionId: videoId
+            videoVersionId: videoVersionId
         } as Comment;
 
         return await this
@@ -50,13 +50,13 @@ export class CommentService extends QueryServiceBase<Comment> {
             .insert(newComment);
     };
 
-    getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {
+    getCommentsAsync = async (videoVersionId: number, currentUserId: PrincipalId) => {
 
         const userComments = await this
             ._ormService
             .getRepository(CommentListView)
             .createQueryBuilder('clv')
-            .where('clv.videoId = :videoId', { videoId })
+            .where('clv.videoVersionId = :videoVersionId', { videoVersionId })
             .andWhere('clv.currentUserId = :currentUserId', { currentUserId: currentUserId.toSQLValue() })
             .getMany();
 

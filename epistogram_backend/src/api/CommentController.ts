@@ -69,7 +69,7 @@ export class CommentController {
             ._commentService
             .getCommentsAsync(
                 itemCodeData.itemType === 'video'
-                    ? itemCodeData.itemId
+                    ? itemCodeData.itemVersionId
                     : 0, principalId);
     };
 

@@ -25,21 +25,22 @@ export class QuestionAnswerService {
 
     createAnswerSessionAsync = async (
         userId: number,
-        examId?: number | null,
-        videoId?: number | null) => {
+        examVersionId?: number | null,
+        videoVideoId?: number | null) => {
 
-        throwNotImplemented();
-        // const session = {
-        //     examId: examId,
-        //     videoVersionId: videoId,
-        //     userId: userId
-        // } as AnswerSession;
+        const session = {
+            examVersionId: examVersionId,
+            videoVersionId: videoVideoId,
+            userId: userId,
+            isPractise: false,
+            isCompleted: false
+        } as AnswerSession;
 
-        // await this._ormService
-        //     .getRepository(AnswerSession)
-        //     .insert(session);
+        await this._ormService
+            .getRepository(AnswerSession)
+            .insert(session);
 
-        // return session.id;
+        return session.id;
     };
 
     answerQuestionAsync = async (
