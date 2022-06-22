@@ -122,7 +122,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const sqlQuery = isExplicitSelect
             ? queryAsString
-            : `SELECT * FROM  ${sqlTableRef}${queryAsString}`;
+            : `SELECT \n${getXViewColumnNames(classType).map(x => `${INDENT}${tableName}.${snk(x)}`).join(',\n')} \nFROM  ${sqlTableRef}${queryAsString}`;
 
         // filter out null params since they're embedded in the sql query now
         // as static values, ther's no need to supply them
