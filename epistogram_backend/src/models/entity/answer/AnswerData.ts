@@ -1,22 +1,23 @@
 import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { AnswerVersion } from './AnswerVersion';
 
 @Entity()
 export class AnswerData {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
-    @IsDeletedFlag()
-    @DeleteDateColumn()
-    deletionDate: Date | null;
-
     @Column()
+    @XViewColumn()
     text: string;
 
-    @Column({ type: 'bool', nullable: true })
+    @Column({ type: 'bool' })
+    @XViewColumn()
     isCorrect: boolean | null;
+
+    // TO MANY
 
     // answer versions 
     @XOneToMany<AnswerData>()(() => AnswerVersion, x => x.answerData)

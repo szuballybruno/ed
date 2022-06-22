@@ -7,7 +7,6 @@ export const getVideoDataSeedData = (
 ) => getSeedList<VideoData>()({
 
     video_data_60: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Feltételes formázás',
         subtitle: 'Értékkülönbségek pontos ábrázolása',
@@ -16,7 +15,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_60.id,
     },
     video_data_54: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Munka egyszerre több munkafüzettel',
         subtitle: 'Ablakok váltása egyszerűen',
@@ -25,7 +23,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_54.id,
     },
     video_data_42: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakorló feladatok',
         subtitle: 'Kamatszámítás',
@@ -34,7 +31,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_42.id,
     },
     video_data_61: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellák formázása',
         subtitle: 'Számformátumok',
@@ -43,7 +39,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_61.id,
     },
     video_data_62: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sorok és oszlopok formázása',
         subtitle: 'Méretek, egyesítés',
@@ -52,7 +47,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_62.id,
     },
     video_data_63: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sorok és oszlopok formázása',
         subtitle: 'Szegélyek és további nyomtatási beállítások',
@@ -61,7 +55,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_63.id,
     },
     video_data_27: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Példák a gyakorlatból',
         subtitle: 'Mire jó az Excel?',
@@ -70,7 +63,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_27.id,
     },
     video_data_52: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megnyitás',
         subtitle: 'Excel dokumentumok megnyitása különböző módon',
@@ -79,7 +71,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_52.id,
     },
     video_data_53: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Mentés',
         subtitle: 'Excel dokumentumok mentése különböző módon',
@@ -88,7 +79,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_53.id,
     },
     video_data_76: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Függvények értékké alakítása',
         subtitle: 'Csere a számított értékkel',
@@ -97,7 +87,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_76.id,
     },
     video_data_70: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számformátumok',
         subtitle: 'Egyéni számformátumok',
@@ -106,7 +95,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_70.id,
     },
     video_data_67: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számformátumok',
         subtitle: 'Pontosság, kerekítés',
@@ -115,7 +103,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_67.id,
     },
     video_data_56: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágólap',
         subtitle: 'Másolás, kivágás, beillesztés módjai',
@@ -124,7 +111,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_56.id,
     },
     video_data_28: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kezdőlap menüszalag',
         subtitle: 'Cellák formázása',
@@ -133,7 +119,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_28.id,
     },
     video_data_29: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kezdőlap menüszalag',
         subtitle: 'Számformátumok',
@@ -142,7 +127,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_29.id,
     },
     video_data_64: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakorló feladatok',
         subtitle: 'Éves hozam kiszámítása',
@@ -151,7 +135,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_64.id,
     },
     video_data_30: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kezdőlap menüszalag',
         subtitle: 'Stílusok, cellaműveletek, rendezés',
@@ -160,7 +143,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_30.id,
     },
     video_data_31: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sorok és oszlopok',
         subtitle: 'Cellák adatainak szerkesztése bárhol',
@@ -169,7 +151,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_31.id,
     },
     video_data_32: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatbevitel, javítás',
         subtitle: 'Generált adatsorok',
@@ -178,7 +159,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_32.id,
     },
     video_data_33: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatbevitel, javítás',
         subtitle: 'Adatsor menü használata',
@@ -187,7 +167,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_33.id,
     },
     video_data_34: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatbevitel, javítás',
         subtitle: 'További műveletek sorokkal, oszlopokkal',
@@ -196,7 +175,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_34.id,
     },
     video_data_35: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatbevitel, javítás',
         subtitle: 'Igazítás, cellaegyesítés',
@@ -205,7 +183,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_35.id,
     },
     video_data_36: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatbevitel, javítás',
         subtitle: 'Cellák tartalmának forgatása, szegélyek',
@@ -214,7 +191,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_36.id,
     },
     video_data_37: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyszerű számítások',
         subtitle: 'Matematikai alapműveletek',
@@ -223,7 +199,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_37.id,
     },
     video_data_38: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyszerű számítások',
         subtitle: 'Egyenletek bevitele',
@@ -232,7 +207,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_38.id,
     },
     video_data_55: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Nyomtatás',
         subtitle: 'Nyomtatási nézet beállításai',
@@ -241,7 +215,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_55.id,
     },
     video_data_80: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Elrejtés, felfedés',
         subtitle: 'Táblázat adott részeinek elrejtése',
@@ -250,7 +223,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_80.id,
     },
     video_data_39: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyszerű számítások',
         subtitle: 'Számítások a cellák értékeivel',
@@ -259,7 +231,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_39.id,
     },
     video_data_40: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyszerű számítások',
         subtitle: 'Fix hivatkozás',
@@ -268,7 +239,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_40.id,
     },
     video_data_71: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblatervező',
         subtitle: 'Cellatartomány táblázattá alakítása',
@@ -277,7 +247,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_71.id,
     },
     video_data_77: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Állapotsor',
         subtitle: 'Cellák tartalmának gyors ellenőrzése',
@@ -286,7 +255,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_77.id,
     },
     video_data_72: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellastílusok',
         subtitle: 'Előre definiált és egyedi stílusok cellánként',
@@ -295,7 +263,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_72.id,
     },
     video_data_41: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakorló feladatok',
         subtitle: 'Számolás dátummal, időpontokkal',
@@ -304,7 +271,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_41.id,
     },
     video_data_68: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számformátumok',
         subtitle: 'Különleges számformátumok',
@@ -313,7 +279,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_68.id,
     },
     video_data_73: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Legfontosabb függvények',
         subtitle: 'Átlag, Min, Max',
@@ -322,7 +287,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_73.id,
     },
     video_data_65: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakorló feladatok',
         subtitle: 'Egyedi kalkulátor készítése',
@@ -331,7 +295,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_65.id,
     },
     video_data_66: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakorló feladatok',
         subtitle: 'Kerület, Terület, Felszín, Térfogat',
@@ -340,7 +303,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_66.id,
     },
     video_data_57: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Formátummásolás',
         subtitle: 'Cellák azonos megjelenéssel',
@@ -349,7 +311,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_57.id,
     },
     video_data_58: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellák formázása',
         subtitle: 'Betűtípus, igazítás beállítása',
@@ -358,7 +319,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_58.id,
     },
     video_data_59: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Feltételes formázás',
         subtitle: 'Adatok megkülönböztetése messziről',
@@ -367,7 +327,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_59.id,
     },
     video_data_69: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számformátumok',
         subtitle: 'Tudományos számformátum',
@@ -376,7 +335,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_69.id,
     },
     video_data_78: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hibaelemzés',
         subtitle: 'Leggyakoribb hibaüzenetek',
@@ -385,7 +343,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_78.id,
     },
     video_data_74: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Legfontosabb függvények',
         subtitle: 'Módusz.egy, Darab, Darab2',
@@ -394,7 +351,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_74.id,
     },
     video_data_81: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Névkezelő',
         subtitle: 'Egyedi cella és tartomány nevek',
@@ -403,7 +359,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_81.id,
     },
     video_data_75: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Legfontosabb függvények',
         subtitle: 'Darabüres, Darabteli, Ma, Most',
@@ -412,7 +367,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_75.id,
     },
     video_data_83: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyesírás ellenőrzés',
         subtitle: 'Munka több nyelven',
@@ -421,7 +375,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_83.id,
     },
     video_data_79: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Panelek rögzítése',
         subtitle: 'Könnyebb tájékozódás sok adat esetén',
@@ -430,7 +383,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_79.id,
     },
     video_data_82: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyéni sorrend',
         subtitle: 'Táblázat adatainak többszintű rendezése',
@@ -439,7 +391,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_82.id,
     },
     video_data_84: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Keresés és csere',
         subtitle: 'Adatok gyors megtalálása és módosítása',
@@ -448,7 +399,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_84.id,
     },
     video_data_86: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Telepítsük az OBS Studiot',
         subtitle: 'Másodpercek alatt használhatjuk is',
@@ -457,7 +407,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_86.id,
     },
     video_data_85: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Az OBS letöltése',
         subtitle: 'Ingyenesen, bármilyen asztali rendszerre',
@@ -466,7 +415,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_85.id,
     },
     video_data_88: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Audio & video beállítások',
         subtitle: 'Hangforrások és felbontás finomhangolása',
@@ -475,7 +423,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_88.id,
     },
     video_data_89: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képernyőfelvétel beállítása',
         subtitle: 'Jelenetek, források konfigurálása',
@@ -484,7 +431,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_89.id,
     },
     video_data_90: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Varázsoljunk hangot OBS-ben',
         subtitle: 'Bemeneti hangfelvevő eszközök beállítása',
@@ -493,7 +439,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_90.id,
     },
     video_data_87: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Alapvető konfigurálás offline felvételhez',
         subtitle: 'Formátumok, minőség beállítása',
@@ -502,7 +447,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_87.id,
     },
     video_data_44: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Ismerkedés a Word-el',
         subtitle: 'Megnyitás, sablonok',
@@ -511,7 +455,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_44.id,
     },
     video_data_51: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Ismerkedés a Word-el',
         subtitle: 'Gyorselérési eszköztár',
@@ -520,7 +463,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_51.id,
     },
     video_data_113: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Minden látszik',
@@ -529,7 +471,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_113.id,
     },
     video_data_109: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Word dokumentum mentése',
         subtitle: 'Mentés lehetőségei',
@@ -538,7 +479,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_109.id,
     },
     video_data_114: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Betűtípusok gyors beállítása',
@@ -547,7 +487,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_114.id,
     },
     video_data_125: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Felosztás',
         subtitle: 'Több dokumentum egy ablakban',
@@ -556,7 +495,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_125.id,
     },
     video_data_115: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Gyors navigálás a dokumentumban',
@@ -565,7 +503,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_115.id,
     },
     video_data_116: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Szavak és mondatok kijelölése',
@@ -574,7 +511,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_116.id,
     },
     video_data_117: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Bekezdések kezelése',
         subtitle: 'Behúzás, igazítás, listák',
@@ -583,7 +519,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_117.id,
     },
     video_data_118: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Munka egyszerre több dokumentummal',
         subtitle: 'Gyors váltás az ablakok között',
@@ -592,7 +527,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_118.id,
     },
     video_data_127: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágólap műveletek',
         subtitle: 'Beillesztés módjai',
@@ -601,7 +535,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_127.id,
     },
     video_data_110: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Word dokumentum nyomtatása',
         subtitle: 'A nyomtatás beállításai',
@@ -610,7 +543,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_110.id,
     },
     video_data_111: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hibajavítás módjai',
         subtitle: 'Kijelölés, Backspace, Del',
@@ -619,7 +551,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_111.id,
     },
     video_data_45: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A szövegbevitel alapjai',
         subtitle: 'Gépelés, diktálás',
@@ -628,7 +559,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_45.id,
     },
     video_data_46: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kezdőlap menüszalag',
         subtitle: 'Betűstílusok, alapvető formázás',
@@ -637,7 +567,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_46.id,
     },
     video_data_47: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Beszúrás menüszalag',
         subtitle: 'Dokumentum kibővítése egyszerűen',
@@ -646,7 +575,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_47.id,
     },
     video_data_48: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tervezés menüszalag',
         subtitle: 'Sablonok használata, szegélyek, vízjelek',
@@ -655,7 +583,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_48.id,
     },
     video_data_49: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Elrendezés menüszalag',
         subtitle: 'Margók, hasábok, tördelés',
@@ -664,7 +591,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_49.id,
     },
     video_data_50: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: '(CSERE) Hivatkozások és Levelezés menüszalag',
         subtitle: 'Tartalomjegyzék és változók a levélben',
@@ -673,7 +599,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_50.id,
     },
     video_data_119: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Oldalak',
         subtitle: 'Oldaltörések beszúrása',
@@ -682,7 +607,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_119.id,
     },
     video_data_112: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Véleményezés menüszalag',
         subtitle: 'Felolvasás, megjegyzések',
@@ -691,7 +615,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_112.id,
     },
     video_data_126: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágólap műveletek',
         subtitle: 'Kivágás, Másolás, Beillesztés',
@@ -700,7 +623,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_126.id,
     },
     video_data_108: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Word dokumentum megnyitása',
         subtitle: 'Megnyitás lehetőségei',
@@ -709,7 +631,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_108.id,
     },
     video_data_120: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megjelenítési lehetőségek',
         subtitle: 'Vonalzó, rácsvonalak, navigáció',
@@ -718,7 +639,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_120.id,
     },
     video_data_128: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágókönyv',
         subtitle: 'Módosítások története',
@@ -727,7 +647,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_128.id,
     },
     video_data_121: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyi és lebegő menük',
         subtitle: 'Leggyakoribb formázási lehetőségek',
@@ -736,7 +655,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_121.id,
     },
     video_data_122: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Nézetek',
         subtitle: 'Olvasómód, nyomtatási elrendezés',
@@ -745,7 +663,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_122.id,
     },
     video_data_129: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Formátummásolás',
         subtitle: 'Azonos megjelenés több helyen',
@@ -754,7 +671,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_129.id,
     },
     video_data_123: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Nagyítás',
         subtitle: 'Automatikus, vagy manuális beállítás',
@@ -763,7 +679,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_123.id,
     },
     video_data_124: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Segédjelek',
         subtitle: 'És azok jelentése',
@@ -772,7 +687,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_124.id,
     },
     video_data_91: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Próbafelvétel OBS-ben',
         subtitle: 'Figyeljünk, hogy mire nyomunk!',
@@ -781,7 +695,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_91.id,
     },
     video_data_92: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Zajszűrés beállítása',
         subtitle: 'Viszlát széknyikorgás!',
@@ -790,7 +703,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_92.id,
     },
     video_data_150: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Fix hivatkozás',
         subtitle: 'Egyszerű számítások',
@@ -799,7 +711,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_150.id,
     },
     video_data_144: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Igazítás, cellaegyesítés',
         subtitle: 'Adatbevitel, javítás',
@@ -808,7 +719,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_144.id,
     },
     video_data_132: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Mire jó az Excel?',
         subtitle: 'Áttekintés',
@@ -817,7 +727,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_132.id,
     },
     video_data_145: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellák tartalmának forgatása, szegélyek',
         subtitle: 'Adatbevitel, javítás',
@@ -826,7 +735,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_145.id,
     },
     video_data_133: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyorselérési eszköztár',
         subtitle: 'Áttekintés',
@@ -835,7 +743,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_133.id,
     },
     video_data_159: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellastílusok',
         subtitle: 'Előre definiált és egyedi stílusok cellánként',
@@ -844,7 +751,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_159.id,
     },
     video_data_134: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A kezdőlap alapjai',
         subtitle: 'Áttekintés',
@@ -853,7 +759,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_134.id,
     },
     video_data_135: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megnyitás',
         subtitle: 'Excel dokumentumok megnyitása különböző módon',
@@ -862,7 +767,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_135.id,
     },
     video_data_156: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Különleges számformátumok',
         subtitle: 'Számformátumok',
@@ -871,7 +775,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_156.id,
     },
     video_data_152: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Formátummásolás',
         subtitle: 'Cellák azonos megjelenéssel',
@@ -880,7 +783,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_152.id,
     },
     video_data_136: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Mentés',
         subtitle: 'Excel dokumentumok mentése különböző módon',
@@ -889,7 +791,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_136.id,
     },
     video_data_137: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Munka egyszerre több munkafüzettel',
         subtitle: 'Ablakok váltása egyszerűen',
@@ -898,7 +799,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_137.id,
     },
     video_data_161: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatok megkülönböztetése messziről',
         subtitle: 'Feltételes formázás',
@@ -907,7 +807,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_161.id,
     },
     video_data_138: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Nyomtatás',
         subtitle: 'Nyomtatási nézet beállításai',
@@ -916,7 +815,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_138.id,
     },
     video_data_153: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Betűtípus, igazítás beállítása',
         subtitle: 'Cellák formázása',
@@ -925,7 +823,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_153.id,
     },
     video_data_139: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágólap',
         subtitle: 'Másolás, kivágás, beillesztés módjai',
@@ -934,7 +831,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_139.id,
     },
     video_data_147: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Matematikai alapműveletek',
         subtitle: 'Egyszerű számítások',
@@ -943,7 +839,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_147.id,
     },
     video_data_140: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sorok és oszlopok',
         subtitle: 'Cellák adatainak szerkesztése bárhol',
@@ -952,7 +847,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_140.id,
     },
     video_data_148: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyenletek bevitele',
         subtitle: 'Egyszerű számítások',
@@ -961,7 +855,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_148.id,
     },
     video_data_141: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Generált adatsorok',
         subtitle: 'Adatbevitel, javítás',
@@ -970,7 +863,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_141.id,
     },
     video_data_165: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Méretek, egyesítés',
         subtitle: 'Sorok és oszlopok formázása',
@@ -979,7 +871,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_165.id,
     },
     video_data_157: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tudományos számformátum',
         subtitle: 'Számformátumok',
@@ -988,7 +879,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_157.id,
     },
     video_data_142: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatsor menü használata',
         subtitle: 'Adatbevitel, javítás',
@@ -997,7 +887,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_142.id,
     },
     video_data_149: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számítások a cellák értékeivel',
         subtitle: 'Egyszerű számítások',
@@ -1006,7 +895,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_149.id,
     },
     video_data_143: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'További műveletek sorokkal, oszlopokkal',
         subtitle: 'Adatbevitel, javítás',
@@ -1015,7 +903,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_143.id,
     },
     video_data_154: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számformátumok',
         subtitle: 'Cellák formázása',
@@ -1024,7 +911,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_154.id,
     },
     video_data_160: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szegélyek',
         subtitle: 'Hozzáadás, formázás, beállítások',
@@ -1033,7 +919,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_160.id,
     },
     video_data_158: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyéni számformátumok',
         subtitle: 'Számformátumok',
@@ -1042,7 +927,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_158.id,
     },
     video_data_155: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Pontosság, kerekítés',
         subtitle: 'Számformátumok',
@@ -1051,7 +935,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_155.id,
     },
     video_data_164: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Értékgörbék, kijelölés képlettel',
         subtitle: 'Feltételes formázás',
@@ -1060,7 +943,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_164.id,
     },
     video_data_163: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatsávok, ikonkészletek, színskálák',
         subtitle: 'Feltételes formázás',
@@ -1069,7 +951,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_163.id,
     },
     video_data_166: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szegélyek és további nyomtatási beállítások',
         subtitle: 'Sorok és oszlopok formázása',
@@ -1078,7 +959,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_166.id,
     },
     video_data_167: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellatartomány táblázattá alakítása',
         subtitle: 'Táblatervező',
@@ -1087,7 +967,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_167.id,
     },
     video_data_168: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Színek, képek, mintázatok választása',
         subtitle: 'Cellák és táblázat kitöltése',
@@ -1096,7 +975,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_168.id,
     },
     video_data_169: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Átlag és szélső értékek meghatározása',
         subtitle: 'ÁTLAG(), MIN(), MAX() függvények',
@@ -1105,7 +983,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_169.id,
     },
     video_data_170: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakori értékek és számlálás',
         subtitle: 'MÓDUSZ.EGY(), DARAB(), DARAB2() függvények',
@@ -1114,7 +991,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_170.id,
     },
     video_data_171: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Üres és teli cellák meghatározása, jelenlegi dátum és időpont lekérése',
         subtitle: 'DARABÜRES(), DARABTELI(), MA(), MOST() függvények',
@@ -1123,7 +999,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_171.id,
     },
     video_data_403: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Kisbetű, nagybetű, kiskapitális',
@@ -1132,7 +1007,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_403.id,
     },
     video_data_172: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Csere a számított értékkel',
         subtitle: 'Függvények értékké alakítása',
@@ -1141,7 +1015,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_172.id,
     },
     video_data_205: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg a táblázat fölött',
         subtitle: 'Szövegdobozok',
@@ -1150,7 +1023,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_205.id,
     },
     video_data_187: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyedi cella- és tartománynevek',
         subtitle: 'Névkezelő',
@@ -1159,7 +1031,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_187.id,
     },
     video_data_173: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Feltételhez kötött műveletek',
         subtitle: 'HA() függvény',
@@ -1168,7 +1039,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_173.id,
     },
     video_data_219: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sorok gyors szűrése',
         subtitle: 'Szűrés',
@@ -1177,7 +1047,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_219.id,
     },
     video_data_174: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Több feltétel érvényesítése egyszerre',
         subtitle: 'ÉS() függvény ',
@@ -1186,7 +1055,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_174.id,
     },
     video_data_198: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyedi hátterek, keretek, árnyékok',
         subtitle: 'Képek kezelése',
@@ -1195,7 +1063,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_198.id,
     },
     video_data_188: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázat adatainak többszintű rendezése',
         subtitle: 'Egyéni sorrend',
@@ -1204,7 +1071,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_188.id,
     },
     video_data_175: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Több feltételhez kötött darab és átlagszámítás',
         subtitle: 'DARABHATÖBB() és ÁTLAGHATÖBB() függvények',
@@ -1213,7 +1079,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_175.id,
     },
     video_data_211: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatérvényesítés számtartomány megadásával',
         subtitle: 'Adateszközök',
@@ -1222,7 +1087,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_211.id,
     },
     video_data_176: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számítások dátumokkal',
         subtitle: 'Dátumfüggvények',
@@ -1231,7 +1095,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_176.id,
     },
     video_data_189: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Munka több nyelven',
         subtitle: 'Helyesírás ellenőrzés',
@@ -1240,7 +1103,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_189.id,
     },
     video_data_206: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A Wingdings betűtípus',
         subtitle: 'Szimbólumok beszúrása',
@@ -1249,7 +1111,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_206.id,
     },
     video_data_177: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Függőleges keresés a táblázatban',
         subtitle: 'FKERES() függvény',
@@ -1258,7 +1119,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_177.id,
     },
     video_data_199: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Élek, különleges effektek, térbeli forgatás',
         subtitle: 'Képek kezelése',
@@ -1267,7 +1127,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_199.id,
     },
     video_data_190: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatok gyors megtalálása és módosítása',
         subtitle: 'Keresés és csere',
@@ -1276,7 +1135,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_190.id,
     },
     video_data_178: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A kerekítés különböző módjai',
         subtitle: 'KEREKÍTÉS(), KEREK.FEL(), KEREK.LE(), PLAFON(), PADLÓ() függvények',
@@ -1285,7 +1143,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_178.id,
     },
     video_data_214: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Figyelmeztetés megjelenítése adatérvényesítés esetén',
         subtitle: 'Adateszközök',
@@ -1294,7 +1151,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_214.id,
     },
     video_data_179: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szövegek összefűzése, összehasonlítása',
         subtitle: 'ÖSSZEFŰZ(), AZONOS() szövegfüggvények',
@@ -1303,7 +1159,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_179.id,
     },
     video_data_191: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázaton belül és kívül egyaránt',
         subtitle: 'Hivatkozások létrehozása',
@@ -1312,7 +1167,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_191.id,
     },
     video_data_180: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Karakterek kiemelése szövegből',
         subtitle: 'BAL(), JOBB(), KÖZÉP() szövegfüggvények',
@@ -1321,7 +1175,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_180.id,
     },
     video_data_200: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képkorrekció, körülvágás',
         subtitle: 'Képek kezelése',
@@ -1330,7 +1183,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_200.id,
     },
     video_data_217: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázat létrehozása .txt fájlból',
         subtitle: 'Adatimportálás',
@@ -1339,7 +1191,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_217.id,
     },
     video_data_192: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Lehetséges eredmények kipróbálása',
         subtitle: 'Esetvizsgáló',
@@ -1348,7 +1199,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_192.id,
     },
     video_data_207: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szabadkézi műveletek',
         subtitle: 'Egyenletek beszúrása',
@@ -1357,7 +1207,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_207.id,
     },
     video_data_201: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Háttér eltávolítása, kitöltések, egyéb opciók',
         subtitle: 'Képformátum menü',
@@ -1366,7 +1215,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_201.id,
     },
     video_data_193: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Ismert eredményhez tartozó bemeneti értékek keresése',
         subtitle: 'Célértékkeresés',
@@ -1375,7 +1223,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_193.id,
     },
     video_data_183: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Cellák tartalmának gyors ellenőrzése',
         subtitle: 'Állapotsor',
@@ -1384,7 +1231,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_183.id,
     },
     video_data_212: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatérvényesítés számok és lista segítségével',
         subtitle: 'Adateszközök',
@@ -1393,7 +1239,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_212.id,
     },
     video_data_184: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Leggyakoribb hibaüzenetek',
         subtitle: 'Hibaelemzés',
@@ -1402,7 +1247,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_184.id,
     },
     video_data_194: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Véletlen szerkesztés megakadályozása',
         subtitle: 'Táblázatok védelme, zárolása',
@@ -1411,7 +1255,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_194.id,
     },
     video_data_215: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adattábla használata',
         subtitle: 'Lehetőségelemzés',
@@ -1420,7 +1263,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_215.id,
     },
     video_data_185: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Könnyebb tájékozódás sok adat esetén',
         subtitle: 'Panelek rögzítése',
@@ -1429,7 +1271,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_185.id,
     },
     video_data_202: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Stílus, effektek',
         subtitle: 'Alakzatok formázása',
@@ -1438,7 +1279,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_202.id,
     },
     video_data_195: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hozzáadás, törlés, figyelmeztető üzenetek',
         subtitle: 'Megjegyzések',
@@ -1447,7 +1287,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_195.id,
     },
     video_data_186: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázat adott részeinek elrejtése',
         subtitle: 'Elrejtés, felfedés',
@@ -1456,7 +1295,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_186.id,
     },
     video_data_222: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Csoportosítás sorok és oszlopok szerint',
         subtitle: 'Tagolás',
@@ -1465,7 +1303,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_222.id,
     },
     video_data_203: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kitöltés, árnyék, térbeli forgatás',
         subtitle: 'Alakzatok formázása',
@@ -1474,7 +1311,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_203.id,
     },
     video_data_196: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblatervező használata',
         subtitle: 'Elkülönített táblázatok',
@@ -1483,7 +1319,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_196.id,
     },
     video_data_221: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatok csoportosítása látványosan',
         subtitle: 'Részösszeg számítás',
@@ -1492,7 +1327,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_221.id,
     },
     video_data_208: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egy feltételhez kötött összegzés',
         subtitle: 'SZUMHA() függvény',
@@ -1501,7 +1335,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_208.id,
     },
     video_data_197: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hozzáadás, méretezés, forgatás, elrendezés',
         subtitle: 'Képek kezelése',
@@ -1510,7 +1343,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_197.id,
     },
     video_data_209: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Oszlopok létrehozása szövegből',
         subtitle: 'Adateszközök',
@@ -1519,7 +1351,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_209.id,
     },
     video_data_204: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kreatív szövegek létrehozása',
         subtitle: 'WordArt beszúrása',
@@ -1528,7 +1359,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_204.id,
     },
     video_data_181: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Több feltételhez kötött összegzés',
         subtitle: 'SZUMHATÖBB() függvény',
@@ -1537,7 +1367,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_181.id,
     },
     video_data_182: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egy feltétel érvényesítése több közül',
         subtitle: 'VAGY() függvény',
@@ -1546,7 +1375,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_182.id,
     },
     video_data_213: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hibaüzenet megjelenítése adatérvényesítés esetén',
         subtitle: 'Adateszközök',
@@ -1555,7 +1383,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_213.id,
     },
     video_data_210: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Ismétlődések eltávolítása',
         subtitle: 'Adateszközök',
@@ -1564,7 +1391,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_210.id,
     },
     video_data_218: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szűrés bonyolultabb szűrőfeltételekkel',
         subtitle: 'Irányított szűrés',
@@ -1573,7 +1399,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_218.id,
     },
     video_data_216: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Webes táblázat beszúrása, a Power Query-szerkesztő használata',
         subtitle: 'Adatimportálás',
@@ -1582,7 +1407,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_216.id,
     },
     video_data_220: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyakorlás, példák',
         subtitle: 'Szűrés',
@@ -1591,7 +1415,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_220.id,
     },
     video_data_223: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Létrehozás, alapvető formázás',
         subtitle: 'Kimutatás táblázat',
@@ -1600,7 +1423,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_223.id,
     },
     video_data_224: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Értékmező beállítások',
         subtitle: 'Kimutatás táblázat',
@@ -1609,7 +1431,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_224.id,
     },
     video_data_225: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kimutatások változtatása idősorral, szeletelővel',
         subtitle: 'Kimutatás táblázat',
@@ -1618,7 +1439,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_225.id,
     },
     video_data_404: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Betűszín beállítása',
@@ -1627,7 +1447,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_404.id,
     },
     video_data_227: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diagram összetevőinek beállítása',
         subtitle: 'Kördiagram és annak formázása',
@@ -1636,7 +1455,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_227.id,
     },
     video_data_406: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Bekezdések igazítása',
@@ -1645,7 +1463,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_406.id,
     },
     video_data_407: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A vonalzó használata',
         subtitle: 'Behúzások, sorköz, térköz',
@@ -1654,7 +1471,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_407.id,
     },
     video_data_261: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A nyomtatás beállításai',
         subtitle: 'Word dokumentum nyomtatása',
@@ -1663,7 +1479,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_261.id,
     },
     video_data_279: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Néhány tipp a helyes beállításhoz',
         subtitle: 'Bekezdésjellemzők, gyakori problémák',
@@ -1672,7 +1487,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_279.id,
     },
     video_data_245: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Programozás az Excelben',
         subtitle: 'Bevezetés a VBA felület használatába',
@@ -1681,7 +1495,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_245.id,
     },
     video_data_246: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Bővítmény telepítése',
         subtitle: 'Solver bővítmény',
@@ -1690,7 +1503,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_246.id,
     },
     video_data_236: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Automatikus számítás több feltétel figyelembevételével',
         subtitle: 'Solver bővítmény',
@@ -1699,7 +1511,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_236.id,
     },
     video_data_237: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gombok, csúszkák',
         subtitle: 'Bevezetés a vezérlőkbe',
@@ -1708,7 +1519,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_237.id,
     },
     video_data_238: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Legördülő menü, jelölőnégyzet',
         subtitle: 'Bevezetés a vezérlőkbe',
@@ -1717,7 +1527,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_238.id,
     },
     video_data_263: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Betűtípusok beállítása',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -1726,7 +1535,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_263.id,
     },
     video_data_259: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megnyitás lehetőségei',
         subtitle: 'Word dokumentum megnyitása',
@@ -1735,7 +1543,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_259.id,
     },
     video_data_248: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Program megnyitása',
         subtitle: 'Ismerkedés a Word-el',
@@ -1744,7 +1551,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_248.id,
     },
     video_data_235: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Funkciók végtelen tárháza programozás nélkül',
         subtitle: 'Bevezetés a makrókba',
@@ -1753,7 +1559,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_235.id,
     },
     video_data_280: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egységes függőleges síkok beállítása',
         subtitle: 'Tabulátorok',
@@ -1762,7 +1567,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_280.id,
     },
     video_data_269: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Aláhúzások és annak típusai',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -1771,7 +1575,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_269.id,
     },
     video_data_249: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gyorselérési eszköztár',
         subtitle: 'Ismerkedés a Word-el',
@@ -1780,7 +1583,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_249.id,
     },
     video_data_264: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Félkövér, dőlt betűtípusok',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -1789,7 +1591,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_264.id,
     },
     video_data_273: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Eredeti kinézet helyreállítása',
         subtitle: 'Minden formázás törlése',
@@ -1798,7 +1599,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_273.id,
     },
     video_data_265: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kis- és nagybetűk beállítása egyszerre',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -1807,7 +1607,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_265.id,
     },
     video_data_262: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kijelölés, Backspace, Delete',
         subtitle: 'Hibajavítás módjai',
@@ -1816,7 +1615,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_262.id,
     },
     video_data_239: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Számolás dátummal, időpontokkal',
         subtitle: 'Gyakorló feladatok',
@@ -1825,7 +1623,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_239.id,
     },
     video_data_250: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Gépelés, diktálás',
         subtitle: 'A szövegbevitel alapjai',
@@ -1834,7 +1631,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_250.id,
     },
     video_data_240: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kamatszámítás',
         subtitle: 'Gyakorló feladatok',
@@ -1843,7 +1639,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_240.id,
     },
     video_data_260: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A mentés lehetőségei',
         subtitle: 'Word dokumentum mentése',
@@ -1852,7 +1647,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_260.id,
     },
     video_data_241: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Éves hozam kiszámítása',
         subtitle: 'Gyakorló feladatok',
@@ -1861,7 +1655,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_241.id,
     },
     video_data_276: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sor- és térköz beállítása',
         subtitle: 'Bekezdések elkülönítése vagy összeolvasztása',
@@ -1870,7 +1663,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_276.id,
     },
     video_data_242: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyedi kalkulátor készítése',
         subtitle: 'Gyakorló feladatok',
@@ -1879,7 +1671,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_242.id,
     },
     video_data_270: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kiskapitális betű',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -1888,7 +1679,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_270.id,
     },
     video_data_244: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Alapvető formázási lehetőségek',
         subtitle: 'Kördiagram és annak formázása',
@@ -1897,7 +1687,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_244.id,
     },
     video_data_228: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyedi hátterek választása',
         subtitle: 'Kördiagram és annak formázása',
@@ -1906,7 +1695,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_228.id,
     },
     video_data_229: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Leggyakoribb hiba létrehozás esetén',
         subtitle: 'Hibaelhárítás',
@@ -1915,7 +1703,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_229.id,
     },
     video_data_230: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vonal, terület, halmozott terület diagramok',
         subtitle: 'Diagramok',
@@ -1924,7 +1711,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_230.id,
     },
     video_data_231: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Oszlop és buborék diagramok',
         subtitle: 'Diagramok',
@@ -1933,7 +1719,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_231.id,
     },
     video_data_232: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sugár diagram',
         subtitle: 'Diagramok',
@@ -1942,7 +1727,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_232.id,
     },
     video_data_233: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Csoportosított oszlopdiagram',
         subtitle: 'Diagramok',
@@ -1951,7 +1735,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_233.id,
     },
     video_data_234: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'További beállítások',
         subtitle: 'Diagramok',
@@ -1960,7 +1743,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_234.id,
     },
     video_data_266: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Betűszín és szövegkiemelés',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -1969,7 +1751,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_266.id,
     },
     video_data_405: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Betűtípus panel',
@@ -1978,7 +1759,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_405.id,
     },
     video_data_278: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szegélyek és árnyékok beállítása',
         subtitle: 'Bekezdések kiemelése',
@@ -1987,7 +1767,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_278.id,
     },
     video_data_274: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hogyan segít minket a "Minden látszik" lehetőség?',
         subtitle: 'Bekezdések igazítása',
@@ -1996,7 +1775,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_274.id,
     },
     video_data_408: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A szöveg megjelenítési módjai',
         subtitle: 'Igazítás, forgatás, listák',
@@ -2005,7 +1783,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_408.id,
     },
     video_data_267: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Betűméret módosítása',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -2014,7 +1791,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_267.id,
     },
     video_data_271: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Betűtípus panel',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -2023,7 +1799,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_271.id,
     },
     video_data_268: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Indexek beállítása',
         subtitle: 'Betűk alapvető formázási lehetőségei',
@@ -2032,7 +1807,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_268.id,
     },
     video_data_272: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kész formázási összeállítások egy kattintással',
         subtitle: 'Szövegeffektusok',
@@ -2041,7 +1815,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_272.id,
     },
     video_data_277: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tördelés beállítása',
         subtitle: 'Bekezdések egyéb lehetőségei',
@@ -2050,7 +1823,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_277.id,
     },
     video_data_275: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Eltolás a margótól',
         subtitle: 'Bekezdések behúzása',
@@ -2059,7 +1831,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_275.id,
     },
     video_data_281: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Igazítás és kitöltés',
         subtitle: 'Tabulátorok',
@@ -2068,7 +1839,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_281.id,
     },
     video_data_282: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Listák egymásba ágyazása',
         subtitle: 'Felsorolás, számozott lista',
@@ -2077,7 +1847,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_282.id,
     },
     video_data_283: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Lapméret és margók beállítása',
         subtitle: 'Oldaljellemzők beállítása',
@@ -2086,7 +1855,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_283.id,
     },
     video_data_284: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kitöltési effektusok és oldalszegély',
         subtitle: 'Oldalszínek és háttér beállítása',
@@ -2095,7 +1863,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_284.id,
     },
     video_data_247: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kerület, Terület, Felszín, Térfogat ',
         subtitle: 'Gyakorló feladatok',
@@ -2104,7 +1871,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_247.id,
     },
     video_data_285: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Létrehozás, elhelyezés',
         subtitle: 'Oldalszámok',
@@ -2113,7 +1879,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_285.id,
     },
     video_data_286: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Fájlnevek rögzítése',
         subtitle: 'A gyakran használt fájlok gyorsabb elérése',
@@ -2122,7 +1887,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_286.id,
     },
     video_data_298: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Oldalak',
         subtitle: 'Oldaltörések beszúrása',
@@ -2131,7 +1895,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_298.id,
     },
     video_data_316: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A helyesírás nyelvének megadása',
         subtitle: 'Többnyelvű dokumentum ellenőrzése',
@@ -2140,7 +1903,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_316.id,
     },
     video_data_287: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Információk a dokumentumról',
         subtitle: 'Metaadatok szerkesztése',
@@ -2149,7 +1911,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_287.id,
     },
     video_data_251: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Betűstílusok, alapvető formázás',
         subtitle: 'Kezdőlap menüszalag',
@@ -2158,7 +1919,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_251.id,
     },
     video_data_252: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dokumentum kibővítése egyszerűen',
         subtitle: 'Beszúrás menüszalag',
@@ -2167,7 +1927,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_252.id,
     },
     video_data_253: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sablonok használata, szegélyek, vízjelek',
         subtitle: 'Tervezés menüszalag',
@@ -2176,7 +1935,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_253.id,
     },
     video_data_254: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Margók, hasábok, tördelés',
         subtitle: 'Elrendezés menüszalag',
@@ -2185,7 +1943,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_254.id,
     },
     video_data_255: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tartalomjegyzék',
         subtitle: 'Hivatkozások menüszalag',
@@ -2194,7 +1951,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_255.id,
     },
     video_data_256: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Lábjegyzet, végjegyzet',
         subtitle: 'Hivatkozások menüszalag',
@@ -2203,7 +1959,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_256.id,
     },
     video_data_257: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Boríték és címke beállításai',
         subtitle: 'Levelezés menüszalag',
@@ -2212,7 +1967,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_257.id,
     },
     video_data_258: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Felolvasás, megjegyzések',
         subtitle: 'Véleményezés menüszalag',
@@ -2221,7 +1975,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_258.id,
     },
     video_data_299: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megjelenítési lehetőségek',
         subtitle: 'Vonalzó, rácsvonalak, navigáció',
@@ -2230,7 +1983,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_299.id,
     },
     video_data_288: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Oldalszámok',
         subtitle: 'Kezdő oldalszám beállítása',
@@ -2239,7 +1991,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_288.id,
     },
     video_data_309: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágókönyv',
         subtitle: 'Módosítások története',
@@ -2248,7 +1999,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_309.id,
     },
     video_data_325: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szövegrészek',
         subtitle: 'Gyakran ismétlődő szövegek tárolása és használata',
@@ -2257,7 +2007,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_325.id,
     },
     video_data_290: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Élőfej és élőláb beállítása',
         subtitle: 'Kiegészítő információk elhelyezése az oldalon',
@@ -2266,7 +2015,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_290.id,
     },
     video_data_300: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyi és lebegő menük',
         subtitle: 'Leggyakoribb formázási lehetőségek',
@@ -2275,7 +2023,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_300.id,
     },
     video_data_291: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Fedőlap készítése',
         subtitle: 'Választás különböző stílusok és színek közül',
@@ -2284,7 +2031,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_291.id,
     },
     video_data_317: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Keresés és csere',
         subtitle: 'Keresési beállítások és paraméterek',
@@ -2293,7 +2039,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_317.id,
     },
     video_data_310: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Formátummásolás',
         subtitle: 'Azonos megjelenés több helyen',
@@ -2302,7 +2047,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_310.id,
     },
     video_data_301: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Betűtípusok gyors beállítása',
@@ -2311,7 +2055,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_301.id,
     },
     video_data_292: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Stílusok',
         subtitle: 'Első lépés a megfelelő elrendezés felé',
@@ -2320,7 +2063,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_292.id,
     },
     video_data_293: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Stílusok',
         subtitle: 'Meglévő stílusok módosítása',
@@ -2329,7 +2071,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_293.id,
     },
     video_data_302: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Nézetek',
         subtitle: 'Olvasómód, nyomtatási elrendezés',
@@ -2338,7 +2079,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_302.id,
     },
     video_data_294: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Témák',
         subtitle: 'Hogyan készítsünk egységes dokumentumot?',
@@ -2347,7 +2087,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_294.id,
     },
     video_data_322: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyesírási és nyelvhelyességi hibák',
         subtitle: 'Ismétlődő hibák kijavítása',
@@ -2356,7 +2095,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_322.id,
     },
     video_data_311: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Sablonok használata',
         subtitle: 'Egyéni sablon mentése',
@@ -2365,7 +2103,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_311.id,
     },
     video_data_295: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Munka egyszerre több dokumentummal',
         subtitle: 'Gyors váltás az ablakok között',
@@ -2374,7 +2111,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_295.id,
     },
     video_data_303: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Nagyítás',
         subtitle: 'Automatikus, vagy manuális beállítás',
@@ -2383,7 +2119,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_303.id,
     },
     video_data_296: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Minden látszik',
@@ -2392,7 +2127,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_296.id,
     },
     video_data_318: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Keresés és csere',
         subtitle: 'A tartalom cseréje',
@@ -2401,7 +2135,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_318.id,
     },
     video_data_304: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Segédjelek',
         subtitle: 'És azok jelentése',
@@ -2410,7 +2143,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_304.id,
     },
     video_data_297: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Gyors navigálás a dokumentumban',
@@ -2419,7 +2151,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_297.id,
     },
     video_data_312: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megjegyzések hozzáadása',
         subtitle: 'Javaslat módosításokra',
@@ -2428,7 +2159,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_312.id,
     },
     video_data_328: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hasábok',
         subtitle: 'Jobb átláthatóság elérése',
@@ -2437,7 +2167,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_328.id,
     },
     video_data_305: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Felosztás',
         subtitle: 'Több dokumentum egy ablakban',
@@ -2446,7 +2175,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_305.id,
     },
     video_data_326: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Rendezés',
         subtitle: 'Számok és szöveg rendezése',
@@ -2455,7 +2183,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_326.id,
     },
     video_data_313: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dokumentumvédelem',
         subtitle: 'Szerkesztés korlátozása',
@@ -2464,7 +2191,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_313.id,
     },
     video_data_306: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Billentyűparancsok',
         subtitle: 'Szavak és mondatok kijelölése',
@@ -2473,7 +2199,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_306.id,
     },
     video_data_319: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Keresés és csere',
         subtitle: 'Csere formázás alapján',
@@ -2482,7 +2207,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_319.id,
     },
     video_data_323: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyesírási és nyelvhelyességi hibák',
         subtitle: 'Automatikus javítás és beállításai',
@@ -2491,7 +2215,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_323.id,
     },
     video_data_307: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágólap műveletek',
         subtitle: 'Kivágás, Másolás, Beillesztés',
@@ -2500,7 +2223,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_307.id,
     },
     video_data_314: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dokumentumvédelem',
         subtitle: 'Véletlen módosítások elkerülése a teljes dokumentumban',
@@ -2509,7 +2231,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_314.id,
     },
     video_data_308: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágólap műveletek',
         subtitle: 'Beillesztés módjai',
@@ -2518,7 +2239,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_308.id,
     },
     video_data_320: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Elválasztás',
         subtitle: 'Automatikus és kézi elválasztás',
@@ -2527,7 +2247,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_320.id,
     },
     video_data_315: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vízjelek',
         subtitle: 'Hozzáadás és testreszabás',
@@ -2536,7 +2255,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_315.id,
     },
     video_data_330: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tartalomjegyzék hozzáadása',
         subtitle: 'Létrehozás és frissítés',
@@ -2545,7 +2263,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_330.id,
     },
     video_data_324: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szinonímák keresése',
         subtitle: 'A beépített szinonímaszótár használata',
@@ -2554,7 +2271,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_324.id,
     },
     video_data_321: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyesírási és nyelvhelyességi hibák',
         subtitle: 'Javítás és felvétel a szótárba',
@@ -2563,7 +2279,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_321.id,
     },
     video_data_327: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Bekezdések elrendezése',
         subtitle: 'Sor- oldal- és szakasztörés',
@@ -2572,7 +2287,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_327.id,
     },
     video_data_329: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Címsorszámozás',
         subtitle: 'Címek és alcímek meghatározása',
@@ -2581,7 +2295,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_329.id,
     },
     video_data_333: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hosszabb szövegek formázása',
         subtitle: 'Elválasztás és oldalszám beállítása',
@@ -2590,7 +2303,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_333.id,
     },
     video_data_332: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Lábjegyzet, végjegyzet',
         subtitle: 'Kiegészítő információk az oldal alján',
@@ -2599,7 +2311,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_332.id,
     },
     video_data_331: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tárgymutató készítése',
         subtitle: 'Magyarázat fűzése kifejezésekhez',
@@ -2608,7 +2319,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_331.id,
     },
     video_data_334: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Fejlesztőeszközök ki- és bekapcsolása',
         subtitle: 'A Word rejtett funkciói',
@@ -2617,7 +2327,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_334.id,
     },
     video_data_335: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tartalomvezérlők hozzáadása',
         subtitle: 'Űrlapok készítése',
@@ -2626,7 +2335,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_335.id,
     },
     video_data_336: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képek beszúrása',
         subtitle: 'Elrendezés és méret beállítása',
@@ -2635,7 +2343,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_336.id,
     },
     video_data_337: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Alakzatok beszúrása',
         subtitle: 'A jelölés és kiemelés alternatív módja',
@@ -2644,7 +2351,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_337.id,
     },
     video_data_338: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Ikonok beszúrása',
         subtitle: 'Pontos magyarázat szavak nélkül',
@@ -2653,7 +2359,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_338.id,
     },
     video_data_401: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Áthúzás, alsó és felső index',
@@ -2662,7 +2367,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_401.id,
     },
     video_data_339: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Ábrák, matricák, körbevágott személyek beszúrása',
         subtitle: 'Az ikonok menü egyéb lehetőségei',
@@ -2671,7 +2375,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_339.id,
     },
     video_data_364: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Körlevél készítése',
         subtitle: 'Adatok behelyettesítése táblázatból',
@@ -2680,7 +2383,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_364.id,
     },
     video_data_353: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'Cellák egyesítése, felosztása, törlése',
@@ -2689,7 +2391,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_353.id,
     },
     video_data_340: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Aktív ablak és 3D térhatású modell beszúrása',
         subtitle: 'Animált szemléltetési lehetőségek',
@@ -2698,7 +2399,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_340.id,
     },
     video_data_341: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diagram beszúrása',
         subtitle: 'Adatábrázolás az Excel erejével',
@@ -2707,7 +2407,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_341.id,
     },
     video_data_354: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'A tartalom elhelyezése és felosztás',
@@ -2716,7 +2415,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_354.id,
     },
     video_data_342: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Smartart-ábra beszúrása',
         subtitle: 'Pontos szemléltetés dinamikus ábrákkal',
@@ -2725,7 +2423,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_342.id,
     },
     video_data_374: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A fájl menü lehetőségei',
         subtitle: 'Mentés, megnyitás, nyomtatás',
@@ -2734,7 +2431,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_374.id,
     },
     video_data_365: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Körlevél készítése',
         subtitle: 'Excelben lévő címlista használata',
@@ -2743,7 +2439,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_365.id,
     },
     video_data_343: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képek kezelése',
         subtitle: 'Háttér eltávolítása és szöveg körbefuttatása',
@@ -2752,7 +2447,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_343.id,
     },
     video_data_355: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'Szövegből táblázat',
@@ -2761,7 +2455,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_355.id,
     },
     video_data_344: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képek kezelése',
         subtitle: 'Képeffektusok és korrekciók',
@@ -2770,7 +2463,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_344.id,
     },
     video_data_381: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Prezentáció méretezése',
         subtitle: 'Diák méretének beállítása',
@@ -2779,7 +2471,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_381.id,
     },
     video_data_356: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'Szegély és mintázat beállítása',
@@ -2788,7 +2479,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_356.id,
     },
     video_data_366: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A gyorselérési eszköztár testreszabása',
         subtitle: 'Tetszőleges funkciók hozzáadása',
@@ -2797,7 +2487,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_366.id,
     },
     video_data_375: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A prezentáció mentése',
         subtitle: 'Mentés lehetőségei',
@@ -2806,7 +2495,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_375.id,
     },
     video_data_357: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'Stílus beállítása',
@@ -2815,7 +2503,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_357.id,
     },
     video_data_367: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kezdőképernyő',
         subtitle: 'Választás a meglévő témák közül',
@@ -2824,7 +2511,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_367.id,
     },
     video_data_358: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'Függvények a Word-ön belül',
@@ -2833,7 +2519,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_358.id,
     },
     video_data_389: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Tartalom beillesztése',
         subtitle: 'Előnézet, beállítások',
@@ -2842,7 +2527,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_389.id,
     },
     video_data_368: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Alapvető kezelési feladatok',
         subtitle: 'Új dia hozzáadása és alapvető szerkesztése',
@@ -2851,7 +2535,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_368.id,
     },
     video_data_359: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyszerű névjegy és cimke készítése',
         subtitle: 'Lapméret és margók ajánlott beállításai',
@@ -2860,7 +2543,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_359.id,
     },
     video_data_376: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A prezentáció videóvá konvertálása',
         subtitle: 'Animációk hozzáadása',
@@ -2869,7 +2551,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_376.id,
     },
     video_data_360: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Magánlevél készítése',
         subtitle: 'Borítékméretek és formázás beállítása',
@@ -2878,7 +2559,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_360.id,
     },
     video_data_350: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Alakzatok kezelése',
         subtitle: 'Torzítás, csomópontok módosítása',
@@ -2887,7 +2567,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_350.id,
     },
     video_data_345: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szövegdoboz beszúrása',
         subtitle: 'Szabadon mozgatható kiegészítő szöveg',
@@ -2896,7 +2575,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_345.id,
     },
     video_data_346: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Wordart beszúrása',
         subtitle: 'Szövegrészletek különleges formázása',
@@ -2905,7 +2583,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_346.id,
     },
     video_data_347: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szimbólumok beszúrása',
         subtitle: 'A Wingdings betűtípus',
@@ -2914,7 +2591,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_347.id,
     },
     video_data_348: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képletek beszúrása',
         subtitle: 'Választás meglévők közül, vagy szabadkézi bevitel',
@@ -2923,7 +2599,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_348.id,
     },
     video_data_349: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dátum beszúrása',
         subtitle: 'Különböző dátumformátumok',
@@ -2932,7 +2607,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_349.id,
     },
     video_data_369: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A képernyő részei',
         subtitle: 'Menüszalagok, gyorselérési eszköztár, státuszsor',
@@ -2941,7 +2615,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_369.id,
     },
     video_data_351: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Iniciálé készítése',
         subtitle: 'Elhelyezése és beállítása',
@@ -2950,7 +2623,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_351.id,
     },
     video_data_385: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg bevitele a diára',
         subtitle: 'Szövegdobozok elhelyezése',
@@ -2959,7 +2631,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_385.id,
     },
     video_data_361: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Önéletrajz készítése',
         subtitle: 'Választás a sablonok közül',
@@ -2968,7 +2639,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_361.id,
     },
     video_data_352: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázatok',
         subtitle: 'A hozzáadás módjai és Excel számolótábla beszúrása',
@@ -2977,7 +2647,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_352.id,
     },
     video_data_382: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Új dia hozzáadása',
         subtitle: 'Választás a téma elemei közül',
@@ -2986,7 +2655,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_382.id,
     },
     video_data_370: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Több dokumentum egyidejű kezelése',
         subtitle: 'Váltás ablakok és prezentációk között',
@@ -2995,7 +2663,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_370.id,
     },
     video_data_377: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Mentés diavetítésként',
         subtitle: 'Önműködően lejátszható bemutató létrehozása',
@@ -3004,7 +2671,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_377.id,
     },
     video_data_362: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hivatalos levél létrehozása',
         subtitle: 'Példák és ellenőrzés',
@@ -3013,7 +2679,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_362.id,
     },
     video_data_371: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A nagyítás lehetőségei',
         subtitle: 'Nagyítás, kicsinyítés, igazítás',
@@ -3022,7 +2687,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_371.id,
     },
     video_data_363: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szakdolgozat létrehozása',
         subtitle: 'Ajánlott formázási beállítások',
@@ -3031,7 +2695,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_363.id,
     },
     video_data_378: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Prezentáció megnyitása',
         subtitle: 'Megnyitás védett nézetben',
@@ -3040,7 +2703,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_378.id,
     },
     video_data_372: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A prezentáció tartalma',
         subtitle: 'Beszúrási lehetőségek',
@@ -3049,7 +2711,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_372.id,
     },
     video_data_373: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A gyorselérési eszköztár használata',
         subtitle: 'Visszavonás, ismétlés',
@@ -3058,7 +2719,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_373.id,
     },
     video_data_383: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diák törlése',
         subtitle: 'Törlés billentyűzet segítségével',
@@ -3067,7 +2727,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_383.id,
     },
     video_data_379: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Új prezentáció készítése',
         subtitle: 'Téma elemei és variációk kiválasztása',
@@ -3076,7 +2735,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_379.id,
     },
     video_data_388: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kattintás és húzás',
         subtitle: 'Tartalom áthelyezése',
@@ -3085,7 +2743,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_388.id,
     },
     video_data_380: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Prezentáció megosztása',
         subtitle: 'A megosztás lehetőségei',
@@ -3094,7 +2751,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_380.id,
     },
     video_data_386: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szövegrész kijelölése',
         subtitle: 'Segítő billentyűkombinációk',
@@ -3103,7 +2759,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_386.id,
     },
     video_data_384: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Prezentáció átrendezése',
         subtitle: 'Diák mozgatása',
@@ -3112,7 +2767,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_384.id,
     },
     video_data_387: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Kattintás és húzás',
         subtitle: 'Szövegrész és tartalom áthelyezése',
@@ -3121,7 +2775,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_387.id,
     },
     video_data_391: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'A gyorselérési eszköztár testreszabása',
         subtitle: 'Tetszőleges funkciók hozzáadása',
@@ -3130,7 +2783,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_391.id,
     },
     video_data_390: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Vágókönyv',
         subtitle: 'Módosítások története',
@@ -3139,7 +2791,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_390.id,
     },
     video_data_395: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Formátummásolás',
         subtitle: 'Azonos megjelenés több helyen',
@@ -3148,7 +2799,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_395.id,
     },
     video_data_396: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Betűtípus módosítása',
@@ -3157,7 +2807,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_396.id,
     },
     video_data_397: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'A formázás törlése egy kattintással',
@@ -3166,7 +2815,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_397.id,
     },
     video_data_399: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'A betűméret módosítása',
@@ -3175,7 +2823,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_399.id,
     },
     video_data_400: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Félkövér, dőlt, aláhúzott szöveg',
@@ -3184,7 +2831,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_400.id,
     },
     video_data_402: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szöveg formázása',
         subtitle: 'Betűköz beállítása',
@@ -3193,7 +2839,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_402.id,
     },
     video_data_409: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'WordArt létrehozása',
         subtitle: 'Szövegek kreatív megjelenéssel',
@@ -3202,7 +2847,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_409.id,
     },
     video_data_434: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Videók beszúrása',
         subtitle: 'Videóeffektusok beállítása',
@@ -3211,7 +2855,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_434.id,
     },
     video_data_410: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'WordArt alapvető formázása',
         subtitle: 'Körvonal és kitöltés beállítása',
@@ -3220,7 +2863,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_410.id,
     },
     video_data_411: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'WordArt effektusai',
         subtitle: 'Tükröződés, ragyogás, forgatás',
@@ -3229,7 +2871,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_411.id,
     },
     video_data_443: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Linkek beszúrása',
         subtitle: 'Linkek típusai',
@@ -3238,7 +2879,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_443.id,
     },
     video_data_435: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Videó vágása',
         subtitle: 'Automatikus indítás beállítása',
@@ -3247,7 +2887,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_435.id,
     },
     video_data_412: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'WordArt betűinek kitöltése',
         subtitle: 'Színek, színátmenetek, képek használata a kitöltéshez',
@@ -3256,7 +2895,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_412.id,
     },
     video_data_413: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázat létrehozása',
         subtitle: 'Normál és excel számolótábla létrehozása',
@@ -3265,7 +2903,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_413.id,
     },
     video_data_414: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázat szerkesztése',
         subtitle: 'Mozgatás, átméretezés, szegélyek',
@@ -3274,7 +2911,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_414.id,
     },
     video_data_457: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Animációk testreszabása',
         subtitle: 'Effektus beállítása és az animációk sorrendjének megváltoztatása',
@@ -3283,7 +2919,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_457.id,
     },
     video_data_418: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képek beszúrása az internetről',
         subtitle: 'Kivágott személyek, matricák, ábrák',
@@ -3292,7 +2927,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_418.id,
     },
     video_data_415: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Táblázat formázása',
         subtitle: 'Hátterek, effektusok választása',
@@ -3301,7 +2935,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_415.id,
     },
     video_data_454: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diaminta használata',
         subtitle: 'Egységes kinézet az egész prezentáció során',
@@ -3310,7 +2943,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_454.id,
     },
     video_data_419: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Alakzatok beszúrása',
         subtitle: 'Elhelyezés, formátum beállítása',
@@ -3319,7 +2951,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_419.id,
     },
     video_data_416: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képek beszúrása a számítógépről',
         subtitle: 'A beszúrás különböző módjai',
@@ -3328,7 +2959,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_416.id,
     },
     video_data_420: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Adatábrázolás a PowerPointban',
         subtitle: 'Táblázat és diagram beszúrása',
@@ -3337,7 +2967,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_420.id,
     },
     video_data_421: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Grafikus elemek formázása',
         subtitle: 'Árnyék és tükröződés beállítása',
@@ -3346,7 +2975,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_421.id,
     },
     video_data_417: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szövegdoboz beszúrása',
         subtitle: 'Átméretezés, mozgatás, elforgatás',
@@ -3355,7 +2983,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_417.id,
     },
     video_data_445: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Egyéni diasor meghatározása',
         subtitle: 'Tartalom átrendezése és kihagyása a prezentáció során',
@@ -3364,7 +2991,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_445.id,
     },
     video_data_422: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Grafikus elemek formázása',
         subtitle: 'Térhatás, térbeli forgatás és művészi effektusok',
@@ -3373,7 +2999,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_422.id,
     },
     video_data_423: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Grafikus elemek formázása',
         subtitle: 'Háttér eltávolítása, keretek és képelrendezés',
@@ -3382,7 +3007,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_423.id,
     },
     video_data_424: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Grafikus elemek formázása',
         subtitle: 'Körülvágás és körülvágás alakzattal',
@@ -3391,7 +3015,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_424.id,
     },
     video_data_431: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Képernyő felvétele',
         subtitle: 'Felvétel beszúrása a PowerPointba',
@@ -3400,7 +3023,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_431.id,
     },
     video_data_447: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'SmartArt ábrák és térhatású modellek beszúrása',
         subtitle: 'Különleges szemléltetési módok',
@@ -3409,7 +3031,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_447.id,
     },
     video_data_437: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diák fejléce és élőlába',
         subtitle: 'Diához kapcsolódó kiegészítő információk elhelyezése',
@@ -3418,7 +3039,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_437.id,
     },
     video_data_448: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Témák használata',
         subtitle: 'Választás a beépített lehetőségek közül',
@@ -3427,7 +3047,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_448.id,
     },
     video_data_438: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dia tartalmának utólagos átrendezése',
         subtitle: 'Választás beépített elrendezések közül',
@@ -3436,7 +3055,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_438.id,
     },
     video_data_446: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diavetítés felvétele',
         subtitle: 'Mentés PowerPoint-diavetítésként',
@@ -3445,7 +3063,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_446.id,
     },
     video_data_439: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dia méretének beállítása',
         subtitle: 'Választás álló és fekvő mód közül',
@@ -3454,7 +3071,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_439.id,
     },
     video_data_449: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Dia egyéni háttere',
         subtitle: 'Kitöltés színátmenettel, képpel, mintázattal',
@@ -3463,7 +3079,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_449.id,
     },
     video_data_432: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Videók lejátszása',
         subtitle: 'Előtűnés és elhalványulás beállítása',
@@ -3472,7 +3087,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_432.id,
     },
     video_data_440: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diák kiegészítése jegyzetekkel',
         subtitle: 'Jegyzetek megtekintése a prezentáció során',
@@ -3481,7 +3095,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_440.id,
     },
     video_data_451: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Teljes prezentáció egyéni háttere',
         subtitle: 'Kitöltés színátmenettel, képpel, mintázattal',
@@ -3490,7 +3103,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_451.id,
     },
     video_data_433: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Hangfájl beillesztése',
         subtitle: 'Hangerő beállítása és vágás',
@@ -3499,7 +3111,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_433.id,
     },
     video_data_441: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Élőfej és élőláb beszúrása',
         subtitle: 'Diák sorszámozása',
@@ -3508,7 +3119,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_441.id,
     },
     video_data_458: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Animációk időzítése',
         subtitle: 'Kiemelés és eltűnés animációk',
@@ -3517,7 +3127,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_458.id,
     },
     video_data_455: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Áttűnések beszúrása',
         subtitle: 'Időtartam és hangeffekt beállítása',
@@ -3526,7 +3135,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_455.id,
     },
     video_data_442: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diák elrejtése',
         subtitle: 'Újbóli megjelenítése',
@@ -3535,7 +3143,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_442.id,
     },
     video_data_464: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Automatikus méretezés',
         subtitle: 'A funkció kikapcsolása szükség esetén',
@@ -3544,7 +3151,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_464.id,
     },
     video_data_461: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: ' Csere a prezentációban',
         subtitle: 'Egy és több szövegrészlet cseréje',
@@ -3553,7 +3159,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_461.id,
     },
     video_data_456: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Animációk beszúrása',
         subtitle: 'Megjelenés animációk',
@@ -3562,7 +3167,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_456.id,
     },
     video_data_453: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Áttűnések beszúrása',
         subtitle: 'Választás különböző effektusok közül',
@@ -3571,7 +3175,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_453.id,
     },
     video_data_459: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Különleges animációk',
         subtitle: 'Szöveg és térhatású modellek animációja',
@@ -3580,7 +3183,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_459.id,
     },
     video_data_463: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Megjegyzések',
         subtitle: 'Hozzáadás és törlés',
@@ -3589,7 +3191,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_463.id,
     },
     video_data_460: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Keresés a prezentációban',
         subtitle: 'Keresési lehetőségek',
@@ -3598,7 +3199,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_460.id,
     },
     video_data_462: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Helyesírás ellenőrzés',
         subtitle: 'Ellenőrzés nyelvének beállítása',
@@ -3607,7 +3207,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_462.id,
     },
     video_data_444: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Időzítés beállítása',
         subtitle: 'Automatikus váltás diák között',
@@ -3616,7 +3215,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_444.id,
     },
     video_data_465: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Szövegdoboz formázása',
         subtitle: 'Kitöltés, szegély, effektusok',
@@ -3625,7 +3223,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_465.id,
     },
     video_data_425: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Fényképalbum létrehozása',
         subtitle: 'Tervezési ötletek',
@@ -3634,7 +3231,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_425.id,
     },
     video_data_466: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Akciógombok létrehozása',
         subtitle: 'Akcióbeállítások kattintásra és rámutatásra',
@@ -3643,7 +3239,6 @@ export const getVideoDataSeedData = (
         videoFileId: videoFiles.video_file_466.id,
     },
     video_data_467: {
-        deletionDate: null,
         thumbnailFileId: null,
         title: 'Diavetítés',
         subtitle: 'Lehetőségeink prezentálás közben',

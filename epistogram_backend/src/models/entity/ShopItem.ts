@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CoinTransaction } from './CoinTransaction';
 import { Course } from './course/Course';
-import { CourseData } from './course/CourseData';
 import { DiscountCode } from './DiscountCode';
 import { ShopItemCategory } from './ShopItemCategory';
 import { StorageFile } from './StorageFile';
@@ -10,46 +10,56 @@ import { StorageFile } from './StorageFile';
 export class ShopItem {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     name: string | null;
 
     @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     purchaseLimit: number | null;
 
     @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     detailsUrl: string | null;
 
     @Column()
+    @XViewColumn()
     coinPrice: number;
 
     @Column()
+    @XViewColumn()
     currencyPrice: number;
+
+    // TO ONE
 
     // shop item category 
     @Column()
+    @XViewColumn()
     shopItemCategoryId: number;
-
     @ManyToOne(_ => ShopItemCategory, x => x.shopItems)
     @JoinColumn({ name: 'shop_item_category_id' })
     shopItemCategory: ShopItemCategory;
 
     // shop item category 
-    @Column({ nullable: true, type: 'integer' })
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
     coverFileId: number | null;
-
     @ManyToOne(_ => StorageFile, x => x.shopItems)
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: StorageFile | null;
 
     // course
-    @Column({ nullable: true, type: 'integer' })
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
     courseId: number | null;
-
     @ManyToOne(_ => Course, x => x.shopItems)
     @JoinColumn({ name: 'course_id' })
     course: Relation<Course>;
+
+    // TO MANY
 
     // coin acquires 
     @JoinColumn()

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { XJoinColumn, XManyToOne, XOneToMany } from "../../../services/XORM/XORMDecorators";
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from "../../../services/XORM/XORMDecorators";
 import { AnswerVersion } from "../answer/AnswerVersion";
 import { ExamVersion } from "../exam/ExamVersion";
 import { GivenAnswer } from "../GivenAnswer";
@@ -12,6 +12,7 @@ import { QuestionData } from "./QuestionData";
 export class QuestionVersion {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     //
@@ -32,6 +33,7 @@ export class QuestionVersion {
 
     // video 
     @Column({ nullable: true })
+    @XViewColumn()
     videoVersionId: number | null;
     @XManyToOne<QuestionVersion>()(() => VideoVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('videoVersionId')
@@ -39,6 +41,7 @@ export class QuestionVersion {
 
     // exam 
     @Column({ nullable: true })
+    @XViewColumn()
     examVersionId: number | null;
     @XManyToOne<QuestionVersion>()(() => ExamVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('examVersionId')
@@ -46,6 +49,7 @@ export class QuestionVersion {
 
     // question 
     @Column()
+    @XViewColumn()
     questionId: number;
     @XManyToOne<QuestionVersion>()(() => Question, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionId')
@@ -53,6 +57,7 @@ export class QuestionVersion {
 
     // question data 
     @Column()
+    @XViewColumn()
     questionDataId: number;
     @XManyToOne<QuestionVersion>()(() => QuestionData, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionDataId')
@@ -60,6 +65,7 @@ export class QuestionVersion {
 
     // category
     @Column({ nullable: true })
+    @XViewColumn()
     personalityTraitCategoryId: number | null;
     @XManyToOne<QuestionVersion>()(() => PersonalityTraitCategory, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('personalityTraitCategoryId')

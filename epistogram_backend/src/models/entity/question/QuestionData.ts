@@ -1,6 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany } from '../../../services/XORM/XORMDecorators';
-import { PersonalityTraitCategory } from '../PersonalityTraitCategory';
+import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { QuestionType } from '../QuestionType';
 import { QuestionVersion } from './QuestionVersion';
 
@@ -8,22 +7,28 @@ import { QuestionVersion } from './QuestionVersion';
 export class QuestionData {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
+    @XViewColumn()
     deletionDate: Date | null;
 
     @Column()
+    @XViewColumn()
     questionText: string;
 
     @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     imageUrl: string | null;
 
     @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     orderIndex: number | null;
 
     @Column({ type: 'double precision', nullable: true })
+    @XViewColumn()
     showUpTimeSeconds: number | null;
 
     // 
@@ -32,6 +37,7 @@ export class QuestionData {
 
     // type 
     @Column({ default: 1 })
+    @XViewColumn()
     typeId: number;
     @ManyToOne(_ => QuestionType, x => x.questions)
     @JoinColumn({ name: 'type_id' })

@@ -1,26 +1,30 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany } from '../../services/XORM/XORMDecorators';
-import { getJoinColumnInverseSide } from '../../utilities/helpers';
+import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
+import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
 import { Role } from './authorization/Role';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
-import { User } from './User';
 import { CourseAccessBridge } from './CourseAccessBridge';
-import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
+import { User } from './User';
 
 @Entity()
 export class Company {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
+    @XViewColumn()
     deletionDate: Date | null;
 
     @Column()
+    @XViewColumn()
     name: string;
+
+    // TO MANY
 
     // users 
     @OneToMany(_ => User, user => user.company)

@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { PermissionCodeType, PermissionScopeType } from '../../../shared/types/sharedTypes';
 import { PermissionAssignmentBridge } from './PermissionAssignmentBridge';
 import { RolePermissionBridge } from './RolePermissionBridge';
@@ -7,13 +8,18 @@ import { RolePermissionBridge } from './RolePermissionBridge';
 export class Permission {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column({ type: 'text' })
+    @XViewColumn()
     code: PermissionCodeType;
 
     @Column({ type: 'text' })
+    @XViewColumn()
     scope: PermissionScopeType;
+
+    // TO MANY
 
     // rolePermissionBridges
     @JoinColumn()

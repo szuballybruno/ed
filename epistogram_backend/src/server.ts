@@ -143,8 +143,8 @@ const main = async () => {
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
-    const courseItemsService = new CourseItemService(ormConnectionService, mapperService);
-    const userCourseBridgeService = new UserCourseBridgeService(courseItemsService, ormConnectionService, mapperService);
+    const courseItemService = new CourseItemService(ormConnectionService, mapperService);
+    const userCourseBridgeService = new UserCourseBridgeService(courseItemService, ormConnectionService, mapperService);
     const questionService = new QuestionService(ormConnectionService);
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
     const storageService = new StorageService(globalConfig);
@@ -152,7 +152,7 @@ const main = async () => {
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService, globalConfig);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService, courseItemService);
     const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
     const sampleMergeService = new SampleMergeService();
     const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
@@ -170,7 +170,6 @@ const main = async () => {
     const commentService = new CommentService(ormConnectionService, mapperService);
     const likeService = new LikeService(ormConnectionService, mapperService);
     const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
-    const courseItemService = new CourseItemService(ormConnectionService, mapperService);
 
     // controllers 
     const permissionController = new PermissionController(permissionService);

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { XDialogHost } from './components/lib/XDialog/XDialogHost';
 import { AuthenticationFrame } from './components/system/AuthenticationFrame';
 import { ChakraThemeFrame } from './components/system/ChakraThemeFrame';
-import { ErrorDialogFrame } from './components/system/DialogFrame';
+import { ErrorDialogFrame } from './components/system/ErrorDialogFrame';
 import { EventListener } from './components/system/EventListener';
 import { InitFrame } from './components/system/InitFrame';
 import { MUIThemeFrame } from './components/system/MUIThemeFrame';

@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { AnswerSession } from '../AnswerSession';
 import { ModuleData } from '../module/ModuleData';
 import { ModuleVersion } from '../module/ModuleVersion';
@@ -13,6 +13,7 @@ import { ExamData } from './ExamData';
 export class ExamVersion {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     // 
@@ -40,6 +41,7 @@ export class ExamVersion {
     //
 
     @Column()
+    @XViewColumn()
     examDataId: number;
     @XManyToOne<ExamVersion>()(() => ExamData, x => x.examVersions)
     @XJoinColumn<ExamVersion>('examDataId')
@@ -47,6 +49,7 @@ export class ExamVersion {
 
     // module
     @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     moduleVersionId: number | null;
     @ManyToOne(_ => ModuleVersion, x => x.examVersions)
     @XJoinColumn<ExamVersion>('moduleVersionId')
@@ -54,6 +57,7 @@ export class ExamVersion {
 
     // exam
     @Column()
+    @XViewColumn()
     examId: number;
     @XManyToOne<ExamVersion>()(() => Exam, x => x.examVersions)
     @XJoinColumn<ExamVersion>('examId')

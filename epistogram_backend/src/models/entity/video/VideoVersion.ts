@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { AnswerSession } from '../AnswerSession';
 import { Comment } from '../Comment';
 import { ModuleVersion } from '../module/ModuleVersion';
@@ -17,6 +17,7 @@ import { VideoData } from './VideoData';
 export class VideoVersion {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     //
@@ -65,6 +66,7 @@ export class VideoVersion {
 
     // module
     @Column()
+    @XViewColumn()
     moduleVersionId: number;
     @XManyToOne<VideoVersion>()(() => ModuleVersion, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('moduleVersionId')
@@ -72,6 +74,7 @@ export class VideoVersion {
 
     // video 
     @Column()
+    @XViewColumn()
     videoId: number;
     @XManyToOne<VideoVersion>()(() => Video, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoId')
@@ -79,6 +82,7 @@ export class VideoVersion {
 
     // video data
     @Column()
+    @XViewColumn()
     videoDataId: number;
     @XManyToOne<VideoVersion>()(() => VideoData, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoDataId')

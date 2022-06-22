@@ -8,7 +8,6 @@ import { QuestionDTO } from '../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { QuestionTypeEnum } from '../shared/types/sharedTypes';
 import { throwNotImplemented } from '../utilities/helpers';
-import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class QuestionService {

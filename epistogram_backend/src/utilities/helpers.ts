@@ -69,7 +69,8 @@ type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;
 type SaveObjCastType =
     | 'string' | 'int' | 'float' | 'boolean'
     | 'string[]' | 'int[]' | 'float[]' | 'boolean[]'
-    | 'custom';
+    | 'custom'
+    | 'any[]';
 
 export class SafeObjectWrapper<TObject> {
 
@@ -102,6 +103,7 @@ export class SafeObjectWrapper<TObject> {
     getValue(getter: (data: TObject) => number[], castTypeOrFn: 'float[]'): number[];
     getValue(getter: (data: TObject) => boolean, castTypeOrFn: 'boolean'): boolean;
     getValue(getter: (data: TObject) => boolean[], castTypeOrFn: 'boolean[]'): boolean[];
+    getValue<TValue>(getter: (data: TObject) => TValue[], castTypeOrFn: 'any[]'): TValue[];
     getValue<TValue>(getter: (data: TObject) => TValue, castType: 'custom', fn: SafeObjectValidatorFunctionType<TValue>): TValue;
     getValue<TValue>(getter: (data: TObject) => TValue, castType: SaveObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue {
 
@@ -133,6 +135,14 @@ export class SafeObjectWrapper<TObject> {
         if (castType === 'boolean[]')
             return this.parseArray(value, x => this.parseBoolean(x));
 
+        if (castType === 'any[]') {
+
+            if (!Array.isArray(value))
+                throw new Error('Expected type is array but value is of a different type.');
+
+            return value;
+        }
+        
         if (castType === 'custom') {
             const isValid = fn!(value);
             if (!isValid)

@@ -1,5 +1,5 @@
-import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag, XJoinColumn, XManyToOne, XOneToMany } from '../../../services/XORM/XORMDecorators';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { StorageFile } from '../StorageFile';
 import { VideoFile } from './VideoFile';
 import { VideoVersion } from './VideoVersion';
@@ -8,37 +8,40 @@ import { VideoVersion } from './VideoVersion';
 export class VideoData {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
-    @IsDeletedFlag()
-    @DeleteDateColumn()
-    deletionDate: Date | null;
-
     @Column()
+    @XViewColumn()
     title: string;
 
-    @Column({ nullable: true })
-    subtitle: string;
-
-    @Column({ nullable: true })
-    description: string;
-
     @Column()
+    @XViewColumn()
     orderIndex: number;
+
+    @Column({ nullable: true, type: 'text' })
+    @XViewColumn()
+    subtitle: string | null;
+
+    @Column({ nullable: true, type: 'text' })
+    @XViewColumn()
+    description: string | null;
 
     //
     // TO ONE
     // 
 
     // video file
-    @Column({ nullable: true })
-    videoFileId: number;
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
+    videoFileId: number | null;
     @XManyToOne<VideoData>()(() => VideoFile, x => x.videos)
     @XJoinColumn<VideoData>('videoFileId')
     videoFile: Relation<VideoFile>;
 
     // thumbnail file
-    @Column({ nullable: true })
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
     thumbnailFileId: number | null;
     @XManyToOne<VideoData>()(() => StorageFile, x => x.videos)
     @XJoinColumn<VideoData>('thumbnailFileId')

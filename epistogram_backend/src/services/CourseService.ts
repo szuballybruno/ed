@@ -1,7 +1,9 @@
 import { UploadedFile } from 'express-fileupload';
 import { CourseData } from '../models/entity/course/CourseData';
+import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../models/entity/CourseCategory';
+import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { User } from '../models/entity/User';
@@ -14,6 +16,7 @@ import { CourseItemPlaylistView } from '../models/views/CourseItemStateView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -33,11 +36,14 @@ import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
+import { InsertEntity, VersionMigrationResult } from '../utilities/misc';
+import { CourseItemService } from './CourseItemService';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { createCharSeparatedList } from './misc/mappings';
+import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
@@ -63,7 +69,8 @@ export class CourseService {
         mapperService: MapperService,
         fileService: FileService,
         examService: ExamService,
-        pretestService: PretestService) {
+        pretestService: PretestService,
+        private _courseItemService: CourseItemService) {
 
         this._moduleService = moduleService;
         this._userCourseBridgeService = userCourseBridgeService;
@@ -457,11 +464,21 @@ export class CourseService {
      */
     async saveCourseDetailsAsync(dto: CourseDetailsEditDataDTO) {
 
+        const cv = await this._ormService
+            .withResType<CourseVersion>()
+            .query(LatestCourseVersionView, { courseId: dto.courseId })
+            .select(CourseVersion)
+            .leftJoin(CourseVersion, x => x
+                .on('id', '=', 'versionId', LatestCourseVersionView))
+            .where('courseId', '=', 'courseId')
+            .getSingle();
+
+        const courseDataId = cv.courseDataId;
+
         // save basic info
         await this._ormService
-            .getRepository(CourseData)
-            .save({
-                id: dto.courseId,
+            .save(CourseData, {
+                id: courseDataId,
                 title: dto.title,
                 teacherId: dto.teacherId,
                 categoryId: dto.category.id,
@@ -521,19 +538,88 @@ export class CourseService {
     /**
      * Saves the course content 
      */
-    async saveCourseContentAsync(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+    async saveCourseContentAsync(courseId: number, mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+
+        if (mutations.length === 0)
+            return;
+
+        // get old version id 
+        const oldVersionId = (await this._ormService
+            .query(LatestCourseVersionView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle())
+            .versionId;
+
+        // create new version
+        const newCourseVersionId = await this
+            ._createNewCourseVersionAsync(courseId, oldVersionId);
+
+        // increment module versions 
+        const moduleVersionMigrations = await this
+            ._incrementModuleVersionsAsync(newCourseVersionId, mutations)
 
         // update items 
-        await this.saveUpdatedCourseItems(mutations);
+        // await this.saveUpdatedCourseItemsAsync(mutations);
 
         // save new items 
-        await this.saveNewCourseItems(mutations);
+        await this._courseItemService
+            .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
 
         // delete items 
-        await this.saveDeletedCourseItems(mutations);
+        // await this.saveDeletedCourseItemsAsync(mutations);
     }
 
-    private async saveUpdatedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+    private async _incrementModuleVersionsAsync(courseVersionId: number, mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+
+        const oldModuleVersionIds = mutations
+            .filter(x => x.action !== 'delete')
+            .map(x => XMutatorHelpers.getFieldValue(x)('moduleVersionId')!);
+
+        const oldModuleVersions = await this._ormService
+            .query(ModuleVersion, { oldModuleVersionIds })
+            .where('id', '=', 'oldModuleVersionIds')
+            .getMany();
+
+        const newModuleVersions = oldModuleVersions
+            .map(oldModuleVersion => {
+
+                const newModule: InsertEntity<ModuleVersion> = {
+                    courseVersionId: courseVersionId,
+                    moduleDataId: oldModuleVersion.moduleDataId,
+                    moduleId: oldModuleVersion.moduleId
+                };
+
+                return newModule;
+            });
+
+        const newModuleVersionIds = await this._ormService
+            .createManyAsync(ModuleVersion, newModuleVersions);
+
+        return newModuleVersionIds
+            .map((x, i): VersionMigrationResult => ({
+                oldVersionId: oldModuleVersions[i].id,
+                newVersionId: x
+            }));
+    }
+
+    private async _createNewCourseVersionAsync(courseId: number, oldVersionId: number) {
+
+        const oldDataId = (await this._ormService
+            .query(CourseVersion, { oldVersionId })
+            .where('id', '=', 'oldVersionId')
+            .getSingle())
+            .courseDataId;
+
+        const newVersionId = await this._ormService
+            .createAsync(CourseVersion, {
+                courseId,
+                courseDataId: oldDataId
+            });
+
+        return newVersionId;
+    }
+
+    private async saveUpdatedCourseItemsAsync(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         throwNotImplemented();
         // const updateMuts = mutations
@@ -584,7 +670,7 @@ export class CourseService {
         //     .save(ExamData, exams);
     }
 
-    private async saveDeletedCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+    private async saveDeletedCourseItemsAsync(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         const itemCodes = mutations
             .filter(x => x.action === 'delete')
@@ -607,65 +693,6 @@ export class CourseService {
 
         this._videoService
             .softDeleteVideosAsync(deletedVideoIds, true);
-    }
-
-    private async saveNewCourseItems(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
-
-        throwNotImplemented();
-        // const checkMutationItemType = (
-        //     mutation: Mutation<CourseContentItemAdminDTO, 'versionCode'>,
-        //     itemType: CourseItemType) => {
-
-        //     return mutation
-        //         .fieldMutators
-        //         .some(fm => fm.field === 'itemType' && fm.value === itemType);
-        // };
-
-        // //
-        // // insert new videos
-        // //
-        // const newVideos = mutations
-        //     .filter(x => x.action === 'add')
-        //     .filter(x => checkMutationItemType(x, 'video'))
-        //     .map((x): Partial<VideoData> => {
-
-        //         const mutObject = mapMutationToPartialObject(x);
-
-        //         return {
-        //             courseId: mutObject.courseId,
-        //             moduleId: mutObject.moduleId,
-        //             title: mutObject.itemTitle,
-        //             subtitle: mutObject.itemSubtitle,
-        //             orderIndex: mutObject.itemOrderIndex,
-        //             description: '',
-        //             lengthSeconds: 0
-        //         };
-        //     });
-
-        // // insert new videos
-        // const newExams = mutations
-        //     .filter(x => x.action === 'add')
-        //     .filter(x => checkMutationItemType(x, 'exam'))
-        //     .map((x): Partial<ExamData> => {
-
-        //         const mutObject = mapMutationToPartialObject(x);
-
-        //         return {
-        //             courseId: mutObject.courseId,
-        //             moduleId: mutObject.moduleId,
-        //             title: mutObject.itemTitle,
-        //             subtitle: mutObject.itemSubtitle,
-        //             orderIndex: mutObject.itemOrderIndex,
-        //             description: '',
-        //             type: 'normal'
-        //         };
-        //     });
-
-        // await this._examService
-        //     .insertBulkAsync(newExams);
-
-        // await this._videoService
-        //     .insertBulkAsync(newVideos);
     }
 
     /**

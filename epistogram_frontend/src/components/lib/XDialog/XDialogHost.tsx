@@ -114,7 +114,7 @@ export const XDialogHost = (props: {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 zIndex: 1000 - index,
-                                background: '#0000000d'
+                                background: 'rgb(0,0,0,0.3)'
                             }}
                             className={isOpen ? styles.disp_flex : styles.disp_none}>
 

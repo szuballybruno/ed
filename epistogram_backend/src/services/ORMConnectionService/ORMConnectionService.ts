@@ -168,29 +168,35 @@ export class ORMConnectionService {
     /**
      * Create many entites
      */
-    async createMany<TEntity>(c: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
+    async createManyAsync<TEntity>(c: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
 
-        return this
+        const res = await this
             .getRepository(c)
             .insert(ent as any[]);
+
+        return res.identifiers.map(x => x['id']);
     }
 
     /**
      * Saves entities
      */
-    async save<TEntity>(classType: ClassType<TEntity>, entites: Partial<TEntity>[]) {
+    async save<TEntity>(classType: ClassType<TEntity>, entityOrEntities: Partial<TEntity>[] | Partial<TEntity>) {
 
         try {
 
-            if (entites.length === 0)
+            const entities = Array.isArray(entityOrEntities)
+                ? entityOrEntities
+                : [entityOrEntities];
+
+            if (entities.length === 0)
                 return;
 
-            entites
+            entities
                 .forEach(x => noUndefined(x));
 
             await this._ormConnection
                 .getRepository(classType)
-                .save(entites as any);
+                .save(entities as any);
         }
         catch (e: any) {
 

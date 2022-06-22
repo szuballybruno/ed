@@ -1,50 +1,60 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag, XManyToOne } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Like } from './Like';
 import { User } from './User';
-import { Like as Like } from './Like';
-import { VideoData } from './video/VideoData';
 import { VideoVersion } from './video/VideoVersion';
 
 @Entity()
 export class Comment {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
+    @XViewColumn()
     deletionDate: Date | null;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
+    @XViewColumn()
     creationDate: Date;
 
     @Column()
+    @XViewColumn()
     text: string;
 
     @Column({ default: false })
+    @XViewColumn()
     isQuestion: boolean;
 
     @Column({ default: false })
+    @XViewColumn()
     isAnonymous: boolean;
 
     @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     parentCommentId: number | null;
+
+    // TO ONE
 
     // users
     @Column()
+    @XViewColumn()
     userId: number;
-
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.comments)
     user: Relation<User>;
 
     // video
     @Column()
+    @XViewColumn()
     videoVersionId: number;
-
     @JoinColumn({ name: 'video_id' })
     @XManyToOne<Comment>()(() => VideoVersion, x => x.comments)
     videoVersion: Relation<VideoVersion>;
+
+    // TO MANY
 
     // likes
     @OneToMany(_ => Like, x => x.user)

@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { XOneToMany } from '../../services/XORM/XORMDecorators';
+import { XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseData } from './course/CourseData';
 import { ModuleData } from './module/ModuleData';
 import { ShopItem } from './ShopItem';
@@ -11,10 +11,14 @@ import { VideoFile } from './video/VideoFile';
 export class StorageFile {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column()
+    @XViewColumn()
     filePath: string;
+
+    // TO MANY
 
     // video files
     @XOneToMany<StorageFile>()(() => VideoFile, v => v.storageFile)
