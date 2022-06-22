@@ -22,7 +22,7 @@ export class SQLBootstrapperService {
     bootstrapDatabase = async () => {
 
         log('Recreating views...');
-        await this.recreateViewsAsync(this._dbSchema.views.map(x => x[0]));
+        await this.recreateViewsAsync(this._dbSchema.views.map(x => x[0]), this._dbSchema.views.map(x => x[1]));
 
         log('Recreating functions...');
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
@@ -168,10 +168,10 @@ export class SQLBootstrapperService {
         }
     };
 
-    private recreateViewsAsync = async (viewNames: string[]) => {
+    private recreateViewsAsync = async (viewSubFolderNames: string[], viewNames: string[]) => {
 
         await this.dropViews(viewNames);
-        await this.createViews(viewNames);
+        await this.createViews(viewNames, viewSubFolderNames);
     };
 
     private replaceSymbols = (sql: string) => {
@@ -180,12 +180,13 @@ export class SQLBootstrapperService {
         return replaceAll(sql, '{CDN_BUCKET_URL}', url);
     };
 
-    private createViews = async (viewNames: string[]) => {
+    private createViews = async (viewNames: string[], viewSubFolderNames: string[]) => {
 
         for (let index = 0; index < viewNames.length; index++) {
 
             const viewName = viewNames[index];
-            const script = this.getViewCreationScript(viewName);
+            const viewSubFolderName = viewSubFolderNames[index];
+            const script = this.getViewCreationScript(viewName, viewSubFolderName);
 
             logSecondary(`Creating view: [${viewName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
@@ -200,14 +201,14 @@ export class SQLBootstrapperService {
         await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
     };
 
-    private getViewCreationScript = (viewName: string) => {
+    private getViewCreationScript = (viewName: string, viewSubFolderName: string) => {
 
-        const sql = this.readSQLFile('views', viewName);
+        const sql = this.readSQLFile('views', viewName, viewSubFolderName);
         return `CREATE VIEW ${viewName}\nAS\n${sql}`;
     };
 
     private readSQLFile = (folderName: string, fileName: string, subFolder?: string) => {
 
-        return readFileSync(this._configuration.getRootRelativePath(`/sql/${folderName}/${fileName}.sql`), 'utf8');
+        return readFileSync(this._configuration.getRootRelativePath(`/sql/${folderName}/${subFolder || ''}${subFolder ? '/' : ''}${fileName}.sql`), 'utf8');
     };
 }

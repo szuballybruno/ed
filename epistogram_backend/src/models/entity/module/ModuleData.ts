@@ -22,6 +22,9 @@ export class ModuleData {
     @Column()
     orderIndex: number;
 
+    @Column()
+    isPretestModule: boolean;
+
     // 
     // TO ONE
     //

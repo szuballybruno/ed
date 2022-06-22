@@ -69,14 +69,14 @@ export class CoinTransactionService {
                 .map(CoinTransactionView, CoinTransactionDTO, x));
     }
 
-    async getCoinsForQuestionAsync(userId: number, questionId: number) {
+    async getCoinsForQuestionAsync(userId: number, questionVersionId: number) {
 
         return await this._ormConnectionService
             .getRepository(CoinTransaction)
             .createQueryBuilder('ca')
             .leftJoinAndSelect('ca.givenAnswer', 'ga')
             .where('ca.userId = :userId', { userId })
-            .andWhere('ga.question_id = :questionId', { questionId })
+            .andWhere('ga.question_version_id = :questionVersionId', { questionVersionId })
             .andWhere('ca.given_answer_id IS NOT NULL')
             .getMany();
     }

@@ -35,9 +35,13 @@ BEGIN
 	-- CORRECT ANSWER IDS
 	SELECT ARRAY
 	(
-		SELECT a.id	
-		FROM public.answer AS a
-		WHERE a.question_id = param_question_id 
+		SELECT av.answer_id
+		FROM public.answer_version AS av
+
+		LEFT JOIN public.question_version qv
+		ON qv.id = av.question_version_id
+		
+		WHERE av.question_version_id = param_question_id 
 			AND a.is_correct = true
 	)		
 	INTO var_correct_answer_ids;

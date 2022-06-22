@@ -64,26 +64,25 @@ export class CoinAcquireService {
      */
     acquireQuestionAnswerCoinsAsync = async (userId: number, givenAnswerId: number) => {
 
-        throwNotImplemented();
-        // // do not reward user if the question is already answered 
-        // // correctly and a coin is previously acquired for that 
-        // const newGivenAnswer = await this._ormService
-        //     .getSingleById(GivenAnswer, givenAnswerId);
+        // do not reward user if the question is already answered 
+        // correctly and a coin is previously acquired for that 
+        const newGivenAnswer = await this._ormService
+            .getSingleById(GivenAnswer, givenAnswerId);
 
-        // const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
-        //     .getCoinsForQuestionAsync(userId, newGivenAnswer.questionId);
+        const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
+            .getCoinsForQuestionAsync(userId, newGivenAnswer.questionVersionId);
 
-        // if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
-        //     return null;
+        if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
+            return null;
 
-        // // insert coin
-        // await this._coinTransactionService
-        //     .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.questionCorrectAnswer, givenAnswerId });
+        // insert coin
+        await this._coinTransactionService
+            .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.questionCorrectAnswer, givenAnswerId });
 
-        // return {
-        //     reason: 'correct_answer',
-        //     amount: this._coinRewardAmounts.questionCorrectAnswer
-        // } as CoinAcquireResultDTO;
+        return {
+            reason: 'correct_answer',
+            amount: this._coinRewardAmounts.questionCorrectAnswer
+        } as CoinAcquireResultDTO;
     };
 
     /**

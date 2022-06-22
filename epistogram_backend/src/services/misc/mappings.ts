@@ -35,6 +35,8 @@ import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
+import { ExamView } from '../../models/views/ExamView';
+import { ExamDataView } from '../../models/views/ExamDataView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
@@ -78,6 +80,7 @@ import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
 import { DiscountCodeDTO } from '../../shared/dtos/DiscountCodeDTO';
 import { EventDTO } from '../../shared/dtos/EventDTO';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
@@ -89,6 +92,7 @@ import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityT
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { ResultAnswerDTO } from '../../shared/dtos/ResultAnswerDTO';
 import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
 import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
@@ -818,25 +822,24 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
     //         } as ExamEditDataDTO;
     //     });
 
-    // mapperService
-    //     .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionData[]) => {
+    mapperService
+        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: ExamDataView[]) => {
 
-    //         return {
-    //             id: exam.examId,
-    //             courseId: exam.courseId,
-    //             subTitle: exam.subtitle,
-    //             title: exam.title,
-    //             thumbnailUrl: exam.thumbnailUrl,
-    //             isFinalExam: exam.isFinalExam,
-    //             canTakeAgain: exam.canRetake,
-    //             correctAnswerCount: exam.correctAnswerCount,
-    //             correctAnswerRate: exam.correctAnswerRate,
-    //             isCompletedPreviously: exam.isCompletedPreviously,
-    //             totalQuestionCount: exam.totalQuestionCount,
-    //             questions: questions
-    //                 .map(x => toQuestionDTO(x)),
-    //         } as ExamPlayerDataDTO;
-    //     });
+            return {
+                id: exam.examId,
+                courseId: exam.courseId,
+                subTitle: exam.subtitle,
+                title: exam.title,
+                thumbnailUrl: exam.thumbnailUrl,
+                isFinalExam: exam.isFinalExam,
+                canTakeAgain: exam.canRetake,
+                correctAnswerCount: exam.correctAnswerCount,
+                correctAnswerRate: exam.correctAnswerRate,
+                isCompletedPreviously: exam.isCompletedPreviously,
+                totalQuestionCount: exam.totalQuestionCount,
+                questions: toQuestionDTO(questions),
+            } as ExamPlayerDataDTO;
+        });
 
     mapperService
         .addMap(ShopItem, ShopItemAdminShortDTO, x => ({
@@ -1133,22 +1136,31 @@ export const toResultAnswerDTO = (view: ExamResultView) => {
     } as ResultAnswerDTO;
 };
 
-// export const toQuestionDTO = (q: QuestionData) => {
+export const toQuestionDTO = (lqav: ExamDataView[]) => {
 
-//     navPropNotNull(q.answers);
+    return lqav
+        .groupBy(x => x.questionId)
+        .map(questionGrouping => {
+            const viewAsQuestion = questionGrouping.items.first();
 
-//     return {
-//         questionId: q.id,
-//         orderIndex: q.orderIndex,
-//         questionText: q.questionText,
-//         imageUrl: q.imageUrl,
-//         showUpTimeSeconds: q.showUpTimeSeconds,
-//         typeId: q.typeId,
-//         answers: q.answers
-//             .map(x => toAnswerDTO(x))
-
-//     } as QuestionDTO;
-// };
+            return {
+                questionId: viewAsQuestion.questionId,
+                orderIndex: viewAsQuestion.orderIndex,
+                questionText: viewAsQuestion.questionText,
+                imageUrl: viewAsQuestion.imageUrl,
+                showUpTimeSeconds: viewAsQuestion.showUpTimeSeconds,
+                typeId: viewAsQuestion.typeId,
+                answers: questionGrouping
+                    .items
+                    .map(viewAsAnswer => {
+                        return {
+                            answerId: viewAsAnswer.answerId,
+                            answerText: viewAsAnswer.answerText
+                        } as AnswerDTO;
+                    })
+            }
+        }) as QuestionDTO[]
+};
 
 export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
 

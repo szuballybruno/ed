@@ -14,7 +14,7 @@ export type XDBMSchemaType = {
     seedScripts: ([Function, PropConstraintType<any, any>] | string)[];
     functionScripts: string[];
     constraints: XDBMConstraintType[];
-    views: ([string] | [string, Function])[];
+    views: ([string, string] | [string, string, Function])[];
     entities: Function[];
     indices: XDMBIndexType[];
     triggers: string[];

@@ -51,41 +51,40 @@ export class QuestionAnswerService {
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) => {
 
-        throwNotImplemented();
-        // const {
-        //     correctAnswerIds,
-        //     givenAnswerId,
-        //     isCorrect,
-        //     streakLength,
-        //     streakId
-        // } = await this._sqlFunctionsService
-        //     .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
+        const {
+            correctAnswerIds,
+            givenAnswerId,
+            isCorrect,
+            streakLength,
+            streakId
+        } = await this._sqlFunctionsService
+            .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
 
-        // let coinAcquires = null as null | {
-        //     normal: CoinAcquireResultDTO | null,
-        //     bonus: CoinAcquireResultDTO | null
-        // };
+        let coinAcquires = null as null | {
+            normal: CoinAcquireResultDTO | null,
+            bonus: CoinAcquireResultDTO | null
+        };
 
-        // // if answer is correct give coin rewards 
-        // if (isCorrect && !isExamQuestion) {
+        // if answer is correct give coin rewards 
+        if (isCorrect && !isExamQuestion) {
 
-        //     const acquire = await this._coinAcquireService
-        //         .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
+            const acquire = await this._coinAcquireService
+                .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
 
-        //     const streakAcquire = await this._coinAcquireService
-        //         .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
+            const streakAcquire = await this._coinAcquireService
+                .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
 
-        //     coinAcquires = {
-        //         normal: acquire,
-        //         bonus: streakAcquire
-        //     };
-        // }
+            coinAcquires = {
+                normal: acquire,
+                bonus: streakAcquire
+            };
+        }
 
-        // return {
-        //     correctAnswerIds: correctAnswerIds,
-        //     givenAnswerIds: answerIds,
-        //     isCorrect: isCorrect,
-        //     coinAcquires
-        // } as AnswerResultDTO;
+        return {
+            correctAnswerIds: correctAnswerIds,
+            givenAnswerIds: answerIds,
+            isCorrect: isCorrect,
+            coinAcquires
+        } as AnswerResultDTO;
     };
 }

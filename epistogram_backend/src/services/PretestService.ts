@@ -1,6 +1,12 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
+import { Exam } from '../models/entity/exam/Exam';
 import { ExamData } from '../models/entity/exam/ExamData';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
+import { ExamView } from '../models/views/ExamView';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { LatestExamView } from '../models/views/LatestExamView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
@@ -51,56 +57,60 @@ export class PretestService {
 
     async getPretestDataAsync(userId: PrincipalId, courseId: number) {
 
-        throwNotImplemented();
-        // // set course as started, and stage to pretest
-        // await this._courseBridgeService
-        //     .setCurrentCourse(userId.toSQLValue(), courseId, 'pretest', null);
+        // set course as started, and stage to pretest
+        await this._courseBridgeService
+            .setCurrentCourse(userId.toSQLValue(), courseId, 'pretest', null);
 
-        // // pretest exam 
-        // const pretestExam = await this._ormService
-        //     .getRepository(ExamData)
-        //     .findOneOrFail({
-        //         where: {
-        //             courseId,
-        //             type: 'pretest'
-        //         }
-        //     });
+        // pretest exam 
+        const pretestExam = await this._ormService
+            .withResType<ExamVersion>()
+            .query(LatestCourseVersionView, { courseId })
+            .select(ExamVersion)
+            .leftJoin(ModuleVersion, (x) => x
+                .on('courseVersionId', '=', 'versionId', LatestCourseVersionView))
+            .leftJoin(ExamVersion, (x) => x
+                .on('moduleVersionId', '=', 'id', ModuleVersion))
+            .innerJoin(Exam, (x) => x
+                .on('id', '=', 'examId', ExamVersion)
+                .and('isPretest', '=', 'true'))
+            .where('courseId', '=', 'courseId')
+            .getSingle()
 
-        // const pretestExamDTO = await this._examService
-        //     .getExamPlayerDTOAsync(userId.toSQLValue(), pretestExam.id);
+        const pretestExamDTO = await this._examService
+            .getExamPlayerDTOAsync(userId.toSQLValue(), pretestExam.id);
 
-        // // answer session
-        // let answerSession = await this._ormService
-        //     .getRepository(AnswerSession)
-        //     .findOne({
-        //         where: {
-        //             userId: userId.toSQLValue(),
-        //             examId: pretestExam.id,
-        //             type: 'pretest'
-        //         }
-        //     });
+        // answer session
+        let answerSession = await this._ormService
+            .getRepository(AnswerSession)
+            .findOne({
+                where: {
+                    userId: userId.toSQLValue(),
+                    examVersionId: pretestExam.id
+                }
+            });
 
-        // if (!answerSession) {
+        if (!answerSession) {
 
-        //     answerSession = instatiateInsertEntity<AnswerSession>({
-        //         userId: userId.toSQLValue(),
-        //         examId: pretestExam.id,
-        //         type: 'pretest',
-        //         videoId: null,
-        //         startDate: null,
-        //         endDate: null
-        //     });
+            answerSession = instatiateInsertEntity<AnswerSession>({
+                userId: userId.toSQLValue(),
+                examVersionId: pretestExam.id,
+                videoVersionId: null,
+                startDate: null,
+                isPractise: false,
+                isCompleted: false,
+                endDate: null
+            });
 
-        //     await this._ormService
-        //         .getRepository(AnswerSession)
-        //         .insert(answerSession);
-        // }
+            await this._ormService
+                .getRepository(AnswerSession)
+                .insert(answerSession);
+        }
 
-        // return {
-        //     answerSessionId: answerSession.id,
-        //     exam: pretestExamDTO
-        // } as PretestDataDTO;
-        return {} as PretestDataDTO;
+        return {
+            answerSessionId: answerSession.id,
+            exam: pretestExamDTO
+        } as PretestDataDTO;
+        //return {} as PretestDataDTO;
     }
 
     async getPretestResultsAsync(principalId: PrincipalId, courseId: number) {

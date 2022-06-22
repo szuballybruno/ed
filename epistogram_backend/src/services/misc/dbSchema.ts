@@ -87,6 +87,8 @@ import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
+import { LatestExamView } from '../../models/views/LatestExamView';
+import { ExamDataView } from '../../models/views/ExamDataView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
@@ -175,6 +177,7 @@ import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -238,91 +241,93 @@ export const createDBSchema = (): XDBMSchemaType => {
         seedScripts,
 
         views: [
-            ['video_version_view'],
-            ['latest_course_version_view'],
-            ['answer_session_view', AnswerSessionView],
-            ['answer_session_evaluation_view'],
-            ['exam_completed_view', ExamCompletedView],
-            ['video_cursor_seconds_view', VideoCursorSecondsView],
-            ['course_item_view'],
-            ['user_practise_recommendation_view', UserPractiseRecommendationView],
-            ['course_item_playlist_view', CourseItemPlaylistView],
-            ['signup_question_view', SignupQuestionView],
-            ['user_role_view', UserRoleView],
-            ['latest_given_answer_view'],
-            ['personality_trait_view', PersonalityTraitView],
-            ['signup_completed_view', SignupCompletedView],
-            ['company_permission_view'],
-            ['user_permission_view'],
-            ['available_course_view', AvailableCourseView],
-            ['exam_result_view', ExamResultView],
-            ['practise_question_view', PractiseQuestionView],
-            ['daily_tip_view', DailyTipView],
-            ['course_admin_short_view', CourseAdminShortView],
-            ['course_admin_detailed_view', CourseAdminDetailedView],
-            ['course_admin_content_view', CourseAdminContentView],
-            ['video_playback_sample_view'],
-            ['user_session_view', UserSessionView],
-            ['user_stats_view', UserStatsView],
-            ['user_session_daily_view', UserSessionDailyView],
-            ['activity_streak_view', ActivityStreakView],
-            ['shop_item_view', ShopItemView],
-            ['shop_item_stateful_view', ShopItemStatefulView],
-            ['course_length_estimation_view'],
-            ['coin_transaction_view', CoinTransactionView],
-            ['coin_balance_view', CoinBalanceView],
-            ['course_questions_success_view'],
-            ['exam_latest_success_rate_view'],
-            ['course_spent_time_view'],
-            ['course_item_edit_view', CourseItemEditView],
-            ['course_item_count_view'],
-            ['course_learning_stats_view', CourseLearningStatsView],
-            ['course_progress_view', CourseProgressView],
-            ['course_module_overview_view', CourseModuleOverviewView],
-            ['course_details_view', CourseDetailsView],
-            ['exam_view', ExamView],
-            ['coin_acquire_per_course_view'],
-            ['course_overview_view', CourseOverviewView],
-            ['personality_trait_category_view', PersonalityTraitCategoryView],
-            ['course_item_completed_view'],
-            ['user_latest_activity_view'],
-            ['admin_user_list_view', AdminUserListView],
-            ['prequiz_question_view', PrequizQuestionView],
-            ['pretest_result_view', PretestResultView],
-            ['course_rating_question_view', CourseRatingQuestionView],
-            ['user_prequiz_answers_view'],
-            ['user_course_bridge_view', UserCourseBridgeView],
-            ['user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView],
-            ['user_course_completion_current_view', UserCourseCompletionCurrentView],
-            ['user_answer_view', UserAnswerView],
-            ['user_performance_answer_group_view', UserPerformanceAnswerGroupView],
-            ['user_reaction_time_view', UserReactionTimeView],
-            ['user_performance_view', UserPerformanceView],
-            ['user_session_block_view', UserSessionBlockView],
-            ['user_inactive_course_view', UserInactiveCourseView],
-            ['user_engagement_view', UserEngagementView],
-            ['user_learning_overview_stats_view', UserLearningOverviewStatsView],
-            ['user_daily_progress_view', UserDailyProgressView],
-            ['user_daily_course_item_progress_view', UserDailyCourseItemProgressView],
-            ['user_active_course_view', UserActiveCourseView],
-            ['user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
-            ['user_course_progress_actual'],
-            ['user_course_progress_view', UserCourseProgressView],
-            ['user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView],
-            ['user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
-            ['user_course_stats_view', UserCourseStatsView],
-            ['user_video_practise_progress_view', UserVideoPractiseProgressView],
-            ['user_video_stats_view', UserVideoStatsView],
-            ['user_exam_stats_view', UserExamStatsView],
-            ['comment_list_view', CommentListView],
-            ['user_spent_time_ratio_view', UserSpentTimeRatioView],
-            ['module_view', ModuleView],
-            ['role_list_view'],
-            ['company_view'],
-            ['assignable_permission_view'],
-            ['assignable_role_view'],
-            ['user_assigned_auth_item_view'],
-            ['user_role_assign_company_view', UserRoleAssignCompanyView]
+            ['basic', 'activity_streak_view', ActivityStreakView],
+            ['basic', 'answer_session_view', AnswerSessionView],
+            ['basic', 'coin_acquire_per_course_view'],
+            ['basic', 'coin_balance_view', CoinBalanceView],
+            ['basic', 'comment_list_view', CommentListView],
+            ['basic', 'company_permission_view'],
+            ['basic', 'course_item_completed_view'],
+            ['basic', 'course_item_view'],
+            ['basic', 'course_module_overview_view', CourseModuleOverviewView],
+            ['basic', 'course_questions_success_view'],
+            ['basic', 'course_rating_question_view', CourseRatingQuestionView],
+            ['basic', 'latest_course_version_view', LatestCourseVersionView],
+            ['basic', 'latest_exam_view', LatestExamView],
+            ['basic', 'latest_given_answer_view'],
+            ['basic', 'module_view', ModuleView],
+            ['basic', 'personality_trait_category_view', PersonalityTraitCategoryView],
+            ['basic', 'personality_trait_view', PersonalityTraitView],
+            ['basic', 'practise_question_view', PractiseQuestionView],
+            ['basic', 'prequiz_question_view', PrequizQuestionView],
+            ['basic', 'shop_item_stateful_view', ShopItemStatefulView],
+            ['basic', 'shop_item_view', ShopItemView],
+            ['basic', 'signup_question_view', SignupQuestionView],
+            ['basic', 'user_active_course_view', UserActiveCourseView],
+            ['basic', 'user_assigned_auth_item_view'],
+            ['basic', 'user_course_bridge_view', UserCourseBridgeView],
+            ['basic', 'user_practise_recommendation_view', UserPractiseRecommendationView],
+            ['basic', 'user_prequiz_answers_view'],
+            ['basic', 'user_role_view', UserRoleView],
+            ['basic', 'user_session_view', UserSessionView],
+            ['basic', 'video_cursor_seconds_view', VideoCursorSecondsView],
+            ['basic', 'video_playback_sample_view'],
+            ['basic', 'video_version_view'],
+            ['common', 'user_permission_view'], // 6 | company_permission_view
+            ['common', 'answer_session_evaluation_view'], // 3 | 1 answer_session_view
+            ['common', 'exam_completed_view', ExamCompletedView], // 6 | 1 answer_session_evaluation_view
+            ['common', 'course_item_playlist_view', CourseItemPlaylistView], // 2 | latest_course_version_view, course_item_view, user_practise_recommendation_view
+            ['common', 'available_course_view', AvailableCourseView], // 2
+            ['common', 'exam_result_view', ExamResultView], // 1
+            ['common', 'course_admin_short_view', CourseAdminShortView], // 1 course_admin_content_view
+            ['common', 'course_length_estimation_view'], // 1 user_course_completion_original_estimation_view
+            ['common', 'exam_latest_success_rate_view'], // 1 course_learning_stats_view
+            ['common', 'course_spent_time_view'], // 2 course_learning_stats_view, user_spent_time_ratio_view
+            ['common', 'course_item_count_view'], // 6
+            ['common', 'exam_data_view', ExamDataView], // 0 | latest_question_view
+            ['common', 'user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView], // 1 user_course_stats_view
+            ['common', 'user_course_completion_current_view', UserCourseCompletionCurrentView], // 2 user_course_progress_view, user_course_recommended_item_quota_view
+            ['common', 'user_answer_view', UserAnswerView], // 2 user_performance_answer_group_view, user_video_stats_view
+            ['common', 'user_performance_answer_group_view', UserPerformanceAnswerGroupView], // 2 user_reaction_time_view, user_performance_view
+            ['common', 'user_reaction_time_view', UserReactionTimeView], // 1 user_learning_overview_stats_view
+            ['common', 'user_session_block_view', UserSessionBlockView],  // 1 user_learning_overview_stats_view
+            ['common', 'user_daily_course_item_progress_view', UserDailyCourseItemProgressView], // 1 user_weekly_course_item_progress_view
+            ['common', 'user_course_progress_actual'], // 1 user_course_progress_view
+            ['common', 'user_course_progress_view', UserCourseProgressView], // 1 user_course_stats_view
+            ['common', 'user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView], // 1 user_course_stats_view
+            ['common', 'user_video_practise_progress_view', UserVideoPractiseProgressView], // 1 user_video_practise_progress_view
+            ['', 'user_session_daily_view', UserSessionDailyView],
+            ['', 'signup_completed_view', SignupCompletedView],
+            ['', 'daily_tip_view', DailyTipView],
+            ['', 'course_admin_detailed_view', CourseAdminDetailedView],
+            ['', 'course_admin_content_view', CourseAdminContentView],
+            ['', 'coin_transaction_view', CoinTransactionView],
+            ['', 'course_item_edit_view', CourseItemEditView],
+            ['', 'course_details_view', CourseDetailsView],
+            ['', 'exam_view', ExamView],
+            ['', 'pretest_result_view', PretestResultView],
+            ['', 'user_daily_progress_view', UserDailyProgressView],
+            ['', 'user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
+            ['', 'user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
+            ['', 'role_list_view'],
+            ['', 'company_view'],
+            ['', 'assignable_permission_view'],
+            ['', 'assignable_role_view'],
+            ['', 'user_role_assign_company_view', UserRoleAssignCompanyView],
+            ['stats', 'course_learning_stats_view', CourseLearningStatsView],
+            ['common', 'course_progress_view', CourseProgressView], // 2 user_inactive_course_view, user_course_stats_view
+            ['', 'course_overview_view', CourseOverviewView],
+            ['', 'user_inactive_course_view', UserInactiveCourseView],
+            ['stats', 'user_performance_view', UserPerformanceView],
+            ['stats', 'user_engagement_view', UserEngagementView],
+            ['stats', 'user_learning_overview_stats_view', UserLearningOverviewStatsView],
+            ['stats', 'user_course_stats_view', UserCourseStatsView],
+            ['stats', 'user_video_stats_view', UserVideoStatsView],
+            ['stats', 'user_exam_stats_view', UserExamStatsView],
+            ['stats', 'user_spent_time_ratio_view', UserSpentTimeRatioView],
+            ['stats', 'user_stats_view', UserStatsView],
+            ['', 'user_latest_activity_view'],
+            ['', 'admin_user_list_view', AdminUserListView]
         ],
 
         functionScripts: [

@@ -4364,6 +4364,8 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
+
+    // pretest questions
     question_data_580: {
         deletionDate: null,
         questionText: 'Melyik menüben találom a szövegből oszlopok varázslóját, a Szövegdarabolót?',

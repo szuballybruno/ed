@@ -4336,6 +4336,7 @@ export const getSeedQuestionVersions = (
         personalityTraitCategoryId: null,
     },
 
+    // pretest questions
     question_version_580: {
         questionId: questions.question_580.id,
         questionDataId: questionDatas.question_data_580.id,

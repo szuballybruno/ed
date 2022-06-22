@@ -8,7 +8,7 @@ export const getExamVersionsSeedData = (
     moduleVersions: ModulesVersionsSeedDataType,
     examDatas: ExamDatasSeedDataType,
     exams: ExamSeedDataType) => getSeedList<ExamVersion>()({
-        
+
         signup_exam_version: {
             moduleVersionId: moduleVersions.module_version_2.id,
             examDataId: examDatas.signup_exam_data.id,
@@ -154,67 +154,67 @@ export const getExamVersionsSeedData = (
         },
 
         exam_version_pretest_33: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_canva_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_33.id,
             examId: exams.pretest_exam_33.id
         },
 
         exam_version_pretest_34: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_cyber_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_34.id,
             examId: exams.pretest_exam_34.id
         },
 
         exam_version_pretest_35: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_insta_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_35.id,
             examId: exams.pretest_exam_35.id
         },
 
         exam_version_pretest_36: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_google_ads_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_36.id,
             examId: exams.pretest_exam_36.id
         },
 
         exam_version_pretest_37: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_python_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_37.id,
             examId: exams.pretest_exam_37.id
         },
 
         exam_version_pretest_38: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_linked_in_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_38.id,
             examId: exams.pretest_exam_38.id
         },
 
         exam_version_pretest_39: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_word_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_39.id,
             examId: exams.pretest_exam_39.id
         },
 
         exam_version_pretest_40: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_obs_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_40.id,
             examId: exams.pretest_exam_40.id
         },
 
         exam_version_pretest_41: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_powerPoint_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_41.id,
             examId: exams.pretest_exam_41.id
         },
 
         exam_version_pretest_42: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_cyber_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_42.id,
             examId: exams.pretest_exam_42.id
         },
 
         exam_version_pretest_43: {
-            moduleVersionId: null,
+            moduleVersionId: moduleVersions.module_version_excel_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_43.id,
             examId: exams.pretest_exam_43.id
         },

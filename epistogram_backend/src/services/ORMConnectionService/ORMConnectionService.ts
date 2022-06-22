@@ -36,8 +36,8 @@ export class ORMConnectionService {
 
         const views = this._schema
             .views
-            .filter(x => !!x[1])
-            .map(x => x[1]!);
+            .filter(x => !!x[2])
+            .map(x => x[2]!);
 
         const entities = this._schema
             .entities;

@@ -12,6 +12,9 @@ successful_answer_sessions AS (
 SELECT 
 	u.id user_id,
 	ex.id exam_id,
+	ev.id exam_version_id,
+	ex.is_pretest,
+	ex.is_signup,
 	ed.deletion_date IS NOT NULL is_deleted,
 	ed.title title,
 	ed.subtitle subtitle,
