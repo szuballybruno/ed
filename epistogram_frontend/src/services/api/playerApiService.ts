@@ -13,7 +13,7 @@ export const usePlayerData = (descriptorCode: string) => {
     return {
         playerData: queryResult.data,
         playerDataStatus: queryResult.state,
-        playerDataError: queryResult.error ,
+        playerDataError: queryResult.error,
         refetchPlayerData: queryResult.refetch
     };
 };
@@ -34,11 +34,11 @@ export const useAnswerQuestion = () => {
 
     const queryRes = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
 
-    const answerQuestionAsync = (answerSessionId: number, answerIds: number[], questionId: number, elapsedSeconds: number) => {
+    const answerQuestionAsync = (answerSessionId: number, answerIds: number[], questionVersionId: number, elapsedSeconds: number) => {
 
         const dto = {
             answerIds,
-            questionId,
+            questionVersionId,
             answerSessionId,
             elapsedSeconds
         } as AnswerQuestionDTO;

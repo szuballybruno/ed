@@ -44,7 +44,7 @@ export const QuesitionView = (props: {
     useEffect(() => {
 
         setSelectedAnswerId(null);
-    }, [question.questionId]);
+    }, [question.questionVersionId]);
 
     // bonus coin 
     useEffect(() => {

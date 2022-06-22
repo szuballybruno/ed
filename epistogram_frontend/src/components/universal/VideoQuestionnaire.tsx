@@ -27,7 +27,7 @@ export const VideoQuestionnaire = (props: {
     const handleAnswerQuestionAsync = async (answerId) => {
 
         const timeElapsed = epochDates(new Date(), showUpTime);
-        await answerQuestionAsync(answerSessionId, answerId, question.questionId, timeElapsed);
+        await answerQuestionAsync(answerSessionId, answerId, question.questionVersionId, timeElapsed);
         onAnswered();
     };
 
@@ -66,7 +66,7 @@ export const VideoQuestionnaire = (props: {
             {...css} />
 
         <Flex display={isAnswered ? undefined : 'none'}
-justify="flex-end">
+            justify="flex-end">
 
             <EpistoButton
                 variant="colored"

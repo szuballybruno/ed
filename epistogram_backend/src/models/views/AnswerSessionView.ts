@@ -17,7 +17,7 @@ export class AnswerSessionView {
 
     @ViewColumn()
     @XViewColumn()
-    examId: number;
+    examVersionId: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -33,5 +33,5 @@ export class AnswerSessionView {
 
     @ViewColumn()
     @XViewColumn()
-    correctQuestionCount: number;
+    correctAnswerCount: number;
 }

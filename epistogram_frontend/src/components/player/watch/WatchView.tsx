@@ -153,7 +153,7 @@ export const WatchView = (props: {
         // and have not been answered during this video session
         const unansweredQuestion = questions
             .filter(x => x.showUpTimeSeconds! < playedSeconds
-                && !answeredQuestionIds.some(qid => x.questionId === qid))[0];
+                && !answeredQuestionIds.some(qid => x.questionVersionId === qid))[0];
 
         if (unansweredQuestion) {
 
@@ -271,7 +271,7 @@ export const WatchView = (props: {
                             isShowing={isQuestionVisible}
                             onAnswered={() => setAnsweredQuestionIds([
                                 ...answeredQuestionIds,
-                                currentQuestion?.questionId!
+                                currentQuestion?.questionVersionId!
                             ])}
                             onClosed={() => {
                                 setCurrentQuestion(null);

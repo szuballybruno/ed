@@ -138,7 +138,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         const userId = principalId.toSQLValue();
 
-        const { answerSessionId, answerIds, elapsedSeconds, questionId } = dto;
+        const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
 
         // inspect questions
         const questions = await this._ormService
@@ -152,19 +152,19 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .orderBy('qd.orderIndex')
             .getMany();
 
-        const isLast = questions[questions.length - 1].questionId === questionId;
-        const examId = questions.first().examVersion.examId!;
+        const isLast = questions[questions.length - 1].id === questionVersionId;
+        const examVersionId = questions.first().examVersion.id!;
 
         // save user activity
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'exam', examId);
+            .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
 
         // save answer 
         const result = this._quesitonAnswerService
             .answerQuestionAsync(
                 userId,
                 answerSessionId,
-                questionId,
+                questionVersionId,
                 answerIds,
                 true,
                 elapsedSeconds);
@@ -185,7 +185,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .getRepository(AnswerSessionView)
             .createQueryBuilder('asv')
             .where('asv.userId = :userId', { userId })
-            .andWhere('asv.examId = :examId', { examId })
+            .andWhere('asv.examVersionId = :examVersionId', { examVersionId })
             .getMany();
 
         const currentAnswerSessionIsSuccessful = answerSessionViews
@@ -205,7 +205,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .getRepository(UserExamProgressBridge)
             .save({
                 completionDate: new Date(),
-                examId,
+                examVersionId,
                 userId
             });
     };

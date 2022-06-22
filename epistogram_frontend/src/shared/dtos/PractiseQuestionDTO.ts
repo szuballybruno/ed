@@ -1,7 +1,7 @@
 import { AnswerDTO } from './AnswerDTO';
 
 export type PractiseQuestionDTO = {
-    questionId: number;
+    questionVersionId: number;
     questionText: string;
     answers: AnswerDTO[];
     typeId: number;

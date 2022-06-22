@@ -49,7 +49,7 @@ export const ExamQuestions = (props: {
             await saveExamAnswer({
                 answerSessionId: answerSessionId,
                 answerIds: selectedAnswerIds!,
-                questionId: currentQuestion.questionId,
+                questionVersionId: currentQuestion.questionVersionId,
                 elapsedSeconds: timeElapsed
             });
 

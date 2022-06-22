@@ -26,7 +26,7 @@ export class QuestionController {
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
         const dto = params
-            .getBody<AnswerQuestionDTO>(['answerIds', 'questionId'])
+            .getBody<AnswerQuestionDTO>(['answerIds', 'questionVersionId'])
             .data;
 
         return this._practiseQuestionService

@@ -24,12 +24,12 @@ export class PlayerController {
 
         const dto = params.getBody<AnswerQuestionDTO>();
         const answerIds = dto.getValue(x => x.answerIds, 'int[]');
-        const questionId = dto.getValue(x => x.questionId, 'int');
+        const questionVersionId = dto.getValue(x => x.questionVersionId, 'int');
         const answerSessionId = dto.getValue(x => x.answerSessionId, 'int');
         const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, 'float');
 
         return this._videoService
-            .answerVideoQuestionAsync(params.principalId, answerSessionId, questionId, answerIds, elapsedSeconds);
+            .answerVideoQuestionAsync(params.principalId, answerSessionId, questionVersionId, answerIds, elapsedSeconds);
     };
 
     @XControllerAction(apiRoutes.player.getPlayerData)

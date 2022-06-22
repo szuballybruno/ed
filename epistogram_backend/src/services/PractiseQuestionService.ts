@@ -67,7 +67,7 @@ export class PractiseQuestionService extends ServiceBase {
         const practiseAnswerSession = await this.getUserPractiseAnswerSession(userId);
 
         return await this._questionAnswerService
-            .answerQuestionAsync(userId, practiseAnswerSession.id, qu.questionId, qu.answerIds, false, 0, true);
+            .answerQuestionAsync(userId, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
     };
 
     getUserPractiseAnswerSession = async (userId: number) => {

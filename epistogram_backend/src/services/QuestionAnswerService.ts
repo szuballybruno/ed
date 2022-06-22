@@ -45,7 +45,7 @@ export class QuestionAnswerService {
     answerQuestionAsync = async (
         userId: number,
         answerSessionId: number,
-        questionId: number,
+        questionVersionId: number,
         answerIds: number[],
         isExamQuestion: boolean,
         elapsedSeconds: number,
@@ -58,7 +58,7 @@ export class QuestionAnswerService {
             streakLength,
             streakId
         } = await this._sqlFunctionsService
-            .answerQuestionFn(userId, answerSessionId, questionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
+            .answerQuestionFn(userId, answerSessionId, questionVersionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
 
         let coinAcquires = null as null | {
             normal: CoinAcquireResultDTO | null,

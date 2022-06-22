@@ -1,7 +1,7 @@
 import { AnswerDTO } from './AnswerDTO';
 
 export type QuestionDTO = {
-    questionId: number;
+    questionVersionId: number;
     questionText: string;
     orderIndex: null | number;
     answers: AnswerDTO[];

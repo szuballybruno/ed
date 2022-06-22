@@ -1,7 +1,6 @@
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
-import { CourseItemListDTO } from '../../../../shared/dtos/CourseItemListDTO';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { formatTime } from '../../../../static/frontendHelpers';
 

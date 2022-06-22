@@ -90,7 +90,7 @@ export class SQLFunctionsService {
     answerQuestionFn = async (
         userId: number,
         answerSessionId: number,
-        questionId: number,
+        questionVersionId: number,
         answerIds: number[],
         elapsedSeconds: number,
         isPractiseAnswer: boolean) => {
@@ -109,7 +109,7 @@ export class SQLFunctionsService {
                 [
                     userId,
                     answerSessionId,
-                    questionId,
+                    questionVersionId,
                     answerIds,
                     elapsedSeconds,
                     isPractiseAnswer
@@ -158,19 +158,19 @@ export class SQLFunctionsService {
     saveUserSessionActivity = (
         userId: number,
         param_activity_type: SessionActivityType,
-        itemId?: number
+        itemVersionId?: number
     ) => {
 
-        const videoId = param_activity_type === 'video' ? itemId : null;
-        const examId = param_activity_type === 'exam' ? itemId : null;
+        const videoVersionId = param_activity_type === 'video' ? itemVersionId : null;
+        const examVersionId = param_activity_type === 'exam' ? itemVersionId : null;
 
         return this.execSQLFunctionAsync<number>(
             'save_user_session_activity',
             [
                 userId,
                 param_activity_type,
-                videoId,
-                examId
+                videoVersionId,
+                examVersionId
             ]
         );
     };

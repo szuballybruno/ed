@@ -152,7 +152,7 @@ export const PractiseQuestions = () => {
 
     const handleAnswerQuestionAsync = async (answerId: number[]) => {
 
-        await answerQuestionAsync(answerId, practiseQuestion!.questionId);
+        await answerQuestionAsync(answerId, practiseQuestion!.questionVersionId);
     };
 
     const handleNextQuestion = () => {

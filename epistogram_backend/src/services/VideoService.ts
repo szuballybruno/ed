@@ -55,14 +55,14 @@ export class VideoService extends QueryServiceBase<VideoData> {
     answerVideoQuestionAsync = async (
         userId: PrincipalId,
         answerSessionId: number,
-        questionId: number,
+        questionVersionId: number,
         answerIds: number[],
         elapsedSeconds: number) => {
 
         // validation comes here
 
         return this._questionAnswerService
-            .answerQuestionAsync(userId.toSQLValue(), answerSessionId, questionId, answerIds, false, elapsedSeconds);
+            .answerQuestionAsync(userId.toSQLValue(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
     };
 
     insertVideoAsync = async (video: VideoData, filePath?: string) => {

@@ -1,5 +1,5 @@
 export type AnswerQuestionDTO = {
-    questionId: number;
+    questionVersionId: number;
     answerIds: number[];
     answerSessionId: number;
     elapsedSeconds: number;

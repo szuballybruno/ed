@@ -9,11 +9,11 @@ export const useAnswerPractiseQuestion = () => {
 
     const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
-    const answerQuestionAsync = (answerIds: number[], questionId: number) => {
+    const answerQuestionAsync = (answerIds: number[], questionVersionId: number) => {
 
         const dto = {
             answerIds,
-            questionId
+            questionVersionId
         } as AnswerQuestionDTO;
 
         return postDataQuery.postDataAsync(dto);

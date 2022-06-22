@@ -6,6 +6,7 @@ SELECT
     ase.start_date,
     ase.end_date,
 	ase.is_completed,
+	false is_successful,
 	(
 		SELECT 
 			COUNT(*)

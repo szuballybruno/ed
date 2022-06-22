@@ -1144,7 +1144,7 @@ export const toQuestionDTO = (lqav: ExamDataView[]) => {
             const viewAsQuestion = questionGrouping.items.first();
 
             return {
-                questionId: viewAsQuestion.questionId,
+                questionVersionId: viewAsQuestion.questionVersionId,
                 orderIndex: viewAsQuestion.orderIndex,
                 questionText: viewAsQuestion.questionText,
                 imageUrl: viewAsQuestion.imageUrl,
