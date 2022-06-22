@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
-import { iterate, useForceUpdate } from '../../../../static/frontendHelpers';
+import { iterate, useForceUpdate, valueCompareTest } from '../../../../static/frontendHelpers';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { RowSchema } from './QuestionEditGridTypes';
 
@@ -34,14 +34,10 @@ export const useQuestionEditGridLogic = (
 
     useEffect(() => {
 
-        if (questions.length === 0)
-            return;
-
-        console.log('setting original items');
         mutatorRef
             .current
             .setOriginalItems(questions);
-    }, [questions.length]);
+    }, [questions]);
 
     //
     // add question
@@ -111,12 +107,13 @@ export const useQuestionEditGridLogic = (
         showTiming,
         isAnyMutated: mutatorRef.current.isAnyMutated,
         mutatedQuestions: mutatorRef.current.mutatedItems,
+        mutations: mutatorRef.current.mutations,
         getKey,
         handleAddQuestion,
         removeQuestion: mutatorRef.current.remove,
         getPlayedSeconds,
         mutateQuestion: mutatorRef.current.mutate,
-        resetMutations: mutatorRef.current.resetMutations
+        resetMutations: mutatorRef.current.resetMutations,
     };
 };
 

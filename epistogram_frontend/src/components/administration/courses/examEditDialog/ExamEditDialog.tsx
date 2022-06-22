@@ -5,17 +5,29 @@ import { ExamEditor } from './ExamEditor';
 import { AdminExamStatisticsModalPage } from './ExamStats';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { ExamEditDialogParams } from './ExamEditDialogTypes';
+import { useCallback } from 'react';
+import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 
-export const ExamEditDialog = (props: {
-    dialogLogic: EpistoDialogLogicType<ExamEditDialogParams>
+export const ExamEditDialog = ({
+    dialogLogic,
+    callback
+}: {
+    dialogLogic: EpistoDialogLogicType<ExamEditDialogParams>,
+    callback: (mutations: QuestionMutationsType) => void,
 }) => {
 
-    const { dialogLogic } = props;
     const { courseName: courseTitle, examTitle, examVersionId } = dialogLogic.params;
+
+    const handleCallback = useCallback((mutations: QuestionMutationsType) => {
+
+        dialogLogic.closeDialog();
+        callback(mutations);
+    }, [callback]);
 
     const paging = usePaging<EditDialogSubpage>([
         {
             content: () => <ExamEditor
+                callback={handleCallback}
                 examVersionId={examVersionId}
                 endabled={dialogLogic.isOpen} />,
             title: 'Kérdések',

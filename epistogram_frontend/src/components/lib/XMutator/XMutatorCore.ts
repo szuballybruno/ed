@@ -33,10 +33,10 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
     // public 
     public mutatedItems: TMutatee[] = [];
+    public mutations: Mutation<TMutatee, TKeyField>[] = [];
 
     // internal 
     private _onMutationHandlersRef: OnMutationHandlerType<TMutatee, TKey, StringKeyof<TMutatee>>[] = [];
-    private _mutations: Mutation<TMutatee, TKeyField>[] = [];
     private _lockRef: boolean = false;
     private _originalItems: TMutatee[] = [];
 
@@ -71,7 +71,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // getter for isAnyMutated
     get isAnyMutated(): boolean {
 
-        return this._mutations.length > 0;
+        return this.mutations.length > 0;
     }
 
     //
@@ -140,12 +140,12 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     applyMutations = () => {
 
         // added items 
-        const addedItems = this._mutations
+        const addedItems = this.mutations
             .filter(mut => mut.action === 'add')
             .map(mut => this.createObj(mut));
 
         // deleted keys 
-        const deletedKeys = this._mutations
+        const deletedKeys = this.mutations
             .filter(x => x.action === 'delete')
             .map(x => x.key);
 
@@ -156,7 +156,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
                 .some(x => x === this.getCompareKeyValue(item)));
 
         // apply updates
-        this._mutations
+        this.mutations
             .filter(mutation => mutation.action === 'update')
             .forEach(mutation => {
 
@@ -218,7 +218,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         const { muts, ...rest } = opts;
 
         // set mutations 
-        this._mutations = muts;
+        this.mutations = muts;
 
         // if this function is called recursively, 
         // from on mutation handlers, 
@@ -277,7 +277,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
             this.setMutations({ muts, key, field, newValue, action: 'update' });
         };
 
-        const newMutations = [...this._mutations];
+        const newMutations = [...this.mutations];
 
         const originalItem = this.getOriginalItems()
             .firstOrNull(x => this.getCompareKey(x) === key);
@@ -387,13 +387,13 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         // but without mutations related to deleted item
         // so for example 'add' mutations won't be copied over
         // thus the item will not show in the new list
-        let newMutations = [...this._mutations];
+        let newMutations = [...this.mutations];
 
         // check if deleted item is one 
         // of the newly added items,
         // if it is there's no need to add a delete mutation, 
         // just to remove the add mutation (which we already did)
-        const isDeletedItemNewlyAdded = this._mutations
+        const isDeletedItemNewlyAdded = this.mutations
             .filter(x => x.key === removeKey)[0]?.action === 'add';
 
         // remove add mutation 
@@ -451,7 +451,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
                 })
         };
 
-        const newMutations = [...this._mutations, mut];
+        const newMutations = [...this.mutations, mut];
 
         this.setMutations({ muts: newMutations, action: 'add', key });
     };
@@ -465,7 +465,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
 
-        const mut = this._mutations
+        const mut = this.mutations
             .firstOrNull(x => x.key === key);
 
         if (!mut)
@@ -488,7 +488,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         console.log('Original items: ');
         console.log(this._originalItems);
 
-        this._mutations = [];
+        this.mutations = [];
         this.setMutatedItems(this.getOriginalItems());
     };
 

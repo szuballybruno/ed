@@ -1,5 +1,6 @@
 export type ExamEditDialogParams = {
-    examVersionId: number,
-    examTitle: string,
-    courseName: string
+    versionCode: string;
+    examVersionId: number;
+    examTitle: string;
+    courseName: string;
 };

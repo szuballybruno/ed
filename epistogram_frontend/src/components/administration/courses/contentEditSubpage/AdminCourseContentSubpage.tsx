@@ -1,5 +1,6 @@
+import { Flex } from '@chakra-ui/react';
 import { Add, Edit } from '@mui/icons-material';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
@@ -10,24 +11,25 @@ import { Environment } from '../../../../static/Environemnt';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
-import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { LoadingFrame } from '../../../system/LoadingFrame';
+import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ExamEditDialog } from '../examEditDialog/ExamEditDialog';
+import { ExamEditDialogParams } from '../examEditDialog/ExamEditDialogTypes';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
+import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { VideoEditDialog } from '../videoEditDialog/VideoEditDialog';
+import { VideoEditDialogParams } from '../videoEditDialog/VideoEditDialogTypes';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
-import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
-import { Flex } from '@chakra-ui/react';
-import { ForceNoOverflowY } from '../../../controls/ForceNoOverflowY';
-import { VideoEditDialogParams } from '../videoEditDialog/VideoEditDialogTypes';
-import { ExamEditDialogParams } from '../examEditDialog/ExamEditDialogTypes';
 
-type ItemType = CourseContentItemAdminDTO;
+type ItemType = {
+    questionMutations?: QuestionMutationsType
+} & CourseContentItemAdminDTO;
 
 export const AdminCourseContentSubpage = () => {
 
@@ -91,6 +93,8 @@ export const AdminCourseContentSubpage = () => {
         addOnMutationHandlers,
         mutatedData: mutatedItems
     } = useXListMutator<ItemType, 'versionCode', string>(originalItems, 'versionCode', mutationEndCallback);
+
+    console.log(mutations);
 
     // set preprocessed items, 
     // this works as a sort of caching
@@ -204,7 +208,8 @@ export const AdminCourseContentSubpage = () => {
                 params: {
                     examVersionId: data!.examVersionId,
                     courseName: 'Course name',
-                    examTitle: data!.itemTitle
+                    examTitle: data!.itemTitle,
+                    versionCode: data!.versionCode
                 }
             });
 
@@ -274,11 +279,7 @@ export const AdminCourseContentSubpage = () => {
         }
     };
 
-    const gridColumns = useGridColumnDefinitions(
-        modules,
-        openDialog,
-        removeRow,
-        mutateRow);
+    const gridColumns = useGridColumnDefinitions(modules, openDialog, removeRow, mutateRow);
 
     //
     // EFFECTS
@@ -331,7 +332,14 @@ export const AdminCourseContentSubpage = () => {
                 {/* dialogs */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
                 <VideoEditDialog dialogLogic={videoEditDialogLogic} />
-                <ExamEditDialog dialogLogic={examEditDialogLogic} />
+
+                <ExamEditDialog
+                    callback={mutations => mutateRow({
+                        key: examEditDialogLogic.params.versionCode,
+                        field: 'questionMutations',
+                        newValue: mutations
+                    })}
+                    dialogLogic={examEditDialogLogic} />
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}

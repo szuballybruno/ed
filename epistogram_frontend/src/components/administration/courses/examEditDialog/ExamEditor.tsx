@@ -1,37 +1,35 @@
 import { Flex } from '@chakra-ui/react';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
-import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
+import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
 
 export const ExamEditor = ({
     examVersionId,
-    endabled
+    endabled,
+    callback
 }: {
     examVersionId: number,
-    endabled: boolean
+    endabled: boolean,
+    callback: (mutations: QuestionMutationsType) => void
 }) => {
 
     // http
     const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
         .useCourseItemEditData(null, examVersionId, endabled);
 
-    const questions = useMemo(() => {
-
-        console.log('------ sadadwwdw');
-        return courseItemEditData?.questions ?? [];
-    }, [courseItemEditData]);
+    const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
     const logic = useQuestionEditGridLogic(questions);
 
-    useEffect(() => {
+    const finish = useCallback(() => {
 
-        console.log('questions changed!');
-    }, [questions]);
+        callback(logic.mutations);
+    }, [callback, logic.mutations]);
 
     return <LoadingFrame
         loadingState={'success'}
@@ -72,7 +70,7 @@ export const ExamEditor = ({
                 <EpistoButton
                     margin={{ left: 'px10' }}
                     isDisabled={!logic.isAnyMutated}
-                    onClick={() => 1}
+                    onClick={finish}
                     variant="colored">
 
                     {translatableTexts.misc.ok}

@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
@@ -23,7 +23,7 @@ export const VideoEditor = ({
     const getPlayedSeconds = () => Math.floor(playedSeconds);
 
     const videoUrl = courseItemEditData?.videoUrl ?? '';
-    const questions = courseItemEditData?.questions ?? [];
+    const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
     const logic = useQuestionEditGridLogic(questions, true, getPlayedSeconds);
 

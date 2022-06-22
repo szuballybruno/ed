@@ -79,16 +79,6 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                                 return x;
                             })
                     }),
-                // renderEditCell: ({ row }) => {
-
-                //     return row.isQuestionHeader
-
-                //         ? <EpistoEntry
-                //             value={row.questionText} />
-
-                //         : <EpistoEntry
-                //             value={row.text} />;
-                // }
             } as GridColumnType<RowSchema, string, 'itemText'>,
 
             // buttons
