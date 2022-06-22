@@ -110,7 +110,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         await this._ormService
             .getRepository(VideoFile)
             .save({
-                id: videoVersion.videoData.videoFileId,
+                id: videoVersion.videoData.videoFile.id,
                 storageFileId: storageFileId
             });
     };

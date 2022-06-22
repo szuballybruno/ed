@@ -13,6 +13,7 @@ SELECT
 	u.id user_id,
 	ex.id exam_id,
 	ev.id exam_version_id,
+	false is_deleted,
 	ex.is_pretest,
 	ex.is_signup,
 	ed.title title,
