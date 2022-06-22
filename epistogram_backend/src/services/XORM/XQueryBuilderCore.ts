@@ -25,7 +25,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         params?: TParams): Promise<TEntity> {
 
         // compile expression
-        const { sqlQuery, sqlParams } = this
+        const { sqlQuery, sqlParams, isExplicitSelect } = this
             ._compileExpressionToSQLQuery(classType, expression, params ?? {} as any);
 
         // execute query and get result rows
@@ -43,7 +43,8 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const resultRow = resultRows[0];
 
-        this._checkColumnMappingIntegrity(resultRow, classType);
+        if (!isExplicitSelect)
+            this._checkColumnMappingIntegrity(resultRow, classType);
 
         return resultRow;
     }
@@ -57,7 +58,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
         params?: TParams): Promise<TEntity | null> {
 
         // compile expression
-        const { sqlQuery, sqlParams } = this
+        const { sqlQuery, sqlParams, isExplicitSelect } = this
             ._compileExpressionToSQLQuery(classType, expression, params ?? {} as any);
 
         // execute query and get result rows
@@ -66,7 +67,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const row = resultRows[0] ?? null;
 
-        if (row)
+        if (!isExplicitSelect && row)
             this._checkColumnMappingIntegrity(row, classType);
 
         return row;
@@ -81,14 +82,14 @@ export class XQueryBuilderCore<TEntity, TParams> {
         params?: TParams) {
 
         // compile expression
-        const { sqlQuery, sqlParams } = this
+        const { sqlQuery, sqlParams, isExplicitSelect } = this
             ._compileExpressionToSQLQuery(classType, query, params ?? {} as any);
 
         // execute query and get result rows
         const resultRows = await this
             ._executeSQLQuery(sqlQuery, sqlParams);
 
-        if (resultRows.length > 0)
+        if (!isExplicitSelect && resultRows.length > 0)
             this._checkColumnMappingIntegrity(resultRows[0], classType);
 
         return resultRows;
@@ -102,7 +103,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
     private _compileExpressionToSQLQuery(
         classType: ClassType<TEntity>,
         expressionParts: XOrmExpression,
-        params: TParams): { sqlQuery: string, sqlParams: any[] } {
+        params: TParams): { sqlQuery: string, sqlParams: any[], isExplicitSelect: boolean } {
 
         const tableName = `"${snk(classType.name)}"`;
         const sqlTableRef = `public.${tableName} ${tableName}`;
@@ -130,7 +131,8 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         return {
             sqlParams,
-            sqlQuery
+            sqlQuery,
+            isExplicitSelect
         };
     }
 

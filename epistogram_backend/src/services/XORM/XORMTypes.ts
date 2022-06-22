@@ -15,15 +15,49 @@ export type SQLBracketType = null | '(' | ')';
 export type CheckExpressionType = 'PARAMS' | 'STATIC_VALUE' | 'ENTITY_REF';
 
 
-export type CheckExpression<TEntityA, TParams, TEntityB = void> = {
-    code: 'WHERE' | 'AND' | 'ON' | 'OR',
-    type: CheckExpressionType,
-    entityA: ClassType<TEntityA>,
-    entityB?: ClassType<TEntityB>,
-    keyA: keyof TEntityA,
-    op: OperationType,
-    keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
-    bracket: SQLBracketType
+export class CheckExpression<TEntityA, TParams, TEntityB = void>  {
+
+    code: 'WHERE' | 'AND' | 'ON' | 'OR';
+    type: CheckExpressionType;
+    entityA: ClassType<TEntityA>;
+    entityB?: ClassType<TEntityB>;
+    keyA: keyof TEntityA;
+    op: OperationType;
+    keyB: keyof TParams | keyof TEntityB | SQLStaticValueType;
+    bracket: SQLBracketType;
+
+    constructor(opts: {
+        code: 'WHERE' | 'AND' | 'ON' | 'OR',
+        entityA: ClassType<TEntityA>,
+        entityB?: ClassType<TEntityB>,
+        keyA: keyof TEntityA,
+        op: OperationType,
+        keyB: keyof TParams | keyof TEntityB | SQLStaticValueType,
+        bracket?: SQLBracketType
+    }) {
+        this.code = opts.code;
+        this.type = this._getCheckExpressionType(opts.keyB, opts.entityB);
+        this.entityA = opts.entityA;
+        this.entityB = opts.entityB;
+        this.keyA = opts.keyA;
+        this.op = opts.op;
+        this.keyB = opts.keyB;
+        this.bracket = opts.bracket ?? null;
+    }
+
+    private _getCheckExpressionType(keyB: any, classTypeB?: ClassType<any>): CheckExpressionType {
+
+        return classTypeB
+            ? 'ENTITY_REF'
+            : this._isSQLStaticValue(keyB)
+                ? 'STATIC_VALUE'
+                : 'PARAMS';
+    }
+
+    private _isSQLStaticValue(value: string) {
+
+        return value === 'NULL' || value === 'false' || value === 'true';
+    }
 };
 
 export type SelectCondition<TEntity> = {
