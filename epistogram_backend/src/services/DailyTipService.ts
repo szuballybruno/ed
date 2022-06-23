@@ -27,8 +27,7 @@ export class DailyTipService {
     async deleteDailyTipAsync(id: number) {
 
         await this._ormService
-            .getRepository(DailyTip)
-            .delete(id);
+            .softDelete(DailyTip, [id])
     }
 
     /**
@@ -41,13 +40,12 @@ export class DailyTipService {
     async createDailyTipAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
         await this._ormService
-            .getRepository(DailyTip)
-            .insert({
+            .createAsync(DailyTip, {
                 personalityTraitCategoryId,
                 description: '',
                 isLive: false,
                 isMax
-            });
+            } as DailyTip);
     }
 
     /**
@@ -73,13 +71,17 @@ export class DailyTipService {
      */
     async saveDailyTipAsync(dto: DailyTipEditDataDTO) {
 
-        const dailyTip = await this._ormService
-            .getRepository(DailyTip)
-            .save({
+        await this._ormService
+            .save(DailyTip, {
                 id: dto.id,
                 description: dto.description,
                 isLive: dto.isLive
             });
+
+        const dailyTip = await this._ormService
+            .query(DailyTip, { id: dto.id })
+            .where('id', '=', 'id')
+            .getSingle()
 
         return this._mapperService
             .map(DailyTip, DailyTipEditDataDTO, dailyTip);
@@ -97,9 +99,8 @@ export class DailyTipService {
 
         // get daily tip views 
         const dailyTips = await this._ormService
-            .getRepository(DailyTipView)
-            .createQueryBuilder('dtv')
-            .where('dtv.userId = :userId', { userId: userId.toSQLValue() })
+            .query(DailyTipView, { userId: userId.toSQLValue() })
+            .where('userId', '=', 'userId')
             .getMany();
 
         // get a tip 
@@ -144,11 +145,10 @@ export class DailyTipService {
         if (!tip.isCurrentTip) {
 
             await this._ormService
-                .getRepository(DailyTipOccurrence)
-                .insert({
+                .createAsync(DailyTipOccurrence, {
                     dailyTipId: tip.dailyTipId,
                     userId: userId.toSQLValue()
-                });
+                } as DailyTipOccurrence);
         }
 
         // map tip

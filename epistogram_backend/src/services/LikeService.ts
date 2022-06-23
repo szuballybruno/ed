@@ -43,8 +43,7 @@ export class LikeService extends QueryServiceBase<Like> {
 
         await this
             ._ormService
-            .getRepository(Like)
-            .insert({
+            .createAsync(Like, {
                 commentId: commentId,
                 userId: currentUserId.toSQLValue()
             } as Like);

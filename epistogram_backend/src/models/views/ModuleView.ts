@@ -10,16 +10,19 @@ export class ModuleView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
-
-    @IsDeletedFlag()
-    @ViewColumn()
-    @XViewColumn()
-    deletionDate: Date;
+    moduleId: number;
 
     @ViewColumn()
     @XViewColumn()
-    name: string;
+    moduleVersionId: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    moduleDataId: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    moduleName: string;
 
     @ViewColumn()
     @XViewColumn()

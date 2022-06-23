@@ -15,6 +15,7 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VideoService } from './VideoService';
 import { throwNotImplemented } from '../utilities/helpers';
+import { StorageFile } from '../models/entity/StorageFile';
 
 export class ModuleService {
 
@@ -48,11 +49,21 @@ export class ModuleService {
     getModuleDetailedDTOAsync = async (moduleId: number) => {
 
         const module = await this._ormService
-            .getRepository(ModuleData)
-            .createQueryBuilder('mo')
-            .where('mo.id = :moduleId', { moduleId })
-            .leftJoinAndSelect('mo.imageFile', 'if')
-            .getOneOrFail();
+            .withResType<ModuleData>()
+            .query(ModuleView, { moduleId })
+            .select(ModuleData)
+            .where('moduleId', '=', 'moduleId')
+            .leftJoin(ModuleData, x => x
+                .on('id', '=', 'moduleDataId', ModuleView))
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'imageFileId', ModuleData))
+            .getOneOrNull();
+        /*        
+               .getRepository(ModuleData)
+               .createQueryBuilder('mo')
+               .where('mo.id = :moduleId', { moduleId })
+               .leftJoinAndSelect('mo.imageFile', 'if')
+               .getOneOrFail(); */
 
         return this._mapperService
             .map(ModuleData, ModuleDetailedDTO, module);
@@ -100,11 +111,22 @@ export class ModuleService {
     getModuleEditDataAsync = async (moduleId: number) => {
 
         const module = await this._ormService
-            .getRepository(ModuleData)
-            .createQueryBuilder('mo')
-            .where('mo.id = :moduleId', { moduleId })
-            .leftJoinAndSelect('mo.imageFile', 'if')
-            .getOneOrFail();
+            .withResType<ModuleData>()
+            .query(ModuleView, { moduleId })
+            .select(ModuleData)
+            .where('moduleId', '=', 'moduleId')
+            .leftJoin(ModuleData, x => x
+                .on('id', '=', 'moduleDataId', ModuleView))
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'imageFileId', ModuleData))
+            .getOneOrNull();
+
+        /*   const module = await this._ormService
+              .getRepository(ModuleData)
+              .createQueryBuilder('mo')
+              .where('mo.id = :moduleId', { moduleId })
+              .leftJoinAndSelect('mo.imageFile', 'if')
+              .getOneOrFail(); */
 
         return this._mapperService
             .map(ModuleData, ModuleAdminEditDTO, module);
@@ -115,8 +137,7 @@ export class ModuleService {
         const moduleId = dto.id;
 
         await this._ormService
-            .getRepository(ModuleData)
-            .save({
+            .save(ModuleData, {
                 id: dto.id,
                 name: dto.name,
                 description: dto.description
@@ -129,8 +150,7 @@ export class ModuleService {
                 .getSingleById(ModuleData, moduleId);
 
             const setModuleThumbnailIdAsync = (fileId: number) => this._ormService
-                .getRepository(ModuleData)
-                .save({
+                .save(ModuleData, {
                     id: moduleId,
                     imageFileId: fileId
                 });

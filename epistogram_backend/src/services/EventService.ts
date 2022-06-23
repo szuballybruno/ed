@@ -37,13 +37,12 @@ export class EventService {
         console.log(`Queueing new event for user: ${userId} code: ${eventCode}`);
 
         await this._ormService
-            .getRepository(Event)
-            .insert({
+            .createAsync(Event, {
                 userId: userId,
                 type: eventCode,
                 isFulfilled: false,
                 data: JSON.stringify(eventDataDTO)
-            });
+            } as Event);
     }
 
     async getUnfulfilledEventAsync() {
@@ -61,8 +60,7 @@ export class EventService {
         const event = events[0];
 
         await this._ormService
-            .getRepository(Event)
-            .save({
+            .save(Event, {
                 id: event.id,
                 isFulfilled: true
             });

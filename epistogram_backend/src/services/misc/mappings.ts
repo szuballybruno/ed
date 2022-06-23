@@ -317,8 +317,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
 
     mapperService
         .addMap(ModuleView, AdminModuleShortDTO, view => ({
-            id: view.id,
-            name: view.name,
+            id: view.moduleId,
+            name: view.moduleName,
             canDelete: view.itemCount === 0
         }));
 

@@ -1,3 +1,4 @@
+import { query } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
@@ -430,42 +431,20 @@ export class CourseService {
             .getSingle()
 
         const categories = await this._ormService
-            .query(CourseCategory)
-            .where('parentCategoryId', 'IS', 'NULL')
-            .getMany();
-
-        const subCategories = await this._ormService
-            .query(CourseCategory)
-            .where('parentCategoryId', 'IS NOT', 'NULL')
-            .getMany();
-
-        console.log('norm')
-        console.log(categories)
-
-        console.log('sub')
-        console.log(subCategories)
-
-        const mergedCategories = categories.map(x => ({
-            ...x,
-            childCategories: subCategories.map(x => x)
-        }))
-
-        /*  console.log(mergedCategories[0].childCategories) */
+            .getRepository(CourseCategory)
+            .createQueryBuilder('cc')
+            .leftJoinAndSelect('cc.childCategories', 'ccc')
+            .where('cc.parentCategoryId IS NULL')
+            .getMany()
 
         const teachers = await this._ormService
             .query(User)
             .innerJoin(TeacherInfo, x => x
                 .on('userId', '=', 'id', User))
             .getMany();
-        /*  const teachers = await this._ormService
-        .getRepository(User)
-        .createQueryBuilder('u')
-        .leftJoinAndSelect('u.teacherInfo', 'te')
-        .where('te IS NOT NULL')
-        .getMany(); */
 
         return this._mapperService
-            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, { mergedCategories, teachers });
+            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, { categories, teachers });
     }
 
     /**
@@ -768,10 +747,9 @@ export class CourseService {
     async createCourseAccessBridge(userId: number, courseId: number) {
 
         await this._ormService
-            .getRepository(CourseAccessBridge)
-            .insert({
+            .createAsync(CourseAccessBridge, {
                 courseId,
                 userId
-            });
+            } as CourseAccessBridge);
     }
 }

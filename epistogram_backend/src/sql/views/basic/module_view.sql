@@ -22,6 +22,8 @@ item_count AS
 )
 SELECT 
 	mv.module_id,
+	mv.id module_version_id,
+	md.id module_data_id,
 	md.name module_name,
 	md.description description,
 	md.order_index order_index,

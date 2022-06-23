@@ -82,8 +82,7 @@ export class FileService {
     deleteFileEntityAsync = async (id: number) => {
 
         await this._ormService
-            .getRepository(StorageFile)
-            .delete(id);
+            .hardDelete(StorageFile, [id]);
     };
 
     insertFileEntityAsync = async (path: string) => {
@@ -93,8 +92,7 @@ export class FileService {
         } as StorageFile;
 
         await this._ormService
-            .getRepository(StorageFile)
-            .insert(file);
+            .createAsync(StorageFile, file);
 
         return file;
     };
