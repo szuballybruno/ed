@@ -2,6 +2,7 @@ import { Video } from '../models/entity/video/Video';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { CourseItemEditView } from '../models/views/CourseItemEditView';
+import { CourseItemView } from '../models/views/CourseItemView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
@@ -63,6 +64,22 @@ export class CourseItemService {
     }
 
     /**
+     * Increments all non-modified course item's version, 
+     * but keeps old [xyx]Data reference, since data is not changed.
+     * This is an optimalization, there's no unneccesary redundant data in the DB this way.
+     * This has hierarchical side effects, it increments every dependant entities's version as well.
+     */
+    async incrementUnmodifiedCourseItemVersions(
+        moduleMigrations: VersionMigrationResult[],
+        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+
+        // const courseItemViews = await this._ormService
+        //     .query(CourseItemView)
+        //     .
+            
+    }
+
+    /**
      * Creates new videos from 
      * video ADD mutations  
      */
@@ -78,7 +95,7 @@ export class CourseItemService {
                 const videoData = XMutatorHelpers
                     .mapMutationToPartialObject(x);
 
-                if (!videoData.itemOrderIndex)
+                if (videoData.itemOrderIndex === null || videoData.itemOrderIndex === undefined)
                     throw new Error('itemOrderIndex is null or undefiend');
 
                 const newVideoData: InsertEntity<VideoData> = {

@@ -560,6 +560,9 @@ export class CourseService {
         // update items 
         // await this.saveUpdatedCourseItemsAsync(mutations);
 
+        await this._courseItemService
+            .incrementUnmodifiedCourseItemVersions(moduleVersionMigrations, mutations);
+
         // save new items 
         await this._courseItemService
             .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);

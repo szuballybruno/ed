@@ -98,11 +98,17 @@ export class ORMConnectionService {
         }
     };
 
+    /**
+     * @deprecated Use XOrm (this service .query())
+     */
     getRepository<T>(classType: ClassType<T>) {
 
         return this._ormConnection.getRepository(classType);
     }
 
+    /**
+     * @deprecated Use XOrm (this service .query())
+     */
     getOrmConnection() {
 
         return this._ormConnection;
@@ -118,6 +124,9 @@ export class ORMConnectionService {
         };
     }
 
+    /**
+     * XORM query builder
+     */
     query<TEntity, TParam extends ParamConstraintType<TParam>, TResult = TEntity>(classType: ClassType<TEntity>, params?: TParam) {
 
         return new XQueryBuilder<TEntity, TParam, TResult>(this._sqlConnectionService, classType, this._loggingEnabled, params);

@@ -48,9 +48,10 @@ export const ShopAndNotifications = (props: {
                 isOpen={settingsPopperOpen} />
 
             <Flex
-                pr={isLowHeight ? 0 : '10px'}
+                paddingRight={isLowHeight ? 0 : '10px'}
                 align="center"
-                mr={isLowHeight ? 0 : '15px'}>
+                marginRight={isLowHeight ? 0 : '15px'}
+                flexShrink="0">
 
                 {/* shop button */}
                 <EpistoButton

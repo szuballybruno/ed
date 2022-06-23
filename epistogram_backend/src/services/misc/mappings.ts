@@ -227,6 +227,9 @@ const marray = [
 
 export type EpistoMappingsType = Mutable<typeof marray>;
 
+/**
+ * @deprecated Migrate all mappings to new mappings system
+ */
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
 
     mapperService
