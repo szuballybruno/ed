@@ -342,7 +342,7 @@ export const WatchView = (props: {
                 </Flex>
 
                 {/* ratings */}
-                <VideoRating videoId={videoPlayerData!.videoVersionId} />
+                <VideoRating videoVersionId={videoPlayerData!.videoVersionId} />
             </Flex>
 
             <Divider

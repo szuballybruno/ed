@@ -361,9 +361,10 @@ export class CourseService {
     async getCourseModulesAsync(userId: number, courseId: number) {
 
         const views = await this._ormService
-            .query(CourseItemPlaylistView, { courseId, userId })
+            .query(CourseItemPlaylistView, { courseId, userId, pretestModuleOrderIndex: 0 })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
+            .and('moduleOrderIndex', '!=', 'pretestModuleOrderIndex')
             .getMany();
 
         const modules = views

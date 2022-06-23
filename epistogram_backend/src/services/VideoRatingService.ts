@@ -19,18 +19,18 @@ export class VideoRatingService {
         const existingRating = await this._ormService
             .query(VideoRating, {
                 userId: userId,
-                videoVersionId: dto.videoId //TODO videoversionid
+                videoVersionId: dto.videoVersionId
             })
             .where('userId', '=', 'userId')
             .and('videoVersionId', '=', 'videoVersionId')
-            .getSingle();
+            .getOneOrNull();
 
         this._ormService
             .save(VideoRating, {
                 id: existingRating ? existingRating.id : undefined,
                 experience: dto.experience,
                 userId,
-                videoVersionId: dto.videoId //TODO videoversionid
+                videoVersionId: dto.videoVersionId
             });
     }
 
@@ -41,11 +41,11 @@ export class VideoRatingService {
         const existingRating = await this._ormService
             .query(VideoRating, {
                 userId: userId,
-                videoVersionId: dto.videoId //TODO videoversionid
+                videoVersionId: dto.videoVersionId
             })
             .where('userId', '=', 'userId')
             .and('videoVersionId', '=', 'videoVersionId')
-            .getSingle();
+            .getOneOrNull();
 
         this._ormService
             .save(VideoRating, {
@@ -54,22 +54,22 @@ export class VideoRatingService {
                     : undefined,
                 difficulty: dto.difficulty,
                 userId,
-                videoVersionId: dto.videoId
+                videoVersionId: dto.videoVersionId
             });
     }
 
-    async getVideoRatingAsync(principalId: PrincipalId, videoId: number) {
+    async getVideoRatingAsync(principalId: PrincipalId, videoVersionId: number) {
 
         const userId = principalId.toSQLValue();
 
         const rating = await this._ormService
             .query(VideoRating, {
                 userId: userId,
-                videoVersionId: videoId //TODO videoversionid
+                videoVersionId: videoVersionId
             })
             .where('userId', '=', 'userId')
             .and('videoVersionId', '=', 'videoVersionId')
-            .getSingle();
+            .getOneOrNull();
 
         return {
             difficulty: rating?.difficulty ?? null,

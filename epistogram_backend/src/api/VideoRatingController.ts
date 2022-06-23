@@ -38,11 +38,11 @@ export class VideoRatingController {
     @XControllerAction(apiRoutes.videoRating.getVideoRating)
     getVideoRatingAction = async (params: ActionParams) => {
 
-        const videoId = params
-            .getQuery<{ videoId: number }>()
-            .getValue(x => x.videoId, 'int');
+        const videoVersionId = params
+            .getQuery<{ videoVersionId: number }>()
+            .getValue(x => x.videoVersionId, 'int');
 
         return await this._videoRatingService
-            .getVideoRatingAsync(params.principalId, videoId);
+            .getVideoRatingAsync(params.principalId, videoVersionId);
     };
 } 

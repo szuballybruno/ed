@@ -41,21 +41,21 @@ export class UserProgressService extends ServiceBase {
             .query(UserCourseRecommendedItemQuotaView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
-            .getSingle();
+            .getOneOrNull();
 
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .and('isCurrent', 'IS', 'true')
-            .getSingle();
+            .getOneOrNull();
 
         const getCurrentWeeklyCompletedView = await this._ormService
             .query(UserWeeklyCourseItemProgressView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .and('isCurrent', 'IS', 'true')
-            .getSingle();
+            .getOneOrNull();
 
         return {
             recommendedItemsPerDay: courseProgressView?.recommendedItemsPerDay ?? 0,

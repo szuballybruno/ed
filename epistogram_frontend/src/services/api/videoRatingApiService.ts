@@ -21,9 +21,9 @@ export const useRateVideoExperience = () => {
     };
 };
 
-export const useVideoRating = (videoId: number) => {
+export const useVideoRating = (videoVersionId: number) => {
 
-    const qr = useReactQuery2<VideoRatingDTO>(apiRoutes.videoRating.getVideoRating, { videoId });
+    const qr = useReactQuery2<VideoRatingDTO>(apiRoutes.videoRating.getVideoRating, { videoVersionId });
 
     return {
         videoRating: qr.data,

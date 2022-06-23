@@ -50,7 +50,8 @@ FROM
 
 		-- total given answer count
 		(
-			SELECT COUNT (ga.id)::int 
+			SELECT 
+				COUNT (ga.id)::int 
 			FROM public.given_answer ga
 
 			LEFT JOIN public.answer_session ase
@@ -64,7 +65,8 @@ FROM
 
 		-- total correct given answer count
 		(
-			SELECT COUNT (ga.id)::int 
+			SELECT 
+				COUNT (ga.id)::int 
 			FROM public.given_answer ga
 
 			LEFT JOIN public.answer_session ase
@@ -80,7 +82,8 @@ FROM
 	
 		-- total session length 
 		(
-			SELECT SUM(usav.length_seconds)::int
+			SELECT 
+				SUM(usav.length_seconds)::int
 			FROM public.user_session_view usav
 			
 			WHERE usav.user_id = u.id
@@ -88,7 +91,8 @@ FROM
 	
 		-- avg session length
 		(
-			SELECT AVG(usav.length_seconds)::int
+			SELECT 
+				AVG(usav.length_seconds)::int
 			FROM public.user_session_view usav
 			
 			WHERE usav.user_id = u.id
@@ -106,7 +110,6 @@ FROM
 			WHERE asv.user_id = u.id 
 				AND asv.answer_session_id IS NOT NULL
 				AND asv.exam_version_id IS DISTINCT FROM 1
-			GROUP BY asv.answer_session_id
 		) total_answer_session_success_rate
 	FROM public.user u
 

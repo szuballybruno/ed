@@ -7,12 +7,12 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { RatingStars } from '../../universal/RatingStars';
 
-export const VideoRating = (props: { videoId: number }) => {
+export const VideoRating = (props: { videoVersionId: number }) => {
 
-    const { videoId } = props;
+    const { videoVersionId } = props;
 
     // http
-    const { videoRating, refetchVideoRating } = useVideoRating(videoId);
+    const { videoRating, refetchVideoRating } = useVideoRating(videoVersionId);
     const { rateVideoExperienceAsync } = useRateVideoExperience();
     const { rateVideoDifficultyAsync } = useRateVideoDifficulty();
 
@@ -29,7 +29,7 @@ export const VideoRating = (props: { videoId: number }) => {
 
         try {
 
-            await rateVideoExperienceAsync({ videoId, experience: rating });
+            await rateVideoExperienceAsync({ videoVersionId, experience: rating });
             await refetchVideoRating();
             setShowDificultyRating(true);
         }
@@ -43,7 +43,7 @@ export const VideoRating = (props: { videoId: number }) => {
 
         try {
 
-            await rateVideoDifficultyAsync({ videoId, difficulty: rating });
+            await rateVideoDifficultyAsync({ videoVersionId, difficulty: rating });
             await refetchVideoRating();
             setShowDificultyRating(false);
         }
@@ -56,7 +56,7 @@ export const VideoRating = (props: { videoId: number }) => {
     useEffect(() => {
 
         setShowDificultyRating(false);
-    }, [videoId]);
+    }, [videoVersionId]);
 
     useEffect(() => {
 
