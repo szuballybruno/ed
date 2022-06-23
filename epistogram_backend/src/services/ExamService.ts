@@ -51,8 +51,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     async createExamAsync(exam: ExamData) {
 
         await this._ormService
-            .getRepository(ExamData)
-            .insert(exam);
+            .createAsync(ExamData, exam)
     }
 
     /**
@@ -106,11 +105,10 @@ export class ExamService extends QueryServiceBase<ExamData> {
     async startExamAsync(answerSessionId: number) {
 
         await this._ormService
-            .getRepository(AnswerSession)
-            .save({
+            .save(AnswerSession, {
                 id: answerSessionId,
                 startDate: new Date()
-            });
+            })
     }
 
     /**
@@ -175,18 +173,16 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         // set answer session end date 
         await this._ormService
-            .getRepository(AnswerSession)
-            .save({
+            .save(AnswerSession, {
                 id: answerSessionId,
                 endDate: new Date()
             });
 
         // set user exam progress
         const answerSessionViews = await this._ormService
-            .getRepository(AnswerSessionView)
-            .createQueryBuilder('asv')
-            .where('asv.userId = :userId', { userId })
-            .andWhere('asv.examVersionId = :examVersionId', { examVersionId })
+            .query(AnswerSessionView, { userId, examVersionId })
+            .where('userId', '=', 'userId')
+            .and('examVersionId', '=', 'examVersionId')
             .getMany();
 
         const currentAnswerSessionIsSuccessful = answerSessionViews
@@ -203,8 +199,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         // if first successful ase, save user exam progress bridge
         await this._ormService
-            .getRepository(UserExamProgressBridge)
-            .save({
+            .save(UserExamProgressBridge, {
                 completionDate: new Date(),
                 examVersionId,
                 userId
@@ -280,14 +275,15 @@ export class ExamService extends QueryServiceBase<ExamData> {
             throw new Error('Current item is not an exam!');
 
         const examResultViews = await this._ormService
-            .getRepository(ExamResultView)
-            .find({
-                where: {
-                    examVersionId: itemVersionId,
-                    userId: userId.toSQLValue(),
-                    answerSessionId: answerSessionId
-                }
-            });
+            .query(ExamResultView, {
+                itemVersionId,
+                userId: userId.toSQLValue(),
+                answerSessionId
+            })
+            .where('examVersionId', '=', 'itemVersionId')
+            .and('userId', '=', 'userId')
+            .and('answerSessionId', '=', 'answerSessionId')
+            .getMany()
 
         return toExamResultDTO(examResultViews);
     };

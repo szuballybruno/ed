@@ -44,20 +44,16 @@ export class CommentService extends QueryServiceBase<Comment> {
             videoVersionId: videoVersionId
         } as Comment;
 
-        return await this
-            ._ormService
-            .getRepository(Comment)
-            .insert(newComment);
+        return await this._ormService
+            .createAsync(Comment, newComment);
     };
 
-    getCommentsAsync = async (videoVersionId: number, currentUserId: PrincipalId) => {
+    getCommentsAsync = async (videoId: number, currentUserId: PrincipalId) => {
 
-        const userComments = await this
-            ._ormService
-            .getRepository(CommentListView)
-            .createQueryBuilder('clv')
-            .where('clv.videoVersionId = :videoVersionId', { videoVersionId })
-            .andWhere('clv.currentUserId = :currentUserId', { currentUserId: currentUserId.toSQLValue() })
+        const userComments = await this._ormService
+            .query(CommentListView, { videoId, currentUserId })
+            .where('videoId', '=', 'videoId')
+            .and('currentUserId', '=', 'currentUserId')
             .getMany();
 
         return await this

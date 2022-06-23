@@ -6,6 +6,7 @@ import { CourseCategory } from '../models/entity/CourseCategory';
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
+import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
@@ -108,9 +109,8 @@ export class CourseService {
     async getCourseProgressShortAsync(userId: PrincipalId) {
 
         const views = await this._ormService
-            .getRepository(CourseProgressView)
-            .createQueryBuilder('cpv')
-            .where('cpv.userId = :userId', { userId: userId.toSQLValue() })
+            .query(CourseProgressView, { userId: userId.toSQLValue() })
+            .where('userId', '=', 'userId')
             .getMany();
 
         return this._mapperService
@@ -127,13 +127,10 @@ export class CourseService {
     async getCourseViewAsync(userId: number, courseId: number) {
 
         const view = await this._ormService
-            .getRepository(AvailableCourseView)
-            .findOneOrFail({
-                where: {
-                    courseId: courseId,
-                    userId
-                }
-            });
+            .query(AvailableCourseView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'courseId')
+            .getSingle();
 
         return view;
     }
@@ -162,16 +159,14 @@ export class CourseService {
     async getCourseDetailsAsync(userId: PrincipalId, courseId: number) {
 
         const courseDetailsView = await this._ormService
-            .getRepository(CourseDetailsView)
-            .createQueryBuilder('cdv')
-            .where('cdv.courseId = :courseId', { courseId })
-            .andWhere('cdv.userId = :userId', { userId: userId.toSQLValue() })
-            .getOneOrFail();
+            .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         const moduleViews = await this._ormService
-            .getRepository(CourseModuleOverviewView)
-            .createQueryBuilder('v')
-            .where('v.courseId = :courseId', { courseId })
+            .query(CourseModuleOverviewView, { courseId })
+            .where('courseId', '=', 'courseId')
             .getMany();
 
         return this._mapperService
@@ -205,8 +200,7 @@ export class CourseService {
         } as CourseData;
 
         await this._ormService
-            .getRepository(CourseData)
-            .insert(newCourse);
+            .createAsync(CourseData, newCourse);
 
         await this._pretestService
             .createPretestExamAsync(newCourse.id);
@@ -262,13 +256,10 @@ export class CourseService {
 
         // get course progress
         const courseProgress = await this._ormService
-            .getRepository(CourseProgressView)
-            .findOne({
-                where: {
-                    courseId: currentCourseId,
-                    userId: userId
-                }
-            });
+            .query(CourseProgressView, { courseId: currentCourseId, userId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         if (!courseProgress)
             return null;
@@ -329,8 +320,7 @@ export class CourseService {
             .getSingleById(CourseData, courseId);
 
         const setCourseThumbnailIdAsync = (thumbnailFileId: number) => this._ormService
-            .getRepository(CourseData)
-            .save({
+            .save(CourseData, {
                 id: courseId,
                 coverFileId: thumbnailFileId
             });
@@ -369,10 +359,9 @@ export class CourseService {
     async getCourseModulesAsync(userId: number, courseId: number) {
 
         const views = await this._ormService
-            .getRepository(CourseItemPlaylistView)
-            .createQueryBuilder('cipv')
-            .where('cipv.courseId = :courseId', { courseId })
-            .andWhere('cipv.userId = :userId', { userId: userId })
+            .query(CourseItemPlaylistView, { courseId, userId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
             .getMany();
 
         const modules = views
@@ -435,27 +424,47 @@ export class CourseService {
 
         // get course 
         const view = await this._ormService
-            .getRepository(CourseAdminDetailedView)
-            .createQueryBuilder('c')
-            .where('c.courseId = :courseId', { courseId: courseId })
-            .getOneOrFail();
+            .query(CourseAdminDetailedView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle()
 
         const categories = await this._ormService
-            .getRepository(CourseCategory)
-            .createQueryBuilder('cc')
-            .leftJoinAndSelect('cc.childCategories', 'ccc')
-            .where('cc.parentCategoryId IS NULL')
+            .query(CourseCategory)
+            .where('parentCategoryId', 'IS', 'NULL')
             .getMany();
+
+        const subCategories = await this._ormService
+            .query(CourseCategory)
+            .where('parentCategoryId', 'IS NOT', 'NULL')
+            .getMany();
+
+        console.log('norm')
+        console.log(categories)
+
+        console.log('sub')
+        console.log(subCategories)
+
+        const mergedCategories = categories.map(x => ({
+            ...x,
+            childCategories: subCategories.map(x => x)
+        }))
+
+        /*  console.log(mergedCategories[0].childCategories) */
 
         const teachers = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('u')
-            .leftJoinAndSelect('u.teacherInfo', 'te')
-            .where('te IS NOT NULL')
+            .query(User)
+            .innerJoin(TeacherInfo, x => x
+                .on('userId', '=', 'id', User))
             .getMany();
+        /*  const teachers = await this._ormService
+        .getRepository(User)
+        .createQueryBuilder('u')
+        .leftJoinAndSelect('u.teacherInfo', 'te')
+        .where('te IS NOT NULL')
+        .getMany(); */
 
         return this._mapperService
-            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, { categories, teachers });
+            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, { mergedCategories, teachers });
     }
 
     /**
@@ -504,18 +513,20 @@ export class CourseService {
      * @param courseId 
      * @returns 
      */
-    async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
+    async getCourseContentAdminDataAsync(courseVersionId: number, loadDeleted: boolean) {
 
         const views = await this._ormService
-            .query(CourseAdminContentView, { courseId })
-            .where('courseId', '=', 'courseId')
+            .query(CourseAdminContentView, { courseVersionId })
+            .where('courseId', '=', 'courseVersionId')
             .getMany();
 
         const modules = await this._ormService
-            .getRepository(ModuleData)
-            .createQueryBuilder('md')
-            .leftJoin(ModuleVersion, 'mv', 'mv.moduleDataId = md.id')
-            .where('mv.courseVersionId = :courseId', { courseId })
+            .withResType<ModuleData>()
+            .query(ModuleVersion, { courseVersionId })
+            .select(ModuleData)
+            .leftJoin(ModuleData, x => x
+                .on('id', '=', 'moduleDataId', ModuleVersion))
+            .where('courseVersionId', '=', 'courseVersionId')
             .getMany();
 
         const moduleDtos = modules

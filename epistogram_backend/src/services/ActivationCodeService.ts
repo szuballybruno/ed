@@ -15,13 +15,12 @@ export class ActivationCodeService {
     async isValidCodeAsync(code: string) {
 
         const actCode = await this._ormService
-            .getRepository(ActivationCode)
-            .findOne({
-                where: {
-                    isUsed: false,
-                    code
-                }
-            });
+            .query(ActivationCode, {
+                code
+            })
+            .where('code', '=', 'code')
+            .and('isUsed', 'IS', 'false')
+            .getSingle()
 
         return actCode;
     }
@@ -29,8 +28,7 @@ export class ActivationCodeService {
     async invalidateCodeAsync(codeId: number) {
 
         await this._ormService
-            .getRepository(ActivationCode)
-            .save({
+            .save(ActivationCode, {
                 id: codeId,
                 isUsed: true
             });
@@ -41,17 +39,16 @@ export class ActivationCodeService {
         const codes = forN(amount, x => this.genCode());
 
         await this._ormService
-            .getRepository(ActivationCode)
-            .insert(codes
+            .createManyAsync(ActivationCode, codes
                 .map(x => ({
                     code: x,
                     isUsed: false
-                })));
+                } as ActivationCode)));
     }
 
     private genCode = () => {
 
         return 'PCW-' + generatePassword(8)
-.toUpperCase();
+            .toUpperCase();
     };
 }

@@ -52,8 +52,8 @@ export class MiscController {
     getJobTitlesAction = async (params: ActionParams) => {
 
         return await this._ormService
-            .getRepository(JobTitle)
-            .find();
+            .query(JobTitle)
+            .getSingle()
     };
 
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)

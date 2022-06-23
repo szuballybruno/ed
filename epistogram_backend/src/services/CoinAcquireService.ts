@@ -131,10 +131,9 @@ export class CoinAcquireService {
 
         // check if it's not more than 3 sessions today
         const todaysInfo = await this._ormService
-            .getRepository(UserSessionDailyView)
-            .createQueryBuilder('us')
-            .where('us.userId = :userId', { userId })
-            .getOneOrFail();
+            .query(UserSessionDailyView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
         if (todaysInfo.sessionCount > 3)
             return;
@@ -161,12 +160,9 @@ export class CoinAcquireService {
     private acquireActivityStreakCoin = async (userId: number) => {
 
         const currentActivityStreak = await this._ormService
-            .getRepository(ActivityStreakView)
-            .findOneOrFail({
-                where: {
-                    isFinalized: false
-                }
-            });
+            .query(ActivityStreakView)
+            .where('isFinalized', 'IS', 'false')
+            .getSingle();
 
         const coinsForActivityStreak = await this._coinTransactionService
             .getCoinsForActivityStreakAsync(userId, currentActivityStreak.id);

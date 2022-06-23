@@ -27,10 +27,9 @@ export class CourseRatingService extends ServiceBase {
     async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: number) {
 
         const views = await this._ormService
-            .getRepository(CourseRatingQuestionView)
-            .createQueryBuilder('crqv')
-            .where('crqv.userId = :userId', { userId: userId.toSQLValue() })
-            .andWhere('crqv.courseId = :courseId', { courseId })
+            .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
             .getMany();
 
         const groups = views
@@ -65,15 +64,16 @@ export class CourseRatingService extends ServiceBase {
         const courseId = answersDTO.courseId;
 
         const prevAnswers = await this._ormService
-            .getRepository(CourseRatingQuestionUserAnswer)
-            .createQueryBuilder('crqua')
-            .where('crqua.userId = :userId', { userId: userId.toSQLValue() })
-            .andWhere('crqua.courseId = :courseId', { courseId })
-            .andWhere('crqua.courseRatingQuestionId IN (:...questionIds)', {
+            .query(CourseRatingQuestionUserAnswer, {
+                userId: userId.toSQLValue(),
+                courseId,
                 questionIds: answersDTO
                     .answers
                     .map(x => x.quesitonId)
             })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('courseRatingQuestionId', '=', 'questionIds')
             .getMany();
 
         const answers = answersDTO
@@ -89,7 +89,6 @@ export class CourseRatingService extends ServiceBase {
             } as CourseRatingQuestionUserAnswer));
 
         await this._ormService
-            .getRepository(CourseRatingQuestionUserAnswer)
-            .save(answers);
+            .save(CourseRatingQuestionUserAnswer, answers);
     }
 }

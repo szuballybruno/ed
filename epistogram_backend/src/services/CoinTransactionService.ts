@@ -6,6 +6,7 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { GivenAnswer } from '../models/entity/GivenAnswer';
 
 export class CoinTransactionService {
 
@@ -33,12 +34,9 @@ export class CoinTransactionService {
     async getCoinBalance(principalId: PrincipalId, userId: number) {
 
         const coinBalance = await this._ormConnectionService
-            .getRepository(CoinBalanceView)
-            .findOneOrFail({
-                where: {
-                    userId: userId
-                }
-            });
+            .query(CoinBalanceView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
         return coinBalance.coinBalance;
     }
@@ -46,23 +44,19 @@ export class CoinTransactionService {
     async giftCoinsToUserAsync(userId: number, amount: number) {
 
         await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .insert({
+            .createAsync(CoinTransaction, {
                 userId,
                 amount,
                 isGifted: true
-            });
+            } as CoinTransaction);
     }
 
     async getCoinTransactionsAsync(userId: PrincipalId) {
 
         const coinTransactions = await this._ormConnectionService
-            .getRepository(CoinTransactionView)
-            .find({
-                where: {
-                    userId: userId.toSQLValue()
-                }
-            });
+            .query(CoinTransactionView, { userId: userId.toSQLValue() })
+            .where('userId', '=', 'userId')
+            .getMany();
 
         return coinTransactions
             .map(x => this._mapperService
@@ -72,46 +66,40 @@ export class CoinTransactionService {
     async getCoinsForQuestionAsync(userId: number, questionVersionId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .createQueryBuilder('ca')
-            .leftJoinAndSelect('ca.givenAnswer', 'ga')
-            .where('ca.userId = :userId', { userId })
-            .andWhere('ga.question_version_id = :questionVersionId', { questionVersionId })
-            .andWhere('ca.given_answer_id IS NOT NULL')
+            .query(CoinTransaction, { userId, questionVersionId })
+            .leftJoin(GivenAnswer, x => x
+                .on('id', '=', 'givenAnswerId', CoinTransaction)
+                .and('questionVersionId', '=', 'questionVersionId'))
+            .where('userId', '=', 'userId')
+            .and('givenAnswerId', 'IS NOT', 'NULL')
             .getMany();
+
     }
 
     async getCoinsForActivitySession(userId: number, activitySessionId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .findOne({
-                where: {
-                    userId,
-                    activitySessionId
-                }
-            });
+            .query(CoinTransaction, { userId, activitySessionId })
+            .where('userId', '=', 'userId')
+            .and('activitySessionId', '=', 'activitySessionId')
+            .getOneOrNull();
     }
 
     async getCoinsForActivityStreakAsync(userId: number, activityStreakId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .find({
-                where: {
-                    userId: userId,
-                    activityStreakId
-                }
-            });
+            .query(CoinTransaction, { userId, activityStreakId })
+            .where('userId', '=', 'userId')
+            .and('activityStreakId', '=', 'activityStreakId')
+            .getMany();
     }
 
     async getCoinsForAnswerStreakAsync(userId: number, answerStreakId: number) {
 
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .createQueryBuilder('ca')
-            .where('ca.userId = :userId', { userId })
-            .andWhere('ca.given_answer_streak_id = :gasid', { gasid: answerStreakId })
+            .query(CoinTransaction, { userId, answerStreakId })
+            .where('userId', '=', 'userId')
+            .and('givenAnswerStreakId', '=', 'answerStreakId')
             .getMany();
     }
 }
