@@ -110,14 +110,24 @@ export const mapToRowSchema = (
 
     const isPretest = item.itemType === 'pretest';
 
+    const getItemModule = () => {
+
+        const module = modules
+            .firstOrNull(x => x.id === item.moduleVersionId);
+
+        if (!module)
+            throw new Error(`Module for item (verisonCode: ${item.versionCode}) not found by moduleVersionId: ${item.moduleVersionId}`);
+
+        return module;
+    };
+
     const module = isPretest
         ? {
             id: -1,
             name: 'none',
             orderIndex: -1
         } as CourseModuleShortDTO
-        : modules
-            .single(x => x.id === item.moduleVersionId);
+        : getItemModule();
 
     return ({
         rowKey: item.versionCode,

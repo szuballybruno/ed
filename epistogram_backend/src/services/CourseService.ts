@@ -569,8 +569,8 @@ export class CourseService {
             .incrementUnmodifiedCourseItemVersions(moduleVersionMigrations, mutations);
 
         // save new items 
-        await this._courseItemService
-            .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
+        // await this._courseItemService
+        //     .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
 
         // delete items 
         // await this.saveDeletedCourseItemsAsync(mutations);
