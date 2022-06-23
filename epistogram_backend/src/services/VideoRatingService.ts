@@ -17,21 +17,20 @@ export class VideoRatingService {
         const userId = principalId.toSQLValue();
 
         const existingRating = await this._ormService
-            .getRepository(VideoRating)
-            .findOne({
-                where: {
-                    videoVersionId: dto.videoId,
-                    userId
-                }
-            });
+            .query(VideoRating, {
+                userId: userId,
+                videoVersionId: dto.videoId //TODO videoversionid
+            })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getSingle();
 
         this._ormService
-            .getRepository(VideoRating)
-            .save({
+            .save(VideoRating, {
                 id: existingRating ? existingRating.id : undefined,
                 experience: dto.experience,
                 userId,
-                videoId: dto.videoId
+                videoVersionId: dto.videoId //TODO videoversionid
             });
     }
 
@@ -40,21 +39,22 @@ export class VideoRatingService {
         const userId = principalId.toSQLValue();
 
         const existingRating = await this._ormService
-            .getRepository(VideoRating)
-            .findOne({
-                where: {
-                    videoVersionId: dto.videoId,
-                    userId
-                }
-            });
+            .query(VideoRating, {
+                userId: userId,
+                videoVersionId: dto.videoId //TODO videoversionid
+            })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getSingle();
 
         this._ormService
-            .getRepository(VideoRating)
-            .save({
-                id: existingRating ? existingRating.id : undefined,
+            .save(VideoRating, {
+                id: existingRating
+                    ? existingRating.id
+                    : undefined,
                 difficulty: dto.difficulty,
                 userId,
-                videoId: dto.videoId
+                videoVersionId: dto.videoId
             });
     }
 
@@ -63,13 +63,13 @@ export class VideoRatingService {
         const userId = principalId.toSQLValue();
 
         const rating = await this._ormService
-            .getRepository(VideoRating)
-            .findOne({
-                where: {
-                    userId,
-                    videoVersionId: videoId
-                }
-            });
+            .query(VideoRating, {
+                userId: userId,
+                videoVersionId: videoId //TODO videoversionid
+            })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getSingle();
 
         return {
             difficulty: rating?.difficulty ?? null,

@@ -23,6 +23,7 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { StorageFile } from '../models/entity/StorageFile';
 
 export class ShopService {
 
@@ -57,9 +58,8 @@ export class ShopService {
         const userId = principalId.toSQLValue();
 
         const shopItemViews = await this._ormService
-            .getRepository(ShopItemStatefulView)
-            .createQueryBuilder('siv')
-            .where('siv.userId = :userId', { userId })
+            .query(ShopItemStatefulView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
         return this._mapperService
@@ -69,8 +69,7 @@ export class ShopService {
     async getShopItemCategoriesAsync() {
 
         const shopItemCategories = await this._ormService
-            .getRepository(ShopItemCategory)
-            .createQueryBuilder('sic')
+            .query(ShopItemCategory)
             .getMany();
 
         return this._mapperService
@@ -80,17 +79,14 @@ export class ShopService {
     async purchaseShopItemAsync(principalId: PrincipalId, shopItemId: number) {
 
         const userId = principalId.toSQLValue();
-        
+
         const shopItem = await this._ormService
             .getSingleById(ShopItem, shopItemId);
 
         const shopItemView = await this._ormService
-            .getRepository(ShopItemView)
-            .findOneOrFail({
-                where: {
-                    id: shopItemId
-                }
-            });
+            .query(ShopItemView, { shopItemId })
+            .where('id', '=', 'shopItemId')
+            .getSingle();
 
         await this._coinTransactionService
             .makeCoinTransactionAsync({
@@ -118,10 +114,9 @@ export class ShopService {
         else {
 
             const discountCodes = await this._ormService
-                .getRepository(DiscountCode)
-                .createQueryBuilder('dc')
-                .where('dc.userId IS NULL')
-                .andWhere('dc.shopItemId = :shopItemId', { shopItemId })
+                .query(DiscountCode, { shopItemId })
+                .where('userId', 'IS', 'NULL')
+                .and('shopItemId', '=', 'shopItemId')
                 .getMany();
 
             const discountCode = discountCodes[0];
@@ -129,8 +124,7 @@ export class ShopService {
                 throw new Error('No more unused discount codes for the selected item!');
 
             await this._ormService
-                .getRepository(DiscountCode)
-                .save({
+                .save(DiscountCode, {
                     id: discountCode.id,
                     userId: userId
                 });
@@ -156,12 +150,9 @@ export class ShopService {
     async getShopItemBriefDataAsync(shopItemId: number) {
 
         const item = await this._ormService
-            .getRepository(ShopItemView)
-            .findOneOrFail({
-                where: {
-                    id: shopItemId
-                }
-            });
+            .query(ShopItemView, { shopItemId })
+            .where('id', '=', 'shopItemId')
+            .getSingle();
 
         return this._mapperService
             .map(ShopItemView, ShopItemBriefData, item);
@@ -170,8 +161,7 @@ export class ShopService {
     async getAdminShopItemsAsync() {
 
         const items = await this._ormService
-            .getRepository(ShopItemView)
-            .createQueryBuilder('siv')
+            .query(ShopItemView)
             .getMany();
 
         return this._mapperService
@@ -181,19 +171,16 @@ export class ShopService {
     async getShopItemEditDTOAsync(shopItemId: number) {
 
         const shopItem = await this._ormService
-            .getRepository(ShopItem)
-            .createQueryBuilder('si')
-            .leftJoinAndSelect('si.coverFile', 'ci')
-            .where('si.id = :shopItemId', { shopItemId })
-            .getOneOrFail();
+            .query(ShopItem, { shopItemId })
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'coverFileId', ShopItem))
+            .where('id', '=', 'shopItemId')
+            .getSingle();
 
         const discountCodes = await this._ormService
-            .getRepository(DiscountCode)
-            .find({
-                where: {
-                    shopItemId
-                }
-            });
+            .query(DiscountCode, { shopItemId })
+            .where('shopItemId', '=', 'shopItemId')
+            .getMany();
 
         return this._mapperService
             .map(ShopItem, ShopItemEditDTO, shopItem, discountCodes);
@@ -202,10 +189,10 @@ export class ShopService {
     async getPrivateCourseListAsync() {
 
         const courses = await this._ormService
-            .getRepository(CourseData)
-            .createQueryBuilder('co')
-            .leftJoinAndSelect('co.coverFile', 'cf')
-            .where('co.visibility = \'private\'')
+            .query(CourseData, { visibility: 'private' })
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'coverFileId', CourseData))
+            .where('visibility', '=', 'visibility')
             .getMany();
 
         return this._mapperService
@@ -219,8 +206,7 @@ export class ShopService {
 
         // save entity details
         await this._ormService
-            .getRepository(ShopItem)
-            .save({
+            .save(ShopItem, {
                 id: dto.id,
                 coinPrice: dto.coinPrice,
                 currencyPrice: dto.currencyPrice,
@@ -252,8 +238,7 @@ export class ShopService {
         } as ShopItem;
 
         await this._ormService
-            .getRepository(ShopItem)
-            .insert(si);
+            .createAsync(ShopItem, si);
 
         return {
             id: si.id
@@ -264,12 +249,9 @@ export class ShopService {
 
         // get existing codes
         const existingCodes = await this._ormService
-            .getRepository(DiscountCode)
-            .find({
-                where: {
-                    shopItemId
-                }
-            });
+            .query(DiscountCode, { shopItemId })
+            .where('shopItemId', '=', 'shopItemId')
+            .getMany();
 
         // handle added codes 
         const addedCodes = discountCodes
@@ -278,12 +260,12 @@ export class ShopService {
 
         if (addedCodes.length > 0)
             await this._ormService
-                .getRepository(DiscountCode)
-                .insert(addedCodes
+                .createManyAsync(DiscountCode, addedCodes
                     .map(addedCode => ({
                         shopItemId,
                         code: addedCode.code
-                    })));
+                    } as DiscountCode))
+                );
 
         // handle deleted codes
         const deletedCodes = existingCodes
@@ -292,8 +274,7 @@ export class ShopService {
 
         if (deletedCodes.length > 0)
             await this._ormService
-                .getRepository(DiscountCode)
-                .delete(deletedCodes.map(x => x.id));
+                .hardDelete(DiscountCode, deletedCodes.map(x => x.id));
     }
 
     private async saveCoverFileAsync(shopItemId: number, file: UploadedFile) {
@@ -302,8 +283,7 @@ export class ShopService {
             .getSingleById(ShopItem, shopItemId);
 
         const setFileIdAsync = (fileId: number) => this._ormService
-            .getRepository(ShopItem)
-            .save({
+            .save(ShopItem, {
                 id: shopItemId,
                 coverFileId: fileId
             });

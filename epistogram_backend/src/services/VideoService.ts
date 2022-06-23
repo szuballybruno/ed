@@ -108,8 +108,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .getSingle()
 
         await this._ormService
-            .getRepository(VideoFile)
-            .save({
+            .save(VideoFile, {
                 id: videoVersion.videoData.videoFile.id,
                 storageFileId: storageFileId
             });
@@ -184,8 +183,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
 
         await this._ormService
-            .getRepository(VideoData)
-            .save({
+            .save(VideoData, {
                 id: videoId,
                 thumbnailFileId: thumbnailFileId
             });
@@ -311,6 +309,8 @@ export class VideoService extends QueryServiceBase<VideoData> {
                 (entity) => entity.storageFileId,
                 videoFileBuffer);
 
+        const videoFile = await getVideoFile()
+
         // set video length
         const videoFileUrl = this._assetUrlService
             .getAssetUrl(filePath);
@@ -318,9 +318,8 @@ export class VideoService extends QueryServiceBase<VideoData> {
         const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
 
         await this._ormService
-            .getRepository(VideoData)
-            .save({
-                id: videoVersionId,
+            .save(VideoFile, {
+                id: videoFile.id,
                 lengthSeconds: lengthSeconds
             });
     };

@@ -30,10 +30,9 @@ export class UserStatsService {
     async getUserStatsAsync(userId: number) {
 
         const stats = await this._ormService
-            .getRepository(UserStatsView)
-            .createQueryBuilder('usv')
-            .where('"usv"."user_id" = :userId', { userId })
-            .getOneOrFail();
+            .query(UserStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
         return this._mapperService
             .map(UserStatsView, UserStatsDTO, stats);
@@ -52,9 +51,8 @@ export class UserStatsService {
     async getUserCourseStatsAsync(userId: number) {
 
         const stats = await this._ormService
-            .getRepository(UserCourseStatsView)
-            .createQueryBuilder('ucsv')
-            .where('"ucsv"."user_id" = :userId', { userId })
+            .query(UserCourseStatsView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
         return this._mapperService
@@ -69,10 +67,9 @@ export class UserStatsService {
     async getUserVideoStatsAsync(userId: number, courseId: number) {
 
         const stats = await this._ormService
-            .getRepository(UserVideoStatsView)
-            .createQueryBuilder('uvsv')
-            .where('"uvsv"."user_id" = :userId', { userId, courseId })
-            .andWhere('"uvsv"."course_id" = :courseId')
+            .query(UserVideoStatsView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
             .getMany();
 
         return this._mapperService
@@ -88,10 +85,9 @@ export class UserStatsService {
     async getUserExamStatsAsync(userId: number, courseId: number) {
 
         const stats = await this._ormService
-            .getRepository(UserExamStatsView)
-            .createQueryBuilder('uesv')
-            .where('"uesv"."user_id" = :userId', { userId, courseId })
-            .andWhere('"uesv"."course_id" = :courseId')
+            .query(UserExamStatsView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
             .getMany();
 
         return this._mapperService
@@ -125,10 +121,9 @@ export class UserStatsService {
             .mapMany(CourseLearningStatsView, CourseLearningDTO, inProgressCourses);
 
         const stats = await this._ormService
-            .getRepository(UserLearningOverviewStatsView)
-            .createQueryBuilder('ulosv')
-            .where('"ulosv"."user_id" = :userId', { userId })
-            .getOneOrFail();
+            .query(UserLearningOverviewStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
         return {
             overallPerformancePercentage: stats.overallPerformancePercentage,

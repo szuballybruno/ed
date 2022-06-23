@@ -252,8 +252,7 @@ export class PlaybackService extends ServiceBase {
         //     : newCompletionDate;
 
         // await this._ormService
-        //     .getRepository(UserVideoProgressBridge)
-        //     .save({
+        //     .save(UserVideoProgressBridge, {
         //         id: pbd?.id,
         //         userId,
         //         videoId,

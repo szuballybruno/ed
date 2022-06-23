@@ -58,12 +58,6 @@ export class ModuleService {
             .leftJoin(StorageFile, x => x
                 .on('id', '=', 'imageFileId', ModuleData))
             .getOneOrNull();
-        /*        
-               .getRepository(ModuleData)
-               .createQueryBuilder('mo')
-               .where('mo.id = :moduleId', { moduleId })
-               .leftJoinAndSelect('mo.imageFile', 'if')
-               .getOneOrFail(); */
 
         return this._mapperService
             .map(ModuleData, ModuleDetailedDTO, module);
@@ -120,13 +114,6 @@ export class ModuleService {
             .leftJoin(StorageFile, x => x
                 .on('id', '=', 'imageFileId', ModuleData))
             .getOneOrNull();
-
-        /*   const module = await this._ormService
-              .getRepository(ModuleData)
-              .createQueryBuilder('mo')
-              .where('mo.id = :moduleId', { moduleId })
-              .leftJoinAndSelect('mo.imageFile', 'if')
-              .getOneOrFail(); */
 
         return this._mapperService
             .map(ModuleData, ModuleAdminEditDTO, module);

@@ -1,5 +1,7 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
+import { JobTitle } from '../models/entity/JobTitle';
+import { StorageFile } from '../models/entity/StorageFile';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { RegistrationType } from '../models/Types';
@@ -99,8 +101,7 @@ export class UserService {
         };
 
         await this._ormService
-            .getRepository(User)
-            .save(user);
+            .save(User, user);
 
         // save teacher info
         await this._saveTeacherInfoAsync(userId, dto.isTeacher);
@@ -151,8 +152,7 @@ export class UserService {
 
         // save user 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 lastName: dto.lastName,
                 firstName: dto.firstName,
@@ -196,8 +196,7 @@ export class UserService {
         const userId = principalId.toSQLValue();
 
         return this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 firstName: dto.firstName,
                 lastName: dto.lastName,
@@ -215,12 +214,9 @@ export class UserService {
     async getBriefUserDataAsync(principalId: PrincipalId, userId: number) {
 
         const user = await this._ormService
-            .getRepository(User)
-            .findOneOrFail({
-                where: {
-                    id: userId
-                }
-            });
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
 
         return {
             id: user.id,
@@ -315,8 +311,7 @@ export class UserService {
     setUserInivitationDataAsync = async (userId: number, rawPassword: string,) => {
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 isInvitationAccepted: true,
                 password: await this._hashService
@@ -333,12 +328,13 @@ export class UserService {
     getUserById = async (userId: number) => {
 
         const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('user')
-            .where('user.id = :userId', { userId: userId })
-            .leftJoinAndSelect('user.avatarFile', 'a')
-            .leftJoinAndSelect('user.jobTitle', 'jt')
-            .getOneOrFail();
+            .query(User, { userId })
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'avatarFileId', User))
+            .leftJoin(JobTitle, x => x
+                .on('id', '=', 'jobTitleId', User))
+            .where('id', '=', 'userId')
+            .getSingle();
 
         return user;
     };
@@ -355,19 +351,15 @@ export class UserService {
         // TODO permissions
 
         const connectedCourses = await this._ormService
-            .getRepository(CourseData)
-            .find({
-                where: {
-                    teacherId: deletedUserId
-                }
-            });
+            .query(CourseData, { deletedUserId })
+            .where('teacherId', '=', 'deletedUserId')
+            .getMany();
 
         if (connectedCourses.length > 0)
             throw new VerboseError('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
         return await this._ormService
-            .getRepository(User)
-            .softDelete(deletedUserId);
+            .softDelete(User, [deletedUserId]);
     };
 
     /**
@@ -411,10 +403,9 @@ export class UserService {
     getUserByEmailAsync = async (email: string) => {
 
         const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('user')
-            .where('user.email = :email', { email: email })
-            .getOne();
+            .query(User, { email })
+            .where('email', '=', 'email')
+            .getSingle();
 
         if (!user)
             return null;
@@ -431,8 +422,7 @@ export class UserService {
     setUserAvatarFileId = async (userId: number, avatarFileId: number) => {
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 avatarFileId: avatarFileId
             });
@@ -450,8 +440,7 @@ export class UserService {
         log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
 
         return this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 refreshToken: refreshToken
             });
@@ -466,8 +455,7 @@ export class UserService {
     setUserInvitationTokenAsync = async (userId: number, invitationToken: string) => {
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 invitationToken
             });
@@ -484,8 +472,7 @@ export class UserService {
     removeRefreshToken = (userId: number) => {
 
         return this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 refreshToken: ''
             });

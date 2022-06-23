@@ -50,12 +50,9 @@ export class PersonalityAssessmentService {
     async getPersonalityTraitsAsync(userId: number) {
 
         return await this._ormService
-            .getRepository(PersonalityTraitView)
-            .find({
-                where: {
-                    userId: userId,
-                }
-            });
+            .query(PersonalityTraitView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
     }
 
     /**
@@ -66,12 +63,9 @@ export class PersonalityAssessmentService {
     async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
         const category = await this._ormService
-            .getRepository(PersonalityTraitCategory)
-            .findOneOrFail({
-                where: {
-                    id: personalityTraitCategoryId
-                }
-            });
+            .query(PersonalityTraitCategory, { personalityTraitCategoryId })
+            .where('id', '=', 'personalityTraitCategoryId')
+            .getOneOrNull();
 
         const tips = await this._ormService
             .query(DailyTip, { isMax, personalityTraitCategoryId })
@@ -91,8 +85,8 @@ export class PersonalityAssessmentService {
     async getPersonalityTraitCategoriesAsync() {
 
         const categories = await this._ormService
-            .getRepository(PersonalityTraitCategoryView)
-            .find();
+            .query(PersonalityTraitCategoryView)
+            .getMany();
 
         const minMaxCatList = categories
             .flatMap(category => {

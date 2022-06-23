@@ -22,8 +22,7 @@ export class TeacherInfoService {
     async deleteTeacherInfoAsync(teacherInfoId: number) {
 
         await this._ormService
-            .getRepository(TeacherInfo)
-            .delete(teacherInfoId);
+            .hardDelete(TeacherInfo, [teacherInfoId]);
     }
 
     /**
@@ -34,11 +33,11 @@ export class TeacherInfoService {
     async getTeacherInfoAsync(userId: number) {
 
         const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('u')
-            .leftJoinAndSelect('u.teacherInfo', 'ti')
-            .where('u.id = :userId', { userId })
-            .getOneOrFail();
+            .query(User, { userId })
+            .leftJoin(TeacherInfo, x => x
+                .on('userId', '=', 'userId'))
+            .where('id', '=', 'userId')
+            .getSingle();
 
         const teacherInfo = user.teacherInfo;
 
@@ -66,8 +65,7 @@ export class TeacherInfoService {
     async saveTeacherInfoAsync(teacherInfoEditDTO: TeacherInfoEditDTO) {
 
         await this._ormService
-            .getRepository(TeacherInfo)
-            .save({
+            .save(TeacherInfo, {
                 id: teacherInfoEditDTO.id,
                 videoCount: teacherInfoEditDTO.videoCount,
                 courseCount: teacherInfoEditDTO.courseCount,
@@ -98,8 +96,7 @@ export class TeacherInfoService {
         } as TeacherInfo;
 
         await this._ormService
-            .getRepository(TeacherInfo)
-            .insert(newTeacherInfo);
+            .createAsync(TeacherInfo, newTeacherInfo);
 
         return newTeacherInfo;
     }

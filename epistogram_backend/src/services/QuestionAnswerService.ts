@@ -37,8 +37,7 @@ export class QuestionAnswerService {
         } as AnswerSession;
 
         await this._ormService
-            .getRepository(AnswerSession)
-            .insert(session);
+            .createAsync(AnswerSession, session);
 
         return session.id;
     };

@@ -42,8 +42,7 @@ export class PrequizService {
             .setCurrentCourse(userId, courseId, 'prequiz', null);
 
         const views = await this._ormService
-            .getRepository(PrequizQuestionView)
-            .createQueryBuilder('pqv')
+            .query(PrequizQuestionView)
             .getMany();
 
         const questions = views
@@ -77,13 +76,11 @@ export class PrequizService {
         const userId = principalId.toSQLValue();
 
         const userAnswer = await this._ormService
-            .getRepository(PrequizUserAnswer)
-            .createQueryBuilder('pua')
-            .leftJoinAndSelect('pua.answer', 'puaa')
-            .where('pua.userId = :userId', { userId })
-            .andWhere('pua.questionId = :questionId', { questionId })
-            .andWhere('pua.courseId = :courseId', { courseId })
-            .getOne();
+            .query(PrequizUserAnswer, { userId, questionId, courseId })
+            .where('userId', '=', 'userId')
+            .and('questionId', '=', 'questionId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         if (!userAnswer)
             return null;
@@ -113,18 +110,14 @@ export class PrequizService {
         const userId = principalId.toSQLValue();
 
         const previousAnswer = await this._ormService
-            .getRepository(PrequizUserAnswer)
-            .findOne({
-                where: {
-                    questionId,
-                    userId,
-                    courseId
-                }
-            });
+            .query(PrequizUserAnswer, { userId, questionId, courseId })
+            .where('userId', '=', 'userId')
+            .and('questionId', '=', 'questionId')
+            .and('courseId', '=', 'courseId')
+            .getSingle()
 
         await this._ormService
-            .getRepository(PrequizUserAnswer)
-            .save({
+            .save(PrequizUserAnswer, {
                 id: previousAnswer?.id,
                 answerId,
                 questionId,

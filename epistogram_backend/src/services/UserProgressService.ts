@@ -38,29 +38,24 @@ export class UserProgressService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         const courseProgressView = await this._ormService
-            .getRepository(UserCourseRecommendedItemQuotaView)
-            .findOne({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(UserCourseRecommendedItemQuotaView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         const currentDailyCompletedView = await this._ormService
-            .getRepository(UserDailyCourseItemProgressView)
-            .createQueryBuilder('udcipv')
-            .where('udcipv.userId = :userId', { userId })
-            .andWhere('udcipv.courseId = :courseId', { courseId })
-            .andWhere('udcipv.isCurrent = true', { courseId })
-            .getOne();
+            .query(UserDailyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('isCurrent', 'IS', 'true')
+            .getSingle();
 
         const getCurrentWeeklyCompletedView = await this._ormService
-            .getRepository(UserWeeklyCourseItemProgressView)
-            .createQueryBuilder('udcipv')
-            .where('udcipv.userId = :userId', { userId })
-            .andWhere('udcipv.courseId = :courseId', { courseId })
-            .andWhere('udcipv.isCurrent = true', { courseId })
-            .getOne();
+            .query(UserWeeklyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('isCurrent', 'IS', 'true')
+            .getSingle();
 
         return {
             recommendedItemsPerDay: courseProgressView?.recommendedItemsPerDay ?? 0,
@@ -76,19 +71,15 @@ export class UserProgressService extends ServiceBase {
 
         const estimationView = await this
             ._ormService
-            .getRepository(UserCourseCompletionCurrentView)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(UserCourseCompletionCurrentView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         const dailyViews = await this._ormService
-            .getRepository(UserDailyCourseItemProgressView)
-            .createQueryBuilder('udcipv')
-            .where('udcipv.courseId = :courseId', { courseId })
-            .andWhere('udcipv.userId = :userId', { userId })
+            .query(UserDailyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
             .getMany();
 
         const dto = {

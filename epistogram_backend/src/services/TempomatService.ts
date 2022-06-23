@@ -64,13 +64,10 @@ export class TempomatService extends ServiceBase {
     async calcOriginalPrevisionedScheduleAsync(userId: number, courseId: number) {
 
         const originalEstimation = await this._ormService
-            .getRepository(UserCourseCompletionOriginalEstimationView)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(UserCourseCompletionOriginalEstimationView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         await this.setPrevisionedScheduleAsync(
             userId,
@@ -84,8 +81,8 @@ export class TempomatService extends ServiceBase {
 
         // get all user progresses and handle them accordingly 
         const userCourseProgressViews = await this._ormService
-            .getRepository(UserCourseProgressView)
-            .find();
+            .query(UserCourseProgressView)
+            .getMany();
 
         for (let index = 0; index < userCourseProgressViews.length; index++) {
 
@@ -118,13 +115,10 @@ export class TempomatService extends ServiceBase {
         const { userId, courseId, tempomatMode, lagBehindPercentage } = userCourseProgressView;
 
         const adjustmentValue = await this._ormService
-            .getRepository(UserTempomatAdjustmentValueView)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(UserTempomatAdjustmentValueView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         const isPositiveAdjustment = lagBehindPercentage >= 0;
         const adjustmentThresholdPercentage = adjustmentValue.actualAdjustmentValue;
@@ -133,13 +127,10 @@ export class TempomatService extends ServiceBase {
             : Math.max(-1 * adjustmentThresholdPercentage, lagBehindPercentage);
 
         const currentView = await this._ormService
-            .getRepository(UserCourseCompletionCurrentView)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(UserCourseCompletionCurrentView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         const adjustmentDaysFraction = currentView.previsionedLengthDays / 100.0 * allowedStretchPercetage;
         const adjustmentDays = isPositiveAdjustment

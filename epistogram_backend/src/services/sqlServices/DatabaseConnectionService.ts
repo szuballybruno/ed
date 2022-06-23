@@ -72,7 +72,7 @@ export class DbConnectionService {
     // PRIVATE
     //
 
-    private async _purgeDBIfNecessary () {
+    private async _purgeDBIfNecessary() {
 
         const isPurgeDbEnabled = this._config.database.isDangerousDBPurgeEnabled;
         const isProdEnvironemnt = this._config.getIsProdEnvironment();
@@ -99,8 +99,8 @@ export class DbConnectionService {
     private _isEmptyDatabase = async () => {
 
         const users = await this._ormConnectionService
-            .getRepository(User)
-            .find();
+            .query(User)
+            .getMany();
 
         return users.length === 0;
     };

@@ -36,17 +36,13 @@ export class SignupService {
         const userId = principalId.toSQLValue();
 
         const userSignupCompltedView = await this._ormService
-            .getRepository(SignupCompletedView)
-            .findOneOrFail({
-                where: {
-                    userId
-                }
-            });
+            .query(SignupCompletedView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
         const questions = await this._ormService
-            .getRepository(SignupQuestionView)
-            .createQueryBuilder('sqv')
-            .where('sqv.userId = :userId', { userId })
+            .query(SignupQuestionView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
         return toSignupDataDTO(questions, userSignupCompltedView.isSignupComplete);

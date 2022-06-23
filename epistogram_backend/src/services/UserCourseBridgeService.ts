@@ -45,8 +45,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         else {
 
             await this._ormService
-                .getRepository(UserCourseBridge)
-                .save({
+                .save(UserCourseBridge, {
                     id: currentCourseBridge.id,
                     currentItemCode: itemCode,
                     stageName,
@@ -56,17 +55,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         // get all bridges for user 
         const bridges = await this._ormService
-            .getRepository(UserCourseBridge)
-            .find({
-                where: {
-                    userId: userId
-                }
-            });
+            .query(UserCourseBridge, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
 
         // update current bridge 
         await this._ormService
-            .getRepository(UserCourseBridge)
-            .save(bridges
+            .save(UserCourseBridge, bridges
                 .map(bridge => ({
                     id: bridge.id,
                     isCurrent: bridge.courseId === courseId,
@@ -81,8 +76,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     ) {
 
         await this._ormService
-            .getRepository(UserCourseBridge)
-            .insert({
+            .createAsync(UserCourseBridge, {
                 courseId: courseId,
                 userId: userId,
                 courseMode: 'advanced',
@@ -100,12 +94,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     async deleteAllBridgesAsync(courseId: number) {
 
         await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(UserCourseBridge)
-            .where('courseId = :courseId', { courseId })
-            .execute();
+            .hardDelete(UserCourseBridge, [courseId])
     }
 
     /**
@@ -123,8 +112,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             throw new Error('User course bridge not found!');
 
         await this._ormService
-            .getRepository(UserCourseBridge)
-            .save({
+            .save(UserCourseBridge, {
                 courseId: courseId,
                 userId: userId.toSQLValue(),
                 id: userCourseBridge.id,
@@ -177,13 +165,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     getCurrentItemCodeAsync = async (userId: number) => {
 
         const currentBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId: userId,
-                    isCurrent: true
-                }
-            });
+            .query(UserCourseBridge, { userId })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', 'IS', 'true')
+            .getSingle();
 
         return currentBridge?.currentItemCode ?? null;
     };
@@ -191,13 +176,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     getUserCourseBridgeAsync = async (userId: number, courseId: number) => {
 
         const userCourseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId: userId,
-                    courseId: courseId
-                }
-            });
+            .query(UserCourseBridge, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         return userCourseBridge;
     };

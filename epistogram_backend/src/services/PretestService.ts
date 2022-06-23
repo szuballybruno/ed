@@ -81,13 +81,10 @@ export class PretestService {
 
         // answer session
         let answerSession = await this._ormService
-            .getRepository(AnswerSession)
-            .findOne({
-                where: {
-                    userId: userId.toSQLValue(),
-                    examVersionId: pretestExam.id
-                }
-            });
+            .query(AnswerSession, { userId: userId.toSQLValue(), examVersionId: pretestExam.id })
+            .where('userId', '=', 'userId')
+            .and('examVersionId', '=', 'examVersionId')
+            .getSingle()
 
         if (!answerSession) {
 
@@ -102,8 +99,7 @@ export class PretestService {
             });
 
             await this._ormService
-                .getRepository(AnswerSession)
-                .insert(answerSession);
+                .createAsync(AnswerSession, answerSession);
         }
 
         return {
@@ -122,22 +118,16 @@ export class PretestService {
             .setCurrentCourse(userId, courseId, 'pretest_results', null);
 
         const view = await this._ormService
-            .getRepository(PretestResultView)
-            .findOneOrFail({
-                where: {
-                    userId,
-                    courseId
-                }
-            });
+            .query(PretestResultView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         const courseView = await this._ormService
-            .getRepository(AvailableCourseView)
-            .findOneOrFail({
-                where: {
-                    courseId: courseId,
-                    userId
-                }
-            });
+            .query(AvailableCourseView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         return this._mapperSerice
             .map(PretestResultView, PretestResultDTO, view, courseView);
@@ -147,13 +137,13 @@ export class PretestService {
 
         throwNotImplemented();
         // const exam = await this._ormService
-        //     .getRepository(ExamData)
-        //     .findOneOrFail({
-        //         where: {
+        //     .query(ExamData, {
         //             courseId,
         //             type: 'pretest'
-        //         }
-        //     });
+        //         })
+        //     .where('courseId', '=', 'courseId')
+        //     .and('type', '=', 'type')
+        //     .getOneOrNull();
 
         // return {
         //     id: exam.id

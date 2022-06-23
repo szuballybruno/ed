@@ -59,8 +59,7 @@ export class PasswordChangeService {
         // some benefits are you can not use the token twice,
         // since it's going to be removed after it's been used  
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: user.id,
                 resetPasswordToken: token
             });
@@ -83,7 +82,7 @@ export class PasswordChangeService {
     requestPasswordChangeAuthenticatedAsync = async (principalId: PrincipalId, oldPassword: string) => {
 
         const userId = principalId.toSQLValue();
-        
+
         const resetPawsswordToken = this._tokenService
             .createSetNewPasswordToken(userId);
 
@@ -94,8 +93,7 @@ export class PasswordChangeService {
             throw new VerboseError('Wrong password!', 'bad request');
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: user.id,
                 resetPasswordToken: resetPawsswordToken
             });
@@ -142,8 +140,7 @@ export class PasswordChangeService {
 
         // save new values 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: user.id,
                 resetPasswordToken: null,
                 password: hashedPassword

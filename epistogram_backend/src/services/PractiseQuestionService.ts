@@ -31,9 +31,8 @@ export class PractiseQuestionService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         const questionViews = await this._ormService
-            .getRepository(PractiseQuestionView)
-            .createQueryBuilder('pq')
-            .where('pq.userId = :userId', { userId })
+            .query(PractiseQuestionView, { userId })
+            .where('userId', '=', 'userId')
             .getMany();
 
         if (!questionViews.any())
