@@ -48,9 +48,9 @@ export class ExamVersion {
     examData: ExamData;
 
     // module
-    @Column({ type: 'int', nullable: true })
+    @Column()
     @XViewColumn()
-    moduleVersionId: number | null;
+    moduleVersionId: number;
     @ManyToOne(_ => ModuleVersion, x => x.examVersions)
     @XJoinColumn<ExamVersion>('moduleVersionId')
     moduleVersion: ModuleVersion;

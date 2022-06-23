@@ -557,18 +557,11 @@ export class CourseService {
             .incrementUnmodifiedCourseItemVersions(moduleVersionMigrations, mutations);
 
         // save new items 
-        // await this._courseItemService
-        //     .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
-
-        // delete items 
-        // await this.saveDeletedCourseItemsAsync(mutations);
+        await this._courseItemService
+            .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
     }
 
     private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {
-
-        // const oldModuleVersionIds = mutations
-        //     .filter(x => x.action !== 'delete')
-        //     .map(x => XMutatorHelpers.getFieldValue(x)('moduleVersionId')!);
 
         const oldModuleVersions = await this._ormService
             .query(ModuleVersion, { oldCourseVersionId })
@@ -663,31 +656,6 @@ export class CourseService {
 
         // await this._ormService
         //     .save(ExamData, exams);
-    }
-
-    private async saveDeletedCourseItemsAsync(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
-
-        const itemCodes = mutations
-            .filter(x => x.action === 'delete')
-            .map(x => x.key)
-            .map(x => readItemCode(x))
-            .groupBy(x => x.itemType);
-
-        const deletedExamIds = itemCodes
-            .filter(x => x.key === 'exam')
-            .flatMap(x => x.items)
-            .map(x => x.itemVersionId);
-
-        const deletedVideoIds = itemCodes
-            .filter(x => x.key === 'video')
-            .flatMap(x => x.items)
-            .map(x => x.itemVersionId);
-
-        this._examService
-            .softDeleteExamsAsync(deletedExamIds, true);
-
-        this._videoService
-            .softDeleteVideosAsync(deletedVideoIds, true);
     }
 
     /**

@@ -6,8 +6,8 @@ import { CourseDatasSeedDataType } from './seed_course_datas';
 export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getSeedList<ModuleData>()({
 
     module_data_SIGNUP_MODULE: {
-        name: 'module',
-        description: 'signup module',
+        name: 'SIGNUP',
+        description: 'SIGNUP',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: false
@@ -15,8 +15,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // insta course pretest module
     module_data_insta_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -24,8 +24,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // google ads course pretest module
     module_data_google_ads_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -33,8 +33,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // python course pretest module
     module_data_python_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -42,8 +42,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // linkedin course pretest module
     module_data_linked_in_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -51,16 +51,16 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // cyber course pretest module
     module_data_cyber_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
     },
 
     module_data_4: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 1,
         imageFileId: null,
         isPretestModule: false
@@ -68,8 +68,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // canva course pretest module
     module_data_canva_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -84,8 +84,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // obs course pretest module
     module_data_obs_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -114,8 +114,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // excel course pretest module
     module_data_excel_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -193,8 +193,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // word course pretest module
     module_data_word_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true
@@ -258,8 +258,8 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
 
     // powerPoint course pretest module
     module_data_powerPoint_pretest_1: {
-        name: 'module',
-        description: 'description',
+        name: 'PRETEST',
+        description: 'PRETEST',
         orderIndex: 0,
         imageFileId: null,
         isPretestModule: true

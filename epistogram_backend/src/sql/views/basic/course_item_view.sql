@@ -83,10 +83,10 @@ ON md.id = mv.module_data_id
 LEFT JOIN public.module mo
 ON mo.id = mv.module_id
 
-LEFT JOIN items_combined ic
+INNER JOIN items_combined ic
 ON ic.course_version_id = cv.id
 AND ic.module_version_id = mv.id
-
+	
 ORDER BY 
 	cv.id, 
 	md.order_index,
