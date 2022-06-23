@@ -15,6 +15,10 @@ export class CourseAdminContentView {
 
     @ViewColumn()
     @XViewColumn()
+    courseVersionId: number;
+
+    @ViewColumn()
+    @XViewColumn()
     moduleName: string;
 
     @ViewColumn()

@@ -5,17 +5,17 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class CourseItemView {
+export class ModuleListView {
 
     @XViewColumn()
     moduleVersionId: number;
     
     @XViewColumn()
-    videoVersionId: number | null;
+    courseVersionId: number;
 
     @XViewColumn()
-    examVersionId: number | null;
+    name: string;
 
     @XViewColumn()
-    versionCode: string;
+    orderIndex: number;
 }

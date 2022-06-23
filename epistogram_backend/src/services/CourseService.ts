@@ -17,6 +17,7 @@ import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView
 import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { ModuleListView } from '../models/views/ModuleListView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -511,16 +512,20 @@ export class CourseService {
             .where('courseId', '=', 'courseId')
             .getMany();
 
-        const modules = await this._ormService
-            .getRepository(ModuleData)
-            .createQueryBuilder('md')
-            .leftJoin(ModuleVersion, 'mv', 'mv.moduleDataId = md.id')
-            .where('mv.courseVersionId = :courseId', { courseId })
+        const courseVersionId = (await this._ormService
+            .query(LatestCourseVersionView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle())
+            .versionId;
+
+        const moduleViews = await this._ormService
+            .query(ModuleListView, { courseVersionId })
+            .where('courseVersionId', '=', 'courseVersionId')
             .getMany();
 
-        const moduleDtos = modules
+        const moduleDtos = moduleViews
             .map(x => ({
-                id: x.id,
+                id: x.moduleVersionId,
                 name: x.name,
                 orderIndex: x.orderIndex
             } as CourseModuleShortDTO));
@@ -543,7 +548,7 @@ export class CourseService {
             return;
 
         // get old version id 
-        const oldVersionId = (await this._ormService
+        const oldCourseVersionId = (await this._ormService
             .query(LatestCourseVersionView, { courseId })
             .where('courseId', '=', 'courseId')
             .getSingle())
@@ -551,11 +556,11 @@ export class CourseService {
 
         // create new version
         const newCourseVersionId = await this
-            ._createNewCourseVersionAsync(courseId, oldVersionId);
+            ._createNewCourseVersionAsync(courseId, oldCourseVersionId);
 
         // increment module versions 
         const moduleVersionMigrations = await this
-            ._incrementModuleVersionsAsync(newCourseVersionId, mutations)
+            ._incrementModuleVersionsAsync(oldCourseVersionId, newCourseVersionId);
 
         // update items 
         // await this.saveUpdatedCourseItemsAsync(mutations);
@@ -571,22 +576,22 @@ export class CourseService {
         // await this.saveDeletedCourseItemsAsync(mutations);
     }
 
-    private async _incrementModuleVersionsAsync(courseVersionId: number, mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+    private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {
 
-        const oldModuleVersionIds = mutations
-            .filter(x => x.action !== 'delete')
-            .map(x => XMutatorHelpers.getFieldValue(x)('moduleVersionId')!);
+        // const oldModuleVersionIds = mutations
+        //     .filter(x => x.action !== 'delete')
+        //     .map(x => XMutatorHelpers.getFieldValue(x)('moduleVersionId')!);
 
         const oldModuleVersions = await this._ormService
-            .query(ModuleVersion, { oldModuleVersionIds })
-            .where('id', '=', 'oldModuleVersionIds')
+            .query(ModuleVersion, { oldCourseVersionId })
+            .where('courseVersionId', '=', 'oldCourseVersionId')
             .getMany();
 
         const newModuleVersions = oldModuleVersions
             .map(oldModuleVersion => {
 
                 const newModule: InsertEntity<ModuleVersion> = {
-                    courseVersionId: courseVersionId,
+                    courseVersionId: newCourseVersionId,
                     moduleDataId: oldModuleVersion.moduleDataId,
                     moduleId: oldModuleVersion.moduleId
                 };

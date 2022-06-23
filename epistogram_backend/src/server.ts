@@ -5,6 +5,8 @@ import { createDBSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
+import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
+import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
 import { instatiateControllers } from './startup/controllersDI';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
@@ -28,11 +30,11 @@ const main = async () => {
     // 
     // INIT DB SCHEMA
     const dbSchema = createDBSchema();
-    
+
     // 
     // INIT SERVICES
     const services = instatiateServices(globalConfig, dbSchema);
-    
+
     // 
     // INIT CONTROLLERS
     const controllers = instatiateControllers(services, globalConfig);
@@ -40,12 +42,49 @@ const main = async () => {
     // 
     // INIT
     initializeMappings(services.urlService.getAssetUrl, services.mapperService);
-    await services.dbConnectionService.initializeAsync();
-    await services.dbConnectionService.seedDBAsync();
+    await services.getService(DbConnectionService).initializeConnectionAsync();
+
+    // FASZA LESZ, IGY FOG MENNI A TRANSACTION
+    // const sqlService = services.getService(SQLConnectionService);
+
+    // try {
+
+
+    //     await sqlService
+    //         .executeSQLAsync(`BEGIN`);
+
+    //     const ids = await sqlService
+    //         .executeSQLAsync(`
+    //         INSERT INTO module_data (name, description, order_index, is_pretest_module)
+    //         VALUES 
+    //             ('SUCCESS', 'ba', 0, false),
+    //             ('SUCCESS2', 'ba', 0, false)
+    //         RETURNING id`);
+
+    //     console.log(ids);
+
+    //     await sqlService
+    //         .executeSQLAsync(`
+    //         INSERT INTO module_data (name, description, is_pretest_module)
+    //         VALUES ('FAIL', 'ba', 0)`);
+
+    //     await sqlService
+    //         .executeSQLAsync('COMMIT');
+
+    // } catch (e) {
+
+    //     console.log(e);
+    // }
+
+    // return;
 
     // 
     // INIT TURBO EXPRESS
     const turboExpress = initTurboExpress(globalConfig, services, controllers);
+
+    //
+    // SEED DB
+    await services.getService(DbConnectionService).bootstrapDBAsync();
 
     // 
     // LISTEN (start server)
