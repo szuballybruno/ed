@@ -1,3 +1,4 @@
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { Video } from '../models/entity/video/Video';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
@@ -85,10 +86,17 @@ export class CourseItemService {
             .filter(courseItem => mutations
                 .none(mut => mut.key === courseItem.versionCode));
 
+        // VIDEOS 
         const videoItems = unmodifiedCourseItems
             .filter(x => !!x.videoVersionId);
 
         await this._incrementVideoVersionsAsync(videoItems, moduleMigrations);
+
+        // EXAMS 
+        const examItems = unmodifiedCourseItems
+            .filter(x => !!x.examVersionId);
+
+        await this._incrementExamVersionsAsync(examItems, moduleMigrations);
     }
 
     /**
@@ -121,6 +129,38 @@ export class CourseItemService {
 
         await this._ormService
             .createManyAsync(VideoVersion, newVersions);
+    }
+
+    /**
+     * Incerements exam version while keeping old data version
+     */
+    private async _incrementExamVersionsAsync(examItems: CourseItemView[], moduleMigrations: VersionMigrationResult[]) {
+
+        const oldVersionIds = examItems
+            .map(x => x.examVersionId!);
+
+        const oldExamVersions = await this._ormService
+            .query(ExamVersion, { oldVersionIds })
+            .where('id', '=', 'oldVersionIds')
+            .getMany();
+
+        const newVersions = oldExamVersions
+            .map(oldExamVersion => {
+
+                const newModuleId = VersionMigrationHelpers
+                    .getNewVersionId(moduleMigrations, oldExamVersion.moduleVersionId);
+
+                const examVersion: InsertEntity<ExamVersion> = {
+                    moduleVersionId: newModuleId,
+                    examDataId: oldExamVersion.examDataId,
+                    examId: oldExamVersion.examId
+                };
+
+                return examVersion;
+            });
+
+        await this._ormService
+            .createManyAsync(ExamVersion, newVersions);
     }
 
     /**
