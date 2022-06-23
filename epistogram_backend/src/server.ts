@@ -10,30 +10,45 @@ import { instatiateControllers } from './startup/controllersDI';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { instatiateServices } from './startup/servicesDI';
 
-const getCurrentDir = () => dirname(fileURLToPath(import.meta.url));
-
 const main = async () => {
 
     log('');
     log('------------- APPLICATION STARTED ----------------');
     log('');
 
-    const globalConfig = GlobalConfiguration
-        .initGlobalConfig(getCurrentDir());
+    //
+    // GET ROOT DIR
+    const rootDir = dirname(fileURLToPath(import.meta.url));
 
+    // 
+    // INIT GLOBAL CONFIG
+    const globalConfig = GlobalConfiguration
+        .initGlobalConfig(rootDir);
+
+    // 
+    // INIT DB SCHEMA
     const dbSchema = createDBSchema();
+    
+    // 
+    // INIT SERVICES
     const services = instatiateServices(globalConfig, dbSchema);
+    
+    // 
+    // INIT CONTROLLERS
     const controllers = instatiateControllers(services, globalConfig);
 
-    // initialize services 
+    // 
+    // INIT
     initializeMappings(services.urlService.getAssetUrl, services.mapperService);
     await services.dbConnectionService.initializeAsync();
     await services.dbConnectionService.seedDBAsync();
 
-    // initialize express
+    // 
+    // INIT TURBO EXPRESS
     const turboExpress = initTurboExpress(globalConfig, services, controllers);
 
-    // listen
+    // 
+    // LISTEN (start server)
     turboExpress.listen();
 };
 
