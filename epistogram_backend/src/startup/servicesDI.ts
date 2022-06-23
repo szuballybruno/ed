@@ -1,3 +1,4 @@
+import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
 import { ActivationCodeService } from './../services/ActivationCodeService';
@@ -55,7 +56,13 @@ import { UserStatsService } from './../services/UserStatsService';
 import { VideoRatingService } from './../services/VideoRatingService';
 import { VideoService } from './../services/VideoService';
 
-export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: XDBMSchemaType) => {
+type CTAnyArgs<T> = { new(...args: any[]): T };
+
+export type ServicesType = { [K: string]: any } & {
+    getService: <T>(ct: CTAnyArgs<T>) => T
+};
+
+export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: XDBMSchemaType): ServicesType => {
 
     const services = {} as any;
 
@@ -113,6 +120,13 @@ export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: 
     services.commentService = new CommentService(services.ormConnectionService, services.mapperService);
     services.likeService = new LikeService(services.ormConnectionService, services.mapperService);
     services.companyService = new CompanyService(services.ormConnectionService, services.mapperService, services.authorizationService);
+
+    services.getService = <T>(ct: CTAnyArgs<T>) => {
+
+        return Object
+            .values(services)
+            .single(x => (x as any).constructor.name === ct.name) as T;
+    }
 
     return services;
 };

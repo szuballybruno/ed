@@ -71,7 +71,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        orm: true
+        orm: false
     };
 
     constructor(rootDirectory: string) {
@@ -122,7 +122,7 @@ export class GlobalConfiguration {
         if (!value && value !== 'false' && !allowEmptyStr)
             throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${GlobalConfiguration.getCurrentEnvironmentName()}'!`);
 
-        log(entryName + ' -> ' + value);
+        // log(entryName + ' -> ' + value);
         return value ?? '';
     };
 

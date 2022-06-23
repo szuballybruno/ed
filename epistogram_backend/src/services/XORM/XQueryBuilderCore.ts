@@ -266,7 +266,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const bracketProc = bracket ? '(' : '';
 
-        const { tokenValue } = ((): { tokenValue: string, paramsValue?: any } => {
+        const { tokenValue } = ((): { tokenValue: string | null } => {
 
             // where condition right side is a 'static value' 
             if (type === 'STATIC_VALUE')
@@ -283,11 +283,22 @@ export class XQueryBuilderCore<TEntity, TParams> {
             const param = sqlParamsList
                 .single(x => x.paramName === keyB);
 
-            return { tokenValue: param.paramValue === null ? 'NULL' : param.token };
+            return { tokenValue: param.paramValue === null ? null : param.token };
         })();
 
-        const operator: OperationType = tokenValue === 'NULL'
-            ? 'IS'
+        const getOperatorIncaseParamIsNull = (): OperationType => {
+
+            if (op === '!=')
+                return 'IS NOT';
+
+            if (op === '=')
+                return 'IS';
+
+            throw new Error(`Operator is ${op} but parameter is null. Null can't be compared with operator: ${op}.`);
+        }
+
+        const operator: OperationType = tokenValue === null
+            ? getOperatorIncaseParamIsNull()
             : op;
 
         const linebreak = code === 'WHERE' ? '\n' : '';

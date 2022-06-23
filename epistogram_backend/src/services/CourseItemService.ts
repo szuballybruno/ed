@@ -73,10 +73,54 @@ export class CourseItemService {
         moduleMigrations: VersionMigrationResult[],
         mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
-        // const courseItemViews = await this._ormService
-        //     .query(CourseItemView)
-        //     .
-            
+        const oldModuleVersionIds = moduleMigrations
+            .map(x => x.oldVersionId);
+
+        const courseItemViews = await this._ormService
+            .query(CourseItemView, { oldModuleVersionIds })
+            .where('moduleVersionId', '=', 'oldModuleVersionIds')
+            .getMany();
+
+        const unmodifiedCourseItems = courseItemViews
+            .filter(courseItem => mutations
+                .none(mut => mut.key === courseItem.versionCode));
+
+        const videoItems = unmodifiedCourseItems
+            .filter(x => !!x.videoVersionId);
+
+        await this._incrementVideoVersionsAsync(videoItems, moduleMigrations);
+    }
+
+    /**
+     * Incerements video version while keeping old data version
+     */
+    private async _incrementVideoVersionsAsync(videoItems: CourseItemView[], moduleMigrations: VersionMigrationResult[]) {
+
+        const oldVersionIds = videoItems
+            .map(x => x.videoVersionId!);
+
+        const oldVideoVersions = await this._ormService
+            .query(VideoVersion, { oldVersionIds })
+            .where('id', '=', 'oldVersionIds')
+            .getMany();
+
+        const newVersions = oldVideoVersions
+            .map(oldVideoVersion => {
+
+                const newModuleId = VersionMigrationHelpers
+                    .getNewVersionId(moduleMigrations, oldVideoVersion.moduleVersionId);
+
+                const videoVerison: InsertEntity<VideoVersion> = {
+                    moduleVersionId: newModuleId,
+                    videoDataId: oldVideoVersion.videoDataId,
+                    videoId: oldVideoVersion.videoId
+                };
+
+                return videoVerison;
+            });
+
+        await this._ormService
+            .createManyAsync(VideoVersion, newVersions);
     }
 
     /**

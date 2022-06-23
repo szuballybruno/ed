@@ -77,6 +77,7 @@ items AS
 )
 SELECT 
 	casv.course_id,
+	lcvv.version_id course_version_id,
 	civ.module_name,
 	civ.module_order_index,
 	civ.module_id,

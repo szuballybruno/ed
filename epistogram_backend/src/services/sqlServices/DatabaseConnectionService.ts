@@ -33,7 +33,46 @@ export class DbConnectionService {
         this._seedService = seedService;
     }
 
-    async initializeAsync() {
+    async initializeConnectionAsync() {
+
+        await this._sqlConnectionService
+            .establishConnectionAsync();
+    }
+
+    async bootstrapDBAsync() {
+
+        // PURGE IF NECESSARY
+        await this._purgeDBIfNecessary();
+
+        // CREATE TABLES 
+        await this._createTables();
+
+        // BOOTSTRAP 
+        await this._sqlBootstrapperSvc
+            .bootstrapDatabase();
+
+        // DO NOT SEED IF HAS DATA
+        const isFreshDB = await this._isEmptyDatabase();
+        if (!isFreshDB) {
+
+            log('DB contains data, skipping seed.', { entryType: 'strong' });
+            return;
+        }
+
+        // SEED IF HAS NO DATA
+        log('Seeding DB...', { entryType: 'strong' });
+
+        await this._seedService
+            .seedDBAsync();
+
+        log('Seeding DB done!', { entryType: 'strong' });
+    }
+
+    //
+    // PRIVATE
+    //
+
+    private async _purgeDBIfNecessary () {
 
         const isPurgeDbEnabled = this._config.database.isDangerousDBPurgeEnabled;
         const isProdEnvironemnt = this._config.getIsProdEnvironment();
@@ -42,41 +81,22 @@ export class DbConnectionService {
         if (isPurgeDbEnabled && isProdEnvironemnt)
             throw new Error('----- TRYING TO PURGE DB ON PROD!!!! ----');
 
-        // connect sql
-        await this._sqlConnectionService.establishConnectionAsync();
-
         // purge DB
         if (isPurgeDbEnabled)
-            await this._sqlBootstrapperSvc.purgeDBAsync();
-
-        await this.connectDatabaseAsync();
+            await this._sqlBootstrapperSvc
+                .purgeDBAsync();
     }
 
-    async seedDBAsync() {
-
-        const isFreshDB = await this.isEmptyDatabase();
-        if (isFreshDB) {
-
-            log('Seeding DB...', { entryType: 'strong' });
-
-            await this._seedService.seedDBAsync();
-
-            log('Seeding DB done!', { entryType: 'strong' });
-        }
-    }
-
-    private async connectDatabaseAsync() {
+    private async _createTables() {
 
         log('Connecting database...');
 
         // connect TypeORM
-        await this._ormConnectionService.connectORMAsync();
-
-        // bootstrap database 
-        await this._sqlBootstrapperSvc.bootstrapDatabase();
+        await this._ormConnectionService
+            .connectORMAsync();
     }
 
-    private isEmptyDatabase = async () => {
+    private _isEmptyDatabase = async () => {
 
         const users = await this._ormConnectionService
             .getRepository(User)

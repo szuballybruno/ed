@@ -181,6 +181,7 @@ import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionV
 import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { ExamVersionView } from '../../models/views/ExamVersionView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
+import { ModuleListView } from '../../models/views/ModuleListView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -277,6 +278,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'video_playback_sample_view'],
             ['basic', 'video_version_view', VideoVersionView],
             ['basic', 'exam_version_view', ExamVersionView],
+            ['basic', 'module_list_view', ModuleListView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view
             ['common', 'answer_session_evaluation_view'], // 3 | 1 answer_session_view
