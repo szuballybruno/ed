@@ -18,7 +18,7 @@ export class PlaybackController {
     saveVideoPlaybackSampleAction = (params: ActionParams) => {
 
         const dto = params
-            .getBody<VideoPlaybackSampleDTO>(['fromSeconds', 'toSeconds', 'videoItemCode', 'videoPlaybackSessionId']);
+            .getBody<VideoPlaybackSampleDTO>(['fromSeconds', 'toSeconds', 'videoVersionId', 'videoPlaybackSessionId']);
 
         return this._playbackService
             .saveVideoPlaybackSample(params.principalId, dto.data);
@@ -28,7 +28,7 @@ export class PlaybackController {
     saveVideoSeekEventAction = (params: ActionParams) => {
 
         const dto = params
-            .getBody<VideoSeekEventDTO>(['fromSeconds', 'toSeconds', 'videoItemCode', 'videoPlaybackSessionId']);
+            .getBody<VideoSeekEventDTO>(['fromSeconds', 'toSeconds', 'videoVersionId', 'videoPlaybackSessionId']);
 
         return this._playbackService
             .saveVideoSeekEventAsync(params.principalId, dto.data);

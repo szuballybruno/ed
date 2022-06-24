@@ -9,7 +9,7 @@ export const usePlaybackWatcher = (
     onVideoWatchedStateChanged: () => void,
     setMaxWatchedSeconds: (maxWatchedSeconds: number) => void,
     isSamplingEnabled: boolean,
-    videoItemCode: string,
+    videoVersionId: number,
     videoPlaybackSessionId: number) => {
 
     // the rate in which new samples are taken
@@ -47,7 +47,7 @@ export const usePlaybackWatcher = (
             postVideoPlaybackSample({
                 fromSeconds: lastSampleSeconds,
                 toSeconds: playedSeconds,
-                videoItemCode,
+                videoVersionId,
                 videoPlaybackSessionId
             });
         }

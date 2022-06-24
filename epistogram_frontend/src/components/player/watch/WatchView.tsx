@@ -65,6 +65,7 @@ export const WatchView = (props: {
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(videoPlayerData.maxWatchedSeconds);
     const reactTimer = useReactTimer(continueCourse, autoplayTimeoutInS * 1000);
     const videoPlaybackSessionId = videoPlayerData.videoPlaybackSessionId;
+    const videoVersionId = videoPlayerData.videoVersionId;
 
     // http
     const { postVideoSeekEvent } = PlaybackApiService.usePostVideoSeekEvent();
@@ -74,7 +75,7 @@ export const WatchView = (props: {
         postVideoSeekEvent({
             fromSeconds,
             toSeconds,
-            videoItemCode: currentItemCode,
+            videoVersionId,
             videoPlaybackSessionId
         });
     }, [currentItemCode, videoPlaybackSessionId]);
@@ -216,7 +217,7 @@ export const WatchView = (props: {
         handleVideoCompletedStateChanged,
         setMaxWatchedSeconds,
         !isSeeking,
-        currentItemCode,
+        videoVersionId,
         videoPlaybackSessionId);
 
     return <>

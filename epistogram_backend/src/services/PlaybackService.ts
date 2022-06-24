@@ -43,12 +43,12 @@ export class PlaybackService extends ServiceBase {
     saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
 
         const userId = principalId.toSQLValue();
-        const { videoPlaybackSessionId, videoItemCode, fromSeconds, toSeconds } = dto;
-
-        // get videoId, check item code
-        const { itemVersionId: videoVersionId, itemType } = readItemCode(videoItemCode);
-        if (itemType !== 'video')
-            throw new Error('Current item is not of type: video!');
+        const {
+            videoPlaybackSessionId,
+            videoVersionId,
+            fromSeconds,
+            toSeconds
+        } = dto;
 
         // handle sample merge
         const { mergedSamples } = await this
@@ -76,11 +76,12 @@ export class PlaybackService extends ServiceBase {
      */
     async saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
 
-        const { fromSeconds, toSeconds, videoItemCode, videoPlaybackSessionId } = videoSeekEventDTO;
-        const { itemVersionId, itemType } = readItemCode(videoItemCode);
-
-        if (itemType !== 'video')
-            throw new Error('Wrong item type: ' + itemType);
+        const {
+            fromSeconds,
+            toSeconds,
+            videoVersionId,
+            videoPlaybackSessionId
+        } = videoSeekEventDTO;
 
         await this._ormService
             .createAsync(VideoSeekEvent, {
@@ -88,7 +89,7 @@ export class PlaybackService extends ServiceBase {
                 fromSeconds: fromSeconds,
                 toSeconds: toSeconds,
                 userId: principalId.toSQLValue(),
-                videoVersionId: itemVersionId,
+                videoVersionId,
                 videoPlaybackSessionId: videoPlaybackSessionId,
                 isForward: fromSeconds <= toSeconds
             });
