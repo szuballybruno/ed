@@ -1,6 +1,6 @@
 import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
 import { ModuleDetailedDTO } from './ModuleDetailedDTO';
-import { ModuleDTO } from './ModuleDTO';
+import { PlaylistModuleDTO } from './PlaylistModuleDTO';
 import { CourseItemStateType, CourseModeType } from '../types/sharedTypes';
 import { VideoPlayerDataDTO } from './VideoDTO';
 
@@ -11,7 +11,7 @@ export class PlayerDataDTO {
     answerSessionId: number | null;
     courseMode: CourseModeType;
     courseId: number;
-    modules: ModuleDTO[];
+    modules: PlaylistModuleDTO[];
     currentPlaylistItemCode: string;
     nextPlaylistItemCode: string | null;
     nextPlaylistItemState: CourseItemStateType | null;

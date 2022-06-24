@@ -46,9 +46,7 @@ export class UserService {
 
     /**
      * Get user edit data 
-     * @param editedUserId 
-     * @returns 
-     */
+          */
     async getEditUserDataAsync(principalId: PrincipalId, editedUserId: number): Promise<UserEditDTO> {
 
         type ResType = User & {
@@ -83,8 +81,6 @@ export class UserService {
 
     /**
      * Save user from admin page, where you can edit almost all fileds.
-     * 
-     * @param dto 
      */
     async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
 
@@ -142,9 +138,6 @@ export class UserService {
 
     /**
      * Save user data which the user itself can edit.  
-     * 
-     * @param userId 
-     * @param dto 
      */
     async saveUserSimpleAsync(principalId: PrincipalId, dto: UserEditSimpleDTO) {
 
@@ -162,9 +155,6 @@ export class UserService {
 
     /**
      * Get user dto-s for the admin page user list.
-     * 
-     * @param searchText 
-     * @returns 
      */
     async getAdminPageUsersListAsync(searchText: string | null) {
 
@@ -187,9 +177,6 @@ export class UserService {
 
     /**
      * Save user data which the user itself can edit.  
-     * 
-     * @param userId 
-     * @param dto 
      */
     async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
 
@@ -207,9 +194,6 @@ export class UserService {
     /**
      * Get a very minimalistic user dto for displaying 
      * very minimal info about the user.
-     * 
-     * @param userId 
-     * @returns 
      */
     async getBriefUserDataAsync(principalId: PrincipalId, userId: number) {
 
@@ -228,9 +212,6 @@ export class UserService {
 
     /**
      * Create a new user.
-     * 
-     * @param opts 
-     * @returns 
      */
     createUserAsync = async (opts: {
         email: string,
@@ -303,9 +284,6 @@ export class UserService {
     /**
      * Accept the invitation, 
      * whilst giving the user a password, for further logins.
-     * 
-     * @param userId 
-     * @param rawPassword 
      */
     setUserInivitationDataAsync = async (userId: number, rawPassword: string,) => {
 
@@ -320,9 +298,6 @@ export class UserService {
 
     /**
      * Get user entity by it's id.
-     * 
-     * @param userId 
-     * @returns 
      */
     getUserById = async (userId: number) => {
 
@@ -340,10 +315,6 @@ export class UserService {
 
     /**
      * Delete a user entity by it's id.
-     * 
-     * @param userId 
-     * @param deletedUserId 
-     * @returns 
      */
     deleteUserAsync = async (userId: PrincipalId, deletedUserId: number) => {
 
@@ -363,9 +334,6 @@ export class UserService {
 
     /**
      * Get user dto by userId.
-     * 
-     * @param userId 
-     * @returns 
      */
     getUserDTOById = async (userId: number) => {
 
@@ -379,9 +347,6 @@ export class UserService {
 
     /**
      * Get user's active refresh token by userId.
-     * 
-     * @param userId 
-     * @returns 
      */
     getUserRefreshTokenById = async (userId: number) => {
 
@@ -395,9 +360,6 @@ export class UserService {
     /**
      * Get a user by it's email address. 
      * Which is also a unique identifier, like the id. 
-     * 
-     * @param email 
-     * @returns 
      */
     getUserByEmailAsync = async (email: string) => {
 
@@ -414,9 +376,6 @@ export class UserService {
 
     /**
      * Set user's avatar file id.
-     * 
-     * @param userId 
-     * @param avatarFileId 
      */
     setUserAvatarFileId = async (userId: number, avatarFileId: number) => {
 
@@ -429,10 +388,6 @@ export class UserService {
 
     /**
      * Set user's refresh token.
-     * 
-     * @param userId 
-     * @param refreshToken 
-     * @returns 
      */
     setUserActiveRefreshToken = (userId: number, refreshToken: string) => {
 
@@ -447,9 +402,6 @@ export class UserService {
 
     /**
      * Set user's invitation token.
-     * 
-     * @param userId 
-     * @param invitationToken 
      */
     setUserInvitationTokenAsync = async (userId: number, invitationToken: string) => {
 
@@ -464,9 +416,6 @@ export class UserService {
      * Remove user's refresh token, 
      * so it can't get a new activation token, 
      * even if it holds a valid refresh token on the client side.
-     * 
-     * @param userId 
-     * @returns 
      */
     removeRefreshToken = (userId: number) => {
 
@@ -480,8 +429,6 @@ export class UserService {
 
     /**
      * Get a list of the users marked as teacher.
-     * 
-     * @returns 
      */
     getTeachersAsync = async () => {
 

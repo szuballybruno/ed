@@ -166,10 +166,7 @@ export class TempomatService extends ServiceBase {
 
     /**
      * Calculates the lag behind from three dates. 
-     * @param startDate 
-     * @param originalPrevisionedCompletionDate 
-     * @param newPrevisionedDate 
-     * @returns A positive int percentage when there is lag from
+                    * @returns A positive int percentage when there is lag from
      * the original estimation or null because it cannot be determined
      */
     calculateLagBehindPercentage = (
@@ -195,9 +192,7 @@ export class TempomatService extends ServiceBase {
     /**
      * Calculates recommended items per day from either the
      * required or the previsioned completion date 
-     * @param startDate 
-     * @param currentPrevisionedCompletionDate 
-     * @param requiredCompletionDate
+               * @param requiredCompletionDate
      * @param totalItemsCount
      * @returns The number of days in a positive int or null
      * because it cannot be determined

@@ -128,8 +128,7 @@ export class EmailService {
 
     /**
      * Sends the mail.
-     * @param email 
-     */
+          */
     private sendMailAsync = async (email: EpistoEmail) => {
 
         const transporter = createTransport({

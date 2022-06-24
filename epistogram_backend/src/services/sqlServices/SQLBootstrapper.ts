@@ -79,20 +79,17 @@ export class SQLBootstrapperService {
 
     purgeDBAsync = async () => {
 
-        log('Purging DB...', { entryType: 'strong' });
+        log('Purging DB / Start...', { entryType: 'strong' });
 
         const dropDBScript = this._dbSchema
             .entities
             .map(x => `DROP TABLE IF EXISTS public.${toSQLSnakeCasing(x.name)} CASCADE;`)
             .join('\n');
 
-        // const dropDBScriptPath = `./sql/misc/dropDB.sql`;
-        // writeFileSync(dropDBScriptPath, dropDBScript, { encoding: "utf-8" });
-
-        // logObject(dropDBScript);
-
         const results = await this._sqlConnectionService
             .executeSQLAsync(dropDBScript);
+
+        log('Purging DB / Done.', { entryType: 'strong' });
     };
 
     private recreateConstraintsAsync = async (constraints: XDBMConstraintType[]) => {

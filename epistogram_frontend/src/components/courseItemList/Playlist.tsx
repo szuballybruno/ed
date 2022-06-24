@@ -5,19 +5,18 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
-import { ModuleDTO } from '../../shared/dtos/ModuleDTO';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
+import { PlaylistModuleDTO } from '../../shared/dtos/PlaylistModuleDTO';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { CollapseItem } from '../universal/CollapseItem';
 import { FlexList } from '../universal/FlexList';
-import { PlaylistElement } from './CourseItemListElement';
+import { PlaylistItem } from './PlaylistItem';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
-
-export const CourseItemList = (props: {
-    modules: ModuleDTO[]
+export const Playlist = (props: {
+    modules: PlaylistModuleDTO[]
 }) => {
 
     // hooks
@@ -32,17 +31,17 @@ export const CourseItemList = (props: {
         .some(x => x.state === 'locked');
 
     const currentModule = modules
-        .filter(module => module.state === 'current')[0] as ModuleDTO | null;
+        .filter(module => module.moduleState === 'current')[0] as PlaylistModuleDTO | null;
 
     const currentItem = modules
         .flatMap(x => x.items)
         .filter(x => x.state === 'current')[0] as PlaylistItemDTO | null;
 
     const isCurrentExpanded = expandedNodeIds
-        .some(x => x === currentModule?.id);
+        .some(x => x === currentModule?.moduleId);
 
     const isModuleSelected = !!modules
-        .filter(x => x.state === 'current' && !x
+        .filter(x => x.moduleState === 'current' && !x
             .items
             .some(x => x.state === 'current'))[0];
 
@@ -73,8 +72,8 @@ export const CourseItemList = (props: {
         const expandedIds = isModuleSelected
             ? isBeginnerMode
                 ? []
-                : [currentModule.id]
-            : [currentModule.id];
+                : [currentModule.moduleId]
+            : [currentModule.moduleId];
 
         setExpandedNodeIds(expandedIds);
     }, [isModuleSelected, currentItem, currentModule]);
@@ -88,12 +87,12 @@ export const CourseItemList = (props: {
             {modules
                 .map((module, index) => {
 
-                    const isLocked = module.state === 'locked';
-                    const isStartable = (module.state === 'available' || module.state === 'completed');
+                    const isLocked = module.moduleState === 'locked';
+                    const isStartable = (module.moduleState === 'available' || module.moduleState === 'completed');
                     const hasCurrentItem = module.items.some(x => x.state === 'current');
-                    const isSelected = module.state === 'current' && !hasCurrentItem;
+                    const isSelected = module.moduleState === 'current' && !hasCurrentItem;
                     const unclickable = isSelected && isBeginnerMode;
-                    const isOpen = expandedNodeIds.some(x => x === module.id);
+                    const isOpen = expandedNodeIds.some(x => x === module.moduleId);
                     const headercolor = isSelected ? 'white' : undefined;
 
                     return <CollapseItem
@@ -116,7 +115,7 @@ export const CourseItemList = (props: {
                             {/* open/close */}
                             <Flex align="center">
 
-                                <EpistoButton onClick={() => handleToggle(module.id)}>
+                                <EpistoButton onClick={() => handleToggle(module.moduleId)}>
 
                                     {unclickable
                                         ? <FiberManualRecordIcon style={{ color: headercolor }} />
@@ -127,7 +126,7 @@ export const CourseItemList = (props: {
 
                                 {/* title */}
                                 <EpistoFont>
-                                    {module.name}
+                                    {module.moduleName}
                                 </EpistoFont>
                             </Flex>
 
@@ -136,7 +135,7 @@ export const CourseItemList = (props: {
 
                                 {isStartable && <EpistoButton
                                     padding="3px"
-                                    onClick={() => startModule(module.code)}
+                                    onClick={() => startModule(module.moduleCode)}
                                     variant="outlined">
 
                                     <PlayArrowIcon style={{ color: 'var(--epistoTeal)' }} />
@@ -151,7 +150,7 @@ export const CourseItemList = (props: {
 
                             {module
                                 .items
-                                .map((playlistItem, index) => <PlaylistElement
+                                .map((playlistItem, index) => <PlaylistItem
                                     key={index}
                                     playlistItem={playlistItem} />)}
                         </FlexList>

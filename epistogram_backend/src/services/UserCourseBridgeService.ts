@@ -10,23 +10,15 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
-    private _courseItemsService: CourseItemService;
-
     constructor(
-        courseItemsService: CourseItemService,
         ormService: ORMConnectionService,
         mapperService: MapperService) {
 
         super(mapperService, ormService, UserCourseBridge);
-        this._courseItemsService = courseItemsService;
     }
 
     /**
      * Set current course and course current item code.
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param itemCode 
      */
     async setCurrentCourse(
         userId: number,
@@ -39,7 +31,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         // insert new bridge
         if (!currentCourseBridge) {
 
-            await this.createNewCourseBridge(courseId, userId, itemCode, stageName);
+            await this._createNewCourseBridge(courseId, userId, itemCode, stageName);
         }
 
         // update current video/exam id 
@@ -69,7 +61,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 } as UserCourseBridge)));
     }
 
-    async createNewCourseBridge(
+    /**
+     * Creates a new course bridge 
+     */
+    private async _createNewCourseBridge(
         courseId: number,
         userId: number,
         currentItemCode: string | null,
@@ -90,7 +85,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     /**
      * Deletes all course bridges associated with the specified course  
-     * @param courseId 
      */
     async deleteAllBridgesAsync(courseId: number) {
 
@@ -100,10 +94,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     /**
      * Sets the course mode (beginner / advanced).
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param mode 
      */
     async setCourseModeAsync(userId: PrincipalId, courseId: number, mode: CourseModeType) {
 
@@ -122,10 +112,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     }
     /**
      * Sets the course mode (beginner / advanced).
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param mode 
      */
     async setCourseStartDateAsync(userId: PrincipalId, courseId: number) {
 
@@ -147,11 +133,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the requiredCompletionDate for a course. Either updates the
      * existing userCourseBridge, or creates a new one.
-     * 
-     * @param principalId 
-     * @param courseId 
-     * @param requiredCompletionDate 
-     * @returns 
      */
     async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: number, requiredCompletionDate: string) {
 
@@ -171,7 +152,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
             log('User course bridge is not exists, creating...')
 
-            await this.createNewCourseBridge(courseId, userId, null, 'created')
+            await this._createNewCourseBridge(courseId, userId, null, 'created')
         } catch (e) {
 
             throw new Error('Failed to create new user course bridge')
@@ -245,7 +226,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .query(UserCourseBridge, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
-            .getSingle();
+            .getOneOrNull();
 
         return userCourseBridge;
     };

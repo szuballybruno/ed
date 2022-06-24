@@ -95,9 +95,6 @@ export const httpDeleteAsync = async (urlEnding: string) => {
 /**
  * Post a json payload, without implicitly handling errors, 
  * meaning exceptions will bubble up, and must be handled by the caller funciton.
- * 
- * @param url 
- * @returns 
  */
 export const usePostDataUnsafe = <TData = any, TResult = void>(url: string) => {
 
@@ -143,9 +140,6 @@ export const usePostDataUnsafe = <TData = any, TResult = void>(url: string) => {
  * Post a multipart payload, containing a file, 
  * and or a data object as a json document.
  * This is also unsafe, as in errors are not handled implicitly.
- * 
- * @param url 
- * @returns 
  */
 export const usePostMultipartDataUnsafe = <TData>(url: string) => {
 
@@ -178,9 +172,6 @@ export const usePostMultipartDataUnsafe = <TData>(url: string) => {
  * Post a json payload, and implicitly handle errors, 
  * which will be set to the error output const. 
  * State is set accordingly. 
- * 
- * @param url 
- * @returns 
  */
 export const usePostData = <TData, TResult>(url: string) => {
 
@@ -223,11 +214,6 @@ export const usePostData = <TData, TResult>(url: string) => {
 /**
  * Post multipart form data. 
  * This allows sending files to the server, and also a data object as json.
- * 
- * @param url 
- * @param file 
- * @param data 
- * @returns 
  */
 export const postMultipartAsync = async (url: string, file?: File, data?: any) => {
 

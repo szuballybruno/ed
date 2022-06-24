@@ -27,10 +27,8 @@ export class PrequizService {
 
     /**
      * Returns a list of prequiz questions 
-     * 
-     * @returns 
      */
-    async getQuestionsAsync(principalId: PrincipalId, courseId: number) {
+    async getPrequizQuestionsAsync(principalId: PrincipalId, courseId: number) {
 
         const userId = principalId.toSQLValue();
 
@@ -63,10 +61,6 @@ export class PrequizService {
     /**
      * Returns an answer that the user 
      * has previously given to the specified quesiton
-     * 
-     * @param questionId 
-     * @param userId 
-     * @returns 
      */
     async getUserAnswerAsync(principalId: PrincipalId, courseId: number, questionId: number) {
 
@@ -92,10 +86,6 @@ export class PrequizService {
 
     /**
      * Answers a prequiz question
-     * 
-     * @param questionId 
-     * @param answerId 
-     * @param value 
      */
     async answerPrequizQuestionAsync(
         principalId: PrincipalId,

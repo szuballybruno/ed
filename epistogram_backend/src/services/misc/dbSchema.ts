@@ -86,7 +86,7 @@ import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestio
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamResultView } from '../../models/views/ExamResultView';
-import { ExamView } from '../../models/views/ExamView';
+import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
 import { LatestExamView } from '../../models/views/LatestExamView';
 import { QuestionDataView } from '../../models/views/QuestionDataView';
 import { ModuleView } from '../../models/views/ModuleView';
@@ -316,7 +316,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['', 'coin_transaction_view', CoinTransactionView],
             ['', 'course_item_edit_view', CourseItemEditView],
             ['', 'course_details_view', CourseDetailsView],
-            ['', 'exam_view', ExamView],
+            ['', 'exam_player_data_view', ExamPlayerDataView],
             ['', 'pretest_result_view', PretestResultView],
             ['', 'user_daily_progress_view', UserDailyProgressView],
             ['', 'user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],

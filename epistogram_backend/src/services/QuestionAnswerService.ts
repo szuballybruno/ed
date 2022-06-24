@@ -2,44 +2,37 @@ import { AnswerSession } from '../models/entity/AnswerSession';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { CoinAcquireService } from './CoinAcquireService';
-import { SQLFunctionsService } from './sqlServices/FunctionsService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '../utilities/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class QuestionAnswerService {
 
-    private _ormService: ORMConnectionService;
-    private _sqlFunctionsService: SQLFunctionsService;
-    private _coinAcquireService: CoinAcquireService;
-
     constructor(
-        ormService: ORMConnectionService,
-        sqlFunctionsService: SQLFunctionsService,
-        coinAcquireService: CoinAcquireService) {
-
-        this._coinAcquireService = coinAcquireService;
-        this._ormService = ormService;
-        this._sqlFunctionsService = sqlFunctionsService;
+        private _ormService: ORMConnectionService,
+        private _sqlFunctionsService: SQLFunctionsService,
+        private _coinAcquireService: CoinAcquireService) {
     }
 
+    /**
+     * Creates a new answer session  
+     */
     createAnswerSessionAsync = async (
         userId: number,
-        examVersionId?: number | null,
-        videoVideoId?: number | null) => {
+        examVersionId: number | null,
+        videoVideoId: number | null) => {
 
-        const session = {
-            examVersionId: examVersionId,
-            videoVersionId: videoVideoId,
-            userId: userId,
-            isPractise: false,
-            isCompleted: false
-        } as AnswerSession;
+        const answerSessionId = await this._ormService
+            .createAsync(AnswerSession, {
+                examVersionId: examVersionId,
+                videoVersionId: videoVideoId,
+                userId: userId,
+                isPractise: false,
+                isCompleted: false,
+                endDate: null,
+                startDate: null
+            });
 
-        await this._ormService
-            .createAsync(AnswerSession, session);
-
-        return session.id;
+        return answerSessionId;
     };
 
     answerQuestionAsync = async (

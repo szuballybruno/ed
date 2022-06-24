@@ -4,9 +4,9 @@ import { useNavigation } from '../../services/core/navigatior';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
-import { VideoListSausageIndicator } from './VideoListSausageIndicator';
+import { PlaylistItemTypeIcon } from './PlaylistItemTypeIcon';
 
-export const PlaylistElement = ({ playlistItem }: { playlistItem: PlaylistItemDTO }) => {
+export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }) => {
 
     const {
         title,
@@ -39,19 +39,19 @@ export const PlaylistElement = ({ playlistItem }: { playlistItem: PlaylistItemDT
             midContent={<Flex align="center">
 
                 {state === 'current' &&
-                    <VideoListSausageIndicator
+                    <PlaylistItemTypeIcon
                         color='var(--deepGreen)' />}
 
                 {state === 'locked' &&
-                    <VideoListSausageIndicator
+                    <PlaylistItemTypeIcon
                         color='grey' />}
 
                 {state === 'available' &&
-                    <VideoListSausageIndicator
+                    <PlaylistItemTypeIcon
                         color='var(--epistoTeal)' />}
 
                 {state === 'completed' &&
-                    <VideoListSausageIndicator
+                    <PlaylistItemTypeIcon
                         color='var(--mildGreen)' />}
 
                 <FlexListTitleSubtitle

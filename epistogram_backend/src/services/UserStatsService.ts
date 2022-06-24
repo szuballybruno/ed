@@ -47,9 +47,7 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every course
-     * @param userId 
-     * @returns
-     * 
+          * @returns
      * TODO: Filter courses by permissions
      * TODO: Rearrange the view, so when the user hasn't
      *       started a course yet, return all the courses with empty
@@ -108,8 +106,7 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every watched video
-     * @param userId 
-     * @returns
+          * @returns
      */
     async getUserVideoStatsAsync(userId: number, courseId: number) {
 
@@ -125,8 +122,7 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every completed exam
-     * @param userId 
-     * @returns
+          * @returns
      */
 
     async getUserExamStatsAsync(userId: number, courseId: number) {
@@ -143,10 +139,7 @@ export class UserStatsService {
 
     /**
      * Gets the learning overview statistics data for single user
-     * @param userId 
-     * @returns 
-     * 
-     * TODO: Correct mapping
+          * TODO: Correct mapping
      */
     getUserLearningOverviewDataAsync = async (userId: number) => {
 

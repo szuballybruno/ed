@@ -7,14 +7,14 @@ import { useSetCourseMode } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
+import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
 import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CourseItemList } from '../../courseItemList/CourseItemList';
+import { Playlist } from '../../courseItemList/Playlist';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
@@ -22,7 +22,7 @@ import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
-    modules: ModuleDTO[],
+    modules: PlaylistModuleDTO[],
     courseId: number,
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
@@ -244,6 +244,6 @@ export const CourseItemSelector = (props: {
             </EpistoFont>
         </EpistoPopper>
 
-        <CourseItemList modules={modules}></CourseItemList>
+        <Playlist modules={modules}></Playlist>
     </>;
 };

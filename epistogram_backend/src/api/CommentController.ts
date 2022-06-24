@@ -63,14 +63,9 @@ export class CommentController {
             .getQuery<{ itemCode: string }>()
             .getValue((x) => x.itemCode, 'string');
 
-        const itemCodeData = readItemCode(itemCode);
-
         return this
             ._commentService
-            .getCommentsAsync(
-                itemCodeData.itemType === 'video'
-                    ? itemCodeData.itemVersionId
-                    : 0, principalId);
+            .getCommentsAsync(itemCode, principalId);
     };
 
     /**

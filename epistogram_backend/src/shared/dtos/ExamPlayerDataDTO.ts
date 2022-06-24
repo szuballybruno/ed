@@ -1,8 +1,7 @@
 import { QuestionDTO } from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
-    id: number;
-    courseId: number;
+    examVersionId: number;
     subTitle: string;
     title: string;
     type: 'exam';

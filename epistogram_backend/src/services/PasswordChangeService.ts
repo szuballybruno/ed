@@ -41,8 +41,6 @@ export class PasswordChangeService {
     /**
      * This will request a passowrd change for a user that's not authenticated, 
      * an email will be sent out with the pw change link.
-     * 
-     * @param email 
      */
     async requestPasswordChangeAsync(email: string) {
 
@@ -75,9 +73,6 @@ export class PasswordChangeService {
      * This will request a passowrd change for a user that's authenticated, 
      * an email will be sent out with the pw change link. 
      * The old password will be requested from the user an an extra safety step. 
-     * 
-     * @param userId 
-     * @param oldPassword 
      */
     requestPasswordChangeAuthenticatedAsync = async (principalId: PrincipalId, oldPassword: string) => {
 
@@ -106,10 +101,6 @@ export class PasswordChangeService {
 
     /**
      * This will set a new password for the user.
-     * 
-     * @param password 
-     * @param passwordCompare 
-     * @param passwordResetToken 
      */
     setNewPasswordAsync = async (
         password: string,

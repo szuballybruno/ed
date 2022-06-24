@@ -52,6 +52,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { PretestService } from './PretestService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
+import { CourseItemView } from '../models/views/CourseItemView';
 
 export class CourseService {
 
@@ -311,7 +312,6 @@ export class CourseService {
 
     /**
      * Get the current course modules with items.
-     * 
      */
     async getCurrentCoursePlaylistModulesAsync(userId: PrincipalId) {
 
@@ -342,30 +342,21 @@ export class CourseService {
 
     /**
      * Returns the course id from an item code.
-     * 
-     * @param descriptorCode 
-     * @returns 
      */
-    async getCourseVersionIdByItemCodeAsync(descriptorCode: string) {
+    async getCourseIdByPlaylistItemCodeAsync(playlistItemCode: string) {
 
-        const { itemVersionId, itemType } = readItemCode(descriptorCode);
+        const view = await this._ormService
+            .query(CourseItemPlaylistView, { playlistItemCode })
+            .where('playlistItemCode', '=', 'playlistItemCode')
+            .or('moduleCode', '=', 'playlistItemCode')
+            .getSingle();
 
-        if (itemType === 'video')
-            return (await this._videoService.getVideoByVersionIdAsync(itemVersionId)).courseVersionId;
-
-        if (itemType === 'exam')
-            return (await this._examService.getExamByIdAsync(itemVersionId)).courseVersionId;
-
-        return (await this._ormService
-            .getSingleById(ModuleVersion, itemVersionId))
-            .courseVersionId;
+        view.courseId;
     }
 
     /**
      * Gets the course details edit DTO.
-     * @param courseId 
-     * @returns 
-     */
+          */
     async getCourseDetailsEditDataAsync(courseId: number) {
 
         // get course 
@@ -434,9 +425,7 @@ export class CourseService {
 
     /**
      * Gets the course content edit DTO. TODO: REVIEW COURSEID OR COURSE_VERSION_ID
-     * @param courseId 
-     * @returns 
-     */
+          */
     async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
 
         const views = await this._ormService
@@ -604,7 +593,6 @@ export class CourseService {
 
     /**
      * Returns admin list items 
-     * @returns 
      */
     async getAdminCoursesAsync() {
 
@@ -618,8 +606,6 @@ export class CourseService {
 
     /**
      * Soft delete course.
-     * 
-     * @param courseId 
      */
     async softDeleteCourseAsync(courseId: number) {
 
@@ -631,9 +617,6 @@ export class CourseService {
 
     /**
      * Returns the currently available courses. 
-     * 
-     * @param userId 
-     * @returns 
      */
     async getAvailableCoursesAsync(userId: PrincipalId) {
 
@@ -652,9 +635,6 @@ export class CourseService {
      * which opens access to a course for a specified user.
      * This can be used to dinamically allow or disallow access to a course, by the user.
      * Like when purchased from the shop, or got limited access etc... 
-     * 
-     * @param userId 
-     * @param courseId 
      */
     async createCourseAccessBridge(userId: number, courseId: number) {
 

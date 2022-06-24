@@ -185,12 +185,9 @@ export const trimTimeFromDate = (date: Date) => {
     return date;
 };
 
-/** 
- * This will shift the Date with the UTC offset, 
+/** This will shift the Date with the UTC offset, 
  * so JS will think it's a UTC date, and won't convert it again. 
- * @param date 
- * @returns 
- **/
+  */
 export const fakeUtcShiftDate = (date: Date) => {
 
     const now_utc = Date.UTC(
@@ -206,10 +203,8 @@ export const fakeUtcShiftDate = (date: Date) => {
 
 /**
  * Gets the difference between two dates in days
- * 
  * @param date1 First date
  * @param date2 Second date
- * @returns 
  */
 export const dateDiffInDays = (date1: Date, date2: Date) => {
 
@@ -225,10 +220,8 @@ export const dateDiffInDays = (date1: Date, date2: Date) => {
 
 /**
  * Adds days to the specified date
- * 
  * @param date Date
  * @param number Number of days to be added
- * @returns 
  */
 export const addDays = (date: Date, number: number) => {
 
@@ -240,11 +233,8 @@ export const addDays = (date: Date, number: number) => {
 /**
  * Calculates the difference in percentage between
  * two numbers
- * 
  * @param a
- * @param b 
- * @returns 
- */
+  */
 export const relativeDiffInPercentage = (a: number, b: number) => {
     return -100 * (a - b) / ((a + b) / 2);
 }

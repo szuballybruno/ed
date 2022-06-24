@@ -1,41 +1,27 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
 import { Exam } from '../models/entity/exam/Exam';
-import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
-import { ExamView } from '../models/views/ExamView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { LatestExamView } from '../models/views/LatestExamView';
 import { PretestResultView } from '../models/views/PretestResultView';
-import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
-import { instatiateInsertEntity } from '../utilities/misc';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PretestService {
 
-    private _mapperSerice: MapperService;
-    private _ormService: ORMConnectionService;
-    private _examService: ExamService;
-    private _courseBridgeService: UserCourseBridgeService;
-
     constructor(
-        ormService: ORMConnectionService,
-        mapperSerice: MapperService,
-        examService: ExamService,
-        courseBridgeService: UserCourseBridgeService) {
-
-        this._ormService = ormService;
-        this._mapperSerice = mapperSerice;
-        this._examService = examService;
-        this._courseBridgeService = courseBridgeService;
+        private _ormService: ORMConnectionService,
+        private _mapperSerice: MapperService,
+        private _examService: ExamService,
+        private _courseBridgeService: UserCourseBridgeService,
+        private _questionAnswerService: QuestionAnswerService) {
     }
 
     async createPretestExamAsync(courseId: number) {
@@ -55,13 +41,35 @@ export class PretestService {
         // return newExam.id;
     }
 
-    async getPretestDataAsync(userId: PrincipalId, courseId: number) {
+    /**
+     * Returns pretest data for the principal user - and a course 
+     */
+    async getPretestDataAsync(principalId: PrincipalId, courseId: number) {
+
+        const userId = principalId.toSQLValue();
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
-            .setCurrentCourse(userId.toSQLValue(), courseId, 'pretest', null);
+            .setCurrentCourse(userId, courseId, 'pretest', null);
 
-        // pretest exam 
+        // get pretest exam 
+        const pretestExam = await this._getPretestExam(userId, courseId);
+
+        // get answer session
+        const answerSessionId = await this._questionAnswerService
+            .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
+
+        return {
+            answerSessionId,
+            exam: pretestExam
+        } as PretestDataDTO;
+    }
+
+    /**
+     * Returns the single pretest exam for a course 
+     */
+    private async _getPretestExam(userId: number, courseId: number) {
+
         const pretestExam = await this._ormService
             .withResType<ExamVersion>()
             .query(LatestCourseVersionView, { courseId })
@@ -76,37 +84,8 @@ export class PretestService {
             .where('courseId', '=', 'courseId')
             .getSingle()
 
-        const pretestExamDTO = await this._examService
-            .getExamPlayerDTOAsync(userId.toSQLValue(), pretestExam.id);
-
-        // answer session
-        let answerSession = await this._ormService
-            .query(AnswerSession, { userId: userId.toSQLValue(), examVersionId: pretestExam.id })
-            .where('userId', '=', 'userId')
-            .and('examVersionId', '=', 'examVersionId')
-            .getSingle()
-
-        if (!answerSession) {
-
-            answerSession = instatiateInsertEntity<AnswerSession>({
-                userId: userId.toSQLValue(),
-                examVersionId: pretestExam.id,
-                videoVersionId: null,
-                startDate: null,
-                isPractise: false,
-                isCompleted: false,
-                endDate: null
-            });
-
-            await this._ormService
-                .createAsync(AnswerSession, answerSession);
-        }
-
-        return {
-            answerSessionId: answerSession.id,
-            exam: pretestExamDTO
-        } as PretestDataDTO;
-        //return {} as PretestDataDTO;
+        return await this._examService
+            .getExamPlayerDTOAsync(userId, pretestExam.id);
     }
 
     async getPretestResultsAsync(principalId: PrincipalId, courseId: number) {

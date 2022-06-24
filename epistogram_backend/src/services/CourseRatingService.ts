@@ -21,8 +21,6 @@ export class CourseRatingService extends ServiceBase {
     /**
      * Get course rating quesiton groups, 
      * and questions in groups  
-     * 
-     * @returns 
      */
     async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: number) {
 
@@ -55,9 +53,6 @@ export class CourseRatingService extends ServiceBase {
 
     /**
      * Saves multiple course rating answers 
-     * 
-     * @param userId 
-     * @param answersDTO 
      */
     async saveCourseRatingGroupAnswersAsync(userId: PrincipalId, answersDTO: CourseRatingQuestionAnswersDTO) {
 

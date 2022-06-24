@@ -192,9 +192,6 @@ export class VideoService extends QueryServiceBase<VideoData> {
 
     /**
      * Get questions for a particular video.
-     * 
-     * @param videoVersionId 
-     * @returns 
      */
     async _getQuestionDataByVideoVersionId(videoVersionId: number) {
 

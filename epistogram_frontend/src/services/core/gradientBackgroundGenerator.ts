@@ -37,7 +37,6 @@ export type GridGradientOptions = {
 /**
  * Generates a 3x3 full screen background gradient from the given colors. Alpha values generated automatically for the main color.
  * Without options, the default blue windows 11-like background is generated.
- * 
  * @param options See: {@link GridGradientOptions}
  * @returns an array of gradients as string[]
  * @example 

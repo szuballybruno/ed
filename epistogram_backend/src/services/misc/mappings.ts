@@ -33,7 +33,7 @@ import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
-import { ExamView } from '../../models/views/ExamView';
+import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
@@ -136,9 +136,8 @@ const marray = [
             videoQuestions: QuestionDataView[],
             videoPlaybackSessionId,
             maxWatchedSeconds
-        ) => ({
+        ) => instantiate<VideoPlayerDataDTO>({
             videoVersionId: playerData.videoVersionId,
-            courseVersionId: playerData.courseVersionId,
             subTitle: playerData.subtitle,
             title: playerData.title,
             description: playerData.description,
@@ -322,6 +321,25 @@ const marray = [
                         items: items,
                     });
                 });
+        }),
+
+    epistoMappingsBuilder
+        .addMapping(ExamPlayerDataDTO, () => (view: ExamPlayerDataView, questions: QuestionDataView[]) => {
+
+            return instantiate<ExamPlayerDataDTO>({
+                examVersionId: view.examId,
+                subTitle: view.subtitle,
+                title: view.title,
+                thumbnailUrl: view.thumbnailUrl,
+                isFinalExam: view.isFinalExam,
+                canTakeAgain: view.canRetake,
+                correctAnswerCount: view.correctAnswerCount,
+                correctAnswerRate: view.correctAnswerRate,
+                isCompletedPreviously: view.isCompletedPreviously,
+                totalQuestionCount: view.totalQuestionCount,
+                questions: toQuestionDTO(questions),
+                type: 'exam'
+            });
         })
 ] as const;
 
@@ -795,25 +813,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             badges: parseCommaSeparatedStringList(x.badges),
             description: x.description
         }));
-
-    mapperService
-        .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionDataView[]) => {
-
-            return {
-                id: exam.examId,
-                courseId: exam.courseId,
-                subTitle: exam.subtitle,
-                title: exam.title,
-                thumbnailUrl: exam.thumbnailUrl,
-                isFinalExam: exam.isFinalExam,
-                canTakeAgain: exam.canRetake,
-                correctAnswerCount: exam.correctAnswerCount,
-                correctAnswerRate: exam.correctAnswerRate,
-                isCompletedPreviously: exam.isCompletedPreviously,
-                totalQuestionCount: exam.totalQuestionCount,
-                questions: toQuestionDTO(questions),
-            } as ExamPlayerDataDTO;
-        });
 
     mapperService
         .addMap(ShopItem, ShopItemAdminShortDTO, x => ({

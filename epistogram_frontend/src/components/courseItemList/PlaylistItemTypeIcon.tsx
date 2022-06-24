@@ -1,6 +1,6 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 
-export const VideoListSausageIndicator = (props: {
+export const PlaylistItemTypeIcon = (props: {
     color: string
 } & FlexProps) => {
 

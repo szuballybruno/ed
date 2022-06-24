@@ -20,7 +20,7 @@ export class PrequizController {
             .getValue(x => x.courseId, 'int');
 
         return await this._prequizService
-            .getQuestionsAsync(params.principalId, courseId);
+            .getPrequizQuestionsAsync(params.principalId, courseId);
     };
 
     @XControllerAction(apiRoutes.prequiz.getUserAnswer)

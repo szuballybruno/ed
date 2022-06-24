@@ -4,7 +4,7 @@ import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { ExamResultView } from '../models/views/ExamResultView';
-import { ExamView } from '../models/views/ExamView';
+import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
@@ -57,14 +57,11 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Returns an exam player dto that contains 
      * all the data necessary to play an exam.
-     * 
-     * @param examId 
-     * @returns 
      */
     getExamPlayerDTOAsync = async (userId: number, examVersionId: number) => {
 
         const examView = await this._ormService
-            .query(ExamView, { examVersionId, userId })
+            .query(ExamPlayerDataView, { examVersionId, userId })
             .where('examVersionId', '=', 'examVersionId')
             .and('userId', '=', 'userId')
             .getSingle();
@@ -76,14 +73,11 @@ export class ExamService extends QueryServiceBase<ExamData> {
             throw new Error('Exam has no questions assigend.');
 
         return this._mapperService
-            .map(ExamView, ExamPlayerDataDTO, examView, questions);
+            .mapTo(ExamPlayerDataDTO, [examView, questions]);
     };
 
     /**
      * Get questions for a particular exam.
-     * 
-     * @param examVersionId 
-     * @returns 
      */
     private async _getQuestionDataByExamVersionId(examVersionId: number) {
 
@@ -92,15 +86,11 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .where('examVersionId', '=', 'examVersionId')
             .getMany()
 
-        console.log(questionData)
-
-        return questionData
+        return questionData;
     }
 
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
-     * 
-     * @param answerSessionId 
      */
     async startExamAsync(answerSessionId: number) {
 
@@ -113,9 +103,6 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
     /**
      * Returns the exam by it's id.
-     * 
-     * @param examId 
-     * @returns 
      */
     getExamByIdAsync = (examId: number) => {
 
@@ -125,10 +112,6 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
     /**
      * Answer a question in the exam. 
-     * 
-     * @param userId 
-     * @param dto 
-     * @returns 
      */
     answerExamQuestionAsync = async (principalId: PrincipalId, dto: AnswerQuestionDTO) => {
 
@@ -208,10 +191,6 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
     /**
      * Delete multiple exams by their ids.
-     * 
-     * @param examIds 
-     * @param unsetCurrentCourseItem 
-     * @returns 
      */
     softDeleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
 
@@ -259,28 +238,27 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
     /**
      * Get the results of the particular exam.
-     * 
-     * @param userId 
-     * @param answerSessionId 
-     * @returns 
      */
     getExamResultsAsync = async (userId: PrincipalId, answerSessionId: number) => {
 
         const currentItemCode = await this._userCourseBridgeService
             .getCurrentItemCodeOrFailAsync(userId.toSQLValue());
 
-        const { itemVersionId, itemType } = readItemCode(currentItemCode);
+        const { itemId, itemType } = readItemCode(currentItemCode);
 
         if (itemType !== 'exam')
             throw new Error('Current item is not an exam!');
 
+        // TODO ITEM VERSION - ITEM ID mismatch
+        throwNotImplemented();
+
         const examResultViews = await this._ormService
             .query(ExamResultView, {
-                itemVersionId,
+                itemId,
                 userId: userId.toSQLValue(),
                 answerSessionId
             })
-            .where('examVersionId', '=', 'itemVersionId')
+            .where('examVersionId', '=', 'itemId')
             .and('userId', '=', 'userId')
             .and('answerSessionId', '=', 'answerSessionId')
             .getMany()

@@ -34,9 +34,6 @@ export class CoinAcquireService {
     /**
      * This will add reward coins for session activity,
      * and also, new notification events, if necessary 
-     * 
-     * @param userId 
-     * @param activitySessionId 
      */
     handleSessionActivityCoinsAsync = async (userId: number, activitySessionId: number) => {
 
@@ -46,9 +43,6 @@ export class CoinAcquireService {
 
     /**
      * Reward user after a video is watched fo the first time 
-     * 
-     * @param userId 
-     * @param videoId 
      */
     acquireVideoWatchedCoinsAsync = async (userId: number, videoId: number) => {
 
@@ -58,9 +52,6 @@ export class CoinAcquireService {
 
     /**
      * Reward user after a question is answered correctly for the first time 
-     * 
-     * @param userId 
-     * @param givenAnswerId 
      */
     acquireQuestionAnswerCoinsAsync = async (userId: number, givenAnswerId: number) => {
 
@@ -87,7 +78,6 @@ export class CoinAcquireService {
 
     /**
      * Reward user with coins based on the given answer streak length  
-     * 
      */
     handleGivenAnswerStreakCoinsAsync = async (userId: number, streakId: number, streakLength: number) => {
 
@@ -122,10 +112,6 @@ export class CoinAcquireService {
     /**
      * Generic activity coins are given at the start of each new activity session,
      * only 3 can be given in one day's period (by date, not 24h)  
-     * 
-     * @param userId 
-     * @param activitySessionId 
-     * @returns 
      */
     private acquireGenericActivityCoin = async (userId: number, activitySessionId: number) => {
 
@@ -153,9 +139,6 @@ export class CoinAcquireService {
     /**
      * Activity streak coins are given after 3-5-10 days of countinous activity
      * the cuntion also adds a notification event that the frontend will pick up and display. 
-     * 
-     * @param userId 
-     * @returns 
      */
     private acquireActivityStreakCoin = async (userId: number) => {
 

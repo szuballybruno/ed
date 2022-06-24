@@ -89,7 +89,7 @@ export class DbConnectionService {
 
     private async _createTables() {
 
-        log('Connecting database...');
+        log('Connecting ORM...');
 
         // connect TypeORM
         await this._ormConnectionService

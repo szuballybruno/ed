@@ -17,8 +17,7 @@ export class TeacherInfoService {
 
     /**
      * Delete a teacher info obj by it's id.
-     * @param teacherInfoId 
-     */
+          */
     async deleteTeacherInfoAsync(teacherInfoId: number) {
 
         await this._ormService
@@ -27,9 +26,7 @@ export class TeacherInfoService {
 
     /**
      * Get a teacher info by user id.
-     * @param userId 
-     * @returns 
-     */
+          */
     async getTeacherInfoAsync(userId: number) {
 
         const user = await this._ormService
@@ -46,9 +43,7 @@ export class TeacherInfoService {
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
-     * @param userId 
-     * @returns 
-     */
+          */
     async getTeacherInfoEditDTOAsync(userId: number) {
 
         const teacherInfo = await this.getTeacherInfoAsync(userId);
@@ -59,9 +54,7 @@ export class TeacherInfoService {
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
-     * @param userId 
-     * @returns 
-     */
+          */
     async saveTeacherInfoAsync(teacherInfoEditDTO: TeacherInfoEditDTO) {
 
         await this._ormService
@@ -80,7 +73,6 @@ export class TeacherInfoService {
     /**
      * Creates a new teacher info entity with default values, 
      * persists it in the DB, and returns it. 
-     * @returns 
      */
     async createTeacherInfoAsync(userId: number) {
 

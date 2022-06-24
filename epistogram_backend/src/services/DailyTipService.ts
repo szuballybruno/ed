@@ -21,8 +21,6 @@ export class DailyTipService {
 
     /**
      * Deletes a daily tip.
-     * 
-     * @param id 
      */
     async deleteDailyTipAsync(id: number) {
 
@@ -33,9 +31,6 @@ export class DailyTipService {
     /**
      * Creates a new daily tip, but with isLive switched off, 
      * thus it won't be shown to users until it's enabled manually.
-     * 
-     * @param personalityTraitCategoryId 
-     * @param isMax 
      */
     async createDailyTipAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
@@ -50,9 +45,6 @@ export class DailyTipService {
 
     /**
      * Returns edit data of a specified daily tip.
-     * 
-     * @param dailyTipId 
-     * @returns 
      */
     async getDailyTipEditDataAsync(dailyTipId: number) {
 
@@ -65,9 +57,6 @@ export class DailyTipService {
 
     /**
      * Saves a daily tip.
-     * 
-     * @param dto 
-     * @returns 
      */
     async saveDailyTipAsync(dto: DailyTipEditDataDTO) {
 
@@ -92,8 +81,6 @@ export class DailyTipService {
      * and registers that this tip was shown on this day.
      * If a user calls this the next day, this will return a different daily tip. 
      * This will go on until we run out of suitable daily tips, and the cycle will start again. 
-     * 
-     * @returns 
      */
     async getDailyTipAsync(userId: PrincipalId) {
 

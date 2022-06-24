@@ -25,9 +25,6 @@ export class PersonalityAssessmentService {
 
     /**
      * Returns the personality assessment DTO, that can be used externally.
-     * 
-     * @param userId 
-     * @returns 
      */
     async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
 
@@ -43,9 +40,6 @@ export class PersonalityAssessmentService {
 
     /**
      * Returns personality trait views for a specified user
-     * 
-     * @param userId 
-     * @returns 
      */
     async getPersonalityTraitsAsync(userId: number) {
 
@@ -57,8 +51,6 @@ export class PersonalityAssessmentService {
 
     /**
      * Return the personality trait category with details, like tips etc.
-     * 
-     * @param personalityTraitCategoryId 
      */
     async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: boolean) {
 
@@ -105,9 +97,6 @@ export class PersonalityAssessmentService {
 
     /**
      * This returns the active descriptions of the users traits. 
-     * 
-     * @param userId 
-     * @returns 
      */
     private getPersonalityDescriptionsDTOAsync = async (userId: number) => {
 
@@ -125,13 +114,9 @@ export class PersonalityAssessmentService {
      * pre-generates the data for a circular (radar) chart.
      * What it does is creates a virtual circle consisting of opposing traits,
      * on opposing sides. Like so: 
-     * 
-     *   Trait 2 min - * *
+     *
      * Trait 1 min - *     * - Trait 1 max
      *                *  * - Trait 2 max
-     * 
-     * @param userId 
-     * @returns 
      */
     private async getUserPersonalityDataAsync(userId: number) {
 

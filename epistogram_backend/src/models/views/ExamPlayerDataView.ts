@@ -6,7 +6,7 @@ import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class ExamView {
+export class ExamPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()

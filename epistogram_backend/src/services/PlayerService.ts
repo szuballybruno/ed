@@ -113,7 +113,7 @@ export class PlayerService extends ServiceBase {
         const answerSessionId = itemType === 'module'
             ? null
             : await this._questionAnswerService
-                .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.videoVersionId);
+                .createAnswerSessionAsync(userId, examDTO?.examVersionId ?? null, videoDTO?.videoVersionId ?? null);
 
         //
         // get next item 
@@ -133,11 +133,11 @@ export class PlayerService extends ServiceBase {
         });
     };
 
-    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedItemCode: string) {
+    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
 
         // get current course id
         const courseVersionId = await this._courseService
-            .getCourseVersionIdByItemCodeAsync(requestedItemCode);
+            .getCourseIdByPlaylistItemCodeAsync(requestedPlaylistItemCode);
 
         if (!courseVersionId)
             throw new Error('Cannot find courseId');
@@ -159,7 +159,7 @@ export class PlayerService extends ServiceBase {
             throw new VerboseError('Course has been deleted!', 'deleted');
 
         // get valid course item 
-        const validItemCode = await this._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseVersionId, requestedItemCode);
+        const validItemCode = await this._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseVersionId, requestedPlaylistItemCode);
 
         return { validItemCode, courseVersionId }
     }

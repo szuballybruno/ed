@@ -91,12 +91,6 @@ export class RegistrationService extends ServiceBase {
     /**
      * This function registers a user using an activation code. 
      * If said code is valid, it will be marked as used as there can not be another registration made with it.
-     * 
-     * @param activationCode 
-     * @param email 
-     * @param firstName 
-     * @param lastName 
-     * @returns 
      */
     async registerUserViaActivationCodeAsync(
         activationCode: string,
@@ -128,12 +122,6 @@ export class RegistrationService extends ServiceBase {
     /**
      * This function registers a new user using a public access token. 
      * Public access tokens come from public links, such as QR codes.
-     * 
-     * @param publicRegToken 
-     * @param email 
-     * @param firstName 
-     * @param lastName 
-     * @returns 
      */
     registerUserViaPublicTokenAsync = async (
         publicRegToken: string,
@@ -176,9 +164,6 @@ export class RegistrationService extends ServiceBase {
     };
 
     /**
-     * 
-     * @param dto 
-     * @returns 
      */
     registerInvitedUserAsync = async (
         invitationToken: string,
@@ -229,11 +214,6 @@ export class RegistrationService extends ServiceBase {
      * This function creates a new invited user, 
      * generates an invitation token, 
      * and sends it as a mail to the given email address. 
-     * 
-     * @param userId 
-     * @param options 
-     * @param sendEmail 
-     * @returns 
      */
     async createInvitedUserAsync(
         options: {
@@ -283,8 +263,6 @@ export class RegistrationService extends ServiceBase {
     /**
      * Get a default password that can be sent to users, 
      * and they can change it later to something stronger.
-     * 
-     * @returns 
      */
     private getDefaultPassword = () => {
 

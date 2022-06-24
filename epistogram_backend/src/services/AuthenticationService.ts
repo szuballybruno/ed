@@ -3,6 +3,7 @@ import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
 import { HashService } from './HashService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { log } from './misc/logger';
 import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
@@ -11,24 +12,13 @@ import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class AuthenticationService {
 
-    private _userService: UserService;
-    private _tokenService: TokenService;
-    private _userSessionActivityService: UserSessionActivityService;
-    private _hashService: HashService;
-    private _permissionService: PermissionService;
-
     constructor(
-        userService: UserService,
-        tokenService: TokenService,
-        userSessionActivityService: UserSessionActivityService,
-        hashService: HashService,
-        permissionService: PermissionService) {
-
-        this._userService = userService;
-        this._tokenService = tokenService;
-        this._userSessionActivityService = userSessionActivityService;
-        this._hashService = hashService;
-        this._permissionService = permissionService;
+        private _userService: UserService,
+        private _tokenService: TokenService,
+        private _userSessionActivityService: UserSessionActivityService,
+        private _hashService: HashService,
+        private _permissionService: PermissionService,
+        private _globalConfig: GlobalConfiguration) {
     }
 
     getRequestAccessTokenPayload = (accessToken: string) => {
@@ -145,12 +135,16 @@ export class AuthenticationService {
 
     private _renewUserSessionAsync = async (userId: number, prevRefreshToken: string) => {
 
-        // check if this refresh token is associated to the user
-        const refreshTokenFromDb = await this._userService
-            .getUserRefreshTokenById(userId);
+        // BYPASS TOKEN IN DB CHECK IF LOCALHOST 
+        if (!this._globalConfig.misc.isLocalhost) {
 
-        if (!refreshTokenFromDb)
-            throw new VerboseError(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+            // check if this refresh token is associated to the user
+            const refreshTokenFromDb = await this._userService
+                .getUserRefreshTokenById(userId);
+
+            if (!refreshTokenFromDb)
+                throw new VerboseError(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+        }
 
         // get user 
         const user = await this._userService
