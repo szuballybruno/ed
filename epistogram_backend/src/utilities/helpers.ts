@@ -204,6 +204,51 @@ export const fakeUtcShiftDate = (date: Date) => {
     return new Date(now_utc);
 };
 
+/**
+ * Gets the difference between two dates in days
+ * 
+ * @param date1 First date
+ * @param date2 Second date
+ * @returns 
+ */
+export const dateDiffInDays = (date1: Date, date2: Date) => {
+
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+    const timeDiff = Math.floor(utc2 - utc1)
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
+
+    return daysDiff;
+}
+
+/**
+ * Adds days to the specified date
+ * 
+ * @param date Date
+ * @param number Number of days to be added
+ * @returns 
+ */
+export const addDays = (date: Date, number: number) => {
+
+    const newDate = new Date(date);
+
+    return new Date(newDate.setDate(newDate.getDate() + number));
+}
+
+/**
+ * Calculates the difference in percentage between
+ * two numbers
+ * 
+ * @param a
+ * @param b 
+ * @returns 
+ */
+export const relativeDiffInPercentage = (a: number, b: number) => {
+    return -100 * (a - b) / ((a + b) / 2);
+}
+
 export const navPropNotNull = (prop: any) => {
 
     withValue(prop, () => { throw new Error('Navigation property was null, or undefined. This could be caused by an improper or missing join.'); });

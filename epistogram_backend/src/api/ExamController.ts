@@ -37,7 +37,7 @@ export class ExamController {
             .startExamAsync(answerSessionId);
     };
 
-    @XControllerAction(apiRoutes.exam.getExamResults, { isPost: true })
+    @XControllerAction(apiRoutes.exam.getExamResults)
     getExamResultsAction = async (params: ActionParams) => {
 
         const answerSessionId = params

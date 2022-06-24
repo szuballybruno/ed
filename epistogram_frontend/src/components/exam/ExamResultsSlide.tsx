@@ -1,11 +1,11 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React, { useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { useExamResults } from '../../services/api/examApiService';
 import { useNavigation } from '../../services/core/navigatior';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';

@@ -1,7 +1,7 @@
 SELECT 
 	sq2.*,
 	sq2.completed_item_count * (100 / cicv.item_count::int) completed_percentage,
-	sq2.completion_date::date - ucb.creation_date::date offset_days_from_start,
+	sq2.completion_date::date - ucb.start_date::date offset_days_from_start,
 	sq2.completion_date = DATE_TRUNC('day', now()) is_current
 FROM 
 (

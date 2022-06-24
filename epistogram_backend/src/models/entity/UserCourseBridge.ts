@@ -15,6 +15,9 @@ export class UserCourseBridge {
     @XViewColumn()
     creationDate: Date;
 
+    @Column({ type: 'timestamptz', nullable: true })
+    startDate: Date | null;
+
     @Column({ type: 'text', default: 'beginner' })
     @XViewColumn()
     courseMode: CourseModeType;
@@ -39,7 +42,9 @@ export class UserCourseBridge {
     @XViewColumn()
     previsionedCompletionDate: Date;
 
-    // TO ONE
+    @Column({ type: 'timestamptz', nullable: true })
+    @XViewColumn()
+    requiredCompletionDate: Date | null;
 
     // user
     @Column()

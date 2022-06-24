@@ -6,10 +6,17 @@ import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTyp
 
 export const ErrorDialogContext = React.createContext<EpistoDialogLogicType | null>(null);
 
-const ErrorDialog = ({ logic }: { logic: EpistoDialogLogicType }) => {
+const ErrorDialog = ({ dialogLogic }: { dialogLogic: EpistoDialogLogicType }) => {
 
-    return <EpistoDialog logic={logic}>
-        <Flex m="30px">
+    return <EpistoDialog
+        closeButtonType='top'
+        title='Asd!'
+        logic={dialogLogic}>
+
+        <Flex
+            p='15px'
+            width='400px'>
+
             An error has occured!
             Please try again later.
         </Flex>
@@ -24,7 +31,7 @@ export const ErrorDialogFrame = (props: {
     const { children } = props;
 
     return <>
-        <ErrorDialog logic={dialogLogic}></ErrorDialog>
+        <ErrorDialog dialogLogic={dialogLogic}></ErrorDialog>
 
         <ErrorDialogContext.Provider value={dialogLogic}>
             {children}

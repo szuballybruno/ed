@@ -1,7 +1,7 @@
 
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
-import { UserCourseStatsView } from '../models/views/UserCourseStatsView';
+import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../models/views/UserCourseStatsView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
@@ -13,18 +13,25 @@ import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
+import { TempomatModeType } from '../shared/types/sharedTypes';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { TempomatService } from './TempomatService';
 
 export class UserStatsService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _tempomatService: TempomatService;
 
-    constructor(ormService: ORMConnectionService, mapperSvc: MapperService) {
+    constructor(
+        ormService: ORMConnectionService,
+        mapperSvc: MapperService,
+        tempomatService: TempomatService) {
 
         this._ormService = ormService;
         this._mapperService = mapperSvc;
+        this._tempomatService = tempomatService;
     }
 
     async getUserStatsAsync(userId: number) {
@@ -55,8 +62,48 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getMany();
 
+        const statsWithTempomatData = stats
+            .map(x => {
+
+                const previsionedCompletionDate = this._tempomatService
+                    .calculatePrevisionedDate(
+                        x.originalPrevisionedCompletionDate,
+                        x.totalItemCount,
+                        x.totalCompletedItemCount,
+                        x.startDate,
+                        x.tempomatMode,
+                        x.tempomatAdjustmentValue
+                    )
+
+                const lagBehindPercentage = this._tempomatService
+                    .calculateLagBehindPercentage(
+                        x.startDate,
+                        x.requiredCompletionDate
+                            ? x.requiredCompletionDate
+                            : x.originalPrevisionedCompletionDate,
+                        previsionedCompletionDate
+                    )
+
+                const recommendedItemsPerDay = this._tempomatService
+                    .calculateRecommendedItemsPerDay(
+                        x.startDate,
+                        previsionedCompletionDate,
+                        x.requiredCompletionDate,
+                        x.totalItemCount
+                    )
+
+                return {
+                    ...x,
+                    previsionedCompletionDate: previsionedCompletionDate,
+                    lagBehindPercentage: lagBehindPercentage,
+                    recommendedItemsPerWeek: recommendedItemsPerDay
+                        ? recommendedItemsPerDay * 7
+                        : null
+                }
+            }) as UserCourseStatsViewWithTempomatData[]
+
         return this._mapperService
-            .mapMany(UserCourseStatsView, UserCourseStatsDTO, stats);
+            .mapTo(UserCourseStatsDTO, [statsWithTempomatData])
     }
 
     /**

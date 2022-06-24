@@ -1,4 +1,7 @@
 import { Flex, Image } from '@chakra-ui/react';
+import { TextField } from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DateTime } from 'luxon';
 import { useCallback } from 'react';
 import { useUserCourseStats } from '../../../../services/api/userStatsApiService';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
@@ -19,13 +22,14 @@ export const EmptyCell = () => <EpistoFont>
 
 export const AdminUserCoursesDataGridControl = (props: {
     handleMoreButton: (courseId: number | null) => void
+    handleSaveRequiredCompletionDate: (courseId: number | null, requiredCompletionDate: Date | null) => void
 }) => {
 
-    const { handleMoreButton } = props;
+    const { handleMoreButton, handleSaveRequiredCompletionDate } = props;
 
     const userId = useIntParam('userId')!;
 
-    const { userCourseStats, userCourseStatsStatus, userCourseStatsError } = useUserCourseStats(userId);
+    const { userCourseStats, userCourseStatsStatus, userCourseStatsError, refetchUserCourseStats } = useUserCourseStats(userId);
 
     const userCourses = userCourseStats ?? [];
 
@@ -49,15 +53,37 @@ export const AdminUserCoursesDataGridControl = (props: {
             lagBehindPercentage: course.lagBehindPercentage,
             previsionedCompletionDate: course.previsionedCompletionDate,
             tempomatMode: course.tempomatMode,
+            requiredCompletionDateColumn: {
+                courseId: course.courseId,
+                requiredCompletionDate: course.requiredCompletionDate
+            },
             moreDetails: course.courseId
-        } as Partial<UserCourseStatsDTO>;
+        } as Partial<UserCourseStatsDTO> & {
+            requiredCompletionDateColumn: {
+                courseId: number,
+                requiredCompletionDate: Date
+            },
+            moreDetails: number
+        };
     });
 
     const rows: Partial<UserCourseStatsDTO>[] = getRowsFromCourses();
 
-    const columnDefGen = <TField extends keyof Partial<UserCourseStatsDTO & { moreDetails: number }>>(
+    const columnDefGen = <TField extends keyof Partial<UserCourseStatsDTO & {
+        requiredCompletionDateColumn: {
+            courseId: number,
+            requiredCompletionDate: Date
+        },
+        moreDetails: number
+    }>>(
         field: TField,
-        columnOptions: OmitProperty<GridColumnType<Partial<UserCourseStatsDTO & { moreDetails: number }>, string | undefined, TField>, 'field'>) => {
+        columnOptions: OmitProperty<GridColumnType<Partial<UserCourseStatsDTO & {
+            requiredCompletionDateColumn: {
+                courseId: number,
+                requiredCompletionDate: Date
+            },
+            moreDetails: number
+        }>, string | undefined, TField>, 'field'>) => {
 
         return {
             field,
@@ -245,6 +271,33 @@ export const AdminUserCoursesDataGridControl = (props: {
                     </EpistoFont>
                 </Flex>
                 : <EmptyCell />
+        }),
+        columnDefGen('requiredCompletionDateColumn', {
+            headerName: 'Határidő',
+            width: 320,
+            renderCell: (params) => <DesktopDatePicker
+                key={params.key}
+                label="Date desktop"
+                minDate={DateTime.now()}
+                inputFormat="yyyy-MM-DD"
+                disableMaskedInput
+                value={params.value?.requiredCompletionDate ? params.value?.requiredCompletionDate : new Date(Date.now())}
+                onChange={(value: DateTime | null) => {
+                    console.log(value?.toJSDate());
+                    handleSaveRequiredCompletionDate(params.value?.courseId || null, value ? value.toJSDate() : null);
+                    refetchUserCourseStats();
+                }}
+                renderInput={(textFieldParams) => {
+
+                    const iProps = textFieldParams.inputProps;
+                    iProps!.value = params.value?.requiredCompletionDate ? params.value.requiredCompletionDate : 'Nincs határidő';
+
+                    return <TextField
+                        inputProps={textFieldParams.inputProps}
+                        InputProps={textFieldParams.InputProps}
+                        inputRef={textFieldParams.inputRef} />;
+                }}
+            />
         }),
         columnDefGen('moreDetails', {
             headerName: 'Részletek',

@@ -8,7 +8,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoPopper } from '../controls/EpistoPopper';
-import { PersonalityChart } from './charts/PersonalityChart';
+import { PersonalityChart } from '../universal/charts/PersonalityChart';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const PersonalityAssessment = (props: FlexProps) => {
@@ -36,6 +36,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
     const allOrAllButOneAccordionsClosed = openAccordions.length <= 1;
 
     return <LoadingFrame
+        pt='10px'
         loadingState={personalityDataState}
         onlyRenderIfLoaded
         error={personalityDataError}
@@ -173,9 +174,9 @@ export const PersonalityAssessment = (props: FlexProps) => {
                                 <AccordionButton>
 
                                     <Box flex='1'
-fontWeight="500"
-fontSize="15px"
-textAlign='left'>
+                                        fontWeight="500"
+                                        fontSize="15px"
+                                        textAlign='left'>
                                         {item.title}
                                     </Box>
 
@@ -184,8 +185,8 @@ textAlign='left'>
 
                                 {/* content  */}
                                 <AccordionPanel pb={4}
-mt="10px"
-fontSize="13px">
+                                    mt="10px"
+                                    fontSize="13px">
 
                                     {item.description}
                                 </AccordionPanel>

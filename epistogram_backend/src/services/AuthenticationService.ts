@@ -50,6 +50,8 @@ export class AuthenticationService {
         const { userId } = this._tokenService
             .verifyRefreshToken(refreshToken);
 
+        console.log(userId)
+
         // get user 
         const currentUser = await this._userService
             .getUserDTOById(userId);

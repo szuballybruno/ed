@@ -1,25 +1,52 @@
 import { Flex, useMediaQuery } from '@chakra-ui/react';
-import React from 'react';
+import { GetTheMostOutOfYourselfSection } from './learningInsights/GetTheMostOutOfYourselfSection';
+import { LearningStatistics } from './learningInsights/LearningStatistics';
 import { LearningStatisticsOverview } from './learningInsights/LearningStatisticsOverview';
-import { PersonalityAssessment } from './universal/PersonalityAssessment';
+import { LearningStatisticsSeciton } from './learningInsights/LearningStatisticsSeciton';
+import { DashboardSection } from './universal/DashboardSection';
+import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';
 
 export const LearningInsightsOverview = () => {
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     return <Flex
+        flex='1'
         direction="column"
         pb="40px"
         minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
-        <LearningStatisticsOverview />
+        <DashboardSection
+            title='Statisztikád'
+            background="var(--transparentWhite70)"
+            borderRadius="6px"
+            showDivider
+            className="largeSoftShadow"
+            marginBottom="10px">
 
-        {/* personality */}
-        <PersonalityAssessment />
+            <LearningStatistics userId={0} />
+        </DashboardSection>
 
-        { // disabled temporarily
+        <DashboardSection
+            title='Egyedi tanulási analízised'
+            background="var(--transparentWhite70)"
+            borderRadius="6px"
+            showDivider
+            className="largeSoftShadow"
+            marginBottom="10px">
 
-        /* learning curves 
-        <LearningCurves />*/}
+            <PersonalityAssessment />
+        </DashboardSection>
+
+        <DashboardSection
+            title='Hozd ki magadból a maximumot'
+            background="var(--transparentWhite70)"
+            borderRadius="6px"
+            showDivider
+            className="largeSoftShadow"
+            marginBottom="10px">
+
+            <GetTheMostOutOfYourselfSection />
+        </DashboardSection>
     </Flex>;
 };

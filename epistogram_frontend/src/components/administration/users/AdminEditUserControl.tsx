@@ -5,6 +5,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
+import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
@@ -59,6 +60,7 @@ export const AdminEditUserControl = (props: {
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
     const { roleAssignCompanies } = useRoleAssignCompanies();
     const { jobTitles } = useJobTitles();
+    const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
 
     useEffect(() => {
 
@@ -114,25 +116,44 @@ export const AdminEditUserControl = (props: {
 
     const handleSaveUserAsync = async () => {
 
-        if (!editDTO || !selectedCompany || !selectedJobTitle) {
+        console.log(JSON.stringify(editDTO));
+        console.log(JSON.stringify(selectedCompany));
+        console.log(JSON.stringify(selectedJobTitle));
 
-            showNotification('A mandatory field is empty!');
+        if (!selectedCompany || !selectedJobTitle)
             return;
+
+        if (!editedUserId) {
+            const newUser: UserEditDTO = {
+                id: -1,
+                firstName,
+                lastName,
+                email,
+                companyId: selectedCompany.id,
+                jobTitleId: selectedJobTitle!.id || null,
+                isTeacher,
+                permissions: permissionsChangeSet,
+                roles: rolesChangeSet
+            };
+
+            return createInvitedUser(newUser);
         }
 
-        const editedUserDTO: UserEditDTO = {
-            id: editDTO.id,
-            firstName,
-            lastName,
-            email,
-            companyId: selectedCompany.id,
-            jobTitleId: selectedJobTitle.id,
-            isTeacher,
-            permissions: permissionsChangeSet,
-            roles: rolesChangeSet
-        };
+        if (editedUserId && editDTO) {
+            const editedUserDTO: UserEditDTO = {
+                id: editDTO.id,
+                firstName,
+                lastName,
+                email,
+                companyId: selectedCompany.id,
+                jobTitleId: selectedJobTitle.id,
+                isTeacher,
+                permissions: permissionsChangeSet,
+                roles: rolesChangeSet
+            };
 
-        await saveUserAsync(editedUserDTO);
+            return saveUserAsync(editedUserDTO);
+        }
     };
 
     useEffect(() => console.log('Useredit dto reloaded'), [editDTO]);

@@ -27,7 +27,6 @@ const LearningInsightsPage = () => {
             <NavigationLinkList
                 routes={[
                     applicationRoutes.learningRoute.overviewRoute,
-                    applicationRoutes.learningRoute.myStatisticsRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
                 ]} />
         </LeftPane>
@@ -39,10 +38,6 @@ const LearningInsightsPage = () => {
                     {
                         route: applicationRoutes.learningRoute.overviewRoute,
                         element: <LearningInsightsOverview />
-                    },
-                    {
-                        route: applicationRoutes.learningRoute.myStatisticsRoute,
-                        element: <LearningStatistics userId={id} />
                     },
                     {
                         route: applicationRoutes.learningRoute.myCoursesRoute,

@@ -102,7 +102,7 @@ export type PermissionScopeType = 'USER' | 'COMPANY' | 'COURSE' | 'COMMENT';
 
 export type AnswerSessionType = 'signup' | 'exam' | 'practise' | 'pretest' | 'video';
 
-export type CourseStageNameType = 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
+export type CourseStageNameType = 'created' | 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
 
 export type TempomatModeType = 'auto' | 'light' | 'balanced' | 'strict';
 

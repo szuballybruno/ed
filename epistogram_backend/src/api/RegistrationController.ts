@@ -73,7 +73,6 @@ export class RegistrationController {
                 'email',
                 'firstName',
                 'lastName',
-                'roleId',
                 'jobTitleId'
             ]).data;
 

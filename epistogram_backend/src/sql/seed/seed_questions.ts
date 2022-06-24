@@ -3,7 +3,7 @@ import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getQuestionSeedData = () => getSeedList<Question>()({
 
-    // -------------------------------- SIGNUP QUESTIONS 
+        // -------------------------------- SIGNUP QUESTIONS 
 
     // SECTION 1
     // 1.1 Question
@@ -120,7 +120,7 @@ export const getQuestionSeedData = () => getSeedList<Question>()({
     question_35: {
 	},
 
-    // -------------------------------- NORMAL QUESTIONS 
+        // -------------------------------- NORMAL QUESTIONS 
 
     question_48: {
 	},
@@ -1151,6 +1151,6 @@ export const getQuestionSeedData = () => getSeedList<Question>()({
 	},
 
 
-});
+    });
 
 export type QuestionSeedDataType = ReturnType<typeof getQuestionSeedData>;

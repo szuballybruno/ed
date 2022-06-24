@@ -240,7 +240,6 @@ export class UserService {
         registrationType: RegistrationType,
         companyId?: number,
         phoneNumber?: string,
-        roleId?: number,
         jobTitleId?: number,
         invitationToken?: string,
         isGod?: boolean

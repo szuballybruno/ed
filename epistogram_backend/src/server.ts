@@ -6,7 +6,6 @@ import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
-import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
 import { instatiateControllers } from './startup/controllersDI';
 import { initTurboExpress } from './startup/instatiateTurboExpress';

@@ -16,3 +16,6 @@ ON cd.id = cv.course_data_id
 
 LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
+
+WHERE ucb.start_date IS NOT NULL
+AND ucb.stage_name != 'created'

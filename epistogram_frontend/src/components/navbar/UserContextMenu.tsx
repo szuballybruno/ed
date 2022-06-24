@@ -27,7 +27,7 @@ export const UserContextMenu = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const { navigate } = useNavigation();
+    const { navigate, openNewTab } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
 
@@ -43,11 +43,6 @@ export const UserContextMenu = (props: {
     };
 
     const userMenuItems = new ArrayBuilder<{ name: string, icon: any, color?: any, onClick: () => void }>()
-        .addIf(hasPermission('ACCESS_ADMIN'), {
-            name: applicationRoutes.administrationRoute.title,
-            icon: applicationRoutes.administrationRoute.icon,
-            onClick: () => navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute)
-        })
         .add({
             name: applicationRoutes.settingsRoute.title,
             icon: applicationRoutes.settingsRoute.icon,
@@ -56,12 +51,7 @@ export const UserContextMenu = (props: {
         .add({
             name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
             icon: applicationRoutes.settingsRoute.featurePreviewRoute.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.featurePreviewRoute),
-        })
-        .add({
-            name: applicationRoutes.settingsRoute.developmentNotesRoute.title,
-            icon: applicationRoutes.settingsRoute.developmentNotesRoute.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotesRoute),
+            onClick: () => openNewTab('https://epistogram.com/upcoming-features'),
         })
         .add({
             name: translatableTexts.navbar.signout,

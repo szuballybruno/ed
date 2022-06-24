@@ -1,23 +1,33 @@
 import { CourseData } from '../models/entity/course/CourseData';
+import { Course } from '../models/entity/Course';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
-import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
-import { UserCourseRecommendedItemQuotaView } from '../models/views/UserCourseRecommendedItemQuotaView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
 import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';
 import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
 import { PrincipalId } from '../utilities/ActionParams';
+import { dateDiffInDays } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { TempomatService } from './TempomatService';
 
 export class UserProgressService extends ServiceBase {
 
-    constructor(mapperService: MapperService, ormservice: ORMConnectionService) {
+    private _tempomatService: TempomatService
+
+    constructor(
+        mapperService: MapperService,
+        ormservice: ORMConnectionService,
+        tempomatService: TempomatService
+    ) {
 
         super(mapperService, ormservice);
+
+        this._tempomatService = tempomatService;
     }
 
     async getActiveCoursesAsync(principalId: PrincipalId) {
@@ -37,11 +47,32 @@ export class UserProgressService extends ServiceBase {
 
         const userId = principalId.toSQLValue();
 
-        const courseProgressView = await this._ormService
-            .query(UserCourseRecommendedItemQuotaView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getOneOrNull();
+        const tempomatCalculationData = await this._ormService
+            .getRepository(TempomatCalculationDataView)
+            .findOneOrFail({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
+
+        const previsionedCompletionDate = this._tempomatService
+            .calculatePrevisionedDate(
+                tempomatCalculationData.originalPrevisionedCompletionDate,
+                tempomatCalculationData.totalItemCount,
+                tempomatCalculationData.totalCompletedItemCount,
+                tempomatCalculationData.startDate,
+                tempomatCalculationData.tempomatMode,
+                tempomatCalculationData.tempomatAdjustmentValue
+            )
+
+        const recommendedItemsPerDay = this._tempomatService
+            .calculateRecommendedItemsPerDay(
+                tempomatCalculationData.startDate,
+                previsionedCompletionDate,
+                tempomatCalculationData.requiredCompletionDate,
+                tempomatCalculationData.totalItemCount
+            )
 
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -58,8 +89,9 @@ export class UserProgressService extends ServiceBase {
             .getOneOrNull();
 
         return {
-            recommendedItemsPerDay: courseProgressView?.recommendedItemsPerDay ?? 0,
-            recommendedItemsPerWeek: courseProgressView?.recommendedItemsPerWeek ?? 0,
+            isDeadlineSet: !!tempomatCalculationData.requiredCompletionDate,
+            recommendedItemsPerDay: recommendedItemsPerDay ?? 0,
+            recommendedItemsPerWeek: recommendedItemsPerDay ? recommendedItemsPerDay * 7 : 0,
             completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
             completedToday: currentDailyCompletedView?.completedItemCount ?? 0
         } as RecomendedItemQuotaDTO;
@@ -69,12 +101,24 @@ export class UserProgressService extends ServiceBase {
 
         const userId = principalId.toSQLValue();
 
-        const estimationView = await this
-            ._ormService
-            .query(UserCourseCompletionCurrentView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
+        const tempomatCalculationData = await this._ormService
+            .getRepository(TempomatCalculationDataView)
+            .findOneOrFail({
+                where: {
+                    courseId,
+                    userId
+                }
+            });
+
+        const previsionedCompletionDate = this._tempomatService
+            .calculatePrevisionedDate(
+                tempomatCalculationData.originalPrevisionedCompletionDate,
+                tempomatCalculationData.totalItemCount,
+                tempomatCalculationData.totalCompletedItemCount,
+                tempomatCalculationData.startDate,
+                tempomatCalculationData.tempomatMode,
+                tempomatCalculationData.tempomatAdjustmentValue
+            )
 
         const dailyViews = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -83,9 +127,9 @@ export class UserProgressService extends ServiceBase {
             .getMany();
 
         const dto = {
-            estimatedCompletionDate: estimationView.previsionedCompletionDate,
-            estimatedLengthInDays: estimationView.previsionedLengthDays,
-            startDate: estimationView.startDate,
+            estimatedCompletionDate: previsionedCompletionDate,
+            estimatedLengthInDays: previsionedCompletionDate ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate) : null,
+            startDate: tempomatCalculationData.startDate,
             days: dailyViews
                 .map((x, index) => {
 

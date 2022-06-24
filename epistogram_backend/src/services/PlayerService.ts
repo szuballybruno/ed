@@ -93,6 +93,9 @@ export class PlayerService extends ServiceBase {
         const userCourseBridge = await this._userCourseBridgeService
             .getUserCourseBridgeOrFailAsync(userId, courseVersionId!);
 
+        if (userCourseBridge && userCourseBridge.startDate === null)
+            await this._userCourseBridgeService.setCourseStartDateAsync(principalId, courseId)
+
         // get new answer session
         const answerSessionId = itemType === 'module'
             ? null

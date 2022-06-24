@@ -1,11 +1,12 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { TempomatModeType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
     expression: ''
 })
-export class UserCourseCompletionCurrentView {
+export class TempomatCalculationDataView {
 
     @ViewColumn()
     @XViewColumn()
@@ -17,41 +18,29 @@ export class UserCourseCompletionCurrentView {
 
     @ViewColumn()
     @XViewColumn()
-    previsionedItemsPerDay: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    previsionedCompletionDate: Date;
-
-    @ViewColumn()
-    @XViewColumn()
-    previsionedLengthDays: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    requiredLengthDays: number;
-
-    @ViewColumn()
-    @XViewColumn()
     requiredCompletionDate: Date;
 
     @ViewColumn()
     @XViewColumn()
-    requiredRemainingDays: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    requiredItemsPerDay: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    requiredItemsCompletedByNow: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    requiredPercentCompletedByNow: number;
-
-    @ViewColumn()
-    @XViewColumn()
     startDate: Date;
+
+    @ViewColumn()
+    @XViewColumn()
+    tempomatMode: TempomatModeType;
+
+    @ViewColumn()
+    @XViewColumn()
+    originalPrevisionedCompletionDate: Date;
+
+    @ViewColumn()
+    @XViewColumn()
+    totalItemCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    totalCompletedItemCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    tempomatAdjustmentValue: number;
 }

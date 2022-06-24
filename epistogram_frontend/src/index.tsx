@@ -23,6 +23,8 @@ import { ArrayBuilder } from './static/frontendHelpers';
 import './styles/globalCssTypes';
 import './styles/index.css';
 import './styles/globalCssClasses.css';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 
 // react query
 const queryClient = new QueryClient();
@@ -32,39 +34,41 @@ const app = (
         <InitFrame>
             <ChakraThemeFrame>
                 <MUIThemeFrame>
-                    <XDialogHost>
-                        <QueryClientProvider client={queryClient}>
-                            <PreventMobileFrame>
-                                <BrowserRouter>
-                                    <TitleSetterFrame>
-                                        <EpistoRoutes
-                                            renderRoutes={new ArrayBuilder<RenderRoute>()
+                    <LocalizationProvider dateAdapter={AdapterLuxon}>
+                        <XDialogHost>
+                            <QueryClientProvider client={queryClient}>
+                                <PreventMobileFrame>
+                                    <BrowserRouter>
+                                        <TitleSetterFrame>
+                                            <EpistoRoutes
+                                                renderRoutes={new ArrayBuilder<RenderRoute>()
 
-                                                // under maintanance
-                                                .addIf(Environment.isUnderMaintenance, {
-                                                    element: <UnderMaintanence />,
-                                                    route: applicationRoutes.matchAll,
-                                                })
-                                                .addIf(!Environment.isUnderMaintenance, {
-                                                    route: applicationRoutes.matchAll,
-                                                    element: (
-                                                        <AuthenticationFrame>
-                                                            <ErrorDialogFrame>
-                                                                <NotificationsFrame>
-                                                                    <EventListener>
-                                                                        <MainRouting />
-                                                                    </EventListener>
-                                                                </NotificationsFrame>
-                                                            </ErrorDialogFrame>
-                                                        </AuthenticationFrame>
-                                                    ),
-                                                })
-                                                .getArray()} />
-                                    </TitleSetterFrame>
-                                </BrowserRouter>
-                            </PreventMobileFrame>
-                        </QueryClientProvider>
-                    </XDialogHost>
+                                                    // under maintanance
+                                                    .addIf(Environment.isUnderMaintenance, {
+                                                        element: <UnderMaintanence />,
+                                                        route: applicationRoutes.matchAll,
+                                                    })
+                                                    .addIf(!Environment.isUnderMaintenance, {
+                                                        route: applicationRoutes.matchAll,
+                                                        element: (
+                                                            <AuthenticationFrame>
+                                                                <ErrorDialogFrame>
+                                                                    <NotificationsFrame>
+                                                                        <EventListener>
+                                                                            <MainRouting />
+                                                                        </EventListener>
+                                                                    </NotificationsFrame>
+                                                                </ErrorDialogFrame>
+                                                            </AuthenticationFrame>
+                                                        ),
+                                                    })
+                                                    .getArray()} />
+                                        </TitleSetterFrame>
+                                    </BrowserRouter>
+                                </PreventMobileFrame>
+                            </QueryClientProvider>
+                        </XDialogHost>
+                    </LocalizationProvider>
                 </MUIThemeFrame>
             </ChakraThemeFrame>
         </InitFrame>

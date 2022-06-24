@@ -1,26 +1,30 @@
-import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
-import { EmailService } from './EmailService';
-import { toSignupDataDTO } from './misc/mappings';
-import { SQLFunctionsService } from './sqlServices/FunctionsService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
+import { SignupDataDTO } from '../shared/dtos/SignupDataDTO';
 import { PrincipalId } from '../utilities/ActionParams';
+import { EmailService } from './EmailService';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class SignupService {
 
     private _emailService: EmailService;
     private _sqlFuncService: SQLFunctionsService;
     private _ormService: ORMConnectionService;
+    private _mapperService: MapperService;
 
     constructor(
         emailService: EmailService,
         sqlFuncService: SQLFunctionsService,
-        ormService: ORMConnectionService) {
+        ormService: ORMConnectionService,
+        mapperService: MapperService) {
 
         this._emailService = emailService;
         this._sqlFuncService = sqlFuncService;
         this._ormService = ormService;
+        this._mapperService = mapperService;
     }
 
     async answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO) {
@@ -45,6 +49,6 @@ export class SignupService {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return toSignupDataDTO(questions, userSignupCompltedView.isSignupComplete);
+        return this._mapperService.mapTo(SignupDataDTO, [questions, userSignupCompltedView.isSignupComplete]);
     }
 }

@@ -4,6 +4,7 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { CourseItemService } from './CourseItemService';
 import { MapperService } from './MapperService';
+import { log } from './misc/logger';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -118,6 +119,71 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 id: userCourseBridge.id,
                 courseMode: mode
             } as UserCourseBridge);
+    }
+    /**
+     * Sets the course mode (beginner / advanced).
+     * 
+     * @param userId 
+     * @param courseId 
+     * @param mode 
+     */
+    async setCourseStartDateAsync(userId: PrincipalId, courseId: number) {
+
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+
+        if (!userCourseBridge)
+            throw new Error('User course bridge not found!');
+
+        await this._ormService
+            .getRepository(UserCourseBridge)
+            .save({
+                courseId: courseId,
+                userId: userId.toSQLValue(),
+                id: userCourseBridge.id,
+                startDate: new Date(Date.now())
+            } as UserCourseBridge);
+    }
+
+    /**
+     * Sets the requiredCompletionDate for a course. Either updates the
+     * existing userCourseBridge, or creates a new one.
+     * 
+     * @param principalId 
+     * @param courseId 
+     * @param requiredCompletionDate 
+     * @returns 
+     */
+    async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: number, requiredCompletionDate: string) {
+
+        const userId = principalId.toSQLValue();
+
+        const userCourseBridge = await this
+            .getUserCourseBridgeAsync(userId, courseId);
+
+        if (userCourseBridge) {
+
+            log('User course bridge exists, updating deadline...')
+
+            return this.updateCompletionDate(userCourseBridge.id, new Date(requiredCompletionDate));
+        }
+
+        try {
+
+            log('User course bridge is not exists, creating...')
+
+            await this.createNewCourseBridge(courseId, userId, null, 'created')
+        } catch (e) {
+
+            throw new Error('Failed to create new user course bridge')
+        }
+
+        const newUserCourseBridge = await this
+            .getUserCourseBridgeAsync(userId, courseId);
+
+        if (!newUserCourseBridge)
+            throw new Error('Failed to find new user course bridge')
+
+        return this.updateCompletionDate(newUserCourseBridge.id, new Date(requiredCompletionDate));
     }
 
     /**
@@ -258,4 +324,12 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         //         .where('courseId = :courseId', { courseId })
         //         .execute();
     };
+
+    private updateCompletionDate = async (userCourseBridgeId: number, requiredCompletionDate: Date) => {
+        return this.updateAsync({
+            id: userCourseBridgeId,
+            requiredCompletionDate: requiredCompletionDate,
+            tempomatMode: 'strict' // Automatically updating tempomat mode to strict
+        })
+    }
 }

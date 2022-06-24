@@ -1,4 +1,5 @@
 import generatePassword from 'password-generator';
+import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
@@ -7,6 +8,7 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { getFullName, throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
+import { AuthorizationService } from './AuthorizationService';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
@@ -22,6 +24,7 @@ export class RegistrationService extends ServiceBase {
     private _emailService: EmailService;
     private _userService: UserService;
     private _authenticationService: AuthenticationService;
+    private _authorizationService: AuthorizationService;
     private _tokenService: TokenService;
     private _roleService: RoleService;
 
@@ -30,6 +33,7 @@ export class RegistrationService extends ServiceBase {
         emailService: EmailService,
         userService: UserService,
         authenticationService: AuthenticationService,
+        authorizationService: AuthorizationService,
         tokenService: TokenService,
         ormService: ORMConnectionService,
         roleService: RoleService,
@@ -39,6 +43,7 @@ export class RegistrationService extends ServiceBase {
 
         this._userService = userService;
         this._authenticationService = authenticationService;
+        this._authorizationService = authorizationService
         this._activationCodeService = acs;
         this._emailService = emailService;
         this._tokenService = tokenService;
@@ -49,6 +54,12 @@ export class RegistrationService extends ServiceBase {
     inviteUserAsync = async (principalId: PrincipalId, dto: CreateInvitedUserDTO) => {
 
         const userId = principalId.toSQLValue();
+
+        if (!dto.companyId)
+            return
+
+        const companyId = dto.companyId
+
         // const hasSetUserCompanyPermission = this._roleService
         //     .findPermissionAsync(userId,  'canSetInvitedUserCompany');
 
@@ -59,13 +70,12 @@ export class RegistrationService extends ServiceBase {
         //     : currentUser.companyId;
 
         // TODO
-        const companyId = 1;
 
         if (!companyId)
             throw new VerboseError(
                 `Current user is not an administrator, 
-                but has rights to add users, but has no company, 
-                in which he/she could add users.`, 'bad request');
+                        but has rights to add users, but has no company,  
+                        in which he/she could add users.`, 'bad request');
 
         // create user
         await this
@@ -74,7 +84,6 @@ export class RegistrationService extends ServiceBase {
                 jobTitleId: dto.jobTitleId,
                 firstName: dto.firstName,
                 lastName: dto.lastName,
-                roleId: dto.roleId,
                 companyId: companyId,
             });
     };
@@ -108,7 +117,6 @@ export class RegistrationService extends ServiceBase {
             firstName,
             lastName,
             companyId: activationCodeEntity.companyId,
-            roleId: RoleIdEnum.user,
             jobTitleId: JobTitleIdEnum.genericUser
         });
 
@@ -197,6 +205,15 @@ export class RegistrationService extends ServiceBase {
         await this._userService
             .setUserInivitationDataAsync(userId, password);
 
+        // Assign ACCESS_APPLICATION permission to user
+        await this
+            ._ormService
+            .getRepository(PermissionAssignmentBridge)
+            .insert({
+                permissionId: 35,
+                assigneeUserId: userId
+            })
+
         // get auth tokens 
         const tokens = await this._authenticationService
             .getUserLoginTokens(user);
@@ -224,7 +241,6 @@ export class RegistrationService extends ServiceBase {
             firstName: string;
             lastName: string;
             companyId: number;
-            roleId: number;
             jobTitleId: number;
             isGod?: boolean;
         },

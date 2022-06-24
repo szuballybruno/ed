@@ -1,6 +1,5 @@
-import { Flex, Text } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { fontSize } from '@mui/material/node_modules/@mui/system';
 import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';

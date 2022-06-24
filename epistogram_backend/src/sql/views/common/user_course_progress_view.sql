@@ -1,6 +1,17 @@
 SELECT
 	sq.*,
-	sq.previsioned_percent_completed_by_now - sq.completed_percentage lag_behind_percentage,
+
+	-- Calculate lag behind either from 
+	--     start_date to current_date and start_date to previsioned progress 
+	--     or required progress
+	CASE
+		WHEN ucb.required_completion_date IS NOT NULL AND ucb.start_date IS NOT NULL
+			THEN sq.required_percent_completed_by_now - sq.completed_percentage
+		WHEN ucb.required_completion_date IS NULL AND ucb.start_date IS NOT NULL
+			THEN sq.previsioned_percent_completed_by_now - sq.completed_percentage
+		ELSE null
+	END lag_behind_percentage,
+
 	ucb.tempomat_mode
 FROM 
 (
@@ -8,6 +19,7 @@ FROM
 		ucccv.user_id,
 		ucccv.course_id,
 		ucccv.previsioned_percent_completed_by_now,
+		ucccv.required_percent_completed_by_now,
 		COALESCE(ucpa.completed_percentage, 0) completed_percentage,
 		ucpa.remaining_item_count,
 		ucccv.previsioned_length_days,

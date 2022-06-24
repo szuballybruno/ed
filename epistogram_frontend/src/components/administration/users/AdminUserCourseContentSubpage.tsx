@@ -1,7 +1,8 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseBriefData } from '../../../services/api/courseApiService';
+import { useCourseBriefData, useSetRequiredCompletionDate } from '../../../services/api/courseApiService';
 import { useEditUserData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { useIntParam } from '../../../static/locationHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
@@ -22,10 +23,27 @@ export const AdminUserCourseContentSubpage = (props: {
     const userId = useIntParam('userId')!;
 
     const { userEditData } = useEditUserData(userId);
+    const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = useSetRequiredCompletionDate();
 
     const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
 
     const { navigate } = useNavigation();
+    const showError = useShowErrorDialog();
+
+    const handleSaveRequiredCompletionDate = (courseId: number | null, requiredCompletionDate: Date | null) => {
+
+        if (!courseId || !requiredCompletionDate)
+            showError('Hiba történt');
+
+        console.log(requiredCompletionDate!.toISOString());
+
+        setRequiredCourseCompletionDateAsync({
+            courseId: courseId!,
+            requiredCourseCompletionDate: requiredCompletionDate!.toISOString()
+        });
+
+
+    };
 
     return <AdminBreadcrumbsHeader>
 
@@ -107,7 +125,8 @@ export const AdminUserCourseContentSubpage = (props: {
             <AdminUserCoursesDataGridControl
                 handleMoreButton={
                     (courseId: number | null) => dialogLogic.openDialog({ params: { courseId: courseId } })
-                } />
+                }
+                handleSaveRequiredCompletionDate={handleSaveRequiredCompletionDate} />
         </AdminSubpageHeader >
     </AdminBreadcrumbsHeader >;
 };
