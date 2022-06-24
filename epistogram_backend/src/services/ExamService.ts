@@ -58,11 +58,11 @@ export class ExamService extends QueryServiceBase<ExamData> {
      * Returns an exam player dto that contains 
      * all the data necessary to play an exam.
      */
-    getExamPlayerDTOAsync = async (userId: number, examVersionId: number) => {
+    getExamPlayerDTOAsync = async (userId: number, examId: number) => {
 
         const examView = await this._ormService
-            .query(ExamPlayerDataView, { examVersionId, userId })
-            .where('examVersionId', '=', 'examVersionId')
+            .query(ExamPlayerDataView, { examId, userId })
+            .where('examId', '=', 'examId')
             .and('userId', '=', 'userId')
             .getSingle();
 

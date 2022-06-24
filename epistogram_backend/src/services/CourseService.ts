@@ -343,7 +343,7 @@ export class CourseService {
     /**
      * Returns the course id from an item code.
      */
-    async getCourseIdByPlaylistItemCodeAsync(playlistItemCode: string) {
+    async getCourseIdOrFailAsync(playlistItemCode: string) {
 
         const view = await this._ormService
             .query(CourseItemPlaylistView, { playlistItemCode })
@@ -351,7 +351,7 @@ export class CourseService {
             .or('moduleCode', '=', 'playlistItemCode')
             .getSingle();
 
-        view.courseId;
+        return view.courseId;
     }
 
     /**

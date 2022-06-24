@@ -24,6 +24,8 @@ import { PlaybackService } from './PlaybackService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { CourseItemView } from '../models/views/CourseItemView';
 
 export class PlayerService extends ServiceBase {
 
@@ -68,41 +70,33 @@ export class PlayerService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         // validate request
-        const { courseVersionId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
-
-        //
-        // GET COURSE ID 
-        const courseId = (await this._ormService
-            .query(LatestCourseVersionView, { courseVersionId })
-            .where('versionId', '=', 'courseVersionId')
-            .getSingle())
-            .courseId;
+        const { courseId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
 
         // set current course 
         await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseVersionId!, 'watch', validItemCode);
+            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
         // course items list
         const modules = await this._courseService
-            .getPlaylistModulesAsync(userId, courseVersionId!);
+            .getPlaylistModulesAsync(userId, courseId);
 
         // get course item dto
-        const { itemVersionId, itemType } = readItemCode(validItemCode);
+        const { itemId, itemType } = readItemCode(validItemCode);
 
         const videoDTO = itemType === 'video' ? await this
-            ._getVideoPlayerDataDTOAsync(userId, itemVersionId) : null;
+            ._getVideoPlayerDataDTOAsync(userId, itemId) : null;
 
         const examDTO = itemType === 'exam' ? await this._examService
-            .getExamPlayerDTOAsync(userId, itemVersionId) : null;
+            .getExamPlayerDTOAsync(userId, itemId) : null;
 
         const moduleDetailedDTO = itemType === 'module' ? await this._moduleService
-            .getModuleDetailedDTOAsync(itemVersionId) : null;
+            .getModuleDetailedDTOAsync(itemId) : null;
 
         //
         // SET START DATE 
         // SET WATCH STAGE
         const userCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeOrFailAsync(userId, courseVersionId!);
+            .getUserCourseBridgeOrFailAsync(userId, courseId);
 
         if (!userCourseBridge.startDate)
             await this._userCourseBridgeService
@@ -125,7 +119,7 @@ export class PlayerService extends ServiceBase {
             modulePlayerData: moduleDetailedDTO,
             answerSessionId: answerSessionId,
             courseMode: userCourseBridge.courseMode,
-            courseId: courseVersionId!,
+            courseId: courseId,
             currentPlaylistItemCode: requestedItemCode,
             modules: modules,
             nextPlaylistItemCode,
@@ -133,40 +127,25 @@ export class PlayerService extends ServiceBase {
         });
     };
 
-    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
-
-        // get current course id
-        const courseVersionId = await this._courseService
-            .getCourseIdByPlaylistItemCodeAsync(requestedPlaylistItemCode);
-
-        if (!courseVersionId)
-            throw new Error('Cannot find courseId');
-
-        // get course 
-        const courseVersion = await this._ormService
-            .query(CourseVersion, { courseVersionId })
-            .leftJoin(Course, x => x
-                .on('id', '=', 'courseId', CourseVersion))
-            .allowDeleted()
-            .where('id', '=', 'courseVersionId')
-            .getSingle();
-
-        // authorize 
-        /*         await this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId: courseVersion.courseId }); */
-
-        if (courseVersion?.course?.deletionDate)
-            throw new VerboseError('Course has been deleted!', 'deleted');
-
-        // get valid course item 
-        const validItemCode = await this._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseVersionId, requestedPlaylistItemCode);
-
-        return { validItemCode, courseVersionId }
-    }
-
     //
     // PRIVATE
     //
+
+    /**
+     * Validates request 
+     */
+    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
+
+        // get current course id
+        const courseId = await this._courseService
+            .getCourseIdOrFailAsync(requestedPlaylistItemCode);
+
+        // get valid course item 
+        const validItemCode = await this
+            ._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseId, requestedPlaylistItemCode);
+
+        return { validItemCode, courseId };
+    }
 
     /**
      * Gets the next item in modules list 
@@ -256,7 +235,14 @@ export class PlayerService extends ServiceBase {
     /**
      * Gets teh video watch dto 
      */
-    private async _getVideoPlayerDataDTOAsync(userId: number, videoVersionId: number) {
+    private async _getVideoPlayerDataDTOAsync(userId: number, videoId: number) {
+
+        // get latest video version id
+        const videoVersionId = (await this._ormService
+            .query(CourseItemView, { videoId })
+            .where('videoId', '=', 'videoId')
+            .getSingle())
+            .videoVersionId!;
 
         const maxWatchedSeconds = await this._playbackService
             .getMaxWatchedSeconds(userId, videoVersionId);

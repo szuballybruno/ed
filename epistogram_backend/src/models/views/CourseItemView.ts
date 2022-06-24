@@ -12,9 +12,15 @@ export class CourseItemView {
     
     @XViewColumn()
     videoVersionId: number | null;
+    
+    @XViewColumn()
+    videoId: number | null;
 
     @XViewColumn()
     examVersionId: number | null;
+
+    @XViewColumn()
+    examId: number | null;
 
     @XViewColumn()
     versionCode: string;
