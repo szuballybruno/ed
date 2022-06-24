@@ -1,7 +1,7 @@
 import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
-import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
 import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
+import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostData } from '../core/httpClient';
@@ -18,12 +18,12 @@ export const usePlayerData = (descriptorCode: string) => {
     };
 };
 
-export const useCourseItemList = (descriptorCode: string, isEnabled: boolean) => {
+export const usePlaylistData = (descriptorCode: string, isEnabled: boolean) => {
 
-    const qr = useReactQuery2<CourseItemDTO[]>(apiRoutes.player.getCourseItems, { descriptorCode }, isEnabled);
+    const qr = useReactQuery2<PlaylistItemDTO[]>(apiRoutes.player.getCourseItems, { descriptorCode }, isEnabled);
 
     return {
-        courseItemList: qr.data as CourseItemDTO[] ?? [],
+        courseItemList: qr.data as PlaylistItemDTO[] ?? [],
         courseItemListStatus: qr.state,
         courseItemListError: qr.error,
         refetchCourseItemList: qr.refetch

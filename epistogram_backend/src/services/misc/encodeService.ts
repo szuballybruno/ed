@@ -1,10 +1,12 @@
+import { Exam } from '../../models/entity/exam/Exam';
+import { Video } from '../../models/entity/video/Video';
 import { CourseItemType } from '../../shared/types/sharedTypes';
 import { withValue } from '../../utilities/helpers';
 import { base64Decode, base64Encode } from './base64Service';
 
-export const getItemCode = (itemId: number, itemType: CourseItemType) => {
+export const getItemCode = (item: Video | Exam, itemType: CourseItemType) => {
 
-    const asStr = itemId + '@' + itemType;
+    const asStr = item.id + '@' + itemType;
     return base64Encode(asStr);
 };
 

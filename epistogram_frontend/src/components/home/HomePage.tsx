@@ -7,7 +7,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { CourseItemListElement } from '../courseItemList/CourseItemListElement';
+import { PlaylistElement } from '../courseItemList/CourseItemListElement';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -54,10 +54,10 @@ const HomePage = () => {
                         mt="5px">
 
                         {(pageDTO.currentCourseProgress.nextItems ?? [])
-                            .map((x, index) => (
-                                <CourseItemListElement
+                            .map((playlistItem, index) => (
+                                <PlaylistElement
                                     key={index}
-                                    courseItem={x} />
+                                    playlistItem={playlistItem} />
                             ))}
                     </Flex>
                 </Flex>}

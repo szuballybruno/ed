@@ -1,11 +1,11 @@
-import { CourseItemDTO } from './CourseItemDTO';
+import { PlaylistItemDTO } from './PlaylistItemDTO';
 import { CourseItemStateType } from '../types/sharedTypes';
 
 export class ModuleDTO {
     id: number;
     name: string;
     orderIndex: number;
-    items: CourseItemDTO[];
+    items: PlaylistItemDTO[];
     state: CourseItemStateType;
     code: string;
 }

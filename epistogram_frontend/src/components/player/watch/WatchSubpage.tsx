@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePlayerData } from '../../../services/api/playerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
@@ -15,12 +15,13 @@ import { ExamPlayer } from './ExamPlayer';
 import { ModuleView } from './ModuleView';
 import { WatchView } from './WatchView';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
 
 export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic('warn3');
     const { navigateToPlayer } = useNavigation();
-    const descriptorCode = useStringParam('descriptorCode')!;
+    const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
     // get player page data
@@ -29,35 +30,44 @@ export const WatchSubpage = () => {
         playerDataStatus,
         playerDataError,
         refetchPlayerData
-    } = usePlayerData(descriptorCode);
+    } = usePlayerData(urlPlaylistItemCode);
 
-    // calc
-    const isDeleted = playerDataError?.code === 'deleted';
-    const video = playerData?.video;
-    const exam = playerData?.exam;
-    const module = playerData?.module;
-    const answerSessionId = playerData?.answerSessionId;
-    const courseMode = playerData?.mode ?? 'beginner';
-    const courseId = playerData?.courseId;
-    const courseModules = playerData?.modules ?? [];
-    const nextItemCode = playerData?.nextItemCode;
-    const title = video?.title || exam?.title || module?.name;
-    const currentItemCode = playerData?.courseItemCode ?? '';
-    const nextItemState = playerData?.nextItemState ?? null;
+    const playerDataWithDefaults = useMemo(() => (playerData ?? ({
+        courseMode: 'beginner',
+        currentPlaylistItemCode: '',
+        nextPlaylistItemState: null,
+        modules: [] as any
+    } as PlayerDataDTO)), [playerData]);
+
+    const {
+        examPlayerData,
+        videoPlayerData,
+        modulePlayerData,
+        answerSessionId,
+        courseMode,
+        courseId,
+        modules,
+        nextPlaylistItemCode,
+        currentPlaylistItemCode,
+        nextPlaylistItemState
+    } = playerDataWithDefaults;
+
+    const title = videoPlayerData?.title || examPlayerData?.title || modulePlayerData?.name;
     const isPlayerLoaded = playerDataStatus === 'success';
+    const isDeleted = playerDataError?.code === 'deleted';
 
     // redirect if current item should be locked 
     useEffect(() => {
 
-        if (!playerData?.courseItemCode)
+        if (currentPlaylistItemCode)
             return;
 
-        if (playerData.courseItemCode === descriptorCode)
+        if (currentPlaylistItemCode === urlPlaylistItemCode)
             return;
 
-        console.log('Invalid course item code: ' + descriptorCode);
-        navigateToPlayer(playerData.courseItemCode);
-    }, [playerData?.courseItemCode]);
+        console.log('Invalid course item code: ' + urlPlaylistItemCode);
+        navigateToPlayer(currentPlaylistItemCode);
+    }, [currentPlaylistItemCode]);
 
     useEffect(() => {
 
@@ -84,10 +94,10 @@ export const WatchSubpage = () => {
 
     const handleContinueCourse = () => {
 
-        console.log('Continue course, next item code: ' + nextItemCode);
+        console.log('Continue course, next item code: ' + nextPlaylistItemCode);
 
-        if (nextItemCode)
-            navigateToPlayer(nextItemCode);
+        if (nextPlaylistItemCode)
+            navigateToPlayer(nextPlaylistItemCode);
     };
 
     return (
@@ -129,28 +139,31 @@ export const WatchSubpage = () => {
                             overflowY='scroll'
                             className="whall" >
 
-                            {video && <WatchView
+                            {/* VIDEO  */}
+                            {videoPlayerData && <WatchView
                                 isPlayerLoaded={isPlayerLoaded}
-                                currentItemCode={currentItemCode}
-                                nextItemState={nextItemState}
+                                currentItemCode={currentPlaylistItemCode}
+                                nextItemState={nextPlaylistItemState}
                                 courseId={courseId!}
                                 courseMode={courseMode}
                                 refetchPlayerData={refetchPlayerData}
                                 answerSessionId={answerSessionId!}
-                                videoPlayerData={video}
-                                modules={courseModules}
+                                videoPlayerData={videoPlayerData}
+                                modules={modules}
                                 continueCourse={handleContinueCourse}
                                 navigateToCourseItem={navigateToCourseItem} />}
 
-                            {exam && <ExamPlayer
+                            {/* EXAM */}
+                            {examPlayerData && <ExamPlayer
                                 continueCourse={handleContinueCourse}
                                 answerSessionId={answerSessionId!}
                                 setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                                 courseId={courseId!}
-                                exam={exam} />}
+                                exam={examPlayerData} />}
 
-                            <ModuleView module={module}
-                                startModule={handleContinueCourse} />
+                            {/* MODULE */}
+                            {modulePlayerData && <ModuleView module={modulePlayerData}
+                                startModule={handleContinueCourse} />}
                         </Box>
 
                         {/* right sidebar */}
@@ -173,11 +186,11 @@ export const WatchSubpage = () => {
                                 minWidth="420px">
 
                                 <CourseItemSelector
-                                    currentItemCode={currentItemCode}
-                                    nextItemState={nextItemState}
+                                    currentItemCode={currentPlaylistItemCode}
+                                    nextItemState={nextPlaylistItemState}
                                     courseId={courseId!}
                                     mode={courseMode}
-                                    modules={courseModules}
+                                    modules={modules}
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData} />
                             </Flex>}

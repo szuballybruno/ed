@@ -233,7 +233,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         const currentBridge = await this._ormService
             .query(UserCourseBridge, { userId })
             .where('userId', '=', 'userId')
-            .and('isCurrent', 'IS', 'true')
+            .and('isCurrent', '=', 'true')
             .getSingle();
 
         return currentBridge?.currentItemCode ?? null;

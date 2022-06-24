@@ -28,7 +28,10 @@ latest_course_items AS
 	SELECT 
 		civ.*,
 		(SELECT encode((civ.module_id || '@module')::bytea, 'base64')) module_code,
-		(SELECT encode((civ.version_code || '@video')::bytea, 'base64')) item_code
+		CASE WHEN civ.video_id IS NULL
+			THEN (SELECT encode((civ.exam_id || '@exam')::bytea, 'base64'))
+			ELSE (SELECT encode((civ.video_id || '@video')::bytea, 'base64')) 
+		END playlist_item_code
 	FROM public.latest_course_version_view lcvi
 	
 	LEFT JOIN public.course_item_view civ
@@ -43,7 +46,7 @@ states AS
 		civ.exam_id,
 		ucb.user_id,
 		CASE 
-			WHEN ucb.current_item_code = civ.item_code
+			WHEN ucb.current_item_code = civ.playlist_item_code
 				THEN 'current'
 			WHEN ci.is_completed
 				THEN 'completed'

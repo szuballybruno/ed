@@ -28,6 +28,6 @@ export class Permission {
 
     // assingments
     @JoinColumn()
-    @OneToMany(_ => PermissionAssignmentBridge, x => x.permission)
+    @OneToMany(_ => PermissionAssignmentBridge, x => x.permissions)
     permissionAssignmentBridges: PermissionAssignmentBridge[];
 }

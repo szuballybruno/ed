@@ -77,7 +77,7 @@ import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedV
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { CourseItemPlaylistView } from '../../models/views/CourseItemStateView';
+import { CourseItemPlaylistView } from '../../models/views/CourseItemPlaylistView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
@@ -160,7 +160,6 @@ import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questio
 import { getQuestionSeedData } from '../../sql/seed/seed_questions';
 import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
 import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_answer';
-import { getSeedQuestions } from '../../sql/seed/seed_questions';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
 import { getSeedQuestionVersions } from '../../sql/seed/seed_question_versions';
 import { getRolesSeedData } from '../../sql/seed/seed_roles';
@@ -176,8 +175,6 @@ import { getVideosSeedData } from '../../sql/seed/seed_videos';
 import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
 import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
-import { XDInjector } from '../../utilities/XDInjection/XDInjector';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { ExamVersionView } from '../../models/views/ExamVersionView';
@@ -185,9 +182,8 @@ import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { ModuleListView } from '../../models/views/ModuleListView';
 import { getUserCourseBridgeSeedData } from '../../sql/seed/seed_user_course_bridges';
 import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_video_progress_bridges';
-import { getVideoSeedData } from '../../sql/seed/seed_videos';
-import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -236,8 +232,8 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
         .add(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getSeedQuestionVersions], AnswerVersion)
         .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
-        .add(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideoSeedData], UserCourseBridge)
-        .add(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoSeedData], UserVideoProgressBridge)
+        .add(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData], UserCourseBridge)
+        .add(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
         .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
         .add(getPrequizUserAnswerSeedData, [getUserSeedData, getCourseSeedData, getPrequizQuestionsSeedData, getPrequizAnswersSeedData], PrequizUserAnswer)
@@ -310,8 +306,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'user_daily_course_item_progress_view', UserDailyCourseItemProgressView], // 1 user_weekly_course_item_progress_view
             ['common', 'user_course_progress_actual'], // 1 user_course_progress_view
             ['common', 'user_course_progress_view', UserCourseProgressView], // 1 user_course_stats_view
-            ['common', 'user_course_recommended_item_quota_view', UserCourseRecommendedItemQuotaView], // 1 user_course_stats_view
             ['common', 'user_video_practise_progress_view', UserVideoPractiseProgressView], // 1 user_video_practise_progress_view
+            ['common', 'tempomat_calculation_data_view', TempomatCalculationDataView],
             ['', 'user_session_daily_view', UserSessionDailyView],
             ['', 'signup_completed_view', SignupCompletedView],
             ['', 'daily_tip_view', DailyTipView],
@@ -324,7 +320,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['', 'pretest_result_view', PretestResultView],
             ['', 'user_daily_progress_view', UserDailyProgressView],
             ['', 'user_weekly_course_item_progress_view', UserWeeklyCourseItemProgressView],
-            ['', 'user_tempomat_adjustment_value_view', UserTempomatAdjustmentValueView],
             ['', 'role_list_view'],
             ['', 'company_view'],
             ['', 'assignable_permission_view'],
@@ -337,7 +332,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['stats', 'user_performance_view', UserPerformanceView],
             ['stats', 'user_engagement_view', UserEngagementView],
             ['stats', 'user_learning_overview_stats_view', UserLearningOverviewStatsView],
-            ['stats', 'user_course_stats_view', UserCourseStatsView],
+            // ['stats', 'user_course_stats_view', UserCourseStatsView],
             ['stats', 'user_video_stats_view', UserVideoStatsView],
             ['stats', 'user_exam_stats_view', UserExamStatsView],
             ['stats', 'user_spent_time_ratio_view', UserSpentTimeRatioView],
@@ -372,6 +367,10 @@ export const createDBSchema = (): XDBMSchemaType => {
             {
                 tableName: 'role',
                 name: 'role_constraint'
+            },
+            {
+                tableName: 'user_course_bridge',
+                name: 'single_current_course_bridge_constraint'
             }
         ],
 

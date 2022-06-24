@@ -24,7 +24,6 @@ import { PretestController } from './../api/PretestController';
 import { QuestionController } from './../api/QuestionController';
 import { RegistrationController } from './../api/RegistrationController';
 import { RoleController } from './../api/RoleController';
-import { ScheduledJobTriggerController } from './../api/ScheduledJobTriggerController';
 import { ShopController } from './../api/ShopController';
 import { SignupController } from './../api/SignupController';
 import { TempomatController } from './../api/TempomatController';
@@ -39,8 +38,9 @@ import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddl
 import { ActionParams } from './../utilities/ActionParams';
 import { onActionError, onActionSuccess } from './../utilities/apiHelpers';
 import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
+import { ServicesType } from './servicesDI';
 
-export const initTurboExpress = (globalConfig: GlobalConfiguration, services: any, controllers: any) => {
+export const initTurboExpress = (globalConfig: GlobalConfiguration, services: ServicesType, controllers: any) => {
 
     const turboExpress = new TurboExpressBuilder<ActionParams>()
         .setPort(globalConfig.misc.hostPort)
@@ -63,7 +63,6 @@ export const initTurboExpress = (globalConfig: GlobalConfiguration, services: an
         .addController(ZAuthenticationController, controllers.authenticationController)
         .addController(ExamController, controllers.examController)
         .addController(RegistrationController, controllers.registrationController)
-        .addController(ScheduledJobTriggerController, controllers.scheduledJobTriggerController)
         .addController(TempomatController, controllers.tempomatController)
         .addController(DailyTipController, controllers.dailyTipController)
         .addController(PersonalityAssessmentController, controllers.personalityAssessmentController)

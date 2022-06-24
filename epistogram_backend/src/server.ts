@@ -1,11 +1,13 @@
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
+import { MapperService } from './services/MapperService';
 import { createDBSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { initializeMappings } from './services/misc/mappings';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
+import { UrlService } from './services/UrlService';
 import './shared/logic/jsExtensions';
 import { instatiateControllers } from './startup/controllersDI';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
@@ -40,7 +42,7 @@ const main = async () => {
 
     // 
     // INIT
-    initializeMappings(services.urlService.getAssetUrl, services.mapperService);
+    initializeMappings(services.getService(UrlService).getAssetUrl, services.getService(MapperService));
     await services.getService(DbConnectionService).initializeConnectionAsync();
 
     // FASZA LESZ, IGY FOG MENNI A TRANSACTION

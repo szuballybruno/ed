@@ -5,13 +5,13 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
-import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
 import { ModuleDTO } from '../../shared/dtos/ModuleDTO';
+import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { CollapseItem } from '../universal/CollapseItem';
 import { FlexList } from '../universal/FlexList';
-import { CourseItemListElement } from './CourseItemListElement';
+import { PlaylistElement } from './CourseItemListElement';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
@@ -36,7 +36,7 @@ export const CourseItemList = (props: {
 
     const currentItem = modules
         .flatMap(x => x.items)
-        .filter(x => x.state === 'current')[0] as CourseItemDTO | null;
+        .filter(x => x.state === 'current')[0] as PlaylistItemDTO | null;
 
     const isCurrentExpanded = expandedNodeIds
         .some(x => x === currentModule?.id);
@@ -151,9 +151,9 @@ export const CourseItemList = (props: {
 
                             {module
                                 .items
-                                .map((courseItem, index) => <CourseItemListElement
+                                .map((playlistItem, index) => <PlaylistElement
                                     key={index}
-                                    courseItem={courseItem} />)}
+                                    playlistItem={playlistItem} />)}
                         </FlexList>
                     </CollapseItem>;
                 })}

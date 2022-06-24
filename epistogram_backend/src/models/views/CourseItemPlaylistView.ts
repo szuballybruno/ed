@@ -62,12 +62,8 @@ export class CourseItemPlaylistView {
 
     @ViewColumn()
     @XViewColumn()
-    itemCode: string;
-    /* 
-        @ViewColumn()
-        @XViewColumn()
-        courseMode: CourseModeType;
-     */
+    playlistItemCode: string;
+    
     @ViewColumn()
     @XViewColumn()
     moduleIsCurrent: boolean;

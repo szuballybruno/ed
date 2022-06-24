@@ -3,13 +3,14 @@ import { Course } from '../models/entity/course/Course';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
-import { ModuleDTO } from '../shared/dtos/ModuleDTO';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
+import { instantiate, throwNotImplemented } from '../utilities/helpers';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
@@ -69,13 +70,21 @@ export class PlayerService extends ServiceBase {
         // validate request
         const { courseVersionId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
 
+        //
+        // GET COURSE ID 
+        const courseId = (await this._ormService
+            .query(LatestCourseVersionView, { courseVersionId })
+            .where('versionId', '=', 'courseVersionId')
+            .getSingle())
+            .courseId;
+
         // set current course 
         await this._userCourseBridgeService
             .setCurrentCourse(userId, courseVersionId!, 'watch', validItemCode);
 
         // course items list
         const modules = await this._courseService
-            .getCourseModulesAsync(userId, courseVersionId!);
+            .getPlaylistModulesAsync(userId, courseVersionId!);
 
         // get course item dto
         const { itemVersionId, itemType } = readItemCode(validItemCode);
@@ -89,34 +98,39 @@ export class PlayerService extends ServiceBase {
         const moduleDetailedDTO = itemType === 'module' ? await this._moduleService
             .getModuleDetailedDTOAsync(itemVersionId) : null;
 
-        // get user course bridge
+        //
+        // SET START DATE 
+        // SET WATCH STAGE
         const userCourseBridge = await this._userCourseBridgeService
             .getUserCourseBridgeOrFailAsync(userId, courseVersionId!);
 
-        if (userCourseBridge && userCourseBridge.startDate === null)
-            await this._userCourseBridgeService.setCourseStartDateAsync(principalId, courseId)
+        if (!userCourseBridge.startDate)
+            await this._userCourseBridgeService
+                .setCourseStartDateAsync(principalId, courseId)
 
+        //
         // get new answer session
         const answerSessionId = itemType === 'module'
             ? null
             : await this._questionAnswerService
                 .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.videoVersionId);
 
-        // next 
-        const { nextItemCode, nextItemState } = this._getNextItem(modules, validItemCode);
+        //
+        // get next item 
+        const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
 
-        return {
-            video: videoDTO,
-            exam: examDTO,
-            module: moduleDetailedDTO,
+        return instantiate<PlayerDataDTO>({
+            videoPlayerData: videoDTO,
+            examPlayerData: examDTO,
+            modulePlayerData: moduleDetailedDTO,
             answerSessionId: answerSessionId,
-            mode: userCourseBridge.courseMode,
+            courseMode: userCourseBridge.courseMode,
             courseId: courseVersionId!,
-            courseItemCode: requestedItemCode,
+            currentPlaylistItemCode: requestedItemCode,
             modules: modules,
-            nextItemCode,
-            nextItemState
-        } as PlayerDataDTO;
+            nextPlaylistItemCode,
+            nextPlaylistItemState: nextItemState
+        });
     };
 
     private async _validatePlayerDataRequest(principalId: PrincipalId, requestedItemCode: string) {
@@ -157,19 +171,19 @@ export class PlayerService extends ServiceBase {
     /**
      * Gets the next item in modules list 
      */
-    private _getNextItem(modules: ModuleDTO[], validItemCode: string) {
+    private _getNextPlaylistItem(modules: PlaylistModuleDTO[], validItemCode: string) {
 
-        const flat = this._getCourseItemsFlat(modules);
+        const flat = this._getPlaylistItemsFlatList(modules);
 
         const currentItemIndexInFlatList = flat
-            .findIndex(x => x.code === validItemCode);
+            .findIndex(x => x.playlistItemCode === validItemCode);
 
         const nextItem = flat[currentItemIndexInFlatList + 1];
-        const nextItemCode = nextItem?.code ?? null;
-        const nextItemState = nextItem?.state ?? null;
+        const nextPlaylistItemCode = nextItem?.playlistItemCode ?? null;
+        const nextItemState = nextItem?.playlistItemState ?? null;
 
         return {
-            nextItemCode,
+            nextPlaylistItemCode,
             nextItemState
         };
     }
@@ -181,62 +195,62 @@ export class PlayerService extends ServiceBase {
     private async _getValidCourseItemCodeAsync(userId: number, courseId: number, targetItemCode: string) {
 
         const modules = await this._courseService
-            .getCourseModulesAsync(userId, courseId);
+            .getPlaylistModulesAsync(userId, courseId);
 
-        const courseItemsFlat = this._getCourseItemsFlat(modules);
+        const courseItemsFlat = this._getPlaylistItemsFlatList(modules);
 
         const targetItem = courseItemsFlat
-            .firstOrNull(x => x.code === targetItemCode);
+            .firstOrNull(x => x.playlistItemCode === targetItemCode);
 
-        if (targetItem && targetItem.state !== 'locked')
-            return targetItem.code;
+        if (targetItem && targetItem.playlistItemState !== 'locked')
+            return targetItem.playlistItemCode;
 
         // target item is locked, fallback...
         const firstLockedIndex = courseItemsFlat
-            .findIndex(x => x.state === 'locked');
+            .findIndex(x => x.playlistItemState === 'locked');
 
         const prevIndex = firstLockedIndex - 1;
 
         return (courseItemsFlat[prevIndex]
             ? courseItemsFlat[prevIndex]
-            : courseItemsFlat[0]).code;
+            : courseItemsFlat[0]).playlistItemCode;
     };
 
     /**
      * Returns a list of objects symbolizing the items present in the specified course. 
      * The list is ordered, and can be traversed by list item indicies.
      */
-    private _getCourseItemsFlat(modules: ModuleDTO[]) {
+    private _getPlaylistItemsFlatList(modules: PlaylistModuleDTO[]) {
 
-        type CourseItemFlatListTyle = {
-            code: string,
-            index: number,
-            state: CourseItemStateType
+        type CourseItemFlatListType = {
+            playlistItemCode: string,
+            playlistItemState: CourseItemStateType,
+            orderIndex: number,
         };
 
-        const flatList = [] as CourseItemFlatListTyle[];
+        const courseItemFlatList = [] as CourseItemFlatListType[];
 
         modules
             .forEach(module => {
 
-                flatList
+                courseItemFlatList
                     .push({
-                        code: module.code,
-                        index: module.orderIndex,
-                        state: module.state
+                        playlistItemCode: module.moduleCode,
+                        orderIndex: module.moduleOrderIndex,
+                        playlistItemState: module.moduleState
                     });
 
                 module
                     .items
-                    .forEach(x => flatList
+                    .forEach(moduleItem => courseItemFlatList
                         .push({
-                            code: x.descriptorCode,
-                            index: x.orderIndex,
-                            state: x.state
+                            playlistItemCode: moduleItem.playlistItemCode,
+                            orderIndex: moduleItem.orderIndex,
+                            playlistItemState: moduleItem.state
                         }));
             });
 
-        return flatList;
+        return courseItemFlatList;
     };
 
     /**

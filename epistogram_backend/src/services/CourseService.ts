@@ -14,7 +14,7 @@ import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
-import { CourseItemPlaylistView } from '../models/views/CourseItemStateView';
+import { CourseItemPlaylistView } from '../models/views/CourseItemPlaylistView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
@@ -27,14 +27,14 @@ import { CourseModuleShortDTO } from '../shared/dtos/admin/CourseModuleShortDTO'
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
+import { PlaylistItemDTO } from '../shared/dtos/PlaylistItemDTO';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
-import { ModuleDTO } from '../shared/dtos/ModuleDTO';
+import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
 import { PrincipalId } from '../utilities/ActionParams';
@@ -104,9 +104,6 @@ export class CourseService {
 
     /**
      * Returns a course progress short view
-     * 
-     * @param userId 
-     * @returns 
      */
     async getCourseProgressShortAsync(userId: PrincipalId) {
 
@@ -121,10 +118,6 @@ export class CourseService {
 
     /**
      * Reruns a course view
-     * 
-     * @param userId 
-     * @param courseId 
-     * @returns 
      */
     async getCourseViewAsync(userId: number, courseId: number) {
 
@@ -139,8 +132,6 @@ export class CourseService {
 
     /**
      * Returns course brief data async 
-     * @param courseId 
-     * @returns 
      */
     async getCourseBriefDataAsync(courseId: number) {
 
@@ -153,10 +144,6 @@ export class CourseService {
 
     /**
      * Returns course detals 
-     * 
-     * @param userId 
-     * @param courseId 
-     * @returns 
      */
     async getCourseDetailsAsync(userId: PrincipalId, courseId: number) {
 
@@ -177,8 +164,6 @@ export class CourseService {
 
     /**
      * Creates a new course 
-     * 
-     * @param dto 
      */
     async createCourseAsync(dto: CreateCourseDTO) {
 
@@ -210,9 +195,6 @@ export class CourseService {
 
     /**
      * Returns the /learning/courses data.  
-     * 
-     * @param userId 
-     * @returns 
      */
     async getCourseProgressDataAsync(userId: PrincipalId) {
 
@@ -245,7 +227,6 @@ export class CourseService {
 
     /**
      * Returns the progress of the current active course, or null.
-     * @returns 
      */
     async getCurrentCourseProgressAsync(userId: number) {
 
@@ -267,7 +248,7 @@ export class CourseService {
             return null;
 
         // get next items 
-        const nextItems = await this.getCourseNextItemsAsync(userId, currentCourseId);
+        const nextItems = await this._getCourseNextItemsAsync(userId, currentCourseId);
 
         return {
             title: courseProgress.courseTitle,
@@ -281,20 +262,16 @@ export class CourseService {
 
     /**
      * Returns the next items in course 
-     * 
-     * @param userId 
-     * @param courseId 
-     * @returns 
      */
-    async getCourseNextItemsAsync(userId: number, courseId: number) {
+    private async _getCourseNextItemsAsync(userId: number, courseId: number) {
 
-        const modules = await this.getCourseModulesAsync(userId, courseId);
+        const modules = await this.getPlaylistModulesAsync(userId, courseId);
 
         const currentModule = modules
-            .firstOrNull(x => x.state === 'current') ?? modules.first();
+            .firstOrNull(x => x.moduleState === 'current') ?? modules.first();
 
         const nextOrCurrentModules = modules
-            .filter(x => x.orderIndex >= currentModule.orderIndex);
+            .filter(x => x.moduleOrderIndex >= currentModule.moduleOrderIndex);
 
         const currentItemOrderIndex = currentModule
             .items
@@ -311,10 +288,6 @@ export class CourseService {
 
     /**
      * Save course thumbnail.
-     * 
-     * @param file 
-     * @param courseId 
-     * @returns 
      */
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
 
@@ -340,7 +313,7 @@ export class CourseService {
      * Get the current course modules with items.
      * 
      */
-    async getCurrentCourseModulesAsync(userId: PrincipalId) {
+    async getCurrentCoursePlaylistModulesAsync(userId: PrincipalId) {
 
         const courseId = await this._userCourseBridgeService
             .getCurrentCourseId(userId.toSQLValue());
@@ -348,17 +321,13 @@ export class CourseService {
         if (!courseId)
             throw new Error('There\'s no current course!');
 
-        return await this.getCourseModulesAsync(userId.toSQLValue(), courseId);
+        return await this.getPlaylistModulesAsync(userId.toSQLValue(), courseId);
     }
 
     /**
-     * Get the course modules with items.
-     * 
-     * @param userId 
-     * @param courseId 
-     * @returns 
+     * Get playlist modules with items.
      */
-    async getCourseModulesAsync(userId: number, courseId: number) {
+    async getPlaylistModulesAsync(userId: number, courseId: number) {
 
         const views = await this._ormService
             .query(CourseItemPlaylistView, { courseId, userId, pretestModuleOrderIndex: 0 })
@@ -367,34 +336,8 @@ export class CourseService {
             .and('moduleOrderIndex', '!=', 'pretestModuleOrderIndex')
             .getMany();
 
-        const modules = views
-            .groupBy(x => x.moduleId)
-            .map(x => {
-
-                const viewAsModule = x.items.first();
-                const isLockedModule = x.items[0]?.itemState === 'locked';
-                const isCompletedModule = x.items.all(x => x.itemState === 'completed');
-                const isCurrentModule = x.items.some(x => x.itemState === 'current') || viewAsModule.moduleIsCurrent;
-                const items = this._mapperService
-                    .mapMany(CourseItemPlaylistView, CourseItemDTO, x.items);
-
-                return {
-                    id: viewAsModule.moduleId,
-                    name: viewAsModule.moduleName,
-                    orderIndex: viewAsModule.moduleOrderIndex,
-                    code: viewAsModule.moduleCode,
-                    items: items,
-                    state: isCurrentModule
-                        ? 'current'
-                        : isLockedModule
-                            ? 'locked'
-                            : isCompletedModule
-                                ? 'completed'
-                                : 'available'
-                } as ModuleDTO;
-            });
-
-        return modules;
+        return this._mapperService
+            .mapTo(PlaylistModuleDTO, [views]);
     }
 
     /**

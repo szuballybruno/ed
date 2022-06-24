@@ -42,10 +42,6 @@ export const apiRoutes = {
         getRoleAssignCompanies: '/companies/get-role-assign-companies',
     },
 
-    scheduledJobs: {
-        evaluateUserProgress: '/scheduledjobs/evaluate-user-progress'
-    },
-
     teacherInfo: {
         getTeacherInfo: '/teacherinfo/get-teacher-info',
         saveTeacherInfo: '/teacherinfo/save-teacher-info'

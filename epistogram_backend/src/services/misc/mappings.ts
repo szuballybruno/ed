@@ -7,7 +7,6 @@ import { CourseCategory } from '../../models/entity/CourseCategory';
 import { DailyTip } from '../../models/entity/DailyTip';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
-import { ExamData } from '../../models/entity/exam/ExamData';
 import { JobTitle } from '../../models/entity/JobTitle';
 import { ModuleData } from '../../models/entity/module/ModuleData';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
@@ -16,7 +15,6 @@ import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
 import { Task } from '../../models/entity/Task';
 import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { User } from '../../models/entity/User';
-import { VideoData } from '../../models/entity/video/VideoData';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
@@ -27,7 +25,7 @@ import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedV
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { CourseItemPlaylistView } from '../../models/views/CourseItemStateView';
+import { CourseItemPlaylistView } from '../../models/views/CourseItemPlaylistView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
@@ -36,21 +34,22 @@ import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestio
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamView } from '../../models/views/ExamView';
-import { QuestionDataView as QuestionDataView } from '../../models/views/QuestionDataView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
+import { QuestionDataView } from '../../models/views/QuestionDataView';
 import { RoleListView } from '../../models/views/RoleListView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
+import { UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserStatsView } from '../../models/views/UserStatsView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
+import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -66,7 +65,7 @@ import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
-import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
+import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { CourseItemEditDTO } from '../../shared/dtos/CourseItemEditDTO';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
@@ -114,15 +113,13 @@ import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { CourseItemStateType } from '../../shared/types/sharedTypes';
-import { toFullName } from '../../utilities/helpers';
+import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
+import { instantiate, toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
-import { getItemCode } from './encodeService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
-import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
-import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
+import { PlaylistModuleDTO } from '../../shared/dtos/PlaylistModuleDTO';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -281,6 +278,50 @@ const marray = [
             };
 
             return dto;
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(PlaylistModuleDTO, () => (views: CourseItemPlaylistView[]) => {
+
+            return views
+                .groupBy(x => x.moduleId)
+                .map(moduleGrouping => {
+
+                    const viewAsModule = moduleGrouping.first;
+                    const isLockedModule = moduleGrouping.items[0]?.itemState === 'locked';
+                    const isCompletedModule = moduleGrouping.items.all(x => x.itemState === 'completed');
+                    const isCurrentModule = moduleGrouping.items.some(x => x.itemState === 'current') || viewAsModule.moduleIsCurrent;
+
+                    const items = moduleGrouping
+                        .items
+                        .map(viewAsItem => instantiate<PlaylistItemDTO>({
+                            subTitle: viewAsItem.itemSubtitle,
+                            title: viewAsItem.itemTitle,
+                            orderIndex: viewAsItem.itemOrderIndex,
+                            state: viewAsItem.itemState,
+                            playlistItemCode: viewAsItem.playlistItemCode,
+                            type: viewAsItem.itemType === 'video' ? 'video' : 'exam',
+                            shouldRepeatVideo: viewAsItem.isRecommendedForPractise,
+                            thumbnailUrl: ''
+                        }));
+
+                    const moduleState = isCurrentModule
+                        ? 'current'
+                        : isLockedModule
+                            ? 'locked'
+                            : isCompletedModule
+                                ? 'completed'
+                                : 'available';
+
+                    return instantiate<PlaylistModuleDTO>({
+                        moduleId: viewAsModule.moduleId,
+                        moduleName: viewAsModule.moduleName,
+                        moduleOrderIndex: viewAsModule.moduleOrderIndex,
+                        moduleCode: viewAsModule.moduleCode,
+                        moduleState,
+                        items: items,
+                    });
+                });
         })
 ] as const;
 
@@ -341,14 +382,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 isQuestion: comment.isQuestion
             };
         });
-
-    // mapperService
-    //     .addMap(QuestionData, QuestionEditDataDTO, question => ({
-    //         questionId: question.id,
-    //         questionText: question.questionText,
-    //         answers: question.answers
-    //             .map(answer => toAnswerEditDTO(answer))
-    //     }));
 
     mapperService
         .addMap(ModuleView, AdminModuleShortDTO, view => ({
@@ -688,57 +721,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         }));
 
     mapperService
-        .addMap(VideoData, CourseItemDTO, (video, state: CourseItemStateType) => {
-
-            return {
-                id: video.id,
-                subTitle: video.subtitle,
-                thumbnailUrl: getAssetUrl(video.thumbnailFile?.filePath) ?? getAssetUrl('images/videoImage.jpg'),
-                title: video.title,
-                orderIndex: video.orderIndex,
-                state: state ?? 'available',
-                descriptorCode: getItemCode(video.id, 'video'),
-                type: 'video'
-            } as CourseItemDTO;
-        });
-
-    mapperService
-        .addMap(ExamData, CourseItemDTO, (exam, state: CourseItemStateType) => {
-
-            return {
-                id: exam.id,
-                subTitle: exam.subtitle,
-                thumbnailUrl: getAssetUrl('/images/examCover.jpg'),
-                title: exam.title,
-                orderIndex: exam.orderIndex,
-                state: state ?? 'available',
-                descriptorCode: getItemCode(exam.id, 'exam'),
-                type: 'exam'
-            } as CourseItemDTO;
-        });
-
-    // mapperService
-    //     .addMap(CourseData, CourseItemListDTO, course => {
-
-    //         navPropNotNull(course.videos);
-    //         navPropNotNull(course.exams);
-
-    //         const videoCourseItemDTOs = mapperService
-    //             .mapMany(VideoData, CourseItemDTO, course.videos);
-
-    //         const examCourseItemDTOs = mapperService
-    //             .mapMany(ExamData, CourseItemDTO, course.exams);
-
-    //         const courseItemDTOs = videoCourseItemDTOs
-    //             .concat(examCourseItemDTOs)
-    //             .orderBy(x => x.orderIndex);
-
-    //         return {
-    //             courseItems: courseItemDTOs
-    //         } as CourseItemListDTO;
-    //     });
-
-    mapperService
         .addMap(DailyTipView, DailyTipDTO, view => {
 
             return {
@@ -802,26 +784,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             } as CourseAdminListItemDTO;
         });
 
-    // mapperService
-    //     .addMap(VideoData, VideoEditDTO, video => {
-
-    //         return {
-    //             id: video.id,
-    //             title: video.title,
-    //             description: video.description,
-    //             subtitle: video.subtitle,
-    //             videoLengthSeconds: video.lengthSeconds,
-
-    //             questions: video
-    //                 .questions
-    //                 .map(x => toQuestionDTO(x)),
-
-    //             videoFileUrl: video.videoFile
-    //                 ? getAssetUrl(video.videoFile.filePath)
-    //                 : null
-    //         } as VideoEditDTO;
-    //     });
-
     mapperService
         .addMap(TeacherInfo, TeacherInfoEditDTO, x => ({
             id: x.id,
@@ -833,37 +795,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             badges: parseCommaSeparatedStringList(x.badges),
             description: x.description
         }));
-
-    mapperService
-        .addMap(CourseItemPlaylistView, CourseItemDTO, courseItemView => {
-
-            return {
-                id: courseItemView.videoId || courseItemView.examId,
-                subTitle: courseItemView.itemSubtitle,
-                title: courseItemView.itemTitle,
-                orderIndex: courseItemView.itemOrderIndex,
-                state: courseItemView.itemState,
-                descriptorCode: courseItemView.itemCode,
-                type: courseItemView.itemType === 'video' ? 'video' : 'exam',
-                shouldRepeatVideo: courseItemView.isRecommendedForPractise
-            } as CourseItemDTO;
-        });
-
-    // mapperService
-    //     .addMap(ExamData, ExamEditDataDTO, exam => {
-
-    //         return {
-    //             id: exam.id,
-    //             title: exam.title,
-    //             courseId: exam.courseId,
-    //             subTitle: exam.subtitle,
-    //             isFinalExam: exam.type === 'final',
-    //             reatakeLimit: exam.retakeLimit,
-    //             questions: exam
-    //                 .questions
-    //                 .map(x => toQuestionDTO(x))
-    //         } as ExamEditDataDTO;
-    //     });
 
     mapperService
         .addMap(ExamView, ExamPlayerDataDTO, (exam, questions: QuestionDataView[]) => {

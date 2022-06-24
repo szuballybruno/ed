@@ -1,19 +1,26 @@
 import { Flex } from '@chakra-ui/react';
-import { Replay, ReplayCircleFilled } from '@mui/icons-material';
+import { ReplayCircleFilled } from '@mui/icons-material';
 import { useNavigation } from '../../services/core/navigatior';
-import { CourseItemDTO } from '../../shared/dtos/CourseItemDTO';
-import { ChipSmall } from '../administration/courses/ChipSmall';
+import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { VideoListSausageIndicator } from './VideoListSausageIndicator';
 
-export const CourseItemListElement = (props: { courseItem: CourseItemDTO }) => {
+export const PlaylistElement = ({ playlistItem }: { playlistItem: PlaylistItemDTO }) => {
 
-    const { title, subTitle, state, descriptorCode, shouldRepeatVideo, type } = props.courseItem;
+    const {
+        title,
+        subTitle,
+        state,
+        playlistItemCode,
+        shouldRepeatVideo,
+        type
+    } = playlistItem;
+
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
 
-    const navigate = () => navigateToPlayer(descriptorCode);
+    const navigate = () => navigateToPlayer(playlistItemCode);
 
     const borderWidth = state === 'current'
         ? 5

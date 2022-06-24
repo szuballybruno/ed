@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
@@ -23,7 +23,7 @@ export class PermissionAssignmentBridge {
 
     @ManyToOne(_ => Permission, x => x.permissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'permissionId'))
-    permission: Permission;
+    permissions: Relation<Permission>[];
 
     // TO ONE
 

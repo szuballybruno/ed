@@ -64,69 +64,127 @@ export type ServicesType = { [K: string]: any } & {
 
 export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: XDBMSchemaType): ServicesType => {
 
-    const services = {} as any;
+    const urlService = new UrlService(globalConfig);
+    const mapperService = new MapperService(urlService);
+    const loggerService = new LoggerService();
+    const hashService = new HashService(globalConfig);
+    const sqlConnectionService = new SQLConnectionService(globalConfig);
+    const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
+    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlConnectionService);
+    const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
+    const eventService = new EventService(mapperService, ormConnectionService);
+    const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService);
+    const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
+    const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
+    const activationCodeService = new ActivationCodeService(ormConnectionService);
+    const emailService = new EmailService(globalConfig, urlService);
+    const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService);
+    const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService, mapperService);
+    const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService);
+    const roleService = new RoleService(ormConnectionService, mapperService);
+    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService);
+    const tokenService = new TokenService(globalConfig);
+    const permissionService = new PermissionService(ormConnectionService, mapperService);
+    const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService, permissionService);
+    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
+    const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
+    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
+    const courseItemService = new CourseItemService(ormConnectionService, mapperService);
+    const userCourseBridgeService = new UserCourseBridgeService(courseItemService, ormConnectionService, mapperService);
+    const questionService = new QuestionService(ormConnectionService);
+    const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
+    const storageService = new StorageService(globalConfig);
+    const fileService = new FileService(userService, storageService, ormConnectionService);
+    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService, globalConfig);
+    const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService);
+    const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService);
+    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService, courseItemService);
+    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService, permissionService);
+    const sampleMergeService = new SampleMergeService();
+    const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
+    const authorizationService = new AuthorizationService(permissionService, ormConnectionService);
+    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, authorizationService);
+    const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
+    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
+    const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);
+    const videoRatingService = new VideoRatingService(ormConnectionService);
+    const dailyTipService = new DailyTipService(ormConnectionService, mapperService);
+    const tempomatService = new TempomatService(ormConnectionService, mapperService, userCourseBridgeService, loggerService, eventService);
+    const userStatsService = new UserStatsService(ormConnectionService, mapperService, tempomatService);
+    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService);
+    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, authorizationService, tokenService, ormConnectionService, roleService, mapperService);
+    const courseRatingService = new CourseRatingService(mapperService, ormConnectionService);
+    const userProgressService = new UserProgressService(mapperService, ormConnectionService, tempomatService);
+    const commentService = new CommentService(ormConnectionService, mapperService);
+    const likeService = new LikeService(ormConnectionService, mapperService);
+    const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
 
-    services.urlService = new UrlService(globalConfig);
-    services.mapperService = new MapperService(services.urlService);
-    services.loggerService = new LoggerService();
-    services.hashService = new HashService(globalConfig);
-    services.sqlConnectionService = new SQLConnectionService(globalConfig);
-    services.sqlBootstrapperService = new SQLBootstrapperService(services.sqlConnectionService, dbSchema, globalConfig);
-    services.ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, services.sqlConnectionService);
-    services.userStatsService = new UserStatsService(services.ormConnectionService, services.mapperService);
-    services.sqlFunctionService = new SQLFunctionsService(services.sqlConnectionService, globalConfig);
-    services.eventService = new EventService(services.mapperService, services.ormConnectionService);
-    services.coinTransactionService = new CoinTransactionService(services.sqlFunctionService, services.ormConnectionService, services.mapperService);
-    services.coinAcquireService = new CoinAcquireService(services.coinTransactionService, services.ormConnectionService, services.eventService);
-    services.userSessionActivityService = new UserSessionActivityService(services.sqlFunctionService, services.coinAcquireService);
-    services.activationCodeService = new ActivationCodeService(services.ormConnectionService);
-    services.emailService = new EmailService(globalConfig, services.urlService);
-    services.questionAnswerService = new QuestionAnswerService(services.ormConnectionService, services.sqlFunctionService, services.coinAcquireService);
-    services.signupService = new SignupService(services.emailService, services.sqlFunctionService, services.ormConnectionService);
-    services.teacherInfoService = new TeacherInfoService(services.ormConnectionService, services.mapperService);
-    services.roleService = new RoleService(services.ormConnectionService, services.mapperService);
-    services.userService = new UserService(services.ormConnectionService, services.mapperService, services.teacherInfoService, services.hashService, services.roleService);
-    services.tokenService = new TokenService(globalConfig);
-    services.permissionService = new PermissionService(services.ormConnectionService, services.mapperService);
-    services.authenticationService = new AuthenticationService(services.userService, services.tokenService, services.userSessionActivityService, services.hashService, services.permissionService);
-    services.registrationService = new RegistrationService(services.activationCodeService, services.emailService, services.userService, services.authenticationService, services.tokenService, services.ormConnectionService, services.roleService, services.mapperService);
-    services.passwordChangeService = new PasswordChangeService(services.userService, services.tokenService, services.emailService, services.urlService, services.ormConnectionService, globalConfig, services.hashService);
-    services.seedService = new SeedService(dbSchema, services.sqlBootstrapperService, services.sqlConnectionService);
-    services.dbConnectionService = new DbConnectionService(globalConfig, services.sqlConnectionService, services.sqlBootstrapperService, services.ormConnectionService, services.seedService);
-    services.courseItemService = new CourseItemService(services.ormConnectionService, services.mapperService);
-    services.userCourseBridgeService = new UserCourseBridgeService(services.courseItemService, services.ormConnectionService, services.mapperService);
-    services.questionService = new QuestionService(services.ormConnectionService);
-    services.examService = new ExamService(services.userCourseBridgeService, services.ormConnectionService, services.userSessionActivityService, services.questionAnswerService, services.questionService, services.mapperService);
-    services.storageService = new StorageService(globalConfig);
-    services.fileService = new FileService(services.userService, services.storageService, services.ormConnectionService);
-    services.videoService = new VideoService(services.ormConnectionService, services.userCourseBridgeService, services.questionAnswerService, services.fileService, services.questionService, services.urlService, services.mapperService, globalConfig);
-    services.moduleService = new ModuleService(services.examService, services.videoService, services.ormConnectionService, services.mapperService, services.fileService);
-    services.pretestService = new PretestService(services.ormConnectionService, services.mapperService, services.examService, services.userCourseBridgeService);
-    services.courseService = new CourseService(services.moduleService, services.userCourseBridgeService, services.videoService, services.ormConnectionService, services.mapperService, services.fileService, services.examService, services.pretestService, services.courseItemService);
-    services.miscService = new MiscService(services.courseService, services.ormConnectionService, services.mapperService, services.userCourseBridgeService, services.permissionService);
-    services.sampleMergeService = new SampleMergeService();
-    services.playbackService = new PlaybackService(services.mapperService, services.ormConnectionService, services.coinAcquireService, services.userSessionActivityService, globalConfig, services.sampleMergeService);
-    services.authorizationService = new AuthorizationService(services.permissionService, services.ormConnectionService);
-    services.playerService = new PlayerService(services.ormConnectionService, services.courseService, services.examService, services.moduleService, services.userCourseBridgeService, services.videoService, services.questionAnswerService, services.mapperService, services.playbackService, services.authorizationService);
-    services.practiseQuestionService = new PractiseQuestionService(services.ormConnectionService, services.questionAnswerService, services.playerService, services.mapperService);
-    services.shopService = new ShopService(services.ormConnectionService, services.mapperService, services.coinTransactionService, services.courseService, services.emailService, services.fileService, services.urlService);
-    services.personalityAssessmentService = new PersonalityAssessmentService(services.ormConnectionService, services.mapperService);
-    services.videoRatingService = new VideoRatingService(services.ormConnectionService);
-    services.dailyTipService = new DailyTipService(services.ormConnectionService, services.mapperService);
-    services.tempomatService = new TempomatService(services.ormConnectionService, services.mapperService, services.userCourseBridgeService, services.loggerService, services.eventService);
-    services.prequizService = new PrequizService(services.ormConnectionService, services.mapperService, services.userCourseBridgeService, services.tempomatService);
-    services.courseRatingService = new CourseRatingService(services.mapperService, services.ormConnectionService);
-    services.userProgressService = new UserProgressService(services.mapperService, services.ormConnectionService);
-    services.commentService = new CommentService(services.ormConnectionService, services.mapperService);
-    services.likeService = new LikeService(services.ormConnectionService, services.mapperService);
-    services.companyService = new CompanyService(services.ormConnectionService, services.mapperService, services.authorizationService);
+    const services = {
+        urlService,
+        mapperService,
+        loggerService,
+        hashService,
+        sqlConnectionService,
+        sqlBootstrapperService,
+        ormConnectionService,
+        sqlFunctionService,
+        eventService,
+        coinTransactionService,
+        coinAcquireService,
+        userSessionActivityService,
+        activationCodeService,
+        emailService,
+        questionAnswerService,
+        signupService,
+        teacherInfoService,
+        roleService,
+        userService,
+        tokenService,
+        permissionService,
+        authenticationService,
+        passwordChangeService,
+        seedService,
+        dbConnectionService,
+        courseItemService,
+        userCourseBridgeService,
+        questionService,
+        examService,
+        storageService,
+        fileService,
+        videoService,
+        moduleService,
+        pretestService,
+        courseService,
+        miscService,
+        sampleMergeService,
+        playbackService,
+        authorizationService,
+        playerService,
+        practiseQuestionService,
+        shopService,
+        personalityAssessmentService,
+        videoRatingService,
+        dailyTipService,
+        tempomatService,
+        userStatsService,
+        prequizService,
+        registrationService,
+        courseRatingService,
+        userProgressService,
+        commentService,
+        likeService,
+        companyService,
+    };
 
-    services.getService = <T>(ct: CTAnyArgs<T>) => {
+    const getService = <T>(ct: CTAnyArgs<T>) => {
 
         return Object
-            .values(services)
+            .values(services as any)
             .single(x => (x as any).constructor.name === ct.name) as T;
-    }
+    };
 
-    return services;
+    return {
+        ...services,
+        getService
+    }
 };

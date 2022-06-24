@@ -1,13 +1,12 @@
 import { CourseItemStateType, CourseItemType } from '../types/sharedTypes';
 
-export class CourseItemDTO {
-    id: number;
+export class PlaylistItemDTO {
     title: string;
     subTitle: string;
     thumbnailUrl: string;
     orderIndex: number;
     state: CourseItemStateType;
-    descriptorCode: string;
+    playlistItemCode: string;
     type: CourseItemType;
     shouldRepeatVideo: boolean | null;
 }

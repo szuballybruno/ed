@@ -46,6 +46,6 @@ export class PlayerController {
     getCourseItemsAction = async (params: ActionParams) => {
 
         return this._courseService
-            .getCurrentCourseModulesAsync(params.principalId);
+            .getCurrentCoursePlaylistModulesAsync(params.principalId);
     };
 }

@@ -1,5 +1,5 @@
-import { CourseItemDTO } from './CourseItemDTO';
+import { PlaylistItemDTO } from './PlaylistItemDTO';
 
 export class CourseItemListDTO {
-    courseItems: CourseItemDTO[];
+    courseItems: PlaylistItemDTO[];
 }

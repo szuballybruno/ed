@@ -1,8 +1,5 @@
-import { CourseData } from '../models/entity/course/CourseData';
-import { Course } from '../models/entity/Course';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
-import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
 import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';

@@ -22,7 +22,6 @@ import { PretestController } from './../api/PretestController';
 import { QuestionController } from './../api/QuestionController';
 import { RegistrationController } from './../api/RegistrationController';
 import { RoleController } from './../api/RoleController';
-import { ScheduledJobTriggerController } from './../api/ScheduledJobTriggerController';
 import { ShopController } from './../api/ShopController';
 import { SignupController } from './../api/SignupController';
 import { TeacherInfoController } from './../api/TeacherInfoController';
@@ -65,7 +64,6 @@ export const instatiateControllers = (services: any, globalConfig: GlobalConfigu
     controllers.userProgressController = new UserProgressController(services.userProgressService);
     controllers.playbackController = new PlaybackController(services.playbackService);
     controllers.tempomatController = new TempomatController(services.tempomatService);
-    controllers.scheduledJobTriggerController = new ScheduledJobTriggerController(services.tempomatService);
     controllers.companyController = new CompanyController(services.companyService);
     controllers.roleController = new RoleController(services.roleService);
     controllers.commentController = new CommentController(services.commentService, services.likeService);
