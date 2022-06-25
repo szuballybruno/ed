@@ -18,4 +18,4 @@ LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
 
 WHERE ucb.start_date IS NOT NULL
-AND ucb.stage_name != 'created'
+AND ucb.stage_name != 'assigned'

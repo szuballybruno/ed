@@ -14,7 +14,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
     const { dailyTipData } = useDailyTip();
 
     const currentCourse = activeCoursesPaging.currentItem;
-    const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId ?? 0, !!currentCourse);
+    const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId!, !!currentCourse);
 
     if (!currentCourse)
         return <Flex>

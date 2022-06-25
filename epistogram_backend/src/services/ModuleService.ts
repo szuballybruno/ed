@@ -1,21 +1,19 @@
 import { UploadedFile } from 'express-fileupload';
 import { CourseData } from '../models/entity/course/CourseData';
 import { ModuleData } from '../models/entity/module/ModuleData';
-import { ExamData } from '../models/entity/exam/ExamData';
-import { VideoData } from '../models/entity/video/VideoData';
+import { StorageFile } from '../models/entity/StorageFile';
 import { ModuleView } from '../models/views/ModuleView';
 import { AdminModuleShortDTO } from '../shared/dtos/AdminModuleShortDTO';
 import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
 import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
 import { ModuleDetailedDTO } from '../shared/dtos/ModuleDetailedDTO';
 import { ModuleListEditDataDTO } from '../shared/dtos/ModuleListEditDataDTO';
+import { throwNotImplemented } from '../utilities/helpers';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VideoService } from './VideoService';
-import { throwNotImplemented } from '../utilities/helpers';
-import { StorageFile } from '../models/entity/StorageFile';
 
 export class ModuleService {
 
@@ -44,19 +42,21 @@ export class ModuleService {
      *
      * @param {number} userId userId.
      * @param {number} moduleId moduleId.
-     * @return {ModuleDetailedDTO} holds valuable information about the module.
+     * @returns {Promise<ModuleDetailedDTO>} holds valuable information about the module.
      */
-    getModuleDetailedDTOAsync = async (moduleId: number) => {
+    getModuleDetailedDTOAsync = async (moduleId: number): Promise<ModuleDetailedDTO> => {
+
+        console.log('moduleId: ' + moduleId)
 
         const module = await this._ormService
             .withResType<ModuleData>()
             .query(ModuleView, { moduleId })
             .select(ModuleData)
-            .where('moduleId', '=', 'moduleId')
             .leftJoin(ModuleData, x => x
                 .on('id', '=', 'moduleDataId', ModuleView))
             .leftJoin(StorageFile, x => x
                 .on('id', '=', 'imageFileId', ModuleData))
+            .where('moduleId', '=', 'moduleId')
             .getOneOrNull();
 
         return this._mapperService

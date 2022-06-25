@@ -147,7 +147,7 @@ export class TempomatService extends ServiceBase {
         const newPrevisionedDate = this
             ._calculateNewPrevisionedDateByTempomatMode(tempomatMode, originalPrevisionedCompletionDate, lagBehindDays, adjustmentCorrection);
 
-        this._loggerService.log('TEMPOMAT ADJUSTMENT: ');
+        this._loggerService.log('CURRENT TEMPOMAT CALCULATION: ');
         this._loggerService.logSecondary(`Start date: ${startDate}`);
         this._loggerService.logSecondary(`Original previsioned completion date: ${originalPrevisionedCompletionDate}`);
         this._loggerService.logSecondary(`Original previsioned length: ${originalPrevisionedLength} days`);
@@ -166,7 +166,7 @@ export class TempomatService extends ServiceBase {
 
     /**
      * Calculates the lag behind from three dates. 
-                    * @returns A positive int percentage when there is lag from
+     * @returns A positive int percentage when there is lag from
      * the original estimation or null because it cannot be determined
      */
     calculateLagBehindPercentage = (

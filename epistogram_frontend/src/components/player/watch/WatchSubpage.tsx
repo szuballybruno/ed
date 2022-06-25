@@ -16,11 +16,12 @@ import { ModuleView } from './ModuleView';
 import { WatchView } from './WatchView';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 
 export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic('warn3');
-    const { navigateToPlayer } = useNavigation();
+    const { navigate, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
@@ -56,17 +57,33 @@ export const WatchSubpage = () => {
     const isPlayerLoaded = playerDataStatus === 'success';
     const isDeleted = playerDataError?.code === 'deleted';
 
+    // logs playerDataStatus if change happens
+    useEffect(() => {
+
+        console.log('PlayerDataStatus: ' + playerDataStatus);
+
+        // TODO: Create a proper error message: 'Video doesn't exists' with
+        //       options to navigate to available courses
+        if (playerDataStatus === 'error')
+            return navigate(applicationRoutes.homeRoute);
+    }, [playerDataStatus]);
+
     // redirect if current item should be locked 
     useEffect(() => {
 
+        console.log('Redirect effect runs...');
+        console.log('CurrentPlaylistItemCode: ' + currentPlaylistItemCode);
+
+        // Prevent navigating to empty url because of loading
+        if (playerDataStatus !== 'success')
+            return;
+
+        // If playerData contains playlistItemCode return
         if (currentPlaylistItemCode)
             return;
 
-        if (currentPlaylistItemCode === urlPlaylistItemCode)
-            return;
-
         console.log('Invalid course item code: ' + urlPlaylistItemCode);
-        navigateToPlayer(currentPlaylistItemCode);
+        navigateToPlayer(urlPlaylistItemCode);
     }, [currentPlaylistItemCode]);
 
     useEffect(() => {

@@ -340,6 +340,16 @@ const marray = [
                 questions: toQuestionDTO(questions),
                 type: 'exam'
             });
+        }),
+
+    epistoMappingsBuilder
+        .addMapping(PretestResultDTO, () => (prv: PretestResultView, acv: AvailableCourseView) => {
+
+            return instantiate<PretestResultDTO>({
+                isCompleted: prv.isCompleted,
+                correctAnswerRate: prv.correctAnswerRate,
+                firstItemCode: acv.firstItemCode
+            });
         })
 ] as const;
 
@@ -949,13 +959,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(PrequizQuestionView, PrequizAnswerDTO, x => ({
             id: x.answerId,
             text: x.answerText
-        }));
-
-    mapperService
-        .addMap(PretestResultView, PretestResultDTO, (x, cv: AvailableCourseView) => ({
-            isCompleted: x.isCompleted,
-            correctAnswerRate: x.correctAnswerRate,
-            firstItemCode: cv.firstItemCode
         }));
 
     mapperService

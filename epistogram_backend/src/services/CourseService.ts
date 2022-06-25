@@ -348,7 +348,6 @@ export class CourseService {
         const view = await this._ormService
             .query(CourseItemPlaylistView, { playlistItemCode })
             .where('playlistItemCode', '=', 'playlistItemCode')
-            .or('moduleCode', '=', 'playlistItemCode')
             .getSingle();
 
         return view.courseId;

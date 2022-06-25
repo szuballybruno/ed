@@ -29,7 +29,7 @@ export const PretestResultsSubpage = () => {
         try {
 
             await setCourseModeAsync({ courseId, mode });
-            navigateToPlayer(pretestResults!.firstItemCode);
+            navigateToPlayer(pretestResults?.firstItemCode!);
         }
         catch (e) {
 

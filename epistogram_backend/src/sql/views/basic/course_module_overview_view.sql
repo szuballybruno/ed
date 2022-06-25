@@ -27,6 +27,8 @@ ON vd.id = vv.video_data_id
 LEFT JOIN public.video_file vf
 ON vf.id = vd.video_file_id
 
+WHERE md.order_index != 0
+
 ORDER BY
 	co.id,
 	md.order_index,

@@ -152,7 +152,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
             log('User course bridge is not exists, creating...')
 
-            await this._createNewCourseBridge(courseId, userId, null, 'created')
+            await this._createNewCourseBridge(courseId, userId, null, 'assigned')
         } catch (e) {
 
             throw new Error('Failed to create new user course bridge')
@@ -215,7 +215,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .query(UserCourseBridge, { userId })
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
-            .getSingle();
+            .getOneOrNull();
 
         return currentBridge?.currentItemCode ?? null;
     };

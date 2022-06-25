@@ -26,6 +26,7 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { CourseItemView } from '../models/views/CourseItemView';
+import { log } from './misc/logger';
 
 export class PlayerService extends ServiceBase {
 
@@ -112,6 +113,9 @@ export class PlayerService extends ServiceBase {
         //
         // get next item 
         const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
+
+        log('nextPlaylistItemCode: ' + nextPlaylistItemCode)
+        log('nextItemState: ' + nextItemState)
 
         return instantiate<PlayerDataDTO>({
             videoPlayerData: videoDTO,

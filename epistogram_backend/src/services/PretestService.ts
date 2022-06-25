@@ -10,6 +10,7 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
+import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
@@ -108,8 +109,10 @@ export class PretestService {
             .and('courseId', '=', 'courseId')
             .getSingle();
 
+        log('First item code: ' + courseView.firstItemCode)
+
         return this._mapperSerice
-            .map(PretestResultView, PretestResultDTO, view, courseView);
+            .mapTo(PretestResultDTO, [view, courseView]);
     }
 
     async getPretestExamIdAsync(courseId: number) {

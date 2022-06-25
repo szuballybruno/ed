@@ -23,7 +23,7 @@ export const HomePageCourseStats = (props: {
     const { userStats } = useUserStats(id);
     const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId ?? 0, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
-    const { recommendedItemQuota } = useRecommendedItemQuota(courseId ?? 0, !!currentCourse);
+    const { recommendedItemQuota } = useRecommendedItemQuota(courseId!, !!currentCourse);
 
     const estimatedCompletionDateString = userProgressData?.estimatedCompletionDate
         ? new Date(userProgressData?.estimatedCompletionDate)
