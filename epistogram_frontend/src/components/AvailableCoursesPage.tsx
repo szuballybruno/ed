@@ -106,7 +106,7 @@ const AvailableCoursesPage = () => {
             </Flex>
         </LeftPane>
 
-        <ContentPane>
+        <ContentPane noMaxWidth>
 
             <Flex
                 id="coursesPanelRoot"

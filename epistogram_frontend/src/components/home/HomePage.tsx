@@ -82,7 +82,8 @@ const HomePage = () => {
                     </Flex>} />}
             </LeftPane>
 
-            <ContentPane>
+            <ContentPane
+                noMaxWidth>
 
                 <Flex
                     direction="column"

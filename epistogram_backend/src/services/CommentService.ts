@@ -1,10 +1,13 @@
 import { Comment } from '../models/entity/Comment';
 import { User } from '../models/entity/User';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { CommentListView } from '../models/views/CommentListView';
+import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../shared/dtos/CommentListDTO';
 import { PrincipalId } from '../utilities/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
+import { instantiate, throwNotImplemented } from '../utilities/helpers';
+import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
@@ -31,28 +34,37 @@ export class CommentService extends QueryServiceBase<Comment> {
         } = comment;
 
         const { itemId, itemType } = readItemCode(itemCode);
+
         if (itemType !== 'video')
             throw new Error('Wrong item type!');
 
-        // TODO itemId - itemversionid mismatch
-        throwNotImplemented();
+        const latestVideoVersion = await this._ormService
+            .query(LatestVideoView, { itemId })
+            .where('videoId', '=', 'itemId')
+            .getSingle();
 
-        const newComment = {
+        if (!latestVideoVersion.videoVersionId)
+            throw new Error('Video not found')
+
+        const newComment = instantiate<InsertEntity<Comment>>({
             isAnonymous: isAnonymous,
             isQuestion: isQuestion,
+            deletionDate: null,
+            creationDate: new Date(Date.now()),
             text: text,
             userId: userId,
             parentCommentId: replyToCommentId,
-            videoVersionId: itemId
-        } as Comment;
+            videoVersionId: latestVideoVersion.videoVersionId
+        });
 
-        return await this._ormService
+        await this._ormService
             .createAsync(Comment, newComment);
     };
 
     getCommentsAsync = async (playlistItemCode: string, currentUserId: PrincipalId) => {
 
         const { itemId, itemType } = readItemCode(playlistItemCode);
+
         if (itemType !== 'video')
             throw new Error('Wrong item type!');
 
@@ -62,7 +74,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             .and('currentUserId', '=', 'currentUserId')
             .getMany();
 
-        return await this
+        return this
             ._mapperService
             .mapMany(CommentListView, CommentListDTO, userComments);
     };

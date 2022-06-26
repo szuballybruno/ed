@@ -184,6 +184,7 @@ import { getUserCourseBridgeSeedData } from '../../sql/seed/seed_user_course_bri
 import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_video_progress_bridges';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
+import { LatestVideoView } from '../../models/views/LatestVideoView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -263,6 +264,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'course_rating_question_view', CourseRatingQuestionView],
             ['basic', 'latest_course_version_view', LatestCourseVersionView],
             ['basic', 'latest_exam_view', LatestExamView],
+            ['basic', 'latest_video_view', LatestVideoView],
             ['basic', 'latest_given_answer_view'],
             ['basic', 'module_view', ModuleView],
             ['basic', 'personality_trait_category_view', PersonalityTraitCategoryView],

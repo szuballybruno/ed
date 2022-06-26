@@ -115,6 +115,7 @@ export const WatchSubpage = () => {
 
         if (nextPlaylistItemCode)
             navigateToPlayer(nextPlaylistItemCode);
+
     };
 
     return (

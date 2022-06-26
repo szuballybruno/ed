@@ -36,6 +36,9 @@ latest_course_items AS
 	
 	LEFT JOIN public.course_item_view civ
 	ON civ.course_version_id = lcvi.version_id
+
+	-- filter out all pretest modules
+	WHERE civ.module_order_index != 0
 ),
 states AS
 (
@@ -50,7 +53,7 @@ states AS
 				THEN 'current'
 			WHEN ci.is_completed
 				THEN 'completed'
-			WHEN ucb.course_mode = 'advanced' OR (civ.item_order_index = 0 AND civ.module_order_index = 0) 
+			WHEN ucb.course_mode = 'advanced' OR (civ.item_order_index = 0 AND civ.module_order_index = 1) 
 				THEN 'available'
 			WHEN LAG(ci.is_completed, 1) OVER (PARTITION BY civ.course_version_id) IS NOT DISTINCT FROM true 
 				THEN 'available'

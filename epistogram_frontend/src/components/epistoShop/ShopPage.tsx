@@ -115,7 +115,7 @@ export const ShopPage = () => {
         </LeftPane>
 
         {/* content */}
-        <ContentPane>
+        <ContentPane noMaxWidth>
             <Flex
                 id="coursesPanelRoot"
                 direction="column"

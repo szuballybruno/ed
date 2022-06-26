@@ -31,7 +31,7 @@ const LearningInsightsPage = () => {
                 ]} />
         </LeftPane>
 
-        <ContentPane>
+        <ContentPane noMaxWidth>
 
             <EpistoRoutes
                 renderRoutes={[

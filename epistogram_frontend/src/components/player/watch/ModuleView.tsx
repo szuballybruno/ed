@@ -28,7 +28,7 @@ export const ModuleView = (params: {
             justify="center">
 
             <Flex direction="row"
-align="center">
+                align="center">
 
                 {module?.imageFilePath && <Flex>
                     <img
@@ -58,16 +58,19 @@ align="center">
             </Flex>
         </Flex>
 
-        <Flex height="60px"
-borderTop="1px solid var(--mildGrey)"
-justify="flex-end"
-p="10px">
+        <Flex
+            height="60px"
+            borderTop="1px solid var(--mildGrey)"
+            justify="flex-end"
+            p="10px">
+
             <EpistoButton variant="colored"
-onClick={startModule}
-padding="0">
+                onClick={startModule}
+                padding="0">
+
                 <Flex className="whall"
-mx="15px"
-align="center">
+                    mx="15px"
+                    align="center">
                     <EpistoFont
                         isUppercase
                         style={{ marginRight: '5px' }}
