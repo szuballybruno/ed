@@ -25,6 +25,8 @@ import './styles/index.css';
 import './styles/globalCssClasses.css';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { LoadingFrame } from './components/system/LoadingFrame';
+import { LoadingFrameNew } from './components/system/LoadingFrameNew';
 
 // react query
 const queryClient = new QueryClient();
@@ -54,9 +56,11 @@ const app = (
                                                             <AuthenticationFrame>
                                                                 <ErrorDialogFrame>
                                                                     <NotificationsFrame>
-                                                                        <EventListener>
-                                                                            <MainRouting />
-                                                                        </EventListener>
+                                                                        <LoadingFrameNew>
+                                                                            <EventListener>
+                                                                                <MainRouting />
+                                                                            </EventListener>
+                                                                        </LoadingFrameNew>
                                                                     </NotificationsFrame>
                                                                 </ErrorDialogFrame>
                                                             </AuthenticationFrame>

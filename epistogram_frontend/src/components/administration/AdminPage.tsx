@@ -92,7 +92,6 @@ export const AdminPage = () => {
         <ContentPane
             isNavbarLowHeight
             noMaxWidth
-            noOverflow
             padding="0 10px 10px 10px">
 
             <EpistoRoutes

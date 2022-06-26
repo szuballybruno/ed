@@ -53,7 +53,7 @@ export class MiscController {
 
         return await this._ormService
             .query(JobTitle)
-            .getSingle()
+            .getMany()
     };
 
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)

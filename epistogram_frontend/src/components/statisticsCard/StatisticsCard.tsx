@@ -157,7 +157,9 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                 src={iconPath} />}
 
             {/* texts */}
-            <Flex direction="column"
+            <Flex
+                maxWidth='calc(100% - 80px)'
+                direction="column"
                 pr="10px">
 
                 {/* value and suffix */}
@@ -168,9 +170,12 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                     {/* value */}
                     <EpistoFont
                         isAutoFontSize
-                        fontSize={40}
+                        fontSize={value
+                            ? (value?.length < 10 ? 40 : 25)
+                            : 40}
                         style={{
                             lineHeight: 1,
+                            maxWidth: 'calc(100% - 10px)'
                         }}>
 
                         {value ?? '-'}

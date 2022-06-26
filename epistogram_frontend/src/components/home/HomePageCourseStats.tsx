@@ -44,9 +44,9 @@ export const HomePageCourseStats = (props: {
                 display: 'grid',
                 boxSizing: 'border-box',
                 gap: '10px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
                 gridAutoFlow: 'row dense',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-                gridAutoRows: '160px'
+                gridAutoRows: '320px'
             }}>
 
             {recommendedItemQuota ? <Grid
@@ -54,14 +54,13 @@ export const HomePageCourseStats = (props: {
                 boxShadow="unset"
                 direction="column"
                 p="10px"
-                minWidth={250}
                 style={{
                     gridColumn: 'auto / span 2',
-                    gridRow: 'auto / span 2',
+                    gridRow: 'auto / span 1',
                     boxSizing: 'border-box',
                     gap: '10px',
                     gridAutoFlow: 'row dense',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
                     gridAutoRows: '160px'
                 }} >
                 <img
@@ -69,6 +68,7 @@ export const HomePageCourseStats = (props: {
                     alt=""
                     style={{
                         height: '100%',
+                        width: '100%',
                         objectFit: 'cover'
                     }}
                     className="roundBorders" />
@@ -90,6 +90,7 @@ export const HomePageCourseStats = (props: {
                 <StatisticsCard
                     title={'A kurzus várható befejezési ideje'}
                     value={estimatedCompletionDateString}
+                    suffix={''}
                     iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
                     isOpenByDefault={false} />
 
@@ -118,9 +119,10 @@ export const HomePageCourseStats = (props: {
                 direction="column"
                 p="10px"
                 minWidth={250}
+                width='*'
                 style={{
                     gridColumn: 'auto / span 3',
-                    gridRow: 'auto / span 2'
+                    gridRow: 'auto / span 1'
                 }} >
 
                 {userProgressData && userProgressData.days.length > 0

@@ -1,11 +1,12 @@
 import { Box, Divider, Flex } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
 import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
+import { useLoading } from '../../../services/core/loading';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
@@ -23,7 +24,6 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { AuthorizationContext } from '../../system/AuthenticationFrame';
-import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
@@ -36,7 +36,12 @@ export const AdminEditUserControl = (props: {
     showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void
 }) => {
 
-    const { editDTO, saveUserAsync, showDeleteUserDialog, refetchTrigger } = props;
+    const {
+        editDTO,
+        saveUserAsync,
+        showDeleteUserDialog,
+        refetchTrigger
+    } = props;
 
     const editedUserId = useIntParam('userId')!;
 
@@ -53,6 +58,7 @@ export const AdminEditUserControl = (props: {
     const [permissionsChangeSet, setPermissionsChangeSet] = useState<ChangeSet<UserPermissionDTO>>(new ChangeSet<UserPermissionDTO>());
 
     const showError = useShowErrorDialog();
+    const setLoading = useLoading();
 
     const canSetInvitedUserCompany = true;//hasPermission('i');
 
@@ -64,7 +70,15 @@ export const AdminEditUserControl = (props: {
 
     useEffect(() => {
 
-        if (!editDTO || jobTitles.length === 0 || roleAssignCompanies.length === 0)
+        if (!editDTO)
+            return;
+
+        setFirstName(editDTO.firstName);
+        setLastName(editDTO.lastName);
+        setEmail(editDTO.email);
+        setIsTeacher(editDTO.isTeacher);
+
+        if (jobTitles.length === 0 || roleAssignCompanies.length === 0)
             return;
 
         const comp = roleAssignCompanies
@@ -73,13 +87,16 @@ export const AdminEditUserControl = (props: {
         const jt = jobTitles
             .single(x => x.id === editDTO.jobTitleId);
 
-        setFirstName(editDTO.firstName);
-        setLastName(editDTO.lastName);
-        setEmail(editDTO.email);
         setSelectedJobTitle(jt);
         setSelectedCompany(comp);
-        setIsTeacher(editDTO.isTeacher);
+
+
     }, [editDTO, jobTitles, roleAssignCompanies]);
+
+    useEffect(() => {
+
+        setLoading(coinBalanceStatus);
+    }, [coinBalanceStatus]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -186,6 +203,7 @@ export const AdminEditUserControl = (props: {
                     {/* first & last name */}
                     <Flex flex="1"
                         justify="space-between">
+
                         <EpistoEntry
                             style={{
                                 flex: 1,
@@ -196,6 +214,7 @@ export const AdminEditUserControl = (props: {
                             setValue={setLastName}
                             labelVariant={'top'}
                             label={translatableTexts.misc.lastName} />
+
                         <EpistoEntry
                             style={{
                                 flex: 1
@@ -287,11 +306,7 @@ export const AdminEditUserControl = (props: {
 
                 {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
 
-                    <LoadingFrame
-                        loadingState={[coinBalanceStatus, giftCoinsToUserState]}
-                        error={coinBalanceError}
-                        direction="column">
-
+                    <>
                         <EditSection isFirst
                             title="EpistoCoin">
                             <EpistoLabel
@@ -344,8 +359,7 @@ export const AdminEditUserControl = (props: {
 
                             </EpistoLabel>
                         </EditSection>
-
-                    </LoadingFrame>
+                    </>
                 )}
 
                 <EditSection

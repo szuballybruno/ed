@@ -27,6 +27,7 @@ export const AdminCourseList = memo((props: {
         className="roundBorders"
         direction="column"
         mr="5px"
+        align='center'
         background="var(--transparentWhite90)"
         minWidth="95px">
 
@@ -40,40 +41,47 @@ export const AdminCourseList = memo((props: {
             <FlexList
                 flex="1"
                 mt="5px"
+                direction='column'
+                align='center'
+                width='85px'
                 className="roundBorders"
                 background="var(--transparentWhite70)">
 
                 {courses
                     .map((course, index) => {
 
-                        return <FlexListItem
+                        return <Image
+                            title={course.title}
                             key={index}
                             onClick={() => onCourseClick(course.courseId)}
-                            align="center"
-                            mb="1"
-                            thumbnailContent={
-                                <Flex
-                                    className="roundBorders"
-                                    style={{
-                                        height: '40px',
-                                        width: '80px'
-                                    }}
-                                    overflow="hidden">
+                            src={course.thumbnailImageURL}
+                            width='85px'
+                            mb='5px'
+                            className='roundBorders'
+                            objectFit="cover" />;
 
-                                    <Image
-                                        src={course.thumbnailImageURL}
-                                        objectFit="cover"
-                                        className="whall" />
-                                </Flex>
-                            }
-                            midContent={isMinimized
-                                ? undefined
-                                : <FlexListTitleSubtitle
-                                    title={course.title}
-                                    subTitle={''}
-                                    isSelected={course.courseId === courseId}
-                                />
-                            } />;
+                        /*       align="center"
+                              mb="1"
+                              thumbnailContent={
+                                  <Flex
+                                      className="roundBorders"
+                                      style={{
+                                          height: '40px',
+                                          width: '100%'
+                                      }}
+                                      overflow="hidden">
+  
+                                      
+                                  </Flex>
+                              }
+                              midContent={isMinimized
+                                  ? undefined
+                                  : <FlexListTitleSubtitle
+                                      title={course.title}
+                                      subTitle={''}
+                                      isSelected={course.courseId === courseId}
+                                  />
+                              } />; */
                     })}
             </FlexList>
         </ForceNoOverflowY>
