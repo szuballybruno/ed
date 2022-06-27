@@ -1,5 +1,5 @@
 import { Flex, useMediaQuery } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
@@ -34,10 +34,11 @@ export const DesktopNavbar = (props: {
 
     const { hasPermission } = useContext(AuthorizationContext)!;
 
-    const menuItems = new ArrayBuilder<ApplicationRoute>()
+    const menuItems = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
         .addIf(hasPermission('ACCESS_ADMIN'), {
             title: applicationRoutes.administrationRoute.title,
-            route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route
+            route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route,
+            icon: applicationRoutes.administrationRoute.icon
         })
         .add({
             title: applicationRoutes.homeRoute.title,
@@ -54,7 +55,7 @@ export const DesktopNavbar = (props: {
             route: applicationRoutes.learningRoute.route,
             icon: applicationRoutes.learningRoute.icon
         })
-        .getArray();
+        .getArray() as ApplicationRoute[];
 
     const { navigateToPlayer, navigate } = useNavigation();
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
