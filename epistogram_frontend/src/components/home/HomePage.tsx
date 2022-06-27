@@ -1,17 +1,19 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { LoadingStateType } from '../../models/types';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
-import { useLoading } from '../../services/core/loading';
 import { useNavigation } from '../../services/core/navigatior';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { EpistoButton } from '../controls/EpistoButton';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
+import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
@@ -25,11 +27,10 @@ const HomePage = () => {
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate } = useNavigation();
 
-    const setLoading = useLoading();
+    const [ls, setLs] = useState<LoadingStateType>('idle');
 
-    useEffect(() => {
-        setLoading(status);
-    }, [status]);
+    useSetBusy(useOverviewPageDTO, status);
+    useSetBusy(setLs, ls);
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
@@ -38,11 +39,15 @@ const HomePage = () => {
 
     return <PageRootContainer>
 
-        {/*     <LoadingFrame
-            width="100%"
-            error={error}> */}
-
         <LeftPane>
+
+            <EpistoButton onClick={() => setLs('loading')}>
+                Load
+            </EpistoButton>
+
+            <EpistoButton onClick={() => setLs('success')}>
+                Stop load
+            </EpistoButton>
 
             {/* current course items and progress */}
             {pageDTO?.currentCourseProgress && <Flex
@@ -103,7 +108,6 @@ const HomePage = () => {
                         title={translatableTexts.homePage.practiseTitle}
                         background="var(--transparentIntenseBlue85)"
                         className="largeSoftShadow roundBorders"
-                        //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
                         color="white"
                         showDivider
                         minHeight="200px"
@@ -132,7 +136,6 @@ const HomePage = () => {
                 <DashboardSection
                     background="var(--transparentWhite70)"
                     className="largeSoftShadow roundBorders"
-                    //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
                     showDivider
                     minHeight="200px"
                     m="0 0 10px 0"
@@ -144,7 +147,6 @@ const HomePage = () => {
                 </DashboardSection>
             </Flex>
         </ContentPane>
-        {/*    </LoadingFrame> */}
     </PageRootContainer>;
 };
 

@@ -6,7 +6,6 @@ import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/
 import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
 import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
-import { useLoading } from '../../../services/core/loading';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
@@ -24,6 +23,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { AuthorizationContext } from '../../system/AuthenticationFrame';
+import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
@@ -58,7 +58,6 @@ export const AdminEditUserControl = (props: {
     const [permissionsChangeSet, setPermissionsChangeSet] = useState<ChangeSet<UserPermissionDTO>>(new ChangeSet<UserPermissionDTO>());
 
     const showError = useShowErrorDialog();
-    const setLoading = useLoading();
 
     const canSetInvitedUserCompany = true;//hasPermission('i');
 
@@ -67,6 +66,8 @@ export const AdminEditUserControl = (props: {
     const { roleAssignCompanies } = useRoleAssignCompanies();
     const { jobTitles } = useJobTitles();
     const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
+
+    useSetBusy(useCoinBalanceOfUser, coinBalanceStatus);
 
     useEffect(() => {
 
@@ -92,11 +93,6 @@ export const AdminEditUserControl = (props: {
 
 
     }, [editDTO, jobTitles, roleAssignCompanies]);
-
-    useEffect(() => {
-
-        setLoading(coinBalanceStatus);
-    }, [coinBalanceStatus]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
