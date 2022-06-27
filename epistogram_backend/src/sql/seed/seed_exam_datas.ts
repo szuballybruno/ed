@@ -11,7 +11,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         title: '[signup exam]',
         isFinal: false
     },
-    exam_data_8: {
+    exam_data_excel_elso_temazaro: {
         title: 'Első lépések témazáró',
         subtitle: '',
         description: null,
@@ -20,7 +20,7 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         isFinal: false,
         retakeLimit: null,
     },
-    exam_data_9: {
+    exam_data_excel_ism_fuggveny_temazaro: {
         title: 'Ismerkedés a függvényekkel témazáró',
         subtitle: '',
         description: null,

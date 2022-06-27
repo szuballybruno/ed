@@ -97,63 +97,63 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_excel_pretest_1.id
     },
 
-    module_version_excel_1: {
+    module_version_excel_bevez: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_1.id,
-        moduleId: modules.module_excel_1.id
+        moduleDataId: moduleDatas.module_data_excel_bevez.id,
+        moduleId: modules.module_excel_bevez.id
     },
 
-    module_version_excel_2: {
+    module_version_excel_ism_fuggv: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_3.id,
-        moduleId: modules.module_excel_2.id
+        moduleDataId: moduleDatas.module_data_excel_ism_fuggv.id,
+        moduleId: modules.module_excel_ism_fuggv.id
     },
 
     module_version_excel_3: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_4.id,
+        moduleDataId: moduleDatas.module_data_excel_3.id,
         moduleId: modules.module_excel_3.id
     },
 
     module_version_excel_4: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_5.id,
+        moduleDataId: moduleDatas.module_data_excel_4.id,
         moduleId: modules.module_excel_4.id
     },
 
     module_version_excel_5: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_6.id,
+        moduleDataId: moduleDatas.module_data_excel_5.id,
         moduleId: modules.module_excel_5.id
     },
 
     module_version_excel_6: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_7.id,
+        moduleDataId: moduleDatas.module_data_excel_6.id,
         moduleId: modules.module_excel_6.id
     },
 
     module_version_excel_7: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_8.id,
+        moduleDataId: moduleDatas.module_data_excel_7.id,
         moduleId: modules.module_excel_7.id
     },
 
     module_version_excel_8: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_9.id,
+        moduleDataId: moduleDatas.module_data_excel_8.id,
         moduleId: modules.module_excel_8.id
     },
 
     module_version_excel_9: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_10.id,
+        moduleDataId: moduleDatas.module_data_excel_9.id,
         moduleId: modules.module_excel_9.id
     },
 
     module_version_excel_10: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_excel_11.id,
+        moduleDataId: moduleDatas.module_data_excel_10.id,
         moduleId: modules.module_excel_10.id
     },
 

@@ -48,9 +48,9 @@ export const getModulesSeedData = () => getSeedList<Module>()({
     // excel course pretest module
     module_excel_pretest_1: {
     },
-    module_excel_1: {
+    module_excel_bevez: {
     },
-    module_excel_2: {
+    module_excel_ism_fuggv: {
     },
     module_excel_3: {
     },

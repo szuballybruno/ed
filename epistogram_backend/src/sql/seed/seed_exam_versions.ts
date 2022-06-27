@@ -15,16 +15,16 @@ export const getExamVersionsSeedData = (
             examId: exams.signup_exam.id
         },
 
-        exam_version_8: {
-            moduleVersionId: moduleVersions.module_version_excel_1.id,
-            examDataId: examDatas.exam_data_8.id,
-            examId: exams.exam_8.id
+        exam_version_excel_elso_temazaro: {
+            moduleVersionId: moduleVersions.module_version_excel_bevez.id,
+            examDataId: examDatas.exam_data_excel_elso_temazaro.id,
+            examId: exams.exam_excel_elso_temazaro.id
         },
 
-        exam_version_9: {
-            moduleVersionId: moduleVersions.module_version_excel_1.id,
-            examDataId: examDatas.exam_data_9.id,
-            examId: exams.exam_9.id
+        exam_version_excel_ism_fuggveny_temazaro: {
+            moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
+            examDataId: examDatas.exam_data_excel_ism_fuggveny_temazaro.id,
+            examId: exams.exam_ism_fuggv_temazaro.id
         },
 
         exam_version_10: {
@@ -69,14 +69,14 @@ export const getExamVersionsSeedData = (
             examId: exams.exam_21.id
         },
 
-        exam_version_12: {
-            moduleVersionId: moduleVersions.module_version_excel_1.id,
-            examDataId: examDatas.exam_data_12.id,
-            examId: exams.exam_12.id
-        },
+        // exam_version_12: {
+        //     moduleVersionId: moduleVersions.module_version_excel_bevez.id,
+        //     examDataId: examDatas.exam_data_12.id,
+        //     examId: exams.exam_12.id
+        // },
 
         exam_version_13: {
-            moduleVersionId: moduleVersions.module_version_excel_2.id,
+            moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
             examDataId: examDatas.exam_data_13.id,
             examId: exams.exam_13.id
         },

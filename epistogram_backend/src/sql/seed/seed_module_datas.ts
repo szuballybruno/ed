@@ -113,77 +113,70 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         imageFileId: null,
         isPretestModule: true
     },
-    module_data_excel_1: {
+    module_data_excel_bevez: {
         name: 'Bevezetés az Excelbe',
         description: 'Excel tanfolyamunk első moduljában az alapvető fogalmakkal, a menürendszerrel, valamint a kezelőszervekkel ismerkedhetsz meg.',
         orderIndex: 1,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_2: {
-        name: 'Első lépések',
-        description: '',
-        orderIndex: 2,
-        imageFileId: null,
-        isPretestModule: false
-    },
-    module_data_excel_3: {
+    module_data_excel_ism_fuggv: {
         name: 'Ismerkedés a függvényekkel',
         description: '',
         orderIndex: 3,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_4: {
+    module_data_excel_3: {
         name: 'A formázás alapjai',
         description: '',
         orderIndex: 4,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_5: {
+    module_data_excel_4: {
         name: 'Leggyakoribb függvények és azok használata',
         description: '',
         orderIndex: 5,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_6: {
+    module_data_excel_5: {
         name: 'Segítség az adatkezelésben',
         description: '',
         orderIndex: 6,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_7: {
+    module_data_excel_6: {
         name: 'Munka másokkal',
         description: '',
         orderIndex: 7,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_8: {
+    module_data_excel_7: {
         name: 'Formázás felsőfokon',
         description: '',
         orderIndex: 8,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_9: {
+    module_data_excel_8: {
         name: 'Munka nagy mennyiségű adattal',
         description: '',
         orderIndex: 9,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_10: {
+    module_data_excel_9: {
         name: 'Kreatív adatábrázolás',
         description: '',
         orderIndex: 10,
         imageFileId: null,
         isPretestModule: false
     },
-    module_data_excel_11: {
+    module_data_excel_10: {
         name: 'Ismerkedés a haladó funkciókkal',
         description: '',
         orderIndex: 11,

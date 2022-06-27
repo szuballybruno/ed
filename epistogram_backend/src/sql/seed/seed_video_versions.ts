@@ -12,295 +12,295 @@ export const getVideoVersionSeedData = (
 
     video_60: {
         videoId: videos.video_60.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_60.id,
     },  
     
     video_version_54: {
         videoId: videos.video_54.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_54.id,
     },
     
     video_version_42: {
         videoId: videos.video_42.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_42.id,
     },
     
     video_version_61: {
         videoId: videos.video_61.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_61.id,
     },
     
     video_version_62: {
         videoId: videos.video_62.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_62.id,
     },
     
     video_version_63: {
         videoId: videos.video_63.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_63.id,
     },
     
     video_version_27: {
         videoId: videos.video_27.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_27.id,
     },
     
     video_version_52: {
         videoId: videos.video_52.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_52.id,
     },
     
     video_version_53: {
         videoId: videos.video_53.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_53.id,
     },
     
     video_version_76: {
         videoId: videos.video_76.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_76.id,
     },
     
     video_version_70: {
         videoId: videos.video_70.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_70.id,
     },
     
     video_version_67: {
         videoId: videos.video_67.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_67.id,
     },
     
     video_version_56: {
         videoId: videos.video_56.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_56.id,
     },
     
     video_version_28: {
         videoId: videos.video_28.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_28.id,
     },
     
     video_version_29: {
         videoId: videos.video_29.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_29.id,
     },
     
     video_version_64: {
         videoId: videos.video_64.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_64.id,
     },
     
     video_version_30: {
         videoId: videos.video_30.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_30.id,
     },
     
     video_version_31: {
         videoId: videos.video_31.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_31.id,
     },
     
     video_version_32: {
         videoId: videos.video_32.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_32.id,
     },
     
     video_version_33: {
         videoId: videos.video_33.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_33.id,
     },
     
     video_version_34: {
         videoId: videos.video_34.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_34.id,
     },
     
     video_version_35: {
         videoId: videos.video_35.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_35.id,
     },
     
     video_version_36: {
         videoId: videos.video_36.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_36.id,
     },
     
     video_version_37: {
         videoId: videos.video_37.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_37.id,
     },
     
     video_version_38: {
         videoId: videos.video_38.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_38.id,
     },
     
     video_version_55: {
         videoId: videos.video_55.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_55.id,
     },
     
     video_version_80: {
         videoId: videos.video_80.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_80.id,
     },
     
     video_version_39: {
         videoId: videos.video_39.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_39.id,
     },
     
     video_version_40: {
         videoId: videos.video_40.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_40.id,
     },
     
     video_version_71: {
         videoId: videos.video_71.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_71.id,
     },
     
     video_version_77: {
         videoId: videos.video_77.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_77.id,
     },
     
     video_version_72: {
         videoId: videos.video_72.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_72.id,
     },
     
     video_version_41: {
         videoId: videos.video_41.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_41.id,
     },
     
     video_version_68: {
         videoId: videos.video_68.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_68.id,
     },
     
     video_version_73: {
         videoId: videos.video_73.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_73.id,
     },
     
     video_version_65: {
         videoId: videos.video_65.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_65.id,
     },
     
     video_version_66: {
         videoId: videos.video_66.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_66.id,
     },
     
     video_version_57: {
         videoId: videos.video_57.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_57.id,
     },
     
     video_version_58: {
         videoId: videos.video_58.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_58.id,
     },
     
     video_version_59: {
         videoId: videos.video_59.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_59.id,
     },
     
     video_version_69: {
         videoId: videos.video_69.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_69.id,
     },
     
     video_version_78: {
         videoId: videos.video_78.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_78.id,
     },
     
     video_version_74: {
         videoId: videos.video_74.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_74.id,
     },
     
     video_version_81: {
         videoId: videos.video_81.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_81.id,
     },
     
     video_version_75: {
         videoId: videos.video_75.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_75.id,
     },
     
     video_version_83: {
         videoId: videos.video_83.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_83.id,
     },
     
     video_version_79: {
         videoId: videos.video_79.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_79.id,
     },
     
     video_version_82: {
         videoId: videos.video_82.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_82.id,
     },
     
     video_version_84: {
         videoId: videos.video_84.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_84.id,
     },
     
@@ -534,31 +534,31 @@ export const getVideoVersionSeedData = (
     
     video_version_150: {
         videoId: videos.video_150.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_150.id,
     },
     
     video_version_144: {
         videoId: videos.video_144.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_144.id,
     },
     
     video_version_132: {
         videoId: videos.video_132.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_132.id,
     },
     
     video_version_145: {
         videoId: videos.video_145.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_145.id,
     },
     
     video_version_133: {
         videoId: videos.video_133.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_133.id,
     },
     
@@ -570,13 +570,13 @@ export const getVideoVersionSeedData = (
     
     video_version_134: {
         videoId: videos.video_134.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_134.id,
     },
     
     video_version_135: {
         videoId: videos.video_135.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_135.id,
     },
     
@@ -594,13 +594,13 @@ export const getVideoVersionSeedData = (
     
     video_version_136: {
         videoId: videos.video_136.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_136.id,
     },
     
     video_version_137: {
         videoId: videos.video_137.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_137.id,
     },
     
@@ -612,7 +612,7 @@ export const getVideoVersionSeedData = (
     
     video_version_138: {
         videoId: videos.video_138.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_138.id,
     },
     
@@ -624,31 +624,31 @@ export const getVideoVersionSeedData = (
     
     video_version_139: {
         videoId: videos.video_139.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_139.id,
     },
     
     video_version_147: {
         videoId: videos.video_147.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_147.id,
     },
     
     video_version_140: {
         videoId: videos.video_140.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_140.id,
     },
     
     video_version_148: {
         videoId: videos.video_148.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_148.id,
     },
     
     video_version_141: {
         videoId: videos.video_141.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_141.id,
     },
     
@@ -666,19 +666,19 @@ export const getVideoVersionSeedData = (
     
     video_version_142: {
         videoId: videos.video_142.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_142.id,
     },
     
     video_version_149: {
         videoId: videos.video_149.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_149.id,
     },
     
     video_version_143: {
         videoId: videos.video_143.id,
-        moduleVersionId: moduleVersions.module_version_excel_1.id,
+        moduleVersionId: moduleVersions.module_version_excel_bevez.id,
         videoDataId: videoDatas.video_data_143.id,
     },
     
@@ -1218,7 +1218,7 @@ export const getVideoVersionSeedData = (
     
     video_version_239: {
         videoId: videos.video_239.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_239.id,
     },
     
@@ -1230,7 +1230,7 @@ export const getVideoVersionSeedData = (
     
     video_version_240: {
         videoId: videos.video_240.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_240.id,
     },
     
@@ -1242,7 +1242,7 @@ export const getVideoVersionSeedData = (
     
     video_version_241: {
         videoId: videos.video_241.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_241.id,
     },
     
@@ -1254,7 +1254,7 @@ export const getVideoVersionSeedData = (
     
     video_version_242: {
         videoId: videos.video_242.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_242.id,
     },
     
@@ -1404,7 +1404,7 @@ export const getVideoVersionSeedData = (
     
     video_version_247: {
         videoId: videos.video_247.id,
-        moduleVersionId: moduleVersions.module_version_excel_2.id,
+        moduleVersionId: moduleVersions.module_version_excel_ism_fuggv.id,
         videoDataId: videoDatas.video_data_247.id,
     },
     

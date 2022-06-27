@@ -6,11 +6,11 @@ export const getExamSeedData = () => getSeedList<Exam>()({
         isPretest: false,
         isSignup: true,
     },
-    exam_8: {
+    exam_excel_elso_temazaro: {
         isPretest: false,
         isSignup: false,
     },
-    exam_9: {
+    exam_ism_fuggv_temazaro: {
         isPretest: false,
         isSignup: false,
     },

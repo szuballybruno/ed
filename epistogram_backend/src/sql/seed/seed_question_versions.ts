@@ -315,7 +315,7 @@ export const getSeedQuestionVersions = (
     question_version_54: {
         questionId: questions.question_54.id,
         questionDataId: questionDatas.question_data_54.id,
-        examVersionId: examVersions.exam_version_8.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -347,7 +347,7 @@ export const getSeedQuestionVersions = (
     question_version_53: {
         questionId: questions.question_53.id,
         questionDataId: questionDatas.question_data_53.id,
-        examVersionId: examVersions.exam_version_8.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -355,7 +355,7 @@ export const getSeedQuestionVersions = (
     question_version_55: {
         questionId: questions.question_55.id,
         questionDataId: questionDatas.question_data_55.id,
-        examVersionId: examVersions.exam_version_8.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -363,7 +363,7 @@ export const getSeedQuestionVersions = (
     question_version_56: {
         questionId: questions.question_56.id,
         questionDataId: questionDatas.question_data_56.id,
-        examVersionId: examVersions.exam_version_8.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -371,7 +371,7 @@ export const getSeedQuestionVersions = (
     question_version_52: {
         questionId: questions.question_52.id,
         questionDataId: questionDatas.question_data_52.id,
-        examVersionId: examVersions.exam_version_8.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1483,7 +1483,7 @@ export const getSeedQuestionVersions = (
     question_version_199: {
         questionId: questions.question_199.id,
         questionDataId: questionDatas.question_data_199.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1491,7 +1491,7 @@ export const getSeedQuestionVersions = (
     question_version_200: {
         questionId: questions.question_200.id,
         questionDataId: questionDatas.question_data_200.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1499,7 +1499,7 @@ export const getSeedQuestionVersions = (
     question_version_201: {
         questionId: questions.question_201.id,
         questionDataId: questionDatas.question_data_201.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1523,7 +1523,7 @@ export const getSeedQuestionVersions = (
     question_version_202: {
         questionId: questions.question_202.id,
         questionDataId: questionDatas.question_data_202.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1531,7 +1531,7 @@ export const getSeedQuestionVersions = (
     question_version_203: {
         questionId: questions.question_203.id,
         questionDataId: questionDatas.question_data_203.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1539,7 +1539,7 @@ export const getSeedQuestionVersions = (
     question_version_204: {
         questionId: questions.question_204.id,
         questionDataId: questionDatas.question_data_204.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1547,7 +1547,7 @@ export const getSeedQuestionVersions = (
     question_version_205: {
         questionId: questions.question_205.id,
         questionDataId: questionDatas.question_data_205.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -1555,7 +1555,7 @@ export const getSeedQuestionVersions = (
     question_version_206: {
         questionId: questions.question_206.id,
         questionDataId: questionDatas.question_data_206.id,
-        examVersionId: examVersions.exam_version_12.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
