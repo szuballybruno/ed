@@ -1,16 +1,24 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import { Flex } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useNavigation } from '../services/core/navigatior';
 import { startUserGuideHelp } from '../services/core/userGuidingService';
 import { Environment } from '../static/Environemnt';
+import { PropsWithChildren } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
 import { FlexFloat } from './controls/FlexFloat';
 import { AuthorizationContext } from './system/AuthenticationFrame';
 
-export const LeftPane = (props: FlexProps) => {
+export const LeftPane = ({
+    padding,
+    basis,
+    children
+}: {
+    padding?: string,
+    basis?: string
+} & PropsWithChildren) => {
 
     const homeRoute = applicationRoutes.rootHomeRoute;
     const { hasPermission } = useContext(AuthorizationContext);
@@ -26,12 +34,11 @@ export const LeftPane = (props: FlexProps) => {
             maxW="320px"
             direction="column"
             align="stretch"
-            padding="25px 15px 0 15px"
+            padding={padding ? padding : '25px 15px 0 15px'}
+            basis={basis ?? undefined}
             className="dividerBorderRight"
             position="relative"
-            //borderLeft="2px solid #e2e2e2"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
-            {...props}>
+            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
             <Flex
@@ -71,7 +78,7 @@ export const LeftPane = (props: FlexProps) => {
                 src={Environment.getAssetUrl('/images/bg-art-6.png')}
                 alt="" />
 
-            {props.children}
+            {children}
 
             {/* magic powder top right */}
             <img

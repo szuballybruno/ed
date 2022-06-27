@@ -1,6 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingStateType } from '../../../models/types';
-import { useGetCurrentAppRoute, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
+import { useForceUpdate, useGetCurrentAppRoute } from '../../../static/frontendHelpers';
 
 export type ErrorType = Object | null;
 
@@ -18,7 +18,8 @@ type BusyStateType = {
 
 export const useBusyBarContext = () => {
 
-    const [busyState, setBusyState] = useState<{ [K: string]: BusyStateType }>({});
+    const stateRef = useRef<{ [K: string]: BusyStateType }>({});
+    const forceUpdate = useForceUpdate();
 
     const setBusy = useCallback((key: string, loadingState: LoadingStateType, error?: ErrorType) => {
 
@@ -28,21 +29,17 @@ export const useBusyBarContext = () => {
             loadingState
         };
 
-        const newState = { ...busyState };
+        const newState = { ...stateRef.current };
         newState[key] = state;
 
-        setBusyState(newState);
-    }, [setBusyState, busyState]);
-
-    const clearBusyState = useCallback(() => {
-
-        setBusyState({});
-    }, [setBusyState]);
+        stateRef.current = newState;
+        forceUpdate();
+    }, []);
 
     const { error, isBusy } = useMemo(() => {
 
         const states = Object
-            .values(busyState);
+            .values(stateRef.current);
 
         const isBusy = states
             .any(x => !!x.error || x.loadingState === 'error' || x.loadingState === 'loading');
@@ -51,14 +48,16 @@ export const useBusyBarContext = () => {
             .filter(x => !!x.error)[0]?.error ?? null;
 
         return { isBusy, error };
-    }, [busyState]);
+    }, [stateRef.current]);
 
     const appRoute = useGetCurrentAppRoute();
 
     useEffect(() => {
 
-        clearBusyState();
-    }, [clearBusyState, appRoute]);
+        console.log('asd');
+        stateRef.current = {};
+        forceUpdate();
+    }, [appRoute]);
 
     return {
         setBusy,
@@ -78,6 +77,6 @@ export const useSetBusy = (loadingFunction: (...args: any[]) => any, loadingStat
     useEffect(() => {
 
         setBusy(loadingFunction.name, loadingState, error);
-    }, [setBusy]);
+    }, [setBusy, loadingState, error]);
 };
 

@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { ComponentType, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes, ApplicationRoutesType } from '../configuration/applicationRoutes';
@@ -874,9 +874,17 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 };
 
 export const useForceUpdate = () => {
+
+    // integer state
+    const [, setValue] = useState({});
     
-    const [, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
+    // update the state to force render
+    const forceUpdate = useCallback(() => {
+        
+        setValue({});
+    }, []); 
+    
+    return forceUpdate;
 };
 
 export const clone = <T>(item: T) => {

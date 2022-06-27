@@ -9,6 +9,7 @@ import { distinct } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFlex } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { LeftPane } from './LeftPane';
@@ -56,7 +57,7 @@ const AvailableCoursesPage = () => {
         <LeftPane>
 
             {/* categories  */}
-            <Flex direction="column">
+            <EpistoFlex direction='vertical'>
 
                 {/* categories title */}
                 <EpistoFont
@@ -103,7 +104,7 @@ const AvailableCoursesPage = () => {
                             </ToggleButton>;
                         })}
                 </ToggleButtonGroup>
-            </Flex>
+            </EpistoFlex>
         </LeftPane>
 
         <ContentPane noMaxWidth>

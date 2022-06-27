@@ -1,5 +1,3 @@
-import { Flex } from '@chakra-ui/layout';
-import React from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
@@ -13,8 +11,9 @@ export const UserSettingsPage = () => {
 
     return <PageRootContainer>
 
-        <LeftPane p="20px"
-            flexBasis="300px" >
+        <LeftPane
+            padding="20px"
+            basis="300px" >
 
             <NavigationLinkList
                 routes={[

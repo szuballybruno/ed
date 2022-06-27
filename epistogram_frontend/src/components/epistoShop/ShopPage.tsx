@@ -54,9 +54,7 @@ export const ShopPage = () => {
             }} />
 
         {/* category filters left pane */}
-        <LeftPane
-            direction="column"
-            align="stretch">
+        <LeftPane>
 
             {/* categories title */}
             <EpistoFont
