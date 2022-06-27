@@ -1,33 +1,6 @@
 WITH
-items_combined AS 
+exam_item AS 
 (
-	-- video
-	SELECT
-		mv.course_version_id,
-		vv.id video_version_id,
-		v.id video_id,
-		NULL::int exam_id,
-		NULL::int exam_version_id,
-		mv.id module_version_id,
-		vd.order_index item_order_index,
-		vd.title item_title,
-		vd.subtitle item_subtitle,
-		'video' item_type,
-		'video_version@' || vv.id version_code
-	FROM public.video_version vv
-	
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	
-	LEFT JOIN public.video_data vd
-	ON vd.id = vv.video_data_id
-	
-	LEFT JOIN public.video v
-	ON v.id = vv.video_id
-
-	UNION ALL
-
-	-- exam
 	SELECT 
 		mv.course_version_id,
 		NULL::int video_version_id,
@@ -56,6 +29,37 @@ items_combined AS
 	
 	LEFT JOIN public.exam_data ed
 	ON ed.id = ev.exam_data_id
+),
+video_item AS
+(
+	SELECT
+		mv.course_version_id,
+		vv.id video_version_id,
+		v.id video_id,
+		NULL::int exam_version_id,
+		NULL::int exam_id,
+		mv.id module_version_id,
+		vd.order_index item_order_index,
+		vd.title item_title,
+		vd.subtitle item_subtitle,
+		'video' item_type,
+		'video_version@' || vv.id version_code
+	FROM public.video_version vv
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	
+	LEFT JOIN public.video_data vd
+	ON vd.id = vv.video_data_id
+	
+	LEFT JOIN public.video v
+	ON v.id = vv.video_id
+),
+items_combined AS 
+(
+	SELECT * FROM video_item
+	UNION ALL
+	SELECT * FROM exam_item
 )
 SELECT 
 	cv.id course_version_id,

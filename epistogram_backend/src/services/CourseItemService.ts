@@ -1,3 +1,5 @@
+import { Exam } from '../models/entity/exam/Exam';
+import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { Video } from '../models/entity/video/Video';
 import { VideoData } from '../models/entity/video/VideoData';
@@ -44,27 +46,6 @@ export class CourseItemService {
     }
 
     /**
-     * Inserts new course items
-     * attached to a CourseVersion
-     */
-    async saveNewCourseItemsAsync(
-        moduleMigrations: VersionMigrationResult[],
-        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
-
-        const filterMutations = (
-            itemType: CourseItemType) => {
-
-            return mutations
-                .filter(x => x.action === 'add')
-                .filter(x => XMutatorHelpers
-                    .anyField(x)('itemType', itemType))
-        };
-
-        await this
-            ._createNewVideosAsync(filterMutations('video'), moduleMigrations);
-    }
-
-    /**
      * Increments all non-modified course item's version, 
      * but keeps old [xyx]Data reference, since data is not changed.
      * This is an optimalization, there's no unneccesary redundant data in the DB this way.
@@ -97,6 +78,30 @@ export class CourseItemService {
             .filter(x => !!x.examVersionId);
 
         await this._incrementExamVersionsAsync(examItems, moduleMigrations);
+    }
+
+    /**
+     * Inserts new course items
+     * attached to a CourseVersion
+     */
+    async saveNewCourseItemsAsync(
+        moduleMigrations: VersionMigrationResult[],
+        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+
+        const filterMutations = (
+            itemType: CourseItemType) => {
+
+            return mutations
+                .filter(x => x.action === 'add')
+                .filter(x => XMutatorHelpers
+                    .anyField(x)('itemType', itemType))
+        };
+
+        await this
+            ._createNewVideosAsync(filterMutations('video'), moduleMigrations);
+
+        await this
+            ._createNewExamsAsync(filterMutations('exam'), moduleMigrations);
     }
 
     /**
@@ -233,5 +238,81 @@ export class CourseItemService {
 
         await this._ormService
             .createManyAsync(VideoVersion, videoVersions);
+    }
+
+    /**
+     * Creates new exams from 
+     * exam ADD mutations  
+     */
+    private async _createNewExamsAsync(
+        examMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+        moduleMigrations: VersionMigrationResult[]) {
+
+        //
+        // CREATE EXAM DATAS
+        const examDatas = examMutations
+            .map((examMutation) => {
+
+                const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
+                    .mapMutationToPartialObject(examMutation);
+
+                if (itemOrderIndex === null || itemOrderIndex === undefined)
+                    throw new Error('itemOrderIndex is null or undefiend');
+
+                const newVideoData: InsertEntity<ExamData> = {
+                    description: '',
+                    isFinal: false,
+                    orderIndex: itemOrderIndex,
+                    retakeLimit: 3,
+                    subtitle: itemSubtitle ?? '',
+                    thumbnailUrl: null,
+                    title: itemTitle ?? ''
+                };
+
+                return newVideoData;
+            });
+
+        const examDataIds = await this._ormService
+            .createManyAsync(ExamData, examDatas);
+
+        //
+        // CREATE VIDEOS 
+        const exams = examMutations
+            .map(_ => {
+
+                const exam: InsertEntity<Exam> = {
+                    isPretest: false,
+                    isSignup: false
+                };
+                return exam;
+            });
+
+        const examIds = await this._ormService
+            .createManyAsync(Exam, exams);
+
+        //
+        // CREATE VIDEO VERSIONS 
+        const examVersions = examMutations
+            .map((examMutation, i) => {
+
+                const examDataId = examDataIds[i];
+                const examId = examIds[i];
+                const oldModuleVersionId = XMutatorHelpers
+                    .getFieldValueOrFail(examMutation)('moduleVersionId');
+
+                const newModuleVersionId = VersionMigrationHelpers
+                    .getNewVersionId(moduleMigrations, oldModuleVersionId);
+
+                const examVersion: InsertEntity<ExamVersion> = {
+                    moduleVersionId: newModuleVersionId,
+                    examDataId: examDataId,
+                    examId: examId
+                };
+
+                return examVersion;
+            });
+
+        await this._ormService
+            .createManyAsync(ExamVersion, examVersions);
     }
 }

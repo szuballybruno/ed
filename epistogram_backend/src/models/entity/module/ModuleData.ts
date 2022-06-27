@@ -22,10 +22,6 @@ export class ModuleData {
     @XViewColumn()
     orderIndex: number;
 
-    @Column()
-    @XViewColumn()
-    isPretestModule: boolean;
-
     // 
     // TO ONE
     //

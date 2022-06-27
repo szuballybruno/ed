@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { ModuleVersion } from './ModuleVersion';
 
@@ -8,6 +8,10 @@ export class Module {
     @PrimaryGeneratedColumn()
     @XViewColumn()
     id: number;
+
+    @Column()
+    @XViewColumn()
+    isPretestModule: boolean;
 
     // TO MANY
 

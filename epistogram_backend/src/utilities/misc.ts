@@ -31,8 +31,12 @@ export const VersionMigrationHelpers = {
 
     getNewVersionId: (migrations: VersionMigrationResult[], oldVersionId: number) => {
 
-        return migrations
-            .single(x => x.oldVersionId === oldVersionId)
-            .newVersionId;
+        const asd = migrations
+            .firstOrNull(x => x.oldVersionId === oldVersionId);
+
+        if (!asd)
+            throw new Error(`Module migrations do not contain migration from old moduleVersionId: ${oldVersionId}!`);
+
+        return asd.newVersionId;
     }
 }

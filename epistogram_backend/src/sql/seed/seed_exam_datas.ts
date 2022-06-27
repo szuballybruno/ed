@@ -272,15 +272,28 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         retakeLimit: null,
         thumbnailUrl: null
     },
-    pretest_exam_data_40: {
-        title: 'OBS',
-        subtitle: 'Kezdés',
+
+    // OBS -----------------------------------------------
+    pretest_exam_data_obs: {
+        title: 'PRETEST EXAM OBS',
+        subtitle: 'PRETEST EXAM OBS',
         description: '',
         orderIndex: 0,
         isFinal: false,
         retakeLimit: null,
         thumbnailUrl: null
     },
+    exam_data_obs_test: {
+        title: 'OBS Test exam',
+        subtitle: 'OBS Test exam',
+        description: '',
+        orderIndex: 2,
+        isFinal: false,
+        retakeLimit: null,
+        thumbnailUrl: null
+    },
+
+
     pretest_exam_data_41: {
         title: 'PowerPoint',
         subtitle: 'Kezdés',

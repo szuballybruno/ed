@@ -189,10 +189,16 @@ export const getExamVersionsSeedData = (
             examId: exams.pretest_exam_39.id
         },
 
+        // OBS -------------------------------------
         exam_version_pretest_40: {
-            moduleVersionId: moduleVersions.module_version_obs_pretest_1.id,
-            examDataId: examDatas.pretest_exam_data_40.id,
-            examId: exams.pretest_exam_40.id
+            moduleVersionId: moduleVersions.module_version_obs_pretest.id,
+            examDataId: examDatas.pretest_exam_data_obs.id,
+            examId: exams.pretest_exam_obs.id
+        },
+        exam_version_obs_test: {
+            moduleVersionId: moduleVersions.module_version_obs_1.id,
+            examDataId: examDatas.exam_data_obs_test.id,
+            examId: exams.exam_obs_test.id
         },
 
         exam_version_pretest_41: {

@@ -126,10 +126,17 @@ export const getExamSeedData = () => getSeedList<Exam>()({
         isPretest: true,
         isSignup: false,
     },
-    pretest_exam_40: {
+
+    // OBS ------------------------------
+    pretest_exam_obs: {
         isPretest: true,
         isSignup: false,
     },
+    exam_obs_test: {
+        isPretest: false,
+        isSignup: false
+    },
+
     pretest_exam_41: {
         isPretest: true,
         isSignup: false,

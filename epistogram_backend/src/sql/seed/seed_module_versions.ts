@@ -66,7 +66,7 @@ export const getModuleVersionsSeedData = (
     },
 
     // obs course pretest module version
-    module_version_obs_pretest_1: {
+    module_version_obs_pretest: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_obs_pretest_1.id,
         moduleId: modules.module_obs_pretest_1.id

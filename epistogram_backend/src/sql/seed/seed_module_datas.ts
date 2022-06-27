@@ -10,7 +10,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'SIGNUP',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: false
     },
 
     // insta course pretest module
@@ -19,7 +18,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST INSTA',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
 
     // google ads course pretest module
@@ -28,7 +26,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST ADS',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
 
     // python course pretest module
@@ -37,7 +34,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST PYTHON',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
 
     // linkedin course pretest module
@@ -46,7 +42,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST LINKEDIN',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
 
     // cyber course pretest module
@@ -55,7 +50,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST CYBER',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
 
     module_data_cyber_1: {
@@ -63,7 +57,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'Cyber 1 module',
         orderIndex: 1,
         imageFileId: null,
-        isPretestModule: false
     },
 
     // canva course pretest module
@@ -72,7 +65,6 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST CANVA',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
 
     // obs course pretest module
@@ -81,28 +73,24 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST OBS',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
     module_data_3: {
         name: 'OBS használata percek alatt',
         description: 'Ebben a modulban megtanulhatod, hogyan állítsd be villámgyorsan az OBS-t úgy, hogy hatékony erőforrás-kezelés mellett is csúcsminőségű felvételeket tudj készíteni, és akkor se érjen probléma, ha esetleg közben valamiért megszakadna a videó.',
         orderIndex: 1,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_7: {
         name: 'Finomságok az OBS-el',
         description: 'Zajszűrés, hangeffektek, az OBS-nek ez sem jelent problémát!',
         orderIndex: 2,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_8: {
         name: 'Első felvételünk, vizsga',
         description: 'Készítsd el első felvételed OBS-el!',
         orderIndex: 3,
         imageFileId: null,
-        isPretestModule: false
     },
 
     // excel course pretest module
@@ -111,77 +99,66 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST EXCEL',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
     module_data_excel_bevez: {
         name: 'Bevezetés az Excelbe',
         description: 'Excel tanfolyamunk első moduljában az alapvető fogalmakkal, a menürendszerrel, valamint a kezelőszervekkel ismerkedhetsz meg.',
         orderIndex: 1,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_ism_fuggv: {
         name: 'Ismerkedés a függvényekkel',
         description: '',
         orderIndex: 3,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_3: {
         name: 'A formázás alapjai',
         description: '',
         orderIndex: 4,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_4: {
         name: 'Leggyakoribb függvények és azok használata',
         description: '',
         orderIndex: 5,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_5: {
         name: 'Segítség az adatkezelésben',
         description: '',
         orderIndex: 6,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_6: {
         name: 'Munka másokkal',
         description: '',
         orderIndex: 7,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_7: {
         name: 'Formázás felsőfokon',
         description: '',
         orderIndex: 8,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_8: {
         name: 'Munka nagy mennyiségű adattal',
         description: '',
         orderIndex: 9,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_9: {
         name: 'Kreatív adatábrázolás',
         description: '',
         orderIndex: 10,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_excel_10: {
         name: 'Ismerkedés a haladó funkciókkal',
         description: '',
         orderIndex: 11,
         imageFileId: null,
-        isPretestModule: false
     },
 
     // word course pretest module
@@ -190,63 +167,54 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST WORD',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
     module_data_word_1: {
         name: 'Első lépések',
         description: '',
         orderIndex: 1,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_2: {
         name: 'Formázás - Hogyan készíthetünk letisztult dokumentumokat?',
         description: '',
         orderIndex: 2,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_3: {
         name: 'Gyorsabb munka a gyakorlatban',
         description: '',
         orderIndex: 3,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_4: {
         name: 'Munka másokkal, dokumentumunk védelme',
         description: '',
         orderIndex: 4,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_5: {
         name: 'Szövegírás, elrendezés, ellenőrzés',
         description: '',
         orderIndex: 5,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_6: {
         name: 'Képek, vizuális eszközök használata',
         description: '',
         orderIndex: 6,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_7: {
         name: 'Táblázatok a Wordben',
         description: '',
         orderIndex: 7,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_word_8: {
         name: 'Példák a gyakorlati alkalmazásra',
         description: '',
         orderIndex: 8,
         imageFileId: null,
-        isPretestModule: false
     },
 
     // powerPoint course pretest module
@@ -255,56 +223,48 @@ export const getModuleDatasSeedData = (courses: CourseDatasSeedDataType) => getS
         description: 'PRETEST PP',
         orderIndex: 0,
         imageFileId: null,
-        isPretestModule: true
     },
     module_data_54: {
         name: 'Első lépések',
         description: '',
         orderIndex: 1,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_55: {
         name: 'Szöveg és tartalom formázása',
         description: '',
         orderIndex: 2,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_56: {
         name: 'Képek, vizuális eszközök használata',
         description: '',
         orderIndex: 3,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_57: {
         name: 'Videók és hanganyagok használata a PowerPointon belül',
         description: '',
         orderIndex: 4,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_58: {
         name: 'Prezentáció rendszerezése, segítség az előadás során',
         description: '',
         orderIndex: 5,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_59: {
         name: 'Prezentáció további testreszabása és effektusok',
         description: '',
         orderIndex: 6,
         imageFileId: null,
-        isPretestModule: false
     },
     module_data_60: {
         name: 'Tartalom ellenőrzése és közös munka',
         description: '',
         orderIndex: 7,
         imageFileId: null,
-        isPretestModule: false
     },
 });
 
