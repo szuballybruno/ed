@@ -26,85 +26,85 @@ export const getModulesSeedData = () => getSeedList<Module>()({
     // cyber course pretest module
     module_cyber_pretest_1: {
     },
-    module_4: {
+    module_cyber_1: {
     },
 
     // canva course pretest module
     module_canva_pretest_1: {
     },
-    module_2: {
+    module_canva_1: {
     },
 
     // obs course pretest module
     module_obs_pretest_1: {
     },
-    module_3: {
+    module_obs_1: {
     },
-    module_7: {
+    module_obs_2: {
     },
-    module_8: {
+    module_obs_3: {
     },
 
     // excel course pretest module
     module_excel_pretest_1: {
     },
-    module_35: {
+    module_excel_1: {
     },
-    module_36: {
+    module_excel_2: {
     },
-    module_37: {
+    module_excel_3: {
     },
-    module_38: {
+    module_excel_4: {
     },
-    module_39: {
+    module_excel_5: {
     },
-    module_40: {
+    module_excel_6: {
     },
-    module_41: {
+    module_excel_7: {
     },
-    module_42: {
+    module_excel_8: {
     },
-    module_43: {
+    module_excel_9: {
     },
-    module_44: {
+    module_excel_10: {
     },
 
     // word course pretest module
     module_word_pretest_1: {
     },
-    module_45: {
+    module_word_1: {
     },
-    module_47: {
+    module_word_2: {
     },
-    module_48: {
+    module_word_3: {
     },
-    module_49: {
+    module_word_4: {
     },
-    module_50: {
+    module_word_5: {
     },
-    module_51: {
+    module_word_6: {
     },
-    module_52: {
+    module_word_7: {
     },
-    module_53: {
+    module_word_8: {
     },
 
     // powerPoint course pretest module
     module_powerPoint_pretest_1: {
     },
-    module_54: {
+    module_pp_1: {
     },
-    module_55: {
+    module_pp_2: {
     },
-    module_56: {
+    module_pp_3: {
     },
-    module_57: {
+    module_pp_4: {
     },
-    module_58: {
+    module_pp_5: {
     },
-    module_59: {
+    module_pp_6: {
     },
-    module_60: {
+    module_pp_7: {
     },
 });
 

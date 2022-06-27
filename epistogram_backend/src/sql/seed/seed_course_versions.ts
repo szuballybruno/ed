@@ -43,10 +43,6 @@ export const getCourseVersionsSeedData = (
             courseDataId: courseDatas.course_data_powerPoint.id,
             courseId: courses.course_powerPoint.id
         },
-        course_version_uj: {
-            courseDataId: courseDatas.course_data_uj.id,
-            courseId: courses.course_uj.id
-        },
         course_version_excel: {
             courseDataId: courseDatas.course_data_excel.id,
             courseId: courses.course_excel.id

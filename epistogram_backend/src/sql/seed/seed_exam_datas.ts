@@ -227,15 +227,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         retakeLimit: null,
         thumbnailUrl: null
     },
-    pretest_exam_data_34: {
-        title: 'Pretest exam course 10',
-        subtitle: 'Pretest exam course 10 desc',
-        description: '',
-        orderIndex: 0,
-        isFinal: false,
-        retakeLimit: null,
-        thumbnailUrl: null
-    },
     pretest_exam_data_35: {
         title: 'Pretest exam course 23',
         subtitle: 'Pretest exam course 23 desc',

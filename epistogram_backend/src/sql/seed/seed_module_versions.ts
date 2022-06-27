@@ -52,10 +52,10 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_cyber_pretest_1.id
     },
 
-    module_version_4: {
+    module_version_cyber_1: {
         courseVersionId: courseVersions.course_version_cyber.id,
-        moduleDataId: moduleDatas.module_data_4.id,
-        moduleId: modules.module_4.id
+        moduleDataId: moduleDatas.module_data_cyber_1.id,
+        moduleId: modules.module_cyber_1.id
     },
 
     // canva course pretest module version
@@ -65,12 +65,6 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_canva_pretest_1.id
     },
 
-    module_version_2: {
-        courseVersionId: courseVersions.course_version_canva.id,
-        moduleDataId: moduleDatas.module_data_2.id,
-        moduleId: modules.module_2.id
-    },
-
     // obs course pretest module version
     module_version_obs_pretest_1: {
         courseVersionId: courseVersions.course_version_obs.id,
@@ -78,22 +72,22 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_obs_pretest_1.id
     },
 
-    module_version_3: {
+    module_version_obs_1: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_3.id,
-        moduleId: modules.module_3.id
+        moduleId: modules.module_obs_1.id
     },
 
-    module_version_7: {
+    module_version_obs_2: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_7.id,
-        moduleId: modules.module_7.id
+        moduleId: modules.module_obs_2.id
     },
 
-    module_version_8: {
+    module_version_obs_3: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_8.id,
-        moduleId: modules.module_8.id
+        moduleId: modules.module_obs_3.id
     },
 
     // excel course pretest module version
@@ -103,64 +97,64 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_excel_pretest_1.id
     },
 
-    module_version_35: {
+    module_version_excel_1: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_35.id,
-        moduleId: modules.module_35.id
+        moduleDataId: moduleDatas.module_data_excel_1.id,
+        moduleId: modules.module_excel_1.id
     },
 
-    module_version_36: {
+    module_version_excel_2: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_36.id,
-        moduleId: modules.module_36.id
+        moduleDataId: moduleDatas.module_data_excel_3.id,
+        moduleId: modules.module_excel_2.id
     },
 
-    module_version_37: {
+    module_version_excel_3: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_37.id,
-        moduleId: modules.module_37.id
+        moduleDataId: moduleDatas.module_data_excel_4.id,
+        moduleId: modules.module_excel_3.id
     },
 
-    module_version_38: {
+    module_version_excel_4: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_38.id,
-        moduleId: modules.module_38.id
+        moduleDataId: moduleDatas.module_data_excel_5.id,
+        moduleId: modules.module_excel_4.id
     },
 
-    module_version_39: {
+    module_version_excel_5: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_39.id,
-        moduleId: modules.module_39.id
+        moduleDataId: moduleDatas.module_data_excel_6.id,
+        moduleId: modules.module_excel_5.id
     },
 
-    module_version_40: {
+    module_version_excel_6: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_40.id,
-        moduleId: modules.module_40.id
+        moduleDataId: moduleDatas.module_data_excel_7.id,
+        moduleId: modules.module_excel_6.id
     },
 
-    module_version_41: {
+    module_version_excel_7: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_41.id,
-        moduleId: modules.module_41.id
+        moduleDataId: moduleDatas.module_data_excel_8.id,
+        moduleId: modules.module_excel_7.id
     },
 
-    module_version_42: {
+    module_version_excel_8: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_42.id,
-        moduleId: modules.module_42.id
+        moduleDataId: moduleDatas.module_data_excel_9.id,
+        moduleId: modules.module_excel_8.id
     },
 
-    module_version_43: {
+    module_version_excel_9: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_43.id,
-        moduleId: modules.module_43.id
+        moduleDataId: moduleDatas.module_data_excel_10.id,
+        moduleId: modules.module_excel_9.id
     },
 
-    module_version_44: {
+    module_version_excel_10: {
         courseVersionId: courseVersions.course_version_excel.id,
-        moduleDataId: moduleDatas.module_data_44.id,
-        moduleId: modules.module_44.id
+        moduleDataId: moduleDatas.module_data_excel_11.id,
+        moduleId: modules.module_excel_10.id
     },
 
     // word course pretest module version
@@ -170,52 +164,52 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_word_pretest_1.id
     },
 
-    module_version_45: {
+    module_version_word_1: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_45.id,
-        moduleId: modules.module_45.id
+        moduleDataId: moduleDatas.module_data_word_1.id,
+        moduleId: modules.module_word_1.id
     },
 
-    module_version_47: {
+    module_version_word_2: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_47.id,
-        moduleId: modules.module_47.id
+        moduleDataId: moduleDatas.module_data_word_2.id,
+        moduleId: modules.module_word_2.id
     },
 
-    module_version_48: {
+    module_version_word_3: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_48.id,
-        moduleId: modules.module_48.id
+        moduleDataId: moduleDatas.module_data_word_3.id,
+        moduleId: modules.module_word_3.id
     },
 
-    module_version_49: {
+    module_version_word_4: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_49.id,
-        moduleId: modules.module_49.id
+        moduleDataId: moduleDatas.module_data_word_4.id,
+        moduleId: modules.module_word_4.id
     },
 
-    module_version_50: {
+    module_version_word_5: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_50.id,
-        moduleId: modules.module_50.id
+        moduleDataId: moduleDatas.module_data_word_5.id,
+        moduleId: modules.module_word_5.id
     },
 
-    module_version_51: {
+    module_version_word_6: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_51.id,
-        moduleId: modules.module_51.id
+        moduleDataId: moduleDatas.module_data_word_6.id,
+        moduleId: modules.module_word_6.id
     },
 
-    module_version_52: {
+    module_version_word_7: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_52.id,
-        moduleId: modules.module_52.id
+        moduleDataId: moduleDatas.module_data_word_7.id,
+        moduleId: modules.module_word_7.id
     },
 
-    module_version_53: {
+    module_version_word_8: {
         courseVersionId: courseVersions.course_version_word.id,
-        moduleDataId: moduleDatas.module_data_53.id,
-        moduleId: modules.module_53.id
+        moduleDataId: moduleDatas.module_data_word_8.id,
+        moduleId: modules.module_word_8.id
     },
 
     // powerPoint course pretest module version
@@ -225,46 +219,46 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_powerPoint_pretest_1.id
     },
 
-    module_version_54: {
+    module_version_pp_1: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_54.id,
-        moduleId: modules.module_54.id
+        moduleId: modules.module_pp_1.id
     },
 
-    module_version_55: {
+    module_version_pp_2: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_55.id,
-        moduleId: modules.module_55.id
+        moduleId: modules.module_pp_2.id
     },
 
-    module_version_56: {
+    module_version_pp_3: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_56.id,
-        moduleId: modules.module_56.id
+        moduleId: modules.module_pp_3.id
     },
 
-    module_version_57: {
+    module_version_pp_4: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_57.id,
-        moduleId: modules.module_57.id
+        moduleId: modules.module_pp_4.id
     },
 
-    module_version_58: {
+    module_version_pp_5: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_58.id,
-        moduleId: modules.module_58.id
+        moduleId: modules.module_pp_5.id
     },
 
-    module_version_59: {
+    module_version_pp_6: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_59.id,
-        moduleId: modules.module_59.id
+        moduleId: modules.module_pp_6.id
     },
 
-    module_version_60: {
+    module_version_pp_7: {
         courseVersionId: courseVersions.course_version_powerPoint.id,
         moduleDataId: moduleDatas.module_data_60.id,
-        moduleId: modules.module_60.id
+        moduleId: modules.module_pp_7.id
     },
 });
 

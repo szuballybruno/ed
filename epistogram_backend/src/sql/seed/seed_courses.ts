@@ -30,9 +30,6 @@ export const getCourseSeedData = () => getSeedList<Course>()({
         course_powerPoint: {
             deletionDate: null
         },
-        course_uj: {
-            deletionDate: null
-        },
         course_excel: {
             deletionDate: null
         }

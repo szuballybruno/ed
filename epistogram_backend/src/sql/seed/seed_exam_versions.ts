@@ -10,145 +10,145 @@ export const getExamVersionsSeedData = (
     exams: ExamSeedDataType) => getSeedList<ExamVersion>()({
 
         signup_exam_version: {
-            moduleVersionId: moduleVersions.module_version_2.id,
+            moduleVersionId: moduleVersions.module_version_SIGNUP_MODULE.id,
             examDataId: examDatas.signup_exam_data.id,
             examId: exams.signup_exam.id
         },
 
         exam_version_8: {
-            moduleVersionId: moduleVersions.module_version_2.id,
+            moduleVersionId: moduleVersions.module_version_excel_1.id,
             examDataId: examDatas.exam_data_8.id,
             examId: exams.exam_8.id
         },
 
         exam_version_9: {
-            moduleVersionId: moduleVersions.module_version_2.id,
+            moduleVersionId: moduleVersions.module_version_excel_1.id,
             examDataId: examDatas.exam_data_9.id,
             examId: exams.exam_9.id
         },
 
         exam_version_10: {
-            moduleVersionId: moduleVersions.module_version_8.id,
+            moduleVersionId: moduleVersions.module_version_obs_3.id,
             examDataId: examDatas.exam_data_10.id,
             examId: exams.exam_10.id
         },
 
         exam_version_15: {
-            moduleVersionId: moduleVersions.module_version_38.id,
+            moduleVersionId: moduleVersions.module_version_excel_4.id,
             examDataId: examDatas.exam_data_15.id,
             examId: exams.exam_15.id
         },
 
         exam_version_16: {
-            moduleVersionId: moduleVersions.module_version_39.id,
+            moduleVersionId: moduleVersions.module_version_excel_5.id,
             examDataId: examDatas.exam_data_16.id,
             examId: exams.exam_16.id
         },
 
         exam_version_17: {
-            moduleVersionId: moduleVersions.module_version_41.id,
+            moduleVersionId: moduleVersions.module_version_excel_7.id,
             examDataId: examDatas.exam_data_17.id,
             examId: exams.exam_17.id
         },
 
         exam_version_18: {
-            moduleVersionId: moduleVersions.module_version_42.id,
+            moduleVersionId: moduleVersions.module_version_excel_8.id,
             examDataId: examDatas.exam_data_18.id,
             examId: exams.exam_18.id
         },
 
         exam_version_20: {
-            moduleVersionId: moduleVersions.module_version_44.id,
+            moduleVersionId: moduleVersions.module_version_excel_10.id,
             examDataId: examDatas.exam_data_20.id,
             examId: exams.exam_20.id
         },
 
         exam_version_21: {
-            moduleVersionId: moduleVersions.module_version_45.id,
+            moduleVersionId: moduleVersions.module_version_word_1.id,
             examDataId: examDatas.exam_data_21.id,
             examId: exams.exam_21.id
         },
 
         exam_version_12: {
-            moduleVersionId: moduleVersions.module_version_35.id,
+            moduleVersionId: moduleVersions.module_version_excel_1.id,
             examDataId: examDatas.exam_data_12.id,
             examId: exams.exam_12.id
         },
 
         exam_version_13: {
-            moduleVersionId: moduleVersions.module_version_36.id,
+            moduleVersionId: moduleVersions.module_version_excel_2.id,
             examDataId: examDatas.exam_data_13.id,
             examId: exams.exam_13.id
         },
 
         exam_version_14: {
-            moduleVersionId: moduleVersions.module_version_37.id,
+            moduleVersionId: moduleVersions.module_version_excel_3.id,
             examDataId: examDatas.exam_data_14.id,
             examId: exams.exam_14.id
         },
 
         exam_version_22: {
-            moduleVersionId: moduleVersions.module_version_47.id,
+            moduleVersionId: moduleVersions.module_version_word_2.id,
             examDataId: examDatas.exam_data_22.id,
             examId: exams.exam_22.id
         },
 
         exam_version_23: {
-            moduleVersionId: moduleVersions.module_version_48.id,
+            moduleVersionId: moduleVersions.module_version_word_3.id,
             examDataId: examDatas.exam_data_23.id,
             examId: exams.exam_23.id
         },
 
         exam_version_24: {
-            moduleVersionId: moduleVersions.module_version_50.id,
+            moduleVersionId: moduleVersions.module_version_word_5.id,
             examDataId: examDatas.exam_data_24.id,
             examId: exams.exam_24.id
         },
 
         exam_version_25: {
-            moduleVersionId: moduleVersions.module_version_51.id,
+            moduleVersionId: moduleVersions.module_version_word_6.id,
             examDataId: examDatas.exam_data_25.id,
             examId: exams.exam_25.id
         },
 
         exam_version_26: {
-            moduleVersionId: moduleVersions.module_version_53.id,
+            moduleVersionId: moduleVersions.module_version_word_8.id,
             examDataId: examDatas.exam_data_26.id,
             examId: exams.exam_26.id
         },
 
         exam_version_27: {
-            moduleVersionId: moduleVersions.module_version_54.id,
+            moduleVersionId: moduleVersions.module_version_pp_1.id,
             examDataId: examDatas.exam_data_27.id,
             examId: exams.exam_27.id
         },
 
         exam_version_28: {
-            moduleVersionId: moduleVersions.module_version_55.id,
+            moduleVersionId: moduleVersions.module_version_pp_2.id,
             examDataId: examDatas.exam_data_28.id,
             examId: exams.exam_28.id
         },
 
         exam_version_29: {
-            moduleVersionId: moduleVersions.module_version_56.id,
+            moduleVersionId: moduleVersions.module_version_pp_3.id,
             examDataId: examDatas.exam_data_29.id,
             examId: exams.exam_29.id
         },
 
         exam_version_30: {
-            moduleVersionId: moduleVersions.module_version_57.id,
+            moduleVersionId: moduleVersions.module_version_pp_4.id,
             examDataId: examDatas.exam_data_30.id,
             examId: exams.exam_30.id
         },
 
         exam_version_31: {
-            moduleVersionId: moduleVersions.module_version_58.id,
+            moduleVersionId: moduleVersions.module_version_pp_5.id,
             examDataId: examDatas.exam_data_31.id,
             examId: exams.exam_31.id
         },
 
         exam_version_32: {
-            moduleVersionId: moduleVersions.module_version_60.id,
+            moduleVersionId: moduleVersions.module_version_pp_7.id,
             examDataId: examDatas.exam_data_32.id,
             examId: exams.exam_32.id
         },
@@ -157,12 +157,6 @@ export const getExamVersionsSeedData = (
             moduleVersionId: moduleVersions.module_version_canva_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_33.id,
             examId: exams.pretest_exam_33.id
-        },
-
-        exam_version_pretest_34: {
-            moduleVersionId: moduleVersions.module_version_cyber_pretest_1.id,
-            examDataId: examDatas.pretest_exam_data_34.id,
-            examId: exams.pretest_exam_34.id
         },
 
         exam_version_pretest_35: {
