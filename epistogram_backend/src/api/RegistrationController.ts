@@ -5,6 +5,7 @@ import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserVia
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -14,12 +15,10 @@ export class RegistrationController {
     private _registrationService: RegistrationService;
     private _config: GlobalConfiguration;
 
-    constructor(
-        res: RegistrationService,
-        config: GlobalConfiguration) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._registrationService = res;
-        this._config = config;
+        this._registrationService = serviceProvider.getService(RegistrationService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
     }
 
     @XControllerAction(apiRoutes.registration.registerUserViaPublicToken, { isPublic: true, isPost: true })

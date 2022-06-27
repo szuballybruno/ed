@@ -1,10 +1,10 @@
 import { User } from '../../models/entity/User';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log } from '../misc/logger';
+import { log, logSecondary } from '../misc/logger';
 import { ORMConnectionService } from '../ORMConnectionService/ORMConnectionService';
 import { SeedService } from './SeedService';
 import { SQLBootstrapperService } from './SQLBootstrapper';
-import { ExecSQLFunctionType, SQLConnectionService } from './SQLConnectionService';
+import { ExecSQLFunctionType } from './SQLConnectionService';
 
 export type SQLConnectionType = {
     executeSQL: ExecSQLFunctionType,
@@ -15,28 +15,28 @@ export class DbConnectionService {
 
     private _config: GlobalConfiguration;
     private _sqlBootstrapperSvc: SQLBootstrapperService;
-    private _sqlConnectionService: SQLConnectionService;
     private _ormConnectionService: ORMConnectionService;
     private _seedService: SeedService;
 
     constructor(
         config: GlobalConfiguration,
-        sqlConnectionService: SQLConnectionService,
         sqlStrapper: SQLBootstrapperService,
         ormConnectionService: ORMConnectionService,
         seedService: SeedService) {
 
         this._config = config;
         this._sqlBootstrapperSvc = sqlStrapper;
-        this._sqlConnectionService = sqlConnectionService;
         this._ormConnectionService = ormConnectionService;
         this._seedService = seedService;
     }
 
-    async initializeConnectionAsync() {
+    async connectTypeORM() {
 
-        await this._sqlConnectionService
-            .establishConnectionAsync();
+        logSecondary('Connecting TypeORM...');
+
+        // connect TypeORM
+        await this._ormConnectionService
+            .connectTypeORMAsync(true);
     }
 
     async bootstrapDBAsync() {
@@ -45,7 +45,7 @@ export class DbConnectionService {
         await this._purgeDBIfNecessary();
 
         // CREATE TABLES 
-        await this._createTables();
+        await this._connectTypeORMAndCreateTables();
 
         // BOOTSTRAP 
         await this._sqlBootstrapperSvc
@@ -87,13 +87,13 @@ export class DbConnectionService {
                 .purgeDBAsync();
     }
 
-    private async _createTables() {
+    private async _connectTypeORMAndCreateTables() {
 
-        log('Connecting ORM...');
+        logSecondary('Connecting TypeORM and creating tables...');
 
         // connect TypeORM
         await this._ormConnectionService
-            .connectORMAsync();
+            .connectTypeORMAsync();
     }
 
     private _isEmptyDatabase = async () => {

@@ -6,6 +6,7 @@ import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -18,20 +19,14 @@ export class MiscController {
     private _config: GlobalConfiguration;
     private _courseBridgeService: UserCourseBridgeService;
 
-    constructor(
-        miscService: MiscService,
-        practiseQuestionService: PractiseQuestionService,
-        tokenService: TokenService,
-        ormService: ORMConnectionService,
-        config: GlobalConfiguration,
-        courseBridgeService: UserCourseBridgeService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._miscService = miscService;
-        this._practiseQuestionService = practiseQuestionService;
-        this._tokenService = tokenService;
-        this._ormService = ormService;
-        this._config = config;
-        this._courseBridgeService = courseBridgeService;
+        this._miscService = serviceProvider.getService(MiscService);
+        this._practiseQuestionService = serviceProvider.getService(PractiseQuestionService);
+        this._tokenService = serviceProvider.getService(TokenService);
+        this._ormService = serviceProvider.getService(ORMConnectionService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
+        this._courseBridgeService = serviceProvider.getService(UserCourseBridgeService);
     }
 
     @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)

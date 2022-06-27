@@ -3,6 +3,7 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -10,9 +11,9 @@ export class UserController {
 
     private _userService: UserService;
 
-    constructor(userService: UserService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._userService = userService;
+        this._userService = serviceProvider.getService(UserService);
     }
 
     saveUserDataAction = async (params: ActionParams) => {

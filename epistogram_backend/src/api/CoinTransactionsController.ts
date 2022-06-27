@@ -1,5 +1,6 @@
 import { CoinTransactionService } from '../services/CoinTransactionService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -7,9 +8,9 @@ export class CoinTransactionsController {
 
     private _coinTransactionService: CoinTransactionService;
 
-    constructor(cts: CoinTransactionService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._coinTransactionService = cts;
+        this._coinTransactionService = serviceProvider.getService(CoinTransactionService);
     }
 
     @XControllerAction(apiRoutes.coinTransactions.getCoinTransactions)

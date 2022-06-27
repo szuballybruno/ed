@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { StorageFile } from '../StorageFile';
 import { ModuleVersion } from './ModuleVersion';
@@ -39,5 +39,5 @@ export class ModuleData {
     //
 
     @XOneToMany<ModuleData>()(() => ModuleVersion, x => x.moduleData)
-    moduleVersions: ModuleVersion[];
+    moduleVersions: Relation<ModuleVersion>[];
 }

@@ -3,14 +3,15 @@ import { VideoRatingService } from '../services/VideoRatingService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class VideoRatingController {
 
     private _videoRatingService: VideoRatingService;
 
-    constructor(videoRatingService: VideoRatingService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._videoRatingService = videoRatingService;
+        this._videoRatingService = serviceProvider.getService(VideoRatingService);
     }
 
     @XControllerAction(apiRoutes.videoRating.rateVideoDifficulty, { isPost: true })

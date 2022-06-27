@@ -3,14 +3,15 @@ import { TeacherInfoService } from '../services/TeacherInfoService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class TeacherInfoController {
 
     private _teacherInfoService: TeacherInfoService;
 
-    constructor(teacherInfoService: TeacherInfoService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._teacherInfoService = teacherInfoService;
+        this._teacherInfoService = serviceProvider.getService(TeacherInfoService);
     }
 
     @XControllerAction(apiRoutes.teacherInfo.getTeacherInfo)

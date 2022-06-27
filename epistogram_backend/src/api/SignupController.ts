@@ -4,16 +4,17 @@ import { SignupService } from '../services/SignupService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class SignupController {
 
     private _signupService: SignupService;
     private _personalityAssessmentService: PersonalityAssessmentService;
 
-    constructor(signupService: SignupService, personalityAssessmentService: PersonalityAssessmentService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._signupService = signupService;
-        this._personalityAssessmentService = personalityAssessmentService;
+        this._signupService = serviceProvider.getService(SignupService);
+        this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }
 
     @XControllerAction(apiRoutes.signup.answerSignupQuestion, { isPost: true })

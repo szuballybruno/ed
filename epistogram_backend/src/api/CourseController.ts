@@ -7,6 +7,7 @@ import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -15,10 +16,10 @@ export class CourseController {
     private _courseService: CourseService;
     private _userCourseBridgeService: UserCourseBridgeService;
 
-    constructor(courseService: CourseService, userCourseBridgeService: UserCourseBridgeService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._courseService = courseService;
-        this._userCourseBridgeService = userCourseBridgeService;
+        this._courseService = serviceProvider.getService(CourseService);
+        this._userCourseBridgeService = serviceProvider.getService(UserCourseBridgeService);
     }
 
     @XControllerAction(apiRoutes.course.getPermissionAssignCourses)

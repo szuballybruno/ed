@@ -1,19 +1,17 @@
 import { ExamService } from '../services/ExamService';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class ExamController {
 
     private _examService: ExamService;
-    private _ormService: ORMConnectionService;
 
-    constructor(examService: ExamService, ormService: ORMConnectionService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._examService = examService;
-        this._ormService = ormService;
+        this._examService = serviceProvider.getService(ExamService);
     }
 
     @XControllerAction(apiRoutes.exam.answerExamQuestion, { isPost: true })

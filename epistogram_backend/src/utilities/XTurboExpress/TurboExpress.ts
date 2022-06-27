@@ -1,12 +1,22 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
+import { LoggerService } from '../../services/LoggerService';
 import { ConstructorSignature } from '../../services/misc/advancedTypes/ConstructorSignature';
 import { log, logSecondary } from '../../services/misc/logger';
+import { ORMConnectionService } from '../../services/ORMConnectionService/ORMConnectionService';
+import { SQLConnectionService } from '../../services/sqlServices/SQLConnectionService';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
+import { ServiceProvider } from '../../startup/servicesDI';
+import { ActionParams } from '../ActionParams';
+import { ITurboExpressLayer } from './ITurboExpressLayer';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
 
-export interface ITurboMiddleware<TInParams, TOutParams> {
+export interface ITurboMiddlewareInstance<TInParams, TOutParams> {
 
     runMiddlewareAsync: (params: MiddlewareParams<TInParams>) => Promise<TOutParams>;
+}
+
+export interface ITurboMiddleware<TInParams, TOutParams>
+    extends ITurboExpressLayer<ITurboMiddlewareInstance<TInParams, TOutParams>> {
 }
 
 export interface IRouteOptions {
@@ -32,6 +42,8 @@ export class EndpointOptionsType implements IRouteOptions {
 
 type MiddlwareFnType = (req: any, res: any, next: any) => void;
 
+export type GetServiceProviderType = () => Promise<ServiceProvider>;
+
 export class TurboExpressBuilder<TActionParams> {
 
     private _port: string;
@@ -39,13 +51,20 @@ export class TurboExpressBuilder<TActionParams> {
     private _onError: (e: any, req: Request, res: Response) => void;
     private _onSuccess: (value: any, req: Request, res: Response) => void;
     private _expressMiddlewares: MiddlwareFnType[];
-    private _controllers: [ConstructorSignature<any>, any][];
+    private _controllers: ITurboExpressLayer[];
+    private _serviceCreationFunction: GetServiceProviderType;
 
-    constructor() {
+    constructor(private _loggerService: LoggerService) {
 
         this._middlewares = [];
         this._expressMiddlewares = [];
         this._controllers = [];
+    }
+
+    setServicesCreationFunction(createServices: GetServiceProviderType) {
+
+        this._serviceCreationFunction = createServices;
+        return this as Pick<TurboExpressBuilder<TActionParams>, 'setPort'>;
     }
 
     setPort(port: string) {
@@ -83,10 +102,10 @@ export class TurboExpressBuilder<TActionParams> {
         return this;
     }
 
-    addController<TController>(signature: ConstructorSignature<TController>, controller: TController): Pick<TurboExpressBuilder<TActionParams>, 'build' | 'addController'> {
+    addController(signature: ITurboExpressLayer): Pick<TurboExpressBuilder<TActionParams>, 'build' | 'addController'> {
 
         this._controllers
-            .push([signature, controller]);
+            .push(signature);
 
         return this;
     }
@@ -94,14 +113,16 @@ export class TurboExpressBuilder<TActionParams> {
     build() {
 
         const turboExpress = new TurboExpress<TActionParams>(
+            this._loggerService,
             this._middlewares,
             this._expressMiddlewares,
             this._port,
+            this._serviceCreationFunction,
             this._onError,
             this._onSuccess);
 
         this._controllers
-            .forEach(([sign, instance]) => {
+            .forEach((sign) => {
 
                 const controllerMetadatas = getControllerActionMetadatas(sign);
 
@@ -116,7 +137,7 @@ export class TurboExpressBuilder<TActionParams> {
                         logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
                         turboExpress
-                            .addAPIEndpoint(path, instance[meta.propName], meta.metadata);
+                            .addAPIEndpoint(path, sign, meta.propName, meta.metadata);
                     });
             });
 
@@ -127,45 +148,42 @@ export class TurboExpressBuilder<TActionParams> {
 export class TurboExpress<TActionParams extends IRouteOptions> {
 
     private _expressServer: Application;
-    private _middlewares: ITurboMiddleware<any, any>[];
-    private _onError: (e: any, req: Request, res: Response) => void;
-    private _onSuccess: (value: any, req: Request, res: Response) => void;
-    private _port: string;
-    private _onListen: (() => void) | undefined;
 
     constructor(
-        middlewares: ITurboMiddleware<any, any>[],
-        expressMiddlewares: MiddlwareFnType[],
-        port: string,
-        onError: (e: any, req: Request, res: Response) => void,
-        onSuccess: (value: any, req: Request, res: Response) => void,
-        onListen?: () => void) {
+        private _loggerService: LoggerService,
+        private _middlewares: ITurboMiddleware<any, any>[],
+        private expressMiddlewares: MiddlwareFnType[],
+        private _port: string,
+        private _getServiceProviderAsync: GetServiceProviderType,
+        private _onError: (e: any, req: Request, res: Response) => void,
+        private _onSuccess: (value: any, req: Request, res: Response) => void,
+        private _onListen?: () => void) {
 
-        this._middlewares = middlewares;
-        this._port = port;
         this._expressServer = express();
-        this._onListen = onListen;
-        this._onError = onError;
-        this._onSuccess = onSuccess;
 
         expressMiddlewares
             .forEach(x => this._expressServer
                 .use(x));
     }
 
-    addAPIEndpoint = (path: string, action: ApiActionType<TActionParams>, options?: EndpointOptionsType) => {
+    addAPIEndpoint = (
+        path: string,
+        controllerSignature: ITurboExpressLayer,
+        functionName: string,
+        options?: EndpointOptionsType) => {
 
-        // async api action handler 
-        const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {
+        const runMiddlewaresAsync = async (req: Request, res: Response, serviceProvider: ServiceProvider) => {
 
             // run middlewares 
             let prevMiddlewareParam: any = {};
 
             for (let index = 0; index < this._middlewares.length; index++) {
 
-                const middleware = this._middlewares[index];
+                const middlewareSignature = this._middlewares[index];
 
-                prevMiddlewareParam = await middleware
+                const middlewareInstance = new middlewareSignature(serviceProvider);
+
+                prevMiddlewareParam = await middlewareInstance
                     .runMiddlewareAsync({
                         req,
                         res,
@@ -177,8 +195,63 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
             if (!prevMiddlewareParam)
                 throw new Error('Invalid middleware configuration, controller action params is null.');
 
+            return prevMiddlewareParam;
+        }
+
+        const executeControllerAction = async (actionParams: TActionParams, serviceProvider: ServiceProvider) => {
+
+            const controllerInstance = new controllerSignature(serviceProvider);
+
+            const controllerAction: ApiActionType<TActionParams> = controllerInstance[functionName];
+
             // run action 
-            return await action(prevMiddlewareParam);
+            return await controllerAction(actionParams);
+        }
+
+        // async api action handler 
+        const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {
+
+            this._loggerService
+                .log(`${req.path}: REQUEST ARRIVED`);
+
+            // Instatiate all services, 
+            // establish connection to DB
+            const serviceProvider = await this._getServiceProviderAsync();
+
+            const ormService = serviceProvider
+                .getService(ORMConnectionService);
+
+            const sqlService = serviceProvider
+                .getService(SQLConnectionService);
+
+            // BEGIN
+            await ormService
+                .beginTransactionAsync();
+
+            try {
+
+                const actionParams = await runMiddlewaresAsync(req, res, serviceProvider);
+                const controllerActionReturnValue = await executeControllerAction(actionParams, serviceProvider);
+
+                // COMMIT
+                await ormService
+                    .commitTransactionAsync();
+
+                return controllerActionReturnValue;
+            }
+            catch (e: any) {
+
+                // COMMIT
+                await ormService
+                    .rollbackTransactionAsync();
+
+                throw e;
+            }
+            finally {
+
+                sqlService
+                    .releaseConnectionClient();
+            }
         };
 
         // create sync wrapper

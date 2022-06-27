@@ -1,16 +1,15 @@
-import { MapperService } from '../services/MapperService';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
-import { QuestionService } from '../services/QuestionService';
 import { VideoService } from '../services/VideoService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class VideoController {
+    private _videoService: VideoService;
 
-    constructor(private _videoService: VideoService) {
+    constructor(serviceProvider: ServiceProvider) {
 
+        this._videoService = serviceProvider.getService(VideoService);
     }
 
     @XControllerAction(apiRoutes.video.uploadVideoFileChunks, { isPost: true, isMultipart: true })

@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { Course } from './Course';
@@ -37,5 +37,5 @@ export class CourseVersion {
     courseDataId: number;
     @XManyToOne<CourseVersion>()(() => CourseData, x => x.courseVersions)
     @XJoinColumn<CourseVersion>('courseDataId')
-    courseData: CourseData;
+    courseData: Relation<CourseData>;
 }

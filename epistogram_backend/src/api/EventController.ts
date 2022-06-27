@@ -1,5 +1,6 @@
 import { EventService } from '../services/EventService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -7,9 +8,9 @@ export class EventController {
 
     private _eventService: EventService;
 
-    constructor(es: EventService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._eventService = es;
+        this._eventService = serviceProvider.getService(EventService);
     }
 
     @XControllerAction(apiRoutes.event.getUnfulfilledEvent)

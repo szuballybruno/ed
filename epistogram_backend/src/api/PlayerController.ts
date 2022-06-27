@@ -5,6 +5,7 @@ import { VideoService } from '../services/VideoService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class PlayerController {
 
@@ -12,11 +13,11 @@ export class PlayerController {
     private _playerService: PlayerService;
     private _videoService: VideoService;
 
-    constructor(courseService: CourseService, playerService: PlayerService, videoService: VideoService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._courseService = courseService;
-        this._playerService = playerService;
-        this._videoService = videoService;
+        this._courseService = serviceProvider.getService(CourseService);
+        this._playerService = serviceProvider.getService(PlayerService);
+        this._videoService = serviceProvider.getService(VideoService);
     }
 
     @XControllerAction(apiRoutes.player.answerVideoQuestion, { isPost: true })

@@ -1,5 +1,7 @@
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
+import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
 import { ActivationCodeService } from './../services/ActivationCodeService';
 import { AuthenticationService } from './../services/AuthenticationService';
@@ -58,17 +60,69 @@ import { VideoService } from './../services/VideoService';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
-export type ServicesType = { [K: string]: any } & {
-    getService: <T>(ct: CTAnyArgs<T>) => T
+export class ServiceProvider {
+
+    private _services: any;
+
+    constructor(services: any) {
+
+        this._services = { ...this._services, ...services };
+    }
+
+    getService<T>(ct: CTAnyArgs<T>) {
+
+        const service = Object
+            .values(this._services)
+            .firstOrNull(x => (x as any).constructor.name === ct.name) as T;
+
+        if (!service)
+            throw new Error(`Service ${ct.name} not found in service provider!`);
+
+        return service;
+    };
 };
 
-export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: XDBMSchemaType): ServicesType => {
+export const instansiateSingletonServices = (rootDir: string) => {
+
+    // 
+    // INIT GLOBAL CONFIG
+    const globalConfig = GlobalConfiguration
+        .initGlobalConfig(rootDir);
+
+    // 
+    // INIT DB SCHEMA
+    const dbSchema = createDBSchema();
 
     const urlService = new UrlService(globalConfig);
     const mapperService = new MapperService(urlService);
     const loggerService = new LoggerService();
+    const poolService = new SQLPoolService(globalConfig);
+
+    poolService.createPool();
+
+    return new ServiceProvider({
+        globalConfig,
+        dbSchema,
+        mapperService,
+        loggerService,
+        urlService,
+        poolService
+    });
+}
+
+export const instatiateServices = (singletonProvider: ServiceProvider): ServiceProvider => {
+
+    // get singletons
+    const globalConfig = singletonProvider.getService(GlobalConfiguration);
+    const dbSchema = singletonProvider.getService(XDBMSchemaType);
+    const mapperService = singletonProvider.getService(MapperService);
+    const urlService = singletonProvider.getService(UrlService);
+    const loggerService = singletonProvider.getService(LoggerService);
+    const poolService = singletonProvider.getService(SQLPoolService);
+
+    // create transients
     const hashService = new HashService(globalConfig);
-    const sqlConnectionService = new SQLConnectionService(globalConfig);
+    const sqlConnectionService = new SQLConnectionService(poolService);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlConnectionService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
@@ -88,7 +142,7 @@ export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: 
     const authenticationService = new AuthenticationService(userService, tokenService, userSessionActivityService, hashService, permissionService, globalConfig);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
-    const dbConnectionService = new DbConnectionService(globalConfig, sqlConnectionService, sqlBootstrapperService, ormConnectionService, seedService);
+    const dbConnectionService = new DbConnectionService(globalConfig, sqlBootstrapperService, ormConnectionService, seedService);
     const courseItemService = new CourseItemService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(ormConnectionService, mapperService);
     const questionService = new QuestionService(ormConnectionService);
@@ -120,6 +174,7 @@ export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: 
     const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
 
     const services = {
+        globalConfig,
         urlService,
         mapperService,
         loggerService,
@@ -176,15 +231,5 @@ export const instatiateServices = (globalConfig: GlobalConfiguration, dbSchema: 
         companyService,
     };
 
-    const getService = <T>(ct: CTAnyArgs<T>) => {
-
-        return Object
-            .values(services as any)
-            .single(x => (x as any).constructor.name === ct.name) as T;
-    };
-
-    return {
-        ...services,
-        getService
-    }
+    return new ServiceProvider(services);
 };

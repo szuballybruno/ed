@@ -28,10 +28,10 @@ export class ORMConnectionService {
         this._loggingEnabled = config.logging.orm;
     }
 
-    connectORMAsync = async () => {
+    connectTypeORMAsync = async (noSync?: boolean) => {
 
         const isLoggingEnabled = this._config.database.isOrmLoggingEnabled;
-        const isDangerousDBPurgeEnabled = this._config.database.isDangerousDBPurgeEnabled;
+        const isSyncEnabled = noSync ? false : this._config.database.isDangerousDBPurgeEnabled;
         const dbConnOpts = this._config.getDatabaseConnectionParameters();
 
         const views = this._schema
@@ -49,7 +49,7 @@ export class ORMConnectionService {
             username: dbConnOpts.username,
             password: dbConnOpts.password,
             database: dbConnOpts.databaseName,
-            synchronize: isDangerousDBPurgeEnabled,
+            synchronize: isSyncEnabled,
             logging: isLoggingEnabled,
             namingStrategy: new SnakeNamingStrategy(),
             extra: {
@@ -60,8 +60,6 @@ export class ORMConnectionService {
                 ...views
             ],
         } as DataSourceOptions;
-
-        log('Connecting to database with TypeORM...', { entryType: 'strong' });
 
         const initAsync = async (dataSourceOptions: DataSourceOptions): Promise<DataSource> => {
 
@@ -84,7 +82,6 @@ export class ORMConnectionService {
 
         try {
 
-            log('Connecting to SQL trough TypeORM...');
             const connection = await initAsync(options);
 
             if (!connection.manager)
@@ -103,6 +100,9 @@ export class ORMConnectionService {
      */
     getRepository<T>(classType: ClassType<T>) {
 
+        if (!this._ormConnection)
+            throw new Error('Trying to use ORM connection, but ORM is disconnected!');
+
         return this._ormConnection.getRepository(classType);
     }
 
@@ -112,6 +112,24 @@ export class ORMConnectionService {
     getOrmConnection() {
 
         return this._ormConnection;
+    }
+
+    beginTransactionAsync() {
+
+        return this._sqlConnectionService
+            .executeSQLAsync('BEGIN');
+    }
+
+    commitTransactionAsync() {
+
+        return this._sqlConnectionService
+            .executeSQLAsync('COMMIT');
+    }
+
+    rollbackTransactionAsync() {
+
+        return this._sqlConnectionService
+            .executeSQLAsync('ROLLBACK');
     }
 
     withResType<TResult>() {

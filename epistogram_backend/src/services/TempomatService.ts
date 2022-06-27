@@ -1,3 +1,4 @@
+import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
 import { TempomatModeType } from '../shared/types/sharedTypes';
@@ -34,14 +35,14 @@ export class TempomatService extends ServiceBase {
 
         const userId = principalId.toSQLValue();
 
-        const bridge = await this._userCourseBridgeService
-            .getOrFailAsync({
-                courseId,
-                userId
-            });
+        const bridge = await this._ormService
+            .query(UserCourseBridge, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
-        await this._userCourseBridgeService
-            .updateAsync({
+        await this._ormService
+            .save(UserCourseBridge, {
                 id: bridge.id,
                 tempomatMode
             });
@@ -51,11 +52,11 @@ export class TempomatService extends ServiceBase {
 
         const userId = principalId.toSQLValue();
 
-        const bridge = await this._userCourseBridgeService
-            .getOrFailAsync({
-                courseId,
-                userId
-            });
+        const bridge = await this._ormService
+            .query(UserCourseBridge, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         return bridge.tempomatMode;
     }

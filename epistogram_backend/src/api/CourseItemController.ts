@@ -1,12 +1,16 @@
 import { CourseItemService } from "../services/CourseItemService";
 import { apiRoutes } from "../shared/types/apiRoutes";
+import { ServiceProvider } from "../startup/servicesDI";
 import { ActionParams } from "../utilities/ActionParams";
 import { XControllerAction } from "../utilities/XTurboExpress/XTurboExpressDecorators";
 
 export class CourseItemController {
 
-    constructor(private _courseItemService: CourseItemService) {
+    private _courseItemService: CourseItemService;
 
+    constructor(serviceProvider: ServiceProvider) {
+
+        this._courseItemService = serviceProvider.getService(CourseItemService);
     }
 
     @XControllerAction(apiRoutes.courseItem.getCourseItemEditData)

@@ -1,17 +1,29 @@
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
-import { MapperService } from './services/MapperService';
-import { createDBSchema } from './services/misc/dbSchema';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
-import { initializeMappings } from './services/misc/mappings';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
-import { UrlService } from './services/UrlService';
+import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
-import { instatiateControllers } from './startup/controllersDI';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
-import { instatiateServices } from './startup/servicesDI';
+import { instansiateSingletonServices, instatiateServices } from './startup/servicesDI';
+import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
+
+const initalizeAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
+
+    const serviceProvider = await getServiceProviderAsync();
+
+    //
+    // SEED DB
+    await serviceProvider
+        .getService(DbConnectionService)
+        .bootstrapDBAsync();
+
+    serviceProvider
+        .getService(SQLConnectionService)
+        .releaseConnectionClient();
+};
 
 const main = async () => {
 
@@ -23,27 +35,34 @@ const main = async () => {
     // GET ROOT DIR
     const rootDir = dirname(fileURLToPath(import.meta.url));
 
-    // 
-    // INIT GLOBAL CONFIG
-    const globalConfig = GlobalConfiguration
-        .initGlobalConfig(rootDir);
-
-    // 
-    // INIT DB SCHEMA
-    const dbSchema = createDBSchema();
+    const singletonServiceProvider = instansiateSingletonServices(rootDir);
 
     // 
     // INIT SERVICES
-    const services = instatiateServices(globalConfig, dbSchema);
+    const getServiceProviderAsync = async () => {
+
+        const serviceProvider = instatiateServices(singletonServiceProvider);
+
+        //
+        // INIT CONNECTION
+        await serviceProvider
+            .getService(SQLConnectionService)
+            .createConnectionClientAsync();
+
+        await serviceProvider
+            .getService(DbConnectionService)
+            .connectTypeORM();
+
+        return serviceProvider;
+    };
 
     // 
-    // INIT CONTROLLERS
-    const controllers = instatiateControllers(services, globalConfig);
+    // INIT TURBO EXPRESS
+    const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync);
 
     // 
     // INIT
-    initializeMappings(services.getService(UrlService).getAssetUrl, services.getService(MapperService));
-    await services.getService(DbConnectionService).initializeConnectionAsync();
+    await initalizeAsync(getServiceProviderAsync);
 
     // FASZA LESZ, IGY FOG MENNI A TRANSACTION
     // const sqlService = services.getService(SQLConnectionService);
@@ -78,14 +97,6 @@ const main = async () => {
     // }
 
     // return;
-
-    // 
-    // INIT TURBO EXPRESS
-    const turboExpress = initTurboExpress(globalConfig, services, controllers);
-
-    //
-    // SEED DB
-    await services.getService(DbConnectionService).bootstrapDBAsync();
 
     // 
     // LISTEN (start server)

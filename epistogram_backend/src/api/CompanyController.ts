@@ -1,6 +1,7 @@
 import { CompanyService } from '../services/CompanyService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -8,9 +9,9 @@ export class CompanyController {
 
     private _compService: CompanyService;
 
-    constructor(compService: CompanyService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._compService = compService;
+        this._compService = serviceProvider.getService(CompanyService);
     }
 
     @XControllerAction(apiRoutes.companies.getCompanies)

@@ -1,5 +1,6 @@
 import { PrequizService } from '../services/PrequizService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -7,9 +8,9 @@ export class PrequizController {
 
     private _prequizService: PrequizService;
 
-    constructor(prequizService: PrequizService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._prequizService = prequizService;
+        this._prequizService = serviceProvider.getService(PrequizService);
     }
 
     @XControllerAction(apiRoutes.prequiz.getQuestions)

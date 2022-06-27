@@ -247,7 +247,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             return [func.props, injector.getInstance(func.fn)];
         });
 
-    return {
+    const schema: XDBMSchemaType = {
         seedScripts,
 
         views: [
@@ -460,4 +460,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             TempomatAdjustmentValue
         ],
     };
+
+    return new XDBMSchemaType(schema);
 };

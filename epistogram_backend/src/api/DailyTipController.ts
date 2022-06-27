@@ -3,14 +3,15 @@ import { DailyTipService } from '../services/DailyTipService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class DailyTipController {
 
     private _dailyTipService: DailyTipService;
 
-    constructor(dailyTipService: DailyTipService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._dailyTipService = dailyTipService;
+        this._dailyTipService = serviceProvider.getService(DailyTipService);
     }
 
     @XControllerAction(apiRoutes.dailyTip.getDailyTip, { isPost: true })

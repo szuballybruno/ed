@@ -1,5 +1,6 @@
 import { PretestService } from '../services/PretestService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -7,9 +8,9 @@ export class PretestController {
 
     private _pretestService: PretestService;
 
-    constructor(pretestService: PretestService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._pretestService = pretestService;
+        this._pretestService = serviceProvider.getService(PretestService);
     }
 
     @XControllerAction(apiRoutes.pretest.getPretestData)

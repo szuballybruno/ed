@@ -5,18 +5,17 @@ import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class CommentController {
 
     private _commentService: CommentService;
     private _userCommentBridgeService: LikeService;
 
-    constructor(
-        commentService: CommentService,
-        userCommentBridgeService: LikeService
-    ) {
-        this._commentService = commentService;
-        this._userCommentBridgeService = userCommentBridgeService;
+    constructor(serviceProvider: ServiceProvider) {
+        
+        this._commentService = serviceProvider.getService(CommentService);
+        this._userCommentBridgeService = serviceProvider.getService(LikeService);
     }
 
     /**

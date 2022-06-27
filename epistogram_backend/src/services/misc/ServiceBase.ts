@@ -26,51 +26,51 @@ export class QueryServiceBase<TMainEntity> extends ServiceBase {
         this._mainEntityClass = mainEntityClass;
     }
 
-    public async insertBulkAsync(objs: QueryDeepPartialEntity<TMainEntity>[]) {
+    // public async insertBulkAsync(objs: QueryDeepPartialEntity<TMainEntity>[]) {
 
-        this._ormService
-            .getRepository(this._mainEntityClass)
-            .insert(objs);
-    }
+    //     this._ormService
+    //         .getRepository(this._mainEntityClass)
+    //         .insert(objs);
+    // }
 
-    public async updateAsync(obj: DeepPartial<TMainEntity>) {
+    // public async updateAsync(obj: DeepPartial<TMainEntity>) {
 
-        await this._ormService
-            .getRepository(this._mainEntityClass)
-            .save(obj);
-    }
+    //     await this._ormService
+    //         .getRepository(this._mainEntityClass)
+    //         .save(obj);
+    // }
 
-    public async createAsync(entity: QueryDeepPartialEntity<TMainEntity>) {
+    // public async createAsync(entity: QueryDeepPartialEntity<TMainEntity>) {
 
-        await this._ormService
-            .getRepository(this._mainEntityClass)
-            .insert(entity);
+    //     await this._ormService
+    //         .getRepository(this._mainEntityClass)
+    //         .insert(entity);
 
-        return entity;
-    }
+    //     return entity;
+    // }
 
-    public async deleteAsync(entity: FindOptionsWhere<TMainEntity>) {
+    // public async deleteAsync(entity: FindOptionsWhere<TMainEntity>) {
 
-        await this._ormService
-            .getRepository(this._mainEntityClass)
-            .delete(entity);
-    }
+    //     await this._ormService
+    //         .getRepository(this._mainEntityClass)
+    //         .delete(entity);
+    // }
 
-    public async getOrFailAsync(obj: FindOptionsWhere<TMainEntity>) {
+    // public async getOrFailAsync(obj: FindOptionsWhere<TMainEntity>) {
 
-        return await this._ormService
-            .getRepository(this._mainEntityClass)
-            .findOneOrFail({
-                where: obj
-            });
-    }
+    //     return await this._ormService
+    //         .getRepository(this._mainEntityClass)
+    //         .findOneOrFail({
+    //             where: obj
+    //         });
+    // }
 
-    public async getAsync(obj: FindOptionsWhere<TMainEntity>) {
+    // public async getAsync(obj: FindOptionsWhere<TMainEntity>) {
 
-        return await this._ormService
-            .getRepository(this._mainEntityClass)
-            .findOne({
-                where: obj
-            });
-    }
+    //     return await this._ormService
+    //         .getRepository(this._mainEntityClass)
+    //         .findOne({
+    //             where: obj
+    //         });
+    // }
 }

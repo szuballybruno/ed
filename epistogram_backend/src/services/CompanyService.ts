@@ -100,9 +100,11 @@ export class CompanyService extends QueryServiceBase<Company> {
         await this._authoirzationService
             .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
-        await this.createAsync({
-            name: 'New company'
-        });
+        await this._ormService
+            .createAsync(Company, {
+                name: 'New company',
+                deletionDate: null
+            });
     }
 
     async deleteCompanyAsync(principalId: PrincipalId, companyId: number) {

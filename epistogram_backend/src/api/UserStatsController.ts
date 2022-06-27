@@ -1,5 +1,6 @@
 import { UserStatsService } from '../services/UserStatsService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -7,9 +8,9 @@ export class UserStatsController {
 
     private _userStatsService: UserStatsService;
 
-    constructor(userStatsService: UserStatsService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._userStatsService = userStatsService;
+        this._userStatsService = serviceProvider.getService(UserStatsService);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserStats)

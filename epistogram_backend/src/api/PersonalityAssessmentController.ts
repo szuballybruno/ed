@@ -1,5 +1,6 @@
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -7,9 +8,9 @@ export class PersonalityAssessmentController {
 
     private _personalityAssessmentService: PersonalityAssessmentService;
 
-    constructor(personalityAssessmentService: PersonalityAssessmentService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._personalityAssessmentService = personalityAssessmentService;
+        this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }
 
     @XControllerAction(apiRoutes.personalityAssessment.getPersonalityTraitCategories)

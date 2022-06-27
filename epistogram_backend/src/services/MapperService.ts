@@ -1,5 +1,5 @@
 import { ClassType } from './misc/advancedTypes/ClassType';
-import { epistoMappingsBuilder, EpistoMappingsType } from './misc/mappings';
+import { epistoMappingsBuilder, EpistoMappingsType, initializeMappings } from './misc/mappings';
 import { XMapper } from './misc/XMapperService/XMapperService';
 import { UrlService } from './UrlService';
 
@@ -16,6 +16,8 @@ export class MapperService extends XMapper<[UrlService], EpistoMappingsType> {
         super(epistoMappingsBuilder, [urlService]);
 
         this._mapperFunctions = [];
+
+        initializeMappings(urlService.getAssetUrl, this);
     }
 
     /**

@@ -3,14 +3,15 @@ import { CourseRatingService } from '../services/CourseRatingService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class CourseRatingController {
 
     private _courseRatingService: CourseRatingService;
 
-    constructor(courseRatingService: CourseRatingService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._courseRatingService = courseRatingService;
+        this._courseRatingService = serviceProvider.getService(CourseRatingService);
     }
 
     @XControllerAction(apiRoutes.courseRating.getCourseRatingGroups)

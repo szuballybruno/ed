@@ -4,14 +4,15 @@ import { ActionParams } from '../utilities/ActionParams';
 import { ModuleService } from '../services/ModuleService';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class ModuleController {
 
     private _moduleService: ModuleService;
 
-    constructor(moduleService: ModuleService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._moduleService = moduleService;
+        this._moduleService = serviceProvider.getService(ModuleService);
     }
 
     @XControllerAction(apiRoutes.module.createModule, { isPost: true })

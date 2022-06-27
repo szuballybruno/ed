@@ -307,10 +307,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     };
 
     private updateCompletionDate = async (userCourseBridgeId: number, requiredCompletionDate: Date) => {
-        return this.updateAsync({
-            id: userCourseBridgeId,
-            requiredCompletionDate: requiredCompletionDate,
-            tempomatMode: 'strict' // Automatically updating tempomat mode to strict
-        })
+        return this._ormService
+            .save(UserCourseBridge, {
+                id: userCourseBridgeId,
+                requiredCompletionDate: requiredCompletionDate,
+                tempomatMode: 'strict' // Automatically updating tempomat mode to strict
+            })
     }
 }

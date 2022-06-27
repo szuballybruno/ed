@@ -231,19 +231,20 @@ export class RoleService extends QueryServiceBase<Role> {
         const userId = principalId.toSQLValue();
 
         // create role
-        const role = await this.createAsync(instatiateInsertEntity<Role>({
-            name: dto.name,
-            companyId: dto.companyId,
-            isCustom: dto.isCustom,
-            deletionDate: null
-        }));
+        const roleId = await this._ormService
+            .createAsync(Role, {
+                name: dto.name,
+                companyId: dto.companyId,
+                isCustom: dto.isCustom,
+                deletionDate: null
+            });
 
         // create permission assignments 
         const permAssignemnts = dto
             .permissionIds
             .map(x => ({
                 permissionId: x,
-                roleId: role.id
+                roleId: roleId
             } as RolePermissionBridge));
 
         await this._ormService

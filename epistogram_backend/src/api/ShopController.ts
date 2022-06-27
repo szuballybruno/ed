@@ -3,14 +3,15 @@ import { ShopService } from '../services/ShopService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class ShopController {
 
     private _shopService: ShopService;
 
-    constructor(shopService: ShopService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._shopService = shopService;
+        this._shopService = serviceProvider.getService(ShopService);
     }
 
     @XControllerAction(apiRoutes.shop.getShopItems)

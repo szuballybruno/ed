@@ -3,14 +3,15 @@ import { PasswordChangeService } from '../services/PasswordChangeService';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 
 export class PasswordChangeController {
 
     private _passwordChangeService: PasswordChangeService;
 
-    constructor(passwordChangeService: PasswordChangeService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._passwordChangeService = passwordChangeService;
+        this._passwordChangeService = serviceProvider.getService(PasswordChangeService);
     }
 
     @XControllerAction(apiRoutes.passwordChange.setNewPassword, { isPost: true, isPublic: true })

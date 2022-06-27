@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
+import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ZAuthenticationController } from './../api/AuthenticationController2';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
@@ -37,53 +38,57 @@ import { AuthenticationMiddleware } from './../turboMiddleware/AuthenticationMid
 import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddleware';
 import { ActionParams } from './../utilities/ActionParams';
 import { onActionError, onActionSuccess } from './../utilities/apiHelpers';
-import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
-import { ServicesType } from './servicesDI';
+import { GetServiceProviderType, TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
+import { ServiceProvider } from './servicesDI';
 
-export const initTurboExpress = (globalConfig: GlobalConfiguration, services: ServicesType, controllers: any) => {
+export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceProvider: GetServiceProviderType) => {
 
-    const turboExpress = new TurboExpressBuilder<ActionParams>()
+    const globalConfig = singletonProvider.getService(GlobalConfiguration);
+    const loggerService = singletonProvider.getService(LoggerService);
+
+    const turboExpress = new TurboExpressBuilder<ActionParams>(loggerService)
+        .setServicesCreationFunction(getServiceProvider)
         .setPort(globalConfig.misc.hostPort)
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)
-        .setTurboMiddleware<void, ActionParams>(new AuthenticationMiddleware(services.authenticationService, services.loggerService))
-        .setTurboMiddleware<ActionParams, ActionParams>(new AuthorizationMiddleware(services.authorizationService))
+        .setTurboMiddleware<void, ActionParams>(AuthenticationMiddleware)
+        .setTurboMiddleware<ActionParams, ActionParams>(AuthorizationMiddleware)
         .setExpressMiddleware(getCORSMiddleware(globalConfig))
         .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
         .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))
         .setExpressMiddleware(fileUpload())
         .setExpressMiddleware(getUnderMaintanenceMiddleware(globalConfig))
-        .addController(MiscController, controllers.miscController)
-        .addController(UserController, controllers.userController)
-        .addController(CourseItemController, controllers.coruseItemController)
-        .addController(PermissionController, controllers.permissionController)
-        .addController(RoleController, controllers.roleController)
-        .addController(CompanyController, controllers.companyController)
-        .addController(CommentController, controllers.commentController)
-        .addController(ZAuthenticationController, controllers.authenticationController)
-        .addController(ExamController, controllers.examController)
-        .addController(RegistrationController, controllers.registrationController)
-        .addController(TempomatController, controllers.tempomatController)
-        .addController(DailyTipController, controllers.dailyTipController)
-        .addController(PersonalityAssessmentController, controllers.personalityAssessmentController)
-        .addController(ShopController, controllers.shopController)
-        .addController(EventController, controllers.eventController)
-        .addController(VideoRatingController, controllers.videoRatingController)
-        .addController(PasswordChangeController, controllers.passwordChangeController)
-        .addController(CoinTransactionsController, controllers.coinTransactionsController)
-        .addController(PrequizController, controllers.prequizController)
-        .addController(PretestController, controllers.pretestController)
-        .addController(CourseRatingController, controllers.courseRatingController)
-        .addController(UserStatsController, controllers.userStatsController)
-        .addController(UserProgressController, controllers.userProgressController)
-        .addController(FileController, controllers.fileController)
-        .addController(SignupController, controllers.signupController)
-        .addController(PlayerController, controllers.playerController)
-        .addController(PlaybackController, controllers.playbackController)
-        .addController(CourseController, controllers.courseController)
-        .addController(ModuleController, controllers.moduleController)
-        .addController(VideoController, controllers.videoController)
-        .addController(QuestionController, controllers.questionController)
+        .addController(MiscController)
+        .addController(UserController)
+        .addController(CourseItemController)
+        .addController(PermissionController)
+        .addController(RoleController)
+        .addController(CompanyController)
+        .addController(CommentController)
+        .addController(ZAuthenticationController)
+        .addController(ExamController)
+        .addController(RegistrationController)
+        .addController(TempomatController)
+        .addController(DailyTipController)
+        .addController(PersonalityAssessmentController)
+        .addController(ShopController)
+        .addController(EventController)
+        .addController(VideoRatingController)
+        .addController(PasswordChangeController)
+        .addController(CoinTransactionsController)
+        .addController(PrequizController)
+        .addController(PretestController)
+        .addController(CourseRatingController)
+        .addController(UserStatsController)
+        .addController(UserProgressController)
+        .addController(FileController)
+        .addController(SignupController)
+        .addController(PlayerController)
+        .addController(PlaybackController)
+        .addController(CourseController)
+        .addController(ModuleController)
+        .addController(VideoController)
+        .addController(QuestionController)
         .build();
 
     return turboExpress;

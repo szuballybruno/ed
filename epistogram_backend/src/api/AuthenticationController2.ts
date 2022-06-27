@@ -2,6 +2,7 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';
@@ -12,10 +13,10 @@ export class ZAuthenticationController {
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfiguration;
 
-    constructor(authenticationService: AuthenticationService, globalConfig: GlobalConfiguration) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._authenticationService = authenticationService;
-        this._config = globalConfig;
+        this._authenticationService = serviceProvider.getService(AuthenticationService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
     }
 
     @XControllerAction(apiRoutes.authentication.loginUser, { isPost: true, isPublic: true })

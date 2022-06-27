@@ -2,6 +2,7 @@ import { RoleService } from '../services/RoleService';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -9,9 +10,9 @@ export class RoleController {
 
     private _roleService: RoleService;
 
-    constructor(roleService: RoleService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._roleService = roleService;
+        this._roleService = serviceProvider.getService(RoleService);
     }
 
     @XControllerAction(apiRoutes.roles.getRoles)

@@ -10,7 +10,7 @@ export type XDMBIndexType = {
     tableName: string;
 }
 
-export type XDBMSchemaType = {
+export class XDBMSchemaType {
     seedScripts: ([Function, PropConstraintType<any, any>] | string)[];
     functionScripts: string[];
     constraints: XDBMConstraintType[];
@@ -18,4 +18,15 @@ export type XDBMSchemaType = {
     entities: Function[];
     indices: XDMBIndexType[];
     triggers: string[];
+
+    constructor(opts: XDBMSchemaType) {
+
+        this.seedScripts = opts.seedScripts;
+        this.functionScripts = opts.functionScripts;
+        this.constraints = opts.constraints;
+        this.views = opts.views;
+        this.entities = opts.entities;
+        this.indices = opts.indices;
+        this.triggers = opts.triggers;
+    }
 }

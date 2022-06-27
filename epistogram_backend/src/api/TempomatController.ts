@@ -1,6 +1,7 @@
 import { TempomatService } from '../services/TempomatService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { TempomatModeType } from '../shared/types/sharedTypes';
+import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
@@ -8,9 +9,9 @@ export class TempomatController {
 
     private _tempomatService: TempomatService;
 
-    constructor(tempomatService: TempomatService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._tempomatService = tempomatService;
+        this._tempomatService = serviceProvider.getService(TempomatService);
     }
 
     @XControllerAction(apiRoutes.tempomat.getTempomatMode)
