@@ -44,6 +44,8 @@ type MiddlwareFnType = (req: any, res: any, next: any) => void;
 
 export type GetServiceProviderType = () => Promise<ServiceProvider>;
 
+export type ActionWrapperFunctionType = (serviceProvider: ServiceProvider, action: () => Promise<any>) => Promise<any>;
+
 export class TurboExpressBuilder<TActionParams> {
 
     private _port: string;
@@ -53,6 +55,7 @@ export class TurboExpressBuilder<TActionParams> {
     private _expressMiddlewares: MiddlwareFnType[];
     private _controllers: ITurboExpressLayer[];
     private _serviceCreationFunction: GetServiceProviderType;
+    private _actionWrapperFunction: ActionWrapperFunctionType;
 
     constructor(private _loggerService: LoggerService) {
 
@@ -64,6 +67,12 @@ export class TurboExpressBuilder<TActionParams> {
     setServicesCreationFunction(createServices: GetServiceProviderType) {
 
         this._serviceCreationFunction = createServices;
+        return this as Pick<TurboExpressBuilder<TActionParams>, 'addActionWrapperFunction'>;
+    }
+
+    addActionWrapperFunction(avFunction: ActionWrapperFunctionType) {
+
+        this._actionWrapperFunction = avFunction;
         return this as Pick<TurboExpressBuilder<TActionParams>, 'setPort'>;
     }
 
@@ -117,6 +126,7 @@ export class TurboExpressBuilder<TActionParams> {
             this._middlewares,
             this._expressMiddlewares,
             this._port,
+            this._actionWrapperFunction,
             this._serviceCreationFunction,
             this._onError,
             this._onSuccess);
@@ -154,6 +164,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
         private _middlewares: ITurboMiddleware<any, any>[],
         private expressMiddlewares: MiddlwareFnType[],
         private _port: string,
+        private _actionWrapper: ActionWrapperFunctionType,
         private _getServiceProviderAsync: GetServiceProviderType,
         private _onError: (e: any, req: Request, res: Response) => void,
         private _onSuccess: (value: any, req: Request, res: Response) => void,
@@ -218,40 +229,11 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
             // establish connection to DB
             const serviceProvider = await this._getServiceProviderAsync();
 
-            const ormService = serviceProvider
-                .getService(ORMConnectionService);
-
-            const sqlService = serviceProvider
-                .getService(SQLConnectionService);
-
-            // BEGIN
-            await ormService
-                .beginTransactionAsync();
-
-            try {
+            return await this._actionWrapper(serviceProvider, async () => {
 
                 const actionParams = await runMiddlewaresAsync(req, res, serviceProvider);
-                const controllerActionReturnValue = await executeControllerAction(actionParams, serviceProvider);
-
-                // COMMIT
-                await ormService
-                    .commitTransactionAsync();
-
-                return controllerActionReturnValue;
-            }
-            catch (e: any) {
-
-                // COMMIT
-                await ormService
-                    .rollbackTransactionAsync();
-
-                throw e;
-            }
-            finally {
-
-                sqlService
-                    .releaseConnectionClient();
-            }
+                return await executeControllerAction(actionParams, serviceProvider);
+            });
         };
 
         // create sync wrapper

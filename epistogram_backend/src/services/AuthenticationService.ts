@@ -1,3 +1,4 @@
+import { DiscountCode } from '../models/entity/DiscountCode';
 import { User } from '../models/entity/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { VerboseError } from '../shared/types/VerboseError';
@@ -5,6 +6,7 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { log } from './misc/logger';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
@@ -13,6 +15,7 @@ import { UserSessionActivityService } from './UserSessionActivityService';
 export class AuthenticationService {
 
     constructor(
+        private _ormService: ORMConnectionService,
         private _userService: UserService,
         private _tokenService: TokenService,
         private _userSessionActivityService: UserSessionActivityService,

@@ -1,6 +1,6 @@
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
-import { toSQLSnakeCasing as snk } from '../../utilities/helpers';
+import { toSQLSnakeCasing as snk, toSQLSnakeCasing } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { CheckExpression, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
@@ -84,6 +84,66 @@ export class XQueryBuilderCore<TEntity, TParams> {
             ._executeSQLQuery(sqlQuery, sqlParams);
 
         return resultRows;
+    }
+
+    /**
+     * Inserts multiple entities to the DB 
+     */
+    async insertManyAsync<T>(signature: ClassType<T>, entities: T[]) {
+
+        const first = entities[0];
+        const insertFields = Object.keys(first);
+
+        const sqlColumns = insertFields
+            .map(x => toSQLSnakeCasing(x));
+
+        let tokenId = 0;
+
+        const entityInsertDatas = entities
+            .map(entity => {
+
+                const tokenValuePairs = insertFields
+                    .map(insertField => {
+
+                        tokenId++;
+
+                        return {
+                            value: (entity as any)[insertField],
+                            token: '$' + tokenId
+                        };
+                    });
+
+                return {
+                    entity,
+                    tokenValuePairs
+                };
+            });
+
+        console.log(first);
+        console.log((first));
+
+        const tokens = entityInsertDatas
+            .map(entityInsertdata => `(${entityInsertdata.tokenValuePairs.map(tvp => tvp.token).join(', ')})`);
+
+        const query = `
+INSERT INTO ${toSQLSnakeCasing(signature.name)} (${sqlColumns.join(', ')})
+VALUES 
+    ${tokens.join(', ')}
+RETURNING id`;
+
+        const queryLog = `${query}\nValues: \n${entityInsertDatas
+            .map((x, i) => `Entity ${i}: ${x.tokenValuePairs.map(tvp => `${tvp.token}: ${tvp.value}`)
+                .join(', ')}`)
+            .join('\n')}`;
+
+        log(queryLog, { color: ConsoleColor.purple, noStamp: true });
+
+        const result = await this._sqlConnectionService
+            .executeSQLAsync(query, entityInsertDatas.flatMap(x => x.tokenValuePairs).map(x => x.value));
+
+        return result
+            .rows
+            .map(x => x.id as number);
     }
 
     // ----- PRIVATE ----- //

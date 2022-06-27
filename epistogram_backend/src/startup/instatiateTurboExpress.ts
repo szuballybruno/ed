@@ -2,6 +2,8 @@ import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
+import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
 import { ZAuthenticationController } from './../api/AuthenticationController2';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
 import { CommentController } from './../api/CommentController';
@@ -38,8 +40,45 @@ import { AuthenticationMiddleware } from './../turboMiddleware/AuthenticationMid
 import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddleware';
 import { ActionParams } from './../utilities/ActionParams';
 import { onActionError, onActionSuccess } from './../utilities/apiHelpers';
-import { GetServiceProviderType, TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
+import { ActionWrapperFunctionType, GetServiceProviderType, TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProvider } from './servicesDI';
+
+export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {
+
+    const ormService = serviceProvider
+        .getService(ORMConnectionService);
+
+    const sqlService = serviceProvider
+        .getService(SQLConnectionService);
+
+    // BEGIN
+    await ormService
+        .beginTransactionAsync();
+
+    try {
+
+        const rv = await action();
+
+        // COMMIT
+        await ormService
+            .commitTransactionAsync();
+
+        return rv;
+    }
+    catch (e: any) {
+
+        // ROLLBACK
+        await ormService
+            .rollbackTransactionAsync();
+
+        throw e;
+    }
+    finally {
+
+        sqlService
+            .releaseConnectionClient();
+    }
+}
 
 export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceProvider: GetServiceProviderType) => {
 
@@ -48,6 +87,7 @@ export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceP
 
     const turboExpress = new TurboExpressBuilder<ActionParams>(loggerService)
         .setServicesCreationFunction(getServiceProvider)
+        .addActionWrapperFunction(actionWrapper)
         .setPort(globalConfig.misc.hostPort)
         .setErrorHandler(onActionError)
         .setSuccessHandler(onActionSuccess)

@@ -9,6 +9,7 @@ import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
 import { ParamConstraintType } from '../XORM/XORMTypes';
 import { InsertEntity } from '../../utilities/misc';
+import { XQueryBuilderCore } from '../XORM/XQueryBuilderCore';
 
 export type ORMConnection = DataSource;
 
@@ -128,6 +129,8 @@ export class ORMConnectionService {
 
     rollbackTransactionAsync() {
 
+        log('Rollback!');
+
         return this._sqlConnectionService
             .executeSQLAsync('ROLLBACK');
     }
@@ -179,29 +182,26 @@ export class ORMConnectionService {
     /**
      * Creates a new entity
      */
-    async createAsync<TEntity>(c: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<number> {
+    async createAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<number> {
 
-        const entity = ent as any;
+        const core = new XQueryBuilderCore(this._sqlConnectionService, true);
 
-        entity.id = null;
+        const ids = await core
+            .insertManyAsync(signature, [ent]);
 
-        const res = await this
-            .getRepository(c)
-            .insert(entity);
-
-        return entity.id as number;
+        return ids[0];
     }
 
     /**
      * Create many entites
      */
-    async createManyAsync<TEntity>(c: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
+    async createManyAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
 
-        const res = await this
-            .getRepository(c)
-            .insert(ent as any[]);
+        const core = new XQueryBuilderCore(this._sqlConnectionService, true);
 
-        return res.identifiers.map(x => x['id']);
+        const ids = await core.insertManyAsync(signature, ent);
+
+        return ids;
     }
 
     /**

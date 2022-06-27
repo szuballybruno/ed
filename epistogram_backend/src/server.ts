@@ -1,14 +1,16 @@
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
-import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
+import { DiscountCode } from './models/entity/DiscountCode';
 import { log } from './services/misc/logger';
+import { MiscService } from './services/MiscService';
+import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
-import { initTurboExpress } from './startup/instatiateTurboExpress';
-import { instansiateSingletonServices, instatiateServices } from './startup/servicesDI';
-import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
+import { actionWrapper, initTurboExpress } from './startup/instatiateTurboExpress';
+import { instansiateSingletonServices, instatiateServices, ServiceProvider } from './startup/servicesDI';
+import { ActionWrapperFunctionType, GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
 
 const initalizeAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
 
@@ -63,40 +65,6 @@ const main = async () => {
     // 
     // INIT
     await initalizeAsync(getServiceProviderAsync);
-
-    // FASZA LESZ, IGY FOG MENNI A TRANSACTION
-    // const sqlService = services.getService(SQLConnectionService);
-
-    // try {
-
-
-    //     await sqlService
-    //         .executeSQLAsync(`BEGIN`);
-
-    //     const ids = await sqlService
-    //         .executeSQLAsync(`
-    //         INSERT INTO module_data (name, description, order_index, is_pretest_module)
-    //         VALUES 
-    //             ('SUCCESS', 'ba', 0, false),
-    //             ('SUCCESS2', 'ba', 0, false)
-    //         RETURNING id`);
-
-    //     console.log(ids);
-
-    //     await sqlService
-    //         .executeSQLAsync(`
-    //         INSERT INTO module_data (name, description, is_pretest_module)
-    //         VALUES ('FAIL', 'ba', 0)`);
-
-    //     await sqlService
-    //         .executeSQLAsync('COMMIT');
-
-    // } catch (e) {
-
-    //     console.log(e);
-    // }
-
-    // return;
 
     // 
     // LISTEN (start server)

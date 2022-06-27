@@ -1,4 +1,5 @@
 
+import { DiscountCode } from '../models/entity/DiscountCode';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
@@ -7,7 +8,6 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { CourseService } from './CourseService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PermissionService } from './PermissionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {
@@ -16,20 +16,17 @@ export class MiscService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _userCourseBridgeService: UserCourseBridgeService;
-    private _permissionService: PermissionService;
 
     constructor(
         courseService: CourseService,
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        userCourseBridgeService: UserCourseBridgeService,
-        permissionService: PermissionService) {
+        userCourseBridgeService: UserCourseBridgeService) {
 
         this._courseService = courseService;
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._userCourseBridgeService = userCourseBridgeService;
-        this._permissionService = permissionService;
     }
 
     async getCourseOverviewDataAsync(userId: PrincipalId) {
