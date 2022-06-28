@@ -374,7 +374,7 @@ export class CourseService {
             .getMany();
 
         return this._mapperService
-            .map(CourseAdminDetailedView, CourseDetailsEditDataDTO, view, { categories, teachers });
+            .mapTo(CourseDetailsEditDataDTO, [view, categories, teachers]);
     }
 
     /**

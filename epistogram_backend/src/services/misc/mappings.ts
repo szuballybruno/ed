@@ -353,7 +353,7 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addMapping(CourseDetailsEditDataDTO, ([urlService]) => (view: CourseDetailsView, categories: CourseCategory[], teachers: User[]) => {
+        .addMapping(CourseDetailsEditDataDTO, ([urlService]) => (view: CourseAdminDetailedView, categories: CourseCategory[], teachers: User[]) => {
 
             const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] => {
 
