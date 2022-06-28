@@ -9,11 +9,14 @@ import { CourseItemView } from '../models/views/CourseItemView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { CourseItemType } from '../shared/types/sharedTypes';
+import { CourseItemSimpleType, CourseItemType } from '../shared/types/sharedTypes';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
+import { readVersionCode } from './misc/encodeService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+
+type ItemMutationType = Mutation<CourseContentItemAdminDTO, 'versionCode'>;
 
 export class CourseItemService {
 
@@ -53,7 +56,7 @@ export class CourseItemService {
      */
     async incrementUnmodifiedCourseItemVersions(
         moduleMigrations: VersionMigrationResult[],
-        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+        mutations: ItemMutationType[]) {
 
         const oldModuleVersionIds = moduleMigrations
             .map(x => x.oldVersionId);
@@ -86,15 +89,13 @@ export class CourseItemService {
      */
     async saveNewCourseItemsAsync(
         moduleMigrations: VersionMigrationResult[],
-        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+        mutations: ItemMutationType[]) {
 
         const filterMutations = (
-            itemType: CourseItemType) => {
+            versionType: CourseItemSimpleType) => {
 
             return mutations
-                .filter(x => x.action === 'add')
-                .filter(x => XMutatorHelpers
-                    .anyField(x)('itemType', itemType))
+                .filter(x => x.action !== 'delete' && readVersionCode(x.key).versionType === versionType)
         };
 
         await this
@@ -173,28 +174,48 @@ export class CourseItemService {
      * video ADD mutations  
      */
     private async _createNewVideosAsync(
-        videoMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+        mutations: ItemMutationType[],
         moduleMigrations: VersionMigrationResult[]) {
+
+        // get old data
+        const { getVersionDataPair, mutationVersionIdPairs } = await this._getVideoVersionDataPairs(mutations);
 
         //
         // CREATE VIDEO DATAS
-        const videoDatas = videoMutations
-            .map((x) => {
+        const videoDatas = mutationVersionIdPairs
+            .map(({ mutation, versionId }) => {
 
-                const videoData = XMutatorHelpers
-                    .mapMutationToPartialObject(x);
+                // get default data
+                // in case of update, default data is the previous data
+                // in case of insert, default data is just a 
+                // js object with proper default values 
+                const defaultData = mutation.action === 'update'
+                    ? getVersionDataPair(versionId)
+                        .data
+                    : {
+                        title: '',
+                        subtitle: '',
+                        orderIndex: XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
+                        description: '',
+                        thumbnailFileId: null,
+                        videoFileId: null
+                    } as VideoData;
 
-                if (videoData.itemOrderIndex === null || videoData.itemOrderIndex === undefined)
-                    throw new Error('itemOrderIndex is null or undefiend');
+                const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
+                    .mapMutationToPartialObject(mutation);
 
-                const newVideoData: InsertEntity<VideoData> = {
-                    title: videoData.itemTitle ?? '',
-                    subtitle: videoData.itemSubtitle ?? '',
-                    orderIndex: videoData.itemOrderIndex,
-                    description: '',
-                    thumbnailFileId: null,
-                    videoFileId: null
-                };
+                // create new video data 
+                // and set props from mutation
+                const newVideoData: InsertEntity<VideoData> = defaultData;
+
+                if (itemOrderIndex)
+                    newVideoData.orderIndex = itemOrderIndex;
+
+                if (itemSubtitle)
+                    newVideoData.subtitle = itemSubtitle;
+
+                if (itemTitle)
+                    newVideoData.title = itemTitle;
 
                 return newVideoData;
             });
@@ -204,8 +225,8 @@ export class CourseItemService {
 
         //
         // CREATE VIDEOS 
-        const videos = videoMutations
-            .map(x => {
+        const videos = mutationVersionIdPairs
+            .map(({ }) => {
 
                 const video: InsertEntity<Video> = {};
                 return video;
@@ -216,13 +237,12 @@ export class CourseItemService {
 
         //
         // CREATE VIDEO VERSIONS 
-        const videoVersions = videoMutations
-            .map((x, i) => {
+        const videoVersions = mutationVersionIdPairs
+            .map(({ mutation, versionId }, i) => {
 
                 const videoDataId = videoDataIds[i];
                 const videoId = videoIds[i];
-                const oldModuleVersionId = XMutatorHelpers
-                    .getFieldValueOrFail(x)('moduleVersionId');
+                const oldModuleVersionId = this._getModuleVersionId(mutation, () => getVersionDataPair(versionId).version.moduleVersionId);
 
                 const newModuleVersionId = VersionMigrationHelpers
                     .getNewVersionId(moduleMigrations, oldModuleVersionId);
@@ -241,35 +261,92 @@ export class CourseItemService {
     }
 
     /**
+     * Get old video data 
+     */
+    private async _getVideoVersionDataPairs(mutations: ItemMutationType[]) {
+
+        //
+        // OLD VIDEO VERSION IDS 
+        const oldVersionIds = mutations
+            .filter(x => x.action === 'update')
+            .map(x => readVersionCode(x.key).versionId);
+
+        const oldVersions = await this._ormService
+            .query(VideoVersion, { oldVersionIds })
+            .where('id', '=', 'oldVersionIds')
+            .getMany();
+
+        const oldDatas = await this._ormService
+            .query(VideoData, { ids: oldVersions.map(x => x.videoDataId) })
+            .where('id', '=', 'ids')
+            .getMany();
+
+        const oldVideos = await this._ormService
+            .query(Video, { ids: oldVersions.map(x => x.videoId) })
+            .where('id', '=', 'ids')
+            .getMany();
+
+        const getVersionDataPair = (versionId: number) => oldVersions
+            .map((version, i) => ({ version, data: oldDatas[i], video: oldVideos[i] }))
+            .single(x => x.version.id === versionId);
+
+        const mutationVersionIdPairs = mutations
+            .map(x => ({ mutation: x, versionId: this._getVersionIdFromMutation(x).versionId }));
+
+        return { getVersionDataPair, mutationVersionIdPairs };
+    }
+
+    /**
      * Creates new exams from 
      * exam ADD mutations  
      */
     private async _createNewExamsAsync(
-        examMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+        mutations: ItemMutationType[],
         moduleMigrations: VersionMigrationResult[]) {
+
+        // get old data
+        const { getVersionDataPair, mutationVersionIdPairs } = await this._getExamVersionDataPairs(mutations);
 
         //
         // CREATE EXAM DATAS
-        const examDatas = examMutations
-            .map((examMutation) => {
+        const examDatas = mutationVersionIdPairs
+            .map(({ mutation, versionId }) => {
 
-                const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
-                    .mapMutationToPartialObject(examMutation);
+                // get default data
+                // in case of update, default data is the previous data
+                // in case of insert, default data is just a 
+                // js object with proper default values 
+                const defaultData = mutation.action === 'update'
+                    ? getVersionDataPair(versionId)
+                        .data
+                    : {
+                        description: '',
+                        isFinal: false,
+                        orderIndex: XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
+                        retakeLimit: 3,
+                        subtitle: '',
+                        thumbnailUrl: null,
+                        title: ''
+                    } as ExamData;
 
-                if (itemOrderIndex === null || itemOrderIndex === undefined)
-                    throw new Error('itemOrderIndex is null or undefiend');
+                // mutaitonObject contains all the mutated properties as keys and  
+                const { itemOrderIndex, itemSubtitle, itemTitle } = XMutatorHelpers
+                    .mapMutationToPartialObject(mutation);
 
-                const newVideoData: InsertEntity<ExamData> = {
-                    description: '',
-                    isFinal: false,
-                    orderIndex: itemOrderIndex,
-                    retakeLimit: 3,
-                    subtitle: itemSubtitle ?? '',
-                    thumbnailUrl: null,
-                    title: itemTitle ?? ''
-                };
+                // create new video data
+                // and apply mutation props to it
+                const newExamData: InsertEntity<ExamData> = defaultData;
 
-                return newVideoData;
+                if (itemOrderIndex)
+                    newExamData.orderIndex = itemOrderIndex;
+
+                if (itemSubtitle)
+                    newExamData.subtitle = itemSubtitle;
+
+                if (itemTitle)
+                    newExamData.title = itemTitle;
+
+                return newExamData;
             });
 
         const examDataIds = await this._ormService
@@ -277,13 +354,19 @@ export class CourseItemService {
 
         //
         // CREATE VIDEOS 
-        const exams = examMutations
-            .map(_ => {
+        const exams = mutationVersionIdPairs
+            .map(({ mutation, versionId }) => {
 
-                const exam: InsertEntity<Exam> = {
-                    isPretest: false,
-                    isSignup: false
-                };
+                // get default data
+                const defaultExam = mutation.action === 'update'
+                    ? getVersionDataPair(versionId).exam
+                    : {
+                        isPretest: false,
+                        isSignup: false
+                    } as Exam;
+
+                const exam: InsertEntity<Exam> = defaultExam;
+
                 return exam;
             });
 
@@ -291,14 +374,13 @@ export class CourseItemService {
             .createManyAsync(Exam, exams);
 
         //
-        // CREATE VIDEO VERSIONS 
-        const examVersions = examMutations
-            .map((examMutation, i) => {
+        // CREATE EXAM VERSIONS 
+        const examVersions = mutationVersionIdPairs
+            .map(({ mutation, versionId }, i) => {
 
                 const examDataId = examDataIds[i];
                 const examId = examIds[i];
-                const oldModuleVersionId = XMutatorHelpers
-                    .getFieldValueOrFail(examMutation)('moduleVersionId');
+                const oldModuleVersionId = this._getModuleVersionId(mutation, () => getVersionDataPair(versionId).version.moduleVersionId);
 
                 const newModuleVersionId = VersionMigrationHelpers
                     .getNewVersionId(moduleMigrations, oldModuleVersionId);
@@ -314,5 +396,67 @@ export class CourseItemService {
 
         await this._ormService
             .createManyAsync(ExamVersion, examVersions);
+    }
+
+    /**
+     * Get old exam data 
+     */
+    private async _getExamVersionDataPairs(mutations: ItemMutationType[]) {
+
+        //
+        // OLD VIDEO VERSION IDS 
+        const oldVersionIds = mutations
+            .filter(x => x.action === 'update')
+            .map(x => readVersionCode(x.key).versionId);
+
+        const oldVersions = await this._ormService
+            .query(ExamVersion, { oldVersionIds })
+            .where('id', '=', 'oldVersionIds')
+            .getMany();
+
+        const oldDatas = await this._ormService
+            .query(ExamData, { ids: oldVersions.map(x => x.examDataId) })
+            .where('id', '=', 'ids')
+            .getMany();
+
+        const oldExams = await this._ormService
+            .query(Exam, { ids: oldVersions.map(x => x.examId) })
+            .where('id', '=', 'ids')
+            .getMany();
+
+        const getVersionDataPair = (versionId: number) => oldVersions
+            .map((version, i) => ({ version, data: oldDatas[i], exam: oldExams[i] }))
+            .single(x => x.version.id === versionId);
+
+        const mutationVersionIdPairs = mutations
+            .map(x => ({ mutation: x, versionId: this._getVersionIdFromMutation(x).versionId }));
+
+        return { getVersionDataPair, mutationVersionIdPairs };
+    }
+
+    /**
+     * get version id from mutation
+     */
+    private _getVersionIdFromMutation(mut: ItemMutationType) {
+
+        return readVersionCode(mut.key);
+    }
+
+    /**
+     * 
+     */
+    private _getModuleVersionId(mutation: ItemMutationType, getOldModuleVersionId: () => number) {
+
+        if (mutation.action !== 'update')
+            return XMutatorHelpers
+                .getFieldValueOrFail(mutation)('moduleVersionId');
+
+        const mutatedId = XMutatorHelpers
+            .getFieldValue(mutation)('moduleVersionId');
+
+        if (mutatedId)
+            return mutatedId;
+
+        return getOldModuleVersionId();
     }
 }

@@ -478,15 +478,16 @@ export class CourseService {
         const moduleVersionMigrations = await this
             ._incrementModuleVersionsAsync(oldCourseVersionId, newCourseVersionId);
 
-        // update items 
-        // await this.saveUpdatedCourseItemsAsync(mutations);
-
+        // increment unmodified
         await this._courseItemService
             .incrementUnmodifiedCourseItemVersions(moduleVersionMigrations, mutations);
 
         // save new items 
         await this._courseItemService
             .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
+
+        // save updated
+        // TODO
     }
 
     private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {

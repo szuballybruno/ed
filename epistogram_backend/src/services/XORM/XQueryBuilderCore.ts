@@ -3,7 +3,7 @@ import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk, toSQLSnakeCasing } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CheckExpression, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
+import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
 
 const INDENT = '   ';
@@ -91,11 +91,19 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async insertManyAsync<T>(signature: ClassType<T>, entities: T[]) {
 
+        // do nothing on empty array
         if (entities.length === 0)
             return [];
 
-        const { insertFields, insertColumns } = this._getInsertColumns(entities);
-        const { valuesQuery, valuesLog, values } = this._getInsertValues(insertFields, entities);
+        // delete id props
+        entities
+            .forEach(ent => delete (ent as any).id);
+
+        // check if insert is defaultInsert
+        const isDefaultInsert = Object.keys(entities[0]).length === 0;
+
+        const { insertFields, insertColumns } = this._getInsertColumns(entities, isDefaultInsert);
+        const { valuesQuery, valuesLog, values } = this._getInsertValues(insertFields, entities, isDefaultInsert);
         const tableName = 'public.' + toSQLSnakeCasing(signature.name);
 
         const query = `
@@ -124,7 +132,7 @@ RETURNING id`;
 
         const { insertFields, insertColumns } = this._getInsertColumns(entities);
         const insertColumnsWithId = ['id', ...insertFields];
-        const { valuesQuery, values, valuesLog } = this._getInsertValues(insertColumnsWithId, entities);
+        const { valuesQuery, values, valuesLog } = this._getInsertValues(insertColumnsWithId, entities, false);
 
         const tableName = 'public.' + toSQLSnakeCasing(signature.name);
 
@@ -178,12 +186,18 @@ WHERE ${tableName}.id = value_table.id::int;
     /**
      * Get insert fields  
      */
-    private _getInsertColumns(entities: any[]) {
+    private _getInsertColumns(entities: any[], isDefaultInsert?: boolean) {
 
         const first = entities[0];
         const insertFields = Object
             .keys(first)
             .filter(x => x !== 'id');
+
+        if (isDefaultInsert)
+            return {
+                insertColumns: ['id'],
+                insertFields: ['id']
+            };
 
         return {
             insertColumns: insertFields
@@ -195,7 +209,7 @@ WHERE ${tableName}.id = value_table.id::int;
     /**
      * Get insert values 
      */
-    private _getInsertValues(insertFields: string[], entities: any[]) {
+    private _getInsertValues(insertFields: string[], entities: any[], isDefaultInsert: boolean) {
 
         let tokenId = 0;
 
@@ -210,29 +224,39 @@ WHERE ${tableName}.id = value_table.id::int;
                         return {
                             value: (entity as any)[insertField],
                             token: '$' + tokenId
-                        };
+                        } as InsertTokenValuePair;
                     });
 
                 return {
                     entity,
                     tokenValuePairs
-                };
+                } as EntityTokenValuePair;
             });
 
+        const getValueTokens = (etvp: EntityTokenValuePair) => {
+
+            if (isDefaultInsert)
+                return ['DEFAULT'];
+
+            return etvp.tokenValuePairs.map(tvp => tvp.token).join(', ')
+        };
+
         const valuesQuery = entityInsertDatas
-            .map(entityInsertdata => `${INDENT}(${entityInsertdata.tokenValuePairs.map(tvp => tvp.token).join(', ')})`)
-            .join(', ');
+            .map(etvp => `${INDENT}(${getValueTokens(etvp)})`)
+            .join(',\n');
 
         const valuesLog = `Values: \n${entityInsertDatas
             .map((x, i) => `Entity ${i}: ${x.tokenValuePairs.map(tvp => `${tvp.token}: ${tvp.value}`)
                 .join(', ')}`)
             .join('\n')}`;
 
-        const values = entityInsertDatas
-            .flatMap(x => x.tokenValuePairs)
-            .map(x => x.value);
+        const values = isDefaultInsert
+            ? []
+            : entityInsertDatas
+                .flatMap(x => x.tokenValuePairs)
+                .map(x => x.value);
 
-        return { tokenId, entityInsertDatas, valuesQuery, valuesLog, values };
+        return { valuesQuery, valuesLog, values };
     }
 
     /**

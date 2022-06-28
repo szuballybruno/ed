@@ -10,6 +10,16 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
 export type SaveEntityType<TEntity> = { id: number } & Partial<TEntity>;
 
+export type InsertTokenValuePair = {
+    value: any;
+    token: string;
+};
+
+export type EntityTokenValuePair = {
+    entity: ClassType<any>;
+    tokenValuePairs: InsertTokenValuePair[];
+};
+
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
 export type SQLBracketType = null | '(' | ')';

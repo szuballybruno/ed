@@ -1,6 +1,6 @@
 import { Exam } from '../../models/entity/exam/Exam';
 import { Video } from '../../models/entity/video/Video';
-import { CourseItemType } from '../../shared/types/sharedTypes';
+import { CourseItemSimpleType, CourseItemType } from '../../shared/types/sharedTypes';
 import { withValue } from '../../utilities/helpers';
 import { base64Decode, base64Encode } from './base64Service';
 
@@ -22,3 +22,15 @@ export const readItemCode = (encoded: string) => {
         itemType: type
     };
 };
+
+export const readVersionCode = (versionCode: string): { versionType: CourseItemSimpleType, versionId: number } => {
+
+    const [itemType, versionId] = versionCode.split('@');
+
+    return {
+        versionType: itemType === 'video_version'
+            ? 'video'
+            : 'exam',
+        versionId: parseInt(versionId)
+    };
+}
