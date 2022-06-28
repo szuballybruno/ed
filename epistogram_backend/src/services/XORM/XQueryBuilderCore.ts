@@ -3,7 +3,7 @@ import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
 import { toSQLSnakeCasing as snk, toSQLSnakeCasing } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CheckExpression, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
+import { CheckExpression, CrossJoinCondition, InnerJoinCondition, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
 
 const INDENT = '   ';
@@ -91,11 +91,111 @@ export class XQueryBuilderCore<TEntity, TParams> {
      */
     async insertManyAsync<T>(signature: ClassType<T>, entities: T[]) {
 
-        const first = entities[0];
-        const insertFields = Object.keys(first);
+        if (entities.length === 0)
+            return [];
 
-        const sqlColumns = insertFields
-            .map(x => toSQLSnakeCasing(x));
+        const { insertFields, insertColumns } = this._getInsertColumns(entities);
+        const { valuesQuery, valuesLog, values } = this._getInsertValues(insertFields, entities);
+        const tableName = 'public.' + toSQLSnakeCasing(signature.name);
+
+        const query = `
+INSERT INTO ${tableName} (${insertColumns.join(', ')})
+VALUES 
+${valuesQuery}
+RETURNING id`;
+
+        log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+
+        const result = await this._sqlConnectionService
+            .executeSQLAsync(query, values);
+
+        return result
+            .rows
+            .map(x => x.id as number);
+    }
+
+    /**
+     * Save many async
+     */
+    async saveManyAsync<T>(signature: ClassType<T>, entities: SaveEntityType<T>[]) {
+
+        if (entities.length === 0)
+            return;
+
+        const { insertFields, insertColumns } = this._getInsertColumns(entities);
+        const insertColumnsWithId = ['id', ...insertFields];
+        const { valuesQuery, values, valuesLog } = this._getInsertValues(insertColumnsWithId, entities);
+
+        const tableName = 'public.' + toSQLSnakeCasing(signature.name);
+
+        const setQuery = insertColumns
+            .map(insertColumn => `${INDENT}${insertColumn} = value_table.${insertColumn}`)
+            .join(',\n');
+
+        const query = `
+UPDATE ${tableName} SET 
+${setQuery}
+FROM (VALUES
+${valuesQuery}
+) value_table(${insertColumnsWithId.map(x => toSQLSnakeCasing(x)).join(', ')}) 
+WHERE ${tableName}.id = value_table.id::int;
+`;
+
+        log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+
+        const res = await this._sqlConnectionService
+            .executeSQLAsync(query, values);
+    }
+
+    /**
+     * Hard delete 
+     */
+    async hardDeleteAsync<T>(signature: ClassType<T>, ids: number[]) {
+
+        const tableName = 'public.' + toSQLSnakeCasing(signature.name);
+
+        await this._sqlConnectionService
+            .executeSQLAsync(`DELETE FROM ${tableName} WHERE id = ANY($1::int[])`, [ids]);
+    }
+
+    /**
+     * Soft delete 
+     */
+    async softDeleteAsync<T>(signature: ClassType<T>, ids: number[]) {
+
+        const ents: any[] = ids
+            .map((x) => ({
+                id: x,
+                deletionDate: new Date()
+            }));
+
+        await this
+            .saveManyAsync(signature, ents);
+    }
+
+    // ----- PRIVATE ----- //
+
+    /**
+     * Get insert fields  
+     */
+    private _getInsertColumns(entities: any[]) {
+
+        const first = entities[0];
+        const insertFields = Object
+            .keys(first)
+            .filter(x => x !== 'id');
+
+        return {
+            insertColumns: insertFields
+                .map(x => toSQLSnakeCasing(x)),
+            insertFields
+        };
+    }
+
+    /**
+     * Get insert values 
+     */
+    private _getInsertValues(insertFields: string[], entities: any[]) {
 
         let tokenId = 0;
 
@@ -119,34 +219,21 @@ export class XQueryBuilderCore<TEntity, TParams> {
                 };
             });
 
-        console.log(first);
-        console.log((first));
+        const valuesQuery = entityInsertDatas
+            .map(entityInsertdata => `${INDENT}(${entityInsertdata.tokenValuePairs.map(tvp => tvp.token).join(', ')})`)
+            .join(', ');
 
-        const tokens = entityInsertDatas
-            .map(entityInsertdata => `(${entityInsertdata.tokenValuePairs.map(tvp => tvp.token).join(', ')})`);
-
-        const query = `
-INSERT INTO ${toSQLSnakeCasing(signature.name)} (${sqlColumns.join(', ')})
-VALUES 
-    ${tokens.join(', ')}
-RETURNING id`;
-
-        const queryLog = `${query}\nValues: \n${entityInsertDatas
+        const valuesLog = `Values: \n${entityInsertDatas
             .map((x, i) => `Entity ${i}: ${x.tokenValuePairs.map(tvp => `${tvp.token}: ${tvp.value}`)
                 .join(', ')}`)
             .join('\n')}`;
 
-        log(queryLog, { color: ConsoleColor.purple, noStamp: true });
+        const values = entityInsertDatas
+            .flatMap(x => x.tokenValuePairs)
+            .map(x => x.value);
 
-        const result = await this._sqlConnectionService
-            .executeSQLAsync(query, entityInsertDatas.flatMap(x => x.tokenValuePairs).map(x => x.value));
-
-        return result
-            .rows
-            .map(x => x.id as number);
+        return { tokenId, entityInsertDatas, valuesQuery, valuesLog, values };
     }
-
-    // ----- PRIVATE ----- //
 
     /**
      * Returns the full SQL query that can be run against the DB 
@@ -236,14 +323,14 @@ RETURNING id`;
      * Turns an 'ExpressionPart' into SQL query 
      */
     private _compileExpressionPart(
-        espressionPart: SimpleExpressionPart<TParams>,
+        expressionPart: SimpleExpressionPart<TParams>,
         sqlParamsList: SQLParamType<TParams, keyof TParams>[],
         sqlTableRef: string): string {
 
         // select condition
-        if (espressionPart.code === 'SELECT') {
+        if (expressionPart.code === 'SELECT') {
 
-            const selectCond = espressionPart as SelectCondition<TEntity>;
+            const selectCond = expressionPart as SelectCondition<TEntity>;
 
             const text = ((): string => {
 
@@ -272,42 +359,53 @@ RETURNING id`;
         }
 
         // left join condition
-        else if (espressionPart.code === 'LEFT JOIN') {
+        else if (expressionPart.code === 'LEFT JOIN') {
 
-            const joinCond = espressionPart as LeftJoinCondition<any>;
+            const joinCond = expressionPart as LeftJoinCondition<any>;
             const joinTableName = this._toSQLTableName(joinCond.classType);
 
             return `\n\nLEFT JOIN ${joinTableName}`;
         }
 
         // inner join condition
-        else if (espressionPart.code === 'INNER JOIN') {
+        else if (expressionPart.code === 'INNER JOIN') {
 
-            const joinCond = espressionPart as InnerJoinCondition<any>;
+            const joinCond = expressionPart as InnerJoinCondition<any>;
             const joinTableName = this._toSQLTableName(joinCond.classType);
 
             return `\n\nINNER JOIN ${joinTableName}`;
         }
 
         // cross join condition
-        else if (espressionPart.code === 'CROSS JOIN') {
+        else if (expressionPart.code === 'CROSS JOIN') {
 
-            const joinCond = espressionPart as CrossJoinCondition<any>;
+            const joinCond = expressionPart as CrossJoinCondition<any>;
             const joinTableName = this._toSQLTableName(joinCond.classType);
 
             return `\n\nCROSS JOIN ${joinTableName}`;
         }
 
         // bracket condition
-        else if (espressionPart.code === 'CLOSING BRACKET') {
+        else if (expressionPart.code === 'CLOSING BRACKET') {
 
             return ')';
+        }
+
+        // ORDER BY
+        else if (expressionPart.code === 'ORDER BY') {
+
+            const columns = expressionPart
+                .orderColumns
+                .map(x => toSQLSnakeCasing(x))
+                .join(', ');
+
+            return `\n\nORDER BY ${columns}`;
         }
 
         // where condition
         else {
 
-            return this._compileCheckExpression(espressionPart, sqlParamsList);
+            return this._compileCheckExpression(expressionPart, sqlParamsList);
         }
     }
 

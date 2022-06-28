@@ -333,25 +333,23 @@ export class RoleService extends QueryServiceBase<Role> {
             .getSingle();
 
         await this._ormService
-            .save(Role, [
-                noUndefined({
-                    id: role.id,
-                    name: dto.name,
-                    ownerCompanyId: dto.companyId
-                })
-            ]);
+            .save(Role, {
+                id: role.id,
+                name: dto.name,
+                companyId: dto.companyId
+            });
+
+        const bridgesToDelete = await this._ormService
+            .query(RolePermissionBridge, { roleId: dto.roleId })
+            .where('roleId', '=', 'roleId')
+            .getMany();
 
         // save role permission bridges
         await this._ormService
-            .getRepository(RolePermissionBridge)
-            .createQueryBuilder()
-            .delete()
-            .from(RolePermissionBridge)
-            .where('roleId = :roleId', { roleId: dto.roleId })
-            .execute();
+            .hardDelete(RolePermissionBridge, bridgesToDelete.map(x => x.id));
 
         await this._ormService
-            .save(RolePermissionBridge, dto
+            .createManyAsync(RolePermissionBridge, dto
                 .permissionIds
                 .map(x => ({
                     permissionId: x,

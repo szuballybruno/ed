@@ -26,7 +26,7 @@ export class VideoRatingService {
             .getOneOrNull();
 
         this._ormService
-            .save(VideoRating, {
+            .saveOrInsertAsync(VideoRating, {
                 id: existingRating ? existingRating.id : undefined,
                 experience: dto.experience,
                 userId,
@@ -48,7 +48,7 @@ export class VideoRatingService {
             .getOneOrNull();
 
         this._ormService
-            .save(VideoRating, {
+            .saveOrInsertAsync(VideoRating, {
                 id: existingRating
                     ? existingRating.id
                     : undefined,

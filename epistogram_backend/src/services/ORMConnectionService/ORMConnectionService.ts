@@ -1,118 +1,21 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
-import { noUndefined } from '../../shared/logic/sharedLogic';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { ParamConstraintType, SaveEntityType } from '../XORM/XORMTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
-import { ParamConstraintType } from '../XORM/XORMTypes';
-import { InsertEntity } from '../../utilities/misc';
 import { XQueryBuilderCore } from '../XORM/XQueryBuilderCore';
-
-export type ORMConnection = DataSource;
 
 export class ORMConnectionService {
 
-    private _config: GlobalConfiguration;
-    private _schema: XDBMSchemaType;
-    private _ormConnection: ORMConnection;
-    private _sqlConnectionService: SQLConnectionService;
+    public _sqlConnectionService: SQLConnectionService;
     private _loggingEnabled: boolean;
 
-    constructor(config: GlobalConfiguration, schema: XDBMSchemaType, sqlConnectionService: SQLConnectionService) {
+    constructor(config: GlobalConfiguration, sqlConnectionService: SQLConnectionService) {
 
-        this._config = config;
-        this._schema = schema;
         this._sqlConnectionService = sqlConnectionService;
         this._loggingEnabled = config.logging.orm;
-    }
-
-    connectTypeORMAsync = async (noSync?: boolean) => {
-
-        const isLoggingEnabled = this._config.database.isOrmLoggingEnabled;
-        const isSyncEnabled = noSync ? false : this._config.database.isDangerousDBPurgeEnabled;
-        const dbConnOpts = this._config.getDatabaseConnectionParameters();
-
-        const views = this._schema
-            .views
-            .filter(x => !!x[2])
-            .map(x => x[2]!);
-
-        const entities = this._schema
-            .entities;
-
-        const options = {
-            type: 'postgres',
-            port: dbConnOpts.port,
-            host: dbConnOpts.host,
-            username: dbConnOpts.username,
-            password: dbConnOpts.password,
-            database: dbConnOpts.databaseName,
-            synchronize: isSyncEnabled,
-            logging: isLoggingEnabled,
-            namingStrategy: new SnakeNamingStrategy(),
-            extra: {
-                socketPath: dbConnOpts.socketPath
-            },
-            entities: [
-                ...entities,
-                ...views
-            ],
-        } as DataSourceOptions;
-
-        const initAsync = async (dataSourceOptions: DataSourceOptions): Promise<DataSource> => {
-
-            return new Promise<DataSource>((res, rej) => {
-
-                const dataSource = new DataSource(dataSourceOptions);
-
-                dataSource
-                    .initialize()
-                    .then(() => {
-
-                        res(dataSource);
-                    })
-                    .catch((err) => {
-
-                        rej(err);
-                    });
-            });
-        };
-
-        try {
-
-            const connection = await initAsync(options);
-
-            if (!connection.manager)
-                throw new Error('TypeORM manager is null or undefined!');
-
-            this._ormConnection = connection;
-        }
-        catch (e) {
-
-            throw new Error('Type ORM connection error!' + e);
-        }
-    };
-
-    /**
-     * @deprecated Use XOrm (this service .query())
-     */
-    getRepository<T>(classType: ClassType<T>) {
-
-        if (!this._ormConnection)
-            throw new Error('Trying to use ORM connection, but ORM is disconnected!');
-
-        return this._ormConnection.getRepository(classType);
-    }
-
-    /**
-     * @deprecated Use XOrm (this service .query())
-     */
-    getOrmConnection() {
-
-        return this._ormConnection;
     }
 
     beginTransactionAsync() {
@@ -156,27 +59,27 @@ export class ORMConnectionService {
     /**
      * Soft deletes entites 
      */
-    async softDelete<TEntity>(classType: ClassType<TEntity>, ids: number[]) {
+    async softDelete<TEntity>(signature: ClassType<TEntity>, ids: number[]) {
 
         if (ids.length === 0)
             return;
 
-        await this._ormConnection
-            .getRepository(classType)
-            .softDelete(ids);
+        const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
+
+        await core.softDeleteAsync(signature, ids);
     }
 
     /**
      * Hard deletes entites 
      */
-    async hardDelete<TEntity>(classType: ClassType<TEntity>, ids: number[]) {
+    async hardDelete<TEntity>(signature: ClassType<TEntity>, ids: number[]) {
 
         if (ids.length === 0)
             return;
 
-        await this._ormConnection
-            .getRepository(classType)
-            .delete(ids);
+        const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
+
+        await core.hardDeleteAsync(signature, ids);
     }
 
     /**
@@ -184,7 +87,7 @@ export class ORMConnectionService {
      */
     async createAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<number> {
 
-        const core = new XQueryBuilderCore(this._sqlConnectionService, true);
+        const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
         const ids = await core
             .insertManyAsync(signature, [ent]);
@@ -197,7 +100,7 @@ export class ORMConnectionService {
      */
     async createManyAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
 
-        const core = new XQueryBuilderCore(this._sqlConnectionService, true);
+        const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
         const ids = await core.insertManyAsync(signature, ent);
 
@@ -207,27 +110,32 @@ export class ORMConnectionService {
     /**
      * Saves entities
      */
-    async save<TEntity>(classType: ClassType<TEntity>, entityOrEntities: Partial<TEntity>[] | Partial<TEntity>) {
+    async save<TEntity>(signature: ClassType<TEntity>, entityOrEntities: SaveEntityType<TEntity>[] | SaveEntityType<TEntity>) {
 
-        try {
+        const entities = Array.isArray(entityOrEntities)
+            ? entityOrEntities
+            : [entityOrEntities];
 
-            const entities = Array.isArray(entityOrEntities)
-                ? entityOrEntities
-                : [entityOrEntities];
+        const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
-            if (entities.length === 0)
-                return;
+        await core.saveManyAsync(signature, entities);
+    }
 
-            entities
-                .forEach(x => noUndefined(x));
+    /**
+     * Save or insert entity
+     */
+    async saveOrInsertAsync<TEntity>(signature: ClassType<TEntity>, ent: Partial<TEntity>): Promise<number> {
 
-            await this._ormConnection
-                .getRepository(classType)
-                .save(entities as any);
+        const entityId = (ent as any).id;
+
+        if (entityId) {
+
+            await this.save(signature, ent as SaveEntityType<TEntity>);
+            return entityId;
         }
-        catch (e: any) {
+        else {
 
-            throw new Error(`Error while saving entities of type '${classType.name}'. Inner message: \n${e.message}`);
+            return await this.createAsync(signature, ent as InsertEntity<TEntity>);
         }
     }
 

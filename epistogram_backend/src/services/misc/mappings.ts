@@ -350,6 +350,74 @@ const marray = [
                 correctAnswerRate: prv.correctAnswerRate,
                 firstItemCode: acv.firstItemCode
             });
+        }),
+
+    epistoMappingsBuilder
+        .addMapping(CourseDetailsEditDataDTO, ([urlService]) => (view: CourseDetailsView, categories: CourseCategory[], teachers: User[]) => {
+
+            const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] => {
+
+                return cc
+                    .filter(x => !x.parentCategoryId)
+                    .map(parent => {
+
+                        const children = cc
+                            .filter(cat => cat.parentCategoryId === parent.id);
+
+                        return {
+                            id: parent.id,
+                            name: parent.name,
+                            childCategories: children
+                                .map(child => ({
+                                    id: child.id,
+                                    name: child.name
+                                }))
+                        } as CourseCategoryDTO;
+                    });
+            };
+
+            const courseCategoryDTOs = toCourseCategoryDTO(categories);
+
+            const thumbnailImageURL = view.coverFilePath
+                ? urlService.getAssetUrl(view.coverFilePath)
+                : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
+
+            return instantiate<CourseDetailsEditDataDTO>({
+                title: view.title,
+                courseId: view.courseId,
+                thumbnailURL: thumbnailImageURL,
+                shortDescription: view.shortDescription,
+                language: view.languageName,
+                difficulty: view.difficulty,
+                description: view.description,
+                benchmark: view.benchmark,
+                previouslyCompletedCount: view.previouslyCompletedCount,
+                visibility: view.visibility,
+                teacherId: view.teacherId,
+                humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
+                technicalRequirementsDescription: view.technicalRequirements,
+
+                skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
+                technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
+                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits),
+
+                category: {
+                    id: view.categoryId,
+                    name: view.categoryName,
+                    childCategories: []
+                },
+                subCategory: {
+                    id: view.subCategoryId,
+                    name: view.subCategoryName,
+                    childCategories: []
+                },
+                teachers: teachers
+                    .map(x => ({
+                        fullName: toFullName(x.firstName, x.lastName),
+                        id: x.id
+                    })),
+                categories: courseCategoryDTOs
+            });
         })
 ] as const;
 
@@ -522,54 +590,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
         .addMap(CourseProgressView, CourseProgressShortDTO, x => ({
             ...x
         }));
-
-    mapperService
-        .addMap(CourseAdminDetailedView, CourseDetailsEditDataDTO, (view, params) => {
-
-            const { categories, teachers } = params as { categories: CourseCategory[], teachers: User[] };
-
-            const courseCategoryDTOs = categories
-                .map(x => toCourseCategoryDTO(x));
-
-            const thumbnailImageURL = view.coverFilePath
-                ? getAssetUrl(view.coverFilePath)
-                : getAssetUrl('/images/defaultCourseCover.jpg');
-
-            return {
-                title: view.title,
-                courseId: view.courseId,
-                thumbnailURL: thumbnailImageURL,
-                shortDescription: view.shortDescription,
-                language: view.languageName,
-                difficulty: view.difficulty,
-                description: view.description,
-                benchmark: view.benchmark,
-                previouslyCompletedCount: view.previouslyCompletedCount,
-                visibility: view.visibility,
-                teacherId: view.teacherId,
-                humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
-                technicalRequirementsDescription: view.technicalRequirementsDescription,
-
-                skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
-                technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
-                humanSkillBenefits: parseSkillBenefits(view.humanSkillBenefits),
-
-                category: {
-                    id: view.categoryId,
-                    name: view.categoryName
-                },
-                subCategory: {
-                    id: view.subCategoryId,
-                    name: view.subCategoryName
-                },
-                teachers: teachers
-                    .map(x => ({
-                        fullName: toFullName(x.firstName, x.lastName),
-                        id: x.id
-                    })),
-                categories: courseCategoryDTOs
-            } as CourseDetailsEditDataDTO;
-        });
 
     mapperService
         .addMap(CourseAdminContentView, CourseContentItemAdminDTO, (x): CourseContentItemAdminDTO => {
@@ -1174,17 +1194,5 @@ export const toAnswerDTO = (a: AnswerData) => {
         answerId: a.id,
         answerText: a.text
     } as AnswerDTO;
-};
-
-export const toCourseCategoryDTO = (cc: CourseCategory): CourseCategoryDTO => {
-
-    return {
-        id: cc.id,
-        name: cc.name,
-        childCategories: cc.childCategories
-            ? cc.childCategories
-                .map(x => toCourseCategoryDTO(x))
-            : []
-    } as CourseCategoryDTO;
 };
 

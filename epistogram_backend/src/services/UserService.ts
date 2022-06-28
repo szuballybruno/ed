@@ -87,17 +87,15 @@ export class UserService {
         const userId = dto.id;
 
         // save user 
-        const user: Partial<User> = {
-            id: userId,
-            lastName: dto.lastName,
-            firstName: dto.firstName,
-            email: dto.email,
-            companyId: dto.companyId,
-            jobTitleId: dto.jobTitleId
-        };
-
         await this._ormService
-            .save(User, user);
+            .save(User, {
+                id: userId,
+                lastName: dto.lastName,
+                firstName: dto.firstName,
+                email: dto.email,
+                companyId: dto.companyId,
+                jobTitleId: dto.jobTitleId
+            });
 
         // save teacher info
         await this._saveTeacherInfoAsync(userId, dto.isTeacher);

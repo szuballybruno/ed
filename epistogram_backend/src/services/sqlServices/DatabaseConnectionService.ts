@@ -5,6 +5,7 @@ import { ORMConnectionService } from '../ORMConnectionService/ORMConnectionServi
 import { SeedService } from './SeedService';
 import { SQLBootstrapperService } from './SQLBootstrapper';
 import { ExecSQLFunctionType } from './SQLConnectionService';
+import { TypeORMConnectionService } from './TypeORMConnectionService';
 
 export type SQLConnectionType = {
     executeSQL: ExecSQLFunctionType,
@@ -22,21 +23,13 @@ export class DbConnectionService {
         config: GlobalConfiguration,
         sqlStrapper: SQLBootstrapperService,
         ormConnectionService: ORMConnectionService,
-        seedService: SeedService) {
+        seedService: SeedService,
+        private _typeOrmConnectionService: TypeORMConnectionService) {
 
         this._config = config;
         this._sqlBootstrapperSvc = sqlStrapper;
         this._ormConnectionService = ormConnectionService;
         this._seedService = seedService;
-    }
-
-    async connectTypeORM() {
-
-        logSecondary('Connecting TypeORM...');
-
-        // connect TypeORM
-        await this._ormConnectionService
-            .connectTypeORMAsync(true);
     }
 
     async bootstrapDBAsync() {
@@ -92,7 +85,7 @@ export class DbConnectionService {
         logSecondary('Connecting TypeORM and creating tables...');
 
         // connect TypeORM
-        await this._ormConnectionService
+        await this._typeOrmConnectionService
             .connectTypeORMAsync();
     }
 

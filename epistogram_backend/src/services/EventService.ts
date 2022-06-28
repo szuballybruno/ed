@@ -48,10 +48,9 @@ export class EventService {
     async getUnfulfilledEventAsync() {
 
         const events = await this._ormService
-            .getRepository(Event)
-            .createQueryBuilder('e')
-            .where('e.is_fulfilled = false')
-            .orderBy('e.creationDate')
+            .query(Event)
+            .where('isFulfilled', '=', 'false')
+            .orderBy(['creationDate'])
             .getMany();
 
         if (events.length === 0)

@@ -68,13 +68,10 @@ export class TempomatService extends ServiceBase {
     ) => {
 
         const tempomatCalculationData = await this._ormService
-            .getRepository(TempomatCalculationDataView)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(TempomatCalculationDataView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getOneOrNull();
 
         if (!tempomatCalculationData)
             throw new Error('Couldn\'t get tempomat calculation data');

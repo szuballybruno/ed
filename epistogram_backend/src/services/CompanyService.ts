@@ -119,11 +119,9 @@ export class CompanyService extends QueryServiceBase<Company> {
     async saveCompanyAsync(principalId: PrincipalId, dto: CompanyEditDataDTO) {
 
         await this._ormService
-            .save(Company, [
-                {
-                    id: dto.id,
-                    name: dto.name
-                }
-            ]);
+            .save(Company, {
+                id: dto.id,
+                name: dto.name
+            });
     }
 }

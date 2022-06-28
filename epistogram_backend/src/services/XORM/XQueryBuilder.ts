@@ -2,7 +2,7 @@ import { ClassType } from '../misc/advancedTypes/ClassType';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, CheckExpressionType } from './XORMTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, CheckExpressionType, OrderByExpression } from './XORMTypes';
 
 // class JoinBuilder<TEntity, TParams extends ParamConstraintType<TParams>> {
 
@@ -116,6 +116,19 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
                 op: op,
                 keyB: keyB,
             }));
+
+        return this;
+    }
+
+    orderBy(orderColumns: (keyof TEntity)[]) {
+
+        const expr: OrderByExpression = {
+            code: 'ORDER BY',
+            orderColumns: orderColumns as any[]
+        };
+
+        this._expression
+            .push(expr);
 
         return this;
     }

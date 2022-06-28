@@ -8,6 +8,7 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
+export type SaveEntityType<TEntity> = { id: number } & Partial<TEntity>;
 
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
@@ -85,13 +86,19 @@ export type ClosingBracketCondition = {
     code: 'CLOSING BRACKET'
 }
 
+export type OrderByExpression = {
+    code: 'ORDER BY',
+    orderColumns: string[]
+}
+
 export type ExpressionPart<TEntity, TParams> =
     SelectCondition<TEntity> |
     CheckExpression<any, any, any> |
     LeftJoinCondition<any> |
     CrossJoinCondition<TEntity> |
     InnerJoinCondition<any> |
-    ClosingBracketCondition;
+    ClosingBracketCondition | 
+    OrderByExpression;
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
 

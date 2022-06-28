@@ -51,10 +51,6 @@ const main = async () => {
             .getService(SQLConnectionService)
             .createConnectionClientAsync();
 
-        await serviceProvider
-            .getService(DbConnectionService)
-            .connectTypeORM();
-
         return serviceProvider;
     };
 

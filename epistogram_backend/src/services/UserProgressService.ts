@@ -99,13 +99,10 @@ export class UserProgressService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         const tempomatCalculationData = await this._ormService
-            .getRepository(TempomatCalculationDataView)
-            .findOneOrFail({
-                where: {
-                    courseId,
-                    userId
-                }
-            });
+            .query(TempomatCalculationDataView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         const previsionedCompletionDate = this._tempomatService
             .calculatePrevisionedDate(

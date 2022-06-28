@@ -139,14 +139,14 @@ export class PlaybackService extends ServiceBase {
         videoVersionId: number,
         videoPlaybackSessionId: number) {
 
+        const samplesToDelete = await this._ormService
+            .query(VideoPlaybackSample, { videoVersionId, userId })
+            .where('videoVersionId', '=', 'videoVersionId')
+            .and('userId', '=', 'userId')
+            .getMany();
+
         await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(VideoPlaybackSample)
-            .where("videoVersionId = :videoVersionId", { videoVersionId })
-            .andWhere("userId = :userId", { userId })
-            .execute();
+            .hardDelete(VideoPlaybackSample, samplesToDelete.map(x => x.id));
 
         await this._ormService
             .createManyAsync(VideoPlaybackSample, mergedSamples
@@ -253,7 +253,7 @@ export class PlaybackService extends ServiceBase {
             : newCompletionDate;
 
         await this._ormService
-            .save(UserVideoProgressBridge, {
+            .saveOrInsertAsync(UserVideoProgressBridge, {
                 id: pbd?.id,
                 userId,
                 videoVersionId,

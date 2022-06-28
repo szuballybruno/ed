@@ -121,8 +121,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             throw new Error('User course bridge not found!');
 
         await this._ormService
-            .getRepository(UserCourseBridge)
-            .save({
+            .save(UserCourseBridge, {
                 courseId: courseId,
                 userId: userId.toSQLValue(),
                 id: userCourseBridge.id,

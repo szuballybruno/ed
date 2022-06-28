@@ -115,125 +115,79 @@ export class ExamService extends QueryServiceBase<ExamData> {
      */
     answerExamQuestionAsync = async (principalId: PrincipalId, dto: AnswerQuestionDTO) => {
 
-        // throwNotImplemented();
+        throwNotImplemented();
         //TODO validation comes here
 
-        const userId = principalId.toSQLValue();
+        // const userId = principalId.toSQLValue();
 
-        const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
+        // const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
 
-        // inspect questions
-        const questions = await this._ormService
-            .getRepository(QuestionVersion)
-            .createQueryBuilder('qv')
-            .withDeleted()
-            .leftJoinAndSelect('qv.questionData', 'qd')
-            .leftJoinAndSelect('qv.examVersion', 'ev')
-            .leftJoinAndSelect('ev.answerSessions', 'as')
-            .where('as.id = :asid', { asid: answerSessionId })
-            .orderBy('qd.orderIndex')
-            .getMany();
+        // // inspect questions
+        // const questions = await this._ormService
+        //     .getRepository(QuestionVersion)
+        //     .createQueryBuilder('qv')
+        //     .withDeleted()
+        //     .leftJoinAndSelect('qv.questionData', 'qd')
+        //     .leftJoinAndSelect('qv.examVersion', 'ev')
+        //     .leftJoinAndSelect('ev.answerSessions', 'as')
+        //     .where('as.id = :asid', { asid: answerSessionId })
+        //     .orderBy('qd.orderIndex')
+        //     .getMany();
 
-        const isLast = questions[questions.length - 1].id === questionVersionId;
-        const examVersionId = questions.first().examVersion.id!;
+        // const isLast = questions[questions.length - 1].id === questionVersionId;
+        // const examVersionId = questions.first().examVersion.id!;
 
-        // save user activity
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
+        // // save user activity
+        // await this._userSessionActivityService
+        //     .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
 
-        // save answer 
-        const result = this._quesitonAnswerService
-            .answerQuestionAsync(
-                userId,
-                answerSessionId,
-                questionVersionId,
-                answerIds,
-                true,
-                elapsedSeconds);
+        // // save answer 
+        // const result = this._quesitonAnswerService
+        //     .answerQuestionAsync(
+        //         userId,
+        //         answerSessionId,
+        //         questionVersionId,
+        //         answerIds,
+        //         true,
+        //         elapsedSeconds);
 
-        if (!isLast)
-            return result;
+        // if (!isLast)
+        //     return result;
 
-        // set answer session end date 
-        await this._ormService
-            .save(AnswerSession, {
-                id: answerSessionId,
-                endDate: new Date()
-            });
+        // // set answer session end date 
+        // await this._ormService
+        //     .save(AnswerSession, {
+        //         id: answerSessionId,
+        //         endDate: new Date()
+        //     });
 
-        // set user exam progress
-        const answerSessionViews = await this._ormService
-            .query(AnswerSessionView, { userId, examVersionId })
-            .where('userId', '=', 'userId')
-            .and('examVersionId', '=', 'examVersionId')
-            .getMany();
+        // // set user exam progress
+        // const answerSessionViews = await this._ormService
+        //     .query(AnswerSessionView, { userId, examVersionId })
+        //     .where('userId', '=', 'userId')
+        //     .and('examVersionId', '=', 'examVersionId')
+        //     .getMany();
 
-        const currentAnswerSessionIsSuccessful = answerSessionViews
-            .first(x => x.answerSessionId == answerSessionId);
+        // const currentAnswerSessionIsSuccessful = answerSessionViews
+        //     .first(x => x.answerSessionId == answerSessionId);
 
-        const successfulAsvCount = answerSessionViews
-            .count(x => x.isSuccessful);
+        // const successfulAsvCount = answerSessionViews
+        //     .count(x => x.isSuccessful);
 
-        const currentIsFirstSuccessfulAse = successfulAsvCount === 1 && currentAnswerSessionIsSuccessful;
+        // const currentIsFirstSuccessfulAse = successfulAsvCount === 1 && currentAnswerSessionIsSuccessful;
 
-        // if not first successful ase return
-        if (!currentIsFirstSuccessfulAse)
-            return result;
+        // // if not first successful ase return
+        // if (!currentIsFirstSuccessfulAse)
+        //     return result;
 
         // if first successful ase, save user exam progress bridge
-        await this._ormService
-            .save(UserExamProgressBridge, {
-                completionDate: new Date(),
-                examVersionId,
-                userId
-            });
-    };
-
-    /**
-     * Delete multiple exams by their ids.
-     */
-    softDeleteExamsAsync = async (examIds: number[], unsetCurrentCourseItem: boolean) => {
-
-        // if (examIds.length === 0)
-        //     return;
-
-        // delete exam quesitons 
-        // const questions = await this._ormService
-        //     .getMany(Question,
-        //         [
-        //             ["SELECT", ["id"]],
-        //             ["WHERE", "examId", "=", "examIds"],
-        //         ],
-        //         { examIds });
-
-        // await this._questionsService
-        //     .softDeleteQuesitonsAsync(questions.map(x => x.id));
-
-        // // delete answer sessions
-        // const answerSessions = await this._ormService
-        //     .getMany(AnswerSession,
-        //         [
-        //             ["SELECT", ["id"]],
-        //             ["WHERE", "examId", "=", "examIds"],
-        //         ],
-        //         { examIds });
-
+        // throwNotImplemented();
         // await this._ormService
-        //     .softDelete(AnswerSession, answerSessions.map(x => x.id));
-
-        // // set current course item on users
-        // if (unsetCurrentCourseItem) {
-        //     for (let index = 0; index < examIds.length; index++) {
-
-        //         const examId = examIds[index];
-        //         await this._userCourseBridgeService
-        //             .unsetUsersCurrentCourseItemAsync(examId);
-        //     }
-        // }
-
-        // delete exam
-        await this._ormService
-            .softDelete(ExamData, examIds);
+        //     .save(UserExamProgressBridge, {
+        //         completionDate: new Date(),
+        //         examVersionId,
+        //         userId
+        //     });
     };
 
     /**

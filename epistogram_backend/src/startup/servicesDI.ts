@@ -1,7 +1,7 @@
-import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
+import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
 import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
 import { ActivationCodeService } from './../services/ActivationCodeService';
 import { AuthenticationService } from './../services/AuthenticationService';
@@ -124,7 +124,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(poolService);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
-    const ormConnectionService = new ORMConnectionService(globalConfig, dbSchema, sqlConnectionService);
+    const ormConnectionService = new ORMConnectionService(globalConfig, sqlConnectionService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
     const eventService = new EventService(mapperService, ormConnectionService);
     const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService);
@@ -142,7 +142,8 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const authenticationService = new AuthenticationService(ormConnectionService, userService, tokenService, userSessionActivityService, hashService, permissionService, globalConfig);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
     const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
-    const dbConnectionService = new DbConnectionService(globalConfig, sqlBootstrapperService, ormConnectionService, seedService);
+    const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);
+    const dbConnectionService = new DbConnectionService(globalConfig, sqlBootstrapperService, ormConnectionService, seedService, typeOrmConnectionService);
     const courseItemService = new CourseItemService(ormConnectionService, mapperService);
     const userCourseBridgeService = new UserCourseBridgeService(ormConnectionService, mapperService);
     const questionService = new QuestionService(ormConnectionService);
@@ -229,6 +230,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
         commentService,
         likeService,
         companyService,
+        typeOrmConnectionService
     };
 
     return new ServiceProvider(services);

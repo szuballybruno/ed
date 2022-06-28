@@ -193,11 +193,14 @@ export class RegistrationService extends ServiceBase {
         // Assign ACCESS_APPLICATION permission to user
         await this
             ._ormService
-            .getRepository(PermissionAssignmentBridge)
-            .insert({
+            .createAsync(PermissionAssignmentBridge, {
                 permissionId: 35,
-                assigneeUserId: userId
-            })
+                assigneeUserId: userId,
+                assigneeCompanyId: null,
+                assigneeGroupId: null,
+                contextCompanyId: null,
+                contextCourseId: null
+            });
 
         // get auth tokens 
         const tokens = await this._authenticationService

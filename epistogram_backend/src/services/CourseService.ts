@@ -364,11 +364,8 @@ export class CourseService {
             .getSingle()
 
         const categories = await this._ormService
-            .getRepository(CourseCategory)
-            .createQueryBuilder('cc')
-            .leftJoinAndSelect('cc.childCategories', 'ccc')
-            .where('cc.parentCategoryId IS NULL')
-            .getMany()
+            .query(CourseCategory)
+            .getMany();
 
         const teachers = await this._ormService
             .query(User)
