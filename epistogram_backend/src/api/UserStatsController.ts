@@ -13,15 +13,18 @@ export class UserStatsController {
         this._userStatsService = serviceProvider.getService(UserStatsService);
     }
 
-    @XControllerAction(apiRoutes.userStats.getUserStats)
-    getUserStatsAction = async (params: ActionParams) => {
-
-        const userId = params
-            .getQuery<{ userId: number }>()
-            .getValue(x => x.userId, 'int');
+    @XControllerAction(apiRoutes.userStats.getHomePageStats)
+    getHomePageStatsAction = async (params: ActionParams) => {
 
         return await this._userStatsService
-            .getUserStatsAsync(userId);
+            .getHomePageStatsAsync(params.principalId);
+    };
+
+    @XControllerAction(apiRoutes.userStats.getUserLearningPageStats)
+    getUserLearningPageStatsAction = async (params: ActionParams) => {
+
+        return await this._userStatsService
+            .getUserLearningPageStatsAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStats)

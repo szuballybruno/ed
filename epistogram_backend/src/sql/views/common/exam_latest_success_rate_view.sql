@@ -1,8 +1,8 @@
 SELECT 
 	sq.*,
-	asev.total_question_count,
-	asev.correct_answer_count,
-	ROUND((asev.correct_answer_count::double precision / asev.total_question_count * 100)::numeric, 1) success_rate 
+	asev.answered_question_count,
+	asev.correct_given_answer_count,
+	ROUND((asev.correct_given_answer_count::double precision / asev.answered_question_count * 100)::numeric, 1) success_rate -- TODO: incorrect success rate when multiple correct answers
 FROM 
 (
 	SELECT 

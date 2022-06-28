@@ -122,7 +122,8 @@ export const apiRoutes = {
     },
 
     userStats: {
-        getUserStats: '/userstats/get-user-stats',
+        getHomePageStats: '/userstats/get-home-page-stats',
+        getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
         getUserCourseStats: '/userstats/get-user-course-stats',
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',

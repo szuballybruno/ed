@@ -5,7 +5,7 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class UserStatsView {
+export class UserLearningPageStatsView {
 
     @ViewColumn()
     @XViewColumn()
@@ -17,27 +17,15 @@ export class UserStatsView {
 
     @ViewColumn()
     @XViewColumn()
+    videosToBeRepeatedCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    questionsToBeRepeatedCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
     completedVideoCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    completedExamCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    successfulExamCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalVideoPlaybackSeconds: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalGivenAnswerCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalCorrectGivenAnswerCount: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -45,11 +33,7 @@ export class UserStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    averageSessionLengthSeconds: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalAnswerSessionSuccessRate: number;
+    answeredQuestionsCount: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -57,5 +41,5 @@ export class UserStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    totalSuccessfulExamRate: number;
+    rankInsideCompany: number;
 }

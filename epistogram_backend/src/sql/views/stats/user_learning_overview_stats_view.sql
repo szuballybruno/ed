@@ -1,21 +1,11 @@
-SELECT 
-	sq.*,
-
-	-- correct answer rate
-	CASE WHEN sq.answered_video_and_practise_quiz_questions = 0
-		THEN 0
-		ELSE sq.correct_answered_video_and_practise_quiz_questions:: double precision / sq.answered_video_and_practise_quiz_questions * 100
-	END correct_answer_rate_percentage,
-
-	(sq.engagement_points * 3 + sq.performance_percentage * 3 + 100 * 0.5) / 6.5 overall_performance_percentage
-FROM 
+WITH stats AS 
 (
 	SELECT 
 		u.id user_id,
 		u.email user_email,
 
 		upv.total_performance_percentage performance_percentage,
-		
+
 		urtv.reaction_time_percent_diff user_reaction_time_difference_percentage,
 		urtv.user_reaction_time_points,
 		urtv.user_exam_length_points,
@@ -26,7 +16,8 @@ FROM
 
 		-- engagement points D
 		(
-			SELECT engagement_points
+			SELECT 
+				engagement_points
 			FROM public.user_engagement_view uev
 			WHERE uev.user_id = u.id
 		) engagement_points,
@@ -35,7 +26,7 @@ FROM
 		(
 			SELECT SUM(usav.length_seconds)::int
 			FROM public.user_session_view usav
-			
+
 			WHERE usav.user_id = u.id
 		) total_time_active_on_platform_seconds,
 
@@ -45,7 +36,7 @@ FROM
 			FROM public.user_video_progress_bridge uvpb
 			WHERE uvpb.user_id = u.id
 		) watched_videos,
-		
+
 		-- completed_exam_count
 		(
 			SELECT SUM (ecv.has_completed_session::int)::int
@@ -63,7 +54,7 @@ FROM
 			ON asv.answer_session_id = ga.answer_session_id
 			AND (asv.answer_session_type = 'video' 
 				 OR asv.answer_session_type = 'practise')
-			
+
 			WHERE asv.user_id = u.id 
 		) answered_video_and_practise_quiz_questions,
 
@@ -77,7 +68,7 @@ FROM
 			ON asv.answer_session_id = ga.answer_session_id
 			AND (asv.answer_session_type = 'video' 
 				 OR asv.answer_session_type = 'practise')
-			
+
 			WHERE asv.user_id = u.id 
 			AND ga.is_correct
 		) correct_answered_video_and_practise_quiz_questions,
@@ -94,7 +85,7 @@ FROM
 		(
 			SELECT AVG(usav.length_seconds)::int
 			FROM public.user_session_view usav
-			
+
 			WHERE usav.user_id = u.id
 		) average_session_length_seconds,
 
@@ -139,4 +130,16 @@ FROM
 		usbv.average_session_block
 
 	ORDER BY u.id
-) sq
+)
+
+SELECT 
+	st.*,
+
+	-- correct answer rate
+	CASE WHEN st.answered_video_and_practise_quiz_questions = 0
+		THEN 0
+		ELSE st.correct_answered_video_and_practise_quiz_questions:: double precision / st.answered_video_and_practise_quiz_questions * 100
+	END correct_answer_rate_percentage,
+
+	(st.engagement_points * 3 + st.performance_percentage * 3 + 100 * 0.5) / 6.5 overall_performance_percentage
+FROM stats st

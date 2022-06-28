@@ -5,7 +5,7 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class AnswerSessionView {
+export class HomePageStatsView {
 
     @ViewColumn()
     @XViewColumn()
@@ -13,29 +13,17 @@ export class AnswerSessionView {
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: number;
+    totalCompletedVideosLastMonth: number;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    totalPlaybackTimeLastMonth: number;
 
     @ViewColumn()
     @XViewColumn()
-    isSuccessful: boolean;
+    totalGivenAnswerCount: number;
 
     @ViewColumn()
     @XViewColumn()
-    isCompleted: boolean;
-
-    @ViewColumn()
-    @XViewColumn()
-    answeredQuestionCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    correctGivenAnswerCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    givenAnswerCount: number;
+    correctAnswerRate: number;
 }

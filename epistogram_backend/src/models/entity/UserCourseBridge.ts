@@ -22,7 +22,7 @@ export class UserCourseBridge {
     @XViewColumn()
     courseMode: CourseModeType;
 
-    @Column()
+    @Column({ type: 'boolean' })
     @XViewColumn()
     isCurrent: boolean;
 

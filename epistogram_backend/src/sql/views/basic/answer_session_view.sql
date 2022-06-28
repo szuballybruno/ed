@@ -1,3 +1,31 @@
+-- total and total correct given answer count, 
+-- and answered question count
+WITH answer_stats AS 
+(
+	SELECT 
+		ase.user_id,
+		ase.id answer_session_id,
+		COUNT (ga.id)::int given_answer_count,
+		SUM (ga.is_correct::int)::int correct_given_answer_count,
+		(
+			SELECT 
+				COUNT(*)
+			FROM public.question_version qv
+
+			LEFT JOIN public.given_answer ga
+			ON ga.question_version_id = qv.id
+
+			WHERE ga.answer_session_id = ase.id
+		) answered_question_count
+	FROM public.given_answer ga
+
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
+	
+	GROUP BY ase.user_id, ase.id
+)
+
+
 SELECT 
 	ase.id answer_session_id,
 	ase.user_id,
@@ -6,24 +34,10 @@ SELECT
     ase.start_date,
     ase.end_date,
 	ase.is_completed,
-	false is_successful,
-	(
-		SELECT 
-			COUNT(*)
-		FROM public.question_version qv
-		
-		LEFT JOIN public.given_answer ga
-		ON ga.question_version_id = qv.id
-
-		WHERE ga.answer_session_id = ase.id
-	) total_question_count,
-	(
-		SELECT 
-			SUM(ga.is_correct::int)
-		FROM public.given_answer ga
-
-		WHERE ga.answer_session_id = ase.id
-	) correct_answer_count,
+	false is_successful, -- TODO
+	ast.answered_question_count,
+	ast.correct_given_answer_count,
+	ast.given_answer_count,
 	CASE WHEN ase.is_practise
 		THEN 'practise'
 		ELSE CASE WHEN e.id = 0
@@ -38,6 +52,10 @@ SELECT
 		END
 	END answer_session_type
 FROM public.answer_session ase
+
+LEFT JOIN answer_stats ast
+ON ast.user_id = ase.user_id
+AND ast.answer_session_id = ase.id
 
 LEFT JOIN public.exam_version ev
 ON ev.id = ase.exam_version_id

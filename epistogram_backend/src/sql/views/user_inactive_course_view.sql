@@ -11,7 +11,7 @@ FROM (
     SELECT DISTINCT ON (course_id)
         usv.user_id user_id,
         usv.end_date session_end_date,
-        ucb.id course_id,
+        cv.course_id course_id,
         EXTRACT(WEEK FROM usv.start_date) AS week,
         COUNT(cv.course_id * -10) points
     FROM public.user_session_view usv
@@ -47,7 +47,7 @@ FROM (
     AND usv.length_seconds != 0 -- no empty sessions
     AND usv.is_finalized = true -- no not finalized sessions
 
-    GROUP BY usv.user_id, usv.start_date, usv.end_date, ucb.id
+    GROUP BY usv.user_id, usv.start_date, usv.end_date, cv.course_id
 
     ORDER BY course_id, usv.end_date desc -- important for distinct on so it can get the latest session for course
 ) user_course_sessions

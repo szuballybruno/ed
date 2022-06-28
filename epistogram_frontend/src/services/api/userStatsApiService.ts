@@ -1,18 +1,30 @@
+import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
-import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
+import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
-export const useUserStats = (userId: number) => {
+export const useHomePageStats = () => {
 
-    const queryRes = useReactQuery2<UserStatsDTO>(apiRoutes.userStats.getUserStats, { userId });
+    const queryRes = useReactQuery2<HomePageStatsDTO>(apiRoutes.userStats.getHomePageStats);
 
     return {
-        userStats: queryRes.data,
-        userStatsStatus: queryRes.state,
-        userStatsError: queryRes.error
+        homePageStats: queryRes.data,
+        homePageStatsStatus: queryRes.state,
+        homePageStatsError: queryRes.error
+    };
+};
+
+export const useUserLearningPageStats = (userId: number) => {
+
+    const queryRes = useReactQuery2<UserLearningPageStatsDTO>(apiRoutes.userStats.getUserLearningPageStats, { userId });
+
+    return {
+        userLearningPageStats: queryRes.data,
+        userLearningPageStatsStatus: queryRes.state,
+        userLearningPageStatsError: queryRes.error
     };
 };
 

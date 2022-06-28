@@ -2,7 +2,7 @@ import { Flex, Grid } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useContext } from 'react';
 import { useRecommendedItemQuota, useUserProgressData } from '../../services/api/userProgressApiService';
-import { useUserStats } from '../../services/api/userStatsApiService';
+import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
@@ -20,7 +20,6 @@ export const HomePageCourseStats = (props: {
     const { activeCoursesPaging } = props;
     const courseId = activeCoursesPaging?.currentItem?.courseId ?? null;
     const { id } = useContext(CurrentUserContext);
-    const { userStats } = useUserStats(id);
     const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId ?? 0, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId!, !!currentCourse);

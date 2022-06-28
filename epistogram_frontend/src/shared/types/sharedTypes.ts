@@ -20,6 +20,7 @@ export type TaskPriorityType = 'normal' | 'important' | 'urgent';
 export type TaskStatusType = 'assigned' | 'inProgress' | 'submitted' | 'rejected' | 'completed';
 
 export type CourseItemType = 'signup' | 'pretest' | 'video' | 'exam' | 'module' | 'final';
+export type CourseItemSimpleType = 'video' | 'exam';
 
 export type CourseItemStateType = 'completed' | 'locked' | 'current' | 'available';
 

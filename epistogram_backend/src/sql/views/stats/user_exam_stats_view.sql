@@ -3,14 +3,14 @@ SELECT DISTINCT ON (e.id)
 	ed.title exam_title,
 	u.id user_id,
 	cv.course_id,
-	0 correct_answer_rate,
+	0 correct_answer_rate, -- TODO: Fix when new exam scoring available
 --	CASE 
 --		WHEN asv.correct_answer_rate < 60
 --		THEN true
 --		ELSE false
 --	END should_practise_exam
 	false should_practise_exam,
-	asv.correct_answer_count::text || ' / ' || asv.total_question_count::text correct_answer_count,
+	asv.correct_given_answer_count::text || ' / ' || asv.answered_question_count::text correct_answer_count, -- TODO: Incorrect when multiple correct answers
 	EXTRACT(EPOCH FROM (asv.end_date - asv.start_date)::time)::int exam_length_seconds,
 	asv.end_date last_completion_date,
 	AVG(ga.elapsed_seconds) average_reaction_time
@@ -47,8 +47,8 @@ GROUP BY
 	u.id, 
 	ed.title,
 	cv.course_id,
-	asv.correct_answer_count,
-	asv.total_question_count,
+	asv.correct_given_answer_count,
+	asv.answered_question_count,
 	asv.end_date,
 	asv.start_date
 

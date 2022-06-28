@@ -123,7 +123,7 @@ import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
-import { UserStatsView } from '../../models/views/UserStatsView';
+import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserVideoPractiseProgressView } from '../../models/views/UserVideoPractiseProgressView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
@@ -185,6 +185,7 @@ import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_vid
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { LatestVideoView } from '../../models/views/LatestVideoView';
+import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -331,6 +332,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'course_progress_view', CourseProgressView], // 2 user_inactive_course_view, user_course_stats_view
             ['', 'course_overview_view', CourseOverviewView],
             ['', 'user_inactive_course_view', UserInactiveCourseView],
+            ['stats', 'home_page_stats_view', HomePageStatsView],
             ['stats', 'user_performance_view', UserPerformanceView],
             ['stats', 'user_engagement_view', UserEngagementView],
             ['stats', 'user_learning_overview_stats_view', UserLearningOverviewStatsView],
@@ -338,7 +340,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['stats', 'user_video_stats_view', UserVideoStatsView],
             ['stats', 'user_exam_stats_view', UserExamStatsView],
             ['stats', 'user_spent_time_ratio_view', UserSpentTimeRatioView],
-            ['stats', 'user_stats_view', UserStatsView],
+            ['stats', 'user_learning_page_stats_view', UserLearningPageStatsView],
             ['', 'user_latest_activity_view'],
             ['', 'admin_user_list_view', AdminUserListView]
         ],

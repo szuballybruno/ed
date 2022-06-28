@@ -68,8 +68,8 @@ LEFT JOIN
 			asv.user_id, 
 			ex.id exam_id, 
 			MAX(asv.answer_session_id) asid,
-			asv.correct_answer_count,
-			asv.total_question_count,
+			asv.correct_given_answer_count correct_answer_count,
+			asv.answered_question_count total_question_count,
 			0 correct_answer_rate
 		FROM public.answer_session_view asv
 		
@@ -86,8 +86,8 @@ LEFT JOIN
 		GROUP BY 
 			ex.id, 
 			asv.user_id, 
-			asv.correct_answer_count, 
-			asv.total_question_count
+			asv.correct_given_answer_count, 
+			asv.answered_question_count
 		ORDER BY asv.user_id, ex.id
 	) sq
 

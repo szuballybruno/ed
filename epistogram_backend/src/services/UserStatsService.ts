@@ -5,18 +5,22 @@ import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../mod
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
-import { UserStatsView } from '../models/views/UserStatsView';
+import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
-import { UserStatsDTO } from '../shared/dtos/UserStatsDTO';
+import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
+import { PrincipalId } from '../utilities/ActionParams';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
+import { HomePageStatsView } from '../models/views/HomePageStatsView';
+import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
 
 export class UserStatsService {
 
@@ -34,15 +38,61 @@ export class UserStatsService {
         this._tempomatService = tempomatService;
     }
 
-    async getUserStatsAsync(userId: number) {
+    async getHomePageStatsAsync(principalId: PrincipalId) {
+        const userId = principalId.toSQLValue();
 
         const stats = await this._ormService
-            .query(UserStatsView, { userId })
+            .query(HomePageStatsView, { userId })
             .where('userId', '=', 'userId')
             .getSingle();
 
         return this._mapperService
-            .map(UserStatsView, UserStatsDTO, stats);
+            .mapTo(HomePageStatsDTO, [stats])
+    }
+
+    async getUserLearningPageStatsAsync(principalId: PrincipalId) {
+
+        const userId = principalId.toSQLValue();
+
+        const stats = await this._ormService
+            .query(UserLearningPageStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        if (!tempomatCalculationData)
+            throw new Error('Couldn\'t get tempomat calculation data');
+
+        const allLagBehindPercentages = tempomatCalculationData.map(x => {
+            const previsionedCompletionDate = this._tempomatService
+                .calculatePrevisionedDate(
+                    x.originalPrevisionedCompletionDate,
+                    x.totalItemCount,
+                    x.totalCompletedItemCount,
+                    x.startDate,
+                    x.tempomatMode,
+                    x.tempomatAdjustmentValue
+                )
+
+            const lagBehindPercentage = this._tempomatService
+                .calculateLagBehindPercentage(
+                    x.startDate,
+                    x.requiredCompletionDate
+                        ? x.requiredCompletionDate
+                        : x.originalPrevisionedCompletionDate,
+                    previsionedCompletionDate
+                )
+
+            return lagBehindPercentage || 0
+        })
+
+        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
+
+        return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage])
     }
 
     /**

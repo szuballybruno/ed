@@ -32,8 +32,9 @@ import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
 import { DailyTipView } from '../../models/views/DailyTipView';
-import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
+import { ExamResultView } from '../../models/views/ExamResultView';
+import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 import { ModuleView } from '../../models/views/ModuleView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
@@ -47,7 +48,7 @@ import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
-import { UserStatsView } from '../../models/views/UserStatsView';
+import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
@@ -65,7 +66,6 @@ import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
-import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { CourseItemEditDTO } from '../../shared/dtos/CourseItemEditDTO';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
@@ -82,12 +82,15 @@ import { EventDTO } from '../../shared/dtos/EventDTO';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
+import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
 import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
+import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
+import { PlaylistModuleDTO } from '../../shared/dtos/PlaylistModuleDTO';
 import { PrequizAnswerDTO } from '../../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
@@ -111,7 +114,7 @@ import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
-import { UserStatsDTO } from '../../shared/dtos/UserStatsDTO';
+import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate, toFullName } from '../../utilities/helpers';
@@ -119,7 +122,6 @@ import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
-import { PlaylistModuleDTO } from '../../shared/dtos/PlaylistModuleDTO';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -418,7 +420,30 @@ const marray = [
                     })),
                 categories: courseCategoryDTOs
             });
-        })
+        }),
+    epistoMappingsBuilder.addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number) => {
+        return {
+            userId: view.userId,
+            userEmail: view.userEmail,
+            totalLagBehindPercentage: totalLagBehindPercentage,
+            videosToBeRepeatedCount: view.videosToBeRepeatedCount,
+            questionsToBeRepeatedCount: view.questionsToBeRepeatedCount,
+            completedVideoCount: view.completedVideoCount,
+            totalSessionLengthSeconds: view.totalSessionLengthSeconds,
+            answeredQuestionsCount: view.answeredQuestionsCount,
+            totalCorrectAnswerRate: view.totalCorrectAnswerRate,
+            rankInsideCompany: view.rankInsideCompany
+        }
+    }),
+    epistoMappingsBuilder.addMapping(HomePageStatsDTO, () => (view: HomePageStatsView) => {
+        return {
+            userId: view.userId,
+            totalCompletedVideosLastMonth: view.totalCompletedVideosLastMonth,
+            totalPlaybackTimeLastMonth: view.totalPlaybackTimeLastMonth,
+            totalGivenAnswerCount: view.totalGivenAnswerCount,
+            correctAnswerRate: view.correctAnswerRate
+        }
+    })
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;
@@ -504,23 +529,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             imageFilePath: courseModule.imageFile
                 ? getAssetUrl(courseModule.imageFile.filePath)
                 : null
-        }));
-
-    mapperService
-        .addMap(UserStatsView, UserStatsDTO, view => ({
-            userId: view.userId,
-            userEmail: view.userEmail,
-            averageSessionLengthSeconds: view.averageSessionLengthSeconds,
-            completedExamCount: view.completedExamCount,
-            completedVideoCount: view.completedVideoCount,
-            successfulExamCount: view.successfulExamCount,
-            totalAnswerSessionSuccessRate: view.totalAnswerSessionSuccessRate,
-            totalCorrectAnswerRate: view.totalCorrectAnswerRate,
-            totalCorrectGivenAnswerCount: view.totalCorrectGivenAnswerCount,
-            totalGivenAnswerCount: view.totalGivenAnswerCount,
-            totalSessionLengthSeconds: view.totalSessionLengthSeconds,
-            totalSuccessfulExamRate: view.totalSuccessfulExamRate,
-            totalVideoPlaybackSeconds: view.totalVideoPlaybackSeconds
         }));
 
     mapperService

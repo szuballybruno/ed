@@ -7,6 +7,7 @@ import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { SaveEntityType } from './XORM/XORMTypes';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -55,10 +56,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         // update current bridge 
         await this._ormService
             .save(UserCourseBridge, bridges
-                .map(bridge => ({
+                .map((bridge: UserCourseBridge): SaveEntityType<UserCourseBridge> => ({
                     id: bridge.id,
-                    isCurrent: bridge.courseId === courseId,
-                } as UserCourseBridge)));
+                    isCurrent: bridge.courseId === courseId
+                })));
     }
 
     /**
