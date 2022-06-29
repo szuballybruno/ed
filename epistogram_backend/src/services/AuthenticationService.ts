@@ -38,6 +38,20 @@ export class AuthenticationService {
 
         log('Establishing auth handshake...');
 
+        await this._ormService
+            .save(DiscountCode, [
+                {
+                    id: 1,
+                    code: 'upd1',
+                    userId: null
+                },
+                {
+                    id: 2,
+                    code: 'upd2',
+                    userId: null
+                }
+            ]);
+
         if (!refreshToken)
             throw new VerboseError('Refresh token not found!', 'forbidden');
 

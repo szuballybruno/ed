@@ -131,9 +131,12 @@ RETURNING id`;
             return;
 
         const first = entities[0];
+        
         const { insertFields, insertColumns } = this._getInsertColumns(entities);
-        const insertColumnsWithId = ['id', ...insertFields];
-        const { valuesQuery, values, valuesLog } = this._getInsertValues(insertColumnsWithId, entities, false);
+        const insertFieldsWithId = ['id', ...insertFields];
+        const insertColumnsWithId = ['id', ...insertColumns];
+
+        const { valuesQuery, values, valuesLog } = this._getInsertValues(insertFieldsWithId, entities, false);
 
         const tableName = 'public.' + toSQLSnakeCasing(signature.name);
 
@@ -141,7 +144,7 @@ RETURNING id`;
             .map((insertColumn, i) => {
 
                 const value = (first as any)[insertFields[i]];
-                const assignment = `value_table.${insertColumn}${this._getSQLCastType(value)}`;
+                const assignment = `value_table.${insertColumn}`;
 
                 return `${INDENT}${insertColumn} = ${assignment}`;
             })
