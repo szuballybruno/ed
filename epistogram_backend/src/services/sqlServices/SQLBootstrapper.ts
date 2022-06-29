@@ -10,38 +10,47 @@ export class SQLBootstrapperService {
 
     private _sqlConnectionService: SQLConnectionService;
     private _dbSchema: XDBMSchemaType;
-    private _configuration: GlobalConfiguration;
+    private _config: GlobalConfiguration;
 
-    constructor(sqlco: SQLConnectionService, schema: XDBMSchemaType, configuration: GlobalConfiguration) {
+    constructor(
+        sqlco: SQLConnectionService,
+        schema: XDBMSchemaType,
+        configuration: GlobalConfiguration) {
 
         this._sqlConnectionService = sqlco;
         this._dbSchema = schema;
-        this._configuration = configuration;
+        this._config = configuration;
     }
 
     bootstrapDatabase = async () => {
 
-        log('Recreating views...');
+        if (this._config.logging.bootstrap)
+            log('Recreating views...');
         await this.recreateViewsAsync(this._dbSchema.views.map(x => x[0]), this._dbSchema.views.map(x => x[1]));
 
-        log('Recreating functions...');
+        if (this._config.logging.bootstrap)
+            log('Recreating functions...');
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
 
-        log('Recreating constraints...');
+        if (this._config.logging.bootstrap)
+            log('Recreating constraints...');
         await this.recreateConstraintsAsync(this._dbSchema.constraints);
 
-        log('Recreating indices...');
+        if (this._config.logging.bootstrap)
+            log('Recreating indices...');
         await this.recreateIndicesAsync(this._dbSchema.indices);
 
-        log('Recreating triggers...');
+        if (this._config.logging.bootstrap)
+            log('Recreating triggers...');
         await this.recreateTriggersAsync(this._dbSchema.triggers);
     };
 
     recalcSequencesAsync = async () => {
 
-        log('Recalculating sequance max values...');
+        if (this._config.logging.bootstrap)
+            log('Recalculating sequance max values...');
 
-        const dbName = this._configuration.database.name;
+        const dbName = this._config.database.name;
 
         const script = `
             DO $$
@@ -65,7 +74,8 @@ export class SQLBootstrapperService {
 
         await this._sqlConnectionService.executeSQLAsync(script);
 
-        logSecondary('Recalculating sequance max values done.');
+        if (this._config.logging.bootstrap)
+            logSecondary('Recalculating sequance max values done.');
     };
 
     executeSeedScriptAsync = async (seedScriptName: string) => {
@@ -106,7 +116,8 @@ export class SQLBootstrapperService {
             const constraint = constraints[index];
             const script = this.readSQLFile('constraints', constraint.name);
 
-            logSecondary(`Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
+            if (this._config.logging.bootstrap)
+                logSecondary(`Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -126,7 +137,8 @@ export class SQLBootstrapperService {
             const sqlIndex = indices[index];
             const script = this.readSQLFile('indices', sqlIndex.name);
 
-            logSecondary(`Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
+            if (this._config.logging.bootstrap)
+                logSecondary(`Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
@@ -140,7 +152,8 @@ export class SQLBootstrapperService {
             const triggerName = triggers[index];
             const script = this.readSQLFile('triggers', triggerName);
 
-            logSecondary(`Creating trigger: [${triggerName}]...`);
+            if (this._config.logging.bootstrap)
+                logSecondary(`Creating trigger: [${triggerName}]...`);
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
@@ -160,7 +173,8 @@ export class SQLBootstrapperService {
             const functionName = functionNames[index];
             const script = this.readSQLFile('functions', functionName);
 
-            logSecondary(`Creating function: [${functionName}]...`);
+            if (this._config.logging.bootstrap)
+                logSecondary(`Creating function: [${functionName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -173,7 +187,7 @@ export class SQLBootstrapperService {
 
     private replaceSymbols = (sql: string) => {
 
-        const url = this._configuration.fileStorage.assetStoreUrl;
+        const url = this._config.fileStorage.assetStoreUrl;
         return replaceAll(sql, '{CDN_BUCKET_URL}', url);
     };
 
@@ -185,7 +199,9 @@ export class SQLBootstrapperService {
             const viewSubFolderName = viewSubFolderNames[index];
             const script = this.getViewCreationScript(viewName, viewSubFolderName);
 
-            logSecondary(`Creating view: [${viewName}]...`);
+            if (this._config.logging.bootstrap)
+                logSecondary(`Creating view: [${viewName}]...`);
+
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -206,6 +222,6 @@ export class SQLBootstrapperService {
 
     private readSQLFile = (folderName: string, fileName: string, subFolder?: string) => {
 
-        return readFileSync(this._configuration.getRootRelativePath(`/sql/${folderName}/${subFolder || ''}${subFolder ? '/' : ''}${fileName}.sql`), 'utf8');
+        return readFileSync(this._config.getRootRelativePath(`/sql/${folderName}/${subFolder || ''}${subFolder ? '/' : ''}${fileName}.sql`), 'utf8');
     };
 }

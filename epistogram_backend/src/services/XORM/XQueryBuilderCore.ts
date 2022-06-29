@@ -130,6 +130,7 @@ RETURNING id`;
         if (entities.length === 0)
             return;
 
+        const first = entities[0];
         const { insertFields, insertColumns } = this._getInsertColumns(entities);
         const insertColumnsWithId = ['id', ...insertFields];
         const { valuesQuery, values, valuesLog } = this._getInsertValues(insertColumnsWithId, entities, false);
@@ -137,15 +138,24 @@ RETURNING id`;
         const tableName = 'public.' + toSQLSnakeCasing(signature.name);
 
         const setQuery = insertColumns
-            .map(insertColumn => `${INDENT}${insertColumn} = value_table.${insertColumn}`)
+            .map((insertColumn, i) => {
+
+                const value = (first as any)[insertFields[i]];
+                const assignment = `value_table.${insertColumn}${this._getSQLCastType(value)}`;
+
+                return `${INDENT}${insertColumn} = ${assignment}`;
+            })
             .join(',\n');
 
         const query = `
 UPDATE ${tableName} SET 
 ${setQuery}
-FROM (VALUES
-${valuesQuery}
-) value_table(${insertColumnsWithId.map(x => toSQLSnakeCasing(x)).join(', ')}) 
+FROM (
+    SELECT * 
+	FROM json_populate_recordset(NULL::${tableName}, (
+		SELECT json_agg(vals) 
+		FROM (SELECT * FROM (VALUES ${valuesQuery}) vals (${insertColumnsWithId.join(', ')})) vals))
+) value_table
 WHERE ${tableName}.id = value_table.id::int;
 `;
 
@@ -572,5 +582,24 @@ WHERE ${tableName}.id = value_table.id::int;
 
         return snakeCaseString
             .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+    }
+
+    private _getSQLCastType(value: any) {
+
+        const t = typeof value;
+
+        if (t === 'number' && Number.isInteger(value))
+            return '::int';
+
+        if (t === 'number' && !Number.isInteger(value))
+            return '::double precision';
+
+        if (Object.prototype.toString.call(value) === '[object Date]')
+            return '::timestamptz';
+
+        if (t === 'boolean')
+            return '::boolean';
+
+        return '';
     }
 }

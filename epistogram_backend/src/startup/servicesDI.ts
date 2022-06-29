@@ -122,7 +122,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
 
     // create transients
     const hashService = new HashService(globalConfig);
-    const sqlConnectionService = new SQLConnectionService(poolService);
+    const sqlConnectionService = new SQLConnectionService(poolService, globalConfig);
     const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
     const ormConnectionService = new ORMConnectionService(globalConfig, sqlConnectionService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
@@ -141,7 +141,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const permissionService = new PermissionService(ormConnectionService, mapperService);
     const authenticationService = new AuthenticationService(ormConnectionService, userService, tokenService, userSessionActivityService, hashService, permissionService, globalConfig);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService);
+    const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService, globalConfig);
     const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);
     const dbConnectionService = new DbConnectionService(globalConfig, sqlBootstrapperService, ormConnectionService, seedService, typeOrmConnectionService);
     const courseItemService = new CourseItemService(ormConnectionService, mapperService);

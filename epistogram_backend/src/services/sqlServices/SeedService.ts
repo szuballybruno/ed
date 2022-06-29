@@ -1,6 +1,7 @@
 
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { logSecondary } from '../misc/logger';
 import { XDBMSchemaType as XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { SQLBootstrapperService } from './SQLBootstrapper';
@@ -31,7 +32,11 @@ export class SeedService {
     private _execService: SQLConnectionService;
     private _dbSchema: XDBMSchemaType;
 
-    constructor(dbSchema: XDBMSchemaType, sqlBootstrapperService: SQLBootstrapperService, execService: SQLConnectionService) {
+    constructor(
+        dbSchema: XDBMSchemaType,
+        sqlBootstrapperService: SQLBootstrapperService,
+        execService: SQLConnectionService,
+        private _config: GlobalConfiguration) {
 
         this._sqlBootstrapperService = sqlBootstrapperService;
         this._execService = execService;
@@ -46,7 +51,8 @@ export class SeedService {
 
             if (typeof seedScriptName === 'string') {
 
-                logSecondary(`Seeding ${seedScriptName}...`);
+                if (this._config.logging.bootstrap)
+                    logSecondary(`Seeding ${seedScriptName}...`);
 
                 await this._sqlBootstrapperService
                     .executeSeedScriptAsync(seedScriptName);
@@ -55,11 +61,13 @@ export class SeedService {
 
                 const [classType, seedObj] = seedScriptName as NewSeedType;
 
-                logSecondary(`Seeding ${classType.name}...`);
+                if (this._config.logging.bootstrap)
+                    logSecondary(`Seeding ${classType.name}...`);
 
                 if (Object.values(seedObj).length === 0) {
 
-                    logSecondary('Skipping, has no values.');
+                    if (this._config.logging.bootstrap)
+                        logSecondary('Skipping, has no values.');
                     continue;
                 }
 

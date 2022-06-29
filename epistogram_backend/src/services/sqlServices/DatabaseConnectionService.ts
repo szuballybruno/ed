@@ -48,17 +48,20 @@ export class DbConnectionService {
         const isFreshDB = await this._isEmptyDatabase();
         if (!isFreshDB) {
 
-            log('DB contains data, skipping seed.', { entryType: 'strong' });
+            if (this._config.logging.bootstrap)
+                log('DB contains data, skipping seed.', { entryType: 'strong' });
             return;
         }
 
         // SEED IF HAS NO DATA
-        log('Seeding DB...', { entryType: 'strong' });
+        if (this._config.logging.bootstrap)
+            log('Seeding DB...', { entryType: 'strong' });
 
         await this._seedService
             .seedDBAsync();
 
-        log('Seeding DB done!', { entryType: 'strong' });
+        if (this._config.logging.bootstrap)
+            log('Seeding DB done!', { entryType: 'strong' });
     }
 
     //
@@ -82,7 +85,8 @@ export class DbConnectionService {
 
     private async _connectTypeORMAndCreateTables() {
 
-        logSecondary('Connecting TypeORM and creating tables...');
+        if (this._config.logging.bootstrap)
+            logSecondary('Connecting TypeORM and creating tables...');
 
         // connect TypeORM
         await this._typeOrmConnectionService

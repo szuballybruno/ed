@@ -16,7 +16,6 @@ export type InsertTokenValuePair = {
 };
 
 export type EntityTokenValuePair = {
-    entity: ClassType<any>;
     tokenValuePairs: InsertTokenValuePair[];
 };
 

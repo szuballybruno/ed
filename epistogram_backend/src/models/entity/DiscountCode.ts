@@ -3,6 +3,11 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
 
+function logType(target : any, key : string) {
+    var t = Reflect.getMetadata("design:type", target, key);
+    console.log(`${key} type: ${t.name}`);
+}
+
 @Entity()
 export class DiscountCode {
 
@@ -15,6 +20,7 @@ export class DiscountCode {
     code: string;
 
     // user 
+    @logType
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
     userId: number | null;

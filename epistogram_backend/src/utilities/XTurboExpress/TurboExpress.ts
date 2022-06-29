@@ -1,12 +1,9 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { LoggerService } from '../../services/LoggerService';
-import { ConstructorSignature } from '../../services/misc/advancedTypes/ConstructorSignature';
+import { GlobalConfiguration } from '../../services/misc/GlobalConfiguration';
 import { log, logSecondary } from '../../services/misc/logger';
-import { ORMConnectionService } from '../../services/ORMConnectionService/ORMConnectionService';
-import { SQLConnectionService } from '../../services/sqlServices/SQLConnectionService';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { ServiceProvider } from '../../startup/servicesDI';
-import { ActionParams } from '../ActionParams';
 import { ITurboExpressLayer } from './ITurboExpressLayer';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
 
@@ -57,7 +54,9 @@ export class TurboExpressBuilder<TActionParams> {
     private _serviceCreationFunction: GetServiceProviderType;
     private _actionWrapperFunction: ActionWrapperFunctionType;
 
-    constructor(private _loggerService: LoggerService) {
+    constructor(
+        private _loggerService: LoggerService,
+        private _config: GlobalConfiguration) {
 
         this._middlewares = [];
         this._expressMiddlewares = [];
@@ -136,7 +135,8 @@ export class TurboExpressBuilder<TActionParams> {
 
                 const controllerMetadatas = getControllerActionMetadatas(sign);
 
-                log(`Controller: ${sign.name}`);
+                if (this._config.logging.bootstrap)
+                    log(`Controller: ${sign.name}`);
 
                 controllerMetadatas
                     .orderBy(meta => meta.metadata.isPost + '')
@@ -144,7 +144,8 @@ export class TurboExpressBuilder<TActionParams> {
 
                         const path = meta.metadata.path;
 
-                        logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
+                        if (this._config.logging.bootstrap)
+                            logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
                         turboExpress
                             .addAPIEndpoint(path, sign, meta.propName, meta.metadata);

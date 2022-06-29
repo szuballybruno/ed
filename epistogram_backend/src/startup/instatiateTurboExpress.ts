@@ -85,7 +85,7 @@ export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceP
     const globalConfig = singletonProvider.getService(GlobalConfiguration);
     const loggerService = singletonProvider.getService(LoggerService);
 
-    const turboExpress = new TurboExpressBuilder<ActionParams>(loggerService)
+    const turboExpress = new TurboExpressBuilder<ActionParams>(loggerService, globalConfig)
         .setServicesCreationFunction(getServiceProvider)
         .addActionWrapperFunction(actionWrapper)
         .setPort(globalConfig.misc.hostPort)
