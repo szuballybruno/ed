@@ -21,6 +21,27 @@ const anyField = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation
     };
 };
 
+const hasMutationForKey = <TMutatee, TKeyField extends keyof TMutatee>(mutations: Mutation<TMutatee, TKeyField>[]) => {
+
+    return <TKey extends TMutatee[TKeyField]>(key: TKey) => {
+
+        return mutations
+            .any(mut => mut.key === key)
+    };
+};
+
+const hasFieldMutation = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation<TMutatee, TKeyField>) => {
+
+    return <TKey extends keyof TMutatee>(key: TKey): boolean => {
+
+        const field = mutation
+            .fieldMutators
+            .firstOrNull(fm => fm.field === key);
+
+        return !!field;
+    };
+}
+
 const getFieldValue = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation<TMutatee, TKeyField>) => {
 
     return <TKey extends keyof TMutatee, TValue extends TMutatee[TKey]>(key: TKey): TValue | null => {
@@ -48,6 +69,8 @@ const getFieldValueOrFail = <TMutatee, TKeyField extends keyof TMutatee>(mutatio
 export const XMutatorHelpers = {
     mapMutationToPartialObject,
     anyField,
+    hasFieldMutation,
     getFieldValue,
-    getFieldValueOrFail
+    getFieldValueOrFail,
+    hasMutationForKey
 }

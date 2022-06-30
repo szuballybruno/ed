@@ -3,6 +3,7 @@ import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseC
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { formatTime } from '../../../../static/frontendHelpers';
+import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 
 export type RowSchemaModule = {
     id: number;

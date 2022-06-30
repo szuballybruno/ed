@@ -78,7 +78,7 @@ export class VideoVersion {
     videoId: number;
     @XManyToOne<VideoVersion>()(() => Video, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoId')
-    video: Video;
+    video: Relation<Video>;
 
     // video data
     @Column()
@@ -86,5 +86,5 @@ export class VideoVersion {
     videoDataId: number;
     @XManyToOne<VideoVersion>()(() => VideoData, x => x.videoVersions)
     @XJoinColumn<VideoVersion>('videoDataId')
-    videoData: VideoData;
+    videoData: Relation<VideoData>;
 }

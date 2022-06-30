@@ -2,9 +2,8 @@
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { logSecondary } from '../misc/logger';
-import { XDBMSchemaType as XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
-import { SQLBootstrapperService } from './SQLBootstrapper';
+import { log, logSecondary } from '../misc/logger';
+import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 
 type NewSeedType = [{ new(): any }, Object];
@@ -28,56 +27,77 @@ export const getSeedList = <TEntity, TConstraint extends PropConstraintType<TCon
 
 export class SeedService {
 
-    private _sqlBootstrapperService: SQLBootstrapperService;
-    private _execService: SQLConnectionService;
-    private _dbSchema: XDBMSchemaType;
 
     constructor(
-        dbSchema: XDBMSchemaType,
-        sqlBootstrapperService: SQLBootstrapperService,
-        execService: SQLConnectionService,
-        private _config: GlobalConfiguration) {
-
-        this._sqlBootstrapperService = sqlBootstrapperService;
-        this._execService = execService;
-        this._dbSchema = dbSchema;
+        private _dbSchema: XDBMSchemaType,
+        private _config: GlobalConfiguration,
+        private _sqlConnectionService: SQLConnectionService) {
     }
 
     seedDBAsync = async () => {
 
+        if (this._config.logging.bootstrap)
+            log('Seeding DB...', { entryType: 'strong' });
+
         for (let index = 0; index < this._dbSchema.seedScripts.length; index++) {
 
-            const seedScriptName = this._dbSchema.seedScripts[index];
+            const scriptObject = this._dbSchema.seedScripts[index];
 
-            if (typeof seedScriptName === 'string') {
+            const [classType, seedObj] = scriptObject as NewSeedType;
 
-                if (this._config.logging.bootstrap)
-                    logSecondary(`Seeding ${seedScriptName}...`);
+            if (this._config.logging.bootstrap)
+                logSecondary(`Seeding ${classType.name}...`);
 
-                await this._sqlBootstrapperService
-                    .executeSeedScriptAsync(seedScriptName);
-            }
-            else {
-
-                const [classType, seedObj] = seedScriptName as NewSeedType;
+            if (Object.values(seedObj).length === 0) {
 
                 if (this._config.logging.bootstrap)
-                    logSecondary(`Seeding ${classType.name}...`);
-
-                if (Object.values(seedObj).length === 0) {
-
-                    if (this._config.logging.bootstrap)
-                        logSecondary('Skipping, has no values.');
-                    continue;
-                }
-
-                const { script, values } = this.parseSeedList(classType, seedObj as any);
-                await this._execService.executeSQLAsync(script, values);
+                    logSecondary('Skipping, has no values.');
+                continue;
             }
+
+            const { script, values } = this.parseSeedList(classType, seedObj as any);
+            await this._sqlConnectionService.executeSQLAsync(script, values);
         }
 
         // recalc seqs
-        await this._sqlBootstrapperService.recalcSequencesAsync();
+        await this
+            ._recalcSequencesAsync();
+
+        if (this._config.logging.bootstrap)
+            log('Seeding DB done!', { entryType: 'strong' });
+    };
+
+    private _recalcSequencesAsync = async () => {
+
+        if (this._config.logging.bootstrap)
+            log('Recalculating sequance max values...');
+
+        const dbName = this._config.database.name;
+
+        const script = `
+            DO $$
+                DECLARE
+                i TEXT;
+                BEGIN
+                FOR i IN (SELECT tbls.table_name 
+                    FROM information_schema.tables AS tbls 
+                    INNER JOIN information_schema.columns AS cols 
+                    ON tbls.table_name = cols.table_name 
+                    WHERE tbls.table_catalog='${dbName}' 
+                        AND tbls.table_schema='public' 
+                        AND cols.column_name='id'
+                        AND tbls.table_type = 'BASE TABLE') 
+                    LOOP
+                    
+                    EXECUTE 'SELECT setval(''"' || i || '_id_seq"'', (SELECT MAX(id) FROM ' || quote_ident(i) || '));';
+                END LOOP;
+            END $$;
+        `;
+
+        await this._sqlConnectionService.executeSQLAsync(script);
+
+        if (this._config.logging.bootstrap)
+            logSecondary('Recalculating sequance max values done.');
     };
 
     private parseSeedList<TEntity>(entitySignature: { new(): TEntity }, seedObject: { [K in string]: NoComplexTypes<TEntity> }) {

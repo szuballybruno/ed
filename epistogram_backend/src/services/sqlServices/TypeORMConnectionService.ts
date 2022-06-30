@@ -5,17 +5,15 @@ import { XDBMSchemaType } from "../XDBManager/XDBManagerTypes";
 
 export class TypeORMConnectionService {
 
-    private _ormConnection: DataSource;
-
     constructor(
         private _config: GlobalConfiguration,
-        private _schema: XDBMSchemaType){
+        private _schema: XDBMSchemaType) {
     }
 
-    connectTypeORMAsync = async (noSync?: boolean) => {
+    connectTypeORMAsync = async () => {
 
         const isLoggingEnabled = this._config.database.isOrmLoggingEnabled;
-        const isSyncEnabled = noSync ? false : this._config.database.isDangerousDBPurgeEnabled;
+        const isSyncEnabled = true;
         const dbConnOpts = this._config.getDatabaseConnectionParameters();
 
         const views = this._schema
@@ -71,7 +69,7 @@ export class TypeORMConnectionService {
             if (!connection.manager)
                 throw new Error('TypeORM manager is null or undefined!');
 
-            this._ormConnection = connection;
+            await connection.destroy();
         }
         catch (e) {
 

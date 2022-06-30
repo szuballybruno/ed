@@ -1,6 +1,9 @@
+import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
+
 export type ExamEditDialogParams = {
     versionCode: string;
     examVersionId: number;
     examTitle: string;
-    courseName: string;
+    courseTitle: string;
+    mutations: QuestionMutationsType;
 };

@@ -47,7 +47,7 @@ export const XManyToOne = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
         getRelationEntity: RelationInputType<TRelationEntity>,
-        getRelationProp: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
+        getRelationProp?: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
 
         return ManyToOne((getRelationEntity) as any, getRelationProp);
     }

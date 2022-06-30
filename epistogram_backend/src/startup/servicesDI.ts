@@ -40,10 +40,10 @@ import { RoleService } from './../services/RoleService';
 import { SampleMergeService } from './../services/SampleMergeService';
 import { ShopService } from './../services/ShopService';
 import { SignupService } from './../services/SignupService';
-import { DbConnectionService } from './../services/sqlServices/DatabaseConnectionService';
+import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
 import { SQLFunctionsService } from './../services/sqlServices/FunctionsService';
 import { SeedService } from './../services/sqlServices/SeedService';
-import { SQLBootstrapperService } from './../services/sqlServices/SQLBootstrapper';
+import { CreateDBService } from '../services/sqlServices/CreateDBService';
 import { SQLConnectionService } from './../services/sqlServices/SQLConnectionService';
 import { StorageService } from './../services/StorageService';
 import { TeacherInfoService } from './../services/TeacherInfoService';
@@ -98,8 +98,6 @@ export const instansiateSingletonServices = (rootDir: string) => {
     const loggerService = new LoggerService();
     const poolService = new SQLPoolService(globalConfig);
 
-    poolService.createPool();
-
     return new ServiceProvider({
         globalConfig,
         dbSchema,
@@ -123,7 +121,8 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     // create transients
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(poolService, globalConfig);
-    const sqlBootstrapperService = new SQLBootstrapperService(sqlConnectionService, dbSchema, globalConfig);
+    const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);
+    const createDBService = new CreateDBService(sqlConnectionService, dbSchema, globalConfig, typeOrmConnectionService);
     const ormConnectionService = new ORMConnectionService(globalConfig, sqlConnectionService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
     const eventService = new EventService(mapperService, ormConnectionService);
@@ -141,12 +140,11 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const permissionService = new PermissionService(ormConnectionService, mapperService);
     const authenticationService = new AuthenticationService(ormConnectionService, userService, tokenService, userSessionActivityService, hashService, permissionService, globalConfig);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(dbSchema, sqlBootstrapperService, sqlConnectionService, globalConfig);
-    const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);
-    const dbConnectionService = new DbConnectionService(globalConfig, sqlBootstrapperService, ormConnectionService, seedService, typeOrmConnectionService);
-    const courseItemService = new CourseItemService(ormConnectionService, mapperService);
-    const userCourseBridgeService = new UserCourseBridgeService(ormConnectionService, mapperService);
+    const seedService = new SeedService(dbSchema, globalConfig, sqlConnectionService);
+    const recreateDBservice = new RecreateDBService(createDBService, seedService, dbSchema, sqlConnectionService);
     const questionService = new QuestionService(ormConnectionService);
+    const courseItemService = new CourseItemService(ormConnectionService, mapperService, questionService);
+    const userCourseBridgeService = new UserCourseBridgeService(ormConnectionService, mapperService);
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
     const storageService = new StorageService(globalConfig);
     const fileService = new FileService(userService, storageService, ormConnectionService);
@@ -181,7 +179,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
         loggerService,
         hashService,
         sqlConnectionService,
-        sqlBootstrapperService,
+        createDBService,
         ormConnectionService,
         sqlFunctionService,
         eventService,
@@ -200,7 +198,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
         authenticationService,
         passwordChangeService,
         seedService,
-        dbConnectionService,
+        recreateDBservice,
         courseItemService,
         userCourseBridgeService,
         questionService,

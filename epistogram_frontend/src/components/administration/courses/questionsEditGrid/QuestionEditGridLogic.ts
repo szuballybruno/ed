@@ -2,25 +2,15 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
-import { iterate, useForceUpdate, valueCompareTest } from '../../../../static/frontendHelpers';
+import { iterate, useForceUpdate } from '../../../../static/frontendHelpers';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
-import { RowSchema } from './QuestionEditGridTypes';
+import { QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridLogic = (
     questions: QuestionEditDataDTO[],
+    mutations: QuestionMutationsType,
     showTiming?: boolean,
     getPlayedSeconds?: () => number) => {
-
-    // const {
-    //     mutatedData: mutatedQuestions,
-    //     add: addQuestion,
-    //     mutate: mutateQuestion,
-    //     remove: removeQuestion,
-    //     isAnyMutated,
-    //     mutations,
-    //     resetMutations,
-    //     addOnMutationHandlers
-    // } = useXListMutator<QuestionEditDataDTO, 'questionVersionId', number>(questions, 'questionVersionId', () => console.log(''));
 
     const forceUpdate = useForceUpdate();
 
@@ -34,10 +24,23 @@ export const useQuestionEditGridLogic = (
 
     useEffect(() => {
 
+        if (!questions)
+            return;
+
         mutatorRef
             .current
             .setOriginalItems(questions);
     }, [questions]);
+
+    useEffect(() => {
+
+        if (!mutations)
+            return;
+
+        mutatorRef
+            .current
+            .setMutationsList(mutations);
+    }, [mutations]);
 
     //
     // add question

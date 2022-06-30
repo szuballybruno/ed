@@ -12,7 +12,8 @@
     "tsdev": "tsnd --respawn server.ts",
     "node": "node --async-stack-traces server.ts",
     "nodenew": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
-    "nodenew2": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts"
+    "purgeStart": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --purge",
+    "purge": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --purge --shortLife"
   },
   "dependencies": {
     "@google-cloud/storage": "5.19.1",

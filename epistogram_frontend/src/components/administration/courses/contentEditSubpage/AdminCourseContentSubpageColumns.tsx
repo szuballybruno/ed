@@ -38,7 +38,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
 export const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
-    openDialog: (type: 'video' | 'exam', data?: CourseContentItemAdminDTO) => void,
+    openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
     removeRow: (key: string) => void,
     mutateRow: MutateFnType<CourseContentItemAdminDTO, string>) => {
 
@@ -250,7 +250,7 @@ export const useGridColumnDefinitions = (
                 return (
                     <div className="h-flex">
                         <EpistoButton
-                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row.data)}>
+                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row)}>
 
                             <Quiz />
                         </EpistoButton>

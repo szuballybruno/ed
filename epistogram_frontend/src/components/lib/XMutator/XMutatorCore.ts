@@ -43,7 +43,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // constructor input
     private _keyPropertyName: TKeyField;
     private _mutationEndCallback?: (opts: { newMutatedItems: TMutatee[] }) => void;
-    private _onMutate: () => void;
+    private _onMutationsChanged: () => void;
 
     // ctor
     constructor(opts: {
@@ -53,14 +53,14 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     }) {
         this._keyPropertyName = opts.keyPropertyName;
         this._mutationEndCallback = opts.mutationEndCallback;
-        this._onMutate = opts.onMutatedItems;
+        this._onMutationsChanged = opts.onMutatedItems;
     }
 
     setOriginalItems(originalItems: TMutatee[]) {
 
         this._originalItems = originalItems;
         this.mutatedItems = originalItems;
-        this._onMutate();
+        this._onMutationsChanged();
     }
 
     getOriginalItems() {
@@ -82,7 +82,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         this.mutatedItems = items;
 
         this.logEvent('Calling on mutate');
-        this._onMutate();
+        this._onMutationsChanged();
 
         console.log('Mutated items: ');
         console.log(this.mutatedItems);
@@ -171,7 +171,8 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
                 mutatedItems[itemIndex] = this.overrideProps(targetItem, mutation.fieldMutators);
             });
 
-        return mutatedItems;
+        // set mutated items internally 
+        this.setMutatedItems(mutatedItems);
     };
 
     // 
@@ -201,6 +202,22 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
             .filter(x => !x.field || x.field === field)
             .forEach(x => x.callback({ key, field, newValue, item }));
     };
+
+    /**
+     * Simply set mutations and 
+     * call on mutated callback  
+     */
+    setMutationsList(mutations: Mutation<TMutatee, TKeyField>[]) {
+
+        // set mutations 
+        this.mutations = mutations;
+
+        // apply mutations 
+        this.applyMutations();
+
+        // call callback
+        this._onMutationsChanged();
+    }
 
     // 
     // FUNCTION: [this.setMutations] 
@@ -234,14 +251,11 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         this.executeMutationHandler(rest);
 
         // apply mutations 
-        const newMutatedItems = this.applyMutations();
-
-        // set mutated items internally 
-        this.setMutatedItems(newMutatedItems);
+        this.applyMutations();
 
         // fire mutationEndCallback with newly mutated items 
         if (this._mutationEndCallback)
-            this._mutationEndCallback({ newMutatedItems });
+            this._mutationEndCallback({ newMutatedItems: this.mutatedItems });
 
         // set locking to false, cycle ends 
         this._lockRef = false;

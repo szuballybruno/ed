@@ -11,11 +11,13 @@ import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
 export const ExamEditor = ({
     examVersionId,
     endabled,
-    callback
+    callback,
+    mutations
 }: {
     examVersionId: number,
     endabled: boolean,
-    callback: (mutations: QuestionMutationsType) => void
+    callback: (mutations: QuestionMutationsType) => void,
+    mutations: QuestionMutationsType
 }) => {
 
     // http
@@ -24,7 +26,7 @@ export const ExamEditor = ({
 
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions);
+    const logic = useQuestionEditGridLogic(questions, mutations);
 
     const finish = useCallback(() => {
 
