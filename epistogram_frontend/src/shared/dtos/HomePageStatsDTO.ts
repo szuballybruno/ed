@@ -1,7 +1,7 @@
 export class HomePageStatsDTO {
     userId: number;
+    videosToBeRepeatedCount: number;
     completedVideosLastMonth: number;
-    playbackTimeLastMonth: number;
-    totalGivenAnswerCount: number;
-    correctAnswerRate: number;
+    lagBehindPercentage: number;
+    performanceLastMonth: number;
 }

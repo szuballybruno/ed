@@ -46,8 +46,42 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getSingle();
 
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        if (!tempomatCalculationData)
+            throw new Error('Couldn\'t get tempomat calculation data');
+
+        const allLagBehindPercentages = tempomatCalculationData.map(x => {
+            const previsionedCompletionDate = this._tempomatService
+                .calculatePrevisionedDate(
+                    x.originalPrevisionedCompletionDate,
+                    x.totalItemCount,
+                    x.totalCompletedItemCount,
+                    x.startDate,
+                    x.tempomatMode,
+                    x.tempomatAdjustmentValue
+                )
+
+            const lagBehindPercentage = this._tempomatService
+                .calculateLagBehindPercentage(
+                    x.startDate,
+                    x.requiredCompletionDate
+                        ? x.requiredCompletionDate
+                        : x.originalPrevisionedCompletionDate,
+                    previsionedCompletionDate
+                )
+
+            return lagBehindPercentage || 0
+        })
+
+        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
+
+
         return this._mapperService
-            .mapTo(HomePageStatsDTO, [stats])
+            .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage])
     }
 
     async getUserLearningPageStatsAsync(principalId: PrincipalId) {

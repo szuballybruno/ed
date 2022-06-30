@@ -4,6 +4,18 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 
+export const getProgressFromLagBehind = (lagBehindPercentage?: number | null) => {
+    if (!lagBehindPercentage)
+        return '-';
+
+    if (lagBehindPercentage > 30)
+        return 'Elmarad';
+
+    if (lagBehindPercentage > 15)
+        return 'Megfelelő';
+
+    return 'Tökéletes';
+};
 
 export type StatisticsGroupType = {
     title: string;
@@ -21,19 +33,6 @@ export const LearningStatistics = (props: {
 
     // http
     const { userLearningPageStats } = useUserLearningPageStats(userId);
-
-    const getProgressFromLagBehind = (lagBehindPercentage?: number | null) => {
-        if (!lagBehindPercentage)
-            return '-';
-
-        if (lagBehindPercentage > 30)
-            return 'Elmarad';
-
-        if (lagBehindPercentage > 15)
-            return 'Megfelelő';
-
-        return 'Tökéletes';
-    };
 
     const statsss: StatisticsCardProps[] = [
         {

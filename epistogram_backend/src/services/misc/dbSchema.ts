@@ -315,6 +315,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'user_course_progress_view', UserCourseProgressView], // 1 user_course_stats_view
             ['common', 'user_video_practise_progress_view', UserVideoPractiseProgressView], // 1 user_video_practise_progress_view
             ['common', 'tempomat_calculation_data_view', TempomatCalculationDataView],
+            ['common', 'user_performance_view', UserPerformanceView],
             ['', 'user_session_daily_view', UserSessionDailyView],
             ['', 'signup_completed_view', SignupCompletedView],
             ['', 'daily_tip_view', DailyTipView],
@@ -337,7 +338,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['', 'course_overview_view', CourseOverviewView],
             ['', 'user_inactive_course_view', UserInactiveCourseView],
             ['stats', 'home_page_stats_view', HomePageStatsView],
-            ['stats', 'user_performance_view', UserPerformanceView],
             ['stats', 'user_engagement_view', UserEngagementView],
             ['stats', 'user_learning_overview_stats_view', UserLearningOverviewStatsView],
             //['stats', 'user_course_stats_view', UserCourseStatsView],

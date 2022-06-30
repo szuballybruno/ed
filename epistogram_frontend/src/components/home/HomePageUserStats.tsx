@@ -4,6 +4,7 @@ import { Environment } from '../../static/Environemnt';
 import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
+import { getProgressFromLagBehind } from '../learningInsights/LearningStatistics';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 
@@ -18,35 +19,35 @@ export const HomePageUserStats = () => {
         gap='10'
         minColumnWidth='200px'>
 
-        {/* total completed video count */}
+        {/* videos to be repeated count */}
         <StatisticsCard
-            title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-            value={homePageStats?.completedVideosLastMonth}
-            suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
+            title={translatableTexts.homePage.statsSummary.videosToBeRepeatedCount.title}
+            value={homePageStats?.videosToBeRepeatedCount}
+            suffix={translatableTexts.homePage.statsSummary.videosToBeRepeatedCount.suffix}
             iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
             isOpenByDefault={false} />
 
-        {/* total playback time */}
+        {/* completed videos last month */}
         <StatisticsCard
-            title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-            value={homePageStats ? roundNumber(homePageStats.playbackTimeLastMonth / 60 / 60) : '-'}
-            suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
+            title={translatableTexts.homePage.statsSummary.completedVideosLastMonth.title}
+            value={homePageStats?.completedVideosLastMonth}
+            suffix={translatableTexts.homePage.statsSummary.completedVideosLastMonth.suffix}
             iconPath={Environment.getAssetUrl('images/watch3D.png')}
             isOpenByDefault={false} />
 
-        {/* total given answer count  */}
+        {/* progress  */}
         <StatisticsCard
-            title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
-            value={homePageStats?.totalGivenAnswerCount}
-            suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
+            title={translatableTexts.homePage.statsSummary.lagBehindPercentage.title}
+            value={getProgressFromLagBehind(homePageStats?.lagBehindPercentage)}
+            suffix={translatableTexts.homePage.statsSummary.lagBehindPercentage.suffix}
             iconPath={Environment.getAssetUrl('images/answeredquestions3D.png')}
             isOpenByDefault={false} />
 
-        {/* correct answer rate  */}
+        {/* performance last month  */}
         <StatisticsCard
-            title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
-            value={homePageStats ? roundNumber(homePageStats.correctAnswerRate) : '-'}
-            suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
+            title={translatableTexts.homePage.statsSummary.performanceLastMonth.title}
+            value={homePageStats?.performanceLastMonth}
+            suffix={translatableTexts.homePage.statsSummary.performanceLastMonth.suffix}
             iconPath={Environment.getAssetUrl('images/rightanswer3D.png')}
             isOpenByDefault={false} />
 
