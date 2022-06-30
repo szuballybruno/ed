@@ -186,6 +186,8 @@ import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { LatestVideoView } from '../../models/views/LatestVideoView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
+import { GivenAnswerScoreView } from '../../models/views/GivenAnswerScoreView';
+import { ExamScoreView } from '../../models/views/ExamScoreView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -252,6 +254,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         seedScripts,
 
         views: [
+            ['basic', 'given_answer_score_view', GivenAnswerScoreView],
             ['basic', 'activity_streak_view', ActivityStreakView],
             ['basic', 'answer_session_view', AnswerSessionView],
             ['basic', 'coin_acquire_per_course_view'],
@@ -287,6 +290,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'video_version_view', VideoVersionView],
             ['basic', 'exam_version_view', ExamVersionView],
             ['basic', 'module_list_view', ModuleListView],
+            ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view
             ['common', 'answer_session_evaluation_view'], // 3 | 1 answer_session_view

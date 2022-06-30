@@ -23,6 +23,15 @@ WITH answer_stats AS
 	ON ase.id = ga.answer_session_id
 	
 	GROUP BY ase.user_id, ase.id
+), answer_session_score AS
+(
+	SELECT
+		gasv.answer_session_id,
+		SUM(gasv.given_answer_points) answer_session_acquired_points,
+		COUNT(gasv.question_version_id) * 4 answer_session_maximum_points
+	FROM public.given_answer_score_view gasv
+
+	GROUP BY gasv.answer_session_id
 )
 
 
@@ -34,7 +43,9 @@ SELECT
     ase.start_date,
     ase.end_date,
 	ase.is_completed,
-	false is_successful, -- TODO
+	ass.answer_session_acquired_points,
+	ROUND((ass.answer_session_acquired_points::double precision / ass.answer_session_maximum_points * 100)::numeric, 1) answer_session_success_rate,
+	ROUND((ass.answer_session_acquired_points::double precision / ass.answer_session_maximum_points * 100)::numeric, 1) > 60 is_successful,
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
@@ -56,6 +67,9 @@ FROM public.answer_session ase
 LEFT JOIN answer_stats ast
 ON ast.user_id = ase.user_id
 AND ast.answer_session_id = ase.id
+
+LEFT JOIN answer_session_score ass
+ON ass.answer_session_id = ase.id
 
 LEFT JOIN public.exam_version ev
 ON ev.id = ase.exam_version_id

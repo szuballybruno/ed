@@ -38,4 +38,12 @@ export class AnswerSessionView {
     @ViewColumn()
     @XViewColumn()
     givenAnswerCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    answerSessionAcquiredPoints: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    answerSessionSuccessRate: number;
 }

@@ -63,14 +63,15 @@ SELECT
 	-- correct_answer_count
 	COALESCE(gac.correct_count, 0) correct_answer_count,
 	
-	-- is_successful -- TODO
-	false is_successful,
+	-- is_successful
+	ase.is_successful,
 		
 	-- correct_answer_rate
-	COALESCE(CASE WHEN tqc.question_count > 0
-		THEN ROUND(gac.correct_count::decimal / tqc.question_count * 100)
-		ELSE 0
-	END, 0) correct_answer_rate
+	ase.answer_session_success_rate correct_answer_rate
+--	COALESCE(CASE WHEN tqc.question_count > 0
+--		THEN ROUND(gac.correct_count::decimal / tqc.question_count * 100)
+--		ELSE 0
+--	END, 0) correct_answer_rate
 FROM non_practise_answer_sessions ase
 
 LEFT JOIN public.user u

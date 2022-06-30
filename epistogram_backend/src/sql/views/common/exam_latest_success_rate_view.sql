@@ -2,7 +2,8 @@ SELECT
 	sq.*,
 	asev.answered_question_count,
 	asev.correct_given_answer_count,
-	ROUND((asev.correct_given_answer_count::double precision / asev.answered_question_count * 100)::numeric, 1) success_rate -- TODO: incorrect success rate when multiple correct answers
+	esv.exam_acquired_points,
+	ROUND((esv.exam_acquired_points::double precision / esv.exam_maximum_points * 100)::numeric, 1) success_rate
 FROM 
 (
 	SELECT 
@@ -46,5 +47,8 @@ ON ev.exam_id = ex.id
 
 LEFT JOIN public.exam_data ed
 ON ed.id = ev.exam_data_id
+
+LEFT JOIN public.exam_score_view esv
+ON esv.exam_version_id = ev.id
 
 ORDER BY sq.user_id, sq.course_id, ed.order_index

@@ -5,25 +5,17 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class HomePageStatsView {
+export class ExamScoreView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    examVersionId: number;
 
     @ViewColumn()
     @XViewColumn()
-    completedVideosLastMonth: number;
+    examAcquiredPoints: number;
 
     @ViewColumn()
     @XViewColumn()
-    playbackTimeLastMonth: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalGivenAnswerCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    correctAnswerRate: number;
+    examMaximumPoints: number;
 }
