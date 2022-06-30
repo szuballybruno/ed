@@ -30,4 +30,13 @@ FROM public.user u
 LEFT JOIN public.answer_session_view asv
 ON asv.user_id = u.id
 
+LEFT JOIN public.exam_version ev
+ON ev.id = asv.exam_version_id
+
+LEFT JOIN public.exam ex
+ON ex.id = ev.exam_id
+
+WHERE ex.is_signup IS NOT TRUE
+AND ex.is_pretest IS NOT TRUE
+
 GROUP BY u.id

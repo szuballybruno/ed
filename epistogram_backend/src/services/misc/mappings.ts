@@ -155,13 +155,13 @@ const marray = [
 
             return {
                 questions: questions
-                    .groupBy(x => x.questionId)
+                    .groupBy(x => x.questionVersionId)
                     .map(questionGrouping => {
 
                         const viewAsQuestion = questionGrouping.items.first();
 
                         return {
-                            questionId: viewAsQuestion.questionId,
+                            questionId: viewAsQuestion.questionVersionId,
                             questionText: viewAsQuestion.questionText,
                             imageUrl: assetUrlService.getAssetUrl(viewAsQuestion.imageUrl),
                             typeId: viewAsQuestion.typeId,
@@ -170,7 +170,7 @@ const marray = [
                                 .map(viewAsAnswer => {
 
                                     return {
-                                        answerId: viewAsAnswer.answerId,
+                                        answerId: viewAsAnswer.answerVersionId,
                                         answerText: viewAsAnswer.answerText,
                                         isGiven: viewAsAnswer.isGivenAnswer
                                     } as SignupAnswerDTO;
@@ -1170,13 +1170,13 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
 
     return {
         questions: questions
-            .groupBy(x => x.questionId)
+            .groupBy(x => x.questionVersionId)
             .map(questionGrouping => {
 
                 const viewAsQuestion = questionGrouping.items.first();
 
                 return {
-                    questionId: viewAsQuestion.questionId,
+                    questionId: viewAsQuestion.questionVersionId,
                     questionText: viewAsQuestion.questionText,
                     imageUrl: viewAsQuestion.imageUrl,
                     typeId: viewAsQuestion.typeId,
@@ -1185,7 +1185,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                         .map(viewAsAnswer => {
 
                             return {
-                                answerId: viewAsAnswer.answerId,
+                                answerId: viewAsAnswer.answerVersionId,
                                 answerText: viewAsAnswer.answerText,
                                 isGiven: viewAsAnswer.isGivenAnswer
                             } as SignupAnswerDTO;

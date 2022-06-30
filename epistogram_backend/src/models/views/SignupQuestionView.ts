@@ -8,42 +8,46 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
 export class SignupQuestionView {
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	userId: number;
 
 	@ViewColumn()
-    @XViewColumn()
-	questionId: number;
+	@XViewColumn()
+	questionVersionId: number;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	questionText: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	imageUrl: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	typeId: number;
 
 	@ViewColumn()
-    @XViewColumn()
-	answerId: number;
+	@XViewColumn()
+	answerVersionId: number;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	answerText: string;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	givenAnswerId: number;
 
 	@ViewColumn()
-    @XViewColumn()
-	userAnswerId: number;
+	@XViewColumn()
+	isCorrect: boolean;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
+	givenAnswerVersionId: number;
+
+	@ViewColumn()
+	@XViewColumn()
 	isGivenAnswer: boolean;
 }

@@ -1,3 +1,4 @@
+import { AnswerSession } from '../models/entity/AnswerSession';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
@@ -30,6 +31,23 @@ export class SignupService {
     async answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO) {
 
         const userId = principalId.toSQLValue();
+
+        const signupAnswerSession = await this._ormService
+            .query(AnswerSession, { examVersionId: 1 })
+            .where('examVersionId', '=', 'examVersionId')
+            .getOneOrNull();
+
+        if (!signupAnswerSession)
+            await this._ormService
+                .createAsync(AnswerSession, {
+                    startDate: new Date(Date.now()),
+                    endDate: null,
+                    isPractise: false,
+                    isCompleted: false,
+                    examVersionId: 1,
+                    videoVersionId: null,
+                    userId: userId
+                })
 
         await this._sqlFuncService
             .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);

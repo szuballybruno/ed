@@ -10,7 +10,7 @@ export type StatisticsCardProps = {
     iconPath?: string
     suffix?: string
     title?: string
-    value?: string
+    value?: string | number | null
     isOpenByDefault?: boolean
     children?: React.ReactNode
     chartSize?: 'normal' | 'large',
@@ -146,15 +146,17 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             align="center">
 
             {/* image */}
-            {iconPath && <img
-                style={{
-                    margin: '5px 10px 5px 20px',
-                    width: 70,
-                    height: 70,
-                    objectFit: 'contain'
-                }}
-                alt=""
-                src={iconPath} />}
+            {iconPath
+                ? <img
+                    style={{
+                        margin: '5px 10px 5px 20px',
+                        width: 70,
+                        height: 70,
+                        objectFit: 'contain'
+                    }}
+                    alt=""
+                    src={iconPath} />
+                : <Flex w='20px' />}
 
             {/* texts */}
             <Flex
@@ -170,7 +172,7 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                     {/* value */}
                     <EpistoFont
                         isAutoFontSize
-                        fontSize={value
+                        fontSize={typeof value === 'string'
                             ? (value?.length < 10 ? 40 : 25)
                             : 40}
                         style={{
@@ -178,7 +180,9 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                             maxWidth: 'calc(100% - 10px)'
                         }}>
 
-                        {value ?? '-'}
+                        {value
+                            ? value
+                            : '-'}
                     </EpistoFont>
 
                     {/* suffix */}

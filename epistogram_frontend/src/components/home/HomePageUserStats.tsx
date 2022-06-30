@@ -21,7 +21,7 @@ export const HomePageUserStats = () => {
         {/* total completed video count */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-            value={homePageStats ? homePageStats.completedVideosLastMonth + '' : '0'}
+            value={homePageStats?.completedVideosLastMonth}
             suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
             iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
             isOpenByDefault={false} />
@@ -29,7 +29,7 @@ export const HomePageUserStats = () => {
         {/* total playback time */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-            value={homePageStats ? roundNumber(homePageStats.playbackTimeLastMonth / 60 / 60) + '' : '0'}
+            value={homePageStats ? roundNumber(homePageStats.playbackTimeLastMonth / 60 / 60) : '-'}
             suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
             iconPath={Environment.getAssetUrl('images/watch3D.png')}
             isOpenByDefault={false} />
@@ -37,7 +37,7 @@ export const HomePageUserStats = () => {
         {/* total given answer count  */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
-            value={homePageStats ? homePageStats.totalGivenAnswerCount + '' : '0'}
+            value={homePageStats?.totalGivenAnswerCount}
             suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
             iconPath={Environment.getAssetUrl('images/answeredquestions3D.png')}
             isOpenByDefault={false} />
@@ -45,7 +45,7 @@ export const HomePageUserStats = () => {
         {/* correct answer rate  */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
-            value={homePageStats ? roundNumber(homePageStats.correctAnswerRate) + '' : '0'}
+            value={homePageStats ? roundNumber(homePageStats.correctAnswerRate) : '-'}
             suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
             iconPath={Environment.getAssetUrl('images/rightanswer3D.png')}
             isOpenByDefault={false} />

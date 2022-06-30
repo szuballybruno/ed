@@ -22,20 +22,31 @@ export const LearningStatistics = (props: {
     // http
     const { userLearningPageStats } = useUserLearningPageStats(userId);
 
+    const getProgressFromLagBehind = (lagBehindPercentage?: number | null) => {
+        if (!lagBehindPercentage)
+            return '-';
+
+        if (lagBehindPercentage > 30)
+            return 'Elmarad';
+
+        if (lagBehindPercentage > 15)
+            return 'Megfelelő';
+
+        return 'Tökéletes';
+    };
+
     const statsss: StatisticsCardProps[] = [
         {
             title: 'Haladásom',
-            value: userLearningPageStats?.totalLagBehindPercentage
-                ? userLearningPageStats.totalLagBehindPercentage + ''
-                : '-'
+            value: getProgressFromLagBehind(userLearningPageStats?.totalLagBehindPercentage)
         }, {
             title: 'Ismétlésre ajánlott videók',
             suffix: 'db',
-            value: userLearningPageStats?.videosToBeRepeatedCount + '' || '-'
+            value: userLearningPageStats?.videosToBeRepeatedCount
         }, {
             title: 'Ismétlésre ajánlott kérdések',
             suffix: 'db',
-            value: userLearningPageStats?.questionsToBeRepeatedCount + '' || '-'
+            value: userLearningPageStats?.questionsToBeRepeatedCount
         }, {
             title: 'Megtekintett videók száma',
             suffix: 'db',
@@ -44,22 +55,20 @@ export const LearningStatistics = (props: {
             title: 'Aktívan eltöltött idő',
             suffix: 'óra',
             value: userLearningPageStats?.totalSessionLengthSeconds
-                ? Math.floor(userLearningPageStats.totalSessionLengthSeconds / 60 / 60) + ''
+                ? Math.floor(userLearningPageStats.totalSessionLengthSeconds / 60 / 60)
                 : '-'
         }, {
             title: 'Megválaszolt kérdések száma',
             suffix: 'db',
-            value: userLearningPageStats?.answeredQuestionsCount + '' || '-'
+            value: userLearningPageStats?.answeredQuestionsCount
         }, {
             title: 'Helyes válaszok aránya',
             suffix: '%',
             value: userLearningPageStats?.totalCorrectAnswerRate
-                ? userLearningPageStats?.totalCorrectAnswerRate + ''
-                : '-'
         }, {
             title: 'Céges rangsor',
             suffix: '%',
-            value: userLearningPageStats?.rankInsideCompany + '' || '-'
+            value: userLearningPageStats?.rankInsideCompany
         }
     ];
 
