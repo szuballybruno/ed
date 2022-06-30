@@ -9,24 +9,22 @@ import { CourseItemView } from '../models/views/CourseItemView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { CourseItemSimpleType, CourseItemType } from '../shared/types/sharedTypes';
+import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readVersionCode } from './misc/encodeService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { QuestionService } from './QuestionService';
 
 type ItemMutationType = Mutation<CourseContentItemAdminDTO, 'versionCode'>;
 
 export class CourseItemService {
 
-    private _ormService: ORMConnectionService;
-    private _mapperService: MapperService;
-
-    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
-
-        this._ormService = ormService;
-        this._mapperService = mapperService;
+    constructor(
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _questionsService: QuestionService) {
     }
 
     /**
@@ -191,7 +189,7 @@ export class CourseItemService {
                 // js object with proper default values 
                 const defaultData = mutation.action === 'update'
                     ? getVersionDataPair(versionId)
-                        .data
+                        .oldData
                     : {
                         title: '',
                         subtitle: '',
@@ -237,12 +235,13 @@ export class CourseItemService {
 
         //
         // CREATE VIDEO VERSIONS 
-        const videoVersions = mutationVersionIdPairs
+        const videoVersionMigrations = mutationVersionIdPairs
             .map(({ mutation, versionId }, i) => {
 
                 const videoDataId = videoDataIds[i];
                 const videoId = videoIds[i];
-                const oldModuleVersionId = this._getModuleVersionId(mutation, () => getVersionDataPair(versionId).version.moduleVersionId);
+                const oldVersion = getVersionDataPair(versionId).oldVersion;
+                const oldModuleVersionId = this._getModuleVersionId(mutation, () => oldVersion.moduleVersionId);
 
                 const newModuleVersionId = VersionMigrationHelpers
                     .getNewVersionId(moduleMigrations, oldModuleVersionId);
@@ -253,11 +252,26 @@ export class CourseItemService {
                     videoId: videoId
                 };
 
-                return videoVersion;
+                return { videoVersion: videoVersion as VideoVersion, oldVersion };
             });
 
         await this._ormService
-            .createManyAsync(VideoVersion, videoVersions);
+            .createManyAsync(VideoVersion, videoVersionMigrations.map(x => x.videoVersion));
+
+        //
+        // SAVE QUESTIONS
+        const questionMutations = mutations
+            .filter(x => XMutatorHelpers.hasFieldMutation(x)('questionMutations'))
+            .flatMap(x => XMutatorHelpers.getFieldValueOrFail(x)('questionMutations'));
+
+        const videoVersionIdMigrations = videoVersionMigrations
+            .map(x => ({
+                newVersionId: x.videoVersion.id,
+                oldVersionId: x.oldVersion.id
+            } as VersionMigrationResult))
+
+        await this._questionsService
+            .saveCourseItemQuestionsAsync(videoVersionIdMigrations, questionMutations);
     }
 
     /**
@@ -286,9 +300,9 @@ export class CourseItemService {
             .where('id', '=', 'ids')
             .getMany();
 
-        const getVersionDataPair = (versionId: number) => oldVersions
-            .map((version, i) => ({ version, data: oldDatas[i], video: oldVideos[i] }))
-            .single(x => x.version.id === versionId);
+        const getVersionDataPair = (oldVersionId: number) => oldVersions
+            .map((oldVersion, i) => ({ oldVersion, oldData: oldDatas[i], oldVideo: oldVideos[i] }))
+            .single(x => x.oldVersion.id === oldVersionId);
 
         const mutationVersionIdPairs = mutations
             .map(x => ({ mutation: x, versionId: this._getVersionIdFromMutation(x).versionId }));

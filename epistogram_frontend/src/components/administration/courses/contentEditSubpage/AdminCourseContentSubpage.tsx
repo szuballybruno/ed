@@ -20,16 +20,11 @@ import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ExamEditDialog } from '../examEditDialog/ExamEditDialog';
 import { ExamEditDialogParams } from '../examEditDialog/ExamEditDialogTypes';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
-import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { VideoEditDialog } from '../videoEditDialog/VideoEditDialog';
 import { VideoEditDialogParams } from '../videoEditDialog/VideoEditDialogTypes';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
-
-type ItemType = {
-    questionMutations?: QuestionMutationsType
-} & CourseContentItemAdminDTO;
 
 export const AdminCourseContentSubpage = () => {
 
@@ -61,10 +56,10 @@ export const AdminCourseContentSubpage = () => {
     const modules = courseContentAdminData?.modules ?? [];
     const originalItems = courseContentAdminData?.items ?? [];
 
-    const getItemKey = useCallback((row: ItemType) => row.versionCode, []);
+    const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
 
-    const preprocessItems = useCallback((items: ItemType[]) => {
+    const preprocessItems = useCallback((items: CourseContentItemAdminDTO[]) => {
 
         const preproItems = items
             .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, isRowModified))
@@ -92,7 +87,7 @@ export const AdminCourseContentSubpage = () => {
         resetMutations,
         addOnMutationHandlers,
         mutatedData: mutatedItems
-    } = useXListMutator<ItemType, 'versionCode', string>(originalItems, 'versionCode', mutationEndCallback);
+    } = useXListMutator<CourseContentItemAdminDTO, 'versionCode', string>(originalItems, 'versionCode', mutationEndCallback);
 
     console.log(mutations);
 
@@ -106,7 +101,7 @@ export const AdminCourseContentSubpage = () => {
         preprocessItems(courseContentAdminData.items);
     }, [courseContentAdminData]);
 
-    const setNewOrderIndices = (items: ItemType[], mutatedRowKey: string, mutateSelf?: boolean) => {
+    const setNewOrderIndices = (items: CourseContentItemAdminDTO[], mutatedRowKey: string, mutateSelf?: boolean) => {
 
         const mapped = items
             .map((item, index) => ({
@@ -192,26 +187,33 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: 'video' | 'exam' | 'module', data?: CourseContentItemAdminDTO) => {
+    const openDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
+
+        const data = row?.data!;
 
         if (type === 'video')
-            videoEditDialogLogic.openDialog({
-                params: {
-                    videoVersionId: data!.videoVersionId,
-                    courseName: 'Course name',
-                    videoTitle: data!.itemTitle
-                }
-            });
+            videoEditDialogLogic
+                .openDialog({
+                    params: {
+                        videoVersionId: data.videoVersionId,
+                        courseName: 'Course name',
+                        videoTitle: data.itemTitle,
+                        versionCode: data.versionCode,
+                        mutations: data.questionMutations
+                    }
+                });
 
         if (type === 'exam')
-            examEditDialogLogic.openDialog({
-                params: {
-                    examVersionId: data!.examVersionId,
-                    courseName: 'Course name',
-                    examTitle: data!.itemTitle,
-                    versionCode: data!.versionCode
-                }
-            });
+            examEditDialogLogic
+                .openDialog({
+                    params: {
+                        examVersionId: data.examVersionId,
+                        courseTitle: 'Course name',
+                        examTitle: data.itemTitle,
+                        versionCode: data.versionCode,
+                        mutations: data.questionMutations
+                    }
+                });
 
         if (type === 'module')
             moduleEditDialogLogic.openDialog();
@@ -258,7 +260,8 @@ export const AdminCourseContentSubpage = () => {
             moduleVersionId: moduleInfo.id,
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,
-            videoLength: 0
+            videoLength: 0,
+            questionMutations: []
         };
 
         addRow(newVersionCode, dto);
@@ -331,7 +334,14 @@ export const AdminCourseContentSubpage = () => {
 
                 {/* dialogs */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
-                <VideoEditDialog dialogLogic={videoEditDialogLogic} />
+
+                <VideoEditDialog
+                    callback={mutations => mutateRow({
+                        key: videoEditDialogLogic.params.versionCode,
+                        field: 'questionMutations',
+                        newValue: mutations
+                    })}
+                    dialogLogic={videoEditDialogLogic} />
 
                 <ExamEditDialog
                     callback={mutations => mutateRow({

@@ -255,6 +255,7 @@ const marray = [
 
                 // map questions 
                 questions: views
+                    .filter(x => !!x.questionVersionId)
                     .groupBy(x => x.questionVersionId)
                     .map(questionGroup => {
 
@@ -637,7 +638,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 errors,
                 warnings,
                 videoLength: x.videoLength,
-                itemType: x.itemType
+                itemType: x.itemType,
+                questionMutations: []
             };
         });
 

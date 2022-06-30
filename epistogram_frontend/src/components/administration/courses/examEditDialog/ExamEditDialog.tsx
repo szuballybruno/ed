@@ -16,7 +16,7 @@ export const ExamEditDialog = ({
     callback: (mutations: QuestionMutationsType) => void,
 }) => {
 
-    const { courseName: courseTitle, examTitle, examVersionId } = dialogLogic.params;
+    const { courseTitle, examTitle, examVersionId, mutations } = dialogLogic.params;
 
     const handleCallback = useCallback((mutations: QuestionMutationsType) => {
 
@@ -29,7 +29,8 @@ export const ExamEditDialog = ({
             content: () => <ExamEditor
                 callback={handleCallback}
                 examVersionId={examVersionId}
-                endabled={dialogLogic.isOpen} />,
+                endabled={dialogLogic.isOpen}
+                mutations={mutations} />,
             title: 'Kérdések',
         },
         {

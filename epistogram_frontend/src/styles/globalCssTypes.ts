@@ -17,10 +17,15 @@ const heights = ['stretch'] as const;
 const globalCssGeneric = {
     margin: {
         all: sizes,
+        
         horizontal: sizes,
         vertical: sizes,
+
         left: sizes,
-        right: sizes
+        right: sizes,
+
+        top: sizes,
+        bottom: sizes
     },
     roundBorders: 'normal',
     background: colors,

@@ -1,4 +1,6 @@
 import { CourseItemType } from '../../types/sharedTypes';
+import { Mutation } from '../mutations/Mutation';
+import { QuestionEditDataDTO } from '../QuestionEditDataDTO';
 import { CourseContentItemIssueDTO } from './CourseContentItemIssueDTO';
 
 export class CourseContentItemAdminDTO {
@@ -16,4 +18,5 @@ export class CourseContentItemAdminDTO {
 	warnings: CourseContentItemIssueDTO[];
 	videoLength: number;
 	itemType: CourseItemType;
+	questionMutations: Mutation<QuestionEditDataDTO, 'questionVersionId'>[];
 }
