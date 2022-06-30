@@ -11,7 +11,7 @@ export type XDMBIndexType = {
 }
 
 export class XDBMSchemaType {
-    seedScripts: ([Function, PropConstraintType<any, any>] | string)[];
+    seedScripts: [Function, PropConstraintType<any, any>][];
     functionScripts: string[];
     constraints: XDBMConstraintType[];
     views: ([string, string] | [string, string, Function])[];

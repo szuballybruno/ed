@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from "../../../services/XORM/XORMDecorators";
 import { AnswerVersion } from "../answer/AnswerVersion";
 import { ExamVersion } from "../exam/ExamVersion";
@@ -37,7 +37,7 @@ export class QuestionVersion {
     videoVersionId: number | null;
     @XManyToOne<QuestionVersion>()(() => VideoVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('videoVersionId')
-    videoVersion: VideoVersion;
+    videoVersion: Relation<VideoVersion>;
 
     // exam 
     @Column({ nullable: true })
@@ -45,7 +45,7 @@ export class QuestionVersion {
     examVersionId: number | null;
     @XManyToOne<QuestionVersion>()(() => ExamVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('examVersionId')
-    examVersion: ExamVersion;
+    examVersion: Relation<ExamVersion>;
 
     // question 
     @Column()
@@ -53,7 +53,7 @@ export class QuestionVersion {
     questionId: number;
     @XManyToOne<QuestionVersion>()(() => Question, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionId')
-    question: Question;
+    question: Relation<Question>;
 
     // question data 
     @Column()
@@ -61,7 +61,7 @@ export class QuestionVersion {
     questionDataId: number;
     @XManyToOne<QuestionVersion>()(() => QuestionData, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionDataId')
-    questionData: QuestionData;
+    questionData: Relation<QuestionData>;
 
     // category
     @Column({ nullable: true })
@@ -69,5 +69,5 @@ export class QuestionVersion {
     personalityTraitCategoryId: number | null;
     @XManyToOne<QuestionVersion>()(() => PersonalityTraitCategory, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('personalityTraitCategoryId')
-    personalityTraitCategory: PersonalityTraitCategory | null;
+    personalityTraitCategory: Relation<PersonalityTraitCategory> | null;
 }

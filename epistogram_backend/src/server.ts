@@ -1,46 +1,33 @@
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
-import { DiscountCode } from './models/entity/DiscountCode';
 import { log } from './services/misc/logger';
-import { MiscService } from './services/MiscService';
-import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
-import { DbConnectionService } from './services/sqlServices/DatabaseConnectionService';
+import { RecreateDBService } from './services/sqlServices/RecreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
-import { actionWrapper, initTurboExpress } from './startup/instatiateTurboExpress';
+import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { instansiateSingletonServices, instatiateServices, ServiceProvider } from './startup/servicesDI';
-import { ActionWrapperFunctionType, GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
+import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
 
-const initalizeAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
+const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
 
     const serviceProvider = await getServiceProviderAsync();
 
     //
     // SEED DB
     await serviceProvider
-        .getService(DbConnectionService)
-        .bootstrapDBAsync();
+        .getService(RecreateDBService)
+        .recreateDBAsync();
 
     serviceProvider
         .getService(SQLConnectionService)
         .releaseConnectionClient();
 };
 
-const main = async () => {
-
-    log('');
-    log('------------- APPLICATION STARTED ----------------');
-    log('');
-
-    //
-    // GET ROOT DIR
-    const rootDir = dirname(fileURLToPath(import.meta.url));
+const initServiceProvider = (rootDir: string) => {
 
     const singletonServiceProvider = instansiateSingletonServices(rootDir);
 
-    // 
-    // INIT SERVICES
     const getServiceProviderAsync = async () => {
 
         const serviceProvider = instatiateServices(singletonServiceProvider);
@@ -54,17 +41,38 @@ const main = async () => {
         return serviceProvider;
     };
 
+    return { getServiceProviderAsync, singletonServiceProvider };
+}
+
+const startServerAsync = async (
+    singletonServiceProvider: ServiceProvider,
+    getServiceProviderAsync: () => Promise<ServiceProvider>) => {
+
     // 
     // INIT TURBO EXPRESS
     const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync);
 
     // 
-    // INIT
-    await initalizeAsync(getServiceProviderAsync);
-
-    // 
     // LISTEN (start server)
     turboExpress.listen();
+}
+
+const main = async () => {
+
+    log('');
+    log('------------- APPLICATION STARTED ----------------');
+    log('');
+
+    const rootDir = dirname(fileURLToPath(import.meta.url));
+    const isPurgeMode = process.argv.any(x => x === '--purge');
+    const isShortLife = process.argv.any(x => x === '--shortLife');
+    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(rootDir);
+
+    if (isPurgeMode)
+        await recreateDBAsync(getServiceProviderAsync);
+
+    if (!isShortLife)
+        await startServerAsync(singletonServiceProvider, getServiceProviderAsync);
 };
 
 await main();

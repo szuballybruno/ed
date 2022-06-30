@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { AnswerGivenAnswerBridge } from '../AnswerGivenAnswerBridge';
 import { QuestionVersion } from '../question/QuestionVersion';
@@ -20,25 +20,25 @@ export class AnswerVersion {
     questionVersionId: number;
     @XManyToOne<AnswerVersion>()(() => QuestionVersion, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('questionVersionId')
-    questionVersion: QuestionVersion;
+    questionVersion: Relation<QuestionVersion>;
 
     @Column()
     @XViewColumn()
     answerId: number;
     @XManyToOne<AnswerVersion>()(() => Answer, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('answerId')
-    answer: Answer;
+    answer: Relation<Answer>;
 
     @Column()
     @XViewColumn()
     answerDataId: number;
     @XManyToOne<AnswerVersion>()(() => AnswerData, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('answerDataId')
-    answerData: AnswerData;
+    answerData: Relation<AnswerData>;
 
     // TO MANY
 
     // given answer bridges
     @XOneToMany<AnswerVersion>()(() => AnswerGivenAnswerBridge, x => x.answerVersion)
-    givenAnswerBridges: AnswerGivenAnswerBridge[];
+    givenAnswerBridges: Relation<AnswerGivenAnswerBridge>[];
 }

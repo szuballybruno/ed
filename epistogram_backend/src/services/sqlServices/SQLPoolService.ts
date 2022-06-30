@@ -1,4 +1,4 @@
-import Postgres, { PoolClient } from 'pg';
+import Postgres from 'pg';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log } from '../misc/logger';
 
@@ -10,6 +10,7 @@ export class SQLPoolService {
     constructor(config: GlobalConfiguration) {
 
         this._config = config;
+        this.createPool();
     }
 
     createPool() {

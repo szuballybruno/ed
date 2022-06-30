@@ -1,28 +1,26 @@
 
 import { readFileSync } from 'fs';
-import { replaceAll, toSQLSnakeCasing } from '../../utilities/helpers';
+import { replaceAll } from '../../utilities/helpers';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { log, logSecondary } from '../misc/logger';
 import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
+import { TypeORMConnectionService } from './TypeORMConnectionService';
 
-export class SQLBootstrapperService {
-
-    private _sqlConnectionService: SQLConnectionService;
-    private _dbSchema: XDBMSchemaType;
-    private _config: GlobalConfiguration;
+export class CreateDBService {
 
     constructor(
-        sqlco: SQLConnectionService,
-        schema: XDBMSchemaType,
-        configuration: GlobalConfiguration) {
-
-        this._sqlConnectionService = sqlco;
-        this._dbSchema = schema;
-        this._config = configuration;
+        private _sqlConnectionService: SQLConnectionService,
+        private _dbSchema: XDBMSchemaType,
+        private _config: GlobalConfiguration,
+        private _typeOrmConnectionService: TypeORMConnectionService) {
     }
 
-    bootstrapDatabase = async () => {
+    createDatabaseSchemaAsync = async () => {
+
+        if (this._config.logging.bootstrap)
+            log('Creating tables with TypeORM...');
+        await this._typeOrmConnectionService.connectTypeORMAsync();
 
         if (this._config.logging.bootstrap)
             log('Recreating views...');
@@ -45,62 +43,7 @@ export class SQLBootstrapperService {
         await this.recreateTriggersAsync(this._dbSchema.triggers);
     };
 
-    recalcSequencesAsync = async () => {
-
-        if (this._config.logging.bootstrap)
-            log('Recalculating sequance max values...');
-
-        const dbName = this._config.database.name;
-
-        const script = `
-            DO $$
-                DECLARE
-                i TEXT;
-                BEGIN
-                FOR i IN (SELECT tbls.table_name 
-                    FROM information_schema.tables AS tbls 
-                    INNER JOIN information_schema.columns AS cols 
-                    ON tbls.table_name = cols.table_name 
-                    WHERE tbls.table_catalog='${dbName}' 
-                        AND tbls.table_schema='public' 
-                        AND cols.column_name='id'
-                        AND tbls.table_type = 'BASE TABLE') 
-                    LOOP
-                    
-                    EXECUTE 'SELECT setval(''"' || i || '_id_seq"'', (SELECT MAX(id) FROM ' || quote_ident(i) || '));';
-                END LOOP;
-            END $$;
-        `;
-
-        await this._sqlConnectionService.executeSQLAsync(script);
-
-        if (this._config.logging.bootstrap)
-            logSecondary('Recalculating sequance max values done.');
-    };
-
-    executeSeedScriptAsync = async (seedScriptName: string) => {
-
-        const sql = this.readSQLFile('seed', seedScriptName);
-
-        const replacedSQl = this.replaceSymbols(sql);
-
-        await this._sqlConnectionService.executeSQLAsync(replacedSQl);
-    };
-
-    purgeDBAsync = async () => {
-
-        log('Purging DB / Start...', { entryType: 'strong' });
-
-        const dropDBScript = this._dbSchema
-            .entities
-            .map(x => `DROP TABLE IF EXISTS public.${toSQLSnakeCasing(x.name)} CASCADE;`)
-            .join('\n');
-
-        const results = await this._sqlConnectionService
-            .executeSQLAsync(dropDBScript);
-
-        log('Purging DB / Done.', { entryType: 'strong' });
-    };
+    // PRIVATE
 
     private recreateConstraintsAsync = async (constraints: XDBMConstraintType[]) => {
 

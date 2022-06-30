@@ -1,7 +1,7 @@
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
-import { VersionMigrationResult } from '../utilities/misc';
+import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -31,6 +31,42 @@ export class QuestionService {
 
         // increment unmodified
         await this._incrementQuestionVersionsAsync(unmodifiedQuestions, itemVersionIdMigrations);
+    }
+
+    /**
+     * Increment question version while 
+     * keeping data reference  
+     */
+    private async _incrementQuestionVersionsAsync(
+        oldQustionVersions: QuestionVersion[],
+        itemVersionIdMigrations: VersionMigrationResult[]) {
+
+        const newVersions = oldQustionVersions
+            .map(oldQustionVersion => {
+
+                const newVideoVersionId = oldQustionVersion.videoVersionId
+                    ? VersionMigrationHelpers
+                        .getNewVersionId(itemVersionIdMigrations, oldQustionVersion.videoVersionId)
+                    : null;
+
+                const newExamVersionId = oldQustionVersion.examVersionId
+                    ? VersionMigrationHelpers
+                        .getNewVersionId(itemVersionIdMigrations, oldQustionVersion.examVersionId)
+                    : null;
+
+                const newVersion: InsertEntity<QuestionVersion> = {
+                    videoVersionId: newVideoVersionId,
+                    examVersionId: newExamVersionId,
+                    questionDataId: oldQustionVersion.questionDataId,
+                    questionId: oldQustionVersion.questionId,
+                    personalityTraitCategoryId: null
+                };
+
+                return newVersion;
+            });
+
+        await this._ormService
+            .createManyAsync(QuestionVersion, newVersions);
     }
 
     /**
