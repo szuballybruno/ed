@@ -21,7 +21,7 @@ export const HomePageUserStats = () => {
         {/* total completed video count */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-            value={homePageStats ? homePageStats.totalCompletedVideosLastMonth + '' : '0'}
+            value={homePageStats ? homePageStats.completedVideosLastMonth + '' : '0'}
             suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
             iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
             isOpenByDefault={false} />
@@ -29,7 +29,7 @@ export const HomePageUserStats = () => {
         {/* total playback time */}
         <StatisticsCard
             title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-            value={homePageStats ? roundNumber(homePageStats.totalPlaybackTimeLastMonth / 60 / 60) + '' : '0'}
+            value={homePageStats ? roundNumber(homePageStats.playbackTimeLastMonth / 60 / 60) + '' : '0'}
             suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
             iconPath={Environment.getAssetUrl('images/watch3D.png')}
             isOpenByDefault={false} />

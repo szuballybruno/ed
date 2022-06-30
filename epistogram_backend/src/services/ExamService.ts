@@ -20,6 +20,8 @@ import { QuestionService } from './QuestionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 import { ExamVersionView } from '../models/views/ExamVersionView';
+import { QuestionData } from '../models/entity/question/QuestionData';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
 
 export class ExamService extends QueryServiceBase<ExamData> {
 
@@ -115,79 +117,91 @@ export class ExamService extends QueryServiceBase<ExamData> {
      */
     answerExamQuestionAsync = async (principalId: PrincipalId, dto: AnswerQuestionDTO) => {
 
-        throwNotImplemented();
+        //throwNotImplemented();
         //TODO validation comes here
 
-        // const userId = principalId.toSQLValue();
+        const userId = principalId.toSQLValue();
 
-        // const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
+        const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
 
-        // // inspect questions
-        // const questions = await this._ormService
-        //     .getRepository(QuestionVersion)
-        //     .createQueryBuilder('qv')
-        //     .withDeleted()
-        //     .leftJoinAndSelect('qv.questionData', 'qd')
-        //     .leftJoinAndSelect('qv.examVersion', 'ev')
-        //     .leftJoinAndSelect('ev.answerSessions', 'as')
-        //     .where('as.id = :asid', { asid: answerSessionId })
-        //     .orderBy('qd.orderIndex')
-        //     .getMany();
+        // inspect questions
+        const questions = await this._ormService
+            .withResType<QuestionVersion>()
+            .query(QuestionVersion, { answerSessionId })
+            .select(AnswerSession)
+            .leftJoin(QuestionData, x => x
+                .on('id', '=', 'questionDataId', QuestionVersion))
+            .leftJoin(ExamVersion, x => x
+                .on('id', '=', 'examVersionId', QuestionVersion))
+            .leftJoin(AnswerSession, x => x
+                .on('examVersionId', '=', 'id', ExamVersion))
+            .where('id', '=', 'answerSessionId')
+            .getMany();
+        /* .getRepository(QuestionVersion)
+        .createQueryBuilder('qv')
+        .withDeleted()
+        .leftJoinAndSelect('qv.questionData', 'qd')
+        .leftJoinAndSelect('qv.examVersion', 'ev')
+        .leftJoinAndSelect('ev.answerSessions', 'as')
+        .where('as.id = :asid', { asid: answerSessionId })
+        .orderBy('qd.orderIndex')
+        .getMany(); */
 
-        // const isLast = questions[questions.length - 1].id === questionVersionId;
-        // const examVersionId = questions.first().examVersion.id!;
+        const isLast = questions[questions.length - 1].id === questionVersionId;
+        const examVersionId = questions.first().examVersionId!;
 
-        // // save user activity
-        // await this._userSessionActivityService
-        //     .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
+        // save user activity
+        await this._userSessionActivityService
+            .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
 
-        // // save answer 
-        // const result = this._quesitonAnswerService
-        //     .answerQuestionAsync(
-        //         userId,
-        //         answerSessionId,
-        //         questionVersionId,
-        //         answerIds,
-        //         true,
-        //         elapsedSeconds);
+        // save answer 
+        const result = this._quesitonAnswerService
+            .answerQuestionAsync(
+                userId,
+                answerSessionId,
+                questionVersionId,
+                answerIds,
+                true,
+                elapsedSeconds);
 
-        // if (!isLast)
-        //     return result;
+        if (!isLast)
+            return result;
 
-        // // set answer session end date 
-        // await this._ormService
-        //     .save(AnswerSession, {
-        //         id: answerSessionId,
-        //         endDate: new Date()
-        //     });
+        // set answer session end date 
+        await this._ormService
+            .save(AnswerSession, {
+                id: answerSessionId,
+                endDate: new Date()
+            });
 
-        // // set user exam progress
-        // const answerSessionViews = await this._ormService
-        //     .query(AnswerSessionView, { userId, examVersionId })
-        //     .where('userId', '=', 'userId')
-        //     .and('examVersionId', '=', 'examVersionId')
-        //     .getMany();
+        // set user exam progress
+        const answerSessionViews = await this._ormService
+            .query(AnswerSessionView, { userId, examVersionId })
+            .where('userId', '=', 'userId')
+            .and('examVersionId', '=', 'examVersionId')
+            .getMany();
 
-        // const currentAnswerSessionIsSuccessful = answerSessionViews
-        //     .first(x => x.answerSessionId == answerSessionId);
+        const currentAnswerSessionIsSuccessful = answerSessionViews
+            .first(x => x.answerSessionId == answerSessionId);
 
-        // const successfulAsvCount = answerSessionViews
-        //     .count(x => x.isSuccessful);
+        const successfulAsvCount = answerSessionViews
+            .count(x => x.isSuccessful);
 
-        // const currentIsFirstSuccessfulAse = successfulAsvCount === 1 && currentAnswerSessionIsSuccessful;
+        const currentIsFirstSuccessfulAse = successfulAsvCount === 1 && currentAnswerSessionIsSuccessful;
 
-        // // if not first successful ase return
-        // if (!currentIsFirstSuccessfulAse)
-        //     return result;
+        // if not first successful ase return
+        if (!currentIsFirstSuccessfulAse)
+            return result;
 
-        // if first successful ase, save user exam progress bridge
-        // throwNotImplemented();
-        // await this._ormService
-        //     .save(UserExamProgressBridge, {
-        //         completionDate: new Date(),
-        //         examVersionId,
-        //         userId
-        //     });
+        //if first successful ase, save user exam progress bridge
+        throwNotImplemented();
+        await this._ormService
+            .save(UserExamProgressBridge, {
+                id: currentAnswerSessionIsSuccessful.answerSessionId,
+                completionDate: new Date(),
+                examVersionId,
+                userId
+            });
     };
 
     /**

@@ -422,7 +422,7 @@ const marray = [
             });
         }),
     epistoMappingsBuilder.addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number) => {
-        return {
+        return instantiate<UserLearningPageStatsDTO>({
             userId: view.userId,
             userEmail: view.userEmail,
             totalLagBehindPercentage: totalLagBehindPercentage,
@@ -433,16 +433,16 @@ const marray = [
             answeredQuestionsCount: view.answeredQuestionsCount,
             totalCorrectAnswerRate: view.totalCorrectAnswerRate,
             rankInsideCompany: view.rankInsideCompany
-        }
+        })
     }),
     epistoMappingsBuilder.addMapping(HomePageStatsDTO, () => (view: HomePageStatsView) => {
-        return {
+        return instantiate<HomePageStatsDTO>({
             userId: view.userId,
-            totalCompletedVideosLastMonth: view.totalCompletedVideosLastMonth,
-            totalPlaybackTimeLastMonth: view.totalPlaybackTimeLastMonth,
+            completedVideosLastMonth: view.completedVideosLastMonth,
+            playbackTimeLastMonth: view.playbackTimeLastMonth,
             totalGivenAnswerCount: view.totalGivenAnswerCount,
             correctAnswerRate: view.correctAnswerRate
-        }
+        })
     })
 ] as const;
 

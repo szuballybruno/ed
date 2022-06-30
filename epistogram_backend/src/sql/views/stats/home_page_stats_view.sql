@@ -8,7 +8,7 @@ SELECT
         FROM public.user_video_progress_bridge uvpb
         WHERE uvpb.user_id = u.id
         AND uvpb.completion_date > CURRENT_DATE - 30 
-    ) completed_video_count,
+    ) completed_videos_last_month,
     
     -- total watch time in the last 30 days
     (
@@ -17,13 +17,13 @@ SELECT
         FROM public.video_playback_sample_view vpsv
         WHERE vpsv.user_id = u.id 
         AND vpsv.creation_date > CURRENT_DATE - 30 
-    ) total_video_playback_seconds,
+    ) playback_time_last_month,
     
     -- total given answer count
     SUM(asv.given_answer_count) total_given_answer_count,
 
     -- correct answer rate    
-    SUM(asv.given_answer_count) / SUM(asv.correct_given_answer_count) correct_answer_rate
+    AVG(asv.answer_session_success_rate) correct_answer_rate
 
 FROM public.user u
 
