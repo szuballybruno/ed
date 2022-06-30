@@ -270,6 +270,7 @@ const marray = [
                             // map answers 
                             answers: questionGroup
                                 .items
+                                .filter(x => !!x.answerVersionId)
                                 .map((viewAsAnswer): AnswerEditDTO => ({
                                     answerVersionId: viewAsAnswer.answerVersionId,
                                     text: viewAsAnswer.answerText,

@@ -143,8 +143,18 @@ export class CourseItemService {
                 return videoVerison;
             });
 
-        await this._ormService
+        const newVersionIds = await this._ormService
             .createManyAsync(VideoVersion, newVersions);
+
+        // SAVE QUESTIONS 
+        const versionMigrations = newVersionIds
+            .map((newVersionId, i) => ({
+                newVersionId: newVersionId,
+                oldVersionId: oldVideoVersions[i].id
+            } as VersionMigrationResult));
+
+        await this._questionsService
+            .saveCourseItemQuestionsAsync(versionMigrations, [], true);
     }
 
     /**
@@ -175,8 +185,18 @@ export class CourseItemService {
                 return examVersion;
             });
 
-        await this._ormService
+        const newVersionIds = await this._ormService
             .createManyAsync(ExamVersion, newVersions);
+
+        // SAVE QUESTIONS 
+        const versionMigrations = newVersionIds
+            .map((newVersionId, i) => ({
+                newVersionId: newVersionId,
+                oldVersionId: oldExamVersions[i].id
+            } as VersionMigrationResult));
+
+        await this._questionsService
+            .saveCourseItemQuestionsAsync(versionMigrations, [], true);
     }
 
     /**
