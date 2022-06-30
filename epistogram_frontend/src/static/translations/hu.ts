@@ -157,27 +157,27 @@ export const huTranslation: TranslationType = {
             practiseTitle: 'Gyakorolj, hogy a legjobb lehess!',
             noTipOfTheDayYet: 'Személyes tanulási tipped 48 óra múlva válik elérhetővé',
             tipOfTheDay: 'Személyre szabott tipped',
-            recommendedQuota: 'Személyre szabott haladási ajánlás',
+            mostRelevantStatistics: 'Legfontosabb statisztikáim',
             tasks: 'Feladatok',
             stats: 'Legfontosabb statisztikáid',
             noStatsYet: 'Tanulási és felejtési görbéd kalkulálásához legalább 30 nap és minimum 20 órányi belépés szükséges',
 
             statsSummary: {
                 mostImportantStatistics: 'Legfontosabb statisztikáid',
-                watchedVideosInThisMonth: {
+                videosToBeRepeatedCount: {
+                    title: 'Ismétlésre ajánlott videók',
+                    suffix: 'db'
+                },
+                completedVideosLastMonth: {
                     title: 'Megtekintett videók a hónapban',
                     suffix: 'db'
                 },
-                timeSpentWithWatchingVideosInThisMonth: {
-                    title: 'Videónézéssel eltöltött idő a hónapban',
-                    suffix: 'óra'
+                lagBehindPercentage: {
+                    title: 'Haladás',
+                    suffix: ''
                 },
-                totalGivenAnswersCount: {
-                    title: 'Megválaszolt tudást vizsgáló kérdések száma',
-                    suffix: 'db'
-                },
-                correctAnswerRate: {
-                    title: 'Helyes válaszok aránya',
+                performanceLastMonth: {
+                    title: 'Teljesítmény a hónapban',
                     suffix: '%'
                 }
             },

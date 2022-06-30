@@ -140,28 +140,28 @@ export type TranslationType = {
             practiseTitle: string;
             noTipOfTheDayYet: string;
             tipOfTheDay: string;
-            recommendedQuota: string;
+            mostRelevantStatistics: string;
             tasks: string;
             stats: string;
             noStatsYet: string;
 
             statsSummary: {
                 mostImportantStatistics: string;
-                watchedVideosInThisMonth: {
+                videosToBeRepeatedCount: {
                     title: string;
-                    suffix: string
-                };
-                timeSpentWithWatchingVideosInThisMonth: {
+                    suffix: string;
+                },
+                completedVideosLastMonth: {
                     title: string;
-                    suffix: string
-                };
-                totalGivenAnswersCount: {
+                    suffix: string;
+                },
+                lagBehindPercentage: {
                     title: string;
-                    suffix: string
-                };
-                correctAnswerRate: {
+                    suffix: string;
+                },
+                performanceLastMonth: {
                     title: string;
-                    suffix: string
+                    suffix: string;
                 }
             };
         };

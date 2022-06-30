@@ -119,7 +119,7 @@ const HomePage = () => {
 
                     {/* tip of the day */}
                     <DashboardSection
-                        title={translatableTexts.homePage.recommendedQuota}
+                        title={translatableTexts.homePage.mostRelevantStatistics}
                         background="var(--transparentWhite70)"
                         borderRadius="6px"
                         showDivider

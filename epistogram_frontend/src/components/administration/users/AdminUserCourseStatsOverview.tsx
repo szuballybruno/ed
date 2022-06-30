@@ -94,8 +94,8 @@ export const AdminUserCourseStatsOverview = (props: {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(23%, 1fr))',
                 gridAutoRows: '160px'
             }}>
-
-            {/* total completed video count */}
+            {/* 
+            {/* total completed video count 
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
                 value={userStats ? userStats.completedVideoCount + '' : '0'}
@@ -103,7 +103,7 @@ export const AdminUserCourseStatsOverview = (props: {
                 iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
                 isOpenByDefault={false} />
 
-            {/* total playback time */}
+            {/* total playback time 
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
                 value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + '' : '0'}
@@ -111,7 +111,7 @@ export const AdminUserCourseStatsOverview = (props: {
                 iconPath={Environment.getAssetUrl('images/watch3D.png')}
                 isOpenByDefault={false} />
 
-            {/* total given answer count  */}
+            {/* total given answer count  
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
                 value={userStats ? userStats.totalGivenAnswerCount + '' : '0'}
@@ -119,13 +119,13 @@ export const AdminUserCourseStatsOverview = (props: {
                 iconPath={Environment.getAssetUrl('images/answeredquestions3D.png')}
                 isOpenByDefault={false} />
 
-            {/* correct answer rate  */}
+            {/* correct answer rate  
             <StatisticsCard
                 title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
                 value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + '' : '0'}
                 suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
                 iconPath={Environment.getAssetUrl('images/rightanswer3D.png')}
-                isOpenByDefault={false} />
+                isOpenByDefault={false} /> */}
         </div>
     </Flex>;
 };

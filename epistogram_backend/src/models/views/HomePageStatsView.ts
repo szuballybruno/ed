@@ -13,17 +13,13 @@ export class HomePageStatsView {
 
     @ViewColumn()
     @XViewColumn()
+    videosToBeRepeatedCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
     completedVideosLastMonth: number;
 
     @ViewColumn()
     @XViewColumn()
-    playbackTimeLastMonth: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalGivenAnswerCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    correctAnswerRate: number;
+    performanceLastMonth: number;
 }

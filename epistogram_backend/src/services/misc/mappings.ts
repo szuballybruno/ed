@@ -437,13 +437,13 @@ const marray = [
             rankInsideCompany: view.rankInsideCompany
         })
     }),
-    epistoMappingsBuilder.addMapping(HomePageStatsDTO, () => (view: HomePageStatsView) => {
+    epistoMappingsBuilder.addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number) => {
         return instantiate<HomePageStatsDTO>({
             userId: view.userId,
+            videosToBeRepeatedCount: view.videosToBeRepeatedCount,
             completedVideosLastMonth: view.completedVideosLastMonth,
-            playbackTimeLastMonth: view.playbackTimeLastMonth,
-            totalGivenAnswerCount: view.totalGivenAnswerCount,
-            correctAnswerRate: view.correctAnswerRate
+            lagBehindPercentage: lagBehindPercentage,
+            performanceLastMonth: view.performanceLastMonth
         })
     })
 ] as const;
