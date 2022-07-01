@@ -313,7 +313,7 @@ export class CourseItemService {
             .map(getNewEntity);
 
         const newEntityIds = await this._ormService
-            .createManyAsync(Video, newEntities);
+            .createManyAsync(entity, newEntities);
 
         //
         // CREATE VERSIONS 
