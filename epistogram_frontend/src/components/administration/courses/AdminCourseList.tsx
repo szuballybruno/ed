@@ -57,6 +57,7 @@ export const AdminCourseList = memo((props: {
                             src={course.thumbnailImageURL}
                             width='85px'
                             mb='5px'
+                            cursor="pointer"
                             className='roundBorders'
                             objectFit="cover" />;
 

@@ -33,7 +33,7 @@ export const VideoEditor = ({
     const videoUrl = courseItemEditData?.videoUrl ?? '';
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions, mutations, true, getPlayedSeconds);
+    const logic = useQuestionEditGridLogic(questions, mutations, videoVersionId, null, true, getPlayedSeconds);
 
     const onCloseHandler = useCallback(() => {
 

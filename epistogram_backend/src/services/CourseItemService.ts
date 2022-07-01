@@ -13,6 +13,7 @@ import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readVersionCode } from './misc/encodeService';
+import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionService } from './QuestionService';
@@ -20,11 +21,7 @@ import { QuestionService } from './QuestionService';
 type ItemMutationType = Mutation<CourseContentItemAdminDTO, 'versionCode'>;
 
 type GetVersionDataPairsFnType<TVerion, TData, TEntity> = {
-    getVersionDataPair: (versionId: number) => {
-        oldVersion: TVerion;
-        oldData: TData;
-        oldEntity: TEntity;
-    },
+    getVersionDataPair: (versionId: number) => OldData<TVerion, TData, TEntity>,
     mutationVersionIdPairs: {
         mutation: ItemMutationType;
         oldVersionId: number;
@@ -196,7 +193,7 @@ export class CourseItemService {
             } as VersionMigrationResult));
 
         await this._questionsService
-            .saveCourseItemQuestionsAsync(versionMigrations, [], true);
+            .saveCourseItemQuestionsAsync(versionMigrations, [], false);
     }
 
     /**

@@ -1,6 +1,8 @@
+import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
@@ -16,10 +18,10 @@ export class QuestionAnswerService {
     /**
      * Creates a new answer session  
      */
-    createAnswerSessionAsync = async (
+    async createAnswerSessionAsync(
         userId: number,
         examVersionId: number | null,
-        videoVideoId: number | null) => {
+        videoVideoId: number | null) {
 
         const answerSessionId = await this._ormService
             .createAsync(AnswerSession, {
@@ -35,14 +37,17 @@ export class QuestionAnswerService {
         return answerSessionId;
     };
 
-    answerQuestionAsync = async (
+    /**
+     * Answer question  
+     */
+    async answerQuestionAsync(
         userId: number,
         answerSessionId: number,
         questionVersionId: number,
         answerIds: number[],
         isExamQuestion: boolean,
         elapsedSeconds: number,
-        isPractiseAnswer?: boolean) => {
+        isPractiseAnswer?: boolean) {
 
         const {
             correctAnswerIds,
@@ -80,4 +85,42 @@ export class QuestionAnswerService {
             coinAcquires
         } as AnswerResultDTO;
     };
+
+    /**
+     * Saves quesiton answers 
+     */
+    async saveQuestionAnswers(questionVersionMigrations: VersionMigrationResult[]) {
+
+
+    }
+
+    /**
+     * Increment answer version 
+     */
+    async incrementAnswerVersions(questionVersionMigrations: VersionMigrationResult[]) {
+        
+        const oldQuestionIds = questionVersionMigrations
+            .map(x => x.oldVersionId);
+
+        const oldAnswerVersions = await this._ormService
+            .query(AnswerVersion, { oldQuestionIds })
+            .where('questionVersionId', '=', 'oldQuestionIds')
+            .getMany();
+
+        const newAnswerVersions = oldAnswerVersions
+            .map((oldVersion) => {
+
+                const newVersion: InsertEntity<AnswerVersion> = {
+                    answerDataId: oldVersion.answerDataId,
+                    answerId: oldVersion.answerId,
+                    questionVersionId: VersionMigrationHelpers
+                        .getNewVersionId(questionVersionMigrations, oldVersion.questionVersionId)
+                };
+
+                return newVersion;
+            });
+
+        await this._ormService
+            .createManyAsync(AnswerVersion, newAnswerVersions);
+    }
 }

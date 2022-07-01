@@ -16,11 +16,14 @@ export class CreateDBService {
         private _typeOrmConnectionService: TypeORMConnectionService) {
     }
 
-    createDatabaseSchemaAsync = async () => {
+    createDatabaseSchemaAsync = async (createTables: boolean) => {
 
-        if (this._config.logging.bootstrap)
-            log('Creating tables with TypeORM...');
-        await this._typeOrmConnectionService.connectTypeORMAsync();
+        if (createTables) {
+
+            if (this._config.logging.bootstrap)
+                log('Creating tables with TypeORM...');
+            await this._typeOrmConnectionService.connectTypeORMAsync();
+        }
 
         if (this._config.logging.bootstrap)
             log('Recreating views...');

@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
 import { log } from './services/misc/logger';
+import { CreateDBService } from './services/sqlServices/CreateDBService';
 import { RecreateDBService } from './services/sqlServices/RecreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
@@ -23,6 +24,19 @@ const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) 
         .getService(SQLConnectionService)
         .releaseConnectionClient();
 };
+
+const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
+
+    const serviceProvider = await getServiceProviderAsync();
+
+    await serviceProvider
+        .getService(CreateDBService)
+        .createDatabaseSchemaAsync(false);
+
+    serviceProvider
+        .getService(SQLConnectionService)
+        .releaseConnectionClient();
+}
 
 const initServiceProvider = (rootDir: string) => {
 
@@ -65,11 +79,18 @@ const main = async () => {
 
     const rootDir = dirname(fileURLToPath(import.meta.url));
     const isPurgeMode = process.argv.any(x => x === '--purge');
+    const isLightRecreateMode = process.argv.any(x => x === '--lightRecreate');
     const isShortLife = process.argv.any(x => x === '--shortLife');
+
+    log(`MODE FLAGS: [${isPurgeMode ? 'PURGE' : ''}${isLightRecreateMode ? 'LIGHT RECREATE' : ''}${isShortLife ? 'SHORT LIFE' : ''}]`);
+
     const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(rootDir);
 
     if (isPurgeMode)
         await recreateDBAsync(getServiceProviderAsync);
+
+    if (isLightRecreateMode)
+        await lightRecreateDBAsync(getServiceProviderAsync);
 
     if (!isShortLife)
         await startServerAsync(singletonServiceProvider, getServiceProviderAsync);

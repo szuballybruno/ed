@@ -26,7 +26,7 @@ export const ExamEditor = ({
 
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions, mutations);
+    const logic = useQuestionEditGridLogic(questions, mutations, null, examVersionId);
 
     const finish = useCallback(() => {
 

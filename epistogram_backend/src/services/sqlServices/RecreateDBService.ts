@@ -27,7 +27,7 @@ export class RecreateDBService {
 
         // CREATE  
         await this._createDBService
-            .createDatabaseSchemaAsync();
+            .createDatabaseSchemaAsync(true);
 
         // SEED 
         await this._seedService

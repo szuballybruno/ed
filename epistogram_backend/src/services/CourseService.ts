@@ -485,9 +485,6 @@ export class CourseService {
         // save new items 
         await this._courseItemService
             .saveNewCourseItemsAsync(moduleVersionMigrations, mutations);
-
-        // save updated
-        // TODO
     }
 
     private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {

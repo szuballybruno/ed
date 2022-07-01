@@ -9,8 +9,10 @@ import { QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 export const useQuestionEditGridLogic = (
     questions: QuestionEditDataDTO[],
     mutations: QuestionMutationsType,
+    videoVersionId: number | null,
+    examVersionId: number | null,
     showTiming?: boolean,
-    getPlayedSeconds?: () => number) => {
+    getPlayedSeconds?: () => number,) => {
 
     const forceUpdate = useForceUpdate();
 
@@ -56,11 +58,13 @@ export const useQuestionEditGridLogic = (
             questionVersionId: getVirtualId(),
             questionText: '',
             questionShowUpTimeSeconds: 0,
+            videoVersionId,
+            examVersionId,
             answers
         };
 
         mutatorRef.current.add(question.questionVersionId, question);
-    }, []);
+    }, [videoVersionId, examVersionId]);
 
     //
     // rows
