@@ -7,6 +7,7 @@ import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { VersionCode } from '../../../../shared/types/versionCode';
 import { Environment } from '../../../../static/Environemnt';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -87,7 +88,7 @@ export const AdminCourseContentSubpage = () => {
         resetMutations,
         addOnMutationHandlers,
         mutatedData: mutatedItems
-    } = useXListMutator<CourseContentItemAdminDTO, 'versionCode', string>(originalItems, 'versionCode', mutationEndCallback);
+    } = useXListMutator<CourseContentItemAdminDTO, 'versionCode', VersionCode>(originalItems, 'versionCode', mutationEndCallback);
 
     console.log(mutations);
 
@@ -101,7 +102,7 @@ export const AdminCourseContentSubpage = () => {
         preprocessItems(courseContentAdminData.items);
     }, [courseContentAdminData]);
 
-    const setNewOrderIndices = (items: CourseContentItemAdminDTO[], mutatedRowKey: string, mutateSelf?: boolean) => {
+    const setNewOrderIndices = (items: CourseContentItemAdminDTO[], mutatedRowKey: VersionCode, mutateSelf?: boolean) => {
 
         const mapped = items
             .map((item, index) => ({
@@ -195,7 +196,7 @@ export const AdminCourseContentSubpage = () => {
             videoEditDialogLogic
                 .openDialog({
                     params: {
-                        videoVersionId: data.videoVersionId,
+                        videoVersionId: data.videoVersionId!,
                         courseName: 'Course name',
                         videoTitle: data.itemTitle,
                         versionCode: data.versionCode,
@@ -207,7 +208,7 @@ export const AdminCourseContentSubpage = () => {
             examEditDialogLogic
                 .openDialog({
                     params: {
-                        examVersionId: data.examVersionId,
+                        examVersionId: data.examVersionId!,
                         courseTitle: 'Course name',
                         examTitle: data.itemTitle,
                         versionCode: data.versionCode,
@@ -243,8 +244,10 @@ export const AdminCourseContentSubpage = () => {
             .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
             .length;
 
-        const newId = getVirtualId();
-        const newVersionCode = `new_${type}_${newId}`;
+        const itemVersionId = getVirtualId();
+
+        const newVersionCode = VersionCode
+            .create(type === 'video' ? 'video_version' : 'exam_version', itemVersionId);
 
         const dto: CourseContentItemAdminDTO = {
             itemType: type === 'exam' ? 'exam' : 'video',
@@ -255,8 +258,8 @@ export const AdminCourseContentSubpage = () => {
             warnings: [],
             errors: [],
             versionCode: newVersionCode,
-            examVersionId: type === 'exam' ? newId : -1,
-            videoVersionId: type === 'exam' ? -1 : newId,
+            examVersionId: type === 'exam' ? itemVersionId : null,
+            videoVersionId: type === 'video' ? itemVersionId : null,
             moduleVersionId: moduleInfo.id,
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,

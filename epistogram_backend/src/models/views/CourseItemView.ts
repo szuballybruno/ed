@@ -1,5 +1,6 @@
 import { ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { VersionCode } from '../../shared/types/versionCode';
 
 @ViewEntity({
     synchronize: false,
@@ -23,5 +24,5 @@ export class CourseItemView {
     examId: number | null;
 
     @XViewColumn()
-    versionCode: string;
+    versionCode: VersionCode;
 }

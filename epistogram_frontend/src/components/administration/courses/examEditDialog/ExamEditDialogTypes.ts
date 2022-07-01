@@ -1,7 +1,8 @@
+import { VersionCode } from '../../../../shared/types/versionCode';
 import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 
 export type ExamEditDialogParams = {
-    versionCode: string;
+    versionCode: VersionCode;
     examVersionId: number;
     examTitle: string;
     courseTitle: string;

@@ -1,4 +1,5 @@
 import { CourseItemType } from '../../types/sharedTypes';
+import { VersionCode } from '../../types/versionCode';
 import { Mutation } from '../mutations/Mutation';
 import { QuestionEditDataDTO } from '../QuestionEditDataDTO';
 import { CourseContentItemIssueDTO } from './CourseContentItemIssueDTO';
@@ -8,12 +9,12 @@ export class CourseContentItemAdminDTO {
 	moduleName: string;
 	moduleOrderIndex: number;
 	moduleVersionId: number;
-	videoVersionId: number;
-	examVersionId: number;
+	videoVersionId: number | null;
+	examVersionId: number | null;
 	itemOrderIndex: number;
 	itemTitle: string;
 	itemSubtitle: string;
-	versionCode: string;
+	versionCode: VersionCode;
 	errors: CourseContentItemIssueDTO[];
 	warnings: CourseContentItemIssueDTO[];
 	videoLength: number;

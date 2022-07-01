@@ -5,6 +5,7 @@ import { ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
+import { VersionCode } from '../../../../shared/types/versionCode';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
@@ -39,8 +40,8 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 export const useGridColumnDefinitions = (
     modules: CourseModuleShortDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
-    removeRow: (key: string) => void,
-    mutateRow: MutateFnType<CourseContentItemAdminDTO, string>) => {
+    removeRow: (key: VersionCode) => void,
+    mutateRow: MutateFnType<CourseContentItemAdminDTO, VersionCode>) => {
 
     const TextCellRenderer = (props: {
         children: ReactNode,
@@ -59,14 +60,14 @@ export const useGridColumnDefinitions = (
     };
 
     const SelectEditCellRenderer = (props: {
-        rowKey: string,
+        rowKey: VersionCode,
         field: any,
         row: Partial<RowSchema>
     }) => {
 
         const { field, rowKey, row } = props;
 
-        const setAndCommitCellValue = useSetAndCommitCellValue<RowSchema, string, 'module'>();
+        const setAndCommitCellValue = useSetAndCommitCellValue<RowSchema, VersionCode, 'module'>();
 
         const [id, setId] = useState<string>(row.module!.id + '');
 
@@ -94,7 +95,7 @@ export const useGridColumnDefinitions = (
 
     const columnDefGen = <TField extends keyof RowSchema,>(
         field: TField,
-        columnOptions: OmitProperty<GridColumnType<RowSchema, string, TField>, 'field'>) => {
+        columnOptions: OmitProperty<GridColumnType<RowSchema, VersionCode, TField>, 'field'>) => {
 
         return {
             field,
@@ -102,7 +103,7 @@ export const useGridColumnDefinitions = (
         };
     };
 
-    const gridColumns: GridColumnType<RowSchema, string, any>[] = [
+    const gridColumns: GridColumnType<RowSchema, VersionCode, any>[] = [
         columnDefGen('rowNumber', {
             headerName: 'Sorszam',
             width: 80

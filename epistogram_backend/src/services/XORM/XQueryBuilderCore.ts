@@ -112,7 +112,8 @@ VALUES
 ${valuesQuery}
 RETURNING id`;
 
-        log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+        if (this._loggingEnabled)
+            log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
 
         const result = await this._sqlConnectionService
             .executeSQLAsync(query, values);
@@ -131,7 +132,7 @@ RETURNING id`;
             return;
 
         const first = entities[0];
-        
+
         const { insertFields, insertColumns } = this._getInsertColumns(entities);
         const insertFieldsWithId = ['id', ...insertFields];
         const insertColumnsWithId = ['id', ...insertColumns];
@@ -162,7 +163,8 @@ FROM (
 WHERE ${tableName}.id = value_table.id::int;
 `;
 
-        log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+        if (this._loggingEnabled)
+            log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
 
         const res = await this._sqlConnectionService
             .executeSQLAsync(query, values);

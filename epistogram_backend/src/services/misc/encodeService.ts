@@ -22,15 +22,3 @@ export const readItemCode = (encoded: string) => {
         itemType: type
     };
 };
-
-export const readVersionCode = (versionCode: string): { versionType: CourseItemSimpleType, versionId: number } => {
-
-    const [itemType, versionId] = versionCode.split('@');
-
-    return {
-        versionType: itemType === 'video_version'
-            ? 'video'
-            : 'exam',
-        versionId: parseInt(versionId)
-    };
-}

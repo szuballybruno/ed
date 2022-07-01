@@ -50,6 +50,8 @@
             "error",
             "single"
         ],
+        "no-extra-semi": "off",
+        "@typescript-eslint/no-extra-semi": "off",
         "semi": [
             "error",
             "always"

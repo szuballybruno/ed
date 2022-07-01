@@ -1,6 +1,7 @@
 import { ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseItemType } from '../../shared/types/sharedTypes';
+import { VersionCode } from '../../shared/types/versionCode';
 
 @ViewEntity({
     synchronize: false,
@@ -39,7 +40,7 @@ export class CourseAdminContentView {
     itemSubtitle: string;
 
     @XViewColumn()
-    versionCode: string;
+    versionCode: VersionCode;
 
     @XViewColumn()
     errors: string;

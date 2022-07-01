@@ -10,9 +10,9 @@ import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentIte
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
+import { VersionCode } from '../shared/types/versionCode';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
-import { readVersionCode } from './misc/encodeService';
 import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -102,7 +102,7 @@ export class CourseItemService {
             versionType: CourseItemSimpleType) => {
 
             return mutations
-                .filter(x => x.action !== 'delete' && readVersionCode(x.key).versionType === versionType)
+                .filter(x => x.action !== 'delete' && VersionCode.read(x.key).versionType === versionType)
         };
 
         await this
@@ -203,6 +203,9 @@ export class CourseItemService {
     private async _createNewVideosAsync(
         mutations: ItemMutationType[],
         moduleMigrations: VersionMigrationResult[]) {
+
+        if (mutations.length === 0)
+            return;
 
         // get old data
         const { getVersionDataPair, mutationVersionIdPairs } = await this._getVideoVersionDataPairs(mutations);
@@ -440,7 +443,7 @@ export class CourseItemService {
             };
 
         const oldVersionIds = updateMutations
-            .map(x => readVersionCode(x.key).versionId);
+            .map(x => VersionCode.read(x.key).versionId);
 
         const oldVersions = await this._ormService
             .query(VideoVersion, { oldVersionIds })
@@ -485,7 +488,7 @@ export class CourseItemService {
             };
 
         const oldVersionIds = updateMutations
-            .map(x => readVersionCode(x.key).versionId);
+            .map(x => VersionCode.read(x.key).versionId);
 
         const oldVersions = await this._ormService
             .query(ExamVersion, { oldVersionIds })
@@ -517,7 +520,7 @@ export class CourseItemService {
      */
     private _getVersionIdFromMutation(mut: ItemMutationType) {
 
-        return readVersionCode(mut.key);
+        return VersionCode.read(mut.key);
     }
 
     /**

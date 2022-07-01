@@ -2,6 +2,7 @@ import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseC
 import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
+import { VersionCode } from '../../../../shared/types/versionCode';
 import { formatTime } from '../../../../static/frontendHelpers';
 import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 
@@ -13,7 +14,7 @@ export type RowSchemaModule = {
 };
 
 export type RowSchema = {
-    rowKey: string;
+    rowKey: VersionCode;
     rowNumber: number;
     itemOrderIndex: string;
     itemTitle: string;
@@ -94,8 +95,8 @@ export const mapToRowSchema = (
     item: CourseContentItemAdminDTO,
     rowNumber: number,
     modules: CourseModuleShortDTO[],
-    getItemKey: (item: CourseContentItemAdminDTO) => string,
-    isModified: (key: string, field: keyof CourseContentItemAdminDTO) => boolean): RowSchema => {
+    getItemKey: (item: CourseContentItemAdminDTO) => VersionCode,
+    isModified: (key: VersionCode, field: keyof CourseContentItemAdminDTO) => boolean): RowSchema => {
 
     const { color, label } = getItemTypeValues(item.itemType);
 
@@ -169,7 +170,7 @@ export const mapToRowSchema = (
                 ? 'var(--intenseRed)'
                 : 'var(--intenseGreen)'
         },
-        quickMenu: item.videoVersionId || item.examVersionId,
+        quickMenu: item.videoVersionId! || item.examVersionId!,
         videoFile: 'vf',
         changedProperties: {
             itemOrderIndex: isModified(key, 'itemOrderIndex'),
