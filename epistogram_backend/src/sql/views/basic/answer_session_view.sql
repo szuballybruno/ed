@@ -49,18 +49,18 @@ SELECT
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
-	CASE WHEN ase.is_practise
-		THEN 'practise'
-		ELSE CASE WHEN e.id = 0
+	CASE 
+		WHEN ase.is_practise
+			THEN 'practise'
+		WHEN e.id = 0
 			THEN 'signup'
-			ELSE CASE WHEN e.is_pretest
-				THEN 'pretest'
-				ELSE CASE WHEN ase.video_version_id IS NOT NULL
-					THEN 'video'
-					ELSE NULL
-				END
-			END
-		END
+		WHEN e.is_pretest
+			THEN 'pretest'
+		WHEN ase.video_version_id IS NOT NULL
+			THEN 'video'
+		WHEN ase.exam_version_id IS NOT NULL
+			THEN 'exam'
+		ELSE NULL
 	END answer_session_type
 FROM public.answer_session ase
 

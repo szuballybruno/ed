@@ -21,7 +21,7 @@ SELECT
     -- performance last month
     (
         SELECT
-            AVG(upv.performance_percentage)
+            ROUND(AVG(upv.performance_percentage), 0)
         FROM public.activity_session ase
     
         LEFT JOIN public.user_session_activity AS usa
