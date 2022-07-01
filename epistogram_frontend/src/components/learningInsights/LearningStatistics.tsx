@@ -5,7 +5,8 @@ import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 
 export const getProgressFromLagBehind = (lagBehindPercentage?: number | null) => {
-    if (!lagBehindPercentage)
+
+    if (lagBehindPercentage === null || lagBehindPercentage === undefined)
         return '-';
 
     if (lagBehindPercentage > 30)

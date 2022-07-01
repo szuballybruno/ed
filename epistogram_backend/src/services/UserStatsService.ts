@@ -79,7 +79,6 @@ export class UserStatsService {
 
         const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
 
-
         return this._mapperService
             .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage])
     }
