@@ -8,7 +8,9 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-export type SaveEntityType<TEntity> = { id: number } & Partial<TEntity>;
+export type EntityType = { id: number };
+
+export type SaveEntityType<TEntity> = EntityType & Partial<TEntity>;
 
 export type InsertTokenValuePair = {
     value: any;
@@ -18,6 +20,7 @@ export type InsertTokenValuePair = {
 export type EntityTokenValuePair = {
     tokenValuePairs: InsertTokenValuePair[];
 };
+
 
 export type OperationType = '=' | '!=' | '<' | '>' | 'IS NOT' | 'IS';
 export type SQLStaticValueType = 'NULL' | 'true' | 'false';
@@ -106,7 +109,7 @@ export type ExpressionPart<TEntity, TParams> =
     LeftJoinCondition<any> |
     CrossJoinCondition<TEntity> |
     InnerJoinCondition<any> |
-    ClosingBracketCondition | 
+    ClosingBracketCondition |
     OrderByExpression;
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
