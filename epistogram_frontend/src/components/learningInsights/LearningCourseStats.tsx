@@ -46,64 +46,7 @@ export const LearningCourseStats = () => {
         minWidth="100%"
         flex="1">
 
-        <AdminUserCourseContentDialog
-            userCourseStatsData={{
-                userProgressData: {
-                    startDate: new Date('2022. 04. 10.'),
-                    estimatedCompletionDate: new Date('2022. 05. 10.'),
-                    estimatedLengthInDays: 30,
-                    days: [
-                        {
-                            completionDate: new Date('2022. 05. 10.'),
-                            completedItemCount: 4,
-                            completedPercentage: 5,
-                            offsetDaysFromStart: 0,
-                            completedPercentageSum: 5
-                        },
-                        {
-                            completionDate: new Date('2022. 05. 12.'),
-                            completedItemCount: 4,
-                            completedPercentage: 8,
-                            offsetDaysFromStart: 0,
-                            completedPercentageSum: 13
-                        },
-                        {
-                            completionDate: new Date('2022. 05. 12.'),
-                            completedItemCount: 4,
-                            completedPercentage: 2,
-                            offsetDaysFromStart: 0,
-                            completedPercentageSum: 15
-                        },
-                        {
-                            completionDate: new Date('2022. 05. 12.'),
-                            completedItemCount: 4,
-                            completedPercentage: 2,
-                            offsetDaysFromStart: 0,
-                            completedPercentageSum: 17
-                        },
-                        {
-                            completionDate: new Date('2022. 05. 12.'),
-                            completedItemCount: 4,
-                            completedPercentage: 8,
-                            offsetDaysFromStart: 0,
-                            completedPercentageSum: 25
-                        },
-                        {
-                            completionDate: new Date('2022. 05. 12.'),
-                            completedItemCount: 4,
-                            completedPercentage: 8,
-                            offsetDaysFromStart: 0,
-                            completedPercentageSum: 33
-                        }
-                    ]
-                },
-                completedVideoCount: 48,
-                totalVideoPlaybackSeconds: 60 * 60 * 3.5,
-                totalGivenAnswerCount: 39,
-                totalCorrectAnswerRate: 74
-
-            }}
-            dialogLogic={dialogLogic} />
+        <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
 
         {/* in progress courses  */}
         <DashboardSection width="100%"

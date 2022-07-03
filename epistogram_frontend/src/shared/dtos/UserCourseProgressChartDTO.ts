@@ -1,8 +1,8 @@
-import { UserCourseProgressChartDayDTO } from './UserCourseProgressChartDayDTO';
+import { EpistoLineChartDataType } from '../types/epistoChartTypes';
 
 export class UserCourseProgressChartDTO {
-    startDate: Date;
-    estimatedCompletionDate: Date;
-    estimatedLengthInDays: number;
-    days: UserCourseProgressChartDayDTO[];
+    dates: string[];
+    originalPrevisionedProgress: EpistoLineChartDataType;
+    previsionedProgress: EpistoLineChartDataType;
+    actualProgress: EpistoLineChartDataType;
 }

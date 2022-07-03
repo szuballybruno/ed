@@ -1,8 +1,7 @@
 import { Flex, Grid } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useContext } from 'react';
-import { useRecommendedItemQuota, useUserProgressData } from '../../services/api/userProgressApiService';
-import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
+import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
@@ -20,12 +19,13 @@ export const HomePageCourseStats = (props: {
     const { activeCoursesPaging } = props;
     const courseId = activeCoursesPaging?.currentItem?.courseId ?? null;
     const { id } = useContext(CurrentUserContext);
-    const { userProgressData, userProgressDataError, userProgressDataState } = useUserProgressData(courseId ?? 0, !!courseId);
+
+    const { userProgressData, userProgressDataError, userProgressDataState } = useUserCourseProgressChartData(courseId ?? 0, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId!, !!currentCourse);
 
-    const estimatedCompletionDateString = userProgressData?.estimatedCompletionDate
-        ? new Date(userProgressData?.estimatedCompletionDate)
+    const estimatedCompletionDateString = recommendedItemQuota?.previsionedCompletionDate
+        ? new Date(recommendedItemQuota?.previsionedCompletionDate)
             .toLocaleDateString('hu-hu', {
                 month: '2-digit',
                 day: '2-digit'
@@ -124,7 +124,7 @@ export const HomePageCourseStats = (props: {
                     gridRow: 'auto / span 1'
                 }} >
 
-                {userProgressData && userProgressData.days.length > 0
+                {userProgressData && userProgressData.actualProgress.length > 0
                     ? <UserProgressChart userProgress={userProgressData} />
                     : <NoProgressChartYet />}
             </FlexFloat>

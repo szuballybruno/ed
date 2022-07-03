@@ -325,6 +325,7 @@ export type TranslationType = {
         courseDetails: {
             cannotStartCourseNotification: string;
             startCourse: string;
+            continueCourse: string;
             recommendedCoursesTitle: string;
 
             briefingInfoItems: {

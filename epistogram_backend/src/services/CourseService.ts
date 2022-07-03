@@ -155,12 +155,16 @@ export class CourseService {
             .getSingle();
 
         const moduleViews = await this._ormService
-            .query(CourseModuleOverviewView, { courseId })
-            .where('courseId', '=', 'courseId')
+            .query(CourseItemPlaylistView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
             .getMany();
 
+        const playlistModuleDTOs = this._mapperService
+            .mapTo(PlaylistModuleDTO, [moduleViews])
+
         return this._mapperService
-            .map(CourseDetailsView, CourseDetailsDTO, courseDetailsView, moduleViews);
+            .map(CourseDetailsView, CourseDetailsDTO, courseDetailsView, playlistModuleDTOs);
     }
 
     /**
@@ -344,12 +348,21 @@ export class CourseService {
      */
     async getCourseIdOrFailAsync(playlistItemCode: string) {
 
-        const view = await this._ormService
+        const viewIfPlaylistItemCode = await this._ormService
             .query(CourseItemPlaylistView, { playlistItemCode })
             .where('playlistItemCode', '=', 'playlistItemCode')
-            .getSingle();
+            .getOneOrNull();
 
-        return view.courseId;
+        if (viewIfPlaylistItemCode)
+            return viewIfPlaylistItemCode.courseId
+
+        const viewIfModuleCode = await this._ormService
+            .query(CourseItemPlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
+            .where('moduleCode', '=', 'moduleCode')
+            .and('itemOrderIndex', '=', 'itemOrderIndex')
+            .getSingle()
+
+        return viewIfModuleCode.courseId;
     }
 
     /**

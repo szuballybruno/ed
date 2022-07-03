@@ -5,8 +5,9 @@ import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCour
 import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';
 import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
+import { EpistoLineChartDataType } from '../shared/types/epistoChartTypes';
 import { PrincipalId } from '../utilities/ActionParams';
-import { dateDiffInDays } from '../utilities/helpers';
+import { dateDiffInDays, forN } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -87,6 +88,7 @@ export class UserProgressService extends ServiceBase {
 
         return {
             isDeadlineSet: !!tempomatCalculationData.requiredCompletionDate,
+            previsionedCompletionDate: previsionedCompletionDate ?? 0,
             recommendedItemsPerDay: recommendedItemsPerDay ?? 0,
             recommendedItemsPerWeek: recommendedItemsPerDay ? recommendedItemsPerDay * 7 : 0,
             completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
@@ -114,14 +116,89 @@ export class UserProgressService extends ServiceBase {
                 tempomatCalculationData.tempomatAdjustmentValue
             )
 
+        const estimatedLengthInDays = previsionedCompletionDate
+            ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate)
+            : null;
+
+        const originalEstimatedLengthInDays = previsionedCompletionDate
+            ? dateDiffInDays(tempomatCalculationData.startDate, tempomatCalculationData.originalPrevisionedCompletionDate)
+            : null;
+
         const dailyViews = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();
 
+        const estimatedLengthInDaysOrNull = estimatedLengthInDays
+            ? estimatedLengthInDays + 1
+            : null;
+
+        const originalEstimatedLengthInDaysOrNull = originalEstimatedLengthInDays
+            ? originalEstimatedLengthInDays + 1
+            : null;
+
+        if (!estimatedLengthInDaysOrNull)
+            throw new Error('Couldn\'t estimate course length')
+
+        if (!originalEstimatedLengthInDaysOrNull)
+            throw new Error('Couldn\'t estimate course length')
+
+        const estimatedDates = forN(estimatedLengthInDaysOrNull, index => {
+
+            const date = new Date(tempomatCalculationData.startDate)
+                .addDays(index);
+
+            return date.toLocaleDateString(undefined, {
+                month: '2-digit',
+                day: '2-digit'
+            });
+        });
+
+        const originalEstimatedDates = forN(originalEstimatedLengthInDaysOrNull, index => {
+
+            const date = new Date(tempomatCalculationData.startDate)
+                .addDays(index);
+
+            return date.toLocaleDateString(undefined, {
+                month: '2-digit',
+                day: '2-digit'
+            });
+        });
+
+        const datesUntilToday = forN(dateDiffInDays(new Date(tempomatCalculationData.startDate), new Date(Date.now())), index => index);
+
+        const previsionedProgress = estimatedDates
+            .map((_, index) => (100 / estimatedDates.length) * (index + 1)) as EpistoLineChartDataType;
+
+        const originalPrevisionedProgress = originalEstimatedDates
+            .map((_, index) => (100 / originalEstimatedDates.length) * (index + 1)) as EpistoLineChartDataType;
+
+        let latestCompletionDatePercentage = 0;
+
+        const actualProgress = datesUntilToday.map((_, index) => {
+
+            const up = dailyViews.find(x => x.offsetDaysFromStart === index + 1)?.completedPercentage || 0;
+
+            if (latestCompletionDatePercentage <= up) {
+
+                latestCompletionDatePercentage += up;
+                return up;
+            } else {
+                return latestCompletionDatePercentage;
+            }
+        });
+
+        const interval = Math.floor(estimatedDates.length / 7);
+
         const dto = {
-            estimatedCompletionDate: previsionedCompletionDate,
+            dates: estimatedDates,
+            originalPrevisionedProgress: originalPrevisionedProgress,
+            previsionedProgress: previsionedProgress,
+            actualProgress: actualProgress
+        } as UserCourseProgressChartDTO;
+
+        /*  estimatedCompletionDate: previsionedCompletionDate,
             estimatedLengthInDays: previsionedCompletionDate ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate) : null,
             startDate: tempomatCalculationData.startDate,
             days: dailyViews
@@ -139,8 +216,7 @@ export class UserProgressService extends ServiceBase {
                         offsetDaysFromStart: x.offsetDaysFromStart,
                         completedPercentageSum
                     };
-                })
-        } as UserCourseProgressChartDTO;
+                }) */
 
         return dto;
     }

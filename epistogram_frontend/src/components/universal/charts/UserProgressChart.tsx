@@ -1,7 +1,5 @@
 import { UserCourseProgressChartDTO } from '../../../shared/dtos/UserCourseProgressChartDTO';
-import { iterate } from '../../../static/frontendHelpers';
 import { EpistoLineChart } from './base_charts/EpistoLineChart';
-import { EpistoLineChartDataType } from './types/EpistoLineChartTypes';
 
 export const UserProgressChart = (props: {
     userProgress: UserCourseProgressChartDTO
@@ -9,24 +7,7 @@ export const UserProgressChart = (props: {
 
     const { userProgress } = props;
 
-    const courseLengthDays = userProgress.estimatedLengthInDays + 1;
-
-    const dates = iterate(courseLengthDays, index => {
-
-        const date = new Date(userProgress.startDate)
-            .addDays(index);
-
-        return date.toLocaleDateString(undefined, {
-            month: '2-digit',
-            day: '2-digit'
-        });
-    });
-
-    const actualProgress = userProgress
-        .days
-        .map(x => x.completedPercentageSum);
-
-    const interval = Math.floor(dates.length / 7);
+    const interval = Math.floor(userProgress.previsionedProgress.length / 7);
 
     const userProgressChartOptions = {
         legend: {
@@ -85,17 +66,23 @@ export const UserProgressChart = (props: {
     return <EpistoLineChart
         title=''
         options={userProgressChartOptions}
-        xAxisData={dates}
+        xAxisData={userProgress.dates}
         xAxisLabel="Dátum"
         yAxisLabel="Haladás"
         yAxisLabelSuffix='%'
         dataset={[
             {
+                name: 'Eredetileg becsült haladás',
+                data: userProgress.originalPrevisionedProgress
+            },
+            {
+
                 name: 'Becsült haladás',
-                data: dates.map((_, index) => (100 / dates.length) * (index + 1)) as EpistoLineChartDataType
-            }, {
+                data: userProgress.previsionedProgress
+            },
+            {
                 name: 'Valós haladás',
-                data: actualProgress
+                data: userProgress.actualProgress
             }
         ]}
         style={{

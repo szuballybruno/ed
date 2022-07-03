@@ -1,19 +1,21 @@
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { Tab, Tabs } from '@mui/material';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCourseDetails } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import { formatTimespan } from '../../static/frontendHelpers';
+import { formatTimespan, useImageColor, useReactQuery2 } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { FlexListItem } from '../universal/FlexListItem';
 import { CourseDetailsBriefingInfoItem } from './CourseDetailsBriefingInfoItem';
 import { CourseDetailsContentSection } from './CourseDetailsContentSection';
@@ -25,11 +27,33 @@ import { TabPanel } from './TabPanel';
 const CourseDetailsPage = () => {
 
     const courseId = useIntParam('courseId')!;
-    const [currentTab, setCurrentTab] = useState(0);
     const { playCourse } = useNavigation();
     const showError = useShowErrorDialog();
 
     const { courseDetails } = useCourseDetails(courseId);
+    const { colors } = useImageColor(courseDetails?.thumbnailURL!);
+
+    const [currentTab, setCurrentTab] = useState(0);
+    const [color, setColor] = useState<string>('white');
+
+    const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
+
+    useEffect(() => {
+        if (colors) {
+            setColor(`rgba(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]}, 0.4)`);
+        }
+    }, [colors]);
+
+    useEffect(() => {
+
+        if (courseDetails?.currentItemCode) {
+            setCurrentTab(2);
+        }
+
+        if (!courseDetails?.currentItemCode) {
+            setCurrentTab(0);
+        }
+    }, [courseDetails]);
 
     const handlePlayCourse = async () => {
 
@@ -100,9 +124,14 @@ const CourseDetailsPage = () => {
         ]
         : [];
 
-    return <PageRootContainer>
+    return <PageRootContainer
+        noBackground
+        background={`linear-gradient(160deg, ${color}, white)`}>
+
+        <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
 
         <ContentPane
+            noMaxWidth
             direction="column"
             overflowY="scroll"
             p="0 100px 0 100px">
@@ -134,7 +163,8 @@ const CourseDetailsPage = () => {
                         <CourseDetailsBriefingInfoItem
                             icon={Environment.getAssetUrl('/course_page_icons/about_category.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.category}
-                            subTitle={courseDetails?.subCategoryName} />
+                            subTitle={courseDetails?.subCategoryName}
+                            mr='10px' />
 
                         {courseDetails && <CourseDetailsBriefingInfoItem
                             icon={<ProfileImage
@@ -143,12 +173,14 @@ const CourseDetailsPage = () => {
                                 firstName={courseDetails!.teacherData.teacherFirstName}
                                 lastName={courseDetails!.teacherData.teacherLastName} />}
                             title={translatableTexts!.courseDetails.briefingInfoItems.teacher}
-                            subTitle={courseDetails!.teacherData.teacherFullName} />}
+                            subTitle={courseDetails!.teacherData.teacherFullName}
+                            mr='10px' />}
 
                         <CourseDetailsBriefingInfoItem
                             icon={Environment.getAssetUrl('/course_page_icons/about_difficulty.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
-                            subTitle={courseDetails?.difficulty + ' / 10 pont'} />
+                            subTitle={courseDetails?.difficulty + ' / 10 pont'}
+                            mr='10px' />
 
                         <CourseDetailsBriefingInfoItem
                             icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
@@ -305,37 +337,64 @@ const CourseDetailsPage = () => {
                                     )} />
                             ))}
 
-                        {/* start coures */}
-                        <EpistoButton
-                            style={{
-                                flex: '1',
-                                color: 'var(--epistoTeal)',
-                                maxHeight: 40,
-                                marginTop: 15,
-                                marginBottom: 15,
-                                display: courseDetails?.canStartCourse ? undefined : 'none'
-                            }}
-                            variant="outlined"
-                            onClick={handlePlayCourse}
-                            icon={(
-                                <img
-                                    src={Environment.getAssetUrl('/icons/play2.svg')}
-                                    alt=""
-                                    style={{
-                                        width: '25px',
-                                        height: '25px',
-                                        marginRight: '5px'
-                                    }} />
-                            )}>
-                            {translatableTexts.courseDetails.startCourse}
-                        </EpistoButton>
+                        <Flex>
+                            {/* start coures */}
+                            <EpistoButton
+                                style={{
+                                    flex: '1',
+                                    color: 'var(--epistoTeal)',
+                                    maxHeight: 40,
+                                    marginTop: 15,
+                                    marginBottom: 15,
+                                    display: courseDetails?.canStartCourse ? undefined : 'none'
+                                }}
+                                variant="outlined"
+                                onClick={handlePlayCourse}
+                                icon={(
+                                    <img
+                                        src={Environment.getAssetUrl('/icons/play2.svg')}
+                                        alt=""
+                                        style={{
+                                            width: '25px',
+                                            height: '25px',
+                                            marginRight: '5px'
+                                        }} />
+                                )}>
+                                {courseDetails?.currentItemCode
+                                    ? translatableTexts.courseDetails.continueCourse
+                                    : translatableTexts.courseDetails.startCourse}
+                            </EpistoButton>
+
+                            {courseDetails?.currentItemCode && <EpistoButton
+                                style={{
+                                    maxHeight: 40,
+                                    marginTop: 15,
+                                    marginBottom: 15,
+                                    marginLeft: 10,
+                                    display: courseDetails?.canStartCourse ? undefined : 'none'
+                                }}
+                                variant="outlined"
+                                onClick={() => {
+                                    dialogLogic.openDialog({
+                                        params: {
+                                            courseId: courseDetails?.courseId
+                                                ? courseDetails.courseId
+                                                : null
+                                        }
+                                    });
+                                }}>
+
+                                {translatableTexts.learningOverview.myStatisticsTitle}
+                            </EpistoButton>}
+                        </Flex>
+
 
                     </Flex>
 
                 </Flex>
             </Flex>
 
-            {/* side tit */}
+            {/* side tit 
             <Flex
                 _before={{
                     position: 'absolute',
@@ -354,7 +413,7 @@ const CourseDetailsPage = () => {
                 height={300}
                 bg={'#eff9ff'}
                 zIndex={-1}
-                backgroundClip={'padding-box'} />
+                backgroundClip={'padding-box'} />*/}
 
         </ContentPane>
     </PageRootContainer>;

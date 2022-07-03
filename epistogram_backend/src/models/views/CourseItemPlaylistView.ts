@@ -63,7 +63,7 @@ export class CourseItemPlaylistView {
     @ViewColumn()
     @XViewColumn()
     playlistItemCode: string;
-    
+
     @ViewColumn()
     @XViewColumn()
     moduleIsCurrent: boolean;

@@ -1,6 +1,7 @@
 import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
 import { ModuleShortDTO } from './ModuleShortDTO';
 import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from '../types/sharedTypes';
+import { PlaylistModuleDTO } from './PlaylistModuleDTO';
 
 export class CourseDetailsDTO {
     title: string;
@@ -42,5 +43,5 @@ export class CourseDetailsDTO {
     totalModuleCount: number;
     totalVideoQuestionCount: number;
 
-    modules: ModuleShortDTO[];
+    modules: PlaylistModuleDTO[];
 }

@@ -342,6 +342,7 @@ export const huTranslation: TranslationType = {
         courseDetails: {
             cannotStartCourseNotification: 'A kurzus jelenleg nem indítható, ez annak lehet a jele, hogy folyamatban van a feltöltése, kérjük próbáld meg később!',
             startCourse: 'Elkezdem a kurzust',
+            continueCourse: 'Folytatom a kurzust',
             recommendedCoursesTitle: 'Ezek a kurzusok is érdekelhetnek',
 
             briefingInfoItems: {

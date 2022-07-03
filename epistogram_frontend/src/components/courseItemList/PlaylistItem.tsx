@@ -40,18 +40,22 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
 
                 {state === 'current' &&
                     <PlaylistItemTypeIcon
+                        title='Kiválasztott'
                         color='var(--deepGreen)' />}
 
                 {state === 'locked' &&
                     <PlaylistItemTypeIcon
-                        color='grey' />}
+                        title='Zárolva'
+                        color='var(--mildRed)' />}
 
                 {state === 'available' &&
                     <PlaylistItemTypeIcon
-                        color='var(--epistoTeal)' />}
+                        title='Felolva'
+                        color='lightgrey' />}
 
                 {state === 'completed' &&
                     <PlaylistItemTypeIcon
+                        title='Elvégezve'
                         color='var(--mildGreen)' />}
 
                 <FlexListTitleSubtitle

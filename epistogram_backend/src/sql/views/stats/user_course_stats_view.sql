@@ -1,14 +1,11 @@
 -- user course progress view
 
-SELECT
-    sq.*,
-
-    -- performance difference from all users average
-    sq.performance_percentage - sq.average_performance_on_course difference_from_average_performance_percentage
-FROM (
+WITH user_course_stats AS
+(
     SELECT
         co.id course_id,
         cd.title,
+		u.id user_id,
 
         -- cover file path
         (
@@ -24,11 +21,9 @@ FROM (
                 ucb.start_date
             FROM public.user_course_bridge ucb
             WHERE ucb.user_id = clsv.user_id
-            AND ucb.course_id = c.id
+            AND ucb.course_id = co.id
         ) start_date,
-
-        clsv.user_id user_id,
-        
+	
         -- course progress percentage
         NULLIF(clsv.completed_course_item_count, 0) /
         NULLIF(clsv.total_course_item_count, 0)::double precision * 100 course_progress_percentage,
@@ -38,9 +33,8 @@ FROM (
             SELECT
                 performance_percentage
             FROM public.user_performance_view upv
-            WHERE
-                upv.user_id = clsv.user_id
-                AND upv.course_id = co.id
+            WHERE upv.user_id = u.id
+            AND upv.course_id = co.id
         ) performance_percentage,
         
         -- completed video count
@@ -85,6 +79,7 @@ FROM (
                 AVG(performance_percentage)
             FROM public.user_performance_view upv
             WHERE upv.course_id = co.id
+			AND upv.performance_percentage != 0
         ) average_performance_on_course,
         
         -- answered video questions count
@@ -195,6 +190,8 @@ FROM (
     
     FROM public.course co
 	
+	CROSS JOIN public.user u
+	
 	LEFT JOIN public.course_version cv
 	ON cv.course_id = co.id
 	
@@ -203,8 +200,18 @@ FROM (
     
     LEFT JOIN public.course_learning_stats_view clsv
     ON clsv.course_id = co.id
+	AND clsv.user_id = u.id
 
     LEFT JOIN public.tempomat_calculation_data_view tcdv
     ON tcdv.user_id = clsv.user_id
     AND tcdv.course_id = co.id
-) sq
+)
+
+SELECT
+    ucs.*,
+
+    -- performance difference from all users average
+    ucs.performance_percentage - ucs.average_performance_on_course difference_from_average_performance_percentage
+FROM  user_course_stats ucs
+
+ORDER BY ucs.user_id

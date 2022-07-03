@@ -14,17 +14,10 @@ import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGr
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
 
 export const AdminUserCourseContentDialog = (props: {
-    userCourseStatsData: {
-        userProgressData: UserCourseProgressChartDTO,
-        completedVideoCount: number,
-        totalVideoPlaybackSeconds: number,
-        totalGivenAnswerCount: number,
-        totalCorrectAnswerRate: number
-    },
     dialogLogic: EpistoDialogLogicType<{ courseId: number | null }>
 }) => {
 
-    const { userCourseStatsData: userStats, dialogLogic } = props;
+    const { dialogLogic } = props;
 
     const [currentTab, setCurrentTab] = useState(0);
 
@@ -40,8 +33,7 @@ export const AdminUserCourseContentDialog = (props: {
     const moreInfoDialogTabs = [
         {
             title: 'Áttekintés',
-            component: <AdminUserCourseStatsOverview
-                userStats={userStats} />
+            component: <AdminUserCourseStatsOverview />
         },
         {
             title: 'Videók',

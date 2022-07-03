@@ -167,3 +167,13 @@ export const QuestionTypeEnum = {
 export type TeacherBadgeNameType = 'badge1' | 'badge2' | 'badge3';
 
 export type PasswordValidationIssueType = 'tooShort' | 'tooLong' | 'hasNoNumber' | 'doesNotMatchControlPassword' | 'passwordIsEmpty' | 'controlPasswordIsEmpty';
+
+export type ImageColorSettingsType = {
+    colors?: number,
+    cors?: boolean,
+    windowSize?: number,
+    format?: {
+        rgb?: 'rgb',
+        hex?: 'hex'
+    }
+}

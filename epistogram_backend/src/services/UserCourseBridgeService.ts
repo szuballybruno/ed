@@ -226,7 +226,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .query(UserCourseBridge, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
-            .getOneOrNull();
+            .getSingle();
 
         return userCourseBridge;
     };
@@ -234,6 +234,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     getUserCourseBridgeOrFailAsync = async (userId: number, courseId: number) => {
 
         const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+
         if (!userCourseBridge)
             throw new Error('User course bridge not found, maybe the course is not yet started!');
 

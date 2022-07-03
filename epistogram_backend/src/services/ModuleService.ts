@@ -48,19 +48,29 @@ export class ModuleService {
 
         console.log('moduleId: ' + moduleId)
 
-        const module = await this._ormService
+        const moduleData = await this._ormService
             .withResType<ModuleData>()
             .query(ModuleView, { moduleId })
             .select(ModuleData)
             .leftJoin(ModuleData, x => x
                 .on('id', '=', 'moduleDataId', ModuleView))
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'imageFileId', ModuleData))
             .where('moduleId', '=', 'moduleId')
             .getOneOrNull();
 
+        if (!moduleData)
+            throw new Error('Module not found')
+
+        const moduleImage = await this._ormService
+            .withResType<StorageFile>()
+            .query(ModuleData, { moduleDataId: moduleData.id })
+            .select(StorageFile)
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'imageFileId', ModuleData))
+            .where('id', '=', 'moduleDataId')
+            .getOneOrNull();
+
         return this._mapperService
-            .map(ModuleData, ModuleDetailedDTO, module);
+            .mapTo(ModuleDetailedDTO, [moduleData, moduleImage?.filePath]);
     };
 
     deleteModulesAsync = async (moduleIds: number[]) => {

@@ -4,7 +4,7 @@ import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgress
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
-export const useUserProgressData = (courseId: number, enabled: boolean) => {
+export const useUserCourseProgressChartData = (courseId: number, enabled: boolean) => {
 
     const qr = useReactQuery2<UserCourseProgressChartDTO>(apiRoutes.userProgress.getUserProgressData, { courseId }, enabled);
 

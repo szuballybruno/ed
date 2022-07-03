@@ -130,9 +130,6 @@ const marray = [
         .addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
 
     epistoMappingsBuilder
-        .addMapping(UserCourseStatsDTO, () => () => ({} as UserCourseStatsDTO)),
-
-    epistoMappingsBuilder
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (
             playerData: VideoPlayerDataView,
             videoQuestions: QuestionDataView[],
@@ -447,7 +444,18 @@ const marray = [
             lagBehindPercentage: lagBehindPercentage,
             performanceLastMonth: view.performanceLastMonth
         })
+    }),
+    epistoMappingsBuilder.addMapping(ModuleDetailedDTO, ([urlService]) => (moduleData: ModuleData, moduleImageFilePath?: string) => {
+        return instantiate<ModuleDetailedDTO>({
+            id: moduleData.id,
+            name: moduleData.name,
+            description: moduleData.description,
+            imageFilePath: moduleImageFilePath
+                ? urlService.getAssetUrl(moduleImageFilePath)
+                : null
+        })
     })
+
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;
@@ -513,16 +521,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
             id: view.moduleId,
             name: view.moduleName,
             canDelete: view.itemCount === 0
-        }));
-
-    mapperService
-        .addMap(ModuleData, ModuleDetailedDTO, courseModule => ({
-            id: courseModule.id,
-            name: courseModule.name,
-            description: courseModule.description,
-            imageFilePath: courseModule.imageFile
-                ? getAssetUrl(courseModule.imageFile.filePath)
-                : null
         }));
 
     mapperService
@@ -649,26 +647,11 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
     mapperService
         .addMap(CourseDetailsView, CourseDetailsDTO, (detailsView, params) => {
 
-            const moduleViews = params as CourseModuleOverviewView[];
+            const modules = params as PlaylistModuleDTO[];
 
             const thumbnailImageURL = detailsView.coverFilePath
                 ? getAssetUrl(detailsView.coverFilePath)
                 : getAssetUrl('/images/defaultCourseCover.jpg');
-
-            const modules = moduleViews
-                .groupBy(x => x.moduleId)
-                .map(group => ({
-                    name: group
-                        .items
-                        .first()
-                        .moduleName,
-                    videos: group
-                        .items
-                        .map(x => ({
-                            title: x.videoTitle,
-                            length: x.videoLengthSeconds
-                        }))
-                }) as ModuleShortDTO);
 
             return {
                 title: detailsView.title,

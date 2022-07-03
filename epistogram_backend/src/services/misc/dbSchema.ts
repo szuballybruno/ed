@@ -340,7 +340,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['stats', 'home_page_stats_view', HomePageStatsView],
             ['stats', 'user_engagement_view', UserEngagementView],
             ['stats', 'user_learning_overview_stats_view', UserLearningOverviewStatsView],
-            //['stats', 'user_course_stats_view', UserCourseStatsView],
+            ['stats', 'user_course_stats_view', UserCourseStatsView],
             ['stats', 'user_video_stats_view', UserVideoStatsView],
             ['stats', 'user_exam_stats_view', UserExamStatsView],
             ['stats', 'user_spent_time_ratio_view', UserSpentTimeRatioView],

@@ -108,7 +108,7 @@ export const QuesitionView = (props: {
             align="center">
 
             <EpistoFont>
-                +1 EpistoCoin megszerezve!
+                +1 EpistoCoinnal gazdagodtál!
             </EpistoFont>
 
             <img

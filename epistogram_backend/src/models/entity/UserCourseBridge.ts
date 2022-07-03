@@ -16,6 +16,7 @@ export class UserCourseBridge {
     creationDate: Date;
 
     @Column({ type: 'timestamptz', nullable: true })
+    @XViewColumn()
     startDate: Date | null;
 
     @Column({ type: 'text', default: 'beginner' })

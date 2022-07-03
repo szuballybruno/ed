@@ -99,7 +99,7 @@ export class PlayerService extends ServiceBase {
         const userCourseBridge = await this._userCourseBridgeService
             .getUserCourseBridgeOrFailAsync(userId, courseId);
 
-        if (!userCourseBridge.startDate)
+        if (!userCourseBridge)
             await this._userCourseBridgeService
                 .setCourseStartDateAsync(principalId, courseId)
 

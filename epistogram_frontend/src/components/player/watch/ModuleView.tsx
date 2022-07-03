@@ -27,23 +27,28 @@ export const ModuleView = (params: {
             align="center"
             justify="center">
 
-            <Flex direction="row"
+            <Flex
+                p='20px'
+                direction="row"
                 align="center">
 
-                {module?.imageFilePath && <Flex>
-                    <img
-                        className="roundBorders"
-                        src={module?.imageFilePath ?? ''}
-                        style={{
-                            width: '100px',
-                            height: '100px',
-                            objectFit: 'cover',
-                            margin: 10
-                        }} />
-                </Flex>}
+                {module?.imageFilePath
+                    && <Flex
+                        justify='flex-end'>
+
+                        <img
+                            className="roundBorders"
+                            src={module?.imageFilePath ?? ''}
+                            style={{
+                                width: '200px',
+                                objectFit: 'cover',
+                                margin: 10
+                            }} />
+                    </Flex>}
 
                 <Flex
-                    maxW="300px"
+                    flex='2'
+                    p='20px'
                     direction="column"
                     justify="center">
 

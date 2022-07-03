@@ -12,6 +12,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
+import { DashboardSection } from '../universal/DashboardSection';
 import { SelectImage } from '../universal/SelectImage';
 
 export const Preferences = () => {
@@ -105,128 +106,148 @@ export const Preferences = () => {
         justify="flex-start"
         flex="1"
         align="center"
-        width="100%"
         loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}>
 
-        {/* profile image selector */}
-        <Flex
-            justify="center"
-            width="100%"
-            maxW="500px">
+        <DashboardSection
+            flex='1'
+            title='Beállítások'
+            background="var(--transparentWhite70)"
+            borderRadius="6px"
+            showDivider
+            width='100%'
+            className="largeSoftShadow"
+            marginBottom="10px">
 
-            <SelectImage
-                className='circle'
-                mx="20px"
-                width="100px"
-                height="100px"
-                setImageSource={setAvatarSrc}
-                setImageFile={setAvatarFile}>
-
-                <ProfileImage
-                    flex="1"
-                    url={avatarSrc ?? null}
-                    ref={imageRef}
-                    className="whall" />
-            </SelectImage>
-        </Flex>
-
-        {/* inputs container */}
-        <Flex
-            direction="column"
-            justify="flex-start"
-            flex="1"
-width="100%"
-            maxW="500px">
-
-            <EpistoEntry
-                label={translatableTexts.preferences.lastName}
-                value={lastName}
-                labelVariant='top'
-                setValue={setLastName} />
-
-            <EpistoEntry
-                label={translatableTexts.preferences.firstName}
-                value={firstName}
-                labelVariant='top'
-                setValue={setFirstName} />
-
-            <EpistoEntry
-                label={translatableTexts.preferences.phoneNumber}
-                value={phoneNumber}
-                labelVariant='top'
-                setValue={setPhoneNumber} />
-
-            {/* open password change options */}
-            {!isPasswordChangeOpen && <EpistoFont
-                isUppercase
-                fontSize="fontExtraSmall"
-                style={{
-                    margin: '10px 0 5px 0',
-                }}>
-
-                {translatableTexts.preferences.changePassword}
-            </EpistoFont>}
-
-            {/* password change options */}
             <Flex
-                direction="column"
-                justify="flex-start"
-                align="center"
-                width="100%">
+                direction='column'
+                ml='10px'
+                maxW='500px'>
 
-                {!isPasswordChangeOpen && <EpistoButton
-                    style={{
-                        background: 'var(--transparentWhite70)',
-                        color: 'black',
-                        width: '100%'
-                    }}
-                    onClick={() => setIsPasswordChangeOpen(true)}
-                    variant="colored">
-
-                    {translatableTexts.preferences.changePassword}
-                </EpistoButton>}
-
-                {isPasswordChangeOpen && <Flex
+                {/* profile image selector */}
+                <Flex
+                    justify="flex-start"
+                    mt='20px'
+                    pl='5px'
                     width="100%"
+                    maxW="500px">
+
+                    <SelectImage
+                        className='circle'
+                        width="100px"
+                        height="100px"
+                        setImageSource={setAvatarSrc}
+                        setImageFile={setAvatarFile}>
+
+                        <ProfileImage
+                            flex="1"
+                            url={avatarSrc ?? null}
+                            ref={imageRef}
+                            className="whall" />
+                    </SelectImage>
+                </Flex>
+
+                {/* inputs container */}
+                <Flex
+                    px='10px'
                     direction="column"
+                    justify="flex-start"
                     flex="1">
 
                     <EpistoEntry
-                        label={translatableTexts.preferences.currentPassword}
-                        value={currentPassword}
-                        type='password'
+                        label={translatableTexts.preferences.lastName}
+                        value={lastName}
                         labelVariant='top'
-                        setValue={setCurrentPassword} />
+                        setValue={setLastName} />
 
-                    <Flex mt="20px"
-width="100%">
+                    <EpistoEntry
+                        label={translatableTexts.preferences.firstName}
+                        value={firstName}
+                        labelVariant='top'
+                        setValue={setFirstName} />
 
-                        <EpistoButton
-                            variant="colored"
+                    <EpistoEntry
+                        label={translatableTexts.preferences.phoneNumber}
+                        value={phoneNumber ? phoneNumber : ''}
+                        labelVariant='top'
+                        setValue={setPhoneNumber} />
+
+                    {/* open password change options */}
+                    {!isPasswordChangeOpen && <EpistoFont
+                        isUppercase
+                        fontSize="fontExtraSmall"
+                        style={{
+                            margin: '13px 0 5px 0',
+                            letterSpacing: '1.2px'
+                        }}>
+
+                        {translatableTexts.preferences.changePassword}
+                    </EpistoFont>}
+
+                    {/* password change options */}
+                    <Flex
+                        direction="column"
+                        justify="flex-start"
+                        align="center"
+                        width="100%">
+
+                        {!isPasswordChangeOpen && <EpistoButton
                             style={{
                                 background: 'var(--transparentWhite70)',
                                 color: 'black',
-                                flex: '1'
+                                width: '100%'
                             }}
-                            onClick={() => setIsPasswordChangeOpen(false)}>
+                            onClick={() => setIsPasswordChangeOpen(true)}
+                            variant="colored">
 
-                            {translatableTexts.preferences.close}
-                        </EpistoButton>
+                            {translatableTexts.preferences.changePassword}
+                        </EpistoButton>}
 
-                        <EpistoButton
-                            variant="colored"
-                            onClick={handleRequestChangePasswordAsync}
-                            style={{
-                                marginLeft: '20px',
-                                background: 'var(--transparentWhite70)',
-                                color: 'black',
-                                flex: '1'
-                            }}>
+                        {isPasswordChangeOpen && <Flex
+                            width="100%"
+                            direction="column"
+                            flex="1">
 
-                            {translatableTexts.preferences.sendResetMail}
-                        </EpistoButton>
+                            <EpistoEntry
+                                label={translatableTexts.preferences.currentPassword}
+                                value={currentPassword}
+                                type='password'
+                                labelVariant='top'
+                                setValue={setCurrentPassword} />
+
+                            <Flex mt="20px"
+                                width="100%">
+
+                                <EpistoButton
+                                    variant="colored"
+                                    style={{
+                                        background: 'var(--transparentWhite70)',
+                                        color: 'black',
+                                        flex: '1'
+                                    }}
+                                    onClick={() => setIsPasswordChangeOpen(false)}>
+
+                                    {translatableTexts.preferences.close}
+                                </EpistoButton>
+
+                                <EpistoButton
+                                    variant="colored"
+                                    onClick={handleRequestChangePasswordAsync}
+                                    style={{
+                                        marginLeft: '20px',
+                                        background: 'var(--transparentWhite70)',
+                                        color: 'black',
+                                        flex: '1'
+                                    }}>
+
+                                    {translatableTexts.preferences.sendResetMail}
+                                </EpistoButton>
+                            </Flex>
+                        </Flex>}
                     </Flex>
-                </Flex>}
+
+
+                </Flex>
+
             </Flex>
 
             {!isPasswordChangeOpen && <EpistoButton
@@ -235,15 +256,16 @@ width="100%">
                 onClick={saveChangesAsync}
                 style={{
                     alignSelf: 'center',
-                    marginTop: '60px',
-                    marginBottom: '30px',
-                    width: '100%',
+                    position: 'absolute',
+                    bottom: '20px',
+                    width: 'calc(100% - 20px)',
+                    padding: '10px 0',
                     background: 'var(--transparentWhite70)',
                     color: 'black',
                 }}>
 
                 {translatableTexts.preferences.saveChanges}
             </EpistoButton>}
-        </Flex>
+        </DashboardSection>
     </LoadingFrame>;
 };

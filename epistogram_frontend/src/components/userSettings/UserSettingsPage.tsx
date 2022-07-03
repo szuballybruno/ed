@@ -21,7 +21,7 @@ export const UserSettingsPage = () => {
                 ]} />
         </LeftPane>
 
-        <ContentPane>
+        <ContentPane noMaxWidth>
             <EpistoRoutes
                 renderRoutes={[
                     {

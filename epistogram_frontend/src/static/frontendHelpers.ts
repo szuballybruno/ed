@@ -8,11 +8,12 @@ import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
+import { ErrorCodeType, ImageColorSettingsType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
+import quantize from 'quantize';
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
@@ -877,13 +878,13 @@ export const useForceUpdate = () => {
 
     // integer state
     const [, setValue] = useState({});
-    
+
     // update the state to force render
     const forceUpdate = useCallback(() => {
-        
+
         setValue({});
-    }, []); 
-    
+    }, []);
+
     return forceUpdate;
 };
 
@@ -903,4 +904,87 @@ export const useSetPageTitle = (title: string) => {
 
         setPageTitle(title);
     }, []);
+};
+
+/**
+ * Gets the difference between two dates in days
+ * @param date1 First date
+ * @param date2 Second date
+ */
+export const dateDiffInDays = (date1: Date, date2: Date) => {
+
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+    const timeDiff = Math.floor(utc2 - utc1);
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    return daysDiff;
+};
+
+export const useImageColor = (src: string, settings?: ImageColorSettingsType) => {
+
+    const CHANNELS = 4;
+
+    const [colors, setColors] = useState<number[][]>();
+
+    const windowSize = settings?.windowSize || 50;
+    const isCorsEnabled = settings?.cors || true;
+    const colorsCount = settings?.colors || 2;
+    const format = settings?.format || 'rgb';
+
+    const getArrayOfPixels = useCallback((
+        original: Uint8ClampedArray,
+        chunkSize = 4
+    ) => {
+
+        const arrayOfPixels: Uint8ClampedArray[] = [];
+
+        for (let i = 0; i < original.length; i += chunkSize * windowSize) {
+            arrayOfPixels.push(original.slice(i, i + chunkSize));
+        }
+
+        return arrayOfPixels;
+    }, [windowSize]);
+
+    const mapToHex = useCallback(
+        (values) => `#${values.map((i) => {
+            const h = i.toString('16');
+            return h.length < 2 ? `0${h}` : h;
+        })
+            .join('')}`,
+        [],
+    );
+
+    useEffect(() => {
+        const canvas = document.createElement('canvas');
+        const img = document.createElement('img');
+
+        const context = canvas.getContext('2d');
+
+        if (isCorsEnabled) {
+            img.setAttribute('crossOrigin', '');
+        }
+
+        if (!context)
+            return;
+
+        img.onload = () => {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            context.drawImage(img, 0, 0);
+            const { data } = context.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
+            const colorMap = quantize(getArrayOfPixels(data, CHANNELS), colorsCount);
+
+            const pallete = colorMap.palette();
+            setColors(format === 'rgb'
+                ? pallete
+                : pallete.map(mapToHex));
+        };
+
+        img.src = src;
+    }, [src, isCorsEnabled, colorsCount, format, getArrayOfPixels, mapToHex]);
+
+    return { colors };
 };

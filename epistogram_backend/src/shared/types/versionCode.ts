@@ -1,4 +1,4 @@
-import { CourseItemSimpleType } from "./sharedTypes";
+import { CourseItemSimpleType } from './sharedTypes';
 
 export class VersionCode extends String {
     private _forcedTypeIncompatibility = VersionCode.name;

@@ -9,17 +9,7 @@ import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
 import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 
-export const AdminUserCourseStatsOverview = (props: {
-    userStats: {
-        userProgressData: UserCourseProgressChartDTO,
-        completedVideoCount: number,
-        totalVideoPlaybackSeconds: number,
-        totalGivenAnswerCount: number,
-        totalCorrectAnswerRate: number
-    }
-}) => {
-
-    const { userStats } = props;
+export const AdminUserCourseStatsOverview = () => {
 
     return <Flex
         direction="column"
@@ -75,10 +65,10 @@ export const AdminUserCourseStatsOverview = (props: {
                 flex="1"
                 direction="column"
                 background="var(--transparentWhite70)">
-
-                {userStats.userProgressData && userStats.userProgressData.days.length > 0
+                {/* 
+                {userStats.userProgressData
                     ? <UserProgressChart userProgress={userStats.userProgressData} />
-                    : <NoProgressChartYet />}
+                    : <NoProgressChartYet />} */}
             </Flex>
         </Flex>
 
