@@ -8,7 +8,7 @@ import { EpistoSelect } from '../../../controls/EpistoSelect';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
 import { DashboardSection } from '../../../universal/DashboardSection';
-import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from '../examEditDialog/ExamStats';
+import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './ExamStats';
 
 export const AdminVideoStatisticsModalPage = () => {
 

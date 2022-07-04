@@ -146,6 +146,7 @@ export const useQuestionEditGridLogic = (
         isQuestionsMutated: questionMutatorRef.current.isAnyMutated,
         mutatedQuestions: questionMutatorRef.current.mutatedItems,
         questionMutations: questionMutatorRef.current.mutations,
+        answerMutations: answerMutatorRef.current.mutations,
         getKey,
         handleAddQuestion,
         getPlayedSeconds,

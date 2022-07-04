@@ -13,18 +13,15 @@ import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
-import { useXListMutator } from '../../../lib/XMutator/XMutator';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { ExamEditDialog } from '../examEditDialog/ExamEditDialog';
-import { ExamEditDialogParams } from '../examEditDialog/ExamEditDialogTypes';
+import { ItemEditDialog } from '../itemEditDialog/ItemEditDialog';
+import { ItemEditDialogParams } from '../itemEditDialog/ItemEditDialogTypes';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
-import { VideoEditDialog } from '../videoEditDialog/VideoEditDialog';
-import { VideoEditDialogParams } from '../videoEditDialog/VideoEditDialogTypes';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
@@ -37,8 +34,7 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic<VideoEditDialogParams>('video_edit_dialog');
-    const examEditDialogLogic = useEpistoDialogLogic<ExamEditDialogParams>('exam_edit_dialog');
+    const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>('item_edit_dialog');
     const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog');
     const isAnySelected = !!courseId && (courseId != -1);
 
@@ -148,27 +144,16 @@ export const AdminCourseContentSubpage = () => {
     const openDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
 
         const data = row?.data!;
+        const isVideo = !!data?.videoVersionId;
 
-        if (type === 'video')
-            videoEditDialogLogic
+        if (type === 'exam' || type === 'video')
+            itemEditDialogLogic
                 .openDialog({
                     params: {
-                        videoVersionId: data.videoVersionId!,
-                        courseName: 'Course name',
-                        videoTitle: data.itemTitle,
-                        versionCode: data.versionCode,
-                        questionMutations: data.questionMutations,
-                        answerMutations: data.answerMutations
-                    }
-                });
-
-        if (type === 'exam')
-            examEditDialogLogic
-                .openDialog({
-                    params: {
-                        examVersionId: data.examVersionId!,
+                        isVideo,
+                        itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
+                        itemTitle: data.itemTitle,
                         courseTitle: 'Course name',
-                        examTitle: data.itemTitle,
                         versionCode: data.versionCode,
                         questionMutations: data.questionMutations,
                         answerMutations: data.answerMutations
@@ -250,7 +235,7 @@ export const AdminCourseContentSubpage = () => {
 
             itemsMutatorRef
                 .current
-                .resetMutations();
+                .resetMutations('NO CALLBACK');
 
             refetchCourseContentAdminData();
         }
@@ -308,25 +293,18 @@ export const AdminCourseContentSubpage = () => {
                 {/* dialogs */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
-                <VideoEditDialog
-                    callback={mutations => itemsMutatorRef
-                        .current
-                        .mutate({
-                            key: videoEditDialogLogic.params.versionCode,
-                            field: 'questionMutations',
-                            newValue: mutations
-                        })}
-                    dialogLogic={videoEditDialogLogic} />
+                <ItemEditDialog
+                    callback={mutations => {
 
-                <ExamEditDialog
-                    callback={mutations => itemsMutatorRef
-                        .current
-                        .mutate({
-                            key: examEditDialogLogic.params.versionCode,
-                            field: 'questionMutations',
-                            newValue: mutations
-                        })}
-                    dialogLogic={examEditDialogLogic} />
+                        itemsMutatorRef
+                            .current
+                            .mutate({
+                                key: itemEditDialogLogic.params.versionCode,
+                                field: 'questionMutations',
+                                newValue: mutations
+                            });
+                    }}
+                    dialogLogic={itemEditDialogLogic} />
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}

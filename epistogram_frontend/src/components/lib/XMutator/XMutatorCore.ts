@@ -95,14 +95,14 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // applies mutations on the items array,
     // returns a new array that's been mutated
     //
-    setMutations = (muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey) => {
+    setMutations = (muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey, onMutationChanged?: 'NO CALLBACK') => {
 
         // set mutations 
         this.mutations = muts ?? [];
 
         // exit if post mutation changed scope
         // below calls will be handled dieeferntly
-        if (this._isPostMutationsChangedScope)
+        if (this._isPostMutationsChangedScope || onMutationChanged === 'NO CALLBACK')
             return;
 
         this._applyMutations(changedKey);
@@ -320,9 +320,9 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [setMutations] 
     // reset/clear mutations  
     //
-    resetMutations = () => {
+    resetMutations = (callback?: 'NO CALLBACK') => {
 
-        this.setMutations([]);
+        this.setMutations([], undefined, callback);
     };
 
     // --------------- PRIVATE ------------------------

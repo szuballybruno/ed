@@ -17,7 +17,7 @@ export const ExamEditor = ({
 }: {
     examVersionId: number,
     endabled: boolean,
-    callback: (mutations: QuestionMutationsType) => void,
+    callback: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType
 }) => {
@@ -32,7 +32,7 @@ export const ExamEditor = ({
 
     const finish = useCallback(() => {
 
-        callback(logic.questionMutations);
+        callback(logic.questionMutations, logic.answerMutations);
     }, [callback, logic.questionMutations]);
 
     return <LoadingFrame

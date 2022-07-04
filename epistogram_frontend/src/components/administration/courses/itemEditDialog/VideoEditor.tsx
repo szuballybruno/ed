@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -18,7 +18,7 @@ export const VideoEditor = ({
 }: {
     enabled: boolean,
     videoVersionId: number,
-    onClose: (questionMutations: QuestionMutationsType) => void,
+    onClose: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType
 }) => {
@@ -39,7 +39,7 @@ export const VideoEditor = ({
 
     const onCloseHandler = useCallback(() => {
 
-        onClose(logic.questionMutations);
+        onClose(logic.questionMutations, logic.answerMutations);
     }, [onClose, logic.questionMutations]);
 
     return <Flex
