@@ -109,7 +109,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
     getKey: (row: TSchema) => TKey,
-    handleEdit?: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
     initialState?: InitialStateType<TSchema>,
     deps?: any[],
     density?: 'dense' | 'spaced',
@@ -117,7 +116,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     id?: string
 }) => {
 
-    const { columns, id, rows, initialState, density, hideFooter, handleEdit, getKey } = props;
+    const { columns, id, rows, initialState, density, hideFooter, getKey } = props;
 
     console.log(`${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
@@ -190,10 +189,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                     throw new Error('Trying to edit a cell but it has no edit handler!');
 
                 column.editHandler({ rowKey, value: val, row });
-
-                //     const writeField = 
-
-                // handleEdit(rowId, field, val);
             }}
             isRowSelectable={x => false}
             columns={columnsProcessed}
@@ -209,11 +204,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
         if (prev.getKey !== next.getKey) {
 
             return [false, 'getKey'];
-        }
-
-        if (prev.handleEdit !== next.handleEdit) {
-
-            return [false, 'handleEdit'];
         }
 
         if (!areArraysEqual(prev.columns, next.columns)) {

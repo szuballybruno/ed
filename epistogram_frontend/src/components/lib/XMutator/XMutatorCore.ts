@@ -1,6 +1,5 @@
 import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
-import { MutationActionType } from '../../../shared/dtos/mutations/MutationActionType';
 import { getKeys } from '../../../shared/logic/sharedLogic';
 import { Environment } from '../../../static/Environemnt';
 import { clone } from '../../../static/frontendHelpers';
@@ -17,11 +16,7 @@ export type OnMutaionHandlerActionType<
         item: TMutatee | null;
     }) => void;
 
-export type OnMutationHandlerType<TMutatee, TKey, TField extends StringKeyof<TMutatee>> = {
-    callback: OnMutaionHandlerActionType<TMutatee, TKey, TField>;
-    field?: TField;
-    action: MutationActionType;
-}
+export type OnMutationHandlerType<TKey> = (changedKey?: TKey) => void;
 
 export type MutateFnType<TMutatee, TKey> = <TField extends StringKeyof<TMutatee>>(params: {
     key: TKey;
@@ -36,36 +31,57 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     public mutations: Mutation<TMutatee, TKeyField>[] = [];
 
     // internal 
-    private _onMutationHandlersRef: OnMutationHandlerType<TMutatee, TKey, StringKeyof<TMutatee>>[] = [];
-    private _lockRef: boolean = false;
+    private _isPostMutationsChangedScope: boolean = false;
     private _originalItems: TMutatee[] = [];
+    private _onMutationsChanged: OnMutationHandlerType<TKey> = () => 1;
+    private _onPostMutationsChanged: OnMutationHandlerType<TKey> = () => 1;
 
     // constructor input
     private _keyPropertyName: TKeyField;
-    private _mutationEndCallback?: (opts: { newMutatedItems: TMutatee[] }) => void;
-    private _onMutationsChanged: () => void;
 
     // ctor
     constructor(opts: {
         keyPropertyName: TKeyField,
-        onMutatedItems: () => void,
-        mutationEndCallback?: (opts: { newMutatedItems: TMutatee[] }) => void,
+        onMutationsChanged?: OnMutationHandlerType<TKey>,
     }) {
         this._keyPropertyName = opts.keyPropertyName;
-        this._mutationEndCallback = opts.mutationEndCallback;
-        this._onMutationsChanged = opts.onMutatedItems;
+
+        if (opts.onMutationsChanged)
+            this.setOnMutationsChanged(opts.onMutationsChanged);
+    }
+
+    setOnPostMutationChanged(callback: () => void) {
+
+        this._onPostMutationsChanged = () => {
+
+            this._logEvent('-- On post mutations changed');
+
+            this._logEvent('Post mutation changed scope BEGIN');
+            this._isPostMutationsChangedScope = true;
+
+            callback();
+
+            this._logEvent('Post mutation changed scope END');
+            this._isPostMutationsChangedScope = false;
+
+            this._applyMutations();
+        };
+    }
+
+    setOnMutationsChanged(callback: () => void) {
+
+        this._onMutationsChanged = () => {
+
+            this._logEvent('-- On mutations changed');
+            callback();
+        };
     }
 
     setOriginalItems(originalItems: TMutatee[]) {
 
         this._originalItems = originalItems;
         this.mutatedItems = originalItems;
-        this._onMutationsChanged();
-    }
-
-    getOriginalItems() {
-
-        return clone(this._originalItems);
+        this.setMutations([]);
     }
 
     // getter for isAnyMutated
@@ -74,200 +90,24 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         return this.mutations.length > 0;
     }
 
-    //
-    // Sets the mutatetd itmesm
-    //
-    setMutatedItems = (items: TMutatee[]) => {
-
-        this.mutatedItems = items;
-
-        this.logEvent('Calling on mutate');
-        this._onMutationsChanged();
-
-        console.log('Mutated items: ');
-        console.log(this.mutatedItems);
-    };
-
-    // 
-    // FUNCTION: [this.logEvent] 
-    //
-    logEvent = (text: string) => {
-
-        console.log(`MUTATION: ${text}`);
-    };
-
-    // 
-    // FUNCTION: [getCompareKey] 
-    //
-    getCompareKey = (item: TMutatee) => item[this._keyPropertyName];
-
-    // 
-    // FUNCTION: [getCompareKeyValue] 
-    //
-    getCompareKeyValue = (obj: TMutatee) => {
-
-        const key = this.getCompareKey(obj);
-        if (key === null || key === undefined)
-            throw new Error('Can\'t use null or undeined as object key!');
-
-        return key;
-    };
-
-    // 
-    // FUNCTION: [overrideProps] 
-    //
-    overrideProps = (obj: any, fieldMutators: FieldMutation<TMutatee, any>[]) => {
-
-        fieldMutators
-            .map(x => obj[x.field] = x.value);
-
-        return obj;
-    };
-
-    // 
-    // FUNCTION: [createObj] 
-    //
-    createObj = (mut: Mutation<TMutatee, TKeyField>): TMutatee => {
-
-        return this.overrideProps({} as any, mut.fieldMutators!);
-    };
-
-    // 
-    // FUNCTION: [ApplyMutations] 
-    // applies mutations on the items array,
-    // returns a new array that's been mutated
-    //
-    applyMutations = () => {
-
-        // added items 
-        const addedItems = this.mutations
-            .filter(mut => mut.action === 'add')
-            .map(mut => this.createObj(mut));
-
-        // deleted keys 
-        const deletedKeys = this.mutations
-            .filter(x => x.action === 'delete')
-            .map(x => x.key);
-
-        // final output list
-        const mutatedItems = this.getOriginalItems()
-            .concat(addedItems)
-            .filter(item => !deletedKeys
-                .some(x => x === this.getCompareKeyValue(item)));
-
-        // apply updates
-        this.mutations
-            .filter(mutation => mutation.action === 'update')
-            .forEach(mutation => {
-
-                const itemIndex = mutatedItems
-                    .findIndex(item => this.getCompareKeyValue(item) === mutation.key);
-
-                if (itemIndex === -1)
-                    return;
-
-                const targetItem = mutatedItems[itemIndex];
-
-                mutatedItems[itemIndex] = this.overrideProps(targetItem, mutation.fieldMutators);
-            });
-
-        // set mutated items internally 
-        this.setMutatedItems(mutatedItems);
-    };
-
-    // 
-    // FUNCTION: [ExecuteMutationHandler] 
-    // executes an on mutation handler  
-    // function if a mutation action is performed  
-    //
-    executeMutationHandler = (opts: {
-        key: TKey,
-        action: MutationActionType,
-        field?: any,
-        newValue?: any,
-    }) => {
-
-        const { action, key, field, newValue } = opts;
-
-        // get item by key 
-        // note that this will still hold the 
-        // old reference in mut handler callbacks)
-        // so in a delete callback the item will be found 
-        const item = this.mutatedItems
-            .firstOrNull(x => this.getCompareKey(x) === key);
-
-        this._onMutationHandlersRef
-            .filter(x => x.action === action)
-            .filter(x => !x.field || x.field === field)
-            .forEach(x => x.callback({ key, field, newValue, item }));
-    };
-
-    /**
-     * Simply set mutations and 
-     * call on mutated callback  
-     */
-    setMutationsList(mutations: Mutation<TMutatee, TKeyField>[]) {
-
-        // set mutations 
-        this.mutations = mutations;
-
-        // apply mutations 
-        this.applyMutations();
-
-        // call callback
-        this._onMutationsChanged();
-    }
-
     // 
     // FUNCTION: [this.setMutations] 
     // applies mutations on the items array,
     // returns a new array that's been mutated
     //
-    setMutations = (opts: {
-        muts: Mutation<TMutatee, TKeyField>[],
-        key: TKey,
-        action: MutationActionType,
-        field?: any,
-        newValue?: any,
-    }) => {
-
-        const { muts, ...rest } = opts;
+    setMutations = (muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey) => {
 
         // set mutations 
-        this.mutations = muts;
+        this.mutations = muts ?? [];
 
-        // if this function is called recursively, 
-        // from on mutation handlers, 
-        // break out after setting the mutations,
-        // otherwise it's an infinite loop
-        if (this._lockRef)
+        // exit if post mutation changed scope
+        // below calls will be handled dieeferntly
+        if (this._isPostMutationsChangedScope)
             return;
 
-        // set locking to true, cycle begins 
-        this._lockRef = true;
-
-        // execute on mutation handlers 
-        this.executeMutationHandler(rest);
-
-        // apply mutations 
-        this.applyMutations();
-
-        // fire mutationEndCallback with newly mutated items 
-        if (this._mutationEndCallback)
-            this._mutationEndCallback({ newMutatedItems: this.mutatedItems });
-
-        // set locking to false, cycle ends 
-        this._lockRef = false;
-    };
-
-    // 
-    // FUNCTION: [SetCompareKey] 
-    // set the value of the 
-    // TMutatee object's compare key prop  
-    //
-    setCompareKey = (obj: TMutatee, key: TKey) => {
-
-        (obj as any)[this._keyPropertyName] = key;
+        this._applyMutations(changedKey);
+        this._onPostMutationsChanged();
+        this._onMutationsChanged(changedKey);
     };
 
     // 
@@ -285,57 +125,37 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
 
-        const setMutationsWithCallback = (muts: Mutation<TMutatee, TKeyField>[]) => {
-
-            this.setMutations({ muts, key, field, newValue, action: 'update' });
-        };
-
         const newMutations = [...this.mutations];
 
-        const originalItem = this.getOriginalItems()
-            .firstOrNull(x => this.getCompareKey(x) === key);
+        // get original value
+        const { hasOriginalValue, originalValue } = (() => {
 
+            const originalItem = this._getOriginalItems()
+                .firstOrNull(x => this._getCompareKey(x) === key);
+
+            const originalValue = originalItem && originalItem[field];
+
+            return { hasOriginalValue: !!originalItem, originalValue };
+        })();
+
+        // ORIGINAL VALUE = NEW VALUE CHECK
         // if new mutation value equals to 
         // the original value, remove mutations for field
-        if (originalItem && originalItem[field] === newValue) {
+        if (hasOriginalValue && originalValue === newValue) {
 
-            const existingMutation = newMutations
-                .filter(x => x.key === key)[0];
+            const { hasExisitingFieldMut, newMutations: muts } = this
+                ._removeExistingMutation(newMutations, key, field);
 
-            if (!existingMutation)
-                return;
+            if (hasExisitingFieldMut) {
 
-            const fieldMut = existingMutation
-                .fieldMutators
-                .filter(x => x.field === field)[0];
-
-            if (!fieldMut)
-                return;
-
-            if (existingMutation.fieldMutators.length === 1) {
-
-                if (Environment.loggingSettings.mutations)
-                    this.logEvent(`Removing mutation: ${key}`);
-
-                setMutationsWithCallback(newMutations
-                    .filter(x => x.key !== key));
-            }
-            else {
-
-                existingMutation
-                    .fieldMutators = existingMutation
-                        .fieldMutators
-                        .filter(x => x.field !== field);
-
-                if (Environment.loggingSettings.mutations)
-                    this.logEvent(`Removing field mutation: ${key} - ${field}`);
-
-                setMutationsWithCallback(newMutations);
+                this._logEvent(`Original value: ${originalValue} = New value ${newValue}. Removing mutation: ${key} - ${field}`);
+                this.setMutations(muts, key);
             }
 
             return;
         }
 
+        // MUTATIING DELETED CHECK
         const oldMutation = newMutations
             .filter(x => x.key === key)[0];
 
@@ -345,6 +165,8 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
             return;
         }
 
+        // Create new update mutation or 
+        // use old one if there's one
         const mutation: Mutation<TMutatee, TKeyField> = oldMutation
             ? oldMutation
             : {
@@ -353,38 +175,42 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
                 action: 'update'
             };
 
+        const isNewMutation = mutation.fieldMutators.length === 0;
+
         // if created new mutation, add it to the mutations 
-        if (mutation.fieldMutators.length === 0) {
+        if (isNewMutation) {
 
-            if (Environment.loggingSettings.mutations)
-                this.logEvent(`Adding new mutation: ${key} - ${field} - ${newValue}`);
-
+            this._logEvent(`Adding new mutation: ${key} - ${field} - ${newValue}`);
             newMutations.push(mutation);
         }
 
-        const propertyMutator = mutation
+        // get existing property mutator
+        // and mutate it's value
+        const existingPropertyMutator = mutation
             .fieldMutators
             .filter(x => x.field === field)[0];
 
-        if (propertyMutator) {
+        if (existingPropertyMutator) {
 
-            if (Environment.loggingSettings.mutations)
-                this.logEvent(`Updating mutation '${key}' property mutator '${field}' value: ${propertyMutator.value} -> ${newValue}`);
+            this._logEvent(`Updating mutation '${key}' property mutator '${field}' value: ${existingPropertyMutator.value} -> ${newValue}`);
 
-            propertyMutator
+            existingPropertyMutator
                 .value = newValue;
         }
+
+        // Create new property mutator
+        // and append it to field mutators 
         else {
 
-            if (Environment.loggingSettings.mutations)
-                this.logEvent(`Mutation '${key}' adding new property mutator '${field}' value: ${newValue}`);
+            this._logEvent(`Mutation '${key}' adding new property mutator '${field}' value: ${newValue}`);
 
             mutation
                 .fieldMutators
                 .push({ field, value: newValue });
         }
 
-        setMutationsWithCallback(newMutations);
+        // set new mutations
+        this.setMutations(newMutations, key);
     };
 
     // 
@@ -412,8 +238,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         // remove add mutation 
         if (isDeletedItemNewlyAdded) {
 
-            if (Environment.loggingSettings)
-                this.logEvent(`Removing previous mutation of item '${removeKey}', since it's being deleted.`);
+            this._logEvent(`Removing previous mutation of item '${removeKey}', since it's being deleted.`);
 
             newMutations = newMutations
                 .filter(x => x.key !== removeKey);
@@ -422,8 +247,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         // add delete mutation
         else {
 
-            if (Environment.loggingSettings.mutations)
-                this.logEvent(`Adding new 'delete' mutation Key: ${removeKey}!`);
+            this._logEvent(`Adding new 'delete' mutation Key: ${removeKey}!`);
 
             const mut: Mutation<TMutatee, TKeyField> = {
                 key: removeKey,
@@ -435,7 +259,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         }
 
         // set new mutations list 
-        this.setMutations({ muts: newMutations, key: removeKey, action: 'delete', });
+        this.setMutations(newMutations, removeKey);
     };
 
     // 
@@ -447,7 +271,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
 
-        this.setCompareKey(obj as TMutatee, key);
+        this._setCompareKey(obj as TMutatee, key);
 
         const mut: Mutation<TMutatee, TKeyField> = {
             key,
@@ -466,7 +290,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
         const newMutations = [...this.mutations, mut];
 
-        this.setMutations({ muts: newMutations, action: 'add', key });
+        this.setMutations(newMutations, key);
     };
 
     // 
@@ -498,20 +322,155 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     //
     resetMutations = () => {
 
-        console.log('Original items: ');
-        console.log(this._originalItems);
+        this.setMutations([]);
+    };
 
-        this.mutations = [];
-        this.setMutatedItems(this.getOriginalItems());
+    // --------------- PRIVATE ------------------------
+
+    /**
+     * Remove existing mutation
+     */
+    private _removeExistingMutation(newMutations: Mutation<TMutatee, TKeyField>[], key: TKey, field: StringKeyof<TMutatee>) {
+
+        const existingMutation = newMutations
+            .filter(x => x.key === key)[0];
+
+        if (!existingMutation)
+            return { hasExisitingFieldMut: false, newMutations };
+
+        const fieldMut = existingMutation
+            .fieldMutators
+            .filter(x => x.field === field)[0];
+
+        if (!fieldMut)
+            return { hasExisitingFieldMut: false, newMutations };
+
+        const existingMutationHasOnlyOneElement = existingMutation.fieldMutators.length === 1;
+
+        // remove whole mutation
+        if (existingMutationHasOnlyOneElement) {
+
+            const filteredMuts = newMutations
+                .filter(x => x.key !== key);
+
+            return { hasExisitingFieldMut: true, newMutations: filteredMuts };
+        }
+
+        // remove field mutation
+        else {
+
+            existingMutation
+                .fieldMutators = existingMutation
+                    .fieldMutators
+                    .filter(x => x.field !== field);
+
+            return { hasExisitingFieldMut: true, newMutations };
+        }
+    }
+
+    /**
+     * gets a clone of the original items array 
+     */
+    private _getOriginalItems() {
+
+        return clone(this._originalItems);
+    }
+
+    // 
+    // FUNCTION: [overrideProps] 
+    //
+    private _overrideProps = (obj: any, fieldMutators: FieldMutation<TMutatee, any>[]) => {
+
+        fieldMutators
+            .map(x => obj[x.field] = x.value);
+
+        return obj;
     };
 
     // 
-    // FUNCTION: [AddOnMutationHandlers] 
-    // add/register handlers that will 
-    // be triggered by mutation actions   
+    // FUNCTION: [createObj] 
     //
-    addOnMutationHandlers = (handers: OnMutationHandlerType<TMutatee, TKey, StringKeyof<TMutatee>>[]) => {
+    private _createObj = (mut: Mutation<TMutatee, TKeyField>): TMutatee => {
 
-        this._onMutationHandlersRef = handers;
+        return this._overrideProps({} as any, mut.fieldMutators!);
+    };
+
+    // 
+    // FUNCTION: [ApplyMutations] 
+    // applies mutations on the items array,
+    // returns a new array that's been mutated
+    //
+    private _applyMutations = (changedKey?: TKey) => {
+
+        // added items 
+        const addedItems = this.mutations
+            .filter(mut => mut.action === 'add')
+            .map(mut => this._createObj(mut));
+
+        // deleted keys 
+        const deletedKeys = this.mutations
+            .filter(x => x.action === 'delete')
+            .map(x => x.key);
+
+        // final output list
+        const mutatedItems = this._getOriginalItems()
+            .concat(addedItems)
+            .filter(item => !deletedKeys
+                .some(x => x === this._getCompareKeyValue(item)));
+
+        // apply updates
+        this.mutations
+            .filter(mutation => mutation.action === 'update')
+            .forEach(mutation => {
+
+                const itemIndex = mutatedItems
+                    .findIndex(item => this._getCompareKeyValue(item) === mutation.key);
+
+                if (itemIndex === -1)
+                    return;
+
+                const targetItem = mutatedItems[itemIndex];
+
+                mutatedItems[itemIndex] = this._overrideProps(targetItem, mutation.fieldMutators);
+            });
+
+        // set mutated items internally 
+        this.mutatedItems = mutatedItems;
+    };
+
+    // 
+    // FUNCTION: [SetCompareKey] 
+    // set the value of the 
+    // TMutatee object's compare key prop  
+    //
+    private _setCompareKey = (obj: TMutatee, key: TKey) => {
+
+        (obj as any)[this._keyPropertyName] = key;
+    };
+
+
+    // 
+    // FUNCTION: [this.logEvent] 
+    //
+    private _logEvent = (text: string) => {
+
+        console.log(`MUTATION: ${text}`);
+    };
+
+    // 
+    // FUNCTION: [getCompareKey] 
+    //
+    private _getCompareKey = (item: TMutatee) => item[this._keyPropertyName];
+
+    // 
+    // FUNCTION: [getCompareKeyValue] 
+    //
+    private _getCompareKeyValue = (obj: TMutatee) => {
+
+        const key = this._getCompareKey(obj);
+        if (key === null || key === undefined)
+            throw new Error('Can\'t use null or undeined as object key!');
+
+        return key;
     };
 }

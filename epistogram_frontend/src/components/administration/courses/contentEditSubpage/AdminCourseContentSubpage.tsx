@@ -55,17 +55,22 @@ export const AdminCourseContentSubpage = () => {
     } = useCourseContentAdminData(courseId, isAnySelected, true);
     const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
 
-    // computed
-    const modules = courseContentAdminData?.modules ?? [];
-    const originalItems = courseContentAdminData?.items ?? [];
-
+    // misc
+    const modules = useMemo(() => courseContentAdminData?.modules ?? [], [courseContentAdminData]);
     const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
+    const forceUpdate = useForceUpdate();
+    const itemsMutatorRef = useRef(new XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>({ keyPropertyName: 'versionCode' }));
 
-    const preprocessItems = useCallback((items: CourseContentItemAdminDTO[]) => {
+    // preprocess items 
+    const preprocessItems = useCallback(() => {
+
+        const items = itemsMutatorRef
+            .current
+            .mutatedItems;
 
         const preproItems = items
-            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, isRowModified))
+            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, itemsMutatorRef.current.isMutated))
             .orderBy(x => x.module.orderIndex)
             .groupBy(x => x.module.id)
             .flatMap(x => x
@@ -75,123 +80,64 @@ export const AdminCourseContentSubpage = () => {
         setPreprocessedItems(preproItems);
     }, [setPreprocessedItems, modules]);
 
-    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
+    // recalc  
+    const recalcOrderIndices = useCallback(() => {
 
-        preprocessItems(newMutatedItems);
+        console.log('recalc order');
+
+        itemsMutatorRef
+            .current
+            .mutatedItems
+            .groupBy(x => x.moduleVersionId)
+            .forEach(x => x
+                .items
+                .forEach((x, i) => {
+
+                    console.log(`${x.itemTitle} -> ${i}`);
+
+                    itemsMutatorRef
+                        .current
+                        .mutate({
+                            key: x.versionCode,
+                            field: 'itemOrderIndex',
+                            newValue: i
+                        });
+                }));
+
+        console.log(itemsMutatorRef
+            .current
+            .mutations);
+    }, []);
+
+    // set - on post mutations changed 
+    useEffect(() => {
+
+        itemsMutatorRef
+            .current
+            .setOnPostMutationChanged(recalcOrderIndices);
+    }, []);
+
+    // set - on mutation changed functions
+    useEffect(() => {
+
+        itemsMutatorRef
+            .current
+            .setOnMutationsChanged(() => {
+                preprocessItems();
+                forceUpdate();
+            });
     }, [preprocessItems]);
 
-    // const forceUpdate = useForceUpdate();
-
-    // const itemsMutatorRef = useMemo(() => new XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>({
-    //     keyPropertyName: 'versionCode',
-    //     onMutatedItems: () => {
-
-    //         console.log('-- Item mutations changed.');
-    //         forceUpdate();
-    //     }
-    // }), []);
-
-    const {
-        add: addRow,
-        mutate: mutateRow,
-        remove: removeRow,
-        isMutated: isRowModified,
-        isAnyMutated: isAnyRowsMutated,
-        mutations,
-        resetMutations,
-        addOnMutationHandlers,
-        mutatedData: mutatedItems
-    } = useXListMutator<CourseContentItemAdminDTO, 'versionCode', VersionCode>(originalItems, 'versionCode', mutationEndCallback);
-
-    // set preprocessed items, 
-    // this works as a sort of caching
+    // set - original items if loaded
     useEffect(() => {
 
         if (!courseContentAdminData)
             return;
 
-        preprocessItems(courseContentAdminData.items);
+        itemsMutatorRef
+            .current
+            .setOriginalItems(courseContentAdminData.items ?? []);
     }, [courseContentAdminData]);
-
-    const setNewOrderIndices = (items: CourseContentItemAdminDTO[], mutatedRowKey: VersionCode, mutateSelf?: boolean) => {
-
-        const mapped = items
-            .map((item, index) => ({
-                key: getItemKey(item),
-                newOrderIndex: index
-            }));
-
-        const filtered = mutateSelf
-            ? mapped
-            : mapped
-                .filter(x => x.key !== mutatedRowKey);
-
-        filtered
-            .forEach(x => mutateRow({
-                key: x.key,
-                field: 'itemOrderIndex',
-                newValue: x.newOrderIndex
-            }));
-    };
-
-    // mutation handlers 
-    addOnMutationHandlers([
-        {
-            field: 'itemOrderIndex',
-            action: 'update',
-            callback: ({ key, newValue, item }) => {
-
-                const newItemOrderIndex = newValue as number;
-                const isNewSmaller = newItemOrderIndex < item!.itemOrderIndex;
-
-                const orderedItems = mutatedItems
-                    .filter(row => row.moduleVersionId === item!.moduleVersionId)
-                    .orderBy(row => {
-
-                        if (getItemKey(row) === key)
-                            return isNewSmaller
-                                ? newItemOrderIndex - 0.5
-                                : newItemOrderIndex + 0.5;
-
-                        return row.itemOrderIndex;
-                    });
-
-                setNewOrderIndices(orderedItems, key);
-            }
-        },
-        {
-            action: 'update',
-            field: 'moduleVersionId',
-            callback: ({ key, item, newValue }) => {
-
-                const oldModuleId = item!.moduleVersionId;
-                const newModuleId = newValue as number;
-
-                const oldModuleItems = mutatedItems
-                    .filter(x => x.moduleVersionId === oldModuleId && getItemKey(x) !== key)
-                    .orderBy(x => x.itemOrderIndex);
-
-                const newModuleItems = mutatedItems
-                    .filter(x => x.moduleVersionId === newModuleId || getItemKey(x) === key)
-                    .orderBy(x => getItemKey(x) === key ? -1 : x.itemOrderIndex);
-
-                setNewOrderIndices(oldModuleItems, key);
-                setNewOrderIndices(newModuleItems, key, true);
-            }
-        },
-        {
-            action: 'delete',
-            callback: ({ item, key }) => {
-
-                const moduleItems = mutatedItems
-                    .filter(x => x.moduleVersionId === item!.moduleVersionId)
-                    .filter(x => getItemKey(x) !== key)
-                    .orderBy(x => x.itemOrderIndex);
-
-                setNewOrderIndices(moduleItems, key);
-            }
-        }
-    ]);
 
     // 
     // FUNCS
@@ -211,7 +157,8 @@ export const AdminCourseContentSubpage = () => {
                         courseName: 'Course name',
                         videoTitle: data.itemTitle,
                         versionCode: data.versionCode,
-                        mutations: data.questionMutations
+                        questionMutations: data.questionMutations,
+                        answerMutations: data.answerMutations
                     }
                 });
 
@@ -223,7 +170,8 @@ export const AdminCourseContentSubpage = () => {
                         courseTitle: 'Course name',
                         examTitle: data.itemTitle,
                         versionCode: data.versionCode,
-                        mutations: data.questionMutations
+                        questionMutations: data.questionMutations,
+                        answerMutations: data.answerMutations
                     }
                 });
 
@@ -236,7 +184,9 @@ export const AdminCourseContentSubpage = () => {
 
         const moduleVersionId = modules[0].id;
 
-        const foundModule = mutatedItems
+        const foundModule = itemsMutatorRef
+            .current
+            .mutatedItems
             .firstOrNull(x => x.moduleVersionId === moduleVersionId);
 
         const moduleInfo = foundModule
@@ -251,7 +201,9 @@ export const AdminCourseContentSubpage = () => {
                 orderIndex: -1
             };
 
-        const itemOrderIndex = mutatedItems
+        const itemOrderIndex = itemsMutatorRef
+            .current
+            .mutatedItems
             .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
             .length;
 
@@ -275,10 +227,13 @@ export const AdminCourseContentSubpage = () => {
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,
             videoLength: 0,
-            questionMutations: []
+            questionMutations: [],
+            answerMutations: []
         };
 
-        addRow(newVersionCode, dto);
+        itemsMutatorRef
+            .current
+            .add(newVersionCode, dto);
         closeAddPopper();
     };
 
@@ -286,17 +241,26 @@ export const AdminCourseContentSubpage = () => {
 
         try {
 
-            await saveCourseDataAsync({ courseId, mutations });
-            resetMutations();
+            await saveCourseDataAsync({
+                courseId,
+                mutations: itemsMutatorRef
+                    .current
+                    .mutations
+            });
+
+            itemsMutatorRef
+                .current
+                .resetMutations();
+
             refetchCourseContentAdminData();
         }
         catch (e) {
 
             showError(e);
         }
-    }, [mutations]);
+    }, []);
 
-    const gridColumns = useGridColumnDefinitions(modules, openDialog, removeRow, mutateRow);
+    const gridColumns = useGridColumnDefinitions(modules, openDialog, itemsMutatorRef);
 
     //
     // EFFECTS
@@ -304,11 +268,6 @@ export const AdminCourseContentSubpage = () => {
 
     if (Environment.loggingSettings.render)
         console.log('Rendering AdminCourseContentSubpage');
-
-    const handleEdit = useCallback((key: any, field: any, value: any) => {
-
-        mutateRow({ key, field, newValue: value });
-    }, [mutateRow]);
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, courseContentAdminDataState]}
@@ -342,7 +301,7 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: handleSaveAsync,
                         title: 'Mentés',
-                        disabled: !isAnyRowsMutated
+                        disabled: !itemsMutatorRef.current.isAnyMutated
                     }
                 ]}>
 
@@ -350,19 +309,23 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
                 <VideoEditDialog
-                    callback={mutations => mutateRow({
-                        key: videoEditDialogLogic.params.versionCode,
-                        field: 'questionMutations',
-                        newValue: mutations
-                    })}
+                    callback={mutations => itemsMutatorRef
+                        .current
+                        .mutate({
+                            key: videoEditDialogLogic.params.versionCode,
+                            field: 'questionMutations',
+                            newValue: mutations
+                        })}
                     dialogLogic={videoEditDialogLogic} />
 
                 <ExamEditDialog
-                    callback={mutations => mutateRow({
-                        key: examEditDialogLogic.params.versionCode,
-                        field: 'questionMutations',
-                        newValue: mutations
-                    })}
+                    callback={mutations => itemsMutatorRef
+                        .current
+                        .mutate({
+                            key: examEditDialogLogic.params.versionCode,
+                            field: 'questionMutations',
+                            newValue: mutations
+                        })}
                     dialogLogic={examEditDialogLogic} />
 
                 <ModuleEditDialog
@@ -384,7 +347,6 @@ export const AdminCourseContentSubpage = () => {
                     <EpistoDataGrid
                         columns={gridColumns}
                         rows={preprocessedItems}
-                        handleEdit={handleEdit}
                         getKey={getRowKey}
                         hideFooter
                         initialState={{

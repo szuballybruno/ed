@@ -4,11 +4,12 @@ import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { iterate, useForceUpdate } from '../../../../static/frontendHelpers';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
-import { QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
+import { AnswerMutationsType, QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridLogic = (
     questions: QuestionEditDataDTO[],
     questionMutations: QuestionMutationsType,
+    answerMutations: AnswerMutationsType,
     videoVersionId: number | null,
     examVersionId: number | null,
     showTiming?: boolean,
@@ -18,7 +19,7 @@ export const useQuestionEditGridLogic = (
 
     const questionMutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', number>({
         keyPropertyName: 'questionVersionId',
-        onMutatedItems: () => {
+        onMutationsChanged: () => {
 
             console.log('-- Question mutations changed.');
             forceUpdate();
@@ -27,7 +28,7 @@ export const useQuestionEditGridLogic = (
 
     const answerMutatorRef = useRef(new XMutatorCore<AnswerEditDTO, 'answerVersionId', number>({
         keyPropertyName: 'answerVersionId',
-        onMutatedItems: () => {
+        onMutationsChanged: () => {
 
             console.log('-- Answer mutations changed.');
             forceUpdate();
@@ -49,34 +50,51 @@ export const useQuestionEditGridLogic = (
 
         questionMutatorRef
             .current
-            .setMutationsList(qmut);
+            .setMutations(qmut);
 
         // answers 
         answerMutatorRef
             .current
             .setOriginalItems(a);
+
+        answerMutatorRef
+            .current
+            .setMutations(answerMutations);
     }, [videoVersionId, examVersionId]);
 
     //
     // add question
     const handleAddQuestion = useCallback(() => {
 
-        const answers = iterate(4, (index): AnswerEditDTO => ({
-            answerVersionId: getVirtualId(),
-            text: '',
-            isCorrect: false
-        }));
+        const questionVersionId = getVirtualId();
+
+        iterate(4, () => {
+
+            const newAnswerVersionId = getVirtualId();
+
+            answerMutatorRef
+                .current
+                .add(newAnswerVersionId, {
+                    answerVersionId: newAnswerVersionId,
+                    isCorrect: false,
+                    questionVersionId: questionVersionId,
+                    text: ''
+                });
+        });
+
 
         const question: QuestionEditDataDTO = {
-            questionVersionId: getVirtualId(),
+            questionVersionId: questionVersionId,
             questionText: '',
             questionShowUpTimeSeconds: 0,
             videoVersionId,
             examVersionId,
-            answers
+            answers: []
         };
 
-        questionMutatorRef.current.add(question.questionVersionId, question);
+        questionMutatorRef
+            .current
+            .add(question.questionVersionId, question);
     }, [videoVersionId, examVersionId]);
 
     //

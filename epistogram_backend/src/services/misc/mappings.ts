@@ -641,7 +641,8 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 warnings,
                 videoLength: x.videoLength,
                 itemType: x.itemType,
-                questionMutations: []
+                questionMutations: [],
+                answerMutations: []
             };
         });
 

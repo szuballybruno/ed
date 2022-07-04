@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
-import { clone, formatSeconds } from '../../../../static/frontendHelpers';
+import { formatSeconds } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';

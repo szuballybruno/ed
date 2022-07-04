@@ -6,19 +6,21 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
-import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
+import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
 
 export const VideoEditor = ({
     videoVersionId,
     enabled,
     onClose,
-    mutations
+    questionMutations,
+    answerMutations
 }: {
     enabled: boolean,
     videoVersionId: number,
     onClose: (questionMutations: QuestionMutationsType) => void,
-    mutations: QuestionMutationsType
+    questionMutations: QuestionMutationsType,
+    answerMutations: AnswerMutationsType
 }) => {
 
     // http
@@ -33,7 +35,7 @@ export const VideoEditor = ({
     const videoUrl = courseItemEditData?.videoUrl ?? '';
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions, mutations, videoVersionId, null, true, getPlayedSeconds);
+    const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, videoVersionId, null, true, getPlayedSeconds);
 
     const onCloseHandler = useCallback(() => {
 

@@ -23,3 +23,4 @@ export type RowSchema = {
 };
 
 export type QuestionMutationsType = Mutation<QuestionEditDataDTO, 'questionVersionId'>[];
+export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];

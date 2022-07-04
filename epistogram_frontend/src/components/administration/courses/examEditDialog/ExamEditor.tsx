@@ -5,19 +5,21 @@ import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
-import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
+import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
 
 export const ExamEditor = ({
     examVersionId,
     endabled,
     callback,
-    mutations
+    questionMutations,
+    answerMutations
 }: {
     examVersionId: number,
     endabled: boolean,
     callback: (mutations: QuestionMutationsType) => void,
-    mutations: QuestionMutationsType
+    questionMutations: QuestionMutationsType,
+    answerMutations: AnswerMutationsType
 }) => {
 
     // http
@@ -26,7 +28,7 @@ export const ExamEditor = ({
 
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions, mutations, null, examVersionId);
+    const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, null, examVersionId);
 
     const finish = useCallback(() => {
 

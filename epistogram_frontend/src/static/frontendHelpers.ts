@@ -1,19 +1,19 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import React, { ComponentType, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import quantize from 'quantize';
+import React, { ComponentType, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
-import { applicationRoutes, ApplicationRoutesType } from '../configuration/applicationRoutes';
+import { applicationRoutes } from '../configuration/applicationRoutes';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { ErrorCodeType, ImageColorSettingsType, RoleIdEnum } from '../shared/types/sharedTypes';
+import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
-import quantize from 'quantize';
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
@@ -922,6 +922,17 @@ export const dateDiffInDays = (date1: Date, date2: Date) => {
 
     return daysDiff;
 };
+
+
+export type ImageColorSettingsType = {
+    colors?: number,
+    cors?: boolean,
+    windowSize?: number,
+    format?: {
+        rgb?: 'rgb',
+        hex?: 'hex'
+    }
+}
 
 export const useImageColor = (src: string, settings?: ImageColorSettingsType) => {
 

@@ -19,7 +19,7 @@ export const VideoEditDialog = ({ callback, dialogLogic }: {
     }, [callback, dialogLogic.closeDialog]);
 
     // props
-    const { videoVersionId, courseName, videoTitle, mutations } = dialogLogic.params;
+    const { videoVersionId, courseName, videoTitle, questionMutations, answerMutations } = dialogLogic.params;
 
     const paging = usePaging<EditDialogSubpage>([
         {
@@ -27,7 +27,8 @@ export const VideoEditDialog = ({ callback, dialogLogic }: {
                 enabled={dialogLogic.isOpen}
                 videoVersionId={videoVersionId}
                 onClose={callbackHandler}
-                mutations={mutations} />,
+                answerMutations={answerMutations}
+                questionMutations={questionMutations} />,
             title: 'Kérdések'
         },
         {
