@@ -6,7 +6,6 @@ import { clone, formatSeconds } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
-import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { ChipSmall } from '../ChipSmall';
@@ -15,7 +14,15 @@ import { RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => {
 
-    const { removeQuestion, showTiming, getPlayedSeconds, mutateQuestion } = logic;
+    const {
+        showTiming,
+        removeQuestion,
+        getPlayedSeconds,
+        mutateQuestion,
+        mutateAnswer,
+        createAnswer,
+        deleteAnswer
+    } = logic;
 
     const columns = useMemo((): GridColumnType<RowSchema, string, any>[] => {
 
@@ -67,17 +74,10 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                         field: 'questionText',
                         newValue: value
                     })
-                    : mutateQuestion({
-                        key: row.questionVersionId,
-                        field: 'answers',
-                        newValue: clone(row.questionEditDTO.answers)
-                            .map(x => {
-
-                                if (x.answerVersionId === row.answerVersionId)
-                                    x.text = value;
-
-                                return x;
-                            })
+                    : mutateAnswer({
+                        key: row.answerVersionId,
+                        field: 'text',
+                        newValue: value
                     }),
             } as GridColumnType<RowSchema, string, 'itemText'>,
 
@@ -87,13 +87,6 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                 field: 'rowKey',
                 width: 90,
                 renderCell: ({ row }) => {
-
-                    const answerDTO = row
-                        .answerEditDTO;
-
-                    const questionVersionId = row
-                        .questionEditDTO
-                        .questionVersionId;
 
                     return <Flex>
 
@@ -108,53 +101,40 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                         {!row.isQuestionHeader && <EpistoButton
                             onClick={() => {
 
-                                mutateQuestion({
-                                    key: questionVersionId,
-                                    field: 'answers',
-                                    newValue: clone(row.questionEditDTO.answers)
-                                        .filter(x => x.answerVersionId !== answerDTO.answerVersionId)
-                                });
+                                deleteAnswer(row.answerVersionId);
                             }}>
 
                             <EpistoIcons.DeleteOutline />
                         </EpistoButton>}
 
-                        {/* add */}
+                        {/* create answer */}
                         {row.isQuestionHeader && <EpistoButton
                             onClick={() => {
 
-                                mutateQuestion({
-                                    key: questionVersionId,
-                                    field: 'answers',
-                                    newValue: [...clone(row.questionEditDTO.answers), {
-                                        answerVersionId: getVirtualId(),
-                                        isCorrect: false,
-                                        text: ''
-                                    }]
+                                const newId = getVirtualId();
+
+                                createAnswer(newId, {
+                                    answerVersionId: newId,
+                                    isCorrect: false,
+                                    text: ''
                                 });
                             }}>
                             <EpistoIcons.Add />
-                        </EpistoButton>}
+                        </EpistoButton>
+                        }
 
                         {/* is correct */}
                         {!row.isQuestionHeader && <EpistoCheckbox
-                            value={!!answerDTO?.isCorrect}
+                            value={row.isCorrect}
                             setValue={(isCorrect) => {
 
-                                mutateQuestion({
-                                    key: questionVersionId,
-                                    field: 'answers',
-                                    newValue: clone(row.questionEditDTO.answers)
-                                        .map(x => {
-
-                                            if (x.answerVersionId === row.answerVersionId)
-                                                x.isCorrect = isCorrect;
-
-                                            return x;
-                                        })
+                                mutateAnswer({
+                                    key: row.answerVersionId,
+                                    field: 'isCorrect',
+                                    newValue: isCorrect
                                 });
                             }} />}
-                    </Flex>;
+                    </Flex >;
                 }
             } as GridColumnType<RowSchema, string, 'rowKey'>,
         ];
@@ -198,7 +178,7 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
         }
 
         return cols;
-    }, []);
+    }, [getPlayedSeconds, mutateQuestion, ]);
 
     return {
         columns

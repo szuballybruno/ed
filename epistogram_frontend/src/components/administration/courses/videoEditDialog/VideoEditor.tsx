@@ -37,8 +37,8 @@ export const VideoEditor = ({
 
     const onCloseHandler = useCallback(() => {
 
-        onClose(logic.mutations);
-    }, [onClose, logic.mutations]);
+        onClose(logic.questionMutations);
+    }, [onClose, logic.questionMutations]);
 
     return <Flex
         direction="column"

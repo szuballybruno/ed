@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { Add, Edit } from '@mui/icons-material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
@@ -9,10 +9,12 @@ import { useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { VersionCode } from '../../../../shared/types/versionCode';
 import { Environment } from '../../../../static/Environemnt';
+import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { useXListMutator } from '../../../lib/XMutator/XMutator';
+import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
@@ -78,6 +80,17 @@ export const AdminCourseContentSubpage = () => {
         preprocessItems(newMutatedItems);
     }, [preprocessItems]);
 
+    // const forceUpdate = useForceUpdate();
+
+    // const itemsMutatorRef = useMemo(() => new XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>({
+    //     keyPropertyName: 'versionCode',
+    //     onMutatedItems: () => {
+
+    //         console.log('-- Item mutations changed.');
+    //         forceUpdate();
+    //     }
+    // }), []);
+
     const {
         add: addRow,
         mutate: mutateRow,
@@ -89,8 +102,6 @@ export const AdminCourseContentSubpage = () => {
         addOnMutationHandlers,
         mutatedData: mutatedItems
     } = useXListMutator<CourseContentItemAdminDTO, 'versionCode', VersionCode>(originalItems, 'versionCode', mutationEndCallback);
-
-    console.log(mutations);
 
     // set preprocessed items, 
     // this works as a sort of caching

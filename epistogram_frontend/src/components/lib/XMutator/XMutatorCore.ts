@@ -197,7 +197,6 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
             .firstOrNull(x => this.getCompareKey(x) === key);
 
         this._onMutationHandlersRef
-
             .filter(x => x.action === action)
             .filter(x => !x.field || x.field === field)
             .forEach(x => x.callback({ key, field, newValue, item }));

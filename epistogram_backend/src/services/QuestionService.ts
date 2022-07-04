@@ -52,19 +52,22 @@ export class QuestionService {
      * Saves questions by mutations  
      */
     private async _saveQuestionMutations(
-        mutations: QuestionMutationType[],
+        muts: QuestionMutationType[],
         itemVersionIdMigrations: VersionMigrationResult[],
         isVideo: boolean) {
 
-        if (mutations.length === 0)
+        if (muts.length === 0)
             return;
 
-        const oldData = await this._getOldQuestionDataAsync(mutations);
+        const mutationsOrdered = muts
+            .orderBy(x => x.action === 'add' ? 1 : 2);
+
+        const { oldData, oldVersionIds } = await this._getOldQuestionDataAsync(mutationsOrdered);
         const getOldData = (mutation: QuestionMutationType) => oldData.single(x => x.oldVersion.id === mutation.key);
 
         //
         // Save questions 
-        const newQuesitons = mutations
+        const newQuesitons = mutationsOrdered
             .map(mut => {
 
                 const defaultData: InsertEntity<Question> = mut.action === 'add'
@@ -79,7 +82,7 @@ export class QuestionService {
 
         //
         // Save question datas 
-        const newQuestionDatas = mutations
+        const newQuestionDatas = mutationsOrdered
             .map(mut => {
 
                 const defaultData: InsertEntity<QuestionData> = mut.action === 'add'
@@ -121,13 +124,13 @@ export class QuestionService {
             if (mutation.action === 'update' && isVideo)
                 return getOldData(mutation).oldVersion.videoVersionId!;
 
-            if (mutation.action === 'update' && isVideo)
-                return getOldData(mutation).oldVersion.videoVersionId!;
+            if (mutation.action === 'update' && !isVideo)
+                return getOldData(mutation).oldVersion.examVersionId!;
 
             throw new Error('Misconfigured if clauses');
         });
 
-        const newQuestionVersions = mutations
+        const newQuestionVersions = mutationsOrdered
             .map((mutation, i) => {
 
                 const oldParentId = getOldParentId(mutation);
@@ -149,12 +152,24 @@ export class QuestionService {
                 return newVersion;
             });
 
-        await this._ormService
+        const newVersionIds = await this._ormService
             .createManyAsync(QuestionVersion, newQuestionVersions);
+
+        const versionMigrations = VersionMigrationHelpers
+            .create(oldVersionIds, newVersionIds);
 
         //  
         // Save answers 
+        const answerMuations = mutationsOrdered
+            .filter(questionMut => XMutatorHelpers.hasFieldMutation(questionMut)('answers'))
+            .flatMap(questionMut => XMutatorHelpers.getFieldValueOrFail(questionMut)('answers')
+                .map(ans => {
+                    ans.questionVersionId = questionMut.key;
+                    return ans;
+                }));
 
+        await this._answerService
+            .saveQuestionAnswers(versionMigrations, answerMuations);
     }
 
     /**
@@ -166,7 +181,7 @@ export class QuestionService {
             .filter(x => x.action === 'update');
 
         if (updateMuts.length === 0)
-            return [];
+            return { oldData: [], oldVersionIds: [] };
 
         const oldVersionIds = updateMuts
             .map(x => x.key);
@@ -186,12 +201,14 @@ export class QuestionService {
             .where('id', '=', 'oldEntityIds')
             .getMany();
 
-        return oldVersions
+        const oldData = oldVersions
             .map((x, i) => ({
                 oldData: oldQuesitonDatas[i],
                 oldEntity: oldQuestions[i],
                 oldVersion: x
             } as OldData<QuestionVersion, QuestionData, Question>));
+
+        return { oldData, oldVersionIds };
     }
 
     /**

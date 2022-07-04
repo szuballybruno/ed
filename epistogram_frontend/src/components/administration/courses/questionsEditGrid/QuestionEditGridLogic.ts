@@ -8,7 +8,7 @@ import { QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridLogic = (
     questions: QuestionEditDataDTO[],
-    mutations: QuestionMutationsType,
+    questionMutations: QuestionMutationsType,
     videoVersionId: number | null,
     examVersionId: number | null,
     showTiming?: boolean,
@@ -16,33 +16,46 @@ export const useQuestionEditGridLogic = (
 
     const forceUpdate = useForceUpdate();
 
-    const mutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', number>({
+    const questionMutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', number>({
         keyPropertyName: 'questionVersionId',
         onMutatedItems: () => {
-            console.log('---------------- mut ------------------');
+
+            console.log('-- Question mutations changed.');
             forceUpdate();
         }
     }));
 
+    const answerMutatorRef = useRef(new XMutatorCore<AnswerEditDTO, 'answerVersionId', number>({
+        keyPropertyName: 'answerVersionId',
+        onMutatedItems: () => {
+
+            console.log('-- Answer mutations changed.');
+            forceUpdate();
+        }
+    }));
+
+    // if video or exam version id changed
+    // load questions, answers, and mutations 
     useEffect(() => {
 
-        if (!questions)
-            return;
+        const q = questions ?? [];
+        const a = q.flatMap(x => x.answers);
+        const qmut = questionMutations ?? [];
 
-        mutatorRef
+        // questions 
+        questionMutatorRef
             .current
-            .setOriginalItems(questions);
-    }, [questions]);
+            .setOriginalItems(q);
 
-    useEffect(() => {
-
-        if (!mutations)
-            return;
-
-        mutatorRef
+        questionMutatorRef
             .current
-            .setMutationsList(mutations);
-    }, [mutations]);
+            .setMutationsList(qmut);
+
+        // answers 
+        answerMutatorRef
+            .current
+            .setOriginalItems(a);
+    }, [videoVersionId, examVersionId]);
 
     //
     // add question
@@ -63,17 +76,17 @@ export const useQuestionEditGridLogic = (
             answers
         };
 
-        mutatorRef.current.add(question.questionVersionId, question);
+        questionMutatorRef.current.add(question.questionVersionId, question);
     }, [videoVersionId, examVersionId]);
 
     //
     // rows
     const questionRows = useMemo((): RowSchema[] => {
 
-        if (mutatorRef.current.mutatedItems.length === 0)
+        if (questionMutatorRef.current.mutatedItems.length === 0)
             return [];
 
-        return mutatorRef
+        return questionMutatorRef
             .current
             .mutatedItems
             .flatMap((question): RowSchema[] => {
@@ -103,7 +116,7 @@ export const useQuestionEditGridLogic = (
 
                 return [headerRow, ...answerRows];
             });
-    }, [mutatorRef.current.mutatedItems]);
+    }, [questionMutatorRef.current.mutatedItems]);
 
     //
     // get key
@@ -112,15 +125,18 @@ export const useQuestionEditGridLogic = (
     return {
         questionRows,
         showTiming,
-        isAnyMutated: mutatorRef.current.isAnyMutated,
-        mutatedQuestions: mutatorRef.current.mutatedItems,
-        mutations: mutatorRef.current.mutations,
+        isQuestionsMutated: questionMutatorRef.current.isAnyMutated,
+        mutatedQuestions: questionMutatorRef.current.mutatedItems,
+        questionMutations: questionMutatorRef.current.mutations,
         getKey,
         handleAddQuestion,
-        removeQuestion: mutatorRef.current.remove,
         getPlayedSeconds,
-        mutateQuestion: mutatorRef.current.mutate,
-        resetMutations: mutatorRef.current.resetMutations,
+        removeQuestion: questionMutatorRef.current.remove,
+        mutateQuestion: questionMutatorRef.current.mutate,
+        resetMutations: questionMutatorRef.current.resetMutations,
+        createAnswer: answerMutatorRef.current.add,
+        mutateAnswer: answerMutatorRef.current.mutate,
+        deleteAnswer: answerMutatorRef.current.remove
     };
 };
 

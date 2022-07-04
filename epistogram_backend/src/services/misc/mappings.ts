@@ -273,7 +273,8 @@ const marray = [
                                 .map((viewAsAnswer): AnswerEditDTO => ({
                                     answerVersionId: viewAsAnswer.answerVersionId,
                                     text: viewAsAnswer.answerText,
-                                    isCorrect: viewAsAnswer.answerIsCorrect
+                                    isCorrect: viewAsAnswer.answerIsCorrect,
+                                    questionVersionId: viewAsQuestion.questionVersionId
                                 }))
                         };
                     })

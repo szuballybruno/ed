@@ -30,8 +30,8 @@ export const ExamEditor = ({
 
     const finish = useCallback(() => {
 
-        callback(logic.mutations);
-    }, [callback, logic.mutations]);
+        callback(logic.questionMutations);
+    }, [callback, logic.questionMutations]);
 
     return <LoadingFrame
         loadingState={'success'}
@@ -61,7 +61,7 @@ export const ExamEditor = ({
 
                 {/* reset */}
                 <EpistoButton
-                    isDisabled={!logic.isAnyMutated}
+                    isDisabled={!logic.isQuestionsMutated}
                     onClick={logic.resetMutations}
                     variant="outlined">
 
@@ -71,7 +71,7 @@ export const ExamEditor = ({
                 {/* ok */}
                 <EpistoButton
                     margin={{ left: 'px10' }}
-                    isDisabled={!logic.isAnyMutated}
+                    isDisabled={!logic.isQuestionsMutated}
                     onClick={finish}
                     variant="colored">
 

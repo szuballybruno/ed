@@ -1,7 +1,9 @@
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerSession } from '../models/entity/AnswerSession';
+import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { SaveQuestionAnswerDTO } from '../shared/dtos/SaveQuestionAnswerDTO';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -89,8 +91,9 @@ export class QuestionAnswerService {
     /**
      * Saves quesiton answers 
      */
-    async saveQuestionAnswers(questionVersionMigrations: VersionMigrationResult[]) {
+    async saveQuestionAnswers(questionVersionMigrations: VersionMigrationResult[], answers: AnswerEditDTO[]) {
 
+        
 
     }
 
