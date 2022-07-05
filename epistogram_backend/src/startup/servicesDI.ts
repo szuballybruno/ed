@@ -57,6 +57,7 @@ import { UserSessionActivityService } from './../services/UserSessionActivitySer
 import { UserStatsService } from './../services/UserStatsService';
 import { VideoRatingService } from './../services/VideoRatingService';
 import { VideoService } from './../services/VideoService';
+import { VersionSaveService } from '../services/VersionSaveService';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -143,7 +144,8 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const seedService = new SeedService(dbSchema, globalConfig, sqlConnectionService);
     const recreateDBservice = new RecreateDBService(createDBService, seedService, dbSchema, sqlConnectionService);
     const questionService = new QuestionService(ormConnectionService, questionAnswerService);
-    const courseItemService = new CourseItemService(ormConnectionService, mapperService, questionService);
+    const versionSaveService = new VersionSaveService(ormConnectionService);
+    const courseItemService = new CourseItemService(ormConnectionService, mapperService, questionService, versionSaveService);
     const userCourseBridgeService = new UserCourseBridgeService(ormConnectionService, mapperService);
     const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService);
     const storageService = new StorageService(globalConfig);

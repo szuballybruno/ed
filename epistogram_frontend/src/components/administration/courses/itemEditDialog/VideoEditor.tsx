@@ -30,7 +30,7 @@ export const VideoEditor = ({
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
     // TODO optimize this
-    const getPlayedSeconds = () => Math.floor(playedSeconds);
+    const getPlayedSeconds = useCallback(() => Math.floor(playedSeconds), [playedSeconds]);
 
     const videoUrl = courseItemEditData?.videoUrl ?? '';
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
@@ -40,7 +40,7 @@ export const VideoEditor = ({
     const onCloseHandler = useCallback(() => {
 
         onClose(logic.questionMutations, logic.answerMutations);
-    }, [onClose, logic.questionMutations]);
+    }, [onClose, logic.questionMutations, logic.answerMutations]);
 
     return <Flex
         direction="column"

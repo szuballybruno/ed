@@ -218,7 +218,7 @@ export const AdminCourseContentSubpage = () => {
 
         itemsMutatorRef
             .current
-            .add(newVersionCode, dto);
+            .create(newVersionCode, dto);
         closeAddPopper();
     };
 
@@ -294,14 +294,22 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
                 <ItemEditDialog
-                    callback={mutations => {
+                    callback={(questionMutations, answerMutations) => {
 
                         itemsMutatorRef
                             .current
                             .mutate({
                                 key: itemEditDialogLogic.params.versionCode,
                                 field: 'questionMutations',
-                                newValue: mutations
+                                newValue: questionMutations
+                            });
+
+                        itemsMutatorRef
+                            .current
+                            .mutate({
+                                key: itemEditDialogLogic.params.versionCode,
+                                field: 'answerMutations',
+                                newValue: answerMutations
                             });
                     }}
                     dialogLogic={itemEditDialogLogic} />

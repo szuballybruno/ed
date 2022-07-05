@@ -6,11 +6,13 @@ import { VideoData } from '../models/entity/video/VideoData';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { CourseItemView } from '../models/views/CourseItemView';
+import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/versionCode';
+import { AnswerVersionsSeedDataType } from '../sql/seed/seed_answer_versions';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { ClassType } from './misc/advancedTypes/ClassType';
@@ -18,6 +20,7 @@ import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionService } from './QuestionService';
+import { VersionSaveService } from './VersionSaveService';
 import { EntityType } from './XORM/XORMTypes';
 
 type ItemMutationType = Mutation<CourseContentItemAdminDTO, 'versionCode'>;
@@ -33,7 +36,8 @@ export class CourseItemService {
     constructor(
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
-        private _questionsService: QuestionService) {
+        private _questionsService: QuestionService,
+        private _versionSaveService: VersionSaveService) {
     }
 
     /**
@@ -83,8 +87,11 @@ export class CourseItemService {
             .map(x => x.videoVersionId!)
             .filter(x => !!x);
 
-        await this
-            ._incrementItemVersionsAsync(VideoVersion, videoVersionIds, moduleMigrations, true);
+        const videoVersionIdMigrations = await this
+            ._versionSaveService
+            .incrementVersionsAsync(VideoVersion, videoVersionIds, moduleMigrations, x => x.moduleVersionId, (ver, id) => ver.moduleVersionId = id);
+
+        this._saveQuestionsAsync([], videoVersionIdMigrations, true);
 
         //
         // EXAMS 
@@ -92,8 +99,11 @@ export class CourseItemService {
             .map(x => x.examVersionId!)
             .filter(x => !!x);
 
-        await this
-            ._incrementItemVersionsAsync(ExamVersion, examItemIds, moduleMigrations, false);
+        const examVersionIdMigrations = await this
+            ._versionSaveService
+            .incrementVersionsAsync(ExamVersion, examItemIds, moduleMigrations, x => x.moduleVersionId, (ver, id) => ver.moduleVersionId = id);
+
+        this._saveQuestionsAsync([], examVersionIdMigrations, false);
     }
 
     /**
@@ -115,11 +125,13 @@ export class CourseItemService {
         // SAVE VIDEOS 
         const videoMutations = filterMutations('video');
 
-        await this
-            ._saveItemsAsync({
+        const videoVersionMigraionResult = await this
+            ._versionSaveService
+            .saveItemsAsync(CourseContentItemAdminDTO)({
                 version: VideoVersion,
                 data: VideoData,
                 entity: Video,
+                mutationDTOParentVersionField: 'moduleVersionId',
                 getDataId: x => x.videoDataId,
                 getEntityId: x => x.videoId,
                 getDefaultData: mutation => ({
@@ -147,24 +159,26 @@ export class CourseItemService {
                     return data;
                 },
                 getNewEntity: () => ({}),
-                getNewVersion: ({ entityId, newDataId, newModuleVersionId }) => ({
-                    moduleVersionId: newModuleVersionId,
+                getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
+                    moduleVersionId: newParentVersionId,
                     videoDataId: newDataId,
                     videoId: entityId
                 }),
+                getParentVersionId: version => version.moduleVersionId,
                 muts: videoMutations,
-                moduleMigrations,
-                isVideo: true
+                parentVersionIdMigrations: moduleMigrations
             });
 
         // SAVE EXAMS 
         const examMutations = filterMutations('exam');
 
-        await this
-            ._saveItemsAsync({
+        const examVersionMigarationResults = await this
+            ._versionSaveService
+            .saveItemsAsync(CourseContentItemAdminDTO)({
                 version: ExamVersion,
                 data: ExamData,
                 entity: Exam,
+                mutationDTOParentVersionField: 'moduleVersionId',
                 getDataId: x => x.examDataId,
                 getEntityId: x => x.examId,
                 getDefaultData: mutation => ({
@@ -196,180 +210,32 @@ export class CourseItemService {
                     isPretest: false,
                     isSignup: false
                 }),
-                getNewVersion: ({ entityId, newDataId, newModuleVersionId }) => ({
-                    moduleVersionId: newModuleVersionId,
+                getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
+                    moduleVersionId: newParentVersionId,
                     examDataId: newDataId,
                     examId: entityId
                 }),
+                getParentVersionId: x => x.moduleVersionId,
                 muts: examMutations,
-                moduleMigrations,
-                isVideo: false
+                parentVersionIdMigrations: moduleMigrations
             });
-    }
-
-    /**
-     * Incerements video version while keeping old data version
-     */
-    private async _incrementItemVersionsAsync<TVersion extends ItemVersionEntityType>(
-        version: ClassType<TVersion>,
-        oldVersionIds: number[],
-        moduleMigrations: VersionMigrationResult[],
-        isVideo: boolean) {
-
-        const oldVersions = await this._ormService
-            .query(version, { oldVersionIds })
-            .where('id', '=', 'oldVersionIds')
-            .getMany();
-
-        const newVersions = oldVersions
-            .map(oldVersion => {
-
-                const newModuleId = VersionMigrationHelpers
-                    .getNewVersionId(moduleMigrations, oldVersion.moduleVersionId);
-
-                const newVersion: InsertEntity<TVersion> = {
-                    ...oldVersion,
-                    moduleVersionId: newModuleId,
-                };
-
-                return newVersion;
-            });
-
-        const newVersionIds = await this._ormService
-            .createManyAsync(version, newVersions);
-
-        // SAVE QUESTIONS 
-        await this._saveQuestionsAsync([], newVersionIds, oldVersionIds, isVideo);
-    }
-
-    /**
-     * Creates new videos from 
-     * video ADD mutations  
-     */
-    private async _saveItemsAsync<TVersion extends ItemVersionEntityType, TData extends EntityType, TEntity extends EntityType>(opts: {
-        version: ClassType<TVersion>,
-        data: ClassType<TData>,
-        entity: ClassType<TEntity>,
-        getDataId: (version: TVersion) => number,
-        getEntityId: (version: TVersion) => number,
-        getDefaultData: (mutation: ItemMutationType) => InsertEntity<TData>,
-        overrideDataProps: (data: InsertEntity<TData>, mutation: ItemMutationType) => InsertEntity<TData>,
-        getNewEntity: (mutation: ItemMutationType) => InsertEntity<TEntity>,
-        getNewVersion: (opts: { newDataId: number, entityId: number, newModuleVersionId: number }) => InsertEntity<TVersion>,
-        muts: ItemMutationType[],
-        moduleMigrations: VersionMigrationResult[],
-        isVideo: boolean
-    }) {
-
-        if (opts.muts.length === 0)
-            return;
-
-        const {
-            version,
-            data,
-            entity,
-            getDataId,
-            getEntityId,
-            getDefaultData,
-            overrideDataProps,
-            getNewEntity,
-            getNewVersion,
-            moduleMigrations,
-            muts,
-            isVideo
-        } = opts;
-
-        // order: add mutations first
-        const mutationOrdered = muts
-            .orderBy(x => x.action === 'add' ? 1 : 2);
-
-        // get old data
-        const { getOldData, oldVersionIds } = await this
-            ._getItemOldData(version, data, entity, getDataId, getEntityId, mutationOrdered);
-
-        //
-        // CREATE VIDEO DATAS
-        const newDatas = mutationOrdered
-            .map(mutation => {
-
-                // get default data
-                // in case of update, default data is the previous data
-                // in case of insert, default data is just a 
-                // js object with proper default values 
-                const defaultData = mutation.action === 'update'
-                    ? getOldData(mutation).oldData
-                    : getDefaultData(mutation);
-
-                return overrideDataProps(defaultData, mutation);
-            });
-
-        const dataIds = await this._ormService
-            .createManyAsync(data, newDatas);
-
-        //
-        // CREATE ENTITES (FROM ADD MUTATIONS ONLY)
-        const newEntities = mutationOrdered
-            .filter(x => x.action === 'add')
-            .map(getNewEntity);
-
-        const newEntityIds = await this._ormService
-            .createManyAsync(entity, newEntities);
-
-        //
-        // CREATE VERSIONS 
-        const newVersions = mutationOrdered
-            .map((mutation, i) => {
-
-                const newDataId = dataIds[i];
-
-                // if action is add, use new entity ids
-                // indexing works, because all new mutations
-                // are ordered as first
-                const entityId = mutation.action === 'add'
-                    ? newEntityIds[i]
-                    : getOldData(mutation).oldEntity.id;
-
-                // new entity: mutation has module version id 
-                // otherwise use mutation or old data (mutation is priorized)
-                const oldModuleVersionId = mutation.action === 'add'
-                    ? XMutatorHelpers.getFieldValueOrFail(mutation)('moduleVersionId')
-                    : XMutatorHelpers.getFieldValue(mutation)('moduleVersionId') ?? getOldData(mutation).oldVersion.moduleVersionId;
-
-                const newModuleVersionId = VersionMigrationHelpers
-                    .getNewVersionId(moduleMigrations, oldModuleVersionId);
-
-                return getNewVersion({
-                    entityId,
-                    newDataId,
-                    newModuleVersionId
-                });
-            });
-
-        const newVersionIds = await this._ormService
-            .createManyAsync(version, newVersions);
-
-        //
-        // SAVE QUESTIONS
-        await this._saveQuestionsAsync(mutationOrdered, newVersionIds, oldVersionIds, isVideo);
     }
 
     /**
      * Save questions 
      */
-    private async _saveQuestionsAsync(mutationOrdered: ItemMutationType[], newVersionIds: number[], oldVersionIds: number[], isVideo: boolean) {
+    private async _saveQuestionsAsync(mutationOrdered: ItemMutationType[], itemVersionIdMigrations: VersionMigrationResult[], isVideo: boolean) {
 
         const questionMutations = mutationOrdered
             .flatMap(x => XMutatorHelpers.getFieldValue(x)('questionMutations')!)
             .filter(x => !!x);
 
-        const videoVersionIdMigrations = newVersionIds
-            .map((newVersionId, i) => ({
-                newVersionId: newVersionId,
-                oldVersionId: oldVersionIds[i]
-            } as VersionMigrationResult))
+        const answerMutations = mutationOrdered
+            .flatMap(x => XMutatorHelpers.getFieldValue(x)('answerMutations')!)
+            .filter(x => !!x);
 
         await this._questionsService
-            .saveCourseItemQuestionsAsync(videoVersionIdMigrations, questionMutations, isVideo);
+            .saveCourseItemQuestionsAsync(itemVersionIdMigrations, questionMutations, answerMutations, isVideo);
     }
 
     /**

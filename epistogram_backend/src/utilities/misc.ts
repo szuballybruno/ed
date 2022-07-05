@@ -35,7 +35,7 @@ export const VersionMigrationHelpers = {
             .firstOrNull(x => x.oldVersionId === oldVersionId);
 
         if (!asd)
-            throw new Error(`Module migrations do not contain migration from old moduleVersionId: ${oldVersionId}!`);
+            throw new Error(`Version migrations do not contain migration from old versionId: ${oldVersionId}!`);
 
         return asd.newVersionId;
     },
@@ -43,9 +43,21 @@ export const VersionMigrationHelpers = {
     create: (oldVersionIds: number[], newVersionIds: number[]) => {
 
         return oldVersionIds
-            .map((x, i) => ({
-                newVersionId: newVersionIds[i],
-                oldVersionId: x
-            } as VersionMigrationResult));
+            .map((x, i) => {
+
+                const newVersionId = newVersionIds[i];
+                const oldVersionId = x;
+
+                if (newVersionId === null || newVersionId === undefined)
+                    throw new Error('Version migration result cannot contain null or undefined!');
+
+                if (oldVersionId === null || oldVersionId === undefined)
+                    throw new Error('Version migration result cannot contain null or undefined!');
+
+                return ({
+                    newVersionId,
+                    oldVersionId
+                } as VersionMigrationResult);
+            });
     }
 }

@@ -266,7 +266,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [Add] 
     // add an item to the list 
     //
-    add = (key: TKey, obj: Partial<TMutatee>) => {
+    create = (key: TKey, obj: TMutatee) => {
 
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');

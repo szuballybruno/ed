@@ -116,7 +116,8 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                                 createAnswer(newId, {
                                     answerVersionId: newId,
                                     isCorrect: false,
-                                    text: ''
+                                    text: '',
+                                    questionVersionId: row.questionVersionId
                                 });
                             }}>
                             <EpistoIcons.Add />
@@ -178,7 +179,15 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
         }
 
         return cols;
-    }, [getPlayedSeconds, mutateQuestion, ]);
+    }, [
+        showTiming,
+        removeQuestion,
+        getPlayedSeconds,
+        mutateQuestion,
+        mutateAnswer,
+        createAnswer,
+        deleteAnswer
+    ]);
 
     return {
         columns

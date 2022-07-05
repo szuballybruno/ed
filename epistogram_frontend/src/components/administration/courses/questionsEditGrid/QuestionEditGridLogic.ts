@@ -60,7 +60,7 @@ export const useQuestionEditGridLogic = (
         answerMutatorRef
             .current
             .setMutations(answerMutations);
-    }, [videoVersionId, examVersionId]);
+    }, [questions, questionMutations, answerMutations, videoVersionId, examVersionId]);
 
     //
     // add question
@@ -74,14 +74,13 @@ export const useQuestionEditGridLogic = (
 
             answerMutatorRef
                 .current
-                .add(newAnswerVersionId, {
+                .create(newAnswerVersionId, {
                     answerVersionId: newAnswerVersionId,
                     isCorrect: false,
                     questionVersionId: questionVersionId,
                     text: ''
                 });
         });
-
 
         const question: QuestionEditDataDTO = {
             questionVersionId: questionVersionId,
@@ -94,7 +93,7 @@ export const useQuestionEditGridLogic = (
 
         questionMutatorRef
             .current
-            .add(question.questionVersionId, question);
+            .create(question.questionVersionId, question);
     }, [videoVersionId, examVersionId]);
 
     //
@@ -119,8 +118,10 @@ export const useQuestionEditGridLogic = (
                     itemText: question.questionText
                 } as RowSchema;
 
-                const answerRows = question
-                    .answers
+                const answerRows = answerMutatorRef
+                    .current
+                    .mutatedItems
+                    .filter(x => x.questionVersionId === question.questionVersionId)
                     .map((answer): RowSchema => ({
                         ...headerRow,
                         isQuestionHeader: false,
@@ -134,7 +135,9 @@ export const useQuestionEditGridLogic = (
 
                 return [headerRow, ...answerRows];
             });
-    }, [questionMutatorRef.current.mutatedItems]);
+    }, [questionMutatorRef.current.mutatedItems, answerMutatorRef.current.mutatedItems]);
+
+    console.log(answerMutatorRef.current.mutations);
 
     //
     // get key
@@ -153,7 +156,7 @@ export const useQuestionEditGridLogic = (
         removeQuestion: questionMutatorRef.current.remove,
         mutateQuestion: questionMutatorRef.current.mutate,
         resetMutations: questionMutatorRef.current.resetMutations,
-        createAnswer: answerMutatorRef.current.add,
+        createAnswer: answerMutatorRef.current.create,
         mutateAnswer: answerMutatorRef.current.mutate,
         deleteAnswer: answerMutatorRef.current.remove
     };

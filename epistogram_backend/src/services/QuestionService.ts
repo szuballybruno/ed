@@ -1,6 +1,7 @@
 import { Question } from '../models/entity/question/Question';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
@@ -10,6 +11,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { QuestionAnswerService } from './QuestionAnswerService';
 
 type QuestionMutationType = Mutation<QuestionEditDataDTO, 'questionVersionId'>;
+type AnswerMutationType = Mutation<AnswerEditDTO, 'answerVersionId'>;
 
 export class QuestionService {
 
@@ -24,7 +26,8 @@ export class QuestionService {
      */
     async saveCourseItemQuestionsAsync(
         itemVersionIdMigrations: VersionMigrationResult[],
-        mutations: QuestionMutationType[],
+        questionMutations: QuestionMutationType[],
+        answerMutations: AnswerMutationType[],
         isVideo: boolean) {
 
         // get old question versions 
@@ -33,10 +36,10 @@ export class QuestionService {
 
         // get unmodified questions 
         const unmodifiedQuestions = oldQuestionVersions
-            .filter(x => !XMutatorHelpers.hasMutationForKey(mutations)(x.id));
+            .filter(x => !XMutatorHelpers.hasMutationForKey(questionMutations)(x.id));
 
         // filter mutations 
-        const nonDeleteMutaitons = mutations
+        const nonDeleteMutaitons = questionMutations
             .filter(x => x.action !== 'delete');
 
         // increment unmodified
@@ -248,11 +251,8 @@ export class QuestionService {
 
         //
         // Save answers 
-        const idMigrations = oldQustionVersions
-            .map((oldVersion, i) => ({
-                newVersionId: newVersionIds[i],
-                oldVersionId: oldVersion.id
-            } as VersionMigrationResult));
+        const idMigrations = VersionMigrationHelpers
+            .create(oldQustionVersions.map(x => x.id), newVersionIds); 
 
         await this._answerService
             .incrementAnswerVersions(idMigrations);
