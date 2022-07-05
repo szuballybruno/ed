@@ -46,6 +46,12 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { PretestService } from './PretestService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
+<<<<<<< HEAD
+=======
+import { CourseItemView } from '../models/views/CourseItemView';
+import { CourseItemSimpleType } from '../shared/types/sharedTypes';
+import { VersionCode } from '../shared/types/versionCode';
+>>>>>>> 580ff1a36654d1f30d7f3fecf55c945951d53941
 
 export class CourseService {
 
@@ -484,13 +490,19 @@ export class CourseService {
         const moduleVersionMigrations = await this
             ._incrementModuleVersionsAsync(oldCourseVersionId, newCourseVersionId);
 
-        // increment unmodified
-        await this._courseItemService
-            .incrementUnmodifiedCourseItemVersions(moduleVersionMigrations, mutations);
+        const filterMutations = (
+            versionType: CourseItemSimpleType) => {
 
-        // save new items 
+            return mutations
+                .filter(x => VersionCode.read(x.key).versionType === versionType);
+        };
+
+        const videoMutations = filterMutations('video');
+        const examMutations = filterMutations('exam');
+
+        // save
         await this._courseItemService
-            .saveMutatedItemsAsync(moduleVersionMigrations, mutations);
+            .saveAsync(moduleVersionMigrations, videoMutations, examMutations);
     }
 
     private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {
@@ -539,57 +551,6 @@ export class CourseService {
         return newVersionId;
     }
 
-    private async saveUpdatedCourseItemsAsync(mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
-
-        throwNotImplemented();
-        // const updateMuts = mutations
-        //     .filter(x => x.action === 'update')
-        //     .map(x => ({ ...x, ...readItemCode(x.key) }))
-        //     .groupBy(x => x.itemType);
-
-        // const videos = updateMuts
-        //     .filter(x => x.key === 'video')
-        //     .flatMap(x => x.items)
-        //     .map(updateMut => {
-
-        //         const updateDto = mapMutationToPartialObject(updateMut);
-
-        //         const video: Partial<VideoData> = {
-        //             id: updateMut.itemId,
-        //             moduleId: updateDto.moduleId,
-        //             title: updateDto.itemTitle,
-        //             subtitle: updateDto.itemSubtitle,
-        //             orderIndex: updateDto.itemOrderIndex
-        //         };
-
-        //         return video;
-        //     });
-
-        // const exams = updateMuts
-        //     .filter(x => x.key === 'exam')
-        //     .flatMap(x => x.items)
-        //     .map(updateMut => {
-
-        //         const updateDto = mapMutationToPartialObject(updateMut);
-
-        //         const exam: Partial<ExamData> = {
-        //             id: updateMut.itemId,
-        //             moduleId: updateDto.moduleId,
-        //             title: updateDto.itemTitle,
-        //             subtitle: updateDto.itemSubtitle,
-        //             orderIndex: updateDto.itemOrderIndex
-        //         };
-
-        //         return exam;
-        //     });
-
-        // await this._ormService
-        //     .save(VideoData, videos);
-
-        // await this._ormService
-        //     .save(ExamData, exams);
-    }
-
     /**
      * Returns admin list items 
      */
@@ -607,8 +568,6 @@ export class CourseService {
      * Soft delete course.
      */
     async softDeleteCourseAsync(courseId: number) {
-
-
 
         await this._ormService
             .softDelete(CourseData, [courseId]);
