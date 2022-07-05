@@ -55,6 +55,10 @@ export class CourseData {
 
     @Column()
     @XViewColumn()
+    isFeatured: boolean;
+
+    @Column()
+    @XViewColumn()
     skillBenefits: string;
 
     @Column()

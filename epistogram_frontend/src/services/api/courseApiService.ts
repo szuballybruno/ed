@@ -1,20 +1,20 @@
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../../shared/dtos/admin/CourseContentAdminDTO';
+import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
+import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAssignDTO';
 import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
 import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { Mutation } from '../../shared/dtos/mutations/Mutation';
 import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { CourseModeType } from '../../shared/types/sharedTypes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
-import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { Mutation } from '../../shared/dtos/mutations/Mutation';
-import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAssignDTO';
 
 export const usePermissionAssignCourses = (userId: number) => {
 
@@ -154,9 +154,21 @@ export const useCourseDetails = (courseId: number) => {
     };
 };
 
-export const useUserCourses = () => {
+export const useUserCourses = (
+    searchTerm: string | null,
+    filterCategoryId: number | null,
+    isFeatured: boolean,
+    isRecommended: boolean,
+    orderBy: string | null
+) => {
 
-    const qr = useReactQuery2<CourseShortDTO[]>(apiRoutes.course.getAvailableCourses);
+    const qr = useReactQuery2<CourseShortDTO[]>(apiRoutes.course.getAvailableCourses, {
+        searchTerm,
+        filterCategoryId,
+        isFeatured,
+        isRecommended,
+        orderBy
+    });
 
     return {
         courses: qr.data ?? [],

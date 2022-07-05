@@ -27,6 +27,13 @@ export class UserStatsController {
             .getUserLearningPageStatsAsync(params.principalId);
     };
 
+    @XControllerAction(apiRoutes.userStats.getImproveYourselfPageStats)
+    getImproveYourselfPageStatsAction = async (params: ActionParams) => {
+
+        return await this._userStatsService
+            .getImproveYourselfPageStatsAsync(params.principalId);
+    };
+
     @XControllerAction(apiRoutes.userStats.getUserCourseStats)
     getUserCourseStatsAction = async (params: ActionParams) => {
 

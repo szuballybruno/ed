@@ -34,8 +34,19 @@ export class CourseController {
     @XControllerAction(apiRoutes.course.getAvailableCourses)
     getAvailableCoursesAction = async (params: ActionParams) => {
 
+        const query = params
+            .getQuery()
+
+        console.log(query)
+
+        const searchTerm: string = query.data.searchTerm || ''
+        const filterCategoryId = query.getValueOrNull(x => x.filterCategoryId, 'int')
+        const isFeatured = query.getValueOrNull(x => x.isFeatured, 'boolean')
+        const isRecommended = query.getValueOrNull(x => x.isRecommended, 'boolean')
+        const orderBy = query.getValueOrNull(x => x.orderBy, 'string')
+
         return this._courseService
-            .getAvailableCoursesAsync(params.principalId);
+            .getAvailableCoursesAsync(params.principalId, searchTerm, filterCategoryId, isFeatured, isRecommended, orderBy);
     };
 
     @XControllerAction(apiRoutes.course.getCourseDetailsEditData)

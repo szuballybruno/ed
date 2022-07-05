@@ -35,6 +35,14 @@ export class AvailableCourseView {
 
     @ViewColumn()
     @XViewColumn()
+    isFeatured: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
+    isRecommended: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
     firstItemCode: string;
 
     @ViewColumn()
@@ -60,6 +68,10 @@ export class AvailableCourseView {
     @ViewColumn()
     @XViewColumn()
     categoryName: string;
+
+    @ViewColumn()
+    @XViewColumn()
+    subCategoryId: number;
 
     @ViewColumn()
     @XViewColumn()

@@ -1,11 +1,8 @@
-import { query } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../models/entity/CourseCategory';
-import { Module } from '../models/entity/module/Module';
-import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
@@ -16,7 +13,6 @@ import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { CourseItemPlaylistView } from '../models/views/CourseItemPlaylistView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
-import { CourseModuleOverviewView } from '../models/views/CourseModuleOverviewView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { ModuleListView } from '../models/views/ModuleListView';
@@ -27,32 +23,29 @@ import { CourseModuleShortDTO } from '../shared/dtos/admin/CourseModuleShortDTO'
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { PlaylistItemDTO } from '../shared/dtos/PlaylistItemDTO';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
-import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
+import { OrderType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
+import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { InsertEntity, VersionMigrationResult } from '../utilities/misc';
 import { CourseItemService } from './CourseItemService';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { readItemCode } from './misc/encodeService';
 import { createCharSeparatedList } from './misc/mappings';
-import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-import { CourseItemView } from '../models/views/CourseItemView';
 
 export class CourseService {
 
@@ -624,7 +617,14 @@ export class CourseService {
     /**
      * Returns the currently available courses. 
      */
-    async getAvailableCoursesAsync(userId: PrincipalId) {
+    async getAvailableCoursesAsync(
+        userId: PrincipalId,
+        searchTerm: string,
+        filterCategoryId: number | null,
+        isFeatured: boolean,
+        isRecommended: boolean,
+        orderBy: OrderType
+    ) {
 
         const courses = await this._ormService
             .query(AvailableCourseView, { userId })
@@ -632,8 +632,31 @@ export class CourseService {
             .and('canView', '=', 'true')
             .getMany();
 
+        const filteredCoursesBySearchTerm =
+            filterByProperty(courses, 'title', searchTerm)
+
+        const filteredCoursesByCategoryId =
+            filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId)
+
+        const filteredCoursesByIsFeatured =
+            filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured)
+
+        const filteredCoursesByIsRecommended =
+            filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended)
+
+        const orderCourses = (courses: AvailableCourseView[], orderType: string) => {
+            if (orderBy === 'nameASC')
+                return orderByProperty(courses, 'title', 'asc')
+            if (orderBy === 'nameDESC')
+                return orderByProperty(courses, 'title', 'desc')
+            return courses
+        }
+
+        const orderedCourses = orderCourses(filteredCoursesByIsRecommended, orderBy)
+
+
         return this._mapperService
-            .mapMany(AvailableCourseView, CourseShortDTO, courses);
+            .mapMany(AvailableCourseView, CourseShortDTO, orderedCourses);
     }
 
     /**

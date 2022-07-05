@@ -3,8 +3,10 @@ import { UploadedFile } from 'express-fileupload';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
+import { typecheck } from '../shared/logic/sharedLogic';
 import { VerboseError } from '../shared/types/VerboseError';
 import { KeyofConstrained } from './misc';
+import { XControllerAction } from './XTurboExpress/XTurboExpressDecorators';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -142,7 +144,7 @@ export class SafeObjectWrapper<TObject> {
 
             return value;
         }
-        
+
         if (castType === 'custom') {
             const isValid = fn!(value);
             if (!isValid)
@@ -295,7 +297,7 @@ export const getSingleFileFromRequest = (req: Request) => {
     return req.files.file as UploadedFile;
 };
 
-export const instantiate = <T>(obj: T) => obj; 
+export const instantiate = <T>(obj: T) => obj;
 
 export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 
@@ -305,6 +307,70 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
     });
 
     return parseType(objWithValue, type ?? 'any') as T;
+};
+
+export const filterByProperty = <T extends Object, TKeyField extends keyof T>(
+    arr: T[],
+    searchKey: TKeyField,
+    searchTerm: string | boolean | number | null
+) => {
+
+    if (searchTerm === null)
+        return arr;
+
+    if (searchTerm === false)
+        return arr;
+
+    return arr.filter(x => {
+
+        const value = x[searchKey]
+
+        if (typeof value === 'string' && typeof searchTerm === 'string')
+            return value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+
+        if (typeof value === 'boolean' && typeof searchTerm === 'boolean')
+            return value === searchTerm
+
+        if (typeof value === 'number' && typeof searchTerm === 'number')
+            return value === searchTerm
+    })
+};
+
+export const orderByProperty = <T extends Object, TKeyField extends keyof T>(
+    arr: T[],
+    key: TKeyField,
+    direction: 'asc' | 'desc'
+) => {
+
+    const sortByProperty = (key: TKeyField, direction: 'asc' | 'desc') => {
+        return (a: T, b: T) => {
+
+            const aValue = a[key]
+            const bValue = b[key]
+
+            if (typeof aValue !== 'string' || typeof bValue !== 'string')
+                return 0;
+
+            let aProp = aValue.toString().toLowerCase();
+            let bProp = bValue.toString().toLowerCase();
+
+            if (aProp < bProp && direction === 'asc')
+                return -1;
+
+            if (aProp < bProp && direction === 'desc')
+                return 1;
+
+            if (aProp > bProp && direction === 'asc')
+                return 1;
+
+            if (aProp > bProp && direction === 'desc')
+                return -1;
+
+            return 0;
+        };
+    }
+
+    return arr.sort(sortByProperty(key, direction));
 };
 
 export const sleepAsync = (seconds: number) => {

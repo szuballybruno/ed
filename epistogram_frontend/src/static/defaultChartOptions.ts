@@ -249,11 +249,15 @@ const defaultCharts = {
             type: 'category',
             axisLabel: {
                 show: true,
-                rotate: 0,
+                rotate: 15,
+                interval: 0,
                 margin: 20
             },
             axisLine: {
                 show: false
+            },
+            axisTick: {
+                alignWithLabel: true
             }
         },
         yAxis: {

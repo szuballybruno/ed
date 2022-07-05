@@ -188,6 +188,7 @@ export class CourseItemService {
                     retakeLimit: 3,
                     subtitle: '',
                     thumbnailUrl: null,
+                    acceptanceThreshold: null,
                     title: ''
                 }),
                 overrideDataProps: (data, mutation) => {

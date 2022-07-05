@@ -5,11 +5,11 @@ SELECT DISTINCT ON (e.id)
 	cv.course_id,
 	asv.answer_session_success_rate correct_answer_rate,
 	CASE 
-		WHEN asv.answer_session_success_rate < 60
-		THEN true
-		ELSE false
+		WHEN asv.is_successful
+		THEN false
+		ELSE true
 	END should_practise_exam,
-	asv.correct_given_answer_count::text || ' / ' || asv.answered_question_count::text correct_answer_count, -- TODO: Incorrect when multiple correct answers
+	ROUND(asv.answer_session_acquired_points / 4, 4) correct_answer_count,
 	EXTRACT(EPOCH FROM (asv.end_date - asv.start_date)::time)::int exam_length_seconds,
 	asv.end_date last_completion_date,
 	AVG(ga.elapsed_seconds) average_reaction_time
@@ -50,6 +50,8 @@ GROUP BY
 	asv.answered_question_count,
 	asv.end_date,
 	asv.start_date,
+	asv.is_successful,
+	asv.answer_session_acquired_points,
 	asv.answer_session_success_rate
 
 ORDER BY e.id, asv.end_date desc

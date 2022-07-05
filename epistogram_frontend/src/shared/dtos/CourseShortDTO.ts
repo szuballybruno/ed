@@ -8,6 +8,7 @@ export class CourseShortDTO {
     teacherName: string;
     categoryName: string;
     stageName: CourseStageNameType;
+    subCategoryId: number;
     subCategoryName: string;
     isComplete: boolean;
     courseLength: number;

@@ -21,6 +21,9 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
+import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
+import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
+import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
 
 export class UserStatsService {
 
@@ -126,6 +129,25 @@ export class UserStatsService {
         const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
 
         return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage])
+    }
+
+    async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
+
+        const userId = principalId.toSQLValue();
+
+        const stats = await this._ormService
+            .query(ImproveYourselfPageStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
+
+        const mostProductiveTimeRangeView = await this._ormService
+            .query(MostProductiveTimeRangeView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        return this._mapperService
+            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, ''])
+
     }
 
     /**

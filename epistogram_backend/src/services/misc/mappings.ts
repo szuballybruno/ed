@@ -35,7 +35,9 @@ import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
+import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
 import { ModuleView } from '../../models/views/ModuleView';
+import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
@@ -83,6 +85,7 @@ import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
+import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
@@ -455,6 +458,17 @@ const marray = [
                 ? urlService.getAssetUrl(moduleImageFilePath)
                 : null
         })
+    }),
+    epistoMappingsBuilder.addMapping(ImproveYourselfPageStatsDTO, () => (stats: ImproveYourselfPageStatsView, mostProductiveTimeRangeChartData: MostProductiveTimeRangeView[], mostActiveDayChartData: '') => {
+        return instantiate<ImproveYourselfPageStatsDTO>({
+            userId: stats.userId,
+            mostProductiveTimeRange: stats.mostProductiveTimeRange,
+            mostProductiveTimeRangeChartData: mostProductiveTimeRangeChartData.map((x, index) => {
+                return [index, x.performancePercentage]
+            }),
+            mostActiveDay: stats.mostActiveDay,
+            mostActiveDayChartData: mostActiveDayChartData
+        })
     })
 
 ] as const;
@@ -791,6 +805,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 courseId: course.courseId,
                 title: course.title,
                 categoryName: course.categoryName,
+                subCategoryId: course.subCategoryId,
                 subCategoryName: course.subCategoryName,
                 currentItemCode: currentItemCode,
                 stageName: course.stageName,

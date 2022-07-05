@@ -4,6 +4,7 @@ WITH answer_session_groups AS
 		asv.user_id,
 		cv.course_id,
 		asv.answer_session_type,
+		asv.start_date,
 		AVG(asv.answer_session_success_rate) answer_session_success_rate
 	FROM public.answer_session_view asv
 
@@ -25,7 +26,8 @@ WITH answer_session_groups AS
 	GROUP BY 
 		asv.user_id,
 		cv.course_id,
-		asv.answer_session_type
+		asv.answer_session_type,
+		asv.start_date
 ),
 
 split_correct_answer_rates AS
@@ -33,6 +35,7 @@ split_correct_answer_rates AS
 	SELECT
 		u.id user_id,
 		co.id course_id,
+		asg.start_date,
 		CASE 
 			WHEN asg.answer_session_type = 'exam'
 			THEN asg.answer_session_success_rate
@@ -59,10 +62,10 @@ split_correct_answer_rates AS
 SELECT
 	scar.user_id,
 	scar.course_id,
+	scar.start_date,
 	SUM(scar.exam_correct_answer_rate) exam_correct_answer_rate,
 	SUM(scar.practise_correct_answer_rate) practise_correct_answer_rate,
 	SUM(scar.video_correct_answer_rate) video_correct_answer_rate
 FROM split_correct_answer_rates scar
 
-GROUP BY scar.user_id, scar.course_id
-
+GROUP BY scar.user_id, scar.course_id, scar.start_date

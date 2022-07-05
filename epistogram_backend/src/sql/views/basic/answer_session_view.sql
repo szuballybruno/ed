@@ -44,8 +44,14 @@ SELECT
     ase.end_date,
 	ase.is_completed,
 	ass.answer_session_acquired_points,
-	ROUND((ass.answer_session_acquired_points::double precision / ass.answer_session_maximum_points * 100)::numeric, 1) answer_session_success_rate,
-	ROUND((ass.answer_session_acquired_points::double precision / ass.answer_session_maximum_points * 100)::numeric, 1) > 60 is_successful,
+	ROUND(
+		(ass.answer_session_acquired_points::double precision 
+		/ ass.answer_session_maximum_points * 100)::numeric, 1
+	) answer_session_success_rate,
+	ROUND(
+		(ass.answer_session_acquired_points::double precision 
+		/ ass.answer_session_maximum_points * 100)::numeric, 1
+	) > COALESCE(ed.acceptance_threshold, 60) is_successful,
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
@@ -73,6 +79,9 @@ ON ass.answer_session_id = ase.id
 
 LEFT JOIN public.exam_version ev
 ON ev.id = ase.exam_version_id
+
+LEFT JOIN public.exam_data ed
+ON ed.id = ev.exam_data_id
 
 LEFT JOIN public.exam e
 ON ev.exam_id = e.id

@@ -188,6 +188,8 @@ import { LatestVideoView } from '../../models/views/LatestVideoView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 import { GivenAnswerScoreView } from '../../models/views/GivenAnswerScoreView';
 import { ExamScoreView } from '../../models/views/ExamScoreView';
+import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
+import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -345,6 +347,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['stats', 'user_exam_stats_view', UserExamStatsView],
             ['stats', 'user_spent_time_ratio_view', UserSpentTimeRatioView],
             ['stats', 'user_learning_page_stats_view', UserLearningPageStatsView],
+            ['stats', 'improve_yourself_page_stats_view', ImproveYourselfPageStatsView],
+            ['stats', 'most_productive_time_range_view', MostProductiveTimeRangeView],
             ['', 'user_latest_activity_view'],
             ['', 'admin_user_list_view', AdminUserListView]
         ],

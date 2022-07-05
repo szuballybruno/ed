@@ -37,6 +37,10 @@ export class ExamData {
     @XViewColumn()
     retakeLimit: number | null;
 
+    @Column({ type: 'integer', nullable: true })
+    @XViewColumn()
+    acceptanceThreshold: number | null;
+
     // 
     // TO MANY
     // 

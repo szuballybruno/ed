@@ -421,6 +421,22 @@ export function distinct<T>(array: T[]) {
     return unique;
 }
 
+export function distinctByAllKeys<T extends Object, TKeyField extends keyof T>(array: T[], keys: TKeyField[]) {
+
+    const isPropValuesEqual = (subject: T, target: T, propNames: TKeyField[]) => {
+
+        return propNames.every(propName => subject[propName] === target[propName]);
+    };
+
+    const getUniqueItemsByProperties = (items: T[], keys: TKeyField[]) => {
+        return items.filter((item, index, array) =>
+            index === array.findIndex(foundItem => isPropValuesEqual(foundItem, item, keys))
+        );
+    };
+
+    return getUniqueItemsByProperties(array, keys);
+}
+
 export const swapItems = (newList: any[], srcIndex: number, destIndex: number) => {
 
     newList.splice(destIndex, 0, newList.splice(srcIndex, 1)[0]);

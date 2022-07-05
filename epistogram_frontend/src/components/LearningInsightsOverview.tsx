@@ -1,5 +1,5 @@
 import { Flex, useMediaQuery } from '@chakra-ui/react';
-import { GetTheMostOutOfYourselfSection } from './learningInsights/GetTheMostOutOfYourselfSection';
+import { ImproveYourselfSection } from './learningInsights/ImproveYourselfSection';
 import { LearningStatistics } from './learningInsights/LearningStatistics';
 import { LearningStatisticsOverview } from './learningInsights/LearningStatisticsOverview';
 import { LearningStatisticsSeciton } from './learningInsights/LearningStatisticsSeciton';
@@ -46,7 +46,7 @@ export const LearningInsightsOverview = () => {
             className="largeSoftShadow"
             marginBottom="10px">
 
-            <GetTheMostOutOfYourselfSection />
+            <ImproveYourselfSection userId={0} />
         </DashboardSection>
     </Flex>;
 };
