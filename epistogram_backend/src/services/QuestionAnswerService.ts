@@ -1,20 +1,27 @@
+import { Answer } from '../models/entity/answer/Answer';
+import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
-import { SaveQuestionAnswerDTO } from '../shared/dtos/SaveQuestionAnswerDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
+import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
+import { VersionSaveService } from './VersionSaveService';
+
+export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];
 
 export class QuestionAnswerService {
 
     constructor(
         private _ormService: ORMConnectionService,
         private _sqlFunctionsService: SQLFunctionsService,
-        private _coinAcquireService: CoinAcquireService) {
+        private _coinAcquireService: CoinAcquireService,
+        private _versionSaveService: VersionSaveService) {
     }
 
     /**
@@ -91,39 +98,45 @@ export class QuestionAnswerService {
     /**
      * Saves quesiton answers 
      */
-    async saveQuestionAnswers(questionVersionMigrations: VersionMigrationResult[], answers: AnswerEditDTO[]) {
+    async saveAnswersAsync(
+        mutations: AnswerMutationsType,
+        questionVersionIdMigrations: VersionMigrationResult[]) {
 
-        
+        return await this._versionSaveService
+            .saveAsync({
+                dtoSignature: AnswerEditDTO,
+                versionSignature: AnswerVersion,
+                dataSignature: AnswerData,
+                entitySignature: Answer,
+                parentVersionIdField: 'questionVersionId',
+                parentVersionIdFieldInDTO: 'questionVersionId',
+                getDataId: x => x.answerDataId,
+                getEntityId: x => x.answerId,
+                getDefaultData: (mut) => ({
+                    isCorrect: false,
+                    text: ''
+                }),
+                getNewEntity: () => ({}),
+                getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
+                    answerDataId: newDataId,
+                    answerId: entityId,
+                    questionVersionId: newParentVersionId
+                }),
+                overrideDataProps: (data, mutation) => {
 
-    }
+                    const { isCorrect, text } = XMutatorHelpers
+                        .mapMutationToPartialObject(mutation);
 
-    /**
-     * Increment answer version 
-     */
-    async incrementAnswerVersions(questionVersionMigrations: VersionMigrationResult[]) {
-        
-        const oldQuestionIds = questionVersionMigrations
-            .map(x => x.oldVersionId);
+                    if (isCorrect === false || isCorrect === true)
+                        data.isCorrect = isCorrect;
 
-        const oldAnswerVersions = await this._ormService
-            .query(AnswerVersion, { oldQuestionIds })
-            .where('questionVersionId', '=', 'oldQuestionIds')
-            .getMany();
+                    if (text)
+                        data.text = text;
 
-        const newAnswerVersions = oldAnswerVersions
-            .map((oldVersion) => {
-
-                const newVersion: InsertEntity<AnswerVersion> = {
-                    answerDataId: oldVersion.answerDataId,
-                    answerId: oldVersion.answerId,
-                    questionVersionId: VersionMigrationHelpers
-                        .getNewVersionId(questionVersionMigrations, oldVersion.questionVersionId)
-                };
-
-                return newVersion;
+                    return data;
+                },
+                muts: mutations,
+                parentVersionIdMigrations: questionVersionIdMigrations
             });
-
-        await this._ormService
-            .createManyAsync(AnswerVersion, newAnswerVersions);
     }
 }

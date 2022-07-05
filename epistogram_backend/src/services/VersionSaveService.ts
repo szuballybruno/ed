@@ -19,14 +19,95 @@ export class VersionSaveService {
     }
 
     /**
+     * SAVE
+     */
+    async saveAsync<TDTO, TVersion extends EntityType, TData extends EntityType, TEntity extends EntityType>(opts: {
+        dtoSignature: ClassType<TDTO>,
+        versionSignature: ClassType<TVersion>,
+        dataSignature: ClassType<TData>,
+        entitySignature: ClassType<TEntity>,
+        parentVersionIdField: keyof TVersion,
+        parentVersionIdFieldInDTO: keyof TDTO,
+        parentVersionIdMigrations: VersionMigrationResult[],
+        muts: Mutation<any, any>[],
+        getDataId: (version: TVersion) => number,
+        getEntityId: (version: TVersion) => number,
+        getDefaultData: (mutation: Mutation<TDTO, any>) => InsertEntity<TData>,
+        overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, any>) => InsertEntity<TData>,
+        getNewEntity: (mutation: Mutation<TDTO, any>) => InsertEntity<TEntity>,
+        getNewVersion: (opts: { newDataId: number, entityId: number, newParentVersionId: number }) => InsertEntity<TVersion>
+    }) {
+
+        const {
+            muts,
+            parentVersionIdMigrations,
+            dtoSignature,
+            versionSignature,
+            dataSignature,
+            entitySignature,
+            parentVersionIdField,
+            parentVersionIdFieldInDTO,
+            getDataId,
+            getDefaultData,
+            getEntityId,
+            getNewEntity,
+            getNewVersion,
+            overrideDataProps
+        } = opts;
+
+        const { mutations, unmutatedVersionIds } = await this
+            .processMutations(versionSignature, parentVersionIdField, muts, parentVersionIdMigrations);
+
+        // INCREMENT UNMUTATED
+        const incrementMigrations = await this
+            .incrementVersionsAsync({
+                versionSignature: versionSignature,
+                oldVersionIds: unmutatedVersionIds,
+                parentMigrations: parentVersionIdMigrations,
+                parentVersionIdField: parentVersionIdField,
+            });
+
+        // SAVE MUTATED
+        const mutationMigrations = await this
+            .saveItemsAsync(dtoSignature)({
+                version: versionSignature,
+                data: dataSignature,
+                entity: entitySignature,
+                mutationDTOParentVersionField: parentVersionIdFieldInDTO,
+                getDataId,
+                getEntityId,
+                getDefaultData,
+                getNewEntity,
+                getNewVersion,
+                getParentVersionId: x => x[parentVersionIdField] as any,
+                muts: mutations,
+                parentVersionIdMigrations: parentVersionIdMigrations,
+                overrideDataProps
+            });
+
+        return incrementMigrations
+            .concat(mutationMigrations);
+    }
+
+    /**
      * Incerements video version while keeping old data version
      */
-    async incrementVersionsAsync<TVersion extends EntityType>(
+    async incrementVersionsAsync<TVersion extends EntityType>(opts: {
         versionSignature: ClassType<TVersion>,
         oldVersionIds: number[],
         parentMigrations: VersionMigrationResult[],
-        getParentVersionId: (version: TVersion) => number,
-        setParentVersionId: (version: TVersion, parentVersionId: number) => void) {
+        parentVersionIdField: keyof TVersion
+    }) {
+
+        const {
+            oldVersionIds,
+            parentMigrations,
+            versionSignature,
+            parentVersionIdField
+        } = opts;
+
+        const getParentVersionId = (version: TVersion): number => version[parentVersionIdField] as any;
+        const setParentVersionId = (version: TVersion, parentVersionId: number) => version[parentVersionIdField] = parentVersionId as any;
 
         const oldVersions = await this._ormService
             .query(versionSignature, { oldVersionIds })
@@ -175,6 +256,43 @@ export class VersionSaveService {
                 .create(oldVersionIds, newVersionIds);
         };
     }
+
+    /**
+     * processMutations
+     */
+    async processMutations<TMutation extends Mutation<any, any>, TVersion extends EntityType>(
+        versionSignature: ClassType<TVersion>,
+        parentVersionIdField: keyof TVersion,
+        mutaitons: TMutation[],
+        parentVersionIdMigrations: VersionMigrationResult[],) {
+
+        // get old parent version ids 
+        const oldParentVersionIds = parentVersionIdMigrations
+            .map(x => x.oldVersionId);
+
+        // get old question versions 
+        const oldQuestionVersions = await this._ormService
+            .query(versionSignature, { oldParentVersionIds })
+            .where(parentVersionIdField, '=', 'oldParentVersionIds')
+            .getMany();
+
+        // get unmodified questions 
+        const unmodified = oldQuestionVersions
+            .filter(x => !XMutatorHelpers
+                .hasMutationForKey(mutaitons)(x.id));
+
+        const unmodifiedVersionIds = unmodified
+            .map(x => x.id);
+
+        // filter mutations 
+        const mutations = mutaitons
+            .filter(x => x.action !== 'delete');
+
+        return {
+            mutations: mutations,
+            unmutatedVersionIds: unmodifiedVersionIds
+        }
+    };
 
     /**
      * Get item old data 
