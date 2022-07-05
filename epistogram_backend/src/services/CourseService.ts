@@ -46,12 +46,9 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { PretestService } from './PretestService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-<<<<<<< HEAD
-=======
 import { CourseItemView } from '../models/views/CourseItemView';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/versionCode';
->>>>>>> 580ff1a36654d1f30d7f3fecf55c945951d53941
 
 export class CourseService {
 
