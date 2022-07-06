@@ -1,15 +1,16 @@
 import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { VersionCode } from '../shared/types/versionCode';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { ClassType } from './misc/advancedTypes/ClassType';
+import { log } from './misc/logger';
 import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { EntityType } from './XORM/XORMTypes';
 
-type GetVersionDataPairsFnType<TMutation, TVerion, TData, TEntity> = {
-    getOldData: (mutation: TMutation) => OldData<TVerion, TData, TEntity>,
-    oldVersionIds: number[]
+type SaveActionType = {
+    mutation: Mutation<any, any> | null;
+    oldVersionId: number;
+    action: 'ADD' | 'UPDATE' | 'INCREMENT';
 }
 
 export class VersionSaveService {
@@ -21,7 +22,7 @@ export class VersionSaveService {
     /**
      * SAVE
      */
-    async saveAsync<TDTO, TVersion extends EntityType, TData extends EntityType, TEntity extends EntityType>(opts: {
+    async saveAsync<TDTO, TMutationKey extends keyof TDTO, TVersion extends EntityType, TData extends EntityType, TEntity extends EntityType>(opts: {
         dtoSignature: ClassType<TDTO>,
         versionSignature: ClassType<TVersion>,
         dataSignature: ClassType<TData>,
@@ -29,12 +30,13 @@ export class VersionSaveService {
         parentVersionIdField: keyof TVersion,
         parentVersionIdFieldInDTO: keyof TDTO,
         parentVersionIdMigrations: VersionMigrationResult[],
-        muts: Mutation<any, any>[],
+        muts: Mutation<TDTO, TMutationKey>[],
         getDataId: (version: TVersion) => number,
         getEntityId: (version: TVersion) => number,
-        getDefaultData: (mutation: Mutation<TDTO, any>) => InsertEntity<TData>,
-        overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, any>) => InsertEntity<TData>,
-        getNewEntity: (mutation: Mutation<TDTO, any>) => InsertEntity<TEntity>,
+        getVersionId: (mutation: Mutation<TDTO, TMutationKey>) => number,
+        getDefaultData: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
+        overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
+        getNewEntity: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TEntity>,
         getNewVersion: (opts: { newDataId: number, entityId: number, newParentVersionId: number }) => InsertEntity<TVersion>
     }) {
 
@@ -50,298 +52,258 @@ export class VersionSaveService {
             getDataId,
             getDefaultData,
             getEntityId,
+            getVersionId,
             getNewEntity,
             getNewVersion,
             overrideDataProps
         } = opts;
 
-        const { mutations, unmutatedVersionIds } = await this
-            .processMutations(versionSignature, parentVersionIdField, muts, parentVersionIdMigrations);
+        this._log(`Saving ${entitySignature.name}...`);
 
-        // INCREMENT UNMUTATED
-        const incrementMigrations = await this
-            .incrementVersionsAsync({
-                versionSignature: versionSignature,
-                oldVersionIds: unmutatedVersionIds,
-                parentMigrations: parentVersionIdMigrations,
-                parentVersionIdField: parentVersionIdField,
-            });
+        // get all old versions of parent 
+        const oldVersions = await this
+            ._getAllOldVersionsByParent(
+                versionSignature,
+                parentVersionIdField,
+                parentVersionIdMigrations,
+                muts,
+                getVersionId);
 
-        // SAVE MUTATED
-        const mutationMigrations = await this
-            .saveItemsAsync(dtoSignature)({
-                version: versionSignature,
+        // get old verison ids 
+        const { oldVersionIds } = this
+            ._getOldVersionIds(muts, oldVersions, getVersionId);
+
+        // get old data
+        const { getOldData } = await this
+            ._getOldDataView({
                 data: dataSignature,
                 entity: entitySignature,
-                mutationDTOParentVersionField: parentVersionIdFieldInDTO,
+                oldVersions,
                 getDataId,
                 getEntityId,
-                getDefaultData,
-                getNewEntity,
-                getNewVersion,
-                getParentVersionId: x => x[parentVersionIdField] as any,
-                muts: mutations,
-                parentVersionIdMigrations: parentVersionIdMigrations,
-                overrideDataProps
+                getVersionId
             });
 
-        return incrementMigrations
-            .concat(mutationMigrations);
-    }
+        // mutations
+        const mutaitonsOrdered = muts
+            .filter(x => x.action !== 'delete')
+            .orderBy(x => x.action === 'add' ? 1 : 2);
 
-    /**
-     * Incerements video version while keeping old data version
-     */
-    async incrementVersionsAsync<TVersion extends EntityType>(opts: {
-        versionSignature: ClassType<TVersion>,
-        oldVersionIds: number[],
-        parentMigrations: VersionMigrationResult[],
-        parentVersionIdField: keyof TVersion
-    }) {
+        // get increment save actions
+        const incrementSaveActions = oldVersionIds
+            .filter(oldVersionId => !mutaitonsOrdered
+                .some(mut => getVersionId(mut) === oldVersionId))
+            .map(oldVersionId => ({ oldVersionId }));
 
-        const {
-            oldVersionIds,
-            parentMigrations,
-            versionSignature,
-            parentVersionIdField
-        } = opts;
+        //
+        // CREATE VIDEO DATAS
+        const newDatas = mutaitonsOrdered
+            .map((mutation) => {
 
-        const getParentVersionId = (version: TVersion): number => version[parentVersionIdField] as any;
-        const setParentVersionId = (version: TVersion, parentVersionId: number) => version[parentVersionIdField] = parentVersionId as any;
+                // get default data
+                // in case of update, default data is the previous data
+                // in case of insert, default data is just a 
+                // js object with proper default values 
+                const defaultData = mutation.action === 'update'
+                    ? getOldData(mutation).oldData
+                    : getDefaultData(mutation);
 
-        const oldVersions = await this._ormService
-            .query(versionSignature, { oldVersionIds })
-            .where('id', '=', 'oldVersionIds')
-            .getMany();
+                return overrideDataProps(defaultData, mutation);
+            });
 
-        const newVersions = oldVersions
-            .map(oldVersion => {
+        const dataIds = await this._ormService
+            .createManyAsync(dataSignature, newDatas);
+
+        //
+        // CREATE ENTITES (FROM ADD MUTATIONS ONLY)
+        const newEntities = mutaitonsOrdered
+            .filter(x => x.action === 'add')
+            .map(getNewEntity);
+
+        const newEntityIds = await this._ormService
+            .createManyAsync(entitySignature, newEntities);
+
+        //
+        // CREATE VERSIONS 
+        const saveActions = mutaitonsOrdered
+            .map(x => ({
+                mutation: x,
+                oldVersionId: getVersionId(x),
+                action: x.action === 'add' ? 'ADD' : 'UPDATE'
+            }) as SaveActionType)
+            .concat(incrementSaveActions
+                .map(x => ({
+                    mutation: null,
+                    oldVersionId: x.oldVersionId,
+                    action: 'INCREMENT'
+                } as SaveActionType)));
+
+        const newVersions = saveActions
+            .map(({ mutation, oldVersionId }, i) => {
+
+                // if no mutation (increment) use old
+                // ELSE use new
+                const newDataId = mutation
+                    ? dataIds[i]
+                    : getOldData(oldVersionId).oldData.id;
+
+                // if no mutation (increment) OR mutation is update, 
+                // use exisitng entity id
+                // ELSE use new entity id
+                const entityId = !mutation || mutation.action === 'update'
+                    ? getOldData(oldVersionId).oldEntity.id
+                    : newEntityIds[i];
+
+                // new entity: mutation has parent version id 
+                // otherwise use mutation or old data (mutation is priorized)
+                const oldParentVersionId: number = ((): number => {
+
+                    if (!mutation)
+                        return getOldData(oldVersionId).oldVersion[parentVersionIdField] as any;
+
+                    if (mutation.action === 'add')
+                        return XMutatorHelpers.getFieldValueOrFail(mutation)(parentVersionIdFieldInDTO) as any as number;
+
+                    const oldParentVersionId = XMutatorHelpers.getFieldValue(mutation)(parentVersionIdFieldInDTO) as any as number;
+                    if (oldParentVersionId)
+                        return oldParentVersionId;
+
+                    return getOldData(oldVersionId).oldVersion[parentVersionIdField] as any
+                })();
 
                 const newParentVersionId = VersionMigrationHelpers
-                    .getNewVersionId(parentMigrations, getParentVersionId(oldVersion));
+                    .getNewVersionId(parentVersionIdMigrations, oldParentVersionId);
 
-                const newVersion: TVersion = { ...oldVersion };
-
-                setParentVersionId(newVersion, newParentVersionId);
-
-                return newVersion;
+                return getNewVersion({
+                    entityId,
+                    newDataId,
+                    newParentVersionId
+                });
             });
 
         const newVersionIds = await this._ormService
             .createManyAsync(versionSignature, newVersions);
 
-        return VersionMigrationHelpers
+        const res = VersionMigrationHelpers
             .create(oldVersionIds, newVersionIds);
+
+        this._log(res
+            .map((x, i) => `${x.oldVersionId} -> ${x.newVersionId} [${saveActions[i].action}]`).join('\n'));
+
+        this._log(`Saved ${entitySignature.name}.`);
+
+        return res;
     }
 
     /**
-     * Creates new videos from 
-     * video ADD mutations  
+     * Get old versions  
      */
-    saveItemsAsync<TMutationDTO, TMutation extends Mutation<TMutationDTO, any>>(dto: ClassType<TMutationDTO>) {
-
-        return async <TVersion extends EntityType, TData extends EntityType, TEntity extends EntityType>(opts: {
-            version: ClassType<TVersion>,
-            data: ClassType<TData>,
-            entity: ClassType<TEntity>,
-            mutationDTOParentVersionField: keyof TMutationDTO,
-            getDataId: (version: TVersion) => number,
-            getEntityId: (version: TVersion) => number,
-            getDefaultData: (mutation: TMutation) => InsertEntity<TData>,
-            overrideDataProps: (data: InsertEntity<TData>, mutation: TMutation) => InsertEntity<TData>,
-            getNewEntity: (mutation: TMutation) => InsertEntity<TEntity>,
-            getNewVersion: (opts: { newDataId: number, entityId: number, newParentVersionId: number }) => InsertEntity<TVersion>,
-            getParentVersionId: (verison: TVersion) => number,
-            muts: TMutation[],
-            parentVersionIdMigrations: VersionMigrationResult[]
-        }): Promise<VersionMigrationResult[]> => {
-
-            if (opts.muts.length === 0)
-                return [];
-
-            const {
-                version,
-                data,
-                entity,
-                mutationDTOParentVersionField,
-                getDataId,
-                getEntityId,
-                getDefaultData,
-                overrideDataProps,
-                getNewEntity,
-                getNewVersion,
-                getParentVersionId,
-                parentVersionIdMigrations,
-                muts
-            } = opts;
-
-            // order: add mutations first
-            const mutationOrdered = muts
-                .orderBy(x => x.action === 'add' ? 1 : 2);
-
-            // get old data
-            const { getOldData, oldVersionIds } = await this
-                ._getOldDataView(version, data, entity, getDataId, getEntityId, mutationOrdered);
-
-            //
-            // CREATE VIDEO DATAS
-            const newDatas = mutationOrdered
-                .map(mutation => {
-
-                    // get default data
-                    // in case of update, default data is the previous data
-                    // in case of insert, default data is just a 
-                    // js object with proper default values 
-                    const defaultData = mutation.action === 'update'
-                        ? getOldData(mutation).oldData
-                        : getDefaultData(mutation);
-
-                    return overrideDataProps(defaultData, mutation);
-                });
-
-            const dataIds = await this._ormService
-                .createManyAsync(data, newDatas);
-
-            //
-            // CREATE ENTITES (FROM ADD MUTATIONS ONLY)
-            const newEntities = mutationOrdered
-                .filter(x => x.action === 'add')
-                .map(getNewEntity);
-
-            const newEntityIds = await this._ormService
-                .createManyAsync(entity, newEntities);
-
-            //
-            // CREATE VERSIONS 
-            const newVersions = mutationOrdered
-                .map((mutation, i) => {
-
-                    const newDataId = dataIds[i];
-
-                    // if action is add, use new entity ids
-                    // indexing works, because all new mutations
-                    // are ordered as first
-                    const entityId = mutation.action === 'add'
-                        ? newEntityIds[i]
-                        : getOldData(mutation).oldEntity.id;
-
-                    // new entity: mutation has parent version id 
-                    // otherwise use mutation or old data (mutation is priorized)
-                    const oldParentVersionId: number = ((): number => {
-
-                        if (mutation.action === 'add')
-                            return XMutatorHelpers.getFieldValueOrFail(mutation)(mutationDTOParentVersionField) as any as number;
-
-                        const oldParentVersionId = XMutatorHelpers.getFieldValue(mutation)(mutationDTOParentVersionField) as any as number;
-                        if (oldParentVersionId)
-                            return oldParentVersionId;
-
-                        return getParentVersionId(getOldData(mutation).oldVersion)
-                    })();
-
-                    const newParentVersionId = VersionMigrationHelpers
-                        .getNewVersionId(parentVersionIdMigrations, oldParentVersionId);
-
-                    return getNewVersion({
-                        entityId,
-                        newDataId,
-                        newParentVersionId
-                    });
-                });
-
-            const newVersionIds = await this._ormService
-                .createManyAsync(version, newVersions);
-
-            return VersionMigrationHelpers
-                .create(oldVersionIds, newVersionIds);
-        };
-    }
-
-    /**
-     * processMutations
-     */
-    async processMutations<TMutation extends Mutation<any, any>, TVersion extends EntityType>(
+    private async _getAllOldVersionsByParent<TVersion extends EntityType>(
         versionSignature: ClassType<TVersion>,
         parentVersionIdField: keyof TVersion,
-        mutaitons: TMutation[],
-        parentVersionIdMigrations: VersionMigrationResult[],) {
+        parentVersionIdMigrations: VersionMigrationResult[],
+        mutations: Mutation<any, any>[],
+        getVersionId: (mutation: Mutation<any, any>) => number) {
 
-        // get old parent version ids 
         const oldParentVersionIds = parentVersionIdMigrations
             .map(x => x.oldVersionId);
 
-        // get old question versions 
-        const oldQuestionVersions = await this._ormService
+        const oldVersions = await this._ormService
             .query(versionSignature, { oldParentVersionIds })
             .where(parentVersionIdField, '=', 'oldParentVersionIds')
             .getMany();
 
-        // get unmodified questions 
-        const unmodified = oldQuestionVersions
-            .filter(x => !XMutatorHelpers
-                .hasMutationForKey(mutaitons)(x.id));
+        const delMutations = mutations
+            .filter(x => x.action === 'delete');
 
-        const unmodifiedVersionIds = unmodified
-            .map(x => x.id);
+        const nonDeleted = oldVersions
+            .filter(oldVer => !delMutations
+                .some(delMut => getVersionId(delMut) === oldVer.id))
 
-        // filter mutations 
-        const mutations = mutaitons
-            .filter(x => x.action !== 'delete');
-
-        return {
-            mutations: mutations,
-            unmutatedVersionIds: unmodifiedVersionIds
-        }
-    };
+        return nonDeleted;
+    }
 
     /**
      * Get item old data 
      */
-    private async _getOldDataView<TMutation extends Mutation<any, any>, TVersion extends EntityType, TData extends EntityType, TEntity extends EntityType>(
-        version: ClassType<TVersion>,
-        data: ClassType<TData>,
-        entity: ClassType<TEntity>,
-        getDataId: (version: TVersion) => number,
-        getEntityId: (version: TVersion) => number,
-        mutations: TMutation[]): Promise<GetVersionDataPairsFnType<TMutation, TVersion, TData, TEntity>> {
+    private async _getOldDataView<
+        TMutation extends Mutation<any, any>,
+        TVersion extends EntityType,
+        TData extends EntityType,
+        TEntity extends EntityType>(opts: {
+            data: ClassType<TData>,
+            entity: ClassType<TEntity>,
+            oldVersions: TVersion[],
+            getDataId: (version: TVersion) => number,
+            getEntityId: (version: TVersion) => number,
+            getVersionId: (mut: TMutation) => number
+        }) {
 
-        const updateMutations = mutations
-            .filter(x => x.action === 'update');
+        const { data, entity, getDataId, getEntityId, getVersionId, oldVersions } = opts;
 
-        if (updateMutations.length === 0)
-            return {
-                getOldData: () => { throw new Error('Version data pairs have no elements!') },
-                oldVersionIds: []
-            };
+        const oldData: OldData<TVersion, TData, TEntity>[] = oldVersions.length === 0
+            ? [] as OldData<TVersion, TData, TEntity>[]
+            : await (async () => {
 
-        const oldVersionIds = updateMutations
-            .map(x => VersionCode.read(x.key).versionId);
+                const oldDataIds = oldVersions.map(getDataId);
+                const oldEntityIds = oldVersions.map(getEntityId);
 
-        const oldVersions = await this._ormService
-            .query(version, { oldVersionIds })
-            .where('id', '=', 'oldVersionIds')
-            .getMany();
+                const oldDatas = await this._ormService
+                    .query(data, { oldDataIds })
+                    .where('id', '=', 'oldDataIds')
+                    .getMany();
 
-        const oldDatas = await this._ormService
-            .query(data, { ids: oldVersions.map(getDataId) })
-            .where('id', '=', 'ids')
-            .getMany();
+                const oldVideos = await this._ormService
+                    .query(entity, { oldEntityIds })
+                    .where('id', '=', 'oldEntityIds')
+                    .getMany();
 
-        const oldVideos = await this._ormService
-            .query(entity, { ids: oldVersions.map(getEntityId) })
-            .where('id', '=', 'ids')
-            .getMany();
+                const oldData = oldVersions
+                    .map((ver) => ({
+                        oldVersion: ver,
+                        oldData: oldDatas.single(data => data.id === getDataId(ver)),
+                        oldEntity: oldVideos.single(ent => ent.id === getEntityId(ver))
+                    } as OldData<TVersion, TData, TEntity>));
 
-        const oldData = oldVersions
-            .map((x, i) => ({
-                oldVersion: x,
-                oldData: oldDatas[i],
-                oldEntity: oldVideos[i]
-            } as OldData<TVersion, TData, TEntity>))
+                return oldData;
+            })();
 
-        const getOldData = (mutation: TMutation) => oldData
-            .single(x => x.oldVersion.id === VersionCode.read(mutation.key).versionId);
+        const getOldData = (mutation: TMutation | number) => {
 
-        return { getOldData, oldVersionIds };
+            const verisonId = typeof mutation === 'number'
+                ? mutation
+                : getVersionId(mutation);
+
+            return oldData
+                .single(x => x.oldVersion.id === verisonId);
+        };
+
+        return { getOldData };
+    }
+
+    /**
+     * get old version ids 
+     */
+    private _getOldVersionIds<TMutation extends Mutation<any, any>>(
+        mutations: TMutation[],
+        oldVersions: EntityType[],
+        getVersionId: (mut: TMutation) => number) {
+
+        const addMutationOldVersionIds = mutations
+            .filter(x => x.action === 'add')
+            .map(x => getVersionId(x));
+
+        const oldVersionIds = addMutationOldVersionIds
+            .concat(oldVersions.map(x => x.id));
+
+        return { oldVersionIds };
+    }
+
+    /**
+     * Log
+     */
+    private _log(text: string) {
+
+        log(text, { noStamp: true });
     }
 }

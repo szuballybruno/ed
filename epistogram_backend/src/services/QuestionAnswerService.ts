@@ -112,6 +112,7 @@ export class QuestionAnswerService {
                 parentVersionIdFieldInDTO: 'questionVersionId',
                 getDataId: x => x.answerDataId,
                 getEntityId: x => x.answerId,
+                getVersionId: x => x.key,
                 getDefaultData: (mut) => ({
                     isCorrect: false,
                     text: ''

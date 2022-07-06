@@ -13,13 +13,21 @@ const defaultNotiProps = {
     progress: undefined,
 };
 
-export const showNotification = (text: string, type?: NotificationType, options?: ToastOptions) => {
+export const showNotification = (text: string, opt?: {
+    type?: NotificationType,
+    autoCloseMs?: number,
+    options?: ToastOptions
+}) => {
 
     toast(text, {
         ...defaultNotiProps,
-        autoClose: type === undefined ? 2000 : 3000,
-        type: type === 'warning' ? 'warning' : 'info',
-        ...(options ?? {})
+        autoClose: opt?.autoCloseMs
+            ? opt.autoCloseMs
+            : opt?.type === undefined
+                ? 2000
+                : 3000,
+        type: opt?.type === 'warning' ? 'warning' : 'info',
+        ...(opt?.options ?? {})
     });
 };
 

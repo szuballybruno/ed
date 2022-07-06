@@ -391,6 +391,7 @@ export const createDBSchema = (): XDBMSchemaType => {
 
         triggers: [
             'role_assignment_validity_check_trigger',
+            'exam_pretest_module_integrity_trigger',
             'permission_assignment_validity_check_trigger',
             'role_permission_bridge_validity_trigger'
         ],

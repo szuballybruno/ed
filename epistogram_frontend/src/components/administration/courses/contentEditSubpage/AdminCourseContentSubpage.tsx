@@ -5,7 +5,7 @@ import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../../services/core/notifications';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { VersionCode } from '../../../../shared/types/versionCode';
 import { Environment } from '../../../../static/Environemnt';
@@ -15,6 +15,7 @@ import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { LoadingFrame } from '../../../system/LoadingFrame';
+import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
@@ -49,7 +50,10 @@ export const AdminCourseContentSubpage = () => {
         courseContentAdminDataState,
         refetchCourseContentAdminData
     } = useCourseContentAdminData(courseId, isAnySelected, true);
-    const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
+    const {
+        saveCourseDataAsync,
+        saveCourseDataState
+    } = useSaveCourseContentData();
 
     // misc
     const modules = useMemo(() => courseContentAdminData?.modules ?? [], [courseContentAdminData]);
@@ -57,6 +61,10 @@ export const AdminCourseContentSubpage = () => {
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
     const forceUpdate = useForceUpdate();
     const itemsMutatorRef = useRef(new XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>({ keyPropertyName: 'versionCode' }));
+
+    // busy state
+    useSetBusy(useSaveCourseContentData, saveCourseDataState);
+    useSetBusy(useCourseContentAdminData, courseContentAdminDataState);
 
     // preprocess items 
     const preprocessItems = useCallback(() => {
@@ -238,6 +246,8 @@ export const AdminCourseContentSubpage = () => {
                 .resetMutations('NO CALLBACK');
 
             refetchCourseContentAdminData();
+
+            showNotification('Mentve', { autoCloseMs: 1000 });
         }
         catch (e) {
 
@@ -254,11 +264,7 @@ export const AdminCourseContentSubpage = () => {
     if (Environment.loggingSettings.render)
         console.log('Rendering AdminCourseContentSubpage');
 
-    return <LoadingFrame
-        loadingState={[saveCourseDataState, courseContentAdminDataState]}
-        error={courseContentAdminDataError}
-        flex="1">
-
+    return (
         <CourseAdministartionFrame
             noHeightOverflow
             isAnySelected={isAnySelected}>
@@ -344,5 +350,5 @@ export const AdminCourseContentSubpage = () => {
                 </Flex>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
-    </LoadingFrame>;
+    );
 };
