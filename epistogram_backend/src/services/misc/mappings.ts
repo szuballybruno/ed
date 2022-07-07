@@ -48,6 +48,7 @@ import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
+import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
@@ -459,7 +460,7 @@ const marray = [
                 : null
         })
     }),
-    epistoMappingsBuilder.addMapping(ImproveYourselfPageStatsDTO, () => (stats: ImproveYourselfPageStatsView, mostProductiveTimeRangeChartData: MostProductiveTimeRangeView[], mostActiveDayChartData: '') => {
+    epistoMappingsBuilder.addMapping(ImproveYourselfPageStatsDTO, () => (stats: ImproveYourselfPageStatsView, mostProductiveTimeRangeChartData: MostProductiveTimeRangeView[], userDailyActivityChartData: UserDailyActivityChartView[]) => {
         return instantiate<ImproveYourselfPageStatsDTO>({
             userId: stats.userId,
             mostProductiveTimeRange: stats.mostProductiveTimeRange,
@@ -467,7 +468,9 @@ const marray = [
                 return [index, x.performancePercentage]
             }),
             mostActiveDay: stats.mostActiveDay,
-            mostActiveDayChartData: mostActiveDayChartData
+            mostActiveDayChartData: userDailyActivityChartData.map((x, index) => {
+                return [index, x.totalSessionLengthSeconds / 60]
+            })
         })
     })
 

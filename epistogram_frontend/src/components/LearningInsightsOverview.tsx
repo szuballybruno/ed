@@ -46,7 +46,7 @@ export const LearningInsightsOverview = () => {
             className="largeSoftShadow"
             marginBottom="10px">
 
-            <ImproveYourselfSection userId={0} />
+            <ImproveYourselfSection />
         </DashboardSection>
     </Flex>;
 };

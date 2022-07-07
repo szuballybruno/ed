@@ -85,6 +85,7 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const engagementPoints = userLearningOverviewData?.engagementPoints || 0;
     const performancePoints = Math.floor(userLearningOverviewData?.performancePercentage || 0);
+    const productivityPoints = Math.floor(userLearningOverviewData?.productivityPercentage || 0);
     const reactionTimeScorePoints = userLearningOverviewData?.reactionTimeScorePoints || 0;
 
     const watchingVideosPercentage = userLearningOverviewData?.userActivityDistributionData.watchingVideosPercentage || 0;
@@ -255,11 +256,7 @@ export const AdminUserStatisticsSubpage = (props: {
 
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.productivity}
-                                    value={0} />
-
-                                <UserStatisticsProgressWithLabel
-                                    title={texts.progressLabels.socialActivity}
-                                    value={0} />
+                                    value={productivityPoints} />
 
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.reactionTime}

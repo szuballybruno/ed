@@ -5,8 +5,7 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-
-export class UserPerformanceView {
+export class UserDailyActivityChartView {
 
     @ViewColumn()
     @XViewColumn()
@@ -14,13 +13,9 @@ export class UserPerformanceView {
 
     @ViewColumn()
     @XViewColumn()
-    performancePercentage: number;
+    totalSessionLengthSeconds: number;
 
-    /*     @ViewColumn()
-        @XViewColumn()
-        userExamLengthPoints: number;
-    
-        @ViewColumn()
-        @XViewColumn()
-        userReactionTimePoints: number; */
+    @ViewColumn()
+    @XViewColumn()
+    dayOfTheWeek: number;
 }

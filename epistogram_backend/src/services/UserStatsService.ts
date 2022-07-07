@@ -24,6 +24,8 @@ import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
 import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
 import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
+import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
 
 export class UserStatsService {
 
@@ -145,8 +147,13 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getMany();
 
+        const userDailyActivityChartView = await this._ormService
+            .query(UserDailyActivityChartView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
         return this._mapperService
-            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, ''])
+            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView])
 
     }
 
@@ -270,12 +277,16 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getSingle();
 
+        const productivityPercentage = await this
+            .calculateProductivityAsync(userId);
+
         return {
             overallPerformancePercentage: stats.overallPerformancePercentage,
 
             performancePercentage: stats.performancePercentage,
             userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
             reactionTimeScorePoints: stats.totalUserReactionTimePoints,
+            productivityPercentage: productivityPercentage,
 
             isAnyCoursesInProgress: inProgressCourses.any(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,
@@ -301,4 +312,41 @@ export class UserStatsService {
             videosToBeRepeatedCount: stats.videosToBeRepeatedCount
         } as Partial<UserLearningOverviewDataDTO>;
     };
+
+    calculateProductivityAsync = async (userId: number) => {
+
+        const userPerformanceView = await this._ormService
+            .query(UserPerformanceView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        const userPerformanceViewFiltered = userPerformanceView
+            .filter(x => {
+                if (x.performancePercentage === 0)
+                    return false
+
+                if (x.performancePercentage === null)
+                    return false
+
+                return true;
+            })
+
+        const avgPerformancePercentage = userPerformanceViewFiltered
+            .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViewFiltered.length;
+
+        const avgLagBehindPercentage = await this._tempomatService
+            .calculateAvgLagBehindPercentageAsync(userId)
+
+        const lagBehindPoints = 100 - avgLagBehindPercentage
+
+        const productivityPercentage = avgPerformancePercentage / lagBehindPoints > 1
+            ? lagBehindPoints * (avgPerformancePercentage / lagBehindPoints) * avgPerformancePercentage / 100
+            : lagBehindPoints * avgPerformancePercentage / 100
+
+        const compensatedProductivityPerformance = avgPerformancePercentage < 60 && lagBehindPoints > 100
+            ? avgPerformancePercentage
+            : productivityPercentage
+
+        return compensatedProductivityPerformance;
+    }
 }

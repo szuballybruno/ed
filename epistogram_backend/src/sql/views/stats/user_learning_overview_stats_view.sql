@@ -4,7 +4,14 @@ WITH stats AS
 		u.id user_id,
 		u.email user_email,
 
-		upv.total_performance_percentage performance_percentage,
+		(
+			SELECT
+				AVG(upv.performance_percentage)
+			FROM public.user_performance_view upv
+			WHERE upv.user_id = u.id
+			AND upv.performance_percentage != 0
+			AND upv.performance_percentage IS NOT NULL
+		) performance_percentage,
 
 		urtv.reaction_time_percent_diff user_reaction_time_difference_percentage,
 		urtv.user_reaction_time_points,
@@ -121,8 +128,7 @@ WITH stats AS
 
 	GROUP BY 
 		u.id, 
-		u.email, 
-		upv.total_performance_percentage, 
+		u.email,
 		urtv.reaction_time_percent_diff, 
 		urtv.user_reaction_time_points, 
 		urtv.user_exam_length_points, 

@@ -11,14 +11,10 @@ import { EpistoBarChart } from '../universal/charts/base_charts/EpistoBarChart';
 
 const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
-export const ImproveYourselfSection = (props: {
-    userId: number
-}) => {
-
-    const { userId } = props;
+export const ImproveYourselfSection = () => {
 
     const { dailyTipData } = useDailyTip();
-    const { improveYourselfPageStats } = useImproveYourselfPageStats(userId);
+    const { improveYourselfPageStats } = useImproveYourselfPageStats();
 
     const [asd, setAsd] = useState<number[][]>([[0, 0]]);
 
@@ -61,54 +57,69 @@ export const ImproveYourselfSection = (props: {
                 <StatisticsCard
                     title='Leghatékonyabb idősávod'
                     value={improveYourselfPageStats?.mostProductiveTimeRange}
-                    isOpenByDefault
                     chartSize='normal'>
 
-                    <EpistoBarChart
-                        title="Leghatékonyabb idősávod"
-                        xAxisData={[
-                            '0:00 - 3:00',
-                            '3:00 - 6:00',
-                            '6:00 - 9:00',
-                            '9:00 - 12:00',
-                            '12:00 - 15:00',
-                            '15:00 - 18:00',
-                            '18:00 - 21:00',
-                            '21:00 - 0:00'
-                        ]}
-                        xAxisLabel="Idősávok"
-                        yAxisLabel="Teljesítmény"
-                        yAxisLabelSuffix="%"
-                        dataset={[{
-                            name: 'Jelenlegi hét',
-                            data: asd
-                        }]}
-                        options={defaultCharts.blueGreenBarChart} />
+                    {improveYourselfPageStats?.mostProductiveTimeRangeChartData
+                        ? <EpistoBarChart
+                            title="Leghatékonyabb idősávod"
+                            xAxisData={[
+                                '0:00 - 3:00',
+                                '3:00 - 6:00',
+                                '6:00 - 9:00',
+                                '9:00 - 12:00',
+                                '12:00 - 15:00',
+                                '15:00 - 18:00',
+                                '18:00 - 21:00',
+                                '21:00 - 0:00'
+                            ]}
+                            xAxisLabel="Idősávok"
+                            yAxisLabel="Teljesítmény"
+                            yAxisLabelSuffix="%"
+                            dataset={[{
+                                name: 'Jelenlegi hét',
+                                data: improveYourselfPageStats?.mostProductiveTimeRangeChartData!
+                            }]}
+                            options={defaultCharts.blueGreenBarChart2} />
+                        : <Flex
+                            align='center'
+                            justify='center'>
+
+                            <EpistoFont>
+                                {'A diagram betöltése sikertelen'}
+                            </EpistoFont>
+                        </Flex>}
 
 
                 </StatisticsCard>
 
                 <StatisticsCard
                     title='Legaktívabb napod'
-                    value={improveYourselfPageStats?.mostActiveDay} >
+                    value={improveYourselfPageStats?.mostActiveDay
+                        ? weekdayLabels[improveYourselfPageStats?.mostActiveDay]
+                        : null} >
 
-                    <EpistoBarChart
-                        title="Napok közötti aktivitás"
-                        dataset={[
-                            {
-                                name: 'Jelenlegi hét',
-                                data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
-                            },
-                            {
-                                name: 'Előző hét',
-                                data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
-                            }
-                        ]}
-                        xAxisData={weekdayLabels}
-                        xAxisLabel="A hét napjai"
-                        yAxisLabel="Belépések időtartama"
-                        yAxisLabelSuffix="perc"
-                        options={defaultCharts.blueGreenBarChart} />
+                    {improveYourselfPageStats?.mostActiveDayChartData
+                        ? <EpistoBarChart
+                            title="Napok közötti aktivitás"
+                            dataset={[
+                                {
+                                    name: 'A hét napjai',
+                                    data: improveYourselfPageStats?.mostActiveDayChartData!,
+                                }
+                            ]}
+                            xAxisData={weekdayLabels}
+                            xAxisLabel="A hét napjai"
+                            yAxisLabel="Belépések időtartama"
+                            yAxisLabelSuffix=" perc"
+                            options={defaultCharts.blueGreenBarChart} />
+                        : <Flex
+                            align='center'
+                            justify='center'>
+
+                            <EpistoFont>
+                                {'A diagram betöltése sikertelen'}
+                            </EpistoFont>
+                        </Flex>}
                 </StatisticsCard>
             </EpistoGrid>
         </Flex>

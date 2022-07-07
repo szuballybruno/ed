@@ -67,6 +67,7 @@ export type ApplicationRoutesType = {
             editRoute: ApplicationRoute;
         };
         personalityAssessmentRoute: ApplicationRoute & {
+            indexRoute: ApplicationRoute,
             editTipsRoute: ApplicationRoute & {
                 editTipRoute: ApplicationRoute;
             };
@@ -376,6 +377,11 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 icon: <SupervisedUserCircleIcon
                     className="fontXXL"
                     color={'secondary'} />,
+
+                indexRoute: {
+                    title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
+                    route: new EpistoRoute('/administration/personality-assessment', ''),
+                },
 
                 editTipsRoute: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,

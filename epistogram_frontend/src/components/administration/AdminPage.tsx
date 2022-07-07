@@ -139,7 +139,7 @@ export const AdminPage = () => {
                         element: <EpistoRoutes
                             renderRoutes={[
                                 {
-                                    route: administrationRoutes.personalityAssessmentRoute,
+                                    route: administrationRoutes.personalityAssessmentRoute.indexRoute,
                                     element: <PersonalityTraitCategoriesSubpage />
                                 },
                                 {

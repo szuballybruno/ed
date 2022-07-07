@@ -29,9 +29,9 @@ export const useUserLearningPageStats = (userId: number) => {
     };
 };
 
-export const useImproveYourselfPageStats = (userId: number) => {
+export const useImproveYourselfPageStats = () => {
 
-    const queryRes = useReactQuery2<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats, { userId });
+    const queryRes = useReactQuery2<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats);
 
     return {
         improveYourselfPageStats: queryRes.data,

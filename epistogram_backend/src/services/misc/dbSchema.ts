@@ -190,6 +190,7 @@ import { GivenAnswerScoreView } from '../../models/views/GivenAnswerScoreView';
 import { ExamScoreView } from '../../models/views/ExamScoreView';
 import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
+import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -318,6 +319,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'user_video_practise_progress_view', UserVideoPractiseProgressView], // 1 user_video_practise_progress_view
             ['common', 'tempomat_calculation_data_view', TempomatCalculationDataView],
             ['common', 'user_performance_view', UserPerformanceView],
+            ['common', 'most_productive_time_range_view', MostProductiveTimeRangeView],
+            ['common', 'user_daily_activity_chart_view', UserDailyActivityChartView],
             ['', 'user_session_daily_view', UserSessionDailyView],
             ['', 'signup_completed_view', SignupCompletedView],
             ['', 'daily_tip_view', DailyTipView],
@@ -348,7 +351,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['stats', 'user_spent_time_ratio_view', UserSpentTimeRatioView],
             ['stats', 'user_learning_page_stats_view', UserLearningPageStatsView],
             ['stats', 'improve_yourself_page_stats_view', ImproveYourselfPageStatsView],
-            ['stats', 'most_productive_time_range_view', MostProductiveTimeRangeView],
             ['', 'user_latest_activity_view'],
             ['', 'admin_user_list_view', AdminUserListView]
         ],

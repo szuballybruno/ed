@@ -190,7 +190,7 @@ export class TempomatService extends ServiceBase {
     /**
      * Calculates recommended items per day from either the
      * required or the previsioned completion date 
-               * @param requiredCompletionDate
+    * @param requiredCompletionDate
      * @param totalItemsCount
      * @returns The number of days in a positive int or null
      * because it cannot be determined
@@ -243,6 +243,44 @@ export class TempomatService extends ServiceBase {
             tempomatMode,
             tempomatAdjustmentValue
         )
+    }
+
+    calculateAvgLagBehindPercentageAsync = async (userId: number) => {
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        if (!tempomatCalculationData)
+            throw new Error('Couldn\'t get tempomat calculation data');
+
+        const allLagBehindPercentages = tempomatCalculationData.map(x => {
+            const previsionedCompletionDate = this
+                .calculatePrevisionedDate(
+                    x.originalPrevisionedCompletionDate,
+                    x.totalItemCount,
+                    x.totalCompletedItemCount,
+                    x.startDate,
+                    x.tempomatMode,
+                    x.tempomatAdjustmentValue
+                )
+
+            const lagBehindPercentage = this
+                .calculateLagBehindPercentage(
+                    x.startDate,
+                    x.requiredCompletionDate
+                        ? x.requiredCompletionDate
+                        : x.originalPrevisionedCompletionDate,
+                    previsionedCompletionDate
+                )
+
+            return lagBehindPercentage || 0
+        })
+
+        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
+
+        return avgLagBehindPercentage
     }
 
 
