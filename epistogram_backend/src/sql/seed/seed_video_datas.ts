@@ -54,14 +54,14 @@ export const getVideoDataSeedData = (
         orderIndex: 32,
         videoFileId: videoFiles.video_file_63.id,
     },
-    video_data_27: {
-        thumbnailFileId: null,
-        title: 'Példák a gyakorlatból',
-        subtitle: 'Mire jó az Excel?',
-        description: '',
-        orderIndex: 0,
-        videoFileId: videoFiles.video_file_27.id,
-    },
+    /*     video_data_27: {
+            thumbnailFileId: null,
+            title: 'Példák a gyakorlatból',
+            subtitle: 'Mire jó az Excel?',
+            description: '',
+            orderIndex: 0,
+            videoFileId: videoFiles.video_file_27.id,
+        }, */
     video_data_52: {
         thumbnailFileId: null,
         title: 'Megnyitás',

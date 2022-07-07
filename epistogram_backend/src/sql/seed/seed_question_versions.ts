@@ -688,13 +688,13 @@ export const getSeedQuestionVersions = (
         personalityTraitCategoryId: null,
     },
 
-    question_version_57: {
-        questionId: questions.question_57.id,
-        questionDataId: questionDatas.question_data_57.id,
-        examVersionId: null,
-        videoVersionId: videoVersions.video_version_27.id,
-        personalityTraitCategoryId: null,
-    },
+    /*     question_version_57: {
+            questionId: questions.question_57.id,
+            questionDataId: questionDatas.question_data_57.id,
+            examVersionId: null,
+            videoVersionId: videoVersions.video_version_27.id,
+            personalityTraitCategoryId: null,
+        }, */
 
     question_version_103: {
         questionId: questions.question_103.id,

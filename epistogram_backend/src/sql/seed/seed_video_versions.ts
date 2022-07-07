@@ -46,11 +46,11 @@ export const getVideoVersionSeedData = (
         videoDataId: videoDatas.video_data_63.id,
     },
 
-    video_version_27: {
-        videoId: videos.video_27.id,
-        moduleVersionId: moduleVersions.module_version_cyber_1.id,
-        videoDataId: videoDatas.video_data_27.id,
-    },
+    /*     video_version_27: {
+            videoId: videos.video_27.id,
+            moduleVersionId: moduleVersions.module_version_cyber_1.id,
+            videoDataId: videoDatas.video_data_27.id,
+        }, */
 
     video_version_52: {
         videoId: videos.video_52.id,

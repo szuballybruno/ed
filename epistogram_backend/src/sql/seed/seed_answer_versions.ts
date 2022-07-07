@@ -646,30 +646,30 @@ export const getAnswerVersionsSeedData = (
         questionVersionId: questionVersions.question_version_56.id,
     },
 
-    answer_version_144: {
-        answerId: answers.answer_144.id,
-        answerDataId: answerDatas.answer_data_144.id,
-        questionVersionId: questionVersions.question_version_57.id,
-    },
-
-    answer_version_145: {
-        answerId: answers.answer_145.id,
-        answerDataId: answerDatas.answer_data_145.id,
-        questionVersionId: questionVersions.question_version_57.id,
-    },
-
-    answer_version_146: {
-        answerId: answers.answer_146.id,
-        answerDataId: answerDatas.answer_data_146.id,
-        questionVersionId: questionVersions.question_version_57.id,
-    },
-
-    answer_version_147: {
-        answerId: answers.answer_147.id,
-        answerDataId: answerDatas.answer_data_147.id,
-        questionVersionId: questionVersions.question_version_57.id,
-    },
-
+    /*     answer_version_144: {
+            answerId: answers.answer_144.id,
+            answerDataId: answerDatas.answer_data_144.id,
+            questionVersionId: questionVersions.question_version_57.id,
+        },
+    
+        answer_version_145: {
+            answerId: answers.answer_145.id,
+            answerDataId: answerDatas.answer_data_145.id,
+            questionVersionId: questionVersions.question_version_57.id,
+        },
+    
+        answer_version_146: {
+            answerId: answers.answer_146.id,
+            answerDataId: answerDatas.answer_data_146.id,
+            questionVersionId: questionVersions.question_version_57.id,
+        },
+    
+        answer_version_147: {
+            answerId: answers.answer_147.id,
+            answerDataId: answerDatas.answer_data_147.id,
+            questionVersionId: questionVersions.question_version_57.id,
+        },
+     */
     answer_version_148: {
         answerId: answers.answer_148.id,
         answerDataId: answerDatas.answer_data_148.id,
