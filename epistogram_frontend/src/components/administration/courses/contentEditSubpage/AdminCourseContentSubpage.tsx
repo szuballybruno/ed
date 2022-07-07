@@ -245,7 +245,7 @@ export const AdminCourseContentSubpage = () => {
                 .current
                 .resetMutations('NO CALLBACK');
 
-            refetchCourseContentAdminData();
+            await refetchCourseContentAdminData();
 
             showNotification('Mentve', { autoCloseMs: 1000 });
         }
