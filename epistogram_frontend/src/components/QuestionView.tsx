@@ -56,13 +56,15 @@ export const QuesitionView = (props: {
 
         showNotification(
             `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
-            'warning',
             {
-                style: {
-                    border: 'solid 2px gold',
-                },
-                icon: <img
-                    src={Environment.getAssetUrl('images/epistoCoin.png')} />
+                type: 'warning',
+                options: {
+                    style: {
+                        border: 'solid 2px gold',
+                    },
+                    icon: <img
+                        src={Environment.getAssetUrl('images/epistoCoin.png')} />
+                }
             });
     }, [bonusCoinsAcquired]);
 

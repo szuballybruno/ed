@@ -8,6 +8,7 @@ import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { VersionCode } from '../shared/types/versionCode';
 import { VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
@@ -79,6 +80,7 @@ export class CourseItemService {
                 parentVersionIdFieldInDTO: 'moduleVersionId',
                 getDataId: x => x.examDataId,
                 getEntityId: x => x.examId,
+                getVersionId: x => VersionCode.read(x.key).versionId,
                 getDefaultData: mutation => ({
                     description: '',
                     isFinal: false,
@@ -141,6 +143,7 @@ export class CourseItemService {
                 parentVersionIdFieldInDTO: 'moduleVersionId',
                 getDataId: x => x.videoDataId,
                 getEntityId: x => x.videoId,
+                getVersionId: x => VersionCode.read(x.key).versionId,
                 getDefaultData: mutation => ({
                     title: '',
                     subtitle: '',

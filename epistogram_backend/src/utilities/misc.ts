@@ -59,5 +59,12 @@ export const VersionMigrationHelpers = {
                     oldVersionId
                 } as VersionMigrationResult);
             });
+    },
+
+    asText: (migrations: VersionMigrationResult[]) => {
+
+        return migrations
+            .map(x => `${x.oldVersionId} -> ${x.newVersionId}`)
+            .join('\n');
     }
 }

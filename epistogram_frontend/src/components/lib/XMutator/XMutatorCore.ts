@@ -228,24 +228,19 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         // thus the item will not show in the new list
         let newMutations = [...this.mutations];
 
-        // check if deleted item is one 
-        // of the newly added items,
-        // if it is there's no need to add a delete mutation, 
-        // just to remove the add mutation (which we already did)
-        const isDeletedItemNewlyAdded = this.mutations
-            .filter(x => x.key === removeKey)[0]?.action === 'add';
+        // is add mutation 
+        const isDeletedNewItem = newMutations
+            .some(x => x.action === 'add' && x.key === removeKey);
 
-        // remove add mutation 
-        if (isDeletedItemNewlyAdded) {
-
-            this._logEvent(`Removing previous mutation of item '${removeKey}', since it's being deleted.`);
-
-            newMutations = newMutations
-                .filter(x => x.key !== removeKey);
-        }
+        // remove any mutations previously 
+        // set for this key
+        newMutations = newMutations
+            .filter(x => x.key !== removeKey);
 
         // add delete mutation
-        else {
+        // if it was not a new item, 
+        // in that case removing the add mutation is sufficient enough
+        if (!isDeletedNewItem) {
 
             this._logEvent(`Adding new 'delete' mutation Key: ${removeKey}!`);
 

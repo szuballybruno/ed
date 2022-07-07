@@ -40,6 +40,7 @@ export class QuestionService {
                     : 'examVersionId',
                 getDataId: x => x.questionDataId,
                 getEntityId: x => x.questionId,
+                getVersionId: x => x.key,
                 getDefaultData: x => ({
                     deletionDate: null,
                     imageUrl: null,
