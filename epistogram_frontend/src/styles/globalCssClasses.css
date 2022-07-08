@@ -138,6 +138,10 @@
     background: var(--deepBlue) !important;
 }
 
+.background-change {
+    background: var(--intenseYellow) !important;
+}
+
 /* borders */
 
 .roundBorders-normal {

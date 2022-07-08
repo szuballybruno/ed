@@ -194,10 +194,6 @@ export const apiRoutes = {
     },
 
     module: {
-        createModule: '/module/create-module',
-        deleteModule: '/module/delete-module',
-        getModuleEditData: '/module/get-edit-data',
-        saveModule: '/module/save-module',
         getModuleListEditData: '/module/get-modules'
     },
 

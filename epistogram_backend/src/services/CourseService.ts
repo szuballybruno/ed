@@ -19,7 +19,6 @@ import { ModuleListView } from '../models/views/ModuleListView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
-import { CourseModuleShortDTO } from '../shared/dtos/admin/CourseModuleShortDTO';
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
@@ -428,8 +427,8 @@ export class CourseService {
     }
 
     /**
-     * Gets the course content edit DTO. TODO: REVIEW COURSEID OR COURSE_VERSION_ID
-          */
+     * Gets the course content edit DTO.
+     */
     async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
 
         const views = await this._ormService
@@ -437,30 +436,15 @@ export class CourseService {
             .where('courseId', '=', 'courseId')
             .getMany();
 
-        const courseVersionId = (await this._ormService
-            .query(LatestCourseVersionView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getSingle())
-            .versionId;
-
-        const moduleViews = await this._ormService
-            .query(ModuleListView, { courseVersionId })
-            .where('courseVersionId', '=', 'courseVersionId')
-            .getMany();
-
-        const moduleDtos = moduleViews
-            .map(x => ({
-                id: x.moduleVersionId,
-                name: x.name,
-                orderIndex: x.orderIndex
-            } as CourseModuleShortDTO));
+        const modules = await this._moduleService
+            .getModuleEditDTOsAsync(courseId);
 
         const items = this._mapperService
             .mapMany(CourseAdminContentView, CourseContentItemAdminDTO, views);
 
         return {
             items,
-            modules: moduleDtos
+            modules
         } as CourseContentAdminDTO;
     }
 

@@ -297,8 +297,6 @@ export const getSingleFileFromRequest = (req: Request) => {
     return req.files.file as UploadedFile;
 };
 
-export const instantiate = <T>(obj: T) => obj;
-
 export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 
     const objWithValue = withValue<T>(obj, () => {

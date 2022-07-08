@@ -54,7 +54,6 @@ export const useBusyBarContext = () => {
 
     useEffect(() => {
 
-        console.log('asd');
         stateRef.current = {};
         forceUpdate();
     }, [appRoute]);

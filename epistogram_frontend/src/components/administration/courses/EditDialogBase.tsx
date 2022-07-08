@@ -24,7 +24,8 @@ export const EditDialogBase = <TParams,>(props: {
     hideTabs?: boolean,
     headerButtons?: ReactNode,
     logic: EpistoDialogLogicType<TParams>,
-    paging: PagingType<EditDialogSubpage>
+    paging: PagingType<EditDialogSubpage>,
+    footer?: ReactNode
 }) => {
 
     const {
@@ -35,7 +36,8 @@ export const EditDialogBase = <TParams,>(props: {
         logic: dialogLogic,
         headerButtons,
         hideTabs,
-        paging
+        paging,
+        footer
     } = props;
 
     const focusedTab = !!paging.currentItem?.isFocused;
@@ -146,6 +148,9 @@ export const EditDialogBase = <TParams,>(props: {
             <EpistoPaging
                 index={paging.currentIndex}
                 slides={subpages.map(x => x.content)} />
+
+            {/* footer */}
+            {footer}
         </Flex>
 
     </EpistoDialog>;

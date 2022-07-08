@@ -1,135 +1,159 @@
 import { Add } from '@mui/icons-material';
-import { useState } from 'react';
-import { useCreateModule, useModuleListEditData, useSaveModule } from '../../../../services/api/moduleApiService';
-import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
-import { ModuleAdminEditDTO } from '../../../../shared/dtos/ModuleAdminEditDTO';
+import { useCallback, useEffect, useState } from 'react';
+import { ModuleApiService } from '../../../../services/api/moduleApiService';
+import { getVirtualId } from '../../../../services/core/idService';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { usePaging } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoFlex } from '../../../controls/EpistoFlex';
+import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { ModuleEditDialogPage } from './ModuleEditDialogPage';
 import { ModuleListEditDialogPage } from './ModuleListEditDialogPage';
 
-export const ModuleEditDialog = (props: {
+export const ModuleEditDialog = ({
+    logic,
+    onModulesChanged,
+    canDelete,
+    courseName
+}: {
     logic: EpistoDialogLogicType,
-    afterChangeCallback: () => void
+    onModulesChanged: (modules: ModuleEditDTO[]) => void,
+    canDelete: (moduleVersionId: number) => boolean,
+    courseName: string
 }) => {
 
-    const { logic, afterChangeCallback } = props;
-
-    // util
+    // misc
     const courseId = useIntParam('courseId')!;
-    const showError = useShowErrorDialog();
 
     // state
     const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
 
     // http
-    const {
-        moduleListEditData,
-        moduleListEditDataState,
-        moduleListEditDataError,
-        refetchModuleListEditData
-    } = useModuleListEditData(courseId, logic.isOpen);
-    const { saveModuleAsync } = useSaveModule();
-    const { createModuleAsync } = useCreateModule();
+    const { moduleListEditData: modules } = ModuleApiService
+        .useModuleListEditData(courseId, logic.isOpen);
+
+    // mut
+    const mutatorRef = useXMutator(ModuleEditDTO, 'versionId');
 
     // calc 
-    const modulesLength = moduleListEditData?.modules.length!;
-    const courseName = moduleListEditData?.courseName ?? '';
-    const moduleName = moduleListEditData?.modules
-        .find(x => x.id === editedModuleId)?.name ?? '';
+    const currentModule = mutatorRef
+        .current
+        .mutatedItems
+        .firstOrNull(x => x.versionId === editedModuleId);
+
+    // set default items
+    useEffect(() => {
+
+        if (!modules)
+            return;
+
+        mutatorRef
+            .current
+            .setOriginalItems(modules);
+    }, [modules]);
+
+    // set on changed callback
+    useEffect(() => {
+
+        mutatorRef
+            .current
+            .setOnPostMutationChanged(() => {
+             
+                console.log('asd');
+                onModulesChanged(mutatorRef.current.mutatedItems);
+            });
+    }, [onModulesChanged]);
 
     // paging
     const paging = usePaging<EditDialogSubpage>([
         {
-            content: () => <ModuleListEditDialogPage
-                refetchModuleList={refetchModuleListEditData}
-                moduleListEditData={moduleListEditData}
-                moduleListEditDataState={moduleListEditDataState}
-                moduleListEditDataError={moduleListEditDataError}
-                handleEditModule={handleEditModule}
-                afterChangeCallback={afterChangeCallback} />,
+            content: () => (
+                <ModuleListEditDialogPage
+                    editModule={handleEditModule}
+                    canDelete={canDelete}
+                    mutator={mutatorRef} />
+            ),
             title: 'Modulok szerkesztése'
 
         },
         {
-            content: () => <ModuleEditDialogPage
-                handleSaveModuleAsync={handleSaveModuleAsync}
-                editedModuleId={editedModuleId!} />,
-            title: moduleName,
+            content: () => (
+                <>
+                    {currentModule && <ModuleEditDialogPage
+                        dto={currentModule}
+                        mutator={mutatorRef} />}
+                </>
+            ),
+            title: currentModule?.name ?? '',
             isFocused: true
         }
     ]);
 
-    //
-    // func
-    //
-
-    // sets edited module id, 
-    // navigates to editmodule page
-    const handleEditModule = (moduleId: number) => {
+    // Go to edit page
+    const handleEditModule = useCallback((moduleId: number) => {
 
         setEditedModuleId(moduleId);
         paging.next();
-    };
+    }, []);
 
-    // save module
-    const handleSaveModuleAsync = async (module: ModuleAdminEditDTO, moduleImageFile: File | null) => {
+    // Create new module
+    const createModule = useCallback(() => {
 
-        try {
+        const moduleVersionId = getVirtualId();
 
-            await saveModuleAsync(
-                module,
-                moduleImageFile ?? undefined);
-
-            showNotification('Modul sikeresen mentve.');
-            refetchModuleListEditData();
-            paging.setItem(0);
-            afterChangeCallback();
-        }
-        catch (e) {
-
-            showError(e);
-        }
-    };
-
-    // add new module
-    const handleAddModuleAsync = async () => {
-
-        try {
-
-            await createModuleAsync({
-                courseId: courseId,
-                name: 'Új modul',
-                orderIndex: modulesLength
+        mutatorRef
+            .current
+            .create(moduleVersionId, {
+                name: '',
+                description: '',
+                imageFilePath: '',
+                versionId: moduleVersionId,
+                orderIndex: mutatorRef
+                    .current
+                    .mutatedItems
+                    .length - 1
             });
+    }, []);
 
-            showNotification('Modul sikeresen hozzáadva!');
-            await refetchModuleListEditData();
-            afterChangeCallback();
-        }
-        catch (e) {
+    // handle save
+    const handleSave = useCallback(() => {
 
-            showError(e);
-        }
-    };
+        return 1;
+    }, []);
 
-    return <EditDialogBase
-        hideTabs
-        paging={paging}
-        logic={logic}
-        headerButtons={<>
-            <EpistoButton
-                onClick={() => handleAddModuleAsync()}
-                icon={<Add />}>
+    return (
+        <EditDialogBase
+            hideTabs
+            paging={paging}
+            logic={logic}
+            headerButtons={<>
+                <EpistoButton
+                    onClick={createModule}
+                    icon={<Add />}>
 
-                Hozzáadás
-            </EpistoButton>
-        </>}
-        chipText='Module'
-        chipColor='var(--deepBlue)'
-        title={'Edit modules'}
-        subTitle={courseName} />;
+                    Hozzáadás
+                </EpistoButton>
+            </>}
+            chipText='Module'
+            chipColor='var(--deepBlue)'
+            title={'Edit modules'}
+            subTitle={courseName}
+            footer={(
+                <EpistoFlex
+                    justify="flex-end"
+                    margin={{ all: 'px5' }}>
+
+                    <EpistoButton
+                        variant='colored'
+                        onClick={handleSave}>
+
+                        {translatableTexts.misc.ok}
+                    </EpistoButton>
+                </EpistoFlex>
+            )} />
+    );
 };

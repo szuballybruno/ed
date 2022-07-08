@@ -1,55 +1,25 @@
 import { Flex } from '@chakra-ui/react';
 import { Delete, Edit } from '@mui/icons-material';
-import { LoadingStateType } from '../../../../models/types';
-import { useDeleteModule } from '../../../../services/api/moduleApiService';
-import { showNotification } from '../../../../services/core/notifications';
-import { ModuleListEditDataDTO } from '../../../../shared/dtos/ModuleListEditDataDTO';
+import { MutableRefObject } from 'react';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoFlex } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
-import { LoadingFrame } from '../../../system/LoadingFrame';
+import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { FlexListItem } from '../../../universal/FlexListItem';
 
-export const ModuleListEditDialogPage = (props: {
-    moduleListEditData: ModuleListEditDataDTO | null,
-    moduleListEditDataState: LoadingStateType,
-    moduleListEditDataError: any,
-    refetchModuleList: () => Promise<void>,
-    handleEditModule: (moduleId: number) => any,
-    afterChangeCallback: () => void
+export const ModuleListEditDialogPage = ({
+    canDelete,
+    editModule,
+    mutator
+}: {
+    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', number>>,
+    editModule: (moduleVersionId: number) => void,
+    canDelete: (moduleVersionId: number) => boolean
 }) => {
 
-    const {
-        moduleListEditData,
-        moduleListEditDataState,
-        moduleListEditDataError,
-        handleEditModule,
-        refetchModuleList,
-        afterChangeCallback
-    } = props;
-
-    const {
-        deleteModuleAsync,
-        deleteModuleState
-    } = useDeleteModule();
-
-    const handleDeleteModule = async (moduleId: number) => {
-
-        await deleteModuleAsync(moduleId);
-        await refetchModuleList();
-        afterChangeCallback();
-
-        showNotification('Modul sikeresen torolve.');
-    };
-
-    const modules = moduleListEditData?.modules ?? [];
-
-    return <LoadingFrame
-        loadingState={[moduleListEditDataState, deleteModuleState]}
-        error={moduleListEditDataError}
-        className="roundBorders"
-        flex="1"
-        flexDirection="column">
-
+    return (
         <Flex
             flex="1"
             p="20px">
@@ -72,35 +42,55 @@ export const ModuleListEditDialogPage = (props: {
                     </EpistoFont>} />
 
                 <Flex direction='column'>
-                    {modules
-                        .map((module) => <Flex
-                            key={module.id}
+                    {mutator
+                        .current
+                        .mutatedItems
+                        .map((module, i) => <EpistoFlex
+                            key={i}
                             flex="1"
-                            direction="column">
+                            direction="horizontal">
 
                             <FlexListItem
+                                flex="1"
                                 h="50px"
                                 className='dividerBorderBottom'
-                                thumbnailContent={module.name}
+                                midContent={(
+                                    <EpistoEntry
+                                        marginTop="0"
+                                        flex="1"
+                                        value={module.name}
+                                        onFocusLost={x => mutator
+                                            .current
+                                            .mutate({
+                                                key: module.versionId,
+                                                field: 'name',
+                                                newValue: x
+                                            })}
+                                        style={{
+                                            background: mutator.current.isAnyFieldMutated(module.versionId)
+                                                ? 'var(--intenseYellow)'
+                                                : undefined
+                                        }} />
+                                )}
                                 endContent={<Flex>
 
                                     <EpistoButton
-                                        onClick={() => handleEditModule(module.id)}>
+                                        onClick={() => editModule(module.versionId)}>
 
                                         <Edit />
                                     </EpistoButton>
 
                                     <EpistoButton
-                                        onClick={() => handleDeleteModule(module.id)}
-                                        isDisabled={!module.canDelete}>
+                                        onClick={() => mutator.current.remove(module.versionId)}
+                                        isDisabled={!canDelete(module.versionId)}>
 
                                         <Delete />
                                     </EpistoButton>
                                 </Flex>
                                 } />
-                        </Flex>)}
+                        </EpistoFlex>)}
                 </Flex>
-            </Flex >
-        </Flex >
-    </LoadingFrame>;
+            </Flex>
+        </Flex>
+    );
 };

@@ -122,3 +122,5 @@ export const userPermissionsEqual = (a: UserPermissionDTO, b: UserPermissionDTO)
 
     return true;
 };
+
+export const instantiate = <T>(obj: T) => obj;

@@ -27,7 +27,6 @@ import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
 import { CourseItemPlaylistView } from '../../models/views/CourseItemPlaylistView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
-import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
@@ -58,7 +57,6 @@ import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../shared/dtos/admin/CourseContentItemIssueDTO';
-import { AdminModuleShortDTO } from '../../shared/dtos/AdminModuleShortDTO';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
 import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
@@ -88,9 +86,8 @@ import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
-import { ModuleAdminEditDTO } from '../../shared/dtos/ModuleAdminEditDTO';
 import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
-import { ModuleShortDTO } from '../../shared/dtos/ModuleShortDTO';
+import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
@@ -121,7 +118,8 @@ import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
-import { instantiate, toFullName } from '../../utilities/helpers';
+import { instantiate } from '../../shared/logic/sharedLogic';
+import { toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
@@ -427,52 +425,68 @@ const marray = [
                 categories: courseCategoryDTOs
             });
         }),
-    epistoMappingsBuilder.addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number) => {
-        return instantiate<UserLearningPageStatsDTO>({
-            userId: view.userId,
-            userEmail: view.userEmail,
-            totalLagBehindPercentage: totalLagBehindPercentage,
-            videosToBeRepeatedCount: view.videosToBeRepeatedCount,
-            questionsToBeRepeatedCount: view.questionsToBeRepeatedCount,
-            completedVideoCount: view.completedVideoCount,
-            totalSessionLengthSeconds: view.totalSessionLengthSeconds,
-            answeredQuestionsCount: view.answeredQuestionsCount,
-            totalCorrectAnswerRate: view.totalCorrectAnswerRate,
-            rankInsideCompany: view.rankInsideCompany
-        })
-    }),
-    epistoMappingsBuilder.addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number) => {
-        return instantiate<HomePageStatsDTO>({
-            userId: view.userId,
-            videosToBeRepeatedCount: view.videosToBeRepeatedCount,
-            completedVideosLastMonth: view.completedVideosLastMonth,
-            lagBehindPercentage: lagBehindPercentage,
-            performanceLastMonth: view.performanceLastMonth
-        })
-    }),
-    epistoMappingsBuilder.addMapping(ModuleDetailedDTO, ([urlService]) => (moduleData: ModuleData, moduleImageFilePath?: string) => {
-        return instantiate<ModuleDetailedDTO>({
-            id: moduleData.id,
-            name: moduleData.name,
-            description: moduleData.description,
-            imageFilePath: moduleImageFilePath
-                ? urlService.getAssetUrl(moduleImageFilePath)
-                : null
-        })
-    }),
-    epistoMappingsBuilder.addMapping(ImproveYourselfPageStatsDTO, () => (stats: ImproveYourselfPageStatsView, mostProductiveTimeRangeChartData: MostProductiveTimeRangeView[], userDailyActivityChartData: UserDailyActivityChartView[]) => {
-        return instantiate<ImproveYourselfPageStatsDTO>({
-            userId: stats.userId,
-            mostProductiveTimeRange: stats.mostProductiveTimeRange,
-            mostProductiveTimeRangeChartData: mostProductiveTimeRangeChartData.map((x, index) => {
-                return [index, x.performancePercentage]
-            }),
-            mostActiveDay: stats.mostActiveDay,
-            mostActiveDayChartData: userDailyActivityChartData.map((x, index) => {
-                return [index, x.totalSessionLengthSeconds / 60]
+    epistoMappingsBuilder
+        .addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number) => {
+            return instantiate<UserLearningPageStatsDTO>({
+                userId: view.userId,
+                userEmail: view.userEmail,
+                totalLagBehindPercentage: totalLagBehindPercentage,
+                videosToBeRepeatedCount: view.videosToBeRepeatedCount,
+                questionsToBeRepeatedCount: view.questionsToBeRepeatedCount,
+                completedVideoCount: view.completedVideoCount,
+                totalSessionLengthSeconds: view.totalSessionLengthSeconds,
+                answeredQuestionsCount: view.answeredQuestionsCount,
+                totalCorrectAnswerRate: view.totalCorrectAnswerRate,
+                rankInsideCompany: view.rankInsideCompany
             })
+        }),
+    epistoMappingsBuilder
+        .addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number) => {
+            return instantiate<HomePageStatsDTO>({
+                userId: view.userId,
+                videosToBeRepeatedCount: view.videosToBeRepeatedCount,
+                completedVideosLastMonth: view.completedVideosLastMonth,
+                lagBehindPercentage: lagBehindPercentage,
+                performanceLastMonth: view.performanceLastMonth
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(ModuleDetailedDTO, ([urlService]) => (moduleData: ModuleData, moduleImageFilePath?: string) => {
+            return instantiate<ModuleDetailedDTO>({
+                id: moduleData.id,
+                name: moduleData.name,
+                description: moduleData.description,
+                imageFilePath: moduleImageFilePath
+                    ? urlService.getAssetUrl(moduleImageFilePath)
+                    : null
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(ImproveYourselfPageStatsDTO, () => (stats: ImproveYourselfPageStatsView, mostProductiveTimeRangeChartData: MostProductiveTimeRangeView[], userDailyActivityChartData: UserDailyActivityChartView[]) => {
+            return instantiate<ImproveYourselfPageStatsDTO>({
+                userId: stats.userId,
+                mostProductiveTimeRange: stats.mostProductiveTimeRange,
+                mostProductiveTimeRangeChartData: mostProductiveTimeRangeChartData.map((x, index) => {
+                    return [index, x.performancePercentage]
+                }),
+                mostActiveDay: stats.mostActiveDay,
+                mostActiveDayChartData: userDailyActivityChartData.map((x, index) => {
+                    return [index, x.totalSessionLengthSeconds / 60]
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(ModuleEditDTO, () => (views: ModuleView[]) => {
+
+            return views
+                .map(x => instantiate<ModuleEditDTO>({
+                    description: x.description,
+                    versionId: x.moduleVersionId,
+                    imageFilePath: '',
+                    name: x.moduleName,
+                    orderIndex: x.orderIndex
+                }));
         })
-    })
 
 ] as const;
 
@@ -533,23 +547,6 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 isQuestion: comment.isQuestion
             };
         });
-
-    mapperService
-        .addMap(ModuleView, AdminModuleShortDTO, view => ({
-            id: view.moduleId,
-            name: view.moduleName,
-            canDelete: view.itemCount === 0
-        }));
-
-    mapperService
-        .addMap(ModuleData, ModuleAdminEditDTO, courseModule => ({
-            id: courseModule.id,
-            name: courseModule.name,
-            description: courseModule.description,
-            imageFilePath: courseModule.imageFile
-                ? getAssetUrl(courseModule.imageFile.filePath)
-                : null
-        }));
 
     mapperService
         .addMap(Event, EventDTO, event => ({

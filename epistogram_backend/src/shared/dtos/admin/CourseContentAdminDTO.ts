@@ -1,7 +1,7 @@
+import { ModuleEditDTO } from '../ModuleEditDTO';
 import { CourseContentItemAdminDTO } from './CourseContentItemAdminDTO';
-import { CourseModuleShortDTO } from './CourseModuleShortDTO';
 
 export class CourseContentAdminDTO {
-    modules: CourseModuleShortDTO[];
+    modules: ModuleEditDTO[];
     items: CourseContentItemAdminDTO[];
 }

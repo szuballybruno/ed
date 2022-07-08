@@ -41,7 +41,7 @@ export const usePlaybackWatcher = (
             && elapsedSeconds > 0
             && elapsedSeconds > minSampleSeconds) {
 
-            if (Environment.verboseLogging)
+            if (Environment.loggingEnabled)
                 console.log(`Watched ${elapsedSeconds}s`);
 
             postVideoPlaybackSample({

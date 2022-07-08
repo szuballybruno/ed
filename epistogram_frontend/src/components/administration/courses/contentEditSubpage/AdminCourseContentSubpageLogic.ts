@@ -1,13 +1,13 @@
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
-import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { instantiate } from '../../../../shared/logic/sharedLogic';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { VersionCode } from '../../../../shared/types/versionCode';
 import { formatTime } from '../../../../static/frontendHelpers';
-import { QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 
 export type RowSchemaModule = {
-    id: number;
+    versionId: number;
     isPretestModule: boolean;
     name: string;
     orderIndex: number;
@@ -94,7 +94,7 @@ const getIssueText = (dto: CourseContentItemIssueDTO) => {
 export const mapToRowSchema = (
     item: CourseContentItemAdminDTO,
     rowNumber: number,
-    modules: CourseModuleShortDTO[],
+    modules: ModuleEditDTO[],
     getItemKey: (item: CourseContentItemAdminDTO) => VersionCode,
     isModified: (key: VersionCode, field: keyof CourseContentItemAdminDTO) => boolean): RowSchema => {
 
@@ -115,7 +115,7 @@ export const mapToRowSchema = (
     const getItemModule = () => {
 
         const module = modules
-            .firstOrNull(x => x.id === item.moduleVersionId);
+            .firstOrNull(x => x.versionId === item.moduleVersionId);
 
         if (!module)
             throw new Error(`Module for item (verisonCode: ${item.versionCode}) not found by moduleVersionId: ${item.moduleVersionId}`);
@@ -123,12 +123,15 @@ export const mapToRowSchema = (
         return module;
     };
 
+    // 
     const module = isPretest
-        ? {
-            id: -1,
+        ? instantiate<ModuleEditDTO>({
+            versionId: -1,
             name: 'none',
-            orderIndex: -1
-        } as CourseModuleShortDTO
+            orderIndex: -1,
+            description: '',
+            imageFilePath: ''
+        })
         : getItemModule();
 
     return ({
@@ -137,12 +140,12 @@ export const mapToRowSchema = (
         itemOrderIndex: isPretest ? '-' : item.itemOrderIndex + '',
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
-        module: {
+        module: instantiate<RowSchemaModule>({
             isPretestModule: isPretest,
-            id: module.id,
+            versionId: module.versionId,
             name: module.name,
-            orderIndex: module.orderIndex
-        },
+            orderIndex: module.orderIndex,
+        }),
         itemType: {
             label,
             color,

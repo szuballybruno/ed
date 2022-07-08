@@ -137,8 +137,6 @@ export const ShopAdminEditSubpage = () => {
         if (!shopItemEditData || shopItemCategories.length === 0 || privateCourses.length === 0)
             return;
 
-        console.log('asd');
-
         setName(shopItemEditData.name);
         setPurchaseLimit(shopItemEditData.purchaseLimit + '');
         setIsPurchaseLimited(!!shopItemEditData.purchaseLimit);

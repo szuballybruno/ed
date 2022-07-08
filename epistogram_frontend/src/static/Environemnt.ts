@@ -1,5 +1,5 @@
 
-console.log('Environment');
+export type LoggingKeysType = 'ROUTING' | 'RENDER' | 'MUTATIONS' | 'AUTH' | 'GRID';
 
 export const Environment = (() => {
 
@@ -13,17 +13,15 @@ export const Environment = (() => {
     const currentOrigin = window.location.origin;
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 1 * 60 * 1000; // 1 mins
-    const verboseLogging = false;
-    const loggingSettings = {
-        routing: false,
-        render: false,
-        mutations: false,
-        auth: true
-    };
+    const loggingEnabled = false;
+    const loggingEnabledKeys: LoggingKeysType[] = ['GRID'];
 
-    console.log('Current version: ' + currentVersion);
-    console.log('Server url: ' + serverUrl);
-    console.log('CDN url: ' + assetCDNStorageUrl);
+    if (loggingEnabled) {
+
+        console.log('Current version: ' + currentVersion);
+        console.log('Server url: ' + serverUrl);
+        console.log('CDN url: ' + assetCDNStorageUrl);
+    }
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 
@@ -40,8 +38,8 @@ export const Environment = (() => {
         currentOrigin,
         getAuthHandshakeIntervalInMs,
         eventPoolingIntervalInMs,
-        verboseLogging,
-        loggingSettings,
+        loggingEnabled,
+        loggingEnabledKeys,
         getAssetUrl
     };
 })();

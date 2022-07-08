@@ -1,22 +1,19 @@
 import moment from 'moment';
-import { Course } from '../models/entity/course/Course';
-import { CourseData } from '../models/entity/course/CourseData';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
-import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
+import { CourseItemView } from '../models/views/CourseItemView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
+import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
 import { PrincipalId } from '../utilities/ActionParams';
-import { instantiate, throwNotImplemented } from '../utilities/helpers';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
+import { log } from './misc/logger';
 import { ServiceBase } from './misc/ServiceBase';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -24,9 +21,6 @@ import { PlaybackService } from './PlaybackService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
-import { CourseItemView } from '../models/views/CourseItemView';
-import { log } from './misc/logger';
 
 export class PlayerService extends ServiceBase {
 

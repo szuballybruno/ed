@@ -1,12 +1,11 @@
-import { Flex } from '@chakra-ui/react';
 import { createContext, useContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
-import { Environment } from '../../static/Environemnt';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 
 const getAuthorizationContextData = (permissionCodes?: PermissionCodeType[]) => {
 
@@ -69,21 +68,18 @@ const AuthFirewall = (props: PropsWithChildren & {
         // error
         if (authState === 'error') {
 
-            if (Environment.loggingSettings.auth)
-                console.log(`Auth state: ${authState}. Redirecting to login.`);
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
 
             navigate(loginRoute);
         }
     }, [authState]);
 
-    if (Environment.loggingSettings.auth)
-        console.log(`Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
+    Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 
     // if loading return blank page
     if (authState === 'loading') {
 
-        if (Environment.loggingSettings.auth)
-            console.log(`Auth state: ${authState}. Rendering empty div until loaded.`);
+        Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering empty div until loaded.`);
 
         return <div></div>;
     }
@@ -91,8 +87,7 @@ const AuthFirewall = (props: PropsWithChildren & {
     // check authentication 
     if (authState === 'forbidden' && !isUnauthorized) {
 
-        if (Environment.loggingSettings.auth)
-            console.log(`Auth state: ${authState}. Redirecting...`);
+        Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
 
         navigate(loginRoute, undefined, { dest });
 
@@ -104,18 +99,15 @@ const AuthFirewall = (props: PropsWithChildren & {
     const ignoreAccessAppRestriction = !!currentRoute.ignoreAccessAppRestriction;
     if (!canAccess && !ignoreAccessAppRestriction && !isUnauthorized) {
 
-        console.log(`canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
-
-        if (Environment.loggingSettings.auth)
-            console.log(`Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
+        Logger.logScoped('AUTH', `canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
+        Logger.logScoped('AUTH', `Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
 
         navigate(signupRoute, undefined);
 
         return <div></div>;
     }
 
-    if (Environment.loggingSettings.auth)
-        console.log(`Auth state: ${authState}. Rendering content...`);
+    Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering content...`);
 
     return <>
         {children}
@@ -127,8 +119,7 @@ export const AuthenticationFrame = (props) => {
     // start auth pooling
     const { authData, authState, refetchAuthHandshake } = useGetAuthHandshake();
 
-    if (Environment.loggingSettings.auth)
-        console.log(`Auth state is: '${authState}'...`);
+    Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
     // authorization context 
     const authContextData = getAuthorizationContextData(authData?.permissions ?? []);

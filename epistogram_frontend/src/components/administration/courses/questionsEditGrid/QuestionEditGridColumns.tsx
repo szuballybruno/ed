@@ -26,8 +26,6 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
 
     const columns = useMemo((): GridColumnType<RowSchema, string, any>[] => {
 
-        console.log('rendering columns!');
-
         let cols: GridColumnType<RowSchema, string, any>[] = [
 
             // question header chip

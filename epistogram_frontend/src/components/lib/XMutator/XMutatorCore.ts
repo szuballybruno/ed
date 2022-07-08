@@ -85,7 +85,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     }
 
     // getter for isAnyMutated
-    get isAnyMutated(): boolean {
+    get isAnyItemsMutated(): boolean {
 
         return this.mutations.length > 0;
     }
@@ -312,6 +312,21 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     };
 
     // 
+    // FUNCTION: [IsMutated] 
+    // check if item's field has been mutated 
+    //
+    isAnyFieldMutated = (key: TKey) => {
+
+        if (key === null || key === undefined)
+            throw new Error('Mutation error, key is null or undefined!');
+
+        const mut = this.mutations
+            .firstOrNull(x => x.key === key);
+
+        return !!mut;
+    };
+
+    // 
     // FUNCTION: [setMutations] 
     // reset/clear mutations  
     //
@@ -449,7 +464,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     //
     private _logEvent = (text: string) => {
 
-        console.log(`MUTATION: ${text}`);
+        // console.log(`MUTATION: ${text}`);
     };
 
     // 

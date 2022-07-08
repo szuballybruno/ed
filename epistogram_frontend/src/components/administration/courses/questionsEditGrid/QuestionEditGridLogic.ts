@@ -21,7 +21,7 @@ export const useQuestionEditGridLogic = (
         keyPropertyName: 'questionVersionId',
         onMutationsChanged: () => {
 
-            console.log('-- Question mutations changed.');
+            // console.log('-- Question mutations changed.');
             forceUpdate();
         }
     }));
@@ -30,7 +30,7 @@ export const useQuestionEditGridLogic = (
         keyPropertyName: 'answerVersionId',
         onMutationsChanged: () => {
 
-            console.log('-- Answer mutations changed.');
+            // console.log('-- Answer mutations changed.');
             forceUpdate();
         }
     }));
@@ -137,8 +137,6 @@ export const useQuestionEditGridLogic = (
             });
     }, [questionMutatorRef.current.mutatedItems, answerMutatorRef.current.mutatedItems]);
 
-    console.log(answerMutatorRef.current.mutations);
-
     //
     // get key
     const getKey = useCallback(x => x.rowKey, []);
@@ -146,7 +144,7 @@ export const useQuestionEditGridLogic = (
     return {
         questionRows,
         showTiming,
-        isQuestionsMutated: questionMutatorRef.current.isAnyMutated,
+        isQuestionsMutated: questionMutatorRef.current.isAnyItemsMutated,
         mutatedQuestions: questionMutatorRef.current.mutatedItems,
         questionMutations: questionMutatorRef.current.mutations,
         answerMutations: answerMutatorRef.current.mutations,
