@@ -58,10 +58,6 @@ SELECT
 		LEFT JOIN public.video_version vv
 		ON vv.id = asv.video_version_id
 		AND vv.video_id = cisv.video_id
-		
-		GROUP BY asv.start_date
-		
-        ORDER BY asv.start_date
     ) last_three_answer_average,
 
     -- The average reaction time for the video quiz questions
