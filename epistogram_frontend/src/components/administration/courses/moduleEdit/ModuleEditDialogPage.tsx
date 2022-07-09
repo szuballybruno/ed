@@ -1,58 +1,24 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useModuleEditData } from '../../../../services/api/moduleApiService';
-import { ModuleAdminEditDTO } from '../../../../shared/dtos/ModuleAdminEditDTO';
-import { EpistoButton } from '../../../controls/EpistoButton';
+import { MutableRefObject } from 'react';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
-import { LoadingFrame } from '../../../system/LoadingFrame';
+import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { SelectImage } from '../../../universal/SelectImage';
 
-export const ModuleEditDialogPage = (props: {
-    handleSaveModuleAsync: (module: ModuleAdminEditDTO, moduleImageFile: File | null) => void,
-    editedModuleId: number
+export const ModuleEditDialogPage = ({
+    mutator,
+    dto
+}: {
+    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', number>>,
+    dto: ModuleEditDTO
 }) => {
 
-    const { handleSaveModuleAsync, editedModuleId } = props;
-
-    const [moduleName, setModuleName] = useState('');
-    const [moduleDescription, setModuleDescription] = useState('');
-    const [moduleImageSource, setMoudleImageSource] = useState<string | null>(null);
-    const [moduleImageFile, setMoudleImageFile] = useState<File | null>(null);
-
-    const { moduleEditData } = useModuleEditData(editedModuleId);
-
-    const handleSaveModule = () => {
-        handleSaveModuleAsync(
-            {
-                id: editedModuleId,
-                name: moduleName,
-                description: moduleDescription
-            } as ModuleAdminEditDTO,
-            moduleImageFile);
-    };
-
-    useEffect(() => {
-
-        if (!moduleEditData)
-            return;
-
-        setModuleName(moduleEditData.name);
-        setModuleDescription(moduleEditData.description);
-        setMoudleImageSource(moduleEditData.imageFilePath);
-    }, [moduleEditData]);
-
-    return <LoadingFrame
-        direction="column"
-        justify="flex-start"
-        p="10px"
-        flex="1">
-
+    return (
         <Flex
-            className="roundBorders"
-            background="var(--transparentWhite70)"
-            mt="5px"
-            p="0 10px 10px 10px"
+            padding="10px"
+            bg="white"
+            width="100%"
             direction="column">
 
             <EpistoLabel
@@ -65,41 +31,46 @@ export const ModuleEditDialogPage = (props: {
                     background="#DDD"
                     my="10px"
                     className="roundBorders mildShadow"
-                    setImageSource={setMoudleImageSource}
-                    setImageFile={setMoudleImageFile}>
+                    setImageSource={(src) => mutator
+                        .current
+                        .mutate({
+                            key: dto.versionId,
+                            field: 'imageFilePath',
+                            newValue: src
+                        })}
+                    setImageFile={x => 1}>
 
-                    {moduleImageSource && <Image
+                    {dto.imageFilePath && <Image
                         className="whall"
                         objectFit="cover"
-                        src={moduleImageSource ?? ''} />}
+                        src={dto.imageFilePath ?? ''} />}
                 </SelectImage>
             </EpistoLabel>
 
             <EpistoEntry
                 labelVariant='top'
                 label="Modul neve"
-                value={moduleName}
-                setValue={setModuleName} />
+                value={dto.name}
+                onFocusLost={x => mutator
+                    .current
+                    .mutate({
+                        key: dto.versionId,
+                        field: 'name',
+                        newValue: x
+                    })} />
 
             <EpistoEntry
                 labelVariant='top'
                 label="Modul leírása"
-                value={moduleDescription}
-                setValue={setModuleDescription}
+                value={dto.description}
+                onFocusLost={x => mutator
+                    .current
+                    .mutate({
+                        key: dto.versionId,
+                        field: 'description',
+                        newValue: x
+                    })}
                 isMultiline />
         </Flex>
-
-        <EpistoButton
-            variant='colored'
-            style={{
-                position: 'absolute',
-                bottom: '10px',
-                width: 'calc(100% - 20px)',
-                background: 'var(--deepBlue)'
-            }}
-            onClick={() => handleSaveModule()}>
-
-            Mentés
-        </EpistoButton>
-    </LoadingFrame>;
+    );
 };

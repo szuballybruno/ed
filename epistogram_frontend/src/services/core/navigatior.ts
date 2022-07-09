@@ -14,11 +14,11 @@ export const useNavigation = () => {
 
         const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
 
-        if (Environment.verboseLogging)
+        if (Environment.loggingEnabled)
             console.log('Navigating to: ' + replacedPath);
 
         domNavigate(replacedPath);
-    }, [domNavigate, getUrl, Environment.verboseLogging]);
+    }, [domNavigate, getUrl, Environment.loggingEnabled]);
 
     const navigateToHref = useCallback((href: string) => {
 

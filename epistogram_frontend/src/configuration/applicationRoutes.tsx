@@ -1,16 +1,13 @@
 import { AdminPanelSettings, Build, Business, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import EventNoteIcon from '@mui/icons-material/EventNote';
+import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { Environment } from '../static/Environemnt';
 import { translatableTexts } from '../static/translatableTexts';
-import LocationCityIcon from '@mui/icons-material/LocationCity';
-import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
-
-console.log('applicationRoutes');
 
 export type ApplicationRoutesType = {
     matchAll: ApplicationRoute;

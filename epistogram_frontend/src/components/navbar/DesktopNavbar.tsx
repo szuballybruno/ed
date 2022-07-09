@@ -5,6 +5,7 @@ import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -181,8 +182,7 @@ export const DesktopNavbar = (props: {
         );
     };
 
-    if (Environment.loggingSettings.render)
-        console.log('Rendering navbar');
+    Logger.logScoped('RENDER', 'Rendering navbar');
 
     return (
         <Flex

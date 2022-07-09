@@ -1,20 +1,20 @@
 import { Flex } from '@chakra-ui/react';
 import { Add, Edit } from '@mui/icons-material';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { VersionCode } from '../../../../shared/types/versionCode';
-import { Environment } from '../../../../static/Environemnt';
 import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
+import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
-import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
@@ -46,7 +46,6 @@ export const AdminCourseContentSubpage = () => {
     // http
     const {
         courseContentAdminData,
-        courseContentAdminDataError,
         courseContentAdminDataState,
         refetchCourseContentAdminData
     } = useCourseContentAdminData(courseId, isAnySelected, true);
@@ -56,7 +55,8 @@ export const AdminCourseContentSubpage = () => {
     } = useSaveCourseContentData();
 
     // misc
-    const modules = useMemo(() => courseContentAdminData?.modules ?? [], [courseContentAdminData]);
+    // const modules = useMemo(() => courseContentAdminData?.modules ?? [], [courseContentAdminData]);
+    const [modules, setModules] = useState<ModuleEditDTO[]>([]);
     const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
     const forceUpdate = useForceUpdate();
@@ -69,6 +69,9 @@ export const AdminCourseContentSubpage = () => {
     // preprocess items 
     const preprocessItems = useCallback(() => {
 
+        if (modules.length === 0)
+            return;
+
         const items = itemsMutatorRef
             .current
             .mutatedItems;
@@ -76,7 +79,7 @@ export const AdminCourseContentSubpage = () => {
         const preproItems = items
             .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, itemsMutatorRef.current.isMutated))
             .orderBy(x => x.module.orderIndex)
-            .groupBy(x => x.module.id)
+            .groupBy(x => x.module.versionId)
             .flatMap(x => x
                 .items
                 .orderBy(i => i.itemOrderIndex));
@@ -87,8 +90,6 @@ export const AdminCourseContentSubpage = () => {
     // recalc  
     const recalcOrderIndices = useCallback(() => {
 
-        console.log('recalc order');
-
         itemsMutatorRef
             .current
             .mutatedItems
@@ -96,8 +97,6 @@ export const AdminCourseContentSubpage = () => {
             .forEach(x => x
                 .items
                 .forEach((x, i) => {
-
-                    console.log(`${x.itemTitle} -> ${i}`);
 
                     itemsMutatorRef
                         .current
@@ -107,10 +106,6 @@ export const AdminCourseContentSubpage = () => {
                             newValue: i
                         });
                 }));
-
-        console.log(itemsMutatorRef
-            .current
-            .mutations);
     }, []);
 
     // set - on post mutations changed 
@@ -147,6 +142,13 @@ export const AdminCourseContentSubpage = () => {
     // FUNCS
     // 
 
+    const handleOnModulesChanged = useCallback((modules: ModuleEditDTO[]) => setModules(modules), []);
+
+    const canDelete = useCallback((moduleVersionId: number) => !itemsMutatorRef
+        .current
+        .mutatedItems
+        .any(x => x.moduleVersionId === moduleVersionId), []);
+
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
     const openDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
@@ -175,7 +177,7 @@ export const AdminCourseContentSubpage = () => {
 
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleVersionId = modules[0].id;
+        const moduleVersionId = modules[0].versionId;
 
         const foundModule = itemsMutatorRef
             .current
@@ -261,8 +263,7 @@ export const AdminCourseContentSubpage = () => {
     // EFFECTS
     //
 
-    if (Environment.loggingSettings.render)
-        console.log('Rendering AdminCourseContentSubpage');
+    Logger.logScoped('RENDER', 'Rendering AdminCourseContentSubpage');
 
     return (
         <CourseAdministartionFrame
@@ -292,7 +293,7 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: handleSaveAsync,
                         title: 'Mentés',
-                        disabled: !itemsMutatorRef.current.isAnyMutated
+                        disabled: !itemsMutatorRef.current.isAnyItemsMutated
                     }
                 ]}>
 
@@ -322,7 +323,9 @@ export const AdminCourseContentSubpage = () => {
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}
-                    afterChangeCallback={refetchCourseContentAdminData} />
+                    onModulesChanged={handleOnModulesChanged}
+                    canDelete={canDelete}
+                    courseName={'Course name'} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper

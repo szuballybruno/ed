@@ -1,4 +1,4 @@
-export type AnswerEditDTO = {
+export class AnswerEditDTO {
     answerVersionId: number;
     questionVersionId: number;
     text: string;

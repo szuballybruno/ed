@@ -3,7 +3,7 @@ import Delete from '@mui/icons-material/Delete';
 import { useGridApiContext } from '@mui/x-data-grid';
 import { MutableRefObject, ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { VersionCode } from '../../../../shared/types/versionCode';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -38,7 +38,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 };
 
 export const useGridColumnDefinitions = (
-    modules: CourseModuleShortDTO[],
+    modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
     itemsMutatorRef: MutableRefObject<XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>>) => {
 
@@ -68,28 +68,28 @@ export const useGridColumnDefinitions = (
 
         const setAndCommitCellValue = useSetAndCommitCellValue<RowSchema, VersionCode, 'module'>();
 
-        const [id, setId] = useState<string>(row.module!.id + '');
+        const [id, setId] = useState<string>(row.module!.versionId + '');
 
         return <EpistoSelect
             items={modules}
             currentKey={id}
             onSelected={(value) => {
 
-                const selectedModuleId = value.id;
+                const versionId = value.versionId;
 
-                setId(selectedModuleId + '');
+                setId(versionId + '');
 
                 console.log('asdasdw');
 
                 setAndCommitCellValue(rowKey, 'module', {
-                    id: selectedModuleId,
+                    versionId: versionId,
                     isPretestModule: false,
                     name: value.name,
                     orderIndex: value.orderIndex
                 });
             }}
             getDisplayValue={x => '' + x?.name}
-            getCompareKey={module => '' + module?.id} />;
+            getCompareKey={module => '' + module?.versionId} />;
     };
 
     const columnDefGen = <TField extends keyof RowSchema,>(
@@ -177,7 +177,7 @@ export const useGridColumnDefinitions = (
                     .mutate({
                         key: rowKey,
                         field: 'moduleVersionId',
-                        newValue: value.id
+                        newValue: value.versionId
                     });
             },
             renderCell: ({ key, field, row, value }) => {

@@ -2,6 +2,7 @@ import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridA
 import { ReactNode, useCallback, useEffect } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 
 const removeOverlay = () => {
 
@@ -118,7 +119,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 
     const { columns, id, rows, initialState, density, hideFooter, getKey } = props;
 
-    console.log(`${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
+    Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
     removeOverlay();
 
@@ -153,8 +154,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                 });
     }, []);
 
-    if (Environment.loggingSettings.render)
-        console.log('rendering grid');
+    Logger.logScoped('GRID', 'Rendering...');
 
     return (
         <DataGridPro
@@ -223,7 +223,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     })();
 
     if (!isUnhanged)
-        console.log(`${prev.id ? `[id: ${prev.id}] ` : ''}Grid params changed, cause: ${cause}`);
+        Logger.logScoped('GRID', `${prev.id ? `[id: ${prev.id}] ` : ''}Grid params changed, cause: ${cause}`);
 
     return isUnhanged;
 });

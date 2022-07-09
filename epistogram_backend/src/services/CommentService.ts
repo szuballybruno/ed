@@ -1,12 +1,10 @@
 import { Comment } from '../models/entity/Comment';
-import { User } from '../models/entity/User';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { CommentListView } from '../models/views/CommentListView';
 import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../shared/dtos/CommentListDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { PrincipalId } from '../utilities/ActionParams';
-import { instantiate, throwNotImplemented } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
