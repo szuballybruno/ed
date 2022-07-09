@@ -274,7 +274,7 @@ export class UserStatsService {
             .filter(x => x.isStarted && !x.isCompleted);
 
         const inProgressCoursesAsCourseShortDTOs = this._mapperService
-            .mapMany(CourseLearningStatsView, CourseLearningDTO, inProgressCourses);
+            .mapTo(CourseLearningDTO, [inProgressCourses]);
 
         const stats = await this._ormService
             .query(UserLearningOverviewStatsView, { userId })

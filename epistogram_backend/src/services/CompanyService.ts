@@ -31,7 +31,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .getMany();
 
         return this._mapperService
-            .mapMany(CompanyView, CompanyDTO, companies);
+            .mapTo(CompanyDTO, [companies]);
     }
 
     async getCompaniesAdminAsync(userId: PrincipalId) {
@@ -42,7 +42,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .getMany();
 
         return this._mapperService
-            .mapMany(CompanyView, CompanyDTO, companies);
+            .mapTo(CompanyDTO, [companies]);
     }
 
     async getRoleAssignCompaniesAsync(principalId: PrincipalId) {
@@ -78,7 +78,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .getMany();
 
         return this._mapperService
-            .mapMany(Company, CompanyDTO, companies);
+            .mapTo(CompanyDTO, [companies]);
     }
 
     async getCompanyEditDataAsync(principalId: PrincipalId, companyId: number) {
@@ -92,7 +92,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .getSingle();
 
         return this._mapperService
-            .map(Company, CompanyEditDataDTO, comp);
+            .mapTo(CompanyEditDataDTO, [comp]);
     }
 
     async createCompanyAsync(principalId: PrincipalId) {

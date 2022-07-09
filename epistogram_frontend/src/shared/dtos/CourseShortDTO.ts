@@ -2,7 +2,7 @@ import { CourseStageNameType } from '../types/sharedTypes';
 
 export class CourseShortDTO {
     courseId: number;
-    currentItemCode: string;
+    currentItemCode: string | null;
     thumbnailImageURL: string;
     title: string;
     teacherName: string;

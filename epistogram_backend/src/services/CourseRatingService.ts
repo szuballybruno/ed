@@ -41,11 +41,11 @@ export class CourseRatingService extends ServiceBase {
                     .map(viewAsQuestion => {
 
                         return this._mapperService
-                            .map(CourseRatingQuestionView, CourseRatingQuestionDTO, viewAsQuestion);
+                            .mapTo(CourseRatingQuestionDTO, [viewAsQuestion]);
                     });
 
                 return this._mapperService
-                    .map(CourseRatingQuestionView, CourseRatingGroupDTO, viewAsGroup, qustions);
+                    .mapTo(CourseRatingGroupDTO, [viewAsGroup, qustions]);
             });
 
         return groups;

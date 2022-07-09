@@ -38,7 +38,7 @@ export class UserProgressService extends ServiceBase {
             .getMany();
 
         return this._mapperService
-            .mapMany(UserActiveCourseView, UserActiveCourseDTO, views);
+            .mapTo(UserActiveCourseDTO, [views]);
     }
 
     async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: number) {

@@ -63,7 +63,7 @@ export class ShopService {
             .getMany();
 
         return this._mapperService
-            .mapMany(ShopItemStatefulView, ShopItemDTO, shopItemViews);
+            .mapTo(ShopItemDTO, [shopItemViews]);
     }
 
     async getShopItemCategoriesAsync() {
@@ -73,7 +73,7 @@ export class ShopService {
             .getMany();
 
         return this._mapperService
-            .mapMany(ShopItemCategory, ShopItemCategoryDTO, shopItemCategories);
+            .mapTo(ShopItemCategoryDTO, [shopItemCategories]);
     }
 
     async purchaseShopItemAsync(principalId: PrincipalId, shopItemId: number) {
@@ -155,7 +155,7 @@ export class ShopService {
             .getSingle();
 
         return this._mapperService
-            .map(ShopItemView, ShopItemBriefData, item);
+            .mapTo(ShopItemBriefData, [item]);
     }
 
     async getAdminShopItemsAsync() {
@@ -165,7 +165,7 @@ export class ShopService {
             .getMany();
 
         return this._mapperService
-            .mapMany(ShopItemView, ShopItemAdminShortDTO, items);
+            .mapTo(ShopItemAdminShortDTO, [items]);
     }
 
     async getShopItemEditDTOAsync(shopItemId: number) {
@@ -183,7 +183,7 @@ export class ShopService {
             .getMany();
 
         return this._mapperService
-            .map(ShopItem, ShopItemEditDTO, shopItem, discountCodes);
+            .mapTo(ShopItemEditDTO, [shopItem, discountCodes]);
     }
 
     async getPrivateCourseListAsync() {
@@ -196,7 +196,7 @@ export class ShopService {
             .getMany();
 
         return this._mapperService
-            .mapMany(CourseData, CourseShopItemListDTO, courses);
+            .mapTo(CourseShopItemListDTO, [courses]);
     }
 
     async saveShopItemAsync(dto: ShopItemEditDTO, coverFile?: UploadedFile) {

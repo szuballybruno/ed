@@ -52,7 +52,7 @@ export class DailyTipService {
             .getSingleById(DailyTip, dailyTipId);
 
         return this._mapperService
-            .map(DailyTip, DailyTipEditDataDTO, dailyTip);
+            .mapTo(DailyTipEditDataDTO, [dailyTip]);
     }
 
     /**
@@ -73,7 +73,7 @@ export class DailyTipService {
             .getSingle()
 
         return this._mapperService
-            .map(DailyTip, DailyTipEditDataDTO, dailyTip);
+            .mapTo(DailyTipEditDataDTO, [dailyTip]);
     }
 
     /**
@@ -140,6 +140,6 @@ export class DailyTipService {
 
         // map tip
         return this._mapperService
-            .map(DailyTipView, DailyTipDTO, tip);
+            .mapTo(DailyTipDTO, [tip]);
     }
 }

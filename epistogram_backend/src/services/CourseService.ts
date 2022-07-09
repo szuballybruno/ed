@@ -109,7 +109,7 @@ export class CourseService {
             .getMany();
 
         return this._mapperService
-            .mapMany(CourseProgressView, CourseProgressShortDTO, views);
+            .mapTo(CourseProgressShortDTO, [views]);
     }
 
     /**
@@ -135,7 +135,7 @@ export class CourseService {
             .getSingleById(CourseData, courseId);
 
         return this._mapperService
-            .map(CourseData, CourseBriefData, course);
+            .mapTo(CourseBriefData, [course]);
     }
 
     /**
@@ -159,7 +159,7 @@ export class CourseService {
             .mapTo(PlaylistModuleDTO, [moduleViews])
 
         return this._mapperService
-            .map(CourseDetailsView, CourseDetailsDTO, courseDetailsView, playlistModuleDTOs);
+            .mapTo(CourseDetailsDTO, [courseDetailsView, playlistModuleDTOs]);
     }
 
     /**
@@ -208,14 +208,14 @@ export class CourseService {
             .filter(x => x.isStarted && !x.isCompleted);
 
         const inProgressCoursesAsCourseShortDTOs = this._mapperService
-            .mapMany(CourseLearningStatsView, CourseLearningDTO, inProgressCourses);
+            .mapTo(CourseLearningDTO, [inProgressCourses]);
 
         // completed corurses
         const completedCourses = courses
             .filter(x => x.isCompleted);
 
         const completedCoursesAsCourseShortDTOs = this._mapperService
-            .mapMany(CourseLearningStatsView, CourseLearningDTO, completedCourses);
+            .mapTo(CourseLearningDTO, [completedCourses]);
 
         return {
             isAnyCoursesComplete: completedCourses.any(x => true),
@@ -440,7 +440,7 @@ export class CourseService {
             .getModuleEditDTOsAsync(courseId);
 
         const items = this._mapperService
-            .mapMany(CourseAdminContentView, CourseContentItemAdminDTO, views);
+            .mapTo(CourseContentItemAdminDTO, [views]);
 
         return {
             items,
@@ -542,7 +542,7 @@ export class CourseService {
             .getMany();
 
         return this._mapperService
-            .mapMany(CourseAdminShortView, CourseAdminListItemDTO, courseAdminShortViews);
+            .mapTo(CourseAdminListItemDTO, [courseAdminShortViews]);
     }
 
     /**
@@ -594,9 +594,8 @@ export class CourseService {
 
         const orderedCourses = orderCourses(filteredCoursesByIsRecommended, orderBy)
 
-
         return this._mapperService
-            .mapMany(AvailableCourseView, CourseShortDTO, orderedCourses);
+            .mapTo(CourseShortDTO, [orderedCourses]);
     }
 
     /**

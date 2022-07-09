@@ -49,10 +49,10 @@ export class PrequizService {
                 const answers = questionGroup
                     .items
                     .map(viewAsAnswer => this._mapperService
-                        .map(PrequizQuestionView, PrequizAnswerDTO, viewAsAnswer));
+                        .mapTo(PrequizAnswerDTO, [viewAsAnswer]));
 
                 return this._mapperService
-                    .map(PrequizQuestionView, PrequizQuestionDTO, viewAsQuestion, answers);
+                    .mapTo(PrequizQuestionDTO, [viewAsQuestion, answers]);
             });
 
         return questions;
