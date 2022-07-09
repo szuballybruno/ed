@@ -183,6 +183,7 @@ export const getExamVersionsSeedData = (
             examId: exams.pretest_exam_38.id
         },
 
+        // WORD
         exam_version_pretest_39: {
             moduleVersionId: moduleVersions.module_version_word_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_39.id,

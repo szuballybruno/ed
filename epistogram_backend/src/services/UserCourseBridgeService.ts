@@ -27,7 +27,45 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         stageName: CourseStageNameType,
         itemCode: string | null) {
 
-        const currentCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+        const currentCourseBridge = await this._ormService
+            .query(UserCourseBridge, {
+                userId,
+                isCurrent: true
+            })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'isCurrent')
+            .getOneOrNull()
+
+        if (currentCourseBridge) {
+            await this._ormService.save(UserCourseBridge, {
+                id: currentCourseBridge.id,
+                isCurrent: false
+            })
+        }
+
+        const nextCourseBridge = await this._ormService
+            .query(UserCourseBridge, {
+                userId,
+                courseId
+            })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getOneOrNull()
+
+        if (nextCourseBridge) {
+
+            await this._ormService.save(UserCourseBridge, {
+                id: nextCourseBridge.id,
+                currentItemCode: itemCode,
+                stageName,
+                isCurrent: true
+            })
+        } else {
+
+            await this._createNewCourseBridge(courseId, userId, itemCode, stageName);
+        }
+
+        /* const currentCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
         // insert new bridge
         if (!currentCourseBridge) {
@@ -59,7 +97,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 .map((bridge: UserCourseBridge): SaveEntityType<UserCourseBridge> => ({
                     id: bridge.id,
                     isCurrent: bridge.courseId === courseId
-                })));
+                }))); */
     }
 
     /**

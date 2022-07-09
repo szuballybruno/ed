@@ -84,7 +84,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     private async _getQuestionDataByExamVersionId(examVersionId: number) {
 
         const questionData = await this._ormService
-            .query(QuestionDataView, { examVersionId })
+            .query(QuestionDataView, { examVersionId: 29 })
             .where('examVersionId', '=', 'examVersionId')
             .getMany()
 

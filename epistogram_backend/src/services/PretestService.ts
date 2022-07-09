@@ -86,7 +86,7 @@ export class PretestService {
             .getSingle()
 
         return await this._examService
-            .getExamPlayerDTOAsync(userId, pretestExam.id);
+            .getExamPlayerDTOAsync(userId, pretestExam.examId);
     }
 
     async getPretestResultsAsync(principalId: PrincipalId, courseId: number) {
