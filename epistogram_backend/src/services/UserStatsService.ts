@@ -220,7 +220,9 @@ export class UserStatsService {
      * Gets the statistics for the users every watched video
           * @returns
      */
-    async getUserVideoStatsAsync(userId: number, courseId: number) {
+    getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: number) => {
+
+        const userId = principalId.toSQLValue()
 
         const stats = await this._ormService
             .query(UserVideoStatsView, { userId, courseId })
@@ -229,7 +231,7 @@ export class UserStatsService {
             .getMany();
 
         return this._mapperService
-            .mapMany(UserVideoStatsView, UserVideoStatsDTO, stats);
+            .mapTo(UserVideoStatsDTO, [stats]);
     }
 
     /**
@@ -237,7 +239,9 @@ export class UserStatsService {
           * @returns
      */
 
-    async getUserExamStatsAsync(userId: number, courseId: number) {
+    getUserExamStatsAsync = async (principalId: PrincipalId, courseId: number) => {
+
+        const userId = principalId.toSQLValue()
 
         const stats = await this._ormService
             .query(UserExamStatsView, { userId, courseId })
@@ -246,7 +250,7 @@ export class UserStatsService {
             .getMany();
 
         return this._mapperService
-            .mapMany(UserExamStatsView, UserExamStatsDTO, stats);
+            .mapTo(UserExamStatsDTO, [stats]);
     }
 
     /**

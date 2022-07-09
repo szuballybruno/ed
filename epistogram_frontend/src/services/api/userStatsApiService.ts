@@ -52,9 +52,9 @@ export const useUserCourseStats = (userId: number) => {
     };
 };
 
-export const useUserVideoStats = (userId: number, courseId: number) => {
+export const useUserVideoStats = (courseId: number) => {
 
-    const queryRes = useReactQuery2<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { userId, courseId });
+    const queryRes = useReactQuery2<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { courseId });
 
     return {
         userVideoStats: queryRes.data,
@@ -63,9 +63,9 @@ export const useUserVideoStats = (userId: number, courseId: number) => {
     };
 };
 
-export const useUserExamStats = (userId: number, courseId: number) => {
+export const useUserExamStats = (courseId: number) => {
 
-    const queryRes = useReactQuery2<UserExamStatsDTO[]>(apiRoutes.userStats.getUserExamStats, { userId, courseId });
+    const queryRes = useReactQuery2<UserExamStatsDTO[]>(apiRoutes.userStats.getUserExamStats, { courseId });
 
     return {
         userExamStats: queryRes.data,

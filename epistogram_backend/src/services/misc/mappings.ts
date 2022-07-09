@@ -130,8 +130,6 @@ import { Mutable } from './XMapperService/XMapperTypes';
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
-    epistoMappingsBuilder
-        .addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
 
     epistoMappingsBuilder
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (
@@ -472,6 +470,39 @@ const marray = [
                 return [index, x.totalSessionLengthSeconds / 60]
             })
         })
+    }),
+    epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {
+        return stats.map(x => {
+            return {
+                userId: x.userId,
+                videoId: x.videoId,
+                videoTitle: x.videoTitle,
+                courseId: x.courseId,
+                lengthSeconds: x.lengthSeconds,
+                totalSpentTimeSeconds: x.totalSpentTimeSeconds,
+                videoReplaysCount: x.videoReplaysCount,
+                isRecommendedForRetry: x.isRecommendedForRetry,
+                lastThreeAnswerAverage: x.lastThreeAnswerAverage,
+                averageReactionTime: x.averageReactionTime,
+                lastWatchTime: x.lastWatchTime
+            }
+        })
+    }),
+    epistoMappingsBuilder.addArrayMapping(UserExamStatsDTO, () => (stats: UserExamStatsView[]) => {
+        return stats.map(x => {
+            return {
+                userId: x.userId,
+                examId: x.examId,
+                examTitle: x.examTitle,
+                courseId: x.courseId,
+                correctAnswerRate: x.correctAnswerRate,
+                shouldPractiseExam: x.shouldPractiseExam,
+                correctAnswerCount: x.correctAnswerCount,
+                examLengthSeconds: x.examLengthSeconds,
+                lastCompletionDate: x.lastCompletionDate,
+                averageReactionTime: x.averageReactionTime
+            }
+        })
     })
 
 ] as const;
@@ -482,39 +513,6 @@ export type EpistoMappingsType = Mutable<typeof marray>;
  * @deprecated Migrate all mappings to new mappings system
  */
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
-
-    mapperService
-        .addMap(UserExamStatsView, UserExamStatsDTO, (stats) => {
-            return {
-                userId: stats.userId,
-                examId: stats.examId,
-                examTitle: stats.examTitle,
-                courseId: stats.courseId,
-                correctAnswerRate: stats.correctAnswerRate,
-                shouldPractiseExam: stats.shouldPractiseExam,
-                correctAnswerCount: stats.correctAnswerCount,
-                examLengthSeconds: stats.examLengthSeconds,
-                lastCompletionDate: stats.lastCompletionDate,
-                averageReactionTime: stats.averageReactionTime
-            }
-        })
-
-    mapperService
-        .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {
-            return {
-                userId: stats.userId,
-                videoId: stats.videoId,
-                videoTitle: stats.videoTitle,
-                courseId: stats.courseId,
-                lengthSeconds: stats.lengthSeconds,
-                totalSpentTimeSeconds: stats.totalSpentTimeSeconds,
-                videoReplaysCount: stats.videoReplaysCount,
-                isRecommendedForRetry: stats.isRecommendedForRetry,
-                lastThreeAnswerAverage: stats.lastThreeAnswerAverage,
-                averageReactionTime: stats.averageReactionTime,
-                lastWatchTime: stats.lastWatchTime
-            }
-        })
 
     mapperService
         .addMap(CommentListView, CommentListDTO, (comment) => {

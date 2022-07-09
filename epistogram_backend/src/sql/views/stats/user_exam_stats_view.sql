@@ -12,7 +12,12 @@ SELECT DISTINCT ON (e.id)
 	ROUND(asv.answer_session_acquired_points / 4, 4) correct_answer_count,
 	EXTRACT(EPOCH FROM (asv.end_date - asv.start_date)::time)::int exam_length_seconds,
 	asv.end_date last_completion_date,
-	AVG(ga.elapsed_seconds) average_reaction_time
+	(
+		SELECT
+			AVG(ga.elapsed_seconds) average_reaction_time
+		FROM public.given_answer ga
+		WHERE ga.answer_session_id = asv.answer_session_id
+	)
 FROM public.exam e
 
 LEFT JOIN public.exam_version ev
@@ -36,22 +41,9 @@ ON mv.id = ev.module_version_id
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id
 
-WHERE asv.end_date IS NOT NULL
-AND u.id IS NOT NULL
+WHERE /*asv.end_date IS NOT NULL
+AND*/ u.id IS NOT NULL
 AND e.is_pretest IS FALSE
 AND e.is_signup IS FALSE
-
-GROUP BY 
-	e.id, 
-	u.id, 
-	ed.title,
-	cv.course_id,
-	asv.correct_given_answer_count,
-	asv.answered_question_count,
-	asv.end_date,
-	asv.start_date,
-	asv.is_successful,
-	asv.answer_session_acquired_points,
-	asv.answer_session_success_rate
 
 ORDER BY e.id, asv.end_date desc
