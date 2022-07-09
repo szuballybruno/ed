@@ -502,22 +502,59 @@ const marray = [
             }
         })
     }),
-    epistoMappingsBuilder.addArrayMapping(UserExamStatsDTO, () => (stats: UserExamStatsView[]) => {
-        return stats.map(x => {
-            return {
-                userId: x.userId,
-                examId: x.examId,
-                examTitle: x.examTitle,
-                courseId: x.courseId,
-                correctAnswerRate: x.correctAnswerRate,
-                shouldPractiseExam: x.shouldPractiseExam,
-                correctAnswerCount: x.correctAnswerCount,
-                examLengthSeconds: x.examLengthSeconds,
-                lastCompletionDate: x.lastCompletionDate,
-                averageReactionTime: x.averageReactionTime
-            }
+    epistoMappingsBuilder
+        .addArrayMapping(UserExamStatsDTO, () => (stats: UserExamStatsView[]) => {
+
+            return stats
+                .map(x => {
+                    return {
+                        userId: x.userId,
+                        examId: x.examId,
+                        examTitle: x.examTitle,
+                        courseId: x.courseId,
+                        correctAnswerRate: x.correctAnswerRate,
+                        shouldPractiseExam: x.shouldPractiseExam,
+                        correctAnswerCount: x.correctAnswerCount,
+                        examLengthSeconds: x.examLengthSeconds,
+                        lastCompletionDate: x.lastCompletionDate,
+                        averageReactionTime: x.averageReactionTime
+                    }
+                })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CommentListDTO, () => (comments: CommentListView[]) => {
+
+            return comments
+                .map(comment => (instantiate<CommentListDTO>({
+                    id: comment.id,
+                    userId: comment.userId,
+                    threadId: comment.threadId,
+                    fullName: comment.fullName,
+                    commentText: comment.commentText,
+                    creationDate: comment.creationDate,
+                    parentCommentId: comment.parentCommentId,
+                    avatarUrl: comment.avatarUrl,
+                    commentLikeCount: comment.commentLikeCount,
+                    isCurrentUserLikedComment: comment.isLike,
+                    isQuestion: comment.isQuestion
+                })))
+        }),
+    epistoMappingsBuilder
+        .addMapping(EventDTO, () => (event: Event) => {
+
+            return instantiate<EventDTO>({
+                data: JSON.parse(event.data),
+                type: event.type
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CoinTransactionDTO, () => (coinTransactions: CoinTransactionView[]) => {
+            return coinTransactions.map(x => {
+                return instantiate<CoinTransactionDTO>({
+                    ...x
+                })
+            })
         })
-    })
 
 ] as const;
 
@@ -527,35 +564,6 @@ export type EpistoMappingsType = Mutable<typeof marray>;
  * @deprecated Migrate all mappings to new mappings system
  */
 export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
-
-    mapperService
-        .addMap(CommentListView, CommentListDTO, (comment) => {
-
-            return {
-                id: comment.id,
-                userId: comment.userId,
-                threadId: comment.threadId,
-                fullName: comment.fullName,
-                commentText: comment.commentText,
-                creationDate: comment.creationDate,
-                parentCommentId: comment.parentCommentId,
-                avatarUrl: comment.avatarUrl,
-                commentLikeCount: comment.commentLikeCount,
-                isCurrentUserLikedComment: comment.isLike,
-                isQuestion: comment.isQuestion
-            };
-        });
-
-    mapperService
-        .addMap(Event, EventDTO, event => ({
-            data: JSON.parse(event.data),
-            type: event.type
-        }));
-
-    mapperService
-        .addMap(CoinTransactionView, CoinTransactionDTO, view => ({
-            ...view
-        }));
 
     mapperService
         .addMap(ShopItemStatefulView, ShopItemDTO, x => ({

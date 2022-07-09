@@ -132,7 +132,7 @@ SELECT
 	-- total correct answer rate
 	CASE WHEN ast.total_given_answer_count = 0
 		THEN 0
-		ELSE  ast.total_correct_given_answer_count::double precision / ast.total_given_answer_count * 100 
+		ELSE CAST(float8 (ast.total_correct_given_answer_count::double precision / ast.total_given_answer_count * 100) as numeric)
 	END total_correct_answer_rate,
 
 	-- rank inside company (top x percentage)

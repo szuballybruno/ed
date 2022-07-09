@@ -74,6 +74,6 @@ export class CommentService extends QueryServiceBase<Comment> {
 
         return this
             ._mapperService
-            .mapMany(CommentListView, CommentListDTO, userComments);
+            .mapTo(CommentListDTO, [userComments]);
     };
 }
