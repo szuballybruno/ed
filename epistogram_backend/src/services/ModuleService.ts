@@ -1,10 +1,13 @@
 import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/course/Course';
+import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { StorageFile } from '../models/entity/StorageFile';
 import { ModuleView } from '../models/views/ModuleView';
 import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
 import { ModuleDetailedDTO } from '../shared/dtos/ModuleDetailedDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
+import { Id } from '../shared/types/versionId';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
@@ -37,7 +40,7 @@ export class ModuleService {
     /**
      * Gets a detailed module dto.
      */
-    getModuleDetailedDTOAsync = async (moduleId: number): Promise<ModuleDetailedDTO> => {
+    getModuleDetailedDTOAsync = async (moduleId: Id<Module>): Promise<ModuleDetailedDTO> => {
 
         console.log('moduleId: ' + moduleId)
 
@@ -70,7 +73,7 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync = async (courseId: number) => {
+    getModuleEditDTOsAsync = async (courseId: Id<Course>) => {
 
         const modules = await this._ormService
             .query(ModuleView, { courseId })

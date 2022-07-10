@@ -1,7 +1,9 @@
+import { ExamVersion } from '../../models/entity/exam/ExamVersion';
+import { Id } from '../types/versionId';
 import { QuestionDTO } from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
-    examVersionId: number;
+    examVersionId: Id<ExamVersion>;
     subTitle: string;
     title: string;
     type: 'exam';

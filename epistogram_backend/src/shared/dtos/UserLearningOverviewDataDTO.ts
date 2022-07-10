@@ -1,8 +1,10 @@
+import { User } from '../../models/entity/User';
+import { Id } from '../types/versionId';
 import { CourseLearningDTO } from './CourseLearningDTO';
 import { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
 
 export class UserLearningOverviewDataDTO {
-    userId: number;
+    userId: Id<User>;
 
     overallPerformancePercentage: number;
 

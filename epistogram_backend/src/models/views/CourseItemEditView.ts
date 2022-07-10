@@ -1,5 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { AnswerVersion } from '../entity/answer/AnswerVersion';
+import { ExamVersion } from '../entity/exam/ExamVersion';
+import { QuestionVersion } from '../entity/question/QuestionVersion';
+import { VideoVersion } from '../entity/video/VideoVersion';
 
 @ViewEntity({
     synchronize: false,
@@ -9,11 +14,11 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<ExamVersion>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
 
     @ViewColumn()
     @XViewColumn()
@@ -33,7 +38,7 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: number;
+    questionVersionId: Id<QuestionVersion>;
 
     @ViewColumn()
     @XViewColumn()
@@ -45,7 +50,7 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    answerVersionId: number;
+    answerVersionId: Id<AnswerVersion>;
 
     @ViewColumn()
     @XViewColumn()

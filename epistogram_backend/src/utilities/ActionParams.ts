@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
+import { User } from '../models/entity/User';
 import { logSecondary } from '../services/misc/logger';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { withValueOrBadRequest, SafeObjectWrapper } from './helpers';
 
 export class PrincipalId {
@@ -22,21 +24,21 @@ export class PrincipalId {
 export class ActionParams {
     req: Request;
     res: Response;
-    // currentUserId: number;
+    // currentuserId: Id<User>;
     isMultipart: boolean;
     principalId: PrincipalId;
 
     constructor(
         req: Request,
         res: Response,
-        userId: number,
+        userId: Id<User>,
         isMultipart: boolean) {
 
         this.isMultipart = isMultipart;
         this.req = req;
         this.res = res;
         // this.currentUserId = userId;
-        this.principalId = new PrincipalId(userId);
+        this.principalId = new PrincipalId(Id.read(userId));
     }
 
     getBody<T = any>(notNullOrUndefined: (keyof T)[] = []) {
