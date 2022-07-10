@@ -8,7 +8,7 @@ import { User } from '../entity/User';
     synchronize: false,
     expression: ''
 })
-export class UserActiveCourseView {
+export class CorrectAnswerRatesSplitView {
 
     @ViewColumn()
     @XViewColumn()
@@ -20,9 +20,17 @@ export class UserActiveCourseView {
 
     @ViewColumn()
     @XViewColumn()
-    title: string;
+    startDate: Date;
 
     @ViewColumn()
     @XViewColumn()
-    coverFilePath: string;
+    examCorrectAnswerRate: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    practiseCorrectAnswerRate: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    videoCorrectAnswerRate: number;
 }

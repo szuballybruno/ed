@@ -1,5 +1,9 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { AnswerSession } from '../entity/AnswerSession';
+import { ExamVersion } from '../entity/exam/ExamVersion';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -9,15 +13,15 @@ export class AnswerSessionView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: number;
+    answerSessionId: Id<AnswerSession>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<ExamVersion>;
 
     @ViewColumn()
     @XViewColumn()

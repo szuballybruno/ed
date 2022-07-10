@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { Like } from './Like';
 import { User } from './User';
 import { VideoVersion } from './video/VideoVersion';
@@ -9,7 +10,7 @@ export class Comment {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Comment>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -41,7 +42,7 @@ export class Comment {
     // users
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.comments)
     user: Relation<User>;
@@ -49,7 +50,7 @@ export class Comment {
     // video
     @Column()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
     @JoinColumn({ name: 'video_id' })
     @XManyToOne<Comment>()(() => VideoVersion, x => x.comments)
     videoVersion: Relation<VideoVersion>;

@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { Course } from '../course/Course';
 import { User } from '../User';
 import { CourseRatingQuestion } from './CourseRatingQuestion';
@@ -9,7 +10,7 @@ export class CourseRatingQuestionUserAnswer {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<CourseRatingQuestionUserAnswer>;
 
     @Column({ type: 'text', nullable: true })
     @XViewColumn()
@@ -24,7 +25,7 @@ export class CourseRatingQuestionUserAnswer {
     // quesiton
     @Column()
     @XViewColumn()
-    courseRatingQuestionId: number;
+    courseRatingQuestionId: Id<CourseRatingQuestion>;
     @JoinColumn({ name: 'course_rating_question_id' })
     @ManyToOne(_ => CourseRatingQuestion, x => x.userAnswers)
     courseRatingQuestion: Relation<CourseRatingQuestion>;
@@ -32,7 +33,7 @@ export class CourseRatingQuestionUserAnswer {
     // user
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.courseRatingAnswers)
     user: Relation<User>;
@@ -40,7 +41,7 @@ export class CourseRatingQuestionUserAnswer {
     // course 
     @Column()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<Course>;
     @JoinColumn({ name: 'course_id' })
     @ManyToOne(_ => Course, x => x.courseRatingUserAnswers)
     course: Relation<Course>;

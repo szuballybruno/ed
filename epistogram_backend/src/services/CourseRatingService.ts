@@ -8,6 +8,10 @@ import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { Id } from '../shared/types/versionId';
+import { User } from '../models/entity/User';
+import { Course } from '../models/entity/course/Course';
+import { CourseRatingQuestion } from '../models/entity/courseRating/CourseRatingQuestion';
 
 export class CourseRatingService extends ServiceBase {
 
@@ -22,7 +26,7 @@ export class CourseRatingService extends ServiceBase {
      * Get course rating quesiton groups, 
      * and questions in groups  
      */
-    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: number) {
+    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: Id<Course>) {
 
         const views = await this._ormService
             .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
@@ -75,13 +79,13 @@ export class CourseRatingService extends ServiceBase {
             .answers
             .map(x => ({
                 id: prevAnswers
-                    .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id ?? undefined,
-                userId: userId.toSQLValue(),
-                courseId,
-                text: x.text ?? null,
-                value: x.value ?? null,
-                courseRatingQuestionId: x.quesitonId
-            } as CourseRatingQuestionUserAnswer));
+                    .firstOrNull(y => Id.read(y.courseRatingQuestionId) === x.quesitonId)?.id!,
+                userId: Id.create<User>(userId.toSQLValue()),
+                courseId: Id.create<Course>(courseId),
+                text: x.text ?? undefined,
+                value: x.value ?? undefined,
+                courseRatingQuestionId: Id.create<CourseRatingQuestion>(x.quesitonId)
+            }));
 
         await this._ormService
             .save(CourseRatingQuestionUserAnswer, answers);

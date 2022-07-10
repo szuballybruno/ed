@@ -1,5 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
 import { PermissionAssignmentBridge } from './authorization/PermissionAssignmentBridge';
@@ -13,7 +14,7 @@ export class Company {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Company>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()

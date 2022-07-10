@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { CourseVersion } from '../course/CourseVersion';
 import { ExamVersion } from '../exam/ExamVersion';
 import { VideoVersion } from '../video/VideoVersion';
@@ -11,7 +12,7 @@ export class ModuleVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<ModuleVersion>;
 
     // 
     // TO ONE
@@ -20,7 +21,7 @@ export class ModuleVersion {
     // course 
     @Column({ nullable: true })
     @XViewColumn()
-    courseVersionId: number | null;
+    courseVersionId: Id<CourseVersion> | null;
     @XManyToOne<ModuleVersion>()(() => CourseVersion, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('courseVersionId')
     courseVersion: Relation<CourseVersion>;
@@ -28,7 +29,7 @@ export class ModuleVersion {
     // module
     @Column()
     @XViewColumn()
-    moduleId: number;
+    moduleId: Id<Module>;
     @XManyToOne<ModuleVersion>()(() => Module, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleId')
     module: Module;
@@ -36,7 +37,7 @@ export class ModuleVersion {
     // module data
     @Column()
     @XViewColumn()
-    moduleDataId: number;
+    moduleDataId: Id<ModuleData>;
     @XManyToOne<ModuleVersion>()(() => ModuleData, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleDataId')
     moduleData: ModuleData;

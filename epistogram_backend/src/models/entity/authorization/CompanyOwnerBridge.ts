@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { User } from '../User';
@@ -9,14 +10,14 @@ export class CompanyOwnerBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<CompanyOwnerBridge>;
 
     // TO ONE
 
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @ManyToOne(_ => User, x => x.companyOwnerBridges)
     @JoinColumn(getJoinColumnName(CompanyOwnerBridge, 'userId'))
     user: Relation<User>;
@@ -24,7 +25,7 @@ export class CompanyOwnerBridge {
     // company 
     @Column()
     @XViewColumn()
-    companyId: number;
+    companyId: Id<Company>;
     @ManyToOne(_ => Company, x => x.companyOwnerBridges)
     @JoinColumn(getJoinColumnName(CompanyOwnerBridge, 'companyId'))
     company: Relation<Company>;

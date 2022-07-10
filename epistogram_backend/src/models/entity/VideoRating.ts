@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
 import { VideoVersion } from './video/VideoVersion';
 
@@ -8,7 +9,7 @@ export class VideoRating {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<VideoRating>;
 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
@@ -23,7 +24,7 @@ export class VideoRating {
     // video 
     @Column()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
     @XManyToOne<VideoRating>()(() => VideoVersion, x => x.videoRatings)
     @XJoinColumn<VideoRating>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -31,7 +32,7 @@ export class VideoRating {
     // user
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @XManyToOne<VideoRating>()(() => User, x => x.videoRatings)
     @XJoinColumn<VideoRating>('userId')
     user: Relation<User>;

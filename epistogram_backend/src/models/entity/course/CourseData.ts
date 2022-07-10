@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
 import { CourseCategory } from '../CourseCategory';
 import { StorageFile } from '../StorageFile';
 import { User } from '../User';
@@ -11,7 +12,7 @@ export class CourseData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<CourseData>;
 
     @UpdateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -86,7 +87,7 @@ export class CourseData {
     // course category
     @Column()
     @XViewColumn()
-    categoryId: number;
+    categoryId: Id<CourseCategory>;
     @ManyToOne(() => CourseCategory, x => x.categoryCourses)
     @JoinColumn({ name: 'category_id' })
     category: Relation<CourseCategory>;
@@ -94,7 +95,7 @@ export class CourseData {
     // course sub category
     @Column()
     @XViewColumn()
-    subCategoryId: number;
+    subCategoryId: Id<CourseCategory>;
     @ManyToOne(() => CourseCategory, x => x.subCategoryCourses)
     @JoinColumn({ name: 'sub_category_id' })
     subCategory: CourseCategory;
@@ -102,7 +103,7 @@ export class CourseData {
     // teacher
     @Column()
     @XViewColumn()
-    teacherId: number;
+    teacherId: Id<User>;
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
     @JoinColumn({ name: 'teacher_id' })
     teacher: Relation<User>;
@@ -110,7 +111,7 @@ export class CourseData {
     // coverFile
     @Column({ nullable: true })
     @XViewColumn()
-    coverFileId: number | null;
+    coverFileId: Id<StorageFile> | null;
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: Relation<StorageFile>;

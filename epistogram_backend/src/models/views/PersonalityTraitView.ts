@@ -1,5 +1,8 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { PersonalityTraitCategory } from '../entity/PersonalityTraitCategory';
+import { User } from '../entity/User';
 
 @ViewEntity({
 	synchronize: false,
@@ -9,11 +12,11 @@ export class PersonalityTraitView {
 
 	@ViewColumn()
 	@XViewColumn()
-	userId: number;
+	userId: Id<User>;
 
 	@ViewColumn()
 	@XViewColumn()
-	traitCategoryId: number;
+	traitCategoryId: Id<PersonalityTraitCategory>;
 
 	@ViewColumn()
 	@XViewColumn()

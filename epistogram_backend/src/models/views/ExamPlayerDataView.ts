@@ -1,6 +1,12 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { Exam } from '../entity/exam/Exam';
+import { ExamVersion } from '../entity/exam/ExamVersion';
+import { Module } from '../entity/module/Module';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -10,15 +16,15 @@ export class ExamPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
 
     @ViewColumn()
     @XViewColumn()
-    examId: number;
+    examId: Id<Exam>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<ExamVersion>;
 
     @IsDeletedFlag('bool')
     @ViewColumn()
@@ -59,11 +65,11 @@ export class ExamPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<Course>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleId: number;
+    moduleId: Id<Module>;
 
     @ViewColumn()
     @XViewColumn()

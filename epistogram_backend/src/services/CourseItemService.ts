@@ -9,6 +9,7 @@ import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentIte
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { VersionCode } from '../shared/types/versionCode';
+import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
@@ -36,7 +37,7 @@ export class CourseItemService {
      * subtitle etc fields of the item,
      * just the questions & answers  
      */
-    async getCourseItemEditDataAsync(videoVersionId: number | null, examVersionId: number | null) {
+    async getCourseItemEditDataAsync(videoVersionId: Id<VideoVersion> | null, examVersionId: Id<ExamVersion> | null) {
 
         const views = await this._ormService
             .query(CourseItemEditView, { videoVersionId, examVersionId })

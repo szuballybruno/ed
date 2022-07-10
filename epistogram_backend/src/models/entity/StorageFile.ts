@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { CourseData } from './course/CourseData';
 import { ModuleData } from './module/ModuleData';
 import { ShopItem } from './ShopItem';
@@ -12,7 +13,7 @@ export class StorageFile {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<StorageFile>;
 
     @Column()
     @XViewColumn()

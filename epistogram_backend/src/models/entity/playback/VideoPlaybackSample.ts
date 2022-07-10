@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { User } from '../User';
 import { VideoVersion } from '../video/VideoVersion';
 import { VideoPlaybackSession } from './VideoPlaybackSession';
@@ -9,7 +10,7 @@ export class VideoPlaybackSample {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<VideoPlaybackSample>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -30,7 +31,7 @@ export class VideoPlaybackSample {
     // video 
     @Column()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
     @XManyToOne<VideoPlaybackSample>()(() => VideoVersion, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -38,7 +39,7 @@ export class VideoPlaybackSample {
     // user
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @XManyToOne<VideoPlaybackSample>()(() => User, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('userId')
     user: Relation<User>;
@@ -46,7 +47,7 @@ export class VideoPlaybackSample {
     // playback session
     @Column()
     @XViewColumn()
-    videoPlaybackSessionId: number;
+    videoPlaybackSessionId: Id<VideoPlaybackSession>;
     @XManyToOne<VideoPlaybackSample>()(() => VideoPlaybackSession, x => x.videoPlaybackSamples)
     @XJoinColumn<VideoPlaybackSample>('videoPlaybackSessionId')
     videoPlaybackSession: Relation<VideoPlaybackSession>;

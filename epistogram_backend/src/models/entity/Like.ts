@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { Comment } from './Comment';
 import { CourseData } from './course/CourseData';
 import { User } from './User';
@@ -9,7 +10,7 @@ export class Like {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Like>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -25,7 +26,7 @@ export class Like {
     // user
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @ManyToOne(_ => User, x => x.likes)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -33,7 +34,7 @@ export class Like {
     // comment
     @Column()
     @XViewColumn()
-    commentId: number;
+    commentId: Id<Comment>;
     @ManyToOne(_ => Comment, x => x.likes)
     @JoinColumn({ name: 'comment_id' })
     comment: Relation<CourseData>;

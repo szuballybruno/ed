@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
 import { VideoVersion } from './video/VideoVersion';
 
@@ -8,7 +9,7 @@ export class UserVideoProgressBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<UserVideoProgressBridge>;
 
     @Column({ nullable: true, type: 'timestamptz' })
     @XViewColumn()
@@ -27,7 +28,7 @@ export class UserVideoProgressBridge {
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.videoProgressBridges)
     user: Relation<User>;
@@ -35,7 +36,7 @@ export class UserVideoProgressBridge {
     // video version 
     @Column()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
     @XManyToOne<UserVideoProgressBridge>()(() => VideoVersion, x => x.userProgressBridges)
     @XJoinColumn<UserVideoProgressBridge>('videoVersionId')
     videoVersion: Relation<VideoVersion>;

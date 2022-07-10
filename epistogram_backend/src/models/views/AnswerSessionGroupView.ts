@@ -1,5 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { AnswerSessionType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { Course } from '../entity/course/Course';
 import { User } from '../entity/User';
@@ -8,7 +9,7 @@ import { User } from '../entity/User';
     synchronize: false,
     expression: ''
 })
-export class UserActiveCourseView {
+export class AnswerSessionGroupView {
 
     @ViewColumn()
     @XViewColumn()
@@ -20,9 +21,9 @@ export class UserActiveCourseView {
 
     @ViewColumn()
     @XViewColumn()
-    title: string;
+    answerSessionType: AnswerSessionType;
 
     @ViewColumn()
     @XViewColumn()
-    coverFilePath: string;
+    answerSessionSuccessRate: number;
 }

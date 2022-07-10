@@ -1,5 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { CourseVersion } from '../entity/course/CourseVersion';
+import { Question } from '../entity/question/Question';
+import { User } from '../entity/User';
+import { Video } from '../entity/video/Video';
 
 @ViewEntity({
     synchronize: false,
@@ -10,15 +15,15 @@ export class UserPractiseRecommendationView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: number;
+    questionId: Id<Question>;
 
     @ViewColumn()
     @XViewColumn()
-    videoId: number;
+    videoId: Id<Video>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: number;
+    courseVersionId: Id<CourseVersion>;
 
     @ViewColumn()
     @XViewColumn()
@@ -30,7 +35,7 @@ export class UserPractiseRecommendationView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
 
     @ViewColumn()
     @XViewColumn()

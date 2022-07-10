@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { CoinTransaction } from './CoinTransaction';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
@@ -9,7 +10,7 @@ export class GivenAnswerStreak {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<GivenAnswerStreak>;
 
     @Column()
     @XViewColumn()
@@ -20,7 +21,7 @@ export class GivenAnswerStreak {
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

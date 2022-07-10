@@ -1,5 +1,8 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { User } from '../entity/User';
 
 @ViewEntity({
 	synchronize: false,
@@ -8,18 +11,18 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
 export class PretestResultView {
 
 	@ViewColumn()
-    @XViewColumn()
-	userId: number;
+	@XViewColumn()
+	userId: Id<User>;
 
 	@ViewColumn()
-    @XViewColumn()
-	courseId: number;
+	@XViewColumn()
+	courseId: Id<Course>;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	isCompleted: boolean;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	correctAnswerRate: number;
 }

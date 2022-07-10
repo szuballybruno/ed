@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { Course } from '../course/Course';
@@ -12,12 +13,12 @@ export class PermissionAssignmentBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<PermissionAssignmentBridge>;
 
     // permission
     @Column()
     @XViewColumn()
-    permissionId: number;
+    permissionId: Id<Permission>;
 
     // TO MANY
 
@@ -30,7 +31,7 @@ export class PermissionAssignmentBridge {
     // user 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeUserId: number | null;
+    assigneeUserId: Id<User> | null;
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeUserId'))
     assigneeUser: User | null;
@@ -38,7 +39,7 @@ export class PermissionAssignmentBridge {
     // company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeCompanyId: number | null;
+    assigneeCompanyId: Id<Company> | null;
     @ManyToOne(_ => Company, x => x.permissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeCompanyId'))
     assigneeCompany: Company | null;
@@ -46,7 +47,7 @@ export class PermissionAssignmentBridge {
     // group
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeGroupId: number | null;
+    assigneeGroupId: Id<Group> | null;
     @ManyToOne(_ => Group, x => x.contextPermissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'assigneeGroupId'))
     assigneeGroup: Group | null;
@@ -54,7 +55,7 @@ export class PermissionAssignmentBridge {
     // context company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    contextCompanyId: number | null;
+    contextCompanyId: Id<Company> | null;
     @ManyToOne(_ => Company, x => x.contextPermissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCompanyId'))
     contextCompany: Company | null;
@@ -62,7 +63,7 @@ export class PermissionAssignmentBridge {
     // context course
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    contextCourseId: number | null;
+    contextCourseId: Id<Company> | null;
     @ManyToOne(_ => Course, x => x.contextPermissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCourseId'))
     contextCourse: Course | null;

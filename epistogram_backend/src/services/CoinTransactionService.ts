@@ -7,6 +7,13 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 import { PrincipalId } from '../utilities/ActionParams';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
+import { User } from '../models/entity/User';
+import { Id } from '../shared/types/versionId';
+import { Question } from '../models/entity/question/Question';
+import { ActivitySession } from '../models/entity/ActivitySession';
+import { ActivityStreak } from '../models/entity/ActivityStreak';
+import { GivenAnswerStreak } from '../models/entity/GivenAnswerStreak';
+import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 
 export class CoinTransactionService {
 
@@ -28,10 +35,10 @@ export class CoinTransactionService {
 
     async getPrincipalCoinBalance(userId: PrincipalId) {
 
-        return await this.getCoinBalance(userId, userId.toSQLValue());
+        return await this.getCoinBalance(userId, Id.create<User>(userId.toSQLValue()));
     }
 
-    async getCoinBalance(principalId: PrincipalId, userId: number) {
+    async getCoinBalance(principalId: PrincipalId, userId: Id<User>) {
 
         const coinBalance = await this._ormConnectionService
             .query(CoinBalanceView, { userId })
@@ -41,7 +48,7 @@ export class CoinTransactionService {
         return coinBalance.coinBalance;
     }
 
-    async giftCoinsToUserAsync(userId: number, amount: number) {
+    async giftCoinsToUserAsync(userId: Id<User>, amount: number) {
 
         await this._ormConnectionService
             .createAsync(CoinTransaction, {
@@ -62,7 +69,7 @@ export class CoinTransactionService {
             .mapTo(CoinTransactionDTO, [coinTransactions]);
     }
 
-    async getCoinsForQuestionAsync(userId: number, questionVersionId: number) {
+    async getCoinsForQuestionAsync(userId: Id<User>, questionVersionId: Id<QuestionVersion>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, questionVersionId })
@@ -75,7 +82,7 @@ export class CoinTransactionService {
 
     }
 
-    async getCoinsForActivitySession(userId: number, activitySessionId: number) {
+    async getCoinsForActivitySession(userId: Id<User>, activitySessionId: Id<ActivitySession>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, activitySessionId })
@@ -84,7 +91,7 @@ export class CoinTransactionService {
             .getOneOrNull();
     }
 
-    async getCoinsForActivityStreakAsync(userId: number, activityStreakId: number) {
+    async getCoinsForActivityStreakAsync(userId: Id<User>, activityStreakId: Id<ActivityStreak>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, activityStreakId })
@@ -93,7 +100,7 @@ export class CoinTransactionService {
             .getMany();
     }
 
-    async getCoinsForAnswerStreakAsync(userId: number, answerStreakId: number) {
+    async getCoinsForAnswerStreakAsync(userId: Id<User>, answerStreakId: Id<GivenAnswerStreak>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, answerStreakId })

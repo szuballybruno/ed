@@ -1,6 +1,11 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
+import { Permission } from '../entity/authorization/Permission';
+import { Role } from '../entity/authorization/Role';
+import { Company } from '../entity/Company';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -10,15 +15,15 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    assignerUserId: number;
+    assignerUserId: Id<User>;
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: number;
+    assigneeUserId: Id<User>;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: number;
+    contextCompanyId: Id<Company>;
 
     @ViewColumn()
     @XViewColumn()
@@ -26,7 +31,7 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    ownerCompanyId: number | null;
+    ownerCompanyId: Id<Company> | null;
 
     @ViewColumn()
     @XViewColumn()
@@ -38,7 +43,7 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    roleId: number;
+    roleId: Id<Role>;
 
     @ViewColumn()
     @XViewColumn()
@@ -54,7 +59,7 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: number;
+    permissionId: Id<Permission>;
 
     @ViewColumn()
     @XViewColumn()

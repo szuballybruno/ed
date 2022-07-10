@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
 
 @Entity()
@@ -7,7 +8,7 @@ export class Task {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Task>;
 
     @Column()
     @XViewColumn()
@@ -26,7 +27,7 @@ export class Task {
     // user
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @ManyToOne(type => User, user => user.tasks)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

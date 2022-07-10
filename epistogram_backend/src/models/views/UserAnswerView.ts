@@ -1,4 +1,9 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { Id } from '../../shared/types/versionId';
+import { AnswerSession } from '../entity/AnswerSession';
+import { Course } from '../entity/course/Course';
+import { GivenAnswer } from '../entity/GivenAnswer';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -7,16 +12,16 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserAnswerView {
 
     @ViewColumn()
-    userId: number;
+    userId: Id<User>;
 
     @ViewColumn()
-    givenAnswerId: number;
+    givenAnswerId: Id<GivenAnswer>;
 
     @ViewColumn()
-    answerSessionId: number;
+    answerSessionId: Id<AnswerSession>;
 
     @ViewColumn()
-    courseId: number;
+    courseId: Id<Course>;
 
     @ViewColumn()
     isCorrect: boolean;

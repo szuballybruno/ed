@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { User } from '../User';
@@ -10,14 +11,14 @@ export class RoleAssignmentBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<RoleAssignmentBridge>;
 
     // TO ONE
 
     // role 
     @Column()
     @XViewColumn()
-    roleId: number;
+    roleId: Id<Role>;
     @ManyToOne(_ => Role, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'roleId'))
     role: Relation<Role>;
@@ -25,7 +26,7 @@ export class RoleAssignmentBridge {
     // user 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeUserId: number | null;
+    assigneeUserId: Id<User> | null;
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeUserId'))
     assigneeUser: Relation<User> | null;
@@ -33,7 +34,7 @@ export class RoleAssignmentBridge {
     // company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeCompanyId: number | null;
+    assigneeCompanyId: Id<Company> | null;
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeCompanyId'))
     assigneeCompany: Relation<Company> | null;
@@ -41,7 +42,7 @@ export class RoleAssignmentBridge {
     // context company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    contextCompanyId: number | null;
+    contextCompanyId: Id<Company> | null;
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'contextCompanyId'))
     contextCompany: Relation<Company> | null;

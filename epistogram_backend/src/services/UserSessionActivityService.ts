@@ -1,4 +1,8 @@
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { User } from '../models/entity/User';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { SessionActivityType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { CoinAcquireService } from './CoinAcquireService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
 
@@ -13,7 +17,7 @@ export class UserSessionActivityService {
         this._coinAcquireService = coinAcquireService;
     }
 
-    saveUserSessionActivityAsync = async (userId: number, type: SessionActivityType, itemVersionId?: number) => {
+    saveUserSessionActivityAsync = async (userId: Id<User>, type: SessionActivityType, itemVersionId?: Id<VideoVersion> | Id<ExamVersion>) => {
 
         const activitySessionId = await this._funcService.saveUserSessionActivity(userId, type, itemVersionId);
 

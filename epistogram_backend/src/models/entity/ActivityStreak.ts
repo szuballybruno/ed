@@ -8,7 +8,7 @@ import { User } from './User';
 export class ActivityStreak {
 
     @PrimaryGeneratedColumn()
-@XViewColumn()
+    @XViewColumn()
     id: number;
 
     @Column({ type: 'timestamptz' })
@@ -28,7 +28,7 @@ export class ActivityStreak {
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<User>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
