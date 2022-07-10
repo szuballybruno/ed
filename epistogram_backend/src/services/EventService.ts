@@ -1,8 +1,10 @@
 import { Event } from '../models/entity/Event';
+import { User } from '../models/entity/User';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { EventDTO } from '../shared/dtos/EventDTO';
 import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';
 import { EventCodeType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -17,22 +19,22 @@ export class EventService {
         this._mapperService = mapperService;
     }
 
-    async addAnswerStreakEventAsync(userId: number, data: CoinAcquireResultDTO) {
+    async addAnswerStreakEventAsync(userId: Id<User>, data: CoinAcquireResultDTO) {
 
         await this.addEventAsync(userId, 'coin_acquire_answer_streak', data);
     }
 
-    async addSessionStreakEventAsync(userId: number, data: CoinAcquireResultDTO) {
+    async addSessionStreakEventAsync(userId: Id<User>, data: CoinAcquireResultDTO) {
 
         await this.addEventAsync(userId, 'coin_acquire_session_streak', data);
     }
 
-    async addLagBehindNotificationEventAsync(userId: number, data: LagBehindNotificationDTO) {
+    async addLagBehindNotificationEventAsync(userId: Id<User>, data: LagBehindNotificationDTO) {
 
         await this.addEventAsync(userId, 'lag_behind_notification', data);
     }
 
-    async addEventAsync(userId: number, eventCode: EventCodeType, eventDataDTO: any) {
+    async addEventAsync(userId: Id<User>, eventCode: EventCodeType, eventDataDTO: any) {
 
         console.log(`Queueing new event for user: ${userId} code: ${eventCode}`);
 

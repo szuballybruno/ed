@@ -5,6 +5,7 @@ import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { typecheck } from '../shared/logic/sharedLogic';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { KeyofConstrained } from './misc';
 import { XControllerAction } from './XTurboExpress/XTurboExpressDecorators';
 
@@ -18,7 +19,7 @@ export const toFullName = (firstName: string, lastName: string, culture?: 'en' |
     return `${firstName} ${lastName}`;
 };
 
-export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, number | null>) => {
+export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, Id<T> | null>) => {
 
     return {
         name: toSQLSnakeCasing(prop as string)

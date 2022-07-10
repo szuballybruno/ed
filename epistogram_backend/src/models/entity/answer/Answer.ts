@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { AnswerVersion } from './AnswerVersion';
 
 @Entity()
@@ -7,7 +8,7 @@ export class Answer {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Answer>;
 
     // TO MANY
 

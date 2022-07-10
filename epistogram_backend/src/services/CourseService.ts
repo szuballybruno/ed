@@ -48,6 +48,11 @@ import { VideoService } from './VideoService';
 import { CourseItemView } from '../models/views/CourseItemView';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/versionCode';
+import { Course } from '../models/entity/course/Course';
+import { Id } from '../shared/types/versionId';
+import { StorageFile } from '../models/entity/StorageFile';
+import { instantiate } from '../shared/logic/sharedLogic';
+import { SaveEntityType } from './XORM/XORMTypes';
 
 export class CourseService {
 
@@ -85,9 +90,12 @@ export class CourseService {
      * Returns courses that the principal can use as context
      * when assigning permissions to a user 
      */
-    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: number) {
+    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<User>) {
 
-        const courses = await this._ormService
+        // TODO: CourseDataId is not CourseId
+        throwNotImplemented()
+
+        /* const courses = await this._ormService
             .query(CourseData)
             .getMany();
 
@@ -95,7 +103,7 @@ export class CourseService {
             .map((x): CoursePermissionAssignDTO => ({
                 id: x.id,
                 title: x.title
-            }));
+            })); */
     }
 
     /**
@@ -115,7 +123,7 @@ export class CourseService {
     /**
      * Reruns a course view
      */
-    async getCourseViewAsync(userId: number, courseId: number) {
+    async getCourseViewAsync(userId: Id<User>, courseId: Id<Course>) {
 
         const view = await this._ormService
             .query(AvailableCourseView, { courseId, userId })
@@ -129,7 +137,7 @@ export class CourseService {
     /**
      * Returns course brief data async 
      */
-    async getCourseBriefDataAsync(courseId: number) {
+    async getCourseBriefDataAsync(courseId: Id<Course>) {
 
         const course = await this._ormService
             .getSingleById(CourseData, courseId);
@@ -141,7 +149,7 @@ export class CourseService {
     /**
      * Returns course detals 
      */
-    async getCourseDetailsAsync(userId: PrincipalId, courseId: number) {
+    async getCourseDetailsAsync(userId: PrincipalId, courseId: Id<Course>) {
 
         const courseDetailsView = await this._ormService
             .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
@@ -169,9 +177,9 @@ export class CourseService {
 
         const newCourse = {
             title: dto.title,
-            teacherId: 1,
-            categoryId: 1,
-            subCategoryId: 1,
+            teacherId: Id.create<User>(1),
+            categoryId: Id.create<CourseCategory>(1),
+            subCategoryId: Id.create<CourseCategory>(1),
             difficulty: 0,
             benchmark: 0,
             description: '',
@@ -228,7 +236,7 @@ export class CourseService {
     /**
      * Returns the progress of the current active course, or null.
      */
-    async getCurrentCourseProgressAsync(userId: number) {
+    async getCurrentCourseProgressAsync(userId: Id<User>) {
 
         // get current course id 
         const currentCourseId = await this._userCourseBridgeService
@@ -263,7 +271,7 @@ export class CourseService {
     /**
      * Returns the next items in course 
      */
-    private async _getCourseNextItemsAsync(userId: number, courseId: number) {
+    private async _getCourseNextItemsAsync(userId: Id<User>, courseId: Id<Course>) {
 
         const modules = await this.getPlaylistModulesAsync(userId, courseId);
 
@@ -289,21 +297,23 @@ export class CourseService {
     /**
      * Save course thumbnail.
      */
-    async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
+    async saveCourseThumbnailAsync(file: UploadedFile, courseId: Id<Course>) {
 
-        const getCourseAsync = () => this._ormService
+        const getCourseDataAsync = () => this._ormService
             .getSingleById(CourseData, courseId);
 
-        const setCourseThumbnailIdAsync = (thumbnailFileId: number) => this._ormService
-            .save(CourseData, {
-                id: courseId,
+        const courseData = await getCourseDataAsync()
+
+        const setCourseThumbnailIdAsync = (thumbnailFileId: Id<StorageFile>) => this._ormService
+            .save(CourseData, instantiate<SaveEntityType<CourseData>>({
+                id: courseData.id,
                 coverFileId: thumbnailFileId
-            });
+            }));
 
         return this._fileService
             .uploadAssigendFileAsync<CourseData>(
                 this._fileService.getFilePath('courseCoverImages', 'courseCoverImage', courseId, 'jpg'),
-                getCourseAsync,
+                getCourseDataAsync,
                 setCourseThumbnailIdAsync,
                 course => course.coverFileId,
                 file.data);
@@ -314,19 +324,21 @@ export class CourseService {
      */
     async getCurrentCoursePlaylistModulesAsync(userId: PrincipalId) {
 
+        const userIdAsIdType = Id.create<User>(userId.toSQLValue())
+
         const courseId = await this._userCourseBridgeService
-            .getCurrentCourseId(userId.toSQLValue());
+            .getCurrentCourseId(userIdAsIdType);
 
         if (!courseId)
             throw new Error('There\'s no current course!');
 
-        return await this.getPlaylistModulesAsync(userId.toSQLValue(), courseId);
+        return await this.getPlaylistModulesAsync(userIdAsIdType, courseId);
     }
 
     /**
      * Get playlist modules with items.
      */
-    async getPlaylistModulesAsync(userId: number, courseId: number) {
+    async getPlaylistModulesAsync(userId: Id<User>, courseId: Id<Course>) {
 
         const views = await this._ormService
             .query(CourseItemPlaylistView, { courseId, userId })
@@ -451,7 +463,7 @@ export class CourseService {
     /**
      * Saves the course content 
      */
-    async saveCourseContentAsync(courseId: number, mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+    async saveCourseContentAsync(courseId: Id<Course>, mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
 
         if (mutations.length === 0)
             return;
@@ -486,7 +498,7 @@ export class CourseService {
             .saveAsync(moduleVersionMigrations, videoMutations, examMutations);
     }
 
-    private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {
+    private async _incrementModuleVersionsAsync(oldCourseVersionId: Id<CourseVersion>, newCourseVersionId: Id<CourseVersion>) {
 
         const oldModuleVersions = await this._ormService
             .query(ModuleVersion, { oldCourseVersionId })
@@ -515,7 +527,7 @@ export class CourseService {
             }));
     }
 
-    private async _createNewCourseVersionAsync(courseId: number, oldVersionId: number) {
+    private async _createNewCourseVersionAsync(courseId: Id<Course>, oldVersionId: Id<CourseVersion>) {
 
         const oldDataId = (await this._ormService
             .query(CourseVersion, { oldVersionId })
@@ -548,7 +560,7 @@ export class CourseService {
     /**
      * Soft delete course.
      */
-    async softDeleteCourseAsync(courseId: number) {
+    async softDeleteCourseAsync(courseId: Id<Course>) {
 
         await this._ormService
             .softDelete(CourseData, [courseId]);
@@ -604,7 +616,7 @@ export class CourseService {
      * This can be used to dinamically allow or disallow access to a course, by the user.
      * Like when purchased from the shop, or got limited access etc... 
      */
-    async createCourseAccessBridge(userId: number, courseId: number) {
+    async createCourseAccessBridge(userId: Id<User>, courseId: Id<Course>) {
 
         await this._ormService
             .createAsync(CourseAccessBridge, {

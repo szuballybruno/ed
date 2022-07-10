@@ -1,7 +1,10 @@
 import { Permission } from '../models/entity/authorization/Permission';
+import { Company } from '../models/entity/Company';
+import { User } from '../models/entity/User';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -22,7 +25,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
     }
 
     async getPermissionAsync(
-        assigneeUserId: number,
+        assigneeUserId: Id<User>,
         permissionsCode: PermissionCodeType,
         context?: ContextOptions) {
 
@@ -54,7 +57,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .mapTo(PermissionListDTO, [permissions]);
     }
 
-    async getPermissionMatrixAsync(userId: number, contextCompanyId: number) {
+    async getPermissionMatrixAsync(userId: Id<User>, contextCompanyId: Id<Company>) {
 
         const perms = await this._ormService
             .query(UserPermissionView, { userId, contextCompanyId })
