@@ -1,7 +1,9 @@
+import { VideoVersion } from '../../models/entity/video/VideoVersion';
+import { Id } from '../types/versionId';
 import { QuestionDTO } from './QuestionDTO';
 
 export class VideoPlayerDataDTO {
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
     subTitle: string;
     title: string;
     thumbnailUrl: string;

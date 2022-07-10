@@ -1,11 +1,15 @@
 import moment from 'moment';
+import { Course } from '../models/entity/course/Course';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
+import { User } from '../models/entity/User';
+import { Video } from '../models/entity/video/Video';
 import { CourseItemView } from '../models/views/CourseItemView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
@@ -62,27 +66,27 @@ export class PlayerService extends ServiceBase {
         principalId: PrincipalId,
         requestedItemCode: string) => {
 
-        const userId = principalId.toSQLValue();
+        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
 
         // validate request
         const { courseId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
 
         // set current course 
         await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+            .setCurrentCourse(userIdAsIdType, courseId, 'watch', validItemCode);
 
         // course items list
         const modules = await this._courseService
-            .getPlaylistModulesAsync(userId, courseId);
+            .getPlaylistModulesAsync(userIdAsIdType, courseId);
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
 
         const videoDTO = itemType === 'video' ? await this
-            ._getVideoPlayerDataDTOAsync(userId, itemId) : null;
+            ._getVideoPlayerDataDTOAsync(userIdAsIdType, itemId) : null;
 
         const examDTO = itemType === 'exam' ? await this._examService
-            .getExamPlayerDTOAsync(userId, itemId) : null;
+            .getExamPlayerDTOAsync(userIdAsIdType, itemId) : null;
 
         const moduleDetailedDTO = itemType === 'module' ? await this._moduleService
             .getModuleDetailedDTOAsync(itemId) : null;
@@ -91,7 +95,7 @@ export class PlayerService extends ServiceBase {
         // SET START DATE 
         // SET WATCH STAGE
         const userCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeOrFailAsync(userId, courseId);
+            .getUserCourseBridgeOrFailAsync(userIdAsIdType, courseId);
 
         if (!userCourseBridge)
             await this._userCourseBridgeService
@@ -102,7 +106,7 @@ export class PlayerService extends ServiceBase {
         const answerSessionId = itemType === 'module'
             ? null
             : await this._questionAnswerService
-                .createAnswerSessionAsync(userId, examDTO?.examVersionId ?? null, videoDTO?.videoVersionId ?? null);
+                .createAnswerSessionAsync(userIdAsIdType, examDTO?.examVersionId ?? null, videoDTO?.videoVersionId ?? null);
 
         //
         // get next item 
@@ -134,13 +138,15 @@ export class PlayerService extends ServiceBase {
      */
     private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
 
+        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+
         // get current course id
         const courseId = await this._courseService
             .getCourseIdOrFailAsync(requestedPlaylistItemCode);
 
         // get valid course item 
         const validItemCode = await this
-            ._getValidCourseItemCodeAsync(principalId.toSQLValue(), courseId, requestedPlaylistItemCode);
+            ._getValidCourseItemCodeAsync(userIdAsIdType, courseId, requestedPlaylistItemCode);
 
         return { validItemCode, courseId };
     }
@@ -169,7 +175,7 @@ export class PlayerService extends ServiceBase {
      * Finds the closest valid course item code to the target. 
      * This is to ensure a user is not recieving an item they should not access.
      */
-    private async _getValidCourseItemCodeAsync(userId: number, courseId: number, targetItemCode: string) {
+    private async _getValidCourseItemCodeAsync(userId: Id<User>, courseId: Id<Course>, targetItemCode: string) {
 
         const modules = await this._courseService
             .getPlaylistModulesAsync(userId, courseId);
@@ -233,7 +239,7 @@ export class PlayerService extends ServiceBase {
     /**
      * Gets teh video watch dto 
      */
-    private async _getVideoPlayerDataDTOAsync(userId: number, videoId: number) {
+    private async _getVideoPlayerDataDTOAsync(userId: Id<User>, videoId: Id<Video>) {
 
         // get latest video version id
         const videoVersionId = (await this._ormService

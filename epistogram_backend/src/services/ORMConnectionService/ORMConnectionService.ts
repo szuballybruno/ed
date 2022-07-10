@@ -1,3 +1,4 @@
+import { Id } from '../../shared/types/versionId';
 import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
@@ -59,7 +60,7 @@ export class ORMConnectionService {
     /**
      * Soft deletes entites 
      */
-    async softDelete<TEntity>(signature: ClassType<TEntity>, ids: number[]) {
+    async softDelete<TEntity>(signature: ClassType<TEntity>, ids: Id<TEntity>[]) {
 
         if (ids.length === 0)
             return;
@@ -72,7 +73,7 @@ export class ORMConnectionService {
     /**
      * Hard deletes entites 
      */
-    async hardDelete<TEntity>(signature: ClassType<TEntity>, ids: number[]) {
+    async hardDelete<TEntity>(signature: ClassType<TEntity>, ids: Id<TEntity>[]) {
 
         if (ids.length === 0)
             return;
@@ -85,7 +86,7 @@ export class ORMConnectionService {
     /**
      * Creates a new entity
      */
-    async createAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<number> {
+    async createAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<Id<TEntity>> {
 
         const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
@@ -124,7 +125,7 @@ export class ORMConnectionService {
     /**
      * Save or insert entity
      */
-    async saveOrInsertAsync<TEntity>(signature: ClassType<TEntity>, ent: Partial<TEntity>): Promise<number> {
+    async saveOrInsertAsync<TEntity>(signature: ClassType<TEntity>, ent: Partial<TEntity>): Promise<Id<TEntity>> {
 
         const entityId = (ent as any).id;
 
@@ -145,7 +146,7 @@ export class ORMConnectionService {
      */
     async getSingleById<TEntity, TField extends keyof TEntity>(
         classType: ClassType<TEntity>,
-        id: number,
+        id: Id<TEntity>,
         idField?: TField,
         allowDeleted?: boolean) {
 

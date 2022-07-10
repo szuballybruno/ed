@@ -1,3 +1,4 @@
+import { Id } from '../../shared/types/versionId';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 
 export type SQLParamType<TParams, TParamName extends keyof TParams> = {
@@ -8,9 +9,9 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-export type EntityType = { id: number };
+export type EntityType<TEntity> = { id: Id<TEntity> };
 
-export type SaveEntityType<TEntity> = EntityType & Partial<TEntity>;
+export type SaveEntityType<TEntity> = Partial<TEntity>;
 
 export type InsertTokenValuePair = {
     value: any;
@@ -130,5 +131,5 @@ export type SQLValueType = {
 };
 
 export type ParamConstraintType<TParams> = {
-    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | Date | SQLValueType;
+    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | Date | SQLValueType | Id<any>;
 };
