@@ -44,25 +44,37 @@ const hasFieldMutation = <TMutatee, TKeyField extends keyof TMutatee>(mutation: 
 
 const getFieldValue = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation<TMutatee, TKeyField>) => {
 
-    return <TKey extends keyof TMutatee, TValue extends TMutatee[TKey]>(key: TKey): TValue | null => {
+    return <TValue extends TMutatee[TKey], TKey extends keyof TMutatee = any>(keyOrFn: TKey | ((obj: Partial<TMutatee>) => TValue)): TValue | null => {
 
-        const field = mutation
-            .fieldMutators
-            .firstOrNull(fm => fm.field === key);
+        if (typeof keyOrFn === 'function') {
 
-        return field?.value as TValue ?? null;
+            const obj = mapMutationToPartialObject(mutation);
+            const res = keyOrFn(obj);
+
+            return res ?? null;
+        }
+        else {
+
+            const field = mutation
+                .fieldMutators
+                .firstOrNull(fm => fm.field === keyOrFn);
+
+            return field?.value as TValue ?? null;
+        }
     };
 };
 
 const getFieldValueOrFail = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation<TMutatee, TKeyField>) => {
 
-    return <TKey extends keyof TMutatee, TValue extends TMutatee[TKey]>(key: TKey): TValue => {
+    return <TValue extends TMutatee[TKey], TKey extends keyof TMutatee = any>(keyOrFn: TKey | ((obj: Partial<TMutatee>) => TValue)): TValue => {
 
-        const fieldValue = getFieldValue(mutation)(key);
+        const fieldValue = getFieldValue(mutation)(keyOrFn);
         if (!fieldValue)
-            throw new Error('Cant find field mutation by key: ' + (key as string));
+            throw new Error(typeof keyOrFn === 'function'
+                ? 'Cant find field mutation by function.'
+                : 'Cant find field mutation by key: ' + (keyOrFn as string));
 
-        return fieldValue as any;
+        return fieldValue;
     };
 };
 

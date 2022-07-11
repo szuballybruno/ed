@@ -35,9 +35,9 @@ export class QuestionService {
                 parentVersionIdField: isVideo
                     ? 'videoVersionId'
                     : 'examVersionId',
-                parentVersionIdFieldInDTO: isVideo
-                    ? 'videoVersionId'
-                    : 'examVersionId',
+                getParentOldVersionId: isVideo
+                    ? x => x.videoVersionId
+                    : x => x.examVersionId,
                 getDataId: x => x.questionDataId,
                 getEntityId: x => x.questionId,
                 getVersionId: x => x.key,

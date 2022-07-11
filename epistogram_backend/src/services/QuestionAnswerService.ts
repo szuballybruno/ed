@@ -109,7 +109,7 @@ export class QuestionAnswerService {
                 dataSignature: AnswerData,
                 entitySignature: Answer,
                 parentVersionIdField: 'questionVersionId',
-                parentVersionIdFieldInDTO: 'questionVersionId',
+                getParentOldVersionId: x => x.questionVersionId,
                 getDataId: x => x.answerDataId,
                 getEntityId: x => x.answerId,
                 getVersionId: x => x.key,

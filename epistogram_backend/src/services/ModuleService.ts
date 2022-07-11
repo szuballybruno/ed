@@ -1,37 +1,34 @@
-import { UploadedFile } from 'express-fileupload';
+import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { StorageFile } from '../models/entity/StorageFile';
 import { ModuleView } from '../models/views/ModuleView';
-import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
+import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleDetailedDTO } from '../shared/dtos/ModuleDetailedDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
-import { throwNotImplemented } from '../utilities/helpers';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { CourseItemSimpleType } from '../shared/types/sharedTypes';
+import { VersionCode } from '../shared/types/versionCode';
+import { VersionMigrationResult } from '../utilities/misc';
+import { CourseItemService } from './CourseItemService';
 import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
+import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { VersionSaveService } from './VersionSaveService';
 import { VideoService } from './VideoService';
 
 export class ModuleService {
 
-    private _examService: ExamService;
-    private _videoService: VideoService;
-    private _ormService: ORMConnectionService;
-    private _mapperService: MapperService;
-    private _fileService: FileService;
-
     constructor(
-        examService: ExamService,
-        videoService: VideoService,
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        fileService: FileService) {
-
-        this._fileService = fileService;
-        this._examService = examService;
-        this._videoService = videoService;
-        this._ormService = ormService;
-        this._mapperService = mapperService;
+        private _examService: ExamService,
+        private _videoService: VideoService,
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _fileService: FileService,
+        private _courseItemService: CourseItemService,
+        private _versionSaveService: VersionSaveService) {
     }
 
     /**
@@ -81,36 +78,92 @@ export class ModuleService {
             .mapTo(ModuleEditDTO, [modules]);
     };
 
-    // saveModuleAsync = async (dto: ModuleEditDTO, file?: UploadedFile) => {
+    /**
+     * Save modules
+     */
+    async saveModulesAsync({
+        courseVersionMigrations,
+        itemMutations,
+        moduleMutations
+    }: {
+        courseVersionMigrations: VersionMigrationResult[],
+        itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
+    }) {
 
-    //     const moduleId = dto.versionId;
+        // get old course version id
+        const oldCoruseVersionId = courseVersionMigrations
+            .single(x => true)
+            .oldVersionId;
 
-    //     await this._ormService
-    //         .save(ModuleData, {
-    //             id: dto.versionId,
-    //             name: dto.name,
-    //             description: dto.description
-    //         });
+        // save modules
+        const moduleVersionMigrations = await this
+            ._versionSaveService
+            .saveAsync({
+                entitySignature: Module,
+                dataSignature: ModuleData,
+                versionSignature: ModuleVersion,
+                dtoSignature: ModuleEditDTO,
+                getDataId: x => x.moduleDataId,
+                getEntityId: x => x.moduleId,
+                getDefaultData: x => ({
+                    description: '',
+                    imageFileId: null,
+                    name: '',
+                    orderIndex: 0
+                }),
+                getNewEntity: x => ({ isPretestModule: false }),
+                getNewVersion: x => ({
+                    courseVersionId: x.newParentVersionId,
+                    moduleDataId: x.newDataId,
+                    moduleId: x.entityId
+                }),
+                getVersionId: x => x.key as number,
+                muts: moduleMutations,
+                overrideDataProps: (data, mutation) => {
 
-    //     // save file 
-    //     if (file) {
+                    const { description, name, orderIndex } = XMutatorHelpers
+                        .mapMutationToPartialObject(mutation);
 
-    //         const getModuleAsync = () => this._ormService
-    //             .getSingleById(ModuleData, moduleId);
+                    if (description)
+                        data.description = description;
 
-    //         const setModuleThumbnailIdAsync = (fileId: number) => this._ormService
-    //             .save(ModuleData, {
-    //                 id: moduleId,
-    //                 imageFileId: fileId
-    //             });
+                    if (name)
+                        data.name = name;
 
-    //         await this._fileService
-    //             .uploadAssigendFileAsync<ModuleData>(
-    //                 this._fileService.getFilePath('module_images', 'module_image', dto.versionId, 'jpg'),
-    //                 getModuleAsync,
-    //                 setModuleThumbnailIdAsync,
-    //                 module => module.imageFileId,
-    //                 file.data);
-    //     }
-    // };
+                    if (orderIndex)
+                        data.orderIndex = orderIndex;
+
+                    return data;
+                },
+                parentVersionIdField: 'courseVersionId',
+                getParentOldVersionId: _ => oldCoruseVersionId,
+                parentVersionIdMigrations: courseVersionMigrations
+            });
+
+        // save items
+        const { examMutations, videoMutations } = await this
+            ._separateCourseItemMutations(itemMutations);
+
+        await this._courseItemService
+            .saveAsync(moduleVersionMigrations, videoMutations, examMutations);
+    }
+
+    /**
+     * Separate course item mutations into video / exam mutations 
+     */
+    private async _separateCourseItemMutations(itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]) {
+
+        const filterMutations = (
+            versionType: CourseItemSimpleType) => {
+
+            return itemMutations
+                .filter(x => VersionCode.read(x.key).versionType === versionType);
+        };
+
+        const videoMutations = filterMutations('video');
+        const examMutations = filterMutations('exam');
+
+        return { videoMutations, examMutations };
+    }
 }
