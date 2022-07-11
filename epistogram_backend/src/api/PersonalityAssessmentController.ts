@@ -1,5 +1,7 @@
+import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -26,8 +28,9 @@ export class PersonalityAssessmentController {
         const query = params
             .getQuery<any>();
 
-        const personalityTraitCategoryId = query
-            .getValue(x => x.personalityTraitCategoryId, 'int');
+        const personalityTraitCategoryId = Id
+            .create<PersonalityTraitCategory>(query
+                .getValue(x => x.personalityTraitCategoryId, 'int'));
 
         const isMax = query
             .getValue(x => x.isMax, 'boolean');

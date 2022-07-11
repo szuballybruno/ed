@@ -151,7 +151,7 @@ export class CourseController {
 
         const courseId = Id
             .create<Course>(params
-                .getBody<IdResultDTO>()
+                .getBody<any>()
                 .getValue(x => x.id, 'int'))
 
         await this._courseService.softDeleteCourseAsync(courseId);

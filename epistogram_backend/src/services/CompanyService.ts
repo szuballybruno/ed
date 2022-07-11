@@ -82,7 +82,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .mapTo(CompanyDTO, [companies]);
     }
 
-    async getCompanyEditDataAsync(principalId: PrincipalId, companyId: number) {
+    async getCompanyEditDataAsync(principalId: PrincipalId, companyId: Id<Company>) {
 
         await this._authoirzationService
             .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId });

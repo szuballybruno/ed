@@ -1,5 +1,7 @@
 import { Permission } from '../models/entity/authorization/Permission';
+import { Comment } from '../models/entity/Comment';
 import { Company } from '../models/entity/Company';
+import { Course } from '../models/entity/course/Course';
 import { User } from '../models/entity/User';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
@@ -10,9 +12,9 @@ import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export type ContextOptions = {
-    companyId?: number,
-    courseId?: number,
-    commentId?: number
+    companyId?: Id<Company>,
+    courseId?: Id<Course>,
+    commentId?: Id<Comment>
 }
 
 export class PermissionService extends QueryServiceBase<Permission> {

@@ -40,10 +40,13 @@ export class CompanyController {
     @XControllerAction(apiRoutes.companies.getCompanyEditData)
     getCompanyEditDataAction = async (params: ActionParams) => {
 
-        return await this._compService
-            .getCompanyEditDataAsync(params.principalId, params
+        const companyId = Id
+            .create<Company>(params
                 .getQuery()
-                .getValue(x => x.companyId, 'int'));
+                .getValue(x => x.companyId, 'int'))
+
+        return await this._compService
+            .getCompanyEditDataAsync(params.principalId, companyId);
     };
 
     @XControllerAction(apiRoutes.companies.getAvailableCompaniesForRoleCreation)

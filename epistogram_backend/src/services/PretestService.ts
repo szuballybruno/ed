@@ -118,7 +118,7 @@ export class PretestService {
             .mapTo(PretestResultDTO, [view, courseView]);
     }
 
-    async getPretestExamIdAsync(courseId: number) {
+    async getPretestExamIdAsync(courseId: Id<Course>) {
 
         throwNotImplemented();
         // const exam = await this._ormService

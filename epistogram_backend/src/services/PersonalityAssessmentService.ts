@@ -55,7 +55,7 @@ export class PersonalityAssessmentService {
     /**
      * Return the personality trait category with details, like tips etc.
      */
-    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: boolean) {
+    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: Id<PersonalityTraitCategory>, isMax: boolean) {
 
         const category = await this._ormService
             .query(PersonalityTraitCategory, { personalityTraitCategoryId })

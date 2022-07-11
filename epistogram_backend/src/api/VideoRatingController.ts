@@ -4,6 +4,8 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { Id } from '../shared/types/versionId';
 
 export class VideoRatingController {
 
@@ -39,9 +41,10 @@ export class VideoRatingController {
     @XControllerAction(apiRoutes.videoRating.getVideoRating)
     getVideoRatingAction = async (params: ActionParams) => {
 
-        const videoVersionId = params
-            .getQuery<{ videoVersionId: number }>()
-            .getValue(x => x.videoVersionId, 'int');
+        const videoVersionId = Id
+            .create<VideoVersion>(params
+                .getQuery<{ videoVersionId: number }>()
+                .getValue(x => x.videoVersionId, 'int'));
 
         return await this._videoRatingService
             .getVideoRatingAsync(params.principalId, videoVersionId);

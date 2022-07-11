@@ -243,7 +243,7 @@ export class UserStatsService {
      */
 
     getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<Course>) => {
-        Id<Course>
+
         const userId = principalId.toSQLValue()
 
         const stats = await this._ormService

@@ -68,7 +68,7 @@ export class PrequizService {
      * Returns an answer that the user 
      * has previously given to the specified quesiton
      */
-    async getUserAnswerAsync(principalId: PrincipalId, courseId: Id<Course>, questionId: number) {
+    async getUserAnswerAsync(principalId: PrincipalId, courseId: Id<Course>, questionId: Id<Question>) {
 
         const userId = Id
             .create<User>(principalId.toSQLValue());

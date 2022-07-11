@@ -269,14 +269,14 @@ export class VersionSaveService {
                 return oldData;
             })();
 
-        const getOldData = (mutation: TMutation | Id<TMutation>) => {
+        const getOldData = (mutation: TMutation | Id<TVersion>) => {
 
-            const verisonId = mutation instanceof Id<TMutation>
-                ? mutation
-                : getVersionId(mutation);
+            /*  const verisonId = mutation instanceof Id<TVersion>
+                 ? mutation
+                 : getVersionId(mutation); */
 
             return oldData
-                .single(x => x.oldVersion.id === verisonId);
+                .single(x => x.oldVersion.id === mutation);
         };
 
         return { getOldData };

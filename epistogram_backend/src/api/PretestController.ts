@@ -42,9 +42,12 @@ export class PretestController {
     @XControllerAction(apiRoutes.pretest.getPretestExamId)
     getPretestExamIdAction = async (params: ActionParams) => {
 
-        return this._pretestService
-            .getPretestExamIdAsync(params
+        const courseId = Id
+            .create<Course>(params
                 .getQuery<any>()
-                .getValue(x => x.courseId, 'int'));
+                .getValue(x => x.courseId, 'int'))
+
+        return this._pretestService
+            .getPretestExamIdAsync(courseId);
     };
 }

@@ -1,5 +1,6 @@
 import { DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';
 import { CourseAccessBridge } from '../CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from '../courseRating/CourseRatingQuestionUserAnswer';
@@ -13,7 +14,7 @@ export class Course {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Course>;
 
     // deleted flag - deletion is associated 
     // with the high level course entity,

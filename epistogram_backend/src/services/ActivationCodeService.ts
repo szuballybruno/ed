@@ -26,11 +26,11 @@ export class ActivationCodeService {
         return actCode;
     }
 
-    async invalidateCodeAsync(codeId: number) {
+    async invalidateCodeAsync(codeId: Id<ActivationCode>) {
 
         await this._ormService
             .save(ActivationCode, {
-                id: Id.create<ActivationCode>(codeId),
+                id: codeId,
                 isUsed: true
             });
     }
