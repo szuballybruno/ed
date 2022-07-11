@@ -14,7 +14,7 @@ export const Environment = (() => {
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 1 * 60 * 1000; // 1 mins
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = ['GRID'];
+    const loggingEnabledKeys: LoggingKeysType[] = [];
 
     if (loggingEnabled) {
 

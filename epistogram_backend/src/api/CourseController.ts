@@ -6,6 +6,7 @@ import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentIte
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
+import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
@@ -121,14 +122,17 @@ export class CourseController {
         const bod = params
             .getBody();
 
-        const mutations = bod
-            .getValue<Mutation<CourseContentItemAdminDTO, 'versionCode'>>(x => x.mutations, 'any[]');
+        const itemMutations = bod
+            .getValue<Mutation<CourseContentItemAdminDTO, 'versionCode'>>(x => x.itemMutations, 'any[]');
+
+        const moduleMutations = bod
+            .getValue<Mutation<ModuleEditDTO, 'versionId'>>(x => x.moduleMutations, 'any[]');
 
         const courseId = Id.create<Course>(bod
             .getValue(x => x.courseId, 'int'));
 
         await this._courseService
-            .saveCourseContentAsync(courseId, mutations);
+            .saveCourseContentAsync(courseId, itemMutations, moduleMutations);
     };
 
     @XControllerAction(apiRoutes.course.saveCourseThumbnail, { isPost: true, isMultipart: true })

@@ -82,13 +82,13 @@ export class PlayerService extends ServiceBase {
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
 
-        const videoDTO = itemType === 'video' ? await this
+        const videoPlayerDTO = itemType === 'video' ? await this
             ._getVideoPlayerDataDTOAsync(userIdAsIdType, itemId) : null;
 
-        const examDTO = itemType === 'exam' ? await this._examService
+        const examPlayerDTO = itemType === 'exam' ? await this._examService
             .getExamPlayerDTOAsync(userIdAsIdType, itemId) : null;
 
-        const moduleDetailedDTO = itemType === 'module' ? await this._moduleService
+        const modulePlayerDTO = itemType === 'module' ? await this._moduleService
             .getModuleDetailedDTOAsync(itemId) : null;
 
         //
@@ -106,7 +106,7 @@ export class PlayerService extends ServiceBase {
         const answerSessionId = itemType === 'module'
             ? null
             : await this._questionAnswerService
-                .createAnswerSessionAsync(userIdAsIdType, examDTO?.examVersionId ?? null, videoDTO?.videoVersionId ?? null);
+                .createAnswerSessionAsync(userIdAsIdType, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
 
         //
         // get next item 
@@ -116,9 +116,9 @@ export class PlayerService extends ServiceBase {
         log('nextItemState: ' + nextItemState)
 
         return instantiate<PlayerDataDTO>({
-            videoPlayerData: videoDTO,
-            examPlayerData: examDTO,
-            modulePlayerData: moduleDetailedDTO,
+            videoPlayerData: videoPlayerDTO,
+            examPlayerData: examPlayerDTO,
+            modulePlayerData: modulePlayerDTO,
             answerSessionId: answerSessionId,
             courseMode: userCourseBridge.courseMode,
             courseId: courseId,

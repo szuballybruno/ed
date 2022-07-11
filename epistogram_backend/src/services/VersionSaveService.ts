@@ -29,12 +29,12 @@ export class VersionSaveService {
         dataSignature: ClassType<TData>,
         entitySignature: ClassType<TEntity>,
         parentVersionIdField: keyof TVersion,
-        parentVersionIdFieldInDTO: keyof TDTO,
         parentVersionIdMigrations: VersionMigrationResult[],
         muts: Mutation<TDTO, TMutationKey>[],
-        getDataId: (version: TVersion) => Id<TVersion>,
-        getEntityId: (version: TVersion) => Id<TVersion>,
-        getVersionId: (mutation: Mutation<TDTO, TMutationKey>) => Id<TVersion>,
+        getParentOldVersionId: (dto: Partial<TDTO>) => number | null | undefined,
+        getDataId: (version: TVersion) => number,
+        getEntityId: (version: TVersion) => number,
+        getVersionId: (mutation: Mutation<TDTO, TMutationKey>) => number,
         getDefaultData: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         getNewEntity: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TEntity>,
@@ -49,7 +49,7 @@ export class VersionSaveService {
             dataSignature,
             entitySignature,
             parentVersionIdField,
-            parentVersionIdFieldInDTO,
+            getParentOldVersionId,
             getDataId,
             getDefaultData,
             getEntityId,
@@ -163,9 +163,9 @@ export class VersionSaveService {
                         return getOldData(oldVersionId).oldVersion[parentVersionIdField] as any;
 
                     if (mutation.action === 'add')
-                        return XMutatorHelpers.getFieldValueOrFail(mutation)(parentVersionIdFieldInDTO) as any as number;
+                        return XMutatorHelpers.getFieldValueOrFail(mutation)(getParentOldVersionId) as any as number;
 
-                    const oldParentVersionId = XMutatorHelpers.getFieldValue(mutation)(parentVersionIdFieldInDTO) as any as number;
+                    const oldParentVersionId = XMutatorHelpers.getFieldValue(mutation)(getParentOldVersionId);
                     if (oldParentVersionId)
                         return oldParentVersionId;
 

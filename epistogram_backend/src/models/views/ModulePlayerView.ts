@@ -1,28 +1,26 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Module } from '../entity/module/Module';
+import { ModuleVersion } from '../entity/module/ModuleVersion';
 
 @ViewEntity({
     synchronize: false,
     expression: ''
 })
-export class ModuleView {
+export class ModulePlayerView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleId: number;
+    moduleId: Id<Module>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: number;
+    moduleVersionId: Id<ModuleVersion>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleDataId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    moduleName: string;
+    name: string;
 
     @ViewColumn()
     @XViewColumn()
@@ -34,13 +32,5 @@ export class ModuleView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    imageFileId: number | null;
-
-    @ViewColumn()
-    @XViewColumn()
-    itemCount: number;
+    imageFilePath: string | null;
 }

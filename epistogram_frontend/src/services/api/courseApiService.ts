@@ -9,6 +9,7 @@ import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO
 import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../../shared/dtos/mutations/Mutation';
 import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
@@ -115,7 +116,8 @@ export const useSaveCourseContentData = () => {
 
     const qr = usePostDataUnsafe<{
         courseId: number,
-        mutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[]
+        itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
     }, void>(apiRoutes.course.saveCourseContent);
 
     return {

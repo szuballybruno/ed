@@ -1,13 +1,15 @@
 import { Flex } from '@chakra-ui/react';
 import { Add, Edit } from '@mui/icons-material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
+import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { Mutation } from '../../../../shared/dtos/mutations/Mutation';
 import { VersionCode } from '../../../../shared/types/versionCode';
 import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
@@ -15,6 +17,7 @@ import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
+import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
@@ -23,6 +26,7 @@ import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ItemEditDialog } from '../itemEditDialog/ItemEditDialog';
 import { ItemEditDialogParams } from '../itemEditDialog/ItemEditDialogTypes';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
+import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
@@ -36,12 +40,10 @@ export const AdminCourseContentSubpage = () => {
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>('item_edit_dialog');
-    const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog');
     const isAnySelected = !!courseId && (courseId != -1);
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
-    const [preprocessedItems, setPreprocessedItems] = useState<RowSchema[]>([]);
 
     // http
     const {
@@ -55,22 +57,38 @@ export const AdminCourseContentSubpage = () => {
     } = useSaveCourseContentData();
 
     // misc
-    // const modules = useMemo(() => courseContentAdminData?.modules ?? [], [courseContentAdminData]);
-    const [modules, setModules] = useState<ModuleEditDTO[]>([]);
     const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
-    const forceUpdate = useForceUpdate();
-    const itemsMutatorRef = useRef(new XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>({ keyPropertyName: 'versionCode' }));
+    const itemsMutatorRef = useXMutator(CourseContentItemAdminDTO, 'versionCode');
 
     // busy state
     useSetBusy(useSaveCourseContentData, saveCourseDataState);
     useSetBusy(useCourseContentAdminData, courseContentAdminDataState);
 
+    // module edit dialog logic
+    const canDelete = useCallback((moduleVersionId: number) => !itemsMutatorRef
+        .current
+        .mutatedItems
+        .any(x => x.moduleVersionId === moduleVersionId), []);
+
+    const moduleEditDialogLogic = useModuleEditDialogLogic({
+        canDelete,
+        modules: courseContentAdminData?.modules ?? EMPTY_ARRAY
+    });
+
+    const isSaveEnabled = itemsMutatorRef.current.isAnyItemsMutated
+        || moduleEditDialogLogic.mutatorRef.current.isAnyItemsMutated;
+
+    const modules = moduleEditDialogLogic
+        .mutatorRef
+        .current
+        .mutatedItems;
+
     // preprocess items 
-    const preprocessItems = useCallback(() => {
+    const gridRowItems = useMemo(() => {
 
         if (modules.length === 0)
-            return;
+            return [];
 
         const items = itemsMutatorRef
             .current
@@ -84,8 +102,8 @@ export const AdminCourseContentSubpage = () => {
                 .items
                 .orderBy(i => i.itemOrderIndex));
 
-        setPreprocessedItems(preproItems);
-    }, [setPreprocessedItems, modules]);
+        return preproItems;
+    }, [itemsMutatorRef.current.mutatedItems, modules]);
 
     // recalc  
     const recalcOrderIndices = useCallback(() => {
@@ -116,17 +134,6 @@ export const AdminCourseContentSubpage = () => {
             .setOnPostMutationChanged(recalcOrderIndices);
     }, []);
 
-    // set - on mutation changed functions
-    useEffect(() => {
-
-        itemsMutatorRef
-            .current
-            .setOnMutationsChanged(() => {
-                preprocessItems();
-                forceUpdate();
-            });
-    }, [preprocessItems]);
-
     // set - original items if loaded
     useEffect(() => {
 
@@ -141,13 +148,6 @@ export const AdminCourseContentSubpage = () => {
     // 
     // FUNCS
     // 
-
-    const handleOnModulesChanged = useCallback((modules: ModuleEditDTO[]) => setModules(modules), []);
-
-    const canDelete = useCallback((moduleVersionId: number) => !itemsMutatorRef
-        .current
-        .mutatedItems
-        .any(x => x.moduleVersionId === moduleVersionId), []);
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
@@ -171,7 +171,9 @@ export const AdminCourseContentSubpage = () => {
                 });
 
         if (type === 'module')
-            moduleEditDialogLogic.openDialog();
+            moduleEditDialogLogic
+                .dialogLogic
+                .openDialog();
 
     };
 
@@ -238,7 +240,11 @@ export const AdminCourseContentSubpage = () => {
 
             await saveCourseDataAsync({
                 courseId,
-                mutations: itemsMutatorRef
+                itemMutations: itemsMutatorRef
+                    .current
+                    .mutations,
+                moduleMutations: moduleEditDialogLogic
+                    .mutatorRef
                     .current
                     .mutations
             });
@@ -293,7 +299,7 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: handleSaveAsync,
                         title: 'Mentés',
-                        disabled: !itemsMutatorRef.current.isAnyItemsMutated
+                        disabled: !isSaveEnabled
                     }
                 ]}>
 
@@ -323,8 +329,6 @@ export const AdminCourseContentSubpage = () => {
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}
-                    onModulesChanged={handleOnModulesChanged}
-                    canDelete={canDelete}
                     courseName={'Course name'} />
 
                 {/* add buttons popper */}
@@ -341,7 +345,7 @@ export const AdminCourseContentSubpage = () => {
 
                     <EpistoDataGrid
                         columns={gridColumns}
-                        rows={preprocessedItems}
+                        rows={gridRowItems}
                         getKey={getRowKey}
                         hideFooter
                         initialState={{

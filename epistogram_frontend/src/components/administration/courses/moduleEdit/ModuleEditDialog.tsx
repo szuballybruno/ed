@@ -1,74 +1,33 @@
 import { Add } from '@mui/icons-material';
-import { useCallback, useEffect, useState } from 'react';
-import { ModuleApiService } from '../../../../services/api/moduleApiService';
-import { getVirtualId } from '../../../../services/core/idService';
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { useEffect } from 'react';
 import { usePaging } from '../../../../static/frontendHelpers';
-import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
-import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
-import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
+import { ModuleEditDialogLogicType } from './ModuleEditDialogLogic';
 import { ModuleEditDialogPage } from './ModuleEditDialogPage';
 import { ModuleListEditDialogPage } from './ModuleListEditDialogPage';
 
 export const ModuleEditDialog = ({
     logic,
-    onModulesChanged,
-    canDelete,
     courseName
 }: {
-    logic: EpistoDialogLogicType,
-    onModulesChanged: (modules: ModuleEditDTO[]) => void,
-    canDelete: (moduleVersionId: number) => boolean,
-    courseName: string
+    courseName: string,
+    logic: ModuleEditDialogLogicType
 }) => {
 
-    // misc
-    const courseId = useIntParam('courseId')!;
+    const {
+        createModule,
+        currentModule,
+        handleEditModule,
+        handleOk,
+        mutatorRef,
+        dialogLogic,
+        currentPageIndex,
+        canDelete
+    } = logic;
 
-    // state
-    const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
-
-    // http
-    const { moduleListEditData: modules } = ModuleApiService
-        .useModuleListEditData(courseId, logic.isOpen);
-
-    // mut
-    const mutatorRef = useXMutator(ModuleEditDTO, 'versionId');
-
-    // calc 
-    const currentModule = mutatorRef
-        .current
-        .mutatedItems
-        .firstOrNull(x => x.versionId === editedModuleId);
-
-    // set default items
-    useEffect(() => {
-
-        if (!modules)
-            return;
-
-        mutatorRef
-            .current
-            .setOriginalItems(modules);
-    }, [modules]);
-
-    // set on changed callback
-    useEffect(() => {
-
-        mutatorRef
-            .current
-            .setOnPostMutationChanged(() => {
-             
-                console.log('asd');
-                onModulesChanged(mutatorRef.current.mutatedItems);
-            });
-    }, [onModulesChanged]);
-
-    // paging
     const paging = usePaging<EditDialogSubpage>([
         {
             content: () => (
@@ -93,43 +52,16 @@ export const ModuleEditDialog = ({
         }
     ]);
 
-    // Go to edit page
-    const handleEditModule = useCallback((moduleId: number) => {
+    useEffect(() => {
 
-        setEditedModuleId(moduleId);
-        paging.next();
-    }, []);
-
-    // Create new module
-    const createModule = useCallback(() => {
-
-        const moduleVersionId = getVirtualId();
-
-        mutatorRef
-            .current
-            .create(moduleVersionId, {
-                name: '',
-                description: '',
-                imageFilePath: '',
-                versionId: moduleVersionId,
-                orderIndex: mutatorRef
-                    .current
-                    .mutatedItems
-                    .length - 1
-            });
-    }, []);
-
-    // handle save
-    const handleSave = useCallback(() => {
-
-        return 1;
-    }, []);
+        paging.setItem(currentPageIndex);
+    }, [currentPageIndex]);
 
     return (
         <EditDialogBase
             hideTabs
             paging={paging}
-            logic={logic}
+            logic={dialogLogic}
             headerButtons={<>
                 <EpistoButton
                     onClick={createModule}
@@ -149,7 +81,7 @@ export const ModuleEditDialog = ({
 
                     <EpistoButton
                         variant='colored'
-                        onClick={handleSave}>
+                        onClick={handleOk}>
 
                         {translatableTexts.misc.ok}
                     </EpistoButton>
