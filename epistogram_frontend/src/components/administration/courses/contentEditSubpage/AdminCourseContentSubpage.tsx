@@ -76,6 +76,9 @@ export const AdminCourseContentSubpage = () => {
         modules: courseContentAdminData?.modules ?? EMPTY_ARRAY
     });
 
+    const isSaveEnabled = itemsMutatorRef.current.isAnyItemsMutated
+        || moduleEditDialogLogic.mutatorRef.current.isAnyItemsMutated;
+
     const modules = moduleEditDialogLogic
         .mutatorRef
         .current
@@ -296,7 +299,7 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: handleSaveAsync,
                         title: 'Mentés',
-                        disabled: !itemsMutatorRef.current.isAnyItemsMutated
+                        disabled: !isSaveEnabled
                     }
                 ]}>
 

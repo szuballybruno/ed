@@ -85,16 +85,25 @@ import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
-import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
+import { ExamResultView } from '../../models/views/ExamResultView';
+import { ExamScoreView } from '../../models/views/ExamScoreView';
+import { ExamVersionView } from '../../models/views/ExamVersionView';
+import { GivenAnswerScoreView } from '../../models/views/GivenAnswerScoreView';
+import { HomePageStatsView } from '../../models/views/HomePageStatsView';
+import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
+import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
 import { LatestExamView } from '../../models/views/LatestExamView';
-import { QuestionDataView } from '../../models/views/QuestionDataView';
-import { ModuleView } from '../../models/views/ModuleView';
+import { LatestVideoView } from '../../models/views/LatestVideoView';
+import { ModuleEditView } from '../../models/views/ModuleEditView';
+import { ModulePlayerView } from '../../models/views/ModulePlayerView';
+import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
+import { QuestionDataView } from '../../models/views/QuestionDataView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
@@ -107,12 +116,14 @@ import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCo
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
+import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserEngagementView } from '../../models/views/UserEngagementView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
+import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
 import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
@@ -123,11 +134,12 @@ import { UserSessionBlockView } from '../../models/views/UserSessionBlockView';
 import { UserSessionDailyView } from '../../models/views/UserSessionDailyView';
 import { UserSessionView } from '../../models/views/UserSessionView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
-import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserVideoPractiseProgressView } from '../../models/views/UserVideoPractiseProgressView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyCourseItemProgressView';
 import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
+import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
+import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
 import { getAnswersSeedData } from '../../sql/seed/seed_answers';
 import { getAnswerDatasSeedData } from '../../sql/seed/seed_answer_datas';
@@ -157,9 +169,9 @@ import { getPermissionAssignmentBridgeSeedData } from '../../sql/seed/seed_permi
 import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personality_trait_categories';
 import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
 import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
+import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_answer';
 import { getQuestionSeedData } from '../../sql/seed/seed_questions';
 import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
-import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_answer';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
 import { getSeedQuestionVersions } from '../../sql/seed/seed_question_versions';
 import { getRolesSeedData } from '../../sql/seed/seed_roles';
@@ -171,26 +183,14 @@ import { getStorageFileSeedData } from '../../sql/seed/seed_storage_file';
 import { getTeacherInfoSeedData } from '../../sql/seed/seed_teacher_info';
 import { getTempomatAdjustmentValueSeedData } from '../../sql/seed/seed_tempomat_adjustment_values';
 import { getUserSeedData } from '../../sql/seed/seed_users';
+import { getUserCourseBridgeSeedData } from '../../sql/seed/seed_user_course_bridges';
+import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_video_progress_bridges';
 import { getVideosSeedData } from '../../sql/seed/seed_videos';
 import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
 import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
-import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
-import { VideoVersionView } from '../../models/views/VideoVersionView';
-import { ExamVersionView } from '../../models/views/ExamVersionView';
-import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
-import { ModuleListView } from '../../models/views/ModuleListView';
-import { getUserCourseBridgeSeedData } from '../../sql/seed/seed_user_course_bridges';
-import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_video_progress_bridges';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { XDInjector } from '../../utilities/XDInjection/XDInjector';
-import { LatestVideoView } from '../../models/views/LatestVideoView';
-import { HomePageStatsView } from '../../models/views/HomePageStatsView';
-import { GivenAnswerScoreView } from '../../models/views/GivenAnswerScoreView';
-import { ExamScoreView } from '../../models/views/ExamScoreView';
-import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
-import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
-import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
+import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -273,7 +273,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'latest_exam_view', LatestExamView],
             ['basic', 'latest_video_view', LatestVideoView],
             ['basic', 'latest_given_answer_view'],
-            ['basic', 'module_view', ModuleView],
+            ['basic', 'module_player_view', ModulePlayerView],
+            ['basic', 'module_edit_view', ModuleEditView],
             ['basic', 'personality_trait_category_view', PersonalityTraitCategoryView],
             ['basic', 'personality_trait_view', PersonalityTraitView],
             ['basic', 'practise_question_view', PractiseQuestionView],
@@ -292,7 +293,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'video_playback_sample_view'],
             ['basic', 'video_version_view', VideoVersionView],
             ['basic', 'exam_version_view', ExamVersionView],
-            ['basic', 'module_list_view', ModuleListView],
             ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view

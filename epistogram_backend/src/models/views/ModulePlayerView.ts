@@ -1,12 +1,11 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
     expression: ''
 })
-export class ModuleView {
+export class ModulePlayerView {
 
     @ViewColumn()
     @XViewColumn()
@@ -18,11 +17,7 @@ export class ModuleView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleDataId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    moduleName: string;
+    name: string;
 
     @ViewColumn()
     @XViewColumn()
@@ -34,13 +29,5 @@ export class ModuleView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    imageFileId: number | null;
-
-    @ViewColumn()
-    @XViewColumn()
-    itemCount: number;
+    imageFilePath: string | null;
 }

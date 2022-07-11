@@ -1,10 +1,10 @@
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { StorageFile } from '../models/entity/StorageFile';
-import { ModuleView } from '../models/views/ModuleView';
+import { ModuleEditView } from '../models/views/ModuleEditView';
+import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
-import { ModuleDetailedDTO } from '../shared/dtos/ModuleDetailedDTO';
+import { ModulePlayerDTO } from '../shared/dtos/ModuleDetailedDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
@@ -34,44 +34,26 @@ export class ModuleService {
     /**
      * Gets a detailed module dto.
      */
-    getModuleDetailedDTOAsync = async (moduleId: number): Promise<ModuleDetailedDTO> => {
+    getModuleDetailedDTOAsync = async (moduleId: number): Promise<ModulePlayerDTO> => {
 
-        console.log('moduleId: ' + moduleId)
-
-        const moduleData = await this._ormService
-            .withResType<ModuleData>()
-            .query(ModuleView, { moduleId })
-            .select(ModuleData)
-            .leftJoin(ModuleData, x => x
-                .on('id', '=', 'moduleDataId', ModuleView))
+        const view = await this._ormService
+            .query(ModulePlayerView, { moduleId })
             .where('moduleId', '=', 'moduleId')
-            .getOneOrNull();
-
-        if (!moduleData)
-            throw new Error('Module not found')
-
-        const moduleImage = await this._ormService
-            .withResType<StorageFile>()
-            .query(ModuleData, { moduleDataId: moduleData.id })
-            .select(StorageFile)
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'imageFileId', ModuleData))
-            .where('id', '=', 'moduleDataId')
-            .getOneOrNull();
+            .getSingle();
 
         return this._mapperService
-            .mapTo(ModuleDetailedDTO, [moduleData, moduleImage?.filePath]);
+            .mapTo(ModulePlayerDTO, [view]);
     };
 
     /**
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync = async (courseId: number) => {
+    getModuleEditDTOsAsync = async (courseVersionId: number) => {
 
         const modules = await this._ormService
-            .query(ModuleView, { courseId })
-            .where('courseId', '=', 'courseId')
+            .query(ModuleEditView, { courseVersionId })
+            .where('courseVersionId', '=', 'courseVersionId')
             .getMany();
 
         return this._mapperService

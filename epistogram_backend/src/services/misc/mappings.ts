@@ -1,5 +1,3 @@
-import { url } from 'inspector';
-import { View } from 'typeorm/schema-builder/view/View';
 import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
@@ -10,7 +8,6 @@ import { DailyTip } from '../../models/entity/DailyTip';
 import { DiscountCode } from '../../models/entity/DiscountCode';
 import { Event } from '../../models/entity/Event';
 import { JobTitle } from '../../models/entity/JobTitle';
-import { ModuleData } from '../../models/entity/module/ModuleData';
 import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { ShopItem } from '../../models/entity/ShopItem';
 import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
@@ -37,7 +34,8 @@ import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
-import { ModuleView } from '../../models/views/ModuleView';
+import { ModuleEditView } from '../../models/views/ModuleEditView';
+import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
@@ -50,7 +48,6 @@ import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
-import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
@@ -88,7 +85,7 @@ import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
-import { ModuleDetailedDTO } from '../../shared/dtos/ModuleDetailedDTO';
+import { ModulePlayerDTO } from '../../shared/dtos/ModuleDetailedDTO';
 import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
@@ -114,7 +111,6 @@ import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
-import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
@@ -123,7 +119,6 @@ import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
 import { toFullName } from '../../utilities/helpers';
-import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
@@ -452,14 +447,13 @@ const marray = [
             })
         }),
     epistoMappingsBuilder
-        .addMapping(ModuleDetailedDTO, ([urlService]) => (moduleData: ModuleData, moduleImageFilePath?: string) => {
-            return instantiate<ModuleDetailedDTO>({
-                id: moduleData.id,
-                name: moduleData.name,
-                description: moduleData.description,
-                imageFilePath: moduleImageFilePath
-                    ? urlService.getAssetUrl(moduleImageFilePath)
-                    : null
+        .addMapping(ModulePlayerDTO, ([urlService]) => (view: ModulePlayerView) => {
+            return instantiate<ModulePlayerDTO>({
+                moduleId: view.moduleId,
+                name: view.name,
+                description: view.description,
+                imageFilePath: urlService
+                    .getAssetUrlNullable(view.imageFilePath)
             })
         }),
     epistoMappingsBuilder
@@ -477,15 +471,15 @@ const marray = [
             })
         }),
     epistoMappingsBuilder
-        .addArrayMapping(ModuleEditDTO, () => (views: ModuleView[]) => {
+        .addArrayMapping(ModuleEditDTO, () => (views: ModuleEditView[]) => {
 
             return views
                 .map(x => instantiate<ModuleEditDTO>({
                     description: x.description,
                     versionId: x.moduleVersionId,
+                    name: x.name,
+                    orderIndex: x.orderIndex,
                     imageFilePath: '',
-                    name: x.moduleName,
-                    orderIndex: x.orderIndex
                 }));
         }),
     epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {

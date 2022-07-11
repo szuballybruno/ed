@@ -63,7 +63,7 @@ export const useModuleEditDialogLogic = ({
                 orderIndex: mutatorRef
                     .current
                     .mutatedItems
-                    .length - 1
+                    .length 
             });
     }, []);
 
