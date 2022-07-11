@@ -1,7 +1,3 @@
-import { Role } from '../../../models/entity/authorization/Role';
-import { RoleAssignmentBridge } from '../../../models/entity/authorization/RoleAssignmentBridge';
-import { Company } from '../../../models/entity/Company';
-import { User } from '../../../models/entity/User';
 import { Id } from '../../types/versionId';
 import { PermissionListDTO } from './PermissionListDTO';
 

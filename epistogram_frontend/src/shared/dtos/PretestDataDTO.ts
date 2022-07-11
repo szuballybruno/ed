@@ -1,4 +1,3 @@
-import { AnswerSession } from '../../models/entity/AnswerSession';
 import { Id } from '../types/versionId';
 import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
 

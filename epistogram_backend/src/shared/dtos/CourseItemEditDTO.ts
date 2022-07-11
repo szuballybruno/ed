@@ -1,5 +1,3 @@
-import { ExamVersion } from '../../models/entity/exam/ExamVersion';
-import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { Id } from '../types/versionId';
 import { QuestionEditDataDTO } from './QuestionEditDataDTO';
 

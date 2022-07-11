@@ -2,6 +2,7 @@ import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostData } from '../core/httpClient';
 
@@ -23,7 +24,7 @@ export const PlayerApiService = {
 
         const queryRes = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
 
-        const answerQuestionAsync = (answerSessionId: number, answerIds: number[], questionVersionId: number, elapsedSeconds: number) => {
+        const answerQuestionAsync = (answerSessionId: Id<'AnswerSession'>, answerIds: Id<'Answer'>[], questionVersionId: Id<'QuestionVersion'>, elapsedSeconds: number) => {
 
             const dto = {
                 answerIds,

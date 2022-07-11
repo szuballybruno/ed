@@ -1,5 +1,3 @@
-import { Course } from '../../models/entity/course/Course';
-import { User } from '../../models/entity/User';
 import { TempomatModeType } from '../../shared/types/sharedTypes';
 import { Id } from '../types/versionId';
 

@@ -1,5 +1,3 @@
-import { Course } from '../../models/entity/course/Course';
-import { CourseCategory } from '../../models/entity/CourseCategory';
 import { CourseStageNameType } from '../types/sharedTypes';
 import { Id } from '../types/versionId';
 

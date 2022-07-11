@@ -1,5 +1,3 @@
-import { Company } from '../../models/entity/Company';
-import { User } from '../../models/entity/User';
 import { Id } from '../types/versionId';
 import { JobTitleDTO } from './JobTitleDTO';
 

@@ -1,5 +1,3 @@
-import { VideoPlaybackSession } from "../../../models/entity/playback/VideoPlaybackSession";
-import { VideoVersion } from "../../../models/entity/video/VideoVersion";
 import { Id } from "../../types/versionId";
 
 export type VideoPlaybackSampleDTO = {

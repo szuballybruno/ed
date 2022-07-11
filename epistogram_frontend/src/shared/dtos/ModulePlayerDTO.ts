@@ -1,4 +1,3 @@
-import { Module } from "../../models/entity/module/Module";
 import { Id } from "../types/versionId";
 
 export class ModulePlayerDTO {

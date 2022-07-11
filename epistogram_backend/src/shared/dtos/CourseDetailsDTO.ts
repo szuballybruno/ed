@@ -1,9 +1,7 @@
-import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
-import { ModuleShortDTO } from './ModuleShortDTO';
 import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from '../types/sharedTypes';
-import { PlaylistModuleDTO } from './PlaylistModuleDTO';
-import { Course } from '../../models/entity/course/Course';
 import { Id } from '../types/versionId';
+import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
+import { PlaylistModuleDTO } from './PlaylistModuleDTO';
 
 export class CourseDetailsDTO {
     title: string;

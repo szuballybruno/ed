@@ -1,10 +1,8 @@
+import { CourseVisibilityType } from '../types/sharedTypes';
+import { Id } from '../types/versionId';
 import { CourseCategoryDTO } from './CourseCategoryDTO';
 import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
 import { TeacherDTO } from './TeacherDTO';
-import { CourseVisibilityType } from '../types/sharedTypes';
-import { Course } from '../../models/entity/course/Course';
-import { Id } from '../types/versionId';
-import { User } from '../../models/entity/User';
 
 export class CourseDetailsEditDataDTO {
     courseId: Id<'Course'>;

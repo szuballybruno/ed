@@ -2,6 +2,7 @@ import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostData } from '../core/httpClient';
 
@@ -9,7 +10,7 @@ export const useAnswerPractiseQuestion = () => {
 
     const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
-    const answerQuestionAsync = (answerIds: number[], questionVersionId: number) => {
+    const answerQuestionAsync = (answerIds: Id<'Answer'>[], questionVersionId: Id<'Question'>) => {
 
         const dto = {
             answerIds,

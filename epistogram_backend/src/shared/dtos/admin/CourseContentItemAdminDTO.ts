@@ -1,7 +1,3 @@
-import { Course } from '../../../models/entity/course/Course';
-import { ExamVersion } from '../../../models/entity/exam/ExamVersion';
-import { ModuleVersion } from '../../../models/entity/module/ModuleVersion';
-import { VideoVersion } from '../../../models/entity/video/VideoVersion';
 import { CourseItemType } from '../../types/sharedTypes';
 import { VersionCode } from '../../types/versionCode';
 import { Id } from '../../types/versionId';

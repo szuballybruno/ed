@@ -1,5 +1,3 @@
-import { Role } from '../../../models/entity/authorization/Role';
-import { Company } from '../../../models/entity/Company';
 import { Id } from '../../types/versionId';
 import { PermissionListDTO } from './PermissionListDTO';
 

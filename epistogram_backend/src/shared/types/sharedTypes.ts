@@ -1,6 +1,4 @@
-import { Role } from "../../models/entity/authorization/Role";
-import { JobTitle } from "../../models/entity/JobTitle";
-import { Id } from "./versionId";
+import { Id } from './versionId';
 
 export type InvitationTokenPayload = { userEmail: string };
 

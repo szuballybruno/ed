@@ -1,4 +1,3 @@
-import { CourseItemSimpleType } from './sharedTypes';
 
 export class Id<T extends String> extends String {
 

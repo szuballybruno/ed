@@ -1,9 +1,3 @@
-import { Permission } from '../../../models/entity/authorization/Permission';
-import { Role } from '../../../models/entity/authorization/Role';
-import { RoleAssignmentBridge } from '../../../models/entity/authorization/RoleAssignmentBridge';
-import { Company } from '../../../models/entity/Company';
-import { Course } from '../../../models/entity/course/Course';
-import { User } from '../../../models/entity/User';
 import { PermissionCodeType } from '../../types/sharedTypes';
 import { Id } from '../../types/versionId';
 

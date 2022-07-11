@@ -11,6 +11,7 @@ import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
@@ -172,7 +173,7 @@ export const getUrl = (path: string, params?: any, query?: any) => {
     return replacedPath;
 };
 
-export const getRoleName = (roleId: number) => {
+export const getRoleName = (roleId: Id<'Role'>) => {
 
     if (roleId === RoleIdEnum.administrator)
         return translatableTexts.roleNames.administrator;

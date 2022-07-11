@@ -1,4 +1,3 @@
-import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TeacherBadgeNameType } from '../types/sharedTypes';
 import { Id } from '../types/versionId';
 

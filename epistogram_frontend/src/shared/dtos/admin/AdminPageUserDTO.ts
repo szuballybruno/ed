@@ -1,7 +1,3 @@
-import { Role } from "../../../models/entity/authorization/Role";
-import { Company } from "../../../models/entity/Company";
-import { JobTitle } from "../../../models/entity/JobTitle";
-import { User } from "../../../models/entity/User";
 import { Id } from "../../types/versionId";
 
 export class AdminPageUserDTO {

@@ -1,4 +1,3 @@
-import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuesitonType } from '../types/sharedTypes';
 import { Id } from '../types/versionId';
 

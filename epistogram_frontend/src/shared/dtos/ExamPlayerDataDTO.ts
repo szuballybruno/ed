@@ -1,4 +1,3 @@
-import { ExamVersion } from '../../models/entity/exam/ExamVersion';
 import { Id } from '../types/versionId';
 import { QuestionDTO } from './QuestionDTO';
 

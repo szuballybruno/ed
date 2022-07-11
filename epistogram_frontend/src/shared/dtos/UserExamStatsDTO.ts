@@ -1,6 +1,3 @@
-import { Course } from "../../models/entity/course/Course";
-import { Exam } from "../../models/entity/exam/Exam";
-import { User } from "../../models/entity/User";
 import { Id } from "../types/versionId";
 
 export class UserExamStatsDTO {

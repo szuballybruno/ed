@@ -1,4 +1,3 @@
-import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { Id } from '../types/versionId';
 import { DailyTipDTO } from './DailyTipDTO';
 

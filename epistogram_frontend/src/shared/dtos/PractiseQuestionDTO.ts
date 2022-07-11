@@ -1,4 +1,3 @@
-import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
 import { Id } from '../types/versionId';
 import { AnswerDTO } from './AnswerDTO';
 
