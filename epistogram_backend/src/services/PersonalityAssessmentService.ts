@@ -57,7 +57,7 @@ export class PersonalityAssessmentService {
         const category = await this._ormService
             .query(PersonalityTraitCategory, { personalityTraitCategoryId })
             .where('id', '=', 'personalityTraitCategoryId')
-            .getOneOrNull();
+            .getSingle();
 
         const tips = await this._ormService
             .query(DailyTip, { isMax, personalityTraitCategoryId })
@@ -66,7 +66,7 @@ export class PersonalityAssessmentService {
             .getMany();
 
         return this._mapperService
-            .map(PersonalityTraitCategory, PersonalityTraitCategoryDTO, category, tips);
+            .mapTo(PersonalityTraitCategoryDTO, [category, tips]);
     }
 
     /**
@@ -84,10 +84,10 @@ export class PersonalityAssessmentService {
             .flatMap(category => {
 
                 const minCat = this._mapperService
-                    .map(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, category, false);
+                    .mapTo(PersonalityTraitCategoryShortDTO, [category, false]);
 
                 const maxCat = this._mapperService
-                    .map(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, category, true);
+                    .mapTo(PersonalityTraitCategoryShortDTO, [category, true]);
 
                 return [minCat, maxCat];
             });

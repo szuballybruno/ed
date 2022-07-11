@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
-import { useUserExamStats, useUserVideoStats } from '../../../../services/api/userStatsApiService';
+import { useUserExamStats } from '../../../../services/api/userStatsApiService';
 import { UserExamStatsDTO } from '../../../../shared/dtos/UserExamStatsDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { secondsToTime } from '../../../../static/frontendHelpers';
@@ -21,7 +21,7 @@ export const AdminUserExamsDataGridControl = (props: {
 
     const userId = useIntParam('userId')!;
 
-    const { userExamStats, userExamStatsStatus, userExamStatsError } = useUserExamStats(userId, courseId!);
+    const { userExamStats, userExamStatsStatus, userExamStatsError } = useUserExamStats(courseId!);
 
     const userExams = userExamStats ?? [];
 

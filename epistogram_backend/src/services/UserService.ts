@@ -170,7 +170,7 @@ export class UserService {
             : users;
 
         return this._mapperService
-            .mapMany(AdminUserListView, AdminPageUserDTO, filteredUsers);
+            .mapTo(AdminPageUserDTO, [filteredUsers]);
     }
 
     /**
@@ -336,11 +336,12 @@ export class UserService {
     getUserDTOById = async (userId: number) => {
 
         const foundUser = await this.getUserById(userId);
+
         if (!foundUser)
             return null;
 
         return this._mapperService
-            .map(User, UserDTO, foundUser);
+            .mapTo(UserDTO, [foundUser]);
     };
 
     /**

@@ -1,3 +1,5 @@
+import { url } from 'inspector';
+import { View } from 'typeorm/schema-builder/view/View';
 import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
@@ -119,6 +121,7 @@ import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStat
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
+import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
 import { toFullName } from '../../utilities/helpers';
 import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
@@ -128,8 +131,6 @@ import { Mutable } from './XMapperService/XMapperTypes';
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
-    epistoMappingsBuilder
-        .addMapping(UserVideoStatsDTO, ([url]) => (blah: number) => ({ courseId: blah, videoTitle: url.getAssetUrl('asd') } as UserVideoStatsDTO)),
 
     epistoMappingsBuilder
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (
@@ -486,190 +487,205 @@ const marray = [
                     name: x.moduleName,
                     orderIndex: x.orderIndex
                 }));
-        })
-
-] as const;
-
-export type EpistoMappingsType = Mutable<typeof marray>;
-
-/**
- * @deprecated Migrate all mappings to new mappings system
- */
-export const initializeMappings = (getAssetUrl: (path: string) => string, mapperService: MapperService) => {
-
-    mapperService
-        .addMap(UserExamStatsView, UserExamStatsDTO, (stats) => {
+        }),
+    epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {
+        return stats.map(x => {
             return {
-                userId: stats.userId,
-                examId: stats.examId,
-                examTitle: stats.examTitle,
-                courseId: stats.courseId,
-                correctAnswerRate: stats.correctAnswerRate,
-                shouldPractiseExam: stats.shouldPractiseExam,
-                correctAnswerCount: stats.correctAnswerCount,
-                examLengthSeconds: stats.examLengthSeconds,
-                lastCompletionDate: stats.lastCompletionDate,
-                averageReactionTime: stats.averageReactionTime
-            }
-        })
-
-    mapperService
-        .addMap(UserVideoStatsView, UserVideoStatsDTO, (stats) => {
-            return {
-                userId: stats.userId,
-                videoId: stats.videoId,
-                videoTitle: stats.videoTitle,
-                courseId: stats.courseId,
-                lengthSeconds: stats.lengthSeconds,
-                totalSpentTimeSeconds: stats.totalSpentTimeSeconds,
-                videoReplaysCount: stats.videoReplaysCount,
-                isRecommendedForRetry: stats.isRecommendedForRetry,
-                lastThreeAnswerAverage: stats.lastThreeAnswerAverage,
-                averageReactionTime: stats.averageReactionTime,
-                lastWatchTime: stats.lastWatchTime
-            }
-        })
-
-    mapperService
-        .addMap(CommentListView, CommentListDTO, (comment) => {
-
-            return {
-                id: comment.id,
-                userId: comment.userId,
-                threadId: comment.threadId,
-                fullName: comment.fullName,
-                commentText: comment.commentText,
-                creationDate: comment.creationDate,
-                parentCommentId: comment.parentCommentId,
-                avatarUrl: comment.avatarUrl,
-                commentLikeCount: comment.commentLikeCount,
-                isCurrentUserLikedComment: comment.isLike,
-                isQuestion: comment.isQuestion
-            };
-        });
-
-    mapperService
-        .addMap(Event, EventDTO, event => ({
-            data: JSON.parse(event.data),
-            type: event.type
-        }));
-
-    mapperService
-        .addMap(CoinTransactionView, CoinTransactionDTO, view => ({
-            ...view
-        }));
-
-    mapperService
-        .addMap(ShopItemStatefulView, ShopItemDTO, x => ({
-            id: x.id,
-            courseId: x.courseId,
-            userId: x.userId,
-            name: x.name,
-            canPurchase: x.canPurchase,
-            purchaseCount: x.purchaseCount,
-            purchaseLimit: x.purchaseLimit,
-            coinPrice: x.coinPrice,
-            currencyPrice: x.currencyPrice,
-            shopItemCategoryId: x.shopItemCategoryId,
-            shopItemCategoryName: x.shopItemCategoryName,
-            coverFilePath: getAssetUrl(x.coverFilePath),
-            detailsUrl: x.detailsUrl
-        }));
-
-    mapperService
-        .addMap(ShopItemCategory, ShopItemCategoryDTO, x => ({
-            id: x.id,
-            name: x.name
-        }));
-
-    mapperService
-        .addMap(CourseLearningStatsView, CourseLearningDTO, x => {
-
-            const thumbnailImageURL = x.filePath
-                ? getAssetUrl(x.filePath)
-                : getAssetUrl('/images/defaultCourseCover.jpg');
-
-            return {
+                userId: x.userId,
+                videoId: x.videoId,
+                videoTitle: x.videoTitle,
                 courseId: x.courseId,
-                title: x.title,
-                categoryName: x.categoryName,
-                subCategoryName: x.subCategoryName,
-                currentItemCode: x.currentItemCode,
-                teacherName: toFullName(x.teacherFirstName, x.teacherLastName),
-                thumbnailImageURL: thumbnailImageURL,
-                isComplete: x.isCompleted,
-                totalSpentSeconds: x.totalSpentSeconds,
-                totalCourseItemCount: x.totalCourseItemCount,
-                completedCourseItemCount: x.completedCourseItemCount,
-                totalVideoCount: x.totalVideoCount,
-                completedVideoCount: x.completedVideoCount,
-                totalVideoQuestionCount: x.totalVideoQuestionCount,
-                answeredVideoQuestionCount: x.answeredVideoQuestionCount,
-                examSuccessRateAverage: x.examSuccessRateAverage,
-                questionSuccessRate: x.questionSuccessRate,
-                finalExamSuccessRate: x.finalExamSuccessRate
-            };
-        });
+                lengthSeconds: x.lengthSeconds,
+                totalSpentTimeSeconds: x.totalSpentTimeSeconds,
+                videoReplaysCount: x.videoReplaysCount,
+                isRecommendedForRetry: x.isRecommendedForRetry,
+                lastThreeAnswerAverage: x.lastThreeAnswerAverage,
+                averageReactionTime: x.averageReactionTime,
+                lastWatchTime: x.lastWatchTime
+            }
+        })
+    }),
+    epistoMappingsBuilder
+        .addArrayMapping(UserExamStatsDTO, () => (stats: UserExamStatsView[]) => {
 
-    mapperService
-        .addMap(CourseProgressView, CourseProgressShortDTO, x => ({
-            ...x
-        }));
-
-    mapperService
-        .addMap(CourseAdminContentView, CourseContentItemAdminDTO, (x): CourseContentItemAdminDTO => {
-
-            const getIssueList = (issues: string) => issues
-                .split('\n')
-                .filter(x => !!x)
-                .map((x): CourseContentItemIssueDTO => {
-
-                    if (x.includes(': ')) {
-                        const parts = x.split(': ');
-                        return {
-                            code: parts[1] as any,
-                            questionName: parts[0]
-                        };
-                    }
-
+            return stats
+                .map(x => {
                     return {
-                        code: x as any
-                    };
+                        userId: x.userId,
+                        examId: x.examId,
+                        examTitle: x.examTitle,
+                        courseId: x.courseId,
+                        correctAnswerRate: x.correctAnswerRate,
+                        shouldPractiseExam: x.shouldPractiseExam,
+                        correctAnswerCount: x.correctAnswerCount,
+                        examLengthSeconds: x.examLengthSeconds,
+                        lastCompletionDate: x.lastCompletionDate,
+                        averageReactionTime: x.averageReactionTime
+                    }
+                })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CommentListDTO, () => (comments: CommentListView[]) => {
+
+            return comments
+                .map(comment => (instantiate<CommentListDTO>({
+                    id: comment.id,
+                    userId: comment.userId,
+                    threadId: comment.threadId,
+                    fullName: comment.fullName,
+                    commentText: comment.commentText,
+                    creationDate: comment.creationDate,
+                    parentCommentId: comment.parentCommentId,
+                    avatarUrl: comment.avatarUrl,
+                    commentLikeCount: comment.commentLikeCount,
+                    isCurrentUserLikedComment: comment.isLike,
+                    isQuestion: comment.isQuestion
+                })))
+        }),
+    epistoMappingsBuilder
+        .addMapping(EventDTO, () => (event: Event) => {
+
+            return instantiate<EventDTO>({
+                data: JSON.parse(event.data),
+                type: event.type
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CoinTransactionDTO, () => (coinTransactions: CoinTransactionView[]) => {
+            return coinTransactions.map(x => {
+                return instantiate<CoinTransactionDTO>({
+                    ...x
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(ShopItemDTO, ([urlService]) => (shopItemViews: ShopItemStatefulView[]) => {
+            return shopItemViews
+                .map(shopItem => {
+                    return instantiate<ShopItemDTO>({
+                        id: shopItem.id,
+                        courseId: shopItem.courseId,
+                        userId: shopItem.userId,
+                        name: shopItem.name,
+                        canPurchase: shopItem.canPurchase,
+                        purchaseCount: shopItem.purchaseCount,
+                        purchaseLimit: shopItem.purchaseLimit,
+                        coinPrice: shopItem.coinPrice,
+                        currencyPrice: shopItem.currencyPrice,
+                        shopItemCategoryId: shopItem.shopItemCategoryId,
+                        shopItemCategoryName: shopItem.shopItemCategoryName,
+                        coverFilePath: urlService.getAssetUrl(shopItem.coverFilePath),
+                        detailsUrl: shopItem.detailsUrl
+                    })
+                })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(ShopItemCategoryDTO, () => (shopItemCategories: ShopItemCategory[]) => {
+            return shopItemCategories
+                .map(shopItemCategory => {
+                    return instantiate<ShopItemCategoryDTO>({
+                        id: shopItemCategory.id,
+                        name: shopItemCategory.name
+                    })
+                })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CourseLearningDTO, ([urlService]) => (stats: CourseLearningStatsView[]) => {
+
+            return stats.map(stat => {
+                const thumbnailImageURL = stat.filePath
+                    ? urlService.getAssetUrl(stat.filePath)
+                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
+
+                return instantiate<CourseLearningDTO>({
+                    courseId: stat.courseId,
+                    title: stat.title,
+                    categoryName: stat.categoryName,
+                    subCategoryName: stat.subCategoryName,
+                    currentItemCode: stat.currentItemCode,
+                    teacherName: toFullName(stat.teacherFirstName, stat.teacherLastName),
+                    thumbnailImageURL: thumbnailImageURL,
+                    firstItemCode: '',
+                    isComplete: stat.isCompleted,
+                    totalSpentSeconds: stat.totalSpentSeconds,
+                    totalCourseItemCount: stat.totalCourseItemCount,
+                    completedCourseItemCount: stat.completedCourseItemCount,
+                    totalVideoCount: stat.totalVideoCount,
+                    completedVideoCount: stat.completedVideoCount,
+                    totalVideoQuestionCount: stat.totalVideoQuestionCount,
+                    answeredVideoQuestionCount: stat.answeredVideoQuestionCount,
+                    examSuccessRateAverage: stat.examSuccessRateAverage,
+                    questionSuccessRate: stat.questionSuccessRate,
+                    finalExamSuccessRate: stat.finalExamSuccessRate
                 });
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CourseProgressShortDTO, () => (courseProgressViews: CourseProgressView[]) => {
+            return courseProgressViews
+                .map(courseProgressView => (instantiate<CourseProgressShortDTO>({
+                    courseId: courseProgressView.courseId,
+                    courseTitle: courseProgressView.courseTitle,
+                    completedCourseItemCount: courseProgressView.completedCourseItemCount,
+                    progressPercentage: courseProgressView.progressPercentage,
+                    totalCourseItemCount: courseProgressView.totalCourseItemCount
+                })))
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CourseContentItemAdminDTO, () => (views: CourseAdminContentView[]) => {
 
-            const errors = getIssueList(x.errors);
-            const warnings = getIssueList(x.warnings);
+            return views.map(view => {
 
-            return {
-                courseId: x.courseId,
-                examVersionId: x.examVersionId,
-                versionCode: x.versionCode,
-                itemOrderIndex: x.itemOrderIndex,
-                itemSubtitle: x.itemSubtitle,
-                itemTitle: x.itemTitle,
-                moduleVersionId: x.moduleVersionId,
-                moduleName: x.moduleName,
-                moduleOrderIndex: x.moduleOrderIndex,
-                videoVersionId: x.videoVersionId,
-                errors,
-                warnings,
-                videoLength: x.videoLength,
-                itemType: x.itemType,
-                questionMutations: [],
-                answerMutations: []
-            };
-        });
+                const getIssueList = (issues: string) => issues
+                    .split('\n')
+                    .filter(x => !!x)
+                    .map((x): CourseContentItemIssueDTO => {
 
-    mapperService
-        .addMap(CourseDetailsView, CourseDetailsDTO, (detailsView, params) => {
+                        if (x.includes(': ')) {
+                            const parts = x.split(': ');
+                            return {
+                                code: parts[1] as any,
+                                questionName: parts[0]
+                            };
+                        }
 
-            const modules = params as PlaylistModuleDTO[];
+                        return {
+                            code: x as any
+                        };
+                    });
+
+                const errors = getIssueList(view.errors);
+                const warnings = getIssueList(view.warnings);
+
+                return instantiate<CourseContentItemAdminDTO>({
+                    courseId: view.courseId,
+                    examVersionId: view.examVersionId,
+                    versionCode: view.versionCode,
+                    itemOrderIndex: view.itemOrderIndex,
+                    itemSubtitle: view.itemSubtitle,
+                    itemTitle: view.itemTitle,
+                    moduleVersionId: view.moduleVersionId,
+                    moduleName: view.moduleName,
+                    moduleOrderIndex: view.moduleOrderIndex,
+                    videoVersionId: view.videoVersionId,
+                    errors,
+                    warnings,
+                    videoLength: view.videoLength,
+                    itemType: view.itemType,
+                    questionMutations: [],
+                    answerMutations: []
+                });
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(CourseDetailsDTO, ([urlService]) => (detailsView: CourseDetailsView, modules: PlaylistModuleDTO[]) => {
 
             const thumbnailImageURL = detailsView.coverFilePath
-                ? getAssetUrl(detailsView.coverFilePath)
-                : getAssetUrl('/images/defaultCourseCover.jpg');
+                ? urlService.getAssetUrl(detailsView.coverFilePath)
+                : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
 
-            return {
+            return instantiate<CourseDetailsDTO>({
+
                 title: detailsView.title,
                 modificationDate: detailsView.modificationDate.toString(),
                 description: detailsView.description,
@@ -698,7 +714,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     teacherFullName: toFullName(detailsView.teacherFirstName, detailsView.teacherLastName),
                     teacherFirstName: detailsView.teacherFirstName,
                     teacherLastName: detailsView.teacherLastName,
-                    teacherBadges: parseCommaSeparatedStringList(detailsView.teacherBadges),
+                    teacherBadges: parseCommaSeparatedStringList(detailsView.teacherBadges) as TeacherBadgeNameType[],
                     teacherCourseCount: detailsView.teacherCourseCount,
                     teacherDescription: detailsView.teacherDescription,
                     teacherRating: detailsView.teacherRating,
@@ -706,7 +722,7 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     teacherStudentCount: detailsView.teacherStudentCount,
                     teacherVideoCount: detailsView.teacherVideoCount,
                     teacherAvatarFilePath: detailsView.teacherAvatarFilePath
-                        ? getAssetUrl(detailsView.teacherAvatarFilePath)
+                        ? urlService.getAssetUrl(detailsView.teacherAvatarFilePath)
                         : null
                 },
 
@@ -714,19 +730,19 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                 totalVideoCount: detailsView.totalVideoCount,
                 totalVideoQuestionCount: detailsView.totalVideoQuestionCount,
                 totalVideoSumLengthSeconds: detailsView.totalVideoSumLengthSeconds
-            } as CourseDetailsDTO;
-        });
+            })
 
-    mapperService
-        .addMap(User, UserDTO, user => {
+        }),
+    epistoMappingsBuilder
+        .addMapping(UserDTO, ([urlService]) => (user: User) => {
 
-            return {
+            return instantiate<UserDTO>({
                 id: user.id,
                 companyId: user.companyId,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
+                phoneNumber: user.phoneNumber || '',
                 isTrusted: user.isTrusted,
                 isInvitationAccepted: user.isInvitationAccepted,
                 name: `${user.lastName} ${user.firstName}`,
@@ -736,315 +752,359 @@ export const initializeMappings = (getAssetUrl: (path: string) => string, mapper
                     : null,
 
                 avatarUrl: user.avatarFile
-                    ? getAssetUrl(user.avatarFile.filePath)
+                    ? urlService.getAssetUrl(user.avatarFile.filePath)
                     : null
-            } as UserDTO;
-        });
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(CompanyEditDataDTO, () => (company: Company) => {
 
-    mapperService
-        .addMap(Company, CompanyEditDataDTO, x => ({
-            id: x.id,
-            name: x.name
-        }));
+            return instantiate<CompanyEditDataDTO>({
+                id: company.id,
+                name: company.name
+            })
+        }),
+    // TODO: unused mapping, check DTO's and endpoints too
+    epistoMappingsBuilder
+        .addMapping(CourseStatDTO, () => (view: AvailableCourseView) => {
 
-    mapperService
-        .addMap(AvailableCourseView, CourseStatDTO, view => {
-
-            return {
+            return instantiate<CourseStatDTO>({
                 title: view.title,
-                coverImageUrl: view.filePath
-                    ? getAssetUrl(view.filePath)
-                    : getAssetUrl('/images/defaultCourseCover.jpg')
-            } as CourseStatDTO;
-        });
+                /* coverImageUrl: view.filePath
+                    ? urlService.getAssetUrl(view.filePath)
+                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg') */
+            })
+        }),
+    // TODO: RoleId missing. Check if its needed
+    epistoMappingsBuilder
+        .addArrayMapping(AdminPageUserDTO, ([urlService]) => (users: AdminUserListView[]) => {
 
-    mapperService
-        .addMap(AdminUserListView, AdminPageUserDTO, v => ({
-            id: v.userId,
-            name: toFullName(v.firstName, v.lastName, 'hu'),
-            firstName: v.firstName,
-            lastName: v.lastName,
-            avatarUrl: v.avatarFilePath
-                ? getAssetUrl(v.avatarFilePath)
-                : null,
-            email: v.email,
-            isInvitationAccepted: v.isInvitationAccepted,
-            isTrusted: v.isTrusted,
-            jobTitleId: v.jobTitleId,
-            jobTitleName: v.jobTitleName,
-            companyId: v.companyId,
-            companyName: v.companyName,
-            canAccessApplication: true,
-            latestActivityDate: v.latestActivityDate,
-            totalSpentTimeSeconds: v.totalSpentSeconds,
-            coinBalance: v.coinBalance,
-        }));
+            return users
+                .map(user => {
 
-    mapperService
-        .addMap(DailyTipView, DailyTipDTO, view => {
+                    return instantiate<AdminPageUserDTO>({
+                        id: user.userId,
+                        name: toFullName(user.firstName, user.lastName, 'hu'),
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        avatarUrl: user.avatarFilePath
+                            ? urlService.getAssetUrl(user.avatarFilePath)
+                            : null,
+                        email: user.email,
+                        roleId: 0,
+                        isInvitationAccepted: user.isInvitationAccepted,
+                        isTrusted: user.isTrusted,
+                        jobTitleId: user.jobTitleId,
+                        jobTitleName: user.jobTitleName,
+                        companyId: user.companyId,
+                        companyName: user.companyName,
+                        canAccessApplication: true,
+                        latestActivityDate: user.latestActivityDate,
+                        totalSpentTimeSeconds: user.totalSpentSeconds,
+                        coinBalance: user.coinBalance,
+                    })
+                })
+        }),
+    epistoMappingsBuilder
+        .addMapping(DailyTipDTO, ([urlService]) => (view: DailyTipView) => {
 
-            return {
+            return instantiate<DailyTipDTO>({
                 id: view.dailyTipId,
                 description: view.description,
-                videoUrl: getAssetUrl(view.videoFilePath)
-            } as DailyTipDTO;
-        });
+                videoUrl: urlService.getAssetUrl(view.videoFilePath)
+            })
+        }),
+    // TODO: CourseLength missing. Check if its needed
+    epistoMappingsBuilder
+        .addArrayMapping(CourseShortDTO, ([urlService]) => (views: AvailableCourseView[]) => {
+            return views.map(course => {
 
-    mapperService
-        .addMap(AvailableCourseView, CourseShortDTO, course => {
+                const thumbnailImageURL = course.filePath
+                    ? urlService.getAssetUrl(course.filePath)
+                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
 
-            const thumbnailImageURL = course.filePath
-                ? getAssetUrl(course.filePath)
-                : getAssetUrl('/images/defaultCourseCover.jpg');
+                const currentItemCode = course.isStarted
+                    ? course.currentItemCode
+                    : null;
 
-            const currentItemCode = course.isStarted
-                ? course.currentItemCode
-                : null;
+                return instantiate<CourseShortDTO>({
+                    courseId: course.courseId,
+                    title: course.title,
+                    categoryName: course.categoryName,
+                    subCategoryId: course.subCategoryId,
+                    subCategoryName: course.subCategoryName,
+                    currentItemCode: currentItemCode,
+                    stageName: course.stageName,
+                    courseLength: 0,
+                    teacherName: toFullName(course.teacherFirstName, course.teacherLastName),
+                    thumbnailImageURL: thumbnailImageURL,
+                    isComplete: course.isCompleted
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CourseAdminListItemDTO, ([urlService]) => (views: CourseAdminShortView[]) => {
+            return views.map(view => {
 
-            return {
-                courseId: course.courseId,
-                title: course.title,
-                categoryName: course.categoryName,
-                subCategoryId: course.subCategoryId,
-                subCategoryName: course.subCategoryName,
-                currentItemCode: currentItemCode,
-                stageName: course.stageName,
-                teacherName: toFullName(course.teacherFirstName, course.teacherLastName),
-                thumbnailImageURL: thumbnailImageURL,
-                isComplete: course.isCompleted
-            } as CourseShortDTO;
-        });
+                const thumbnailImageURL = view.coverFilePath
+                    ? urlService.getAssetUrl(view.coverFilePath)
+                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
 
-    mapperService
-        .addMap(CourseAdminShortView, CourseAdminListItemDTO, view => {
+                return instantiate<CourseAdminListItemDTO>({
+                    title: view.title,
+                    courseId: view.courseId,
+                    videosCount: view.videoCount,
+                    examCount: view.examCount,
+                    thumbnailImageURL,
+                    category: {
+                        id: view.categoryId,
+                        name: view.categoryName
+                    },
+                    subCategory: {
+                        id: view.subCategoryId,
+                        name: view.subCategoryName
+                    },
+                    teacher: {
+                        id: view.teacherId,
+                        fullName: toFullName(view.teacherFirstName, view.teacherLastName)
+                        //firstName: view.teacherFirstName,
+                        //lastName: view.teacherLastName,
+                    }
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(TeacherInfoEditDTO, () => (teacher: TeacherInfo) => {
+            return instantiate<TeacherInfoEditDTO>({
+                id: teacher.id,
+                courseCount: teacher.courseCount,
+                rating: teacher.rating,
+                studentCount: teacher.studentCount,
+                videoCount: teacher.videoCount,
+                skills: teacher.skills,
+                badges: parseCommaSeparatedStringList(teacher.badges) as TeacherBadgeNameType[],
+                description: teacher.description
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(ShopItemAdminShortDTO, ([urlService]) => (shopItems: ShopItemView[]) => {
 
-            const thumbnailImageURL = view.coverFilePath
-                ? getAssetUrl(view.coverFilePath)
-                : getAssetUrl('/images/defaultCourseCover.jpg');
+            return shopItems
+                .map(shopItem => {
 
-            return {
-                title: view.title,
-                courseId: view.courseId,
-                videosCount: view.videoCount,
-                examCount: view.examCount,
-                thumbnailImageURL,
-                category: {
-                    id: view.categoryId,
-                    name: view.categoryName
-                },
-                subCategory: {
-                    id: view.subCategoryId,
-                    name: view.subCategoryName
-                },
-                teacher: {
-                    id: view.teacherId,
-                    name: toFullName(view.teacherFirstName, view.teacherLastName),
-                    firstName: view.teacherFirstName,
-                    lastName: view.teacherLastName,
-                }
-            } as CourseAdminListItemDTO;
-        });
+                    return instantiate<ShopItemAdminShortDTO>({
+                        id: shopItem.id,
+                        coverFilePath: urlService.getAssetUrl(shopItem.coverFilePath),
+                        coinPrice: shopItem.coinPrice,
+                        currencyPrice: shopItem.currencyPrice,
+                        name: shopItem.name,
+                        purchaseLimit: shopItem.purchaseLimit,
+                        shopItemCategoryId: shopItem.shopItemCategoryId
+                    })
+                })
+        }),
+    // TODO: Name, purchaseLimit, detailsUrl shouldn\'t be null
+    epistoMappingsBuilder
+        .addMapping(ShopItemEditDTO, ([urlService]) => (shopItem: ShopItem, discountCodes: DiscountCode[]) => {
+            return instantiate<ShopItemEditDTO>({
+                id: shopItem.id,
+                coverFilePath: shopItem.coverFile?.filePath
+                    ? urlService.getAssetUrl(shopItem.coverFile.filePath)
+                    : '',
+                coinPrice: shopItem.coinPrice,
+                currencyPrice: shopItem.currencyPrice,
+                name: shopItem.name || '',
+                purchaseLimit: shopItem.purchaseLimit || 0,
+                shopItemCategoryId: shopItem.shopItemCategoryId,
+                courseId: shopItem.courseId,
+                detailsUrl: shopItem.detailsUrl || '',
+                discountCodes: discountCodes
+                    .map(discountCode => {
 
-    mapperService
-        .addMap(TeacherInfo, TeacherInfoEditDTO, x => ({
-            id: x.id,
-            courseCount: x.courseCount,
-            rating: x.rating,
-            studentCount: x.studentCount,
-            videoCount: x.videoCount,
-            skills: x.skills,
-            badges: parseCommaSeparatedStringList(x.badges),
-            description: x.description
-        }));
+                        return instantiate<DiscountCodeDTO>({
+                            id: discountCode.id,
+                            code: discountCode.code,
+                            isUsed: !!discountCode.userId
+                        })
+                    })
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(ShopItemBriefData, () => (view: ShopItemView) => {
 
-    mapperService
-        .addMap(ShopItem, ShopItemAdminShortDTO, x => ({
+            return instantiate<ShopItemBriefData>({
+                name: view.name
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(CourseBriefData, () => (course: CourseData) => {
 
-            id: x.id,
-            coverFilePath: x.coverFile?.filePath ? getAssetUrl(x.coverFile.filePath) : null,
-            coinPrice: x.coinPrice,
-            currencyPrice: x.currencyPrice,
-            name: x.name,
-            purchaseLimit: x.purchaseLimit,
-            shopItemCategoryId: x.shopItemCategoryId
-        }));
+            return instantiate<CourseBriefData>({
+                id: course.id,
+                title: course.title
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CourseShopItemListDTO, ([urlService]) => (courses: CourseData[]) => {
 
-    mapperService
-        .addMap(DiscountCode, DiscountCodeDTO, x => ({
-            id: x.id,
-            code: x.code,
-            isUsed: !!x.userId
-        }));
+            return courses.map(course => {
+                return instantiate<CourseShopItemListDTO>({
+                    id: course.id,
+                    title: course.title,
+                    coverImagePath: course.coverFile
+                        ? urlService.getAssetUrl(course.coverFile.filePath)
+                        : null
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(CourseOverviewDataDTO, () => (course: CourseOverviewView) => {
 
-    mapperService
-        .addMap(ShopItem, ShopItemEditDTO, (shopItem, discountCodes: DiscountCode[]) => ({
+            return instantiate<CourseOverviewDataDTO>({
+                answeredVideoQuestionCount: course.answeredVideoQuestionCount,
+                coinsAcquired: course.coinsAcquired,
+                completedVideoCount: course.completedVideoCount,
+                examSuccessRateAverage: course.examSuccessRateAverage,
+                finalExamSuccessRate: course.finalExamSuccessRate,
+                questionSuccessRate: course.questionSuccessRate,
+                totalSpentSeconds: course.totalSpentSeconds
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(PersonalityTraitCategoryShortDTO, () => (x: PersonalityTraitCategoryView, isMax: boolean) => {
 
-            id: shopItem.id,
-            coverFilePath: shopItem.coverFile?.filePath
-                ? getAssetUrl(shopItem.coverFile.filePath)
-                : null,
-            coinPrice: shopItem.coinPrice,
-            currencyPrice: shopItem.currencyPrice,
-            name: shopItem.name,
-            purchaseLimit: shopItem.purchaseLimit,
-            shopItemCategoryId: shopItem.shopItemCategoryId,
-            courseId: shopItem.courseId,
-            detailsUrl: shopItem.detailsUrl,
-            discountCodes: mapperService
-                .mapMany(DiscountCode, DiscountCodeDTO, discountCodes)
-        }));
-
-    mapperService
-        .addMap(ShopItemView, ShopItemAdminShortDTO, x => ({
-            id: x.id,
-            name: x.name,
-            purchaseLimit: x.purchaseLimit,
-            coinPrice: x.coinPrice,
-            currencyPrice: x.currencyPrice,
-            shopItemCategoryId: x.shopItemCategoryId,
-            coverFilePath: getAssetUrl(x.coverFilePath)
-        }));
-
-    mapperService
-        .addMap(ShopItemView, ShopItemBriefData, x => ({
-            name: x.name
-        }));
-
-    mapperService
-        .addMap(CourseData, CourseBriefData, course => ({
-            id: course.id,
-            title: course.title
-        }));
-
-    mapperService
-        .addMap(CourseData, CourseShopItemListDTO, course => ({
-            id: course.id,
-            title: course.title,
-            coverImagePath: course.coverFile
-                ? getAssetUrl(course.coverFile.filePath)
-                : null
-        }));
-
-    mapperService
-        .addMap(CourseOverviewView, CourseOverviewDataDTO, c => ({
-            answeredVideoQuestionCount: c.answeredVideoQuestionCount,
-            coinsAcquired: c.coinsAcquired,
-            completedVideoCount: c.completedVideoCount,
-            examSuccessRateAverage: c.examSuccessRateAverage,
-            finalExamSuccessRate: c.finalExamSuccessRate,
-            questionSuccessRate: c.questionSuccessRate,
-            totalSpentSeconds: c.totalSpentSeconds
-        }));
-
-    mapperService
-        .addMap(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, (x, isMax: boolean): PersonalityTraitCategoryShortDTO => {
-
-            return {
+            return instantiate<PersonalityTraitCategoryShortDTO>({
                 id: x.id,
                 title: x.title,
                 label: isMax ? x.maxLabel : x.minLabel,
                 isMax,
                 tipCount: isMax ? x.maxTipsCount : x.minTipsCount
-            };
-        });
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(PersonalityTraitCategoryDTO, () => (category: PersonalityTraitCategory, tips: DailyTip[]) => {
 
-    mapperService
-        .addMap(DailyTip, DailyTipDTO, x => ({
-            description: x.description,
-            id: x.id,
-            videoUrl: ''
-        }));
+            return instantiate<PersonalityTraitCategoryDTO>({
+                id: category.id,
+                maxDescription: category.maxDescription,
+                maxLabel: category.maxLabel,
+                minDescription: category.minDescription,
+                minLabel: category.minLabel,
+                title: category.title,
+                tips: tips.map(tip => {
+                    return instantiate<DailyTipDTO>({
+                        description: tip.description,
+                        id: tip.id,
+                        videoUrl: ''
+                    })
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(DailyTipEditDataDTO, () => (dailyTip: DailyTip) => {
 
-    mapperService
-        .addMap(PersonalityTraitCategory, PersonalityTraitCategoryDTO, (category, tips: DailyTip[]) => ({
-            id: category.id,
-            maxDescription: category.maxDescription,
-            maxLabel: category.maxLabel,
-            minDescription: category.minDescription,
-            minLabel: category.minLabel,
-            title: category.title,
-            tips: mapperService
-                .mapMany(DailyTip, DailyTipDTO, tips)
-        }));
+            return instantiate<DailyTipEditDataDTO>({
+                description: dailyTip.description,
+                id: dailyTip.id,
+                isLive: dailyTip.isLive
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(PrequizQuestionDTO, () => (question: PrequizQuestionView, answers: PrequizAnswerDTO[]) => {
 
-    mapperService
-        .addMap(DailyTip, DailyTipEditDataDTO, x => ({
-            description: x.description,
-            id: x.id,
-            isLive: x.isLive
-        }));
+            return instantiate<PrequizQuestionDTO>({
+                id: question.questionId,
+                isNumeric: question.isNumericAnswer,
+                text: question.questionText,
+                minValue: question.minValue,
+                maxValue: question.maxValue,
+                stepValue: question.stepValue,
+                maxLabel: question.maxLabel,
+                minLabel: question.minLabel,
+                valuePostfix: question.valuePostfix,
+                answers
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(PrequizAnswerDTO, () => (question: PrequizQuestionView) => {
 
-    mapperService
-        .addMap(PrequizQuestionView, PrequizQuestionDTO, (x, answers) => ({
-            id: x.questionId,
-            isNumeric: x.isNumericAnswer,
-            text: x.questionText,
-            minValue: x.minValue,
-            maxValue: x.maxValue,
-            stepValue: x.stepValue,
-            maxLabel: x.maxLabel,
-            minLabel: x.minLabel,
-            valuePostfix: x.valuePostfix,
-            answers
-        }));
+            return instantiate<PrequizAnswerDTO>({
+                id: question.answerId,
+                text: question.answerText
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(CourseRatingQuestionDTO, () => (question: CourseRatingQuestionView) => {
 
-    mapperService
-        .addMap(PrequizQuestionView, PrequizAnswerDTO, x => ({
-            id: x.answerId,
-            text: x.answerText
-        }));
+            return instantiate<CourseRatingQuestionDTO>({
+                id: question.questionId,
+                text: question.questionText,
+                type: question.questionType,
+                answerText: question.answerText,
+                answerValue: question.answerValue
+            })
+        }),
+    epistoMappingsBuilder
+        .addMapping(CourseRatingGroupDTO, () => (view: CourseRatingQuestionView, questions: CourseRatingQuestionDTO[]) => {
 
-    mapperService
-        .addMap(CourseRatingQuestionView, CourseRatingQuestionDTO, x => ({
-            id: x.questionId,
-            text: x.questionText,
-            type: x.questionType,
-            answerText: x.answerText,
-            answerValue: x.answerValue
-        }));
+            return instantiate<CourseRatingGroupDTO>({
+                id: view.groupId,
+                name: view.groupName,
+                questions
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(UserActiveCourseDTO, ([urlService]) => (views: UserActiveCourseView[]) => {
 
-    mapperService
-        .addMap(CourseRatingQuestionView, CourseRatingGroupDTO, (x, questions: CourseRatingQuestionDTO[]) => ({
-            id: x.groupId,
-            name: x.groupName,
-            questions
-        }));
+            return views.map(view => {
+                return instantiate<UserActiveCourseDTO>({
+                    courseId: view.courseId,
+                    coverFilePath: urlService.getAssetUrl(view.coverFilePath),
+                    title: view.title
+                })
+            })
+        }),
+    // TODO: Check if canManage is needed here
+    epistoMappingsBuilder
+        .addArrayMapping(CompanyDTO, () => (views: CompanyView[]) => {
 
-    mapperService
-        .addMap(UserDailyProgressView, UserDailyProgressDTO, view => ({
-            date: view.creationDate,
-            spentSeconds: view.spentSeconds
-        }));
+            return views.map(view => {
+                return instantiate<CompanyDTO>({
+                    id: view.companyId,
+                    name: view.companyName,
+                    //canManage: view.canManage
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CompanyDTO, () => (companies: Company[]) => {
 
-    mapperService
-        .addMap(UserActiveCourseView, UserActiveCourseDTO, view => ({
-            courseId: view.courseId,
-            coverFilePath: getAssetUrl(view.coverFilePath),
-            title: view.title
-        }));
+            return companies.map(company => {
 
-    mapperService
-        .addMap(CompanyView, CompanyDTO, x => ({
-            id: x.companyId,
-            name: x.companyName,
-            canManage: x.canManage
-        }));
+                return instantiate<CompanyDTO>({
+                    id: company.id,
+                    name: company.name
+                })
+            })
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(PermissionListDTO, () => (permissions: Permission[]) => {
 
-    mapperService
-        .addMap(Company, CompanyDTO, x => ({
-            id: x.id,
-            name: x.name
-        }));
+            return permissions.map(permission => {
 
-    mapperService
-        .addMap(Permission, PermissionListDTO, x => ({
-            code: x.code,
-            scope: x.scope,
-            id: x.id
-        }));
+                return instantiate<PermissionListDTO>({
+                    code: permission.code,
+                    scope: permission.scope,
+                    id: permission.id
+                })
+            })
+        }),
 
-    return marray;
-};
+
+
+] as const;
+
+export type EpistoMappingsType = Mutable<typeof marray>;
 
 const separationChar = '|';
 

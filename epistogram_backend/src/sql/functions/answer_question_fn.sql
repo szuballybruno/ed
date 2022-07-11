@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION answer_question_fn
 	param_user_id integer,
 	param_answer_session_id integer,
 	param_question_version_id integer,
-	param_answer_version_ids integer[],
+	param_answer_ids integer[],
 	param_elapsed_seconds double precision,
 	param_is_practise_answer boolean
 )
@@ -19,7 +19,8 @@ RETURNS TABLE
 AS $$ 
 
 DECLARE
-	var_correct_answer_version_ids integer[]; 
+	var_correct_answer_ids integer[]; 
+	var_answer_version_ids integer[]; 
 	var_given_answer_id integer;
 	var_is_previous_streak_out_of_date boolean;
 	
@@ -35,7 +36,7 @@ BEGIN
 	-- CORRECT ANSWER IDS
 	SELECT ARRAY
 	(
-		SELECT av.id answer_version_id
+		SELECT av.answer_id
 		FROM public.answer_version AS av
 
 		LEFT JOIN public.question_version qv
@@ -47,7 +48,17 @@ BEGIN
 		WHERE av.question_version_id = param_question_version_id 
 			AND ad.is_correct = true
 	)		
-	INTO var_correct_answer_version_ids;
+	INTO var_correct_answer_ids;
+
+	-- ANSWER IDS TO ANSWER VERSION IDS
+	SELECT ARRAY
+	(
+		SELECT av.id answer_version_id
+		FROM public.answer_version AS av
+
+		WHERE av.answer_id = ANY(param_answer_ids)
+	)		
+	INTO var_answer_version_ids;
 	
 	-- IS CORRECTLY ANSWERED BEFORE
 	SELECT COUNT(ga.id) > 0 
@@ -60,7 +71,7 @@ BEGIN
 	INTO var_is_correctly_answered_before;
 	
 	-- IS CORRECT 
-	var_is_correct := var_correct_answer_version_ids = param_answer_version_ids;
+	var_is_correct := var_correct_answer_ids = param_answer_ids;
 	
 	-- PREVIOUS STREAK
 	SELECT id 
@@ -130,7 +141,7 @@ BEGIN
 	SELECT 
 		var_given_answer_id,
 		answer_version_ids.*
-	FROM UNNEST (param_answer_version_ids) AS answer_version_ids;
+	FROM UNNEST (var_answer_version_ids) AS answer_version_ids;
 	
 	-- STREAK LENGTH 
 	SELECT COUNT(ga.id) 
@@ -142,7 +153,7 @@ BEGIN
 	
 	-- RETURN 
 	RETURN QUERY SELECT
-		var_correct_answer_version_ids,
+		var_correct_answer_ids,
 		var_given_answer_id,
 		var_previous_streak_id,
 		var_streak_length,

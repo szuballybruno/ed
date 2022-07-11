@@ -49,7 +49,7 @@ export class TeacherInfoService {
         const teacherInfo = await this.getTeacherInfoAsync(userId);
 
         return this._mapperService
-            .map(TeacherInfo, TeacherInfoEditDTO, teacherInfo);
+            .mapTo(TeacherInfoEditDTO, [teacherInfo]);
     }
 
     /**

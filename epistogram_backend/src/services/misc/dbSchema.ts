@@ -304,7 +304,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'course_admin_short_view', CourseAdminShortView], // 1 course_admin_content_view
             ['common', 'course_length_estimation_view'], // 1 user_course_completion_original_estimation_view
             ['common', 'exam_latest_success_rate_view'], // 1 course_learning_stats_view
-            ['common', 'course_spent_time_view'], // 2 course_learning_stats_view, user_spent_time_ratio_view
+            ['common', 'course_spent_time_view'], // 2 course_learning_stats_view, user_spent_time_ratio_viewí
             ['common', 'course_item_count_view'], // 6
             ['common', 'question_data_view', QuestionDataView], // 0 | latest_question_view
             ['common', 'user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView], // 1 user_course_stats_view
@@ -381,10 +381,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             {
                 tableName: 'role',
                 name: 'role_constraint'
-            },
-            {
-                tableName: 'user_course_bridge',
-                name: 'single_current_course_bridge_constraint'
             }
         ],
 
@@ -392,6 +388,10 @@ export const createDBSchema = (): XDBMSchemaType => {
             {
                 tableName: 'user',
                 name: 'user_email_unique_index'
+            },
+            {
+                tableName: 'user_course_bridge',
+                name: 'single_current_course_bridge_unique_index'
             }
         ],
 

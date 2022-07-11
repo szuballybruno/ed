@@ -58,9 +58,8 @@ export class CoinTransactionService {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return coinTransactions
-            .map(x => this._mapperService
-                .map(CoinTransactionView, CoinTransactionDTO, x));
+        return this._mapperService
+            .mapTo(CoinTransactionDTO, [coinTransactions]);
     }
 
     async getCoinsForQuestionAsync(userId: number, questionVersionId: number) {

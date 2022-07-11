@@ -51,7 +51,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .getMany();
 
         return this._mapperService
-            .mapMany(Permission, PermissionListDTO, permissions);
+            .mapTo(PermissionListDTO, [permissions]);
     }
 
     async getPermissionMatrixAsync(userId: number, contextCompanyId: number) {

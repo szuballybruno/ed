@@ -58,6 +58,14 @@ export class QuestionAnswerService {
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) {
 
+        console.log('userId: ' + userId)
+        console.log('answerSessionId: ' + answerSessionId)
+        console.log('questionVersionId: ' + questionVersionId)
+        console.log('answerIds: ' + answerIds)
+        console.log('isExamQuestion: ' + isExamQuestion)
+        console.log('elapsedSeconds: ' + elapsedSeconds)
+        console.log('isPractiseAnswer: ' + isPractiseAnswer)
+
         const {
             correctAnswerIds,
             givenAnswerId,
@@ -66,6 +74,12 @@ export class QuestionAnswerService {
             streakId
         } = await this._sqlFunctionsService
             .answerQuestionFn(userId, answerSessionId, questionVersionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
+
+        console.log('correctAnswerIds: ' + correctAnswerIds)
+        console.log('givenAnswerId: ' + givenAnswerId)
+        console.log('isCorrect: ' + isCorrect)
+        console.log('streakLength: ' + streakLength)
+        console.log('streakId: ' + streakId)
 
         let coinAcquires = null as null | {
             normal: CoinAcquireResultDTO | null,

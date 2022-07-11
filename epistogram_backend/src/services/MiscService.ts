@@ -41,7 +41,7 @@ export class MiscService {
             .getSingle();
 
         return this._mapperService
-            .map(CourseOverviewView, CourseOverviewDataDTO, view);
+            .mapTo(CourseOverviewDataDTO, [view]);
     }
 
     async getOverviewPageDTOAsync(userId: PrincipalId) {

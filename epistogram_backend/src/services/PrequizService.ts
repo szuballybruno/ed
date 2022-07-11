@@ -49,10 +49,10 @@ export class PrequizService {
                 const answers = questionGroup
                     .items
                     .map(viewAsAnswer => this._mapperService
-                        .map(PrequizQuestionView, PrequizAnswerDTO, viewAsAnswer));
+                        .mapTo(PrequizAnswerDTO, [viewAsAnswer]));
 
                 return this._mapperService
-                    .map(PrequizQuestionView, PrequizQuestionDTO, viewAsQuestion, answers);
+                    .mapTo(PrequizQuestionDTO, [viewAsQuestion, answers]);
             });
 
         return questions;
@@ -71,7 +71,7 @@ export class PrequizService {
             .where('userId', '=', 'userId')
             .and('questionId', '=', 'questionId')
             .and('courseId', '=', 'courseId')
-            .getSingle();
+            .getOneOrNull();
 
         if (!userAnswer)
             return null;
@@ -94,6 +94,7 @@ export class PrequizService {
         answerId: number | null,
         value: number | null) {
 
+
         const userId = principalId.toSQLValue();
 
         const previousAnswer = await this._ormService
@@ -101,16 +102,29 @@ export class PrequizService {
             .where('userId', '=', 'userId')
             .and('questionId', '=', 'questionId')
             .and('courseId', '=', 'courseId')
-            .getSingle()
+            .getOneOrNull()
 
-        await this._ormService
-            .save(PrequizUserAnswer, {
-                id: previousAnswer?.id,
-                answerId,
-                questionId,
-                courseId,
-                userId,
-                value
-            });
+        if (previousAnswer) {
+            await this._ormService
+                .save(PrequizUserAnswer, {
+                    id: previousAnswer.id,
+                    answerId,
+                    questionId,
+                    courseId,
+                    userId,
+                    value
+                });
+        } else {
+            await this._ormService
+                .createAsync(PrequizUserAnswer, {
+                    answerId,
+                    questionId,
+                    courseId,
+                    userId,
+                    value
+                })
+        }
+
+
     }
 }
