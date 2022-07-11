@@ -1,8 +1,11 @@
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { Question } from '../models/entity/question/Question';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
+import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

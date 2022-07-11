@@ -1,5 +1,4 @@
 
-import { DiscountCode } from '../models/entity/DiscountCode';
 import { User } from '../models/entity/User';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
@@ -7,28 +6,18 @@ import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
-import { CourseService } from './CourseService';
+import { CourseProgressService } from './CourseProgressService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {
 
-    private _courseService: CourseService;
-    private _ormService: ORMConnectionService;
-    private _mapperService: MapperService;
-    private _userCourseBridgeService: UserCourseBridgeService;
-
     constructor(
-        courseService: CourseService,
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        userCourseBridgeService: UserCourseBridgeService) {
-
-        this._courseService = courseService;
-        this._ormService = ormService;
-        this._mapperService = mapperService;
-        this._userCourseBridgeService = userCourseBridgeService;
+        private _courseProgressService: CourseProgressService,
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _userCourseBridgeService: UserCourseBridgeService) {
     }
 
     async getCourseOverviewDataAsync(principalId: PrincipalId) {
@@ -57,7 +46,8 @@ export class MiscService {
         const recommendedCourseDTOs = [] as CourseShortDTO[];
         const developmentChartData = this.getDevelopmentChart();
 
-        const currentCourseProgress = await this._courseService
+        const currentCourseProgress = await this
+            ._courseProgressService
             .getCurrentCourseProgressAsync(userId);
 
         const overviewPageDTO = {

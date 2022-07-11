@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
-import { useCourseBriefData } from '../../../../services/api/courseApiService';
+import { CourseApiService } from '../../../../services/api/courseApiService';
 import { useBriefUserData } from '../../../../services/api/userApiService';
 import { UserCourseProgressChartDTO } from '../../../../shared/dtos/UserCourseProgressChartDTO';
 import { useIntParam } from '../../../../static/locationHelpers';
@@ -24,7 +24,7 @@ export const AdminUserCourseContentDialog = (props: {
     const courseId = dialogLogic.params.courseId;
     const userId = useIntParam('userId');
 
-    const { courseBriefData } = useCourseBriefData(courseId);
+    const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { briefUserData } = useBriefUserData(userId);
 
     const courseTitle = courseBriefData?.title || '';

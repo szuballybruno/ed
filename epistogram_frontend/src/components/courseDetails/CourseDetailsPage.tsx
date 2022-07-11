@@ -1,7 +1,7 @@
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { Tab, Tabs } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useCourseDetails } from '../../services/api/courseApiService';
+import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
@@ -30,7 +30,7 @@ const CourseDetailsPage = () => {
     const { playCourse } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const { courseDetails } = useCourseDetails(courseId);
+    const { courseDetails } = CourseApiService.useCourseDetails(courseId);
     const { colors } = useImageColor(courseDetails?.thumbnailURL!);
 
     const [currentTab, setCurrentTab] = useState(0);

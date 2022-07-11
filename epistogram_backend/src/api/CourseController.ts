@@ -196,18 +196,4 @@ export class CourseController {
         return this._userCourseBridgeService
             .setRequiredCompletionDateAsync(params.principalId, courseId, requiredCourseCompletionDate);
     };
-
-    @XControllerAction(apiRoutes.course.getCourseProgressShort)
-    getCourseProgressShortAction = async (params: ActionParams) => {
-
-        return this._courseService
-            .getCourseProgressShortAsync(params.principalId);
-    };
-
-    @XControllerAction(apiRoutes.course.getCourseProgressData)
-    getCourseProgressDataAction = async (params: ActionParams) => {
-
-        return this._courseService
-            .getCourseProgressDataAsync(params.principalId);
-    };
 }

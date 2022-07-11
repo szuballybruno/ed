@@ -1,5 +1,7 @@
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
+import { CourseProgressController } from '../api/CourseProgressController';
+import { PlaylistController } from '../api/PlaylistController';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
@@ -126,6 +128,8 @@ export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceP
         .addController(PlayerController)
         .addController(PlaybackController)
         .addController(CourseController)
+        .addController(PlaylistController)
+        .addController(CourseProgressController)
         .addController(ModuleController)
         .addController(VideoController)
         .addController(QuestionController)

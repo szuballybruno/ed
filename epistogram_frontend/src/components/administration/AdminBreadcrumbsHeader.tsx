@@ -6,7 +6,7 @@ import { ReactNode, useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { useCourseBriefData } from '../../services/api/courseApiService';
+import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
 import { useBriefUserData } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
@@ -104,7 +104,7 @@ export const AdminBreadcrumbsHeader = (props: {
 
     // http
     const { briefUserData } = useBriefUserData(userId);
-    const { courseBriefData } = useCourseBriefData(courseId);
+    const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 
     // calc

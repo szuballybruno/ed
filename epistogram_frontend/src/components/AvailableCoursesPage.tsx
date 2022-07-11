@@ -1,7 +1,7 @@
 import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React from 'react';
-import { useUserCourses } from '../services/api/courseApiService';
+import { CourseApiService } from '../services/api/courseApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
@@ -27,7 +27,7 @@ const AvailableCoursesPage = () => {
     const [isRecommended, setIsRecommended] = React.useState(false);
     const [orderBy, setOrderBy] = React.useState<OrderType | null>(null);
 
-    const { courses, coursesState, coursesError } = useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
+    const { courses, coursesState, coursesError } = CourseApiService.useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
 
     const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();

@@ -7,8 +7,8 @@ type gct<TObj> = {
 
 // ---------------- GENERIC
 
+export const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError', 'deepBlue', 'change'] as const;
 const sizes = ['px5', 'px10', 'px15', 'px20'] as const;
-const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError', 'deepBlue', 'change'] as const;
 const fontSizes = ['small', 'normal', 'large'] as const;
 const fontWeights = ['light', 'normal', 'heavy'] as const;
 const widths = ['stretch'] as const;

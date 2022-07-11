@@ -105,7 +105,7 @@ export class ModuleService {
                     moduleDataId: x.newDataId,
                     moduleId: x.entityId
                 }),
-                getVersionId: x => Id.create<ModuleVersion>(x.key),
+                getVersionId: x => x.key,
                 muts: moduleMutations,
                 overrideDataProps: (data, mutation) => {
 

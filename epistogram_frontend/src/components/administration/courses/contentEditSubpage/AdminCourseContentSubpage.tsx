@@ -3,20 +3,16 @@ import { Add, Edit } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
-import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
+import { CourseApiService } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { Mutation } from '../../../../shared/dtos/mutations/Mutation';
 import { VersionCode } from '../../../../shared/types/versionCode';
-import { useForceUpdate } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
-import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
@@ -50,11 +46,11 @@ export const AdminCourseContentSubpage = () => {
         courseContentAdminData,
         courseContentAdminDataState,
         refetchCourseContentAdminData
-    } = useCourseContentAdminData(courseId, isAnySelected, true);
+    } = CourseApiService.useCourseContentAdminData(courseId, isAnySelected, true);
     const {
         saveCourseDataAsync,
         saveCourseDataState
-    } = useSaveCourseContentData();
+    } = CourseApiService.useSaveCourseContentData();
 
     // misc
     const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
@@ -62,8 +58,8 @@ export const AdminCourseContentSubpage = () => {
     const itemsMutatorRef = useXMutator(CourseContentItemAdminDTO, 'versionCode');
 
     // busy state
-    useSetBusy(useSaveCourseContentData, saveCourseDataState);
-    useSetBusy(useCourseContentAdminData, courseContentAdminDataState);
+    useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
+    useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
 
     // module edit dialog logic
     const canDelete = useCallback((moduleVersionId: number) => !itemsMutatorRef

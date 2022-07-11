@@ -1,12 +1,12 @@
 import { Flex } from '@chakra-ui/react';
-import { memo, ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useAdminCourseList } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminCourseList } from './AdminCourseList';
 
 export const CourseAdministartionFrame = (params: {
@@ -23,7 +23,7 @@ export const CourseAdministartionFrame = (params: {
     const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
 
     // http
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList('');
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = CourseApiService.useAdminCourseList('');
 
     // dt
     const currentCourse = courses

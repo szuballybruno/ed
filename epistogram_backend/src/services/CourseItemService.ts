@@ -1,6 +1,7 @@
 import { Exam } from '../models/entity/exam/Exam';
 import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { Video } from '../models/entity/video/Video';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
@@ -81,7 +82,7 @@ export class CourseItemService {
                 getParentOldVersionId: x => x.moduleVersionId,
                 getDataId: x => x.examDataId,
                 getEntityId: x => x.examId,
-                getVersionId: x => VersionCode.read(x.key).versionId,
+                getVersionId: x => VersionCode.read(x.key).versionId as Id<ExamVersion>,
                 getDefaultData: mutation => ({
                     description: '',
                     isFinal: false,
