@@ -13,13 +13,13 @@ export class LatestVideoView {
 
     @ViewColumn()
     @XViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 }

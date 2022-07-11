@@ -26,7 +26,7 @@ export class ActivationCodeService {
         return actCode;
     }
 
-    async invalidateCodeAsync(codeId: Id<ActivationCode>) {
+    async invalidateCodeAsync(codeId: Id<'ActivationCode'>) {
 
         await this._ormService
             .save(ActivationCode, {

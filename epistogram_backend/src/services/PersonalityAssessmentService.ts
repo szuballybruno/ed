@@ -30,7 +30,7 @@ export class PersonalityAssessmentService {
      */
     async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const chartData = await this.getUserPersonalityDataAsync(userIdAsIdType);
         const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userIdAsIdType);
@@ -44,7 +44,7 @@ export class PersonalityAssessmentService {
     /**
      * Returns personality trait views for a specified user
      */
-    async getPersonalityTraitsAsync(userId: Id<User>) {
+    async getPersonalityTraitsAsync(userId: Id<'User'>) {
 
         return await this._ormService
             .query(PersonalityTraitView, { userId })
@@ -55,7 +55,7 @@ export class PersonalityAssessmentService {
     /**
      * Return the personality trait category with details, like tips etc.
      */
-    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: Id<PersonalityTraitCategory>, isMax: boolean) {
+    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) {
 
         const category = await this._ormService
             .query(PersonalityTraitCategory, { personalityTraitCategoryId })
@@ -101,7 +101,7 @@ export class PersonalityAssessmentService {
     /**
      * This returns the active descriptions of the users traits. 
      */
-    private getPersonalityDescriptionsDTOAsync = async (userId: Id<User>) => {
+    private getPersonalityDescriptionsDTOAsync = async (userId: Id<'User'>) => {
 
         const personalityTraits = await this.getPersonalityTraitsAsync(userId);
 
@@ -121,7 +121,7 @@ export class PersonalityAssessmentService {
      * Trait 1 min - *     * - Trait 1 max
      *                *  * - Trait 2 max
      */
-    private async getUserPersonalityDataAsync(userId: Id<User>) {
+    private async getUserPersonalityDataAsync(userId: Id<'User'>) {
 
         const categoryViews = await this.getPersonalityTraitsAsync(userId);
         const traits = [] as PersonalityTraitDataDTO[];

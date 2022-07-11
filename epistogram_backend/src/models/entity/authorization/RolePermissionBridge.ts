@@ -9,14 +9,14 @@ export class RolePermissionBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<RolePermissionBridge>;
+    id: Id<'RolePermissionBridge'>;
 
     // TO ONE
 
     // role 
     @Column()
     @XViewColumn()
-    roleId: Id<Role>;
+    roleId: Id<'Role'>;
     @ManyToOne(_ => Role, x => x.rolePermissionBridges)
     @JoinColumn({ name: 'role_id' })
     role: Relation<Role>;
@@ -24,7 +24,7 @@ export class RolePermissionBridge {
     // permission
     @Column()
     @XViewColumn()
-    permissionId: Id<Permission>;
+    permissionId: Id<'Permission'>;
     @ManyToOne(_ => Permission, x => x.rolePermissionBridges)
     @JoinColumn({ name: 'permission_id' })
     permission: Relation<Permission>;

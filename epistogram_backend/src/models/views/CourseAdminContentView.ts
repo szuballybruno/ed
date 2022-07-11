@@ -16,16 +16,16 @@ import { VideoVersion } from '../entity/video/VideoVersion';
 export class CourseAdminContentView {
 
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @XViewColumn()
-    courseVersionId: Id<CourseVersion>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
     moduleName: string;
@@ -34,7 +34,7 @@ export class CourseAdminContentView {
     moduleOrderIndex: number;
 
     @XViewColumn()
-    moduleVersionId: Id<ModuleVersion>;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
     itemOrderIndex: number;

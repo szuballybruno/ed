@@ -10,7 +10,7 @@ export class PersonalityTraitCategory {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<PersonalityTraitCategory>;
+    id: Id<'PersonalityTraitCategory'>;
 
     @Column()
     @XViewColumn()

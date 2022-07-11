@@ -23,11 +23,11 @@ export class CourseItemController {
             .getQuery();
 
         const videoVersionId = Id
-            .create<VideoVersion>(bod
+            .create<'VideoVersion'>(bod
                 .getValueOrNull(x => x.videoVersionId, 'int'))
 
         const examVersionId = Id
-            .create<ExamVersion>(bod
+            .create<'ExamVersion'>(bod
                 .getValueOrNull(x => x.examVersionId, 'int'))
 
         return this._courseItemService

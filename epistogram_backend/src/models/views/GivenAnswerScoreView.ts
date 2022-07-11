@@ -15,19 +15,19 @@ export class GivenAnswerScoreView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    answerVersionId: Id<AnswerVersion>;
+    answerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    givenAnswerId: Id<GivenAnswer>;
+    givenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -35,7 +35,7 @@ export class GivenAnswerScoreView {
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: Id<AnswerSession>;
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
     @XViewColumn()

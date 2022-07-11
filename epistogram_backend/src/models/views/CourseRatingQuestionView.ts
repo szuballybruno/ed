@@ -14,11 +14,11 @@ export class CourseRatingQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -30,7 +30,7 @@ export class CourseRatingQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: Id<Question>;
+    questionId: Id<'Question'>;
 
     @ViewColumn()
     @XViewColumn()

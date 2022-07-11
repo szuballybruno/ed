@@ -12,11 +12,11 @@ export class ModulePlayerView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleId: Id<Module>;
+    moduleId: Id<'Module'>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: Id<ModuleVersion>;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @ViewColumn()
     @XViewColumn()

@@ -11,28 +11,28 @@ export class AnswerVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<AnswerVersion>;
+    id: Id<'AnswerVersion'>;
 
     // TO ONE
 
     // question 
     @Column()
     @XViewColumn()
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
     @XManyToOne<AnswerVersion>()(() => QuestionVersion, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('questionVersionId')
     questionVersion: Relation<QuestionVersion>;
 
     @Column()
     @XViewColumn()
-    answerId: Id<Answer>;
+    answerId: Id<'Answer'>;
     @XManyToOne<AnswerVersion>()(() => Answer, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('answerId')
     answer: Relation<Answer>;
 
     @Column()
     @XViewColumn()
-    answerDataId: Id<AnswerData>;
+    answerDataId: Id<'AnswerData'>;
     @XManyToOne<AnswerVersion>()(() => AnswerData, x => x.answerVersions)
     @XJoinColumn<AnswerVersion>('answerDataId')
     answerData: Relation<AnswerData>;

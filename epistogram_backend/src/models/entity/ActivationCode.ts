@@ -8,7 +8,7 @@ export class ActivationCode {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ActivationCode>;
+    id: Id<'ActivationCode'>;
 
     @Column()
     @XViewColumn()
@@ -21,7 +21,7 @@ export class ActivationCode {
     // company
     @Column()
     @XViewColumn()
-    companyId: Id<Company>;
+    companyId: Id<'Company'>;
 
     @JoinColumn({ name: 'company_id' })
     @ManyToOne(_ => Company, x => x.activationCodes)

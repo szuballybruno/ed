@@ -39,7 +39,7 @@ export class RoleController {
     getRoleEditDataAction = (params: ActionParams) => {
 
         const roleId = Id
-            .create<Role>(params
+            .create<'Role'>(params
                 .getQuery()
                 .getValue(x => x.roleId, 'int'))
 
@@ -51,7 +51,7 @@ export class RoleController {
     deleteRoleAction = (params: ActionParams) => {
 
         const roleId = Id
-            .create<Role>(params
+            .create<'Role'>(params
                 .getBody()
                 .getValue(x => x.roleId, 'int'))
 
@@ -75,11 +75,11 @@ export class RoleController {
             .getQuery();
 
         const userId = Id
-            .create<User>(query
+            .create<'User'>(query
                 .getValue(x => x.userId, 'int'))
 
         const companyId = Id
-            .create<Company>(query
+            .create<'Company'>(query
                 .getValue(x => x.companyId, 'int'))
 
         return this._roleService
@@ -107,7 +107,7 @@ export class RoleController {
     getUserRolesAction = (params: ActionParams) => {
 
         const userId = Id
-            .create<User>(params
+            .create<'User'>(params
                 .getQuery()
                 .getValue(x => x.userId, 'int'))
 
@@ -119,7 +119,7 @@ export class RoleController {
     getUserPermissionsAsync = (params: ActionParams) => {
 
         const userId = Id
-            .create<User>(params
+            .create<'User'>(params
                 .getQuery()
                 .getValue(x => x.userId, 'int'))
 

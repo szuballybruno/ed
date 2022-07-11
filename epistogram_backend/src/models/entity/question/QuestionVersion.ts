@@ -14,7 +14,7 @@ export class QuestionVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<QuestionVersion>;
+    id: Id<'QuestionVersion'>;
 
     //
     // TO MANY
@@ -35,7 +35,7 @@ export class QuestionVersion {
     // video 
     @Column({ nullable: true })
     @XViewColumn()
-    videoVersionId: Id<VideoVersion> | null;
+    videoVersionId: Id<'VideoVersion'> | null;
     @XManyToOne<QuestionVersion>()(() => VideoVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -43,7 +43,7 @@ export class QuestionVersion {
     // exam 
     @Column({ nullable: true })
     @XViewColumn()
-    examVersionId: Id<ExamVersion> | null;
+    examVersionId: Id<'ExamVersion'> | null;
     @XManyToOne<QuestionVersion>()(() => ExamVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('examVersionId')
     examVersion: Relation<ExamVersion>;
@@ -51,7 +51,7 @@ export class QuestionVersion {
     // question 
     @Column()
     @XViewColumn()
-    questionId: Id<Question>;
+    questionId: Id<'Question'>;
     @XManyToOne<QuestionVersion>()(() => Question, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionId')
     question: Relation<Question>;
@@ -59,7 +59,7 @@ export class QuestionVersion {
     // question data 
     @Column()
     @XViewColumn()
-    questionDataId: Id<QuestionData>;
+    questionDataId: Id<'QuestionData'>;
     @XManyToOne<QuestionVersion>()(() => QuestionData, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionDataId')
     questionData: Relation<QuestionData>;
@@ -67,7 +67,7 @@ export class QuestionVersion {
     // category
     @Column({ nullable: true })
     @XViewColumn()
-    personalityTraitCategoryId: Id<PersonalityTraitCategory> | null;
+    personalityTraitCategoryId: Id<'PersonalityTraitCategory'> | null;
     @XManyToOne<QuestionVersion>()(() => PersonalityTraitCategory, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('personalityTraitCategoryId')
     personalityTraitCategory: Relation<PersonalityTraitCategory> | null;

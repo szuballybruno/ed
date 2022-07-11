@@ -15,15 +15,15 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    assignerUserId: Id<User>;
+    assignerUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: Id<User>;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: Id<Company>;
+    contextCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -31,7 +31,7 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    ownerCompanyId: Id<Company> | null;
+    ownerCompanyId: Id<'Company'> | null;
 
     @ViewColumn()
     @XViewColumn()
@@ -43,7 +43,7 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    roleId: Id<Role>;
+    roleId: Id<'Role'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -59,7 +59,7 @@ export class AssignableRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: Id<Permission>;
+    permissionId: Id<'Permission'>;
 
     @ViewColumn()
     @XViewColumn()

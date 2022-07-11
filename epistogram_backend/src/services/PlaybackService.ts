@@ -45,7 +45,7 @@ export class PlaybackService extends ServiceBase {
      */
     saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const {
             videoPlaybackSessionId,
@@ -80,7 +80,7 @@ export class PlaybackService extends ServiceBase {
      */
     async saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const {
             fromSeconds,
@@ -104,7 +104,7 @@ export class PlaybackService extends ServiceBase {
     /**
      * Gets the max watched seconds // TODO clarify this
      */
-    getMaxWatchedSeconds = async (userId: Id<User>, videoVersionId: Id<VideoVersion>) => {
+    getMaxWatchedSeconds = async (userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>) => {
 
         const ads = await this._ormService
             .query(VideoCursorSecondsView, { userId, videoVersionId })
@@ -119,7 +119,7 @@ export class PlaybackService extends ServiceBase {
     // PRIVATE
     //
 
-    private async _handleSampleMerge(userId: Id<User>, videoVersionId: Id<VideoVersion>, videoPlaybackSessionId: Id<VideoPlaybackSession>, fromSeconds: number, toSeconds: number) {
+    private async _handleSampleMerge(userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>, videoPlaybackSessionId: Id<'VideoPlaybackSession'>, fromSeconds: number, toSeconds: number) {
 
         // get old playback samples
         const oldSamples = await this
@@ -141,9 +141,9 @@ export class PlaybackService extends ServiceBase {
 
     private async _saveMergedSamples(
         mergedSamples: VideoPlaybackSample[],
-        userId: Id<User>,
-        videoVersionId: Id<VideoVersion>,
-        videoPlaybackSessionId: Id<VideoPlaybackSession>) {
+        userId: Id<'User'>,
+        videoVersionId: Id<'VideoVersion'>,
+        videoPlaybackSessionId: Id<'VideoPlaybackSession'>) {
 
         const samplesToDelete = await this._ormService
             .query(VideoPlaybackSample, { videoVersionId, userId })
@@ -166,7 +166,7 @@ export class PlaybackService extends ServiceBase {
                 } as VideoPlaybackSample)));
     }
 
-    private async _handleVideoProgressAsync(userId: Id<User>, videoVersionId: Id<VideoVersion>, toSeconds: number, mergedSamples: VideoPlaybackSample[]) {
+    private async _handleVideoProgressAsync(userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>, toSeconds: number, mergedSamples: VideoPlaybackSample[]) {
 
         // calucate watched percent
         const watchedPercent = await this
@@ -196,7 +196,7 @@ export class PlaybackService extends ServiceBase {
         return { isFirstCompletion };
     }
 
-    private async _getVideoWatchedPercentAsync(videoVersionId: Id<VideoVersion>, samples: VideoPlaybackSample[]) {
+    private async _getVideoWatchedPercentAsync(videoVersionId: Id<'VideoVersion'>, samples: VideoPlaybackSample[]) {
 
         if (samples.length === 0)
             return 0;
@@ -229,7 +229,7 @@ export class PlaybackService extends ServiceBase {
         return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
     };
 
-    private async _getVideoPlaybackSamples(userId: Id<User>, videoVersionId: Id<VideoVersion>, videoPlaybackSessionId: Id<VideoPlaybackSession>) {
+    private async _getVideoPlaybackSamples(userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>, videoPlaybackSessionId: Id<'VideoPlaybackSession'>) {
 
         return this._ormService
             .query(VideoPlaybackSample, { userId, videoVersionId, videoPlaybackSessionId })
@@ -240,8 +240,8 @@ export class PlaybackService extends ServiceBase {
     }
 
     private async _saveUserVideoProgressBridgeAsync(
-        userId: Id<User>,
-        videoVersionId: Id<VideoVersion>,
+        userId: Id<'User'>,
+        videoVersionId: Id<'VideoVersion'>,
         completedPercentage: number,
         cursorSeconds: number,
         newCompletionDate?: Date) {
@@ -269,7 +269,7 @@ export class PlaybackService extends ServiceBase {
             });
     };
 
-    private async _getVideoIsCompletedStateAsync(userId: Id<User>, videoVersionId: Id<VideoVersion>) {
+    private async _getVideoIsCompletedStateAsync(userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>) {
 
         const pbd = await this._ormService
             .query(UserVideoProgressBridge, { userId, videoVersionId })

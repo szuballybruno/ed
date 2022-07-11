@@ -21,7 +21,7 @@ export class DailyTipController {
     deleteDailyTipAction = async (params: ActionParams) => {
 
         const tipId = Id
-            .create<DailyTip>(params
+            .create<'DailyTip'>(params
                 .getBody<any>()
                 .getValue(x => x.dailyTipId, 'int'));
 
@@ -36,7 +36,7 @@ export class DailyTipController {
             .getBody<any>();
 
         const personalityTraitCategoryId = Id
-            .create<PersonalityTraitCategory>(body
+            .create<'PersonalityTraitCategory'>(body
                 .getValue(x => x.personalityTraitCategoryId, 'int'));
 
         const isMax = body
@@ -50,7 +50,7 @@ export class DailyTipController {
     getDailyTipEditDataAction = async (params: ActionParams) => {
 
         const dailyTipId = Id
-            .create<DailyTip>(params
+            .create<'DailyTip'>(params
                 .getQuery<any>()
                 .getValue(x => x.dailyTipId, 'int'));
 

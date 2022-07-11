@@ -11,12 +11,12 @@ export class CourseAccessBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CourseAccessBridge>;
+    id: Id<'CourseAccessBridge'>;
 
     // course
     @Column()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     @ManyToOne(_ => Course, course => course.userAccessBridges)
     @JoinColumn({ name: 'course_id' })
     course: Relation<Course>;
@@ -24,7 +24,7 @@ export class CourseAccessBridge {
     // user 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    userId: Id<User> | null;
+    userId: Id<'User'> | null;
     @ManyToOne(_ => User, x => x.courseAccessBridges)
     @JoinColumn(getJoinColumnName(CourseAccessBridge, 'userId'))
     user: Relation<User>;
@@ -32,7 +32,7 @@ export class CourseAccessBridge {
     // company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    companyId: Id<Company> | null;
+    companyId: Id<'Company'> | null;
     @ManyToOne(_ => Company, x => x.courseAccessBridges)
     @JoinColumn(getJoinColumnName(CourseAccessBridge, 'companyId'))
     company: Relation<Company>;

@@ -8,7 +8,7 @@ export class ShopItemCategory {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ShopItemCategory>;
+    id: Id<'ShopItemCategory'>;
 
     @Column()
     @XViewColumn()

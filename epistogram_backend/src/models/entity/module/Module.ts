@@ -8,7 +8,7 @@ export class Module {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Module>;
+    id: Id<'Module'>;
 
     @Column()
     @XViewColumn()

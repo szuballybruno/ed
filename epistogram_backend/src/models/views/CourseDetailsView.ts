@@ -14,11 +14,11 @@ export class CourseDetailsView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -86,7 +86,7 @@ export class CourseDetailsView {
 
     @ViewColumn()
     @XViewColumn()
-    subCategoryId: Id<CourseCategory>;
+    subCategoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -104,7 +104,7 @@ export class CourseDetailsView {
 
     @ViewColumn()
     @XViewColumn()
-    teacherId: Id<User>;
+    teacherId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

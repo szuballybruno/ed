@@ -14,7 +14,7 @@ export class Company {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Company>;
+    id: Id<'Company'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()

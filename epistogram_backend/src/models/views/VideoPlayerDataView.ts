@@ -15,23 +15,23 @@ export class VideoPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoDataId: Id<VideoData>;
+    videoDataId: Id<'VideoData'>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: Id<ModuleVersion>;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: Id<CourseVersion>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()

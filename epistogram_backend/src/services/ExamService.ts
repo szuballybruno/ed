@@ -63,7 +63,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
      * Returns an exam player dto that contains 
      * all the data necessary to play an exam.
      */
-    getExamPlayerDTOAsync = async (userId: Id<User>, examId: Id<Exam>) => {
+    getExamPlayerDTOAsync = async (userId: Id<'User'>, examId: Id<'Exam'>) => {
 
         const examView = await this._ormService
             .query(ExamPlayerDataView, { examId, userId })
@@ -84,7 +84,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Get questions for a particular exam.
      */
-    private async _getQuestionDataByExamVersionId(examVersionId: Id<ExamVersion>) {
+    private async _getQuestionDataByExamVersionId(examVersionId: Id<'ExamVersion'>) {
 
         const questionData = await this._ormService
             .query(QuestionDataView, { examVersionId: examVersionId })
@@ -97,7 +97,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
      */
-    async startExamAsync(answerSessionId: Id<AnswerSession>) {
+    async startExamAsync(answerSessionId: Id<'AnswerSession'>) {
 
         await this._ormService
             .save(AnswerSession, {
@@ -109,7 +109,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Returns the exam by it's id.
      */
-    getExamByIdAsync = (examId: Id<Exam>) => {
+    getExamByIdAsync = (examId: Id<'Exam'>) => {
 
         return this._ormService
             .getSingleById(ExamVersionView, examId);
@@ -123,7 +123,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         //throwNotImplemented();
         //TODO validation comes here
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
 
@@ -210,9 +210,9 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Get the results of the particular exam.
      */
-    getExamResultsAsync = async (userId: PrincipalId, answerSessionId: Id<AnswerSession>) => {
+    getExamResultsAsync = async (userId: PrincipalId, answerSessionId: Id<'AnswerSession'>) => {
 
-        const userIdAsIdType = Id.create<User>(userId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
         const currentItemCode = await this._userCourseBridgeService
             .getCurrentItemCodeOrFailAsync(userIdAsIdType);

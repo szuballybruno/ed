@@ -11,14 +11,14 @@ export class RoleAssignmentBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<RoleAssignmentBridge>;
+    id: Id<'RoleAssignmentBridge'>;
 
     // TO ONE
 
     // role 
     @Column()
     @XViewColumn()
-    roleId: Id<Role>;
+    roleId: Id<'Role'>;
     @ManyToOne(_ => Role, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'roleId'))
     role: Relation<Role>;
@@ -26,7 +26,7 @@ export class RoleAssignmentBridge {
     // user 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeUserId: Id<User> | null;
+    assigneeUserId: Id<'User'> | null;
     @ManyToOne(_ => User, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeUserId'))
     assigneeUser: Relation<User> | null;
@@ -34,7 +34,7 @@ export class RoleAssignmentBridge {
     // company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    assigneeCompanyId: Id<Company> | null;
+    assigneeCompanyId: Id<'Company'> | null;
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'assigneeCompanyId'))
     assigneeCompany: Relation<Company> | null;
@@ -42,7 +42,7 @@ export class RoleAssignmentBridge {
     // context company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    contextCompanyId: Id<Company> | null;
+    contextCompanyId: Id<'Company'> | null;
     @ManyToOne(_ => Company, x => x.roleAssignmentBridges)
     @JoinColumn(getJoinColumnName(RoleAssignmentBridge, 'contextCompanyId'))
     contextCompany: Relation<Company> | null;

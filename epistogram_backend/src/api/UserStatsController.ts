@@ -41,7 +41,7 @@ export class UserStatsController {
     getUserCourseStatsAction = async (params: ActionParams) => {
 
         const userId = Id
-            .create<User>(params
+            .create<'User'>(params
                 .getQuery<{ userId: number }>()
                 .getValue(x => x.userId, 'int'));
 
@@ -53,7 +53,7 @@ export class UserStatsController {
     getUserVideoStatsAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
@@ -65,7 +65,7 @@ export class UserStatsController {
     getUserExamStatsAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
@@ -80,7 +80,7 @@ export class UserStatsController {
             .getQuery<any>();
 
         const userId = Id
-            .create<User>(query
+            .create<'User'>(query
                 .getValue(x => x.userId, 'int'));
 
         return this._userStatsService

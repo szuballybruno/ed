@@ -3,7 +3,7 @@ import { TeacherBadgeNameType } from '../types/sharedTypes';
 import { Id } from '../types/versionId';
 
 export class TeacherInfoEditDTO {
-    id: Id<TeacherInfo>;
+    id: Id<'TeacherInfo'>;
     skills: string;
     badges: TeacherBadgeNameType[];
     courseCount: number;

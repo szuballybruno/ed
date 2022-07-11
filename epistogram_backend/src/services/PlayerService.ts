@@ -47,7 +47,7 @@ export class PlayerService {
         principalId: PrincipalId,
         requestedItemCode: string) => {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         // validate request
         const { courseId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
@@ -120,7 +120,7 @@ export class PlayerService {
      */
     private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         // get current course id
         const courseId = await this._courseService
@@ -157,7 +157,7 @@ export class PlayerService {
      * Finds the closest valid course item code to the target. 
      * This is to ensure a user is not recieving an item they should not access.
      */
-    private async _getValidCourseItemCodeAsync(userId: Id<User>, courseId: Id<Course>, targetItemCode: string) {
+    private async _getValidCourseItemCodeAsync(userId: Id<'User'>, courseId: Id<'Course'>, targetItemCode: string) {
 
         const modules = await this
             ._playlistService
@@ -222,7 +222,7 @@ export class PlayerService {
     /**
      * Gets teh video watch dto 
      */
-    private async _getVideoPlayerDataDTOAsync(userId: Id<User>, videoId: Id<Video>) {
+    private async _getVideoPlayerDataDTOAsync(userId: Id<'User'>, videoId: Id<'Video'>) {
 
         // get latest video version id
         const videoVersionId = (await this._ormService

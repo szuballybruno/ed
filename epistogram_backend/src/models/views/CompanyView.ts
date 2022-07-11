@@ -12,11 +12,11 @@ export class CompanyView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    companyId: Id<Company>;
+    companyId: Id<'Company'>;
 
     @IsDeletedFlag('bool')
     @DeleteDateColumn()

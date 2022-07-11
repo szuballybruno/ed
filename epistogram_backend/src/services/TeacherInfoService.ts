@@ -19,7 +19,7 @@ export class TeacherInfoService {
     /**
      * Delete a teacher info obj by it's id.
           */
-    async deleteTeacherInfoAsync(teacherInfoId: Id<TeacherInfo>) {
+    async deleteTeacherInfoAsync(teacherInfoId: Id<'TeacherInfo'>) {
 
         await this._ormService
             .hardDelete(TeacherInfo, [teacherInfoId]);
@@ -28,7 +28,7 @@ export class TeacherInfoService {
     /**
      * Get a teacher info by user id.
           */
-    async getTeacherInfoAsync(userId: Id<User>) {
+    async getTeacherInfoAsync(userId: Id<'User'>) {
 
         const user = await this._ormService
             .query(User, { userId })
@@ -45,7 +45,7 @@ export class TeacherInfoService {
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
           */
-    async getTeacherInfoEditDTOAsync(userId: Id<User>) {
+    async getTeacherInfoEditDTOAsync(userId: Id<'User'>) {
 
         const teacherInfo = await this.getTeacherInfoAsync(userId);
 
@@ -75,7 +75,7 @@ export class TeacherInfoService {
      * Creates a new teacher info entity with default values, 
      * persists it in the DB, and returns it. 
      */
-    async createTeacherInfoAsync(userId: Id<User>) {
+    async createTeacherInfoAsync(userId: Id<'User'>) {
 
         const newTeacherInfo = {
             badges: '',

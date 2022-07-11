@@ -10,7 +10,7 @@ export class ActivityStreak {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ActivityStreak>;
+    id: Id<'ActivityStreak'>;
 
     @Column({ type: 'timestamptz' })
     @XViewColumn()
@@ -29,7 +29,7 @@ export class ActivityStreak {
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

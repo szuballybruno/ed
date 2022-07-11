@@ -48,7 +48,7 @@ export class UserService {
     /**
      * Get user edit data 
           */
-    async getEditUserDataAsync(principalId: PrincipalId, editedUserId: Id<User>): Promise<UserEditDTO> {
+    async getEditUserDataAsync(principalId: PrincipalId, editedUserId: Id<'User'>): Promise<UserEditDTO> {
 
         type ResType = User & {
             teacherInfoId: number
@@ -109,7 +109,7 @@ export class UserService {
     /**
      * Saves user teacher info
      */
-    private async _saveTeacherInfoAsync(userId: Id<User>, isTeacher: boolean) {
+    private async _saveTeacherInfoAsync(userId: Id<'User'>, isTeacher: boolean) {
 
         const teacherInfo = await this._teacherInfoService
             .getTeacherInfoAsync(userId);
@@ -140,7 +140,7 @@ export class UserService {
      */
     async saveUserSimpleAsync(principalId: PrincipalId, dto: UserEditSimpleDTO) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         // save user 
         await this._ormService
@@ -179,7 +179,7 @@ export class UserService {
      */
     async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         return this._ormService
             .save(User, {
@@ -194,7 +194,7 @@ export class UserService {
      * Get a very minimalistic user dto for displaying 
      * very minimal info about the user.
      */
-    async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<User>) {
+    async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         const user = await this._ormService
             .query(User, { userId })
@@ -284,7 +284,7 @@ export class UserService {
      * Accept the invitation, 
      * whilst giving the user a password, for further logins.
      */
-    setUserInivitationDataAsync = async (userId: Id<User>, rawPassword: string,) => {
+    setUserInivitationDataAsync = async (userId: Id<'User'>, rawPassword: string,) => {
 
         await this._ormService
             .save(User, {
@@ -298,7 +298,7 @@ export class UserService {
     /**
      * Get user entity by it's id.
      */
-    getUserById = async (userId: Id<User>) => {
+    getUserById = async (userId: Id<'User'>) => {
 
         const user = await this._ormService
             .query(User, { userId })
@@ -315,7 +315,7 @@ export class UserService {
     /**
      * Delete a user entity by it's id.
      */
-    deleteUserAsync = async (userId: PrincipalId, deletedUserId: Id<User>) => {
+    deleteUserAsync = async (userId: PrincipalId, deletedUserId: Id<'User'>) => {
 
         // TODO permissions
 
@@ -334,7 +334,7 @@ export class UserService {
     /**
      * Get user dto by userId.
      */
-    getUserDTOById = async (userId: Id<User>) => {
+    getUserDTOById = async (userId: Id<'User'>) => {
 
         const foundUser = await this.getUserById(userId);
 
@@ -348,7 +348,7 @@ export class UserService {
     /**
      * Get user's active refresh token by userId.
      */
-    getUserRefreshTokenById = async (userId: Id<User>) => {
+    getUserRefreshTokenById = async (userId: Id<'User'>) => {
 
         const user = await this.getUserById(userId);
         if (!user)
@@ -377,7 +377,7 @@ export class UserService {
     /**
      * Set user's avatar file id.
      */
-    setUserAvatarFileId = async (userId: Id<User>, avatarFileId: Id<StorageFile>) => {
+    setUserAvatarFileId = async (userId: Id<'User'>, avatarFileId: Id<'StorageFile'>) => {
 
         await this._ormService
             .save(User, {
@@ -389,7 +389,7 @@ export class UserService {
     /**
      * Set user's refresh token.
      */
-    setUserActiveRefreshToken = (userId: Id<User>, refreshToken: string) => {
+    setUserActiveRefreshToken = (userId: Id<'User'>, refreshToken: string) => {
 
         log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
 
@@ -403,7 +403,7 @@ export class UserService {
     /**
      * Set user's invitation token.
      */
-    setUserInvitationTokenAsync = async (userId: Id<User>, invitationToken: string) => {
+    setUserInvitationTokenAsync = async (userId: Id<'User'>, invitationToken: string) => {
 
         await this._ormService
             .save(User, {
@@ -417,7 +417,7 @@ export class UserService {
      * so it can't get a new activation token, 
      * even if it holds a valid refresh token on the client side.
      */
-    removeRefreshToken = (userId: Id<User>) => {
+    removeRefreshToken = (userId: Id<'User'>) => {
 
         return this._ormService
             .save(User, {

@@ -8,7 +8,7 @@ export class CourseCategory {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CourseCategory>;
+    id: Id<'CourseCategory'>;
 
     @Column()
     @XViewColumn()
@@ -19,7 +19,7 @@ export class CourseCategory {
     // parent category 
     @Column({ nullable: true })
     @XViewColumn()
-    parentCategoryId: Id<CourseCategory> | null;
+    parentCategoryId: Id<'CourseCategory'> | null;
     @ManyToOne(_ => CourseCategory, x => x.childCategories)
     @JoinColumn({ name: 'parent_category_id' })
     parentCategory: CourseCategory;

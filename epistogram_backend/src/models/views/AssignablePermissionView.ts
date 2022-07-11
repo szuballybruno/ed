@@ -14,15 +14,15 @@ export class AssignablePermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: Id<User>;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: Id<Company>;
+    contextCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: Id<Permission>;
+    permissionId: Id<'Permission'>;
 
     @ViewColumn()
     @XViewColumn()

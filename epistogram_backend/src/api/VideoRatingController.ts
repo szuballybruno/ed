@@ -42,7 +42,7 @@ export class VideoRatingController {
     getVideoRatingAction = async (params: ActionParams) => {
 
         const videoVersionId = Id
-            .create<VideoVersion>(params
+            .create<'VideoVersion'>(params
                 .getQuery<{ videoVersionId: number }>()
                 .getValue(x => x.videoVersionId, 'int'));
 

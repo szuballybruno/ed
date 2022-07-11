@@ -10,7 +10,7 @@ export class Like {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Like>;
+    id: Id<'Like'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -26,7 +26,7 @@ export class Like {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.likes)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -34,7 +34,7 @@ export class Like {
     // comment
     @Column()
     @XViewColumn()
-    commentId: Id<Comment>;
+    commentId: Id<'Comment'>;
     @ManyToOne(_ => Comment, x => x.likes)
     @JoinColumn({ name: 'comment_id' })
     comment: Relation<CourseData>;

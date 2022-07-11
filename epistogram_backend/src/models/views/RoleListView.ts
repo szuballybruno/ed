@@ -16,11 +16,11 @@ export class RoleListView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    ownerCompanyId: Id<Company>;
+    ownerCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -33,7 +33,7 @@ export class RoleListView {
 
     @ViewColumn()
     @XViewColumn()
-    roleId: Id<Role>;
+    roleId: Id<'Role'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -41,7 +41,7 @@ export class RoleListView {
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: Id<Permission>;
+    permissionId: Id<'Permission'>;
 
     @ViewColumn()
     @XViewColumn()

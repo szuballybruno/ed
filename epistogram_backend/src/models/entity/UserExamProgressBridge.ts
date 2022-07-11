@@ -9,7 +9,7 @@ export class UserExamProgressBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<UserExamProgressBridge>;
+    id: Id<'UserExamProgressBridge'>;
 
     @Column({ nullable: true, type: 'timestamptz' })
     @XViewColumn()
@@ -20,7 +20,7 @@ export class UserExamProgressBridge {
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @XManyToOne<UserExamProgressBridge>()(() => User, x => x.examProgressBridges)
     @XJoinColumn<UserExamProgressBridge>('userId')
     user: Relation<User>;
@@ -28,7 +28,7 @@ export class UserExamProgressBridge {
     // exam version
     @Column()
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
     @XManyToOne<UserExamProgressBridge>()(() => ExamVersion, x => x.userProgressBridges)
     @XJoinColumn<UserExamProgressBridge>('examVersionId')
     examVersion: Relation<ExamVersion>;

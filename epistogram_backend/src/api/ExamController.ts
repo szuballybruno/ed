@@ -32,7 +32,7 @@ export class ExamController {
 
         const body = params.getBody<{ answerSessionId: number }>();
         const answerSessionId = Id
-            .create<AnswerSession>(body.getValue(x => x.answerSessionId, 'int'));
+            .create<'AnswerSession'>(body.getValue(x => x.answerSessionId, 'int'));
 
         await this._examService
             .startExamAsync(answerSessionId);
@@ -42,7 +42,7 @@ export class ExamController {
     getExamResultsAction = async (params: ActionParams) => {
 
         const answerSessionId = Id
-            .create<AnswerSession>(params
+            .create<'AnswerSession'>(params
                 .getQuery()
                 .getValue(x => x.answerSessionId, 'int'));
 

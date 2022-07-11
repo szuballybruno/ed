@@ -11,7 +11,7 @@ export class Role {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Role>;
+    id: Id<'Role'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -43,7 +43,7 @@ export class Role {
     // owner company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    companyId: Id<Company> | null;
+    companyId: Id<'Company'> | null;
     @JoinColumn(getJoinColumnName(Role, 'companyId'))
     @ManyToOne(_ => Company, x => x.ownedRoles)
     company: Relation<Company>;

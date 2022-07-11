@@ -42,12 +42,12 @@ export class AuthenticationService {
         await this._ormService
             .save(DiscountCode, [
                 {
-                    id: Id.create<DiscountCode>(1),
+                    id: Id.create<'DiscountCode'>(1),
                     code: 'upd1',
                     userId: null
                 },
                 {
-                    id: Id.create<DiscountCode>(1),
+                    id: Id.create<'DiscountCode'>(1),
                     code: 'upd2',
                     userId: null
                 }
@@ -133,11 +133,11 @@ export class AuthenticationService {
     logOutUserAsync = async (userId: PrincipalId) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(Id.create<User>(userId.toSQLValue()), 'logout');
+            .saveUserSessionActivityAsync(Id.create<'User'>(userId.toSQLValue()), 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
-            .removeRefreshToken(Id.create<User>(userId.toSQLValue()));
+            .removeRefreshToken(Id.create<'User'>(userId.toSQLValue()));
     };
 
     getUserLoginTokens = async (user: User) => {
@@ -152,7 +152,7 @@ export class AuthenticationService {
         };
     };
 
-    private _renewUserSessionAsync = async (userId: Id<User>, prevRefreshToken: string) => {
+    private _renewUserSessionAsync = async (userId: Id<'User'>, prevRefreshToken: string) => {
 
         // BYPASS TOKEN IN DB CHECK IF LOCALHOST 
         if (!this._globalConfig.misc.isLocalhost) {

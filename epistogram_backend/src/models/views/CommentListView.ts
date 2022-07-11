@@ -13,11 +13,11 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    id: Id<Comment>;
+    id: Id<'Comment'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -25,7 +25,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -41,7 +41,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    parentCommentId: Id<Comment>;
+    parentCommentId: Id<'Comment'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -53,7 +53,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    currentUserId: Id<User>;
+    currentUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

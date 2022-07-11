@@ -23,7 +23,7 @@ export class CourseRatingController {
             .getQuery<any>();
 
         const courseId = Id
-            .create<Course>(query
+            .create<'Course'>(query
                 .getValue(x => x.courseId, 'int'));
 
         return this._courseRatingService

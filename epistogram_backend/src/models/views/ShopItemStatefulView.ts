@@ -14,15 +14,15 @@ export class ShopItemStatefulView {
 
     @ViewColumn()
     @XViewColumn()
-    id: Id<ShopItem>;
+    id: Id<'ShopItem'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -54,7 +54,7 @@ export class ShopItemStatefulView {
 
     @ViewColumn()
     @XViewColumn()
-    shopItemCategoryId: Id<ShopItemCategory>;
+    shopItemCategoryId: Id<'ShopItemCategory'>;
 
     @ViewColumn()
     @XViewColumn()

@@ -34,7 +34,7 @@ export class SignupService {
     async answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const signupAnswerSession = await this._ormService
             .query(AnswerSession, { examVersionId: 1 })
@@ -48,7 +48,7 @@ export class SignupService {
                     endDate: null,
                     isPractise: false,
                     isCompleted: false,
-                    examVersionId: Id.create<ExamVersion>(1),
+                    examVersionId: Id.create<'ExamVersion'>(1),
                     videoVersionId: null,
                     userId: userId
                 })

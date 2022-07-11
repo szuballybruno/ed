@@ -15,15 +15,15 @@ export class UserPractiseRecommendationView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: Id<Question>;
+    questionId: Id<'Question'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: Id<CourseVersion>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -35,7 +35,7 @@ export class UserPractiseRecommendationView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

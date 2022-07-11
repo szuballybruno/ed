@@ -14,7 +14,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @IsDeletedFlag('bool')
     @ViewColumn()
@@ -27,7 +27,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    categoryId: Id<CourseCategory>;
+    categoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -35,7 +35,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    subCategoryId: Id<CourseCategory>;
+    subCategoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -43,7 +43,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    teacherId: Id<User>;
+    teacherId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

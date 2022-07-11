@@ -14,15 +14,15 @@ export class PractiseQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    latestGivenAnswerId: Id<GivenAnswer>;
+    latestGivenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -42,7 +42,7 @@ export class PractiseQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    answerId: Id<Answer>;
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
     @XViewColumn()

@@ -12,11 +12,11 @@ export class CoinTransactionView {
 
     @ViewColumn()
     @XViewColumn()
-    id: Id<CoinTransaction>;
+    id: Id<'CoinTransaction'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

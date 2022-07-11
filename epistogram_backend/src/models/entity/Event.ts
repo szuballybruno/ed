@@ -9,7 +9,7 @@ export class Event {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Event>;
+    id: Id<'Event'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -31,7 +31,7 @@ export class Event {
 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.events)
     user: Relation<User>;

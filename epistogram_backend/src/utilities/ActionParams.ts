@@ -24,14 +24,14 @@ export class PrincipalId {
 export class ActionParams {
     req: Request;
     res: Response;
-    // currentuserId: Id<User>;
+    // currentuserId: Id<'User'>;
     isMultipart: boolean;
     principalId: PrincipalId;
 
     constructor(
         req: Request,
         res: Response,
-        userId: Id<User>,
+        userId: Id<'User'>,
         isMultipart: boolean) {
 
         this.isMultipart = isMultipart;

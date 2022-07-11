@@ -39,7 +39,7 @@ export class ModuleService {
     /**
      * Gets a detailed module dto.
      */
-    getModuleDetailedDTOAsync = async (moduleId: Id<Module>): Promise<ModulePlayerDTO> => {
+    getModuleDetailedDTOAsync = async (moduleId: Id<'Module'>): Promise<ModulePlayerDTO> => {
 
         const view = await this._ormService
             .query(ModulePlayerView, { moduleId })
@@ -54,7 +54,7 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync = async (courseVersionId: Id<CourseVersion>) => {
+    getModuleEditDTOsAsync = async (courseVersionId: Id<'CourseVersion'>) => {
 
         const modules = await this._ormService
             .query(ModuleEditView, { courseVersionId })

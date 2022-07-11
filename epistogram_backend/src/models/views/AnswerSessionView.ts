@@ -13,15 +13,15 @@ export class AnswerSessionView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: Id<AnswerSession>;
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()

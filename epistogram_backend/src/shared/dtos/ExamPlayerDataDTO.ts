@@ -3,7 +3,7 @@ import { Id } from '../types/versionId';
 import { QuestionDTO } from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
     subTitle: string;
     title: string;
     type: 'exam';

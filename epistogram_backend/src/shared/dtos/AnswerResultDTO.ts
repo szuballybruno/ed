@@ -4,8 +4,8 @@ import { Id } from '../types/versionId';
 import { CoinAcquireResultDTO } from './CoinAcquireResultDTO';
 
 export type AnswerResultDTO = {
-    givenAnswerIds: Id<GivenAnswer>[];
-    correctAnswerIds: Id<Answer>[];
+    givenAnswerIds: Id<'GivenAnswer'>[];
+    correctAnswerIds: Id<'Answer'>[];
     isCorrect: boolean;
     coinAcquires: {
         normal: CoinAcquireResultDTO | null;

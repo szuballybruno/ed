@@ -32,7 +32,7 @@ export class UserController {
     deleteUserAction = async (params: ActionParams) => {
 
         const deleteUserId = Id
-            .create<User>(params
+            .create<'User'>(params
                 .getBody()
                 .getValue(x => x.userId, 'int'));
 
@@ -44,7 +44,7 @@ export class UserController {
     getEditUserDataAction = async (params: ActionParams) => {
 
         const editedUserId = Id
-            .create<User>(params
+            .create<'User'>(params
                 .getQuery()
                 .getValue(x => x.editedUserId, 'int'));
 
@@ -90,7 +90,7 @@ export class UserController {
     getBriefUserDataAction = async (params: ActionParams) => {
 
         const userId = Id
-            .create<User>(params
+            .create<'User'>(params
                 .getQuery()
                 .getValue(x => x.userId, 'int'));
 

@@ -14,19 +14,19 @@ export class UserAssignedAuthItemView {
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: Id<User>;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: Id<Permission> | null;
+    permissionId: Id<'Permission'> | null;
 
     @ViewColumn()
     @XViewColumn()
-    roleId: Id<Role> | null;
+    roleId: Id<'Role'> | null;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: Id<Company>;
+    contextCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()

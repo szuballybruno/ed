@@ -16,11 +16,11 @@ export class UserRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    assignmentBridgeId: Id<RoleAssignmentBridge>;
+    assignmentBridgeId: Id<'RoleAssignmentBridge'>;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: Id<Company>;
+    contextCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -28,7 +28,7 @@ export class UserRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    roleId: Id<Role>;
+    roleId: Id<'Role'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -36,7 +36,7 @@ export class UserRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: Id<User>;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -44,7 +44,7 @@ export class UserRoleView {
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: Id<Permission>;
+    permissionId: Id<'Permission'>;
 
     @ViewColumn()
     @XViewColumn()

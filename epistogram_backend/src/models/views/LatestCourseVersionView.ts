@@ -13,9 +13,9 @@ export class LatestCourseVersionView {
 
     @ViewColumn()
     @XViewColumn()
-    versionId: Id<CourseVersion>;
+    versionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 }

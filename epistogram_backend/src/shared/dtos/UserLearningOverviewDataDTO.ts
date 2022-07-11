@@ -4,7 +4,7 @@ import { CourseLearningDTO } from './CourseLearningDTO';
 import { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
 
 export class UserLearningOverviewDataDTO {
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     overallPerformancePercentage: number;
 

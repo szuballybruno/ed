@@ -20,7 +20,7 @@ export class TeacherInfoController {
     getTeacherInfoAction = async (params: ActionParams) => {
 
         const userId = Id
-            .create<User>(params.getQuery<any>()
+            .create<'User'>(params.getQuery<any>()
                 .getValue(x => x.userId, 'int'));
 
         return await this._teacherInfoService

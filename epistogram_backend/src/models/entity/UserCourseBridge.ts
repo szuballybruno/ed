@@ -10,7 +10,7 @@ export class UserCourseBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<UserCourseBridge>;
+    id: Id<'UserCourseBridge'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -51,7 +51,7 @@ export class UserCourseBridge {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.userCourseBridges)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -59,7 +59,7 @@ export class UserCourseBridge {
     // course
     @Column()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     @ManyToOne(_ => Course, x => x.userCourseBridges)
     @JoinColumn({ name: 'course_id' })
     course: Relation<Course>;

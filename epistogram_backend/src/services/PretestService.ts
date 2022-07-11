@@ -28,7 +28,7 @@ export class PretestService {
         private _questionAnswerService: QuestionAnswerService) {
     }
 
-    async createPretestExamAsync(courseId: Id<Course>) {
+    async createPretestExamAsync(courseId: Id<'Course'>) {
 
         throwNotImplemented();
         // const newExam = {
@@ -48,9 +48,9 @@ export class PretestService {
     /**
      * Returns pretest data for the principal user - and a course 
      */
-    async getPretestDataAsync(principalId: PrincipalId, courseId: Id<Course>) {
+    async getPretestDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
@@ -72,7 +72,7 @@ export class PretestService {
     /**
      * Returns the single pretest exam for a course 
      */
-    private async _getPretestExam(userId: Id<User>, courseId: Id<Course>) {
+    private async _getPretestExam(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const pretestExam = await this._ormService
             .withResType<ExamVersion>()
@@ -92,9 +92,9 @@ export class PretestService {
             .getExamPlayerDTOAsync(userId, pretestExam.examId);
     }
 
-    async getPretestResultsAsync(principalId: PrincipalId, courseId: Id<Course>) {
+    async getPretestResultsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         // set current course stage 
         await this._courseBridgeService
@@ -118,7 +118,7 @@ export class PretestService {
             .mapTo(PretestResultDTO, [view, courseView]);
     }
 
-    async getPretestExamIdAsync(courseId: Id<Course>) {
+    async getPretestExamIdAsync(courseId: Id<'Course'>) {
 
         throwNotImplemented();
         // const exam = await this._ormService

@@ -16,9 +16,9 @@ export const readItemCode = (encoded: string) => {
     const decoded = base64Decode(encoded);
     const splitted = decoded.split('@');
     const type = withValue(splitted[1]) as CourseItemType;
-    const id: Id<Exam> | Id<Video> = type === 'exam'
-        ? Id.create<Exam>(parseInt(withValue(splitted[0])))
-        : Id.create<Video>(parseInt(withValue(splitted[0])));
+    const id: Id<'Exam'> | Id<'Video'> = type === 'exam'
+        ? Id.create<'Exam'>(parseInt(withValue(splitted[0])))
+        : Id.create<'Video'>(parseInt(withValue(splitted[0])));
 
     return {
         itemId: id,

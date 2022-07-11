@@ -12,7 +12,7 @@ export class ShopItem {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ShopItem>;
+    id: Id<'ShopItem'>;
 
     @Column({ type: 'text', nullable: true })
     @XViewColumn()
@@ -39,7 +39,7 @@ export class ShopItem {
     // shop item category 
     @Column()
     @XViewColumn()
-    shopItemCategoryId: Id<ShopItemCategory>;
+    shopItemCategoryId: Id<'ShopItemCategory'>;
     @ManyToOne(_ => ShopItemCategory, x => x.shopItems)
     @JoinColumn({ name: 'shop_item_category_id' })
     shopItemCategory: ShopItemCategory;
@@ -47,7 +47,7 @@ export class ShopItem {
     // shop item category 
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    coverFileId: Id<StorageFile> | null;
+    coverFileId: Id<'StorageFile'> | null;
     @ManyToOne(_ => StorageFile, x => x.shopItems)
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: StorageFile | null;
@@ -55,7 +55,7 @@ export class ShopItem {
     // course
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    courseId: Id<Course> | null;
+    courseId: Id<'Course'> | null;
     @ManyToOne(_ => Course, x => x.shopItems)
     @JoinColumn({ name: 'course_id' })
     course: Relation<Course>;

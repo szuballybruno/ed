@@ -19,16 +19,16 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
 
     @ViewColumn()
     @XViewColumn()
-    examId: Id<Exam>;
+    examId: Id<'Exam'>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -36,7 +36,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: Id<Question>;
+    questionId: Id<'Question'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -44,7 +44,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: Id<AnswerSession>;
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -68,7 +68,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    givenAnswerId: Id<GivenAnswer>;
+    givenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -76,15 +76,15 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    answerBridgeId: Id<AnswerGivenAnswerBridge>;
+    answerBridgeId: Id<'AnswerGivenAnswerBridge'>;
 
     @ViewColumn()
     @XViewColumn()
-    userAnswerId: Id<AnswerVersion>;
+    userAnswerId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    answerId: Id<Answer>;
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
     @XViewColumn()

@@ -11,7 +11,7 @@ export class AnswerSession {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<AnswerSession>;
+    id: Id<'AnswerSession'>;
 
     @Column({ nullable: true, type: 'timestamptz' })
     @XViewColumn()
@@ -45,7 +45,7 @@ export class AnswerSession {
     // exam
     @Column({ nullable: true })
     @XViewColumn()
-    examVersionId: Id<ExamVersion> | null;
+    examVersionId: Id<'ExamVersion'> | null;
     @XManyToOne<AnswerSession>()(() => ExamVersion, e => e.answerSessions)
     @XJoinColumn<AnswerSession>('examVersionId')
     examVersion: ExamVersion | null;
@@ -53,7 +53,7 @@ export class AnswerSession {
     // video 
     @Column({ nullable: true })
     @XViewColumn()
-    videoVersionId: Id<VideoVersion> | null;
+    videoVersionId: Id<'VideoVersion'> | null;
     @XManyToOne<AnswerSession>()(() => VideoVersion, x => x.answerSessions)
     @XJoinColumn<AnswerSession>('videoVersionId')
     videoVersion: VideoVersion | null;
@@ -61,7 +61,7 @@ export class AnswerSession {
     // user 
     @Column({ nullable: true })
     @XViewColumn()
-    userId: Id<User> | null;
+    userId: Id<'User'> | null;
     @ManyToOne(_ => User, e => e.answerSessions)
     @JoinColumn({ name: 'user_id' })
     user: User | null;

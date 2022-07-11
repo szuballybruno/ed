@@ -10,14 +10,14 @@ export class CompanyOwnerBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CompanyOwnerBridge>;
+    id: Id<'CompanyOwnerBridge'>;
 
     // TO ONE
 
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.companyOwnerBridges)
     @JoinColumn(getJoinColumnName(CompanyOwnerBridge, 'userId'))
     user: Relation<User>;
@@ -25,7 +25,7 @@ export class CompanyOwnerBridge {
     // company 
     @Column()
     @XViewColumn()
-    companyId: Id<Company>;
+    companyId: Id<'Company'>;
     @ManyToOne(_ => Company, x => x.companyOwnerBridges)
     @JoinColumn(getJoinColumnName(CompanyOwnerBridge, 'companyId'))
     company: Relation<Company>;

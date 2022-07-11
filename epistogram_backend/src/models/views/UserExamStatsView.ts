@@ -13,11 +13,11 @@ export class UserExamStatsView {
 
     @XViewColumn()
     @ViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @XViewColumn()
     @ViewColumn()
-    examId: Id<Exam>;
+    examId: Id<'Exam'>;
 
     @XViewColumn()
     @ViewColumn()
@@ -25,7 +25,7 @@ export class UserExamStatsView {
 
     @XViewColumn()
     @ViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @XViewColumn()
     @ViewColumn()

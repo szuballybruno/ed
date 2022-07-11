@@ -168,7 +168,7 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of [] 
      */
-    async getUserCourseStatsAsync(userId: Id<User>) {
+    async getUserCourseStatsAsync(userId: Id<'User'>) {
 
         const stats = await this._ormService
             .query(UserCourseStatsView, { userId })
@@ -223,7 +223,7 @@ export class UserStatsService {
      * Gets the statistics for the users every watched video
           * @returns
      */
-    getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: Id<Course>) => {
+    getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
 
         const userId = principalId.toSQLValue()
 
@@ -242,7 +242,7 @@ export class UserStatsService {
           * @returns
      */
 
-    getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<Course>) => {
+    getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
 
         const userId = principalId.toSQLValue()
 
@@ -260,7 +260,7 @@ export class UserStatsService {
      * Gets the learning overview statistics data for single user
           * TODO: Correct mapping
      */
-    getUserLearningOverviewDataAsync = async (userId: Id<User>) => {
+    getUserLearningOverviewDataAsync = async (userId: Id<'User'>) => {
 
         const userSpentTimeRatio = await this._ormService
             .query(UserSpentTimeRatioView, { userId })
@@ -320,7 +320,7 @@ export class UserStatsService {
         } as Partial<UserLearningOverviewDataDTO>;
     };
 
-    calculateProductivityAsync = async (userId: Id<User>) => {
+    calculateProductivityAsync = async (userId: Id<'User'>) => {
 
         const userPerformanceView = await this._ormService
             .query(UserPerformanceView, { userId })

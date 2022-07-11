@@ -14,7 +14,7 @@ export class CoinTransaction {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CoinTransaction>;
+    id: Id<'CoinTransaction'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -35,7 +35,7 @@ export class CoinTransaction {
     //
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.coinAcquires)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -45,7 +45,7 @@ export class CoinTransaction {
     //
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    activitySessionId: Id<ActivitySession>;
+    activitySessionId: Id<'ActivitySession'>;
     @JoinColumn({ name: 'activity_session_id' })
     @ManyToOne(_ => ActivitySession, x => x.coinAcquires)
     activitySession: Relation<ActivitySession> | null;
@@ -55,7 +55,7 @@ export class CoinTransaction {
     //
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
     @JoinColumn({ name: 'video_id' })
     @ManyToOne(_ => Video, x => x.coinAcquires)
     video: Relation<Video> | null;
@@ -65,7 +65,7 @@ export class CoinTransaction {
     //
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    givenAnswerId: Id<GivenAnswer>;
+    givenAnswerId: Id<'GivenAnswer'>;
     @JoinColumn({ name: 'given_answer_id' })
     @ManyToOne(_ => GivenAnswer, x => x.coinAcquires)
     givenAnswer: Relation<GivenAnswer> | null;
@@ -75,7 +75,7 @@ export class CoinTransaction {
     //
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    givenAnswerStreakId: Id<GivenAnswerStreak>;
+    givenAnswerStreakId: Id<'GivenAnswerStreak'>;
     @JoinColumn({ name: 'given_answer_streak_id' })
     @ManyToOne(_ => GivenAnswerStreak, x => x.coinAcquires)
     givenAnswerStreak: Relation<GivenAnswerStreak> | null;
@@ -85,7 +85,7 @@ export class CoinTransaction {
     //
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    activityStreakId: Id<ActivityStreak>;
+    activityStreakId: Id<'ActivityStreak'>;
     @JoinColumn({ name: 'activity_streak_id' })
     @ManyToOne(_ => ActivityStreak, x => x.coinAcquires)
     activityStreak: Relation<ActivityStreak> | null;
@@ -95,7 +95,7 @@ export class CoinTransaction {
     //
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    shopItemId: Id<ShopItem>;
+    shopItemId: Id<'ShopItem'>;
     @JoinColumn({ name: 'shop_item_id' })
     @ManyToOne(_ => ShopItem, x => x.coinAcquires)
     shopItem: Relation<ShopItem> | null;

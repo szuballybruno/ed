@@ -10,10 +10,10 @@ import { User } from '../entity/User';
 export class UserPerformanceAnswerGroupView {
 
     @ViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     totalAnswerCount: number;

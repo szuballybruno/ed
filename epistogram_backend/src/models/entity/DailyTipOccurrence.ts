@@ -9,7 +9,7 @@ export class DailyTipOccurrence {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<DailyTipOccurrence>;
+    id: Id<'DailyTipOccurrence'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
@@ -19,7 +19,7 @@ export class DailyTipOccurrence {
     // daily tip
     @Column()
     @XViewColumn()
-    dailyTipId: Id<DailyTip>;
+    dailyTipId: Id<'DailyTip'>;
     @ManyToOne(_ => DailyTip, x => x.occurrences)
     @JoinColumn({ name: 'daily_tip_id' })
     dailyTip: Relation<DailyTip>;
@@ -27,7 +27,7 @@ export class DailyTipOccurrence {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.dailyTipOccurrences)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

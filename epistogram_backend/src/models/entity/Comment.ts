@@ -10,7 +10,7 @@ export class Comment {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Comment>;
+    id: Id<'Comment'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -42,7 +42,7 @@ export class Comment {
     // users
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.comments)
     user: Relation<User>;
@@ -50,7 +50,7 @@ export class Comment {
     // video
     @Column()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
     @JoinColumn({ name: 'video_id' })
     @XManyToOne<Comment>()(() => VideoVersion, x => x.comments)
     videoVersion: Relation<VideoVersion>;

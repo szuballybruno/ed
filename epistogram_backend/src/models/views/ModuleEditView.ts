@@ -12,11 +12,11 @@ export class ModuleEditView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: Id<ModuleVersion>;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: Id<CourseVersion>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()

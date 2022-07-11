@@ -12,11 +12,11 @@ export class VideoCursorSecondsView {
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

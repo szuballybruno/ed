@@ -18,7 +18,7 @@ export class VideoRatingService {
     async rateVideoExperienceAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const existingRating = await this._ormService
             .query(VideoRating, {
@@ -41,7 +41,7 @@ export class VideoRatingService {
     async rateVideoDifficultyAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const existingRating = await this._ormService
             .query(VideoRating, {
@@ -63,10 +63,10 @@ export class VideoRatingService {
             });
     }
 
-    async getVideoRatingAsync(principalId: PrincipalId, videoVersionId: Id<VideoVersion>) {
+    async getVideoRatingAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'>) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const rating = await this._ormService
             .query(VideoRating, {

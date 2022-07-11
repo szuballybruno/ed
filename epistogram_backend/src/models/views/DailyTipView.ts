@@ -12,11 +12,11 @@ export class DailyTipView {
 
     @ViewColumn()
     @XViewColumn()
-    dailyTipId: Id<DailyTip>;
+    dailyTipId: Id<'DailyTip'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

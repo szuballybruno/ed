@@ -21,7 +21,7 @@ export class PrequizController {
     getQuestionsAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
@@ -36,11 +36,11 @@ export class PrequizController {
             .getQuery<{ questionId: number, courseId: number }>();
 
         const questionId = Id
-            .create<Question>(query
+            .create<'Question'>(query
                 .getValue(x => x.questionId, 'int'));
 
         const courseId = Id
-            .create<Course>(query
+            .create<'Course'>(query
                 .getValue(x => x.courseId, 'int'));
 
         return await this._prequizService
@@ -59,11 +59,11 @@ export class PrequizController {
             }>();
 
         const questionId = Id
-            .create<Question>(bod
+            .create<'Question'>(bod
                 .getValue(x => x.questionId, 'int'));
 
         const courseId = Id
-            .create<Course>(bod
+            .create<'Course'>(bod
                 .getValue(x => x.courseId, 'int'));
 
         const value = bod
@@ -73,7 +73,7 @@ export class PrequizController {
             .getValueOrNull(x => x.answerId, 'int')
 
         const answerIdAsIdType = answerId
-            ? Id.create<Answer>(answerId)
+            ? Id.create<'Answer'>(answerId)
             : null
 
         return await this._prequizService

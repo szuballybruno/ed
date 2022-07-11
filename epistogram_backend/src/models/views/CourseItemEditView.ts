@@ -14,11 +14,11 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -38,7 +38,7 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -50,7 +50,7 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    answerVersionId: Id<AnswerVersion>;
+    answerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()

@@ -44,7 +44,7 @@ export class CommentController {
         const principalId = params.principalId;
 
         const commentId = Id
-            .create<Comment>(params
+            .create<'Comment'>(params
                 .getBody<{ commentId: number }>()
                 .getValue(x => x.commentId, 'int'));
 
@@ -79,7 +79,7 @@ export class CommentController {
         const principalId = params.principalId;
 
         const commentId = Id
-            .create<Comment>(params
+            .create<'Comment'>(params
                 .getBody<{ commentId: number }>()
                 .getValue(x => x.commentId, 'int'));
 

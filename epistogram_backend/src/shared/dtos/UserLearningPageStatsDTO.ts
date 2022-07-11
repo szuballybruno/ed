@@ -2,7 +2,7 @@ import { User } from "../../models/entity/User";
 import { Id } from "../types/versionId";
 
 export class UserLearningPageStatsDTO {
-    userId: Id<User>;
+    userId: Id<'User'>;
     userEmail: string;
     totalLagBehindPercentage: number;
     videosToBeRepeatedCount: number;

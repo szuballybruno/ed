@@ -11,12 +11,12 @@ import { QuestionEditDataDTO } from '../QuestionEditDataDTO';
 import { CourseContentItemIssueDTO } from './CourseContentItemIssueDTO';
 
 export class CourseContentItemAdminDTO {
-	courseId: Id<Course>;
+	courseId: Id<'Course'>;
 	moduleName: string;
 	moduleOrderIndex: number;
-	moduleVersionId: Id<ModuleVersion>;
-	videoVersionId: Id<VideoVersion> | null;
-	examVersionId: Id<ExamVersion> | null;
+	moduleVersionId: Id<'ModuleVersion'>;
+	videoVersionId: Id<'VideoVersion'> | null;
+	examVersionId: Id<'ExamVersion'> | null;
 	itemOrderIndex: number;
 	itemTitle: string;
 	itemSubtitle: string;

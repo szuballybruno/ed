@@ -8,7 +8,7 @@ export class Task {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Task>;
+    id: Id<'Task'>;
 
     @Column()
     @XViewColumn()
@@ -27,7 +27,7 @@ export class Task {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(type => User, user => user.tasks)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

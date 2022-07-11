@@ -12,7 +12,7 @@ export class CourseData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CourseData>;
+    id: Id<'CourseData'>;
 
     @UpdateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -87,7 +87,7 @@ export class CourseData {
     // course category
     @Column()
     @XViewColumn()
-    categoryId: Id<CourseCategory>;
+    categoryId: Id<'CourseCategory'>;
     @ManyToOne(() => CourseCategory, x => x.categoryCourses)
     @JoinColumn({ name: 'category_id' })
     category: Relation<CourseCategory>;
@@ -95,7 +95,7 @@ export class CourseData {
     // course sub category
     @Column()
     @XViewColumn()
-    subCategoryId: Id<CourseCategory>;
+    subCategoryId: Id<'CourseCategory'>;
     @ManyToOne(() => CourseCategory, x => x.subCategoryCourses)
     @JoinColumn({ name: 'sub_category_id' })
     subCategory: CourseCategory;
@@ -103,7 +103,7 @@ export class CourseData {
     // teacher
     @Column()
     @XViewColumn()
-    teacherId: Id<User>;
+    teacherId: Id<'User'>;
     @ManyToOne(() => User, teacher => teacher.teachedCourses)
     @JoinColumn({ name: 'teacher_id' })
     teacher: Relation<User>;
@@ -111,7 +111,7 @@ export class CourseData {
     // coverFile
     @Column({ nullable: true })
     @XViewColumn()
-    coverFileId: Id<StorageFile> | null;
+    coverFileId: Id<'StorageFile'> | null;
     @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: Relation<StorageFile>;

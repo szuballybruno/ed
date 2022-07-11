@@ -9,7 +9,7 @@ import { User } from '../entity/User';
 export class UserReactionTimeView {
 
     @ViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     userExamLengthPoints: number;

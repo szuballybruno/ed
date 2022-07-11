@@ -23,7 +23,7 @@ export class MiscService {
     async getCourseOverviewDataAsync(principalId: PrincipalId) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const courseId = await this._userCourseBridgeService
             .getCurrentCourseIdOrFail(userId);
@@ -41,7 +41,7 @@ export class MiscService {
     async getOverviewPageDTOAsync(principalId: PrincipalId) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const recommendedCourseDTOs = [] as CourseShortDTO[];
         const developmentChartData = this.getDevelopmentChart();

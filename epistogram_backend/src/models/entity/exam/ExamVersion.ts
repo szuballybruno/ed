@@ -15,7 +15,7 @@ export class ExamVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ExamVersion>;
+    id: Id<'ExamVersion'>;
 
     // 
     // TO MANY
@@ -43,7 +43,7 @@ export class ExamVersion {
 
     @Column()
     @XViewColumn()
-    examDataId: Id<ExamData>;
+    examDataId: Id<'ExamData'>;
     @XManyToOne<ExamVersion>()(() => ExamData, x => x.examVersions)
     @XJoinColumn<ExamVersion>('examDataId')
     examData: ExamData;
@@ -51,7 +51,7 @@ export class ExamVersion {
     // module
     @Column()
     @XViewColumn()
-    moduleVersionId: Id<ModuleVersion>;
+    moduleVersionId: Id<'ModuleVersion'>;
     @ManyToOne(_ => ModuleVersion, x => x.examVersions)
     @XJoinColumn<ExamVersion>('moduleVersionId')
     moduleVersion: ModuleVersion;
@@ -59,7 +59,7 @@ export class ExamVersion {
     // exam
     @Column()
     @XViewColumn()
-    examId: Id<Exam>;
+    examId: Id<'Exam'>;
     @XManyToOne<ExamVersion>()(() => Exam, x => x.examVersions)
     @XJoinColumn<ExamVersion>('examId')
     exam: Exam;

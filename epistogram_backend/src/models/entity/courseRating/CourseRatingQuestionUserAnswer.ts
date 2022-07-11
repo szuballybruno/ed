@@ -10,7 +10,7 @@ export class CourseRatingQuestionUserAnswer {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CourseRatingQuestionUserAnswer>;
+    id: Id<'CourseRatingQuestionUserAnswer'>;
 
     @Column({ type: 'text', nullable: true })
     @XViewColumn()
@@ -25,7 +25,7 @@ export class CourseRatingQuestionUserAnswer {
     // quesiton
     @Column()
     @XViewColumn()
-    courseRatingQuestionId: Id<CourseRatingQuestion>;
+    courseRatingQuestionId: Id<'CourseRatingQuestion'>;
     @JoinColumn({ name: 'course_rating_question_id' })
     @ManyToOne(_ => CourseRatingQuestion, x => x.userAnswers)
     courseRatingQuestion: Relation<CourseRatingQuestion>;
@@ -33,7 +33,7 @@ export class CourseRatingQuestionUserAnswer {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.courseRatingAnswers)
     user: Relation<User>;
@@ -41,7 +41,7 @@ export class CourseRatingQuestionUserAnswer {
     // course 
     @Column()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     @JoinColumn({ name: 'course_id' })
     @ManyToOne(_ => Course, x => x.courseRatingUserAnswers)
     course: Relation<Course>;

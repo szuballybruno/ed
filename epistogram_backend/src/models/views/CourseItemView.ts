@@ -15,19 +15,19 @@ import { VideoVersion } from '../entity/video/VideoVersion';
 export class CourseItemView {
 
     @XViewColumn()
-    moduleVersionId: Id<ModuleVersion>;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
-    videoVersionId: Id<VideoVersion> | null;
+    videoVersionId: Id<'VideoVersion'> | null;
 
     @XViewColumn()
-    videoId: Id<Video> | null;
+    videoId: Id<'Video'> | null;
 
     @XViewColumn()
-    examVersionId: Id<ExamVersion> | null;
+    examVersionId: Id<'ExamVersion'> | null;
 
     @XViewColumn()
-    examId: Id<Exam> | null;
+    examId: Id<'Exam'> | null;
 
     @XViewColumn()
     versionCode: VersionCode;

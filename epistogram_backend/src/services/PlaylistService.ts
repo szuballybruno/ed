@@ -22,7 +22,7 @@ export class PlaylistService {
     async getCurrentCoursePlaylistModulesAsync(principalId: PrincipalId) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue())
+            .create<'User'>(principalId.toSQLValue())
 
         const courseId = await this._userCourseBridgeService
             .getCurrentCourseId(userId);
@@ -36,7 +36,7 @@ export class PlaylistService {
     /**
      * Get playlist modules with items.
      */
-    async getPlaylistModulesAsync(userId: Id<User>, courseId: Id<Course>) {
+    async getPlaylistModulesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const views = await this._ormService
             .query(CourseItemPlaylistView, { courseId, userId })

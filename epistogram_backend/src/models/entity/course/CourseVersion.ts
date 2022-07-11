@@ -11,7 +11,7 @@ export class CourseVersion {
     @XViewColumn()
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<CourseVersion>;
+    id: Id<'CourseVersion'>;
 
     // 
     // TO MANY 
@@ -28,14 +28,14 @@ export class CourseVersion {
     // course 
     @Column()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     @XManyToOne<CourseVersion>()(() => Course, x => x.courseVersions)
     @XJoinColumn<CourseVersion>('courseId')
     course: Course;
 
     @Column()
     @XViewColumn()
-    courseDataId: Id<CourseData>;
+    courseDataId: Id<'CourseData'>;
     @XManyToOne<CourseVersion>()(() => CourseData, x => x.courseVersions)
     @XJoinColumn<CourseVersion>('courseDataId')
     courseData: Relation<CourseData>;

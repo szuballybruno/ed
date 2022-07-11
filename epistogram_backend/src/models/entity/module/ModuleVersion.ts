@@ -12,7 +12,7 @@ export class ModuleVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ModuleVersion>;
+    id: Id<'ModuleVersion'>;
 
     // 
     // TO ONE
@@ -21,7 +21,7 @@ export class ModuleVersion {
     // course 
     @Column({ nullable: true })
     @XViewColumn()
-    courseVersionId: Id<CourseVersion> | null;
+    courseVersionId: Id<'CourseVersion'> | null;
     @XManyToOne<ModuleVersion>()(() => CourseVersion, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('courseVersionId')
     courseVersion: Relation<CourseVersion>;
@@ -29,7 +29,7 @@ export class ModuleVersion {
     // module
     @Column()
     @XViewColumn()
-    moduleId: Id<Module>;
+    moduleId: Id<'Module'>;
     @XManyToOne<ModuleVersion>()(() => Module, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleId')
     module: Module;
@@ -37,7 +37,7 @@ export class ModuleVersion {
     // module data
     @Column()
     @XViewColumn()
-    moduleDataId: Id<ModuleData>;
+    moduleDataId: Id<'ModuleData'>;
     @XManyToOne<ModuleVersion>()(() => ModuleData, x => x.moduleVersions)
     @XJoinColumn<ModuleVersion>('moduleDataId')
     moduleData: ModuleData;

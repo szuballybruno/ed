@@ -4,7 +4,7 @@ import { Id } from '../types/versionId';
 import { Module } from '../../models/entity/module/Module';
 
 export class PlaylistModuleDTO {
-    moduleId: Id<Module>;
+    moduleId: Id<'Module'>;
     moduleName: string;
     moduleOrderIndex: number;
     moduleState: CourseItemStateType;

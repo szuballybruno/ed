@@ -13,7 +13,7 @@ export class StorageFile {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<StorageFile>;
+    id: Id<'StorageFile'>;
 
     @Column()
     @XViewColumn()

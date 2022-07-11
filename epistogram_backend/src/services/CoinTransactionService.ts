@@ -35,10 +35,10 @@ export class CoinTransactionService {
 
     async getPrincipalCoinBalance(userId: PrincipalId) {
 
-        return await this.getCoinBalance(userId, Id.create<User>(userId.toSQLValue()));
+        return await this.getCoinBalance(userId, Id.create<'User'>(userId.toSQLValue()));
     }
 
-    async getCoinBalance(principalId: PrincipalId, userId: Id<User>) {
+    async getCoinBalance(principalId: PrincipalId, userId: Id<'User'>) {
 
         const coinBalance = await this._ormConnectionService
             .query(CoinBalanceView, { userId })
@@ -48,7 +48,7 @@ export class CoinTransactionService {
         return coinBalance.coinBalance;
     }
 
-    async giftCoinsToUserAsync(userId: Id<User>, amount: number) {
+    async giftCoinsToUserAsync(userId: Id<'User'>, amount: number) {
 
         await this._ormConnectionService
             .createAsync(CoinTransaction, {
@@ -69,7 +69,7 @@ export class CoinTransactionService {
             .mapTo(CoinTransactionDTO, [coinTransactions]);
     }
 
-    async getCoinsForQuestionAsync(userId: Id<User>, questionVersionId: Id<QuestionVersion>) {
+    async getCoinsForQuestionAsync(userId: Id<'User'>, questionVersionId: Id<'QuestionVersion'>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, questionVersionId })
@@ -82,7 +82,7 @@ export class CoinTransactionService {
 
     }
 
-    async getCoinsForActivitySession(userId: Id<User>, activitySessionId: Id<ActivitySession>) {
+    async getCoinsForActivitySession(userId: Id<'User'>, activitySessionId: Id<'ActivitySession'>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, activitySessionId })
@@ -91,7 +91,7 @@ export class CoinTransactionService {
             .getOneOrNull();
     }
 
-    async getCoinsForActivityStreakAsync(userId: Id<User>, activityStreakId: Id<ActivityStreak>) {
+    async getCoinsForActivityStreakAsync(userId: Id<'User'>, activityStreakId: Id<'ActivityStreak'>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, activityStreakId })
@@ -100,7 +100,7 @@ export class CoinTransactionService {
             .getMany();
     }
 
-    async getCoinsForAnswerStreakAsync(userId: Id<User>, answerStreakId: Id<GivenAnswerStreak>) {
+    async getCoinsForAnswerStreakAsync(userId: Id<'User'>, answerStreakId: Id<'GivenAnswerStreak'>) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, answerStreakId })

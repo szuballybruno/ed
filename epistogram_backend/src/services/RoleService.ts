@@ -52,7 +52,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .mapTo(RoleAdminListDTO, [roles]);
     }
 
-    async getAssignablePermissionsAsync(principalId: PrincipalId, courseId: Id<Course> | null, companyId: Id<Company> | null) {
+    async getAssignablePermissionsAsync(principalId: PrincipalId, courseId: Id<'Course'> | null, companyId: Id<'Company'> | null) {
 
         const scope: PermissionScopeType = courseId
             ? 'COURSE'
@@ -76,7 +76,7 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
     }
 
-    async getAssignableRolesAsync(principalId: PrincipalId, assigneeUserId: Id<User>, companyId: Id<Company>) {
+    async getAssignableRolesAsync(principalId: PrincipalId, assigneeUserId: Id<'User'>, companyId: Id<'Company'>) {
 
         const roles = await this._ormService
             .query(AssignableRoleView, { principalId, assigneeUserId, companyId })
@@ -109,7 +109,7 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
     }
 
-    async getUserRolesAsync(principalId: PrincipalId, userId: Id<User>) {
+    async getUserRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         const roles = await this._ormService
             .query(UserRoleView, { userId })
@@ -133,7 +133,7 @@ export class RoleService extends QueryServiceBase<Role> {
             }));
     }
 
-    async getUserPermissionsAsync(principalId: PrincipalId, userId: Id<User>) {
+    async getUserPermissionsAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         const roles = await this._ormService
             .query(UserPermissionView, { userId })
@@ -157,7 +157,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
     async saveUserAssignedAuthItemsAsync(
         principalId: PrincipalId,
-        savedUserId: Id<User>,
+        savedUserId: Id<'User'>,
         rolesChangeSet: ChangeSet<UserRoleDTO>,
         permissionsChangeSet: ChangeSet<UserPermissionDTO>) {
 
@@ -176,7 +176,7 @@ export class RoleService extends QueryServiceBase<Role> {
             permissionsChangeSet);
     }
 
-    async _saveRolesAsync(principalId: PrincipalId, saveduserId: Id<User>, assignedRoles: ChangeSet<UserRoleDTO>) {
+    async _saveRolesAsync(principalId: PrincipalId, saveduserId: Id<'User'>, assignedRoles: ChangeSet<UserRoleDTO>) {
 
         // TODO validation
 
@@ -203,7 +203,7 @@ export class RoleService extends QueryServiceBase<Role> {
     }
 
     async _savePermissionsAsync(
-        savedUserId: Id<User>,
+        savedUserId: Id<'User'>,
         changeset: ChangeSet<UserPermissionDTO>) {
 
         // DEASSIGN
@@ -256,14 +256,14 @@ export class RoleService extends QueryServiceBase<Role> {
             .save(RolePermissionBridge, permAssignemnts);
     }
 
-    async getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<Role>): Promise<RoleEditDTO> {
+    async getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<'Role'>): Promise<RoleEditDTO> {
 
         const userId = principalId.toSQLValue();
 
         type ResultType = {
-            roleId: Id<Role>,
+            roleId: Id<'Role'>,
             roleName: string,
-            permissionId: Id<Permission>,
+            permissionId: Id<'Permission'>,
             isCustom: boolean,
             companyId: Role['companyId']
         }
@@ -319,7 +319,7 @@ export class RoleService extends QueryServiceBase<Role> {
         };
     }
 
-    async deleteRoleAsync(principalId: PrincipalId, roleId: Id<Role>) {
+    async deleteRoleAsync(principalId: PrincipalId, roleId: Id<'Role'>) {
 
         const userId = principalId.toSQLValue();
 

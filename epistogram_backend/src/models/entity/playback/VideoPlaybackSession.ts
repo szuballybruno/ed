@@ -11,7 +11,7 @@ export class VideoPlaybackSession {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<VideoPlaybackSession>;
+    id: Id<'VideoPlaybackSession'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -28,7 +28,7 @@ export class VideoPlaybackSession {
     // video 
     @Column()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
     @XManyToOne<VideoPlaybackSession>()(() => VideoVersion, x => x.videoPlaybackSessions)
     @XJoinColumn<VideoPlaybackSession>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -36,7 +36,7 @@ export class VideoPlaybackSession {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @XManyToOne<VideoPlaybackSession>()(() => User, x => x.videoPlaybackSessions)
     @XJoinColumn<VideoPlaybackSession>('userId')
     user: Relation<User>;

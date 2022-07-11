@@ -8,7 +8,7 @@ export class JobTitle {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<JobTitle>;
+    id: Id<'JobTitle'>;
 
     @Column()
     @XViewColumn()

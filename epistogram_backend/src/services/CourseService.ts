@@ -53,7 +53,7 @@ export class CourseService {
      * Returns courses that the principal can use as context
      * when assigning permissions to a user 
      */
-    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<User>) {
+    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         // TODO: CourseDataId is not CourseId
         throwNotImplemented()
@@ -72,7 +72,7 @@ export class CourseService {
     /**
      * Reruns a course view
      */
-    async getCourseViewAsync(userId: Id<User>, courseId: Id<Course>) {
+    async getCourseViewAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const view = await this._ormService
             .query(AvailableCourseView, { courseId, userId })
@@ -86,7 +86,7 @@ export class CourseService {
     /**
      * Returns course brief data async 
      */
-    async getCourseBriefDataAsync(courseId: Id<Course>) {
+    async getCourseBriefDataAsync(courseId: Id<'Course'>) {
 
         const course = await this._ormService
             .getSingleById(CourseData, courseId);
@@ -98,7 +98,7 @@ export class CourseService {
     /**
      * Returns course detals 
      */
-    async getCourseDetailsAsync(userId: PrincipalId, courseId: Id<Course>) {
+    async getCourseDetailsAsync(userId: PrincipalId, courseId: Id<'Course'>) {
 
         const courseDetailsView = await this._ormService
             .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
@@ -128,9 +128,9 @@ export class CourseService {
 
         const newCourse = {
             title: dto.title,
-            teacherId: Id.create<User>(1),
-            categoryId: Id.create<CourseCategory>(1),
-            subCategoryId: Id.create<CourseCategory>(1),
+            teacherId: Id.create<'User'>(1),
+            categoryId: Id.create<'CourseCategory'>(1),
+            subCategoryId: Id.create<'CourseCategory'>(1),
             difficulty: 0,
             benchmark: 0,
             description: '',
@@ -155,14 +155,14 @@ export class CourseService {
     /**
      * Save course thumbnail.
      */
-    async saveCourseThumbnailAsync(file: UploadedFile, courseId: Id<Course>) {
+    async saveCourseThumbnailAsync(file: UploadedFile, courseId: Id<'Course'>) {
 
         const getCourseDataAsync = () => this._ormService
             .getSingleById(CourseData, courseId);
 
         const courseData = await getCourseDataAsync()
 
-        const setCourseThumbnailIdAsync = (thumbnailFileId: Id<StorageFile>) => this._ormService
+        const setCourseThumbnailIdAsync = (thumbnailFileId: Id<'StorageFile'>) => this._ormService
             .save(CourseData, instantiate<SaveEntityType<CourseData>>({
                 id: courseData.id,
                 coverFileId: thumbnailFileId
@@ -273,7 +273,7 @@ export class CourseService {
     /**
      * Gets the course content edit DTO.
      */
-    async getCourseContentAdminDataAsync(courseId: Id<Course>, loadDeleted: boolean) {
+    async getCourseContentAdminDataAsync(courseId: Id<'Course'>, loadDeleted: boolean) {
 
         const views = await this._ormService
             .query(CourseAdminContentView, { courseId })
@@ -302,7 +302,7 @@ export class CourseService {
      * Saves the course content 
      */
     async saveCourseContentAsync(
-        courseId: Id<Course>,
+        courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
         moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]) {
 
@@ -328,7 +328,7 @@ export class CourseService {
      * TODO use version save service
      * @deprecated
      */
-    private async _saveCourseVersionAsync(courseId: Id<Course>) {
+    private async _saveCourseVersionAsync(courseId: Id<'Course'>) {
 
         // get old version id 
         const oldCourseVersionId = (await this._ormService
@@ -351,7 +351,7 @@ export class CourseService {
      * TODO use version save service
      * @deprecated 
      */
-    private async _createNewCourseVersionAsync(courseId: Id<Course>, oldVersionId: Id<CourseVersion>) {
+    private async _createNewCourseVersionAsync(courseId: Id<'Course'>, oldVersionId: Id<'CourseVersion'>) {
 
         const oldDataId = (await this._ormService
             .query(CourseVersion, { oldVersionId })
@@ -384,7 +384,7 @@ export class CourseService {
     /**
      * Soft delete course.
      */
-    async softDeleteCourseAsync(courseId: Id<Course>) {
+    async softDeleteCourseAsync(courseId: Id<'Course'>) {
 
         await this._ormService
             .softDelete(CourseData, [courseId]);
@@ -440,7 +440,7 @@ export class CourseService {
      * This can be used to dinamically allow or disallow access to a course, by the user.
      * Like when purchased from the shop, or got limited access etc... 
      */
-    async createCourseAccessBridge(userId: Id<User>, courseId: Id<Course>) {
+    async createCourseAccessBridge(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         await this._ormService
             .createAsync(CourseAccessBridge, {

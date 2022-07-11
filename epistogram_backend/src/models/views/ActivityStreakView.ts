@@ -12,11 +12,11 @@ export class ActivityStreakView {
 
     @ViewColumn()
     @XViewColumn()
-    id: Id<ActivityStreak>;
+    id: Id<'ActivityStreak'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

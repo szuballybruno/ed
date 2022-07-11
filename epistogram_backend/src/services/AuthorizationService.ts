@@ -33,7 +33,7 @@ export class AuthorizationService {
         context?: ContextOptions) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue())
+            .create<'User'>(principalId.toSQLValue())
 
         const perm = await this._permissionService
             .getPermissionAsync(userId, permissionCode, context);

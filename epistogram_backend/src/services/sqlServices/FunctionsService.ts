@@ -19,14 +19,14 @@ import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
-    userId: Id<User>,
+    userId: Id<'User'>,
     amount: number,
-    activitySessionId?: Id<ActivitySession>,
-    videoId?: Id<Video>,
-    givenAnswerId?: Id<GivenAnswer>,
-    givenAnswerStreakId?: Id<GivenAnswerStreak>,
-    activityStreakId?: Id<ActivityStreak>,
-    shopItemId?: Id<ShopItem>
+    activitySessionId?: Id<'ActivitySession'>,
+    videoId?: Id<'Video'>,
+    givenAnswerId?: Id<'GivenAnswer'>,
+    givenAnswerStreakId?: Id<'GivenAnswerStreak'>,
+    activityStreakId?: Id<'ActivityStreak'>,
+    shopItemId?: Id<'ShopItem'>
 };
 
 export class SQLFunctionsService {
@@ -90,7 +90,7 @@ export class SQLFunctionsService {
         }
     };
 
-    answerSignupQuestionFn = (userId: Id<User>, questionId: Id<Question>, answerId: Id<Answer>) => {
+    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerId: Id<'Answer'>) => {
 
         return this.execSQLFunctionAsync(
             'answer_signup_question_fn',
@@ -102,17 +102,17 @@ export class SQLFunctionsService {
     };
 
     answerQuestionFn = async (
-        userId: Id<User>,
-        answerSessionId: Id<AnswerSession>,
-        questionVersionId: Id<QuestionVersion>,
-        answerIds: Id<Answer>[],
+        userId: Id<'User'>,
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
         elapsedSeconds: number,
         isPractiseAnswer: boolean) => {
 
         type ReType = {
-            correct_answer_ids: Id<Answer>[],
-            given_answer_id: Id<GivenAnswer>,
-            streak_id: Id<GivenAnswerStreak>,
+            correct_answer_ids: Id<'Answer'>[],
+            given_answer_id: Id<'GivenAnswer'>,
+            streak_id: Id<'GivenAnswerStreak'>,
             streak_length: number,
             is_correct: boolean,
         };
@@ -157,8 +157,8 @@ export class SQLFunctionsService {
     };
 
     getUserSessionFirstActivityId = (
-        userId: Id<User>,
-        sessionActivityId: Id<ActivitySession>) => {
+        userId: Id<'User'>,
+        sessionActivityId: Id<'ActivitySession'>) => {
 
         return this.execSQLFunctionAsync<number>(
             'get_user_session_first_activity_id',
@@ -170,15 +170,15 @@ export class SQLFunctionsService {
     };
 
     saveUserSessionActivity = (
-        userId: Id<User>,
+        userId: Id<'User'>,
         param_activity_type: SessionActivityType,
-        itemVersionId?: Id<VideoVersion> | Id<ExamVersion>
+        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>
     ) => {
 
         const videoVersionId = param_activity_type === 'video' ? itemVersionId : null;
         const examVersionId = param_activity_type === 'exam' ? itemVersionId : null;
 
-        return this.execSQLFunctionAsync<Id<ActivitySession>>(
+        return this.execSQLFunctionAsync<Id<'ActivitySession'>>(
             'save_user_session_activity',
             [
                 userId,

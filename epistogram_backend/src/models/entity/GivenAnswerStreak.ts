@@ -10,7 +10,7 @@ export class GivenAnswerStreak {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<GivenAnswerStreak>;
+    id: Id<'GivenAnswerStreak'>;
 
     @Column()
     @XViewColumn()
@@ -21,7 +21,7 @@ export class GivenAnswerStreak {
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

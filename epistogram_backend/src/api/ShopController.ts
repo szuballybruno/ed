@@ -35,7 +35,7 @@ export class ShopController {
 
         const body = params.getBody();
         const shopItemId = Id
-            .create<ShopItem>(body.getValue(x => x.shopItemId, 'int'));
+            .create<'ShopItem'>(body.getValue(x => x.shopItemId, 'int'));
 
         return await this._shopService
             .purchaseShopItemAsync(params.principalId, shopItemId);
@@ -53,7 +53,7 @@ export class ShopController {
 
         return await this._shopService
             .getShopItemBriefDataAsync(Id
-                .create<ShopItem>(params
+                .create<'ShopItem'>(params
                     .getQuery<any>()
                     .getValue(x => x.shopItemId, 'int')));
     };
@@ -63,7 +63,7 @@ export class ShopController {
 
         return await this._shopService
             .getShopItemEditDTOAsync(Id
-                .create<ShopItem>(params
+                .create<'ShopItem'>(params
                     .getQuery<any>()
                     .getValue(x => x.shopItemId, 'int')));
     };

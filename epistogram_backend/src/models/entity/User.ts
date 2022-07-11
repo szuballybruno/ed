@@ -34,7 +34,7 @@ export class User {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<User>;
+    id: Id<'User'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -110,7 +110,7 @@ export class User {
     // Avatar file
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    avatarFileId: Id<StorageFile> | null;
+    avatarFileId: Id<'StorageFile'> | null;
     @ManyToOne(() => StorageFile, sf => sf.users)
     @JoinColumn({ name: 'avatar_file_id' })
     avatarFile: Relation<StorageFile> | null;
@@ -118,7 +118,7 @@ export class User {
     // company 
     @Column()
     @XViewColumn()
-    companyId: Id<Company>;
+    companyId: Id<'Company'>;
     @ManyToOne(() => Company, x => x.users)
     @JoinColumn({ name: 'company_id' })
     company: Relation<Company>;
@@ -126,7 +126,7 @@ export class User {
     // job title 
     @Column({ nullable: true, type: 'number' })
     @XViewColumn()
-    jobTitleId: Id<JobTitle> | null;
+    jobTitleId: Id<'JobTitle'> | null;
     @ManyToOne(_ => JobTitle, x => x.users)
     @JoinColumn({ name: 'job_title_id' })
     jobTitle: Relation<JobTitle> | null;

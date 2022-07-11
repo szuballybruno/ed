@@ -16,19 +16,19 @@ export class CourseItemPlaylistView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
-    examId: Id<Exam>;
+    examId: Id<'Exam'>;
 
     /*  @ViewColumn()
      @XViewColumn()
@@ -36,7 +36,7 @@ export class CourseItemPlaylistView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleId: Id<Module>;
+    moduleId: Id<'Module'>;
 
     @ViewColumn()
     @XViewColumn()

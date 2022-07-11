@@ -9,7 +9,7 @@ export class ModuleData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ModuleData>;
+    id: Id<'ModuleData'>;
 
     @Column()
     @XViewColumn()
@@ -30,7 +30,7 @@ export class ModuleData {
     // image file 
     @Column({ nullable: true, type: 'integer' })
     @XViewColumn()
-    imageFileId: Id<StorageFile> | null;
+    imageFileId: Id<'StorageFile'> | null;
     @OneToOne(_ => StorageFile, x => x.courseModule)
     @JoinColumn({ name: 'image_file_id' })
     imageFile: StorageFile | null;

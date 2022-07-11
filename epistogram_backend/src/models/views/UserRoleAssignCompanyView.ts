@@ -12,11 +12,11 @@ export class UserRoleAssignCompanyView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    companyId: Id<Company>;
+    companyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()

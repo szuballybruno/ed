@@ -26,7 +26,7 @@ export class CourseRatingService extends ServiceBase {
      * Get course rating quesiton groups, 
      * and questions in groups  
      */
-    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: Id<Course>) {
+    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: Id<'Course'>) {
 
         const views = await this._ormService
             .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
@@ -80,11 +80,11 @@ export class CourseRatingService extends ServiceBase {
             .map(x => ({
                 id: prevAnswers
                     .firstOrNull(y => Id.read(y.courseRatingQuestionId) === x.quesitonId)?.id!,
-                userId: Id.create<User>(userId.toSQLValue()),
-                courseId: Id.create<Course>(courseId),
+                userId: Id.create<'User'>(userId.toSQLValue()),
+                courseId: Id.create<'Course'>(courseId),
                 text: x.text ?? undefined,
                 value: x.value ?? undefined,
-                courseRatingQuestionId: Id.create<CourseRatingQuestion>(x.quesitonId)
+                courseRatingQuestionId: Id.create<'CourseRatingQuestion'>(x.quesitonId)
             }));
 
         await this._ormService

@@ -63,7 +63,7 @@ export class PractiseQuestionService extends ServiceBase {
 
     answerPractiseQuestionAsync = async (principalId: PrincipalId, qu: AnswerQuestionDTO) => {
 
-        const userIdAsIdType = Id.create<User>(principalId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const practiseAnswerSession = await this.getUserPractiseAnswerSession(userIdAsIdType);
 
@@ -71,7 +71,7 @@ export class PractiseQuestionService extends ServiceBase {
             .answerQuestionAsync(userIdAsIdType, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
     };
 
-    getUserPractiseAnswerSession = async (userId: Id<User>) => {
+    getUserPractiseAnswerSession = async (userId: Id<'User'>) => {
 
         return this._ormService
             .query(AnswerSession, { userId })

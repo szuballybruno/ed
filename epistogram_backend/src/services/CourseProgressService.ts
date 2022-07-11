@@ -57,7 +57,7 @@ export class CourseProgressService {
     /**
      * Returns the progress of the current active course, or null.
      */
-    async getCurrentCourseProgressAsync(userId: Id<User>) {
+    async getCurrentCourseProgressAsync(userId: Id<'User'>) {
 
         // get current course id 
         const currentCourseId = await this._userCourseBridgeService
@@ -106,7 +106,7 @@ export class CourseProgressService {
     /**
      * Returns the next items in course 
      */
-    private async _getCourseNextItemsAsync(userId: Id<User>, courseId: Id<Course>) {
+    private async _getCourseNextItemsAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const modules = await this
             ._playlistService

@@ -3,14 +3,14 @@ import { User } from "../../models/entity/User";
 import { Id } from "../types/versionId";
 
 export class CommentListDTO {
-    id: Id<Comment>;
-    userId: Id<User>;
+    id: Id<'Comment'>;
+    userId: Id<'User'>;
     threadId: number;
     fullName: string | null;
     isQuestion: boolean;
     commentText: string;
     creationDate: Date;
-    parentCommentId: Id<Comment>;
+    parentCommentId: Id<'Comment'>;
     avatarUrl: string;
     commentLikeCount: number;
     isCurrentUserLikedComment: boolean;

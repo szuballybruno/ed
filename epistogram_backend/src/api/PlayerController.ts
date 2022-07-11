@@ -33,14 +33,14 @@ export class PlayerController {
             .getValue(x => x.answerIds, 'int[]');
 
         const answerIdsAsIdType = answerIds
-            .map(x => Id.create<Answer>(x))
+            .map(x => Id.create<'Answer'>(x))
 
         const questionVersionId = Id
-            .create<QuestionVersion>(dto
+            .create<'QuestionVersion'>(dto
                 .getValue(x => x.questionVersionId, 'int'));
 
         const answerSessionId = Id
-            .create<AnswerSession>(dto
+            .create<'AnswerSession'>(dto
                 .getValue(x => x.answerSessionId, 'int'));
 
         const elapsedSeconds = dto.getValue(x => x.elapsedSeconds, 'float');

@@ -8,7 +8,7 @@ export class AnswerData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<AnswerData>;
+    id: Id<'AnswerData'>;
 
     @Column()
     @XViewColumn()

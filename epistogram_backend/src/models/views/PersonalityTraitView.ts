@@ -12,11 +12,11 @@ export class PersonalityTraitView {
 
 	@ViewColumn()
 	@XViewColumn()
-	userId: Id<User>;
+	userId: Id<'User'>;
 
 	@ViewColumn()
 	@XViewColumn()
-	traitCategoryId: Id<PersonalityTraitCategory>;
+	traitCategoryId: Id<'PersonalityTraitCategory'>;
 
 	@ViewColumn()
 	@XViewColumn()

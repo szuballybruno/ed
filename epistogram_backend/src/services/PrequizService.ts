@@ -33,10 +33,10 @@ export class PrequizService {
     /**
      * Returns a list of prequiz questions 
      */
-    async getPrequizQuestionsAsync(principalId: PrincipalId, courseId: Id<Course>) {
+    async getPrequizQuestionsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         // set course as started, and stage to prequiz
         await this._courseBridgeService
@@ -68,10 +68,10 @@ export class PrequizService {
      * Returns an answer that the user 
      * has previously given to the specified quesiton
      */
-    async getUserAnswerAsync(principalId: PrincipalId, courseId: Id<Course>, questionId: Id<Question>) {
+    async getUserAnswerAsync(principalId: PrincipalId, courseId: Id<'Course'>, questionId: Id<'Question'>) {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const userAnswer = await this._ormService
             .query(PrequizUserAnswer, { userId, questionId, courseId })
@@ -96,14 +96,14 @@ export class PrequizService {
      */
     async answerPrequizQuestionAsync(
         principalId: PrincipalId,
-        questionId: Id<Question>,
-        courseId: Id<Course>,
-        answerId: Id<Answer> | null,
+        questionId: Id<'Question'>,
+        courseId: Id<'Course'>,
+        answerId: Id<'Answer'> | null,
         value: number | null) {
 
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const previousAnswer = await this._ormService
             .query(PrequizUserAnswer, { userId, questionId, courseId })

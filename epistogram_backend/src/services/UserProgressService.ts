@@ -44,7 +44,7 @@ export class UserProgressService extends ServiceBase {
             .mapTo(UserActiveCourseDTO, [views]);
     }
 
-    async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<Course>) {
+    async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = principalId.toSQLValue();
 
@@ -99,7 +99,7 @@ export class UserProgressService extends ServiceBase {
         } as RecomendedItemQuotaDTO;
     }
 
-    async getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<Course>) {
+    async getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = principalId.toSQLValue();
 

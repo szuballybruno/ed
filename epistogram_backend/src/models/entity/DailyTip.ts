@@ -10,7 +10,7 @@ export class DailyTip {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<DailyTip>;
+    id: Id<'DailyTip'>;
 
     @Column()
     @XViewColumn()
@@ -36,7 +36,7 @@ export class DailyTip {
     // personality trait 
     @Column()
     @XViewColumn()
-    personalityTraitCategoryId: Id<PersonalityTraitCategory>;
+    personalityTraitCategoryId: Id<'PersonalityTraitCategory'>;
     @OneToMany(_ => PersonalityTraitCategory, x => x.tips)
     @JoinColumn({ name: 'personality_trait_category_id' })
     personalityTraitCategory: Relation<PersonalityTraitCategory>;
@@ -44,7 +44,7 @@ export class DailyTip {
     // video file
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    videoFileId: Id<StorageFile> | null;
+    videoFileId: Id<'StorageFile'> | null;
     @OneToOne(_ => StorageFile)
     @JoinColumn({ name: 'video_file_id' })
     videoFile: Relation<StorageFile> | null;

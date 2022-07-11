@@ -16,15 +16,15 @@ export class ExamPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    examId: Id<Exam>;
+    examId: Id<'Exam'>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
 
     @IsDeletedFlag('bool')
     @ViewColumn()
@@ -65,11 +65,11 @@ export class ExamPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleId: Id<Module>;
+    moduleId: Id<'Module'>;
 
     @ViewColumn()
     @XViewColumn()

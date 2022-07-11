@@ -3,7 +3,7 @@ import { Id } from '../types/versionId';
 import { AnswerDTO } from './AnswerDTO';
 
 export type QuestionDTO = {
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     orderIndex: null | number;
     answers: AnswerDTO[];

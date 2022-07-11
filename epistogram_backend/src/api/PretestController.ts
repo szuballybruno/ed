@@ -19,7 +19,7 @@ export class PretestController {
     getPretestDataAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'))
 
@@ -31,7 +31,7 @@ export class PretestController {
     getPretestResultsAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'))
 
@@ -43,7 +43,7 @@ export class PretestController {
     getPretestExamIdAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'))
 

@@ -12,7 +12,7 @@ export class GivenAnswer {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<GivenAnswer>;
+    id: Id<'GivenAnswer'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -42,7 +42,7 @@ export class GivenAnswer {
     // question version
     @Column()
     @XViewColumn()
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
     @XManyToOne<GivenAnswer>()(() => QuestionVersion, x => x.givenAnswers)
     @XJoinColumn<GivenAnswer>('questionVersionId')
     questionVersion: Relation<QuestionVersion>;
@@ -50,7 +50,7 @@ export class GivenAnswer {
     // answer session
     @Column()
     @XViewColumn()
-    answerSessionId: Id<AnswerSession>;
+    answerSessionId: Id<'AnswerSession'>;
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
     @JoinColumn({ name: 'answer_session_id' })
     answerSession: Relation<AnswerSession>;
@@ -58,7 +58,7 @@ export class GivenAnswer {
     // givenAnswerStreakBridges
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    givenAnswerStreakId: Id<GivenAnswerStreak> | null;
+    givenAnswerStreakId: Id<'GivenAnswerStreak'> | null;
     @JoinColumn({ name: 'given_answer_streak_id' })
     @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
     givenAnswerStreak: GivenAnswerStreak;

@@ -9,7 +9,7 @@ export class VideoRating {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<VideoRating>;
+    id: Id<'VideoRating'>;
 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
@@ -24,7 +24,7 @@ export class VideoRating {
     // video 
     @Column()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
     @XManyToOne<VideoRating>()(() => VideoVersion, x => x.videoRatings)
     @XJoinColumn<VideoRating>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -32,7 +32,7 @@ export class VideoRating {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @XManyToOne<VideoRating>()(() => User, x => x.videoRatings)
     @XJoinColumn<VideoRating>('userId')
     user: Relation<User>;

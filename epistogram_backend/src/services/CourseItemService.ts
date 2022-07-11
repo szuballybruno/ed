@@ -38,7 +38,7 @@ export class CourseItemService {
      * subtitle etc fields of the item,
      * just the questions & answers  
      */
-    async getCourseItemEditDataAsync(videoVersionId: Id<VideoVersion> | null, examVersionId: Id<ExamVersion> | null) {
+    async getCourseItemEditDataAsync(videoVersionId: Id<'VideoVersion'> | null, examVersionId: Id<'ExamVersion'> | null) {
 
         const views = await this._ormService
             .query(CourseItemEditView, { videoVersionId, examVersionId })
@@ -82,7 +82,7 @@ export class CourseItemService {
                 getParentOldVersionId: x => x.moduleVersionId,
                 getDataId: x => x.examDataId,
                 getEntityId: x => x.examId,
-                getVersionId: x => VersionCode.read(x.key).versionId as Id<ExamVersion>,
+                getVersionId: x => VersionCode.read(x.key).versionId as Id<'ExamVersion'>,
                 getDefaultData: mutation => ({
                     description: '',
                     isFinal: false,

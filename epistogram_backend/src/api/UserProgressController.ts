@@ -20,7 +20,7 @@ export class UserProgressController {
 
         return await this._userProgressService
             .getRecommendedItemQuotaAsync(params.principalId, Id
-                .create<Course>(params
+                .create<'Course'>(params
                     .getQuery<any>()
                     .getValue(x => x.courseId, 'int')));
     };
@@ -36,7 +36,7 @@ export class UserProgressController {
     getUserProgressDataAction = (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params
+            .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 

@@ -14,7 +14,7 @@ export class Course {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Course>;
+    id: Id<'Course'>;
 
     // deleted flag - deletion is associated 
     // with the high level course entity,

@@ -12,9 +12,9 @@ import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export type ContextOptions = {
-    companyId?: Id<Company>,
-    courseId?: Id<Course>,
-    commentId?: Id<Comment>
+    companyId?: Id<'Company'>,
+    courseId?: Id<'Course'>,
+    commentId?: Id<'Comment'>
 }
 
 export class PermissionService extends QueryServiceBase<Permission> {
@@ -27,7 +27,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
     }
 
     async getPermissionAsync(
-        assigneeUserId: Id<User>,
+        assigneeUserId: Id<'User'>,
         permissionsCode: PermissionCodeType,
         context?: ContextOptions) {
 
@@ -59,7 +59,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .mapTo(PermissionListDTO, [permissions]);
     }
 
-    async getPermissionMatrixAsync(userId: Id<User>, contextCompanyId: Id<Company>) {
+    async getPermissionMatrixAsync(userId: Id<'User'>, contextCompanyId: Id<'Company'>) {
 
         const perms = await this._ormService
             .query(UserPermissionView, { userId, contextCompanyId })

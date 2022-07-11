@@ -10,7 +10,7 @@ export class Permission {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Permission>;
+    id: Id<'Permission'>;
 
     @Column({ type: 'text' })
     @XViewColumn()

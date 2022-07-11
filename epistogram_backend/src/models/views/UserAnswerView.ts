@@ -12,16 +12,16 @@ import { User } from '../entity/User';
 export class UserAnswerView {
 
     @ViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
-    givenAnswerId: Id<GivenAnswer>;
+    givenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
-    answerSessionId: Id<AnswerSession>;
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     isCorrect: boolean;

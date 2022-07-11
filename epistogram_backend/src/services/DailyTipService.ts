@@ -25,7 +25,7 @@ export class DailyTipService {
     /**
      * Deletes a daily tip.
      */
-    async deleteDailyTipAsync(id: Id<DailyTip>) {
+    async deleteDailyTipAsync(id: Id<'DailyTip'>) {
 
         await this._ormService
             .softDelete(DailyTip, [id])
@@ -35,7 +35,7 @@ export class DailyTipService {
      * Creates a new daily tip, but with isLive switched off, 
      * thus it won't be shown to users until it's enabled manually.
      */
-    async createDailyTipAsync(personalityTraitCategoryId: Id<PersonalityTraitCategory>, isMax: boolean) {
+    async createDailyTipAsync(personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) {
 
         await this._ormService
             .createAsync(DailyTip, {
@@ -49,7 +49,7 @@ export class DailyTipService {
     /**
      * Returns edit data of a specified daily tip.
      */
-    async getDailyTipEditDataAsync(dailyTipId: Id<DailyTip>) {
+    async getDailyTipEditDataAsync(dailyTipId: Id<'DailyTip'>) {
 
         const dailyTip = await this._ormService
             .getSingleById(DailyTip, dailyTipId);
@@ -138,7 +138,7 @@ export class DailyTipService {
                 .createAsync(DailyTipOccurrence, {
                     dailyTipId: tip.dailyTipId,
                     userId: Id
-                        .create<User>(userId.toSQLValue())
+                        .create<'User'>(userId.toSQLValue())
                 } as DailyTipOccurrence);
         }
 

@@ -13,11 +13,11 @@ export class ShopItemView {
 
     @ViewColumn()
     @XViewColumn()
-    id: Id<ShopItem>;
+    id: Id<'ShopItem'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -37,7 +37,7 @@ export class ShopItemView {
 
     @ViewColumn()
     @XViewColumn()
-    shopItemCategoryId: Id<ShopItemCategory>;
+    shopItemCategoryId: Id<'ShopItemCategory'>;
 
     @ViewColumn()
     @XViewColumn()

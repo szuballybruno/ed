@@ -8,7 +8,7 @@ export class TeacherInfo {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<TeacherInfo>;
+    id: Id<'TeacherInfo'>;
 
     @Column()
     @XViewColumn()
@@ -43,7 +43,7 @@ export class TeacherInfo {
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @OneToOne(_ => User, x => x.teacherInfo)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

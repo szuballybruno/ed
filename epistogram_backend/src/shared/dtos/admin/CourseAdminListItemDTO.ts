@@ -6,7 +6,7 @@ import { UserDTO } from '../UserDTO';
 import { CourseCategoryMinimalDTO } from './CourseCategoryMinimalDTO';
 
 export class CourseAdminListItemDTO {
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     title: string;
     thumbnailImageURL: string;
     videosCount: number;

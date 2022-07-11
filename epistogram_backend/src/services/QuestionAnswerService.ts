@@ -33,9 +33,9 @@ export class QuestionAnswerService {
      * Creates a new answer session  
      */
     async createAnswerSessionAsync(
-        userId: Id<User>,
-        examVersionId: Id<ExamVersion> | null,
-        videoVideoId: Id<VideoVersion> | null) {
+        userId: Id<'User'>,
+        examVersionId: Id<'ExamVersion'> | null,
+        videoVideoId: Id<'VideoVersion'> | null) {
 
         const answerSessionId = await this._ormService
             .createAsync(AnswerSession, {
@@ -55,10 +55,10 @@ export class QuestionAnswerService {
      * Answer question  
      */
     async answerQuestionAsync(
-        userId: Id<User>,
-        answerSessionId: Id<AnswerSession>,
-        questionVersionId: Id<QuestionVersion>,
-        answerIds: Id<Answer>[],
+        userId: Id<'User'>,
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
         isExamQuestion: boolean,
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) {

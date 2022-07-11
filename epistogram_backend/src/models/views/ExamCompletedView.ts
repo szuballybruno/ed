@@ -13,15 +13,15 @@ export class ExamCompletedView {
 
 	@ViewColumn()
 	@XViewColumn()
-	userId: Id<User>;
+	userId: Id<'User'>;
 
 	@ViewColumn()
 	@XViewColumn()
-	examId: Id<Exam>;
+	examId: Id<'Exam'>;
 
 	@ViewColumn()
 	@XViewColumn()
-	courseId: Id<Course>;
+	courseId: Id<'Course'>;
 
 	@ViewColumn()
 	@XViewColumn()

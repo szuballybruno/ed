@@ -14,7 +14,7 @@ export class DiscountCode {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<DiscountCode>;
+    id: Id<'DiscountCode'>;
 
     @Column()
     @XViewColumn()
@@ -24,7 +24,7 @@ export class DiscountCode {
     @logType
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    userId: Id<User> | null;
+    userId: Id<'User'> | null;
     @ManyToOne(_ => User, x => x.discountCodes)
     @JoinColumn({ name: 'user_id' })
     user: User | null;
@@ -32,7 +32,7 @@ export class DiscountCode {
     // shop item
     @Column()
     @XViewColumn()
-    shopItemId: Id<ShopItem>;
+    shopItemId: Id<'ShopItem'>;
     @OneToMany(_ => ShopItem, x => x.discountCodes)
     @JoinColumn({ name: 'shop_item_id' })
     shopItem: Relation<ShopItem>;

@@ -18,27 +18,27 @@ export class QuestionDataView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: Id<Question>;
+    questionId: Id<'Question'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: Id<ExamVersion>;
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: Id<CourseVersion>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: Id<QuestionVersion>;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    questionDataId: Id<QuestionData>;
+    questionDataId: Id<'QuestionData'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -62,7 +62,7 @@ export class QuestionDataView {
 
     @ViewColumn()
     @XViewColumn()
-    answerId: Id<Answer>;
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
     @XViewColumn()

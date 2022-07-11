@@ -41,7 +41,7 @@ export class CompanyController {
     getCompanyEditDataAction = async (params: ActionParams) => {
 
         const companyId = Id
-            .create<Company>(params
+            .create<'Company'>(params
                 .getQuery()
                 .getValue(x => x.companyId, 'int'))
 
@@ -67,7 +67,7 @@ export class CompanyController {
     deleteCompanyAction = async (params: ActionParams) => {
 
         const companyId = Id
-            .create<Company>(params
+            .create<'Company'>(params
                 .getBody()
                 .getValue(x => x.companyId, 'int'))
 

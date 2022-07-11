@@ -27,7 +27,7 @@ export class VideoController {
             }>();
 
         const videoId = Id
-            .create<Video>(body
+            .create<'Video'>(body
                 .getValue(x => x.videoId, 'int'));
 
         const chunksCount = body.getValue(x => x.chunksCount, 'int');

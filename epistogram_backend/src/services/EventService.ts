@@ -19,22 +19,22 @@ export class EventService {
         this._mapperService = mapperService;
     }
 
-    async addAnswerStreakEventAsync(userId: Id<User>, data: CoinAcquireResultDTO) {
+    async addAnswerStreakEventAsync(userId: Id<'User'>, data: CoinAcquireResultDTO) {
 
         await this.addEventAsync(userId, 'coin_acquire_answer_streak', data);
     }
 
-    async addSessionStreakEventAsync(userId: Id<User>, data: CoinAcquireResultDTO) {
+    async addSessionStreakEventAsync(userId: Id<'User'>, data: CoinAcquireResultDTO) {
 
         await this.addEventAsync(userId, 'coin_acquire_session_streak', data);
     }
 
-    async addLagBehindNotificationEventAsync(userId: Id<User>, data: LagBehindNotificationDTO) {
+    async addLagBehindNotificationEventAsync(userId: Id<'User'>, data: LagBehindNotificationDTO) {
 
         await this.addEventAsync(userId, 'lag_behind_notification', data);
     }
 
-    async addEventAsync(userId: Id<User>, eventCode: EventCodeType, eventDataDTO: any) {
+    async addEventAsync(userId: Id<'User'>, eventCode: EventCodeType, eventDataDTO: any) {
 
         console.log(`Queueing new event for user: ${userId} code: ${eventCode}`);
 

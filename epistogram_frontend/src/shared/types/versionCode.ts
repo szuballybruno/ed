@@ -10,7 +10,7 @@ export class VersionCode extends String {
         super();
     }
 
-    static read(versionCode: VersionCode): { versionType: CourseItemSimpleType, versionId: Id<VideoVersion> | Id<ExamVersion> } {
+    static read(versionCode: VersionCode): { versionType: CourseItemSimpleType, versionId: Id<'VideoVersion'> | Id<'ExamVersion'> } {
 
         try {
 

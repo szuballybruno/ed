@@ -14,11 +14,11 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	userId: Id<User>;
+	userId: Id<'User'>;
 
 	@ViewColumn()
 	@XViewColumn()
-	questionVersionId: Id<QuestionVersion>;
+	questionVersionId: Id<'QuestionVersion'>;
 
 	@ViewColumn()
 	@XViewColumn()
@@ -34,7 +34,7 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	answerVersionId: Id<AnswerVersion>;
+	answerVersionId: Id<'AnswerVersion'>;
 
 	@ViewColumn()
 	@XViewColumn()
@@ -42,7 +42,7 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	givenAnswerId: Id<GivenAnswer>;
+	givenAnswerId: Id<'GivenAnswer'>;
 
 	@ViewColumn()
 	@XViewColumn()
@@ -50,7 +50,7 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	givenAnswerVersionId: Id<AnswerVersion>;
+	givenAnswerVersionId: Id<'AnswerVersion'>;
 
 	@ViewColumn()
 	@XViewColumn()

@@ -11,7 +11,7 @@ export class ActivitySession {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<ActivitySession>;
+    id: Id<'ActivitySession'>;
 
     @Column({ type: 'timestamptz' })
     @XViewColumn()
@@ -32,7 +32,7 @@ export class ActivitySession {
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -40,7 +40,7 @@ export class ActivitySession {
     // activity streak
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    activityStreakId: Id<ActivityStreak> | null;
+    activityStreakId: Id<'ActivityStreak'> | null;
     @JoinColumn({ name: 'activity_streak_id' })
     @ManyToOne(_ => ActivityStreak, x => x.activitySessions)
     activityStreak: Relation<ActivityStreak> | null;

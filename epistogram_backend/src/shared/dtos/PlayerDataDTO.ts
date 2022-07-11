@@ -11,9 +11,9 @@ export class PlayerDataDTO {
     videoPlayerData: VideoPlayerDataDTO | null;
     examPlayerData: ExamPlayerDataDTO | null;
     modulePlayerData: ModulePlayerDTO | null;
-    answerSessionId: Id<AnswerSession> | null;
+    answerSessionId: Id<'AnswerSession'> | null;
     courseMode: CourseModeType;
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     modules: PlaylistModuleDTO[];
     currentPlaylistItemCode: string;
     nextPlaylistItemCode: string | null;

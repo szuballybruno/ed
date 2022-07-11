@@ -13,7 +13,7 @@ export class CourseDetailsDTO {
     categoryName: string;
     subCategoryName: string;
     canStartCourse: boolean;
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     shortDescription: string;
     difficulty: number;
     benchmark: number;

@@ -17,7 +17,7 @@ export class UserSessionActivityService {
         this._coinAcquireService = coinAcquireService;
     }
 
-    saveUserSessionActivityAsync = async (userId: Id<User>, type: SessionActivityType, itemVersionId?: Id<VideoVersion> | Id<ExamVersion>) => {
+    saveUserSessionActivityAsync = async (userId: Id<'User'>, type: SessionActivityType, itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>) => {
 
         const activitySessionId = await this._funcService.saveUserSessionActivity(userId, type, itemVersionId);
 

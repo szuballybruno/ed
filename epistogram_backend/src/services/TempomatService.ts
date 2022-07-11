@@ -34,7 +34,7 @@ export class TempomatService extends ServiceBase {
         this._userCourseBridgeService = courseBridgeServie;
     }
 
-    async setTempomatModeAsync(principalId: PrincipalId, courseId: Id<Course>, tempomatMode: TempomatModeType) {
+    async setTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>, tempomatMode: TempomatModeType) {
 
         const userId = principalId.toSQLValue();
 
@@ -51,7 +51,7 @@ export class TempomatService extends ServiceBase {
             });
     }
 
-    async getTempomatModeAsync(principalId: PrincipalId, courseId: Id<Course>) {
+    async getTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = principalId.toSQLValue();
 
@@ -66,7 +66,7 @@ export class TempomatService extends ServiceBase {
 
     // Get tempomat calculation data
     getTempomatCalculationData = async (
-        userId: Id<User>,
+        userId: Id<'User'>,
         courseId: number
     ) => {
 
@@ -226,7 +226,7 @@ export class TempomatService extends ServiceBase {
     }
 
 
-    async calculatePrevisionedDateAsync(userId: Id<User>, courseId: number) {
+    async calculatePrevisionedDateAsync(userId: Id<'User'>, courseId: number) {
 
         const {
             originalPrevisionedCompletionDate,
@@ -248,7 +248,7 @@ export class TempomatService extends ServiceBase {
         )
     }
 
-    calculateAvgLagBehindPercentageAsync = async (userId: Id<User>) => {
+    calculateAvgLagBehindPercentageAsync = async (userId: Id<'User'>) => {
 
         const tempomatCalculationData = await this._ormService
             .query(TempomatCalculationDataView, { userId })

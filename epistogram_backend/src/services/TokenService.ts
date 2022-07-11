@@ -43,7 +43,7 @@ export class TokenService {
 
     verifySetNewPasswordToken = (token: string) => {
 
-        return this.verifyJWTToken<{ userId: Id<User> }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
+        return this.verifyJWTToken<{ userId: Id<'User'> }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
     };
 
     //
@@ -76,7 +76,7 @@ export class TokenService {
             `${this._config.security.tokenLifespans.refreshTokenLifespanInS}s`);
     };
 
-    createSetNewPasswordToken = (userId: Id<User>) => {
+    createSetNewPasswordToken = (userId: Id<'User'>) => {
 
         return this.getJWTToken(
             { userId },

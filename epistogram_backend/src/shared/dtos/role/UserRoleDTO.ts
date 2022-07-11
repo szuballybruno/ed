@@ -6,12 +6,12 @@ import { Id } from '../../types/versionId';
 import { PermissionListDTO } from './PermissionListDTO';
 
 export class UserRoleDTO {
-    assignmentBridgeId: Id<RoleAssignmentBridge>;
-    contextCompanyId: Id<Company>;
+    assignmentBridgeId: Id<'RoleAssignmentBridge'>;
+    contextCompanyId: Id<'Company'>;
     contextCompanyName: string;
-    roleId: Id<Role>;
+    roleId: Id<'Role'>;
     roleName: string;
-    assigneeUserId: Id<User>;
+    assigneeUserId: Id<'User'>;
     isInherited: boolean;
     permissions: PermissionListDTO[];
 }

@@ -20,7 +20,7 @@ export class TempomatController {
     getTempomatModeAction = async (params: ActionParams) => {
 
         const courseId = Id
-            .create<Course>(params.getQuery<any>()
+            .create<'Course'>(params.getQuery<any>()
                 .getValue(x => x.courseId, 'int'))
 
         return this._tempomatService
@@ -37,7 +37,7 @@ export class TempomatController {
             .getValue<TempomatModeType>(bod => bod.mode, 'custom', value => value === 'auto' || value === 'balanced' || value === 'light' || value === 'strict');
 
         const courseId = Id
-            .create<Course>(body
+            .create<'Course'>(body
                 .getValue(x => x.courseId, 'int'));
 
         await this._tempomatService

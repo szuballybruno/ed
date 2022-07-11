@@ -29,7 +29,7 @@ export class PersonalityAssessmentController {
             .getQuery<any>();
 
         const personalityTraitCategoryId = Id
-            .create<PersonalityTraitCategory>(query
+            .create<'PersonalityTraitCategory'>(query
                 .getValue(x => x.personalityTraitCategoryId, 'int'));
 
         const isMax = query

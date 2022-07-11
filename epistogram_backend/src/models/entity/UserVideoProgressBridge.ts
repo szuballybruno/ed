@@ -9,7 +9,7 @@ export class UserVideoProgressBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<UserVideoProgressBridge>;
+    id: Id<'UserVideoProgressBridge'>;
 
     @Column({ nullable: true, type: 'timestamptz' })
     @XViewColumn()
@@ -28,7 +28,7 @@ export class UserVideoProgressBridge {
     // user 
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.videoProgressBridges)
     user: Relation<User>;
@@ -36,7 +36,7 @@ export class UserVideoProgressBridge {
     // video version 
     @Column()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
     @XManyToOne<UserVideoProgressBridge>()(() => VideoVersion, x => x.userProgressBridges)
     @XJoinColumn<UserVideoProgressBridge>('videoVersionId')
     videoVersion: Relation<VideoVersion>;

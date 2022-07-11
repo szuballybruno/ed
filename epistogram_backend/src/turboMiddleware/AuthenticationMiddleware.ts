@@ -36,7 +36,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
             this._loggerService
                 .log(`${requestPath}: Route is open, skipping authentication...`);
 
-            return new ActionParams(req, res, Id.create<User>(-1), isMultipart);
+            return new ActionParams(req, res, Id.create<'User'>(-1), isMultipart);
         }
 
         // private (authenticated) route

@@ -9,7 +9,7 @@ export class QuestionData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<QuestionData>;
+    id: Id<'QuestionData'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()

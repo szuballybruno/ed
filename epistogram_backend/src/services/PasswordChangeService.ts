@@ -78,7 +78,7 @@ export class PasswordChangeService {
     requestPasswordChangeAuthenticatedAsync = async (principalId: PrincipalId, oldPassword: string) => {
 
         const userId = Id
-            .create<User>(principalId.toSQLValue());
+            .create<'User'>(principalId.toSQLValue());
 
         const resetPawsswordToken = this._tokenService
             .createSetNewPasswordToken(userId);

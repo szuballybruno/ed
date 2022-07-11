@@ -198,7 +198,7 @@ export class RegistrationService extends ServiceBase {
         await this
             ._ormService
             .createAsync(PermissionAssignmentBridge, {
-                permissionId: Id.create<Permission>(35),
+                permissionId: Id.create<'Permission'>(35),
                 assigneeUserId: userId,
                 assigneeCompanyId: null,
                 assigneeGroupId: null,
@@ -227,8 +227,8 @@ export class RegistrationService extends ServiceBase {
             email: string;
             firstName: string;
             lastName: string;
-            companyId: Id<Company>;
-            jobTitleId: Id<JobTitle>;
+            companyId: Id<'Company'>;
+            jobTitleId: Id<'JobTitle'>;
             isGod?: boolean;
         },
         noEmailNotification?: boolean) {

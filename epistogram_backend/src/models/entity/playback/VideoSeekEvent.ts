@@ -10,7 +10,7 @@ export class VideoSeekEvent {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<VideoSeekEvent>;
+    id: Id<'VideoSeekEvent'>;
 
     @CreateDateColumn({ default: 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -35,7 +35,7 @@ export class VideoSeekEvent {
     // video 
     @Column()
     @XViewColumn()
-    videoVersionId: Id<VideoVersion>;
+    videoVersionId: Id<'VideoVersion'>;
     @XManyToOne<VideoSeekEvent>()(() => VideoVersion, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -43,7 +43,7 @@ export class VideoSeekEvent {
     // user
     @Column()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
     @XManyToOne<VideoSeekEvent>()(() => User, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('userId')
     user: Relation<User>;
@@ -51,7 +51,7 @@ export class VideoSeekEvent {
     // playback session
     @Column()
     @XViewColumn()
-    videoPlaybackSessionId: Id<VideoPlaybackSession>;
+    videoPlaybackSessionId: Id<'VideoPlaybackSession'>;
     @XManyToOne<VideoSeekEvent>()(() => VideoPlaybackSession, x => x.videoSeekEvents)
     @XJoinColumn<VideoSeekEvent>('videoPlaybackSessionId')
     videoPlaybackSession: Relation<VideoPlaybackSession>;

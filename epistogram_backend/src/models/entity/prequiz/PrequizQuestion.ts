@@ -9,7 +9,7 @@ export class PrequizQuestion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<PrequizQuestion>;
+    id: Id<'PrequizQuestion'>;
 
     @Column()
     @XViewColumn()

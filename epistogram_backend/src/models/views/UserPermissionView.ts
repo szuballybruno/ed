@@ -18,11 +18,11 @@ export class UserPermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: Id<User>;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: Id<Company> | null;
+    contextCompanyId: Id<'Company'> | null;
 
     @ViewColumn()
     @XViewColumn()
@@ -30,7 +30,7 @@ export class UserPermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    contextCourseId: Id<Course> | null;
+    contextCourseId: Id<'Course'> | null;
 
     @ViewColumn()
     @XViewColumn()
@@ -38,11 +38,11 @@ export class UserPermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    contextCommentId: Id<Comment> | null;
+    contextCommentId: Id<'Comment'> | null;
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: Id<Permission>;
+    permissionId: Id<'Permission'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -50,11 +50,11 @@ export class UserPermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    assignmentBridgeId: Id<RoleAssignmentBridge> | null;
+    assignmentBridgeId: Id<'RoleAssignmentBridge'> | null;
 
     @ViewColumn()
     @XViewColumn()
-    parentRoleId: Id<Role> | null;
+    parentRoleId: Id<'Role'> | null;
 
     @ViewColumn()
     @XViewColumn()

@@ -7,7 +7,7 @@ import { Id } from '../types/versionId';
 import { User } from '../../models/entity/User';
 
 export class CourseDetailsEditDataDTO {
-    courseId: Id<Course>;
+    courseId: Id<'Course'>;
     title: string;
     thumbnailURL: string;
     shortDescription: string;
@@ -17,7 +17,7 @@ export class CourseDetailsEditDataDTO {
     previouslyCompletedCount: number;
     language: string;
     visibility: CourseVisibilityType;
-    teacherId: Id<User>;
+    teacherId: Id<'User'>;
     humanSkillBenefitsDescription: string;
     technicalRequirementsDescription: string;
 

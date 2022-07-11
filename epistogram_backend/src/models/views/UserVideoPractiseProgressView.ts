@@ -10,10 +10,10 @@ import { Video } from '../entity/video/Video';
 export class UserVideoPractiseProgressView {
 
     @ViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
-    videoId: Id<Video>;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     watchPercentage: number;

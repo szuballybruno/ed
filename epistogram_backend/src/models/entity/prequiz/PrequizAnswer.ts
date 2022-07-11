@@ -11,7 +11,7 @@ export class PrequizAnswer {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<PrequizAnswer>;
+    id: Id<'PrequizAnswer'>;
 
     @Column()
     @XViewColumn()
@@ -26,7 +26,7 @@ export class PrequizAnswer {
     // question 
     @Column()
     @XViewColumn()
-    questionId: Id<PrequizQuestion>;
+    questionId: Id<'PrequizQuestion'>;
     @ManyToOne(_ => PrequizQuestion, x => x.answers)
     @JoinColumn({ name: 'question_id' })
     question: PrequizQuestion;

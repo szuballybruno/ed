@@ -64,15 +64,15 @@ export class VideoService extends QueryServiceBase<VideoData> {
 
     answerVideoQuestionAsync = async (
         userId: PrincipalId,
-        answerSessionId: Id<AnswerSession>,
-        questionVersionId: Id<QuestionVersion>,
-        answerIds: Id<Answer>[],
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
         elapsedSeconds: number) => {
 
         // validation comes here
 
         return this._questionAnswerService
-            .answerQuestionAsync(Id.create<User>(userId.toSQLValue()), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
+            .answerQuestionAsync(Id.create<'User'>(userId.toSQLValue()), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
     };
 
     insertVideoAsync = async (video: VideoData, filePath?: string) => {
@@ -101,7 +101,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         //     .save(video);
     };
 
-    setVideoFileIdAsync = async (videoVersionId: Id<VideoVersion>, storageFileId: Id<StorageFile>) => {
+    setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
 
         const videoVersion = await this._ormService
             .query(VideoVersion, { videoVersionId })
@@ -119,7 +119,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
             });
     };
 
-    async softDeleteVideosAsync(videoIds: Id<Video>[], unsetCurrentCourseItem: boolean) {
+    async softDeleteVideosAsync(videoIds: Id<'Video'>[], unsetCurrentCourseItem: boolean) {
 
         // if (videoIds.length === 0)
         //     return;
@@ -185,7 +185,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .softDelete(VideoData, videoIds);
     }
 
-    setVideoThumbnailFileId = async (videoId: Id<Video>, thumbnailFileId: Id<StorageFile>) => {
+    setVideoThumbnailFileId = async (videoId: Id<'Video'>, thumbnailFileId: Id<'StorageFile'>) => {
 
         await this._ormService
             .save(VideoData, {
@@ -198,7 +198,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
     /**
      * Get questions for a particular video.
      */
-    async _getQuestionDataByVideoVersionId(videoVersionId: Id<VideoVersion>) {
+    async _getQuestionDataByVideoVersionId(videoVersionId: Id<'VideoVersion'>) {
 
         const questionData = await this._ormService
             .query(QuestionDataView, { videoVersionId })
@@ -210,7 +210,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         return questionData
     }
 
-    getVideoByVersionIdAsync = async (videoVersionId: Id<VideoVersion>) => {
+    getVideoByVersionIdAsync = async (videoVersionId: Id<'VideoVersion'>) => {
 
         const video = await this._ormService
             .query(VideoPlayerDataView, { videoVersionId })
@@ -220,7 +220,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         return video;
     };
 
-    getVideoPlayerDataAsync = async (videoVersionId: Id<VideoVersion>) => {
+    getVideoPlayerDataAsync = async (videoVersionId: Id<'VideoVersion'>) => {
 
         const videoPlayerData = await this._ormService
             .query(VideoPlayerDataView, { videoVersionId })
@@ -231,7 +231,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
     };
 
     uploadVideoFileChunksAsync = async (
-        videoId: Id<Video>,
+        videoId: Id<'Video'>,
         chunkIndex: number,
         chunksCount: number,
         getFile: () => UploadedFile | undefined) => {
@@ -287,7 +287,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         }
     };
 
-    private _uploadVideoFileAsync = async (videoVersionId: Id<VideoVersion>, videoFileBuffer: Buffer) => {
+    private _uploadVideoFileAsync = async (videoVersionId: Id<'VideoVersion'>, videoFileBuffer: Buffer) => {
 
         // upload file
         const filePath = this._fileService

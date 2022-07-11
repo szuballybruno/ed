@@ -13,7 +13,7 @@ export class AdminUserListView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<User>;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -41,7 +41,7 @@ export class AdminUserListView {
 
     @ViewColumn()
     @XViewColumn()
-    companyId: Id<Company>;
+    companyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -49,7 +49,7 @@ export class AdminUserListView {
 
     @ViewColumn()
     @XViewColumn()
-    jobTitleId: Id<JobTitle>;
+    jobTitleId: Id<'JobTitle'>;
 
     @ViewColumn()
     @XViewColumn()

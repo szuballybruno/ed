@@ -9,7 +9,7 @@ export class Video {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<Video>;
+    id: Id<'Video'>;
 
     // TO MANY
 
