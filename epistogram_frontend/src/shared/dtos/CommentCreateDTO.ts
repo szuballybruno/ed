@@ -1,5 +1,8 @@
+import { User } from "../../models/entity/User";
+import { Id } from "../types/versionId";
+
 export class CommentCreateDTO {
-    userId: number;
+    userId: Id<User>;
     itemCode: string;
     replyToCommentId: number;
     isAnonymous: boolean;

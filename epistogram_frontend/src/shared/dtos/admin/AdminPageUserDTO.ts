@@ -1,6 +1,11 @@
+import { Role } from "../../../models/entity/authorization/Role";
+import { Company } from "../../../models/entity/Company";
+import { JobTitle } from "../../../models/entity/JobTitle";
+import { User } from "../../../models/entity/User";
+import { Id } from "../../types/versionId";
 
 export class AdminPageUserDTO {
-    id: number;
+    id: Id<User>;
     isTrusted: boolean;
     email: string;
     name: string;
@@ -9,11 +14,11 @@ export class AdminPageUserDTO {
     canAccessApplication: boolean;
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
-    jobTitleId: number;
+    jobTitleId: Id<JobTitle>;
     jobTitleName: string;
-    companyId: number;
+    companyId: Id<Company>;
     companyName: string;
-    roleId: number;
+    roleId: Id<Role>;
     latestActivityDate: Date;
     totalSpentTimeSeconds: number;
     coinBalance: number;

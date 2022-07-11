@@ -1,6 +1,8 @@
+import { Course } from "../../models/entity/course/Course";
+import { Id } from "../types/versionId";
 
 export class CourseLearningDTO {
-    courseId: number;
+    courseId: Id<Course>;
     thumbnailImageURL: string;
     title: string;
     teacherName: string;

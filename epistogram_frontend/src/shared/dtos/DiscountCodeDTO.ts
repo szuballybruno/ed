@@ -1,5 +1,8 @@
+import { DiscountCode } from "../../models/entity/DiscountCode";
+import { Id } from "../types/versionId";
+
 export class DiscountCodeDTO {
-    id: number;
+    id: Id<DiscountCode>;
     code: string;
     isUsed: boolean;
 }

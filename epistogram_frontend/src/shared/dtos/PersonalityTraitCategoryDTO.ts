@@ -1,7 +1,9 @@
+import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
+import { Id } from '../types/versionId';
 import { DailyTipDTO } from './DailyTipDTO';
 
 export class PersonalityTraitCategoryDTO {
-    id: number;
+    id: Id<PersonalityTraitCategory>;
     title: string;
     maxLabel: string;
     minLabel: string;

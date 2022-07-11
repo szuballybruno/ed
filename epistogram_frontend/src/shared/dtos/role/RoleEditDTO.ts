@@ -1,8 +1,12 @@
+import { Permission } from "../../../models/entity/authorization/Permission";
+import { Role } from "../../../models/entity/authorization/Role";
+import { Company } from "../../../models/entity/Company";
+import { Id } from "../../types/versionId";
 
 export class RoleEditDTO {
-    roleId: number;
+    roleId: Id<Role>;
     name: string;
-    permissionIds: number[];
-    companyId: number | null;
+    permissionIds: Id<Permission>[];
+    companyId: Id<Company> | null;
     isCustom: boolean;
 }

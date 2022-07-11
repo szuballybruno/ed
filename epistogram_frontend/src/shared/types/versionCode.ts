@@ -1,4 +1,7 @@
+import { ExamVersion } from '../../models/entity/exam/ExamVersion';
+import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { CourseItemSimpleType } from './sharedTypes';
+import { Id } from './versionId';
 
 export class VersionCode extends String {
     private _forcedTypeIncompatibility = VersionCode.name;
@@ -7,7 +10,7 @@ export class VersionCode extends String {
         super();
     }
 
-    static read(versionCode: VersionCode): { versionType: CourseItemSimpleType, versionId: number } {
+    static read(versionCode: VersionCode): { versionType: CourseItemSimpleType, versionId: Id<VideoVersion> | Id<ExamVersion> } {
 
         try {
 
@@ -17,7 +20,7 @@ export class VersionCode extends String {
                 versionType: itemType === 'video_version'
                     ? 'video'
                     : 'exam',
-                versionId: parseInt(versionId)
+                versionId: Id.create(parseInt(versionId))
             };
         } catch (e: any) {
 

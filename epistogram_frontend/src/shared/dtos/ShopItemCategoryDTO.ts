@@ -1,5 +1,7 @@
+import { ShopItemCategory } from "../../models/entity/ShopItemCategory";
+import { Id } from "../types/versionId";
 
 export class ShopItemCategoryDTO {
-    id: number;
+    id: Id<ShopItemCategory>;
     name: string;
 }
