@@ -156,13 +156,12 @@ export const AdminSubpageHeader = (props: {
                         .map((button, index) => <EpistoButton
                             key={index}
                             style={{
-                                color: '#555',
+                                // color: '#555',
                                 marginRight: '10px',
-                                //background: "var(--transparentIntenseTeal)",
-                                fontWeight: 'bold',
+                                // fontWeight: 'bold',
                                 height: 41
                             }}
-                            variant="plain"
+                            variant={button.variant ?? 'plain'}
                             isDisabled={button.disabled}
                             onClick={button.action}>
                             {button.icon}

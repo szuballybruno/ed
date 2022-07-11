@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
+import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { trimEndChar } from '../shared/logic/sharedLogic';
+import { CSSOptionsType } from '../styles/globalCssTypes';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -59,6 +61,7 @@ export type ButtonType<T = undefined> = {
     icon?: ReactNode,
     disabled?: boolean,
     action?: T extends undefined ? () => void : (params: T) => void,
+    variant?: EpistoButtonPropsType['variant']
 };
 
 export type VolumeSettingsType = {

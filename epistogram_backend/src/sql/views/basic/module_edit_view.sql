@@ -8,3 +8,6 @@ FROM public.module_version mv
 
 LEFT JOIN public.module_data md
 ON md.id = mv.module_data_id
+
+ORDER BY
+	md.order_index

@@ -1,6 +1,6 @@
 import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
 import React from 'react';
-import { useCourseDetails } from '../../services/api/courseApiService';
+import { CourseApiService } from '../../services/api/courseApiService';
 import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
@@ -20,7 +20,7 @@ const CourseTile = (props: {
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
 
-    const { courseDetails } = useCourseDetails(course.courseId);
+    const { courseDetails } = CourseApiService.useCourseDetails(course.courseId);
 
     return <FlexFloat
         className="whall roundBorders"

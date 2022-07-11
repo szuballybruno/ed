@@ -8,51 +8,32 @@ import { instantiate } from '../shared/logic/sharedLogic';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
-import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { log } from './misc/logger';
-import { ServiceBase } from './misc/ServiceBase';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlaybackService } from './PlaybackService';
+import { PlaylistService } from './PlaylistService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 
-export class PlayerService extends ServiceBase {
-
-    private _courseService: CourseService;
-    private _examService: ExamService;
-    private _moduleService: ModuleService;
-    private _userCourseBridgeService: UserCourseBridgeService;
-    private _videoService: VideoService;
-    private _questionAnswerService: QuestionAnswerService;
-    private _playbackService: PlaybackService;
+export class PlayerService {
 
     constructor(
-        ormService: ORMConnectionService,
-        courseService: CourseService,
-        examService: ExamService,
-        moduleService: ModuleService,
-        userCourseBridge: UserCourseBridgeService,
-        videoService: VideoService,
-        questionAnswerService: QuestionAnswerService,
-        mappserService: MapperService,
-        playbackService: PlaybackService,
-        private _authorizationService: AuthorizationService) {
-
-        super(mappserService, ormService);
-
-        this._courseService = courseService;
-        this._examService = examService;
-        this._moduleService = moduleService;
-        this._userCourseBridgeService = userCourseBridge;
-        this._videoService = videoService;
-        this._questionAnswerService = questionAnswerService;
-        this._playbackService = playbackService;
+        private _ormService: ORMConnectionService,
+        private _courseService: CourseService,
+        private _playlistService: PlaylistService,
+        private _examService: ExamService,
+        private _moduleService: ModuleService,
+        private _videoService: VideoService,
+        private _questionAnswerService: QuestionAnswerService,
+        private _playbackService: PlaybackService,
+        private _userCourseBridgeService: UserCourseBridgeService,
+        private _mapperService: MapperService) {
     }
 
     /**
@@ -72,7 +53,8 @@ export class PlayerService extends ServiceBase {
             .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
         // course items list
-        const modules = await this._courseService
+        const modules = await this
+            ._playlistService
             .getPlaylistModulesAsync(userId, courseId);
 
         // get course item dto
@@ -171,7 +153,8 @@ export class PlayerService extends ServiceBase {
      */
     private async _getValidCourseItemCodeAsync(userId: number, courseId: number, targetItemCode: string) {
 
-        const modules = await this._courseService
+        const modules = await this
+            ._playlistService
             .getPlaylistModulesAsync(userId, courseId);
 
         const courseItemsFlat = this._getPlaylistItemsFlatList(modules);

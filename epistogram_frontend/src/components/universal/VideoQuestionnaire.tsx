@@ -1,7 +1,7 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useReactTimer } from '../../helpers/reactTimer';
-import { useAnswerQuestion } from '../../services/api/playerApiService';
+import { PlayerApiService } from '../../services/api/PPlayerApiService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { epochDates } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -19,7 +19,7 @@ export const VideoQuestionnaire = (props: {
 } & FlexProps) => {
 
     const { question, isShowing, onAnswered, answerSessionId, onClosed, ...css } = props;
-    const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
+    const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = PlayerApiService.useAnswerQuestion();
     const isAnswered = !!answerResult;
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());

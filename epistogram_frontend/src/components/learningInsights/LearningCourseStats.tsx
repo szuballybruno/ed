@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
-import { useUserCourseData } from '../../services/api/courseApiService';
+import { CourseProgressApiService } from '../../services/api/CourseProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
@@ -13,7 +13,7 @@ import { LearningCourseStatsTile } from './LearningCourseStatsTile';
 
 export const LearningCourseStats = () => {
 
-    const { coursesData, coursesDataError, coursesDataStatus } = useUserCourseData();
+    const { coursesData, coursesDataError, coursesDataStatus } = CourseProgressApiService.useCourseProgressData();
     const isAnyCoursesComplete = coursesData?.isAnyCoursesComplete;
     const isAnyCoursesInProgress = coursesData?.isAnyCoursesInProgress;
     const completedCourses = coursesData?.completedCourses ?? [];

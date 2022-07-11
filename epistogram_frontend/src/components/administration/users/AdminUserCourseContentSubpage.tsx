@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseBriefData, useSetRequiredCompletionDate } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useEditUserData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -7,7 +7,7 @@ import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { useIntParam } from '../../../static/locationHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminUserCoursesDataGridControl } from './dataGrids/AdminUserCoursesDataGridControl';
@@ -23,7 +23,7 @@ export const AdminUserCourseContentSubpage = (props: {
     const userId = useIntParam('userId')!;
 
     const { userEditData } = useEditUserData(userId);
-    const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = useSetRequiredCompletionDate();
+    const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
     const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
 

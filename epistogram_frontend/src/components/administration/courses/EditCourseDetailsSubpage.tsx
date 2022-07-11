@@ -1,8 +1,8 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { Slider } from '@mui/material';
-import { default as React, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseDetailsEditData, useDeleteCourse, useSaveCourseDetailsData, useUploadCourseThumbnailAsync } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
@@ -18,11 +18,10 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { SelectImage } from '../../universal/SelectImage';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
-import { TailingAdminButtons } from '../TailingAdminButtons';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
 
-export const DetailsEditSubpage = () => {
+export const EditCourseDetailsSubpage = () => {
 
     // util
     const courseId = useIntParam('courseId')!;
@@ -31,10 +30,10 @@ export const DetailsEditSubpage = () => {
     const { navigate } = useNavigation();
 
     // http
-    const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = useCourseDetailsEditData(courseId);
-    const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseDetailsData();
-    const { saveCourseThumbnailAsync, saveCourseThumbnailState } = useUploadCourseThumbnailAsync();
-    const { deleteCourseAsync, deleteCourseState } = useDeleteCourse();
+    const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = CourseApiService.useCourseDetailsEditData(courseId);
+    const { saveCourseDataAsync, saveCourseDataState } = CourseApiService.useSaveCourseDetailsData();
+    const { saveCourseThumbnailAsync, saveCourseThumbnailState } = CourseApiService.useUploadCourseThumbnailAsync();
+    const { deleteCourseAsync, deleteCourseState } = CourseApiService.useDeleteCourse();
 
     // calc 
     const categories = courseDetailsEditData?.categories ?? [];
@@ -182,6 +181,17 @@ export const DetailsEditSubpage = () => {
                     applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
                     applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
                     applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
+                ]}
+                headerButtons={[
+                    {
+                        action: handleDeleteCourseAsync,
+                        title: 'Torles'
+                    },
+                    {
+                        action: handleSaveCourseAsync,
+                        title: 'Mentés',
+                        variant: 'colored'
+                    }
                 ]}>
 
                 {/* Course edit */}
@@ -463,10 +473,6 @@ export const DetailsEditSubpage = () => {
                         </EditSection>
                     </Flex>
                 </Flex>
-
-                <TailingAdminButtons
-                    onDeleteCallback={handleDeleteCourseAsync}
-                    onSaveCallback={handleSaveCourseAsync} />
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >;

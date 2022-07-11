@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
-import { usePlayerData } from '../../../services/api/playerApiService';
+import { PlayerApiService } from '../../../services/api/PPlayerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
@@ -31,7 +31,7 @@ export const WatchSubpage = () => {
         playerDataStatus,
         playerDataError,
         refetchPlayerData
-    } = usePlayerData(urlPlaylistItemCode);
+    } = PlayerApiService.usePlayerData(urlPlaylistItemCode);
 
     const playerDataWithDefaults = useMemo(() => (playerData ?? ({
         courseMode: 'beginner',

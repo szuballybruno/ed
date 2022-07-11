@@ -3,7 +3,7 @@ import { FilterAlt, Search } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { RadioGroup } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSetCourseMode } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -39,7 +39,7 @@ export const CourseItemSelector = (props: {
     // http 
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, isPlayerLoaded);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
-    const { setCourseModeAsync } = useSetCourseMode();
+    const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
 
     // dialog state 
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');

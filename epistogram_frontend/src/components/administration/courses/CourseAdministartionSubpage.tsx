@@ -4,7 +4,7 @@ import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage
 import { AdminInteractiveCourseSubpage } from './AdminInteractiveCourseSubpage';
 import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
-import { DetailsEditSubpage } from './DetailsEditSubpage';
+import { EditCourseDetailsSubpage } from './EditCourseDetailsSubpage';
 
 export const CourseAdministartionSubpage = () => {
 
@@ -17,7 +17,7 @@ export const CourseAdministartionSubpage = () => {
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    element: <DetailsEditSubpage />
+                    element: <EditCourseDetailsSubpage />
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,

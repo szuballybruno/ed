@@ -11,8 +11,6 @@ import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { CourseItemPlaylistView } from '../models/views/CourseItemPlaylistView';
-import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
-import { CourseProgressView } from '../models/views/CourseProgressView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
@@ -20,44 +18,31 @@ import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentIte
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
-import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
-import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
-import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
-import { CourseItemSimpleType, OrderType } from '../shared/types/sharedTypes';
-import { VersionCode } from '../shared/types/versionCode';
+import { OrderType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/ActionParams';
-import { filterByProperty, orderByProperty } from '../utilities/helpers';
+import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationHelpers } from '../utilities/misc';
-import { CourseItemService } from './CourseItemService';
-import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
-import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { VideoService } from './VideoService';
 
 export class CourseService {
 
     constructor(
         private _moduleService: ModuleService,
-        private _userCourseBridgeService: UserCourseBridgeService,
-        private _videoService: VideoService,
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
         private _fileService: FileService,
-        private _examService: ExamService,
-        private _pretestService: PretestService,
-        private _courseItemService: CourseItemService) {
+        private _pretestService: PretestService) {
     }
 
     /**
@@ -75,20 +60,6 @@ export class CourseService {
                 id: x.id,
                 title: x.title
             }));
-    }
-
-    /**
-     * Returns a course progress short view
-     */
-    async getCourseProgressShortAsync(userId: PrincipalId) {
-
-        const views = await this._ormService
-            .query(CourseProgressView, { userId: userId.toSQLValue() })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        return this._mapperService
-            .mapTo(CourseProgressShortDTO, [views]);
     }
 
     /**
@@ -146,6 +117,8 @@ export class CourseService {
      */
     async createCourseAsync(dto: CreateCourseDTO) {
 
+        throwNotImplemented();
+
         const newCourse = {
             title: dto.title,
             teacherId: 1,
@@ -173,99 +146,6 @@ export class CourseService {
     }
 
     /**
-     * Returns the /learning/courses data.  
-     */
-    async getCourseProgressDataAsync(userId: PrincipalId) {
-
-        const courses = await this._ormService
-            .query(CourseLearningStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        // in progress courses 
-        const inProgressCourses = courses
-            .filter(x => x.isStarted && !x.isCompleted);
-
-        const inProgressCoursesAsCourseShortDTOs = this._mapperService
-            .mapTo(CourseLearningDTO, [inProgressCourses]);
-
-        // completed corurses
-        const completedCourses = courses
-            .filter(x => x.isCompleted);
-
-        const completedCoursesAsCourseShortDTOs = this._mapperService
-            .mapTo(CourseLearningDTO, [completedCourses]);
-
-        return {
-            isAnyCoursesComplete: completedCourses.any(x => true),
-            isAnyCoursesInProgress: inProgressCourses.any(x => true),
-            completedCourses: completedCoursesAsCourseShortDTOs,
-            inProgressCourses: inProgressCoursesAsCourseShortDTOs
-        } as UserCoursesDataDTO;
-    }
-
-    /**
-     * Returns the progress of the current active course, or null.
-     */
-    async getCurrentCourseProgressAsync(userId: number) {
-
-        // get current course id 
-        const currentCourseId = await this._userCourseBridgeService
-            .getCurrentCourseId(userId);
-
-        if (!currentCourseId)
-            return null;
-
-        // get course progress
-        const courseProgress = await this._ormService
-            .query(CourseProgressView, { courseId: currentCourseId, userId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
-
-        if (!courseProgress)
-            return null;
-
-        // get next items 
-        const nextItems = await this._getCourseNextItemsAsync(userId, currentCourseId);
-
-        return {
-            title: courseProgress.courseTitle,
-            totalCourseItemCount: courseProgress.totalCourseItemCount,
-            completedCourseItemCount: courseProgress.completedCourseItemCount,
-            progressPercentage: courseProgress.progressPercentage,
-            continueItemCode: courseProgress.continueItemCode,
-            nextItems
-        } as CourseProgressDTO;
-    }
-
-    /**
-     * Returns the next items in course 
-     */
-    private async _getCourseNextItemsAsync(userId: number, courseId: number) {
-
-        const modules = await this.getPlaylistModulesAsync(userId, courseId);
-
-        const currentModule = modules
-            .firstOrNull(x => x.moduleState === 'current') ?? modules.first();
-
-        const nextOrCurrentModules = modules
-            .filter(x => x.moduleOrderIndex >= currentModule.moduleOrderIndex);
-
-        const currentItemOrderIndex = currentModule
-            .items
-            .filter(x => x.state === 'current')[0]?.orderIndex ?? -1;
-
-        const nextItems = nextOrCurrentModules
-            .flatMap(module => module
-                .items
-                .filter(item => item.orderIndex > currentItemOrderIndex))
-            .slice(0, 3);
-
-        return nextItems;
-    }
-
-    /**
      * Save course thumbnail.
      */
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
@@ -286,35 +166,6 @@ export class CourseService {
                 setCourseThumbnailIdAsync,
                 course => course.coverFileId,
                 file.data);
-    }
-
-    /**
-     * Get the current course modules with items.
-     */
-    async getCurrentCoursePlaylistModulesAsync(userId: PrincipalId) {
-
-        const courseId = await this._userCourseBridgeService
-            .getCurrentCourseId(userId.toSQLValue());
-
-        if (!courseId)
-            throw new Error('There\'s no current course!');
-
-        return await this.getPlaylistModulesAsync(userId.toSQLValue(), courseId);
-    }
-
-    /**
-     * Get playlist modules with items.
-     */
-    async getPlaylistModulesAsync(userId: number, courseId: number) {
-
-        const views = await this._ormService
-            .query(CourseItemPlaylistView, { courseId, userId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getMany();
-
-        return this._mapperService
-            .mapTo(PlaylistModuleDTO, [views]);
     }
 
     /**
@@ -365,7 +216,12 @@ export class CourseService {
     }
 
     /**
-     * Saves the course details.
+     * Saves the course details 
+     * without incrementing version
+     * version incrementation is only necessary when 
+     * adding breaking changes, like modifying exams, 
+     * or playlist order indices. Changing the course name, or description etc.
+     * is not considered a breaking change.
      */
     async saveCourseDetailsAsync(dto: CourseDetailsEditDataDTO) {
 
@@ -460,6 +316,8 @@ export class CourseService {
 
     /**
      * Save course version 
+     * TODO use version save service
+     * @deprecated
      */
     private async _saveCourseVersionAsync(courseId: number) {
 
@@ -480,35 +338,10 @@ export class CourseService {
         return { courseVersionMigrations };
     }
 
-    // private async _incrementModuleVersionsAsync(oldCourseVersionId: number, newCourseVersionId: number) {
-
-    //     const oldModuleVersions = await this._ormService
-    //         .query(ModuleVersion, { oldCourseVersionId })
-    //         .where('courseVersionId', '=', 'oldCourseVersionId')
-    //         .getMany();
-
-    //     const newModuleVersions = oldModuleVersions
-    //         .map(oldModuleVersion => {
-
-    //             const newModule: InsertEntity<ModuleVersion> = {
-    //                 courseVersionId: newCourseVersionId,
-    //                 moduleDataId: oldModuleVersion.moduleDataId,
-    //                 moduleId: oldModuleVersion.moduleId
-    //             };
-
-    //             return newModule;
-    //         });
-
-    //     const newModuleVersionIds = await this._ormService
-    //         .createManyAsync(ModuleVersion, newModuleVersions);
-
-    //     return newModuleVersionIds
-    //         .map((x, i): VersionMigrationResult => ({
-    //             oldVersionId: oldModuleVersions[i].id,
-    //             newVersionId: x
-    //         }));
-    // }
-
+    /**
+     * TODO use version save service
+     * @deprecated 
+     */
     private async _createNewCourseVersionAsync(courseId: number, oldVersionId: number) {
 
         const oldDataId = (await this._ormService

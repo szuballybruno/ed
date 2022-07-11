@@ -58,6 +58,8 @@ import { UserStatsService } from './../services/UserStatsService';
 import { VideoRatingService } from './../services/VideoRatingService';
 import { VideoService } from './../services/VideoService';
 import { VersionSaveService } from '../services/VersionSaveService';
+import { CourseProgressService } from '../services/CourseProgressService';
+import { PlaylistService } from '../services/PlaylistService';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -153,12 +155,14 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService, globalConfig);
     const moduleService = new ModuleService(examService, videoService, ormConnectionService, mapperService, fileService, courseItemService, versionSaveService);
     const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService, questionAnswerService);
-    const courseService = new CourseService(moduleService, userCourseBridgeService, videoService, ormConnectionService, mapperService, fileService, examService, pretestService, courseItemService);
-    const miscService = new MiscService(courseService, ormConnectionService, mapperService, userCourseBridgeService);
+    const playlistService = new PlaylistService(userCourseBridgeService, ormConnectionService, mapperService);
+    const courseProgressService = new CourseProgressService(userCourseBridgeService, ormConnectionService, mapperService, playlistService);
+    const courseService = new CourseService(moduleService, ormConnectionService, mapperService, fileService, pretestService);
+    const miscService = new MiscService(courseProgressService, ormConnectionService, mapperService, userCourseBridgeService);
     const sampleMergeService = new SampleMergeService();
     const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService);
     const authorizationService = new AuthorizationService(permissionService, ormConnectionService);
-    const playerService = new PlayerService(ormConnectionService, courseService, examService, moduleService, userCourseBridgeService, videoService, questionAnswerService, mapperService, playbackService, authorizationService);
+    const playerService = new PlayerService(ormConnectionService, courseService, playlistService, examService, moduleService, videoService, questionAnswerService, playbackService, userCourseBridgeService, mapperService);
     const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService);
     const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService);
     const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService);

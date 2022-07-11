@@ -1,5 +1,5 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { useSetCourseMode } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { usePretestResults } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -21,7 +21,7 @@ export const PretestResultsSubpage = () => {
     const correctAnswerRate = pretestResults?.correctAnswerRate ?? 0;
     const isBeginner = correctAnswerRate < 50;
 
-    const { setCourseModeAsync, setCourseModeState } = useSetCourseMode();
+    const { setCourseModeAsync, setCourseModeState } = CourseApiService.useSetCourseMode();
     const showError = useShowErrorDialog();
 
     const setModeAndNavigateAsync = async (mode: CourseModeType) => {

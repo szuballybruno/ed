@@ -42,11 +42,4 @@ export class PlayerController {
 
         return this._playerService.getPlayerDataAsync(params.principalId, descriptorCode);
     };
-
-    @XControllerAction(apiRoutes.player.getCourseItems)
-    getCourseItemsAction = async (params: ActionParams) => {
-
-        return this._courseService
-            .getCurrentCoursePlaylistModulesAsync(params.principalId);
-    };
 }

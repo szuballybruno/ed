@@ -165,8 +165,11 @@ export const apiRoutes = {
 
     player: {
         getPlayerData: '/player/get-player-data',
-        getCourseItems: '/player/get-course-items',
         answerVideoQuestion: '/questions/answer-video-question'
+    },
+
+    playlist: {
+        getPlaylist: '/playlist/get-playlist',
     },
 
     playback: {
@@ -189,8 +192,11 @@ export const apiRoutes = {
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
         setRequiredCompletionDate: '/course/set-required-completion-date',
-        getCourseProgressData: '/course/get-course-progress-data',
-        getCourseProgressShort: '/course/get-course-progress-short'
+    },
+
+    courseProgress: {
+        getCourseProgressData: '/courseprogress/get-course-progress-data',
+        getCourseProgressShort: '/courseprogress/get-course-progress-short'
     },
 
     module: {
