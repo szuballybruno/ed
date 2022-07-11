@@ -26,6 +26,9 @@ import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageS
 import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
+import { User } from '../models/entity/User';
+import { Id } from '../shared/types/versionId';
+import { Course } from '../models/entity/course/Course';
 
 export class UserStatsService {
 
@@ -165,7 +168,7 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of [] 
      */
-    async getUserCourseStatsAsync(userId: number) {
+    async getUserCourseStatsAsync(userId: Id<User>) {
 
         const stats = await this._ormService
             .query(UserCourseStatsView, { userId })
@@ -220,7 +223,7 @@ export class UserStatsService {
      * Gets the statistics for the users every watched video
           * @returns
      */
-    getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: number) => {
+    getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: Id<Course>) => {
 
         const userId = principalId.toSQLValue()
 
@@ -239,8 +242,8 @@ export class UserStatsService {
           * @returns
      */
 
-    getUserExamStatsAsync = async (principalId: PrincipalId, courseId: number) => {
-
+    getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<Course>) => {
+        Id<Course>
         const userId = principalId.toSQLValue()
 
         const stats = await this._ormService
@@ -257,7 +260,7 @@ export class UserStatsService {
      * Gets the learning overview statistics data for single user
           * TODO: Correct mapping
      */
-    getUserLearningOverviewDataAsync = async (userId: number) => {
+    getUserLearningOverviewDataAsync = async (userId: Id<User>) => {
 
         const userSpentTimeRatio = await this._ormService
             .query(UserSpentTimeRatioView, { userId })
@@ -317,7 +320,7 @@ export class UserStatsService {
         } as Partial<UserLearningOverviewDataDTO>;
     };
 
-    calculateProductivityAsync = async (userId: number) => {
+    calculateProductivityAsync = async (userId: Id<User>) => {
 
         const userPerformanceView = await this._ormService
             .query(UserPerformanceView, { userId })

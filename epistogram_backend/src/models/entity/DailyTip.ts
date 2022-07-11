@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { PersonalityTraitCategory } from './PersonalityTraitCategory';
 import { StorageFile } from './StorageFile';
@@ -9,7 +10,7 @@ export class DailyTip {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<DailyTip>;
 
     @Column()
     @XViewColumn()
@@ -35,7 +36,7 @@ export class DailyTip {
     // personality trait 
     @Column()
     @XViewColumn()
-    personalityTraitCategoryId: number;
+    personalityTraitCategoryId: Id<PersonalityTraitCategory>;
     @OneToMany(_ => PersonalityTraitCategory, x => x.tips)
     @JoinColumn({ name: 'personality_trait_category_id' })
     personalityTraitCategory: Relation<PersonalityTraitCategory>;
@@ -43,7 +44,7 @@ export class DailyTip {
     // video file
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    videoFileId: number | null;
+    videoFileId: Id<StorageFile> | null;
     @OneToOne(_ => StorageFile)
     @JoinColumn({ name: 'video_file_id' })
     videoFile: Relation<StorageFile> | null;

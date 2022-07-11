@@ -3,7 +3,7 @@ import { User } from "../../models/entity/User";
 import { Id } from "../types/versionId";
 
 export class CommentListDTO {
-    id: number;
+    id: Id<Comment>;
     userId: Id<User>;
     threadId: number;
     fullName: string | null;

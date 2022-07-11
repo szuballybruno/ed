@@ -1,3 +1,5 @@
+import { Course } from '../models/entity/course/Course';
+import { User } from '../models/entity/User';
 import { CourseService } from '../services/CourseService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -7,6 +9,7 @@ import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -25,10 +28,12 @@ export class CourseController {
     @XControllerAction(apiRoutes.course.getPermissionAssignCourses)
     getPermissionAssignCoursesAction = async (parmas: ActionParams) => {
 
+        const userId = Id.create<User>(parmas
+            .getQuery()
+            .getValue(x => x.userId, 'int'))
+
         return this._courseService
-            .getPermissionAssignCoursesAsync(parmas.principalId, parmas
-                .getQuery()
-                .getValue(x => x.userId, 'int'));
+            .getPermissionAssignCoursesAsync(parmas.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.course.getAvailableCourses)
@@ -64,9 +69,13 @@ export class CourseController {
         const query = params
             .getQuery();
 
+        const courseId = Id
+            .create<Course>(query
+                .getValue(x => x.courseId, 'int'))
+
         return await this._courseService
             .getCourseContentAdminDataAsync(
-                query.getValue(x => x.courseId, 'int'),
+                courseId,
                 query.getValue(x => x.loadDeleted, 'boolean'));
     };
 
@@ -79,18 +88,20 @@ export class CourseController {
     @XControllerAction(apiRoutes.course.getCourseBriefData)
     getCourseBriefDataAction = async (params: ActionParams) => {
 
+        const courseId = Id.create<Course>(params
+            .getQuery()
+            .getValue(x => x.courseId, 'int'))
+
         return await this._courseService
-            .getCourseBriefDataAsync(params
-                .getQuery()
-                .getValue(x => x.courseId, 'int'));
+            .getCourseBriefDataAsync(courseId);
     };
 
     @XControllerAction(apiRoutes.course.getCourseDetails)
     getCourseDetailsAction = async (params: ActionParams) => {
 
-        const courseId = params
-            .getQuery<any>()
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id.create<Course>(params
+            .getQuery()
+            .getValue(x => x.courseId, 'int'))
 
         return await this._courseService
             .getCourseDetailsAsync(params.principalId, courseId);
@@ -113,8 +124,8 @@ export class CourseController {
         const mutations = bod
             .getValue<Mutation<CourseContentItemAdminDTO, 'versionCode'>>(x => x.mutations, 'any[]');
 
-        const courseId = bod
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id.create<Course>(bod
+            .getValue(x => x.courseId, 'int'));
 
         await this._courseService
             .saveCourseContentAsync(courseId, mutations);
@@ -126,9 +137,10 @@ export class CourseController {
         const file = params
             .getSingleFileOrFail();
 
-        const courseId = params
-            .getBody<{ courseId: number }>()
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<Course>(params
+                .getBody<{ courseId: number }>()
+                .getValue(x => x.courseId, 'int'));
 
         await this._courseService
             .saveCourseThumbnailAsync(file, courseId);
@@ -137,9 +149,12 @@ export class CourseController {
     @XControllerAction(apiRoutes.course.deleteCourse, { isPost: true })
     deleteCourseAction = async (params: ActionParams) => {
 
-        await this._courseService.softDeleteCourseAsync(params
-            .getBody<IdResultDTO>()
-            .getValue(x => x.id, 'int'));
+        const courseId = Id
+            .create<Course>(params
+                .getBody<IdResultDTO>()
+                .getValue(x => x.id, 'int'))
+
+        await this._courseService.softDeleteCourseAsync(courseId);
     };
 
     @XControllerAction(apiRoutes.course.createCourse, { isPost: true })
@@ -155,7 +170,9 @@ export class CourseController {
         const dto = params
             .getBody<{ courseId: number, mode: CourseModeType }>();
 
-        const courseId = dto.getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<Course>(dto.getValue(x => x.courseId, 'int'));
+
         const courseMode = dto.getValue(x => x.mode, 'custom', value => value === 'advanced' || value === 'beginner');
 
         return this._userCourseBridgeService
@@ -168,7 +185,8 @@ export class CourseController {
         const dto = params
             .getBody<{ courseId: number, requiredCourseCompletionDate: string }>();
 
-        const courseId = dto.getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<Course>(dto.getValue(x => x.courseId, 'int'));
         const requiredCourseCompletionDate = dto.getValue(x => x.requiredCourseCompletionDate, 'string');
 
         return this._userCourseBridgeService

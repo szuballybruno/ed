@@ -121,7 +121,7 @@ export class CompanyService extends QueryServiceBase<Company> {
 
         await this._ormService
             .save(Company, {
-                id: Id.create<Company>(dto.id),
+                id: dto.id,
                 name: dto.name
             });
     }

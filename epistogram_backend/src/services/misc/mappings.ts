@@ -1,5 +1,3 @@
-import { url } from 'inspector';
-import { View } from 'typeorm/schema-builder/view/View';
 import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
@@ -50,7 +48,6 @@ import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
-import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
@@ -114,7 +111,6 @@ import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
-import { UserDailyProgressDTO } from '../../shared/dtos/UserDailyProgressDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
@@ -122,8 +118,8 @@ import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { toFullName } from '../../utilities/helpers';
-import { MapperService } from '../MapperService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
@@ -791,7 +787,7 @@ const marray = [
                             ? urlService.getAssetUrl(user.avatarFilePath)
                             : null,
                         email: user.email,
-                        roleId: 0,
+                        roleId: Id.create(0),
                         isInvitationAccepted: user.isInvitationAccepted,
                         isTrusted: user.isTrusted,
                         jobTitleId: user.jobTitleId,
@@ -1099,8 +1095,6 @@ const marray = [
                 })
             })
         }),
-
-
 
 ] as const;
 

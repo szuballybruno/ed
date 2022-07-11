@@ -441,7 +441,7 @@ export class CourseService {
     /**
      * Gets the course content edit DTO.
      */
-    async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
+    async getCourseContentAdminDataAsync(courseId: Id<Course>, loadDeleted: boolean) {
 
         const views = await this._ormService
             .query(CourseAdminContentView, { courseId })

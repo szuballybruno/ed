@@ -11,7 +11,7 @@ export class UserPermissionDTO {
     permissionAssignmentBridgeId: Id<RoleAssignmentBridge> | null;
     permissionId: Id<Permission>;
     permissionCode: PermissionCodeType;
-    assigneeuserId: Id<User>;
+    assigneeUserId: Id<User>;
     contextCompanyId: Id<Company> | null;
     contextCompanyName: string | null;
     contextCourseId: Id<Course> | null;

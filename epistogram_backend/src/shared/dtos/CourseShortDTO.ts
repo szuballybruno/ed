@@ -1,14 +1,17 @@
+import { Course } from '../../models/entity/course/Course';
+import { CourseCategory } from '../../models/entity/CourseCategory';
 import { CourseStageNameType } from '../types/sharedTypes';
+import { Id } from '../types/versionId';
 
 export class CourseShortDTO {
-    courseId: number;
+    courseId: Id<Course>;
     currentItemCode: string | null;
     thumbnailImageURL: string;
     title: string;
     teacherName: string;
     categoryName: string;
     stageName: CourseStageNameType;
-    subCategoryId: number;
+    subCategoryId: Id<CourseCategory>;
     subCategoryName: string;
     isComplete: boolean;
     courseLength: number;

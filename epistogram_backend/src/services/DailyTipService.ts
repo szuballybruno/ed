@@ -7,6 +7,9 @@ import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
+import { Id } from '../shared/types/versionId';
+import { User } from '../models/entity/User';
 
 export class DailyTipService {
 
@@ -22,7 +25,7 @@ export class DailyTipService {
     /**
      * Deletes a daily tip.
      */
-    async deleteDailyTipAsync(id: number) {
+    async deleteDailyTipAsync(id: Id<DailyTip>) {
 
         await this._ormService
             .softDelete(DailyTip, [id])
@@ -32,7 +35,7 @@ export class DailyTipService {
      * Creates a new daily tip, but with isLive switched off, 
      * thus it won't be shown to users until it's enabled manually.
      */
-    async createDailyTipAsync(personalityTraitCategoryId: number, isMax: boolean) {
+    async createDailyTipAsync(personalityTraitCategoryId: Id<PersonalityTraitCategory>, isMax: boolean) {
 
         await this._ormService
             .createAsync(DailyTip, {
@@ -46,7 +49,7 @@ export class DailyTipService {
     /**
      * Returns edit data of a specified daily tip.
      */
-    async getDailyTipEditDataAsync(dailyTipId: number) {
+    async getDailyTipEditDataAsync(dailyTipId: Id<DailyTip>) {
 
         const dailyTip = await this._ormService
             .getSingleById(DailyTip, dailyTipId);
@@ -134,7 +137,8 @@ export class DailyTipService {
             await this._ormService
                 .createAsync(DailyTipOccurrence, {
                     dailyTipId: tip.dailyTipId,
-                    userId: userId.toSQLValue()
+                    userId: Id
+                        .create<User>(userId.toSQLValue())
                 } as DailyTipOccurrence);
         }
 

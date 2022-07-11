@@ -1,8 +1,10 @@
+import { User } from '../models/entity/User';
 import { UserService } from '../services/UserService';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -29,9 +31,10 @@ export class UserController {
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true, checkPermission: 'ACCESS_ADMIN' })
     deleteUserAction = async (params: ActionParams) => {
 
-        const deleteUserId = params
-            .getBody()
-            .getValue(x => x.userId, 'int');
+        const deleteUserId = Id
+            .create<User>(params
+                .getBody()
+                .getValue(x => x.userId, 'int'));
 
         return this._userService
             .deleteUserAsync(params.principalId, deleteUserId);
@@ -40,9 +43,10 @@ export class UserController {
     @XControllerAction(apiRoutes.user.getEditUserData)
     getEditUserDataAction = async (params: ActionParams) => {
 
-        const editedUserId = params
-            .getQuery()
-            .getValue(x => x.editedUserId, 'int');
+        const editedUserId = Id
+            .create<User>(params
+                .getQuery()
+                .getValue(x => x.editedUserId, 'int'));
 
         return await this._userService
             .getEditUserDataAsync(params.principalId, editedUserId);
@@ -85,9 +89,10 @@ export class UserController {
     @XControllerAction(apiRoutes.user.getBriefUserData)
     getBriefUserDataAction = async (params: ActionParams) => {
 
-        const userId = params
-            .getQuery()
-            .getValue(x => x.userId, 'int');
+        const userId = Id
+            .create<User>(params
+                .getQuery()
+                .getValue(x => x.userId, 'int'));
 
         return await this._userService
             .getBriefUserDataAsync(params.principalId, userId);

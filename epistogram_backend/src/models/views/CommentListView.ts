@@ -41,7 +41,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    parentCommentId: number;
+    parentCommentId: Id<Comment>;
 
     @ViewColumn()
     @XViewColumn()

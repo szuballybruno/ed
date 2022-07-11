@@ -1,6 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { CourseCategory } from '../entity/CourseCategory';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -10,7 +14,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<Course>;
 
     @IsDeletedFlag('bool')
     @ViewColumn()
@@ -23,7 +27,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    categoryId: number;
+    categoryId: Id<CourseCategory>;
 
     @ViewColumn()
     @XViewColumn()
@@ -31,7 +35,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    subCategoryId: number;
+    subCategoryId: Id<CourseCategory>;
 
     @ViewColumn()
     @XViewColumn()
@@ -39,7 +43,7 @@ export class CourseAdminShortView {
 
     @ViewColumn()
     @XViewColumn()
-    teacherId: number;
+    teacherId: Id<User>;
 
     @ViewColumn()
     @XViewColumn()

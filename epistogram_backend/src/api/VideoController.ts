@@ -1,5 +1,7 @@
+import { Video } from '../models/entity/video/Video';
 import { VideoService } from '../services/VideoService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -24,7 +26,10 @@ export class VideoController {
                 chunksCount: number
             }>();
 
-        const videoId = body.getValue(x => x.videoId, 'int');
+        const videoId = Id
+            .create<Video>(body
+                .getValue(x => x.videoId, 'int'));
+
         const chunksCount = body.getValue(x => x.chunksCount, 'int');
         const chunkIndex = body.getValue(x => x.chunkIndex, 'int');
 

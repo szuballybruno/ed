@@ -3,6 +3,7 @@ import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
 import { User } from '../models/entity/User';
 import { InvitationTokenPayload } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
 const { sign, verify } = JsonWebToken;
@@ -42,7 +43,7 @@ export class TokenService {
 
     verifySetNewPasswordToken = (token: string) => {
 
-        return this.verifyJWTToken<{ userId: number }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
+        return this.verifyJWTToken<{ userId: Id<User> }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
     };
 
     //
@@ -75,7 +76,7 @@ export class TokenService {
             `${this._config.security.tokenLifespans.refreshTokenLifespanInS}s`);
     };
 
-    createSetNewPasswordToken = (userId: number) => {
+    createSetNewPasswordToken = (userId: Id<User>) => {
 
         return this.getJWTToken(
             { userId },

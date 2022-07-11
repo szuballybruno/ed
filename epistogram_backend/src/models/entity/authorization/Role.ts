@@ -1,5 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../Company';
 import { RoleAssignmentBridge } from './RoleAssignmentBridge';
@@ -10,7 +11,7 @@ export class Role {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<Role>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -42,7 +43,7 @@ export class Role {
     // owner company 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    companyId: number | null;
+    companyId: Id<Company> | null;
     @JoinColumn(getJoinColumnName(Role, 'companyId'))
     @ManyToOne(_ => Company, x => x.ownedRoles)
     company: Relation<Company>;

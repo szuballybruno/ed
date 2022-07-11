@@ -1,7 +1,11 @@
+import { Role } from '../models/entity/authorization/Role';
+import { Company } from '../models/entity/Company';
+import { User } from '../models/entity/User';
 import { RoleService } from '../services/RoleService';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -34,19 +38,25 @@ export class RoleController {
     @XControllerAction(apiRoutes.roles.getRoleEditData)
     getRoleEditDataAction = (params: ActionParams) => {
 
-        return this._roleService
-            .getRoleEditDataAsync(params.principalId, params
+        const roleId = Id
+            .create<Role>(params
                 .getQuery()
-                .getValue(x => x.roleId, 'int'));
+                .getValue(x => x.roleId, 'int'))
+
+        return this._roleService
+            .getRoleEditDataAsync(params.principalId, roleId);
     };
 
     @XControllerAction(apiRoutes.roles.deleteRole, { isPost: true })
     deleteRoleAction = (params: ActionParams) => {
 
-        return this._roleService
-            .deleteRoleAsync(params.principalId, params
+        const roleId = Id
+            .create<Role>(params
                 .getBody()
-                .getValue(x => x.roleId, 'int'));
+                .getValue(x => x.roleId, 'int'))
+
+        return this._roleService
+            .deleteRoleAsync(params.principalId, roleId);
     };
 
     @XControllerAction(apiRoutes.roles.saveRole, { isPost: true })
@@ -64,11 +74,20 @@ export class RoleController {
         const query = params
             .getQuery();
 
+        const userId = Id
+            .create<User>(query
+                .getValue(x => x.userId, 'int'))
+
+        const companyId = Id
+            .create<Company>(query
+                .getValue(x => x.companyId, 'int'))
+
         return this._roleService
             .getAssignableRolesAsync(
                 params.principalId,
-                query.getValue(x => x.userId, 'int'),
-                query.getValue(x => x.companyId, 'int'));
+                userId,
+                companyId
+            );
     };
 
     @XControllerAction(apiRoutes.roles.getAssignablePermissions)
@@ -87,18 +106,24 @@ export class RoleController {
     @XControllerAction(apiRoutes.roles.getUserRoles)
     getUserRolesAction = (params: ActionParams) => {
 
-        return this._roleService
-            .getUserRolesAsync(params.principalId, params
+        const userId = Id
+            .create<User>(params
                 .getQuery()
-                .getValue(x => x.userId, 'int'));
+                .getValue(x => x.userId, 'int'))
+
+        return this._roleService
+            .getUserRolesAsync(params.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.roles.getUserPermissions)
     getUserPermissionsAsync = (params: ActionParams) => {
 
-        return this._roleService
-            .getUserPermissionsAsync(params.principalId, params
+        const userId = Id
+            .create<User>(params
                 .getQuery()
-                .getValue(x => x.userId, 'int'));
+                .getValue(x => x.userId, 'int'))
+
+        return this._roleService
+            .getUserPermissionsAsync(params.principalId, userId);
     };
 }

@@ -1,5 +1,13 @@
 import { ViewColumn, ViewEntity } from "typeorm";
 import { XViewColumn } from "../../services/XORM/XORMDecorators";
+import { Id } from "../../shared/types/versionId";
+import { Answer } from "../entity/answer/Answer";
+import { CourseVersion } from "../entity/course/CourseVersion";
+import { ExamVersion } from "../entity/exam/ExamVersion";
+import { Question } from "../entity/question/Question";
+import { QuestionData } from "../entity/question/QuestionData";
+import { QuestionVersion } from "../entity/question/QuestionVersion";
+import { VideoVersion } from "../entity/video/VideoVersion";
 
 @ViewEntity({
     synchronize: false,
@@ -10,27 +18,27 @@ export class QuestionDataView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: number;
+    questionId: Id<Question>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<VideoVersion>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<ExamVersion>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: number;
+    courseVersionId: Id<CourseVersion>;
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: number;
+    questionVersionId: Id<QuestionVersion>;
 
     @ViewColumn()
     @XViewColumn()
-    questionDataId: number;
+    questionDataId: Id<QuestionData>;
 
     @ViewColumn()
     @XViewColumn()
@@ -54,7 +62,7 @@ export class QuestionDataView {
 
     @ViewColumn()
     @XViewColumn()
-    answerId: number;
+    answerId: Id<Answer>;
 
     @ViewColumn()
     @XViewColumn()

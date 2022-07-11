@@ -11,7 +11,7 @@ export class UserRoleDTO {
     contextCompanyName: string;
     roleId: Id<Role>;
     roleName: string;
-    assigneeuserId: Id<User>;
+    assigneeUserId: Id<User>;
     isInherited: boolean;
     permissions: PermissionListDTO[];
 }

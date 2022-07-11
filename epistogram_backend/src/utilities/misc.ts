@@ -1,3 +1,4 @@
+import { Id } from "../shared/types/versionId";
 
 export type PropConstraintType<TObj, TProp> = {
     [K in keyof TObj]: TProp;
@@ -6,7 +7,7 @@ export type PropConstraintType<TObj, TProp> = {
 export type NoIdType<T> = Omit<NoComplexTypes<T>, 'id'>;
 
 export type NoComplexTypes<TObj> = {
-    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | Date | undefined | null) ? TKey : never]: TObj[TKey]
+    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | Date | Id<any> | undefined | null) ? TKey : never]: TObj[TKey]
 };
 
 export type InsertEntity<T> = NoIdType<NoComplexTypes<T>>;
@@ -25,11 +26,11 @@ export type KeyofConstrained<TOriginal, TConstraint> = keyof {
 
 export const instatiateInsertEntity = <T>(entity: InsertEntity<T>) => entity as T;
 
-export type VersionMigrationResult = { oldVersionId: number, newVersionId: number };
+export type VersionMigrationResult = { oldVersionId: Id<any>, newVersionId: Id<any> };
 
 export const VersionMigrationHelpers = {
 
-    getNewVersionId: (migrations: VersionMigrationResult[], oldVersionId: number) => {
+    getNewVersionId: (migrations: VersionMigrationResult[], oldVersionId: Id<any>) => {
 
         const asd = migrations
             .firstOrNull(x => x.oldVersionId === oldVersionId);
@@ -40,7 +41,7 @@ export const VersionMigrationHelpers = {
         return asd.newVersionId;
     },
 
-    create: (oldVersionIds: number[], newVersionIds: number[]) => {
+    create: (oldVersionIds: Id<any>[], newVersionIds: Id<any>[]) => {
 
         return oldVersionIds
             .map((x, i) => {

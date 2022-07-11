@@ -1,5 +1,7 @@
+import { User } from '../models/entity/User';
 import { CoinTransactionService } from '../services/CoinTransactionService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -34,8 +36,10 @@ export class CoinTransactionsController {
             .getQuery<any>()
             .getValue(x => x.userId, 'int');
 
+        const userIdAsIdType = Id.create<User>(userId)
+
         return this._coinTransactionService
-            .getCoinBalance(params.principalId, userId);
+            .getCoinBalance(params.principalId, userIdAsIdType);
     };
 
     @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
@@ -47,10 +51,12 @@ export class CoinTransactionsController {
         const userId = dto
             .getValue(x => x.userId, 'int');
 
+        const userIdAsIdType = Id.create<User>(userId)
+
         const amount = dto
             .getValue(x => x.amount, 'int');
 
         return await this._coinTransactionService
-            .giftCoinsToUserAsync(userId, amount);
+            .giftCoinsToUserAsync(userIdAsIdType, amount);
     };
 }

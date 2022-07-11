@@ -191,6 +191,8 @@ import { ExamScoreView } from '../../models/views/ExamScoreView';
 import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
+import { AnswerSessionGroupView } from '../../models/views/AnswerSessionGroupView';
+import { CorrectAnswerRatesSplitView } from '../../models/views/CorrectAnswerRatesSplitView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -310,18 +312,20 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView], // 1 user_course_stats_view
             ['common', 'user_course_completion_current_view', UserCourseCompletionCurrentView], // 2 user_course_progress_view, user_course_recommended_item_quota_view
             ['common', 'user_answer_view', UserAnswerView], // 2 user_performance_answer_group_view, user_video_stats_view
-            ['common', 'user_performance_answer_group_view', UserPerformanceAnswerGroupView], // 2 user_reaction_time_view, user_performance_view
-            ['common', 'user_reaction_time_view', UserReactionTimeView], // 1 user_learning_overview_stats_view
             ['common', 'user_session_block_view', UserSessionBlockView],  // 1 user_learning_overview_stats_view
             ['common', 'user_daily_course_item_progress_view', UserDailyCourseItemProgressView], // 1 user_weekly_course_item_progress_view
             ['common', 'user_course_progress_actual'], // 1 user_course_progress_view
             ['common', 'user_course_progress_view', UserCourseProgressView], // 1 user_course_stats_view
             ['common', 'user_video_practise_progress_view', UserVideoPractiseProgressView], // 1 user_video_practise_progress_view
             ['common', 'tempomat_calculation_data_view', TempomatCalculationDataView],
-            ['common', 'user_performance_view', UserPerformanceView],
-            ['common', 'most_productive_time_range_view', MostProductiveTimeRangeView],
             ['common', 'user_daily_activity_chart_view', UserDailyActivityChartView],
+            ['common', 'answer_session_group_view', AnswerSessionGroupView],
+            ['', 'correct_answer_rates_split_view', CorrectAnswerRatesSplitView],
+            ['', 'user_performance_answer_group_view', UserPerformanceAnswerGroupView], // 2 user_reaction_time_view, user_performance_view
+            ['', 'user_reaction_time_view', UserReactionTimeView], // 1 user_learning_overview_stats_view
+            ['', 'most_productive_time_range_view', MostProductiveTimeRangeView],
             ['', 'user_session_daily_view', UserSessionDailyView],
+            ['', 'user_performance_view', UserPerformanceView],
             ['', 'signup_completed_view', SignupCompletedView],
             ['', 'daily_tip_view', DailyTipView],
             ['', 'course_admin_detailed_view', CourseAdminDetailedView],
