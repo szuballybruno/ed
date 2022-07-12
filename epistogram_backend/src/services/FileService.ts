@@ -51,7 +51,7 @@ export class FileService {
         storageFileIdField,
         entityId
     }: {
-        entityId: number,
+        entityId: Id<any>,
         fileCode: FileCodesType,
         entitySignature: ClassType<T>,
         storageFileIdField: TField,
@@ -72,7 +72,7 @@ export class FileService {
             .getSingle();
 
         // get old file id 
-        const oldStorageFileId = entity[storageFileIdField] as any as number | null;
+        const oldStorageFileId = entity[storageFileIdField] as any as Id<any> | null;
 
         // delete previous file, and file entity
         if (oldStorageFileId) {
@@ -130,7 +130,7 @@ export class FileService {
             .uploadBufferToStorageAsync(fileBuffer, filePath);
     };
 
-    getFilePath = (fileType: FileCodesType, entityId: number) => {
+    getFilePath = (fileType: FileCodesType, entityId: Id<any>) => {
 
         const extension = fileCodes[fileType][0];
 

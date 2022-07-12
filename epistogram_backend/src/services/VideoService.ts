@@ -59,7 +59,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .answerQuestionAsync(Id.create<'User'>(userId.toSQLValue()), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
     };
 
-    setVideoFileIdAsync = async (videoVersionId: number, storageFileId: number) => {
+    setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
 
         const videoVersion = await this._ormService
             .query(VideoVersion, { videoVersionId })

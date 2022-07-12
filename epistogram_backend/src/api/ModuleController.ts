@@ -21,12 +21,12 @@ export class ModuleController {
         const query = params
             .getQuery<any>();
 
-        const courseId = Id
-            .create<'Course'>(query
-                .getValue(x => x.courseId, 'int'));
+        const courseVersionId = Id
+            .create<'CourseVersion'>(query
+                .getValue(x => x.courseVersionId, 'int'));
 
         return this._moduleService
-            .getModuleEditDTOsAsync(courseId);
+            .getModuleEditDTOsAsync(courseVersionId);
     };
 
     @XControllerAction(apiRoutes.module.saveCoverFile)

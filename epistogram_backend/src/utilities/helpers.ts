@@ -106,6 +106,8 @@ export class SafeObjectWrapper<TObject> {
     getValue(getter: (data: TObject) => number[], castTypeOrFn: 'float[]'): number[];
     getValue(getter: (data: TObject) => boolean, castTypeOrFn: 'boolean'): boolean;
     getValue(getter: (data: TObject) => boolean[], castTypeOrFn: 'boolean[]'): boolean[];
+    getValue<TId extends String>(getter: (data: TObject) => Id<TId>, castTypeOrFn: 'int'): Id<TId>;
+    getValue<TId extends String>(getter: (data: TObject) => Id<TId>[], castTypeOrFn: 'int[]'): Id<TId>[];
     getValue<TValue>(getter: (data: TObject) => TValue[], castTypeOrFn: 'any[]'): TValue[];
     getValue<TValue>(getter: (data: TObject) => TValue, castType: 'custom', fn: SafeObjectValidatorFunctionType<TValue>): TValue;
     getValue<TValue>(getter: (data: TObject) => TValue, castType: SaveObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue {

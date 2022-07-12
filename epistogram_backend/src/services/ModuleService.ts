@@ -20,6 +20,7 @@ import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
+import { ModulePlayerDTO } from '../shared/dtos/ModulePlayerDTO';
 
 export class ModuleService {
 
@@ -34,7 +35,7 @@ export class ModuleService {
     /**
      * Gets a detailed module dto.
      */
-    async getModuleDetailedDTOAsync(moduleId: number): Promise<ModulePlayerDTO> {
+    async getModuleDetailedDTOAsync(moduleId: Id<'Module'>): Promise<ModulePlayerDTO> {
 
         const view = await this._ormService
             .query(ModulePlayerView, { moduleId })
@@ -49,7 +50,7 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    async getModuleEditDTOsAsync(courseVersionId: number) {
+    async getModuleEditDTOsAsync(courseVersionId: Id<'CourseVersion'>) {
 
         const modules = await this._ormService
             .query(ModuleEditView, { courseVersionId })
@@ -63,7 +64,7 @@ export class ModuleService {
     /**
      * Saves module's thumbnail image
      */
-    async saveModuleThumbnailImageAsync(moduleVersionId: number, fileBuffer: Buffer) {
+    async saveModuleThumbnailImageAsync(moduleVersionId: Id<'ModuleVersion'>, fileBuffer: Buffer) {
 
         const moduleVersion = await this._ormService
             .getSingleById(ModuleVersion, moduleVersionId);

@@ -9,7 +9,7 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-export type EntityType<TEntity> = { id: Id<any> };
+export type EntityType<TEntity = any> = { id: Id<any> };
 
 export type SaveEntityType<TEntity> = Partial<TEntity>;
 

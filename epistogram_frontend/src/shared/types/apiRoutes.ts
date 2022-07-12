@@ -1,3 +1,8 @@
+import { Id } from './versionId';
+
+export type RouteParameterType = { body: any, query: any };
+export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
+
 export const apiRoutes = {
 
     registration: {
@@ -200,7 +205,8 @@ export const apiRoutes = {
     },
 
     module: {
-        getModuleListEditData: '/module/get-modules'
+        getModuleListEditData: '/module/get-modules',
+        saveCoverFile: '/module/save-cover-file' as ParametrizedRouteType<{ body: { moduleVersionId: Id<'ModuleVersion'> }, query: {} }>
     },
 
     video: {

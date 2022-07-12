@@ -270,8 +270,14 @@ export class CourseService {
             .where('courseId', '=', 'courseId')
             .getMany();
 
+        const courseVersionId = (await this._ormService
+            .query(LatestCourseVersionView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle())
+            .versionId;
+
         const modules = await this._moduleService
-            .getModuleEditDTOsAsync(courseId);
+            .getModuleEditDTOsAsync(courseVersionId);
 
         const items = this._mapperService
             .mapTo(CourseContentItemAdminDTO, [views]);
