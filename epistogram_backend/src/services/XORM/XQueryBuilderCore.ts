@@ -174,7 +174,7 @@ WHERE ${tableName}.id = value_table.id::int;
     /**
      * Hard delete 
      */
-    async hardDeleteAsync<T>(signature: ClassType<T>, ids: Id<'T'>[]) {
+    async hardDeleteAsync<T>(signature: ClassType<T>, ids: Id<any>[]) {
 
         const tableName = 'public.' + toSQLSnakeCasing(signature.name);
 
@@ -185,7 +185,7 @@ WHERE ${tableName}.id = value_table.id::int;
     /**
      * Soft delete 
      */
-    async softDeleteAsync<T>(signature: ClassType<T>, ids: Id<'T'>[]) {
+    async softDeleteAsync<T>(signature: ClassType<T>, ids: Id<any>[]) {
 
         const ents: any[] = ids
             .map((x) => ({

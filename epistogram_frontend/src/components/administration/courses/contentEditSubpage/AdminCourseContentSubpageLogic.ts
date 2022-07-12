@@ -4,10 +4,11 @@ import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { instantiate } from '../../../../shared/logic/sharedLogic';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { VersionCode } from '../../../../shared/types/versionCode';
+import { Id } from '../../../../shared/types/versionId';
 import { formatTime } from '../../../../static/frontendHelpers';
 
 export type RowSchemaModule = {
-    versionId: number;
+    versionId: Id<'ModuleVersion'>;
     isPretestModule: boolean;
     name: string;
     orderIndex: number;
@@ -35,7 +36,7 @@ export type RowSchema = {
         color: any;
     };
     videoFile: string;
-    quickMenu: number;
+    quickMenu: Id<'VideoVersion'> | Id<'ExamVersion'>;
     changedProperties: {
         itemOrderIndex: boolean;
         itemTitle: boolean;
@@ -126,7 +127,7 @@ export const mapToRowSchema = (
     // 
     const module = isPretest
         ? instantiate<ModuleEditDTO>({
-            versionId: -1,
+            versionId: Id.create<'ModuleVersion'>(-1),
             name: 'none',
             orderIndex: -1,
             description: '',

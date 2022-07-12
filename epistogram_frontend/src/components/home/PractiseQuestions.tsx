@@ -5,6 +5,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
 import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
 import { useNavigation } from '../../services/core/navigatior';
+import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
 import { getRandomInteger } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -149,7 +150,7 @@ export const PractiseQuestions = () => {
     const currentCourseItemCodeWrapper = useCurrentCourseItemCode();
     const currentCourseItemCode = currentCourseItemCodeWrapper?.currentCourseItemCode;
 
-    const handleAnswerQuestionAsync = async (answerId: number[]) => {
+    const handleAnswerQuestionAsync = async (answerId: Id<'Answer'>[]) => {
 
         await answerQuestionAsync(answerId, practiseQuestion!.questionVersionId);
     };

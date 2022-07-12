@@ -9,6 +9,7 @@ import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { VersionCode } from '../../../../shared/types/versionCode';
+import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -31,12 +32,13 @@ export const AdminCourseContentSubpage = () => {
 
     // util
     const ref = useRef(null);
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>('item_edit_dialog');
-    const isAnySelected = !!courseId && (courseId != -1);
+    const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
@@ -62,7 +64,7 @@ export const AdminCourseContentSubpage = () => {
     useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
 
     // module edit dialog logic
-    const canDelete = useCallback((moduleVersionId: number) => !itemsMutatorRef
+    const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorRef
         .current
         .mutatedItems
         .any(x => x.moduleVersionId === moduleVersionId), []);
@@ -190,7 +192,7 @@ export const AdminCourseContentSubpage = () => {
             }
             : {
                 name: 'no module',
-                id: -1,
+                id: Id.create<'ModuleVersion'>(-1),
                 orderIndex: -1
             };
 
@@ -200,10 +202,16 @@ export const AdminCourseContentSubpage = () => {
             .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
             .length;
 
-        const itemVersionId = getVirtualId();
+        const itemVersionId = type === 'video'
+            ? Id.create<'VideoVersion'>(getVirtualId())
+            : Id.create<'ExamVersion'>(getVirtualId());
 
         const newVersionCode = VersionCode
-            .create(type === 'video' ? 'video_version' : 'exam_version', itemVersionId);
+            .create(
+                type === 'video'
+                    ? 'video_version'
+                    : 'exam_version',
+                itemVersionId);
 
         const dto: CourseContentItemAdminDTO = {
             itemType: type === 'exam' ? 'exam' : 'video',
@@ -214,8 +222,8 @@ export const AdminCourseContentSubpage = () => {
             warnings: [],
             errors: [],
             versionCode: newVersionCode,
-            examVersionId: type === 'exam' ? itemVersionId : null,
-            videoVersionId: type === 'video' ? itemVersionId : null,
+            examVersionId: type === 'exam' ? itemVersionId as Id<'ExamVersion'> : null,
+            videoVersionId: type === 'video' ? itemVersionId as Id<'VideoVersion'> : null,
             moduleVersionId: moduleInfo.id,
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,

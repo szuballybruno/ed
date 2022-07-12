@@ -2,7 +2,7 @@ import { PermissionCodeType } from '../../types/sharedTypes';
 import { Id } from '../../types/versionId';
 
 export class UserPermissionDTO {
-    permissionAssignmentBridgeId: Id<'RoleAssignmentBridge'> | null;
+    permissionAssignmentBridgeId: Id<'PermissionAssignmentBridge'> | null;
     permissionId: Id<'Permission'>;
     permissionCode: PermissionCodeType;
     assigneeUserId: Id<'User'>;

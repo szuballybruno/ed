@@ -3,6 +3,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useUserListQuery } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
+import { Id } from '../../../shared/types/versionId';
 import { formatTimespan } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { ProfileImage } from '../../ProfileImage';
@@ -96,7 +97,7 @@ export const AdminCourseUsersGrid = () => {
 export const AdminCourseUsersSubpage = (props: {
     courses: CourseAdminListItemDTO[],
     refetchCoursesFunction: () => void,
-    navigationFunction: (courseId: number) => void
+    navigationFunction: (courseId: Id<'Course'>) => void
 }) => {
 
     const { courses, navigationFunction } = props;

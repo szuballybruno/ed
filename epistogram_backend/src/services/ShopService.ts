@@ -26,6 +26,7 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { StorageFile } from '../models/entity/StorageFile';
 import { Id } from '../shared/types/versionId';
 import { CourseCategory } from '../models/entity/CourseCategory';
+import { CourseShopItemListView } from '../models/views/CourseShopItemListView';
 
 export class ShopService {
 
@@ -192,10 +193,7 @@ export class ShopService {
     async getPrivateCourseListAsync() {
 
         const courses = await this._ormService
-            .query(CourseData, { visibility: 'private' })
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'coverFileId', CourseData))
-            .where('visibility', '=', 'visibility')
+            .query(CourseShopItemListView)
             .getMany();
 
         return this._mapperService
@@ -205,7 +203,7 @@ export class ShopService {
     async saveShopItemAsync(dto: ShopItemEditDTO, coverFile?: UploadedFile) {
 
         const isCourse = !!dto.courseId;
-        const courseCategoryId = Id.create<'CourseCategory'>(1);
+        const shopItemCategoryId = Id.create<'ShopItemCategory'>(1);
 
         // save entity details
         await this._ormService
@@ -216,7 +214,7 @@ export class ShopService {
                 courseId: isCourse ? dto.courseId : null,
                 name: isCourse ? null : dto.name,
                 purchaseLimit: isCourse ? null : dto.purchaseLimit,
-                shopItemCategoryId: isCourse ? courseCategoryId : dto.shopItemCategoryId,
+                shopItemCategoryId: isCourse ? shopItemCategoryId : dto.shopItemCategoryId,
                 detailsUrl: isCourse ? null : dto.detailsUrl
             });
 
@@ -236,7 +234,7 @@ export class ShopService {
             courseId: null,
             name: '',
             purchaseLimit: 0,
-            shopItemCategoryId: Id.create<'ShopItem'>(1),
+            shopItemCategoryId: Id.create<'ShopItemCategory'>(1),
             detailsUrl: null
         } as ShopItem;
 

@@ -6,6 +6,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useExamResults } from '../../services/api/examApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -17,7 +18,7 @@ export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
     setIsExamInProgress: (isExamInProgress: boolean) => void,
     continueCourse: () => void,
-    answerSessionId: number,
+    answerSessionId: Id<'AnswerSession'>,
     goToCourseRating: () => void
 }) => {
 

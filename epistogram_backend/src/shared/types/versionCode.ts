@@ -18,7 +18,7 @@ export class VersionCode extends String {
                 versionType: itemType === 'video_version'
                     ? 'video'
                     : 'exam',
-                versionId: Id.create(parseInt(versionId))
+                versionId: Id.create<any>(parseInt(versionId))
             };
         } catch (e: any) {
 
@@ -26,7 +26,7 @@ export class VersionCode extends String {
         }
     }
 
-    static create(versionType: 'video_version' | 'exam_version', versionId: number) {
+    static create(versionType: 'video_version' | 'exam_version', versionId: Id<'VideoVersion'> | Id<'ExamVersion'>) {
 
         return `${versionType}@${versionId}` as any as VersionCode;
     }

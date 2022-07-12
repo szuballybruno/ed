@@ -45,7 +45,7 @@ export class FileService {
         filePath: string,
         getEntityAsync: () => Promise<T>,
         assignFileToEntity: (fileId: Id<'StorageFile'>) => Promise<any>,
-        getFileEntityId: (entity: T) => Id<'T'> | null,
+        getFileEntityId: (entity: T) => Id<any> | null,
         fileBuffer: Buffer) => {
 
         // crate pending storage file
@@ -73,7 +73,7 @@ export class FileService {
             .uploadBufferToStorageAsync(fileBuffer, filePath);
     };
 
-    getFilePath = (folderPath: string, fileType: string, fileId: Id<'any'>, extension: string) => {
+    getFilePath = (folderPath: string, fileType: string, fileId: Id<any>, extension: string) => {
 
         extension = replaceAll(extension, '.', '');
 
@@ -98,7 +98,7 @@ export class FileService {
         return file;
     };
 
-    getFileEntityAsync = (id: Id<'any'>) => {
+    getFileEntityAsync = (id: Id<any>) => {
 
         return this._ormService
             .getSingleById(StorageFile, id);

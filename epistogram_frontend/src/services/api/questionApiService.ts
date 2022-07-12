@@ -10,7 +10,7 @@ export const useAnswerPractiseQuestion = () => {
 
     const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
-    const answerQuestionAsync = (answerIds: Id<'Answer'>[], questionVersionId: Id<'Question'>) => {
+    const answerQuestionAsync = (answerIds: Id<'Answer'>[], questionVersionId: Id<'QuestionVersion'>) => {
 
         const dto = {
             answerIds,

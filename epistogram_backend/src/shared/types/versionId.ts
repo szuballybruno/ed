@@ -1,6 +1,8 @@
 
 export class Id<T extends String> extends String {
 
+    private _forcedTypeIncompatibility: T = null as any;
+
     private constructor() {
 
         super();

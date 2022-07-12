@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import { useUserCourseStats } from '../../../../services/api/userStatsApiService';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
+import { Id } from '../../../../shared/types/versionId';
 import { Environment } from '../../../../static/Environemnt';
 import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
@@ -21,13 +22,14 @@ export const EmptyCell = () => <EpistoFont>
 </EpistoFont>;
 
 export const AdminUserCoursesDataGridControl = (props: {
-    handleMoreButton: (courseId: number | null) => void
-    handleSaveRequiredCompletionDate: (courseId: number | null, requiredCompletionDate: Date | null) => void
+    handleMoreButton: (courseId: Id<'Course'> | null) => void
+    handleSaveRequiredCompletionDate: (courseId: Id<'Course'> | null, requiredCompletionDate: Date | null) => void
 }) => {
 
     const { handleMoreButton, handleSaveRequiredCompletionDate } = props;
 
-    const userId = useIntParam('userId')!;
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { userCourseStats, userCourseStatsStatus, userCourseStatsError, refetchUserCourseStats } = useUserCourseStats(userId);
 
@@ -60,10 +62,10 @@ export const AdminUserCoursesDataGridControl = (props: {
             moreDetails: course.courseId
         } as Partial<UserCourseStatsDTO> & {
             requiredCompletionDateColumn: {
-                courseId: number,
+                courseId: Id<'Course'>,
                 requiredCompletionDate: Date
             },
-            moreDetails: number
+            moreDetails: Id<'Course'>
         };
     });
 
@@ -71,18 +73,18 @@ export const AdminUserCoursesDataGridControl = (props: {
 
     const columnDefGen = <TField extends keyof Partial<UserCourseStatsDTO & {
         requiredCompletionDateColumn: {
-            courseId: number,
+            courseId: Id<'Course'>,
             requiredCompletionDate: Date
         },
-        moreDetails: number
+        moreDetails: Id<'Course'>
     }>>(
         field: TField,
         columnOptions: OmitProperty<GridColumnType<Partial<UserCourseStatsDTO & {
             requiredCompletionDateColumn: {
-                courseId: number,
+                courseId: Id<'Course'>,
                 requiredCompletionDate: Date
             },
-            moreDetails: number
+            moreDetails: Id<'Course'>
         }>, string | undefined, TField>, 'field'>) => {
 
         return {

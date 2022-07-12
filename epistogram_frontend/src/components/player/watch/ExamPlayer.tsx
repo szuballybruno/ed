@@ -3,6 +3,7 @@ import { useStartExam } from '../../../services/api/examApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../../shared/types/versionId';
 import { usePaging } from '../../../static/frontendHelpers';
 import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
 import { ExamQuestions } from '../../exam/ExamQuestions';
@@ -11,8 +12,8 @@ import { EpistoPaging } from '../../universal/EpistoPaging';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
-    answerSessionId: number,
-    courseId: number,
+    answerSessionId: Id<'AnswerSession'>,
+    courseId: Id<'Course'>,
     continueCourse: () => void,
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {

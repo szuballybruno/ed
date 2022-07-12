@@ -64,7 +64,7 @@ export class CourseRatingService extends ServiceBase {
 
         const prevAnswers = await this._ormService
             .query(CourseRatingQuestionUserAnswer, {
-                userId: userId.toSQLValue(),
+                userId: Id.create<'User'>(userId.toSQLValue()),
                 courseId,
                 questionIds: answersDTO
                     .answers
@@ -79,12 +79,12 @@ export class CourseRatingService extends ServiceBase {
             .answers
             .map(x => ({
                 id: prevAnswers
-                    .firstOrNull(y => Id.read(y.courseRatingQuestionId) === x.quesitonId)?.id!,
+                    .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id!,
                 userId: Id.create<'User'>(userId.toSQLValue()),
-                courseId: Id.create<'Course'>(courseId),
+                courseId: courseId,
                 text: x.text ?? undefined,
                 value: x.value ?? undefined,
-                courseRatingQuestionId: Id.create<'CourseRatingQuestion'>(x.quesitonId)
+                courseRatingQuestionId: x.quesitonId
             }));
 
         await this._ormService

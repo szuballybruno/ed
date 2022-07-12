@@ -13,13 +13,16 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { Id } from '../../../shared/types/versionId';
 
 export const EditPersonalityTraitCategorySubpage = () => {
 
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const traitCategoryId = useIntParam('traitCategoryId')!;
+
+    const traitCategoryId = Id
+        .create<'PersonalityTraitCategory'>(useIntParam('traitCategoryId')!);
     const isMax = useBoolParam('isMax');
 
     // http 
@@ -39,7 +42,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
     const tips = personalityTraitCategoryDetails?.tips ?? [];
 
-    const handleEdit = (dailyTipId: number) => {
+    const handleEdit = (dailyTipId: Id<'DailyTip'>) => {
 
         navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { traitCategoryId, isMax, dailyTipId });
     };
@@ -58,7 +61,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
         }
     };
 
-    const handleDelete = async (dailyTipId: number) => {
+    const handleDelete = async (dailyTipId: Id<'DailyTip'>) => {
 
         try {
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { CourseProgressApiService } from '../../services/api/CourseProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { Id } from '../../shared/types/versionId';
 import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
@@ -19,7 +20,7 @@ export const LearningCourseStats = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
+    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
 
 
     const { navigateToPlayer } = useNavigation();

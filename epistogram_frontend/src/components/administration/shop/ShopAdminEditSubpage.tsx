@@ -22,12 +22,15 @@ import { EpistoSelect } from '../../controls/EpistoSelect';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { useIntParam } from '../../../static/locationHelpers';
+import { Id } from '../../../shared/types/versionId';
 
 export const ShopAdminEditSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
-    const shopItemId = useIntParam('shopItemId')!;
+
+    const shopItemId = Id
+        .create<'ShopItem'>(useIntParam('shopItemId')!);
     const showError = useShowErrorDialog();
 
     // http
@@ -163,7 +166,7 @@ export const ShopAdminEditSubpage = () => {
         if (isCourse) {
 
             setShopItemCategory(shopItemCategories
-                .filter(x => x.id === 1)[0]);
+                .filter(x => x.id === Id.create<'ShopItemCategory'>(1))[0]);
 
             if (!course)
                 setCourse(privateCourses[0]);
@@ -171,7 +174,7 @@ export const ShopAdminEditSubpage = () => {
         else {
 
             setShopItemCategory(shopItemCategories
-                .filter(x => x.id === 3)[0]);
+                .filter(x => x.id === Id.create<'ShopItemCategory'>(3))[0]);
 
             setCoverFilePath(shopItemEditData?.coverFilePath ?? '');
             setName(shopItemEditData?.name ?? '');

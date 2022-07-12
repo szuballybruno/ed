@@ -5,12 +5,13 @@ import { AssignableRoleDTO } from '../../../../shared/dtos/AssignableRoleDTO';
 import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { userRolesEqual } from '../../../../shared/logic/sharedLogic';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 import { AssignAuthItemDialog, SelectType } from './AssignAuthItemDialog';
 
 export const AssignRoleDialog = (props: {
     dialgoLogic: EpistoDialogLogicType,
-    userId: number,
+    userId: Id<'User'>,
     onAdd: (role: UserRoleDTO) => void,
     assignedRoles: UserRoleDTO[]
 }) => {
@@ -44,7 +45,7 @@ export const AssignRoleDialog = (props: {
             roleId: selectedRole.roleId,
             roleName: selectedRole.roleName,
             assigneeUserId: userId,
-            assignmentBridgeId: -1,
+            assignmentBridgeId: Id.create<'RoleAssignmentBridge'>(-1),
             isInherited: false,
             permissions: selectedRole.permissions
         };

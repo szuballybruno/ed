@@ -1,9 +1,10 @@
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
-export const useTeacherInfoEditData = (userId: number) => {
+export const useTeacherInfoEditData = (userId: Id<'User'>) => {
 
     const qr = useReactQuery2<TeacherInfoEditDTO>(apiRoutes.teacherInfo.getTeacherInfo, { userId });
 

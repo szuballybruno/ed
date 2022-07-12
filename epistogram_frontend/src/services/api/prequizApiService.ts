@@ -1,10 +1,11 @@
 import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../../shared/dtos/PrequizUserAnswerDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
-export const usePrequizQuestions = (courseId: number) => {
+export const usePrequizQuestions = (courseId: Id<'Course'>) => {
 
     const qr = useReactQuery2<PrequizQuestionDTO[]>(apiRoutes.prequiz.getQuestions, { courseId });
 
@@ -15,7 +16,7 @@ export const usePrequizQuestions = (courseId: number) => {
     };
 };
 
-export const usePrequizUserAnswer = (courseId: number, questionId: number | null) => {
+export const usePrequizUserAnswer = (courseId: Id<'Course'>, questionId: Id<'Question'> | null) => {
 
     const qr = useReactQuery2<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, { questionId, courseId }, !!questionId);
 
@@ -29,9 +30,9 @@ export const usePrequizUserAnswer = (courseId: number, questionId: number | null
 export const useAnswerPrequizQuestion = () => {
 
     const qr = usePostDataUnsafe<{
-        questionId: number,
-        courseId: number,
-        answerId: number | null,
+        questionId: Id<'Question'>,
+        courseId: Id<'Course'>,
+        answerId: Id<'Answer'> | null,
         value: number | null
     }, void>(apiRoutes.prequiz.answerPrequizQuestion);
 

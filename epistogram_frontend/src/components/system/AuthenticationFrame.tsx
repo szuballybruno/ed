@@ -4,6 +4,7 @@ import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api
 import { useNavigation } from '../../services/core/navigatior';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 
@@ -30,14 +31,14 @@ export const AuthorizationContext = createContext<AuthorizationContextDataType>(
 
 const userDefaults: UserDTO = {
     avatarUrl: '',
-    companyId: -1,
+    companyId: Id.create<'Company'>(-1),
     email: '',
     firstName: '',
-    id: -1,
+    id: Id.create<'User'>(-1),
     isInvitationAccepted: true,
     isTrusted: true,
     jobTitle: {
-        id: -1,
+        id: Id.create<'JobTitle'>(-1),
         name: ''
     },
     lastName: '',

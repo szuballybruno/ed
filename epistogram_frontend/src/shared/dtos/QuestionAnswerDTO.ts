@@ -1,5 +1,7 @@
+import { Id } from '../types/versionId';
+
 export type QuestionAnswerDTO = {
-    answerSessionId: number;
-    questionId: number;
-    answerId: number;
+    answerSessionId: Id<'AnswerSession'>;
+    questionId: Id<'Question'>;
+    answerId: Id<'Answer'>;
 }

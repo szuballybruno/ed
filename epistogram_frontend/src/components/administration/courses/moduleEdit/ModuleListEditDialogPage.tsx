@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { Delete, Edit } from '@mui/icons-material';
 import { MutableRefObject } from 'react';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
@@ -14,9 +15,9 @@ export const ModuleListEditDialogPage = ({
     editModule,
     mutator
 }: {
-    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', number>>,
-    editModule: (moduleVersionId: number) => void,
-    canDelete: (moduleVersionId: number) => boolean
+    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
+    editModule: (moduleVersionId: Id<'ModuleVersion'>) => void,
+    canDelete: (moduleVersionId: Id<'ModuleVersion'>) => boolean
 }) => {
 
     return (

@@ -10,5 +10,5 @@ export class VideoPlayerDataDTO {
     description: string;
     questions: QuestionDTO[];
     maxWatchedSeconds: number;
-    videoPlaybackSessionId: number;
+    videoPlaybackSessionId: Id<'VideoPlaybackSession'>;
 }

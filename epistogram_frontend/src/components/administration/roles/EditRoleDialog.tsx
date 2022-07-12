@@ -1,12 +1,13 @@
 import { Save } from '@mui/icons-material';
 import { useRoleEditData, useSaveRole } from '../../../services/api/rolesApiService';
+import { Id } from '../../../shared/types/versionId';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { EditRoleControl } from './EditRoleControl';
 
 export const EditRoleDialog = (props: {
-    logic: EpistoDialogLogicType<{ roleId: number }>,
+    logic: EpistoDialogLogicType<{ roleId: Id<'Role'> }>,
     onSave: () => void,
 }) => {
 

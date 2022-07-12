@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
+import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, useImageColor, useReactQuery2 } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
@@ -26,7 +27,8 @@ import { TabPanel } from './TabPanel';
 
 const CourseDetailsPage = () => {
 
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
     const { playCourse } = useNavigation();
     const showError = useShowErrorDialog();
 
@@ -36,7 +38,7 @@ const CourseDetailsPage = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [color, setColor] = useState<string>('white');
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
+    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
 
     useEffect(() => {
         if (colors) {

@@ -2,9 +2,10 @@ import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
-export const usePretestData = (courseId: number) => {
+export const usePretestData = (courseId: Id<'Course'>) => {
 
     const qr = useReactQuery2<PretestDataDTO>(apiRoutes.pretest.getPretestData, { courseId });
 
@@ -15,7 +16,7 @@ export const usePretestData = (courseId: number) => {
     };
 };
 
-export const usePretestResults = (courseId: number) => {
+export const usePretestResults = (courseId: Id<'Course'>) => {
 
     const qr = useReactQuery2<PretestResultDTO>(apiRoutes.pretest.getPretestResults, { courseId });
 
@@ -26,7 +27,7 @@ export const usePretestResults = (courseId: number) => {
     };
 };
 
-export const usePretestExamId = (courseId: number) => {
+export const usePretestExamId = (courseId: Id<'Course'>) => {
 
     const qr = useReactQuery2<IdResultDTO>(apiRoutes.pretest.getPretestExamId, { courseId });
 

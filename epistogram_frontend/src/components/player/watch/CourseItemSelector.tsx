@@ -19,11 +19,12 @@ import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
+import { Id } from '../../../shared/types/versionId';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
     modules: PlaylistModuleDTO[],
-    courseId: number,
+    courseId: Id<'Course'>,
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,

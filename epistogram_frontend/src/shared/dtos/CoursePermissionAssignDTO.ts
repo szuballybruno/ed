@@ -1,5 +1,6 @@
+import { Id } from '../types/versionId';
 
 export class CoursePermissionAssignDTO {
-    id: number;
-    title: string; 
+    id: Id<'Course'>;
+    title: string;
 }

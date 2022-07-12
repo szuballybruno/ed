@@ -1,12 +1,13 @@
 import { Comment } from '../../models/entity/Comment';
 import { getSeedList } from '../../services/sqlServices/SeedService';
+import { Id } from '../../shared/types/versionId';
 import { UserSeedDataType } from './seed_users';
 import { VideoVersionSeedDataType } from './seed_video_versions';
 
 export const getCommentsSeedData = (
     videoVersions: VideoVersionSeedDataType,
     users: UserSeedDataType) => getSeedList<Comment>()({
-        
+
         excel_comment_1: {
             deletionDate: null,
             creationDate: new Date(Date.now()),
@@ -25,7 +26,7 @@ export const getCommentsSeedData = (
             isAnonymous: false,
             isQuestion: false,
             videoVersionId: videoVersions.video_version_132.id,
-            parentCommentId: 1
+            parentCommentId: Id.create<'Comment'>(1)
         },
         excel_comment_3: {
             deletionDate: null,
@@ -35,7 +36,7 @@ export const getCommentsSeedData = (
             isAnonymous: false,
             isQuestion: false,
             videoVersionId: videoVersions.video_version_132.id,
-            parentCommentId: 1
+            parentCommentId: Id.create<'Comment'>(1)
         },
         excel_comment_4: {
             deletionDate: null,
@@ -55,7 +56,7 @@ export const getCommentsSeedData = (
             isAnonymous: false,
             isQuestion: false,
             videoVersionId: videoVersions.video_version_132.id,
-            parentCommentId: 4
+            parentCommentId: Id.create<'Comment'>(4)
 
         }
     });

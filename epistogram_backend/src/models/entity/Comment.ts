@@ -35,7 +35,7 @@ export class Comment {
 
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    parentCommentId: number | null;
+    parentCommentId: Id<'Comment'> | null;
 
     // TO ONE
 

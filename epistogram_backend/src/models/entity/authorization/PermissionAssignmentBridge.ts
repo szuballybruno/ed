@@ -63,7 +63,7 @@ export class PermissionAssignmentBridge {
     // context course
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
-    contextCourseId: Id<'Company'> | null;
+    contextCourseId: Id<'Course'> | null;
     @ManyToOne(_ => Course, x => x.contextPermissionAssignmentBridges)
     @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'contextCourseId'))
     contextCourse: Course | null;

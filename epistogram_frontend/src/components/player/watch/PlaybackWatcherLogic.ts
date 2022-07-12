@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
+import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { isBetweenThreshold } from '../../../static/frontendHelpers';
 
@@ -9,8 +10,8 @@ export const usePlaybackWatcher = (
     onVideoWatchedStateChanged: () => void,
     setMaxWatchedSeconds: (maxWatchedSeconds: number) => void,
     isSamplingEnabled: boolean,
-    videoVersionId: number,
-    videoPlaybackSessionId: number) => {
+    videoVersionId: Id<'VideoVersion'>,
+    videoPlaybackSessionId: Id<'VideoPlaybackSession'>) => {
 
     // the rate in which new samples are taken
     const sampleRateSeconds = 5;

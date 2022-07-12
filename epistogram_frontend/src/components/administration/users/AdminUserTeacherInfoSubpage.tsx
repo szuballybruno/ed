@@ -19,6 +19,7 @@ import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { useNavigation } from '../../../services/core/navigatior';
 import { EditSection } from '../courses/EditSection';
 import { useIntParam } from '../../../static/locationHelpers';
+import { Id } from '../../../shared/types/versionId';
 
 export const AdminUserTeacherInfoSubpage = (props: {
     users: AdminPageUserDTO[]
@@ -26,7 +27,8 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
     const { users } = props;
 
-    const editedUserId = useIntParam('userId')!;
+    const editedUserId = Id
+        .create<'User'>(useIntParam('userId')!);
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();

@@ -59,7 +59,7 @@ export class PrequizController {
             }>();
 
         const questionId = Id
-            .create<'Question'>(bod
+            .create<'PrequizQuestion'>(bod
                 .getValue(x => x.questionId, 'int'));
 
         const courseId = Id
@@ -73,7 +73,7 @@ export class PrequizController {
             .getValueOrNull(x => x.answerId, 'int')
 
         const answerIdAsIdType = answerId
-            ? Id.create<'Answer'>(answerId)
+            ? Id.create<'PrequizAnswer'>(answerId)
             : null
 
         return await this._prequizService

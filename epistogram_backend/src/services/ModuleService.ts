@@ -23,6 +23,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { VersionSaveService } from './VersionSaveService';
 import { VideoService } from './VideoService';
 import { ModulePlayerDTO } from '../shared/dtos/ModulePlayerDTO';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 
 export class ModuleService {
 
@@ -54,7 +55,14 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync = async (courseVersionId: Id<'CourseVersion'>) => {
+    getModuleEditDTOsAsync = async (courseId: Id<'Course'>) => {
+
+        const latestCourse = await this._ormService
+            .query(LatestCourseVersionView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle()
+
+        const courseVersionId = latestCourse.versionId
 
         const modules = await this._ormService
             .query(ModuleEditView, { courseVersionId })

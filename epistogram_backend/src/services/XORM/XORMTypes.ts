@@ -9,7 +9,7 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-export type EntityType<TEntity> = { id: Id<'TEntity'> };
+export type EntityType<TEntity> = { id: Id<any> };
 
 export type SaveEntityType<TEntity> = Partial<TEntity>;
 
@@ -131,5 +131,5 @@ export type SQLValueType = {
 };
 
 export type ParamConstraintType<TParams> = {
-    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | Date | SQLValueType | Id<'any'>;
+    [K in keyof TParams]: null | string | string[] | number | number[] | boolean | boolean[] | Date | SQLValueType | Id<any> | Id<any>[];
 };

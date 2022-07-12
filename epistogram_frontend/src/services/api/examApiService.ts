@@ -2,12 +2,13 @@ import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useStartExam = () => {
 
-    const qr = usePostDataUnsafe<{ answerSessionId: number }, void>(apiRoutes.exam.startExam);
+    const qr = usePostDataUnsafe<{ answerSessionId: Id<'AnswerSession'> }, void>(apiRoutes.exam.startExam);
 
     return {
         startExamAsync: qr.postDataAsync,
@@ -27,7 +28,7 @@ export const useSaveExamAnswer = () => {
     };
 };
 
-export const useExamResults = (answerSessionId: number) => {
+export const useExamResults = (answerSessionId: Id<'AnswerSession'>) => {
 
     const qr = useReactQuery2<ExamResultsDTO>(apiRoutes.exam.getExamResults, { answerSessionId });
 

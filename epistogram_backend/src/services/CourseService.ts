@@ -92,7 +92,7 @@ export class CourseService {
             .getSingleById(CourseData, courseId);
 
         return this._mapperService
-            .mapTo(CourseBriefData, [course]);
+            .mapTo(CourseBriefData, [course, courseId]);
     }
 
     /**
@@ -148,8 +148,8 @@ export class CourseService {
         await this._ormService
             .createAsync(CourseData, newCourse);
 
-        await this._pretestService
-            .createPretestExamAsync(newCourse.id);
+        /*  await this._pretestService
+             .createPretestExamAsync(newCourse.id); */
     }
 
     /**
@@ -280,14 +280,8 @@ export class CourseService {
             .where('courseId', '=', 'courseId')
             .getMany();
 
-        const courseVersionId = (await this._ormService
-            .query(LatestCourseVersionView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getSingle())
-            .versionId;
-
         const modules = await this._moduleService
-            .getModuleEditDTOsAsync(courseVersionId);
+            .getModuleEditDTOsAsync(courseId);
 
         const items = this._mapperService
             .mapTo(CourseContentItemAdminDTO, [views]);

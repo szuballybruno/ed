@@ -96,9 +96,9 @@ export class PrequizService {
      */
     async answerPrequizQuestionAsync(
         principalId: PrincipalId,
-        questionId: Id<'Question'>,
+        questionId: Id<'PrequizQuestion'>,
         courseId: Id<'Course'>,
-        answerId: Id<'Answer'> | null,
+        answerId: Id<'PrequizAnswer'> | null,
         value: number | null) {
 
 

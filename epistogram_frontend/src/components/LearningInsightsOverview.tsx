@@ -5,6 +5,7 @@ import { LearningStatisticsOverview } from './learningInsights/LearningStatistic
 import { LearningStatisticsSeciton } from './learningInsights/LearningStatisticsSeciton';
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';
+import { Id } from '../shared/types/versionId';
 
 export const LearningInsightsOverview = () => {
 
@@ -24,7 +25,7 @@ export const LearningInsightsOverview = () => {
             className="largeSoftShadow"
             marginBottom="10px">
 
-            <LearningStatistics userId={0} />
+            <LearningStatistics userId={Id.create<'User'>(0)} />
         </DashboardSection>
 
         <DashboardSection

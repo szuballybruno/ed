@@ -6,6 +6,7 @@ import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
 import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
+import { Id } from '../../shared/types/versionId';
 
 export const useUserListQuery = (searchText: string | null) => {
 
@@ -39,7 +40,7 @@ export const useSaveUser = () => {
     };
 };
 
-export const useEditUserData = (editedUserId: number) => {
+export const useEditUserData = (editedUserId: Id<'User'>) => {
 
     const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId });
 
@@ -51,7 +52,7 @@ export const useEditUserData = (editedUserId: number) => {
     };
 };
 
-export const useUserLearningOverviewData = (userId: number) => {
+export const useUserLearningOverviewData = (userId: Id<'User'>) => {
 
     const queryRes = useReactQuery2<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
 
@@ -64,7 +65,7 @@ export const useUserLearningOverviewData = (userId: number) => {
 };
 
 
-export const useBriefUserData = (userId: number | null) => {
+export const useBriefUserData = (userId: Id<'User'> | null) => {
 
     const queryRes = useReactQuery2<BriefUserDataDTO>(apiRoutes.user.getBriefUserData, { userId: userId }, !!userId);
 
@@ -75,7 +76,7 @@ export const useBriefUserData = (userId: number | null) => {
     };
 };
 
-export const deleteUserAsync = (userId: number) => {
+export const deleteUserAsync = (userId: Id<'User'>) => {
 
     return httpPostAsync(apiRoutes.user.deleteUser, { userId });
 };

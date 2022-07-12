@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
 import { UserVideoStatsDTO } from '../../../../shared/dtos/UserVideoStatsDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
+import { Id } from '../../../../shared/types/versionId';
 import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -13,13 +14,14 @@ import { ChipSmall } from '../../courses/ChipSmall';
 import { EmptyCell } from './AdminUserCoursesDataGridControl';
 
 export const AdminUserVideosDataGridControl = (props: {
-    courseId: number | null
+    courseId: Id<'Course'> | null
     handleMoreButton: () => void
 }) => {
 
     const { handleMoreButton, courseId } = props;
 
-    const userId = useIntParam('userId')!;
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(courseId!);
 

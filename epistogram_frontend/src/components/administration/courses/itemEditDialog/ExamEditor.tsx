@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useCallback, useMemo } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
+import { Id } from '../../../../shared/types/versionId';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { LoadingFrame } from '../../../system/LoadingFrame';
@@ -15,7 +16,7 @@ export const ExamEditor = ({
     questionMutations,
     answerMutations
 }: {
-    examVersionId: number,
+    examVersionId: Id<'ExamVersion'>,
     endabled: boolean,
     callback: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,

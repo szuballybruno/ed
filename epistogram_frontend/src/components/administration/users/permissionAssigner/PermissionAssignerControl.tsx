@@ -5,6 +5,7 @@ import { ChangeSet } from '../../../../shared/dtos/changeSet/ChangeSet';
 import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../../shared/dtos/role/UserRoleDTO';
 import { userPermissionsEqual, userRolesEqual } from '../../../../shared/logic/sharedLogic';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { EventTriggerType, useHandleAddRemoveItems, useSubscribeEventTrigger } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -21,7 +22,7 @@ type StateType = 'new' | 'removed' | 'none';
 type RoleRowType = {
     rowId: number,
     name: string;
-    roleId: number;
+    roleId: Id<'Role'>;
     contextCompanyName: string;
     state: StateType;
     isInherited: boolean;
@@ -72,7 +73,7 @@ const AuthItemRemoveButton = (props: {
 );
 
 const useRolesLogic = (props: {
-    userId: number,
+    userId: Id<'User'>,
     onChange: (data: { assignedRoles: ChangeSet<UserRoleDTO> }) => void,
     refetchTrigger: EventTriggerType
 }) => {
@@ -81,7 +82,7 @@ const useRolesLogic = (props: {
 
     // http
     const { userRoles: rolesFromServer, refetchUserRoles } = useUserRoles(userId);
-    
+
     // subscribe refetch trigger
     useSubscribeEventTrigger(refetchTrigger, refetchUserRoles);
 
@@ -93,7 +94,7 @@ const useRolesLogic = (props: {
 
     const assignedRolesChangeset: ChangeSet<UserRoleDTO> = useMemo(() => ({
         newItems: assignedRoles
-            .filter(x => !x.isInherited && x.assignmentBridgeId === -1),
+            .filter(x => !x.isInherited && x.assignmentBridgeId === Id.create<'RoleAssignmentBridge'>(-1)),
         deletedItems: removedRoles
     }), [assignedRoles, removedRoles]);
 
@@ -217,7 +218,7 @@ const useRolesLogic = (props: {
 
 // permissions 
 const usePermissionLogic = (props: {
-    userId: number,
+    userId: Id<'User'>,
     rolesLogic: ReturnType<typeof useRolesLogic>,
     onChange: (data: { assignedPermissions: ChangeSet<UserPermissionDTO> }) => void,
     refetchTrigger: EventTriggerType
@@ -252,7 +253,7 @@ const usePermissionLogic = (props: {
                 contextCompanyName: dto.contextCompanyName,
                 contextCourseId: null,
                 contextCourseName: null,
-                permissionAssignmentBridgeId: -1,
+                permissionAssignmentBridgeId: Id.create<'PermissionAssignmentBridge'>(-1),
                 permissionId: perm.id,
                 permissionCode: perm.code
             })));
@@ -269,7 +270,7 @@ const usePermissionLogic = (props: {
                 contextCompanyName: dto.contextCompanyName,
                 contextCourseId: null,
                 contextCourseName: null,
-                permissionAssignmentBridgeId: -1,
+                permissionAssignmentBridgeId: Id.create<'PermissionAssignmentBridge'>(-1),
                 permissionId: perm.id,
                 permissionCode: perm.code
             })));
@@ -294,7 +295,7 @@ const usePermissionLogic = (props: {
     const assignedPermissionsChangeset: ChangeSet<UserPermissionDTO> = useMemo(() => ({
         deletedItems: removedPermissions,
         newItems: assignedPermissions
-            .filter(x => x.permissionAssignmentBridgeId === -1)
+            .filter(x => x.permissionAssignmentBridgeId === Id.create<'PermissionAssignmentBridge'>(-1))
             .filter(x => x.parentRoleId === null)
     }), [assignedPermissions, removedPermissions]);
 
@@ -382,8 +383,8 @@ const usePermissionLogic = (props: {
 };
 
 export const PermissionAssignerControl = (props: {
-    userId: number,
-    userCompanyId: number | null,
+    userId: Id<'User'>,
+    userCompanyId: Id<'Company'> | null,
     onChange: (data: {
         assignedRoles?: ChangeSet<UserRoleDTO>;
         assignedPermissions?: ChangeSet<UserPermissionDTO>

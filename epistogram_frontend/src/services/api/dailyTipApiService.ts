@@ -1,6 +1,7 @@
 import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
@@ -15,7 +16,7 @@ export const useDailyTip = () => {
     };
 };
 
-export const useDailyTipEditData = (dailyTipId: number) => {
+export const useDailyTipEditData = (dailyTipId: Id<'DailyTip'>) => {
 
     const qr = useReactQuery2<DailyTipEditDataDTO>(apiRoutes.dailyTip.getDailyTipEditData, { dailyTipId });
 
@@ -38,7 +39,7 @@ export const useSaveDailyTip = () => {
 
 export const useCreateDailyTip = () => {
 
-    const qr = usePostDataUnsafe<{ personalityTraitCategoryId: number, isMax: boolean }, void>(apiRoutes.dailyTip.createDailyTip);
+    const qr = usePostDataUnsafe<{ personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }, void>(apiRoutes.dailyTip.createDailyTip);
 
     return {
         createDailyTipAsync: qr.postDataAsync,
@@ -48,7 +49,7 @@ export const useCreateDailyTip = () => {
 
 export const useDeleteDailyTip = () => {
 
-    const qr = usePostDataUnsafe<{ dailyTipId: number }, void>(apiRoutes.dailyTip.deleteDailyTip);
+    const qr = usePostDataUnsafe<{ dailyTipId: Id<'DailyTip'> }, void>(apiRoutes.dailyTip.deleteDailyTip);
 
     return {
         deleteDailyTipAsync: qr.postDataAsync,

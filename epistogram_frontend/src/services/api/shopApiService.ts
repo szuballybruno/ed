@@ -6,6 +6,7 @@ import { ShopItemCategoryDTO } from '../../shared/dtos/ShopItemCategoryDTO';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
@@ -43,7 +44,7 @@ export const useAdminShopItems = () => {
     };
 };
 
-export const useShopItemEditData = (shopItemId: number) => {
+export const useShopItemEditData = (shopItemId: Id<'ShopItem'>) => {
 
     const qr = useReactQuery2<ShopItemEditDTO>(apiRoutes.shop.getShopItemEditData, { shopItemId });
 
@@ -55,7 +56,7 @@ export const useShopItemEditData = (shopItemId: number) => {
     };
 };
 
-export const useShopItemBriefData = (shopItemId: number | null) => {
+export const useShopItemBriefData = (shopItemId: Id<'ShopItem'> | null) => {
 
     const qr = useReactQuery2<ShopItemBriefData>(apiRoutes.shop.getShopItemBriefData, { shopItemId }, !!shopItemId);
 
@@ -84,7 +85,7 @@ export const usePurchaseShopItem = () => {
         firstItemCode: string | null
     };
 
-    const qr = usePostDataUnsafe<{ shopItemId: number }, PurhcaseResultType>(apiRoutes.shop.purchaseShopItem);
+    const qr = usePostDataUnsafe<{ shopItemId: Id<'ShopItem'> }, PurhcaseResultType>(apiRoutes.shop.purchaseShopItem);
 
     return {
         purchaseShopItemAsync: qr.postDataAsync,

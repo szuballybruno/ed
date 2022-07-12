@@ -85,6 +85,7 @@ import { CourseModuleOverviewView } from '../../models/views/CourseModuleOvervie
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
+import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
@@ -295,6 +296,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'video_playback_sample_view'],
             ['basic', 'video_version_view', VideoVersionView],
             ['basic', 'exam_version_view', ExamVersionView],
+            ['basic', 'course_shop_item_list_view', CourseShopItemListView],
             ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view

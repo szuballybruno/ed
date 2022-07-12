@@ -2,6 +2,7 @@ import { Image } from '@chakra-ui/image';
 import { Flex } from '@chakra-ui/layout';
 import React, { memo } from 'react';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
+import { Id } from '../../../shared/types/versionId';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ForceNoOverflowY } from '../../controls/ForceNoOverflowY';
@@ -10,7 +11,7 @@ import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
 export const AdminCourseList = memo((props: {
-    onCourseClick: (courseId: number) => void,
+    onCourseClick: (courseId: Id<'Course'>) => void,
     courses: CourseAdminListItemDTO[],
     noOverflow?: boolean
 }) => {
@@ -21,7 +22,8 @@ export const AdminCourseList = memo((props: {
     const isMinimized = true;
 
     // util
-    const courseId = useIntParam('courseId');
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
 
     return <Flex
         className="roundBorders"

@@ -7,6 +7,7 @@ import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssign
 import { CoursePermissionAssignDTO } from '../../../../shared/dtos/CoursePermissionAssignDTO';
 import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
 import { userPermissionsEqual } from '../../../../shared/logic/sharedLogic';
+import { Id } from '../../../../shared/types/versionId';
 import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
 import { SegmentedButton } from '../../../controls/SegmentedButton';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
@@ -14,7 +15,7 @@ import { AssignAuthItemDialog, SelectType } from './AssignAuthItemDialog';
 
 export const AssignPermissionDialog = (props: {
     dialgoLogic: EpistoDialogLogicType,
-    userId: number,
+    userId: Id<'User'>,
     onAdd: (role: UserPermissionDTO) => void,
     assignedPermissions: UserPermissionDTO[]
 }) => {
@@ -24,15 +25,15 @@ export const AssignPermissionDialog = (props: {
     const [selectedCompany, setSelectedCompany] = useState<RoleAssignCompanyDTO | null>(null);
     const [selectedCourse, setSelectedCourse] = useState<CoursePermissionAssignDTO | null>(null);
     const [selectedPermission, setSelectedPermission] = useState<AssignablePermissionDTO | null>(null);
-    
+
     const paging = usePaging(['Company level permissions', 'Course level permissions']);
 
     // http
     const { roleAssignCompanies } = useRoleAssignCompanies();
     const { permissionAssignCourses } = CourseApiService.usePermissionAssignCourses(userId);
     const { assignablePermissionList } = useAssignablePermissions(
-        userId, 
-        paging.currentIndex === 1 ? selectedCourse?.id ?? null : null, 
+        userId,
+        paging.currentIndex === 1 ? selectedCourse?.id ?? null : null,
         paging.currentIndex === 0 ? selectedCompany?.id ?? null : null);
 
     // init permission selector
@@ -57,7 +58,7 @@ export const AssignPermissionDialog = (props: {
             contextCourseName: selectedCourse?.title ?? null,
             parentRoleId: null,
             parentRoleName: null,
-            permissionAssignmentBridgeId: -1
+            permissionAssignmentBridgeId: Id.create<'PermissionAssignmentBridge'>(-1)
         };
     }, [selectedCompany, selectedPermission]);
 

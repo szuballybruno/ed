@@ -1,6 +1,7 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { MutableRefObject } from 'react';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
@@ -10,7 +11,7 @@ export const ModuleEditDialogPage = ({
     mutator,
     dto
 }: {
-    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', number>>,
+    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
     dto: ModuleEditDTO
 }) => {
 

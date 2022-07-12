@@ -21,10 +21,12 @@ latest_given_answer_ids AS
 )
 SELECT 
 	u.id user_id,
+	qv.question_id,
 	qv.id question_version_id,
 	qd.question_text question_text,
 	qd.image_url image_url,
 	qd.type_id type_id,
+	av.answer_id,
 	av.id answer_version_id,
 	ad.text answer_text,
 	lgai.given_answer_id,

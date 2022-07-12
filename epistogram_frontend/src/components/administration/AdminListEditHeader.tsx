@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/layout';
 import { Close } from '@mui/icons-material';
 import { ButtonType } from '../../models/types';
+import { Id } from '../../shared/types/versionId';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoCheckbox } from '../controls/EpistoCheckbox';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -11,7 +12,7 @@ import { BulkEditButtons, BulkEditButtonType } from './BulkEditButtons';
 export const AdminListEditHeader = (props: {
     isAllSelected?: boolean,
     selectAllOrNone?: (isAll: boolean) => void,
-    selectedIds?: number[],
+    selectedIds?: Id<'ShopItem'>[],
     headerButtons?: BulkEditButtonType[],
     itemLabel?: string,
     onSearchChanged?: (value: string) => void,

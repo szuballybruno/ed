@@ -4,6 +4,7 @@ import { apiRoutes } from '../../shared/types/apiRoutes';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompanyDTO';
+import { Id } from '../../shared/types/versionId';
 
 export const useCompaniesAdmin = () => {
 
@@ -69,7 +70,7 @@ export const useCompanies = () => {
     };
 };
 
-export const useCompanyEditData = (companyId: number) => {
+export const useCompanyEditData = (companyId: Id<'Company'>) => {
 
     const qr = useReactQuery2<CompanyEditDataDTO>(apiRoutes.companies.getCompanyEditData, { companyId });
 

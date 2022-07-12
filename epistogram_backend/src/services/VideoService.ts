@@ -34,6 +34,7 @@ import { User } from '../models/entity/User';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { Answer } from '../models/entity/answer/Answer';
+import { LatestVideoView } from '../models/views/LatestVideoView';
 
 export class VideoService extends QueryServiceBase<VideoData> {
 
@@ -187,9 +188,22 @@ export class VideoService extends QueryServiceBase<VideoData> {
 
     setVideoThumbnailFileId = async (videoId: Id<'Video'>, thumbnailFileId: Id<'StorageFile'>) => {
 
+        const videoData = await this._ormService
+            .withResType<VideoData>()
+            .query(LatestVideoView, { videoId })
+            .select(VideoData)
+            .leftJoin(VideoVersion, (x => x
+                .on('id', '=', 'videoVersionId', LatestVideoView)))
+            .leftJoin(VideoData, (x => x
+                .on('id', '=', 'videoDataId', VideoVersion)))
+            .where('videoId', '=', 'videoId')
+            .getSingle()
+
+        const videoDataId = videoData.id
+
         await this._ormService
             .save(VideoData, {
-                id: videoId,
+                id: videoDataId,
                 thumbnailFileId: thumbnailFileId
             });
     };
@@ -236,6 +250,12 @@ export class VideoService extends QueryServiceBase<VideoData> {
         chunksCount: number,
         getFile: () => UploadedFile | undefined) => {
 
+        const videoVersion = await this._ormService
+            .query(LatestVideoView, { videoId })
+            .getSingle()
+
+        const videoVersionId = videoVersion.videoVersionId
+
         const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
         const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
@@ -277,7 +297,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
                 fs.rmSync(filePath);
 
                 // upload to cloud 
-                await this._uploadVideoFileAsync(videoId, fullFile);
+                await this._uploadVideoFileAsync(videoVersionId, fullFile);
             }
         }
         catch (e) {

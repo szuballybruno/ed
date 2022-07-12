@@ -30,7 +30,7 @@ export class CourseRatingQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: Id<'Question'>;
+    questionId: Id<'CourseRatingQuestion'>;
 
     @ViewColumn()
     @XViewColumn()

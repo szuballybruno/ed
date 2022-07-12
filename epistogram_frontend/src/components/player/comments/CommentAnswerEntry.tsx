@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { Avatar, Checkbox } from '@mui/material';
 import { useContext, useState } from 'react';
+import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -9,12 +10,12 @@ import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
 export const CommentAnswerEntry = (props: {
     handleCreateNewComment: (
-        replyToCommentId: number | null,
+        replyToCommentId: Id<'Comment'> | null,
         isAnonymous: boolean,
         isQuestion: boolean,
         text: string
     ) => void,
-    currentReplyCommentId: number | null,
+    currentReplyCommentId: Id<'Comment'> | null,
     currentReplyUserFullName: string | null,
     setCurrentReplyUserFullName: React.Dispatch<React.SetStateAction<string | null>>,
 }) => {

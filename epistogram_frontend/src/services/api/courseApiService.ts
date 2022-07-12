@@ -159,7 +159,7 @@ export const CourseApiService = {
 
     useUserCourses: (
         searchTerm: string | null,
-        filterCategoryId: number | null,
+        filterCategoryId: Id<'CourseCategory'> | null,
         isFeatured: boolean,
         isRecommended: boolean,
         orderBy: string | null

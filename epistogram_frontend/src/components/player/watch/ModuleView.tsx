@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/layout';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { ModulePlayerDTO } from '../../../shared/dtos/ModuleDetailedDTO';
+import { ModulePlayerDTO } from '../../../shared/dtos/ModulePlayerDTO';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';

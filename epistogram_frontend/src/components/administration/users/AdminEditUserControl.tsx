@@ -13,6 +13,7 @@ import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
 import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { Id } from '../../../shared/types/versionId';
 import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -43,7 +44,8 @@ export const AdminEditUserControl = (props: {
         refetchTrigger
     } = props;
 
-    const editedUserId = useIntParam('userId')!;
+    const editedUserId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { hasPermission } = useContext(AuthorizationContext);
 
@@ -138,7 +140,7 @@ export const AdminEditUserControl = (props: {
 
         if (!editedUserId) {
             const newUser: UserEditDTO = {
-                id: -1,
+                id: Id.create<'User'>(-1),
                 firstName,
                 lastName,
                 email,

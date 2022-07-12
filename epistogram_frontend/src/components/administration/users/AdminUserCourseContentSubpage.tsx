@@ -4,6 +4,7 @@ import { useEditUserData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { Id } from '../../../shared/types/versionId';
 import { useIntParam } from '../../../static/locationHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
@@ -20,17 +21,18 @@ export const AdminUserCourseContentSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const userId = useIntParam('userId')!;
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { userEditData } = useEditUserData(userId);
     const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: number | null }>('sasd');
+    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
 
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const handleSaveRequiredCompletionDate = (courseId: number | null, requiredCompletionDate: Date | null) => {
+    const handleSaveRequiredCompletionDate = (courseId: Id<'Course'> | null, requiredCompletionDate: Date | null) => {
 
         if (!courseId || !requiredCompletionDate)
             showError('Hiba történt');
@@ -67,7 +69,7 @@ export const AdminUserCourseContentSubpage = (props: {
 
             <AdminUserCoursesDataGridControl
                 handleMoreButton={
-                    (courseId: number | null) => dialogLogic.openDialog({ params: { courseId: courseId } })
+                    (courseId: Id<'Course'> | null) => dialogLogic.openDialog({ params: { courseId: courseId } })
                 }
                 handleSaveRequiredCompletionDate={handleSaveRequiredCompletionDate} />
         </AdminSubpageHeader >

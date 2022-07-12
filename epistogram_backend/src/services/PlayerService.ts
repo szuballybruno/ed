@@ -65,13 +65,13 @@ export class PlayerService {
         const { itemId, itemType } = readItemCode(validItemCode);
 
         const videoPlayerDTO = itemType === 'video' ? await this
-            ._getVideoPlayerDataDTOAsync(userIdAsIdType, itemId) : null;
+            ._getVideoPlayerDataDTOAsync(userIdAsIdType, itemId as Id<'Video'>) : null;
 
         const examPlayerDTO = itemType === 'exam' ? await this._examService
-            .getExamPlayerDTOAsync(userIdAsIdType, itemId) : null;
+            .getExamPlayerDTOAsync(userIdAsIdType, itemId as Id<'Exam'>) : null;
 
         const modulePlayerDTO = itemType === 'module' ? await this._moduleService
-            .getModuleDetailedDTOAsync(itemId) : null;
+            .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
 
         //
         // SET START DATE 

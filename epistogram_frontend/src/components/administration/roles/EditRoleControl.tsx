@@ -9,6 +9,7 @@ import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { PermissionListDTO } from '../../../shared/dtos/role/PermissionListDTO';
 import { RoleCreateDTO } from '../../../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../../../shared/dtos/role/RoleEditDTO';
+import { Id } from '../../../shared/types/versionId';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
@@ -28,7 +29,7 @@ export const EditRoleControl = (props: {
     roleEditData?: RoleEditDTO,
     saveState: LoadingStateType[],
     error: any[],
-    logic: EpistoDialogLogicType | EpistoDialogLogicType<{ roleId: number }>,
+    logic: EpistoDialogLogicType | EpistoDialogLogicType<{ roleId: Id<'Role'> }>,
     saveButton: ButtonType
 }) => {
 
@@ -85,9 +86,9 @@ export const EditRoleControl = (props: {
     }, [selectedPermissions, setSelectedPermissions, deselectPermission]);
 
     const handleSaveRole = useCallback(() => onSave({
-        roleId: roleEditData?.roleId ?? -1,
+        roleId: roleEditData?.roleId ?? Id.create<'Role'>(-1),
         companyId: isCustomRole
-            ? selectedCompany?.id ?? -1
+            ? selectedCompany?.id ?? Id.create<'Company'>(-1)
             : null,
         name,
         isCustom: isCustomRole,
@@ -120,7 +121,7 @@ export const EditRoleControl = (props: {
         <EpistoDialog
             closeButtonType="top"
             logic={logic as EpistoDialogLogicType}>
-                
+
             <LoadingFrame
                 direction="column"
                 loadingState={[permissionsListState, companiesState]}

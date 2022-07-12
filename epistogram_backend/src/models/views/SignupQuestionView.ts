@@ -18,6 +18,10 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
+	questionId: Id<'Question'>;
+
+	@ViewColumn()
+	@XViewColumn()
 	questionVersionId: Id<'QuestionVersion'>;
 
 	@ViewColumn()
@@ -31,6 +35,10 @@ export class SignupQuestionView {
 	@ViewColumn()
 	@XViewColumn()
 	typeId: number;
+
+	@ViewColumn()
+	@XViewColumn()
+	answerId: Id<'Answer'>;
 
 	@ViewColumn()
 	@XViewColumn()

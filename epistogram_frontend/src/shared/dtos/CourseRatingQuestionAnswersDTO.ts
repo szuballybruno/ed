@@ -1,6 +1,7 @@
+import { Id } from '../types/versionId';
 import { CourseRatingQuestionAnswerDTO } from './CourseRatingQuestionAnswerDTO';
 
 export class CourseRatingQuestionAnswersDTO {
-    courseId: number;
+    courseId: Id<'Course'>;
     answers: CourseRatingQuestionAnswerDTO[];
 }

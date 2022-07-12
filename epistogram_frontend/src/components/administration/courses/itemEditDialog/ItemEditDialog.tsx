@@ -9,6 +9,7 @@ import { useCallback } from 'react';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
+import { Id } from '../../../../shared/types/versionId';
 
 export const ItemEditDialog = ({
     dialogLogic,
@@ -37,7 +38,7 @@ export const ItemEditDialog = ({
         .addIf(isVideo, {
             content: () => <VideoEditor
                 enabled={dialogLogic.isOpen}
-                videoVersionId={itemVersionId}
+                videoVersionId={itemVersionId as Id<'VideoVersion'>}
                 onClose={handleCallback}
                 answerMutations={answerMutations}
                 questionMutations={questionMutations} />,
@@ -50,7 +51,7 @@ export const ItemEditDialog = ({
         .addIf(!isVideo, {
             content: () => <ExamEditor
                 callback={handleCallback}
-                examVersionId={itemVersionId}
+                examVersionId={itemVersionId as Id<'ExamVersion'>}
                 endabled={dialogLogic.isOpen}
                 questionMutations={questionMutations}
                 answerMutations={answerMutations} />,

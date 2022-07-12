@@ -50,7 +50,7 @@ export class UserPermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    assignmentBridgeId: Id<'RoleAssignmentBridge'> | null;
+    assignmentBridgeId: Id<'PermissionAssignmentBridge'> | null;
 
     @ViewColumn()
     @XViewColumn()

@@ -1,6 +1,7 @@
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../../../../shared/dtos/mutations/Mutation';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
+import { Id } from '../../../../shared/types/versionId';
 
 export type RowSchema = {
 
@@ -12,12 +13,12 @@ export type RowSchema = {
     itemText: string;
 
     // question fileds
-    questionVersionId: number;
+    questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     questionShowUpTimeSeconds?: number;
 
     // ans fileds 
-    answerVersionId: number;
+    answerVersionId: Id<'AnswerVersion'>;
     text: string;
     isCorrect: boolean;
 };

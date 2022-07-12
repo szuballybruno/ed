@@ -198,13 +198,13 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         //if first successful ase, save user exam progress bridge
         throwNotImplemented();
-        await this._ormService
-            .save(UserExamProgressBridge, {
-                id: currentAnswerSessionIsSuccessful.answerSessionId,
-                completionDate: new Date(),
-                examVersionId,
-                userId: userIdAsIdType
-            });
+        /*  await this._ormService
+             .save(UserExamProgressBridge, {
+                 id: currentAnswerSessionIsSuccessful.answerSessionId,
+                 completionDate: new Date(),
+                 examVersionId,
+                 userId: userIdAsIdType
+             }); */
     };
 
     /**

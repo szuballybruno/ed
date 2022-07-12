@@ -2,6 +2,7 @@ import { Divider, Flex, Image } from '@chakra-ui/react';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -11,7 +12,7 @@ import { TempomatModeTile } from './TempomatModeTile';
 
 export const TempomatSettingsDialog = (props: {
     tempomatDialogLogic: EpistoDialogLogicType,
-    courseId: number,
+    courseId: Id<'Course'>,
     onTempomatModeChanged: () => Promise<void>,
     tempomatMode: TempomatModeType
 }) => {

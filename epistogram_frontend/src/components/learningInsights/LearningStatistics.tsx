@@ -1,5 +1,6 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
+import { Id } from '../../shared/types/versionId';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
@@ -26,7 +27,7 @@ export type StatisticsGroupType = {
 const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
 export const LearningStatistics = (props: {
-    userId: number
+    userId: Id<'User'>
 }) => {
 
     const { userId } = props;
