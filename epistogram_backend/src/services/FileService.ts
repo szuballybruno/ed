@@ -2,11 +2,15 @@ import { UploadedFile } from 'express-fileupload';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
+import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { PrincipalId } from '../utilities/ActionParams';
 import { replaceAll } from '../utilities/helpers';
+import { GenericPropNameType, StringKeyof } from '../utilities/misc';
+import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
 import { UserService } from './UserService';
+import { EntityType } from './XORM/XORMTypes';
 
 export class FileService {
 
@@ -33,13 +37,67 @@ export class FileService {
             throw new VerboseError('File upload failed: Only jpeg or png', 'bad request');
 
         await this.uploadAssigendFileAsync<User>(
-            this.getFilePath('userAvatars', 'user_avatar', userId, 'png'),
+            this.getFilePath('user_avatar', userId),
             () => this._userService.getUserById(userId),
             (fileId) => this._userService.setUserAvatarFileId(userId, fileId),
             (entity) => entity.avatarFileId,
             file.data);
     };
 
+    async uploadAssigendFile2Async<TField extends StringKeyof<T>, T extends EntityType>({
+        entitySignature,
+        fileBuffer,
+        fileCode,
+        storageFileIdField,
+        entityId
+    }: {
+        entityId: number,
+        fileCode: FileCodesType,
+        entitySignature: ClassType<T>,
+        storageFileIdField: TField,
+        fileBuffer: Buffer,
+    }) {
+
+        // path
+        const path = this.getFilePath(fileCode, entityId);
+
+        // crate pending storage file
+        const newStorageFileEntityId = await this
+            ._insertFileEntityAsync(path);
+
+        // get entity
+        const entity = await this._ormService
+            .query(entitySignature, { entityId })
+            .where('id', '=', 'entityId')
+            .getSingle();
+
+        // get old file id 
+        const oldStorageFileId = entity[storageFileIdField] as any as number | null;
+
+        // delete previous file, and file entity
+        if (oldStorageFileId) {
+
+            const oldFileEntity = await this.getFileEntityAsync(oldStorageFileId);
+            await this.deleteFileEntityAsync(oldStorageFileId);
+
+            await this._storageService
+                .deleteStorageFileAsync(oldFileEntity.filePath);
+        }
+
+        // save entity
+        const saveData = { id: entityId } as T;
+        (saveData as any)[storageFileIdField] = newStorageFileEntityId;
+        await this._ormService
+            .save(entitySignature, saveData);
+
+        // upload to storage
+        await this._storageService
+            .uploadBufferToStorageAsync(fileBuffer, fileCode);
+    };
+
+    /**
+     * @deprecated 
+     */
     uploadAssigendFileAsync = async <T>(
         filePath: string,
         getEntityAsync: () => Promise<T>,
@@ -48,13 +106,13 @@ export class FileService {
         fileBuffer: Buffer) => {
 
         // crate pending storage file
-        const newStorageFileEntity = await this.insertFileEntityAsync(filePath);
+        const newStorageFileEntityId = await this._insertFileEntityAsync(filePath);
 
         // get entity
         const entity = await getEntityAsync();
 
         // assing to entity
-        await assignFileToEntity(newStorageFileEntity.id);
+        await assignFileToEntity(newStorageFileEntityId);
 
         // delete previous file, and file entity
         const oldFileEntityId = getFileEntityId(entity);
@@ -72,11 +130,11 @@ export class FileService {
             .uploadBufferToStorageAsync(fileBuffer, filePath);
     };
 
-    getFilePath = (folderPath: string, fileType: string, fileId: number, extension: string) => {
+    getFilePath = (fileType: FileCodesType, entityId: number) => {
 
-        extension = replaceAll(extension, '.', '');
+        const extension = fileCodes[fileType][0];
 
-        return `${folderPath}/${fileType}_${fileId}_${Date.now()}.${extension}`;
+        return `${fileType}_container/${fileType}_${entityId}_${Date.now()}.${extension}`;
     };
 
     deleteFileEntityAsync = async (id: number) => {
@@ -85,16 +143,12 @@ export class FileService {
             .hardDelete(StorageFile, [id]);
     };
 
-    insertFileEntityAsync = async (path: string) => {
+    private async _insertFileEntityAsync(path: string) {
 
-        const file = {
-            filePath: path
-        } as StorageFile;
-
-        await this._ormService
-            .createAsync(StorageFile, file);
-
-        return file;
+        return await this._ormService
+            .createAsync(StorageFile, {
+                filePath: path
+            });
     };
 
     getFileEntityAsync = (id: number) => {

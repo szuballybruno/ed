@@ -33,7 +33,7 @@ export const ItemEditDialog = ({
         callback(questionMutations, answerMutations);
     }, [callback]);
 
-    const paging = usePaging<EditDialogSubpage>(new ArrayBuilder()
+    const pages = new ArrayBuilder()
         .addIf(isVideo, {
             content: () => <VideoEditor
                 enabled={dialogLogic.isOpen}
@@ -60,7 +60,9 @@ export const ItemEditDialog = ({
             content: () => <AdminExamStatisticsModalPage />,
             title: 'Statisztika',
         })
-        .getArray());
+        .getArray();
+
+    const paging = usePaging<EditDialogSubpage>({ items: pages });
 
     return <EditDialogBase
         logic={dialogLogic}

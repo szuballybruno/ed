@@ -29,7 +29,11 @@ export const useSignupQuestionsState = (options: {
     } = options;
 
     // questionnaire
-    const questionnaireState = usePaging(questions, onPrevoiusOverNavigation, onNextOverNavigation);
+    const questionnaireState = usePaging({
+        items: questions,
+        onPreviousOverNavigation: onPrevoiusOverNavigation,
+        onNextOverNavigation
+    });
     const currentQuestion = questionnaireState.currentItem;
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
     const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
@@ -124,8 +128,8 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
             upperComponent={<Flex alignItems={'center'}
-justifyContent={'flex-end'}
-width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
+                justifyContent={'flex-end'}
+                width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
 
             <RadioGroup
                 id="answers"
@@ -147,7 +151,7 @@ width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
                             padding: '5px 10px',
                             border: '1px solid var(--mildGrey)',
                             borderRadius: '6px'
-                           
+
                         }}
                         control={<Radio checked={answer.answerId === selectedAnswerId} />}
                         label={answer.answerText} />)}

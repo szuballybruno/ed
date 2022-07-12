@@ -25,4 +25,21 @@ export class ModuleController {
         return this._moduleService
             .getModuleEditDTOsAsync(courseId);
     };
+
+    @XControllerAction(apiRoutes.module.saveCoverFile)
+    saveModuleThumbnailImageAction = async (params: ActionParams) => {
+
+        const { body } = params
+            .getFromParameterized(apiRoutes.module.saveCoverFile);
+
+        const file = params
+            .getSingleFileOrFail();
+
+        const moduleVersionId = body
+            .getValue(x => x.moduleVersionId, 'int');
+
+        await this
+            ._moduleService
+            .saveModuleThumbnailImageAsync(moduleVersionId, file.data);
+    }
 }

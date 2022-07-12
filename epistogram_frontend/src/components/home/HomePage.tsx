@@ -35,7 +35,7 @@ const HomePage = () => {
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const { activeCourses } = useActiveCourses();
-    const activeCoursesPaging = usePaging(activeCourses);
+    const activeCoursesPaging = usePaging({ items: activeCourses });
 
     return <PageRootContainer>
 

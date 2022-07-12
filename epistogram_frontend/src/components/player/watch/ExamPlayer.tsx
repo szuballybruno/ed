@@ -29,7 +29,7 @@ export const ExamPlayer = (props: {
     const showError = useShowErrorDialog();
     const { navigateToCourseRating } = useNavigation();
 
-    const slidesState = usePaging([1, 2, 3, 4]);
+    const slidesState = usePaging({ items: [1, 2, 3, 4] });
 
     const handleStartExamAsync = async () => {
 

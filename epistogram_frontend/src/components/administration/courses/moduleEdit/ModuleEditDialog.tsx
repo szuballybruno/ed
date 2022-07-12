@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePaging } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -24,11 +24,11 @@ export const ModuleEditDialog = ({
         handleOk,
         mutatorRef,
         dialogLogic,
-        currentPageIndex,
+        handleBackToList,
         canDelete
     } = logic;
 
-    const paging = usePaging<EditDialogSubpage>([
+    const pages = useMemo(() => [
         {
             content: () => (
                 <ModuleListEditDialogPage
@@ -50,12 +50,18 @@ export const ModuleEditDialog = ({
             title: currentModule?.name ?? '',
             isFocused: true
         }
-    ]);
+    ], [currentModule, handleEditModule, canDelete]);
+
+    const paging = usePaging<EditDialogSubpage>({
+        items: pages,
+        onPrevious: handleBackToList
+    });
 
     useEffect(() => {
 
-        paging.setItem(currentPageIndex);
-    }, [currentPageIndex]);
+        if (currentModule)
+            paging.next();
+    }, [currentModule]);
 
     return (
         <EditDialogBase

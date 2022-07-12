@@ -150,22 +150,14 @@ export class CourseService {
      */
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
 
-        const getCourseAsync = () => this._ormService
-            .getSingleById(CourseData, courseId);
-
-        const setCourseThumbnailIdAsync = (thumbnailFileId: number) => this._ormService
-            .save(CourseData, {
-                id: courseId,
-                coverFileId: thumbnailFileId
-            });
-
         return this._fileService
-            .uploadAssigendFileAsync<CourseData>(
-                this._fileService.getFilePath('courseCoverImages', 'courseCoverImage', courseId, 'jpg'),
-                getCourseAsync,
-                setCourseThumbnailIdAsync,
-                course => course.coverFileId,
-                file.data);
+            .uploadAssigendFile2Async({
+                entitySignature: CourseData,
+                entityId: courseId,
+                fileBuffer: file.data,
+                fileCode: 'course_cover',
+                storageFileIdField: 'coverFileId'
+            });
     }
 
     /**

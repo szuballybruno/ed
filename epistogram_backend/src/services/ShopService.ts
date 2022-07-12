@@ -279,21 +279,13 @@ export class ShopService {
 
     private async saveCoverFileAsync(shopItemId: number, file: UploadedFile) {
 
-        const getEntityAsync = () => this._ormService
-            .getSingleById(ShopItem, shopItemId);
-
-        const setFileIdAsync = (fileId: number) => this._ormService
-            .save(ShopItem, {
-                id: shopItemId,
-                coverFileId: fileId
-            });
-
         return await this._fileService
-            .uploadAssigendFileAsync<ShopItem>(
-                this._fileService.getFilePath('shop_item_cover_images', 'shop_item_cover_image', shopItemId, 'jpg'),
-                getEntityAsync,
-                setFileIdAsync,
-                entity => entity.coverFileId,
-                file.data);
+            .uploadAssigendFile2Async({
+                entitySignature: ShopItem,
+                entityId: shopItemId,
+                fileBuffer: file.data,
+                fileCode: 'shop_item_cover',
+                storageFileIdField: 'coverFileId'
+            });
     }
 }

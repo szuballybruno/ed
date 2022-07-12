@@ -24,15 +24,15 @@ export const AssignPermissionDialog = (props: {
     const [selectedCompany, setSelectedCompany] = useState<RoleAssignCompanyDTO | null>(null);
     const [selectedCourse, setSelectedCourse] = useState<CoursePermissionAssignDTO | null>(null);
     const [selectedPermission, setSelectedPermission] = useState<AssignablePermissionDTO | null>(null);
-    
-    const paging = usePaging(['Company level permissions', 'Course level permissions']);
+
+    const paging = usePaging({ items: ['Company level permissions', 'Course level permissions'] });
 
     // http
     const { roleAssignCompanies } = useRoleAssignCompanies();
     const { permissionAssignCourses } = CourseApiService.usePermissionAssignCourses(userId);
     const { assignablePermissionList } = useAssignablePermissions(
-        userId, 
-        paging.currentIndex === 1 ? selectedCourse?.id ?? null : null, 
+        userId,
+        paging.currentIndex === 1 ? selectedCourse?.id ?? null : null,
         paging.currentIndex === 0 ? selectedCompany?.id ?? null : null);
 
     // init permission selector

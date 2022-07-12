@@ -11,30 +11,26 @@ import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/versionCode';
 import { VersionMigrationResult } from '../utilities/misc';
 import { CourseItemService } from './CourseItemService';
-import { ExamService } from './ExamService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
-import { VideoService } from './VideoService';
 
 export class ModuleService {
 
     constructor(
-        private _examService: ExamService,
-        private _videoService: VideoService,
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
-        private _fileService: FileService,
         private _courseItemService: CourseItemService,
-        private _versionSaveService: VersionSaveService) {
+        private _versionSaveService: VersionSaveService,
+        private _fileService: FileService) {
     }
 
     /**
      * Gets a detailed module dto.
      */
-    getModuleDetailedDTOAsync = async (moduleId: number): Promise<ModulePlayerDTO> => {
+    async getModuleDetailedDTOAsync(moduleId: number): Promise<ModulePlayerDTO> {
 
         const view = await this._ormService
             .query(ModulePlayerView, { moduleId })
@@ -49,7 +45,7 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync = async (courseVersionId: number) => {
+    async getModuleEditDTOsAsync(courseVersionId: number) {
 
         const modules = await this._ormService
             .query(ModuleEditView, { courseVersionId })
@@ -59,6 +55,24 @@ export class ModuleService {
         return this._mapperService
             .mapTo(ModuleEditDTO, [modules]);
     };
+
+    /**
+     * Saves module's thumbnail image
+     */
+    async saveModuleThumbnailImageAsync(moduleVersionId: number, fileBuffer: Buffer) {
+
+        const moduleVersion = await this._ormService
+            .getSingleById(ModuleVersion, moduleVersionId);
+
+        await this._fileService
+            .uploadAssigendFile2Async({
+                entitySignature: ModuleData,
+                entityId: moduleVersion.moduleDataId,
+                fileBuffer: fileBuffer,
+                fileCode: 'module_thumbnail',
+                storageFileIdField: 'imageFileId'
+            });
+    }
 
     /**
      * Save modules

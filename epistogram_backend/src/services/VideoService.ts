@@ -1,34 +1,21 @@
-import { StorageFile } from '../models/entity/StorageFile';
+import { UploadedFile } from 'express-fileupload';
+import fs from 'fs';
 import { VideoData } from '../models/entity/video/VideoData';
-import { CourseItemEditView } from '../models/views/CourseItemEditView';
-import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { VideoFile } from '../models/entity/video/VideoFile';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { QuestionDataView } from '../models/views/QuestionDataView';
+import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
+import { PrincipalId } from '../utilities/ActionParams';
+import { throwNotImplemented } from '../utilities/helpers';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { getVideoLengthSecondsAsync } from './misc/videoDurationService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
-import { QuestionData } from '../models/entity/question/QuestionData';
-import { throwNotImplemented, withValue } from '../utilities/helpers';
-import { AnswerData } from '../models/entity/answer/AnswerData';
-import { X509Certificate } from 'crypto';
-import { CourseController } from '../api/CourseController';
-import { Index } from 'typeorm';
-import { PrincipalId } from '../utilities/ActionParams';
-import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import fs from 'fs';
-import { UploadedFile } from 'express-fileupload';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
-import { Video } from '../models/entity/video/Video';
-import { VideoVersionView } from '../models/views/VideoVersionView';
-import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
-import { QuestionDataView } from '../models/views/QuestionDataView';
-import { VideoFile } from '../models/entity/video/VideoFile';
 
 export class VideoService extends QueryServiceBase<VideoData> {
 
@@ -70,32 +57,6 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .answerQuestionAsync(userId.toSQLValue(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
     };
 
-    insertVideoAsync = async (video: VideoData, filePath?: string) => {
-
-        throwNotImplemented();
-        // if (video.id)
-        //     throw new Error('Cannot insert with id!');
-
-        // if (filePath) {
-        //     const videoFileUrl = this._assetUrlService
-        //         .getAssetUrl(filePath)!;
-
-        //     video.videoFile = {
-        //         filePath: filePath
-        //     } as StorageFile;
-
-        //     video.lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
-        // }
-        // else {
-
-        //     video.lengthSeconds = 0;
-        // }
-
-        // await this._ormService
-        //     .getRepository(VideoData)
-        //     .save(video);
-    };
-
     setVideoFileIdAsync = async (videoVersionId: number, storageFileId: number) => {
 
         const videoVersion = await this._ormService
@@ -113,72 +74,6 @@ export class VideoService extends QueryServiceBase<VideoData> {
                 storageFileId: storageFileId
             });
     };
-
-    async softDeleteVideosAsync(videoIds: number[], unsetCurrentCourseItem: boolean) {
-
-        // if (videoIds.length === 0)
-        //     return;
-
-        // // delete questions
-        // const questions = await this._ormService
-        //     .getRepository(Question)
-        //     .createQueryBuilder("q")
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .getMany();
-
-        // await this._questionsService
-        //     .softDeleteQuesitonsAsync(questions.map(x => x.id));
-
-        // // delete answer sessions
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(AnswerSession)
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // // set current course item on users
-        // if (unsetCurrentCourseItem) {
-        //     for (let index = 0; index < videoIds.length; index++) {
-
-        //         const videoId = videoIds[index];
-        //         await this._userCourseBridgeService
-        //             .unsetUsersCurrentCourseItemAsync(undefined, videoId);
-        //     }
-        // }
-
-        // // delete playback samples 
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(VideoPlaybackSample)
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // // delete ratings 
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(VideoRating)
-        //     .where('video_id IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // // delete playback samples 
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(UserVideoProgressBridge)
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // delete video
-        await this._ormService
-            .softDelete(VideoData, videoIds);
-    }
 
     setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
 
@@ -284,40 +179,41 @@ export class VideoService extends QueryServiceBase<VideoData> {
 
     private _uploadVideoFileAsync = async (videoVersionId: number, videoFileBuffer: Buffer) => {
 
+        throwNotImplemented();
         // upload file
-        const filePath = this._fileService
-            .getFilePath('videos', 'video', videoVersionId, 'mp4');
+        // const filePath = this._fileService
+        //     .getFilePath('video_file', videoVersionId);
 
-        const getVideoFile = async () => this._ormService
-            .withResType<VideoFile>()
-            .query(VideoVersion, { videoVersionId })
-            .select(VideoFile)
-            .leftJoin(VideoData, x => x
-                .on('id', '=', 'videoDataId', VideoVersion))
-            .leftJoin(VideoFile, x => x
-                .on('id', '=', 'videoFileId', VideoData))
-            .getSingle()
+        // const videoData = await this._ormService
+        //     .withResType<VideoData>()
+        //     .query(VideoVersion, { videoVersionId })
+        //     .select(VideoData)
+        //     .leftJoin(VideoData, x => x
+        //         .on('id', '=', 'videoDataId', VideoVersion))
+        //     .where('id', '=', 'videoVersionId')
+        //     .getSingle();
 
-        await this._fileService
-            .uploadAssigendFileAsync<VideoFile>(
-                filePath,
-                () => getVideoFile(),
-                (fileId) => this.setVideoFileIdAsync(videoVersionId, fileId),
-                (entity) => entity.storageFileId,
-                videoFileBuffer);
+        // await this._fileService
+        //     .uploadAssigendFile2Async({
+        //         entitySignature: VideoFile,
+        //         entityId: videoData.videoFileId,
+        //         fileBuffer: videoFileBuffer,
+        //         fileCode: 'video_file',
+        //         storageFileIdField: 'storageFileId'
+        //     });
 
-        const videoFile = await getVideoFile()
+        // const videoFile = await getVideoFile()
 
-        // set video length
-        const videoFileUrl = this._assetUrlService
-            .getAssetUrl(filePath);
+        // // set video length
+        // const videoFileUrl = this._assetUrlService
+        //     .getAssetUrl(filePath);
 
-        const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+        // const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
 
-        await this._ormService
-            .save(VideoFile, {
-                id: videoFile.id,
-                lengthSeconds: lengthSeconds
-            });
+        // await this._ormService
+        //     .save(VideoFile, {
+        //         id: videoFile.id,
+        //         lengthSeconds: lengthSeconds
+        //     });
     };
 }

@@ -459,10 +459,17 @@ export const epochDates = (dateA: Date, dateB: Date) => {
     return Math.abs((dateA.getTime() - dateB.getTime()) / 1000);
 };
 
-export const usePaging = <T>(
+export const usePaging = <T>({
+    items,
+    onNextOverNavigation,
+    onPrevious,
+    onPreviousOverNavigation
+}: {
     items: T[] | number,
     onPreviousOverNavigation?: () => void,
-    onNextOverNavigation?: () => void) => {
+    onNextOverNavigation?: () => void,
+    onPrevious?: () => void
+}) => {
 
     if (!hasValue(items))
         throw new Error('Cannot page a null or undefined items collection!');
@@ -501,8 +508,11 @@ export const usePaging = <T>(
         } else {
 
             setCurrentItemIndex(currentIndex - 1);
+
+            if (onPrevious)
+                onPrevious();
         }
-    }, [onPreviousOverNavigation, setCurrentItemIndex, isFirst, currentIndex]);
+    }, [onPreviousOverNavigation, setCurrentItemIndex, isFirst, currentIndex, onPrevious]);
 
     const setItem = useCallback((itemIndex: number) => {
 

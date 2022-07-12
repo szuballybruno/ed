@@ -59,7 +59,7 @@ export const WatchView = (props: {
 
     const { questions } = videoPlayerData;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(['Leírás', 'Hozzászólások', 'Jegyzetek']);
+    const descCommentPaging = usePaging<string>({ items: ['Leírás', 'Hozzászólások', 'Jegyzetek'] });
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(videoPlayerData.maxWatchedSeconds);

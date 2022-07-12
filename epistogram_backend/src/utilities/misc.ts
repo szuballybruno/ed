@@ -25,6 +25,10 @@ export type KeyofConstrained<TOriginal, TConstraint> = keyof {
 
 export const instatiateInsertEntity = <T>(entity: InsertEntity<T>) => entity as T;
 
+export type GenericPropNameType<TProperty extends string, TValue> = { [P in TProperty]: TValue }
+
+export type StringKeyof<T> = (keyof T) & string;
+
 export type VersionMigrationResult = { oldVersionId: number, newVersionId: number };
 
 export const VersionMigrationHelpers = {

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { logSecondary } from '../services/misc/logger';
+import { ParametrizedRouteType, RouteParameterType } from '../shared/types/apiRoutes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { withValueOrBadRequest, SafeObjectWrapper } from './helpers';
 
@@ -17,6 +18,11 @@ export class PrincipalId {
 
         return this._id;
     }
+}
+
+export type ParamsData<T extends RouteParameterType> = {
+    body: SafeObjectWrapper<T['body']>,
+    query: SafeObjectWrapper<T['query']>
 }
 
 export class ActionParams {
@@ -88,5 +94,13 @@ export class ActionParams {
             throw new VerboseError('File not sent!', 'bad request');
 
         return file as UploadedFile;
+    }
+
+    getFromParameterized<T extends RouteParameterType>(route: ParametrizedRouteType<T>): ParamsData<T> {
+
+        return {
+            body: this.getBody<T['body']>(),
+            query: this.getQuery<T['query']>()
+        };
     }
 }

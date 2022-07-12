@@ -1,7 +1,6 @@
 import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
 import { getKeys } from '../../../shared/logic/sharedLogic';
-import { Environment } from '../../../static/Environemnt';
 import { clone } from '../../../static/frontendHelpers';
 
 export type StringKeyof<T> = (keyof T) & string;

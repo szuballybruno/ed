@@ -19,7 +19,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 }) => {
 
     const { dialogLogic, shopItem, onSuccessfulPurchase } = props;
-    const paging = usePaging([1, 2]);
+    const paging = usePaging({ items: [1, 2] });
     const isCourse = !!shopItem?.courseId;
     const { navigateToPlayer } = useNavigation();
 

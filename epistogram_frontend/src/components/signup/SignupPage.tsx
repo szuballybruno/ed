@@ -16,7 +16,7 @@ import { SignupWrapper } from './SignupWrapper';
 export const SignupPage = () => {
 
     // slides
-    const slidesState = usePaging([1, 2, 3]);
+    const slidesState = usePaging({ items: [1, 2, 3] });
     const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
     const isInvitedUser = true;
 

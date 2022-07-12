@@ -23,14 +23,10 @@ export const CourseRatingSubpage = () => {
 
     const showError = useShowErrorDialog();
 
-    const paging = usePaging(
-        courseRatingGroups ?? [],
-        undefined,
-        () => {
-
-            console.log('asdasdaw');
-            navigateToCourseOverview(courseId);
-        });
+    const paging = usePaging({
+        items: courseRatingGroups ?? [],
+        onNextOverNavigation: () => navigateToCourseOverview(courseId)
+    });
 
     const [questionAnswers, setQuestionAnswers] = useState<{ quesitionId: number, value: number | null, text: string | null }[]>([]);
     const currentRatingGroup = paging.currentItem;

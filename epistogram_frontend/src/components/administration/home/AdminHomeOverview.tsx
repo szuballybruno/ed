@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useActiveCourses } from '../../../services/api/userProgressApiService';
 import { Environment } from '../../../static/Environemnt';
-import {  usePaging } from '../../../static/frontendHelpers';
+import { usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -46,7 +46,7 @@ const AdminSectionWithButton = (props: {
 export const AdminHomeOverview = () => {
 
     const { activeCourses } = useActiveCourses();
-    const activeCoursesPaging = usePaging(activeCourses);
+    const activeCoursesPaging = usePaging({ items: activeCourses });
     const currentCourse = activeCoursesPaging.currentItem;
 
     const nav = useNavigate();

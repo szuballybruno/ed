@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { usePaging } from '../../../../static/frontendHelpers';
 import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 
@@ -38,14 +37,16 @@ export const useModuleEditDialogLogic = ({
             .setOriginalItems(modules);
     }, [modules]);
 
-    // paging
-    const paging = usePaging<number>([1, 2]);
-
     // Go to edit page
     const handleEditModule = useCallback((moduleId: number) => {
 
         setEditedModuleId(moduleId);
-        paging.next();
+    }, []);
+
+    // back to list
+    const handleBackToList = useCallback(() => {
+
+        setEditedModuleId(null);
     }, []);
 
     // Create new module
@@ -78,10 +79,10 @@ export const useModuleEditDialogLogic = ({
         mutatorRef,
         handleOk,
         handleEditModule,
+        handleBackToList,
         createModule,
         currentModule,
         dialogLogic,
-        currentPageIndex: paging.currentIndex,
         canDelete
     };
 };

@@ -20,7 +20,7 @@ export const PrequizSubpage = () => {
     const { navigateToWatchPretest } = useNavigation();
     const { questions } = usePrequizQuestions(courseId);
 
-    const paging = usePaging(questions);
+    const paging = usePaging({ items: questions });
     const question = paging.currentItem;
 
     const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(courseId, question?.id ?? null);
