@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
 import { useBriefUserData } from '../../../../services/api/userApiService';
 import { UserCourseProgressChartDTO } from '../../../../shared/dtos/UserCourseProgressChartDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { TabPanel } from '../../../courseDetails/TabPanel';
@@ -14,7 +15,7 @@ import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGr
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
 
 export const AdminUserCourseContentDialog = (props: {
-    dialogLogic: EpistoDialogLogicType<{ courseId: number | null }>
+    dialogLogic: EpistoDialogLogicType<{ courseId: Id<'Course'> | null }>
 }) => {
 
     const { dialogLogic } = props;
@@ -22,7 +23,8 @@ export const AdminUserCourseContentDialog = (props: {
     const [currentTab, setCurrentTab] = useState(0);
 
     const courseId = dialogLogic.params.courseId;
-    const userId = useIntParam('userId');
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { briefUserData } = useBriefUserData(userId);

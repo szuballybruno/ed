@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { ExamVersion } from './exam/ExamVersion';
 import { User } from './User';
 
@@ -8,7 +9,7 @@ export class UserExamProgressBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'UserExamProgressBridge'>;
 
     @Column({ nullable: true, type: 'timestamptz' })
     @XViewColumn()
@@ -19,7 +20,7 @@ export class UserExamProgressBridge {
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
     @XManyToOne<UserExamProgressBridge>()(() => User, x => x.examProgressBridges)
     @XJoinColumn<UserExamProgressBridge>('userId')
     user: Relation<User>;
@@ -27,7 +28,7 @@ export class UserExamProgressBridge {
     // exam version
     @Column()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<'ExamVersion'>;
     @XManyToOne<UserExamProgressBridge>()(() => ExamVersion, x => x.userProgressBridges)
     @XJoinColumn<UserExamProgressBridge>('examVersionId')
     examVersion: Relation<ExamVersion>;

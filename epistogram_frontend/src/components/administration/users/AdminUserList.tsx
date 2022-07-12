@@ -1,5 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { Id } from '../../../shared/types/versionId';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ProfileImage } from '../../ProfileImage';
@@ -9,9 +10,10 @@ import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
 export const AdminUserList = (props: {
     users: AdminPageUserDTO[],
-    navigationFunction: (userId: number) => void
+    navigationFunction: (userId: Id<'User'>) => void
 }) => {
-    const userId = useIntParam('userId')!;
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { users, navigationFunction } = props;
 

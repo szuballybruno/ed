@@ -24,6 +24,9 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { UrlService } from './UrlService';
 import { PrincipalId } from '../utilities/ActionParams';
 import { StorageFile } from '../models/entity/StorageFile';
+import { Id } from '../shared/types/versionId';
+import { CourseCategory } from '../models/entity/CourseCategory';
+import { CourseShopItemListView } from '../models/views/CourseShopItemListView';
 
 export class ShopService {
 
@@ -76,9 +79,10 @@ export class ShopService {
             .mapTo(ShopItemCategoryDTO, [shopItemCategories]);
     }
 
-    async purchaseShopItemAsync(principalId: PrincipalId, shopItemId: number) {
+    async purchaseShopItemAsync(principalId: PrincipalId, shopItemId: Id<'ShopItem'>) {
 
-        const userId = principalId.toSQLValue();
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const shopItem = await this._ormService
             .getSingleById(ShopItem, shopItemId);
@@ -147,7 +151,7 @@ export class ShopService {
         }
     }
 
-    async getShopItemBriefDataAsync(shopItemId: number) {
+    async getShopItemBriefDataAsync(shopItemId: Id<'ShopItem'>) {
 
         const item = await this._ormService
             .query(ShopItemView, { shopItemId })
@@ -168,7 +172,7 @@ export class ShopService {
             .mapTo(ShopItemAdminShortDTO, [items]);
     }
 
-    async getShopItemEditDTOAsync(shopItemId: number) {
+    async getShopItemEditDTOAsync(shopItemId: Id<'ShopItem'>) {
 
         const shopItem = await this._ormService
             .query(ShopItem, { shopItemId })
@@ -189,10 +193,7 @@ export class ShopService {
     async getPrivateCourseListAsync() {
 
         const courses = await this._ormService
-            .query(CourseData, { visibility: 'private' })
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'coverFileId', CourseData))
-            .where('visibility', '=', 'visibility')
+            .query(CourseShopItemListView)
             .getMany();
 
         return this._mapperService
@@ -202,7 +203,7 @@ export class ShopService {
     async saveShopItemAsync(dto: ShopItemEditDTO, coverFile?: UploadedFile) {
 
         const isCourse = !!dto.courseId;
-        const courseCategoryId = 1;
+        const shopItemCategoryId = Id.create<'ShopItemCategory'>(1);
 
         // save entity details
         await this._ormService
@@ -213,7 +214,7 @@ export class ShopService {
                 courseId: isCourse ? dto.courseId : null,
                 name: isCourse ? null : dto.name,
                 purchaseLimit: isCourse ? null : dto.purchaseLimit,
-                shopItemCategoryId: isCourse ? courseCategoryId : dto.shopItemCategoryId,
+                shopItemCategoryId: isCourse ? shopItemCategoryId : dto.shopItemCategoryId,
                 detailsUrl: isCourse ? null : dto.detailsUrl
             });
 
@@ -233,7 +234,7 @@ export class ShopService {
             courseId: null,
             name: '',
             purchaseLimit: 0,
-            shopItemCategoryId: 1,
+            shopItemCategoryId: Id.create<'ShopItemCategory'>(1),
             detailsUrl: null
         } as ShopItem;
 
@@ -245,7 +246,7 @@ export class ShopService {
         } as IdResultDTO;
     }
 
-    private async saveShopItemDiscountCodes(shopItemId: number, discountCodes: DiscountCodeDTO[]) {
+    private async saveShopItemDiscountCodes(shopItemId: Id<'ShopItem'>, discountCodes: DiscountCodeDTO[]) {
 
         // get existing codes
         const existingCodes = await this._ormService
@@ -277,7 +278,7 @@ export class ShopService {
                 .hardDelete(DiscountCode, deletedCodes.map(x => x.id));
     }
 
-    private async saveCoverFileAsync(shopItemId: number, file: UploadedFile) {
+    private async saveCoverFileAsync(shopItemId: Id<'ShopItem'>, file: UploadedFile) {
 
         return await this._fileService
             .uploadAssigendFile2Async({

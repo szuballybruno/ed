@@ -4,6 +4,7 @@ import { usePretestResults } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { CourseModeType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -14,7 +15,9 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestResultsSubpage = () => {
 
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
+
     const { navigateToPlayer } = useNavigation();
 
     const { pretestResults, pretestResultsError, pretestResultsState } = usePretestResults(courseId);

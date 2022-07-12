@@ -1,5 +1,6 @@
 import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { ExamVersion } from './ExamVersion';
 
 @Entity()
@@ -7,7 +8,7 @@ export class ExamData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'ExamData'>;
 
     @Column()
     @XViewColumn()

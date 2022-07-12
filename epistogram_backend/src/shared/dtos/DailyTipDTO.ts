@@ -1,5 +1,7 @@
+import { Id } from "../types/versionId";
+
 export class DailyTipDTO {
-    id: number;
+    id: Id<'DailyTip'>;
     description: string;
     videoUrl: string;
 }

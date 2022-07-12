@@ -12,12 +12,13 @@ import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { CourseModeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const CourseApiService = {
 
-    usePermissionAssignCourses: (userId: number) => {
+    usePermissionAssignCourses: (userId: Id<'User'>) => {
 
         const qr = useReactQuery2<CoursePermissionAssignDTO[]>(apiRoutes.course.getPermissionAssignCourses, { userId });
 
@@ -40,7 +41,7 @@ export const CourseApiService = {
 
     useSetCourseMode: () => {
 
-        const qr = usePostDataUnsafe<{ courseId: number, mode: CourseModeType }, void>(apiRoutes.course.setCourseMode);
+        const qr = usePostDataUnsafe<{ courseId: Id<'Course'>, mode: CourseModeType }, void>(apiRoutes.course.setCourseMode);
 
         return {
             setCourseModeAsync: qr.postDataAsync,
@@ -50,7 +51,7 @@ export const CourseApiService = {
 
     useSetRequiredCompletionDate: () => {
 
-        const qr = usePostDataUnsafe<{ courseId: number, requiredCourseCompletionDate: string }, void>(apiRoutes.course.setRequiredCompletionDate);
+        const qr = usePostDataUnsafe<{ courseId: Id<'Course'>, requiredCourseCompletionDate: string }, void>(apiRoutes.course.setRequiredCompletionDate);
 
         return {
             setRequiredCourseCompletionDateAsync: qr.postDataAsync,
@@ -58,7 +59,7 @@ export const CourseApiService = {
         };
     },
 
-    useCourseDetailsEditData: (courseId: number) => {
+    useCourseDetailsEditData: (courseId: Id<'Course'>) => {
 
         const qr = useReactQuery2<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
 
@@ -70,7 +71,7 @@ export const CourseApiService = {
         };
     },
 
-    useCourseContentAdminData: (courseId: number, isEnabled: boolean, loadDeleted: boolean) => {
+    useCourseContentAdminData: (courseId: Id<'Course'>, isEnabled: boolean, loadDeleted: boolean) => {
 
         const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted }, isEnabled);
 
@@ -115,7 +116,7 @@ export const CourseApiService = {
     useSaveCourseContentData: () => {
 
         const qr = usePostDataUnsafe<{
-            courseId: number,
+            courseId: Id<'Course'>,
             itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
             moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
         }, void>(apiRoutes.course.saveCourseContent);
@@ -128,15 +129,15 @@ export const CourseApiService = {
 
     useUploadCourseThumbnailAsync: () => {
 
-        const qr = usePostMultipartDataUnsafe<{ courseId: number }>(apiRoutes.course.saveCourseThumbnail);
+        const qr = usePostMultipartDataUnsafe<{ courseId: Id<'Course'> }>(apiRoutes.course.saveCourseThumbnail);
 
         return {
-            saveCourseThumbnailAsync: (courseId: number, file: File) => qr.postMultipartDataAsync({ courseId }, file),
+            saveCourseThumbnailAsync: (courseId: Id<'Course'>, file: File) => qr.postMultipartDataAsync({ courseId }, file),
             saveCourseThumbnailState: qr.state,
         };
     },
 
-    useCourseBriefData: (courseId: number | null) => {
+    useCourseBriefData: (courseId: Id<'Course'> | null) => {
 
         const qr = useReactQuery2<CourseBriefData>(apiRoutes.course.getCourseBriefData, { courseId }, !!courseId);
 
@@ -147,7 +148,7 @@ export const CourseApiService = {
         };
     },
 
-    useCourseDetails: (courseId: number) => {
+    useCourseDetails: (courseId: Id<'Course'>) => {
 
         const qr = useReactQuery2<CourseDetailsDTO>(apiRoutes.course.getCourseDetails, { courseId });
 
@@ -158,7 +159,7 @@ export const CourseApiService = {
 
     useUserCourses: (
         searchTerm: string | null,
-        filterCategoryId: number | null,
+        filterCategoryId: Id<'CourseCategory'> | null,
         isFeatured: boolean,
         isRecommended: boolean,
         orderBy: string | null

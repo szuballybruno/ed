@@ -5,6 +5,7 @@ import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
 export const useHomePageStats = () => {
@@ -18,7 +19,7 @@ export const useHomePageStats = () => {
     };
 };
 
-export const useUserLearningPageStats = (userId: number) => {
+export const useUserLearningPageStats = (userId: Id<'User'>) => {
 
     const queryRes = useReactQuery2<UserLearningPageStatsDTO>(apiRoutes.userStats.getUserLearningPageStats, { userId });
 
@@ -40,7 +41,7 @@ export const useImproveYourselfPageStats = () => {
     };
 };
 
-export const useUserCourseStats = (userId: number) => {
+export const useUserCourseStats = (userId: Id<'User'>) => {
 
     const queryRes = useReactQuery2<UserCourseStatsDTO[]>(apiRoutes.userStats.getUserCourseStats, { userId });
 
@@ -52,7 +53,7 @@ export const useUserCourseStats = (userId: number) => {
     };
 };
 
-export const useUserVideoStats = (courseId: number) => {
+export const useUserVideoStats = (courseId: Id<'Course'>) => {
 
     const queryRes = useReactQuery2<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { courseId });
 
@@ -63,7 +64,7 @@ export const useUserVideoStats = (courseId: number) => {
     };
 };
 
-export const useUserExamStats = (courseId: number) => {
+export const useUserExamStats = (courseId: Id<'Course'>) => {
 
     const queryRes = useReactQuery2<UserExamStatsDTO[]>(apiRoutes.userStats.getUserExamStats, { courseId });
 

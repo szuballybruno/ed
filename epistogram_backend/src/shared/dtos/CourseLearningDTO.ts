@@ -1,6 +1,7 @@
+import { Id } from "../types/versionId";
 
 export class CourseLearningDTO {
-    courseId: number;
+    courseId: Id<'Course'>;
     thumbnailImageURL: string;
     title: string;
     teacherName: string;

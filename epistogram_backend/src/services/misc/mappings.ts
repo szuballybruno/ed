@@ -85,7 +85,7 @@ import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
-import { ModulePlayerDTO } from '../../shared/dtos/ModuleDetailedDTO';
+import { ModulePlayerDTO } from '../../shared/dtos/ModulePlayerDTO';
 import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
@@ -118,10 +118,12 @@ import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { toFullName } from '../../utilities/helpers';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
+import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -156,7 +158,7 @@ const marray = [
                         const viewAsQuestion = questionGrouping.items.first();
 
                         return {
-                            questionId: viewAsQuestion.questionVersionId,
+                            questionId: viewAsQuestion.questionId,
                             questionText: viewAsQuestion.questionText,
                             imageUrl: assetUrlService.getAssetUrl(viewAsQuestion.imageUrl),
                             typeId: viewAsQuestion.typeId,
@@ -165,7 +167,7 @@ const marray = [
                                 .map(viewAsAnswer => {
 
                                     return {
-                                        answerId: viewAsAnswer.answerVersionId,
+                                        answerId: viewAsAnswer.answerId,
                                         answerText: viewAsAnswer.answerText,
                                         isGiven: viewAsAnswer.isGivenAnswer
                                     } as SignupAnswerDTO;
@@ -329,7 +331,7 @@ const marray = [
         .addMapping(ExamPlayerDataDTO, () => (view: ExamPlayerDataView, questions: QuestionDataView[]) => {
 
             return instantiate<ExamPlayerDataDTO>({
-                examVersionId: view.examId,
+                examVersionId: view.examVersionId,
                 subTitle: view.subtitle,
                 title: view.title,
                 thumbnailUrl: view.thumbnailUrl,
@@ -785,7 +787,7 @@ const marray = [
                             ? urlService.getAssetUrl(user.avatarFilePath)
                             : null,
                         email: user.email,
-                        roleId: 0,
+                        roleId: Id.create(0),
                         isInvitationAccepted: user.isInvitationAccepted,
                         isTrusted: user.isTrusted,
                         jobTitleId: user.jobTitleId,
@@ -931,22 +933,22 @@ const marray = [
             })
         }),
     epistoMappingsBuilder
-        .addMapping(CourseBriefData, () => (course: CourseData) => {
+        .addMapping(CourseBriefData, () => (course: CourseData, courseId: Id<'Course'>) => {
 
             return instantiate<CourseBriefData>({
-                id: course.id,
+                id: courseId,
                 title: course.title
             })
         }),
     epistoMappingsBuilder
-        .addArrayMapping(CourseShopItemListDTO, ([urlService]) => (courses: CourseData[]) => {
+        .addArrayMapping(CourseShopItemListDTO, ([urlService]) => (courses: CourseShopItemListView[]) => {
 
             return courses.map(course => {
                 return instantiate<CourseShopItemListDTO>({
-                    id: course.id,
+                    id: course.courseId,
                     title: course.title,
-                    coverImagePath: course.coverFile
-                        ? urlService.getAssetUrl(course.coverFile.filePath)
+                    coverImagePath: course.coverFilePath
+                        ? urlService.getAssetUrl(course.coverFilePath)
                         : null
                 })
             })
@@ -1094,8 +1096,6 @@ const marray = [
             })
         }),
 
-
-
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;
@@ -1235,7 +1235,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                 const viewAsQuestion = questionGrouping.items.first();
 
                 return {
-                    questionId: viewAsQuestion.questionVersionId,
+                    questionId: viewAsQuestion.questionId,
                     questionText: viewAsQuestion.questionText,
                     imageUrl: viewAsQuestion.imageUrl,
                     typeId: viewAsQuestion.typeId,
@@ -1244,7 +1244,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                         .map(viewAsAnswer => {
 
                             return {
-                                answerId: viewAsAnswer.answerVersionId,
+                                answerId: viewAsAnswer.answerId,
                                 answerText: viewAsAnswer.answerText,
                                 isGiven: viewAsAnswer.isGivenAnswer
                             } as SignupAnswerDTO;
@@ -1255,11 +1255,12 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
     } as SignupDataDTO;
 };
 
-export const toAnswerDTO = (a: AnswerData) => {
+/* export const toAnswerDTO = (a: AnswerData) => {
 
     return {
-        answerId: a.id,
+        answerId: a.answerVersions.id,
         answerText: a.text
     } as AnswerDTO;
 };
 
+ */

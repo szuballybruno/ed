@@ -1,10 +1,11 @@
+import { Id } from '../types/versionId';
 import { JobTitleDTO } from './JobTitleDTO';
 
 export class UserDTO {
-    id: number;
+    id: Id<'User'>;
     firstName: string;
     lastName: string;
-    companyId: number;
+    companyId: Id<'Company'>;
     isTrusted: boolean;
     email: string;
     phoneNumber: string;

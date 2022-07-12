@@ -4,6 +4,9 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
+import { DailyTip } from '../models/entity/DailyTip';
+import { Id } from '../shared/types/versionId';
+import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
 
 export class DailyTipController {
 
@@ -17,9 +20,10 @@ export class DailyTipController {
     @XControllerAction(apiRoutes.dailyTip.getDailyTip, { isPost: true })
     deleteDailyTipAction = async (params: ActionParams) => {
 
-        const tipId = params
-            .getBody<any>()
-            .getValue(x => x.dailyTipId, 'int');
+        const tipId = Id
+            .create<'DailyTip'>(params
+                .getBody<any>()
+                .getValue(x => x.dailyTipId, 'int'));
 
         await this._dailyTipService
             .deleteDailyTipAsync(tipId);
@@ -31,8 +35,9 @@ export class DailyTipController {
         const body = params
             .getBody<any>();
 
-        const personalityTraitCategoryId = body
-            .getValue(x => x.personalityTraitCategoryId, 'int');
+        const personalityTraitCategoryId = Id
+            .create<'PersonalityTraitCategory'>(body
+                .getValue(x => x.personalityTraitCategoryId, 'int'));
 
         const isMax = body
             .getValue(x => x.isMax, 'boolean');
@@ -44,9 +49,10 @@ export class DailyTipController {
     @XControllerAction(apiRoutes.dailyTip.getDailyTipEditData)
     getDailyTipEditDataAction = async (params: ActionParams) => {
 
-        const dailyTipId = params
-            .getQuery<any>()
-            .getValue(x => x.dailyTipId, 'int');
+        const dailyTipId = Id
+            .create<'DailyTip'>(params
+                .getQuery<any>()
+                .getValue(x => x.dailyTipId, 'int'));
 
         return await this._dailyTipService
             .getDailyTipEditDataAsync(dailyTipId);

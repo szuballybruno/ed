@@ -1,14 +1,15 @@
 import { PermissionCodeType } from '../../types/sharedTypes';
+import { Id } from '../../types/versionId';
 
 export class UserPermissionDTO {
-    permissionAssignmentBridgeId: number | null;
-    permissionId: number;
+    permissionAssignmentBridgeId: Id<'PermissionAssignmentBridge'> | null;
+    permissionId: Id<'Permission'>;
     permissionCode: PermissionCodeType;
-    assigneeUserId: number;
-    contextCompanyId: number | null;
+    assigneeUserId: Id<'User'>;
+    contextCompanyId: Id<'Company'> | null;
     contextCompanyName: string | null;
-    contextCourseId: number | null;
+    contextCourseId: Id<'Course'> | null;
     contextCourseName: string | null;
-    parentRoleId: number | null;
+    parentRoleId: Id<'Role'> | null;
     parentRoleName: string | null;
 }

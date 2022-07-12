@@ -1,5 +1,7 @@
+import { Id } from "../types/versionId";
+
 export class UserActiveCourseDTO {
-    courseId: number;
+    courseId: Id<'Course'>;
     title: string;
     coverFilePath: string;
 }

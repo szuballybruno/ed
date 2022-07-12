@@ -3,6 +3,7 @@ import { memo, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCompanyEditData, useSaveCompany } from '../../../services/api/companyApiService';
 import { showNotification } from '../../../services/core/notifications';
+import { Id } from '../../../shared/types/versionId';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -12,7 +13,8 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 export const CompanyAdminEditPage = memo((props: { onNameLoaded: (name: string) => void }) => {
 
     const { onNameLoaded } = props;
-    const compnayId = useIntParam('companyId')!;
+    const compnayId = Id
+        .create<'Company'>(useIntParam('companyId')!);
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
     const [name, setName] = useState('');
 

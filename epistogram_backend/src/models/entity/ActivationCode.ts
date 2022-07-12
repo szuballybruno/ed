@@ -1,13 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { Company } from './Company';
 
 @Entity()
 export class ActivationCode {
 
     @PrimaryGeneratedColumn()
-@XViewColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ActivationCode'>;
 
     @Column()
     @XViewColumn()
@@ -20,7 +21,7 @@ export class ActivationCode {
     // company
     @Column()
     @XViewColumn()
-    companyId: number;
+    companyId: Id<'Company'>;
 
     @JoinColumn({ name: 'company_id' })
     @ManyToOne(_ => Company, x => x.activationCodes)

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
 import { PlaylistModuleDTO } from '../../shared/dtos/PlaylistModuleDTO';
+import { Id } from '../../shared/types/versionId';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { CollapseItem } from '../universal/CollapseItem';
@@ -20,7 +21,7 @@ export const Playlist = (props: {
 }) => {
 
     // hooks
-    const [expandedNodeIds, setExpandedNodeIds] = useState<number[]>([]);
+    const [expandedNodeIds, setExpandedNodeIds] = useState<Id<'Module'>[]>([]);
     const { navigateToPlayer } = useNavigation();
 
     // data
@@ -46,7 +47,7 @@ export const Playlist = (props: {
             .some(x => x.state === 'current'))[0];
 
     // funcs
-    const handleToggle = (moduleId: number) => {
+    const handleToggle = (moduleId: Id<'Module'>) => {
 
         if (expandedNodeIds.some(x => x === moduleId)) {
 

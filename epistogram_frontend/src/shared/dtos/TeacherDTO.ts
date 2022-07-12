@@ -1,4 +1,6 @@
+import { Id } from "../types/versionId";
+
 export class TeacherDTO {
-    id: number;
+    id: Id<'User'>;
     fullName: string;
 }

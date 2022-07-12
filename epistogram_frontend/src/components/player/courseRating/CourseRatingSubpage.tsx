@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from '../../../services/api/courseRatingApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { Id } from '../../../shared/types/versionId';
 import { usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -16,7 +17,9 @@ import { RatingStars } from '../../universal/RatingStars';
 
 export const CourseRatingSubpage = () => {
 
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
+
     const { navigateToCourseOverview } = useNavigation();
 
     const { courseRatingGroups, courseRatingGroupsError, courseRatingGroupsState, refetchCourseRatingGroupsAsync } = useCourseRatingGroups(courseId);
@@ -28,7 +31,7 @@ export const CourseRatingSubpage = () => {
         onNextOverNavigation: () => navigateToCourseOverview(courseId)
     });
 
-    const [questionAnswers, setQuestionAnswers] = useState<{ quesitionId: number, value: number | null, text: string | null }[]>([]);
+    const [questionAnswers, setQuestionAnswers] = useState<{ quesitionId: Id<'CourseRatingQuestion'>, value: number | null, text: string | null }[]>([]);
     const currentRatingGroup = paging.currentItem;
     const currentQuestions = currentRatingGroup?.questions ?? [];
     const currentGroupIndex = paging.currentIndex;

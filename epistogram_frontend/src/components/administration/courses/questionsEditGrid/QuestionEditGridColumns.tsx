@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { formatSeconds } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -109,7 +110,8 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                         {row.isQuestionHeader && <EpistoButton
                             onClick={() => {
 
-                                const newId = getVirtualId();
+                                const newId = Id
+                                    .create<'AnswerVersion'>(getVirtualId());
 
                                 createAnswer(newId, {
                                     answerVersionId: newId,

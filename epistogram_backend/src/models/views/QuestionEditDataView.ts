@@ -8,23 +8,23 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
 export class QuestionEditDataView {
 
 	@ViewColumn()
-    @XViewColumn()
-	questionId: number;
+	@XViewColumn()
+	questionId: Id<'Question'>;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	dataId: number;
 
 	@ViewColumn()
-    @XViewColumn()
+	@XViewColumn()
 	versionId: number;
-	
+
 	examId: number;
 	videoId: number;
 	questionText: string;
-	answerId: number;
+	answerId: Id<'Answer'>;
 	answerIsCorrect: boolean;
-	answerText:string;
+	answerText: string;
 	showUpTimeSeconds?: number;
 	typeId: number;
 }

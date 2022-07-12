@@ -5,6 +5,7 @@ import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 const INDENT = '   ';
 
@@ -120,7 +121,7 @@ RETURNING id`;
 
         return result
             .rows
-            .map(x => x.id as number);
+            .map(x => Id.create<'T'>(x.id));
     }
 
     /**
@@ -173,7 +174,7 @@ WHERE ${tableName}.id = value_table.id::int;
     /**
      * Hard delete 
      */
-    async hardDeleteAsync<T>(signature: ClassType<T>, ids: number[]) {
+    async hardDeleteAsync<T>(signature: ClassType<T>, ids: Id<any>[]) {
 
         const tableName = 'public.' + toSQLSnakeCasing(signature.name);
 
@@ -184,7 +185,7 @@ WHERE ${tableName}.id = value_table.id::int;
     /**
      * Soft delete 
      */
-    async softDeleteAsync<T>(signature: ClassType<T>, ids: number[]) {
+    async softDeleteAsync<T>(signature: ClassType<T>, ids: Id<any>[]) {
 
         const ents: any[] = ids
             .map((x) => ({

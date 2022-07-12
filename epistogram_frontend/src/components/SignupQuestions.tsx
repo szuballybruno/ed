@@ -3,6 +3,7 @@ import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO'
 import { useSignupData, useAnswerSignupQuestion } from '../services/api/signupApiService';
 import { SingupQuestionSlides, useSignupQuestionsState } from './exam/SingupQuestionSlides';
 import { LoadingFrame } from './system/LoadingFrame';
+import { Id } from '../shared/types/versionId';
 
 export const SignupQuestions = (props: {
     onPrevoiusOverNavigation: () => void,
@@ -21,7 +22,7 @@ export const SignupQuestions = (props: {
 
     const questions = signupData?.questions ?? [];
 
-    const handleSaveSelectedAnswerAsync = async (answerId: number, questionId: number) => {
+    const handleSaveSelectedAnswerAsync = async (answerId: Id<'Answer'>, questionId: Id<'Question'>) => {
 
         const dto = {
             answerId,

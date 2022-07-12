@@ -2,10 +2,10 @@ import { UploadedFile } from 'express-fileupload';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { PrincipalId } from '../utilities/ActionParams';
-import { replaceAll } from '../utilities/helpers';
-import { GenericPropNameType, StringKeyof } from '../utilities/misc';
+import { StringKeyof } from '../utilities/misc';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
@@ -30,7 +30,7 @@ export class FileService {
 
     uploadAvatarFileAsync = async (principalId: PrincipalId, file: UploadedFile) => {
 
-        const userId = principalId.toSQLValue();
+        const userId = Id.create<'User'>(principalId.toSQLValue());
 
         //TODO: Create a validation function
         if (!['image/png', 'image/jpeg'].includes(file.mimetype))
@@ -101,8 +101,8 @@ export class FileService {
     uploadAssigendFileAsync = async <T>(
         filePath: string,
         getEntityAsync: () => Promise<T>,
-        assignFileToEntity: (fileId: number) => Promise<any>,
-        getFileEntityId: (entity: T) => number | null,
+        assignFileToEntity: (fileId: Id<'StorageFile'>) => Promise<any>,
+        getFileEntityId: (entity: T) => Id<any> | null,
         fileBuffer: Buffer) => {
 
         // crate pending storage file
@@ -137,7 +137,7 @@ export class FileService {
         return `${fileType}_container/${fileType}_${entityId}_${Date.now()}.${extension}`;
     };
 
-    deleteFileEntityAsync = async (id: number) => {
+    deleteFileEntityAsync = async (id: Id<'any'>) => {
 
         await this._ormService
             .hardDelete(StorageFile, [id]);
@@ -151,7 +151,7 @@ export class FileService {
             });
     };
 
-    getFileEntityAsync = (id: number) => {
+    getFileEntityAsync = (id: Id<any>) => {
 
         return this._ormService
             .getSingleById(StorageFile, id);

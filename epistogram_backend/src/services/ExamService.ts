@@ -22,6 +22,9 @@ import { UserSessionActivityService } from './UserSessionActivityService';
 import { ExamVersionView } from '../models/views/ExamVersionView';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { Exam } from '../models/entity/exam/Exam';
+import { User } from '../models/entity/User';
+import { Id } from '../shared/types/versionId';
 
 export class ExamService extends QueryServiceBase<ExamData> {
 
@@ -60,7 +63,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
      * Returns an exam player dto that contains 
      * all the data necessary to play an exam.
      */
-    getExamPlayerDTOAsync = async (userId: number, examId: number) => {
+    getExamPlayerDTOAsync = async (userId: Id<'User'>, examId: Id<'Exam'>) => {
 
         const examView = await this._ormService
             .query(ExamPlayerDataView, { examId, userId })
@@ -81,10 +84,10 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Get questions for a particular exam.
      */
-    private async _getQuestionDataByExamVersionId(examVersionId: number) {
+    private async _getQuestionDataByExamVersionId(examVersionId: Id<'ExamVersion'>) {
 
         const questionData = await this._ormService
-            .query(QuestionDataView, { examVersionId: 29 })
+            .query(QuestionDataView, { examVersionId: examVersionId })
             .where('examVersionId', '=', 'examVersionId')
             .getMany()
 
@@ -94,7 +97,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
      */
-    async startExamAsync(answerSessionId: number) {
+    async startExamAsync(answerSessionId: Id<'AnswerSession'>) {
 
         await this._ormService
             .save(AnswerSession, {
@@ -106,7 +109,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Returns the exam by it's id.
      */
-    getExamByIdAsync = (examId: number) => {
+    getExamByIdAsync = (examId: Id<'Exam'>) => {
 
         return this._ormService
             .getSingleById(ExamVersionView, examId);
@@ -120,7 +123,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         //throwNotImplemented();
         //TODO validation comes here
 
-        const userId = principalId.toSQLValue();
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const { answerSessionId, answerIds, elapsedSeconds, questionVersionId } = dto;
 
@@ -152,12 +155,12 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         // save user activity
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
+            .saveUserSessionActivityAsync(userIdAsIdType, 'exam', examVersionId);
 
         // save answer 
         const result = this._quesitonAnswerService
             .answerQuestionAsync(
-                userId,
+                userIdAsIdType,
                 answerSessionId,
                 questionVersionId,
                 answerIds,
@@ -176,7 +179,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         // set user exam progress
         const answerSessionViews = await this._ormService
-            .query(AnswerSessionView, { userId, examVersionId })
+            .query(AnswerSessionView, { userId: userIdAsIdType, examVersionId })
             .where('userId', '=', 'userId')
             .and('examVersionId', '=', 'examVersionId')
             .getMany();
@@ -195,22 +198,24 @@ export class ExamService extends QueryServiceBase<ExamData> {
 
         //if first successful ase, save user exam progress bridge
         throwNotImplemented();
-        await this._ormService
-            .save(UserExamProgressBridge, {
-                id: currentAnswerSessionIsSuccessful.answerSessionId,
-                completionDate: new Date(),
-                examVersionId,
-                userId
-            });
+        /*  await this._ormService
+             .save(UserExamProgressBridge, {
+                 id: currentAnswerSessionIsSuccessful.answerSessionId,
+                 completionDate: new Date(),
+                 examVersionId,
+                 userId: userIdAsIdType
+             }); */
     };
 
     /**
      * Get the results of the particular exam.
      */
-    getExamResultsAsync = async (userId: PrincipalId, answerSessionId: number) => {
+    getExamResultsAsync = async (userId: PrincipalId, answerSessionId: Id<'AnswerSession'>) => {
+
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
         const currentItemCode = await this._userCourseBridgeService
-            .getCurrentItemCodeOrFailAsync(userId.toSQLValue());
+            .getCurrentItemCodeOrFailAsync(userIdAsIdType);
 
         const { itemId, itemType } = readItemCode(currentItemCode);
 
@@ -223,7 +228,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         const examResultViews = await this._ormService
             .query(ExamResultView, {
                 itemId,
-                userId: userId.toSQLValue(),
+                userId: userIdAsIdType,
                 answerSessionId
             })
             .where('examVersionId', '=', 'itemId')

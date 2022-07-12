@@ -1,8 +1,10 @@
 import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/course/Course';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../models/entity/CourseCategory';
+import { StorageFile } from '../models/entity/StorageFile';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
@@ -18,13 +20,14 @@ import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentIte
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { CoursePermissionAssignDTO } from '../shared/dtos/CoursePermissionAssignDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { OrderType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationHelpers } from '../utilities/misc';
@@ -34,6 +37,7 @@ import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
+import { SaveEntityType } from './XORM/XORMTypes';
 
 export class CourseService {
 
@@ -49,9 +53,12 @@ export class CourseService {
      * Returns courses that the principal can use as context
      * when assigning permissions to a user 
      */
-    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: number) {
+    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        const courses = await this._ormService
+        // TODO: CourseDataId is not CourseId
+        throwNotImplemented()
+
+        /* const courses = await this._ormService
             .query(CourseData)
             .getMany();
 
@@ -59,13 +66,13 @@ export class CourseService {
             .map((x): CoursePermissionAssignDTO => ({
                 id: x.id,
                 title: x.title
-            }));
+            })); */
     }
 
     /**
      * Reruns a course view
      */
-    async getCourseViewAsync(userId: number, courseId: number) {
+    async getCourseViewAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const view = await this._ormService
             .query(AvailableCourseView, { courseId, userId })
@@ -79,19 +86,19 @@ export class CourseService {
     /**
      * Returns course brief data async 
      */
-    async getCourseBriefDataAsync(courseId: number) {
+    async getCourseBriefDataAsync(courseId: Id<'Course'>) {
 
         const course = await this._ormService
             .getSingleById(CourseData, courseId);
 
         return this._mapperService
-            .mapTo(CourseBriefData, [course]);
+            .mapTo(CourseBriefData, [course, courseId]);
     }
 
     /**
      * Returns course detals 
      */
-    async getCourseDetailsAsync(userId: PrincipalId, courseId: number) {
+    async getCourseDetailsAsync(userId: PrincipalId, courseId: Id<'Course'>) {
 
         const courseDetailsView = await this._ormService
             .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
@@ -121,9 +128,9 @@ export class CourseService {
 
         const newCourse = {
             title: dto.title,
-            teacherId: 1,
-            categoryId: 1,
-            subCategoryId: 1,
+            teacherId: Id.create<'User'>(1),
+            categoryId: Id.create<'CourseCategory'>(1),
+            subCategoryId: Id.create<'CourseCategory'>(1),
             difficulty: 0,
             benchmark: 0,
             description: '',
@@ -141,14 +148,14 @@ export class CourseService {
         await this._ormService
             .createAsync(CourseData, newCourse);
 
-        await this._pretestService
-            .createPretestExamAsync(newCourse.id);
+        /*  await this._pretestService
+             .createPretestExamAsync(newCourse.id); */
     }
 
     /**
      * Save course thumbnail.
      */
-    async saveCourseThumbnailAsync(file: UploadedFile, courseId: number) {
+    async saveCourseThumbnailAsync(file: UploadedFile, courseId: Id<'Course'>) {
 
         return this._fileService
             .uploadAssigendFile2Async({
@@ -256,21 +263,15 @@ export class CourseService {
     /**
      * Gets the course content edit DTO.
      */
-    async getCourseContentAdminDataAsync(courseId: number, loadDeleted: boolean) {
+    async getCourseContentAdminDataAsync(courseId: Id<'Course'>, loadDeleted: boolean) {
 
         const views = await this._ormService
             .query(CourseAdminContentView, { courseId })
             .where('courseId', '=', 'courseId')
             .getMany();
 
-        const courseVersionId = (await this._ormService
-            .query(LatestCourseVersionView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getSingle())
-            .versionId;
-
         const modules = await this._moduleService
-            .getModuleEditDTOsAsync(courseVersionId);
+            .getModuleEditDTOsAsync(courseId);
 
         const items = this._mapperService
             .mapTo(CourseContentItemAdminDTO, [views]);
@@ -285,7 +286,7 @@ export class CourseService {
      * Saves the course content 
      */
     async saveCourseContentAsync(
-        courseId: number,
+        courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
         moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]) {
 
@@ -311,7 +312,7 @@ export class CourseService {
      * TODO use version save service
      * @deprecated
      */
-    private async _saveCourseVersionAsync(courseId: number) {
+    private async _saveCourseVersionAsync(courseId: Id<'Course'>) {
 
         // get old version id 
         const oldCourseVersionId = (await this._ormService
@@ -334,7 +335,7 @@ export class CourseService {
      * TODO use version save service
      * @deprecated 
      */
-    private async _createNewCourseVersionAsync(courseId: number, oldVersionId: number) {
+    private async _createNewCourseVersionAsync(courseId: Id<'Course'>, oldVersionId: Id<'CourseVersion'>) {
 
         const oldDataId = (await this._ormService
             .query(CourseVersion, { oldVersionId })
@@ -367,7 +368,7 @@ export class CourseService {
     /**
      * Soft delete course.
      */
-    async softDeleteCourseAsync(courseId: number) {
+    async softDeleteCourseAsync(courseId: Id<'Course'>) {
 
         await this._ormService
             .softDelete(CourseData, [courseId]);
@@ -423,7 +424,7 @@ export class CourseService {
      * This can be used to dinamically allow or disallow access to a course, by the user.
      * Like when purchased from the shop, or got limited access etc... 
      */
-    async createCourseAccessBridge(userId: number, courseId: number) {
+    async createCourseAccessBridge(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         await this._ormService
             .createAsync(CourseAccessBridge, {

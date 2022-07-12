@@ -1,4 +1,6 @@
+import { Id } from "../../types/versionId";
+
 export class CourseCategoryMinimalDTO {
-    id: number;
+    id: Id<'CourseCategory'>;
     name: string;
 }

@@ -1,8 +1,9 @@
+import { Id } from '../types/versionId';
 import { CourseLearningDTO } from './CourseLearningDTO';
 import { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
 
 export class UserLearningOverviewDataDTO {
-    userId: number;
+    userId: Id<'User'>;
 
     overallPerformancePercentage: number;
 

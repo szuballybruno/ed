@@ -1,3 +1,5 @@
+import { Id } from "../types/versionId";
+
 export type IdResultDTO = {
-    id: number;
+    id: Id<any>;
 }

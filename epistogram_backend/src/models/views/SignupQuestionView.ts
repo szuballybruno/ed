@@ -1,5 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { AnswerVersion } from '../entity/answer/AnswerVersion';
+import { GivenAnswer } from '../entity/GivenAnswer';
+import { QuestionVersion } from '../entity/question/QuestionVersion';
+import { User } from '../entity/User';
 
 @ViewEntity({
 	synchronize: false,
@@ -9,11 +14,15 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	userId: number;
+	userId: Id<'User'>;
 
 	@ViewColumn()
 	@XViewColumn()
-	questionVersionId: number;
+	questionId: Id<'Question'>;
+
+	@ViewColumn()
+	@XViewColumn()
+	questionVersionId: Id<'QuestionVersion'>;
 
 	@ViewColumn()
 	@XViewColumn()
@@ -29,7 +38,11 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	answerVersionId: number;
+	answerId: Id<'Answer'>;
+
+	@ViewColumn()
+	@XViewColumn()
+	answerVersionId: Id<'AnswerVersion'>;
 
 	@ViewColumn()
 	@XViewColumn()
@@ -37,7 +50,7 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	givenAnswerId: number;
+	givenAnswerId: Id<'GivenAnswer'>;
 
 	@ViewColumn()
 	@XViewColumn()
@@ -45,7 +58,7 @@ export class SignupQuestionView {
 
 	@ViewColumn()
 	@XViewColumn()
-	givenAnswerVersionId: number;
+	givenAnswerVersionId: Id<'AnswerVersion'>;
 
 	@ViewColumn()
 	@XViewColumn()

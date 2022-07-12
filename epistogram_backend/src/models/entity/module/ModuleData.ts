@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { StorageFile } from '../StorageFile';
 import { ModuleVersion } from './ModuleVersion';
 
@@ -8,7 +9,7 @@ export class ModuleData {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'ModuleData'>;
 
     @Column()
     @XViewColumn()
@@ -29,7 +30,7 @@ export class ModuleData {
     // image file 
     @Column({ nullable: true, type: 'integer' })
     @XViewColumn()
-    imageFileId: number | null;
+    imageFileId: Id<'StorageFile'> | null;
     @OneToOne(_ => StorageFile, x => x.courseModule)
     @JoinColumn({ name: 'image_file_id' })
     imageFile: StorageFile | null;

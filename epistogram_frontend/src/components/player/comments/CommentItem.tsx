@@ -1,6 +1,7 @@
 import { Flex, Divider, Avatar } from '@chakra-ui/react';
 import { ThumbUpAlt } from '@mui/icons-material';
 import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
+import { Id } from '../../../shared/types/versionId';
 import { dateTimeToString, toDateStringFormatted } from '../../../static/frontendHelpers';
 import { ChipSmall } from '../../administration/courses/ChipSmall';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -10,8 +11,8 @@ import { CommentAnswerEntry } from './CommentAnswerEntry';
 export const CommentItem = (props: {
     comment: CommentListDTO,
     handleAnswerComment: (comment: CommentListDTO) => void,
-    handleCreateLike: (commentId: number) => void,
-    handleDeleteLike: (commentId: number) => void
+    handleCreateLike: (commentId: Id<'Comment'>) => void,
+    handleDeleteLike: (commentId: Id<'Comment'>) => void
 
 }) => {
 
@@ -32,7 +33,7 @@ export const CommentItem = (props: {
         isQuestion
     } = comment;
 
-    const handleLikeButton = (commentId: number, isCurrentUserLikedComment: boolean) => {
+    const handleLikeButton = (commentId: Id<'Comment'>, isCurrentUserLikedComment: boolean) => {
         if (!isCurrentUserLikedComment) {
             handleCreateLike(commentId);
         } else {

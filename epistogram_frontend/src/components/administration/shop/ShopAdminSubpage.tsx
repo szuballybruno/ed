@@ -16,6 +16,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { ShopAdminEditSubpage } from './ShopAdminEditSubpage';
 import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
+import { Id } from '../../../shared/types/versionId';
 
 export const ShopAdminSubpage = () => {
 
@@ -28,7 +29,7 @@ export const ShopAdminSubpage = () => {
     const showError = useShowErrorDialog();
 
     // state 
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [selectedIds, setSelectedIds] = useState<Id<'ShopItem'>[]>([]);
     const isAllSelected = !adminShopItems.some(si => !selectedIds.some(id => id === si.id));
 
     // func
@@ -43,12 +44,12 @@ export const ShopAdminSubpage = () => {
         }
     };
 
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: Id<'ShopItem'>) => {
 
         navigate(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id });
     };
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: Id<'ShopItem'>) => {
 
         throw new Error('Not implemented!');
     };
@@ -80,15 +81,15 @@ export const ShopAdminSubpage = () => {
         }
     ];
 
-    const setSelected = (userId: number, isSelected: boolean) => {
+    const setSelected = (shopItemId: Id<'ShopItem'>, isSelected: boolean) => {
 
         if (isSelected) {
 
-            setSelectedIds([...selectedIds, userId]);
+            setSelectedIds([...selectedIds, shopItemId]);
         }
         else {
 
-            setSelectedIds(selectedIds.filter(x => x !== userId));
+            setSelectedIds(selectedIds.filter(x => x !== shopItemId));
         }
     };
 

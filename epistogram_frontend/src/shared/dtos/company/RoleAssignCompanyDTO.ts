@@ -1,5 +1,7 @@
+import { Id } from "../../types/versionId";
+
 export class RoleAssignCompanyDTO {
-    id: number;
+    id: Id<'Company'>;
     name: string;
     canAssignRole: boolean;
 }

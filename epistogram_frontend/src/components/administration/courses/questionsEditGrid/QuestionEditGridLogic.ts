@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { iterate, useForceUpdate } from '../../../../static/frontendHelpers';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { AnswerMutationsType, QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
@@ -10,14 +11,14 @@ export const useQuestionEditGridLogic = (
     questions: QuestionEditDataDTO[],
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
-    videoVersionId: number | null,
-    examVersionId: number | null,
+    videoVersionId: Id<'VideoVersion'> | null,
+    examVersionId: Id<'ExamVersion'> | null,
     showTiming?: boolean,
     getPlayedSeconds?: () => number,) => {
 
     const forceUpdate = useForceUpdate();
 
-    const questionMutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', number>({
+    const questionMutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', Id<'QuestionVersion'>>({
         keyPropertyName: 'questionVersionId',
         onMutationsChanged: () => {
 
@@ -26,7 +27,7 @@ export const useQuestionEditGridLogic = (
         }
     }));
 
-    const answerMutatorRef = useRef(new XMutatorCore<AnswerEditDTO, 'answerVersionId', number>({
+    const answerMutatorRef = useRef(new XMutatorCore<AnswerEditDTO, 'answerVersionId', Id<'AnswerVersion'>>({
         keyPropertyName: 'answerVersionId',
         onMutationsChanged: () => {
 
@@ -66,11 +67,13 @@ export const useQuestionEditGridLogic = (
     // add question
     const handleAddQuestion = useCallback(() => {
 
-        const questionVersionId = getVirtualId();
+        const questionVersionId = Id
+            .create<'QuestionVersion'>(getVirtualId());
 
         iterate(4, () => {
 
-            const newAnswerVersionId = getVirtualId();
+            const newAnswerVersionId = Id
+                .create<'AnswerVersion'>(getVirtualId());
 
             answerMutatorRef
                 .current

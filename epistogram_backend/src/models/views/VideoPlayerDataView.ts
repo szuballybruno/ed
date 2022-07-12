@@ -1,5 +1,11 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { CourseVersion } from '../entity/course/CourseVersion';
+import { ModuleVersion } from '../entity/module/ModuleVersion';
+import { Video } from '../entity/video/Video';
+import { VideoData } from '../entity/video/VideoData';
+import { VideoVersion } from '../entity/video/VideoVersion';
 
 @ViewEntity({
     synchronize: false,
@@ -9,23 +15,23 @@ export class VideoPlayerDataView {
 
     @ViewColumn()
     @XViewColumn()
-    videoId: number;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<'VideoVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoDataId: number;
+    videoDataId: Id<'VideoData'>;
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: number;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: number;
+    courseVersionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()

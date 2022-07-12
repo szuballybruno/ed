@@ -2,12 +2,13 @@ import { Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from '../../../services/api/videoRatingApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { RatingStars } from '../../universal/RatingStars';
 
-export const VideoRating = (props: { videoVersionId: number }) => {
+export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
 
     const { videoVersionId } = props;
 

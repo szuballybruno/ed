@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useReactTimer } from '../../helpers/reactTimer';
 import { PlayerApiService } from '../../services/api/PPlayerApiService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { Id } from '../../shared/types/versionId';
 import { epochDates } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -12,7 +13,7 @@ import { TimeoutFrame } from './TimeoutFrame';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
-    answerSessionId: number,
+    answerSessionId: Id<'AnswerSession'>,
     isShowing: boolean,
     onAnswered: () => void,
     onClosed: () => void
@@ -24,10 +25,10 @@ export const VideoQuestionnaire = (props: {
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
 
-    const handleAnswerQuestionAsync = async (answerId) => {
+    const handleAnswerQuestionAsync = async (answerIds: Id<'Answer'>[]) => {
 
         const timeElapsed = epochDates(new Date(), showUpTime);
-        await answerQuestionAsync(answerSessionId, answerId, question.questionVersionId, timeElapsed);
+        await answerQuestionAsync(answerSessionId, answerIds, question.questionVersionId, timeElapsed);
         onAnswered();
     };
 

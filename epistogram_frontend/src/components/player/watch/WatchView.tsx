@@ -27,15 +27,16 @@ import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
 import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
+import { Id } from '../../../shared/types/versionId';
 
 const autoplayTimeoutInS = 3;
 
 export const WatchView = (props: {
     videoPlayerData: VideoPlayerDataDTO,
-    answerSessionId: number,
+    answerSessionId: Id<'AnswerSession'>,
     modules: PlaylistModuleDTO[],
     courseMode: CourseModeType,
-    courseId: number,
+    courseId: Id<'Course'>,
     continueCourse: () => void,
     navigateToCourseItem: NavigateToCourseItemActionType,
     refetchPlayerData: () => Promise<void>,
@@ -83,7 +84,7 @@ export const WatchView = (props: {
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
     const isQuestionVisible = !!currentQuestion;
-    const [answeredQuestionIds, setAnsweredQuestionIds] = useState<number[]>([]);
+    const [answeredQuestionIds, setAnsweredQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
     const hasQuestions = questions.length > 0;
 
     // still watching

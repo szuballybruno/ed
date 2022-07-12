@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { ActivityStreak } from './ActivityStreak';
 import { CoinTransaction } from './CoinTransaction';
 import { User } from './User';
@@ -9,8 +10,8 @@ import { UserSessionActivity } from './UserSessionActivity';
 export class ActivitySession {
 
     @PrimaryGeneratedColumn()
-@XViewColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ActivitySession'>;
 
     @Column({ type: 'timestamptz' })
     @XViewColumn()
@@ -31,7 +32,7 @@ export class ActivitySession {
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -39,7 +40,7 @@ export class ActivitySession {
     // activity streak
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    activityStreakId: number | null;
+    activityStreakId: Id<'ActivityStreak'> | null;
     @JoinColumn({ name: 'activity_streak_id' })
     @ManyToOne(_ => ActivityStreak, x => x.activitySessions)
     activityStreak: Relation<ActivityStreak> | null;

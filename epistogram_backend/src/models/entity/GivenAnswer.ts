@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { IsDeletedFlag, XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';
 import { CoinTransaction } from './CoinTransaction';
@@ -11,7 +12,7 @@ export class GivenAnswer {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'GivenAnswer'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
@@ -41,7 +42,7 @@ export class GivenAnswer {
     // question version
     @Column()
     @XViewColumn()
-    questionVersionId: number;
+    questionVersionId: Id<'QuestionVersion'>;
     @XManyToOne<GivenAnswer>()(() => QuestionVersion, x => x.givenAnswers)
     @XJoinColumn<GivenAnswer>('questionVersionId')
     questionVersion: Relation<QuestionVersion>;
@@ -49,7 +50,7 @@ export class GivenAnswer {
     // answer session
     @Column()
     @XViewColumn()
-    answerSessionId: number;
+    answerSessionId: Id<'AnswerSession'>;
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
     @JoinColumn({ name: 'answer_session_id' })
     answerSession: Relation<AnswerSession>;
@@ -57,7 +58,7 @@ export class GivenAnswer {
     // givenAnswerStreakBridges
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    givenAnswerStreakId: number | null;
+    givenAnswerStreakId: Id<'GivenAnswerStreak'> | null;
     @JoinColumn({ name: 'given_answer_streak_id' })
     @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
     givenAnswerStreak: GivenAnswerStreak;

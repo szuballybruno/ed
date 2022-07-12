@@ -1,11 +1,15 @@
+import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/course/Course';
+import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
-import { ModulePlayerDTO } from '../shared/dtos/ModuleDetailedDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
+import { Id } from '../shared/types/versionId';
+import { throwNotImplemented } from '../utilities/helpers';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/versionCode';
@@ -114,7 +118,7 @@ export class ModuleService {
                     moduleDataId: x.newDataId,
                     moduleId: x.entityId
                 }),
-                getVersionId: x => x.key as number,
+                getVersionId: x => x.key,
                 muts: moduleMutations,
                 overrideDataProps: (data, mutation) => {
 

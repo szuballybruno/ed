@@ -1,3 +1,4 @@
+import { Course } from '../models/entity/course/Course';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
@@ -5,7 +6,9 @@ import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCour
 import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';
 import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { EpistoLineChartDataType } from '../shared/types/epistoChartTypes';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { dateDiffInDays, forN } from '../utilities/helpers';
 import { MapperService } from './MapperService';
@@ -41,7 +44,7 @@ export class UserProgressService extends ServiceBase {
             .mapTo(UserActiveCourseDTO, [views]);
     }
 
-    async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: number) {
+    async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = principalId.toSQLValue();
 
@@ -96,7 +99,7 @@ export class UserProgressService extends ServiceBase {
         } as RecomendedItemQuotaDTO;
     }
 
-    async getProgressChartDataAsync(principalId: PrincipalId, courseId: number) {
+    async getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = principalId.toSQLValue();
 
@@ -191,33 +194,11 @@ export class UserProgressService extends ServiceBase {
 
         const interval = Math.floor(estimatedDates.length / 7);
 
-        const dto = {
+        return instantiate<UserCourseProgressChartDTO>({
             dates: estimatedDates,
             originalPrevisionedProgress: originalPrevisionedProgress,
             previsionedProgress: previsionedProgress,
             actualProgress: actualProgress
-        } as UserCourseProgressChartDTO;
-
-        /*  estimatedCompletionDate: previsionedCompletionDate,
-            estimatedLengthInDays: previsionedCompletionDate ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate) : null,
-            startDate: tempomatCalculationData.startDate,
-            days: dailyViews
-                .map((x, index) => {
-
-                    const prevView = dailyViews[index - 1];
-                    const completedPercentageSum = prevView
-                        ? prevView.completedPercentage + x.completedPercentage
-                        : x.completedPercentage;
-
-                    return {
-                        completedItemCount: x.completedItemCount,
-                        completedPercentage: x.completedPercentage,
-                        completionDate: x.completionDate,
-                        offsetDaysFromStart: x.offsetDaysFromStart,
-                        completedPercentageSum
-                    };
-                }) */
-
-        return dto;
+        })
     }
 }

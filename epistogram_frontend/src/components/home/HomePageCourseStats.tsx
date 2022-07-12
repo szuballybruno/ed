@@ -3,6 +3,7 @@ import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material'
 import { useContext } from 'react';
 import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -20,7 +21,7 @@ export const HomePageCourseStats = (props: {
     const courseId = activeCoursesPaging?.currentItem?.courseId ?? null;
     const { id } = useContext(CurrentUserContext);
 
-    const { userProgressData, userProgressDataError, userProgressDataState } = useUserCourseProgressChartData(courseId ?? 0, !!courseId);
+    const { userProgressData, userProgressDataError, userProgressDataState } = useUserCourseProgressChartData(courseId ?? Id.create<'Course'>(0), !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId!, !!currentCourse);
 

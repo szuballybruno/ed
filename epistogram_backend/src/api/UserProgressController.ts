@@ -1,5 +1,7 @@
+import { Course } from '../models/entity/course/Course';
 import { UserProgressService } from '../services/UserProgressService';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -17,9 +19,10 @@ export class UserProgressController {
     getRecommendedItemQuotaAction = async (params: ActionParams) => {
 
         return await this._userProgressService
-            .getRecommendedItemQuotaAsync(params.principalId, params
-                .getQuery<any>()
-                .getValue(x => x.courseId, 'int'));
+            .getRecommendedItemQuotaAsync(params.principalId, Id
+                .create<'Course'>(params
+                    .getQuery<any>()
+                    .getValue(x => x.courseId, 'int')));
     };
 
     @XControllerAction(apiRoutes.userProgress.getActiveCourses)
@@ -32,9 +35,10 @@ export class UserProgressController {
     @XControllerAction(apiRoutes.userProgress.getUserProgressData)
     getUserProgressDataAction = (params: ActionParams) => {
 
-        const courseId = params
-            .getQuery<any>()
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<'Course'>(params
+                .getQuery<any>()
+                .getValue(x => x.courseId, 'int'));
 
         return this._userProgressService
             .getProgressChartDataAsync(params.principalId, courseId);

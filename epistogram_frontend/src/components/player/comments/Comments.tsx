@@ -5,6 +5,7 @@ import { useComments, useCreateComment, useCreateLike, useDeleteLike } from '../
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { CommentCreateDTO } from '../../../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
+import { Id } from '../../../shared/types/versionId';
 import { PagingType } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
@@ -22,7 +23,7 @@ const Comments = (props: {
     const user = useContext(CurrentUserContext);
     const showErrorDialog = useShowErrorDialog();
 
-    const [currentReplyCommentId, setCurrentReplyCommentId] = useState<number | null>(null);
+    const [currentReplyCommentId, setCurrentReplyCommentId] = useState<Id<'Comment'> | null>(null);
     const [currentReplyThreadId, setCurrentReplyThreadId] = useState<number | null>(null);
     const [currentReplyUserFullName, setCurrentReplyUserFullName] = useState<string | null>(null);
 
@@ -39,7 +40,7 @@ const Comments = (props: {
         }));
 
     const handleCreateNewComment = async (
-        replyToCommentId: number | null,
+        replyToCommentId: Id<'Comment'> | null,
         isAnonymous: boolean,
         isQuestion: boolean,
         text: string
@@ -64,7 +65,7 @@ const Comments = (props: {
         }
     };
 
-    const handleCreateLike = async (commentId: number) => {
+    const handleCreateLike = async (commentId: Id<'Comment'>) => {
 
         try {
             await createLikeAsync({ commentId: commentId });
@@ -74,7 +75,7 @@ const Comments = (props: {
         }
     };
 
-    const handleDeleteLike = async (commentId: number) => {
+    const handleDeleteLike = async (commentId: Id<'Comment'>) => {
 
         try {
             await deleteLikeAsync({ commentId: commentId });

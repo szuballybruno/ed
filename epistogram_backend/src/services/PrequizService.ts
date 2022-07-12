@@ -1,8 +1,13 @@
+import { Answer } from '../models/entity/answer/Answer';
+import { Course } from '../models/entity/course/Course';
 import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
+import { Question } from '../models/entity/question/Question';
+import { User } from '../models/entity/User';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -28,9 +33,10 @@ export class PrequizService {
     /**
      * Returns a list of prequiz questions 
      */
-    async getPrequizQuestionsAsync(principalId: PrincipalId, courseId: number) {
+    async getPrequizQuestionsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userId = principalId.toSQLValue();
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         // set course as started, and stage to prequiz
         await this._courseBridgeService
@@ -62,9 +68,10 @@ export class PrequizService {
      * Returns an answer that the user 
      * has previously given to the specified quesiton
      */
-    async getUserAnswerAsync(principalId: PrincipalId, courseId: number, questionId: number) {
+    async getUserAnswerAsync(principalId: PrincipalId, courseId: Id<'Course'>, questionId: Id<'Question'>) {
 
-        const userId = principalId.toSQLValue();
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const userAnswer = await this._ormService
             .query(PrequizUserAnswer, { userId, questionId, courseId })
@@ -89,13 +96,14 @@ export class PrequizService {
      */
     async answerPrequizQuestionAsync(
         principalId: PrincipalId,
-        questionId: number,
-        courseId: number,
-        answerId: number | null,
+        questionId: Id<'PrequizQuestion'>,
+        courseId: Id<'Course'>,
+        answerId: Id<'PrequizAnswer'> | null,
         value: number | null) {
 
 
-        const userId = principalId.toSQLValue();
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const previousAnswer = await this._ormService
             .query(PrequizUserAnswer, { userId, questionId, courseId })

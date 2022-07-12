@@ -9,6 +9,7 @@ import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
 import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
 import { iterate } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -24,8 +25,9 @@ import { EditSection } from './EditSection';
 export const EditCourseDetailsSubpage = () => {
 
     // util
-    const courseId = useIntParam('courseId')!;
-    const isAnySelected = courseId != -1;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
+    const isAnySelected = Id.read(courseId) != -1;
     const showError = useShowErrorDialog();
     const { navigate } = useNavigation();
 
@@ -53,7 +55,7 @@ export const EditCourseDetailsSubpage = () => {
     const [prevCompletedCount, setPrevCompletedCount] = useState('');
     const [language, setLanguage] = useState('');
     const [visibility, setVisibility] = useState<CourseVisibilityType>('public');
-    const [teacherId, setTeacherId] = useState(0);
+    const [teacherId, setTeacherId] = useState<Id<'User'>>(Id.create<'User'>(0));
     const [skillBenefits, setSkillBenefits] = useState<string[]>([
         'Alapvető műveletek elvégzése',
         'Grafikai elemek használata',

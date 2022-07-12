@@ -6,6 +6,8 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { ServiceProvider } from '../startup/servicesDI';
+import { Comment } from '../models/entity/Comment';
+import { Id } from '../shared/types/versionId';
 
 export class CommentController {
 
@@ -13,7 +15,7 @@ export class CommentController {
     private _userCommentBridgeService: LikeService;
 
     constructor(serviceProvider: ServiceProvider) {
-        
+
         this._commentService = serviceProvider.getService(CommentService);
         this._userCommentBridgeService = serviceProvider.getService(LikeService);
     }
@@ -41,9 +43,10 @@ export class CommentController {
 
         const principalId = params.principalId;
 
-        const commentId = params
-            .getBody<{ commentId: number }>()
-            .getValue(x => x.commentId, 'int');
+        const commentId = Id
+            .create<'Comment'>(params
+                .getBody<{ commentId: number }>()
+                .getValue(x => x.commentId, 'int'));
 
         return this
             ._userCommentBridgeService
@@ -75,9 +78,10 @@ export class CommentController {
 
         const principalId = params.principalId;
 
-        const commentId = params
-            .getBody<{ commentId: number }>()
-            .getValue(x => x.commentId, 'int');
+        const commentId = Id
+            .create<'Comment'>(params
+                .getBody<{ commentId: number }>()
+                .getValue(x => x.commentId, 'int'));
 
         return this
             ._userCommentBridgeService

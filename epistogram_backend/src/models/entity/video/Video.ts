@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { CoinTransaction } from '../CoinTransaction';
 import { VideoVersion } from './VideoVersion';
 
@@ -8,7 +9,7 @@ export class Video {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'Video'>;
 
     // TO MANY
 

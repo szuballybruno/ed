@@ -1,8 +1,10 @@
+import { Id } from "../types/versionId";
+
 export class UserExamStatsDTO {
-    userId: number;
-    examId: number;
+    userId: Id<'User'>;
+    examId: Id<'Exam'>;
     examTitle: string;
-    courseId: number;
+    courseId: Id<'Course'>;
     correctAnswerRate: number;
     shouldPractiseExam: boolean;
     correctAnswerCount: string;

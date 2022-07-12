@@ -5,6 +5,7 @@ import { useSaveExamAnswer } from '../../services/api/examApiService';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
 import { epochDates, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -15,7 +16,7 @@ import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
-    answerSessionId: number,
+    answerSessionId: Id<'AnswerSession'>,
     onExamFinished: () => void,
     exitExamAction?: () => void,
     hideLoading?: boolean
@@ -34,7 +35,7 @@ export const ExamQuestions = (props: {
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const questionPaging = usePaging({ items: questions, onNextOverNavigation: onExamFinished });
     const currentQuestion = questionPaging.currentItem!;
-    const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([]);
+    const [selectedAnswerIds, setSelectedAnswerIds] = useState<Id<'Answer'>[]>([]);
     const progressPercentage = (100 / questions.length) * questionPaging.currentIndex;
     const isSingleAnswerMode = currentQuestion.typeId === QuestionTypeEnum.singleAnswer;
     const hasSelectedAnswer = selectedAnswerIds.length > 0;
@@ -62,7 +63,7 @@ export const ExamQuestions = (props: {
         }
     };
 
-    const setAnswerSelectedState = (answerId: number, isSelected: boolean) => {
+    const setAnswerSelectedState = (answerId: Id<'Answer'>, isSelected: boolean) => {
 
         if (isSelected) {
 

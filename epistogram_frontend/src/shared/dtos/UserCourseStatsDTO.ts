@@ -1,8 +1,9 @@
 import { TempomatModeType } from '../../shared/types/sharedTypes';
+import { Id } from '../types/versionId';
 
 export class UserCourseStatsDTO {
-    userId: number;
-    courseId: number;
+    userId: Id<'User'>;
+    courseId: Id<'Course'>;
     thumbnailImageUrl: string;
     courseName: string;
     startDate: Date;

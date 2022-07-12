@@ -1,10 +1,11 @@
+import { Id } from '../../types/versionId';
 import { PermissionListDTO } from './PermissionListDTO';
 
 export class RoleAdminListDTO {
-    roleId: number;
+    roleId: Id<'Role'>;
     roleName: string;
     ownerName: string;
-    companyId: number;
+    companyId: Id<'Company'>;
     companyName: string;
     permissions: PermissionListDTO[];
 }

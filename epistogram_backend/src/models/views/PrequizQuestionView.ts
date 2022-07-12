@@ -1,5 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -9,8 +10,8 @@ export class PrequizQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: number;
-    
+    questionId: Id<'Question'>;
+
     @ViewColumn()
     @XViewColumn()
     questionText: string;
@@ -18,19 +19,19 @@ export class PrequizQuestionView {
     @ViewColumn()
     @XViewColumn()
     isNumericAnswer: boolean;
-    
+
     @ViewColumn()
     @XViewColumn()
-    answerId: number;
-    
+    answerId: Id<'Answer'>;
+
     @ViewColumn()
     @XViewColumn()
     answerText: string;
-    
+
     @ViewColumn()
     @XViewColumn()
     minValue: number;
-    
+
     @ViewColumn()
     @XViewColumn()
     maxValue: number;
@@ -38,7 +39,7 @@ export class PrequizQuestionView {
     @ViewColumn()
     @XViewColumn()
     stepValue: number;
-    
+
     @ViewColumn()
     @XViewColumn()
     minLabel: string;

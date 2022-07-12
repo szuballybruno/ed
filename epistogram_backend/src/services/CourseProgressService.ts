@@ -1,9 +1,12 @@
+import { Course } from '../models/entity/course/Course';
+import { User } from '../models/entity/User';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -54,7 +57,7 @@ export class CourseProgressService {
     /**
      * Returns the progress of the current active course, or null.
      */
-    async getCurrentCourseProgressAsync(userId: number) {
+    async getCurrentCourseProgressAsync(userId: Id<'User'>) {
 
         // get current course id 
         const currentCourseId = await this._userCourseBridgeService
@@ -103,7 +106,7 @@ export class CourseProgressService {
     /**
      * Returns the next items in course 
      */
-    private async _getCourseNextItemsAsync(userId: number, courseId: number) {
+    private async _getCourseNextItemsAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const modules = await this
             ._playlistService

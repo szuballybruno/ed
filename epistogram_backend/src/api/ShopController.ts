@@ -4,6 +4,8 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
+import { ShopItem } from '../models/entity/ShopItem';
+import { Id } from '../shared/types/versionId';
 
 export class ShopController {
 
@@ -32,7 +34,8 @@ export class ShopController {
     purchaseShopItemAction = async (params: ActionParams) => {
 
         const body = params.getBody();
-        const shopItemId = body.getValue(x => x.shopItemId, 'int');
+        const shopItemId = Id
+            .create<'ShopItem'>(body.getValue(x => x.shopItemId, 'int'));
 
         return await this._shopService
             .purchaseShopItemAsync(params.principalId, shopItemId);
@@ -49,18 +52,20 @@ export class ShopController {
     getShopItemBriefDataAction = async (params: ActionParams) => {
 
         return await this._shopService
-            .getShopItemBriefDataAsync(params
-                .getQuery<any>()
-                .getValue(x => x.shopItemId, 'int'));
+            .getShopItemBriefDataAsync(Id
+                .create<'ShopItem'>(params
+                    .getQuery<any>()
+                    .getValue(x => x.shopItemId, 'int')));
     };
 
     @XControllerAction(apiRoutes.shop.getShopItemEditData)
     getShopItemEditDTOAction = async (params: ActionParams) => {
 
         return await this._shopService
-            .getShopItemEditDTOAsync(params
-                .getQuery<any>()
-                .getValue(x => x.shopItemId, 'int'));
+            .getShopItemEditDTOAsync(Id
+                .create<'ShopItem'>(params
+                    .getQuery<any>()
+                    .getValue(x => x.shopItemId, 'int')));
     };
 
     @XControllerAction(apiRoutes.shop.getPrivateCourseList)

@@ -6,6 +6,7 @@ import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { OrderType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { distinct, distinctByAllKeys } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { ContentPane } from './ContentPane';
@@ -22,7 +23,7 @@ import { EpistoSearch } from './universal/EpistoSearch';
 const AvailableCoursesPage = () => {
 
     const [searchText, setSearchText] = React.useState<string | null>(null);
-    const [filterCategoryId, setFilterCategoryId] = React.useState<number | null>(null);
+    const [filterCategoryId, setFilterCategoryId] = React.useState<Id<'CourseCategory'> | null>(null);
     const [isFeatured, setIsFeatured] = React.useState(false);
     const [isRecommended, setIsRecommended] = React.useState(false);
     const [orderBy, setOrderBy] = React.useState<OrderType | null>(null);

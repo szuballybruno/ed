@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
 
 @Entity()
@@ -7,7 +8,7 @@ export class TeacherInfo {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'TeacherInfo'>;
 
     @Column()
     @XViewColumn()
@@ -42,7 +43,7 @@ export class TeacherInfo {
     // user 
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
     @OneToOne(_ => User, x => x.teacherInfo)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;

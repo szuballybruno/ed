@@ -67,11 +67,13 @@ import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
+import { AnswerSessionGroupView } from '../../models/views/AnswerSessionGroupView';
 import { AnswerSessionView } from '../../models/views/AnswerSessionView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinBalanceView } from '../../models/views/CoinBalanceView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CommentListView } from '../../models/views/CommentListView';
+import { CorrectAnswerRatesSplitView } from '../../models/views/CorrectAnswerRatesSplitView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
@@ -83,6 +85,7 @@ import { CourseModuleOverviewView } from '../../models/views/CourseModuleOvervie
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
+import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
@@ -293,6 +296,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'video_playback_sample_view'],
             ['basic', 'video_version_view', VideoVersionView],
             ['basic', 'exam_version_view', ExamVersionView],
+            ['basic', 'course_shop_item_list_view', CourseShopItemListView],
             ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view
@@ -310,18 +314,20 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'user_course_completion_original_estimation_view', UserCourseCompletionOriginalEstimationView], // 1 user_course_stats_view
             ['common', 'user_course_completion_current_view', UserCourseCompletionCurrentView], // 2 user_course_progress_view, user_course_recommended_item_quota_view
             ['common', 'user_answer_view', UserAnswerView], // 2 user_performance_answer_group_view, user_video_stats_view
-            ['common', 'user_performance_answer_group_view', UserPerformanceAnswerGroupView], // 2 user_reaction_time_view, user_performance_view
-            ['common', 'user_reaction_time_view', UserReactionTimeView], // 1 user_learning_overview_stats_view
             ['common', 'user_session_block_view', UserSessionBlockView],  // 1 user_learning_overview_stats_view
             ['common', 'user_daily_course_item_progress_view', UserDailyCourseItemProgressView], // 1 user_weekly_course_item_progress_view
             ['common', 'user_course_progress_actual'], // 1 user_course_progress_view
             ['common', 'user_course_progress_view', UserCourseProgressView], // 1 user_course_stats_view
             ['common', 'user_video_practise_progress_view', UserVideoPractiseProgressView], // 1 user_video_practise_progress_view
             ['common', 'tempomat_calculation_data_view', TempomatCalculationDataView],
-            ['common', 'user_performance_view', UserPerformanceView],
-            ['common', 'most_productive_time_range_view', MostProductiveTimeRangeView],
             ['common', 'user_daily_activity_chart_view', UserDailyActivityChartView],
+            ['common', 'answer_session_group_view', AnswerSessionGroupView],
+            ['', 'correct_answer_rates_split_view', CorrectAnswerRatesSplitView],
+            ['', 'user_performance_answer_group_view', UserPerformanceAnswerGroupView], // 2 user_reaction_time_view, user_performance_view
+            ['', 'user_reaction_time_view', UserReactionTimeView], // 1 user_learning_overview_stats_view
+            ['', 'most_productive_time_range_view', MostProductiveTimeRangeView],
             ['', 'user_session_daily_view', UserSessionDailyView],
+            ['', 'user_performance_view', UserPerformanceView],
             ['', 'signup_completed_view', SignupCompletedView],
             ['', 'daily_tip_view', DailyTipView],
             ['', 'course_admin_detailed_view', CourseAdminDetailedView],

@@ -1,18 +1,32 @@
+import { ActivitySession } from '../../models/entity/ActivitySession';
+import { ActivityStreak } from '../../models/entity/ActivityStreak';
+import { Answer } from '../../models/entity/answer/Answer';
+import { AnswerSession } from '../../models/entity/AnswerSession';
+import { ExamVersion } from '../../models/entity/exam/ExamVersion';
+import { GivenAnswer } from '../../models/entity/GivenAnswer';
+import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
+import { Question } from '../../models/entity/question/Question';
+import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
+import { ShopItem } from '../../models/entity/ShopItem';
+import { User } from '../../models/entity/User';
+import { Video } from '../../models/entity/video/Video';
+import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { TaskCodeType } from '../../models/Types';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
-    userId: number,
+    userId: Id<'User'>,
     amount: number,
-    activitySessionId?: number,
-    videoId?: number,
-    givenAnswerId?: number,
-    givenAnswerStreakId?: number,
-    activityStreakId?: number,
-    shopItemId?: number
+    activitySessionId?: Id<'ActivitySession'>,
+    videoId?: Id<'Video'>,
+    givenAnswerId?: Id<'GivenAnswer'>,
+    givenAnswerStreakId?: Id<'GivenAnswerStreak'>,
+    activityStreakId?: Id<'ActivityStreak'>,
+    shopItemId?: Id<'ShopItem'>
 };
 
 export class SQLFunctionsService {
@@ -76,7 +90,7 @@ export class SQLFunctionsService {
         }
     };
 
-    answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
+    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerId: Id<'Answer'>) => {
 
         return this.execSQLFunctionAsync(
             'answer_signup_question_fn',
@@ -88,17 +102,17 @@ export class SQLFunctionsService {
     };
 
     answerQuestionFn = async (
-        userId: number,
-        answerSessionId: number,
-        questionVersionId: number,
-        answerIds: number[],
+        userId: Id<'User'>,
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
         elapsedSeconds: number,
         isPractiseAnswer: boolean) => {
 
         type ReType = {
-            correct_answer_ids: number[],
-            given_answer_id: number,
-            streak_id: number,
+            correct_answer_ids: Id<'Answer'>[],
+            given_answer_id: Id<'GivenAnswer'>,
+            streak_id: Id<'GivenAnswerStreak'>,
             streak_length: number,
             is_correct: boolean,
         };
@@ -143,8 +157,8 @@ export class SQLFunctionsService {
     };
 
     getUserSessionFirstActivityId = (
-        userId: number,
-        sessionActivityId: number) => {
+        userId: Id<'User'>,
+        sessionActivityId: Id<'ActivitySession'>) => {
 
         return this.execSQLFunctionAsync<number>(
             'get_user_session_first_activity_id',
@@ -156,15 +170,15 @@ export class SQLFunctionsService {
     };
 
     saveUserSessionActivity = (
-        userId: number,
+        userId: Id<'User'>,
         param_activity_type: SessionActivityType,
-        itemVersionId?: number
+        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>
     ) => {
 
         const videoVersionId = param_activity_type === 'video' ? itemVersionId : null;
         const examVersionId = param_activity_type === 'exam' ? itemVersionId : null;
 
-        return this.execSQLFunctionAsync<number>(
+        return this.execSQLFunctionAsync<Id<'ActivitySession'>>(
             'save_user_session_activity',
             [
                 userId,

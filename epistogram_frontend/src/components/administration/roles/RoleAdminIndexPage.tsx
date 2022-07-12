@@ -15,6 +15,7 @@ import { AddRoleDialog } from './AddRoleDialog';
 import { EditRoleDialog } from './EditRoleDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { usePostCallback } from '../../../static/frontendHelpers';
+import { Id } from '../../../shared/types/versionId';
 
 type RowType = RoleAdminListDTO & {
     perms: string,
@@ -44,16 +45,16 @@ export const RoleAdminIndexPage = memo(() => {
     const handleDeleteRole = usePostCallback(deleteRoleAsync, [refetchRolesList]);
 
     const addDialogLogic = useEpistoDialogLogic(AddRoleDialog);
-    const editDialogLogic = useEpistoDialogLogic<{ roleId: number }>(EditRoleDialog);
-    const deleteWarningDialogLogic = useEpistoDialogLogic<{ roleId: number }>('deleteWarningDialogLogic');
+    const editDialogLogic = useEpistoDialogLogic<{ roleId: Id<'Role'> }>(EditRoleDialog);
+    const deleteWarningDialogLogic = useEpistoDialogLogic<{ roleId: Id<'Role'> }>('deleteWarningDialogLogic');
 
-    const handleEdit = useCallback((roleId: number) => {
+    const handleEdit = useCallback((roleId: Id<'Role'>) => {
 
         editDialogLogic
             .openDialog({ params: { roleId } });
     }, [editDialogLogic]);
 
-    const handleDelete = useCallback((roleId: number) => {
+    const handleDelete = useCallback((roleId: Id<'Role'>) => {
 
         deleteWarningDialogLogic
             .openDialog({ params: { roleId } });

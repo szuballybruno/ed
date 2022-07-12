@@ -5,6 +5,7 @@ import { ApplicationRoute } from '../../models/types';
 import { getUrl } from '../../static/frontendHelpers';
 import { useCallback } from 'react';
 import { Environment } from '../../static/Environemnt';
+import { Id } from '../../shared/types/versionId';
 
 export const useNavigation = () => {
 
@@ -35,19 +36,19 @@ export const useNavigation = () => {
 
     const navigateToPlayer = (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode });
 
-    const navigateToCourseDetails = (courseId: number, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode });
+    const navigateToCourseDetails = (courseId: Id<'Course'>, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode });
 
-    const navigateToWatchPrequiz = (courseId: number) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
+    const navigateToWatchPrequiz = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
 
-    const navigateToWatchPretest = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+    const navigateToWatchPretest = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
 
-    const navigateToWatchPretestResults = (courseId: number) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
+    const navigateToWatchPretestResults = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
 
-    const navigateToCourseRating = (courseId: number) => navigate(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
+    const navigateToCourseRating = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
 
-    const navigateToCourseOverview = (courseId: number) => navigate(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
+    const navigateToCourseOverview = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
 
-    const playCourse = (courseId: number, stageName: CourseStageNameType, currentItemCode: string | null) => {
+    const playCourse = (courseId: Id<'Course'>, stageName: CourseStageNameType, currentItemCode: string | null) => {
 
         if (currentItemCode) {
 

@@ -8,6 +8,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { Id } from '../../../shared/types/versionId';
 import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
@@ -24,7 +25,8 @@ export const AdminEditUserSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const editedUserId = useIntParam('userId')!;
+    const editedUserId = Id
+        .create<'User'>(useIntParam('userId')!);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();

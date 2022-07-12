@@ -1,8 +1,10 @@
 
+import { User } from '../models/entity/User';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { CourseProgressService } from './CourseProgressService';
 import { MapperService } from './MapperService';
@@ -18,10 +20,13 @@ export class MiscService {
         private _userCourseBridgeService: UserCourseBridgeService) {
     }
 
-    async getCourseOverviewDataAsync(userId: PrincipalId) {
+    async getCourseOverviewDataAsync(principalId: PrincipalId) {
+
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const courseId = await this._userCourseBridgeService
-            .getCurrentCourseIdOrFail(userId.toSQLValue());
+            .getCurrentCourseIdOrFail(userId);
 
         const view = await this._ormService
             .query(CourseOverviewView, { courseId, userId })
@@ -33,14 +38,17 @@ export class MiscService {
             .mapTo(CourseOverviewDataDTO, [view]);
     }
 
-    async getOverviewPageDTOAsync(userId: PrincipalId) {
+    async getOverviewPageDTOAsync(principalId: PrincipalId) {
+
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const recommendedCourseDTOs = [] as CourseShortDTO[];
         const developmentChartData = this.getDevelopmentChart();
 
         const currentCourseProgress = await this
             ._courseProgressService
-            .getCurrentCourseProgressAsync(userId.toSQLValue());
+            .getCurrentCourseProgressAsync(userId);
 
         const overviewPageDTO = {
             tipOfTheDay: this.getTipOfTheDay(),

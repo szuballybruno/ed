@@ -1,5 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { ShopItem } from '../entity/ShopItem';
+import { ShopItemCategory } from '../entity/ShopItemCategory';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -9,15 +14,15 @@ export class ShopItemStatefulView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'ShopItem'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -49,7 +54,7 @@ export class ShopItemStatefulView {
 
     @ViewColumn()
     @XViewColumn()
-    shopItemCategoryId: number;
+    shopItemCategoryId: Id<'ShopItemCategory'>;
 
     @ViewColumn()
     @XViewColumn()

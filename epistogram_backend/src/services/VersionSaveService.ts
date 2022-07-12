@@ -1,4 +1,5 @@
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { Id } from '../shared/types/versionId';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { log } from './misc/logger';
@@ -9,7 +10,7 @@ import { EntityType } from './XORM/XORMTypes';
 
 type SaveActionType = {
     mutation: Mutation<any, any> | null;
-    oldVersionId: number;
+    oldVersionId: Id<any>;
     action: 'ADD' | 'UPDATE' | 'INCREMENT';
 }
 
@@ -22,7 +23,13 @@ export class VersionSaveService {
     /**
      * SAVE
      */
-    async saveAsync<TDTO, TMutationKey extends keyof TDTO, TVersion extends EntityType, TData extends EntityType, TEntity extends EntityType>(opts: {
+    async saveAsync<
+        TDTO,
+        TMutationKey extends keyof TDTO,
+        TVersion extends EntityType<TVersion>,
+        TData extends EntityType<TData>,
+        TEntity extends EntityType<TEntity>
+    >(opts: {
         dtoSignature: ClassType<TDTO>,
         versionSignature: ClassType<TVersion>,
         dataSignature: ClassType<TData>,
@@ -30,14 +37,14 @@ export class VersionSaveService {
         parentVersionIdField: keyof TVersion,
         parentVersionIdMigrations: VersionMigrationResult[],
         muts: Mutation<TDTO, TMutationKey>[],
-        getParentOldVersionId: (dto: Partial<TDTO>) => number | null | undefined,
-        getDataId: (version: TVersion) => number,
-        getEntityId: (version: TVersion) => number,
-        getVersionId: (mutation: Mutation<TDTO, TMutationKey>) => number,
+        getParentOldVersionId: (dto: Partial<TDTO>) => Id<any> | null | undefined,
+        getDataId: (version: TVersion) => Id<any>,
+        getEntityId: (version: TVersion) => Id<any>,
+        getVersionId: (mutation: Mutation<TDTO, TMutationKey>) => Id<any>,
         getDefaultData: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         getNewEntity: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TEntity>,
-        getNewVersion: (opts: { newDataId: number, entityId: number, newParentVersionId: number }) => InsertEntity<TVersion>
+        getNewVersion: (opts: { newDataId: Id<any>, entityId: Id<any>, newParentVersionId: Id<any> }) => InsertEntity<TVersion>
     }) {
 
         const {
@@ -156,13 +163,13 @@ export class VersionSaveService {
 
                 // new entity: mutation has parent version id 
                 // otherwise use mutation or old data (mutation is priorized)
-                const oldParentVersionId: number = ((): number => {
+                const oldParentVersionId: Id<'EntityType<any>'> = ((): Id<'EntityType<any>'> => {
 
                     if (!mutation)
                         return getOldData(oldVersionId).oldVersion[parentVersionIdField] as any;
 
                     if (mutation.action === 'add')
-                        return XMutatorHelpers.getFieldValueOrFail(mutation)(getParentOldVersionId) as any as number;
+                        return XMutatorHelpers.getFieldValueOrFail(mutation)(getParentOldVersionId) as any as Id<'EntityType<any>'>;
 
                     const oldParentVersionId = XMutatorHelpers.getFieldValue(mutation)(getParentOldVersionId);
                     if (oldParentVersionId)
@@ -198,15 +205,15 @@ export class VersionSaveService {
     /**
      * Get old versions  
      */
-    private async _getAllOldVersionsByParent<TVersion extends EntityType>(
+    private async _getAllOldVersionsByParent<TVersion extends EntityType<TVersion>>(
         versionSignature: ClassType<TVersion>,
         parentVersionIdField: keyof TVersion,
         parentVersionIdMigrations: VersionMigrationResult[],
         mutations: Mutation<any, any>[],
-        getVersionId: (mutation: Mutation<any, any>) => number) {
+        getVersionId: (mutation: Mutation<any, any>) => Id<any>) {
 
         const oldParentVersionIds = parentVersionIdMigrations
-            .map(x => x.oldVersionId);
+            .map(x => Id.read(x.oldVersionId));
 
         const oldVersions = await this._ormService
             .query(versionSignature, { oldParentVersionIds })
@@ -228,15 +235,15 @@ export class VersionSaveService {
      */
     private async _getOldDataView<
         TMutation extends Mutation<any, any>,
-        TVersion extends EntityType,
-        TData extends EntityType,
-        TEntity extends EntityType>(opts: {
+        TVersion extends EntityType<TVersion>,
+        TData extends EntityType<TData>,
+        TEntity extends EntityType<TEntity>>(opts: {
             data: ClassType<TData>,
             entity: ClassType<TEntity>,
             oldVersions: TVersion[],
-            getDataId: (version: TVersion) => number,
-            getEntityId: (version: TVersion) => number,
-            getVersionId: (mut: TMutation) => number
+            getDataId: (version: TVersion) => Id<any>,
+            getEntityId: (version: TVersion) => Id<any>,
+            getVersionId: (mut: TMutation) => Id<any>
         }) {
 
         const { data, entity, getDataId, getEntityId, getVersionId, oldVersions } = opts;
@@ -245,8 +252,8 @@ export class VersionSaveService {
             ? [] as OldData<TVersion, TData, TEntity>[]
             : await (async () => {
 
-                const oldDataIds = oldVersions.map(getDataId);
-                const oldEntityIds = oldVersions.map(getEntityId);
+                const oldDataIds = oldVersions.map(x => Id.read(getDataId(x)));
+                const oldEntityIds = oldVersions.map(x => Id.read(getEntityId(x)));
 
                 const oldDatas = await this._ormService
                     .query(data, { oldDataIds })
@@ -268,14 +275,14 @@ export class VersionSaveService {
                 return oldData;
             })();
 
-        const getOldData = (mutation: TMutation | number) => {
+        const getOldData = (mutation: TMutation | Id<any>) => {
 
-            const verisonId = typeof mutation === 'number'
-                ? mutation
-                : getVersionId(mutation);
+            /*  const verisonId = mutation instanceof .create<'TVersion'>
+                 ? mutation
+                 : getVersionId(mutation); */
 
             return oldData
-                .single(x => x.oldVersion.id === verisonId);
+                .single(x => x.oldVersion.id === mutation);
         };
 
         return { getOldData };
@@ -286,8 +293,8 @@ export class VersionSaveService {
      */
     private _getOldVersionIds<TMutation extends Mutation<any, any>>(
         mutations: TMutation[],
-        oldVersions: EntityType[],
-        getVersionId: (mut: TMutation) => number) {
+        oldVersions: EntityType<TMutation>[],
+        getVersionId: (mut: TMutation) => Id<any>) {
 
         const addMutationOldVersionIds = mutations
             .filter(x => x.action === 'add')

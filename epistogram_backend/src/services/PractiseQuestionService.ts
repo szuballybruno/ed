@@ -8,6 +8,8 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { ServiceBase } from './misc/ServiceBase';
 import { MapperService } from './MapperService';
 import { PrincipalId } from '../utilities/ActionParams';
+import { User } from '../models/entity/User';
+import { Id } from '../shared/types/versionId';
 
 export class PractiseQuestionService extends ServiceBase {
 
@@ -61,15 +63,15 @@ export class PractiseQuestionService extends ServiceBase {
 
     answerPractiseQuestionAsync = async (principalId: PrincipalId, qu: AnswerQuestionDTO) => {
 
-        const userId = principalId.toSQLValue();
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
-        const practiseAnswerSession = await this.getUserPractiseAnswerSession(userId);
+        const practiseAnswerSession = await this.getUserPractiseAnswerSession(userIdAsIdType);
 
         return await this._questionAnswerService
-            .answerQuestionAsync(userId, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
+            .answerQuestionAsync(userIdAsIdType, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
     };
 
-    getUserPractiseAnswerSession = async (userId: number) => {
+    getUserPractiseAnswerSession = async (userId: Id<'User'>) => {
 
         return this._ormService
             .query(AnswerSession, { userId })

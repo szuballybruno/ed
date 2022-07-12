@@ -7,6 +7,7 @@ import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
@@ -81,7 +82,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .mapTo(CompanyDTO, [companies]);
     }
 
-    async getCompanyEditDataAsync(principalId: PrincipalId, companyId: number) {
+    async getCompanyEditDataAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
 
         await this._authoirzationService
             .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId });
@@ -107,7 +108,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             });
     }
 
-    async deleteCompanyAsync(principalId: PrincipalId, companyId: number) {
+    async deleteCompanyAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
 
         await this._authoirzationService
             .checkPermissionAsync(principalId, 'DELETE_COMPANIES');

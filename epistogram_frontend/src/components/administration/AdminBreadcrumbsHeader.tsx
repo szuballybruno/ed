@@ -10,6 +10,7 @@ import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
 import { useBriefUserData } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
+import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoFont } from '../controls/EpistoFont';
 
@@ -95,9 +96,15 @@ export const AdminBreadcrumbsHeader = (props: {
 
     // params
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
-    const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
-    const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
-    const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
+    const userId = urlParams.userId
+        ? Id.create<'User'>(parseInt(urlParams.userId))
+        : null;
+    const courseId = urlParams.courseId
+        ? Id.create<'Course'>(parseInt(urlParams.courseId))
+        : null;
+    const shopItemId = urlParams.shopItemId
+        ? Id.create<'ShopItem'>(parseInt(urlParams.shopItemId))
+        : null;
 
     // util
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();

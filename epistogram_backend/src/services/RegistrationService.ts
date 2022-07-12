@@ -1,9 +1,13 @@
 import generatePassword from 'password-generator';
+import { Permission } from '../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
+import { Company } from '../models/entity/Company';
+import { JobTitle } from '../models/entity/JobTitle';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { getFullName, throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
@@ -194,7 +198,7 @@ export class RegistrationService extends ServiceBase {
         await this
             ._ormService
             .createAsync(PermissionAssignmentBridge, {
-                permissionId: 35,
+                permissionId: Id.create<'Permission'>(35),
                 assigneeUserId: userId,
                 assigneeCompanyId: null,
                 assigneeGroupId: null,
@@ -223,8 +227,8 @@ export class RegistrationService extends ServiceBase {
             email: string;
             firstName: string;
             lastName: string;
-            companyId: number;
-            jobTitleId: number;
+            companyId: Id<'Company'>;
+            jobTitleId: Id<'JobTitle'>;
             isGod?: boolean;
         },
         noEmailNotification?: boolean) {

@@ -1,3 +1,5 @@
+import { Id } from './versionId';
+
 export type InvitationTokenPayload = { userEmail: string };
 
 export type ErrorCodeType =
@@ -120,11 +122,11 @@ export type OrderType = 'nameASC' | 'nameDESC';
 export type CourseContentItemIssueCodeType = 'questions_missing' | 'video_too_long' | 'ans_miss' | 'corr_ans_miss';
 
 export const RoleIdEnum = {
-    administrator: 1,
-    supervisor: 2,
-    user: 3,
+    administrator: Id.create<'Role'>(1),
+    supervisor: Id.create<'Role'>(2),
+    user: Id.create<'Role'>(2),
 
-    toRoleType(roleId: number): RoleType {
+    toRoleType(roleId: Id<'Role'>): RoleType {
 
         console.log(roleId);
         console.log(this.administrator);
@@ -157,8 +159,8 @@ export const RoleIdEnum = {
 };
 
 export const JobTitleIdEnum = {
-    genericUser: 1,
-    tester: 2
+    genericUser: Id.create<'JobTitle'>(1),
+    tester: Id.create<'JobTitle'>(2)
 };
 
 export const QuestionTypeEnum = {

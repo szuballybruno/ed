@@ -1,6 +1,7 @@
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
+import { Id } from '../shared/types/versionId';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -18,7 +19,7 @@ export class TeacherInfoService {
     /**
      * Delete a teacher info obj by it's id.
           */
-    async deleteTeacherInfoAsync(teacherInfoId: number) {
+    async deleteTeacherInfoAsync(teacherInfoId: Id<'TeacherInfo'>) {
 
         await this._ormService
             .hardDelete(TeacherInfo, [teacherInfoId]);
@@ -27,7 +28,7 @@ export class TeacherInfoService {
     /**
      * Get a teacher info by user id.
           */
-    async getTeacherInfoAsync(userId: number) {
+    async getTeacherInfoAsync(userId: Id<'User'>) {
 
         const user = await this._ormService
             .query(User, { userId })
@@ -44,7 +45,7 @@ export class TeacherInfoService {
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
           */
-    async getTeacherInfoEditDTOAsync(userId: number) {
+    async getTeacherInfoEditDTOAsync(userId: Id<'User'>) {
 
         const teacherInfo = await this.getTeacherInfoAsync(userId);
 
@@ -74,7 +75,7 @@ export class TeacherInfoService {
      * Creates a new teacher info entity with default values, 
      * persists it in the DB, and returns it. 
      */
-    async createTeacherInfoAsync(userId: number) {
+    async createTeacherInfoAsync(userId: Id<'User'>) {
 
         const newTeacherInfo = {
             badges: '',

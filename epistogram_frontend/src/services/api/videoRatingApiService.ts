@@ -2,6 +2,7 @@ import { apiRoutes } from '../../shared/types/apiRoutes';
 import { VideoRatingDTO } from '../../shared/dtos/VideoRatingDTO';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
+import { Id } from '../../shared/types/versionId';
 
 export const useRateVideoDifficulty = () => {
 
@@ -21,7 +22,7 @@ export const useRateVideoExperience = () => {
     };
 };
 
-export const useVideoRating = (videoVersionId: number) => {
+export const useVideoRating = (videoVersionId: Id<'VideoVersion'>) => {
 
     const qr = useReactQuery2<VideoRatingDTO>(apiRoutes.videoRating.getVideoRating, { videoVersionId });
 

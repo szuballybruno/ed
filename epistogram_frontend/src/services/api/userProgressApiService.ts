@@ -2,9 +2,10 @@ import { RecomendedItemQuotaDTO } from '../../shared/dtos/RecomendedItemQuotaDTO
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
-export const useUserCourseProgressChartData = (courseId: number, enabled: boolean) => {
+export const useUserCourseProgressChartData = (courseId: Id<'Course'>, enabled: boolean) => {
 
     const qr = useReactQuery2<UserCourseProgressChartDTO>(apiRoutes.userProgress.getUserProgressData, { courseId }, enabled);
 
@@ -15,7 +16,7 @@ export const useUserCourseProgressChartData = (courseId: number, enabled: boolea
     };
 };
 
-export const useRecommendedItemQuota = (courseId: number, enabled: boolean) => {
+export const useRecommendedItemQuota = (courseId: Id<'Course'>, enabled: boolean) => {
 
     const qr = useReactQuery2<RecomendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, enabled);
 

@@ -1,6 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { PermissionCodeType, PermissionScopeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
+import { Permission } from '../entity/authorization/Permission';
+import { Company } from '../entity/Company';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -10,15 +14,15 @@ export class AssignablePermissionView {
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: number;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: number;
+    contextCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: number;
+    permissionId: Id<'Permission'>;
 
     @ViewColumn()
     @XViewColumn()

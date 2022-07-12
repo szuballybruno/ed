@@ -1,6 +1,8 @@
+import { User } from '../models/entity/User';
 import { AuthenticationService } from '../services/AuthenticationService';
 import { LoggerService } from '../services/LoggerService';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { getAuthCookies } from '../utilities/helpers';
@@ -34,7 +36,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
             this._loggerService
                 .log(`${requestPath}: Route is open, skipping authentication...`);
 
-            return new ActionParams(req, res, -1, isMultipart);
+            return new ActionParams(req, res, Id.create<'User'>(-1), isMultipart);
         }
 
         // private (authenticated) route

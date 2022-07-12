@@ -1,8 +1,11 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { User } from '../models/entity/User';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { SignupDataDTO } from '../shared/dtos/SignupDataDTO';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
@@ -30,7 +33,8 @@ export class SignupService {
 
     async answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO) {
 
-        const userId = principalId.toSQLValue();
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const signupAnswerSession = await this._ormService
             .query(AnswerSession, { examVersionId: 1 })
@@ -44,7 +48,7 @@ export class SignupService {
                     endDate: null,
                     isPractise: false,
                     isCompleted: false,
-                    examVersionId: 1,
+                    examVersionId: Id.create<'ExamVersion'>(1),
                     videoVersionId: null,
                     userId: userId
                 })

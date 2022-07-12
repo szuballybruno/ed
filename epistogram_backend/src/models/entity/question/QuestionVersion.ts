@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from "../../../services/XORM/XORMDecorators";
+import { Id } from "../../../shared/types/versionId";
 import { AnswerVersion } from "../answer/AnswerVersion";
 import { ExamVersion } from "../exam/ExamVersion";
 import { GivenAnswer } from "../GivenAnswer";
@@ -13,7 +14,7 @@ export class QuestionVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'QuestionVersion'>;
 
     //
     // TO MANY
@@ -34,7 +35,7 @@ export class QuestionVersion {
     // video 
     @Column({ nullable: true })
     @XViewColumn()
-    videoVersionId: number | null;
+    videoVersionId: Id<'VideoVersion'> | null;
     @XManyToOne<QuestionVersion>()(() => VideoVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
@@ -42,7 +43,7 @@ export class QuestionVersion {
     // exam 
     @Column({ nullable: true })
     @XViewColumn()
-    examVersionId: number | null;
+    examVersionId: Id<'ExamVersion'> | null;
     @XManyToOne<QuestionVersion>()(() => ExamVersion, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('examVersionId')
     examVersion: Relation<ExamVersion>;
@@ -50,7 +51,7 @@ export class QuestionVersion {
     // question 
     @Column()
     @XViewColumn()
-    questionId: number;
+    questionId: Id<'Question'>;
     @XManyToOne<QuestionVersion>()(() => Question, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionId')
     question: Relation<Question>;
@@ -58,7 +59,7 @@ export class QuestionVersion {
     // question data 
     @Column()
     @XViewColumn()
-    questionDataId: number;
+    questionDataId: Id<'QuestionData'>;
     @XManyToOne<QuestionVersion>()(() => QuestionData, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('questionDataId')
     questionData: Relation<QuestionData>;
@@ -66,7 +67,7 @@ export class QuestionVersion {
     // category
     @Column({ nullable: true })
     @XViewColumn()
-    personalityTraitCategoryId: number | null;
+    personalityTraitCategoryId: Id<'PersonalityTraitCategory'> | null;
     @XManyToOne<QuestionVersion>()(() => PersonalityTraitCategory, x => x.questionVersions)
     @XJoinColumn<QuestionVersion>('personalityTraitCategoryId')
     personalityTraitCategory: Relation<PersonalityTraitCategory> | null;

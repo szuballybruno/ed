@@ -1,6 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { CourseCategory } from '../entity/CourseCategory';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -10,7 +14,7 @@ export class CourseAdminDetailedView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -66,7 +70,7 @@ export class CourseAdminDetailedView {
 
     @ViewColumn()
     @XViewColumn()
-    categoryId: number;
+    categoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -74,7 +78,7 @@ export class CourseAdminDetailedView {
 
     @ViewColumn()
     @XViewColumn()
-    subCategoryId: number;
+    subCategoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -82,7 +86,7 @@ export class CourseAdminDetailedView {
 
     @ViewColumn()
     @XViewColumn()
-    teacherId: number;
+    teacherId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

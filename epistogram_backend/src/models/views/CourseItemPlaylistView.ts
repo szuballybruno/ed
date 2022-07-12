@@ -1,6 +1,12 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseItemStateType, CourseItemType, CourseModeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { Exam } from '../entity/exam/Exam';
+import { Module } from '../entity/module/Module';
+import { User } from '../entity/User';
+import { Video } from '../entity/video/Video';
 
 @ViewEntity({
     synchronize: false,
@@ -10,19 +16,19 @@ export class CourseItemPlaylistView {
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoId: number;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
-    examId: number;
+    examId: Id<'Exam'>;
 
     /*  @ViewColumn()
      @XViewColumn()
@@ -30,7 +36,7 @@ export class CourseItemPlaylistView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleId: number;
+    moduleId: Id<'Module'>;
 
     @ViewColumn()
     @XViewColumn()

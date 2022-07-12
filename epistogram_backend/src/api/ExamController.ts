@@ -1,6 +1,8 @@
+import { AnswerSession } from '../models/entity/AnswerSession';
 import { ExamService } from '../services/ExamService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -29,7 +31,8 @@ export class ExamController {
     startExamAction = async (params: ActionParams) => {
 
         const body = params.getBody<{ answerSessionId: number }>();
-        const answerSessionId = body.getValue(x => x.answerSessionId, 'int');
+        const answerSessionId = Id
+            .create<'AnswerSession'>(body.getValue(x => x.answerSessionId, 'int'));
 
         await this._examService
             .startExamAsync(answerSessionId);
@@ -38,9 +41,10 @@ export class ExamController {
     @XControllerAction(apiRoutes.exam.getExamResults)
     getExamResultsAction = async (params: ActionParams) => {
 
-        const answerSessionId = params
-            .getQuery()
-            .getValue(x => x.answerSessionId, 'int');
+        const answerSessionId = Id
+            .create<'AnswerSession'>(params
+                .getQuery()
+                .getValue(x => x.answerSessionId, 'int'));
 
         return this._examService
             .getExamResultsAsync(params.principalId, answerSessionId);

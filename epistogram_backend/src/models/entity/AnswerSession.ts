@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { ExamVersion } from './exam/ExamVersion';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
@@ -9,8 +10,8 @@ import { VideoVersion } from './video/VideoVersion';
 export class AnswerSession {
 
     @PrimaryGeneratedColumn()
-@XViewColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'AnswerSession'>;
 
     @Column({ nullable: true, type: 'timestamptz' })
     @XViewColumn()
@@ -44,7 +45,7 @@ export class AnswerSession {
     // exam
     @Column({ nullable: true })
     @XViewColumn()
-    examVersionId: number | null;
+    examVersionId: Id<'ExamVersion'> | null;
     @XManyToOne<AnswerSession>()(() => ExamVersion, e => e.answerSessions)
     @XJoinColumn<AnswerSession>('examVersionId')
     examVersion: ExamVersion | null;
@@ -52,7 +53,7 @@ export class AnswerSession {
     // video 
     @Column({ nullable: true })
     @XViewColumn()
-    videoVersionId: number | null;
+    videoVersionId: Id<'VideoVersion'> | null;
     @XManyToOne<AnswerSession>()(() => VideoVersion, x => x.answerSessions)
     @XJoinColumn<AnswerSession>('videoVersionId')
     videoVersion: VideoVersion | null;
@@ -60,7 +61,7 @@ export class AnswerSession {
     // user 
     @Column({ nullable: true })
     @XViewColumn()
-    userId: number | null;
+    userId: Id<'User'> | null;
     @ManyToOne(_ => User, e => e.answerSessions)
     @JoinColumn({ name: 'user_id' })
     user: User | null;

@@ -1,5 +1,10 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Permission } from '../entity/authorization/Permission';
+import { Role } from '../entity/authorization/Role';
+import { Company } from '../entity/Company';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -9,19 +14,19 @@ export class UserAssignedAuthItemView {
 
     @ViewColumn()
     @XViewColumn()
-    assigneeUserId: number;
+    assigneeUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    permissionId: number | null;
+    permissionId: Id<'Permission'> | null;
 
     @ViewColumn()
     @XViewColumn()
-    roleId: number | null;
+    roleId: Id<'Role'> | null;
 
     @ViewColumn()
     @XViewColumn()
-    contextCompanyId: number;
+    contextCompanyId: Id<'Company'>;
 
     @ViewColumn()
     @XViewColumn()

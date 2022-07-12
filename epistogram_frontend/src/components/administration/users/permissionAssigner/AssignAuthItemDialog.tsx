@@ -1,5 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
@@ -12,7 +13,7 @@ export type SelectType<T> = { title: string } & EpistoSelectPropsType<T>;
 export const AssignAuthItemDialog = (props: {
     children?: ReactNode,
     dialgoLogic: EpistoDialogLogicType,
-    userId: number,
+    userId: Id<'User'>,
     onAdd: () => void,
     selects: SelectType<any>[],
     title: string,

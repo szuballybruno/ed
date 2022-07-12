@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { DailyTip } from './DailyTip';
 import { QuestionData } from './question/QuestionData';
 import { QuestionVersion } from './question/QuestionVersion';
@@ -9,7 +10,7 @@ export class PersonalityTraitCategory {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'PersonalityTraitCategory'>;
 
     @Column()
     @XViewColumn()

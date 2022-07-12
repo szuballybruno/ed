@@ -1,6 +1,8 @@
+import { Company } from '../models/entity/Company';
 import { CompanyService } from '../services/CompanyService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -38,10 +40,13 @@ export class CompanyController {
     @XControllerAction(apiRoutes.companies.getCompanyEditData)
     getCompanyEditDataAction = async (params: ActionParams) => {
 
-        return await this._compService
-            .getCompanyEditDataAsync(params.principalId, params
+        const companyId = Id
+            .create<'Company'>(params
                 .getQuery()
-                .getValue(x => x.companyId, 'int'));
+                .getValue(x => x.companyId, 'int'))
+
+        return await this._compService
+            .getCompanyEditDataAsync(params.principalId, companyId);
     };
 
     @XControllerAction(apiRoutes.companies.getAvailableCompaniesForRoleCreation)
@@ -61,10 +66,13 @@ export class CompanyController {
     @XControllerAction(apiRoutes.companies.deleteCompany, { isPost: true })
     deleteCompanyAction = async (params: ActionParams) => {
 
-        await this._compService
-            .deleteCompanyAsync(params.principalId, params
+        const companyId = Id
+            .create<'Company'>(params
                 .getBody()
-                .getValue(x => x.companyId, 'int'));
+                .getValue(x => x.companyId, 'int'))
+
+        await this._compService
+            .deleteCompanyAsync(params.principalId, companyId);
     };
 
     @XControllerAction(apiRoutes.companies.saveCompany, { isPost: true })

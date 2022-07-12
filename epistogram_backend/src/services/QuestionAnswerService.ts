@@ -2,10 +2,15 @@ import { Answer } from '../models/entity/answer/Answer';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerSession } from '../models/entity/AnswerSession';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { User } from '../models/entity/User';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { Id } from '../shared/types/versionId';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
@@ -28,9 +33,9 @@ export class QuestionAnswerService {
      * Creates a new answer session  
      */
     async createAnswerSessionAsync(
-        userId: number,
-        examVersionId: number | null,
-        videoVideoId: number | null) {
+        userId: Id<'User'>,
+        examVersionId: Id<'ExamVersion'> | null,
+        videoVideoId: Id<'VideoVersion'> | null) {
 
         const answerSessionId = await this._ormService
             .createAsync(AnswerSession, {
@@ -50,10 +55,10 @@ export class QuestionAnswerService {
      * Answer question  
      */
     async answerQuestionAsync(
-        userId: number,
-        answerSessionId: number,
-        questionVersionId: number,
-        answerIds: number[],
+        userId: Id<'User'>,
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
         isExamQuestion: boolean,
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) {

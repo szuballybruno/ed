@@ -1,5 +1,8 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { CourseVersion } from '../entity/course/CourseVersion';
+import { ModuleVersion } from '../entity/module/ModuleVersion';
 
 @ViewEntity({
     synchronize: false,
@@ -9,11 +12,11 @@ export class ModuleEditView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: number;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseVersionId: number;
+    courseVersionId: Id<'CourseVersion'>;
 
     @ViewColumn()
     @XViewColumn()

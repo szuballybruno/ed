@@ -1,4 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { Id } from '../../shared/types/versionId';
+import { User } from '../entity/User';
+import { Video } from '../entity/video/Video';
 
 @ViewEntity({
     synchronize: false,
@@ -7,10 +10,10 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserVideoPractiseProgressView {
 
     @ViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @ViewColumn()
-    videoId: number;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     watchPercentage: number;

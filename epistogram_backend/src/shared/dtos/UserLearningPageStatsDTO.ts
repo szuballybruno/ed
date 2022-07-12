@@ -1,5 +1,7 @@
+import { Id } from "../types/versionId";
+
 export class UserLearningPageStatsDTO {
-    userId: number;
+    userId: Id<'User'>;
     userEmail: string;
     totalLagBehindPercentage: number;
     videosToBeRepeatedCount: number;

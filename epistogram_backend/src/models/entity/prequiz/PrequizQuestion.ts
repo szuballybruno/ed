@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { PrequizAnswer } from './PrequizAnswer';
 import { PrequizUserAnswer } from './PrequizUserAnswer';
 
@@ -8,7 +9,7 @@ export class PrequizQuestion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'PrequizQuestion'>;
 
     @Column()
     @XViewColumn()

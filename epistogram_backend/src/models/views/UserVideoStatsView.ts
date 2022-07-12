@@ -1,5 +1,9 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Course } from '../entity/course/Course';
+import { User } from '../entity/User';
+import { Video } from '../entity/video/Video';
 
 @ViewEntity({
     synchronize: false,
@@ -9,11 +13,11 @@ export class UserVideoStatsView {
 
     @XViewColumn()
     @ViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @XViewColumn()
     @ViewColumn()
-    videoId: number;
+    videoId: Id<'Video'>;
 
     @XViewColumn()
     @ViewColumn()
@@ -21,7 +25,7 @@ export class UserVideoStatsView {
 
     @XViewColumn()
     @ViewColumn()
-    courseId: number;
+    courseId: Id<'Course'>;
 
     @XViewColumn()
     @ViewColumn()

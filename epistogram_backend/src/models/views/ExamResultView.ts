@@ -1,5 +1,15 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Answer } from '../entity/answer/Answer';
+import { AnswerVersion } from '../entity/answer/AnswerVersion';
+import { AnswerGivenAnswerBridge } from '../entity/AnswerGivenAnswerBridge';
+import { AnswerSession } from '../entity/AnswerSession';
+import { Exam } from '../entity/exam/Exam';
+import { ExamVersion } from '../entity/exam/ExamVersion';
+import { GivenAnswer } from '../entity/GivenAnswer';
+import { Question } from '../entity/question/Question';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -9,16 +19,16 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
 
     @ViewColumn()
     @XViewColumn()
-    examId: number;
+    examId: Id<'Exam'>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -26,7 +36,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: number;
+    questionId: Id<'Question'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -34,7 +44,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: number;
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -58,7 +68,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    givenAnswerId: number;
+    givenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -66,15 +76,15 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    answerBridgeId: number;
+    answerBridgeId: Id<'AnswerGivenAnswerBridge'>;
 
     @ViewColumn()
     @XViewColumn()
-    userAnswerId: number;
+    userAnswerId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    answerId: number;
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
     @XViewColumn()

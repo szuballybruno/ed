@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseModeType, CourseStageNameType, TempomatModeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { Course } from './course/Course';
 import { User } from './User';
 
@@ -9,7 +10,7 @@ export class UserCourseBridge {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'UserCourseBridge'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -50,7 +51,7 @@ export class UserCourseBridge {
     // user
     @Column()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.userCourseBridges)
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
@@ -58,7 +59,7 @@ export class UserCourseBridge {
     // course
     @Column()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<'Course'>;
     @ManyToOne(_ => Course, x => x.userCourseBridges)
     @JoinColumn({ name: 'course_id' })
     course: Relation<Course>;

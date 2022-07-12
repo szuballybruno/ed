@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { showNotification } from '../services/core/notifications';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
+import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
 import { EpistoFont } from './controls/EpistoFont';
 import { LoadingFramePropsType } from './system/LoadingFrame';
@@ -10,8 +11,8 @@ import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
 import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
 export const QuesitionView = (props: {
-    answerQuesitonAsync: (answerId: number[]) => Promise<void>,
-    correctAnswerIds: number[],
+    answerQuesitonAsync: (answerId: Id<'Answer'>[]) => Promise<void>,
+    correctAnswerIds: Id<'Answer'>[],
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
@@ -32,9 +33,9 @@ export const QuesitionView = (props: {
 
     const isAnswered = correctAnswerIds.length > 0;
 
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+    const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>(null);
 
-    const handleSelectedAnswerAsync = async (answerId: number) => {
+    const handleSelectedAnswerAsync = async (answerId: Id<'Answer'>) => {
 
         setSelectedAnswerId(answerId);
         await answerQuesitonAsync([answerId]);

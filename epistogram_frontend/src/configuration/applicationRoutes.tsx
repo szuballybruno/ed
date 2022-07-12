@@ -6,6 +6,7 @@ import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { ApplicationRoute, EpistoRoute } from '../models/types';
+import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
 import { translatableTexts } from '../static/translatableTexts';
 
@@ -72,11 +73,11 @@ export type ApplicationRoutesType = {
         myCompanyRoute: ApplicationRoute;
         companiesRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
-            editRoute: ApplicationRoute<{ companyId: number }>;
+            editRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
         };
         rolesRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
-            editRoute: ApplicationRoute<{ roleId: number }>;
+            editRoute: ApplicationRoute<{ roleId: Id<'Role'> }>;
         };
         debugRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;

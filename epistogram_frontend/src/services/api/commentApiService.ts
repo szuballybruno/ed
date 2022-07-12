@@ -1,6 +1,7 @@
 import { CommentCreateDTO } from '../../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { usePostDataUnsafe } from '../core/httpClient';
 
@@ -16,7 +17,7 @@ export const useCreateComment = () => {
 
 export const useCreateLike = () => {
 
-    const qr = usePostDataUnsafe<{ commentId: number }, void>(apiRoutes.comment.createLike);
+    const qr = usePostDataUnsafe<{ commentId: Id<'Comment'> }, void>(apiRoutes.comment.createLike);
 
     return {
         createLikeAsync: qr.postDataAsync,
@@ -26,7 +27,7 @@ export const useCreateLike = () => {
 
 export const useDeleteLike = () => {
 
-    const qr = usePostDataUnsafe<{ commentId: number }, void>(apiRoutes.comment.deleteLike);
+    const qr = usePostDataUnsafe<{ commentId: Id<'Comment'> }, void>(apiRoutes.comment.deleteLike);
 
     return {
         deleteLikeAsync: qr.postDataAsync,

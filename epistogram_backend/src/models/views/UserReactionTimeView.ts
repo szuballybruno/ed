@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { Id } from '../../shared/types/versionId';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -7,7 +9,7 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserReactionTimeView {
 
     @ViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @ViewColumn()
     userExamLengthPoints: number;

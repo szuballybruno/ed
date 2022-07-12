@@ -1,6 +1,7 @@
+import { Id } from '../types/versionId';
 
 export class ModuleEditDTO {
-    versionId: number;
+    versionId: Id<'ModuleVersion'>;
     name: string;
     description: string;
     imageFilePath: string | null;

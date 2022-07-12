@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 
@@ -9,13 +10,13 @@ export const useModuleEditDialogLogic = ({
     canDelete
 }: {
     modules: ModuleEditDTO[],
-    canDelete: (moduleVersionId: number) => boolean,
+    canDelete: (moduleVersionId: Id<'ModuleVersion'>) => boolean,
 }) => {
 
     const dialogLogic = useEpistoDialogLogic('module_edit_dialog');
 
     // state
-    const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
+    const [editedModuleId, setEditedModuleId] = useState<Id<'ModuleVersion'> | null>(null);
 
     // mut
     const mutatorRef = useXMutator(ModuleEditDTO, 'versionId');
@@ -38,7 +39,7 @@ export const useModuleEditDialogLogic = ({
     }, [modules]);
 
     // Go to edit page
-    const handleEditModule = useCallback((moduleId: number) => {
+    const handleEditModule = useCallback((moduleId: Id<'ModuleVersion'>) => {
 
         setEditedModuleId(moduleId);
     }, []);
@@ -52,7 +53,8 @@ export const useModuleEditDialogLogic = ({
     // Create new module
     const createModule = useCallback(() => {
 
-        const moduleVersionId = getVirtualId();
+        const moduleVersionId = Id
+            .create<'ModuleVersion'>(getVirtualId());
 
         mutatorRef
             .current
@@ -64,7 +66,7 @@ export const useModuleEditDialogLogic = ({
                 orderIndex: mutatorRef
                     .current
                     .mutatedItems
-                    .length 
+                    .length
             });
     }, []);
 

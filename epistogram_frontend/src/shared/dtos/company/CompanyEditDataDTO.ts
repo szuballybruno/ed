@@ -1,4 +1,6 @@
+import { Id } from "../../types/versionId";
+
 export class CompanyEditDataDTO {
-    id: number;
+    id: Id<'Company'>;
     name: string;
 }

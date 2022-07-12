@@ -2,6 +2,7 @@ import { DiscountCode } from '../models/entity/DiscountCode';
 import { User } from '../models/entity/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { VerboseError } from '../shared/types/VerboseError';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { HashService } from './HashService';
@@ -41,12 +42,12 @@ export class AuthenticationService {
         await this._ormService
             .save(DiscountCode, [
                 {
-                    id: 1,
+                    id: Id.create<'DiscountCode'>(1),
                     code: 'upd1',
                     userId: null
                 },
                 {
-                    id: 2,
+                    id: Id.create<'DiscountCode'>(1),
                     code: 'upd2',
                     userId: null
                 }
@@ -132,11 +133,11 @@ export class AuthenticationService {
     logOutUserAsync = async (userId: PrincipalId) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId.toSQLValue(), 'logout');
+            .saveUserSessionActivityAsync(Id.create<'User'>(userId.toSQLValue()), 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
-            .removeRefreshToken(userId.toSQLValue());
+            .removeRefreshToken(Id.create<'User'>(userId.toSQLValue()));
     };
 
     getUserLoginTokens = async (user: User) => {
@@ -151,7 +152,7 @@ export class AuthenticationService {
         };
     };
 
-    private _renewUserSessionAsync = async (userId: number, prevRefreshToken: string) => {
+    private _renewUserSessionAsync = async (userId: Id<'User'>, prevRefreshToken: string) => {
 
         // BYPASS TOKEN IN DB CHECK IF LOCALHOST 
         if (!this._globalConfig.misc.isLocalhost) {

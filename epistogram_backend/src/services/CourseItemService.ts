@@ -1,6 +1,7 @@
 import { Exam } from '../models/entity/exam/Exam';
 import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { Video } from '../models/entity/video/Video';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
@@ -9,6 +10,7 @@ import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentIte
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { VersionCode } from '../shared/types/versionCode';
+import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
@@ -36,7 +38,7 @@ export class CourseItemService {
      * subtitle etc fields of the item,
      * just the questions & answers  
      */
-    async getCourseItemEditDataAsync(videoVersionId: number | null, examVersionId: number | null) {
+    async getCourseItemEditDataAsync(videoVersionId: Id<'VideoVersion'> | null, examVersionId: Id<'ExamVersion'> | null) {
 
         const views = await this._ormService
             .query(CourseItemEditView, { videoVersionId, examVersionId })
@@ -80,7 +82,7 @@ export class CourseItemService {
                 getParentOldVersionId: x => x.moduleVersionId,
                 getDataId: x => x.examDataId,
                 getEntityId: x => x.examId,
-                getVersionId: x => VersionCode.read(x.key).versionId,
+                getVersionId: x => VersionCode.read(x.key).versionId as Id<'ExamVersion'>,
                 getDefaultData: mutation => ({
                     description: '',
                     isFinal: false,

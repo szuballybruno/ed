@@ -1,5 +1,8 @@
+import { Course } from '../models/entity/course/Course';
+import { User } from '../models/entity/User';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { CourseItemService } from './CourseItemService';
@@ -22,8 +25,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      * Set current course and course current item code.
      */
     async setCurrentCourse(
-        userId: number,
-        courseId: number,
+        userId: Id<'User'>,
+        courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         itemCode: string | null) {
 
@@ -104,8 +107,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      * Creates a new course bridge 
      */
     private async _createNewCourseBridge(
-        courseId: number,
-        userId: number,
+        courseId: Id<'Course'>,
+        userId: Id<'User'>,
         currentItemCode: string | null,
         stageName: CourseStageNameType,
     ) {
@@ -125,7 +128,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Deletes all course bridges associated with the specified course  
      */
-    async deleteAllBridgesAsync(courseId: number) {
+    async deleteAllBridgesAsync(courseId: Id<'Course'>) {
 
         await this._ormService
             .hardDelete(UserCourseBridge, [courseId])
@@ -134,9 +137,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    async setCourseModeAsync(userId: PrincipalId, courseId: number, mode: CourseModeType) {
+    async setCourseModeAsync(userId: PrincipalId, courseId: Id<'Course'>, mode: CourseModeType) {
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue())
+
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
         if (!userCourseBridge)
             throw new Error('User course bridge not found!');
@@ -144,7 +149,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         await this._ormService
             .save(UserCourseBridge, {
                 courseId: courseId,
-                userId: userId.toSQLValue(),
+                userId: userIdAsIdType,
                 id: userCourseBridge.id,
                 courseMode: mode
             } as UserCourseBridge);
@@ -152,9 +157,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    async setCourseStartDateAsync(userId: PrincipalId, courseId: number) {
+    async setCourseStartDateAsync(userId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userId.toSQLValue(), courseId);
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue())
+
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
         if (!userCourseBridge)
             throw new Error('User course bridge not found!');
@@ -162,7 +169,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         await this._ormService
             .save(UserCourseBridge, {
                 courseId: courseId,
-                userId: userId.toSQLValue(),
+                userId: userIdAsIdType,
                 id: userCourseBridge.id,
                 startDate: new Date(Date.now())
             } as UserCourseBridge);
@@ -172,12 +179,12 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      * Sets the requiredCompletionDate for a course. Either updates the
      * existing userCourseBridge, or creates a new one.
      */
-    async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: number, requiredCompletionDate: string) {
+    async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: Id<'Course'>, requiredCompletionDate: string) {
 
-        const userId = principalId.toSQLValue();
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue())
 
         const userCourseBridge = await this
-            .getUserCourseBridgeAsync(userId, courseId);
+            .getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
         if (userCourseBridge) {
 
@@ -190,14 +197,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
             log('User course bridge is not exists, creating...')
 
-            await this._createNewCourseBridge(courseId, userId, null, 'assigned')
+            await this._createNewCourseBridge(courseId, userIdAsIdType, null, 'assigned')
         } catch (e) {
 
             throw new Error('Failed to create new user course bridge')
         }
 
         const newUserCourseBridge = await this
-            .getUserCourseBridgeAsync(userId, courseId);
+            .getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
         if (!newUserCourseBridge)
             throw new Error('Failed to find new user course bridge')
@@ -208,7 +215,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Returns the current course id 
      */
-    async getCurrentCourseId(userId: number) {
+    async getCurrentCourseId(userId: Id<'User'>) {
 
         const courseBridge = await this._ormService
             .query(UserCourseBridge, { userId })
@@ -222,7 +229,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Returns the current course id 
      */
-    async getCurrentCourseIdOrFail(userId: number) {
+    async getCurrentCourseIdOrFail(userId: Id<'User'>) {
 
         const id = await this.getCurrentCourseId(userId);
 
@@ -232,7 +239,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return id;
     }
 
-    getCurrentItemCodeOrFailAsync = async (userId: number) => {
+    getCurrentItemCodeOrFailAsync = async (userId: Id<'User'>) => {
 
         const currentItemCode = await this.getCurrentItemCodeAsync(userId);
 
@@ -244,10 +251,12 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     getPrincipalCurrentItemCodeAsync = async (userId: PrincipalId) => {
 
-        return await this.getCurrentItemCodeAsync(userId.toSQLValue());
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue())
+
+        return await this.getCurrentItemCodeAsync(userIdAsIdType);
     };
 
-    getCurrentItemCodeAsync = async (userId: number) => {
+    getCurrentItemCodeAsync = async (userId: Id<'User'>) => {
 
         const currentBridge = await this._ormService
             .query(UserCourseBridge, { userId })
@@ -258,7 +267,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return currentBridge?.currentItemCode ?? null;
     };
 
-    getUserCourseBridgeAsync = async (userId: number, courseId: number) => {
+    getUserCourseBridgeAsync = async (userId: Id<'User'>, courseId: Id<'Course'>) => {
 
         const userCourseBridge = await this._ormService
             .query(UserCourseBridge, { userId, courseId })
@@ -269,7 +278,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return userCourseBridge;
     };
 
-    getUserCourseBridgeOrFailAsync = async (userId: number, courseId: number) => {
+    getUserCourseBridgeOrFailAsync = async (userId: Id<'User'>, courseId: Id<'Course'>) => {
 
         const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
@@ -345,7 +354,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         //         .execute();
     };
 
-    private updateCompletionDate = async (userCourseBridgeId: number, requiredCompletionDate: Date) => {
+    private updateCompletionDate = async (userCourseBridgeId: Id<'UserCourseBridge'>, requiredCompletionDate: Date) => {
         return this._ormService
             .save(UserCourseBridge, {
                 id: userCourseBridgeId,

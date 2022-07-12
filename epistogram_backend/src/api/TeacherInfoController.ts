@@ -4,6 +4,8 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
+import { User } from '../models/entity/User';
+import { Id } from '../shared/types/versionId';
 
 export class TeacherInfoController {
 
@@ -17,8 +19,9 @@ export class TeacherInfoController {
     @XControllerAction(apiRoutes.teacherInfo.getTeacherInfo)
     getTeacherInfoAction = async (params: ActionParams) => {
 
-        const userId = params.getQuery<any>()
-            .getValue(x => x.userId, 'int');
+        const userId = Id
+            .create<'User'>(params.getQuery<any>()
+                .getValue(x => x.userId, 'int'));
 
         return await this._teacherInfoService
             .getTeacherInfoEditDTOAsync(userId);

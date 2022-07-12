@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from '../../../services/api/prequizApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
@@ -15,7 +16,9 @@ import { QuestionAnswer } from '../../exam/QuestionAnswer';
 
 export const PrequizSubpage = () => {
 
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
+
     const showError = useShowErrorDialog();
     const { navigateToWatchPretest } = useNavigation();
     const { questions } = usePrequizQuestions(courseId);
@@ -29,7 +32,7 @@ export const PrequizSubpage = () => {
     const currentQuestionIndex = paging.currentIndex;
     const totalQuestionsCount = questions.length;
 
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>();
+    const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>();
     const canContinue = question?.isNumeric || !!selectedAnswerId;
     const progressPercentage = (currentQuestionIndex + 1) / totalQuestionsCount * 100;
 

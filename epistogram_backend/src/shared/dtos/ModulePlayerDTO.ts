@@ -1,5 +1,7 @@
+import { Id } from "../types/versionId";
+
 export class ModulePlayerDTO {
-    moduleId: number;
+    moduleId: Id<'Module'>;
     name: string;
     description: string;
     imageFilePath: string | null;

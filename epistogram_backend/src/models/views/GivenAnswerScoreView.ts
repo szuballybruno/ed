@@ -1,5 +1,11 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { AnswerVersion } from '../entity/answer/AnswerVersion';
+import { AnswerSession } from '../entity/AnswerSession';
+import { GivenAnswer } from '../entity/GivenAnswer';
+import { QuestionVersion } from '../entity/question/QuestionVersion';
+import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
@@ -9,19 +15,19 @@ export class GivenAnswerScoreView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
-    answerVersionId: number;
+    answerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    questionVersionId: number;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    givenAnswerId: number;
+    givenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -29,7 +35,7 @@ export class GivenAnswerScoreView {
 
     @ViewColumn()
     @XViewColumn()
-    answerSessionId: number;
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
     @XViewColumn()

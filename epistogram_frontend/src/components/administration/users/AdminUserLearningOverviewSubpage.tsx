@@ -9,6 +9,7 @@ import { ButtonType } from '../../../models/types';
 import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { isCurrentAppRoute } from '../../../static/frontendHelpers';
@@ -75,7 +76,8 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
-    const userId = useIntParam('userId')!;
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
 
     const { navigate } = useNavigation();
     const navigateToAddUser = () => navigate(usersRoute.addRoute);

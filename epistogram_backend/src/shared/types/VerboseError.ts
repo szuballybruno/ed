@@ -6,8 +6,8 @@ export class VerboseError extends Error {
     // makes casting normal exception easier
     code?: ErrorCodeType;
 
-    constructor(code: ErrorCodeType) 
-    constructor(message: string, code: ErrorCodeType) 
+    constructor(code: ErrorCodeType)
+    constructor(message: string, code: ErrorCodeType)
     constructor(messageOrCode: string | ErrorCodeType, code?: ErrorCodeType) {
 
         super(code ? messageOrCode : `Error code: ${messageOrCode}`);

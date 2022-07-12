@@ -1,5 +1,9 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Comment } from '../entity/Comment';
+import { User } from '../entity/User';
+import { Video } from '../entity/video/Video';
 
 @ViewEntity({
     synchronize: false,
@@ -9,11 +13,11 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'Comment'>;
 
     @ViewColumn()
     @XViewColumn()
-    videoId: number;
+    videoId: Id<'Video'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -21,7 +25,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: number;
+    userId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -37,7 +41,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    parentCommentId: number;
+    parentCommentId: Id<'Comment'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -49,7 +53,7 @@ export class CommentListView {
 
     @ViewColumn()
     @XViewColumn()
-    currentUserId: number;
+    currentUserId: Id<'User'>;
 
     @ViewColumn()
     @XViewColumn()

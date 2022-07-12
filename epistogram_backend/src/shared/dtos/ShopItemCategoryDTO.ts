@@ -1,5 +1,6 @@
+import { Id } from "../types/versionId";
 
 export class ShopItemCategoryDTO {
-    id: number;
+    id: Id<'ShopItemCategory'>;
     name: string;
 }
