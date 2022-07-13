@@ -6,6 +6,7 @@ import { getErrorTypeByHTTPCode, getUrl } from '../../static/frontendHelpers';
 import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
 import { LoadingStateType } from '../../models/types';
 import { VerboseError } from '../../shared/types/VerboseError';
+import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
 
 export class HTTPResponse {
     code: number;
@@ -141,7 +142,7 @@ export const usePostDataUnsafe = <TData = any, TResult = void>(url: string) => {
  * and or a data object as a json document.
  * This is also unsafe, as in errors are not handled implicitly.
  */
-export const usePostMultipartDataUnsafe = <TData>(url: string) => {
+export const usePostMultipartDataUnsafe = <TData>(url: string | ParametrizedRouteType<RouteParameterType<TData, any>>) => {
 
     const [state, setState] = useState<LoadingStateType>('idle');
 

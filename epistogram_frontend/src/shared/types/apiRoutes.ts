@@ -1,6 +1,6 @@
 import { Id } from './versionId';
 
-export type RouteParameterType = { body: any, query: any };
+export type RouteParameterType<TBody = any, TQuery = any> = { body: TBody, query: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
 
 export const apiRoutes = {

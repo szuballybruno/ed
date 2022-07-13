@@ -6,8 +6,8 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { ModuleEditDialogLogicType } from './ModuleEditDialogLogic';
-import { ModuleEditDialogPage } from './ModuleEditDialogPage';
-import { ModuleListEditDialogPage } from './ModuleListEditDialogPage';
+import { ModuleEdit } from './ModuleEdit';
+import { ModuleList } from './ModuleList';
 
 export const ModuleEditDialog = ({
     logic,
@@ -31,7 +31,7 @@ export const ModuleEditDialog = ({
     const pages = useMemo(() => [
         {
             content: () => (
-                <ModuleListEditDialogPage
+                <ModuleList
                     editModule={handleEditModule}
                     canDelete={canDelete}
                     mutator={mutatorRef} />
@@ -42,7 +42,7 @@ export const ModuleEditDialog = ({
         {
             content: () => (
                 <>
-                    {currentModule && <ModuleEditDialogPage
+                    {currentModule && <ModuleEdit
                         dto={currentModule}
                         mutator={mutatorRef} />}
                 </>

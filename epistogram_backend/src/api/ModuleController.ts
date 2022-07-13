@@ -1,4 +1,3 @@
-import { Course } from '../models/entity/course/Course';
 import { ModuleService } from '../services/ModuleService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';
@@ -29,7 +28,7 @@ export class ModuleController {
             .getModuleEditDTOsAsync(courseVersionId);
     };
 
-    @XControllerAction(apiRoutes.module.saveCoverFile)
+    @XControllerAction(apiRoutes.module.saveCoverFile, { isPost: true })
     saveModuleThumbnailImageAction = async (params: ActionParams) => {
 
         const { body } = params

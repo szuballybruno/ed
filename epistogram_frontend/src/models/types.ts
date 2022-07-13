@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { trimEndChar } from '../shared/logic/sharedLogic';
+import { ParametrizedRouteType, RouteParameterType } from '../shared/types/apiRoutes';
 import { CSSOptionsType } from '../styles/globalCssTypes';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
@@ -68,3 +69,5 @@ export type VolumeSettingsType = {
     volume: number;
     isMuted: boolean;
 }
+
+export type GetRouteBodyParamsType<T> = T extends ParametrizedRouteType<infer I> ? I['body'] : never;

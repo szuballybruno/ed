@@ -473,7 +473,7 @@ const marray = [
             })
         }),
     epistoMappingsBuilder
-        .addArrayMapping(ModuleEditDTO, () => (views: ModuleEditView[]) => {
+        .addArrayMapping(ModuleEditDTO, ([url]) => (views: ModuleEditView[]) => {
 
             return views
                 .map(x => instantiate<ModuleEditDTO>({
@@ -481,7 +481,7 @@ const marray = [
                     versionId: x.moduleVersionId,
                     name: x.name,
                     orderIndex: x.orderIndex,
-                    imageFilePath: '',
+                    imageFilePath: url.getAssetUrlNullable(x.coverFilePath),
                 }));
         }),
     epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {

@@ -66,7 +66,7 @@ export class VideoVersion {
     //
 
     // module
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     moduleVersionId: Id<'ModuleVersion'>;
     @XManyToOne<VideoVersion>()(() => ModuleVersion, x => x.videoVersions)
@@ -74,7 +74,7 @@ export class VideoVersion {
     moduleVersion: Relation<ModuleVersion>;
 
     // video 
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     videoId: Id<'Video'>;
     @XManyToOne<VideoVersion>()(() => Video, x => x.videoVersions)
@@ -82,7 +82,7 @@ export class VideoVersion {
     video: Relation<Video>;
 
     // video data
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     videoDataId: Id<'VideoData'>;
     @XManyToOne<VideoVersion>()(() => VideoData, x => x.videoVersions)

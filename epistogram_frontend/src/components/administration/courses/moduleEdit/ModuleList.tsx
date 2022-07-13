@@ -10,7 +10,7 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { FlexListItem } from '../../../universal/FlexListItem';
 
-export const ModuleListEditDialogPage = ({
+export const ModuleList = ({
     canDelete,
     editModule,
     mutator
