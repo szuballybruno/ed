@@ -25,6 +25,7 @@ import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { Exam } from '../models/entity/exam/Exam';
 import { User } from '../models/entity/User';
 import { Id } from '../shared/types/versionId';
+import { LatestExamView } from '../models/views/LatestExamView';
 
 export class ExamService extends QueryServiceBase<ExamData> {
 
@@ -222,16 +223,20 @@ export class ExamService extends QueryServiceBase<ExamData> {
         if (itemType !== 'exam')
             throw new Error('Current item is not an exam!');
 
-        // TODO ITEM VERSION - ITEM ID mismatch
-        throwNotImplemented();
+        const latestExam = await this._ormService
+            .query(LatestExamView, { examId: itemId })
+            .where('examId', '=', 'examId')
+            .getSingle()
+
+        const latestExamVersionId = latestExam.examVersionId
 
         const examResultViews = await this._ormService
             .query(ExamResultView, {
-                itemId,
+                examVersionId: latestExamVersionId,
                 userId: userIdAsIdType,
                 answerSessionId
             })
-            .where('examVersionId', '=', 'itemId')
+            .where('examVersionId', '=', 'examVersionId')
             .and('userId', '=', 'userId')
             .and('answerSessionId', '=', 'answerSessionId')
             .getMany()

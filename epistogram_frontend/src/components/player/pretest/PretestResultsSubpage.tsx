@@ -49,9 +49,9 @@ export const PretestResultsSubpage = () => {
             <Flex
                 flex="1"
                 direction="column"
+                minHeight='calc(100vh - 100px)'
                 p="20px"
                 className="roundBorders largeSoftShadow"
-                mx="50px"
                 background="var(--transparentWhite70)">
 
                 <Flex
@@ -68,8 +68,10 @@ export const PretestResultsSubpage = () => {
                     </EpistoFont>
                 </Flex>
 
+
                 <EpistoGrid
                     gap={'10'}
+                    width='100%'
                     padding="10px"
                     minColumnWidth={'280px'}
                     auto={'fill'}
@@ -89,7 +91,9 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         iconPath={Environment.getAssetUrl('/images/pretest3.png')}
-                        value="Kezdő"
+                        value={isBeginner
+                            ? 'Kezdő'
+                            : 'Haladó'}
                         suffix=""
                         title="Üzemmód ajánlott" />
 
@@ -97,9 +101,10 @@ export const PretestResultsSubpage = () => {
                         iconPath={Environment.getAssetUrl('/images/pretest4.png')}
                         value="Automata"
                         suffix=""
-                        title="Megtekintésre ajánlott napi videó" />
+                        title="módban indul a tempomat" />
 
                 </EpistoGrid>
+
 
                 <Flex justify="center"
                     align="center"

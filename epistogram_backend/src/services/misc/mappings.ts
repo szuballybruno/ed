@@ -352,7 +352,10 @@ const marray = [
             return instantiate<PretestResultDTO>({
                 isCompleted: prv.isCompleted,
                 correctAnswerRate: prv.correctAnswerRate,
-                firstItemCode: acv.firstItemCode
+                firstItemCode: acv.firstItemCode,
+                estimatedCompletionDate: new Date(Date.now()),
+                requiredCompletionDate: new Date(Date.now()),
+                recommendedVideosPerDay: 1
             });
         }),
 
@@ -1164,7 +1167,7 @@ export const toExamResultDTO = (views: ExamResultView[]) => {
     const viewAsExam = views.first();
 
     const questionDTOs = views
-        .groupBy(x => x.questionId)
+        .groupBy(x => x.questionVersionId)
         .map(questsionGroup => {
 
             const viewAsQuestion = questsionGroup.items.first();

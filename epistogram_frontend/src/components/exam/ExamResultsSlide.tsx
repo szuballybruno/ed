@@ -59,7 +59,8 @@ export const ExamResultsSlide = (props: {
 
         <Flex direction="column"
             className="whall"
-            p="20px">
+            background='yellow'
+            p="40px 20px">
 
             {/* title */}
             <EpistoFont

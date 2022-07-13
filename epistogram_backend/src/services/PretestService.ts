@@ -52,6 +52,8 @@ export class PretestService {
 
         const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
+        console.log('CourseId: ' + courseId)
+
         // set course as started, and stage to pretest
         await this._courseBridgeService
             .setCurrentCourse(userIdAsIdType, courseId, 'pretest', null);

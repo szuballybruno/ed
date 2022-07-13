@@ -21,11 +21,6 @@ export class ExamResultView {
     @XViewColumn()
     userId: Id<'User'>;
 
-
-    @ViewColumn()
-    @XViewColumn()
-    examId: Id<'Exam'>;
-
     @ViewColumn()
     @XViewColumn()
     examVersionId: Id<'ExamVersion'>;
@@ -36,7 +31,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    questionId: Id<'Question'>;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
     @XViewColumn()
@@ -80,7 +75,7 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    userAnswerId: Id<'AnswerVersion'>;
+    userAnswerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
