@@ -1,4 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Flex, Grid, Image } from '@chakra-ui/react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { usePretestResults } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -12,6 +12,51 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
+
+export const PretestDateInfo = (props: {
+    description: string,
+    date: Date
+}) => {
+    return <Flex justify="center"
+        align="center"
+        flex='1'
+        mx='30px'
+        my="10px">
+
+        <Image
+            h="30px"
+            w="30px"
+            mr="10px"
+            src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
+        />
+
+        <Flex
+            flex='1'
+            marginRight='20px'>
+
+            <EpistoFont fontSize={'fontLarge'}>
+
+                {props.description}
+            </EpistoFont>
+        </Flex>
+
+
+        <EpistoFont
+            fontSize={'fontLarge'}
+            style={{
+                marginLeft: '5px',
+                fontWeight: 600
+            }}>
+
+            {new Date(props.date)
+                .toLocaleDateString('hu-hu', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                })}
+        </EpistoFont>
+    </Flex>;
+};
 
 export const PretestResultsSubpage = () => {
 
@@ -51,6 +96,8 @@ export const PretestResultsSubpage = () => {
                 direction="column"
                 minHeight='calc(100vh - 100px)'
                 p="20px"
+                align='center'
+                justify='space-between'
                 className="roundBorders largeSoftShadow"
                 background="var(--transparentWhite70)">
 
@@ -69,13 +116,14 @@ export const PretestResultsSubpage = () => {
                 </Flex>
 
 
-                <EpistoGrid
+                <Grid
                     gap={'10'}
-                    width='100%'
                     padding="10px"
-                    minColumnWidth={'280px'}
-                    auto={'fill'}
-                    gridAutoRows="150px" >
+                    marginTop='50px'
+                    gridAutoRows="150px"
+                    justifyContent='center'
+                    gridTemplateColumns='repeat(4, 280px)'
+                    minH='150px'>
 
                     <StatisticsCard
                         iconPath={Environment.getAssetUrl('/images/pretest1.png')}
@@ -99,54 +147,54 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         iconPath={Environment.getAssetUrl('/images/pretest4.png')}
-                        value="Automata"
+                        value={pretestResults?.requiredCompletionDate
+                            ? 'Szigorú'
+                            : 'Automata'}
                         suffix=""
                         title="módban indul a tempomat" />
 
-                </EpistoGrid>
+                </Grid>
 
-
-                <Flex justify="center"
-                    align="center"
-                    my="10px">
-
-                    <Image
-                        h="30px"
-                        w="30px"
-                        mr="5px"
-                        src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
-                    />
-
-                    <EpistoFont fontSize={'fontLarge'}>
-
-                        A tanfolyam várható befejezésének dátuma:
-                    </EpistoFont>
-
-                    <EpistoFont
-                        fontSize={'fontLarge'}
-                        style={{
-                            marginLeft: '5px',
-                            fontWeight: 600
-                        }}>
-
-                        2022.04.03.
-                    </EpistoFont>
-                </Flex>
                 <Flex
-                    px="10px"
-                    justify="center"
-                    align="center">
+                    flex='1'
+                    direction='column'
+                    align='center'
+                    pt='50px'
+                    maxW='1120px'
+                    justify='flex-start'>
 
-                    <EpistoFont
-                        fontSize="fontNormal14"
-                        style={{
-                            maxWidth: 600
-                        }}>
+                    <Flex
+                        flex='1'
+                        width='100%'
+                        maxH='100px'
+                        direction='column'>
 
-                        Mivel kevesebb, mint 50%-ot értél el a felmérő teszten, számodra a Kezdő üzemmódot ajánlanánk. Ebben az esetben folyamatosan haladhatsz a videókkal, de nem tudsz szabadon elindítani újat, csak az éppen aktuálisan következőt (ekkor felnyílik a lakat ikon). A videókban csak addig a pontig tudsz előre tekerni, ameddig már egyszer eljutottál.
-                        Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!
-                    </EpistoFont>
+                        {pretestResults?.requiredCompletionDate && <PretestDateInfo
+                            description='Munkáltatód által megszabott befejezési határidő: '
+                            date={pretestResults.requiredCompletionDate} />}
+
+                        <PretestDateInfo
+                            date={pretestResults?.estimatedCompletionDate!}
+                            description='A kurzus várható befejezése: ' />
+                    </Flex>
+
+
+
+                    <Flex
+                        px="10px"
+                        pt='50px'
+                        justify="center"
+                        align="center">
+
+                        <EpistoFont
+                            fontSize2='normal'>
+
+                            Mivel kevesebb, mint 50%-ot értél el a felmérő teszten, számodra a Kezdő üzemmódot ajánlanánk. Ebben az esetben folyamatosan haladhatsz a videókkal, de nem tudsz szabadon elindítani újat, csak az éppen aktuálisan következőt (ekkor felnyílik a lakat ikon). A videókban csak addig a pontig tudsz előre tekerni, ameddig már egyszer eljutottál.
+                            Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!
+                        </EpistoFont>
+                    </Flex>
                 </Flex>
+
                 {
                     pretestResults && <Flex
                         my="15px"

@@ -13,46 +13,54 @@ export const ExamLayoutContent = (props: {
     return (
         <Flex
             id="examLayoutContentRoot"
+            className='roundBorders mildShadow'
             direction={'column'}
             alignItems={'center'}
             justifyContent={'center'}
-            width={'80%'}
+            width={'100%'}
+            background='var(--transparentWhite70)'
             flex={1}
             style={style}>
 
-            {/* header */}
-            <Flex
-                id="examLayoutContentHeader"
-                p="20px"
-                align="center">
+            <Flex direction='column'>
 
-                <img
-                    style={{
-                        borderRadius: '50%',
-                        padding: '8px',
-                        width: '50px',
-                        height: '50px',
-                        marginRight: '30px'
-                    }}
-                    alt=""
-                    src="https://static.thenounproject.com/png/92068-200.png"
-                    className="tinyShadow" />
+                {/* header */}
+                <Flex
+                    id="examLayoutContentHeader"
+                    p='20px 0 40px 0'
+                    minW='400px'
+                    align="center">
 
-                <EpistoFont>
-                    {title}
-                </EpistoFont>
+                    <img
+                        style={{
+                            borderRadius: '50%',
+                            padding: '8px',
+                            width: '50px',
+                            height: '50px',
+                            marginRight: '30px',
+                            marginLeft: '-5px'
+                        }}
+                        alt=""
+                        src="https://static.thenounproject.com/png/92068-200.png"
+                        className="mildShadow" />
+
+                    <EpistoFont fontWeight='heavy'>
+                        {title}
+                    </EpistoFont>
+                </Flex>
+
+                {/* answers */}
+                <Flex
+                    id="examLayoutContentContainer"
+                    direction={'row'}
+                    minW='500px'
+                    justifyContent={'center'}
+                    pt={10}>
+
+                    {children}
+                </Flex>
             </Flex>
 
-            {/* answers */}
-            <Flex
-                id="examLayoutContentContainer"
-                direction={'row'}
-                justifyContent={'center'}
-                pt={10}
-                width="100%">
-
-                {children}
-            </Flex>
         </Flex>
     );
 };

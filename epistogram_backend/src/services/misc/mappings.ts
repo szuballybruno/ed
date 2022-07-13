@@ -484,7 +484,7 @@ const marray = [
                     versionId: x.moduleVersionId,
                     name: x.name,
                     orderIndex: x.orderIndex,
-                    imageFilePath: url.getAssetUrlNullable(x.coverFilePath),
+                    imageFilePath: url.getAssetUrlNullable('x.coverFilePath'),
                 }));
         }),
     epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {

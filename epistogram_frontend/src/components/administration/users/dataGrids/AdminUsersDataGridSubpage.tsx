@@ -1,7 +1,4 @@
-import { NavigateNextTwoTone } from '@mui/icons-material';
-import { GridRowsProp, GridColDef, DataGrid } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
