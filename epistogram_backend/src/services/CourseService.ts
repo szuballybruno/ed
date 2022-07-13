@@ -158,7 +158,7 @@ export class CourseService {
     async saveCourseThumbnailAsync(file: UploadedFile, courseId: Id<'Course'>) {
 
         return this._fileService
-            .uploadAssigendFile2Async({
+            .uploadAssigendFileAsync({
                 entitySignature: CourseData,
                 entityId: courseId,
                 fileBuffer: file.data,

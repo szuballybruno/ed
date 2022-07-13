@@ -281,7 +281,7 @@ export class ShopService {
     private async saveCoverFileAsync(shopItemId: Id<'ShopItem'>, file: UploadedFile) {
 
         return await this._fileService
-            .uploadAssigendFile2Async({
+            .uploadAssigendFileAsync({
                 entitySignature: ShopItem,
                 entityId: shopItemId,
                 fileBuffer: file.data,

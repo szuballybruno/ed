@@ -70,7 +70,7 @@ export class ModuleService {
             .getSingleById(ModuleVersion, moduleVersionId);
 
         await this._fileService
-            .uploadAssigendFile2Async({
+            .uploadAssigendFileAsync({
                 entitySignature: ModuleData,
                 entityId: moduleVersion.moduleDataId,
                 fileBuffer: fileBuffer,

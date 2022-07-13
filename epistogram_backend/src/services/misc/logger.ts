@@ -7,7 +7,8 @@ export const ConsoleColor = constraintFn<ConsoleColorType>()({
     red: { code: '31m' },
     gray: { code: '90m' },
     blue: { code: '94m' },
-    purple: { code: '95m' }
+    purple: { code: '95m' },
+    yellow: { code: '33m' }
 });
 
 export const logWarning = (content: any) => log(content, { entryType: 'warning' });
@@ -30,12 +31,12 @@ export const log = (content: any, opts?: {
     const color = opts?.color ?? null;
     const noStamp = !!opts?.noStamp;
 
-    const getColor = (code: ConsoleColorType) => `\x1b[${code.code}%s\x1b[0m`;
+    const getColor = (code: ConsoleColorType) => '\x1b[' + code.code + '%s\x1b[0m';
 
     const stamp = `[${dateTimeString}.${miliseconds}]`;
 
     if (entryType === 'warning')
-        console.warn(content);
+        console.warn(getColor(ConsoleColor.yellow), content);
 
     if (entryType === 'error')
         console.error(getColor(ConsoleColor.red), content);
