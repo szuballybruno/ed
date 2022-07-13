@@ -24,7 +24,7 @@ export class QuestionService {
      * Saves course item questions based on mutations  
      */
     async saveQuestionsAsync(
-        itemVersionIdMigrations: VersionMigrationResult[],
+        itemVersionIdMigrations: VersionMigrationResult<'VideoVersion' | 'ExamVersion'>[],
         questionMutations: QuestionMutationType[],
         isVideo: boolean) {
 
@@ -54,8 +54,8 @@ export class QuestionService {
                 }),
                 getNewEntity: x => ({}),
                 getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
-                    examVersionId: isVideo ? null : newParentVersionId,
-                    videoVersionId: !isVideo ? null : newParentVersionId,
+                    examVersionId: isVideo ? null : newParentVersionId as Id<'ExamVersion'>,
+                    videoVersionId: !isVideo ? null : newParentVersionId as Id<'VideoVersion'>,
                     personalityTraitCategoryId: null,
                     questionDataId: newDataId,
                     questionId: entityId

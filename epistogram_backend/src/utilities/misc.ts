@@ -30,11 +30,11 @@ export type GenericPropNameType<TProperty extends string, TValue> = { [P in TPro
 
 export type StringKeyof<T> = (keyof T) & string;
 
-export type VersionMigrationResult = { oldVersionId: Id<any>, newVersionId: Id<any> };
+export type VersionMigrationResult<TId extends String> = { oldVersionId: Id<TId>, newVersionId: Id<TId> };
 
 export const VersionMigrationHelpers = {
 
-    getNewVersionId: (migrations: VersionMigrationResult[], oldVersionId: Id<any>) => {
+    getNewVersionId: <TId extends String>(migrations: VersionMigrationResult<TId>[], oldVersionId: Id<TId>): Id<TId> => {
 
         const asd = migrations
             .firstOrNull(x => x.oldVersionId === oldVersionId);
@@ -45,7 +45,7 @@ export const VersionMigrationHelpers = {
         return asd.newVersionId;
     },
 
-    create: (oldVersionIds: Id<any>[], newVersionIds: Id<any>[]) => {
+    create: <TId extends String>(oldVersionIds: Id<TId>[], newVersionIds: Id<TId>[]) => {
 
         return oldVersionIds
             .map((x, i) => {
@@ -62,11 +62,11 @@ export const VersionMigrationHelpers = {
                 return ({
                     newVersionId,
                     oldVersionId
-                } as VersionMigrationResult);
+                } as VersionMigrationResult<TId>);
             });
     },
 
-    asText: (migrations: VersionMigrationResult[]) => {
+    asText: <TId extends String>(migrations: VersionMigrationResult<TId>[]) => {
 
         return migrations
             .map(x => `${x.oldVersionId} -> ${x.newVersionId}`)

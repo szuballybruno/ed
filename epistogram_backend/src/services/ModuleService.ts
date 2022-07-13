@@ -87,7 +87,7 @@ export class ModuleService {
         itemMutations,
         moduleMutations
     }: {
-        courseVersionMigrations: VersionMigrationResult[],
+        courseVersionMigrations: VersionMigrationResult<'CourseVersion'>[],
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
         moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
     }) {

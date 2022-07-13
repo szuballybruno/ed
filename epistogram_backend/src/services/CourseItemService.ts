@@ -54,7 +54,7 @@ export class CourseItemService {
      * Save
      */
     async saveAsync(
-        moduleMigrations: VersionMigrationResult[],
+        moduleMigrations: VersionMigrationResult<'ModuleVersion'>[],
         videoMutations: ItemMutationType[],
         examMutations: ItemMutationType[]) {
 
@@ -67,7 +67,7 @@ export class CourseItemService {
      * attached to a CourseVersion
      */
     private async _saveExamsAsync(
-        moduleMigrations: VersionMigrationResult[],
+        moduleMigrations: VersionMigrationResult<'ModuleVersion'>[],
         examMutations: ItemMutationType[]) {
 
         // SAVE EXAMS
@@ -130,7 +130,7 @@ export class CourseItemService {
      * Saves videos 
      */
     private async _saveVideosAsync(
-        moduleMigrations: VersionMigrationResult[],
+        moduleMigrations: VersionMigrationResult<'ModuleVersion'>[],
         videoMutations: ItemMutationType[]) {
 
         // SAVE VIDEOS
@@ -145,7 +145,7 @@ export class CourseItemService {
                 getParentOldVersionId: x => x.moduleVersionId,
                 getDataId: x => x.videoDataId,
                 getEntityId: x => x.videoId,
-                getVersionId: x => VersionCode.read(x.key).versionId,
+                getVersionId: x => VersionCode.read(x.key).versionId as Id<'VideoVersion'>,
                 getDefaultData: mutation => ({
                     title: '',
                     subtitle: '',
@@ -189,7 +189,7 @@ export class CourseItemService {
      */
     private async _saveQuestionsAsync(
         mutations: ItemMutationType[],
-        itemVersionIdMigrations: VersionMigrationResult[],
+        itemVersionIdMigrations: VersionMigrationResult<'VideoVersion' | 'ExamVersion'>[],
         isVideo: boolean) {
 
         // SAVE ANSWERS 
