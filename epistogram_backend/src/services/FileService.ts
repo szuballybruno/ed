@@ -7,6 +7,7 @@ import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { PrincipalId } from '../utilities/ActionParams';
 import { StringKeyof } from '../utilities/misc';
 import { ClassType } from './misc/advancedTypes/ClassType';
+import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
 import { UserService } from './UserService';
@@ -36,15 +37,17 @@ export class FileService {
         if (!['image/png', 'image/jpeg'].includes(file.mimetype))
             throw new VerboseError('File upload failed: Only jpeg or png', 'bad request');
 
-        await this.uploadAssigendFileAsync<User>(
-            this.getFilePath('user_avatar', userId),
-            () => this._userService.getUserById(userId),
-            (fileId) => this._userService.setUserAvatarFileId(userId, fileId),
-            (entity) => entity.avatarFileId,
-            file.data);
+        await this
+            .uploadAssigendFileAsync({
+                entityId: userId,
+                entitySignature: User,
+                fileBuffer: file.data,
+                fileCode: 'user_avatar',
+                storageFileIdField: 'avatarFileId'
+            });
     };
 
-    async uploadAssigendFile2Async<TField extends StringKeyof<T>, T extends EntityType>({
+    async uploadAssigendFileAsync<TField extends StringKeyof<T>, T extends EntityType>({
         entitySignature,
         fileBuffer,
         fileCode,
@@ -59,75 +62,71 @@ export class FileService {
     }) {
 
         // path
-        const path = this.getFilePath(fileCode, entityId);
-
-        // crate pending storage file
-        const newStorageFileEntityId = await this
-            ._insertFileEntityAsync(path);
-
-        // get entity
-        const entity = await this._ormService
-            .query(entitySignature, { entityId })
-            .where('id', '=', 'entityId')
-            .getSingle();
-
-        // get old file id 
-        const oldStorageFileId = entity[storageFileIdField] as any as Id<any> | null;
-
-        // delete previous file, and file entity
-        if (oldStorageFileId) {
-
-            const oldFileEntity = await this.getFileEntityAsync(oldStorageFileId);
-            await this.deleteFileEntityAsync(oldStorageFileId);
-
-            await this._storageService
-                .deleteStorageFileAsync(oldFileEntity.filePath);
-        }
-
-        // save entity
-        const saveData = { id: entityId } as T;
-        (saveData as any)[storageFileIdField] = newStorageFileEntityId;
-        await this._ormService
-            .save(entitySignature, saveData);
+        const newCDNFilePath = this.getFilePath(fileCode, entityId);
 
         // upload to storage
         await this._storageService
-            .uploadBufferToStorageAsync(fileBuffer, fileCode);
-    };
+            .uploadBufferToStorageAsync(fileBuffer, newCDNFilePath);
 
-    /**
-     * @deprecated 
-     */
-    uploadAssigendFileAsync = async <T>(
-        filePath: string,
-        getEntityAsync: () => Promise<T>,
-        assignFileToEntity: (fileId: Id<'StorageFile'>) => Promise<any>,
-        getFileEntityId: (entity: T) => Id<any> | null,
-        fileBuffer: Buffer) => {
+        /**
+         * All operations after uploading file 
+         * to CDN are in a try block, because if there's a failure,
+         * we have to revert the upload manually.
+         * DB operations will be reverted automatically, 
+         * since we are in a global transaction scope.
+         */
+        try {
 
-        // crate pending storage file
-        const newStorageFileEntityId = await this._insertFileEntityAsync(filePath);
+            // crate pending storage file
+            const newStorageFileEntityId = await this
+                ._insertFileEntityAsync(newCDNFilePath);
 
-        // get entity
-        const entity = await getEntityAsync();
+            // get entity
+            const entity = await this._ormService
+                .query(entitySignature, { entityId })
+                .where('id', '=', 'entityId')
+                .getSingle();
 
-        // assing to entity
-        await assignFileToEntity(newStorageFileEntityId);
+            // get old file id 
+            const oldStorageFileId = entity[storageFileIdField] as any as Id<any> | null;
 
-        // delete previous file, and file entity
-        const oldFileEntityId = getFileEntityId(entity);
-        if (oldFileEntityId) {
+            // save entity
+            const saveData = { id: entityId } as T;
+            (saveData as any)[storageFileIdField] = newStorageFileEntityId;
+            await this._ormService
+                .save(entitySignature, saveData);
 
-            const oldFileEntity = await this.getFileEntityAsync(oldFileEntityId);
-            await this.deleteFileEntityAsync(oldFileEntityId);
+            // delete previous file, and file entity
+            if (oldStorageFileId) {
 
-            await this._storageService
-                .deleteStorageFileAsync(oldFileEntity.filePath);
+                const oldFileEntity = await this.getFileEntityAsync(oldStorageFileId);
+
+                try {
+
+                    await this.deleteFileEntityAsync(oldStorageFileId);
+                    await this._storageService
+                        .deleteStorageFileAsync(oldFileEntity.filePath);
+                }
+                catch (e) {
+
+                    log(e, { entryType: 'warning' })
+                }
+            }
         }
+        catch (e) {
 
-        // upload to storage
-        await this._storageService
-            .uploadBufferToStorageAsync(fileBuffer, filePath);
+            /**
+             * In case of any failure, 
+             * delete file from storage bucket
+             */
+            await this._storageService
+                .deleteStorageFileAsync(newCDNFilePath);
+
+            /**
+             * Than throw the error.
+             */
+            throw e;
+        }
     };
 
     getFilePath = (fileType: FileCodesType, entityId: Id<any>) => {

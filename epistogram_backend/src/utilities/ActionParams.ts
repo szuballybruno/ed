@@ -28,23 +28,18 @@ export type ParamsData<T extends RouteParameterType> = {
 }
 
 export class ActionParams {
-    req: Request;
-    res: Response;
-    // currentuserId: Id<'User'>;
+
     isMultipart: boolean;
     principalId: PrincipalId;
 
     constructor(
-        req: Request,
-        res: Response,
+        public req: Request,
+        public res: Response,
         userId: Id<'User'>,
         isMultipart: boolean) {
 
-        this.isMultipart = isMultipart;
-        this.req = req;
-        this.res = res;
-        // this.currentUserId = userId;
         this.principalId = new PrincipalId(Id.read(userId));
+        this.isMultipart = !!this.req.body.document;
     }
 
     getBody<T = any>(notNullOrUndefined: (keyof T)[] = []) {

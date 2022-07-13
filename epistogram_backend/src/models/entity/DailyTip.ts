@@ -34,7 +34,7 @@ export class DailyTip {
     // TO ONE 
 
     // personality trait 
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     personalityTraitCategoryId: Id<'PersonalityTraitCategory'>;
     @OneToMany(_ => PersonalityTraitCategory, x => x.tips)

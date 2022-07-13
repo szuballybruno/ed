@@ -391,8 +391,6 @@ export class UserService {
      */
     setUserActiveRefreshToken = (userId: Id<'User'>, refreshToken: string) => {
 
-        log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
-
         return this._ormService
             .save(User, {
                 id: userId,

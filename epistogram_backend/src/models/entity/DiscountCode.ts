@@ -30,7 +30,7 @@ export class DiscountCode {
     user: User | null;
 
     // shop item
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     shopItemId: Id<'ShopItem'>;
     @OneToMany(_ => ShopItem, x => x.discountCodes)

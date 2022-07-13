@@ -39,8 +39,8 @@ export class Comment {
 
     // TO ONE
 
-    // users
-    @Column()
+    // user
+    @Column({ type: 'int' })
     @XViewColumn()
     userId: Id<'User'>;
     @JoinColumn({ name: 'user_id' })
@@ -48,7 +48,7 @@ export class Comment {
     user: Relation<User>;
 
     // video
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     videoVersionId: Id<'VideoVersion'>;
     @JoinColumn({ name: 'video_id' })

@@ -1,8 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
-import { CourseVersion } from '../entity/course/CourseVersion';
-import { ModuleVersion } from '../entity/module/ModuleVersion';
 
 @ViewEntity({
     synchronize: false,
@@ -29,4 +27,8 @@ export class ModuleEditView {
     @ViewColumn()
     @XViewColumn()
     orderIndex: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    coverFilePath: string | null;
 }

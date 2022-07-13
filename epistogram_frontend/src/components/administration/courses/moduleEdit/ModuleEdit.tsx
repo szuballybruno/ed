@@ -1,5 +1,6 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { MutableRefObject } from 'react';
+import { ModuleApiService } from '../../../../services/api/MModuleApiService';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
@@ -7,13 +8,15 @@ import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
 import { SelectImage } from '../../../universal/SelectImage';
 
-export const ModuleEditDialogPage = ({
+export const ModuleEdit = ({
     mutator,
     dto
 }: {
     mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
     dto: ModuleEditDTO
 }) => {
+
+    const { saveCoverFile } = ModuleApiService.useSaveCoverFile();
 
     return (
         <Flex
@@ -39,7 +42,7 @@ export const ModuleEditDialogPage = ({
                             field: 'imageFilePath',
                             newValue: src
                         })}
-                    setImageFile={x => 1}>
+                    setImageFile={file => saveCoverFile({ moduleVersionId: dto.versionId }, file)}>
 
                     {dto.imageFilePath && <Image
                         className="whall"
