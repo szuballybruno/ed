@@ -119,7 +119,7 @@ export class QuestionAnswerService {
      */
     async saveAnswersAsync(
         mutations: AnswerMutationsType,
-        questionVersionIdMigrations: VersionMigrationResult[]) {
+        questionVersionIdMigrations: VersionMigrationResult<'QuestionVersion'>[]) {
 
         return await this._versionSaveService
             .saveAsync({

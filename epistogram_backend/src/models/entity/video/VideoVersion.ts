@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { EntityType } from '../../../services/XORM/XORMTypes';
 import { Id } from '../../../shared/types/versionId';
 import { AnswerSession } from '../AnswerSession';
 import { Comment } from '../Comment';
@@ -15,7 +16,7 @@ import { Video } from './Video';
 import { VideoData } from './VideoData';
 
 @Entity()
-export class VideoVersion {
+export class VideoVersion extends EntityType<'VideoVersion'> {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
