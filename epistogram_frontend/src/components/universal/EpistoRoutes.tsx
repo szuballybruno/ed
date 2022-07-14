@@ -3,7 +3,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { Logger } from '../../static/Logger';
-import { AuthenticationStateContext, AuthorizationContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext,  RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 
 export type RenderRoute = {
     element: JSX.Element;
@@ -21,7 +22,7 @@ const RouteRenderer = (props: {
 
     const authState = useContext(AuthenticationStateContext);
     const refetchUserAsync = useContext(RefetchUserAsyncContext);
-    const { hasPermission } = useContext(AuthorizationContext)!;
+    const { hasPermission } = useAuthorizationContext();
 
     Logger.logScoped('ROUTING', `Route renderer: Abs: '${route.route.getAbsolutePath()}' Rel: '${route.route.getRelativePath()}'`);
 

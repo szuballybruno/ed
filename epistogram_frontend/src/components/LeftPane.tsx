@@ -9,7 +9,7 @@ import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
 import { FlexFloat } from './controls/FlexFloat';
-import { AuthorizationContext } from './system/AuthenticationFrame';
+import { useAuthorizationContext } from './system/AuthorizationContext';
 
 export const LeftPane = ({
     padding,
@@ -21,7 +21,7 @@ export const LeftPane = ({
 } & PropsWithChildren) => {
 
     const homeRoute = applicationRoutes.rootHomeRoute;
-    const { hasPermission } = useContext(AuthorizationContext);
+    const { hasPermission } = useAuthorizationContext();
     const { navigate } = useNavigation();
 
     return (

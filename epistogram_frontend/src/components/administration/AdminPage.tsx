@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import React, { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
@@ -8,7 +8,7 @@ import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthorizationContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
@@ -24,7 +24,7 @@ import { UserAdminSubpage } from './users/UserAdminSubpage';
 
 export const AdminPage = () => {
 
-    const { hasPermission } = useContext(AuthorizationContext);
+    const { hasPermission } = useAuthorizationContext();
     const administrationRoutes = applicationRoutes.administrationRoute;
     const { navigate } = useNavigation();
 

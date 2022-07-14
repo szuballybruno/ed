@@ -8,7 +8,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
-import { AuthorizationContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NotificationsPopper } from './NotificationsPopper';
 import { UserContextMenu } from './UserContextMenu';
 
@@ -22,7 +22,7 @@ export const ShopAndNotifications = (props: {
 
     const { navigate } = useNavigation();
 
-    const { isAuthenticated } = useContext(AuthorizationContext);
+    const { isAuthenticated } = useAuthorizationContext();
 
     // refs 
     const userSettingsRef = useRef<HTMLDivElement>(null);

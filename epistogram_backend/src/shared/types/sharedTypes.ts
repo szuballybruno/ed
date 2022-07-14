@@ -1,3 +1,4 @@
+import { PermissionCodeType as PermissionCodeTypeNew } from './PermissionCodesType';
 import { Id } from './versionId';
 
 export type InvitationTokenPayload = { userEmail: string };
@@ -30,68 +31,7 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 
 export type CourseModeType = 'beginner' | 'advanced';
 
-export const permissionCodes = [
-
-    // role admin
-    'VIEW_PREDEFINED_ROLES',
-    'EDIT_PREDEFINED_ROLES',
-    'VIEW_CUSTOM_ROLES',
-    'EDIT_CUSTOM_ROLES',
-    'DELETE_PREDEFINED_ROLES',
-    'DELETE_CUSTOM_ROLES',
-
-    // role assign
-    'ASSIGN_PREDEFINED_ROLES',
-    'ASSIGN_CUSTOM_ROLES',
-
-    // permissions
-    'ASSIGN_GLOBAL_PERMISSIONS',
-    'ASSIGN_COMPANY_PERMISSIONS',
-    'ASSIGN_COURSE_PERMISSIONS',
-
-    // course 
-    'EDIT_COMPANY_COURSES',
-    'DELETE_COMPANY_COURSES',
-    'CREATE_COMPANY_COURSES',
-    'LIST_COMPANY_COURSES',
-    'WATCH_COURSE',
-    'WATCH_COMPANY_COURSES',
-
-    // manage company
-    'EDIT_COMPANY',
-    'DELETE_COMPANIES',
-    'CREATE_COMPANIES',
-    'ASSIGN_ROLES_TO_COMPANY',
-
-    // player 
-    'SET_COURSE_MODE',
-    'SET_COURSE_MODE_GLOBAL',
-    'SET_TEMPOMAT_MODE',
-    'SET_TEMPOMAT_MODE_GLOBAL',
-
-    // admin
-    'VIEW_COURSE_ADMIN',
-
-    // misc company scoped 
-    'VIEW_SHOP',
-    'VIEW_TEACHER_OVERVIEW',
-    'SET_JOB_TITLE',
-    'EDIT_COURSE_OWNER_TEACHER_DATA',
-
-    // misc
-    'SET_COURSE_OWNER_TEACHER_FLAG',
-    'ADD_EPISTO_COIN_TO_USERS',
-    'VIEW_ANONYM_COMMENTER_NAME',
-    'ACCESS_ADMIN',
-    'ACCESS_APPLICATION',
-    'MANAGE_SHOP',
-    'SET_OWN_EMAIL_ADDRESS',
-    'IS_SIGNUP_MANDATORY',
-    'EDIT_COMMENT',
-    'DELETE_COMMENT'
-] as const;
-
-export type PermissionCodeType = typeof permissionCodes[number];
+export type PermissionCodeType = PermissionCodeTypeNew;
 
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |

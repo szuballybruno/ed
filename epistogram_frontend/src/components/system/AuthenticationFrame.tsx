@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -7,27 +7,7 @@ import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
-
-const getAuthorizationContextData = (permissionCodes?: PermissionCodeType[]) => {
-
-    return {
-        hasPermission: (permCode: PermissionCodeType) => {
-
-            if (!permissionCodes)
-                return false;
-
-            const isFound = permissionCodes
-                .any(code => code === permCode);
-
-            return isFound;
-        },
-        isAuthenticated: true
-    };
-};
-
-type AuthorizationContextDataType = ReturnType<typeof getAuthorizationContextData>;
-
-export const AuthorizationContext = createContext<AuthorizationContextDataType>(getAuthorizationContextData());
+import { AuthorizationContext, AuthorizationContextLogic, useAuthorizationContext } from './AuthorizationContext';
 
 const userDefaults: UserDTO = {
     avatarUrl: '',
@@ -60,7 +40,7 @@ const AuthFirewall = (props: PropsWithChildren & {
     const signupRoute = applicationRoutes.signupRoute;
     const { navigate } = useNavigation();
     const currentRoute = useGetCurrentAppRoute();
-    const { hasPermission } = useContext(AuthorizationContext);
+    const { hasPermission } = useAuthorizationContext();
     const isUnauthorized = !!currentRoute.isUnauthorized;
 
     // check for error before render, redirect to login if necessary
@@ -123,7 +103,7 @@ export const AuthenticationFrame = (props) => {
     Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
     // authorization context 
-    const authContextData = getAuthorizationContextData(authData?.permissions ?? []);
+    const authContextData = new AuthorizationContextLogic(authData?.permissions ?? []);
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserAsyncContext.Provider value={() => refetchAuthHandshake()}>

@@ -9,7 +9,7 @@ import { Logger } from '../../static/Logger';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
-import { AuthorizationContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
 
@@ -33,7 +33,7 @@ export const DesktopNavbar = (props: {
     const isLowHeight = !!_isLowHeight;
     const isMinimalMode = !!_isMinimalMode;
 
-    const { hasPermission } = useContext(AuthorizationContext)!;
+    const { hasPermission } = useAuthorizationContext();
 
     const menuItems = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
         .addIf(hasPermission('ACCESS_ADMIN'), {
@@ -62,7 +62,7 @@ export const DesktopNavbar = (props: {
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     // context
-    const { isAuthenticated } = useContext(AuthorizationContext);
+    const { isAuthenticated } = useAuthorizationContext();
 
     // media 
     const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');

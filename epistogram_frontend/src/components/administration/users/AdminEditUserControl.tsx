@@ -23,7 +23,7 @@ import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryN
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { AuthorizationContext } from '../../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../../system/AuthorizationContext';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
@@ -47,7 +47,7 @@ export const AdminEditUserControl = (props: {
     const editedUserId = Id
         .create<'User'>(useIntParam('userId')!);
 
-    const { hasPermission } = useContext(AuthorizationContext);
+    const { hasPermission } = useAuthorizationContext();
 
     // editable fields
     const [firstName, setFirstName] = useState('');

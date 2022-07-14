@@ -11,7 +11,8 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext, AuthorizationContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext,  RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
@@ -23,7 +24,7 @@ const LoginScreen = () => {
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
-    const { hasPermission } = useContext(AuthorizationContext);
+    const { hasPermission } = useAuthorizationContext();
     const dest = useQueryVal('dest');
 
     // state
