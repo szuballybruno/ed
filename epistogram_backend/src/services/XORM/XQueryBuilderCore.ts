@@ -254,7 +254,8 @@ WHERE ${tableName}.id = value_table.id::int;
             if (isDefaultInsert)
                 return ['DEFAULT'];
 
-            return etvp.tokenValuePairs.map(tvp => tvp.token).join(', ')
+            return etvp.tokenValuePairs.map(tvp => tvp.token)
+.join(', ');
         };
 
         const valuesQuery = entityInsertDatas
@@ -300,7 +301,9 @@ WHERE ${tableName}.id = value_table.id::int;
 
         const sqlQuery = isExplicitSelect
             ? queryAsString
-            : `SELECT \n${getXViewColumnNames(classType).map(x => `${INDENT}${tableName}.${snk(x)}`).join(',\n')} \nFROM  ${sqlTableRef}${queryAsString}`;
+            : `SELECT \n${getXViewColumnNames(classType)
+.map(x => `${INDENT}${tableName}.${snk(x)}`)
+.join(',\n')} \nFROM  ${sqlTableRef}${queryAsString}`;
 
         // filter out null params since they're embedded in the sql query now
         // as static values, ther's no need to supply them
@@ -342,7 +345,7 @@ WHERE ${tableName}.id = value_table.id::int;
                 const token = isArray
                     ? `ANY($${counter}::int[])`
                     : valueIsNull
-                        ? `$null`
+                        ? '$null'
                         : `$${counter}`;
 
                 // only increment token if value is not null, 
@@ -493,7 +496,7 @@ WHERE ${tableName}.id = value_table.id::int;
                 return 'IS';
 
             throw new Error(`Operator is ${op} but parameter is null. Null can't be compared with operator: ${op}.`);
-        }
+        };
 
         const operator: OperationType = tokenValue === null
             ? getOperatorIncaseParamIsNull()

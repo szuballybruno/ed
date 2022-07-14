@@ -1,5 +1,4 @@
 
-import { User } from '../models/entity/User';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
@@ -58,7 +57,7 @@ export class MiscService {
         } as OverviewPageDTO;
 
         return overviewPageDTO;
-    };
+    }
 
     private getTipOfTheDay = () => 'Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!';
 

@@ -42,7 +42,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             .getSingle();
 
         if (!latestVideoVersion.videoVersionId)
-            throw new Error('Video not found')
+            throw new Error('Video not found');
 
         const newComment = instantiate<InsertEntity<Comment>>({
             isAnonymous: isAnonymous,

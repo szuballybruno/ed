@@ -1,4 +1,3 @@
-import { Company } from '../models/entity/Company';
 import { CompanyService } from '../services/CompanyService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
@@ -43,7 +42,7 @@ export class CompanyController {
         const companyId = Id
             .create<'Company'>(params
                 .getQuery()
-                .getValue(x => x.companyId, 'int'))
+                .getValue(x => x.companyId, 'int'));
 
         return await this._compService
             .getCompanyEditDataAsync(params.principalId, companyId);
@@ -69,7 +68,7 @@ export class CompanyController {
         const companyId = Id
             .create<'Company'>(params
                 .getBody()
-                .getValue(x => x.companyId, 'int'))
+                .getValue(x => x.companyId, 'int'));
 
         await this._compService
             .deleteCompanyAsync(params.principalId, companyId);

@@ -1,17 +1,13 @@
-import { VideoPlaybackSample } from "../models/entity/playback/VideoPlaybackSample";
+import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 
 export class SampleMergeService {
 
     private _SAMPLE_THRESHOLD_SECONDS = 1;
 
-    constructor() {
-
-    }
-
     mergeSamples(samples: VideoPlaybackSample[]) {
 
         let allOverlappingIndices: number[] = [];
-        let resultSamples: VideoPlaybackSample[] = [];
+        const resultSamples: VideoPlaybackSample[] = [];
 
         for (let sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
 

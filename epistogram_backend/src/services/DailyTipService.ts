@@ -7,9 +7,7 @@ import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/ActionParams';
-import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
 import { Id } from '../shared/types/versionId';
-import { User } from '../models/entity/User';
 
 export class DailyTipService {
 
@@ -28,7 +26,7 @@ export class DailyTipService {
     async deleteDailyTipAsync(id: Id<'DailyTip'>) {
 
         await this._ormService
-            .softDelete(DailyTip, [id])
+            .softDelete(DailyTip, [id]);
     }
 
     /**
@@ -73,7 +71,7 @@ export class DailyTipService {
         const dailyTip = await this._ormService
             .query(DailyTip, { id: dto.id })
             .where('id', '=', 'id')
-            .getSingle()
+            .getSingle();
 
         return this._mapperService
             .mapTo(DailyTipEditDataDTO, [dailyTip]);

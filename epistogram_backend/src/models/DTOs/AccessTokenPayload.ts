@@ -1,5 +1,4 @@
-import { Id } from "../../shared/types/versionId";
-import { User } from "../entity/User";
+import { Id } from '../../shared/types/versionId';
 
 export type AccessTokenPayload = {
     userId: Id<'User'>;

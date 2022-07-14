@@ -8,7 +8,6 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { ServiceBase } from './misc/ServiceBase';
 import { MapperService } from './MapperService';
 import { PrincipalId } from '../utilities/ActionParams';
-import { User } from '../models/entity/User';
 import { Id } from '../shared/types/versionId';
 
 export class PractiseQuestionService extends ServiceBase {

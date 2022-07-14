@@ -2,16 +2,12 @@ import { Answer } from '../models/entity/answer/Answer';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { QuestionVersion } from '../models/entity/question/QuestionVersion';
-import { User } from '../models/entity/User';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { Id } from '../shared/types/versionId';
-import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
+import { VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -49,7 +45,7 @@ export class QuestionAnswerService {
             });
 
         return answerSessionId;
-    };
+    }
 
     /**
      * Answer question  
@@ -63,13 +59,13 @@ export class QuestionAnswerService {
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) {
 
-        console.log('userId: ' + userId)
-        console.log('answerSessionId: ' + answerSessionId)
-        console.log('questionVersionId: ' + questionVersionId)
-        console.log('answerIds: ' + answerIds)
-        console.log('isExamQuestion: ' + isExamQuestion)
-        console.log('elapsedSeconds: ' + elapsedSeconds)
-        console.log('isPractiseAnswer: ' + isPractiseAnswer)
+        console.log('userId: ' + userId);
+        console.log('answerSessionId: ' + answerSessionId);
+        console.log('questionVersionId: ' + questionVersionId);
+        console.log('answerIds: ' + answerIds);
+        console.log('isExamQuestion: ' + isExamQuestion);
+        console.log('elapsedSeconds: ' + elapsedSeconds);
+        console.log('isPractiseAnswer: ' + isPractiseAnswer);
 
         const {
             correctAnswerIds,
@@ -80,11 +76,11 @@ export class QuestionAnswerService {
         } = await this._sqlFunctionsService
             .answerQuestionFn(userId, answerSessionId, questionVersionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
 
-        console.log('correctAnswerIds: ' + correctAnswerIds)
-        console.log('givenAnswerId: ' + givenAnswerId)
-        console.log('isCorrect: ' + isCorrect)
-        console.log('streakLength: ' + streakLength)
-        console.log('streakId: ' + streakId)
+        console.log('correctAnswerIds: ' + correctAnswerIds);
+        console.log('givenAnswerId: ' + givenAnswerId);
+        console.log('isCorrect: ' + isCorrect);
+        console.log('streakLength: ' + streakLength);
+        console.log('streakId: ' + streakId);
 
         let coinAcquires = null as null | {
             normal: CoinAcquireResultDTO | null,
@@ -112,7 +108,7 @@ export class QuestionAnswerService {
             isCorrect: isCorrect,
             coinAcquires
         } as AnswerResultDTO;
-    };
+    }
 
     /**
      * Saves quesiton answers 

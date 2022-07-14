@@ -1,6 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseRatingQuesitonType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({

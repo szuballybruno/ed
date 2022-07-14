@@ -1,4 +1,3 @@
-import { Course } from '../models/entity/course/Course';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
@@ -18,7 +17,7 @@ import { TempomatService } from './TempomatService';
 
 export class UserProgressService extends ServiceBase {
 
-    private _tempomatService: TempomatService
+    private _tempomatService: TempomatService;
 
     constructor(
         mapperService: MapperService,
@@ -65,7 +64,7 @@ export class UserProgressService extends ServiceBase {
                 tempomatCalculationData.startDate,
                 tempomatCalculationData.tempomatMode,
                 tempomatCalculationData.tempomatAdjustmentValue
-            )
+            );
 
         const recommendedItemsPerDay = this._tempomatService
             .calculateRecommendedItemsPerDay(
@@ -73,7 +72,7 @@ export class UserProgressService extends ServiceBase {
                 previsionedCompletionDate,
                 tempomatCalculationData.requiredCompletionDate,
                 tempomatCalculationData.totalItemCount
-            )
+            );
 
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -117,7 +116,7 @@ export class UserProgressService extends ServiceBase {
                 tempomatCalculationData.startDate,
                 tempomatCalculationData.tempomatMode,
                 tempomatCalculationData.tempomatAdjustmentValue
-            )
+            );
 
         const estimatedLengthInDays = previsionedCompletionDate
             ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate)
@@ -142,10 +141,10 @@ export class UserProgressService extends ServiceBase {
             : null;
 
         if (!estimatedLengthInDaysOrNull)
-            throw new Error('Couldn\'t estimate course length')
+            throw new Error('Couldn\'t estimate course length');
 
         if (!originalEstimatedLengthInDaysOrNull)
-            throw new Error('Couldn\'t estimate course length')
+            throw new Error('Couldn\'t estimate course length');
 
         const estimatedDates = forN(estimatedLengthInDaysOrNull, index => {
 
@@ -199,6 +198,6 @@ export class UserProgressService extends ServiceBase {
             originalPrevisionedProgress: originalPrevisionedProgress,
             previsionedProgress: previsionedProgress,
             actualProgress: actualProgress
-        })
+        });
     }
 }

@@ -1,5 +1,3 @@
-import { Course } from '../models/entity/course/Course';
-import { User } from '../models/entity/User';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';

@@ -1,10 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
-import { CourseData } from '../models/entity/course/CourseData';
 import { DiscountCode } from '../models/entity/DiscountCode';
 import { ShopItem } from '../models/entity/ShopItem';
 import { ShopItemCategory } from '../models/entity/ShopItemCategory';
 import { User } from '../models/entity/User';
-import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseShopItemListDTO } from '../shared/dtos/CourseShopItemListDTO';
 import { DiscountCodeDTO } from '../shared/dtos/DiscountCodeDTO';
 import { IdResultDTO } from '../shared/dtos/IdResultDTO';
@@ -25,7 +23,6 @@ import { UrlService } from './UrlService';
 import { PrincipalId } from '../utilities/ActionParams';
 import { StorageFile } from '../models/entity/StorageFile';
 import { Id } from '../shared/types/versionId';
-import { CourseCategory } from '../models/entity/CourseCategory';
 import { CourseShopItemListView } from '../models/views/CourseShopItemListView';
 
 export class ShopService {

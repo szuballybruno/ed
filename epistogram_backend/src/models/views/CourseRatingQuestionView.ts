@@ -2,9 +2,6 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseRatingQuesitonType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { Course } from '../entity/course/Course';
-import { Question } from '../entity/question/Question';
-import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,

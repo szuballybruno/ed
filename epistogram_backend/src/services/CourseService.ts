@@ -1,10 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
-import { Course } from '../models/entity/course/Course';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../models/entity/CourseCategory';
-import { StorageFile } from '../models/entity/StorageFile';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
@@ -25,7 +23,6 @@ import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
-import { instantiate } from '../shared/logic/sharedLogic';
 import { OrderType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
@@ -37,7 +34,6 @@ import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
-import { SaveEntityType } from './XORM/XORMTypes';
 
 export class CourseService {
 
@@ -56,7 +52,7 @@ export class CourseService {
     async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         // TODO: CourseDataId is not CourseId
-        throwNotImplemented()
+        throwNotImplemented();
 
         /* const courses = await this._ormService
             .query(CourseData)
@@ -113,7 +109,7 @@ export class CourseService {
             .getMany();
 
         const playlistModuleDTOs = this._mapperService
-            .mapTo(PlaylistModuleDTO, [moduleViews])
+            .mapTo(PlaylistModuleDTO, [moduleViews]);
 
         return this._mapperService
             .mapTo(CourseDetailsDTO, [courseDetailsView, playlistModuleDTOs]);
@@ -178,13 +174,13 @@ export class CourseService {
             .getOneOrNull();
 
         if (viewIfPlaylistItemCode)
-            return viewIfPlaylistItemCode.courseId
+            return viewIfPlaylistItemCode.courseId;
 
         const viewIfModuleCode = await this._ormService
             .query(CourseItemPlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
             .where('moduleCode', '=', 'moduleCode')
             .and('itemOrderIndex', '=', 'itemOrderIndex')
-            .getSingle()
+            .getSingle();
 
         return viewIfModuleCode.courseId;
     }
@@ -198,7 +194,7 @@ export class CourseService {
         const view = await this._ormService
             .query(CourseAdminDetailedView, { courseId })
             .where('courseId', '=', 'courseId')
-            .getSingle()
+            .getSingle();
 
         const categories = await this._ormService
             .query(CourseCategory)
@@ -399,26 +395,26 @@ export class CourseService {
             .getMany();
 
         const filteredCoursesBySearchTerm =
-            filterByProperty(courses, 'title', searchTerm)
+            filterByProperty(courses, 'title', searchTerm);
 
         const filteredCoursesByCategoryId =
-            filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId)
+            filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId);
 
         const filteredCoursesByIsFeatured =
-            filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured)
+            filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
 
         const filteredCoursesByIsRecommended =
-            filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended)
+            filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
 
         const orderCourses = (courses: AvailableCourseView[], orderType: string) => {
             if (orderBy === 'nameASC')
-                return orderByProperty(courses, 'title', 'asc')
+                return orderByProperty(courses, 'title', 'asc');
             if (orderBy === 'nameDESC')
-                return orderByProperty(courses, 'title', 'desc')
-            return courses
-        }
+                return orderByProperty(courses, 'title', 'desc');
+            return courses;
+        };
 
-        const orderedCourses = orderCourses(filteredCoursesByIsRecommended, orderBy)
+        const orderedCourses = orderCourses(filteredCoursesByIsRecommended, orderBy);
 
         return this._mapperService
             .mapTo(CourseShortDTO, [orderedCourses]);

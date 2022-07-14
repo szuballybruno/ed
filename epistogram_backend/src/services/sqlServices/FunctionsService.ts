@@ -1,16 +1,3 @@
-import { ActivitySession } from '../../models/entity/ActivitySession';
-import { ActivityStreak } from '../../models/entity/ActivityStreak';
-import { Answer } from '../../models/entity/answer/Answer';
-import { AnswerSession } from '../../models/entity/AnswerSession';
-import { ExamVersion } from '../../models/entity/exam/ExamVersion';
-import { GivenAnswer } from '../../models/entity/GivenAnswer';
-import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
-import { Question } from '../../models/entity/question/Question';
-import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
-import { ShopItem } from '../../models/entity/ShopItem';
-import { User } from '../../models/entity/User';
-import { Video } from '../../models/entity/video/Video';
-import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { TaskCodeType } from '../../models/Types';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';

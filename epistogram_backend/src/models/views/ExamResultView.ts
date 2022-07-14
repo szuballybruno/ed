@@ -1,15 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
-import { Answer } from '../entity/answer/Answer';
-import { AnswerVersion } from '../entity/answer/AnswerVersion';
-import { AnswerGivenAnswerBridge } from '../entity/AnswerGivenAnswerBridge';
-import { AnswerSession } from '../entity/AnswerSession';
-import { Exam } from '../entity/exam/Exam';
-import { ExamVersion } from '../entity/exam/ExamVersion';
-import { GivenAnswer } from '../entity/GivenAnswer';
-import { Question } from '../entity/question/Question';
-import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,

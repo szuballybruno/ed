@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { User } from '../models/entity/User';
 import { logSecondary } from '../services/misc/logger';
 import { ParametrizedRouteType, RouteParameterType } from '../shared/types/apiRoutes';
 import { VerboseError } from '../shared/types/VerboseError';

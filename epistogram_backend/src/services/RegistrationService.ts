@@ -1,21 +1,17 @@
 import generatePassword from 'password-generator';
-import { Permission } from '../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
-import { Company } from '../models/entity/Company';
-import { JobTitle } from '../models/entity/JobTitle';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { JobTitleIdEnum, RoleIdEnum } from '../shared/types/sharedTypes';
+import { JobTitleIdEnum } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
-import { getFullName, throwNotImplemented } from '../utilities/helpers';
+import { throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthorizationService } from './AuthorizationService';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
-import { log } from './misc/logger';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
@@ -47,7 +43,7 @@ export class RegistrationService extends ServiceBase {
 
         this._userService = userService;
         this._authenticationService = authenticationService;
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
         this._activationCodeService = acs;
         this._emailService = emailService;
         this._tokenService = tokenService;
@@ -60,9 +56,9 @@ export class RegistrationService extends ServiceBase {
         const userId = principalId.toSQLValue();
 
         if (!dto.companyId)
-            return
+            return;
 
-        const companyId = dto.companyId
+        const companyId = dto.companyId;
 
         // const hasSetUserCompanyPermission = this._roleService
         //     .findPermissionAsync(userId,  'canSetInvitedUserCompany');

@@ -1,8 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
-import { CoinTransaction } from '../entity/CoinTransaction';
-import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,

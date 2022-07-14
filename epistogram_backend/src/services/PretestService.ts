@@ -1,8 +1,6 @@
-import { Course } from '../models/entity/course/Course';
 import { Exam } from '../models/entity/exam/Exam';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { User } from '../models/entity/User';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { PretestResultView } from '../models/views/PretestResultView';
@@ -52,7 +50,7 @@ export class PretestService {
 
         const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
-        console.log('CourseId: ' + courseId)
+        console.log('CourseId: ' + courseId);
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
@@ -88,7 +86,7 @@ export class PretestService {
                 .on('id', '=', 'examId', ExamVersion)
                 .and('isPretest', '=', 'true'))
             .where('courseId', '=', 'courseId')
-            .getSingle()
+            .getSingle();
 
         return await this._examService
             .getExamPlayerDTOAsync(userId, pretestExam.examId);
@@ -114,7 +112,7 @@ export class PretestService {
             .and('courseId', '=', 'courseId')
             .getSingle();
 
-        log('First item code: ' + courseView.firstItemCode)
+        log('First item code: ' + courseView.firstItemCode);
 
         return this._mapperSerice
             .mapTo(PretestResultDTO, [view, courseView]);

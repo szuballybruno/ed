@@ -1,8 +1,5 @@
 import moment from 'moment';
-import { Course } from '../models/entity/course/Course';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
-import { User } from '../models/entity/User';
-import { Video } from '../models/entity/video/Video';
 import { CourseItemView } from '../models/views/CourseItemView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
@@ -81,7 +78,7 @@ export class PlayerService {
 
         if (!userCourseBridge)
             await this._userCourseBridgeService
-                .setCourseStartDateAsync(principalId, courseId)
+                .setCourseStartDateAsync(principalId, courseId);
 
         //
         // get new answer session
@@ -94,8 +91,8 @@ export class PlayerService {
         // get next item 
         const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
 
-        log('nextPlaylistItemCode: ' + nextPlaylistItemCode)
-        log('nextItemState: ' + nextItemState)
+        log('nextPlaylistItemCode: ' + nextPlaylistItemCode);
+        log('nextItemState: ' + nextItemState);
 
         return instantiate<PlayerDataDTO>({
             videoPlayerData: videoPlayerDTO,
@@ -180,7 +177,7 @@ export class PlayerService {
         return (courseItemsFlat[prevIndex]
             ? courseItemsFlat[prevIndex]
             : courseItemsFlat[0]).playlistItemCode;
-    };
+    }
 
     /**
      * Returns a list of objects symbolizing the items present in the specified course. 
@@ -217,7 +214,7 @@ export class PlayerService {
             });
 
         return courseItemFlatList;
-    };
+    }
 
     /**
      * Gets teh video watch dto 
@@ -240,7 +237,9 @@ export class PlayerService {
         const videoQuestionData = await this._videoService
             ._getQuestionDataByVideoVersionId(videoVersionId);
 
-        const currentDateMinThreshold = moment(new Date()).subtract(5, 'minutes').toDate();
+        const currentDateMinThreshold = moment(new Date())
+.subtract(5, 'minutes')
+.toDate();
 
         const oldSessions = await this._ormService
             .query(VideoPlaybackSession, { userId, videoVersionId, currentDateMinThreshold })
@@ -267,5 +266,5 @@ export class PlayerService {
             .mapTo(VideoPlayerDataDTO, [videoPlayerData, videoQuestionData, videoPlaybackSessionId, maxWatchedSeconds]);
 
         return dto;
-    };
+    }
 }

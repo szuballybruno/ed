@@ -1,4 +1,4 @@
-import { Id } from "../shared/types/versionId";
+import { Id } from '../shared/types/versionId';
 
 export type PropConstraintType<TObj, TProp> = {
     [K in keyof TObj]: TProp;
@@ -72,4 +72,4 @@ export const VersionMigrationHelpers = {
             .map(x => `${x.oldVersionId} -> ${x.newVersionId}`)
             .join('\n');
     }
-}
+};

@@ -1,4 +1,3 @@
-import { User } from '../models/entity/User';
 import { AuthenticationService } from '../services/AuthenticationService';
 import { LoggerService } from '../services/LoggerService';
 import { VerboseError } from '../shared/types/VerboseError';

@@ -1,8 +1,4 @@
-import { Answer } from '../models/entity/answer/Answer';
-import { Course } from '../models/entity/course/Course';
 import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
-import { Question } from '../models/entity/question/Question';
-import { User } from '../models/entity/User';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
@@ -11,7 +7,6 @@ import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PrequizService {
@@ -110,7 +105,7 @@ export class PrequizService {
             .where('userId', '=', 'userId')
             .and('questionId', '=', 'questionId')
             .and('courseId', '=', 'courseId')
-            .getOneOrNull()
+            .getOneOrNull();
 
         if (previousAnswer) {
             await this._ormService
@@ -130,7 +125,7 @@ export class PrequizService {
                     courseId,
                     userId,
                     value
-                })
+                });
         }
 
 

@@ -1,4 +1,3 @@
-import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
 import { Company } from '../../models/entity/Company';
@@ -203,7 +202,7 @@ const marray = [
                     requiredCompletionDate: x.requiredCompletionDate,
                     tempomatMode: x.tempomatMode,
                 };
-            })
+            });
         }),
 
     epistoMappingsBuilder
@@ -439,7 +438,7 @@ const marray = [
                 answeredQuestionsCount: view.answeredQuestionsCount,
                 totalCorrectAnswerRate: view.totalCorrectAnswerRate,
                 rankInsideCompany: view.rankInsideCompany
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number) => {
@@ -449,7 +448,7 @@ const marray = [
                 completedVideosLastMonth: view.completedVideosLastMonth,
                 lagBehindPercentage: lagBehindPercentage,
                 performanceLastMonth: view.performanceLastMonth
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(ModulePlayerDTO, ([urlService]) => (view: ModulePlayerView) => {
@@ -459,7 +458,7 @@ const marray = [
                 description: view.description,
                 imageFilePath: urlService
                     .getAssetUrlNullable(view.imageFilePath)
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(ImproveYourselfPageStatsDTO, () => (stats: ImproveYourselfPageStatsView, mostProductiveTimeRangeChartData: MostProductiveTimeRangeView[], userDailyActivityChartData: UserDailyActivityChartView[]) => {
@@ -467,13 +466,13 @@ const marray = [
                 userId: stats.userId,
                 mostProductiveTimeRange: stats.mostProductiveTimeRange,
                 mostProductiveTimeRangeChartData: mostProductiveTimeRangeChartData.map((x, index) => {
-                    return [index, x.performancePercentage]
+                    return [index, x.performancePercentage];
                 }),
                 mostActiveDay: stats.mostActiveDay,
                 mostActiveDayChartData: userDailyActivityChartData.map((x, index) => {
-                    return [index, x.totalSessionLengthSeconds / 60]
+                    return [index, x.totalSessionLengthSeconds / 60];
                 })
-            })
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(ModuleEditDTO, ([url]) => (views: ModuleEditView[]) => {
@@ -501,8 +500,8 @@ const marray = [
                 lastThreeAnswerAverage: x.lastThreeAnswerAverage,
                 averageReactionTime: x.averageReactionTime,
                 lastWatchTime: x.lastWatchTime
-            }
-        })
+            };
+        });
     }),
     epistoMappingsBuilder
         .addArrayMapping(UserExamStatsDTO, () => (stats: UserExamStatsView[]) => {
@@ -520,8 +519,8 @@ const marray = [
                         examLengthSeconds: x.examLengthSeconds,
                         lastCompletionDate: x.lastCompletionDate,
                         averageReactionTime: x.averageReactionTime
-                    }
-                })
+                    };
+                });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CommentListDTO, () => (comments: CommentListView[]) => {
@@ -539,7 +538,7 @@ const marray = [
                     commentLikeCount: comment.commentLikeCount,
                     isCurrentUserLikedComment: comment.isLike,
                     isQuestion: comment.isQuestion
-                })))
+                })));
         }),
     epistoMappingsBuilder
         .addMapping(EventDTO, () => (event: Event) => {
@@ -547,15 +546,15 @@ const marray = [
             return instantiate<EventDTO>({
                 data: JSON.parse(event.data),
                 type: event.type
-            })
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CoinTransactionDTO, () => (coinTransactions: CoinTransactionView[]) => {
             return coinTransactions.map(x => {
                 return instantiate<CoinTransactionDTO>({
                     ...x
-                })
-            })
+                });
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(ShopItemDTO, ([urlService]) => (shopItemViews: ShopItemStatefulView[]) => {
@@ -575,8 +574,8 @@ const marray = [
                         shopItemCategoryName: shopItem.shopItemCategoryName,
                         coverFilePath: urlService.getAssetUrl(shopItem.coverFilePath),
                         detailsUrl: shopItem.detailsUrl
-                    })
-                })
+                    });
+                });
         }),
     epistoMappingsBuilder
         .addArrayMapping(ShopItemCategoryDTO, () => (shopItemCategories: ShopItemCategory[]) => {
@@ -585,8 +584,8 @@ const marray = [
                     return instantiate<ShopItemCategoryDTO>({
                         id: shopItemCategory.id,
                         name: shopItemCategory.name
-                    })
-                })
+                    });
+                });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseLearningDTO, ([urlService]) => (stats: CourseLearningStatsView[]) => {
@@ -617,7 +616,7 @@ const marray = [
                     questionSuccessRate: stat.questionSuccessRate,
                     finalExamSuccessRate: stat.finalExamSuccessRate
                 });
-            })
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseProgressShortDTO, () => (courseProgressViews: CourseProgressView[]) => {
@@ -628,7 +627,7 @@ const marray = [
                     completedCourseItemCount: courseProgressView.completedCourseItemCount,
                     progressPercentage: courseProgressView.progressPercentage,
                     totalCourseItemCount: courseProgressView.totalCourseItemCount
-                })))
+                })));
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseContentItemAdminDTO, () => (views: CourseAdminContentView[]) => {
@@ -674,7 +673,7 @@ const marray = [
                     questionMutations: [],
                     answerMutations: []
                 });
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(CourseDetailsDTO, ([urlService]) => (detailsView: CourseDetailsView, modules: PlaylistModuleDTO[]) => {
@@ -729,7 +728,7 @@ const marray = [
                 totalVideoCount: detailsView.totalVideoCount,
                 totalVideoQuestionCount: detailsView.totalVideoQuestionCount,
                 totalVideoSumLengthSeconds: detailsView.totalVideoSumLengthSeconds
-            })
+            });
 
         }),
     epistoMappingsBuilder
@@ -753,7 +752,7 @@ const marray = [
                 avatarUrl: user.avatarFile
                     ? urlService.getAssetUrl(user.avatarFile.filePath)
                     : null
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(CompanyEditDataDTO, () => (company: Company) => {
@@ -761,7 +760,7 @@ const marray = [
             return instantiate<CompanyEditDataDTO>({
                 id: company.id,
                 name: company.name
-            })
+            });
         }),
     // TODO: unused mapping, check DTO's and endpoints too
     epistoMappingsBuilder
@@ -772,7 +771,7 @@ const marray = [
                 /* coverImageUrl: view.filePath
                     ? urlService.getAssetUrl(view.filePath)
                     : urlService.getAssetUrl('/images/defaultCourseCover.jpg') */
-            })
+            });
         }),
     // TODO: RoleId missing. Check if its needed
     epistoMappingsBuilder
@@ -801,8 +800,8 @@ const marray = [
                         latestActivityDate: user.latestActivityDate,
                         totalSpentTimeSeconds: user.totalSpentSeconds,
                         coinBalance: user.coinBalance,
-                    })
-                })
+                    });
+                });
         }),
     epistoMappingsBuilder
         .addMapping(DailyTipDTO, ([urlService]) => (view: DailyTipView) => {
@@ -811,7 +810,7 @@ const marray = [
                 id: view.dailyTipId,
                 description: view.description,
                 videoUrl: urlService.getAssetUrl(view.videoFilePath)
-            })
+            });
         }),
     // TODO: CourseLength missing. Check if its needed
     epistoMappingsBuilder
@@ -838,8 +837,8 @@ const marray = [
                     teacherName: toFullName(course.teacherFirstName, course.teacherLastName),
                     thumbnailImageURL: thumbnailImageURL,
                     isComplete: course.isCompleted
-                })
-            })
+                });
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseAdminListItemDTO, ([urlService]) => (views: CourseAdminShortView[]) => {
@@ -869,8 +868,8 @@ const marray = [
                         //firstName: view.teacherFirstName,
                         //lastName: view.teacherLastName,
                     }
-                })
-            })
+                });
+            });
         }),
     epistoMappingsBuilder
         .addMapping(TeacherInfoEditDTO, () => (teacher: TeacherInfo) => {
@@ -883,7 +882,7 @@ const marray = [
                 skills: teacher.skills,
                 badges: parseCommaSeparatedStringList(teacher.badges) as TeacherBadgeNameType[],
                 description: teacher.description
-            })
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(ShopItemAdminShortDTO, ([urlService]) => (shopItems: ShopItemView[]) => {
@@ -899,8 +898,8 @@ const marray = [
                         name: shopItem.name,
                         purchaseLimit: shopItem.purchaseLimit,
                         shopItemCategoryId: shopItem.shopItemCategoryId
-                    })
-                })
+                    });
+                });
         }),
     // TODO: Name, purchaseLimit, detailsUrl shouldn\'t be null
     epistoMappingsBuilder
@@ -924,16 +923,16 @@ const marray = [
                             id: discountCode.id,
                             code: discountCode.code,
                             isUsed: !!discountCode.userId
-                        })
+                        });
                     })
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(ShopItemBriefData, () => (view: ShopItemView) => {
 
             return instantiate<ShopItemBriefData>({
                 name: view.name
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(CourseBriefData, () => (course: CourseData, courseId: Id<'Course'>) => {
@@ -941,7 +940,7 @@ const marray = [
             return instantiate<CourseBriefData>({
                 id: courseId,
                 title: course.title
-            })
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseShopItemListDTO, ([urlService]) => (courses: CourseShopItemListView[]) => {
@@ -953,8 +952,8 @@ const marray = [
                     coverImagePath: course.coverFilePath
                         ? urlService.getAssetUrl(course.coverFilePath)
                         : null
-                })
-            })
+                });
+            });
         }),
     epistoMappingsBuilder
         .addMapping(CourseOverviewDataDTO, () => (course: CourseOverviewView) => {
@@ -967,7 +966,7 @@ const marray = [
                 finalExamSuccessRate: course.finalExamSuccessRate,
                 questionSuccessRate: course.questionSuccessRate,
                 totalSpentSeconds: course.totalSpentSeconds
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(PersonalityTraitCategoryShortDTO, () => (x: PersonalityTraitCategoryView, isMax: boolean) => {
@@ -978,7 +977,7 @@ const marray = [
                 label: isMax ? x.maxLabel : x.minLabel,
                 isMax,
                 tipCount: isMax ? x.maxTipsCount : x.minTipsCount
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(PersonalityTraitCategoryDTO, () => (category: PersonalityTraitCategory, tips: DailyTip[]) => {
@@ -995,9 +994,9 @@ const marray = [
                         description: tip.description,
                         id: tip.id,
                         videoUrl: ''
-                    })
+                    });
                 })
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(DailyTipEditDataDTO, () => (dailyTip: DailyTip) => {
@@ -1006,7 +1005,7 @@ const marray = [
                 description: dailyTip.description,
                 id: dailyTip.id,
                 isLive: dailyTip.isLive
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(PrequizQuestionDTO, () => (question: PrequizQuestionView, answers: PrequizAnswerDTO[]) => {
@@ -1022,7 +1021,7 @@ const marray = [
                 minLabel: question.minLabel,
                 valuePostfix: question.valuePostfix,
                 answers
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(PrequizAnswerDTO, () => (question: PrequizQuestionView) => {
@@ -1030,7 +1029,7 @@ const marray = [
             return instantiate<PrequizAnswerDTO>({
                 id: question.answerId,
                 text: question.answerText
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(CourseRatingQuestionDTO, () => (question: CourseRatingQuestionView) => {
@@ -1041,7 +1040,7 @@ const marray = [
                 type: question.questionType,
                 answerText: question.answerText,
                 answerValue: question.answerValue
-            })
+            });
         }),
     epistoMappingsBuilder
         .addMapping(CourseRatingGroupDTO, () => (view: CourseRatingQuestionView, questions: CourseRatingQuestionDTO[]) => {
@@ -1050,7 +1049,7 @@ const marray = [
                 id: view.groupId,
                 name: view.groupName,
                 questions
-            })
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(UserActiveCourseDTO, ([urlService]) => (views: UserActiveCourseView[]) => {
@@ -1060,8 +1059,8 @@ const marray = [
                     courseId: view.courseId,
                     coverFilePath: urlService.getAssetUrl(view.coverFilePath),
                     title: view.title
-                })
-            })
+                });
+            });
         }),
     // TODO: Check if canManage is needed here
     epistoMappingsBuilder
@@ -1072,8 +1071,8 @@ const marray = [
                     id: view.companyId,
                     name: view.companyName,
                     //canManage: view.canManage
-                })
-            })
+                });
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CompanyDTO, () => (companies: Company[]) => {
@@ -1083,8 +1082,8 @@ const marray = [
                 return instantiate<CompanyDTO>({
                     id: company.id,
                     name: company.name
-                })
-            })
+                });
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(PermissionListDTO, () => (permissions: Permission[]) => {
@@ -1095,8 +1094,8 @@ const marray = [
                     code: permission.code,
                     scope: permission.scope,
                     id: permission.id
-                })
-            })
+                });
+            });
         }),
 
 ] as const;
@@ -1224,8 +1223,8 @@ export const toQuestionDTO = (lqav: QuestionDataView[]) => {
                             answerText: viewAsAnswer.answerText
                         } as AnswerDTO;
                     })
-            }
-        }) as QuestionDTO[]
+            };
+        }) as QuestionDTO[];
 };
 
 export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {

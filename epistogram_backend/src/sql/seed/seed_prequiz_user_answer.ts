@@ -1,6 +1,5 @@
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import { AnswerSessionSeedDataType } from './seed_answer_sessions';
 import { CourseSeedDataType } from './seed_courses';
 import { PrequizAnswersSeedDataType } from './seed_prequiz_answers';
 import { PrequizQuestionsSeedDataType } from './seed_prequiz_questions';

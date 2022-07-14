@@ -1,8 +1,6 @@
 import { DeleteDateColumn, ViewColumn, ViewEntity } from 'typeorm';
 import { IsDeletedFlag, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
-import { Company } from '../entity/Company';
-import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,

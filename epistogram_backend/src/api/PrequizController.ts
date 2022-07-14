@@ -1,6 +1,3 @@
-import { Answer } from '../models/entity/answer/Answer';
-import { Course } from '../models/entity/course/Course';
-import { Question } from '../models/entity/question/Question';
 import { PrequizService } from '../services/PrequizService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';
@@ -70,11 +67,11 @@ export class PrequizController {
             .getValueOrNull(x => x.value, 'int');
 
         const answerId = bod
-            .getValueOrNull(x => x.answerId, 'int')
+            .getValueOrNull(x => x.answerId, 'int');
 
         const answerIdAsIdType = answerId
             ? Id.create<'PrequizAnswer'>(answerId)
-            : null
+            : null;
 
         return await this._prequizService
             .answerPrequizQuestionAsync(params.principalId, questionId, courseId, answerIdAsIdType, value);

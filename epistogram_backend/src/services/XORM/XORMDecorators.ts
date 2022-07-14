@@ -40,8 +40,8 @@ export const XOneToMany = <TCurrentEntity = never>() => {
         getRelationProp: (relationEntity: TRelationEntity) => Relation<TCurrentEntity> | TCurrentEntity | null): PropertyDecorator => {
 
         return OneToMany((getRelationEntity) as any, getRelationProp);
-    }
-}
+    };
+};
 
 export const XManyToOne = <TCurrentEntity = never>() => {
 
@@ -50,20 +50,20 @@ export const XManyToOne = <TCurrentEntity = never>() => {
         getRelationProp?: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
 
         return ManyToOne((getRelationEntity) as any, getRelationProp);
-    }
+    };
 };
 
 export const XJoinColumn = <TCurrentEntity = never>(key: keyof TCurrentEntity) => {
 
     return JoinColumn({ name: toSQLSnakeCasing(key as string) });
-}
+};
 
 export const getXViewColumnNames = <T>(classType: ClassType<T>) => {
 
     return XMetadataHandler
         .getMetadataProperiesByCode(classType.name, X_VIEW_COLUMN_METADATA_KEY)
         .map(x => x.propName);
-}
+};
 
 export const getIsDeletedDecoratorPropertyData = <T>(classType: ClassType<T>) => {
 

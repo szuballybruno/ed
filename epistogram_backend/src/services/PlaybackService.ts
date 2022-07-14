@@ -1,7 +1,5 @@
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
-import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
-import { User } from '../models/entity/User';
 import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoFile } from '../models/entity/video/VideoFile';
@@ -12,10 +10,8 @@ import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
 import { CoinAcquireService } from './CoinAcquireService';
 import { MapperService } from './MapperService';
-import { readItemCode } from './misc/encodeService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -227,7 +223,7 @@ export class PlaybackService extends ServiceBase {
             .reduce((prev, curr) => curr + prev);
 
         return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
-    };
+    }
 
     private async _getVideoPlaybackSamples(userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>, videoPlaybackSessionId: Id<'VideoPlaybackSession'>) {
 
@@ -267,7 +263,7 @@ export class PlaybackService extends ServiceBase {
                 completionDate,
                 cursorSeconds
             });
-    };
+    }
 
     private async _getVideoIsCompletedStateAsync(userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>) {
 
@@ -278,5 +274,5 @@ export class PlaybackService extends ServiceBase {
             .getOneOrNull();
 
         return !!pbd?.completionDate;
-    };
+    }
 }

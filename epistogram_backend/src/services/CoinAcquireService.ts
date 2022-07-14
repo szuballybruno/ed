@@ -2,15 +2,10 @@ import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { ActivityStreakView } from '../models/views/ActivityStreakView';
 import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
-import { throwNotImplemented, trimTimeFromDate } from '../utilities/helpers';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { Id } from '../shared/types/versionId';
-import { User } from '../models/entity/User';
-import { Video } from '../models/entity/video/Video';
-import { ActivitySession } from '../models/entity/ActivitySession';
-import { GivenAnswerStreak } from '../models/entity/GivenAnswerStreak';
 
 export class CoinAcquireService {
 

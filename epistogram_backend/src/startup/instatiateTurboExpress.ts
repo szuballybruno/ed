@@ -80,7 +80,7 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
         sqlService
             .releaseConnectionClient();
     }
-}
+};
 
 export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceProvider: GetServiceProviderType) => {
 

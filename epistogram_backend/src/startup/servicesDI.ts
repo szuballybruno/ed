@@ -82,8 +82,8 @@ export class ServiceProvider {
             throw new Error(`Service ${ct.name} not found in service provider!`);
 
         return service;
-    };
-};
+    }
+}
 
 export const instansiateSingletonServices = (rootDir: string) => {
 
@@ -109,7 +109,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
         urlService,
         poolService
     });
-}
+};
 
 export const instatiateServices = (singletonProvider: ServiceProvider): ServiceProvider => {
 

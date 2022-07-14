@@ -12,9 +12,7 @@ export interface ITurboMiddlewareInstance<TInParams, TOutParams> {
     runMiddlewareAsync: (params: MiddlewareParams<TInParams>) => Promise<TOutParams>;
 }
 
-export interface ITurboMiddleware<TInParams, TOutParams>
-    extends ITurboExpressLayer<ITurboMiddlewareInstance<TInParams, TOutParams>> {
-}
+export type ITurboMiddleware<TInParams, TOutParams> = ITurboExpressLayer<ITurboMiddlewareInstance<TInParams, TOutParams>>
 
 export interface IRouteOptions {
     isPost?: boolean
@@ -208,7 +206,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
                 throw new Error('Invalid middleware configuration, controller action params is null.');
 
             return prevMiddlewareParam;
-        }
+        };
 
         const executeControllerAction = async (actionParams: TActionParams, serviceProvider: ServiceProvider) => {
 
@@ -218,7 +216,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
 
             // run action 
             return await controllerAction(actionParams);
-        }
+        };
 
         // async api action handler 
         const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {

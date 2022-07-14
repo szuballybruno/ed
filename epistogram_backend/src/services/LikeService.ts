@@ -1,6 +1,5 @@
 import { Comment } from '../models/entity/Comment';
 import { Like } from '../models/entity/Like';
-import { User } from '../models/entity/User';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { MapperService } from './MapperService';
@@ -24,7 +23,7 @@ export class LikeService extends QueryServiceBase<Like> {
 
         const userId = Id
             .create<'User'>(currentUserId
-                .toSQLValue())
+                .toSQLValue());
 
         // check if comment exists
         const comment = await this

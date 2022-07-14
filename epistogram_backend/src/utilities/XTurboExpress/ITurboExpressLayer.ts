@@ -1,4 +1,4 @@
-import { ServiceProvider } from "../../startup/servicesDI";
+import { ServiceProvider } from '../../startup/servicesDI';
 
 export interface ITurboExpressLayer<T = any> {
 

@@ -2,7 +2,6 @@ import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 't
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 import { DailyTip } from './DailyTip';
-import { QuestionData } from './question/QuestionData';
 import { QuestionVersion } from './question/QuestionVersion';
 
 @Entity()

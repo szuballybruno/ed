@@ -1,7 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
-import { Question } from '../question/Question';
 import { TempomatAdjustmentValue } from '../TempomatAdjustmentValue';
 import { PrequizQuestion } from './PrequizQuestion';
 import { PrequizUserAnswer } from './PrequizUserAnswer';

@@ -1,7 +1,6 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { ExamData } from '../models/entity/exam/ExamData';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
-import { UserExamProgressBridge } from '../models/entity/UserExamProgressBridge';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
@@ -22,8 +21,6 @@ import { UserSessionActivityService } from './UserSessionActivityService';
 import { ExamVersionView } from '../models/views/ExamVersionView';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { Exam } from '../models/entity/exam/Exam';
-import { User } from '../models/entity/User';
 import { Id } from '../shared/types/versionId';
 import { LatestExamView } from '../models/views/LatestExamView';
 
@@ -57,7 +54,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     async createExamAsync(exam: ExamData) {
 
         await this._ormService
-            .createAsync(ExamData, exam)
+            .createAsync(ExamData, exam);
     }
 
     /**
@@ -90,7 +87,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         const questionData = await this._ormService
             .query(QuestionDataView, { examVersionId: examVersionId })
             .where('examVersionId', '=', 'examVersionId')
-            .getMany()
+            .getMany();
 
         return questionData;
     }
@@ -104,7 +101,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .save(AnswerSession, {
                 id: answerSessionId,
                 startDate: new Date()
-            })
+            });
     }
 
     /**
@@ -226,9 +223,9 @@ export class ExamService extends QueryServiceBase<ExamData> {
         const latestExam = await this._ormService
             .query(LatestExamView, { examId: itemId })
             .where('examId', '=', 'examId')
-            .getSingle()
+            .getSingle();
 
-        const latestExamVersionId = latestExam.examVersionId
+        const latestExamVersionId = latestExam.examVersionId;
 
         const examResultViews = await this._ormService
             .query(ExamResultView, {
@@ -239,7 +236,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .where('examVersionId', '=', 'examVersionId')
             .and('userId', '=', 'userId')
             .and('answerSessionId', '=', 'answerSessionId')
-            .getMany()
+            .getMany();
 
         return toExamResultDTO(examResultViews);
     };

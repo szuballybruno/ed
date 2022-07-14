@@ -1,7 +1,7 @@
-import { DataSource, DataSourceOptions } from "typeorm";
-import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { GlobalConfiguration } from "../misc/GlobalConfiguration";
-import { XDBMSchemaType } from "../XDBManager/XDBManagerTypes";
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
+import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
 export class TypeORMConnectionService {
 

@@ -109,7 +109,7 @@ export class FileService {
                 }
                 catch (e) {
 
-                    log(e, { entryType: 'warning' })
+                    log(e, { entryType: 'warning' });
                 }
             }
         }
@@ -127,7 +127,7 @@ export class FileService {
              */
             throw e;
         }
-    };
+    }
 
     getFilePath = (fileType: FileCodesType, entityId: Id<any>) => {
 
@@ -148,7 +148,7 @@ export class FileService {
             .createAsync(StorageFile, {
                 filePath: path
             });
-    };
+    }
 
     getFileEntityAsync = (id: Id<any>) => {
 

@@ -3,11 +3,9 @@ import { UploadedFile } from 'express-fileupload';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
-import { typecheck } from '../shared/logic/sharedLogic';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
 import { KeyofConstrained } from './misc';
-import { XControllerAction } from './XTurboExpress/XTurboExpressDecorators';
 
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
@@ -217,11 +215,11 @@ export const dateDiffInDays = (date1: Date, date2: Date) => {
     const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
     const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
 
-    const timeDiff = Math.floor(utc2 - utc1)
-    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
+    const timeDiff = Math.floor(utc2 - utc1);
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
     return daysDiff;
-}
+};
 
 /**
  * Adds days to the specified date
@@ -233,7 +231,7 @@ export const addDays = (date: Date, number: number) => {
     const newDate = new Date(date);
 
     return new Date(newDate.setDate(newDate.getDate() + number));
-}
+};
 
 /**
  * Calculates the difference in percentage between
@@ -242,7 +240,7 @@ export const addDays = (date: Date, number: number) => {
   */
 export const relativeDiffInPercentage = (a: number, b: number) => {
     return -100 * (a - b) / ((a + b) / 2);
-}
+};
 
 export const navPropNotNull = (prop: any) => {
 
@@ -324,17 +322,19 @@ export const filterByProperty = <T extends Object, TKeyField extends keyof T>(
 
     return arr.filter(x => {
 
-        const value = x[searchKey]
+        const value = x[searchKey];
 
         if (typeof value === 'string' && typeof searchTerm === 'string')
-            return value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            return value.toString()
+.toLowerCase()
+.includes(searchTerm.toLowerCase());
 
         if (typeof value === 'boolean' && typeof searchTerm === 'boolean')
-            return value === searchTerm
+            return value === searchTerm;
 
         if (typeof value === 'number' && typeof searchTerm === 'number')
-            return value === searchTerm
-    })
+            return value === searchTerm;
+    });
 };
 
 export const orderByProperty = <T extends Object, TKeyField extends keyof T>(
@@ -346,14 +346,16 @@ export const orderByProperty = <T extends Object, TKeyField extends keyof T>(
     const sortByProperty = (key: TKeyField, direction: 'asc' | 'desc') => {
         return (a: T, b: T) => {
 
-            const aValue = a[key]
-            const bValue = b[key]
+            const aValue = a[key];
+            const bValue = b[key];
 
             if (typeof aValue !== 'string' || typeof bValue !== 'string')
                 return 0;
 
-            let aProp = aValue.toString().toLowerCase();
-            let bProp = bValue.toString().toLowerCase();
+            const aProp = aValue.toString()
+.toLowerCase();
+            const bProp = bValue.toString()
+.toLowerCase();
 
             if (aProp < bProp && direction === 'asc')
                 return -1;
@@ -369,7 +371,7 @@ export const orderByProperty = <T extends Object, TKeyField extends keyof T>(
 
             return 0;
         };
-    }
+    };
 
     return arr.sort(sortByProperty(key, direction));
 };

@@ -1,13 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from "typeorm";
-import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from "../../../services/XORM/XORMDecorators";
-import { Id } from "../../../shared/types/versionId";
-import { AnswerVersion } from "../answer/AnswerVersion";
-import { ExamVersion } from "../exam/ExamVersion";
-import { GivenAnswer } from "../GivenAnswer";
-import { PersonalityTraitCategory } from "../PersonalityTraitCategory";
-import { VideoVersion } from "../video/VideoVersion";
-import { Question } from "./Question";
-import { QuestionData } from "./QuestionData";
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
+import { AnswerVersion } from '../answer/AnswerVersion';
+import { ExamVersion } from '../exam/ExamVersion';
+import { GivenAnswer } from '../GivenAnswer';
+import { PersonalityTraitCategory } from '../PersonalityTraitCategory';
+import { VideoVersion } from '../video/VideoVersion';
+import { Question } from './Question';
+import { QuestionData } from './QuestionData';
 
 @Entity()
 export class QuestionVersion {

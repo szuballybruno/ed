@@ -1,5 +1,4 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { ViewEntity } from 'typeorm';
 
 @ViewEntity({
     synchronize: false,

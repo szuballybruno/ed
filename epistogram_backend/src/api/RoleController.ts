@@ -1,6 +1,3 @@
-import { Role } from '../models/entity/authorization/Role';
-import { Company } from '../models/entity/Company';
-import { User } from '../models/entity/User';
 import { RoleService } from '../services/RoleService';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
@@ -41,7 +38,7 @@ export class RoleController {
         const roleId = Id
             .create<'Role'>(params
                 .getQuery()
-                .getValue(x => x.roleId, 'int'))
+                .getValue(x => x.roleId, 'int'));
 
         return this._roleService
             .getRoleEditDataAsync(params.principalId, roleId);
@@ -53,7 +50,7 @@ export class RoleController {
         const roleId = Id
             .create<'Role'>(params
                 .getBody()
-                .getValue(x => x.roleId, 'int'))
+                .getValue(x => x.roleId, 'int'));
 
         return this._roleService
             .deleteRoleAsync(params.principalId, roleId);
@@ -76,11 +73,11 @@ export class RoleController {
 
         const userId = Id
             .create<'User'>(query
-                .getValue(x => x.userId, 'int'))
+                .getValue(x => x.userId, 'int'));
 
         const companyId = Id
             .create<'Company'>(query
-                .getValue(x => x.companyId, 'int'))
+                .getValue(x => x.companyId, 'int'));
 
         return this._roleService
             .getAssignableRolesAsync(
@@ -109,7 +106,7 @@ export class RoleController {
         const userId = Id
             .create<'User'>(params
                 .getQuery()
-                .getValue(x => x.userId, 'int'))
+                .getValue(x => x.userId, 'int'));
 
         return this._roleService
             .getUserRolesAsync(params.principalId, userId);
@@ -121,7 +118,7 @@ export class RoleController {
         const userId = Id
             .create<'User'>(params
                 .getQuery()
-                .getValue(x => x.userId, 'int'))
+                .getValue(x => x.userId, 'int'));
 
         return this._roleService
             .getUserPermissionsAsync(params.principalId, userId);

@@ -1,5 +1,3 @@
-import { Course } from '../models/entity/course/Course';
-import { User } from '../models/entity/User';
 import { CourseItemPlaylistView } from '../models/views/CourseItemPlaylistView';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { Id } from '../shared/types/versionId';
@@ -22,7 +20,7 @@ export class PlaylistService {
     async getCurrentCoursePlaylistModulesAsync(principalId: PrincipalId) {
 
         const userId = Id
-            .create<'User'>(principalId.toSQLValue())
+            .create<'User'>(principalId.toSQLValue());
 
         const courseId = await this._userCourseBridgeService
             .getCurrentCourseId(userId);

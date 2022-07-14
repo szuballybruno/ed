@@ -68,7 +68,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .leftJoin(VideoFile, x => x
                 .on('id', '=', 'videoFileId', VideoData))
             .where('id', '=', 'videoVersionId')
-            .getSingle()
+            .getSingle();
 
         await this._ormService
             .save(VideoFile, {
@@ -88,9 +88,9 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .leftJoin(VideoData, (x => x
                 .on('id', '=', 'videoDataId', VideoVersion)))
             .where('videoId', '=', 'videoId')
-            .getSingle()
+            .getSingle();
 
-        const videoDataId = videoData.id
+        const videoDataId = videoData.id;
 
         await this._ormService
             .save(VideoData, {
@@ -108,11 +108,11 @@ export class VideoService extends QueryServiceBase<VideoData> {
         const questionData = await this._ormService
             .query(QuestionDataView, { videoVersionId })
             .where('videoVersionId', '=', 'videoVersionId')
-            .getMany()
+            .getMany();
 
-        console.log(questionData)
+        console.log(questionData);
 
-        return questionData
+        return questionData;
     }
 
     getVideoByVersionIdAsync = async (videoVersionId: Id<'VideoVersion'>) => {
@@ -130,7 +130,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         const videoPlayerData = await this._ormService
             .query(VideoPlayerDataView, { videoVersionId })
             .where('videoVersionId', '=', 'videoVersionId')
-            .getSingle()
+            .getSingle();
 
         return videoPlayerData;
     };
@@ -143,9 +143,9 @@ export class VideoService extends QueryServiceBase<VideoData> {
 
         const videoVersion = await this._ormService
             .query(LatestVideoView, { videoId })
-            .getSingle()
+            .getSingle();
 
-        const videoVersionId = videoVersion.videoVersionId
+        const videoVersionId = videoVersion.videoVersionId;
 
         const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
         const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;

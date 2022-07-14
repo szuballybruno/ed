@@ -5,7 +5,7 @@ import { ShopItem } from './ShopItem';
 import { User } from './User';
 
 function logType(target: any, key: string) {
-    var t = Reflect.getMetadata("design:type", target, key);
+    const t = Reflect.getMetadata('design:type', target, key);
     console.log(`${key} type: ${t.name}`);
 }
 

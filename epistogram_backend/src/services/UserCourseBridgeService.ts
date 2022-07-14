@@ -1,16 +1,12 @@
-import { Course } from '../models/entity/course/Course';
-import { User } from '../models/entity/User';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
-import { CourseItemService } from './CourseItemService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { SaveEntityType } from './XORM/XORMTypes';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -37,13 +33,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             })
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'isCurrent')
-            .getOneOrNull()
+            .getOneOrNull();
 
         if (currentCourseBridge) {
             await this._ormService.save(UserCourseBridge, {
                 id: currentCourseBridge.id,
                 isCurrent: false
-            })
+            });
         }
 
         const nextCourseBridge = await this._ormService
@@ -53,7 +49,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
-            .getOneOrNull()
+            .getOneOrNull();
 
         if (nextCourseBridge) {
 
@@ -62,7 +58,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 currentItemCode: itemCode,
                 stageName,
                 isCurrent: true
-            })
+            });
         } else {
 
             await this._createNewCourseBridge(courseId, userId, itemCode, stageName);
@@ -131,7 +127,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     async deleteAllBridgesAsync(courseId: Id<'Course'>) {
 
         await this._ormService
-            .hardDelete(UserCourseBridge, [courseId])
+            .hardDelete(UserCourseBridge, [courseId]);
     }
 
     /**
@@ -139,7 +135,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async setCourseModeAsync(userId: PrincipalId, courseId: Id<'Course'>, mode: CourseModeType) {
 
-        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue())
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
         const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
@@ -159,7 +155,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async setCourseStartDateAsync(userId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue())
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
         const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
@@ -181,33 +177,33 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: Id<'Course'>, requiredCompletionDate: string) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue())
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
         const userCourseBridge = await this
             .getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
         if (userCourseBridge) {
 
-            log('User course bridge exists, updating deadline...')
+            log('User course bridge exists, updating deadline...');
 
             return this.updateCompletionDate(userCourseBridge.id, new Date(requiredCompletionDate));
         }
 
         try {
 
-            log('User course bridge is not exists, creating...')
+            log('User course bridge is not exists, creating...');
 
-            await this._createNewCourseBridge(courseId, userIdAsIdType, null, 'assigned')
+            await this._createNewCourseBridge(courseId, userIdAsIdType, null, 'assigned');
         } catch (e) {
 
-            throw new Error('Failed to create new user course bridge')
+            throw new Error('Failed to create new user course bridge');
         }
 
         const newUserCourseBridge = await this
             .getUserCourseBridgeAsync(userIdAsIdType, courseId);
 
         if (!newUserCourseBridge)
-            throw new Error('Failed to find new user course bridge')
+            throw new Error('Failed to find new user course bridge');
 
         return this.updateCompletionDate(newUserCourseBridge.id, new Date(requiredCompletionDate));
     }
@@ -251,7 +247,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     getPrincipalCurrentItemCodeAsync = async (userId: PrincipalId) => {
 
-        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue())
+        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
         return await this.getCurrentItemCodeAsync(userIdAsIdType);
     };
@@ -360,6 +356,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 id: userCourseBridgeId,
                 requiredCompletionDate: requiredCompletionDate,
                 tempomatMode: 'strict' // Automatically updating tempomat mode to strict
-            })
-    }
+            });
+    };
 }

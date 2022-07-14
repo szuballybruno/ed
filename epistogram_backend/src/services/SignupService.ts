@@ -1,6 +1,4 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { User } from '../models/entity/User';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
@@ -51,7 +49,7 @@ export class SignupService {
                     examVersionId: Id.create<'ExamVersion'>(1),
                     videoVersionId: null,
                     userId: userId
-                })
+                });
 
         await this._sqlFuncService
             .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);

@@ -21,7 +21,7 @@ export class ActivationCodeService {
             })
             .where('code', '=', 'code')
             .and('isUsed', 'IS', 'false')
-            .getSingle()
+            .getSingle();
 
         return actCode;
     }

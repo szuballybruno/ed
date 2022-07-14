@@ -1,4 +1,3 @@
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { CourseService } from '../services/CourseService';
 import { PlayerService } from '../services/PlayerService';
 import { VideoService } from '../services/VideoService';
@@ -6,10 +5,7 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
-import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { Id } from '../shared/types/versionId';
-import { Answer } from '../models/entity/answer/Answer';
-import { AnswerSession } from '../models/entity/AnswerSession';
 
 export class PlayerController {
 
@@ -33,7 +29,7 @@ export class PlayerController {
             .getValue(x => x.answerIds, 'int[]');
 
         const answerIdsAsIdType = answerIds
-            .map(x => Id.create<'Answer'>(x))
+            .map(x => Id.create<'Answer'>(x));
 
         const questionVersionId = Id
             .create<'QuestionVersion'>(dto

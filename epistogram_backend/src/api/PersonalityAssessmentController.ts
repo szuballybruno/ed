@@ -1,4 +1,3 @@
-import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';

@@ -1,5 +1,3 @@
-import { User } from '../models/entity/User';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { VideoRating } from '../models/entity/VideoRating';
 import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
 import { Id } from '../shared/types/versionId';

@@ -1,8 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { AnswerSession } from '../AnswerSession';
-import { ModuleData } from '../module/ModuleData';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { QuestionVersion } from '../question/QuestionVersion';
 import { UserExamProgressBridge } from '../UserExamProgressBridge';

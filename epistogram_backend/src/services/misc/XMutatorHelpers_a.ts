@@ -17,7 +17,7 @@ const anyField = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation
 
         return mutation
             .fieldMutators
-            .some(fm => fm.field === key && fm.value === value)
+            .some(fm => fm.field === key && fm.value === value);
     };
 };
 
@@ -26,7 +26,7 @@ const hasMutationForKey = <TMutatee, TKeyField extends keyof TMutatee>(mutations
     return <TKey extends TMutatee[TKeyField]>(key: TKey) => {
 
         return mutations
-            .any(mut => mut.key === key)
+            .any(mut => mut.key === key);
     };
 };
 
@@ -40,7 +40,7 @@ const hasFieldMutation = <TMutatee, TKeyField extends keyof TMutatee>(mutation: 
 
         return !!field;
     };
-}
+};
 
 const getFieldValue = <TMutatee, TKeyField extends keyof TMutatee>(mutation: Mutation<TMutatee, TKeyField>) => {
 
@@ -85,4 +85,4 @@ export const XMutatorHelpers = {
     getFieldValue,
     getFieldValueOrFail,
     hasMutationForKey
-}
+};

@@ -1,11 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
 import { CourseStageNameType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { Course } from '../entity/course/Course';
-import { CourseCategory } from '../entity/CourseCategory';
-import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,

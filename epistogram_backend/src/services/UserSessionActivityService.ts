@@ -1,6 +1,3 @@
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { User } from '../models/entity/User';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { SessionActivityType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { CoinAcquireService } from './CoinAcquireService';

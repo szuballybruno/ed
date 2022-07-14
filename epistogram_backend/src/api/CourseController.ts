@@ -1,11 +1,8 @@
-import { Course } from '../models/entity/course/Course';
-import { User } from '../models/entity/User';
 import { CourseService } from '../services/CourseService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
-import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../shared/types/apiRoutes';
@@ -31,7 +28,7 @@ export class CourseController {
 
         const userId = Id.create<'User'>(parmas
             .getQuery()
-            .getValue(x => x.userId, 'int'))
+            .getValue(x => x.userId, 'int'));
 
         return this._courseService
             .getPermissionAssignCoursesAsync(parmas.principalId, userId);
@@ -41,15 +38,15 @@ export class CourseController {
     getAvailableCoursesAction = async (params: ActionParams) => {
 
         const query = params
-            .getQuery()
+            .getQuery();
 
-        console.log(query)
+        console.log(query);
 
-        const searchTerm: string = query.data.searchTerm || ''
-        const filterCategoryId = query.getValueOrNull(x => x.filterCategoryId, 'int')
-        const isFeatured = query.getValueOrNull(x => x.isFeatured, 'boolean')
-        const isRecommended = query.getValueOrNull(x => x.isRecommended, 'boolean')
-        const orderBy = query.getValueOrNull(x => x.orderBy, 'string')
+        const searchTerm: string = query.data.searchTerm || '';
+        const filterCategoryId = query.getValueOrNull(x => x.filterCategoryId, 'int');
+        const isFeatured = query.getValueOrNull(x => x.isFeatured, 'boolean');
+        const isRecommended = query.getValueOrNull(x => x.isRecommended, 'boolean');
+        const orderBy = query.getValueOrNull(x => x.orderBy, 'string');
 
         return this._courseService
             .getAvailableCoursesAsync(params.principalId, searchTerm, filterCategoryId, isFeatured, isRecommended, orderBy);
@@ -72,7 +69,7 @@ export class CourseController {
 
         const courseId = Id
             .create<'Course'>(query
-                .getValue(x => x.courseId, 'int'))
+                .getValue(x => x.courseId, 'int'));
 
         return await this._courseService
             .getCourseContentAdminDataAsync(
@@ -91,7 +88,7 @@ export class CourseController {
 
         const courseId = Id.create<'Course'>(params
             .getQuery()
-            .getValue(x => x.courseId, 'int'))
+            .getValue(x => x.courseId, 'int'));
 
         return await this._courseService
             .getCourseBriefDataAsync(courseId);
@@ -102,7 +99,7 @@ export class CourseController {
 
         const courseId = Id.create<'Course'>(params
             .getQuery()
-            .getValue(x => x.courseId, 'int'))
+            .getValue(x => x.courseId, 'int'));
 
         return await this._courseService
             .getCourseDetailsAsync(params.principalId, courseId);
@@ -156,7 +153,7 @@ export class CourseController {
         const courseId = Id
             .create<'Course'>(params
                 .getBody<any>()
-                .getValue(x => x.id, 'int'))
+                .getValue(x => x.id, 'int'));
 
         await this._courseService.softDeleteCourseAsync(courseId);
     };

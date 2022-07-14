@@ -1,4 +1,3 @@
-import { Video } from '../models/entity/video/Video';
 import { VideoService } from '../services/VideoService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';

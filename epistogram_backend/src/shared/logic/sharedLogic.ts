@@ -1,6 +1,6 @@
 import { UserPermissionDTO } from '../dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../dtos/role/UserRoleDTO';
-import { CourseItemSimpleType, PasswordValidationIssueType } from '../types/sharedTypes';
+import { PasswordValidationIssueType } from '../types/sharedTypes';
 
 export const validatePassowrd = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
 

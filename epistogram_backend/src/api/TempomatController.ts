@@ -1,4 +1,3 @@
-import { Course } from '../models/entity/course/Course';
 import { TempomatService } from '../services/TempomatService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { TempomatModeType } from '../shared/types/sharedTypes';
@@ -21,7 +20,7 @@ export class TempomatController {
 
         const courseId = Id
             .create<'Course'>(params.getQuery<any>()
-                .getValue(x => x.courseId, 'int'))
+                .getValue(x => x.courseId, 'int'));
 
         return this._tempomatService
             .getTempomatModeAsync(params.principalId, courseId);

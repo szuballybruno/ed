@@ -1,6 +1,6 @@
 import Postgres from 'pg';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log, logSecondary } from '../misc/logger';
+import { logSecondary } from '../misc/logger';
 import { SQLPoolService } from './SQLPoolService';
 
 export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Postgres.QueryResult<any>>;

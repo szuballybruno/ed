@@ -1,6 +1,5 @@
 import { CourseRatingQuestionUserAnswer } from '../models/entity/courseRating/CourseRatingQuestionUserAnswer';
 import { CourseRatingGroupDTO } from '../shared/dtos/CourseRatingGroupDTO';
-import { CourseRatingQuestionAnswerDTO } from '../shared/dtos/CourseRatingQuestionAnswerDTO';
 import { CourseRatingQuestionAnswersDTO } from '../shared/dtos/CourseRatingQuestionAnswersDTO';
 import { CourseRatingQuestionDTO } from '../shared/dtos/CourseRatingQuestionDTO';
 import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionView';
@@ -9,9 +8,6 @@ import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/ActionParams';
 import { Id } from '../shared/types/versionId';
-import { User } from '../models/entity/User';
-import { Course } from '../models/entity/course/Course';
-import { CourseRatingQuestion } from '../models/entity/courseRating/CourseRatingQuestion';
 
 export class CourseRatingService extends ServiceBase {
 

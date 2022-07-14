@@ -1,4 +1,3 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
 import { JobTitle } from '../models/entity/JobTitle';
 import { StorageFile } from '../models/entity/StorageFile';
@@ -18,7 +17,6 @@ import { PrincipalId } from '../utilities/ActionParams';
 import { getFullName, throwNotImplemented, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';

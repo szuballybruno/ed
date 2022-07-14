@@ -1,4 +1,3 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
 import { ExamService } from '../services/ExamService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';

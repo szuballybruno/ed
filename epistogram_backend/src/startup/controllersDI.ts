@@ -1,4 +1,3 @@
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ZAuthenticationController } from './../api/AuthenticationController2';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
 import { CommentController } from './../api/CommentController';

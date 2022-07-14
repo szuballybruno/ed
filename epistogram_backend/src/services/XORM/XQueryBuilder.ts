@@ -2,7 +2,7 @@ import { ClassType } from '../misc/advancedTypes/ClassType';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, CheckExpressionType, OrderByExpression } from './XORMTypes';
+import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, OrderByExpression } from './XORMTypes';
 
 // class JoinBuilder<TEntity, TParams extends ParamConstraintType<TParams>> {
 

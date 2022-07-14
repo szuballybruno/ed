@@ -1,5 +1,3 @@
-import { Course } from '../models/entity/course/Course';
-import { User } from '../models/entity/User';
 import { UserStatsService } from '../services/UserStatsService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';

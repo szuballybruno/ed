@@ -1,12 +1,10 @@
 import { CommentService } from '../services/CommentService';
-import { readItemCode } from '../services/misc/encodeService';
 import { LikeService } from '../services/LikeService';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { ServiceProvider } from '../startup/servicesDI';
-import { Comment } from '../models/entity/Comment';
 import { Id } from '../shared/types/versionId';
 
 export class CommentController {

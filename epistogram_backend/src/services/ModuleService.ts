@@ -1,6 +1,3 @@
-import { UploadedFile } from 'express-fileupload';
-import { Course } from '../models/entity/course/Course';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
@@ -9,7 +6,6 @@ import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Id } from '../shared/types/versionId';
-import { throwNotImplemented } from '../utilities/helpers';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/versionCode';
@@ -44,7 +40,7 @@ export class ModuleService {
 
         return this._mapperService
             .mapTo(ModulePlayerDTO, [view]);
-    };
+    }
 
     /**
      * get module edit dtos 
@@ -59,7 +55,7 @@ export class ModuleService {
 
         return this._mapperService
             .mapTo(ModuleEditDTO, [modules]);
-    };
+    }
 
     /**
      * Saves module's thumbnail image

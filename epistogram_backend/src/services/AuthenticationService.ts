@@ -4,7 +4,6 @@ import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { log } from './misc/logger';
@@ -93,8 +92,6 @@ export class AuthenticationService {
     }
 
     logInUser = async (email: string, password: string) => {
-
-        log(`Logging in user... ${email} - ${password}`);
 
         // further validate request 
         if (!email || !password)

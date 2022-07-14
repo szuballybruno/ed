@@ -1,4 +1,3 @@
-import { User } from '../models/entity/User';
 import { UserService } from '../services/UserService';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';

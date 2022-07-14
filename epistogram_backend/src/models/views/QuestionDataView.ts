@@ -1,13 +1,6 @@
-import { ViewColumn, ViewEntity } from "typeorm";
-import { XViewColumn } from "../../services/XORM/XORMDecorators";
-import { Id } from "../../shared/types/versionId";
-import { Answer } from "../entity/answer/Answer";
-import { CourseVersion } from "../entity/course/CourseVersion";
-import { ExamVersion } from "../entity/exam/ExamVersion";
-import { Question } from "../entity/question/Question";
-import { QuestionData } from "../entity/question/QuestionData";
-import { QuestionVersion } from "../entity/question/QuestionVersion";
-import { VideoVersion } from "../entity/video/VideoVersion";
+import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,

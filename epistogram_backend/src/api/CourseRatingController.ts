@@ -4,7 +4,6 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
-import { Course } from '../models/entity/course/Course';
 import { Id } from '../shared/types/versionId';
 
 export class CourseRatingController {

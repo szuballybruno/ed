@@ -1,5 +1,3 @@
-import { DeepPartial, FindOptionsWhere } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { ClassType } from './advancedTypes/ClassType';
 import { MapperService } from '../MapperService';
 import { ORMConnectionService } from '../ORMConnectionService/ORMConnectionService';

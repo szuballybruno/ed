@@ -36,7 +36,7 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
     serviceProvider
         .getService(SQLConnectionService)
         .releaseConnectionClient();
-}
+};
 
 const initServiceProvider = (rootDir: string) => {
 
@@ -56,7 +56,7 @@ const initServiceProvider = (rootDir: string) => {
     };
 
     return { getServiceProviderAsync, singletonServiceProvider };
-}
+};
 
 const startServerAsync = async (
     singletonServiceProvider: ServiceProvider,
@@ -69,7 +69,7 @@ const startServerAsync = async (
     // 
     // LISTEN (start server)
     turboExpress.listen();
-}
+};
 
 const main = async () => {
 

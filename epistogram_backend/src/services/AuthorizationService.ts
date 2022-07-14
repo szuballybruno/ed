@@ -1,9 +1,7 @@
-import { User } from '../models/entity/User';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/ActionParams';
-import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { ContextOptions, PermissionService } from './PermissionService';
 
@@ -33,7 +31,7 @@ export class AuthorizationService {
         context?: ContextOptions) {
 
         const userId = Id
-            .create<'User'>(principalId.toSQLValue())
+            .create<'User'>(principalId.toSQLValue());
 
         const perm = await this._permissionService
             .getPermissionAsync(userId, permissionCode, context);

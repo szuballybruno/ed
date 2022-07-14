@@ -1,5 +1,3 @@
-import { Course } from '../models/entity/course/Course';
-import { User } from '../models/entity/User';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
@@ -80,7 +78,7 @@ export class TempomatService extends ServiceBase {
             throw new Error('Couldn\'t get tempomat calculation data');
 
         return tempomatCalculationData;
-    }
+    };
 
 
     /**
@@ -124,7 +122,7 @@ export class TempomatService extends ServiceBase {
             !tempomatMode ||
             !adjustmentCorrection
         ) {
-            return null
+            return null;
         }
 
         const originalPrevisionedLength = this
@@ -163,7 +161,7 @@ export class TempomatService extends ServiceBase {
         this._loggerService.logSecondary(`New previsoned date: ${newPrevisionedDate}`);
 
         return newPrevisionedDate;
-    }
+    };
 
     /**
      * Calculates the lag behind from three dates. 
@@ -181,14 +179,14 @@ export class TempomatService extends ServiceBase {
             !originalPrevisionedCompletionDate ||
             !newPrevisionedDate
         ) {
-            return null
+            return null;
         }
 
-        const daysFromStartToOriginalPrevisioned = dateDiffInDays(startDate, originalPrevisionedCompletionDate)
-        const daysFromStartToNewPrevisioned = dateDiffInDays(startDate, newPrevisionedDate)
+        const daysFromStartToOriginalPrevisioned = dateDiffInDays(startDate, originalPrevisionedCompletionDate);
+        const daysFromStartToNewPrevisioned = dateDiffInDays(startDate, newPrevisionedDate);
 
-        return Math.ceil(relativeDiffInPercentage(daysFromStartToOriginalPrevisioned, daysFromStartToNewPrevisioned))
-    }
+        return Math.ceil(relativeDiffInPercentage(daysFromStartToOriginalPrevisioned, daysFromStartToNewPrevisioned));
+    };
 
     /**
      * Calculates recommended items per day from either the
@@ -216,14 +214,14 @@ export class TempomatService extends ServiceBase {
         // recommended items per day from that
         if (requiredCompletionDate) {
 
-            const daysFromStartToRequired = dateDiffInDays(startDate, requiredCompletionDate)
-            return Math.ceil(totalItemsCount / daysFromStartToRequired)
+            const daysFromStartToRequired = dateDiffInDays(startDate, requiredCompletionDate);
+            return Math.ceil(totalItemsCount / daysFromStartToRequired);
         } else {
 
-            const daysFromStartToCurrentPrevisioned = dateDiffInDays(startDate, currentPrevisionedCompletionDate)
-            return Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned)
+            const daysFromStartToCurrentPrevisioned = dateDiffInDays(startDate, currentPrevisionedCompletionDate);
+            return Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned);
         }
-    }
+    };
 
 
     async calculatePrevisionedDateAsync(userId: Id<'User'>, courseId: number) {
@@ -245,7 +243,7 @@ export class TempomatService extends ServiceBase {
             startDate,
             tempomatMode,
             tempomatAdjustmentValue
-        )
+        );
     }
 
     calculateAvgLagBehindPercentageAsync = async (userId: Id<'User'>) => {
@@ -267,7 +265,7 @@ export class TempomatService extends ServiceBase {
                     x.startDate,
                     x.tempomatMode,
                     x.tempomatAdjustmentValue
-                )
+                );
 
             const lagBehindPercentage = this
                 .calculateLagBehindPercentage(
@@ -276,15 +274,15 @@ export class TempomatService extends ServiceBase {
                         ? x.requiredCompletionDate
                         : x.originalPrevisionedCompletionDate,
                     previsionedCompletionDate
-                )
+                );
 
-            return lagBehindPercentage || 0
-        })
+            return lagBehindPercentage || 0;
+        });
 
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
+        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
 
-        return avgLagBehindPercentage
-    }
+        return avgLagBehindPercentage;
+    };
 
 
     // TODO: Create a logic for adding notifications
@@ -314,13 +312,13 @@ export class TempomatService extends ServiceBase {
     ) => {
 
         if (!originalPrevisionedCompletionDate)
-            throw new Error('Pretest hasn\'t been done')
+            throw new Error('Pretest hasn\'t been done');
 
         if (!startDate)
-            throw new Error('The user hasn\'t started the course yet')
+            throw new Error('The user hasn\'t started the course yet');
 
-        return dateDiffInDays(startDate, originalPrevisionedCompletionDate)
-    }
+        return dateDiffInDays(startDate, originalPrevisionedCompletionDate);
+    };
 
     private _calculateOriginalEstimatedVideosPerDay = (
         videosCount: number,
@@ -328,10 +326,10 @@ export class TempomatService extends ServiceBase {
     ) => {
 
         if (!originalPrevisionedLength)
-            throw new Error('Pretest hasn\'t been done')
+            throw new Error('Pretest hasn\'t been done');
 
-        return videosCount / originalPrevisionedLength
-    }
+        return videosCount / originalPrevisionedLength;
+    };
 
     private _calculateDaysSpentFromStartDate = (
         startDate: Date
@@ -340,31 +338,31 @@ export class TempomatService extends ServiceBase {
         const currentDate = new Date(Date.now());
 
         return Math.abs(dateDiffInDays(currentDate, startDate));
-    }
+    };
 
     private _calculateHowManyVideosShouldHaveWatchedByNow = (
         originalEstimatedVideosPerDay: number,
         daysSpentFromStartDate: number
     ) => {
 
-        return originalEstimatedVideosPerDay * daysSpentFromStartDate
-    }
+        return originalEstimatedVideosPerDay * daysSpentFromStartDate;
+    };
 
     private _calculateLagBehindVideos = (
         howManyVideosShouldHaveWatchedByNow: number,
         watchedVideos: number
     ) => {
 
-        return howManyVideosShouldHaveWatchedByNow - watchedVideos
-    }
+        return howManyVideosShouldHaveWatchedByNow - watchedVideos;
+    };
 
     private _calculateLagBehindDays = (
         lagBehindVideos: number,
         originalEstimatedVideosPerDay: number
     ) => {
 
-        return lagBehindVideos / originalEstimatedVideosPerDay
-    }
+        return lagBehindVideos / originalEstimatedVideosPerDay;
+    };
 
     private _calculateNewPrevisionedDateByTempomatMode = (
         tempomatMode: TempomatModeType,
@@ -382,27 +380,27 @@ export class TempomatService extends ServiceBase {
                 case 'balanced':
 
                     if (!adjustmentCorrection)
-                        throw new Error('No adjustment correction provided')
+                        throw new Error('No adjustment correction provided');
 
                     return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
                 case 'strict':
 
-                    return originalPrevisionedCompletionDate
+                    return originalPrevisionedCompletionDate;
                 case 'auto':
 
                     if (!adjustmentCorrection)
-                        throw new Error('No adjustment correction provided')
+                        throw new Error('No adjustment correction provided');
 
                     return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
                 default:
-                    throw new Error('Tempomat mode doesn\'t exists')
+                    throw new Error('Tempomat mode doesn\'t exists');
             }
-        }
+        };
 
-        const newPrevisionedDate = getNewPrevisionedDate()
+        const newPrevisionedDate = getNewPrevisionedDate();
 
         return newPrevisionedDate >= originalPrevisionedCompletionDate
             ? newPrevisionedDate
-            : originalPrevisionedCompletionDate
-    }
+            : originalPrevisionedCompletionDate;
+    };
 }

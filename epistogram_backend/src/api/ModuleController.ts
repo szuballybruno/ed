@@ -43,5 +43,5 @@ export class ModuleController {
         await this
             ._moduleService
             .saveModuleThumbnailImageAsync(moduleVersionId, file.data);
-    }
+    };
 }

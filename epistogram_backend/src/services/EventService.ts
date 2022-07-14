@@ -1,5 +1,4 @@
 import { Event } from '../models/entity/Event';
-import { User } from '../models/entity/User';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { EventDTO } from '../shared/dtos/EventDTO';
 import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';

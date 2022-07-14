@@ -9,7 +9,7 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
     paramValue: TParams[TParamName];
 }
 
-export class EntityType<TEntityName extends string = any> { id: Id<TEntityName> };
+export class EntityType<TEntityName extends string = any> { id: Id<TEntityName>; }
 
 export type SaveEntityType<TEntity> = Partial<TEntity>;
 
@@ -72,7 +72,7 @@ export class CheckExpression<TEntityA, TParams, TEntityB = void>  {
 
         return value === 'NULL' || value === 'false' || value === 'true';
     }
-};
+}
 
 export type SelectCondition<TEntity> = {
     code: 'SELECT',

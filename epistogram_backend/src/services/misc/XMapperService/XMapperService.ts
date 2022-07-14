@@ -1,5 +1,5 @@
-import { ClassType } from "../advancedTypes/ClassType";
-import { ContainerItemType, ContainerType, GetSingleContainerType, MappingFunctionType } from "./XMapperTypes";
+import { ClassType } from '../advancedTypes/ClassType';
+import { ContainerItemType, ContainerType, GetSingleContainerType, MappingFunctionType } from './XMapperTypes';
 
 export class XMapper<TServices extends any[], TContainer extends ContainerType> {
 

@@ -1,12 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseItemStateType, CourseItemType, CourseModeType } from '../../shared/types/sharedTypes';
+import { CourseItemStateType, CourseItemType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { Course } from '../entity/course/Course';
-import { Exam } from '../entity/exam/Exam';
-import { Module } from '../entity/module/Module';
-import { User } from '../entity/User';
-import { Video } from '../entity/video/Video';
 
 @ViewEntity({
     synchronize: false,

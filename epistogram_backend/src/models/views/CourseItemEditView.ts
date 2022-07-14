@@ -1,10 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
-import { AnswerVersion } from '../entity/answer/AnswerVersion';
-import { ExamVersion } from '../entity/exam/ExamVersion';
-import { QuestionVersion } from '../entity/question/QuestionVersion';
-import { VideoVersion } from '../entity/video/VideoVersion';
 
 @ViewEntity({
     synchronize: false,

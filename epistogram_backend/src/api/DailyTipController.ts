@@ -4,9 +4,7 @@ import { ActionParams } from '../utilities/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
-import { DailyTip } from '../models/entity/DailyTip';
 import { Id } from '../shared/types/versionId';
-import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
 
 export class DailyTipController {
 

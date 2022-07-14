@@ -1,6 +1,5 @@
 import { QuestionData } from '../../models/entity/question/QuestionData';
 import { getSeedList } from '../../services/sqlServices/SeedService';
-import { PersonalityTraitCategoriesSeedType } from './seed_personality_trait_categories';
 
 export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
 

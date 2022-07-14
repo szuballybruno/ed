@@ -1,5 +1,4 @@
 
-import { CourseData } from '../models/entity/course/CourseData';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../models/views/UserCourseStatsView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
@@ -13,7 +12,6 @@ import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
-import { TempomatModeType } from '../shared/types/sharedTypes';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
@@ -26,9 +24,7 @@ import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageS
 import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
-import { User } from '../models/entity/User';
 import { Id } from '../shared/types/versionId';
-import { Course } from '../models/entity/course/Course';
 
 export class UserStatsService {
 
@@ -71,7 +67,7 @@ export class UserStatsService {
                     x.startDate,
                     x.tempomatMode,
                     x.tempomatAdjustmentValue
-                )
+                );
 
             const lagBehindPercentage = this._tempomatService
                 .calculateLagBehindPercentage(
@@ -80,15 +76,15 @@ export class UserStatsService {
                         ? x.requiredCompletionDate
                         : x.originalPrevisionedCompletionDate,
                     previsionedCompletionDate
-                )
+                );
 
-            return lagBehindPercentage || 0
-        })
+            return lagBehindPercentage || 0;
+        });
 
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
+        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
 
         return this._mapperService
-            .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage])
+            .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
     }
 
     async getUserLearningPageStatsAsync(principalId: PrincipalId) {
@@ -117,7 +113,7 @@ export class UserStatsService {
                     x.startDate,
                     x.tempomatMode,
                     x.tempomatAdjustmentValue
-                )
+                );
 
             const lagBehindPercentage = this._tempomatService
                 .calculateLagBehindPercentage(
@@ -126,14 +122,14 @@ export class UserStatsService {
                         ? x.requiredCompletionDate
                         : x.originalPrevisionedCompletionDate,
                     previsionedCompletionDate
-                )
+                );
 
-            return lagBehindPercentage || 0
-        })
+            return lagBehindPercentage || 0;
+        });
 
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length
+        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
 
-        return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage])
+        return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
     }
 
     async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
@@ -156,7 +152,7 @@ export class UserStatsService {
             .getMany();
 
         return this._mapperService
-            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView])
+            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView]);
 
     }
 
@@ -186,7 +182,7 @@ export class UserStatsService {
                         x.startDate,
                         x.tempomatMode,
                         x.tempomatAdjustmentValue
-                    )
+                    );
 
                 const lagBehindPercentage = this._tempomatService
                     .calculateLagBehindPercentage(
@@ -195,7 +191,7 @@ export class UserStatsService {
                             ? x.requiredCompletionDate
                             : x.originalPrevisionedCompletionDate,
                         previsionedCompletionDate
-                    )
+                    );
 
                 const recommendedItemsPerDay = this._tempomatService
                     .calculateRecommendedItemsPerDay(
@@ -203,7 +199,7 @@ export class UserStatsService {
                         previsionedCompletionDate,
                         x.requiredCompletionDate,
                         x.totalItemCount
-                    )
+                    );
 
                 return {
                     ...x,
@@ -212,11 +208,11 @@ export class UserStatsService {
                     recommendedItemsPerWeek: recommendedItemsPerDay
                         ? recommendedItemsPerDay * 7
                         : null
-                }
-            }) as UserCourseStatsViewWithTempomatData[]
+                };
+            }) as UserCourseStatsViewWithTempomatData[];
 
         return this._mapperService
-            .mapTo(UserCourseStatsDTO, [statsWithTempomatData])
+            .mapTo(UserCourseStatsDTO, [statsWithTempomatData]);
     }
 
     /**
@@ -225,7 +221,7 @@ export class UserStatsService {
      */
     getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
 
-        const userId = principalId.toSQLValue()
+        const userId = principalId.toSQLValue();
 
         const stats = await this._ormService
             .query(UserVideoStatsView, { userId, courseId })
@@ -235,7 +231,7 @@ export class UserStatsService {
 
         return this._mapperService
             .mapTo(UserVideoStatsDTO, [stats]);
-    }
+    };
 
     /**
      * Gets the statistics for the users every completed exam
@@ -244,7 +240,7 @@ export class UserStatsService {
 
     getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
 
-        const userId = principalId.toSQLValue()
+        const userId = principalId.toSQLValue();
 
         const stats = await this._ormService
             .query(UserExamStatsView, { userId, courseId })
@@ -254,7 +250,7 @@ export class UserStatsService {
 
         return this._mapperService
             .mapTo(UserExamStatsDTO, [stats]);
-    }
+    };
 
     /**
      * Gets the learning overview statistics data for single user
@@ -330,30 +326,30 @@ export class UserStatsService {
         const userPerformanceViewFiltered = userPerformanceView
             .filter(x => {
                 if (x.performancePercentage === 0)
-                    return false
+                    return false;
 
                 if (x.performancePercentage === null)
-                    return false
+                    return false;
 
                 return true;
-            })
+            });
 
         const avgPerformancePercentage = userPerformanceViewFiltered
             .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViewFiltered.length;
 
         const avgLagBehindPercentage = await this._tempomatService
-            .calculateAvgLagBehindPercentageAsync(userId)
+            .calculateAvgLagBehindPercentageAsync(userId);
 
-        const lagBehindPoints = 100 - avgLagBehindPercentage
+        const lagBehindPoints = 100 - avgLagBehindPercentage;
 
         const productivityPercentage = avgPerformancePercentage / lagBehindPoints > 1
             ? lagBehindPoints * (avgPerformancePercentage / lagBehindPoints) * avgPerformancePercentage / 100
-            : lagBehindPoints * avgPerformancePercentage / 100
+            : lagBehindPoints * avgPerformancePercentage / 100;
 
         const compensatedProductivityPerformance = avgPerformancePercentage < 60 && lagBehindPoints > 100
             ? avgPerformancePercentage
-            : productivityPercentage
+            : productivityPercentage;
 
         return compensatedProductivityPerformance;
-    }
+    };
 }

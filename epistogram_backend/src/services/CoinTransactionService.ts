@@ -7,13 +7,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 import { PrincipalId } from '../utilities/ActionParams';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
-import { User } from '../models/entity/User';
 import { Id } from '../shared/types/versionId';
-import { Question } from '../models/entity/question/Question';
-import { ActivitySession } from '../models/entity/ActivitySession';
-import { ActivityStreak } from '../models/entity/ActivityStreak';
-import { GivenAnswerStreak } from '../models/entity/GivenAnswerStreak';
-import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 
 export class CoinTransactionService {
 

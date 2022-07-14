@@ -175,7 +175,7 @@ export class VersionSaveService {
                     if (oldParentVersionId)
                         return oldParentVersionId;
 
-                    return getOldData(oldVersionId).oldVersion[parentVersionIdField] as any
+                    return getOldData(oldVersionId).oldVersion[parentVersionIdField] as any;
                 })();
 
                 const newParentVersionId = VersionMigrationHelpers
@@ -195,7 +195,8 @@ export class VersionSaveService {
             .create(oldVersionIds, newVersionIds);
 
         this._log(res
-            .map((x, i) => `${x.oldVersionId} -> ${x.newVersionId} [${saveActions[i].action}]`).join('\n'));
+            .map((x, i) => `${x.oldVersionId} -> ${x.newVersionId} [${saveActions[i].action}]`)
+.join('\n'));
 
         this._log(`Saved ${entitySignature.name}.`);
 
@@ -225,7 +226,7 @@ export class VersionSaveService {
 
         const nonDeleted = oldVersions
             .filter(oldVer => !delMutations
-                .some(delMut => getVersionId(delMut) === oldVer.id))
+                .some(delMut => getVersionId(delMut) === oldVer.id));
 
         return nonDeleted;
     }

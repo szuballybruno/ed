@@ -1,6 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { Id } from '../../shared/types/versionId';
-import { User } from '../entity/User';
 
 @ViewEntity({
     synchronize: false,
