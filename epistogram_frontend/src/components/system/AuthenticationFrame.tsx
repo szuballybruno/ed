@@ -7,7 +7,7 @@ import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
-import { AuthorizationContext, AuthorizationContextLogic, useAuthorizationContext } from './AuthorizationContext';
+import { AuthorizationContext, getAuthorizationContextLogic, useAuthorizationContext } from './AuthorizationContext';
 
 const userDefaults: UserDTO = {
     avatarUrl: '',
@@ -103,7 +103,7 @@ export const AuthenticationFrame = (props) => {
     Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
     // authorization context 
-    const authContextData = new AuthorizationContextLogic(authData?.permissions ?? []);
+    const authContextData = getAuthorizationContextLogic(authData?.permissions ?? []);
 
     return <AuthenticationStateContext.Provider value={authState}>
         <RefetchUserAsyncContext.Provider value={() => refetchAuthHandshake()}>

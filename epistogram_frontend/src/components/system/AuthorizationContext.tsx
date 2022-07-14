@@ -2,27 +2,29 @@ import { createContext, useContext } from 'react';
 import { GetParamByCodeType, GetPermissionScope } from '../../shared/types/PermissionCodesType';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 
-export class AuthorizationContextLogic {
+export const getAuthorizationContextLogic = (_permissionCodes: PermissionCodeType[]) => {
 
-    public isAuthenticated: boolean = true;
-
-    constructor(private _permissionCodes: PermissionCodeType[]) {
-
-    }
-
-    hasPermission<TCode extends PermissionCodeType>(...args: GetPermissionScope<TCode> extends 'USER' ? [TCode] : [TCode, GetParamByCodeType<TCode>]) {
+    const hasPermission = <TCode extends PermissionCodeType>(
+        ...args: GetPermissionScope<TCode> extends 'USER'
+            ? [TCode]
+            : [TCode, GetParamByCodeType<TCode>]) => {
 
         const [searchPermissionCode, params] = args;
 
-        const isFound = this._permissionCodes
+        const isFound = _permissionCodes
             .any(userPermissionCode => userPermissionCode === searchPermissionCode);
 
         return isFound;
     };
+
+    return {
+        hasPermission,
+        isAuthenticated: true
+    };
 };
 
-type AuthorizationContextDataType = AuthorizationContextLogic;
+type AuthorizationContextDataType = ReturnType<typeof getAuthorizationContextLogic>;
 
-export const AuthorizationContext = createContext<AuthorizationContextDataType>(new AuthorizationContextLogic([]));
+export const AuthorizationContext = createContext<AuthorizationContextDataType>(getAuthorizationContextLogic([]));
 
 export const useAuthorizationContext = () => useContext(AuthorizationContext);
