@@ -34,7 +34,7 @@ export const PrequizSubpage = () => {
 
     const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>();
     const canContinue = question?.isNumeric || !!selectedAnswerId;
-    const progressPercentage = (currentQuestionIndex + 1) / totalQuestionsCount * 100;
+    const progressPercentage = (currentQuestionIndex) / totalQuestionsCount * 100;
 
     const [numericValue, setNumericValue] = useState(0);
 
@@ -125,6 +125,7 @@ export const PrequizSubpage = () => {
                             min={question.minValue}
                             step={question.stepValue}
                             valueLabelDisplay="auto"
+                            valueLabelFormat={value => `${value} óra`}
                             marks={true}
                             style={{
                                 color: 'var(--deepBlue)'
@@ -132,17 +133,6 @@ export const PrequizSubpage = () => {
                             onChange={(_, value) => setNumericValue(value as any)}
                             value={numericValue} />
 
-                        <EpistoFont
-                            fontSize="fontHuge"
-                            style={{
-                                boxShadow: '-1px 3px 16px 17px white',
-                                background: 'white',
-                                borderRadius: '10px',
-                                marginTop: '10px'
-                            }}>
-
-                            {numericValue} {question.valuePostfix ?? undefined}
-                        </EpistoFont>
                     </Flex>
                     : <Grid
                         templateColumns="repeat(2, 1fr)"

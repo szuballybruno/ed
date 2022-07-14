@@ -22,6 +22,8 @@ export const PlayerPage = () => {
                 width="var(--playerWidth)"
                 margin="auto"
                 maxHeight='100vh'
+                minHeight='100vh'
+                minWidth='100%'
                 overflowY='hidden'
                 isMinimalMode
                 showLogo>

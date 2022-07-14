@@ -81,6 +81,8 @@ export const ExamPlayer = (props: {
 
     return <EpistoPaging
         flex="1"
+        pt='10px'
+        pb='100px'
         slides={slides}
         index={slidesState.currentIndex} />;
 };

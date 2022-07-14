@@ -1,6 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -10,15 +11,15 @@ export class LatestExamView {
 
     @ViewColumn()
     @XViewColumn()
-    examId: number;
+    examId: Id<'Exam'>;
 
     @ViewColumn()
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    courseId: number;
+    courseId: Id<'Course'>;
 
     @ViewColumn()
     @XViewColumn()

@@ -47,9 +47,10 @@ export const ExamLayout = (props: {
 
     return <Flex
         className="whall"
+        minH='calc(100vh - 100px)'
         direction="column"
         alignItems="center"
-        px={40}>
+        px={20}>
 
         {/* header */}
         <Flex

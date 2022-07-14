@@ -1,12 +1,12 @@
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../../shared/dtos/BriefUserDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
 import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
+import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
-import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
-import { Id } from '../../shared/types/versionId';
 
 export const useUserListQuery = (searchText: string | null) => {
 

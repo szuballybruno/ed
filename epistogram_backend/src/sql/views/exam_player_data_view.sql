@@ -3,11 +3,41 @@ successful_answer_sessions AS (
 	SELECT 
 		* 
 	FROM public.answer_session_view asev
-	-- ----------------------------------------
-	-- IMPORTANT! THIS SHOULD BE FIXED WHEN NEW
-	-- EXAM RATING COMES IN PLACE!!!
-	-- ----------------------------------------
-	-- WHERE asev.is_successful
+ 
+ 	WHERE asev.is_successful
+),
+latest_answer_session_view AS (
+	SELECT 
+		sq.*,
+		asv.correct_given_answer_count correct_answer_count,
+		asv.answered_question_count total_question_count,
+		asv.answer_session_success_rate correct_answer_rate,
+		asv.is_successful
+	FROM
+	(
+		SELECT 
+			asv.user_id, 
+			ex.id exam_id, 
+			MAX(asv.answer_session_id) asid
+		FROM public.answer_session_view asv
+		
+		LEFT JOIN public.exam_version ev
+		ON ev.id = asv.exam_version_id
+		
+		LEFT JOIN public.exam ex
+		ON ex.id = ev.exam_id
+		
+		--WHERE asv.is_successful
+		
+		GROUP BY 
+			ex.id, 
+			asv.user_id
+		
+		ORDER BY asv.user_id, ex.id
+	) sq
+
+	LEFT JOIN public.answer_session_view asv
+	ON asv.answer_session_id = sq.asid
 )
 SELECT 
 	u.id user_id,
@@ -38,6 +68,7 @@ SELECT
 		WHERE sas.exam_version_id = ev.id 
 		AND sas.user_id = u.id
 	) can_retake,
+	lasv.asid,
 	lasv.correct_answer_count,
 	lasv.total_question_count,
 	lasv.correct_answer_rate,
@@ -58,42 +89,7 @@ ON cv.id = mv.course_version_id
 
 CROSS JOIN public.user u
 
-LEFT JOIN
-(
-	SELECT 
-		sq.*
-	FROM
-	(
-		SELECT 
-			asv.user_id, 
-			ex.id exam_id, 
-			MAX(asv.answer_session_id) asid,
-			asv.correct_given_answer_count correct_answer_count,
-			asv.answered_question_count total_question_count,
-			0 correct_answer_rate
-		FROM public.answer_session_view asv
-		
-		LEFT JOIN public.exam_version ev
-		ON ev.id = asv.exam_version_id
-		
-		LEFT JOIN public.exam ex
-		ON ex.id = ev.exam_id
-		-- ----------------------------------------
-		-- IMPORTANT! THIS SHOULD BE FIXED WHEN NEW
-		-- EXAM RATING COMES IN PLACE!!!
-		-- ----------------------------------------
-		-- WHERE asv.is_successful
-		GROUP BY 
-			ex.id, 
-			asv.user_id, 
-			asv.correct_given_answer_count, 
-			asv.answered_question_count
-		ORDER BY asv.user_id, ex.id
-	) sq
-
-	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = sq.asid
-) lasv
+LEFT JOIN latest_answer_session_view lasv
 ON lasv.user_id = u.id AND lasv.exam_id = ex.id
 
 ORDER BY 

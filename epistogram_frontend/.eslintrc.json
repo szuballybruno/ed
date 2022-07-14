@@ -31,7 +31,9 @@
         "react/display-name": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-inferrable-types": "off",
-        "react/prop-types": [0],
+        "react/prop-types": [
+            0
+        ],
         "newline-per-chained-call": [
             "error",
             {

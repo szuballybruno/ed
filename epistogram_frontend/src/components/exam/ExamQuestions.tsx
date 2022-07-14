@@ -12,6 +12,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { ExamLayout } from './ExamLayout';
+import { ExamLayoutContent } from './ExamLayoutContent';
 import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
@@ -111,41 +112,15 @@ export const ExamQuestions = (props: {
             nextButtonTitle={translatableTexts.exam.nextQuestion}
             progressValue={progressPercentage}>
 
-            <Flex
-                direction={'column'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                width={'80%'}
-                flex={1}>
-
-                <Flex
-                    p="20px"
-                    align="center">
-
-                    <img
-                        style={{
-                            borderRadius: '50%',
-                            padding: '8px',
-                            width: '50px',
-                            height: '50px',
-                            marginRight: '30px'
-                        }}
-                        alt=""
-                        src="https://static.thenounproject.com/png/92068-200.png"
-                        className="tinyShadow" />
-
-                    <EpistoFont>
-                        {currentQuestion.questionText}
-                    </EpistoFont>
-                </Flex>
+            <ExamLayoutContent
+                title={currentQuestion.questionText}>
 
                 {/* answers */}
                 <Flex
                     direction={'row'}
                     justifyContent={'center'}
                     pt={10}
-                    width="100%"
-                    mx={200}>
+                    width="100%">
 
                     <Grid
                         templateColumns="repeat(2, 1fr)"
@@ -161,13 +136,14 @@ export const ExamQuestions = (props: {
 
                                 return <QuestionAnswer
                                     key={index}
+                                    minWidth={400}
                                     onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
                                     answerText={answer.answerText}
                                     isSelected={isAnswerSelected} />;
                             })}
                     </Grid>
                 </Flex>
-            </Flex>
+            </ExamLayoutContent>
         </ExamLayout>
     </LoadingFrame>;
 };
