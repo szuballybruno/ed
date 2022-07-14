@@ -24,6 +24,7 @@ export const getAuthorizationContextLogic = (_permissionCodes: PermissionCodeTyp
 };
 
 type AuthorizationContextDataType = ReturnType<typeof getAuthorizationContextLogic>;
+export type HasPermissionFnType = AuthorizationContextDataType['hasPermission']; 
 
 export const AuthorizationContext = createContext<AuthorizationContextDataType>(getAuthorizationContextLogic([]));
 

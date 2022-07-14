@@ -143,8 +143,9 @@ export class CoinAcquireService {
     private acquireActivityStreakCoin = async (userId: Id<'User'>) => {
 
         const currentActivityStreak = await this._ormService
-            .query(ActivityStreakView)
+            .query(ActivityStreakView, { userId })
             .where('isFinalized', 'IS', 'false')
+            .and('userId', '=', 'userId')
             .getSingle();
 
         const coinsForActivityStreak = await this._coinTransactionService

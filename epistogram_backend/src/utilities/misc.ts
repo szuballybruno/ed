@@ -4,10 +4,12 @@ export type PropConstraintType<TObj, TProp> = {
     [K in keyof TObj]: TProp;
 };
 
-export type NoIdType<T> = Omit<NoComplexTypes<T>, 'id'>;
+export type NoIdType<T> = Omit<T, 'id'>;
 
-export type NoComplexTypes<TObj> = {
-    [TKey in keyof TObj as TObj[TKey] extends (string | number | boolean | Date | Id<any> | undefined | null) ? TKey : never]: TObj[TKey]
+type AllowedInsertTypes = string | number | boolean | Date | Id<any> | undefined | null;
+
+export type NoComplexTypes<TObject> = {
+    [TKey in keyof TObject as TObject[TKey] extends AllowedInsertTypes ? TKey : never]: TObject[TKey]
 };
 
 export type InsertEntity<T> = NoIdType<NoComplexTypes<T>>;

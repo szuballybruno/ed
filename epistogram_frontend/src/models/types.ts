@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
+import { HasPermissionFnType } from '../components/system/AuthorizationContext';
 import { trimEndChar } from '../shared/logic/sharedLogic';
 import { ParametrizedRouteType, RouteParameterType } from '../shared/types/apiRoutes';
 import { CSSOptionsType } from '../styles/globalCssTypes';
@@ -55,6 +56,7 @@ export type ApplicationRoute<T = any> = {
     paramsType?: T;
     isUnauthorized?: boolean;
     ignoreAccessAppRestriction?: boolean;
+    isAuthoirziedToVisit?: (hasPermission: HasPermissionFnType) => boolean
 }
 
 export type ButtonType<T = undefined> = {
