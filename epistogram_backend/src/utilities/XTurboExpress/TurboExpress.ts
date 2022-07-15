@@ -1,7 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { LoggerService } from '../../services/LoggerService';
 import { GlobalConfiguration } from '../../services/misc/GlobalConfiguration';
-import { log, logSecondary } from '../../services/misc/logger';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { ServiceProvider } from '../../startup/servicesDI';
 import { ITurboExpressLayer } from './ITurboExpressLayer';
@@ -133,8 +132,7 @@ export class TurboExpressBuilder<TActionParams> {
 
                 const controllerMetadatas = getControllerActionMetadatas(sign);
 
-                if (this._config.logging.bootstrap)
-                    log(`Controller: ${sign.name}`);
+                this._loggerService.logScoped('BOOTSTRAP', `Controller: ${sign.name}`);
 
                 controllerMetadatas
                     .orderBy(meta => meta.metadata.isPost + '')
@@ -142,8 +140,7 @@ export class TurboExpressBuilder<TActionParams> {
 
                         const path = meta.metadata.path;
 
-                        if (this._config.logging.bootstrap)
-                            logSecondary(`Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
+                        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
                         turboExpress
                             .addAPIEndpoint(path, sign, meta.propName, meta.metadata);

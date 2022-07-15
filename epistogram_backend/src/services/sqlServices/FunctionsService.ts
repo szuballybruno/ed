@@ -1,5 +1,4 @@
 import { TaskCodeType } from '../../models/Types';
-import { SessionActivityType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { logObject } from '../misc/logger';
@@ -24,7 +23,7 @@ export class SQLFunctionsService {
     constructor(conn: SQLConnectionService, config: GlobalConfiguration) {
 
         this._connectionService = conn;
-        this._loggingEnabled = config.logging.orm;
+        this._loggingEnabled = config.logging.enabledScopes.some(x => x === 'ORM');
     }
 
     execSQLFunctionAsync = async <T>(fnName: string, args: any[], isMultiResult?: boolean) => {
@@ -152,26 +151,6 @@ export class SQLFunctionsService {
             [
                 userId,
                 sessionActivityId
-            ]
-        );
-    };
-
-    saveUserSessionActivity = (
-        userId: Id<'User'>,
-        param_activity_type: SessionActivityType,
-        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>
-    ) => {
-
-        const videoVersionId = param_activity_type === 'video' ? itemVersionId : null;
-        const examVersionId = param_activity_type === 'exam' ? itemVersionId : null;
-
-        return this.execSQLFunctionAsync<Id<'ActivitySession'>>(
-            'save_user_session_activity',
-            [
-                userId,
-                param_activity_type,
-                videoVersionId,
-                examVersionId
             ]
         );
     };

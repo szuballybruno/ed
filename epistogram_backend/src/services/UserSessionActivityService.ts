@@ -6,6 +6,7 @@ import { SessionActivityType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
+import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { EntityType } from './XORM/XORMTypes';
@@ -21,7 +22,8 @@ export class UserSessionActivityService {
 
     constructor(
         private _ormService: ORMConnectionService,
-        private _coinAcquireService: CoinAcquireService) {
+        private _coinAcquireService: CoinAcquireService,
+        private _loggerService: LoggerService) {
     }
 
     saveUserSessionActivityAsync = async (userId: Id<'User'>, type: SessionActivityType, itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>) => {
@@ -61,9 +63,13 @@ export class UserSessionActivityService {
                 userId,
                 isInvalidStreak: (prevStreakEndDate: Date) => {
 
-                    return prevStreakEndDate < moment(new Date())
+                    const mom = moment(new Date())
                         .subtract(5, 'minutes')
                         .toDate();
+
+                    const res = prevStreakEndDate < mom;
+
+                    return res;
                 }
             });
 
@@ -121,7 +127,11 @@ export class UserSessionActivityService {
         entitySignature: ClassType<TEntity>,
         userId: Id<'User'>,
         isInvalidStreak: (prevEndDate: Date) => boolean
-    }) {
+    }): Promise<Id<any>> {
+
+        this
+            ._loggerService
+            .logScoped('ROLLING SESSION', 'Saving rolling session: ' + entitySignature.name);
 
         // get prev streak
         const prevRollingSession = await this
@@ -131,10 +141,19 @@ export class UserSessionActivityService {
             .and('isFinalized', '=', 'false')
             .getOneOrNull();
 
-        // if prev streak exists 
+        const isPrevInvalid = prevRollingSession
+            ? isInvalidStreak(prevRollingSession.endDate)
+            : true;
+
+        // if prev streak exists,
+        // update it according to it's validity
         if (prevRollingSession) {
 
-            const saveData: Partial<RollingSessionEntityType<TId>> = isInvalidStreak(prevRollingSession.endDate)
+            this
+                ._loggerService
+                .logScoped('ROLLING SESSION', 'Prev rolling session isinvalid: ' + isPrevInvalid);
+
+            const saveData: Partial<RollingSessionEntityType<TId>> = isPrevInvalid
                 // finalize streak if invalid
                 ? {
                     id: prevRollingSession.id,
@@ -146,14 +165,25 @@ export class UserSessionActivityService {
                     endDate: new Date()
                 };
 
+            this
+                ._loggerService
+                .logScoped('ROLLING SESSION', 'Update rolling session...');
+
+            this
+                ._loggerService
+                .logScoped('ROLLING SESSION', saveData);
+
             await this._ormService
                 .save(entitySignature, saveData);
-
-            return prevRollingSession.id;
         }
 
-        // if not, insert streak
-        else {
+        // if prev rolling session is invalid, 
+        // or doesn't exist, insert a new one
+        if (isPrevInvalid || !prevRollingSession) {
+
+            this
+                ._loggerService
+                .logScoped('ROLLING SESSION', 'No prev session, or prev session is invalid, inserting...');
 
             const insert: InsertEntity<RollingSessionEntityType<TId>> = {
                 endDate: new Date(),
@@ -162,8 +192,14 @@ export class UserSessionActivityService {
                 userId
             };
 
+            this
+                ._loggerService
+                .logScoped('ROLLING SESSION', insert);
+
             return await this._ormService
                 .createAsync(entitySignature, insert);
         }
+
+        return prevRollingSession.id;
     }
 }

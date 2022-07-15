@@ -1,5 +1,5 @@
 import Postgres from 'pg';
-import { GlobalConfiguration } from '../misc/GlobalConfiguration';
+import { LoggerService } from '../LoggerService';
 import { logSecondary } from '../misc/logger';
 import { SQLPoolService } from './SQLPoolService';
 
@@ -11,14 +11,13 @@ export class SQLConnectionService {
 
     constructor(
         private _poolService: SQLPoolService,
-        private _config: GlobalConfiguration) {
+        private _loggerService: LoggerService) {
 
     }
 
     async createConnectionClientAsync() {
 
-        if (this._config.logging.bootstrap)
-        logSecondary('Connecting postgres client...');
+        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', 'Connecting postgres client...');
         this._client = await this._poolService.connectClientAsync();
     }
 

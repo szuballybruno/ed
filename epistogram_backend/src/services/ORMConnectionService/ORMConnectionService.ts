@@ -16,7 +16,7 @@ export class ORMConnectionService {
     constructor(config: GlobalConfiguration, sqlConnectionService: SQLConnectionService) {
 
         this._sqlConnectionService = sqlConnectionService;
-        this._loggingEnabled = config.logging.orm;
+        this._loggingEnabled = config.logging.enabledScopes.some(x => x === 'ORM');
     }
 
     beginTransactionAsync() {

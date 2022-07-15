@@ -1,8 +1,8 @@
 
 import { readFileSync } from 'fs';
 import { replaceAll } from '../../utilities/helpers';
+import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log, logSecondary } from '../misc/logger';
 import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 import { TypeORMConnectionService } from './TypeORMConnectionService';
@@ -13,36 +13,31 @@ export class CreateDBService {
         private _sqlConnectionService: SQLConnectionService,
         private _dbSchema: XDBMSchemaType,
         private _config: GlobalConfiguration,
-        private _typeOrmConnectionService: TypeORMConnectionService) {
+        private _typeOrmConnectionService: TypeORMConnectionService,
+        private _loggerService: LoggerService) {
     }
 
     createDatabaseSchemaAsync = async (createTables: boolean) => {
 
         if (createTables) {
 
-            if (this._config.logging.bootstrap)
-                log('Creating tables with TypeORM...');
+            this._loggerService.logScoped('BOOTSTRAP', 'Creating tables with TypeORM...');
             await this._typeOrmConnectionService.connectTypeORMAsync();
         }
 
-        if (this._config.logging.bootstrap)
-            log('Recreating views...');
+        this._loggerService.logScoped('BOOTSTRAP', 'Recreating views...');
         await this.recreateViewsAsync(this._dbSchema.views.map(x => x[0]), this._dbSchema.views.map(x => x[1]));
 
-        if (this._config.logging.bootstrap)
-            log('Recreating functions...');
+        this._loggerService.logScoped('BOOTSTRAP', 'Recreating functions...');
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
 
-        if (this._config.logging.bootstrap)
-            log('Recreating constraints...');
+        this._loggerService.logScoped('BOOTSTRAP', 'Recreating constraints...');
         await this.recreateConstraintsAsync(this._dbSchema.constraints);
 
-        if (this._config.logging.bootstrap)
-            log('Recreating indices...');
+        this._loggerService.logScoped('BOOTSTRAP', 'Recreating indices...');
         await this.recreateIndicesAsync(this._dbSchema.indices);
 
-        if (this._config.logging.bootstrap)
-            log('Recreating triggers...');
+        this._loggerService.logScoped('BOOTSTRAP', 'Recreating triggers...');
         await this.recreateTriggersAsync(this._dbSchema.triggers);
     };
 
@@ -62,8 +57,7 @@ export class CreateDBService {
             const constraint = constraints[index];
             const script = this.readSQLFile('constraints', constraint.name);
 
-            if (this._config.logging.bootstrap)
-                logSecondary(`Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -83,8 +77,7 @@ export class CreateDBService {
             const sqlIndex = indices[index];
             const script = this.readSQLFile('indices', sqlIndex.name);
 
-            if (this._config.logging.bootstrap)
-                logSecondary(`Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
@@ -98,8 +91,7 @@ export class CreateDBService {
             const triggerName = triggers[index];
             const script = this.readSQLFile('triggers', triggerName);
 
-            if (this._config.logging.bootstrap)
-                logSecondary(`Creating trigger: [${triggerName}]...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating trigger: [${triggerName}]...`);
             await this._sqlConnectionService
                 .executeSQLAsync(script);
         }
@@ -119,8 +111,7 @@ export class CreateDBService {
             const functionName = functionNames[index];
             const script = this.readSQLFile('functions', functionName);
 
-            if (this._config.logging.bootstrap)
-                logSecondary(`Creating function: [${functionName}]...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating function: [${functionName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };
@@ -145,8 +136,7 @@ export class CreateDBService {
             const viewSubFolderName = viewSubFolderNames[index];
             const script = this.getViewCreationScript(viewName, viewSubFolderName);
 
-            if (this._config.logging.bootstrap)
-                logSecondary(`Creating view: [${viewName}]...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating view: [${viewName}]...`);
 
             await this._sqlConnectionService.executeSQLAsync(script);
         }
