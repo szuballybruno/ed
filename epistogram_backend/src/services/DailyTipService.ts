@@ -6,7 +6,7 @@ import { DailyTipView } from '../models/views/DailyTipView';
 import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
 
 export class DailyTipService {

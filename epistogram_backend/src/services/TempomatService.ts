@@ -3,7 +3,7 @@ import { TempomatCalculationDataView } from '../models/views/TempomatCalculation
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';

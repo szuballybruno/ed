@@ -7,7 +7,7 @@ import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';

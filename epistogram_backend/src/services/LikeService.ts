@@ -1,7 +1,7 @@
 import { Comment } from '../models/entity/Comment';
 import { Like } from '../models/entity/Like';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

@@ -3,7 +3,7 @@ import { LoggerService } from '../services/LoggerService';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { getAuthCookies } from '../utilities/helpers';
 import { ITurboMiddlewareInstance, MiddlewareParams } from '../utilities/XTurboExpress/TurboExpress';
 

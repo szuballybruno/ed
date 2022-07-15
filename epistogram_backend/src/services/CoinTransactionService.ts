@@ -5,7 +5,7 @@ import { CoinTransactionView } from '../models/views/CoinTransactionView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { Id } from '../shared/types/versionId';
 

@@ -19,7 +19,7 @@ import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
 import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedTypes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';

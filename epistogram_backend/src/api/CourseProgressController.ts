@@ -1,7 +1,7 @@
 import { CourseProgressService } from '../services/CourseProgressService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class CourseProgressController {

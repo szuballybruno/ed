@@ -3,7 +3,7 @@ import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { VerboseError } from '../shared/types/VerboseError';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

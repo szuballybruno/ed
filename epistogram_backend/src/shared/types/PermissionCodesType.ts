@@ -201,6 +201,8 @@ type ScopeParamByScopeType<T extends PermissionScopeType> = T extends 'COMPANY'
     ? {
         commentId: number
     }
-    : void
+    : void;
 
-export type GetParamByCodeType<TCode extends PermissionCodeType> = ScopeParamByScopeType<PermissionCodesObjectType[TCode]['scope']>;
+export type GetPermissionScope<TCode extends PermissionCodeType> = PermissionCodesObjectType[TCode]['scope'];
+
+export type GetParamByCodeType<TCode extends PermissionCodeType> = ScopeParamByScopeType<GetPermissionScope<TCode>>;

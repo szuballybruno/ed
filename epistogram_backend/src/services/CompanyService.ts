@@ -8,7 +8,7 @@ import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';

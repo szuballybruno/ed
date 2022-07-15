@@ -7,7 +7,7 @@ import { PretestResultView } from '../models/views/PretestResultView';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';

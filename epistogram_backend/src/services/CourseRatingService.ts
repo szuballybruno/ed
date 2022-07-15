@@ -6,7 +6,7 @@ import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionVi
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
 
 export class CourseRatingService extends ServiceBase {

@@ -4,7 +4,7 @@ import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../shared/dtos/CommentListDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';

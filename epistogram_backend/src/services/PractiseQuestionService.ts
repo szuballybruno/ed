@@ -7,7 +7,7 @@ import { QuestionAnswerService } from './QuestionAnswerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { ServiceBase } from './misc/ServiceBase';
 import { MapperService } from './MapperService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
 
 export class PractiseQuestionService extends ServiceBase {

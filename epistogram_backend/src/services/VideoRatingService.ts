@@ -1,7 +1,7 @@
 import { VideoRating } from '../models/entity/VideoRating';
 import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class VideoRatingService {

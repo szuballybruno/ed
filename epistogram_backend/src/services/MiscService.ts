@@ -4,7 +4,7 @@ import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
 import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { CourseProgressService } from './CourseProgressService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

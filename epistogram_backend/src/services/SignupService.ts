@@ -4,7 +4,7 @@ import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { SignupDataDTO } from '../shared/dtos/SignupDataDTO';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

@@ -40,7 +40,7 @@ import { VideoRatingController } from './../api/VideoRatingController';
 import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './../services/misc/middlewareService';
 import { AuthenticationMiddleware } from './../turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddleware';
-import { ActionParams } from './../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { onActionError, onActionSuccess } from './../utilities/apiHelpers';
 import { ActionWrapperFunctionType, GetServiceProviderType, TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProvider } from './servicesDI';

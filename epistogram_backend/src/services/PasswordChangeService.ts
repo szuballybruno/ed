@@ -2,7 +2,7 @@ import { User } from '../models/entity/User';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';

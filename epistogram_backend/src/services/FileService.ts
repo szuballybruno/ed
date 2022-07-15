@@ -4,7 +4,7 @@ import { User } from '../models/entity/User';
 import { VerboseError } from '../shared/types/VerboseError';
 import { Id } from '../shared/types/versionId';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { StringKeyof } from '../utilities/misc';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { log } from './misc/logger';

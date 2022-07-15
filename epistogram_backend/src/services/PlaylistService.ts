@@ -1,7 +1,7 @@
 import { CourseItemPlaylistView } from '../models/views/CourseItemPlaylistView';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';

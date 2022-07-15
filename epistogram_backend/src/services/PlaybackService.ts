@@ -9,7 +9,7 @@ import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSam
 import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { CoinAcquireService } from './CoinAcquireService';
 import { MapperService } from './MapperService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
