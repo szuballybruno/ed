@@ -1,4 +1,5 @@
 import { PermissionScopeType } from './sharedTypes';
+import { Id } from './versionId';
 
 type ConstraintObjectPropsType<TObject, TPropertyValue> = { [K in keyof TObject]: TPropertyValue };
 
@@ -191,15 +192,15 @@ export type PermissionCodeType = keyof typeof permissionCodes;
 
 type ScopeParamByScopeType<T extends PermissionScopeType> = T extends 'COMPANY'
     ? {
-        companyId: number
+        companyId: Id<'Company'>
     }
     : T extends 'COURSE'
     ? {
-        courseId: number
+        courseId: Id<'Course'>
     }
     : T extends 'COMMENT'
     ? {
-        commentId: number
+        commentId: Id<'Comment'>
     }
     : void;
 

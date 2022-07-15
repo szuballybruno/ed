@@ -17,4 +17,4 @@ export class Id<T extends String> extends String {
 
         return id as any as Id<T>;
     } 
-};
+}

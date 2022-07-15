@@ -1,4 +1,4 @@
-import { Id } from "../types/versionId";
+import { Id } from '../types/versionId';
 
 export class PrequizAnswerDTO {
     id: Id<'Answer'>;

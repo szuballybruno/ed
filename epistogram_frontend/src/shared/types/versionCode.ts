@@ -30,4 +30,4 @@ export class VersionCode extends String {
 
         return `${versionType}@${versionId}` as any as VersionCode;
     }
-};
+}
