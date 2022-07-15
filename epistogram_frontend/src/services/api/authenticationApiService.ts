@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { VerboseError } from '../../shared/types/VerboseError';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { Environment } from '../../static/Environemnt';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
@@ -32,7 +32,7 @@ export const useGetAuthHandshake = () => {
 
     const { refetch, isLoading, isError } = qr;
     const authData = isError ? null : qr.data as AuthDataDTO;
-    const error = qr.error as VerboseError | null;
+    const error = qr.error as ErrorWithCode | null;
 
     const authState = ((): AuthenticationStateType => {
 

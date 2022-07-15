@@ -2,7 +2,7 @@ import JsonWebToken from 'jsonwebtoken';
 import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
 import { User } from '../models/entity/User';
 import { InvitationTokenPayload } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
@@ -106,7 +106,7 @@ export class TokenService {
         const payload = verify(token, secret) as any as TTokenPayload;
 
         if (!payload)
-            throw new VerboseError('Token verification failed!', 'forbidden');
+            throw new ErrorWithCode('Token verification failed!', 'forbidden');
 
         return payload;
     };

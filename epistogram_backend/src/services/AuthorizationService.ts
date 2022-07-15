@@ -1,6 +1,6 @@
 import { GetParamByCodeType, GetPermissionScope } from '../shared/types/PermissionCodesType';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -25,7 +25,7 @@ export class AuthorizationService {
             .hasPermissionAsync(principalId, searchPermissionCode as any, params);
 
         if (!hasPermission)
-            throw new VerboseError('User has no permission to access resource.', 'no permission');
+            throw new ErrorWithCode('User has no permission to access resource.', 'no permission');
     }
 
     async getCheckPermissionResultAsync<TCode extends PermissionCodeType>(

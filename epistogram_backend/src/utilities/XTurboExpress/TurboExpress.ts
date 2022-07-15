@@ -2,9 +2,11 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import { LoggerService } from '../../services/LoggerService';
 import { GlobalConfiguration } from '../../services/misc/GlobalConfiguration';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { ServiceProvider } from '../../startup/servicesDI';
 import { ITurboExpressLayer } from './ITurboExpressLayer';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
+import { ControllerActionReturnType } from './XTurboExpressTypes';
 
 export interface ITurboMiddlewareInstance<TInParams, TOutParams> {
 
@@ -179,6 +181,9 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
         functionName: string,
         options?: EndpointOptionsType) => {
 
+        /**
+         * Handles middleware execution
+         */
         const runMiddlewaresAsync = async (req: Request, res: Response, serviceProvider: ServiceProvider) => {
 
             // run middlewares 
@@ -205,34 +210,98 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
             return prevMiddlewareParam;
         };
 
+        /**
+         * Handle controller action execution 
+         */
         const executeControllerAction = async (actionParams: TActionParams, serviceProvider: ServiceProvider) => {
 
+            /**
+             * Instantiate controller 
+             */
             const controllerInstance = new controllerSignature(serviceProvider);
 
+            /**
+             * Get controller action and execute it
+             */
             const controllerAction: ApiActionType<TActionParams> = controllerInstance[functionName];
+            const controllerActionResultOrData = await controllerAction(actionParams);
 
-            // run action 
-            return await controllerAction(actionParams);
+            /**
+             * If controller action returned a ControllerActionReturnType 
+             * meaning it has an authentication function,
+             * execute the auth function, and only if it passes, 
+             * continue, and execute the action funciton, 
+             * which returns the data to the client.
+             */
+            if (this._isAuthResult(controllerActionResultOrData)) {
+
+                const controllerActionResult = controllerActionResultOrData as ControllerActionReturnType;
+
+                /**
+                 * Execute auth function. 
+                 * It returns an auth res, 
+                 * throw exceptions accordingly.
+                 */
+                const authRes = await controllerActionResult.auth();
+                if (authRes.state === 'FAILED')
+                    throw new ErrorWithCode('Authorization failed!', 'no permission');
+
+                return await controllerActionResult.action();
+            }
+
+            /**
+             * If controller action just returns data (OLD SOLUTION) 
+             * return the data.
+             */
+            else {
+
+                return controllerActionResultOrData;
+            }
         };
 
-        // async api action handler 
+        /**
+         * Handle async operations 
+         * in the scope of an incoming request
+         * - instatiate transient services 
+         * - execute middleware
+         * - execute action  
+         */
         const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {
 
             this._loggerService
                 .log(`${req.path}: REQUEST ARRIVED`);
 
-            // Instatiate all services, 
-            // establish connection to DB
+            /**
+             * Instatiate all services, 
+             * establish connection to DB
+             */
             const serviceProvider = await this._getServiceProviderAsync();
 
-            return await this._actionWrapper(serviceProvider, async () => {
+            /**
+             * Executes the middlewares, 
+             * then the controller action (with action params returned from middlewares) 
+             */
+            const executeMiddlewaresAndControllerAction = async () => {
 
                 const actionParams = await runMiddlewaresAsync(req, res, serviceProvider);
                 return await executeControllerAction(actionParams, serviceProvider);
-            });
+            };
+
+            /**
+             * Execute middlewares, 
+             * and controller action in the action wrapper function, 
+             * which is an external async wrapper (for flexibility)
+             */
+            const actionWrapperResult = await this
+                ._actionWrapper(serviceProvider, executeMiddlewaresAndControllerAction);
+
+            return actionWrapperResult;
         };
 
-        // create sync wrapper
+        /**
+         * SYNC wrapper for async execution, 
+         * this will be supplied directly to Express.js 
+         */
         const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
 
             asyncStuff(req, res, next)
@@ -246,7 +315,9 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
                 });
         };
 
-        // register on express as route 
+        /**
+         * Register sync wrapper on Express.js
+         */
         if (options?.isPost) {
 
             this._expressServer.post(path, syncActionWrapper);
@@ -260,5 +331,24 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
 
         this._expressServer
             .listen(this._port, this._onListen);
+    }
+
+    _isAuthResult(obj: any) {
+
+        const returnObj = obj as ControllerActionReturnType;
+
+        if (!returnObj)
+            return false;
+
+        if (!returnObj.auth || !returnObj.action)
+            return false;
+
+        if (typeof returnObj.action !== 'function')
+            return false;
+
+        if (typeof returnObj.auth !== 'function')
+            return false;
+
+        return true;
     }
 }

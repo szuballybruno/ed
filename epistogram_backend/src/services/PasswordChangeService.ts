@@ -1,6 +1,6 @@
 import { User } from '../models/entity/User';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { EmailService } from './EmailService';
@@ -87,7 +87,7 @@ export class PasswordChangeService {
             .getUserById(userId);
 
         if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
-            throw new VerboseError('Wrong password!', 'bad request');
+            throw new ErrorWithCode('Wrong password!', 'bad request');
 
         await this._ormService
             .save(User, {
@@ -111,7 +111,7 @@ export class PasswordChangeService {
 
         // verify new password with compare password 
         if (validatePassowrd(password, passwordCompare))
-            throw new VerboseError('Password is invalid.', 'bad request');
+            throw new ErrorWithCode('Password is invalid.', 'bad request');
 
         // verify token
         const tokenPayload = this._tokenService
@@ -125,7 +125,7 @@ export class PasswordChangeService {
 
         // verify user reset password token
         if (user.resetPasswordToken !== passwordResetToken)
-            throw new VerboseError('Wrong token.', 'bad request');
+            throw new ErrorWithCode('Wrong token.', 'bad request');
 
         // hash new password
         const hashedPassword = await this._hashService

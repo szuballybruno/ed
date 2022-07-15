@@ -1,7 +1,7 @@
 import { UploadedFile } from 'express-fileupload';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -35,7 +35,7 @@ export class FileService {
 
         //TODO: Create a validation function
         if (!['image/png', 'image/jpeg'].includes(file.mimetype))
-            throw new VerboseError('File upload failed: Only jpeg or png', 'bad request');
+            throw new ErrorWithCode('File upload failed: Only jpeg or png', 'bad request');
 
         await this
             .uploadAssigendFileAsync({

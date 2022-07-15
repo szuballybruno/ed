@@ -1,6 +1,6 @@
 import { ErrorCodeType } from './sharedTypes';
 
-export class VerboseError extends Error {
+export class ErrorWithCode extends Error {
 
     // intentionally nullable
     // makes casting normal exception easier

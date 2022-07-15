@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { logError, logSecondary } from '../services/misc/logger';
 import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
 import { ErrorCodeType } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 
 export const onActionError = (errorin: any, req: Request, res: Response) => {
 
@@ -13,7 +13,7 @@ export const onActionError = (errorin: any, req: Request, res: Response) => {
     // logError(error.message);
     logError(error.stack);
 
-    respondError(res, '', ((error as VerboseError).code ?? 'internal server error') as ErrorCodeType);
+    respondError(res, '', ((error as ErrorWithCode).code ?? 'internal server error') as ErrorCodeType);
 };
 
 export const onActionSuccess = (value: any, req: Request, res: Response) => {
@@ -47,7 +47,7 @@ export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Res
             .catch((error: any) => {
 
                 logError(error);
-                respondError(wrapperRes, error.message, ((error as VerboseError).code ?? 'internal server error') as ErrorCodeType);
+                respondError(wrapperRes, error.message, ((error as ErrorWithCode).code ?? 'internal server error') as ErrorCodeType);
             });
     };
 

@@ -1,7 +1,7 @@
 import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
@@ -24,7 +24,7 @@ export class ZAuthenticationController {
 
         // check request 
         if (!params.req.body)
-            throw new VerboseError('Body is null.', 'bad request');
+            throw new ErrorWithCode('Body is null.', 'bad request');
 
         // get credentials from request
         const { email, password } = params.req.body;

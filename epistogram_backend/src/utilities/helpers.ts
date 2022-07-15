@@ -3,7 +3,7 @@ import { UploadedFile } from 'express-fileupload';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { KeyofConstrained } from './misc';
 
@@ -291,7 +291,7 @@ export const requestHasFiles = (req: Request) => {
 export const getSingleFileFromRequest = (req: Request) => {
 
     if (!req.files)
-        throw new VerboseError('Request contains no files.', 'bad request');
+        throw new ErrorWithCode('Request contains no files.', 'bad request');
 
     // TODO multiple file error check
 
@@ -302,7 +302,7 @@ export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => 
 
     const objWithValue = withValue<T>(obj, () => {
 
-        throw new VerboseError('Requied field has no value!', 'bad request');
+        throw new ErrorWithCode('Requied field has no value!', 'bad request');
     });
 
     return parseType(objWithValue, type ?? 'any') as T;

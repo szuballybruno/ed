@@ -17,7 +17,7 @@ import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { UserPermissionDTO } from '../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
 import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
@@ -295,7 +295,7 @@ export class RoleService extends QueryServiceBase<Role> {
             .getMany();
 
         if (roles.none())
-            throw new VerboseError('forbidden');
+            throw new ErrorWithCode('forbidden');
 
         const group = roles
             .groupBy(x => x.roleId)
