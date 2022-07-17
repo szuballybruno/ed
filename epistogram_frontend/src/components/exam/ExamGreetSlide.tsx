@@ -20,16 +20,20 @@ export const ExamGreetSlide = (props: {
     } = props;
 
     return <ExamLayout
-        headerLeftItem={translatableTexts.exam.hello}
+        justify='flex-start'
         headerCenterText={exam.title}
         showNextButton={exam.canTakeAgain}
         handleNext={startExam}
         nextButtonTitle={translatableTexts.exam.startExam}>
 
-        <Flex direction="column"
+        <Flex
+            direction="column"
             align="center"
+            justify='center'
+            background='var(--transparentWhite70)'
             flex="1"
-            className="whall">
+            p='20px'
+            className="whall roundBorders mildShadow">
             <img
                 src={Environment.getAssetUrl('/images/examCover.png')}
                 alt={''}
@@ -72,8 +76,10 @@ export const ExamGreetSlide = (props: {
 
                     <ExamResultStats
                         correctAnswerRate={exam!.correctAnswerRate}
-                        totalQuestionCount={exam!.totalQuestionCount}
-                        correctAnswerCount={exam!.correctAnswerCount} />
+                        totalQuestionCount={exam!.questionsCount}
+                        correctAnswerCount={exam!.fullyCorrectlyAnsweredQuestionsCount}
+                        examLengthSeconds={exam!.examLengthSeconds}
+                        examSuccessRateDiffFromCompany={exam!.examSuccessRateDiffFromCompany} />
                 </Flex>
             </>}
         </Flex>

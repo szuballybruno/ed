@@ -1,6 +1,7 @@
 -- total and total correct given answer count, 
 -- and answered question count
-WITH answer_stats AS 
+WITH 
+answer_stats AS 
 (
 	SELECT 
 		ase.user_id,
@@ -23,7 +24,8 @@ WITH answer_stats AS
 	ON ase.id = ga.answer_session_id
 	
 	GROUP BY ase.user_id, ase.id
-), answer_session_score AS
+), 
+answer_session_score AS
 (
 	SELECT
 		gasv.answer_session_id,
@@ -47,7 +49,7 @@ SELECT
 	ROUND(
 		(ass.answer_session_acquired_points::double precision 
 		/ ass.answer_session_maximum_points * 100)::numeric, 1
-	) answer_session_success_rate,
+	)::double precision answer_session_success_rate,
 	ROUND(
 		(ass.answer_session_acquired_points::double precision 
 		/ ass.answer_session_maximum_points * 100)::numeric, 1

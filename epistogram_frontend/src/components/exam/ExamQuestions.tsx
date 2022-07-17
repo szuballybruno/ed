@@ -85,13 +85,11 @@ export const ExamQuestions = (props: {
     };
 
     return <LoadingFrame
-        className="whall"
         loadingState={hideLoading ? undefined : saveExamAnswerState}
         flex="1"
         direction={'column'}
         alignItems={'center'}
-        width="100%"
-        px={40}>
+        width="100%">
 
         <ExamLayout
             headerLeftItem={<Flex align="center">

@@ -23,6 +23,8 @@ import { QuestionData } from '../models/entity/question/QuestionData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { Id } from '../shared/types/versionId';
 import { LatestExamView } from '../models/views/LatestExamView';
+import { log } from './misc/logger';
+import { ExamResultStatsView } from '../models/views/ExamResultStatsView';
 
 export class ExamService extends QueryServiceBase<ExamData> {
 
@@ -75,8 +77,17 @@ export class ExamService extends QueryServiceBase<ExamData> {
         if (questions.length === 0)
             throw new Error('Exam has no questions assigend.');
 
+        const examResultView = await this._ormService
+            .query(ExamResultStatsView, {
+                examVersionId: examView.examVersionId,
+                userId
+            })
+            .where('examVersionId', '=', 'examVersionId')
+            .and('userId', '=', 'userId')
+            .getSingle();
+
         return this._mapperService
-            .mapTo(ExamPlayerDataDTO, [examView, questions]);
+            .mapTo(ExamPlayerDataDTO, [examView, questions, examResultView]);
     };
 
     /**
@@ -128,14 +139,14 @@ export class ExamService extends QueryServiceBase<ExamData> {
         // inspect questions
         const questions = await this._ormService
             .withResType<QuestionVersion>()
-            .query(QuestionVersion, { answerSessionId })
-            .select(AnswerSession)
+            .query(AnswerSession, { answerSessionId })
+            .select(QuestionVersion)
+            .leftJoin(ExamVersion, x => x
+                .on('id', '=', 'examVersionId', AnswerSession))
+            .leftJoin(QuestionVersion, x => x
+                .on('examVersionId', '=', 'id', ExamVersion))
             .leftJoin(QuestionData, x => x
                 .on('id', '=', 'questionDataId', QuestionVersion))
-            .leftJoin(ExamVersion, x => x
-                .on('id', '=', 'examVersionId', QuestionVersion))
-            .leftJoin(AnswerSession, x => x
-                .on('examVersionId', '=', 'id', ExamVersion))
             .where('id', '=', 'answerSessionId')
             .getMany();
         /* .getRepository(QuestionVersion)
@@ -149,6 +160,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         .getMany(); */
 
         const isLast = questions[questions.length - 1].id === questionVersionId;
+
         const examVersionId = questions.first().examVersionId!;
 
         // save user activity
@@ -238,6 +250,15 @@ export class ExamService extends QueryServiceBase<ExamData> {
             .and('answerSessionId', '=', 'answerSessionId')
             .getMany();
 
-        return toExamResultDTO(examResultViews);
+        const examResultStatsView = await this._ormService
+            .query(ExamResultStatsView, {
+                answerSessionId,
+                userId
+            })
+            .where('answerSessionId', '=', 'answerSessionId')
+            .and('userId', '=', 'userId')
+            .getSingle();
+
+        return toExamResultDTO(examResultViews, examResultStatsView);
     };
 }

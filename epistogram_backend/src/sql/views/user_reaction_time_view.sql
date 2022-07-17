@@ -5,8 +5,7 @@ WITH user_exam AS (
         ev.exam_id,
         asv.answer_session_id answer_session_id,
         EXTRACT(SECONDS FROM asv.end_date - asv.start_date) exam_length_seconds,
-            COALESCE(erv.correct_given_answer_count::double precision, 0) /
-            COALESCE(erv.question_count, 0) exam_correct_answer_rate
+        asv.answer_session_success_rate exam_correct_answer_rate
     FROM public.user u
     
     LEFT JOIN public.answer_session_view asv
@@ -14,9 +13,6 @@ WITH user_exam AS (
 	
 	LEFT JOIN public.exam_version ev
 	ON ev.id = asv.exam_version_id
-    
-    LEFT JOIN public.exam_result_view erv
-    ON erv.answer_session_id = asv.answer_session_id
     
     WHERE
         asv.answer_session_type = 'exam'

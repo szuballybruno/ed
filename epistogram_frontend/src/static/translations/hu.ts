@@ -36,6 +36,7 @@ export const huTranslation: TranslationType = {
                 percentage: '%',
                 hour: 'óra',
                 minute: 'perc',
+                second: 'mp',
                 count: 'db',
                 countPerDay: 'db/nap'
             },
@@ -445,7 +446,7 @@ export const huTranslation: TranslationType = {
             hello: 'üdv!',
             nextQuestion: 'Következő',
             resultsTitle: 'Egy újabb tesztet oldottál meg, íme az eredményed:',
-            questionsLabel: 'Kérdések',
+            questionsLabel: 'Kérdésekre adott válaszaid',
             answerLabel: 'Válaszod',
             continueCourse: 'Kurzus folytatása',
             correctAnswer: 'Helyes!',
@@ -467,8 +468,8 @@ export const huTranslation: TranslationType = {
                     suffix: 'perc'
                 },
                 fromAllUsers: {
-                    title: 'Az összes felhasználó között',
-                    suffix: '%'
+                    title: 'eredmény a cégen belül',
+                    suffix: ''
                 }
 
             }

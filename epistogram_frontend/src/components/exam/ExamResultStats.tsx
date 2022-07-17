@@ -1,5 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
+import { formatTime } from '../../static/frontendHelpers';
 
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
@@ -8,14 +9,31 @@ import StatisticsCard from '../statisticsCard/StatisticsCard';
 export const ExamResultStats = (props: {
     correctAnswerRate: number,
     correctAnswerCount: number,
-    totalQuestionCount: number
+    totalQuestionCount: number,
+    examLengthSeconds: number | null,
+    examSuccessRateDiffFromCompany: number | null
 }) => {
 
-    const { correctAnswerRate, correctAnswerCount, totalQuestionCount } = props;
+    const { correctAnswerRate, correctAnswerCount, totalQuestionCount, examLengthSeconds, examSuccessRateDiffFromCompany } = props;
+
+    const successRateDiffInText = ((successRateDiff: number | null = examSuccessRateDiffFromCompany) => {
+
+        if (!successRateDiff)
+            return null;
+
+        if (successRateDiff > 30)
+            return 'Kimagasló';
+
+        if (successRateDiff < -30)
+            return 'Átlag alatti';
+
+        return 'Átlagos';
+
+    })();
 
     return <EpistoGrid
         width="100%"
-        minColumnWidth={'200px'}
+        minColumnWidth={'280px'}
         gap={'10px'}
         auto={'fill'}>
 
@@ -36,15 +54,15 @@ export const ExamResultStats = (props: {
         <StatisticsCard
             height="150px"
             iconPath={Environment.getAssetUrl('/icons/exam_result_time.svg')}
-            suffix={translatableTexts.exam.examResultStats.examDoneInMinutes.suffix}
+            suffix={translatableTexts.misc.suffixes.second}
             title={translatableTexts.exam.examResultStats.examDoneInMinutes.title}
-            value={'66'} />
+            value={examLengthSeconds ? formatTime(examLengthSeconds) : null} />
 
         <StatisticsCard
             height="150px"
             iconPath={Environment.getAssetUrl('/icons/exam_result_top_percent.svg')}
             suffix={translatableTexts.exam.examResultStats.fromAllUsers.suffix}
             title={translatableTexts.exam.examResultStats.fromAllUsers.title}
-            value={'top 20'} />
+            value={successRateDiffInText} />
     </EpistoGrid>;
 };

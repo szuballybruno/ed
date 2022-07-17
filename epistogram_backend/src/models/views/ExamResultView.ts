@@ -38,14 +38,6 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    correctGivenAnswerCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    questionCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
     isSuccessfulSession: boolean;
 
     @ViewColumn()
@@ -71,6 +63,10 @@ export class ExamResultView {
     @ViewColumn()
     @XViewColumn()
     answerId: Id<'Answer'>;
+
+    @ViewColumn()
+    @XViewColumn()
+    correctAnswerRatePerQuestion: number;
 
     @ViewColumn()
     @XViewColumn()

@@ -12,6 +12,11 @@ export class ExamPlayerDataDTO {
     questions: QuestionDTO[];
     correctAnswerCount: number;
     totalQuestionCount: number;
-    correctAnswerRate: number;
     isCompletedPreviously: boolean;
+
+    fullyCorrectlyAnsweredQuestionsCount: number;
+    questionsCount: number;
+    examSuccessRateDiffFromCompany: number;
+    correctAnswerRate: number;
+    examLengthSeconds: number;
 }

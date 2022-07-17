@@ -34,6 +34,7 @@ export type TranslationType = {
                 percentage: string;
                 hour: string;
                 minute: string;
+                second: string;
                 count: string;
                 countPerDay: string
             };
