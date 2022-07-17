@@ -66,6 +66,8 @@ export const LearningStatistics = (props: {
             title: 'Helyes válaszok aránya',
             suffix: '%',
             value: userLearningPageStats?.totalCorrectAnswerRate
+                ? Math.floor(userLearningPageStats.totalCorrectAnswerRate)
+                : '-'
         }, {
             title: 'Céges rangsor',
             suffix: '%',

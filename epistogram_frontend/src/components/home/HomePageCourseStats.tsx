@@ -37,89 +37,84 @@ export const HomePageCourseStats = (props: {
         mt='10px'
         direction='column'>
 
-        <div
-            style={{
-                width: '100%',
-                maxWidth: '100%',
-                display: 'grid',
-                boxSizing: 'border-box',
-                gap: '10px',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                gridAutoFlow: 'row dense',
-                gridAutoRows: '320px'
-            }}>
+        <Flex
+            flex='1'>
 
-            {recommendedItemQuota ? <Grid
-                background='transparent'
-                boxShadow="unset"
-                direction="column"
-                p="10px"
-                style={{
-                    gridColumn: 'auto / span 2',
-                    gridRow: 'auto / span 1',
-                    boxSizing: 'border-box',
-                    gap: '10px',
-                    gridAutoFlow: 'row dense',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                    gridAutoRows: '160px'
-                }} >
-                <img
-                    src={currentCourse?.coverFilePath ?? ''}
-                    alt=""
+            {recommendedItemQuota
+                ? <Grid
+                    background='transparent'
+                    boxShadow="unset"
+                    direction="column"
+                    w='550px'
+                    minW={'550px'}
+                    p="10px"
                     style={{
-                        height: '100%',
-                        width: '100%',
-                        objectFit: 'cover'
-                    }}
-                    className="roundBorders" />
+                        gridColumn: 'auto / span 2',
+                        gridRow: 'auto / span 1',
+                        boxSizing: 'border-box',
+                        gap: '10px',
+                        gridAutoFlow: 'row dense',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                        gridAutoRows: '160px'
+                    }} >
+                    <img
+                        src={currentCourse?.coverFilePath ?? ''}
+                        alt=""
+                        style={{
+                            height: '100%',
+                            width: '100%',
+                            objectFit: 'cover'
+                        }}
+                        className="roundBorders" />
 
-                <StatisticsCard
-                    title={'Teljesítve az ajánlott napi videókból'}
-                    value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
-                    suffix={''}
-                    iconPath={Environment.getAssetUrl('/images/dailyquota.png')}
-                    isOpenByDefault={false} />
+                    <StatisticsCard
+                        title={'Teljesítve az ajánlott napi videókból'}
+                        value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
+                        suffix={''}
+                        iconPath={Environment.getAssetUrl('/images/dailyquota.png')}
+                        isOpenByDefault={false} />
 
-                <StatisticsCard
-                    title={'Teljesítve az ajánlott heti videókból'}
-                    value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
-                    suffix={''}
-                    iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
-                    isOpenByDefault={false} />
+                    <StatisticsCard
+                        title={'Teljesítve az ajánlott heti videókból'}
+                        value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
+                        suffix={''}
+                        iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
+                        isOpenByDefault={false} />
 
-                <StatisticsCard
-                    title={'A kurzus várható befejezési ideje'}
-                    value={estimatedCompletionDateString}
-                    suffix={''}
-                    iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
-                    isOpenByDefault={false} />
+                    <StatisticsCard
+                        title={'A kurzus várható befejezési ideje'}
+                        value={estimatedCompletionDateString}
+                        suffix={''}
+                        iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
+                        isOpenByDefault={false} />
 
-            </Grid> : <Flex
-                align='center'
-                justify='center'
-                textAlign='center'
-                style={{
-                    gridColumn: 'auto / span 2',
-                    gridRow: 'auto / span 2',
-                    boxSizing: 'border-box',
-                    gap: '10px',
-                    gridAutoFlow: 'row dense',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-                    gridAutoRows: '160px'
-                }}>
+                </Grid>
+                : <Flex
+                    align='center'
+                    justify='center'
+                    textAlign='center'
+                    style={{
+                        gridColumn: 'auto / span 2',
+                        gridRow: 'auto / span 2',
+                        boxSizing: 'border-box',
+                        gap: '10px',
+                        gridAutoFlow: 'row dense',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                        gridAutoRows: '160px'
+                    }}>
 
-                Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
-            </Flex>}
+                    Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
+                </Flex>}
 
 
             {/* chart item  */}
             <FlexFloat
+                flex='3'
                 background='transparent'
                 boxShadow="unset"
                 direction="column"
                 p="10px"
                 minWidth={250}
-                width='*'
                 style={{
                     gridColumn: 'auto / span 3',
                     gridRow: 'auto / span 1'
@@ -129,7 +124,7 @@ export const HomePageCourseStats = (props: {
                     ? <UserProgressChart userProgress={userProgressData} />
                     : <NoProgressChartYet />}
             </FlexFloat>
-        </div>
+        </Flex>
 
         {/* navigation buttons */}
         <Flex
