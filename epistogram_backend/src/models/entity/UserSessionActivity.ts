@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { SessionActivityType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 import { ActivitySession } from './ActivitySession';
 import { ExamVersion } from './exam/ExamVersion';
 import { VideoVersion } from './video/VideoVersion';
@@ -10,7 +11,7 @@ export class UserSessionActivity {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: number;
+    id: Id<'UserSessionActivity'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     @XViewColumn()
@@ -23,25 +24,25 @@ export class UserSessionActivity {
     // TO ONE
 
     // video 
-    @Column({ nullable: true })
+    @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<'VideoVersion'> | null;
     @XManyToOne<UserSessionActivity>()(() => VideoVersion, x => x.userSessionActivities)
     @XJoinColumn<UserSessionActivity>('videoVersionId')
     videoVersion: Relation<VideoVersion>;
 
     // exam 
-    @Column({ nullable: true })
+    @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    examVersionId: number | null;
+    examVersionId: Id<'ExamVersion'> | null;
     @XManyToOne<UserSessionActivity>()(() => ExamVersion, x => x.userSessionActivities)
     @XJoinColumn<UserSessionActivity>('examVersionId')
     examVersion: Relation<ExamVersion> | null;
 
     // user
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
-    activitySessionId: number;
+    activitySessionId: Id<'ActivitySession'>;
     @ManyToOne(_ => ActivitySession, x => x.activities)
     @JoinColumn({ name: 'activity_session_id' })
     activitySession: Relation<ActivitySession>;

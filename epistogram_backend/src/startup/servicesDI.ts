@@ -98,7 +98,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
     const urlService = new UrlService(globalConfig);
     const mapperService = new MapperService(urlService);
-    const loggerService = new LoggerService();
+    const loggerService = new LoggerService(globalConfig);
     const poolService = new SQLPoolService(globalConfig);
 
     return new ServiceProvider({
@@ -123,15 +123,15 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
 
     // create transients
     const hashService = new HashService(globalConfig);
-    const sqlConnectionService = new SQLConnectionService(poolService, globalConfig);
+    const sqlConnectionService = new SQLConnectionService(poolService, loggerService);
     const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);
-    const createDBService = new CreateDBService(sqlConnectionService, dbSchema, globalConfig, typeOrmConnectionService);
+    const createDBService = new CreateDBService(sqlConnectionService, dbSchema, globalConfig, typeOrmConnectionService, loggerService);
     const ormConnectionService = new ORMConnectionService(globalConfig, sqlConnectionService);
     const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
     const eventService = new EventService(mapperService, ormConnectionService);
     const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService);
     const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
-    const userSessionActivityService = new UserSessionActivityService(sqlFunctionService, coinAcquireService);
+    const userSessionActivityService = new UserSessionActivityService(ormConnectionService, coinAcquireService, loggerService);
     const activationCodeService = new ActivationCodeService(ormConnectionService);
     const emailService = new EmailService(globalConfig, urlService);
     const versionSaveService = new VersionSaveService(ormConnectionService);
@@ -144,7 +144,7 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const permissionService = new PermissionService(ormConnectionService, mapperService);
     const authenticationService = new AuthenticationService(ormConnectionService, userService, tokenService, userSessionActivityService, hashService, permissionService, globalConfig);
     const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService);
-    const seedService = new SeedService(dbSchema, globalConfig, sqlConnectionService);
+    const seedService = new SeedService(dbSchema, globalConfig, sqlConnectionService, loggerService);
     const recreateDBservice = new RecreateDBService(createDBService, seedService, dbSchema, sqlConnectionService);
     const questionService = new QuestionService(ormConnectionService, versionSaveService);
     const courseItemService = new CourseItemService(ormConnectionService, mapperService, questionService, versionSaveService, questionAnswerService);

@@ -53,8 +53,7 @@ export const MainRouting = () => {
                 },
                 {
                     route: applicationRoutes.administrationRoute,
-                    element: <AdminPage />,
-                    isAuthorizedToView: x => x.canAccessAdministration
+                    element: <AdminPage />
                 },
                 {
                     route: applicationRoutes.homeRoute,

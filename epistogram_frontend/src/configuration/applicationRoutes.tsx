@@ -141,6 +141,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         shopRoute: {
             title: translatableTexts.routeTitles.shopPage,
             route: new EpistoRoute('/', 'shop'),
+            isAuthoirziedToVisit: hasPermission => hasPermission('ACCESS_ADMIN')
         },
 
         rootHomeRoute: {
@@ -256,6 +257,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
             title: translatableTexts.routeTitles.administration,
             route: new EpistoRoute('/', 'administration', '*'),
             icon: <AdminPanelSettings />,
+            isAuthoirziedToVisit: hasPermission => hasPermission('ACCESS_ADMIN'),
 
             homeRoute: {
                 title: translatableTexts.routeTitles.administrationHome,
@@ -312,8 +314,10 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
             coursesRoute: {
                 title: translatableTexts.routeTitles.administrationCourseAdmin,
                 route: new EpistoRoute('/administration', 'courses', '*'),
-                icon: <Subscriptions className="fontXXL"
+                icon: <Subscriptions
+                    className="fontXXL"
                     color={'secondary'} />,
+                isAuthoirziedToVisit: hasPermission => hasPermission('ACCESS_ADMIN'),
 
                 landingRoute: {
                     title: translatableTexts.routeTitles.administrationCourseAdmin,
@@ -375,6 +379,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 icon: <SupervisedUserCircleIcon
                     className="fontXXL"
                     color={'secondary'} />,
+                isAuthoirziedToVisit: hasPermission => hasPermission('ACCESS_ADMIN'),
 
                 indexRoute: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,

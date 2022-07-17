@@ -369,8 +369,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             'answer_question_fn',
             'create_daily_tip_fn',
             'insert_coin_transaction',
-            'get_user_session_first_activity_id',
-            'save_user_session_activity'
+            'get_user_session_first_activity_id'
         ],
 
         constraints: [

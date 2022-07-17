@@ -1,15 +1,13 @@
-import { useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { Logger } from '../../static/Logger';
-import { AuthenticationStateContext,  RefetchUserAsyncContext } from '../system/AuthenticationFrame';
-import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { HasPermissionFnType, useAuthorizationContext } from '../system/AuthorizationContext';
 
 export type RenderRoute = {
     element: JSX.Element;
     route: ApplicationRoute;
-    isAuthorizedToView?: (userActivity: any) => boolean;
+    isAuthorizedToView?: (hasPermission: HasPermissionFnType) => boolean;
 }
 
 const RouteRenderer = (props: {
@@ -20,16 +18,17 @@ const RouteRenderer = (props: {
 
     const { children, route, isAuthorizedToView } = props;
 
-    const authState = useContext(AuthenticationStateContext);
-    const refetchUserAsync = useContext(RefetchUserAsyncContext);
     const { hasPermission } = useAuthorizationContext();
+    const isAuthorizedToViewResult = route.isAuthoirziedToVisit
+        ? route.isAuthoirziedToVisit(hasPermission)
+        : isAuthorizedToView
+            ? isAuthorizedToView(hasPermission)
+            : true;
 
     Logger.logScoped('ROUTING', `Route renderer: Abs: '${route.route.getAbsolutePath()}' Rel: '${route.route.getRelativePath()}'`);
 
-    // redirect to home if external authorization check fails
-    const authFuncCheck = true;
-
-    if (!authFuncCheck) {
+    // AUTH check, redirect
+    if (!isAuthorizedToViewResult) {
 
         Logger.logScoped('ROUTING', '-- Authorization function returned false, redirecting...');
 
@@ -38,8 +37,8 @@ const RouteRenderer = (props: {
             to={applicationRoutes.homeRoute.route.getAbsolutePath()} />;
     }
 
+    // RENDER 
     Logger.logScoped('ROUTING', '-- Rendering...');
-
     return children;
 };
 

@@ -1,8 +1,8 @@
 
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
+import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log, logSecondary } from '../misc/logger';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 
@@ -27,17 +27,16 @@ export const getSeedList = <TEntity, TConstraint extends PropConstraintType<TCon
 
 export class SeedService {
 
-
     constructor(
         private _dbSchema: XDBMSchemaType,
         private _config: GlobalConfiguration,
-        private _sqlConnectionService: SQLConnectionService) {
+        private _sqlConnectionService: SQLConnectionService,
+        private _loggerService: LoggerService) {
     }
 
     seedDBAsync = async () => {
 
-        if (this._config.logging.bootstrap)
-            log('Seeding DB...', { entryType: 'strong' });
+        this._loggerService.logScoped('BOOTSTRAP', 'Seeding DB...');
 
         for (let index = 0; index < this._dbSchema.seedScripts.length; index++) {
 
@@ -45,13 +44,11 @@ export class SeedService {
 
             const [classType, seedObj] = scriptObject as NewSeedType;
 
-            if (this._config.logging.bootstrap)
-                logSecondary(`Seeding ${classType.name}...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Seeding ${classType.name}...`);
 
             if (Object.values(seedObj).length === 0) {
 
-                if (this._config.logging.bootstrap)
-                    logSecondary('Skipping, has no values.');
+                this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', 'Skipping, has no values.');
                 continue;
             }
 
@@ -63,14 +60,12 @@ export class SeedService {
         await this
             ._recalcSequencesAsync();
 
-        if (this._config.logging.bootstrap)
-            log('Seeding DB done!', { entryType: 'strong' });
+        this._loggerService.logScoped('BOOTSTRAP', 'Seeding DB done!');
     };
 
     private _recalcSequencesAsync = async () => {
 
-        if (this._config.logging.bootstrap)
-            log('Recalculating sequance max values...');
+        this._loggerService.logScoped('BOOTSTRAP', 'Recalculating sequance max values...');
 
         const dbName = this._config.database.name;
 
@@ -96,8 +91,7 @@ export class SeedService {
 
         await this._sqlConnectionService.executeSQLAsync(script);
 
-        if (this._config.logging.bootstrap)
-            logSecondary('Recalculating sequance max values done.');
+        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', 'Recalculating sequance max values done.');
     };
 
     private parseSeedList<TEntity>(entitySignature: { new(): TEntity }, seedObject: { [K in string]: NoComplexTypes<TEntity> }) {

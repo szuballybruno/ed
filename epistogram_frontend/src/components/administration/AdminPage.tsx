@@ -5,6 +5,7 @@ import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
+import { RouteHelpers } from '../../static/RouteHelpers';
 import { ContentPane } from '../ContentPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
@@ -26,24 +27,17 @@ export const AdminPage = () => {
 
     const { hasPermission } = useAuthorizationContext();
     const administrationRoutes = applicationRoutes.administrationRoute;
-    const { navigate } = useNavigation();
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.homeRoute.overviewRoute)
         .add(administrationRoutes.usersRoute.editRoute)
-        .addIf(hasPermission('ACCESS_ADMIN'), administrationRoutes.coursesRoute)
-        .addIf(hasPermission('MANAGE_SHOP'), administrationRoutes.shopRoute)
-        .addIf(hasPermission('ACCESS_ADMIN'), administrationRoutes.personalityAssessmentRoute)
+        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.coursesRoute, hasPermission), administrationRoutes.coursesRoute)
+        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.shopRoute, hasPermission), administrationRoutes.shopRoute)
+        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.personalityAssessmentRoute, hasPermission), administrationRoutes.personalityAssessmentRoute)
         .add(administrationRoutes.companiesRoute)
         .add(administrationRoutes.rolesRoute)
         .add(administrationRoutes.debugRoute)
         .getArray();
-
-    useEffect(() => {
-
-        if (!hasPermission('ACCESS_ADMIN'))
-            navigate(applicationRoutes.homeRoute);
-    }, []);
 
     return <PageRootContainer>
 
@@ -122,15 +116,13 @@ export const AdminPage = () => {
                     // course administartion
                     {
                         route: administrationRoutes.coursesRoute,
-                        element: <CourseAdministartionSubpage />,
-                        isAuthorizedToView: x => x.canAccessCourseAdministration
+                        element: <CourseAdministartionSubpage />
                     },
 
                     // shop administartion
                     {
                         route: administrationRoutes.shopRoute,
-                        element: <ShopAdminSubpage />,
-                        isAuthorizedToView: x => x.canAccessShopAdministration
+                        element: <ShopAdminSubpage />
                     },
 
                     // personality assessment administartion
@@ -151,7 +143,6 @@ export const AdminPage = () => {
                                     element: <EditDailyTipSubpage />
                                 }
                             ]} />,
-                        isAuthorizedToView: x => x.canAccessShopAdministration
                     },
 
                     {
@@ -168,14 +159,6 @@ export const AdminPage = () => {
                         route: administrationRoutes.debugRoute,
                         element: <DebugPage />
                     }
-
-                    // statistics
-                    // {
-                    //     route: administrationRoutes.myCompanyRoute,
-                    //     element: <AdminStatistics />,
-                    //     protectionLevel: 'authorize',
-                    //     isAuthorizedToView: x => x.canAccessShopAdministration
-                    // }
                 ]} />
         </ContentPane>
     </PageRootContainer>;
