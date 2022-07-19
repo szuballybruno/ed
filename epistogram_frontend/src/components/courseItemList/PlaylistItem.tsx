@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { ReplayCircleFilled } from '@mui/icons-material';
 import { useNavigation } from '../../services/core/navigatior';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
+import { ChipSmall } from '../administration/courses/ChipSmall';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { PlaylistItemTypeIcon } from './PlaylistItemTypeIcon';
@@ -14,7 +15,8 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
         state,
         playlistItemCode,
         shouldRepeatVideo,
-        type
+        type,
+        correctAnswerRate
     } = playlistItem;
 
     const isLocked = state === 'locked';
@@ -63,12 +65,18 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
                     isSelected={state === 'current'}
                     subTitle={subTitle} />
             </Flex>}
-            endContent={shouldRepeatVideo &&
-                <ReplayCircleFilled
-                    style={{
-                        fontWeight: 'bold',
-                        color: 'var(--intenseOrange)'
-                    }} />
+            endContent={<Flex>
+
+                {shouldRepeatVideo &&
+                    <ReplayCircleFilled
+                        style={{
+                            fontWeight: 'bold',
+                            color: 'var(--intenseOrange)'
+                        }} />}
+
+                {(type === 'exam' && correctAnswerRate) 
+                    && <ChipSmall text={correctAnswerRate + '%'} />}
+            </Flex>
             }>
         </FlexListItem >
     );

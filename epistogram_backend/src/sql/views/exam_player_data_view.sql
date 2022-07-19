@@ -19,7 +19,7 @@ latest_answer_sessions AS (
 	LEFT JOIN public.exam ex
 	ON ex.id = ev.exam_id
 	
-	--WHERE asv.is_successful
+	WHERE asv.is_completed
 	
 	GROUP BY 
 		ex.id, 

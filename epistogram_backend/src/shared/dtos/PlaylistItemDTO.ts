@@ -9,4 +9,5 @@ export class PlaylistItemDTO {
     playlistItemCode: string;
     type: CourseItemType;
     shouldRepeatVideo: boolean | null;
+    correctAnswerRate: number | null;
 }

@@ -4,6 +4,7 @@ import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { PretestResultView } from '../models/views/PretestResultView';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { Id } from '../shared/types/versionId';
@@ -14,16 +15,22 @@ import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
+import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PretestService {
+
+    private _tempomatService: TempomatService;
 
     constructor(
         private _ormService: ORMConnectionService,
         private _mapperSerice: MapperService,
         private _examService: ExamService,
         private _courseBridgeService: UserCourseBridgeService,
-        private _questionAnswerService: QuestionAnswerService) {
+        private _questionAnswerService: QuestionAnswerService,
+        tempomatService: TempomatService) {
+
+            this._tempomatService = tempomatService;
     }
 
     async createPretestExamAsync(courseId: Id<'Course'>) {
@@ -114,8 +121,46 @@ export class PretestService {
 
         log('First item code: ' + courseView.firstItemCode);
 
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, {
+                userId: userIdAsIdType,
+                courseId
+            })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
+
+        const previsionedCompletionDate = this._tempomatService
+            .calculatePrevisionedDate(
+                tempomatCalculationData.originalPrevisionedCompletionDate,
+                tempomatCalculationData.totalItemCount,
+                tempomatCalculationData.totalCompletedItemCount,
+                tempomatCalculationData.startDate,
+                tempomatCalculationData.tempomatMode,
+                tempomatCalculationData.tempomatAdjustmentValue
+        );
+
+        const recommendedItemsPerDay = this._tempomatService
+            .calculateRecommendedItemsPerDay(
+                tempomatCalculationData.startDate,
+                previsionedCompletionDate,
+                tempomatCalculationData.requiredCompletionDate,
+                tempomatCalculationData.totalItemCount
+            );
+
+        const {
+            originalPrevisionedCompletionDate, 
+            requiredCompletionDate
+        } = tempomatCalculationData;
+
         return this._mapperSerice
-            .mapTo(PretestResultDTO, [view, courseView]);
+            .mapTo(PretestResultDTO, [
+                view, 
+                courseView, 
+                originalPrevisionedCompletionDate, 
+                requiredCompletionDate, 
+                recommendedItemsPerDay
+            ]);
     }
 
     async getPretestExamIdAsync(courseId: Id<'Course'>) {

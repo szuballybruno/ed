@@ -20,7 +20,7 @@ export const PrequizSubpage = () => {
         .create<'Course'>(useIntParam('courseId')!);
 
     const showError = useShowErrorDialog();
-    const { navigateToWatchPretest } = useNavigation();
+    const { navigateToWatchPretestGreeting } = useNavigation();
     const { questions } = usePrequizQuestions(courseId);
 
     const paging = usePaging({ items: questions });
@@ -51,7 +51,7 @@ export const PrequizSubpage = () => {
 
             if (paging.isLast) {
 
-                navigateToWatchPretest(courseId);
+                navigateToWatchPretestGreeting(courseId);
             } else {
 
                 paging.next();

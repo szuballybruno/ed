@@ -184,6 +184,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         await this._ormService
             .save(AnswerSession, {
                 id: answerSessionId,
+                isCompleted: true,
                 endDate: new Date()
             });
 

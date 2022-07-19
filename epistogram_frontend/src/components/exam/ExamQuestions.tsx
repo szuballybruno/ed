@@ -32,6 +32,8 @@ export const ExamQuestions = (props: {
     } = props;
 
     const questions = exam.questions;
+    const [completedQuestionIds, setCompletedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
+    const [skippedQuestionIds, setSkippedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
     const showError = useShowErrorDialog();
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const questionPaging = usePaging({ items: questions, onNextOverNavigation: onExamFinished });
@@ -55,6 +57,7 @@ export const ExamQuestions = (props: {
                 elapsedSeconds: timeElapsed
             });
 
+            setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
             setShowUpTime(new Date());
             setSelectedAnswerIds([]);
             questionPaging.next();
@@ -68,14 +71,14 @@ export const ExamQuestions = (props: {
 
         if (isSelected) {
 
-            if (isSingleAnswerMode) {
+            /* if (isSingleAnswerMode) {
 
                 setSelectedAnswerIds([answerId]);
             }
-            else {
+            else { */
 
-                setSelectedAnswerIds([...selectedAnswerIds, answerId]);
-            }
+            setSelectedAnswerIds([...selectedAnswerIds, answerId]);
+            /*   } */
         }
         else {
 
@@ -103,6 +106,12 @@ export const ExamQuestions = (props: {
                     {questions.length}/{questionPaging.currentIndex + 1}
                 </EpistoFont>
             </Flex>}
+            stepperLogic={{
+                ids: questions.map(x => x.questionVersionId),
+                currentId: currentQuestion.questionVersionId,
+                completedIds: completedQuestionIds,
+                skippedIds: skippedQuestionIds
+            }}
             headerCenterText={exam.title}
             exitExamAction={exitExamAction}
             handleNext={handleNextAsync}

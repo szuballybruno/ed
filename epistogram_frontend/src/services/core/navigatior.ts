@@ -40,6 +40,8 @@ export const useNavigation = () => {
 
     const navigateToWatchPrequiz = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
 
+    const navigateToWatchPretestGreeting = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestGreetingRoute, {courseId});
+
     const navigateToWatchPretest = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
 
     const navigateToWatchPretestResults = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
@@ -82,6 +84,7 @@ export const useNavigation = () => {
         openNewTab,
         navigateToWatchPrequiz,
         navigateToWatchPretest,
+        navigateToWatchPretestGreeting,
         navigateToWatchPretestResults,
         navigateToCourseRating,
         navigateToCourseOverview,

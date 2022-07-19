@@ -73,6 +73,8 @@ latest_answer_session AS
 	ON asv.user_id = u.id
 	AND asv.exam_version_id = ev.id
 
+	WHERE asv.is_completed = true
+
 	GROUP BY u.id, ev.id
 ),
 question_count AS

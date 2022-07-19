@@ -27,6 +27,7 @@ export type ApplicationRoutesType = {
         watchRoute: ApplicationRoute;
         prequizRoute: ApplicationRoute;
         pretestRoute: ApplicationRoute;
+        pretestGreetingRoute: ApplicationRoute;
         pretestResultsRoute: ApplicationRoute;
         courseRatingRoute: ApplicationRoute;
         courseOverviewRoute: ApplicationRoute;
@@ -177,6 +178,11 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
             pretestRoute: {
                 title: translatableTexts.routeTitles.pretest,
                 route: new EpistoRoute('/watch', 'pretest/:courseId'),
+            },
+
+            pretestGreetingRoute: {
+                title: translatableTexts.routeTitles.pretestGreeting,
+                route: new EpistoRoute('/watch', 'pretest-greeting/:courseId'),
             },
 
             pretestResultsRoute: {

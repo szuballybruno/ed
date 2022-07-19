@@ -307,7 +307,8 @@ const marray = [
                             playlistItemCode: viewAsItem.playlistItemCode,
                             type: viewAsItem.itemType === 'video' ? 'video' : 'exam',
                             shouldRepeatVideo: viewAsItem.isRecommendedForPractise,
-                            thumbnailUrl: ''
+                            thumbnailUrl: '',
+                            correctAnswerRate: viewAsItem.correctAnswerRate
                         }));
 
                     const moduleState = isCurrentModule
@@ -354,15 +355,21 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addMapping(PretestResultDTO, () => (prv: PretestResultView, acv: AvailableCourseView) => {
+        .addMapping(PretestResultDTO, () => (
+            prv: PretestResultView, 
+            acv: AvailableCourseView, 
+            originalPrevisionedCompletionDate: Date, 
+            requiredCompletionDate: Date, 
+            recommendedItemsPerDay: number | null
+        ) => {
 
             return instantiate<PretestResultDTO>({
                 isCompleted: prv.isCompleted,
                 correctAnswerRate: prv.correctAnswerRate,
                 firstItemCode: acv.firstItemCode,
-                estimatedCompletionDate: new Date(Date.now()),
-                requiredCompletionDate: new Date(Date.now()),
-                recommendedVideosPerDay: 1
+                estimatedCompletionDate: originalPrevisionedCompletionDate,
+                requiredCompletionDate: requiredCompletionDate,
+                recommendedVideosPerDay: recommendedItemsPerDay
             });
         }),
 

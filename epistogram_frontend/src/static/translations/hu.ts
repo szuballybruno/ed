@@ -210,6 +210,7 @@ export const huTranslation: TranslationType = {
             player: 'Lejátszó',
             courseOverview: 'Kurzus összegző',
             pretest: 'Pretest',
+            pretestGreeting: 'Pretest greeting',
             pretestResults: 'Pretest results',
             prequiz: 'Prequiz',
             setNewPassword: 'Új jelszó beállítása',
@@ -442,6 +443,7 @@ export const huTranslation: TranslationType = {
 
         exam: {
             greetText: 'Készülj fel, ha a kezdés gombra kattintasz a vizsga elindul!',
+            greetTextRetry: 'Készülj fel, ha az újrakezdés gombra kattintasz a vizsga elindul! Ha újrakezded a vizsgát, mindig a jobb eredményt vesszük figyelembe!',
             statsLabelText: 'Utolsó kitöltésed eredményei:',
             hello: 'üdv!',
             nextQuestion: 'Következő',
