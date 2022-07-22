@@ -98,7 +98,7 @@ export const AdminPage = () => {
                             renderRoutes={[
                                 {
                                     route: administrationRoutes.homeRoute.overviewRoute,
-                                    element: <AdminHomeOverview />
+                                    element: <AdminHomeOverview />,
                                 },
                                 {
                                     route: administrationRoutes.homeRoute.detailsRoute,
