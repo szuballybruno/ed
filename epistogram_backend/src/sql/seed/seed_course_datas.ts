@@ -28,7 +28,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_5.id,
+            coverFileId: storageFiles.storage_file_course_cover_canva.id,
         },
         course_data_cyber: {
             modificationDate: new Date('2022-01-15 16:02:23.130322+00'),
@@ -49,7 +49,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_21.id,
+            coverFileId: storageFiles.storage_file_course_cover_cyber.id,
         },
         course_data_insta: {
             modificationDate: new Date('2022-01-14 21:52:26.140736+00'),
@@ -70,7 +70,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_10.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_163.id,
+            coverFileId: storageFiles.storage_file_course_cover_insta.id,
         },
 
         course_data_google_ads: {
@@ -92,7 +92,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_4.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_165.id,
+            coverFileId: storageFiles.storage_file_course_cover_ads.id,
         },
 
         course_data_python: {
@@ -114,7 +114,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_3.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_167.id,
+            coverFileId: storageFiles.storage_file_course_cover_py.id,
         },
 
         course_data_linked_in: {
@@ -136,7 +136,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_10.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_166.id,
+            coverFileId: storageFiles.storage_file_course_cover_linkedin.id,
         },
 
         course_data_word: {
@@ -158,7 +158,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_326.id,
+            coverFileId: storageFiles.storage_file_course_cover_word.id,
         },
 
         course_data_obs: {
@@ -180,7 +180,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_9.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_162.id,
+            coverFileId: storageFiles.storage_file_course_cover_obs.id,
         },
 
         course_data_powerPoint: {
@@ -202,29 +202,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_161.id,
-        },
-
-        course_data_uj: {
-            modificationDate: new Date('2022-01-15 16:02:29.20839+00'),
-            isFeatured: false,
-            title: 'Uj kurzus',
-            shortDescription: '',
-            description: '',
-            difficulty: 0,
-            benchmark: 0,
-            previouslyCompletedCount: 0,
-            language: 'magyar',
-            technicalRequirements: '',
-            requirementsDescription: '',
-            skillBenefits: '',
-            humanSkillBenefits: '',
-            humanSkillBenefitsDescription: '',
-            visibility: 'private',
-            categoryId: courseCategories.course_category_1.id,
-            subCategoryId: courseCategories.course_category_1.id,
-            teacherId: users.god.id,
-            coverFileId: null,
+            coverFileId: storageFiles.storage_file_course_cover_pp.id,
         },
 
         course_data_excel: {
@@ -246,7 +224,7 @@ export const getCourseDatasSeedData = (
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
             teacherId: users.god.id,
-            coverFileId: storageFiles.storage_file_302.id,
+            coverFileId: storageFiles.storage_file_course_cover_excel.id,
         }
     });
 

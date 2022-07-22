@@ -103,9 +103,13 @@ export class FileService {
 
                 try {
 
-                    await this.deleteFileEntityAsync(oldStorageFileId);
-                    await this._storageService
-                        .deleteStorageFileAsync(oldFileEntity.filePath);
+                    // TODO delete temporarily disabled
+                    // since while testing, we don't want to lose 
+                    // files from the dev bucket 
+
+                    // await this.deleteFileEntityAsync(oldStorageFileId);
+                    // await this._storageService
+                    //     .deleteStorageFileAsync(oldFileEntity.filePath);
                 }
                 catch (e) {
 

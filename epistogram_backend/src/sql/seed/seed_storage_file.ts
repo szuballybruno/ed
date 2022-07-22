@@ -1397,62 +1397,35 @@ export const getStorageFileSeedData = () => getSeedList<StorageFile>()({
     storage_file_527: {
         filePath: '/shop_item_cover_images/shop_item_cover_image_18_1644399045859.jpg'
     },
-    storage_file_2: {
-        filePath: '/courseCoverImages/1.png'
+    storage_file_course_cover_canva: {
+        filePath: 'course_cover_container/course_cover_canva.png'
     },
-    storage_file_4: {
-        filePath: '/courseCoverImages/3.png'
+    storage_file_course_cover_cyber: {
+        filePath: 'course_cover_container/course_cover_cyber.jpg'
     },
-    storage_file_5: {
-        filePath: '/courseCoverImages/canva.png'
+    storage_file_course_cover_pp: {
+        filePath: 'course_cover_container/course_cover_pp.jpg'
     },
-    storage_file_6: {
-        filePath: '/courseCoverImages/5.png'
+    storage_file_course_cover_obs: {
+        filePath: 'course_cover_container/course_cover_obs.jpg'
     },
-    storage_file_7: {
-        filePath: '/courseCoverImages/7.png'
+    storage_file_course_cover_insta: {
+        filePath: 'course_cover_container/course_cover_insta.jpg'
     },
-    storage_file_8: {
-        filePath: '/courseCoverImages/6.png'
+    storage_file_course_cover_ads: {
+        filePath: 'course_cover_container/course_cover_ads.jpg'
     },
-    storage_file_9: {
-        filePath: '/courseCoverImages/8.png'
+    storage_file_course_cover_linkedin: {
+        filePath: 'course_cover_container/course_cover_li.jpg'
     },
-    storage_file_21: {
-        filePath: 'courseCoverImages/cyber.jpg'
+    storage_file_course_cover_py: {
+        filePath: 'course_cover_container/course_cover_py.jpg'
     },
-    storage_file_39: {
-        filePath: 'courseCoverImages/courseCoverImage_15_1635401920887..jpg'
+    storage_file_course_cover_excel: {
+        filePath: 'course_cover_container/course_cover_excel.jpg'
     },
-    storage_file_61: {
-        filePath: 'courseCoverImages/courseCoverImage_2_1635425366973..jpg'
-    },
-    storage_file_115: {
-        filePath: 'courseCoverImages/courseCoverImage_18_1635936801554..jpg'
-    },
-    storage_file_161: {
-        filePath: 'courseCoverImages/courseCoverImage_22_1639469876995..jpg'
-    },
-    storage_file_162: {
-        filePath: 'courseCoverImages/courseCoverImage_17_1639469918555..jpg'
-    },
-    storage_file_163: {
-        filePath: 'courseCoverImages/courseCoverImage_23_1639471078184..jpg'
-    },
-    storage_file_165: {
-        filePath: 'courseCoverImages/courseCoverImage_24_1639471231667..jpg'
-    },
-    storage_file_166: {
-        filePath: 'courseCoverImages/courseCoverImage_25_1639471289057..jpg'
-    },
-    storage_file_167: {
-        filePath: 'courseCoverImages/courseCoverImage_26_1639473175106..jpg'
-    },
-    storage_file_302: {
-        filePath: 'courseCoverImages/courseCoverImage_27_1642268257899.jpg'
-    },
-    storage_file_326: {
-        filePath: 'courseCoverImages/courseCoverImage_28_1642272695575.jpg'
+    storage_file_course_cover_word: {
+        filePath: 'course_cover_container/course_cover_word.jpg'
     }
 });
 
