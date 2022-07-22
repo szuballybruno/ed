@@ -59,6 +59,8 @@ export const XDialog = (props: {
 
     const hostElement = getHostElement();
 
+    console.log('--- XDialog update: ' + logic.key);
+
     console.log('host: ');
     console.log(hostElement);
 

@@ -12,6 +12,13 @@ export const XDialogHost = (props: {
     const forceUpdate = useForceUpdate();
     const xDialogHoster = useMemo(() => new XDialogHoster(forceUpdate), []);
 
+    console.log('--- XDialog render: ');
+    const msg = xDialogHoster
+        .getDialogItems()
+        .map(x => `${x.key}: ${x.isOpen}`)
+        .join('; ');
+    console.log(msg);
+
     return <>
 
         <XDialogHosterContext.Provider
@@ -21,9 +28,6 @@ export const XDialogHost = (props: {
                 {xDialogHoster
                     .getDialogItems()
                     .map((poolItem, index) => {
-
-                        const isOpen = xDialogHoster
-                            .getOpenState(poolItem.key);
 
                         return <div
                             key={index}
@@ -37,7 +41,7 @@ export const XDialogHost = (props: {
                                 zIndex: 1000 - index,
                                 background: 'rgb(0,0,0,0.3)'
                             }}
-                            className={isOpen ? styles.disp_flex : styles.disp_none}>
+                            className={poolItem.isOpen ? styles.disp_flex : styles.disp_none}>
 
                             {/* click handler */}
                             <div
