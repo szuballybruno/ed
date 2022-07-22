@@ -1,5 +1,5 @@
 
-export type LoggingKeysType = 'ROUTING' | 'RENDER' | 'MUTATIONS' | 'AUTH' | 'GRID';
+export type LoggingKeysType = 'ROUTING' | 'RENDER' | 'MUTATIONS' | 'AUTH' | 'GRID' | 'DIALOGS';
 
 export const Environment = (() => {
 
@@ -14,7 +14,7 @@ export const Environment = (() => {
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 1 * 60 * 1000; // 1 mins
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = [];
+    const loggingEnabledKeys: LoggingKeysType[] = ['DIALOGS'];
 
     if (loggingEnabled) {
 

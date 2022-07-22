@@ -1,12 +1,4 @@
-import { createContext, ReactNode } from 'react';
+import { createContext } from 'react';
+import { XDialogHoster } from './XDialogHoster';
 
-type XDialogContextType = {
-    openDialog: (key: string) => void,
-    closeDialog: (key: string) => void,
-    mountContent: (key: string) => void,
-    unmountContent: (key: string) => void,
-    getOpenState: (key: string) => boolean,
-    getHostElement: (key: string) => Element
-};
-
-export const XDialogContext = createContext<XDialogContextType>({} as any);
+export const XDialogHosterContext = createContext<XDialogHoster>({} as any);

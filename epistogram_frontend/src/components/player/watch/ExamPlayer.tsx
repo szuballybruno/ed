@@ -61,8 +61,6 @@ export const ExamPlayer = (props: {
         setIsExamInProgress(false);
     };
 
-
-
     const goToCourseRating = () => {
 
         navigateToCourseRating(courseId);

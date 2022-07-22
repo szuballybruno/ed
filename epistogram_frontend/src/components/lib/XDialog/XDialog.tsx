@@ -1,16 +1,43 @@
-import React, { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { XDialogContext } from './XDialoContext';
+import { XDialogHosterContext } from './XDialoContext';
 
 export const useXDialogLogic = (key: string) => {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const xDialogHoster = useContext(XDialogHosterContext);
 
-    return useMemo(() => ({
+    const isOpen = useMemo(() => xDialogHoster.getOpenState(key), [key, xDialogHoster.getOpenState]);
+
+    const openDialog = useCallback(() => xDialogHoster.openDialog(key), [key, xDialogHoster.openDialog]);
+
+    const closeDialog = useCallback(() => xDialogHoster.closeDialog(key), [key, xDialogHoster.closeDialog]);
+
+    const mountContent = useCallback(() => xDialogHoster.mountContent(key), [key, xDialogHoster.mountContent]);
+
+    const unmountContent = useCallback(() => xDialogHoster.unmountContent(key), [key, xDialogHoster.unmountContent]);
+
+    const getHostElement = useCallback(() => xDialogHoster.getHostElement(key), [key, xDialogHoster.getHostElement]);
+
+    const bundle = useMemo(() => ({
         key,
         isOpen,
-        setIsOpen
-    }), [key, isOpen, setIsOpen]);
+        openDialog,
+        closeDialog,
+        mountContent,
+        unmountContent,
+        getHostElement
+    }),
+        [
+            key,
+            isOpen,
+            openDialog,
+            closeDialog,
+            mountContent,
+            unmountContent,
+            getHostElement
+        ]);
+
+    return bundle;
 };
 
 export type XDialogLogicType = ReturnType<typeof useXDialogLogic>;
@@ -21,51 +48,21 @@ export const XDialog = (props: {
 }) => {
 
     const { children, logic } = props;
-
-    const {
-        mountContent,
-        unmountContent,
-        getOpenState,
-        openDialog,
-        closeDialog,
-        getHostElement
-    } = useContext(XDialogContext);
-
-    const isReallyOpen = getOpenState(logic.key);
-    const hostElement = getHostElement(logic.key);
+    const { getHostElement, mountContent, unmountContent } = logic;
 
     // mount / unmount from content pool
     useEffect(() => {
 
-        mountContent(logic.key);
-
-        return () => {
-
-            unmountContent(logic.key);
-        };
+        mountContent();
+        return unmountContent;
     }, []);
 
-    // open close dialog based on logic
-    useEffect(() => {
+    const hostElement = getHostElement();
 
-        if (logic.isOpen) {
+    console.log('host: ');
+    console.log(hostElement);
 
-            openDialog(logic.key);
-        }
-        else {
-
-            closeDialog(logic.key);
-        }
-    }, [logic.isOpen]);
-
-    // sync logic state with global state, 
-    // since global state can change by itself 
-    useEffect(() => {
-
-        if (logic.isOpen != isReallyOpen)
-            logic.setIsOpen(isReallyOpen);
-    }, [isReallyOpen]);
-
+    // render 
     if (!hostElement)
         return <></>;
 

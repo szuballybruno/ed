@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ButtonType } from '../../../models/types';
 import { useXDialogLogic } from '../../lib/XDialog/XDialog';
-import { OpenDialogOptionsType, EpistoDialogLogicType, DeclareDialogOptionsType } from './EpistoDialogTypes';
+import { DeclareDialogOptionsType, EpistoDialogLogicType, OpenDialogOptionsType } from './EpistoDialogTypes';
 
 export const useEpistoDialogLogic = <TParams = void,>(
     dialogKey: string | Function,
@@ -11,11 +11,6 @@ export const useEpistoDialogLogic = <TParams = void,>(
     const [description, setDescription] = useState(declareOptions?.description ?? '');
     const [params, setParams] = useState<TParams>({} as TParams);
     const xlogic = useXDialogLogic(typeof dialogKey === 'function' ? dialogKey.name : dialogKey);
-
-    const closeDialog = useCallback(() => {
-
-        xlogic.setIsOpen(false);
-    }, [xlogic]);
 
     const [buttons, setButtons] = useState<ButtonType<EpistoDialogLogicType<TParams>>[]>([]);
 
@@ -36,9 +31,9 @@ export const useEpistoDialogLogic = <TParams = void,>(
                 setParams(opt.params);
         }
 
-        xlogic.setIsOpen(true);
+        xlogic.openDialog();
     }, [
-        xlogic.setIsOpen,
+        xlogic.openDialog,
         setButtons,
         setTitle,
         setDescription,
@@ -47,7 +42,7 @@ export const useEpistoDialogLogic = <TParams = void,>(
 
     return {
         openDialog,
-        closeDialog,
+        closeDialog: xlogic.closeDialog,
         isOpen: xlogic.isOpen,
         title,
         description,
