@@ -34,6 +34,7 @@ export type TranslationType = {
                 percentage: string;
                 hour: string;
                 minute: string;
+                second: string;
                 count: string;
                 countPerDay: string
             };
@@ -192,6 +193,7 @@ export type TranslationType = {
             player: string;
             courseOverview: string;
             pretest: string;
+            pretestGreeting: string;
             pretestResults: string;
             prequiz: string;
             setNewPassword: string;
@@ -402,6 +404,7 @@ export type TranslationType = {
 
         exam: {
             greetText: string;
+            greetTextRetry: string;
             statsLabelText: string;
             hello: string;
             nextQuestion: string;

@@ -1,15 +1,20 @@
-import { Flex, Text } from '@chakra-ui/react';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import { LinearProgress } from '@mui/material';
-import React, { ReactNode } from 'react';
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { ArrowBack, ArrowForward, Check } from '@mui/icons-material';
+import { Step, StepButton, StepIconProps, StepLabel, Stepper, styled } from '@mui/material';
+import { ReactNode } from 'react';
+import { Id } from '../../shared/types/versionId';
 import { isString } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
+
+
 
 export const ExamLayout = (props: {
     children: ReactNode,
     handleNext: () => void,
+    stepperLogic?: StepperLogicType<'QuestionVersion'>,
     handleBack?: () => void,
     nextButtonTitle: string,
     showNextButton?: boolean,
@@ -17,8 +22,10 @@ export const ExamLayout = (props: {
     headerCenterText?: string,
     headerLeftItem?: string | ReactNode,
     progressValue?: number,
-    footerButtons?: ({ text: string, action: () => void })[]
-}) => {
+    isHeightMaximized?: boolean,
+    showButtonsOnTop?: boolean,
+    footerButtons?: ({ text: string, action: () => void })[],
+} & FlexProps) => {
 
     const {
         exitExamAction,
@@ -30,8 +37,14 @@ export const ExamLayout = (props: {
         progressValue,
         handleNext,
         handleBack,
-        nextButtonTitle
+        nextButtonTitle,
+        isHeightMaximized,
+        showButtonsOnTop,
+        stepperLogic,
+        ...css
     } = props;
+
+
 
     const footerButton = (title: string, action: () => void, icon?: any, iconFront?: any) => <EpistoButton
         variant={'colored'}
@@ -46,19 +59,23 @@ export const ExamLayout = (props: {
     </EpistoButton>;
 
     return <Flex
-        className="whall"
-        minH='calc(100vh - 100px)'
+        minH='calc(100vh - 120px)'
+        maxH={isHeightMaximized ? '1080px' : 'unset'}
+        width='100%'
+        px='5px'
         direction="column"
-        alignItems="center"
-        px={20}>
+        alignItems="center">
 
         {/* header */}
         <Flex
             direction={'row'}
             alignItems={'center'}
+            position={!isHeightMaximized ? 'sticky' : undefined}
+            top={!isHeightMaximized ? '0' : undefined}
             className="roundBorders mildShadow"
-            background="var(--transparentWhite70)"
+            background={!isHeightMaximized ? 'white' : 'var(--transparentWhite70)'}
             width="100%"
+            zIndex='1000'
             height={60}
             pl={20}>
 
@@ -88,7 +105,9 @@ export const ExamLayout = (props: {
             </Flex>
 
             <Flex minWidth="200"
-                justify="flex-end">
+                justify="flex-end"
+                pr='10px'>
+
                 {exitExamAction && <EpistoButton
                     onClick={exitExamAction}
                     style={{
@@ -98,6 +117,16 @@ export const ExamLayout = (props: {
 
                     {translatableTexts.exam.exitExam}
                 </EpistoButton>}
+
+                {showButtonsOnTop && <>
+                    {/* other buttons */}
+                    {footerButtons && footerButtons
+                        .map(x => footerButton(x.text, x.action))}
+
+                    {/* continue button */}
+                    {showNextButton && footerButton(nextButtonTitle, handleNext, <ArrowForward />)}
+                </>}
+
             </Flex>
 
         </Flex>
@@ -110,7 +139,8 @@ export const ExamLayout = (props: {
             width="100%"
             align="center"
             justify="center"
-            direction="column">
+            direction="column"
+            {...css}>
 
             {children}
         </Flex>
@@ -120,7 +150,8 @@ export const ExamLayout = (props: {
             width="100%"
             className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
-            height="80px"
+            height="60px"
+            align='center'
             p={20}>
 
             {/* back button */}
@@ -130,9 +161,12 @@ export const ExamLayout = (props: {
             <Flex
                 flex={1}
                 px={10}
+                justify='center'
                 alignItems={'center'}>
 
-                {progressValue !== undefined && <>
+                {stepperLogic && <EpistoStepper stepperLogic={stepperLogic} />}
+
+                {/* {progressValue !== undefined && <>
                     <LinearProgress
                         variant="determinate"
                         value={progressValue}
@@ -145,7 +179,7 @@ export const ExamLayout = (props: {
                     <EpistoFont fontSize={'fontNormal14'}>
                         {`${Math.round(progressValue)}%`}
                     </EpistoFont>
-                </>}
+                </>} */}
             </Flex>
 
             {/* other buttons */}

@@ -36,6 +36,7 @@ export const huTranslation: TranslationType = {
                 percentage: '%',
                 hour: 'óra',
                 minute: 'perc',
+                second: 'mp',
                 count: 'db',
                 countPerDay: 'db/nap'
             },
@@ -209,6 +210,7 @@ export const huTranslation: TranslationType = {
             player: 'Lejátszó',
             courseOverview: 'Kurzus összegző',
             pretest: 'Pretest',
+            pretestGreeting: 'Pretest greeting',
             pretestResults: 'Pretest results',
             prequiz: 'Prequiz',
             setNewPassword: 'Új jelszó beállítása',
@@ -441,11 +443,12 @@ export const huTranslation: TranslationType = {
 
         exam: {
             greetText: 'Készülj fel, ha a kezdés gombra kattintasz a vizsga elindul!',
+            greetTextRetry: 'Készülj fel, ha az újrakezdés gombra kattintasz a vizsga elindul! Ha újrakezded a vizsgát, mindig a jobb eredményt vesszük figyelembe!',
             statsLabelText: 'Utolsó kitöltésed eredményei:',
             hello: 'üdv!',
             nextQuestion: 'Következő',
             resultsTitle: 'Egy újabb tesztet oldottál meg, íme az eredményed:',
-            questionsLabel: 'Kérdések',
+            questionsLabel: 'Kérdésekre adott válaszaid',
             answerLabel: 'Válaszod',
             continueCourse: 'Kurzus folytatása',
             correctAnswer: 'Helyes!',
@@ -467,8 +470,8 @@ export const huTranslation: TranslationType = {
                     suffix: 'perc'
                 },
                 fromAllUsers: {
-                    title: 'Az összes felhasználó között',
-                    suffix: '%'
+                    title: 'eredmény a cégen belül',
+                    suffix: ''
                 }
 
             }

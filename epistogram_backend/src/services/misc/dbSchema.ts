@@ -89,6 +89,7 @@ import { CourseShopItemListView } from '../../models/views/CourseShopItemListVie
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
+import { ExamResultStatsView } from '../../models/views/ExamResultStatsView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamScoreView } from '../../models/views/ExamScoreView';
 import { ExamVersionView } from '../../models/views/ExamVersionView';
@@ -345,6 +346,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['', 'assignable_role_view'],
             ['', 'user_role_assign_company_view', UserRoleAssignCompanyView],
             ['stats', 'course_learning_stats_view', CourseLearningStatsView],
+            ['stats', 'exam_result_stats_view', ExamResultStatsView],
             ['common', 'course_progress_view', CourseProgressView], // 2 user_inactive_course_view, user_course_stats_view
             ['', 'course_overview_view', CourseOverviewView],
             ['', 'user_inactive_course_view', UserInactiveCourseView],

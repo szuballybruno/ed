@@ -17,7 +17,9 @@ export const HomePageUserStats = () => {
         className='whall'
         auto='fill'
         gap='10'
-        minColumnWidth='200px'>
+        mt='5px'
+        minW='500px'
+        minColumnWidth='280px'>
 
         {/* videos to be repeated count */}
         <StatisticsCard

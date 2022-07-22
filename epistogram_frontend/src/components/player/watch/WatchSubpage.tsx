@@ -147,7 +147,7 @@ export const WatchSubpage = () => {
                     error={[playerDataError]}>
 
                     <Flex
-                        px="20px"
+                        //px="20px"
                         height='100vh'
                         mb="50px">
 
@@ -189,7 +189,7 @@ export const WatchSubpage = () => {
                             id="courseItemListSidebar"
                             justify="flex-start"
                             zIndex="10"
-                            ml="10px"
+                            ml={isSidebarHidden ? '0' : '10px'}
                             bg="var(--transparentWhite70)"
                             maxWidth={isSidebarHidden ? '0px' : '420px'}
                             opacity={isSidebarHidden ? 0 : 1}

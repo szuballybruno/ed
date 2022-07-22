@@ -118,11 +118,14 @@ import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { toFullName } from '../../utilities/helpers';
+import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
 import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
+import { ExamCompletedView } from '../../models/views/ExamCompletedView';
+import { log } from './logger';
+import { ExamResultStatsView } from '../../models/views/ExamResultStatsView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -304,7 +307,8 @@ const marray = [
                             playlistItemCode: viewAsItem.playlistItemCode,
                             type: viewAsItem.itemType === 'video' ? 'video' : 'exam',
                             shouldRepeatVideo: viewAsItem.isRecommendedForPractise,
-                            thumbnailUrl: ''
+                            thumbnailUrl: '',
+                            correctAnswerRate: viewAsItem.correctAnswerRate
                         }));
 
                     const moduleState = isCurrentModule
@@ -327,7 +331,7 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addMapping(ExamPlayerDataDTO, () => (view: ExamPlayerDataView, questions: QuestionDataView[]) => {
+        .addMapping(ExamPlayerDataDTO, () => (view: ExamPlayerDataView, questions: QuestionDataView[], examResultStatsView: ExamResultStatsView) => {
 
             return instantiate<ExamPlayerDataDTO>({
                 examVersionId: view.examVersionId,
@@ -337,24 +341,35 @@ const marray = [
                 isFinalExam: view.isFinalExam,
                 canTakeAgain: view.canRetake,
                 correctAnswerCount: view.correctAnswerCount,
-                correctAnswerRate: view.correctAnswerRate,
                 isCompletedPreviously: view.isCompletedPreviously,
                 totalQuestionCount: view.totalQuestionCount,
                 questions: toQuestionDTO(questions),
-                type: 'exam'
+                type: 'exam',
+
+                fullyCorrectlyAnsweredQuestionsCount: examResultStatsView.fullyCorrectlyAnsweredQuestionsCount,
+                questionsCount: examResultStatsView.questionCount,
+                correctAnswerRate: examResultStatsView.correctAnswerRate,
+                examLengthSeconds: examResultStatsView.examLengthSeconds,
+                examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany)
             });
         }),
 
     epistoMappingsBuilder
-        .addMapping(PretestResultDTO, () => (prv: PretestResultView, acv: AvailableCourseView) => {
+        .addMapping(PretestResultDTO, () => (
+            prv: PretestResultView, 
+            acv: AvailableCourseView, 
+            originalPrevisionedCompletionDate: Date, 
+            requiredCompletionDate: Date, 
+            recommendedItemsPerDay: number | null
+        ) => {
 
             return instantiate<PretestResultDTO>({
                 isCompleted: prv.isCompleted,
                 correctAnswerRate: prv.correctAnswerRate,
                 firstItemCode: acv.firstItemCode,
-                estimatedCompletionDate: new Date(Date.now()),
-                requiredCompletionDate: new Date(Date.now()),
-                recommendedVideosPerDay: 1
+                estimatedCompletionDate: originalPrevisionedCompletionDate,
+                requiredCompletionDate: requiredCompletionDate,
+                recommendedVideosPerDay: recommendedItemsPerDay
             });
         }),
 
@@ -1161,7 +1176,7 @@ export const toTaskDTO = (task: Task) => {
     } as TaskDTO;
 };
 
-export const toExamResultDTO = (views: ExamResultView[]) => {
+export const toExamResultDTO = (views: ExamResultView[], examResultStatsView: ExamResultStatsView) => {
 
     const viewAsExam = views.first();
 
@@ -1173,22 +1188,26 @@ export const toExamResultDTO = (views: ExamResultView[]) => {
 
             return {
                 text: viewAsQuestion.questionText,
-                isCorrect: viewAsQuestion.isCorrect,
+                correctAnswerRate: viewAsQuestion.correctAnswerRatePerQuestion,
                 answers: questsionGroup
                     .items
                     .map(x => toResultAnswerDTO(x)),
             } as ExamResultQuestionDTO;
         });
 
-    return {
+    return instantiate<ExamResultsDTO>({
         isSuccessful: viewAsExam.isCompletedSession,
-        correctAnswerCount: viewAsExam.correctGivenAnswerCount,
-        questionCount: viewAsExam.questionCount,
         questions: questionDTOs,
         isCompletedPrevoiusly: !viewAsExam.onlySuccessfulSession,
         isFinalExam: viewAsExam.isFinalExam,
-        shouldShowCourseCompleted: viewAsExam.onlySuccessfulSession && viewAsExam.isFinalExam
-    } as ExamResultsDTO;
+        shouldShowCourseCompleted: viewAsExam.onlySuccessfulSession && viewAsExam.isFinalExam,
+
+        fullyCorrectlyAnsweredQuestionsCount: examResultStatsView.fullyCorrectlyAnsweredQuestionsCount,
+        questionsCount: examResultStatsView.questionCount,
+        correctAnswerRate: examResultStatsView.correctAnswerRate,
+        examLengthSeconds: examResultStatsView.examLengthSeconds,
+        examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany)
+    })
 };
 
 export const toResultAnswerDTO = (view: ExamResultView) => {

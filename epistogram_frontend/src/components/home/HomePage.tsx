@@ -41,13 +41,13 @@ const HomePage = () => {
 
         <LeftPane>
 
-            <EpistoButton onClick={() => setLs('loading')}>
+            {/*             <EpistoButton onClick={() => setLs('loading')}>
                 Load
             </EpistoButton>
 
             <EpistoButton onClick={() => setLs('success')}>
                 Stop load
-            </EpistoButton>
+            </EpistoButton> */}
 
             {/* current course items and progress */}
             {pageDTO?.currentCourseProgress && <Flex

@@ -86,7 +86,7 @@ export class CourseItemService {
                     description: '',
                     isFinal: false,
                     orderIndex: XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
-                    retakeLimit: 3,
+                    retakeLimit: null,
                     subtitle: '',
                     thumbnailUrl: null,
                     acceptanceThreshold: null,

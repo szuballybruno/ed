@@ -3,6 +3,7 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -20,16 +21,20 @@ export const ExamGreetSlide = (props: {
     } = props;
 
     return <ExamLayout
-        headerLeftItem={translatableTexts.exam.hello}
+        justify='flex-start'
         headerCenterText={exam.title}
         showNextButton={exam.canTakeAgain}
         handleNext={startExam}
-        nextButtonTitle={translatableTexts.exam.startExam}>
+        nextButtonTitle={exam.isCompletedPreviously ? 'Újrakezdés' : translatableTexts.exam.startExam}>
 
-        <Flex direction="column"
+        <Flex
+            direction="column"
             align="center"
+            justify='center'
+            background='var(--transparentWhite70)'
             flex="1"
-            className="whall">
+            p='20px'
+            className="whall roundBorders mildShadow">
             <img
                 src={Environment.getAssetUrl('/images/examCover.png')}
                 alt={''}
@@ -48,10 +53,12 @@ export const ExamGreetSlide = (props: {
             <EpistoFont
                 style={{
                     padding: '30px',
-                    maxWidth: '400px'
+                    maxWidth: '500px'
                 }}>
 
-                {translatableTexts.exam.greetText}
+                {exam.isCompletedPreviously 
+                    ? translatableTexts.exam.greetTextRetry 
+                    : translatableTexts.exam.greetText}
             </EpistoFont>
 
             {/* if previously completed  */}
@@ -72,8 +79,10 @@ export const ExamGreetSlide = (props: {
 
                     <ExamResultStats
                         correctAnswerRate={exam!.correctAnswerRate}
-                        totalQuestionCount={exam!.totalQuestionCount}
-                        correctAnswerCount={exam!.correctAnswerCount} />
+                        totalQuestionCount={exam!.questionsCount}
+                        correctAnswerCount={exam!.fullyCorrectlyAnsweredQuestionsCount}
+                        examLengthSeconds={exam!.examLengthSeconds}
+                        examSuccessRateDiffFromCompany={exam!.examSuccessRateDiffFromCompany} />
                 </Flex>
             </>}
         </Flex>

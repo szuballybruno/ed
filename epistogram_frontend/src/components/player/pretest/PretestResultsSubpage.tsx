@@ -133,7 +133,7 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         iconPath={Environment.getAssetUrl('/images/pretest2.png')}
-                        value="6"
+                        value={pretestResults?.recommendedVideosPerDay}
                         suffix="db"
                         title="Megtekintésre ajánlott napi videó" />
 

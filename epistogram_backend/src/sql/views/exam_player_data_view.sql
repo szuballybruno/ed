@@ -6,38 +6,38 @@ successful_answer_sessions AS (
  
  	WHERE asev.is_successful
 ),
-latest_answer_session_view AS (
+latest_answer_sessions AS (
 	SELECT 
-		sq.*,
+		asv.user_id, 
+		ex.id exam_id, 
+		MAX(asv.answer_session_id) asid
+	FROM public.answer_session_view asv
+	
+	LEFT JOIN public.exam_version ev
+	ON ev.id = asv.exam_version_id
+	
+	LEFT JOIN public.exam ex
+	ON ex.id = ev.exam_id
+	
+	WHERE asv.is_completed
+	
+	GROUP BY 
+		ex.id, 
+		asv.user_id
+	
+	ORDER BY asv.user_id, ex.id
+),
+latest_answer_session_data AS (
+	SELECT 
+		las.*,
 		asv.correct_given_answer_count correct_answer_count,
 		asv.answered_question_count total_question_count,
 		asv.answer_session_success_rate correct_answer_rate,
 		asv.is_successful
-	FROM
-	(
-		SELECT 
-			asv.user_id, 
-			ex.id exam_id, 
-			MAX(asv.answer_session_id) asid
-		FROM public.answer_session_view asv
-		
-		LEFT JOIN public.exam_version ev
-		ON ev.id = asv.exam_version_id
-		
-		LEFT JOIN public.exam ex
-		ON ex.id = ev.exam_id
-		
-		--WHERE asv.is_successful
-		
-		GROUP BY 
-			ex.id, 
-			asv.user_id
-		
-		ORDER BY asv.user_id, ex.id
-	) sq
+	FROM latest_answer_sessions las
 
 	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = sq.asid
+	ON asv.answer_session_id = las.asid
 )
 SELECT 
 	u.id user_id,
@@ -68,11 +68,11 @@ SELECT
 		WHERE sas.exam_version_id = ev.id 
 		AND sas.user_id = u.id
 	) can_retake,
-	lasv.asid,
-	lasv.correct_answer_count,
-	lasv.total_question_count,
-	lasv.correct_answer_rate,
-	lasv.total_question_count IS NOT NULL is_completed_previously
+	lasd.asid,
+	lasd.correct_answer_count,
+	lasd.total_question_count,
+	lasd.correct_answer_rate,
+	lasd.total_question_count IS NOT NULL is_completed_previously
 FROM public.exam ex
 
 LEFT JOIN public.exam_version ev
@@ -89,8 +89,8 @@ ON cv.id = mv.course_version_id
 
 CROSS JOIN public.user u
 
-LEFT JOIN latest_answer_session_view lasv
-ON lasv.user_id = u.id AND lasv.exam_id = ex.id
+LEFT JOIN latest_answer_session_data lasd
+ON lasd.user_id = u.id AND lasd.exam_id = ex.id
 
 ORDER BY 
 	u.id,

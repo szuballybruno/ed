@@ -76,4 +76,8 @@ export class CourseItemPlaylistView {
     @ViewColumn()
     @XViewColumn()
     isRecommendedForPractise: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
+    correctAnswerRate: number;
 }

@@ -80,15 +80,18 @@ export const CourseOverviewSubpage = () => {
             showNextButton={false}>
 
             <Flex
+                flex='1'
+                background='var(--transparentWhite70)'
                 direction="column"
-                className="whall"
-                p="20px 0">
+                justify='flex-start'
+                className="whall roundBorders mildShadow"
+                p="20px">
 
                 <EpistoGrid
                     minColumnWidth={'250px'}
                     gap={'10'}
                     auto={'fill'}
-w="100%">
+                    w="100%">
 
                     {courseStatsOverviewData
                         .map((item, index) => {

@@ -15,14 +15,15 @@ export const ModuleView = (params: {
     const isVisible = !!module;
 
     return <Flex
-        className="roundBorders mildShadow"
+        className="whall roundBorders mildShadow"
+        maxH="calc(100vh - 120px)"
         display={isVisible ? undefined : 'none'}
         direction="column"
         background="var(--transparentWhite70)">
 
         <Flex
-            height="500px"
-            maxH="500px"
+            flex='1'
+            maxH="calc(100vh - 120px)"
             align="center"
             justify="center">
 

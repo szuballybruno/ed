@@ -40,6 +40,24 @@ latest_course_items AS
 	-- filter out all pretest modules
 	WHERE civ.module_order_index != 0
 ),
+latest_answer_session AS
+(
+	SELECT
+		u.id user_id,
+		ev.id exam_version_id,
+		MAX(asv.answer_session_id)::int answer_session_id
+	FROM public.user u
+	
+	CROSS JOIN public.exam_version ev
+	
+	LEFT JOIN public.answer_session_view asv
+	ON asv.user_id = u.id
+	AND asv.exam_version_id = ev.id
+
+	WHERE asv.is_completed = true
+
+	GROUP BY u.id, ev.id
+),
 states AS
 (
 	SELECT 
@@ -59,7 +77,8 @@ states AS
 				THEN 'available'
 				ELSE 'locked'
 		END item_state,
-		ucb.current_item_code = civ.module_code module_is_current
+		ucb.current_item_code = civ.module_code module_is_current,
+		asv.answer_session_success_rate correct_answer_rate
 	FROM latest_course_items civ
 	
 	LEFT JOIN public.course_version cv 
@@ -71,6 +90,13 @@ states AS
 	
 	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
+
+	LEFT JOIN latest_answer_session las
+	ON las.exam_version_id = civ.exam_version_id
+	AND las.user_id = ucb.user_id
+
+	LEFT JOIN public.answer_session_view asv
+	ON asv.answer_session_id = las.answer_session_id
 ),
 combined AS 
 (
@@ -80,6 +106,7 @@ combined AS
 		lci.*,
 		st.item_state,
 		st.module_is_current,
+		st.correct_answer_rate,
 		uprv.is_recommended_for_practise
 	FROM latest_course_items lci
 	

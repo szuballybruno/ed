@@ -22,7 +22,9 @@ export const ExamLayoutContent = (props: {
             flex={1}
             style={style}>
 
-            <Flex direction='column'>
+            <Flex
+                p='200px'
+                direction='column'>
 
                 {/* header */}
                 <Flex
