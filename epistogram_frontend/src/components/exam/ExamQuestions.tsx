@@ -1,16 +1,18 @@
 import { Grid } from '@chakra-ui/layout';
-import { Flex, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useSaveExamAnswer } from '../../services/api/examApiService';
+import { Flex } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { useCompleteExam, useSaveExamAnswer } from '../../services/api/examApiService';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
-import { epochDates, usePaging } from '../../static/frontendHelpers';
+import { ArrayBuilder, epochDates, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { LoadingFrame } from '../system/LoadingFrame';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { ExamLayout } from './ExamLayout';
 import { ExamLayoutContent } from './ExamLayoutContent';
 import { QuestionAnswer } from './QuestionAnswer';
@@ -19,30 +21,34 @@ export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
     answerSessionId: Id<'AnswerSession'>,
     onExamFinished: () => void,
-    exitExamAction?: () => void,
+    handleAbortExam: () => void
     hideLoading?: boolean
 }) => {
 
     const {
         answerSessionId,
         onExamFinished,
-        exitExamAction,
+        handleAbortExam,
         exam,
         hideLoading
     } = props;
 
     const questions = exam.questions;
     const [completedQuestionIds, setCompletedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
-    const [skippedQuestionIds, setSkippedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
     const showError = useShowErrorDialog();
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
+    const { completeExamAsync, completeExamState } = useCompleteExam();
     const questionPaging = usePaging({ items: questions, onNextOverNavigation: onExamFinished });
     const currentQuestion = questionPaging.currentItem!;
     const [selectedAnswerIds, setSelectedAnswerIds] = useState<Id<'Answer'>[]>([]);
-    const progressPercentage = (100 / questions.length) * questionPaging.currentIndex;
-    const isSingleAnswerMode = currentQuestion.typeId === QuestionTypeEnum.singleAnswer;
     const hasSelectedAnswer = selectedAnswerIds.length > 0;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
+    const dialogLogic = useEpistoDialogLogic('exam_close_dialog');
+
+    useEffect(() => {
+
+        console.log('Dialoglogic frissül' + dialogLogic.isOpen);
+    }, [dialogLogic.isOpen]);
 
     const handleNextAsync = async () => {
 
@@ -67,18 +73,22 @@ export const ExamQuestions = (props: {
         }
     };
 
+    const handleOpenDialog = () => {
+
+        dialogLogic.openDialog();
+    };
+
+    const handleSelectCurrent = <T extends string>(id: Id<T>) => {
+
+        const itemIndex = questions.findIndex(x => x.questionVersionId === id);
+        questionPaging.setItem(itemIndex);
+    };
+
     const setAnswerSelectedState = (answerId: Id<'Answer'>, isSelected: boolean) => {
 
         if (isSelected) {
 
-            /* if (isSingleAnswerMode) {
-
-                setSelectedAnswerIds([answerId]);
-            }
-            else { */
-
             setSelectedAnswerIds([...selectedAnswerIds, answerId]);
-            /*   } */
         }
         else {
 
@@ -93,6 +103,82 @@ export const ExamQuestions = (props: {
         direction={'column'}
         alignItems={'center'}
         width="100%">
+
+        <EpistoDialog
+            closeButtonType='top'
+            title='Biztosan befejezed ezt a vizsgát?'
+            logic={dialogLogic}>
+
+            <Flex
+                direction='column'
+                p='20px'>
+
+                <EpistoFont style={{
+                    margin: '0 0 20px 0'
+                }}>
+                    {'A \'Befejezem\' gombra való kattintás után már nem módosíthatod a válaszaidat'}
+                </EpistoFont>
+
+                <EpistoFont style={{
+                    margin: '0 0 20px 0'
+                }}>
+                    Átugrott kérdések száma: {questions.length - completedQuestionIds.length} db
+                </EpistoFont>
+
+                <Flex
+                    my='10px'
+                    flex='1'>
+
+                    <EpistoButton
+                        variant='light'
+                        onClick={() => {
+
+                            dialogLogic.closeDialog();
+                            handleAbortExam();
+                        }}
+                        style={{
+                            flex: 1,
+                            background: 'var(--mildRed)',
+                            marginRight: 5
+                        }}>
+
+                        Eredmény elvetése
+                    </EpistoButton>
+
+                    <EpistoButton
+                        variant='light'
+                        onClick={() => {
+
+                            completeExamAsync({
+                                answerSessionId: answerSessionId
+                            });
+                            onExamFinished();
+                            dialogLogic.closeDialog();
+                        }}
+                        style={{
+                            flex: 1,
+                            marginLeft: 5
+                        }}>
+
+                        Befejezem
+                    </EpistoButton>
+                </Flex>
+
+                <EpistoButton
+                    variant='colored'
+                    onClick={() => {
+
+                        dialogLogic.closeDialog();
+                    }}>
+
+                    Átnézem mégegyszer
+                </EpistoButton>
+
+
+            </Flex>
+
+
+        </EpistoDialog>
 
         <ExamLayout
             headerLeftItem={<Flex align="center">
@@ -110,14 +196,21 @@ export const ExamQuestions = (props: {
                 ids: questions.map(x => x.questionVersionId),
                 currentId: currentQuestion.questionVersionId,
                 completedIds: completedQuestionIds,
-                skippedIds: skippedQuestionIds
+                selectCurrentHandler: handleSelectCurrent
             }}
             headerCenterText={exam.title}
-            exitExamAction={exitExamAction}
-            handleNext={handleNextAsync}
-            showNextButton={hasSelectedAnswer}
-            nextButtonTitle={translatableTexts.exam.nextQuestion}
-            progressValue={progressPercentage}>
+            headerButtons={new ArrayBuilder()
+                .add({
+                    title: 'Vizsga befejezése',
+                    action: handleOpenDialog
+                })
+                .getArray()}
+            footerButtons={new ArrayBuilder()
+                .addIf(hasSelectedAnswer, {
+                    title: translatableTexts.exam.nextQuestion,
+                    action: handleNextAsync
+                })
+                .getArray()}>
 
             <ExamLayoutContent
                 title={currentQuestion.questionText}>

@@ -222,7 +222,8 @@ export const apiRoutes = {
     exam: {
         answerExamQuestion: '/exam/answer-exam-question',
         getExamResults: '/exam/get-exam-results',
-        startExam: '/exam/start-exam'
+        startExam: '/exam/start-exam',
+        completeExam: '/exam/complete-exam'
     },
 
     comment: {

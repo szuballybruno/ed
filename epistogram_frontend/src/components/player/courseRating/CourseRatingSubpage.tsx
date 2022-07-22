@@ -5,7 +5,7 @@ import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from '../../..
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
-import { usePaging } from '../../../static/frontendHelpers';
+import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -90,11 +90,13 @@ export const CourseRatingSubpage = () => {
             height="100%">
 
             <ExamLayout
-                headerCenterText="Kurzus ertekelese"
-                handleNext={handleNextAsync}
-                showNextButton={canContinue}
-                nextButtonTitle={translatableTexts.exam.nextQuestion}
-                progressValue={progressPercentage}
+                headerCenterText="Kurzus értékelése"
+                footerButtons={new ArrayBuilder()
+                    .addIf(canContinue, {
+                        title: translatableTexts.exam.nextQuestion,
+                        action: handleNextAsync
+                    })
+                    .getArray()}
                 handleBack={currentGroupIndex !== 0 ? handleBackAsync : undefined}>
 
                 <ExamLayoutContent

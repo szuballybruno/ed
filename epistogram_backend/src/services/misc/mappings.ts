@@ -350,16 +350,17 @@ const marray = [
                 questionsCount: examResultStatsView.questionCount,
                 correctAnswerRate: examResultStatsView.correctAnswerRate,
                 examLengthSeconds: examResultStatsView.examLengthSeconds,
-                examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany)
+                examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany),
+                answeredQuestionCount: examResultStatsView.answeredQuestionCount
             });
         }),
 
     epistoMappingsBuilder
         .addMapping(PretestResultDTO, () => (
-            prv: PretestResultView, 
-            acv: AvailableCourseView, 
-            originalPrevisionedCompletionDate: Date, 
-            requiredCompletionDate: Date, 
+            prv: PretestResultView,
+            acv: AvailableCourseView,
+            originalPrevisionedCompletionDate: Date,
+            requiredCompletionDate: Date,
             recommendedItemsPerDay: number | null
         ) => {
 

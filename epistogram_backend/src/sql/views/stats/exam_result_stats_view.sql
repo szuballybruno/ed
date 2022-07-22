@@ -99,6 +99,7 @@ SELECT
     qc.question_count question_count,
 	asl.length_seconds::int exam_length_seconds,
 	asv.answer_session_success_rate correct_answer_rate,
+	asv.answered_question_count,
 	cesr.exam_success_rate_by_company
 FROM public.exam_version ev
 

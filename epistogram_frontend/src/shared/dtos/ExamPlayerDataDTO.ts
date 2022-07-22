@@ -19,4 +19,5 @@ export class ExamPlayerDataDTO {
     examSuccessRateDiffFromCompany: number;
     correctAnswerRate: number;
     examLengthSeconds: number;
+    answeredQuestionCount: number;
 }

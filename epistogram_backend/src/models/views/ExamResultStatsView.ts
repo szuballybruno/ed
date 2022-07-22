@@ -39,4 +39,8 @@ export class ExamResultStatsView {
     @ViewColumn()
     @XViewColumn()
     examLengthSeconds: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    answeredQuestionCount: number;
 }

@@ -28,6 +28,7 @@ export const PretestSubpage = () => {
                 exam={pretestData?.exam}
                 answerSessionId={pretestData?.answerSessionId}
                 onExamFinished={goToFirstWatchItem}
+                handleAbortExam={goToFirstWatchItem}
                 hideLoading />}
         </LoadingFrame>
     );

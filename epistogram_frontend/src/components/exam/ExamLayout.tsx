@@ -9,54 +9,80 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
 
-
+type ExamLayoutButtonProps = {
+    title: string,
+    action: () => void,
+    icon?: any,
+    iconPosition?: 'start' | 'end'
+};
 
 export const ExamLayout = (props: {
     children: ReactNode,
-    handleNext: () => void,
+    headerLeftItem?: string | ReactNode,
+    headerCenterText?: string,
+    isHeightMaximized?: boolean,
     stepperLogic?: StepperLogicType<'QuestionVersion'>,
     handleBack?: () => void,
-    nextButtonTitle: string,
-    showNextButton?: boolean,
-    exitExamAction?: () => void,
-    headerCenterText?: string,
-    headerLeftItem?: string | ReactNode,
-    progressValue?: number,
-    isHeightMaximized?: boolean,
-    showButtonsOnTop?: boolean,
-    footerButtons?: ({ text: string, action: () => void })[],
+    showFooterButtonsOnTop?: boolean,
+    footerButtons?: (ExamLayoutButtonProps)[],
+    headerButtons?: (ExamLayoutButtonProps)[],
 } & FlexProps) => {
 
     const {
-        exitExamAction,
+        headerButtons,
         footerButtons,
         headerCenterText,
-        showNextButton,
         headerLeftItem,
         children,
-        progressValue,
-        handleNext,
         handleBack,
-        nextButtonTitle,
         isHeightMaximized,
-        showButtonsOnTop,
+        showFooterButtonsOnTop,
         stepperLogic,
         ...css
     } = props;
 
 
 
-    const footerButton = (title: string, action: () => void, icon?: any, iconFront?: any) => <EpistoButton
-        variant={'colored'}
-        onClick={action}
-        style={{
-            height: '40px',
-            marginLeft: '10px'
-        }}>
-        {iconFront}
-        {title}
-        {icon}
-    </EpistoButton>;
+    const examLayoutButton = (args: ExamLayoutButtonProps) => {
+
+        const {
+            title,
+            action,
+            icon,
+            iconPosition
+        } = args;
+
+        return <EpistoButton
+            variant={'colored'}
+            onClick={action}
+            style={{
+                height: '40px',
+                marginLeft: '10px'
+            }}>
+            {iconPosition === 'start' && icon}
+            {title}
+            {iconPosition === 'end' && icon}
+        </EpistoButton>;
+    };
+
+    const HeaderButtons = () => {
+        return <Flex>
+
+            {/* other buttons */}
+            {headerButtons && headerButtons
+                .map(x => examLayoutButton(x))}
+        </Flex>;
+    };
+
+    const FooterButtons = () => {
+
+        return <Flex>
+
+            {/* other buttons */}
+            {footerButtons && footerButtons
+                .map(x => examLayoutButton(x))}
+        </Flex>;
+    };
 
     return <Flex
         minH='calc(100vh - 120px)'
@@ -108,25 +134,9 @@ export const ExamLayout = (props: {
                 justify="flex-end"
                 pr='10px'>
 
-                {exitExamAction && <EpistoButton
-                    onClick={exitExamAction}
-                    style={{
-                        minWidth: 170
-                    }}
-                    variant={'outlined'}>
+                {headerButtons && <HeaderButtons />}
 
-                    {translatableTexts.exam.exitExam}
-                </EpistoButton>}
-
-                {showButtonsOnTop && <>
-                    {/* other buttons */}
-                    {footerButtons && footerButtons
-                        .map(x => footerButton(x.text, x.action))}
-
-                    {/* continue button */}
-                    {showNextButton && footerButton(nextButtonTitle, handleNext, <ArrowForward />)}
-                </>}
-
+                {(showFooterButtonsOnTop && !headerButtons) && <FooterButtons />}
             </Flex>
 
         </Flex>
@@ -155,7 +165,12 @@ export const ExamLayout = (props: {
             p={20}>
 
             {/* back button */}
-            {handleBack && footerButton('Vissza', handleBack, undefined, <ArrowBack />)}
+            {handleBack && examLayoutButton({
+                title: 'Vissza',
+                action: handleBack,
+                icon: <ArrowBack />,
+                iconPosition: 'start'
+            })}
 
             {/* progress line */}
             <Flex
@@ -166,28 +181,9 @@ export const ExamLayout = (props: {
 
                 {stepperLogic && <EpistoStepper stepperLogic={stepperLogic} />}
 
-                {/* {progressValue !== undefined && <>
-                    <LinearProgress
-                        variant="determinate"
-                        value={progressValue}
-
-                        style={{
-                            flex: '1',
-                            marginRight: '10px'
-                        }} />
-
-                    <EpistoFont fontSize={'fontNormal14'}>
-                        {`${Math.round(progressValue)}%`}
-                    </EpistoFont>
-                </>} */}
             </Flex>
 
-            {/* other buttons */}
-            {footerButtons && footerButtons
-                .map(x => footerButton(x.text, x.action))}
-
-            {/* continue button */}
-            {showNextButton && footerButton(nextButtonTitle, handleNext, <ArrowForward />)}
+            <FooterButtons />
         </Flex>
     </Flex>;
 };

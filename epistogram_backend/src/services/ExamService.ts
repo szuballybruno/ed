@@ -115,6 +115,15 @@ export class ExamService extends QueryServiceBase<ExamData> {
             });
     }
 
+    async completeExamAsync(answerSessionId: Id<'AnswerSession'>) {
+
+        await this._ormService
+            .save(AnswerSession, {
+                id: answerSessionId,
+                endDate: new Date()
+            });
+    }
+
     /**
      * Returns the exam by it's id.
      */

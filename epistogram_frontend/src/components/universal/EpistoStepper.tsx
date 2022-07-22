@@ -7,7 +7,7 @@ export type StepperLogicType<T extends string> = {
     ids: Id<T>[]
     currentId: Id<T>
     completedIds: Id<T>[] | null
-    skippedIds: Id<T>[] | null
+    selectCurrentHandler: (id: Id<T>) => void
 }
 
 export interface EpistoStepperProps<T extends string> {
@@ -21,7 +21,7 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
         ids,
         currentId,
         completedIds,
-        skippedIds
+        selectCurrentHandler
     } = props.stepperLogic;
 
     const getCurrentIndex = () => {
@@ -33,15 +33,6 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
 
     const currentIndex = getCurrentIndex();
     const idsCount = ids.length - 1;
-
-    const getIsSkipped = (id: Id<any>) => {
-
-        if (!skippedIds)
-            return false;
-
-        return skippedIds
-            .any(id);
-    };
 
     const getIsCompleted = (id: Id<any>) => {
 
@@ -59,14 +50,15 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
 
                 const isCurrent = currentIndex === index;
                 const isCompleted = getIsCompleted(id);
-                const isSkipped = getIsSkipped(id);
-                ;
+                const isSkipped = index < currentIndex && !isCompleted;
+
                 return <Flex
                     align='center'
                     key={Id.read(id)}>
 
                     {/* stepper dot */}
                     <Flex
+                        onClick={() => selectCurrentHandler(id)}
                         align='center'
                         justify='center'
                         className='square20 circle'

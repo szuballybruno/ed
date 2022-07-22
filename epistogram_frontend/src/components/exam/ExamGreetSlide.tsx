@@ -23,9 +23,12 @@ export const ExamGreetSlide = (props: {
     return <ExamLayout
         justify='flex-start'
         headerCenterText={exam.title}
-        showNextButton={exam.canTakeAgain}
-        handleNext={startExam}
-        nextButtonTitle={exam.isCompletedPreviously ? 'Újrakezdés' : translatableTexts.exam.startExam}>
+        footerButtons={new ArrayBuilder()
+            .addIf(exam.canTakeAgain, {
+                title: exam.isCompletedPreviously ? 'Újrakezdés' : translatableTexts.exam.startExam,
+                action: startExam
+            })
+            .getArray()}>
 
         <Flex
             direction="column"
@@ -56,8 +59,8 @@ export const ExamGreetSlide = (props: {
                     maxWidth: '500px'
                 }}>
 
-                {exam.isCompletedPreviously 
-                    ? translatableTexts.exam.greetTextRetry 
+                {exam.isCompletedPreviously
+                    ? translatableTexts.exam.greetTextRetry
                     : translatableTexts.exam.greetText}
             </EpistoFont>
 

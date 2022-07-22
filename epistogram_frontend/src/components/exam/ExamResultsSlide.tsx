@@ -39,9 +39,7 @@ export const ExamResultsSlide = (props: {
         justify='flex-start'
         isHeightMaximized={false}
         headerCenterText={exam.title}
-        handleNext={continueCourse}
-        nextButtonTitle={translatableTexts.exam.continueCourse}
-        showButtonsOnTop
+        showFooterButtonsOnTop
         footerButtons={new ArrayBuilder<any>()
             .addIf(exam.isFinalExam, {
                 text: 'Kurzus értékelése',
@@ -61,8 +59,11 @@ export const ExamResultsSlide = (props: {
                     navigate(applicationRoutes.availableCoursesRoute);
                 }
             })
-            .getArray()}
-        showNextButton={!exam.isFinalExam}>
+            .addIf(!exam.isFinalExam, {
+                text: translatableTexts.exam.continueCourse,
+                action: continueCourse
+            })
+            .getArray()}>
 
         <Flex
             direction="column"

@@ -45,21 +45,15 @@ export const useEpistoDialogLogic = <TParams = void,>(
         setParams
     ]);
 
-    return useMemo(() => {
-        return ({
-            openDialog,
-            closeDialog,
-            isOpen: xlogic.isOpen,
-            title,
-            description,
-            buttons,
-            declareOptions,
-            xlogic,
-            params
-        } as EpistoDialogLogicType<TParams>);
-    }, [
-        closeDialog,
+    return {
         openDialog,
-        xlogic
-    ]);
+        closeDialog,
+        isOpen: xlogic.isOpen,
+        title,
+        description,
+        buttons,
+        declareOptions,
+        xlogic,
+        params
+    };
 };

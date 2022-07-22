@@ -6,7 +6,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
-import { usePaging } from '../../../static/frontendHelpers';
+import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -96,11 +96,15 @@ export const PrequizSubpage = () => {
                 </EpistoFont>
             </Flex>}
             headerCenterText="Kurzus előtti felmérő"
-            handleNext={handleNextAsync}
-            showNextButton={canContinue}
-            nextButtonTitle={translatableTexts.exam.nextQuestion}
-            progressValue={progressPercentage}
-            handleBack={currentQuestionIndex !== 0 ? handleBackAsync : undefined}>
+            footerButtons={new ArrayBuilder()
+                .addIf(canContinue, {
+                    title: translatableTexts.exam.nextQuestion,
+                    action: handleNextAsync
+                })
+                .getArray()}
+            handleBack={currentQuestionIndex !== 0
+                ? handleBackAsync
+                : undefined}>
 
             <ExamLayoutContent
                 title={question?.text ?? ''}>

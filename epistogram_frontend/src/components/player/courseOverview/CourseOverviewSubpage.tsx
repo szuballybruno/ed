@@ -67,17 +67,14 @@ export const CourseOverviewSubpage = () => {
     return (
         <ExamLayout
             headerCenterText={'A kurzus során elért eredményed'}
-            handleNext={() => { console.log('TODO'); }}
-            nextButtonTitle={translatableTexts.exam.continueCourse}
             footerButtons={[
                 {
-                    text: 'Vissza a tanfolyamkeresobe',
+                    title: 'Vissza a tanfolyamkeresobe',
                     action: () => {
                         navigate(applicationRoutes.availableCoursesRoute);
                     },
                 },
-            ]}
-            showNextButton={false}>
+            ]}>
 
             <Flex
                 flex='1'
