@@ -14,8 +14,8 @@ SELECT
 	cd.human_skill_benefits human_skill_benefits,
 	cd.human_skill_benefits_description human_skill_benefits_description,
 	cd.modification_date modification_date,
-	acv.stage_name stage_name,
-	acv.current_item_code current_item_code,
+	ucb.current_item_code,
+	ucb.stage_name,
 	
 	-- cat 
 	cc.id category_id,
@@ -128,11 +128,7 @@ SELECT
 		
 		WHERE lco.id = co.id
 	) total_video_question_count,
-	(
-		SELECT (cv.can_view)
-		FROM public.available_course_view cv
-		WHERE (cv.user_id = u.id AND cv.course_id = co.id)
-	) can_start_course
+	true can_start_course
 FROM public.course co
 
 LEFT JOIN public.course_version cv
@@ -142,9 +138,6 @@ LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id
 
 CROSS JOIN public.user u
-
-LEFT JOIN public.available_course_view acv
-ON acv.user_id = u.id AND acv.course_id = co.id
 
 LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
@@ -160,6 +153,10 @@ ON tinfo.user_id = tuser.id
 
 LEFT JOIN public.course_category cc
 ON cc.id = cd.category_id
+
+LEFT JOIN public.user_course_bridge ucb
+ON ucb.user_id = u.id
+AND ucb.course_id = co.id
 
 LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id

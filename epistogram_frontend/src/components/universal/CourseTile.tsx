@@ -1,7 +1,5 @@
 import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
-import React from 'react';
-import { CourseApiService } from '../../services/api/courseApiService';
-import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -10,7 +8,7 @@ import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from './SmallStat';
 
 const CourseTile = (props: {
-    course: CourseShortDTO
+    course: AvailableCourseDTO
 } & FlexProps) => {
 
     const { course, children, ...css } = props;
@@ -19,8 +17,6 @@ const CourseTile = (props: {
     const courseSubCategory = course.subCategoryName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
-
-    const { courseDetails } = CourseApiService.useCourseDetails(course.courseId);
 
     return <FlexFloat
         className="whall roundBorders"
@@ -115,25 +111,25 @@ const CourseTile = (props: {
                 <SmallStat
                     title="Ennyi idő alatt tudod elvégezni a kurzust"
                     iconUrl={Environment.getAssetUrl('images/time3D.png')}
-                    text={formatTimespan(courseDetails?.totalVideoSumLengthSeconds || 0)} />
+                    text={formatTimespan(course.totalVideoSumLengthSeconds)} />
 
                 {/* videos count */}
                 <SmallStat
                     title="Ennyi videót tartalmaz a kurzus"
                     iconUrl={Environment.getAssetUrl('images/videos3D.png')}
-                    text={courseDetails?.totalVideoCount + '' || '0'} />
+                    text={course.totalVideoCount + ''} />
 
                 {/* difficulty */}
                 <SmallStat
                     title="A kurzus nehézsége 1-5-ig értékelve"
                     iconUrl={Environment.getAssetUrl('images/difficulty3D.png')}
-                    text={courseDetails?.difficulty + ''} />
+                    text={course.difficulty + ''} />
 
                 {/* rating */}
                 <SmallStat
                     title="1-5-ig ennyire érékelték a hallgatók a tanfolyamot"
                     iconUrl={Environment.getAssetUrl('images/star3D.png')}
-                    text={courseDetails?.benchmark + ''} />
+                    text={course.benchmark + ''} />
             </Flex>
 
             {/* rating */}

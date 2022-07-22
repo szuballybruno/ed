@@ -1,15 +1,12 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { LoadingStateType } from '../../models/types';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { EpistoButton } from '../controls/EpistoButton';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
@@ -27,10 +24,7 @@ const HomePage = () => {
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate } = useNavigation();
 
-    const [ls, setLs] = useState<LoadingStateType>('idle');
-
     useSetBusy(useOverviewPageDTO, status);
-    useSetBusy(setLs, ls);
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 

@@ -15,27 +15,27 @@ import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { OrderType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
+import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationHelpers } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
 
 export class CourseService {
 
@@ -408,30 +408,31 @@ export class CourseService {
                     .getMany();
 
                 // TODO refactor
-                const filteredCoursesBySearchTerm =
-                    filterByProperty(courses, 'title', searchTerm);
+                // const filteredCoursesBySearchTerm =
+                //     filterByProperty(courses, 'title', searchTerm);
 
-                const filteredCoursesByCategoryId =
-                    filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId);
+                // const filteredCoursesByCategoryId =
+                //     filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId);
 
-                const filteredCoursesByIsFeatured =
-                    filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
+                // const filteredCoursesByIsFeatured =
+                //     filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
 
-                const filteredCoursesByIsRecommended =
-                    filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
+                // const filteredCoursesByIsRecommended =
+                //     filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
 
-                const orderCourses = (courses: AvailableCourseView[], orderType: string) => {
+                const orderedCourses = (() => {
+
                     if (orderBy === 'nameASC')
                         return orderByProperty(courses, 'title', 'asc');
+
                     if (orderBy === 'nameDESC')
                         return orderByProperty(courses, 'title', 'desc');
-                    return courses;
-                };
 
-                const orderedCourses = orderCourses(filteredCoursesByIsRecommended, orderBy);
+                    return courses;
+                })();
 
                 return this._mapperService
-                    .mapTo(CourseShortDTO, [orderedCourses]);
+                    .mapTo(AvailableCourseDTO, [orderedCourses]);
             }
         };
     }

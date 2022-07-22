@@ -1,7 +1,7 @@
 
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
-import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
 import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -42,7 +42,7 @@ export class MiscService {
         const userId = Id
             .create<'User'>(principalId.toSQLValue());
 
-        const recommendedCourseDTOs = [] as CourseShortDTO[];
+        const recommendedCourseDTOs = [] as AvailableCourseDTO[];
         const developmentChartData = this.getDevelopmentChart();
 
         const currentCourseProgress = await this

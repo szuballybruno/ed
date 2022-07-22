@@ -657,7 +657,7 @@ export type QueryResult<T> = {
     error: ErrorWithCode | null;
 }
 
-export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
+export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
     const queryValues = queryParams ? Object.values(queryParams) : [];
 

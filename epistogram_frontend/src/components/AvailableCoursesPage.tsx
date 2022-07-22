@@ -4,10 +4,10 @@ import React from 'react';
 import { CourseApiService } from '../services/api/courseApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
-import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
 import { OrderType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { distinct, distinctByAllKeys } from '../static/frontendHelpers';
+import { distinctByAllKeys } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
@@ -51,12 +51,12 @@ const AvailableCoursesPage = () => {
         ['subCategoryId']
     );
 
-    const navigateToDetailsPage = (course: CourseShortDTO) => {
+    const navigateToDetailsPage = (course: AvailableCourseDTO) => {
 
         navigateToCourseDetails(course.courseId, course.currentItemCode ?? undefined);
     };
 
-    const handlePlayCourse = async (course: CourseShortDTO) => {
+    const handlePlayCourse = async (course: AvailableCourseDTO) => {
 
         playCourse(course.courseId, course.stageName, course.currentItemCode);
     };

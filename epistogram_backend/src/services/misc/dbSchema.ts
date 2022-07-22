@@ -304,6 +304,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['common', 'answer_session_evaluation_view'], // 3 | 1 answer_session_view
             ['common', 'exam_completed_view', ExamCompletedView], // 6 | 1 answer_session_evaluation_view
             ['common', 'course_item_playlist_view', CourseItemPlaylistView], // 2 | latest_course_version_view, course_item_view, user_practise_recommendation_view
+            ['common', 'course_details_view', CourseDetailsView],
             ['common', 'available_course_view', AvailableCourseView], // 2
             ['common', 'exam_result_view', ExamResultView], // 1
             ['common', 'course_admin_short_view', CourseAdminShortView], // 1 course_admin_content_view
@@ -335,7 +336,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['', 'course_admin_content_view', CourseAdminContentView],
             ['', 'coin_transaction_view', CoinTransactionView],
             ['', 'course_item_edit_view', CourseItemEditView],
-            ['', 'course_details_view', CourseDetailsView],
             ['', 'exam_player_data_view', ExamPlayerDataView],
             ['', 'pretest_result_view', PretestResultView],
             ['', 'user_daily_progress_view', UserDailyProgressView],

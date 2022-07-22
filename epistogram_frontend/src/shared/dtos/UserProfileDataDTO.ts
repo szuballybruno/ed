@@ -1,6 +1,6 @@
-import { CourseShortDTO } from './CourseShortDTO';
+import { AvailableCourseDTO } from './AvailableCourseDTO';
 
 export type UserProfileDataDTO = {
-    favoriteCourses: CourseShortDTO[];
-    completedCourses: CourseShortDTO[];
+    favoriteCourses: AvailableCourseDTO[];
+    completedCourses: AvailableCourseDTO[];
 }

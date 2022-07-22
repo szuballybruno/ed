@@ -21,10 +21,6 @@ export class AvailableCourseView {
     @XViewColumn()
     canView: boolean;
 
-    // @ViewColumn()
-    // @XViewColumn()
-    // teacherId: number;
-
     @ViewColumn()
     @XViewColumn()
     isCompleted: boolean;
@@ -84,4 +80,16 @@ export class AvailableCourseView {
     @ViewColumn()
     @XViewColumn()
     teacherLastName: string;
+
+    @XViewColumn()
+	totalVideoSumLengthSeconds: number;
+	
+    @XViewColumn()
+    totalVideoCount: number;
+
+    @XViewColumn()
+	difficulty: number;
+	
+    @XViewColumn()
+    benchmark: number;
 }

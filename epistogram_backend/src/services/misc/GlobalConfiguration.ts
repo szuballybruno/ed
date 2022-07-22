@@ -73,13 +73,18 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['ROLLING SESSION'] as LogScopeType[]
+        enabledScopes: ['ROLLING SESSION'] as LogScopeType[],
     };
 
     constructor(rootDirectory: string) {
 
         this.rootDirectory = rootDirectory;
     }
+
+    overrideLogScopes = (scopes: LogScopeType[]) => {
+
+        this.logging.enabledScopes = this.logging.enabledScopes.concat(scopes);
+    };
 
     getIsProdEnvironment = () => {
 
