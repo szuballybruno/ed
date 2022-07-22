@@ -15,19 +15,21 @@ import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { OrderType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
-import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
+import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationHelpers } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { createCharSeparatedList } from './misc/mappings';
@@ -42,17 +44,23 @@ export class CourseService {
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
         private _fileService: FileService,
-        private _pretestService: PretestService) {
+        private _pretestService: PretestService,
+        private _authorizationService: AuthorizationService) {
     }
 
     /**
      * Returns courses that the principal can use as context
      * when assigning permissions to a user 
      */
-    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
 
         // TODO: CourseDataId is not CourseId
         throwNotImplemented();
+
+        return {
+            auth: () => Promise.resolve(AuthorizationResult.ok),
+            action: () => Promise.resolve()
+        };
 
         /* const courses = await this._ormService
             .query(CourseData)
@@ -379,45 +387,54 @@ export class CourseService {
     /**
      * Returns the currently available courses. 
      */
-    async getAvailableCoursesAsync(
+    getAvailableCoursesAsync(
         userId: PrincipalId,
         searchTerm: string,
         filterCategoryId: number | null,
         isFeatured: boolean,
         isRecommended: boolean,
         orderBy: OrderType
-    ) {
+    ): ControllerActionReturnType {
 
-        const courses = await this._ormService
-            .query(AvailableCourseView, { userId })
-            .where('userId', '=', 'userId')
-            .and('canView', '=', 'true')
-            .getMany();
+        return {
+            auth: () => this._authorizationService
+                .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN'),
+            action: async () => {
 
-        const filteredCoursesBySearchTerm =
-            filterByProperty(courses, 'title', searchTerm);
+                const courses = await this._ormService
+                    .query(AvailableCourseView, { userId })
+                    .where('userId', '=', 'userId')
+                    .and('canView', '=', 'true')
+                    .getMany();
 
-        const filteredCoursesByCategoryId =
-            filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId);
+                // TODO refactor
+                // const filteredCoursesBySearchTerm =
+                //     filterByProperty(courses, 'title', searchTerm);
 
-        const filteredCoursesByIsFeatured =
-            filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
+                // const filteredCoursesByCategoryId =
+                //     filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId);
 
-        const filteredCoursesByIsRecommended =
-            filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
+                // const filteredCoursesByIsFeatured =
+                //     filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
 
-        const orderCourses = (courses: AvailableCourseView[], orderType: string) => {
-            if (orderBy === 'nameASC')
-                return orderByProperty(courses, 'title', 'asc');
-            if (orderBy === 'nameDESC')
-                return orderByProperty(courses, 'title', 'desc');
-            return courses;
+                // const filteredCoursesByIsRecommended =
+                //     filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
+
+                const orderedCourses = (() => {
+
+                    if (orderBy === 'nameASC')
+                        return orderByProperty(courses, 'title', 'asc');
+
+                    if (orderBy === 'nameDESC')
+                        return orderByProperty(courses, 'title', 'desc');
+
+                    return courses;
+                })();
+
+                return this._mapperService
+                    .mapTo(AvailableCourseDTO, [orderedCourses]);
+            }
         };
-
-        const orderedCourses = orderCourses(filteredCoursesByIsRecommended, orderBy);
-
-        return this._mapperService
-            .mapTo(CourseShortDTO, [orderedCourses]);
     }
 
     /**

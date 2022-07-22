@@ -8,7 +8,7 @@ import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressCha
 import { instantiate } from '../shared/logic/sharedLogic';
 import { EpistoLineChartDataType } from '../shared/types/epistoChartTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { dateDiffInDays, forN } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';

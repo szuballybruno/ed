@@ -10,7 +10,7 @@ import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCa
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
 
 export class PersonalityAssessmentService {

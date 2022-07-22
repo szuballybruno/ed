@@ -1,5 +1,5 @@
 import cors from 'cors';
-import { VerboseError } from '../../shared/types/VerboseError';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { getAsyncMiddlewareHandler } from '../../utilities/apiHelpers';
 import { GlobalConfiguration } from './GlobalConfiguration';
 
@@ -8,7 +8,7 @@ export const getUnderMaintanenceMiddleware = (config: GlobalConfiguration) => ge
     if (!config.misc.isUnderMaintanence)
         return;
 
-    throw new VerboseError('Server is under maintanence!', 'under maintenance');
+    throw new ErrorWithCode('Server is under maintanence!', 'under maintenance');
 });
 
 export const getCORSMiddleware = (config: GlobalConfiguration) => {

@@ -1,9 +1,9 @@
 import { DiscountCode } from '../models/entity/DiscountCode';
 import { User } from '../models/entity/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { log } from './misc/logger';
@@ -29,7 +29,7 @@ export class AuthenticationService {
 
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
-            throw new VerboseError('Token is invalid.', 'bad request');
+            throw new ErrorWithCode('Token is invalid.', 'bad request');
 
         return tokenPayload;
     };
@@ -53,7 +53,7 @@ export class AuthenticationService {
             ]);
 
         if (!refreshToken)
-            throw new VerboseError('Refresh token not found!', 'forbidden');
+            throw new ErrorWithCode('Refresh token not found!', 'forbidden');
 
         const { userId } = this._tokenService
             .verifyRefreshToken(refreshToken);
@@ -95,20 +95,20 @@ export class AuthenticationService {
 
         // further validate request 
         if (!email || !password)
-            throw new VerboseError('Email or password is null.', 'bad request');
+            throw new ErrorWithCode('Email or password is null.', 'bad request');
 
         // authenticate
         const user = await this._userService
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new VerboseError('Invalid email.', 'forbidden');
+            throw new ErrorWithCode('Invalid email.', 'forbidden');
 
         const isPasswordCorrect = await this._hashService
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
-            throw new VerboseError('Invalid password.', 'forbidden');
+            throw new ErrorWithCode('Invalid password.', 'forbidden');
 
         const userId = user.id;
 
@@ -157,7 +157,7 @@ export class AuthenticationService {
                 .getUserRefreshTokenById(userId);
 
             if (!refreshTokenFromDb)
-                throw new VerboseError(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+                throw new ErrorWithCode(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
         }
 
         // get user 
@@ -165,7 +165,7 @@ export class AuthenticationService {
             .getUserById(userId);
 
         if (!user)
-            throw new VerboseError('User not found by id ' + userId, 'internal server error');
+            throw new ErrorWithCode('User not found by id ' + userId, 'internal server error');
 
         // get tokens
         const { accessToken, refreshToken } = await this.getUserLoginTokens(user);

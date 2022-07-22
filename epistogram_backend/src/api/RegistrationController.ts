@@ -6,7 +6,7 @@ import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserVi
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 

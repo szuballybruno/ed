@@ -1,6 +1,7 @@
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
+import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { CreateDBService } from './services/sqlServices/CreateDBService';
 import { RecreateDBService } from './services/sqlServices/RecreateDBService';
@@ -13,6 +14,11 @@ import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
 const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
 
     const serviceProvider = await getServiceProviderAsync();
+
+    // override logging scopes to show bootstrap
+    serviceProvider
+        .getService(GlobalConfiguration)
+        .overrideLogScopes(['BOOTSTRAP']);
 
     //
     // SEED DB
@@ -28,6 +34,11 @@ const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) 
 const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
 
     const serviceProvider = await getServiceProviderAsync();
+
+    // override logging scopes to show bootstrap
+    serviceProvider
+        .getService(GlobalConfiguration)
+        .overrideLogScopes(['BOOTSTRAP']);
 
     await serviceProvider
         .getService(CreateDBService)

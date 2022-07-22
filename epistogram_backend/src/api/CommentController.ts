@@ -2,7 +2,7 @@ import { CommentService } from '../services/CommentService';
 import { LikeService } from '../services/LikeService';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { ServiceProvider } from '../startup/servicesDI';
 import { Id } from '../shared/types/versionId';

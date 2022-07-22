@@ -9,10 +9,11 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class CourseController {
+export class CourseController implements XController<CourseController> {
 
     private _courseService: CourseService;
     private _userCourseBridgeService: UserCourseBridgeService;
@@ -24,7 +25,7 @@ export class CourseController {
     }
 
     @XControllerAction(apiRoutes.course.getPermissionAssignCourses)
-    getPermissionAssignCoursesAction = async (parmas: ActionParams) => {
+    getPermissionAssignCoursesAction = (parmas: ActionParams) => {
 
         const userId = Id.create<'User'>(parmas
             .getQuery()
@@ -35,12 +36,10 @@ export class CourseController {
     };
 
     @XControllerAction(apiRoutes.course.getAvailableCourses)
-    getAvailableCoursesAction = async (params: ActionParams) => {
+    getAvailableCoursesAction = (params: ActionParams) => {
 
         const query = params
             .getQuery();
-
-        console.log(query);
 
         const searchTerm: string = query.data.searchTerm || '';
         const filterCategoryId = query.getValueOrNull(x => x.filterCategoryId, 'int');

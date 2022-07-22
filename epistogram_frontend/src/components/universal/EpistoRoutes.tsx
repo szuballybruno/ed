@@ -7,6 +7,10 @@ import { HasPermissionFnType, useAuthorizationContext } from '../system/Authoriz
 export type RenderRoute = {
     element: JSX.Element;
     route: ApplicationRoute;
+
+    /**
+     * @deprecated
+     */
     isAuthorizedToView?: (hasPermission: HasPermissionFnType) => boolean;
 }
 

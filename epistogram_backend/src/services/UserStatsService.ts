@@ -15,7 +15,7 @@ import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';

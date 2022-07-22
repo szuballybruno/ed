@@ -279,7 +279,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 },
                 detailsRoute: {
                     title: translatableTexts.routeTitles.administrationHomeDetails,
-                    route: new EpistoRoute('/administration/home', 'details'),
+                    route: new EpistoRoute('/administration/home', 'details')
                 },
             },
 

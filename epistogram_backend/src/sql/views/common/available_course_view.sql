@@ -72,7 +72,11 @@ SELECT
 	ucb.stage_name stage_name,
 	teacher.id teacher_id,
 	teacher.first_name teacher_first_name,
-	teacher.last_name teacher_last_name
+	teacher.last_name teacher_last_name,
+	cdv.total_video_sum_length_seconds,
+	cdv.total_video_count,
+	cd.difficulty,
+	cd.benchmark
 FROM assigned_courses ac 
 
 LEFT JOIN public.course co
@@ -89,6 +93,10 @@ ON cd.id = cv.course_data_id
 
 LEFT JOIN public.user u 
 ON u.id = ac.user_id
+
+LEFT JOIN public.course_details_view cdv
+ON cdv.course_id = co.id
+AND cdv.user_id = u.id
 
 LEFT JOIN public.course_item_view first_civ
 ON first_civ.course_version_id = cv.id

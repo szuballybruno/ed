@@ -1,6 +1,6 @@
 import { AuthorizationService } from '../services/AuthorizationService';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { ITurboMiddlewareInstance, MiddlewareParams } from '../utilities/XTurboExpress/TurboExpress';
 
 export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionParams, ActionParams> {

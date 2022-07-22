@@ -15,25 +15,6 @@ SELECT
 			AND cipv.item_state = 'completed' 
 	) completed_course_item_count,
 	(
-		SELECT 
-			COUNT(v.id)::int
-		FROM public.video v
-		
-		LEFT JOIN public.video_version vv
-		ON vv.video_id = v.id
-	
-		LEFT JOIN public.module_version mv
-		ON mv.id = vv.module_version_id
-		
-		LEFT JOIN public.course_version cv
-		ON cv.id = mv.course_version_id
-		
-		LEFT JOIN public.course co
-		ON co.id = cv.course_id
-		
-		WHERE co.id = acv.course_id
-	) total_video_count,
-	(
 		SELECT COUNT(course_id)::integer
 		FROM public.course_item_playlist_view cisv
 		WHERE cisv.course_id = acv.course_id 

@@ -20,7 +20,7 @@ import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { StorageFile } from '../models/entity/StorageFile';
 import { Id } from '../shared/types/versionId';
 import { CourseShopItemListView } from '../models/views/CourseShopItemListView';

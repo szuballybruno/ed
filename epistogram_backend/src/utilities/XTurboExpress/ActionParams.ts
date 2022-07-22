@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { logSecondary } from '../services/misc/logger';
-import { ParametrizedRouteType, RouteParameterType } from '../shared/types/apiRoutes';
-import { VerboseError } from '../shared/types/VerboseError';
-import { Id } from '../shared/types/versionId';
-import { withValueOrBadRequest, SafeObjectWrapper } from './helpers';
+import { logSecondary } from '../../services/misc/logger';
+import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { Id } from '../../shared/types/versionId';
+import { withValueOrBadRequest, SafeObjectWrapper } from '../helpers';
 
 export class PrincipalId {
 
@@ -15,7 +15,12 @@ export class PrincipalId {
         this._id = id;
     }
 
-    toSQLValue() {
+    getId(): Id<'User'> {
+
+        return Id.create<'User'>(this._id);
+    }
+
+    toSQLValue(): number {
 
         return this._id;
     }
@@ -87,7 +92,7 @@ export class ActionParams {
 
         const file = this.req.files?.file;
         if (!file)
-            throw new VerboseError('File not sent!', 'bad request');
+            throw new ErrorWithCode('File not sent!', 'bad request');
 
         return file as UploadedFile;
     }

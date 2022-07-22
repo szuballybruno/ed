@@ -1,7 +1,7 @@
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';

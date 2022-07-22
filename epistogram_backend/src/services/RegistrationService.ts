@@ -3,9 +3,9 @@ import { PermissionAssignmentBridge } from '../models/entity/authorization/Permi
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { JobTitleIdEnum } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
@@ -72,7 +72,7 @@ export class RegistrationService extends ServiceBase {
         // TODO
 
         if (!companyId)
-            throw new VerboseError(
+            throw new ErrorWithCode(
                 `Current user is not an administrator, 
                         but has rights to add users, but has no company,  
                         in which he/she could add users.`, 'bad request');
@@ -103,7 +103,7 @@ export class RegistrationService extends ServiceBase {
             .isValidCodeAsync(activationCode);
 
         if (!activationCodeEntity)
-            throw new VerboseError(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
+            throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
         // create user 
         await this.createInvitedUserAsync({
@@ -178,13 +178,13 @@ export class RegistrationService extends ServiceBase {
             .getUserByEmailAsync(userEmail);
 
         if (!user)
-            throw new VerboseError('No such user!', 'bad request');
+            throw new ErrorWithCode('No such user!', 'bad request');
 
         const userId = user.id;
 
         // check passwords 
         if (validatePassowrd(password, passwordControl))
-            throw new VerboseError('Password is invalid.', 'bad request');
+            throw new ErrorWithCode('Password is invalid.', 'bad request');
 
         // update user 
         await this._userService

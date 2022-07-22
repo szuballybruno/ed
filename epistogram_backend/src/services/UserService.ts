@@ -11,9 +11,9 @@ import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { getFullName, throwNotImplemented, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
@@ -323,7 +323,7 @@ export class UserService {
             .getMany();
 
         if (connectedCourses.length > 0)
-            throw new VerboseError('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+            throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
         return await this._ormService
             .softDelete(User, [deletedUserId]);

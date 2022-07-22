@@ -28,8 +28,10 @@ import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsV
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
+import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
+import { ExamResultStatsView } from '../../models/views/ExamResultStatsView';
 import { ExamResultView } from '../../models/views/ExamResultView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
@@ -57,6 +59,7 @@ import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContent
 import { CourseContentItemIssueDTO } from '../../shared/dtos/admin/CourseContentItemIssueDTO';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
 import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
@@ -72,7 +75,6 @@ import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO
 import { CourseRatingGroupDTO } from '../../shared/dtos/CourseRatingGroupDTO';
 import { CourseRatingQuestionDTO } from '../../shared/dtos/CourseRatingQuestionDTO';
 import { CourseShopItemListDTO } from '../../shared/dtos/CourseShopItemListDTO';
-import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
 import { CourseStatDTO } from '../../shared/dtos/CourseStatDTO';
 import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
@@ -84,8 +86,8 @@ import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
-import { ModulePlayerDTO } from '../../shared/dtos/ModulePlayerDTO';
 import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
+import { ModulePlayerDTO } from '../../shared/dtos/ModulePlayerDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
@@ -122,10 +124,6 @@ import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
-import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
-import { ExamCompletedView } from '../../models/views/ExamCompletedView';
-import { log } from './logger';
-import { ExamResultStatsView } from '../../models/views/ExamResultStatsView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -345,7 +343,6 @@ const marray = [
                 totalQuestionCount: view.totalQuestionCount,
                 questions: toQuestionDTO(questions),
                 type: 'exam',
-
                 fullyCorrectlyAnsweredQuestionsCount: examResultStatsView.fullyCorrectlyAnsweredQuestionsCount,
                 questionsCount: examResultStatsView.questionCount,
                 correctAnswerRate: examResultStatsView.correctAnswerRate,
@@ -828,34 +825,41 @@ const marray = [
                 videoUrl: urlService.getAssetUrl(view.videoFilePath)
             });
         }),
-    // TODO: CourseLength missing. Check if its needed
+
     epistoMappingsBuilder
-        .addArrayMapping(CourseShortDTO, ([urlService]) => (views: AvailableCourseView[]) => {
-            return views.map(course => {
+        .addArrayMapping(AvailableCourseDTO, ([urlService]) => (views: AvailableCourseView[]) => {
 
-                const thumbnailImageURL = course.filePath
-                    ? urlService.getAssetUrl(course.filePath)
-                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
+            return views
+                .map(view => {
 
-                const currentItemCode = course.isStarted
-                    ? course.currentItemCode
-                    : null;
+                    const thumbnailImageURL = view.filePath
+                        ? urlService.getAssetUrl(view.filePath)
+                        : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
 
-                return instantiate<CourseShortDTO>({
-                    courseId: course.courseId,
-                    title: course.title,
-                    categoryName: course.categoryName,
-                    subCategoryId: course.subCategoryId,
-                    subCategoryName: course.subCategoryName,
-                    currentItemCode: currentItemCode,
-                    stageName: course.stageName,
-                    courseLength: 0,
-                    teacherName: toFullName(course.teacherFirstName, course.teacherLastName),
-                    thumbnailImageURL: thumbnailImageURL,
-                    isComplete: course.isCompleted
+                    const currentItemCode = view.isStarted
+                        ? view.currentItemCode
+                        : null;
+
+                    return instantiate<AvailableCourseDTO>({
+                        courseId: view.courseId,
+                        title: view.title,
+                        categoryName: view.categoryName,
+                        subCategoryId: view.subCategoryId,
+                        subCategoryName: view.subCategoryName,
+                        currentItemCode: currentItemCode,
+                        stageName: view.stageName,
+                        courseLength: 0,
+                        teacherName: toFullName(view.teacherFirstName, view.teacherLastName),
+                        thumbnailImageURL: thumbnailImageURL,
+                        isComplete: view.isCompleted,
+                        benchmark: view.benchmark,
+                        difficulty: view.difficulty,
+                        totalVideoCount: view.totalVideoCount,
+                        totalVideoSumLengthSeconds: view.totalVideoSumLengthSeconds
+                    });
                 });
-            });
         }),
+
     epistoMappingsBuilder
         .addArrayMapping(CourseAdminListItemDTO, ([urlService]) => (views: CourseAdminShortView[]) => {
             return views.map(view => {

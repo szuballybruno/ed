@@ -10,7 +10,7 @@ import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
@@ -654,10 +654,10 @@ export type QueryResult<T> = {
     state: LoadingStateType;
     refetch: () => Promise<void>;
     data: T;
-    error: VerboseError | null;
+    error: ErrorWithCode | null;
 }
 
-export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
+export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
     const queryValues = queryParams ? Object.values(queryParams) : [];
 
@@ -702,7 +702,7 @@ export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: bo
             : null;
     }, [queryResult.data]);
 
-    const error = queryResult.error as VerboseError | null;
+    const error = queryResult.error as ErrorWithCode | null;
 
     return {
         state,

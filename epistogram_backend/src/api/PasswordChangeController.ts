@@ -1,6 +1,6 @@
 import { ChangePasswordDTO } from '../shared/dtos/SetNewPasswordDTO';
 import { PasswordChangeService } from '../services/PasswordChangeService';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';

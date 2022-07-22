@@ -1,9 +1,9 @@
 import { AuthenticationService } from '../services/AuthenticationService';
 import { LoggerService } from '../services/LoggerService';
-import { VerboseError } from '../shared/types/VerboseError';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { getAuthCookies } from '../utilities/helpers';
 import { ITurboMiddlewareInstance, MiddlewareParams } from '../utilities/XTurboExpress/TurboExpress';
 
@@ -42,7 +42,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
         else {
 
             if (!accessToken)
-                throw new VerboseError('Access token not found!', 'forbidden');
+                throw new ErrorWithCode('Access token not found!', 'forbidden');
 
             // get userId from access token
             const { userId } = this._authenticationService

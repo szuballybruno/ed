@@ -1,7 +1,7 @@
 import { CourseStageNameType } from '../types/sharedTypes';
 import { Id } from '../types/versionId';
 
-export class CourseShortDTO {
+export class AvailableCourseDTO {
     courseId: Id<'Course'>;
     currentItemCode: string | null;
     thumbnailImageURL: string;
@@ -13,4 +13,8 @@ export class CourseShortDTO {
     subCategoryName: string;
     isComplete: boolean;
     courseLength: number;
+	totalVideoSumLengthSeconds: number;
+    totalVideoCount: number;
+	difficulty: number;
+    benchmark: number;
 }

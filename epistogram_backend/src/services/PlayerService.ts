@@ -7,7 +7,7 @@ import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/ActionParams';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';

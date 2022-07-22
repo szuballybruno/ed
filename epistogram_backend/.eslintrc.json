@@ -29,6 +29,8 @@
         "no-constant-condition": "off",
         "@typescript-eslint/no-inferrable-types": 0,
         "no-inferrable-types": 0,
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "off",
         "newline-per-chained-call": [
             "error",
             {
