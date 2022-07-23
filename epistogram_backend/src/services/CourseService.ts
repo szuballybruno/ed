@@ -1,4 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
+import { CourseController } from '../api/CourseController';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
@@ -28,7 +29,7 @@ import { Id } from '../shared/types/versionId';
 import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationHelpers } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult, ControllerActionReturnType, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
@@ -90,91 +91,156 @@ export class CourseService {
     /**
      * Returns course brief data async 
      */
-    async getCourseBriefDataAsync(courseId: Id<'Course'>) {
+    getCourseBriefDataAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>
+    ) {
 
-        const course = await this._ormService
-            .getSingleById(CourseData, courseId);
+        return {
 
-        return this._mapperService
-            .mapTo(CourseBriefData, [course, courseId]);
+            action: async () => {
+
+                const course = await this._ormService
+                    .getSingleById(CourseData, courseId);
+
+                return this._mapperService
+                    .mapTo(CourseBriefData, [course, courseId]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
     /**
      * Returns course detals 
      */
-    async getCourseDetailsAsync(userId: PrincipalId, courseId: Id<'Course'>) {
+    getCourseDetailsAsync(
+        userId: PrincipalId,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
-        const courseDetailsView = await this._ormService
-            .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
+        return {
+            action: async () => {
+                const courseDetailsView = await this._ormService
+                    .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getSingle();
 
-        const moduleViews = await this._ormService
-            .query(CourseItemPlaylistView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getMany();
+                const moduleViews = await this._ormService
+                    .query(CourseItemPlaylistView, { userId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getMany();
 
-        const playlistModuleDTOs = this._mapperService
-            .mapTo(PlaylistModuleDTO, [moduleViews]);
+                const playlistModuleDTOs = this._mapperService
+                    .mapTo(PlaylistModuleDTO, [moduleViews]);
 
-        return this._mapperService
-            .mapTo(CourseDetailsDTO, [courseDetailsView, playlistModuleDTOs]);
+                return this._mapperService
+                    .mapTo(CourseDetailsDTO, [courseDetailsView, playlistModuleDTOs]);
+
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+
+            }
+        }
     }
+
 
     /**
      * Creates a new course 
      */
-    async createCourseAsync(dto: CreateCourseDTO) {
+    createCourseAsync(
+        userId: PrincipalId,
+        dto: CreateCourseDTO
+    ): ControllerActionReturnType {
 
-        throwNotImplemented();
+        return {
+            action: async () => {
+                throwNotImplemented();
 
-        const newCourse = {
-            title: dto.title,
-            teacherId: Id.create<'User'>(1),
-            categoryId: Id.create<'CourseCategory'>(1),
-            subCategoryId: Id.create<'CourseCategory'>(1),
-            difficulty: 0,
-            benchmark: 0,
-            description: '',
-            shortDescription: '',
-            language: 'magyar',
-            previouslyCompletedCount: 0,
-            visibility: 'private',
-            technicalRequirements: '',
-            humanSkillBenefits: '',
-            humanSkillBenefitsDescription: '',
-            requirementsDescription: '',
-            skillBenefits: ''
-        } as CourseData;
+                const newCourse = {
+                    title: dto.title,
+                    teacherId: Id.create<'User'>(1),
+                    categoryId: Id.create<'CourseCategory'>(1),
+                    subCategoryId: Id.create<'CourseCategory'>(1),
+                    difficulty: 0,
+                    benchmark: 0,
+                    description: '',
+                    shortDescription: '',
+                    language: 'magyar',
+                    previouslyCompletedCount: 0,
+                    visibility: 'private',
+                    technicalRequirements: '',
+                    humanSkillBenefits: '',
+                    humanSkillBenefitsDescription: '',
+                    requirementsDescription: '',
+                    skillBenefits: ''
+                } as CourseData;
 
-        await this._ormService
-            .createAsync(CourseData, newCourse);
+                await this._ormService
+                    .createAsync(CourseData, newCourse);
 
-        /*  await this._pretestService
-             .createPretestExamAsync(newCourse.id); */
+                /*  await this._pretestService
+                     .createPretestExamAsync(newCourse.id); */
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
     }
 
     /**
      * Save course thumbnail.
      */
-    async saveCourseThumbnailAsync(file: UploadedFile, courseId: Id<'Course'>) {
+    saveCourseThumbnailAsync(
+        userId: PrincipalId,
+        file: UploadedFile,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
-        return this._fileService
-            .uploadAssigendFileAsync({
-                entitySignature: CourseData,
-                entityId: courseId,
-                fileBuffer: file.data,
-                fileCode: 'course_cover',
-                storageFileIdField: 'coverFileId'
-            });
+        return {
+            action: async () => {
+                return this._fileService
+                    .uploadAssigendFileAsync({
+                        entitySignature: CourseData,
+                        entityId: courseId,
+                        fileBuffer: file.data,
+                        fileCode: 'course_cover',
+                        storageFileIdField: 'coverFileId'
+                    });
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
     }
 
     /**
      * Returns the course id from an item code.
      */
-    async getCourseIdOrFailAsync(playlistItemCode: string) {
+    async getCourseIdOrFailAsync(
+        playlistItemCode: string
+    ) {
+
 
         const viewIfPlaylistItemCode = await this._ormService
             .query(CourseItemPlaylistView, { playlistItemCode })
@@ -191,33 +257,52 @@ export class CourseService {
             .getSingle();
 
         return viewIfModuleCode.courseId;
+
     }
 
     /**
      * Gets the course details edit DTO.
           */
-    async getCourseDetailsEditDataAsync(courseId: number) {
+    getCourseDetailsEditDataAsync(
+        userId: PrincipalId,
+        courseId: number
+    ): ControllerActionReturnType {
 
-        // get course 
-        const view = await this._ormService
-            .query(CourseAdminDetailedView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getSingle();
+        return {
+            action: async () => {
 
-        const categories = await this._ormService
-            .query(CourseCategory)
-            .getMany();
+                // get course 
+                const view = await this._ormService
+                    .query(CourseAdminDetailedView, { courseId })
+                    .where('courseId', '=', 'courseId')
+                    .getSingle();
 
-        const teachers = await this._ormService
-            .query(User)
-            .innerJoin(TeacherInfo, x => x
-                .on('userId', '=', 'id', User))
-            .getMany();
+                const categories = await this._ormService
+                    .query(CourseCategory)
+                    .getMany();
 
-        return this._mapperService
-            .mapTo(CourseDetailsEditDataDTO, [view, categories, teachers]);
+                const teachers = await this._ormService
+                    .query(User)
+                    .innerJoin(TeacherInfo, x => x
+                        .on('userId', '=', 'id', User))
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(CourseDetailsEditDataDTO, [view, categories, teachers]);
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
+
     }
-
     /**
      * Saves the course details 
      * without incrementing version
@@ -226,95 +311,148 @@ export class CourseService {
      * or playlist order indices. Changing the course name, or description etc.
      * is not considered a breaking change.
      */
-    async saveCourseDetailsAsync(dto: CourseDetailsEditDataDTO) {
+    saveCourseDetailsAsync(
+        userId: PrincipalId,
+        dto: CourseDetailsEditDataDTO
+    ): ControllerActionReturnType {
 
-        const cv = await this._ormService
-            .withResType<CourseVersion>()
-            .query(LatestCourseVersionView, { courseId: dto.courseId })
-            .select(CourseVersion)
-            .leftJoin(CourseVersion, x => x
-                .on('id', '=', 'versionId', LatestCourseVersionView))
-            .where('courseId', '=', 'courseId')
-            .getSingle();
+        return {
+            action: async () => {
 
-        const courseDataId = cv.courseDataId;
+                const cv = await this._ormService
+                    .withResType<CourseVersion>()
+                    .query(LatestCourseVersionView, { courseId: dto.courseId })
+                    .select(CourseVersion)
+                    .leftJoin(CourseVersion, x => x
+                        .on('id', '=', 'versionId', LatestCourseVersionView))
+                    .where('courseId', '=', 'courseId')
+                    .getSingle();
 
-        // save basic info
-        await this._ormService
-            .save(CourseData, {
-                id: courseDataId,
-                title: dto.title,
-                teacherId: dto.teacherId,
-                categoryId: dto.category.id,
-                subCategoryId: dto.subCategory.id,
-                benchmark: dto.benchmark,
-                description: dto.description,
-                difficulty: dto.difficulty,
-                language: dto.language,
-                shortDescription: dto.shortDescription,
-                previouslyCompletedCount: dto.previouslyCompletedCount,
-                humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
-                skillBenefits: createCharSeparatedList(dto.skillBenefits ?? []),
-                technicalRequirements: createCharSeparatedList(dto.technicalRequirements ?? []),
-                requirementsDescription: dto.technicalRequirementsDescription,
-                humanSkillBenefits: createCharSeparatedList(dto
-                    .humanSkillBenefits
-                    .map(x => `${x.text}: ${x.value}`)),
-                visibility: dto.visibility
-            });
+                const courseDataId = cv.courseDataId;
+
+                // save basic info
+                await this._ormService
+                    .save(CourseData, {
+                        id: courseDataId,
+                        title: dto.title,
+                        teacherId: dto.teacherId,
+                        categoryId: dto.category.id,
+                        subCategoryId: dto.subCategory.id,
+                        benchmark: dto.benchmark,
+                        description: dto.description,
+                        difficulty: dto.difficulty,
+                        language: dto.language,
+                        shortDescription: dto.shortDescription,
+                        previouslyCompletedCount: dto.previouslyCompletedCount,
+                        humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
+                        skillBenefits: createCharSeparatedList(dto.skillBenefits ?? []),
+                        technicalRequirements: createCharSeparatedList(dto.technicalRequirements ?? []),
+                        requirementsDescription: dto.technicalRequirementsDescription,
+                        humanSkillBenefits: createCharSeparatedList(dto
+                            .humanSkillBenefits
+                            .map(x => `${x.text}: ${x.value}`)),
+                        visibility: dto.visibility
+                    })
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
+
+
     }
 
     /**
      * Gets the course content edit DTO.
      */
-    async getCourseContentAdminDataAsync(courseId: Id<'Course'>, loadDeleted: boolean) {
-
-        const views = await this._ormService
-            .query(CourseAdminContentView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getMany();
-
-        const courseVersionId = (await this._ormService
-            .query(LatestCourseVersionView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getSingle())
-            .versionId;
-
-        const modules = await this._moduleService
-            .getModuleEditDTOsAsync(courseVersionId);
-
-        const items = this._mapperService
-            .mapTo(CourseContentItemAdminDTO, [views]);
+    getCourseContentAdminDataAsync(
+        userId: PrincipalId,
+        courseId: Id<'Course'>,
+        loadDeleted: boolean
+    ): ControllerActionReturnType {
 
         return {
-            items,
-            modules
-        } as CourseContentAdminDTO;
+            action: async () => {
+                const views = await this._ormService
+                    .query(CourseAdminContentView, { courseId })
+                    .where('courseId', '=', 'courseId')
+                    .getMany();
+
+                const courseVersionId = (await this._ormService
+                    .query(LatestCourseVersionView, { courseId })
+                    .where('courseId', '=', 'courseId')
+                    .getSingle())
+                    .versionId;
+
+                const modules = await this._moduleService
+                    .getModuleEditDTOsAsync(courseVersionId);
+
+                const items = this._mapperService
+                    .mapTo(CourseContentItemAdminDTO, [views]);
+
+                return {
+                    items,
+                    modules
+                } as CourseContentAdminDTO;
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     }
 
     /**
      * Saves the course content 
      */
-    async saveCourseContentAsync(
+    saveCourseContentAsync(
+        userId: PrincipalId,
         courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]) {
+        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
+    ): ControllerActionReturnType {
 
-        if (itemMutations.length === 0 && moduleMutations.length === 0)
-            return;
+        return {
+            action: async () => {
+                if (itemMutations.length === 0 && moduleMutations.length === 0)
+                    return;
 
-        // save course 
-        const { courseVersionMigrations } = await this
-            ._saveCourseVersionAsync(courseId);
+                // save course 
+                const { courseVersionMigrations } = await this
+                    ._saveCourseVersionAsync(courseId);
 
-        // save modules 
-        await this
-            ._moduleService
-            .saveModulesAsync({
-                courseVersionMigrations,
-                moduleMutations,
-                itemMutations
-            });
+                // save modules 
+                await this
+                    ._moduleService
+                    .saveModulesAsync({
+                        courseVersionMigrations,
+                        moduleMutations,
+                        itemMutations
+                    });
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
+
+
     }
 
     /**
@@ -365,23 +503,56 @@ export class CourseService {
     /**
      * Returns admin list items 
      */
-    async getAdminCoursesAsync() {
+    getAdminCoursesAsync(
+        userId: PrincipalId
+    ): ControllerActionReturnType {
 
-        const courseAdminShortViews = await this._ormService
-            .query(CourseAdminShortView)
-            .getMany();
+        return {
+            action: async () => {
 
-        return this._mapperService
-            .mapTo(CourseAdminListItemDTO, [courseAdminShortViews]);
+                const courseAdminShortViews = await this._ormService
+                    .query(CourseAdminShortView)
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(CourseAdminListItemDTO, [courseAdminShortViews]);
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     }
 
     /**
      * Soft delete course.
      */
-    async softDeleteCourseAsync(courseId: Id<'Course'>) {
+    softDeleteCourseAsync(
+        userId: PrincipalId,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
-        await this._ormService
-            .softDelete(CourseData, [courseId]);
+        return {
+            action: async () => {
+
+                await this._ormService
+                    .softDelete(CourseData, [courseId]);
+
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
     }
 
     /**
@@ -443,7 +614,10 @@ export class CourseService {
      * This can be used to dinamically allow or disallow access to a course, by the user.
      * Like when purchased from the shop, or got limited access etc... 
      */
-    async createCourseAccessBridge(userId: Id<'User'>, courseId: Id<'Course'>) {
+    async createCourseAccessBridge(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>
+    ) {
 
         await this._ormService
             .createAsync(CourseAccessBridge, {

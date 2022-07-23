@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useContext, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { XDialogHosterContext } from './XDialoContext';
 

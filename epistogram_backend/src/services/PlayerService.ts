@@ -238,8 +238,8 @@ export class PlayerService {
             ._getQuestionDataByVideoVersionId(videoVersionId);
 
         const currentDateMinThreshold = moment(new Date())
-.subtract(5, 'minutes')
-.toDate();
+            .subtract(5, 'minutes')
+            .toDate();
 
         const oldSessions = await this._ormService
             .query(VideoPlaybackSession, { userId, videoVersionId, currentDateMinThreshold })

@@ -230,7 +230,10 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Get the results of the particular exam.
      */
-    getExamResultsAsync = async (userId: PrincipalId, answerSessionId: Id<'AnswerSession'>) => {
+    getExamResultsAsync = async (
+        userId: PrincipalId,
+        answerSessionId: Id<'AnswerSession'>
+    ) => {
 
         const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
