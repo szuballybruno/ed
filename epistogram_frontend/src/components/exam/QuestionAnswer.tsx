@@ -1,5 +1,5 @@
 import { FlexProps } from '@chakra-ui/layout';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 

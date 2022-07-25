@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { PagingType } from '../../../static/frontendHelpers';
 import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';

@@ -1,4 +1,3 @@
-import { CourseItemType } from '../../../../shared/types/sharedTypes';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoPopper } from '../../../controls/EpistoPopper';
 

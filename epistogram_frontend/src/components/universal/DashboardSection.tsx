@@ -1,4 +1,4 @@
-import { Box, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import { EpistoHeader } from '../EpistoHeader';
 import { FlexFloat } from '../controls/FlexFloat';
 

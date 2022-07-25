@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/layout';
-import { InputAdornment, TextField, Typography } from '@mui/material';
+import { InputAdornment, TextField } from '@mui/material';
 import { forwardRef, useEffect, useState } from 'react';
 import { EpistoFont } from './EpistoFont';
 

@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/layout';
 import { InputAdornment, TextField } from '@mui/material';
-import { FocusEventHandler, Ref, useEffect, useState } from 'react';
+import { Ref, useEffect, useState } from 'react';
 import { ClassBuilder } from '../../helpers/classBuilder';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from './EpistoFont';

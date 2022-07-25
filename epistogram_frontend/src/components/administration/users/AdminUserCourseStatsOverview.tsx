@@ -1,13 +1,6 @@
 import { Flex } from '@chakra-ui/react';
-import { UserCourseProgressChartDTO } from '../../../shared/dtos/UserCourseProgressChartDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
-import { Environment } from '../../../static/Environemnt';
-import { roundNumber } from '../../../static/frontendHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { NoProgressChartYet } from '../../home/NoProgressChartYet';
-import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
-import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 
 export const AdminUserCourseStatsOverview = () => {
 

@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { CSSProperties } from 'react';
 import { PagingType } from '../../static/frontendHelpers';

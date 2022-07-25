@@ -16,6 +16,9 @@ export const CoinRewardDialog = (props: {
 
     const { dialogLogic, lottiePath, coinRewardAmount, text } = props;
 
+    if (!lottiePath)
+        return <></>;
+
     return <EpistoDialog logic={dialogLogic}>
         <Flex
             direction="column"

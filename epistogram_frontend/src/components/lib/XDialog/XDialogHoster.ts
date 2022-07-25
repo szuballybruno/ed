@@ -12,19 +12,43 @@ export class XDialogHoster {
 
     private _dialogPool: ContentPoolItemType[] = [];
     private _update: () => void = () => 1;
+    private _updateListeners: ({ key: string, fn: () => void })[] = [];
 
     constructor(update: () => void) {
 
         this._update = () => {
 
             Logger.logScoped('DIALOGS', 'Dialog hoster update');
+
+            // update 
             update();
+
+            // call update lisnteners
+            this._updateListeners
+                .forEach(x => x.fn());
         };
 
         if (XDialogHoster.isCreatedAlready)
             throw new Error('Trying to create multiple dialog hosters!');
 
         XDialogHoster.isCreatedAlready = true;
+    }
+
+    /**
+     * Adds update listener 
+     */
+    addOnUpdateListener(key: string, fn: () => void) {
+
+        this._updateListeners = [...this._updateListeners, { key, fn }];
+    }
+
+    /**
+     * Removes an update lisnener 
+     */
+    removeUpdateListener(key: string) {
+
+        this._updateListeners = this._updateListeners
+            .filter(x => x.key !== key);
     }
 
     /**
@@ -132,6 +156,7 @@ export class XDialogHoster {
             .findIndex(x => x.key === key);
 
         this._dialogPool[index].isOpen = isOpen;
+        this._update();
     }
 
     /**

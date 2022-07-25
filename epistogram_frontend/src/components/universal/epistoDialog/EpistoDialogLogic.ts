@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { ButtonType } from '../../../models/types';
-import { useXDialogLogic } from '../../lib/XDialog/XDialog';
+import { useXDialogLogic } from '../../lib/XDialog/XDialogLogic';
 import { DeclareDialogOptionsType, EpistoDialogLogicType, OpenDialogOptionsType } from './EpistoDialogTypes';
 
 export const useEpistoDialogLogic = <TParams = void,>(

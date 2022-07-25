@@ -6,7 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
-import { formatTimespan, useImageColor, useReactQuery2 } from '../../static/frontendHelpers';
+import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';

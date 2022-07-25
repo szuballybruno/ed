@@ -3,7 +3,6 @@ import { Add, Delete } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
-import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoLabel } from '../controls/EpistoLabel';
 import { FlexList } from '../universal/FlexList';
 

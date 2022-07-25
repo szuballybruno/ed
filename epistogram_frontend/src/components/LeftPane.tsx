@@ -1,5 +1,4 @@
 import { Flex } from '@chakra-ui/react';
-import { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useNavigation } from '../services/core/navigatior';
 import { startUserGuideHelp } from '../services/core/userGuidingService';

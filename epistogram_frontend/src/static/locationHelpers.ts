@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 
 export const useIntParam = (name: string) => {
 

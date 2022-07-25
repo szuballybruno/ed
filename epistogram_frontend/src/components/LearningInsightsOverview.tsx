@@ -1,8 +1,6 @@
 import { Flex, useMediaQuery } from '@chakra-ui/react';
 import { ImproveYourselfSection } from './learningInsights/ImproveYourselfSection';
 import { LearningStatistics } from './learningInsights/LearningStatistics';
-import { LearningStatisticsOverview } from './learningInsights/LearningStatisticsOverview';
-import { LearningStatisticsSeciton } from './learningInsights/LearningStatisticsSeciton';
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';
 import { Id } from '../shared/types/versionId';

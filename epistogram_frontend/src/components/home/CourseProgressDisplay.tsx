@@ -1,6 +1,6 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { LinearProgress, Typography } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';

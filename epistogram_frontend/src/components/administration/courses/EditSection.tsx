@@ -1,7 +1,6 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoHeader } from '../../EpistoHeader';
 
 export const EditSection = (props: {
     title: string,

@@ -12,13 +12,6 @@ export const XDialogHost = (props: {
     const forceUpdate = useForceUpdate();
     const xDialogHoster = useMemo(() => new XDialogHoster(forceUpdate), []);
 
-    console.log('--- XDialog render: ');
-    const msg = xDialogHoster
-        .getDialogItems()
-        .map(x => `${x.key}: ${x.isOpen}`)
-        .join('; ');
-    console.log(msg);
-
     return <>
 
         <XDialogHosterContext.Provider

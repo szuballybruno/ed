@@ -1,7 +1,6 @@
 import { useContext } from 'react';
-import { useHomePageStats, useUserLearningPageStats } from '../../services/api/userStatsApiService';
+import { useHomePageStats } from '../../services/api/userStatsApiService';
 import { Environment } from '../../static/Environemnt';
-import { roundNumber } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { getProgressFromLagBehind } from '../learningInsights/LearningStatistics';

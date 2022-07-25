@@ -38,7 +38,8 @@ const NoQuestionsAvailable = () => {
 
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
 
-                <EpistoFont
+                {/* VALIDATE DOM NESTING */}
+                {/* <EpistoFont
                     onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
                     style={{
                         color: 'var(--epistoTeal)',
@@ -46,7 +47,7 @@ const NoQuestionsAvailable = () => {
                         cursor: 'pointer'
                     }}>
                     {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
-                </EpistoFont>
+                </EpistoFont> */}
             </EpistoFont>
         </Flex>
 

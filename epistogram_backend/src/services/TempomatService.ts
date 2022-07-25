@@ -106,24 +106,13 @@ export class TempomatService extends ServiceBase {
     *         then on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a little bit HIGHER
     */
     calculatePrevisionedDate = (
-        originalPrevisionedCompletionDate: Date | null,
-        totalItemCount: number | null,
-        totalCompletedItemCount: number | null,
-        startDate: Date | null,
-        tempomatMode: TempomatModeType | null,
-        adjustmentCorrection: number | null
+        originalPrevisionedCompletionDate: Date,
+        totalItemCount: number,
+        totalCompletedItemCount: number,
+        startDate: Date,
+        tempomatMode: TempomatModeType,
+        adjustmentCorrection: number
     ) => {
-
-        if (
-            !originalPrevisionedCompletionDate ||
-            !totalItemCount ||
-            !totalCompletedItemCount ||
-            !startDate ||
-            !tempomatMode ||
-            !adjustmentCorrection
-        ) {
-            return null;
-        }
 
         const originalPrevisionedLength = this
             ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
