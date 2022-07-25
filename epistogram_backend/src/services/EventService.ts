@@ -4,6 +4,7 @@ import { EventDTO } from '../shared/dtos/EventDTO';
 import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';
 import { EventCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
+import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -11,11 +12,16 @@ export class EventService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(mapperService: MapperService, conn: ORMConnectionService) {
+    constructor(
+        mapperService: MapperService,
+        conn: ORMConnectionService,
+        authorizationService: AuthorizationService) {
 
         this._ormService = conn;
         this._mapperService = mapperService;
+        this._authorizationService = authorizationService;
     }
 
     async addAnswerStreakEventAsync(userId: Id<'User'>, data: CoinAcquireResultDTO) {

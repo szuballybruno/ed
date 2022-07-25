@@ -143,6 +143,13 @@ export const permissionCodes = fn({
         scope: 'USER'
     },
 
+    // user
+
+    CREATE_NEW_USER: {
+        code: 'CREATE_NEW_USER',
+        scope: 'USER'
+    },
+
     // misc
     SET_COURSE_OWNER_TEACHER_FLAG: {
         code: 'SET_COURSE_OWNER_TEACHER_FLAG',

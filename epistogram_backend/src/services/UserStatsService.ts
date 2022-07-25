@@ -25,135 +25,165 @@ import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeR
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { Id } from '../shared/types/versionId';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
+import { User } from '../models/entity/User';
 
 export class UserStatsService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _tempomatService: TempomatService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperSvc: MapperService,
-        tempomatService: TempomatService) {
+        tempomatService: TempomatService,
+        authorizationService: AuthorizationService) {
 
         this._ormService = ormService;
         this._mapperService = mapperSvc;
         this._tempomatService = tempomatService;
+        this._authorizationService = authorizationService;
     }
 
-    async getHomePageStatsAsync(principalId: PrincipalId) {
-        const userId = principalId.toSQLValue();
+    getHomePageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
 
-        const stats = await this._ormService
-            .query(HomePageStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getSingle();
+        return {
+            action: async () => {
+                const userId = principalId.toSQLValue();
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
+                const stats = await this._ormService
+                    .query(HomePageStatsView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
 
-        if (!tempomatCalculationData)
-            throw new Error('Couldn\'t get tempomat calculation data');
+                const tempomatCalculationData = await this._ormService
+                    .query(TempomatCalculationDataView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getMany();
 
-        const allLagBehindPercentages = tempomatCalculationData.map(x => {
-            const previsionedCompletionDate = this._tempomatService
-                .calculatePrevisionedDate(
-                    x.originalPrevisionedCompletionDate,
-                    x.totalItemCount,
-                    x.totalCompletedItemCount,
-                    x.startDate,
-                    x.tempomatMode,
-                    x.tempomatAdjustmentValue
-                );
+                if (!tempomatCalculationData)
+                    throw new Error('Couldn\'t get tempomat calculation data');
 
-            const lagBehindPercentage = this._tempomatService
-                .calculateLagBehindPercentage(
-                    x.startDate,
-                    x.requiredCompletionDate
-                        ? x.requiredCompletionDate
-                        : x.originalPrevisionedCompletionDate,
-                    previsionedCompletionDate
-                );
+                const allLagBehindPercentages = tempomatCalculationData.map(x => {
+                    const previsionedCompletionDate = this._tempomatService
+                        .calculatePrevisionedDate(
+                            x.originalPrevisionedCompletionDate,
+                            x.totalItemCount,
+                            x.totalCompletedItemCount,
+                            x.startDate,
+                            x.tempomatMode,
+                            x.tempomatAdjustmentValue
+                        );
 
-            return lagBehindPercentage || 0;
-        });
+                    const lagBehindPercentage = this._tempomatService
+                        .calculateLagBehindPercentage(
+                            x.startDate,
+                            x.requiredCompletionDate
+                                ? x.requiredCompletionDate
+                                : x.originalPrevisionedCompletionDate,
+                            previsionedCompletionDate
+                        );
 
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+                    return lagBehindPercentage || 0;
+                });
 
-        return this._mapperService
-            .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
+                const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+
+                return this._mapperService
+                    .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
-    async getUserLearningPageStatsAsync(principalId: PrincipalId) {
+    getUserLearningPageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
 
-        const userId = principalId.toSQLValue();
+        return {
+            action: async () => {
+                const userId = principalId.toSQLValue();
 
-        const stats = await this._ormService
-            .query(UserLearningPageStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getSingle();
+                const stats = await this._ormService
+                    .query(UserLearningPageStatsView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
+                const tempomatCalculationData = await this._ormService
+                    .query(TempomatCalculationDataView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getMany();
 
-        if (!tempomatCalculationData)
-            throw new Error('Couldn\'t get tempomat calculation data');
+                if (!tempomatCalculationData)
+                    throw new Error('Couldn\'t get tempomat calculation data');
 
-        const allLagBehindPercentages = tempomatCalculationData.map(x => {
-            const previsionedCompletionDate = this._tempomatService
-                .calculatePrevisionedDate(
-                    x.originalPrevisionedCompletionDate,
-                    x.totalItemCount,
-                    x.totalCompletedItemCount,
-                    x.startDate,
-                    x.tempomatMode,
-                    x.tempomatAdjustmentValue
-                );
+                const allLagBehindPercentages = tempomatCalculationData.map(x => {
+                    const previsionedCompletionDate = this._tempomatService
+                        .calculatePrevisionedDate(
+                            x.originalPrevisionedCompletionDate,
+                            x.totalItemCount,
+                            x.totalCompletedItemCount,
+                            x.startDate,
+                            x.tempomatMode,
+                            x.tempomatAdjustmentValue
+                        );
 
-            const lagBehindPercentage = this._tempomatService
-                .calculateLagBehindPercentage(
-                    x.startDate,
-                    x.requiredCompletionDate
-                        ? x.requiredCompletionDate
-                        : x.originalPrevisionedCompletionDate,
-                    previsionedCompletionDate
-                );
+                    const lagBehindPercentage = this._tempomatService
+                        .calculateLagBehindPercentage(
+                            x.startDate,
+                            x.requiredCompletionDate
+                                ? x.requiredCompletionDate
+                                : x.originalPrevisionedCompletionDate,
+                            previsionedCompletionDate
+                        );
 
-            return lagBehindPercentage || 0;
-        });
+                    return lagBehindPercentage || 0;
+                });
 
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+                const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
 
-        return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
+                return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
-    async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
+    getImproveYourselfPageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
 
-        const userId = principalId.toSQLValue();
+        return {
+            action: async () => {
+                const userId = principalId.toSQLValue();
 
-        const stats = await this._ormService
-            .query(ImproveYourselfPageStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getSingle();
+                const stats = await this._ormService
+                    .query(ImproveYourselfPageStatsView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
 
-        const mostProductiveTimeRangeView = await this._ormService
-            .query(MostProductiveTimeRangeView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
+                const mostProductiveTimeRangeView = await this._ormService
+                    .query(MostProductiveTimeRangeView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getMany();
 
-        const userDailyActivityChartView = await this._ormService
-            .query(UserDailyActivityChartView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
+                const userDailyActivityChartView = await this._ormService
+                    .query(UserDailyActivityChartView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getMany();
 
-        return this._mapperService
-            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView]);
-
+                return this._mapperService
+                    .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
     /**
@@ -164,73 +194,94 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of [] 
      */
-    async getUserCourseStatsAsync(userId: Id<'User'>) {
+    getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
 
-        const stats = await this._ormService
-            .query(UserCourseStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
+        return {
+            action: async () => {
+                const stats = await this._ormService
+                    .query(UserCourseStatsView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getMany();
 
-        const statsWithTempomatData = stats
-            .map(x => {
+                const statsWithTempomatData = stats
+                    .map(x => {
 
-                const previsionedCompletionDate = this._tempomatService
-                    .calculatePrevisionedDate(
-                        x.originalPrevisionedCompletionDate,
-                        x.totalItemCount,
-                        x.totalCompletedItemCount,
-                        x.startDate,
-                        x.tempomatMode,
-                        x.tempomatAdjustmentValue
-                    );
+                        const previsionedCompletionDate = this._tempomatService
+                            .calculatePrevisionedDate(
+                                x.originalPrevisionedCompletionDate,
+                                x.totalItemCount,
+                                x.totalCompletedItemCount,
+                                x.startDate,
+                                x.tempomatMode,
+                                x.tempomatAdjustmentValue
+                            );
 
-                const lagBehindPercentage = this._tempomatService
-                    .calculateLagBehindPercentage(
-                        x.startDate,
-                        x.requiredCompletionDate
-                            ? x.requiredCompletionDate
-                            : x.originalPrevisionedCompletionDate,
-                        previsionedCompletionDate
-                    );
+                        const lagBehindPercentage = this._tempomatService
+                            .calculateLagBehindPercentage(
+                                x.startDate,
+                                x.requiredCompletionDate
+                                    ? x.requiredCompletionDate
+                                    : x.originalPrevisionedCompletionDate,
+                                previsionedCompletionDate
+                            );
 
-                const recommendedItemsPerDay = this._tempomatService
-                    .calculateRecommendedItemsPerDay(
-                        x.startDate,
-                        previsionedCompletionDate,
-                        x.requiredCompletionDate,
-                        x.totalItemCount
-                    );
+                        const recommendedItemsPerDay = this._tempomatService
+                            .calculateRecommendedItemsPerDay(
+                                x.startDate,
+                                previsionedCompletionDate,
+                                x.requiredCompletionDate,
+                                x.totalItemCount
+                            );
 
-                return {
-                    ...x,
-                    previsionedCompletionDate: previsionedCompletionDate,
-                    lagBehindPercentage: lagBehindPercentage,
-                    recommendedItemsPerWeek: recommendedItemsPerDay
-                        ? recommendedItemsPerDay * 7
-                        : null
-                };
-            }) as UserCourseStatsViewWithTempomatData[];
+                        return {
+                            ...x,
+                            previsionedCompletionDate: previsionedCompletionDate,
+                            lagBehindPercentage: lagBehindPercentage,
+                            recommendedItemsPerWeek: recommendedItemsPerDay
+                                ? recommendedItemsPerDay * 7
+                                : null
+                        };
+                    }) as UserCourseStatsViewWithTempomatData[];
 
-        return this._mapperService
-            .mapTo(UserCourseStatsDTO, [statsWithTempomatData]);
+                return this._mapperService
+                    .mapTo(UserCourseStatsDTO, [statsWithTempomatData]);
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
     }
 
     /**
      * Gets the statistics for the users every watched video
           * @returns
      */
-    getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
+    getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
 
-        const userId = principalId.toSQLValue();
+        return {
+            action: async () => {
 
-        const stats = await this._ormService
-            .query(UserVideoStatsView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getMany();
+                const userId = principalId.toSQLValue();
 
-        return this._mapperService
-            .mapTo(UserVideoStatsDTO, [stats]);
+                const stats = await this._ormService
+                    .query(UserVideoStatsView, { userId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(UserVideoStatsDTO, [stats]);
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     };
 
     /**
@@ -238,82 +289,105 @@ export class UserStatsService {
           * @returns
      */
 
-    getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
+    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
 
-        const userId = principalId.toSQLValue();
+        return {
+            action: async () => {
 
-        const stats = await this._ormService
-            .query(UserExamStatsView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getMany();
+                const userId = principalId.toSQLValue();
 
-        return this._mapperService
-            .mapTo(UserExamStatsDTO, [stats]);
+                const stats = await this._ormService
+                    .query(UserExamStatsView, { userId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(UserExamStatsDTO, [stats]);
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     };
 
     /**
      * Gets the learning overview statistics data for single user
           * TODO: Correct mapping
      */
-    getUserLearningOverviewDataAsync = async (userId: Id<'User'>) => {
-
-        const userSpentTimeRatio = await this._ormService
-            .query(UserSpentTimeRatioView, { userId })
-            .where('userId', '=', 'userId')
-            .getOneOrNull();
-
-        const courses = await this._ormService
-            .query(CourseLearningStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        // in progress courses 
-        const inProgressCourses = courses
-            .filter(x => x.isStarted && !x.isCompleted);
-
-        const inProgressCoursesAsCourseShortDTOs = this._mapperService
-            .mapTo(CourseLearningDTO, [inProgressCourses]);
-
-        const stats = await this._ormService
-            .query(UserLearningOverviewStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getSingle();
-
-        const productivityPercentage = await this
-            .calculateProductivityAsync(userId);
+    getUserLearningOverviewDataAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
 
         return {
-            overallPerformancePercentage: stats.overallPerformancePercentage,
+            action: async () => {
+                const userSpentTimeRatio = await this._ormService
+                    .query(UserSpentTimeRatioView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getOneOrNull();
 
-            performancePercentage: stats.performancePercentage,
-            userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
-            reactionTimeScorePoints: stats.totalUserReactionTimePoints,
-            productivityPercentage: productivityPercentage,
+                const courses = await this._ormService
+                    .query(CourseLearningStatsView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getMany();
 
-            isAnyCoursesInProgress: inProgressCourses.any(x => true),
-            inProgressCourses: inProgressCoursesAsCourseShortDTOs,
+                // in progress courses 
+                const inProgressCourses = courses
+                    .filter(x => x.isStarted && !x.isCompleted);
 
-            userActivityDistributionData: {
-                watchingVideosPercentage: userSpentTimeRatio?.totalVideoWatchElapsedTime,
-                completingExamsPercentage: userSpentTimeRatio?.totalExamSessionElapsedTime,
-                answeringQuestionsPercentage: userSpentTimeRatio?.totalQuestionElapsedTime,
-                noActivityPercentage: userSpentTimeRatio?.otherTotalSpentSeconds
+                const inProgressCoursesAsCourseShortDTOs = this._mapperService
+                    .mapTo(CourseLearningDTO, [inProgressCourses]);
+
+                const stats = await this._ormService
+                    .query(UserLearningOverviewStatsView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
+
+                const productivityPercentage = await this
+                    .calculateProductivityAsync(userId);
+
+                return {
+                    overallPerformancePercentage: stats.overallPerformancePercentage,
+
+                    performancePercentage: stats.performancePercentage,
+                    userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
+                    reactionTimeScorePoints: stats.totalUserReactionTimePoints,
+                    productivityPercentage: productivityPercentage,
+
+                    isAnyCoursesInProgress: inProgressCourses.any(x => true),
+                    inProgressCourses: inProgressCoursesAsCourseShortDTOs,
+
+                    userActivityDistributionData: {
+                        watchingVideosPercentage: userSpentTimeRatio?.totalVideoWatchElapsedTime,
+                        completingExamsPercentage: userSpentTimeRatio?.totalExamSessionElapsedTime,
+                        answeringQuestionsPercentage: userSpentTimeRatio?.totalQuestionElapsedTime,
+                        noActivityPercentage: userSpentTimeRatio?.otherTotalSpentSeconds
+                    },
+
+                    userId: userId,
+                    engagementPoints: stats.engagementPoints,
+                    totalTimeActiveOnPlatformSeconds: stats.totalTimeActiveOnPlatformSeconds,
+                    watchedVideos: stats.watchedVideos,
+                    answeredVideoAndPractiseQuizQuestions: stats.answeredVideoAndPractiseQuizQuestions,
+                    correctAnsweredVideoAndPractiseQuizQuestions: stats.correctAnsweredVideoAndPractiseQuizQuestions,
+                    correctAnswerRatePercentage: stats.correctAnswerRatePercentage,
+                    averageWatchedVideosPerDay: stats.averageWatchedVideosPerDay,
+                    mostFrequentTimeRange: stats.mostFrequentTimeRange,
+                    averageSessionLengthSeconds: stats.averageSessionLengthSeconds,
+                    totalDoneExams: stats.totalDoneExams,
+                    videosToBeRepeatedCount: stats.videosToBeRepeatedCount
+                } as Partial<UserLearningOverviewDataDTO>;
             },
+            auth: async () => {
 
-            userId: userId,
-            engagementPoints: stats.engagementPoints,
-            totalTimeActiveOnPlatformSeconds: stats.totalTimeActiveOnPlatformSeconds,
-            watchedVideos: stats.watchedVideos,
-            answeredVideoAndPractiseQuizQuestions: stats.answeredVideoAndPractiseQuizQuestions,
-            correctAnsweredVideoAndPractiseQuizQuestions: stats.correctAnsweredVideoAndPractiseQuizQuestions,
-            correctAnswerRatePercentage: stats.correctAnswerRatePercentage,
-            averageWatchedVideosPerDay: stats.averageWatchedVideosPerDay,
-            mostFrequentTimeRange: stats.mostFrequentTimeRange,
-            averageSessionLengthSeconds: stats.averageSessionLengthSeconds,
-            totalDoneExams: stats.totalDoneExams,
-            videosToBeRepeatedCount: stats.videosToBeRepeatedCount
-        } as Partial<UserLearningOverviewDataDTO>;
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     };
 
     calculateProductivityAsync = async (userId: Id<'User'>) => {

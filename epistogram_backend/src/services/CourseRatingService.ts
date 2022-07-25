@@ -8,82 +8,111 @@ import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
+import { AuthorizationService } from './AuthorizationService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class CourseRatingService extends ServiceBase {
 
+    private _authorizationService: AuthorizationService
+
     constructor(
         mapperService: MapperService,
-        ormService: ORMConnectionService) {
+        ormService: ORMConnectionService,
+        authorizationService: AuthorizationService) {
 
         super(mapperService, ormService);
+
+        this._authorizationService = authorizationService
     }
 
     /**
      * Get course rating quesiton groups, 
      * and questions in groups  
      */
-    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: Id<'Course'>) {
+    getCourseRatingGroupsAsync(
+        userId: PrincipalId,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
-        const views = await this._ormService
-            .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getMany();
+        return {
+            action: async () => {
+                const views = await this._ormService
+                    .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getMany();
 
-        const groups = views
-            .groupBy(view => view.groupId)
-            .map(group => {
+                const groups = views
+                    .groupBy(view => view.groupId)
+                    .map(group => {
 
-                const viewAsGroup = group.first;
+                        const viewAsGroup = group.first;
 
-                const qustions = group
-                    .items
-                    .map(viewAsQuestion => {
+                        const qustions = group
+                            .items
+                            .map(viewAsQuestion => {
+
+                                return this._mapperService
+                                    .mapTo(CourseRatingQuestionDTO, [viewAsQuestion]);
+                            });
 
                         return this._mapperService
-                            .mapTo(CourseRatingQuestionDTO, [viewAsQuestion]);
+                            .mapTo(CourseRatingGroupDTO, [viewAsGroup, qustions]);
                     });
 
-                return this._mapperService
-                    .mapTo(CourseRatingGroupDTO, [viewAsGroup, qustions]);
-            });
-
-        return groups;
+                return groups;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'WATCH_COURSE', { courseId })
+            }
+        }
     }
 
     /**
      * Saves multiple course rating answers 
      */
-    async saveCourseRatingGroupAnswersAsync(userId: PrincipalId, answersDTO: CourseRatingQuestionAnswersDTO) {
+    saveCourseRatingGroupAnswersAsync(
+        userId: PrincipalId,
+        answersDTO: CourseRatingQuestionAnswersDTO
+    ): ControllerActionReturnType {
 
-        const courseId = answersDTO.courseId;
+        return {
+            action: async () => {
+                const courseId = answersDTO.courseId;
 
-        const prevAnswers = await this._ormService
-            .query(CourseRatingQuestionUserAnswer, {
-                userId: Id.create<'User'>(userId.toSQLValue()),
-                courseId,
-                questionIds: answersDTO
+                const prevAnswers = await this._ormService
+                    .query(CourseRatingQuestionUserAnswer, {
+                        userId: Id.create<'User'>(userId.toSQLValue()),
+                        courseId,
+                        questionIds: answersDTO
+                            .answers
+                            .map(x => x.quesitonId)
+                    })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .and('courseRatingQuestionId', '=', 'questionIds')
+                    .getMany();
+
+                const answers = answersDTO
                     .answers
-                    .map(x => x.quesitonId)
-            })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .and('courseRatingQuestionId', '=', 'questionIds')
-            .getMany();
+                    .map(x => ({
+                        id: prevAnswers
+                            .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id!,
+                        userId: Id.create<'User'>(userId.toSQLValue()),
+                        courseId: courseId,
+                        text: x.text ?? undefined,
+                        value: x.value ?? undefined,
+                        courseRatingQuestionId: x.quesitonId
+                    }));
 
-        const answers = answersDTO
-            .answers
-            .map(x => ({
-                id: prevAnswers
-                    .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id!,
-                userId: Id.create<'User'>(userId.toSQLValue()),
-                courseId: courseId,
-                text: x.text ?? undefined,
-                value: x.value ?? undefined,
-                courseRatingQuestionId: x.quesitonId
-            }));
-
-        await this._ormService
-            .save(CourseRatingQuestionUserAnswer, answers);
+                await this._ormService
+                    .save(CourseRatingQuestionUserAnswer, answers);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'WATCH_COURSE', { courseId: answersDTO.courseId })
+            }
+        }
     }
 }

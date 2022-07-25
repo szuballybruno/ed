@@ -17,10 +17,13 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 
 export class PretestService {
 
     private _tempomatService: TempomatService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         private _ormService: ORMConnectionService,
@@ -28,9 +31,11 @@ export class PretestService {
         private _examService: ExamService,
         private _courseBridgeService: UserCourseBridgeService,
         private _questionAnswerService: QuestionAnswerService,
+        private authorizationService: AuthorizationService,
         tempomatService: TempomatService) {
 
-            this._tempomatService = tempomatService;
+        this._tempomatService = tempomatService;
+        this._authorizationService = authorizationService
     }
 
     async createPretestExamAsync(courseId: Id<'Course'>) {
@@ -53,27 +58,38 @@ export class PretestService {
     /**
      * Returns pretest data for the principal user - and a course 
      */
-    async getPretestDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
-
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
-
-        console.log('CourseId: ' + courseId);
-
-        // set course as started, and stage to pretest
-        await this._courseBridgeService
-            .setCurrentCourse(userIdAsIdType, courseId, 'pretest', null);
-
-        // get pretest exam 
-        const pretestExam = await this._getPretestExam(userIdAsIdType, courseId);
-
-        // get answer session
-        const answerSessionId = await this._questionAnswerService
-            .createAnswerSessionAsync(userIdAsIdType, pretestExam.examVersionId, null);
+    getPretestDataAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
         return {
-            answerSessionId,
-            exam: pretestExam
-        } as PretestDataDTO;
+            action: async () => {
+                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+
+                console.log('CourseId: ' + courseId);
+
+                // set course as started, and stage to pretest
+                await this._courseBridgeService
+                    .setCurrentCourse(userIdAsIdType, courseId, 'pretest', null);
+
+                // get pretest exam 
+                const pretestExam = await this._getPretestExam(userIdAsIdType, courseId);
+
+                // get answer session
+                const answerSessionId = await this._questionAnswerService
+                    .createAnswerSessionAsync(userIdAsIdType, pretestExam.examVersionId, null);
+
+                return {
+                    answerSessionId,
+                    exam: pretestExam
+                } as PretestDataDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
+            }
+        }
     }
 
     /**
@@ -99,68 +115,79 @@ export class PretestService {
             .getExamPlayerDTOAsync(userId, pretestExam.examId);
     }
 
-    async getPretestResultsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+    getPretestResultsAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        return {
+            action: async () => {
+                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
-        // set current course stage 
-        await this._courseBridgeService
-            .setCurrentCourse(userIdAsIdType, courseId, 'pretest_results', null);
+                // set current course stage 
+                await this._courseBridgeService
+                    .setCurrentCourse(userIdAsIdType, courseId, 'pretest_results', null);
 
-        const view = await this._ormService
-            .query(PretestResultView, { userId: userIdAsIdType, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
+                const view = await this._ormService
+                    .query(PretestResultView, { userId: userIdAsIdType, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getSingle();
 
-        const courseView = await this._ormService
-            .query(AvailableCourseView, { userId: userIdAsIdType, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
+                const courseView = await this._ormService
+                    .query(AvailableCourseView, { userId: userIdAsIdType, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getSingle();
 
-        log('First item code: ' + courseView.firstItemCode);
+                log('First item code: ' + courseView.firstItemCode);
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, {
-                userId: userIdAsIdType,
-                courseId
-            })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
+                const tempomatCalculationData = await this._ormService
+                    .query(TempomatCalculationDataView, {
+                        userId: userIdAsIdType,
+                        courseId
+                    })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getSingle();
 
-        const previsionedCompletionDate = this._tempomatService
-            .calculatePrevisionedDate(
-                tempomatCalculationData.originalPrevisionedCompletionDate,
-                tempomatCalculationData.totalItemCount,
-                tempomatCalculationData.totalCompletedItemCount,
-                tempomatCalculationData.startDate,
-                tempomatCalculationData.tempomatMode,
-                tempomatCalculationData.tempomatAdjustmentValue
-        );
+                const previsionedCompletionDate = this._tempomatService
+                    .calculatePrevisionedDate(
+                        tempomatCalculationData.originalPrevisionedCompletionDate,
+                        tempomatCalculationData.totalItemCount,
+                        tempomatCalculationData.totalCompletedItemCount,
+                        tempomatCalculationData.startDate,
+                        tempomatCalculationData.tempomatMode,
+                        tempomatCalculationData.tempomatAdjustmentValue
+                    );
 
-        const recommendedItemsPerDay = this._tempomatService
-            .calculateRecommendedItemsPerDay(
-                tempomatCalculationData.startDate,
-                previsionedCompletionDate,
-                tempomatCalculationData.requiredCompletionDate,
-                tempomatCalculationData.totalItemCount
-            );
+                const recommendedItemsPerDay = this._tempomatService
+                    .calculateRecommendedItemsPerDay(
+                        tempomatCalculationData.startDate,
+                        previsionedCompletionDate,
+                        tempomatCalculationData.requiredCompletionDate,
+                        tempomatCalculationData.totalItemCount
+                    );
 
-        const {
-            originalPrevisionedCompletionDate, 
-            requiredCompletionDate
-        } = tempomatCalculationData;
+                const {
+                    originalPrevisionedCompletionDate,
+                    requiredCompletionDate
+                } = tempomatCalculationData;
 
-        return this._mapperSerice
-            .mapTo(PretestResultDTO, [
-                view, 
-                courseView, 
-                originalPrevisionedCompletionDate, 
-                requiredCompletionDate, 
-                recommendedItemsPerDay
-            ]);
+                return this._mapperSerice
+                    .mapTo(PretestResultDTO, [
+                        view,
+                        courseView,
+                        originalPrevisionedCompletionDate,
+                        requiredCompletionDate,
+                        recommendedItemsPerDay
+                    ]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
+            }
+        }
     }
 
     async getPretestExamIdAsync(courseId: Id<'Course'>) {

@@ -38,7 +38,7 @@ export class CoinTransactionsController {
         const userIdAsIdType = Id.create<'User'>(userId);
 
         return this._coinTransactionService
-            .getCoinBalance(params.principalId, userIdAsIdType);
+            .getCoinBalanceAsync(params.principalId, userIdAsIdType);
     };
 
     @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
@@ -56,6 +56,6 @@ export class CoinTransactionsController {
             .getValue(x => x.amount, 'int');
 
         return await this._coinTransactionService
-            .giftCoinsToUserAsync(userIdAsIdType, amount);
+            .giftCoinsToUserAsync(params.principalId, userIdAsIdType, amount);
     };
 }

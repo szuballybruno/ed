@@ -44,7 +44,7 @@ export class UserStatsController {
                 .getValue(x => x.userId, 'int'));
 
         return await this._userStatsService
-            .getUserCourseStatsAsync(userId);
+            .getUserCourseStatsAsync(params.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserVideoStats)
@@ -82,6 +82,6 @@ export class UserStatsController {
                 .getValue(x => x.userId, 'int'));
 
         return this._userStatsService
-            .getUserLearningOverviewDataAsync(userId);
+            .getUserLearningOverviewDataAsync(params.principalId, userId);
     };
 }

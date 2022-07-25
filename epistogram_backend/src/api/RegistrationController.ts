@@ -57,6 +57,7 @@ export class RegistrationController {
 
         await this._registrationService
             .registerUserViaActivationCodeAsync(
+                params.principalId,
                 body.getValue(x => x.activationCode, 'string'),
                 body.getValue(x => x.emailAddress, 'string'),
                 body.getValue(x => x.firstName, 'string'),

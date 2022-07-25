@@ -8,18 +8,26 @@ import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/Funct
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { Id } from '../shared/types/versionId';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 
 export class CoinTransactionService {
 
     private _funcService: SQLFunctionsService;
     private _mapperService: MapperService;
     private _ormConnectionService: ORMConnectionService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(funcService: SQLFunctionsService, ormConnService: ORMConnectionService, mapperService: MapperService) {
+    constructor(
+        funcService: SQLFunctionsService,
+        ormConnService: ORMConnectionService,
+        mapperService: MapperService,
+        authorizationService: AuthorizationService) {
 
         this._funcService = funcService;
         this._mapperService = mapperService;
         this._ormConnectionService = ormConnService;
+        this._authorizationService = authorizationService;
     }
 
     async makeCoinTransactionAsync(insertCoinFnParamsType: InsertCoinFnParamsType) {
@@ -27,12 +35,21 @@ export class CoinTransactionService {
         await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
     }
 
-    async getPrincipalCoinBalance(userId: PrincipalId) {
+    getPrincipalCoinBalance(userId: PrincipalId): ControllerActionReturnType {
 
-        return await this.getCoinBalance(userId, Id.create<'User'>(userId.toSQLValue()));
+        return {
+            action: async () => {
+
+                return await this.getCoinBalance(userId, Id.create<'User'>(userId.toSQLValue()));
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
-    async getCoinBalance(principalId: PrincipalId, userId: Id<'User'>) {
+    private async getCoinBalance(principalId: PrincipalId, userId: Id<'User'>) {
 
         const coinBalance = await this._ormConnectionService
             .query(CoinBalanceView, { userId })
@@ -42,28 +59,75 @@ export class CoinTransactionService {
         return coinBalance.coinBalance;
     }
 
-    async giftCoinsToUserAsync(userId: Id<'User'>, amount: number) {
+    getCoinBalanceAsync(
+        principalId: PrincipalId,
+        userId: Id<'User'>
+    ): ControllerActionReturnType {
 
-        await this._ormConnectionService
-            .createAsync(CoinTransaction, {
-                userId,
-                amount,
-                isGifted: true
-            } as CoinTransaction);
+        return {
+            action: async () => {
+                const coinBalance = await this._ormConnectionService
+                    .query(CoinBalanceView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
+
+                return coinBalance.coinBalance;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
+
     }
 
-    async getCoinTransactionsAsync(userId: PrincipalId) {
+    giftCoinsToUserAsync(
+        principalId: PrincipalId,
+        userId: Id<'User'>,
+        amount: number): ControllerActionReturnType {
 
-        const coinTransactions = await this._ormConnectionService
-            .query(CoinTransactionView, { userId: userId.toSQLValue() })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        return this._mapperService
-            .mapTo(CoinTransactionDTO, [coinTransactions]);
+        return {
+            action: async () => {
+                await this._ormConnectionService
+                    .createAsync(CoinTransaction, {
+                        userId,
+                        amount,
+                        isGifted: true
+                    } as CoinTransaction);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS')
+            }
+        }
     }
 
-    async getCoinsForQuestionAsync(userId: Id<'User'>, questionVersionId: Id<'QuestionVersion'>) {
+    getCoinTransactionsAsync(
+        userId: PrincipalId
+    ): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+                const coinTransactions = await this._ormConnectionService
+                    .query(CoinTransactionView, { userId: userId.toSQLValue() })
+                    .where('userId', '=', 'userId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(CoinTransactionDTO, [coinTransactions]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+            }
+        }
+    }
+
+    async getCoinsForQuestionAsync(
+        userId: Id<'User'>,
+        questionVersionId: Id<'QuestionVersion'>
+    ) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, questionVersionId })
@@ -73,11 +137,12 @@ export class CoinTransactionService {
             .where('userId', '=', 'userId')
             .and('givenAnswerId', 'IS NOT', 'NULL')
             .getMany();
-
     }
 
-    async getCoinsForActivitySession(userId: Id<'User'>, activitySessionId: Id<'ActivitySession'>) {
-
+    async getCoinsForActivitySession(
+        userId: Id<'User'>,
+        activitySessionId: Id<'ActivitySession'>
+    ) {
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, activitySessionId })
             .where('userId', '=', 'userId')
@@ -85,8 +150,10 @@ export class CoinTransactionService {
             .getOneOrNull();
     }
 
-    async getCoinsForActivityStreakAsync(userId: Id<'User'>, activityStreakId: Id<'ActivityStreak'>) {
-
+    async getCoinsForActivityStreakAsync(
+        userId: Id<'User'>,
+        activityStreakId: Id<'ActivityStreak'>
+    ) {
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, activityStreakId })
             .where('userId', '=', 'userId')
@@ -94,7 +161,10 @@ export class CoinTransactionService {
             .getMany();
     }
 
-    async getCoinsForAnswerStreakAsync(userId: Id<'User'>, answerStreakId: Id<'GivenAnswerStreak'>) {
+    async getCoinsForAnswerStreakAsync(
+        userId: Id<'User'>,
+        answerStreakId: Id<'GivenAnswerStreak'>
+    ) {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, answerStreakId })

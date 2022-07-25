@@ -5,6 +5,8 @@ import { UserSessionActivity } from '../models/entity/UserSessionActivity';
 import { SessionActivityType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
@@ -20,13 +22,22 @@ type RollingSessionEntityType<TId extends string> = EntityType<TId> & {
 
 export class UserSessionActivityService {
 
+    private _authorizationService: AuthorizationService
+
     constructor(
         private _ormService: ORMConnectionService,
         private _coinAcquireService: CoinAcquireService,
-        private _loggerService: LoggerService) {
+        private _loggerService: LoggerService,
+        private authorizationService: AuthorizationService) {
+
+        this._authorizationService = authorizationService
     }
 
-    saveUserSessionActivityAsync = async (userId: Id<'User'>, type: SessionActivityType, itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>) => {
+    async saveUserSessionActivityAsync(
+        userId: Id<'User'>,
+        type: SessionActivityType,
+        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>
+    ) {
 
         // save session activity
         const activitySessionId = await this
@@ -36,6 +47,7 @@ export class UserSessionActivityService {
         const coinAcquireResult = await this
             ._coinAcquireService
             .handleSessionActivityCoinsAsync(userId, activitySessionId);
+
     };
 
     private async _saveSessionActivity(

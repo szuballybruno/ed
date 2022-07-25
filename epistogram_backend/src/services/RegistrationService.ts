@@ -17,6 +17,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class RegistrationService extends ServiceBase {
 
@@ -92,31 +93,40 @@ export class RegistrationService extends ServiceBase {
      * This function registers a user using an activation code. 
      * If said code is valid, it will be marked as used as there can not be another registration made with it.
      */
-    async registerUserViaActivationCodeAsync(
+    registerUserViaActivationCodeAsync(
+        principalId: PrincipalId,
         activationCode: string,
         email: string,
         firstName: string,
-        lastName: string) {
+        lastName: string): ControllerActionReturnType {
 
-        // check code 
-        const activationCodeEntity = await this._activationCodeService
-            .isValidCodeAsync(activationCode);
+        return {
+            action: async () => {
+                // check code 
+                const activationCodeEntity = await this._activationCodeService
+                    .isValidCodeAsync(activationCode);
 
-        if (!activationCodeEntity)
-            throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
+                if (!activationCodeEntity)
+                    throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
-        // create user 
-        await this.createInvitedUserAsync({
-            email,
-            firstName,
-            lastName,
-            companyId: activationCodeEntity.companyId,
-            jobTitleId: JobTitleIdEnum.genericUser
-        });
+                // create user 
+                await this.createInvitedUserAsync({
+                    email,
+                    firstName,
+                    lastName,
+                    companyId: activationCodeEntity.companyId,
+                    jobTitleId: JobTitleIdEnum.genericUser
+                });
 
-        // invalidate activation code 
-        await this._activationCodeService
-            .invalidateCodeAsync(activationCodeEntity.id);
+                // invalidate activation code 
+                await this._activationCodeService
+                    .invalidateCodeAsync(activationCodeEntity.id);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'CREATE_NEW_USER')
+            }
+        }
     }
 
     /**
@@ -165,10 +175,10 @@ export class RegistrationService extends ServiceBase {
 
     /**
      */
-    registerInvitedUserAsync = async (
+    async registerInvitedUserAsync(
         invitationToken: string,
         password: string,
-        passwordControl: string) => {
+        passwordControl: string) {
 
         // verify token 
         const { userEmail } = this._tokenService.verifyInvitaionToken(invitationToken);
@@ -211,6 +221,7 @@ export class RegistrationService extends ServiceBase {
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
+
     };
 
     /**
