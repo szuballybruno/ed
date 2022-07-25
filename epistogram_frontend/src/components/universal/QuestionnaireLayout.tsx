@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { EpistoText } from '../controls/EpistoText';
 import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';

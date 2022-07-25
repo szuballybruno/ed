@@ -1,7 +1,6 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
-import { ExpandMore, InfoOutlined } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
 import React, { useRef, useState } from 'react';
 import { usePersonalityData } from '../../services/api/signupApiService';
 import { translatableTexts } from '../../static/translatableTexts';

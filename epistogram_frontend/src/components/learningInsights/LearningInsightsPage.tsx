@@ -9,7 +9,6 @@ import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { LearningCourseStats } from './LearningCourseStats';
-import { LearningStatistics } from './LearningStatistics';
 
 const LearningInsightsPage = () => {
 

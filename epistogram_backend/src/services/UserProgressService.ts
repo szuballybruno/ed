@@ -98,7 +98,7 @@ export class UserProgressService extends ServiceBase {
         } as RecomendedItemQuotaDTO;
     }
 
-    async getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+    async getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<'Course'>): Promise<UserCourseProgressChartDTO | 'NO DATA'> {
 
         const userId = principalId.toSQLValue();
 
@@ -107,6 +107,14 @@ export class UserProgressService extends ServiceBase {
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'userId')
             .getSingle();
+
+        /**
+         * check preqiz completion
+         * if it's incomplete, do not go any further
+         */
+        const isCompletedPrequiz = !!tempomatCalculationData.originalPrevisionedCompletionDate;
+        if (isCompletedPrequiz)
+            return 'NO DATA';
 
         const previsionedCompletionDate = this._tempomatService
             .calculatePrevisionedDate(

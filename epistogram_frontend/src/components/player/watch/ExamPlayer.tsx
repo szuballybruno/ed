@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { useStartExam } from '../../../services/api/examApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -6,13 +5,9 @@ import { useShowErrorDialog } from '../../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
 import { Id } from '../../../shared/types/versionId';
 import { usePaging } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { ExamResultsSlide } from '../../exam/ExamResultsSlide';
-import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 
 export const ExamPlayer = (props: {

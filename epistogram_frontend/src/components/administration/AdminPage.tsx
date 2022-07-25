@@ -1,8 +1,6 @@
 import { Flex } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { RouteHelpers } from '../../static/RouteHelpers';

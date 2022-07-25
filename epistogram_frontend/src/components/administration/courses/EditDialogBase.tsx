@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
-import { PagingType, usePaging } from '../../../static/frontendHelpers';
+import { PagingType } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';

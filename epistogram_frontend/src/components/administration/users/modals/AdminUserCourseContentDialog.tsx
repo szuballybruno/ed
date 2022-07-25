@@ -3,7 +3,6 @@ import { Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
 import { useBriefUserData } from '../../../../services/api/userApiService';
-import { UserCourseProgressChartDTO } from '../../../../shared/dtos/UserCourseProgressChartDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoFont } from '../../../controls/EpistoFont';

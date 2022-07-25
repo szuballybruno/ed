@@ -1,5 +1,5 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
-import { Divider, Typography } from '@mui/material';
+import { Divider } from '@mui/material';
 import { EpistoFont } from './controls/EpistoFont';
 
 export const EpistoHeader = (props: {

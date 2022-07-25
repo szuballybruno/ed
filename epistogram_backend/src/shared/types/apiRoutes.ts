@@ -1,6 +1,6 @@
 import { Id } from './versionId';
 
-export type RouteParameterType<TBody = any, TQuery = any> = { body: TBody, query: TQuery };
+export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
 
 export const apiRoutes = {
@@ -137,7 +137,7 @@ export const apiRoutes = {
     },
 
     userProgress: {
-        getUserProgressData: '/userprogress/get-user-progress-data',
+        getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
         getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
         getActiveCourses: '/userprogress/get-active-courses'
     },
@@ -206,7 +206,7 @@ export const apiRoutes = {
 
     module: {
         getModuleListEditData: '/module/get-modules',
-        saveCoverFile: '/module/save-cover-file' as ParametrizedRouteType<{ body: { moduleVersionId: Id<'ModuleVersion'> }, query: {} }>
+        saveCoverFile: '/module/save-cover-file' as ParametrizedRouteType<{ body: { moduleVersionId: Id<'ModuleVersion'> } }>
     },
 
     video: {

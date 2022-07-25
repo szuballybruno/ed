@@ -1,5 +1,4 @@
 import { Flex } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
 import React from 'react';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { Environment } from '../../static/Environemnt';

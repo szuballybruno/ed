@@ -1,6 +1,5 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
-import { Environment } from '../../static/Environemnt';
 import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 

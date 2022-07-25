@@ -1,4 +1,3 @@
-import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';

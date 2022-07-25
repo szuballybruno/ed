@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';

@@ -1,6 +1,6 @@
 import { Box, Divider, Flex } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { useRoleAssignCompanies } from '../../../services/api/companyApiService';

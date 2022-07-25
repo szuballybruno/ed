@@ -1,7 +1,6 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { CourseShopItemListDTO } from '../../../shared/dtos/CourseShopItemListDTO';
 import { DiscountCodeDTO } from '../../../shared/dtos/DiscountCodeDTO';
 import { ShopItemCategoryDTO } from '../../../shared/dtos/ShopItemCategoryDTO';

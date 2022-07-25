@@ -9,7 +9,6 @@ import { Environment } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 

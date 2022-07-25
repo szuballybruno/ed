@@ -1,10 +1,9 @@
-import { CreateInvitedUserDTO } from '../../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRegisterUser = () => {
 

@@ -8,9 +8,6 @@ import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
-import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
-import { ExamQuestions } from '../../exam/ExamQuestions';
-import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestGreetingSubpage = () => {
 

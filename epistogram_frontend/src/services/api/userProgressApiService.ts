@@ -5,14 +5,15 @@ import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
-export const useUserCourseProgressChartData = (courseId: Id<'Course'>, enabled: boolean) => {
+export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, enabled: boolean) => {
 
-    const qr = useReactQuery2<UserCourseProgressChartDTO>(apiRoutes.userProgress.getUserProgressData, { courseId }, enabled);
+    const qr = useReactQuery2<UserCourseProgressChartDTO | 'NO DATA'>(apiRoutes.userProgress.getUserProgressData, { courseId }, enabled);
 
     return {
-        userProgressData: qr.data,
+        userProgressData: qr.data as UserCourseProgressChartDTO,
         userProgressDataState: qr.state,
-        userProgressDataError: qr.error
+        userProgressDataError: qr.error,
+        userProgressDataIsValid: qr.data && qr.data != 'NO DATA'
     };
 };
 

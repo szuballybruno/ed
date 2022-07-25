@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit } from '@mui/icons-material';
-import { memo, useCallback, useEffect, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useDeleteRole, useRolesList } from '../../../services/api/rolesApiService';
 import { useNavigation } from '../../../services/core/navigatior';

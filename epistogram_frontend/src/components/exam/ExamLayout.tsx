@@ -1,10 +1,7 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
-import { ArrowBack, ArrowForward, Check } from '@mui/icons-material';
-import { Step, StepButton, StepIconProps, StepLabel, Stepper, styled } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import { ReactNode } from 'react';
-import { Id } from '../../shared/types/versionId';
 import { isString } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';

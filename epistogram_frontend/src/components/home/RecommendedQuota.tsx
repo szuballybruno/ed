@@ -1,10 +1,8 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
-import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { PagingType } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { RecommendedItemQuota } from './RecommendedItemQuota';
 

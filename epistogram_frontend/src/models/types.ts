@@ -2,8 +2,7 @@ import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { HasPermissionFnType } from '../components/system/AuthorizationContext';
 import { trimEndChar } from '../shared/logic/sharedLogic';
-import { ParametrizedRouteType, RouteParameterType } from '../shared/types/apiRoutes';
-import { CSSOptionsType } from '../styles/globalCssTypes';
+import { ParametrizedRouteType } from '../shared/types/apiRoutes';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 

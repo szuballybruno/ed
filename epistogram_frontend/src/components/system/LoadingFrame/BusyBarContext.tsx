@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { LoadingStateType } from '../../../models/types';
 import { useForceUpdate, useGetCurrentAppRoute } from '../../../static/frontendHelpers';
 

@@ -1,4 +1,4 @@
-import { FlexProps, Text } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 

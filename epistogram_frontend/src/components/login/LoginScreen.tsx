@@ -6,7 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
 import { useIsScreenWiderThan } from '../../static/frontendHelpers';
-import { useQueryVal, useStringParam } from '../../static/locationHelpers';
+import { useQueryVal } from '../../static/locationHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';

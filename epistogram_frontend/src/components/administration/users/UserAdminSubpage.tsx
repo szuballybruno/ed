@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Route } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useUserListQuery } from '../../../services/api/userApiService';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';

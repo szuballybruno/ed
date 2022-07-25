@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
 import { formatTime } from '../../static/frontendHelpers';
 

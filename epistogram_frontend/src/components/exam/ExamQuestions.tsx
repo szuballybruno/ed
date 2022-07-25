@@ -1,6 +1,6 @@
 import { Grid } from '@chakra-ui/layout';
 import { Flex } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCompleteExam, useSaveExamAnswer } from '../../services/api/examApiService';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';

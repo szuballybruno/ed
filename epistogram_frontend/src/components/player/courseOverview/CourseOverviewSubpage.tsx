@@ -3,7 +3,6 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseOverviewData } from '../../../services/api/miscApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { isNullOrUndefined } from '../../../static/frontendHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { ExamLayout } from '../../exam/ExamLayout';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';

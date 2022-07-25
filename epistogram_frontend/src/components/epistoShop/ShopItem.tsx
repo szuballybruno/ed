@@ -1,11 +1,9 @@
-import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { Done, LocalOffer } from '@mui/icons-material';
-import { Typography } from '@mui/material';
 import React from 'react';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 
 import { translatableTexts } from '../../static/translatableTexts';
-import StarsIcon from '@mui/icons-material/Stars';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';

@@ -6,7 +6,6 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoCheckbox } from '../controls/EpistoCheckbox';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoSearch } from '../controls/EpistoSearch';
-import { EpistoSelect } from '../controls/EpistoSelect';
 import { BulkEditButtons, BulkEditButtonType } from './BulkEditButtons';
 
 export const AdminListEditHeader = (props: {

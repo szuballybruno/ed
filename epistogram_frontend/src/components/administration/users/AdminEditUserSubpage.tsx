@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
-import React, { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
@@ -13,7 +13,7 @@ import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '..
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 import { AdminUserList } from './AdminUserList';

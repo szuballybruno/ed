@@ -1,11 +1,9 @@
-import { Box, Flex, FlexProps, Heading, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Text } from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { LinearProgress } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingStateType } from '../../models/types';
 import { isArray } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 
 type ErrorType = any | any[];
