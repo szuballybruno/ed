@@ -1,5 +1,5 @@
 import { ButtonType } from '../../../models/types';
-import { XDialogLogicType } from '../../lib/XDialog/XDialog';
+import { XDialogLogicType } from '../../lib/XDialog/XDialogLogic';
 
 export type OpenDialogOptionsType<TParams = void> = {
     title?: string;

@@ -45,11 +45,6 @@ export const ExamQuestions = (props: {
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
     const dialogLogic = useEpistoDialogLogic('exam_close_dialog');
 
-    useEffect(() => {
-
-        console.log('Dialoglogic frissül' + dialogLogic.isOpen);
-    }, [dialogLogic.isOpen]);
-
     const handleNextAsync = async () => {
 
         const timeElapsed = epochDates(new Date(), showUpTime);
