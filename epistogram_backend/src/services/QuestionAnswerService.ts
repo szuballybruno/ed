@@ -9,6 +9,7 @@ import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
+import { LoggerService } from './LoggerService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { SQLFunctionsService } from './sqlServices/FunctionsService';
@@ -22,7 +23,8 @@ export class QuestionAnswerService {
         private _ormService: ORMConnectionService,
         private _sqlFunctionsService: SQLFunctionsService,
         private _coinAcquireService: CoinAcquireService,
-        private _versionSaveService: VersionSaveService) {
+        private _versionSaveService: VersionSaveService,
+        private _loggerService: LoggerService) {
     }
 
     /**
@@ -39,9 +41,7 @@ export class QuestionAnswerService {
                 videoVersionId: videoVideoId,
                 userId: userId,
                 isPractise: false,
-                isCompleted: false,
-                endDate: null,
-                startDate: null
+                startDate: new Date()
             });
 
         return answerSessionId;
@@ -50,7 +50,7 @@ export class QuestionAnswerService {
     /**
      * Answer question  
      */
-    async answerQuestionAsync(
+    async saveGivenAnswerAsync(
         userId: Id<'User'>,
         answerSessionId: Id<'AnswerSession'>,
         questionVersionId: Id<'QuestionVersion'>,
@@ -59,13 +59,13 @@ export class QuestionAnswerService {
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) {
 
-        console.log('userId: ' + userId);
-        console.log('answerSessionId: ' + answerSessionId);
-        console.log('questionVersionId: ' + questionVersionId);
-        console.log('answerIds: ' + answerIds);
-        console.log('isExamQuestion: ' + isExamQuestion);
-        console.log('elapsedSeconds: ' + elapsedSeconds);
-        console.log('isPractiseAnswer: ' + isPractiseAnswer);
+        this._loggerService.logScoped('GIVEN ANSWER', 'userId: ' + userId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'answerSessionId: ' + answerSessionId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'questionVersionId: ' + questionVersionId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'answerIds: ' + answerIds);
+        this._loggerService.logScoped('GIVEN ANSWER', 'isExamQuestion: ' + isExamQuestion);
+        this._loggerService.logScoped('GIVEN ANSWER', 'elapsedSeconds: ' + elapsedSeconds);
+        this._loggerService.logScoped('GIVEN ANSWER', 'isPractiseAnswer: ' + isPractiseAnswer);
 
         const {
             correctAnswerIds,

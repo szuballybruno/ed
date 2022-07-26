@@ -49,6 +49,9 @@ export class TempomatService extends ServiceBase {
             });
     }
 
+    /**
+     * Temp mode  
+     */
     async getTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const userId = principalId.toSQLValue();
@@ -62,7 +65,9 @@ export class TempomatService extends ServiceBase {
         return bridge.tempomatMode;
     }
 
-    // Get tempomat calculation data
+    /**
+     * Get tempomat calculation data
+     */
     getTempomatCalculationData = async (
         userId: Id<'User'>,
         courseId: number
@@ -79,7 +84,6 @@ export class TempomatService extends ServiceBase {
 
         return tempomatCalculationData;
     };
-
 
     /**
     * Calculates the current previsioned date for every tempomat mode
@@ -180,9 +184,6 @@ export class TempomatService extends ServiceBase {
     /**
      * Calculates recommended items per day from either the
      * required or the previsioned completion date 
-    * @param requiredCompletionDate
-     * @param totalItemsCount
-     * @returns The number of days in a positive int or null
      * because it cannot be determined
      */
     calculateRecommendedItemsPerDay = (
@@ -212,29 +213,9 @@ export class TempomatService extends ServiceBase {
         }
     };
 
-
-    async calculatePrevisionedDateAsync(userId: Id<'User'>, courseId: number) {
-
-        const {
-            originalPrevisionedCompletionDate,
-            totalItemCount,
-            totalCompletedItemCount,
-            startDate,
-            tempomatMode,
-            tempomatAdjustmentValue
-        } = await this
-            .getTempomatCalculationData(userId, courseId);
-
-        return this.calculatePrevisionedDate(
-            originalPrevisionedCompletionDate,
-            totalItemCount,
-            totalCompletedItemCount,
-            startDate,
-            tempomatMode,
-            tempomatAdjustmentValue
-        );
-    }
-
+    /**
+     * Calculates average lag behind perc. 
+     */
     calculateAvgLagBehindPercentageAsync = async (userId: Id<'User'>) => {
 
         const tempomatCalculationData = await this._ormService
@@ -273,8 +254,9 @@ export class TempomatService extends ServiceBase {
         return avgLagBehindPercentage;
     };
 
-
-    // TODO: Create a logic for adding notifications
+    /**
+     * TODO: Create a logic for adding notifications
+     */
     async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
 
         const { courseId, userId, lagBehindPercentage } = userCourseProgressView;

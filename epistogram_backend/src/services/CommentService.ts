@@ -59,7 +59,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             .createAsync(Comment, newComment);
     };
 
-    getCommentsAsync = async (playlistItemCode: string, currentUserId: PrincipalId) => {
+    getCommentsAsync = async (playlistItemCode: string, principalId: PrincipalId) => {
 
         const { itemId, itemType } = readItemCode(playlistItemCode);
 
@@ -67,9 +67,9 @@ export class CommentService extends QueryServiceBase<Comment> {
             throw new Error('Wrong item type!');
 
         const userComments = await this._ormService
-            .query(CommentListView, { videoId: itemId, currentUserId })
+            .query(CommentListView, { videoId: itemId, principalId })
             .where('videoId', '=', 'videoId')
-            .and('currentUserId', '=', 'currentUserId')
+            .and('currentUserId', '=', 'principalId')
             .getMany();
 
         return this

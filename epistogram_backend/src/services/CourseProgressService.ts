@@ -23,11 +23,11 @@ export class CourseProgressService {
     /**
      * Returns the /learning/courses data.  
      */
-    async getCourseProgressDataAsync(userId: PrincipalId) {
+    async getCourseProgressDataAsync(principalId: PrincipalId) {
 
         const courses = await this._ormService
-            .query(CourseLearningStatsView, { userId })
-            .where('userId', '=', 'userId')
+            .query(CourseLearningStatsView, { principalId })
+            .where('userId', '=', 'principalId')
             .getMany();
 
         // in progress courses 
@@ -90,11 +90,11 @@ export class CourseProgressService {
     /**
      * Returns a course progress short view
      */
-    async getCourseProgressShortAsync(userId: PrincipalId) {
+    async getCourseProgressShortAsync(principalId: PrincipalId) {
 
         const views = await this._ormService
-            .query(CourseProgressView, { userId: userId.toSQLValue() })
-            .where('userId', '=', 'userId')
+            .query(CourseProgressView, { principalId })
+            .where('userId', '=', 'principalId')
             .getMany();
 
         return this._mapperService

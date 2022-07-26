@@ -43,9 +43,7 @@ export class SignupService {
             await this._ormService
                 .createAsync(AnswerSession, {
                     startDate: new Date(Date.now()),
-                    endDate: null,
                     isPractise: false,
-                    isCompleted: false,
                     examVersionId: Id.create<'ExamVersion'>(1),
                     videoVersionId: null,
                     userId: userId

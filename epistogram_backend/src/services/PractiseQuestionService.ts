@@ -62,12 +62,12 @@ export class PractiseQuestionService extends ServiceBase {
 
     answerPractiseQuestionAsync = async (principalId: PrincipalId, qu: AnswerQuestionDTO) => {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
-        const practiseAnswerSession = await this.getUserPractiseAnswerSession(userIdAsIdType);
+        const practiseAnswerSession = await this.getUserPractiseAnswerSession(userId);
 
         return await this._questionAnswerService
-            .answerQuestionAsync(userIdAsIdType, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
+            .saveGivenAnswerAsync(userId, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
     };
 
     getUserPractiseAnswerSession = async (userId: Id<'User'>) => {

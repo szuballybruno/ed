@@ -7,7 +7,16 @@ type gct<TObj> = {
 
 // ---------------- GENERIC
 
-export const colors = ['fontDark', 'fontLight', 'fontGray', 'fontError', 'deepBlue', 'change'] as const;
+export const colors = [
+    'fontDark',
+    'fontLight',
+    'fontGray',
+    'fontError',
+    'deepBlue',
+    'change',
+    'mildRed'
+] as const;
+
 const sizes = ['px5', 'px10', 'px15', 'px20'] as const;
 const fontSizes = ['small', 'normal', 'large'] as const;
 const fontWeights = ['light', 'normal', 'heavy'] as const;
@@ -17,7 +26,7 @@ const heights = ['stretch'] as const;
 const globalCssGeneric = {
     margin: {
         all: sizes,
-        
+
         horizontal: sizes,
         vertical: sizes,
 

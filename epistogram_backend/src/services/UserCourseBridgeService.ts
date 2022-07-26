@@ -133,11 +133,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    async setCourseModeAsync(userId: PrincipalId, courseId: Id<'Course'>, mode: CourseModeType) {
+    async setCourseModeAsync(principalId: PrincipalId, courseId: Id<'Course'>, mode: CourseModeType) {
 
-        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
+        const userId = principalId.getId();
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
         if (!userCourseBridge)
             throw new Error('User course bridge not found!');
@@ -145,7 +145,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         await this._ormService
             .save(UserCourseBridge, {
                 courseId: courseId,
-                userId: userIdAsIdType,
+                userId: userId,
                 id: userCourseBridge.id,
                 courseMode: mode
             } as UserCourseBridge);
@@ -153,11 +153,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    async setCourseStartDateAsync(userId: PrincipalId, courseId: Id<'Course'>) {
+    async setCourseStartDateAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
+        const userId = principalId.getId();
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
         if (!userCourseBridge)
             throw new Error('User course bridge not found!');
@@ -165,7 +165,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         await this._ormService
             .save(UserCourseBridge, {
                 courseId: courseId,
-                userId: userIdAsIdType,
+                userId: userId,
                 id: userCourseBridge.id,
                 startDate: new Date(Date.now())
             } as UserCourseBridge);
@@ -177,10 +177,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async setRequiredCompletionDateAsync(principalId: PrincipalId, courseId: Id<'Course'>, requiredCompletionDate: string) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
         const userCourseBridge = await this
-            .getUserCourseBridgeAsync(userIdAsIdType, courseId);
+            .getUserCourseBridgeAsync(userId, courseId);
 
         if (userCourseBridge) {
 
@@ -193,14 +193,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
             log('User course bridge is not exists, creating...');
 
-            await this._createNewCourseBridge(courseId, userIdAsIdType, null, 'assigned');
+            await this._createNewCourseBridge(courseId, userId, null, 'assigned');
         } catch (e) {
 
             throw new Error('Failed to create new user course bridge');
         }
 
         const newUserCourseBridge = await this
-            .getUserCourseBridgeAsync(userIdAsIdType, courseId);
+            .getUserCourseBridgeAsync(userId, courseId);
 
         if (!newUserCourseBridge)
             throw new Error('Failed to find new user course bridge');
@@ -245,11 +245,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return currentItemCode;
     };
 
-    getPrincipalCurrentItemCodeAsync = async (userId: PrincipalId) => {
+    getPrincipalCurrentItemCodeAsync = async (principalId: PrincipalId) => {
 
-        const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
+        const userId = principalId.getId();
 
-        return await this.getCurrentItemCodeAsync(userIdAsIdType);
+        return await this.getCurrentItemCodeAsync(userId);
     };
 
     getCurrentItemCodeAsync = async (userId: Id<'User'>) => {

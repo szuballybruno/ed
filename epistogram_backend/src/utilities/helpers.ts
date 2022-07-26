@@ -7,6 +7,8 @@ import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { KeyofConstrained } from './misc';
 
+export const snoozeAsync = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const getFullName = (user: User) => toFullName(user.firstName, user.lastName);
 
 export const toFullName = (firstName: string, lastName: string, culture?: 'en' | 'hu') => {

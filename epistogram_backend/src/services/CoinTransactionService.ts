@@ -27,9 +27,9 @@ export class CoinTransactionService {
         await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
     }
 
-    async getPrincipalCoinBalance(userId: PrincipalId) {
+    async getPrincipalCoinBalance(principalId: PrincipalId) {
 
-        return await this.getCoinBalance(userId, Id.create<'User'>(userId.toSQLValue()));
+        return await this.getCoinBalance(principalId, principalId.getId());
     }
 
     async getCoinBalance(principalId: PrincipalId, userId: Id<'User'>) {
@@ -52,10 +52,10 @@ export class CoinTransactionService {
             } as CoinTransaction);
     }
 
-    async getCoinTransactionsAsync(userId: PrincipalId) {
+    async getCoinTransactionsAsync(principalId: PrincipalId) {
 
         const coinTransactions = await this._ormConnectionService
-            .query(CoinTransactionView, { userId: userId.toSQLValue() })
+            .query(CoinTransactionView, { userId: principalId.toSQLValue() })
             .where('userId', '=', 'userId')
             .getMany();
 

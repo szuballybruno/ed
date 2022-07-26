@@ -17,13 +17,11 @@ export class LikeService extends QueryServiceBase<Like> {
 
     // create like with current user
     async createUserCommentLikeBridgeAsync(
-        currentUserId: PrincipalId,
+        principalId: PrincipalId,
         commentId: Id<'Comment'>
     ) {
 
-        const userId = Id
-            .create<'User'>(currentUserId
-                .toSQLValue());
+        const userId = principalId.getId();
 
         // check if comment exists
         const comment = await this
@@ -56,14 +54,14 @@ export class LikeService extends QueryServiceBase<Like> {
 
     // delete like with current user
     async softDeleteUserCommentLikeBridgeAsync(
-        currentUserId: PrincipalId,
+        principalId: PrincipalId,
         commentId: Id<'Comment'>
     ) {
         const userComment = await this
             ._ormService
-            .query(Like, { currentUserId: currentUserId.toSQLValue(), commentId })
+            .query(Like, { principalId, commentId })
             .where('commentId', '=', 'commentId')
-            .and('userId', '=', 'currentUserId')
+            .and('userId', '=', 'principalId')
             .getOneOrNull();
 
         if (!userComment)

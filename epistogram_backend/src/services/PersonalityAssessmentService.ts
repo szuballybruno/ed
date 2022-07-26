@@ -29,10 +29,10 @@ export class PersonalityAssessmentService {
      */
     async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
-        const chartData = await this.getUserPersonalityDataAsync(userIdAsIdType);
-        const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userIdAsIdType);
+        const chartData = await this.getUserPersonalityDataAsync(userId);
+        const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userId);
 
         return {
             chartData: chartData,

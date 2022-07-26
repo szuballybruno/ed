@@ -138,12 +138,12 @@ export class UserService {
      */
     async saveUserSimpleAsync(principalId: PrincipalId, dto: UserEditSimpleDTO) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
         // save user 
         await this._ormService
             .save(User, {
-                id: userIdAsIdType,
+                id: userId,
                 lastName: dto.lastName,
                 firstName: dto.firstName,
                 phoneNumber: dto.phoneNumber
@@ -177,11 +177,11 @@ export class UserService {
      */
     async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
         return this._ormService
             .save(User, {
-                id: userIdAsIdType,
+                id: userId,
                 firstName: dto.firstName,
                 lastName: dto.lastName,
                 phoneNumber: dto.phoneNumber
@@ -313,7 +313,7 @@ export class UserService {
     /**
      * Delete a user entity by it's id.
      */
-    deleteUserAsync = async (userId: PrincipalId, deletedUserId: Id<'User'>) => {
+    deleteUserAsync = async (principalId: PrincipalId, deletedUserId: Id<'User'>) => {
 
         // TODO permissions
 

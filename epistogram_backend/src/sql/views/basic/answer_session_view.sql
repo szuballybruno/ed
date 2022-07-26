@@ -30,21 +30,22 @@ answer_session_score AS
 	SELECT
 		gasv.answer_session_id,
 		SUM(gasv.given_answer_points) answer_session_acquired_points,
-		COUNT(gasv.question_version_id) * 4 answer_session_maximum_points
+		COUNT(gasv.question_version_id) * points_per_question.value answer_session_maximum_points
 	FROM public.given_answer_score_view gasv
 
-	GROUP BY gasv.answer_session_id
+	LEFT JOIN public.constant_value points_per_question
+	ON points_per_question.key = 'POINTS_PER_QUESTION'
+
+	GROUP BY 
+		gasv.answer_session_id,
+		points_per_question.value
 )
-
-
 SELECT 
 	ase.id answer_session_id,
 	ase.user_id,
 	ase.exam_version_id,
 	ase.video_version_id,
     ase.start_date,
-    ase.end_date,
-	ase.is_completed,
 	ass.answer_session_acquired_points,
 	ROUND(
 		(ass.answer_session_acquired_points::double precision 
@@ -57,6 +58,8 @@ SELECT
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
+	cicv.id IS NOT NULL is_completed,
+	cicv.completion_date end_date,
 	CASE 
 		WHEN ase.is_practise
 			THEN 'practise'
@@ -87,3 +90,6 @@ ON ed.id = ev.exam_data_id
 
 LEFT JOIN public.exam e
 ON ev.exam_id = e.id
+
+LEFT JOIN public.course_item_completion_view cicv
+ON cicv.answer_session_id = ase.id

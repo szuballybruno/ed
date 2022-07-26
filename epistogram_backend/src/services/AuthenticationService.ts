@@ -125,14 +125,14 @@ export class AuthenticationService {
         return tokens;
     };
 
-    logOutUserAsync = async (userId: PrincipalId) => {
+    logOutUserAsync = async (principalId: PrincipalId) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(Id.create<'User'>(userId.toSQLValue()), 'logout');
+            .saveUserSessionActivityAsync(principalId.getId(), 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
-            .removeRefreshToken(Id.create<'User'>(userId.toSQLValue()));
+            .removeRefreshToken(principalId.getId());
     };
 
     getUserLoginTokens = async (user: User) => {

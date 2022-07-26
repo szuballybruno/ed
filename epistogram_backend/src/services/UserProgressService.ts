@@ -113,7 +113,7 @@ export class UserProgressService extends ServiceBase {
          * if it's incomplete, do not go any further
          */
         const isCompletedPrequiz = !!tempomatCalculationData.originalPrevisionedCompletionDate;
-        if (isCompletedPrequiz)
+        if (!isCompletedPrequiz)
             return 'NO DATA';
 
         const previsionedCompletionDate = this._tempomatService

@@ -22,11 +22,11 @@ export class CourseRatingService extends ServiceBase {
      * Get course rating quesiton groups, 
      * and questions in groups  
      */
-    async getCourseRatingGroupsAsync(userId: PrincipalId, courseId: Id<'Course'>) {
+    async getCourseRatingGroupsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         const views = await this._ormService
-            .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
-            .where('userId', '=', 'userId')
+            .query(CourseRatingQuestionView, { principalId, courseId })
+            .where('userId', '=', 'principalId')
             .and('courseId', '=', 'courseId')
             .getMany();
 
@@ -54,19 +54,19 @@ export class CourseRatingService extends ServiceBase {
     /**
      * Saves multiple course rating answers 
      */
-    async saveCourseRatingGroupAnswersAsync(userId: PrincipalId, answersDTO: CourseRatingQuestionAnswersDTO) {
+    async saveCourseRatingGroupAnswersAsync(principalId: PrincipalId, answersDTO: CourseRatingQuestionAnswersDTO) {
 
         const courseId = answersDTO.courseId;
 
         const prevAnswers = await this._ormService
             .query(CourseRatingQuestionUserAnswer, {
-                userId: Id.create<'User'>(userId.toSQLValue()),
+                principalId,
                 courseId,
                 questionIds: answersDTO
                     .answers
                     .map(x => x.quesitonId)
             })
-            .where('userId', '=', 'userId')
+            .where('userId', '=', 'principalId')
             .and('courseId', '=', 'courseId')
             .and('courseRatingQuestionId', '=', 'questionIds')
             .getMany();
@@ -76,7 +76,7 @@ export class CourseRatingService extends ServiceBase {
             .map(x => ({
                 id: prevAnswers
                     .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id!,
-                userId: Id.create<'User'>(userId.toSQLValue()),
+                principalId,
                 courseId: courseId,
                 text: x.text ?? undefined,
                 value: x.value ?? undefined,

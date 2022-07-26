@@ -83,12 +83,12 @@ export class DailyTipService {
      * If a user calls this the next day, this will return a different daily tip. 
      * This will go on until we run out of suitable daily tips, and the cycle will start again. 
      */
-    async getDailyTipAsync(userId: PrincipalId) {
+    async getDailyTipAsync(principalId: PrincipalId) {
 
         // get daily tip views 
         const dailyTips = await this._ormService
-            .query(DailyTipView, { userId: userId.toSQLValue() })
-            .where('userId', '=', 'userId')
+            .query(DailyTipView, { principalId })
+            .where('userId', '=', 'principalId')
             .getMany();
 
         // get a tip 
@@ -135,8 +135,7 @@ export class DailyTipService {
             await this._ormService
                 .createAsync(DailyTipOccurrence, {
                     dailyTipId: tip.dailyTipId,
-                    userId: Id
-                        .create<'User'>(userId.toSQLValue())
+                    userId: principalId.getId()
                 } as DailyTipOccurrence);
         }
 

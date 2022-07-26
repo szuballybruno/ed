@@ -39,9 +39,10 @@ WITH stats AS
 
 		-- completed video count D
 		(
-			SELECT COUNT(uvpb.completion_date)::int
-			FROM public.user_video_progress_bridge uvpb
-			WHERE uvpb.user_id = u.id
+			SELECT COUNT(cicv.id)::int
+			FROM public.course_item_completion_view cicv
+			WHERE cicv.user_id = u.id
+			AND cicv.video_version_id IS NOT NULL
 		) watched_videos,
 
 		-- completed_exam_count
@@ -82,10 +83,10 @@ WITH stats AS
 
 		-- average watched videos per day
 		(
-			SELECT COUNT(uvpb.completion_date)::double precision / 30
-			FROM public.user_video_progress_bridge uvpb
-			WHERE uvpb.user_id = u.id
-			AND uvpb.completion_date > CURRENT_DATE - 30
+			SELECT COUNT(cicv.id)::double precision / 30
+			FROM public.course_item_completion_view cicv
+			WHERE cicv.user_id = u.id
+			AND cicv.completion_date > CURRENT_DATE - 30
 		) average_watched_videos_per_day,
 
 		-- avg session length

@@ -32,30 +32,26 @@ export class CoinTransactionsController {
     getCoinBalanceOfUserAction = async (params: ActionParams) => {
 
         const userId = params
-            .getQuery<any>()
+            .getQuery<{ userId: Id<'User'> }>()
             .getValue(x => x.userId, 'int');
 
-        const userIdAsIdType = Id.create<'User'>(userId);
-
         return this._coinTransactionService
-            .getCoinBalance(params.principalId, userIdAsIdType);
+            .getCoinBalance(params.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
     giftCoinsToUser = async (params: ActionParams) => {
 
         const dto = params
-            .getBody<{ userId: number, amount: number }>();
+            .getBody<{ userId: Id<'User'>, amount: number }>();
 
         const userId = dto
             .getValue(x => x.userId, 'int');
-
-        const userIdAsIdType = Id.create<'User'>(userId);
 
         const amount = dto
             .getValue(x => x.amount, 'int');
 
         return await this._coinTransactionService
-            .giftCoinsToUserAsync(userIdAsIdType, amount);
+            .giftCoinsToUserAsync(userId, amount);
     };
 }

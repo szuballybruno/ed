@@ -142,6 +142,10 @@
     background: var(--intenseYellow) !important;
 }
 
+.background-mildRed {
+    background: var(--mildRed) !important;
+}
+
 /* borders */
 
 .roundBorders-normal {

@@ -55,20 +55,20 @@ export class PretestService {
      */
     async getPretestDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
         console.log('CourseId: ' + courseId);
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
-            .setCurrentCourse(userIdAsIdType, courseId, 'pretest', null);
+            .setCurrentCourse(userId, courseId, 'pretest', null);
 
         // get pretest exam 
-        const pretestExam = await this._getPretestExam(userIdAsIdType, courseId);
+        const pretestExam = await this._getPretestExamPlayerData(userId, courseId);
 
         // get answer session
         const answerSessionId = await this._questionAnswerService
-            .createAnswerSessionAsync(userIdAsIdType, pretestExam.examVersionId, null);
+            .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
 
         return {
             answerSessionId,
@@ -79,7 +79,7 @@ export class PretestService {
     /**
      * Returns the single pretest exam for a course 
      */
-    private async _getPretestExam(userId: Id<'User'>, courseId: Id<'Course'>) {
+    private async _getPretestExamPlayerData(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const pretestExam = await this._ormService
             .withResType<ExamVersion>()
@@ -101,20 +101,20 @@ export class PretestService {
 
     async getPretestResultsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
         // set current course stage 
         await this._courseBridgeService
-            .setCurrentCourse(userIdAsIdType, courseId, 'pretest_results', null);
+            .setCurrentCourse(userId, courseId, 'pretest_results', null);
 
         const view = await this._ormService
-            .query(PretestResultView, { userId: userIdAsIdType, courseId })
+            .query(PretestResultView, { userId: userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getSingle();
 
         const courseView = await this._ormService
-            .query(AvailableCourseView, { userId: userIdAsIdType, courseId })
+            .query(AvailableCourseView, { userId: userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getSingle();
@@ -123,7 +123,7 @@ export class PretestService {
 
         const tempomatCalculationData = await this._ormService
             .query(TempomatCalculationDataView, {
-                userId: userIdAsIdType,
+                userId: userId,
                 courseId
             })
             .where('userId', '=', 'userId')

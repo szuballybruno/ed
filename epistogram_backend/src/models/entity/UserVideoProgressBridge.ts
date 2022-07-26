@@ -11,10 +11,6 @@ export class UserVideoProgressBridge {
     @XViewColumn()
     id: Id<'UserVideoProgressBridge'>;
 
-    @Column({ nullable: true, type: 'timestamptz' })
-    @XViewColumn()
-    completionDate: Date;
-
     @Column({ type: 'double precision' })
     @XViewColumn()
     cursorSeconds: number;

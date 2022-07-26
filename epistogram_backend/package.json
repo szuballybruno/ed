@@ -13,6 +13,7 @@
     "node": "node --async-stack-traces server.ts",
     "nodenew": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
     "lrmon": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --lightRecreate",
+    "lrkeep": "nodemon -e ts,sql,tsx -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --lightRecreate --keepAlive",
     "purgeStart": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --purge",
     "purge": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --purge --shortLife"
   },

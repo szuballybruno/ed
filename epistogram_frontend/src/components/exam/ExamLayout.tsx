@@ -38,9 +38,7 @@ export const ExamLayout = (props: {
         ...css
     } = props;
 
-
-
-    const examLayoutButton = (args: ExamLayoutButtonProps) => {
+    const ExamLayoutButton = (args: ExamLayoutButtonProps) => {
 
         const {
             title,
@@ -67,7 +65,9 @@ export const ExamLayout = (props: {
 
             {/* other buttons */}
             {headerButtons && headerButtons
-                .map(x => examLayoutButton(x))}
+                .map((x, i) => <ExamLayoutButton
+                    key={i}
+                    {...x} />)}
         </Flex>;
     };
 
@@ -77,7 +77,9 @@ export const ExamLayout = (props: {
 
             {/* other buttons */}
             {footerButtons && footerButtons
-                .map(x => examLayoutButton(x))}
+                .map((x, i) => <ExamLayoutButton
+                    key={i}
+                    {...x} />)}
         </Flex>;
     };
 
@@ -162,7 +164,7 @@ export const ExamLayout = (props: {
             p={20}>
 
             {/* back button */}
-            {handleBack && examLayoutButton({
+            {handleBack && ExamLayoutButton({
                 title: 'Vissza',
                 action: handleBack,
                 icon: <ArrowBack />,

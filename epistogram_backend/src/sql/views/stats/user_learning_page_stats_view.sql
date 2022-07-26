@@ -96,9 +96,9 @@ SELECT
 	-- completed video count 
 	(
 		SELECT 
-			COUNT(uvpb.completion_date)::int
-		FROM public.user_video_progress_bridge uvpb
-		WHERE uvpb.user_id = u.id
+			COUNT(cicv.id)::int
+		FROM public.course_item_completion_view cicv
+		WHERE cicv.user_id = u.id
 	) completed_video_count,
 
 	-- total watch time

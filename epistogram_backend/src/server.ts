@@ -9,6 +9,7 @@ import { SQLConnectionService } from './services/sqlServices/SQLConnectionServic
 import './shared/logic/jsExtensions';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { instansiateSingletonServices, instatiateServices, ServiceProvider } from './startup/servicesDI';
+import { snoozeAsync } from './utilities/helpers';
 import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
 
 const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
@@ -92,6 +93,7 @@ const main = async () => {
     const isPurgeMode = process.argv.any(x => x === '--purge');
     const isLightRecreateMode = process.argv.any(x => x === '--lightRecreate');
     const isShortLife = process.argv.any(x => x === '--shortLife');
+    const isKeepAlive = process.argv.any(x => x === '--keepAlive');
 
     log(`MODE FLAGS: [${isPurgeMode ? 'PURGE' : ''}${isLightRecreateMode ? 'LIGHT RECREATE' : ''}${isShortLife ? 'SHORT LIFE' : ''}]`);
 
@@ -102,6 +104,9 @@ const main = async () => {
 
     if (isLightRecreateMode)
         await lightRecreateDBAsync(getServiceProviderAsync);
+
+    if (isKeepAlive)
+        await snoozeAsync(9999999);
 
     if (!isShortLife)
         await startServerAsync(singletonServiceProvider, getServiceProviderAsync);
