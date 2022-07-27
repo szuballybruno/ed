@@ -20,10 +20,13 @@ export const PrequizSubpage = () => {
         .create<'Course'>(useIntParam('courseId')!);
 
     const showError = useShowErrorDialog();
-    const { navigateToWatchPretestGreeting } = useNavigation();
+    const { navigate2 } = useNavigation();
     const { questions } = usePrequizQuestions(courseId);
 
-    const paging = usePaging({ items: questions });
+    const paging = usePaging({
+        items: questions,
+        onNextOverNavigation: () => navigate2(r => r.playerRoute.pretestGreetingRoute, { courseId })
+    });
     const question = paging.currentItem;
 
     const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(courseId, question?.id ?? null);
@@ -49,13 +52,7 @@ export const PrequizSubpage = () => {
                 courseId
             });
 
-            if (paging.isLast) {
-
-                navigateToWatchPretestGreeting(courseId);
-            } else {
-
-                paging.next();
-            }
+            paging.next();
 
         } catch (e) {
 
@@ -84,17 +81,19 @@ export const PrequizSubpage = () => {
 
     return (
         <ExamLayout
-            headerLeftItem={<Flex align="center">
+            headerLeftItem={(
+                <Flex align="center">
 
-                <img
-                    alt=""
-                    src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
-                    className="square35" />
+                    <img
+                        alt=""
+                        src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
+                        className="square35" />
 
-                <EpistoFont style={{ marginLeft: '10px' }}>
-                    {totalQuestionsCount}/{currentQuestionIndex + 1}
-                </EpistoFont>
-            </Flex>}
+                    <EpistoFont style={{ marginLeft: '10px' }}>
+                        {totalQuestionsCount}/{currentQuestionIndex + 1}
+                    </EpistoFont>
+                </Flex>
+            )}
             headerCenterText="Kurzus előtti felmérő"
             footerButtons={new ArrayBuilder()
                 .addIf(canContinue, {

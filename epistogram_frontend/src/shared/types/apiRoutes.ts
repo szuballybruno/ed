@@ -1,6 +1,6 @@
 import { Id } from './versionId';
 
-export type RouteParameterType<TBody = any, TQuery = any> = { body: TBody, query: TQuery };
+export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
 
 export const apiRoutes = {
@@ -111,7 +111,8 @@ export const apiRoutes = {
     prequiz: {
         getQuestions: '/prequiz/get-questions',
         getUserAnswer: '/prequiz/get-user-answer',
-        answerPrequizQuestion: '/prequiz/answer-prequiz-question'
+        answerPrequizQuestion: '/prequiz/answer-prequiz-question',
+        finishPrequiz: '/prequiz/finish-prequiz' as ParametrizedRouteType<{ body: { courseId: Id<'Course'> } }>
     },
 
     pretest: {
@@ -137,7 +138,7 @@ export const apiRoutes = {
     },
 
     userProgress: {
-        getUserProgressData: '/userprogress/get-user-progress-data',
+        getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
         getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
         getActiveCourses: '/userprogress/get-active-courses'
     },
@@ -206,7 +207,7 @@ export const apiRoutes = {
 
     module: {
         getModuleListEditData: '/module/get-modules',
-        saveCoverFile: '/module/save-cover-file' as ParametrizedRouteType<{ body: { moduleVersionId: Id<'ModuleVersion'> }, query: {} }>
+        saveCoverFile: '/module/save-cover-file' as ParametrizedRouteType<{ body: { moduleVersionId: Id<'ModuleVersion'> } }>
     },
 
     video: {

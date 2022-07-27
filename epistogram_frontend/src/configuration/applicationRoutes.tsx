@@ -27,7 +27,7 @@ export type ApplicationRoutesType = {
         watchRoute: ApplicationRoute;
         prequizRoute: ApplicationRoute;
         pretestRoute: ApplicationRoute;
-        pretestGreetingRoute: ApplicationRoute;
+        pretestGreetingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
         pretestResultsRoute: ApplicationRoute;
         courseRatingRoute: ApplicationRoute;
         courseOverviewRoute: ApplicationRoute;

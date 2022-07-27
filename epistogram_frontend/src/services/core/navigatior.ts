@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { applicationRoutes, ApplicationRoutesType } from '../../configuration/applicationRoutes';
 import { CourseStageNameType } from '../../shared/types/sharedTypes';
 import { ApplicationRoute } from '../../models/types';
 import { getUrl } from '../../static/frontendHelpers';
 import { useCallback } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { Id } from '../../shared/types/versionId';
+import { Logger } from '../../static/Logger';
 
 export const useNavigation = () => {
 
@@ -15,21 +16,30 @@ export const useNavigation = () => {
 
         const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
 
-        if (Environment.loggingEnabled)
-            console.log('Navigating to: ' + replacedPath);
+        Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
 
         domNavigate(replacedPath);
     }, [domNavigate, getUrl, Environment.loggingEnabled]);
+
+    const navigate2 = <T>(routeOrFn: (ApplicationRoute<T>) | ((routes: ApplicationRoutesType) => ApplicationRoute<T>), ...args: T extends void ? [] : [T]) => {
+
+        const [params] = args;
+
+        const route = typeof routeOrFn === 'function'
+            ? routeOrFn(applicationRoutes)
+            : routeOrFn as ApplicationRoute<T>;
+
+        const replacedPath = getUrl(route.route.getAbsolutePath(), params);
+
+        Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
+
+        domNavigate(replacedPath);
+    };
 
     const navigateToHref = useCallback((href: string) => {
 
         domNavigate(href);
     }, [domNavigate]);
-
-    const navigateWithParams = <T,>(route: ApplicationRoute<T>, params: T) => {
-
-        navigate(route, params);
-    };
 
     const openNewTab = (url: string) => (window as any).open(url, '_blank')
         .focus();
@@ -40,11 +50,11 @@ export const useNavigation = () => {
 
     const navigateToWatchPrequiz = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
 
-    const navigateToWatchPretestGreeting = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestGreetingRoute, {courseId});
+    const navigateToPretestGreeting = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.pretestGreetingRoute, { courseId });
 
-    const navigateToWatchPretest = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+    const navigateToPretest = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
 
-    const navigateToWatchPretestResults = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
+    const navigateToPretestResults = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
 
     const navigateToCourseRating = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
 
@@ -60,13 +70,13 @@ export const useNavigation = () => {
 
         if (stageName === 'pretest') {
 
-            navigateToWatchPretest(courseId);
+            navigateToPretest(courseId);
             return;
         }
 
         if (stageName === 'pretest_results') {
 
-            navigateToWatchPretestResults(courseId);
+            navigateToPretestResults(courseId);
             return;
         }
 
@@ -78,14 +88,14 @@ export const useNavigation = () => {
     return {
         history,
         navigate,
-        navigateWithParams,
+        navigate2,
         navigateToPlayer,
         navigateToCourseDetails,
         openNewTab,
         navigateToWatchPrequiz,
-        navigateToWatchPretest,
-        navigateToWatchPretestGreeting,
-        navigateToWatchPretestResults,
+        navigateToPretest,
+        navigateToPretestGreeting,
+        navigateToPretestResults,
         navigateToCourseRating,
         navigateToCourseOverview,
         playCourse,

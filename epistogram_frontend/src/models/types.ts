@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { HasPermissionFnType } from '../components/system/AuthorizationContext';
 import { trimEndChar } from '../shared/logic/sharedLogic';
-import { ParametrizedRouteType } from '../shared/types/apiRoutes';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -47,7 +46,7 @@ export class EpistoRoute {
     }
 }
 
-export type ApplicationRoute<T = any> = {
+export type ApplicationRoute<T = void> = {
     title: string;
     route: EpistoRoute;
     icon?: JSX.Element;
@@ -70,5 +69,3 @@ export type VolumeSettingsType = {
     volume: number;
     isMuted: boolean;
 }
-
-export type GetRouteBodyParamsType<T> = T extends ParametrizedRouteType<infer I> ? I['body'] : never;
