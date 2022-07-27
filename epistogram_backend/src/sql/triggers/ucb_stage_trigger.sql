@@ -42,6 +42,14 @@ BEGIN
         NEW.stage_name = 'finished'))
 	    THEN RAISE EXCEPTION 'Trying to set stage to "%", but "pretest" is not yet completed!', NEW.stage_name;
 	END IF;
+
+    -- check startDate
+	IF (NEW.start_date IS NULL AND 
+        (NEW.stage_name = 'pretest_results' OR
+        NEW.stage_name = 'watch' OR 
+        NEW.stage_name = 'finished'))
+	    THEN RAISE EXCEPTION 'Trying to set stage to "%", but "start_date" is not yet set!', NEW.stage_name;
+	END IF;
 	
 	return NEW;
 END

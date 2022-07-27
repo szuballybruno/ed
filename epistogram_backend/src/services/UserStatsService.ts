@@ -1,30 +1,29 @@
 
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
+import { HomePageStatsView } from '../models/views/HomePageStatsView';
+import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
+import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
 import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../models/views/UserCourseStatsView';
+import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
-import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
+import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
+import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
+import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
-import { HomePageStatsView } from '../models/views/HomePageStatsView';
-import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
-import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
-import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
-import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
-import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
-import { UserPerformanceView } from '../models/views/UserPerformanceView';
-import { Id } from '../shared/types/versionId';
 
 export class UserStatsService {
 
@@ -43,45 +42,18 @@ export class UserStatsService {
     }
 
     async getHomePageStatsAsync(principalId: PrincipalId) {
-        const userId = principalId.toSQLValue();
+
+        const userId = principalId
+            .getId();
 
         const stats = await this._ormService
             .query(HomePageStatsView, { userId })
             .where('userId', '=', 'userId')
             .getSingle();
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        if (!tempomatCalculationData)
-            throw new Error('Couldn\'t get tempomat calculation data');
-
-        const allLagBehindPercentages = tempomatCalculationData.map(x => {
-            const previsionedCompletionDate = this._tempomatService
-                .calculatePrevisionedDate(
-                    x.originalPrevisionedCompletionDate,
-                    x.totalItemCount,
-                    x.totalCompletedItemCount,
-                    x.startDate,
-                    x.tempomatMode,
-                    x.tempomatAdjustmentValue
-                );
-
-            const lagBehindPercentage = this._tempomatService
-                .calculateLagBehindPercentage(
-                    x.startDate,
-                    x.requiredCompletionDate
-                        ? x.requiredCompletionDate
-                        : x.originalPrevisionedCompletionDate,
-                    previsionedCompletionDate
-                );
-
-            return lagBehindPercentage || 0;
-        });
-
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+        const { avgLagBehindPercentage } = await this
+            ._tempomatService
+            .getAvgLagBehindPercentage(userId);
 
         return this._mapperService
             .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
@@ -89,47 +61,21 @@ export class UserStatsService {
 
     async getUserLearningPageStatsAsync(principalId: PrincipalId) {
 
-        const userId = principalId.toSQLValue();
+        const userId = principalId
+            .getId();
 
         const stats = await this._ormService
             .query(UserLearningPageStatsView, { userId })
             .where('userId', '=', 'userId')
             .getSingle();
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
+        const { avgLagBehindPercentage } = await this
+            ._tempomatService
+            .getAvgLagBehindPercentage(userId);
 
-        if (!tempomatCalculationData)
-            throw new Error('Couldn\'t get tempomat calculation data');
-
-        const allLagBehindPercentages = tempomatCalculationData.map(x => {
-            const previsionedCompletionDate = this._tempomatService
-                .calculatePrevisionedDate(
-                    x.originalPrevisionedCompletionDate,
-                    x.totalItemCount,
-                    x.totalCompletedItemCount,
-                    x.startDate,
-                    x.tempomatMode,
-                    x.tempomatAdjustmentValue
-                );
-
-            const lagBehindPercentage = this._tempomatService
-                .calculateLagBehindPercentage(
-                    x.startDate,
-                    x.requiredCompletionDate
-                        ? x.requiredCompletionDate
-                        : x.originalPrevisionedCompletionDate,
-                    previsionedCompletionDate
-                );
-
-            return lagBehindPercentage || 0;
-        });
-
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
-
-        return this._mapperService.mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
+        return this
+            ._mapperService
+            .mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
     }
 
     async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
@@ -158,7 +104,6 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every course
-          * @returns
      * TODO: Filter courses by permissions
      * TODO: Rearrange the view, so when the user hasn't
      *       started a course yet, return all the courses with empty
@@ -174,40 +119,14 @@ export class UserStatsService {
         const statsWithTempomatData = stats
             .map(x => {
 
-                const previsionedCompletionDate = this._tempomatService
-                    .calculatePrevisionedDate(
-                        x.originalPrevisionedCompletionDate,
-                        x.totalItemCount,
-                        x.totalCompletedItemCount,
-                        x.startDate,
-                        x.tempomatMode,
-                        x.tempomatAdjustmentValue
-                    );
-
-                const lagBehindPercentage = this._tempomatService
-                    .calculateLagBehindPercentage(
-                        x.startDate,
-                        x.requiredCompletionDate
-                            ? x.requiredCompletionDate
-                            : x.originalPrevisionedCompletionDate,
-                        previsionedCompletionDate
-                    );
-
-                const recommendedItemsPerDay = this._tempomatService
-                    .calculateRecommendedItemsPerDay(
-                        x.startDate,
-                        previsionedCompletionDate,
-                        x.requiredCompletionDate,
-                        x.totalItemCount
-                    );
+                const { previsionedCompletionDate, lagBehindPercentage, recommendedItemsPerWeek } = this._tempomatService
+                    .calculateTempomatValues(x);
 
                 return {
                     ...x,
                     previsionedCompletionDate: previsionedCompletionDate,
                     lagBehindPercentage: lagBehindPercentage,
-                    recommendedItemsPerWeek: recommendedItemsPerDay
-                        ? recommendedItemsPerDay * 7
-                        : null
+                    recommendedItemsPerWeek
                 };
             }) as UserCourseStatsViewWithTempomatData[];
 
@@ -217,7 +136,6 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every watched video
-          * @returns
      */
     getUserVideoStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
 
@@ -235,9 +153,7 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every completed exam
-          * @returns
      */
-
     getUserExamStatsAsync = async (principalId: PrincipalId, courseId: Id<'Course'>) => {
 
         const userId = principalId.toSQLValue();
@@ -254,7 +170,7 @@ export class UserStatsService {
 
     /**
      * Gets the learning overview statistics data for single user
-          * TODO: Correct mapping
+     * TODO: Correct mapping
      */
     getUserLearningOverviewDataAsync = async (userId: Id<'User'>) => {
 
@@ -337,8 +253,9 @@ export class UserStatsService {
         const avgPerformancePercentage = userPerformanceViewFiltered
             .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViewFiltered.length;
 
-        const avgLagBehindPercentage = await this._tempomatService
-            .calculateAvgLagBehindPercentageAsync(userId);
+        const { avgLagBehindPercentage } = await this
+            ._tempomatService
+            .getAvgLagBehindPercentage(userId);
 
         const lagBehindPoints = 100 - avgLagBehindPercentage;
 

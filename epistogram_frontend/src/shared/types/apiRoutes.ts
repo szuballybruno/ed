@@ -118,7 +118,6 @@ export const apiRoutes = {
     pretest: {
         getPretestData: '/pretest/get-pretest-data',
         getPretestResults: '/pretest/get-pretest-results',
-        getPretestExamId: '/pretest/get-pretest-exam-id',
         finishPretest: '/pretest/finish-pretest' as ParametrizedRouteType<{ body: { answerSessionId: Id<'AnswerSession'> } }>
     },
 

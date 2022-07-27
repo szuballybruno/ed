@@ -38,18 +38,6 @@ export class PretestController {
             .getPretestResultsAsync(params.principalId, courseId);
     };
 
-    @XControllerAction(apiRoutes.pretest.getPretestExamId)
-    getPretestExamIdAction = async (params: ActionParams) => {
-
-        const courseId = Id
-            .create<'Course'>(params
-                .getQuery<any>()
-                .getValue(x => x.courseId, 'int'));
-
-        return this._pretestService
-            .getPretestExamIdAsync(courseId);
-    };
-
     @XControllerAction(apiRoutes.pretest.finishPretest, { isPost: true })
     async finishPretestAction(params: ActionParams) {
 

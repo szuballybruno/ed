@@ -1,37 +1,36 @@
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
+import { notnull } from '../shared/logic/sharedLogic';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
-import { MapperService } from './MapperService';
-import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { UserCourseBridgeService } from './UserCourseBridgeService';
 
-export class TempomatService extends ServiceBase {
+type CalculateTempomatValuesArgs = {
+    tempomatMode: TempomatModeType,
+    originalPrevisionedCompletionDate: Date,
+    startDate: Date,
+    requiredCompletionDate: Date,
+    totalItemCount: number,
+    totalCompletedItemCount: number,
+    tempomatAdjustmentValue: number,
+}
 
-    private _userCourseBridgeService: UserCourseBridgeService;
-    private _loggerService: LoggerService;
-    private _eventService: EventService;
+export class TempomatService {
 
     constructor(
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        courseBridgeServie: UserCourseBridgeService,
-        loggerService: LoggerService,
-        eventService: EventService) {
-
-        super(mapperService, ormService);
-
-        this._eventService = eventService;
-        this._loggerService = loggerService;
-        this._userCourseBridgeService = courseBridgeServie;
+        private _ormService: ORMConnectionService,
+        private _loggerService: LoggerService,
+        private _eventService: EventService) {
     }
 
+    /**
+     * Set tempomat mode 
+     */
     async setTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>, tempomatMode: TempomatModeType) {
 
         const userId = principalId.toSQLValue();
@@ -46,6 +45,25 @@ export class TempomatService extends ServiceBase {
             .save(UserCourseBridge, {
                 id: bridge.id,
                 tempomatMode
+            });
+    }
+
+    /**
+     * TODO: Create a logic for adding notifications
+     */
+    async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
+
+        const { courseId, userId, lagBehindPercentage } = userCourseProgressView;
+
+        if (lagBehindPercentage < 35)
+            return;
+
+        this._loggerService
+            .log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
+
+        await this._eventService
+            .addLagBehindNotificationEventAsync(userId, {
+                lagBehindPercentage
             });
     }
 
@@ -66,24 +84,126 @@ export class TempomatService extends ServiceBase {
     }
 
     /**
-     * Get tempomat calculation data
+     * Get single tempomat calculation data
      */
-    getTempomatCalculationData = async (
-        userId: Id<'User'>,
-        courseId: number
-    ) => {
+    async getTempomatCalculationData(userId: Id<'User'>, courseId: number) {
 
-        const tempomatCalculationData = await this._ormService
+        return await this
+            ._ormService
             .query(TempomatCalculationDataView, { courseId, userId })
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'userId')
-            .getOneOrNull();
+            .getSingle();
+    }
 
-        if (!tempomatCalculationData)
-            throw new Error('Couldn\'t get tempomat calculation data');
+    /**
+     * Gets all tempomat calc datas associated with user 
+     */
+    async getTempomatCalculationDatasAsync(userId: Id<'User'>) {
 
-        return tempomatCalculationData;
-    };
+        return await this
+            ._ormService
+            .query(TempomatCalculationDataView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+    }
+
+    /**
+     * getAvgLagBehindPercentage
+     */
+    async getAvgLagBehindPercentage(userId: Id<'User'>) {
+
+        const tempomatCalculationDatas = await this
+            .getTempomatCalculationDatasAsync(userId);
+
+        const allLagBehindPercentages = tempomatCalculationDatas
+            .map(x => {
+
+                const { lagBehindPercentage } = this
+                    .calculateTempomatValues(x);
+
+                return lagBehindPercentage;
+            });
+
+        // wtf
+        const avgLagBehindPercentage = allLagBehindPercentages
+            .reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+
+        return { avgLagBehindPercentage };
+    }
+
+    /**
+     * Calc tempomat values 
+     */
+    async calculateTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
+
+        return this.calculateTempomatValues(tempomatCalculationData);
+    }
+
+    /**
+     * Calc tempomat values 
+     */
+    calculateTempomatValues(opts: CalculateTempomatValuesArgs) {
+
+        const {
+            originalPrevisionedCompletionDate,
+            totalItemCount,
+            totalCompletedItemCount,
+            startDate,
+            tempomatMode,
+            tempomatAdjustmentValue,
+            requiredCompletionDate
+        } = opts;
+
+        notnull(startDate, 'startDate');
+
+        const previsionedCompletionDate = this
+            ._calculatePrevisionedDate(
+                originalPrevisionedCompletionDate,
+                totalItemCount,
+                totalCompletedItemCount,
+                startDate,
+                tempomatMode,
+                tempomatAdjustmentValue
+            );
+
+        const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
+            ._calculateRecommendedItemsPerDay(
+                startDate,
+                previsionedCompletionDate,
+                requiredCompletionDate,
+                totalItemCount
+            );
+
+        const lagBehindPercentage = this
+            ._calculateLagBehindPercentage(
+                startDate,
+                requiredCompletionDate
+                    ? requiredCompletionDate
+                    : originalPrevisionedCompletionDate,
+                previsionedCompletionDate
+            );
+
+        return {
+            previsionedCompletionDate,
+            recommendedItemsPerDay,
+            recommendedItemsPerWeek,
+            originalPrevisionedCompletionDate,
+            requiredCompletionDate,
+            startDate,
+            lagBehindPercentage
+        };
+    }
+
+    /**
+     * ---------------------- PRIVATE FUNCTIONS
+     */
 
     /**
     * Calculates the current previsioned date for every tempomat mode
@@ -109,14 +229,14 @@ export class TempomatService extends ServiceBase {
     *         comes from the PRETEST, so you push the NEW PREVISIONED COMPLETION DATE LESS
     *         then on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a little bit HIGHER
     */
-    calculatePrevisionedDate = (
+    private _calculatePrevisionedDate(
         originalPrevisionedCompletionDate: Date,
         totalItemCount: number,
         totalCompletedItemCount: number,
         startDate: Date,
         tempomatMode: TempomatModeType,
         adjustmentCorrection: number
-    ) => {
+    ) {
 
         const originalPrevisionedLength = this
             ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
@@ -154,193 +274,106 @@ export class TempomatService extends ServiceBase {
         this._loggerService.logSecondary(`New previsoned date: ${newPrevisionedDate}`);
 
         return newPrevisionedDate;
-    };
+    }
 
     /**
      * Calculates the lag behind from three dates. 
      * @returns A positive int percentage when there is lag from
      * the original estimation or null because it cannot be determined
      */
-    calculateLagBehindPercentage = (
-        startDate: Date | null,
-        originalPrevisionedCompletionDate: Date | null,
-        newPrevisionedDate: Date | null
-    ) => {
-
-        if (
-            !startDate ||
-            !originalPrevisionedCompletionDate ||
-            !newPrevisionedDate
-        ) {
-            return null;
-        }
+    private _calculateLagBehindPercentage(
+        startDate: Date,
+        originalPrevisionedCompletionDate: Date,
+        newPrevisionedDate: Date
+    ) {
 
         const daysFromStartToOriginalPrevisioned = dateDiffInDays(startDate, originalPrevisionedCompletionDate);
         const daysFromStartToNewPrevisioned = dateDiffInDays(startDate, newPrevisionedDate);
 
         return Math.ceil(relativeDiffInPercentage(daysFromStartToOriginalPrevisioned, daysFromStartToNewPrevisioned));
-    };
+    }
 
     /**
      * Calculates recommended items per day from either the
      * required or the previsioned completion date 
      * because it cannot be determined
      */
-    calculateRecommendedItemsPerDay = (
-        startDate: Date | null,
-        currentPrevisionedCompletionDate: Date | null,
-        requiredCompletionDate: Date | null,
-        totalItemsCount: number | null
-    ) => {
+    private _calculateRecommendedItemsPerDay(
+        startDate: Date,
+        currentPrevisionedCompletionDate: Date,
+        requiredCompletionDate: Date,
+        totalItemsCount: number
+    ) {
 
-        if (!startDate)
-            return null;
-        if (!currentPrevisionedCompletionDate)
-            return null;
-        if (!totalItemsCount)
-            return null;
+        let recommendedItemsPerDay = 0;
 
         // If there is required completion date, calculate
         // recommended items per day from that
         if (requiredCompletionDate) {
 
             const daysFromStartToRequired = dateDiffInDays(startDate, requiredCompletionDate);
-            return Math.ceil(totalItemsCount / daysFromStartToRequired);
+            recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToRequired);
         } else {
 
             const daysFromStartToCurrentPrevisioned = dateDiffInDays(startDate, currentPrevisionedCompletionDate);
-            return Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned);
+            recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned);
         }
-    };
 
-    /**
-     * Calculates average lag behind perc. 
-     */
-    calculateAvgLagBehindPercentageAsync = async (userId: Id<'User'>) => {
+        const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        if (!tempomatCalculationData)
-            throw new Error('Couldn\'t get tempomat calculation data');
-
-        const allLagBehindPercentages = tempomatCalculationData.map(x => {
-            const previsionedCompletionDate = this
-                .calculatePrevisionedDate(
-                    x.originalPrevisionedCompletionDate,
-                    x.totalItemCount,
-                    x.totalCompletedItemCount,
-                    x.startDate,
-                    x.tempomatMode,
-                    x.tempomatAdjustmentValue
-                );
-
-            const lagBehindPercentage = this
-                .calculateLagBehindPercentage(
-                    x.startDate,
-                    x.requiredCompletionDate
-                        ? x.requiredCompletionDate
-                        : x.originalPrevisionedCompletionDate,
-                    previsionedCompletionDate
-                );
-
-            return lagBehindPercentage || 0;
-        });
-
-        const avgLagBehindPercentage = allLagBehindPercentages.reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
-
-        return avgLagBehindPercentage;
-    };
-
-    /**
-     * TODO: Create a logic for adding notifications
-     */
-    async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
-
-        const { courseId, userId, lagBehindPercentage } = userCourseProgressView;
-
-        if (lagBehindPercentage < 35)
-            return;
-
-        this._loggerService
-            .log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
-
-        await this._eventService
-            .addLagBehindNotificationEventAsync(userId, {
-                lagBehindPercentage
-            });
+        return { recommendedItemsPerDay, recommendedItemsPerWeek };
     }
 
-    /**
-     * PRIVATE FUNCTIONS
-     */
-
-    private _calculateOriginalPrevisionedLength = (
-        originalPrevisionedCompletionDate: Date,
-        startDate: Date
-    ) => {
-
-        if (!originalPrevisionedCompletionDate)
-            throw new Error('Pretest hasn\'t been done');
-
-        if (!startDate)
-            throw new Error('The user hasn\'t started the course yet');
+    private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {
 
         return dateDiffInDays(startDate, originalPrevisionedCompletionDate);
-    };
+    }
 
-    private _calculateOriginalEstimatedVideosPerDay = (
+    private _calculateOriginalEstimatedVideosPerDay(
         videosCount: number,
         originalPrevisionedLength: number
-    ) => {
+    ) {
 
         if (!originalPrevisionedLength)
             throw new Error('Pretest hasn\'t been done');
 
         return videosCount / originalPrevisionedLength;
-    };
+    }
 
-    private _calculateDaysSpentFromStartDate = (
-        startDate: Date
-    ) => {
+    private _calculateDaysSpentFromStartDate(startDate: Date) {
 
         const currentDate = new Date(Date.now());
 
         return Math.abs(dateDiffInDays(currentDate, startDate));
-    };
+    }
 
-    private _calculateHowManyVideosShouldHaveWatchedByNow = (
+    private _calculateHowManyVideosShouldHaveWatchedByNow(
         originalEstimatedVideosPerDay: number,
         daysSpentFromStartDate: number
-    ) => {
+    ) {
 
         return originalEstimatedVideosPerDay * daysSpentFromStartDate;
-    };
+    }
 
-    private _calculateLagBehindVideos = (
+    private _calculateLagBehindVideos(
         howManyVideosShouldHaveWatchedByNow: number,
         watchedVideos: number
-    ) => {
+    ) {
 
         return howManyVideosShouldHaveWatchedByNow - watchedVideos;
-    };
+    }
 
-    private _calculateLagBehindDays = (
-        lagBehindVideos: number,
-        originalEstimatedVideosPerDay: number
-    ) => {
+    private _calculateLagBehindDays(lagBehindVideos: number, originalEstimatedVideosPerDay: number) {
 
         return lagBehindVideos / originalEstimatedVideosPerDay;
-    };
+    }
 
-    private _calculateNewPrevisionedDateByTempomatMode = (
+    private _calculateNewPrevisionedDateByTempomatMode(
         tempomatMode: TempomatModeType,
         originalPrevisionedCompletionDate: Date,
         lagBehindDays: number,
         adjustmentCorrection?: number
-    ) => {
+    ) {
 
         const getNewPrevisionedDate = () => {
             switch (tempomatMode as TempomatModeType) {
@@ -373,5 +406,5 @@ export class TempomatService extends ServiceBase {
         return newPrevisionedDate >= originalPrevisionedCompletionDate
             ? newPrevisionedDate
             : originalPrevisionedCompletionDate;
-    };
+    }
 }

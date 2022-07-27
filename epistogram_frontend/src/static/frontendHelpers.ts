@@ -4,6 +4,7 @@ import React, { ComponentType, ReactNode, useCallback, useEffect, useMemo, useSt
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
@@ -659,12 +660,21 @@ export type QueryResult<T> = {
 
 export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
-    const queryValues = queryParams ? Object.values(queryParams) : [];
+    const queryValues1 = (queryParams
+        ? Object.values(queryParams)
+        : [])
+        .filter(x => !!x);
+
+    const queryValues = queryValues1.length > 0
+        ? queryValues1
+        : EMPTY_ARRAY;
 
     const getFunction = useCallback(() => {
 
         return httpGetAsync(url, queryParams);
     }, [url, queryParams]);
+
+    const queryingEnabled = isEnabled === false ? false : true;
 
     const queryResult = useQuery(
         [url, ...queryValues],
@@ -673,7 +683,7 @@ export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any,
             retry: false,
             refetchOnWindowFocus: false,
             keepPreviousData: true,
-            enabled: isEnabled === false ? false : true
+            enabled: queryingEnabled
         });
 
     const state = useMemo((): LoadingStateType => {
@@ -692,8 +702,11 @@ export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any,
 
     const refetch = useCallback(async () => {
 
+        if (!queryingEnabled)
+            return;
+
         await queryResult.refetch();
-    }, [queryResult.refetch]);
+    }, [queryingEnabled, queryResult.refetch]);
 
     const data = useMemo((): T => {
 

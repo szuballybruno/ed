@@ -1,4 +1,3 @@
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
@@ -8,8 +7,8 @@ import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressCha
 import { instantiate } from '../shared/logic/sharedLogic';
 import { EpistoLineChartDataType } from '../shared/types/epistoChartTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { dateDiffInDays, forN } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -45,34 +44,15 @@ export class UserProgressService extends ServiceBase {
 
     async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userId = principalId.toSQLValue();
+        const userId = principalId.getId();
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, {
-                userId,
-                courseId
-            })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
-
-        const previsionedCompletionDate = this._tempomatService
-            .calculatePrevisionedDate(
-                tempomatCalculationData.originalPrevisionedCompletionDate,
-                tempomatCalculationData.totalItemCount,
-                tempomatCalculationData.totalCompletedItemCount,
-                tempomatCalculationData.startDate,
-                tempomatCalculationData.tempomatMode,
-                tempomatCalculationData.tempomatAdjustmentValue
-            );
-
-        const recommendedItemsPerDay = this._tempomatService
-            .calculateRecommendedItemsPerDay(
-                tempomatCalculationData.startDate,
-                previsionedCompletionDate,
-                tempomatCalculationData.requiredCompletionDate,
-                tempomatCalculationData.totalItemCount
-            );
+        const {
+            requiredCompletionDate,
+            previsionedCompletionDate,
+            recommendedItemsPerDay
+        } = await this
+            ._tempomatService
+            .calculateTempomatValuesAsync(userId, courseId);
 
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -88,50 +68,34 @@ export class UserProgressService extends ServiceBase {
             .and('isCurrent', 'IS', 'true')
             .getOneOrNull();
 
-        return {
-            isDeadlineSet: !!tempomatCalculationData.requiredCompletionDate,
+        return instantiate<RecomendedItemQuotaDTO>({
+            isDeadlineSet: !!requiredCompletionDate,
             previsionedCompletionDate: previsionedCompletionDate ?? 0,
             recommendedItemsPerDay: recommendedItemsPerDay ?? 0,
             recommendedItemsPerWeek: recommendedItemsPerDay ? recommendedItemsPerDay * 7 : 0,
             completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
             completedToday: currentDailyCompletedView?.completedItemCount ?? 0
-        } as RecomendedItemQuotaDTO;
+        });
     }
 
     async getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<'Course'>): Promise<UserCourseProgressChartDTO | 'NO DATA'> {
 
-        const userId = principalId.toSQLValue();
+        const userId = principalId.getId();
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { courseId, userId })
-            .where('courseId', '=', 'courseId')
-            .and('userId', '=', 'userId')
-            .getSingle();
-
-        /**
-         * check preqiz completion
-         * if it's incomplete, do not go any further
-         */
-        const isCompletedPrequiz = !!tempomatCalculationData.originalPrevisionedCompletionDate;
-        if (!isCompletedPrequiz)
-            return 'NO DATA';
-
-        const previsionedCompletionDate = this._tempomatService
-            .calculatePrevisionedDate(
-                tempomatCalculationData.originalPrevisionedCompletionDate,
-                tempomatCalculationData.totalItemCount,
-                tempomatCalculationData.totalCompletedItemCount,
-                tempomatCalculationData.startDate,
-                tempomatCalculationData.tempomatMode,
-                tempomatCalculationData.tempomatAdjustmentValue
-            );
+        const {
+            originalPrevisionedCompletionDate,
+            previsionedCompletionDate,
+            startDate
+        } = await this
+            ._tempomatService
+            .calculateTempomatValuesAsync(userId, courseId);
 
         const estimatedLengthInDays = previsionedCompletionDate
-            ? dateDiffInDays(tempomatCalculationData.startDate, previsionedCompletionDate)
+            ? dateDiffInDays(startDate, previsionedCompletionDate)
             : null;
 
         const originalEstimatedLengthInDays = previsionedCompletionDate
-            ? dateDiffInDays(tempomatCalculationData.startDate, tempomatCalculationData.originalPrevisionedCompletionDate)
+            ? dateDiffInDays(startDate, originalPrevisionedCompletionDate)
             : null;
 
         const dailyViews = await this._ormService
@@ -156,7 +120,7 @@ export class UserProgressService extends ServiceBase {
 
         const estimatedDates = forN(estimatedLengthInDaysOrNull, index => {
 
-            const date = new Date(tempomatCalculationData.startDate)
+            const date = new Date(startDate)
                 .addDays(index);
 
             return date.toLocaleDateString(undefined, {
@@ -167,7 +131,7 @@ export class UserProgressService extends ServiceBase {
 
         const originalEstimatedDates = forN(originalEstimatedLengthInDaysOrNull, index => {
 
-            const date = new Date(tempomatCalculationData.startDate)
+            const date = new Date(startDate)
                 .addDays(index);
 
             return date.toLocaleDateString(undefined, {
@@ -176,7 +140,7 @@ export class UserProgressService extends ServiceBase {
             });
         });
 
-        const datesUntilToday = forN(dateDiffInDays(new Date(tempomatCalculationData.startDate), new Date(Date.now())), index => index);
+        const datesUntilToday = forN(dateDiffInDays(new Date(startDate), new Date(Date.now())), index => index);
 
         const previsionedProgress = estimatedDates
             .map((_, index) => (100 / estimatedDates.length) * (index + 1)) as EpistoLineChartDataType;
