@@ -12,7 +12,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const CompanyAdminIndexPage = memo(() => {
 
-    const { navigateWithParams } = useNavigation();
+    const { navigate2 } = useNavigation();
     const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
 
     // http
@@ -55,7 +55,7 @@ export const CompanyAdminIndexPage = memo(() => {
                             </EpistoFont>
 
                             <EpistoButton
-                                onClick={() => navigateWithParams(editRoute, { companyId: company.id })}>
+                                onClick={() => navigate2(editRoute, { companyId: company.id })}>
                                 <Edit></Edit>
                             </EpistoButton>
 

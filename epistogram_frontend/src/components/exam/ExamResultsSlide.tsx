@@ -26,7 +26,9 @@ export const ExamResultsSlide = (props: {
     const { answerSessionId, goToCourseRating, continueCourse, setIsExamInProgress, exam } = props;
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
+
+    const courseId = Id.create<'Course'>(1);
 
     // effects
     useEffect(() => {
@@ -49,14 +51,14 @@ export const ExamResultsSlide = (props: {
                 text: 'Kurzus összegzése',
                 action: () => {
 
-                    navigate(applicationRoutes.playerRoute.courseOverviewRoute);
+                    navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
                 }
             })
             .addIf(exam.isFinalExam, {
                 text: 'Vissza a tanfolyamkeresőbe',
                 action: () => {
 
-                    navigate(applicationRoutes.availableCoursesRoute);
+                    navigate2(applicationRoutes.availableCoursesRoute);
                 }
             })
             .addIf(!exam.isFinalExam, {

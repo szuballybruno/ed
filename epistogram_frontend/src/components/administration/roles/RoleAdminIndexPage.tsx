@@ -3,19 +3,18 @@ import { Add, Delete, Edit } from '@mui/icons-material';
 import { memo, useCallback, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useDeleteRole, useRolesList } from '../../../services/api/rolesApiService';
-import { useNavigation } from '../../../services/core/navigatior';
 import { RoleAdminListDTO } from '../../../shared/dtos/role/RoleAdminListDTO';
+import { Id } from '../../../shared/types/versionId';
+import { usePostCallback } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AddRoleDialog } from './AddRoleDialog';
 import { EditRoleDialog } from './EditRoleDialog';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { usePostCallback } from '../../../static/frontendHelpers';
-import { Id } from '../../../shared/types/versionId';
 
 type RowType = RoleAdminListDTO & {
     perms: string,
@@ -23,9 +22,6 @@ type RowType = RoleAdminListDTO & {
 };
 
 export const RoleAdminIndexPage = memo(() => {
-
-    const { navigateWithParams } = useNavigation();
-    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
 
     // http
     const { refetchRolesList, rolesList, rolesListError, rolesListState } = useRolesList();

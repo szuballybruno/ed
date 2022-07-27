@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { logSecondary } from '../../services/misc/logger';
+import { XSafeObjectWrapper } from '../../shared/logic/XSafeObjectWrapper';
 import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
 import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { Id } from '../../shared/types/versionId';
-import { withValueOrBadRequest, SafeObjectWrapper } from '../helpers';
+import { withValueOrBadRequest } from '../helpers';
 
 export class PrincipalId {
 
@@ -27,8 +28,8 @@ export class PrincipalId {
 }
 
 export type ParamsData<T extends RouteParameterType> = {
-    body: SafeObjectWrapper<T['body']>,
-    query: SafeObjectWrapper<T['query']>
+    body: XSafeObjectWrapper<T['body']>,
+    query: XSafeObjectWrapper<T['query']>
 }
 
 export class ActionParams {
@@ -52,7 +53,7 @@ export class ActionParams {
 
             const bodyJson = withValueOrBadRequest<string>(this.req.body.document);
             const body = JSON.parse(bodyJson);
-            return new SafeObjectWrapper<T>(body);
+            return new XSafeObjectWrapper<T>(body);
         }
         else {
 
@@ -67,14 +68,14 @@ export class ActionParams {
             if (nullOrUndefProps.length > 0)
                 throw new Error(`Null or undefined properties found on object: [${nullOrUndefProps.join(', ')}]!`);
 
-            return new SafeObjectWrapper<T>(body);
+            return new XSafeObjectWrapper<T>(body);
         }
     }
 
     getQuery<T = any>() {
 
         const query = withValueOrBadRequest<T>(this.req.query);
-        return new SafeObjectWrapper<T>(query);
+        return new XSafeObjectWrapper<T>(query);
     }
 
     getFiles() {

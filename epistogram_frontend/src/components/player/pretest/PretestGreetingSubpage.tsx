@@ -1,37 +1,31 @@
 import { Flex } from '@chakra-ui/react';
-import { usePretestData } from '../../../services/api/pretestApiService';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../services/core/navigatior';
-import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
-import { ArrayBuilder } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
 
 export const PretestGreetingSubpage = () => {
 
-    const courseId = Id
-        .create<'Course'>(useIntParam('courseId')!);
+    const { navigate2 } = useNavigation();
+    
+    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestGreetingRoute)
+        .getValue(x => x.courseId, 'int');
 
-    const { navigateToWatchPretest } = useNavigation();
+    const gotToPretest = () => {
 
-    const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
-
-    const startPretestExam = () => {
-
-        navigateToWatchPretest(courseId);
+        navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId });
     };
 
     return (
         <ExamLayout
             headerCenterText='Szintfelmérő vizsga'
-            footerButtons={new ArrayBuilder()
-                .add({
-                    title: 'Kezdés',
-                    action: startPretestExam
-                })
-                .getArray()}>
+            footerButtons={[{
+                title: 'Kezdés',
+                action: gotToPretest
+            }]}>
 
             <Flex
                 direction="column"

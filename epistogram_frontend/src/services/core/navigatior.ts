@@ -12,6 +12,9 @@ export const useNavigation = () => {
 
     const domNavigate = useNavigate();
 
+    /**
+     * @deprecated use "navigate2"
+     */
     const navigate = useCallback((route: ApplicationRoute, params?: any, query?: any) => {
 
         const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
@@ -29,6 +32,9 @@ export const useNavigation = () => {
             ? routeOrFn(applicationRoutes)
             : routeOrFn as ApplicationRoute<T>;
 
+        if (!params)
+            Logger.logScoped('WARNING', 'Navigating without parameters! Route: ' + route.route.getAbsolutePath());
+
         const replacedPath = getUrl(route.route.getAbsolutePath(), params);
 
         Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
@@ -44,21 +50,45 @@ export const useNavigation = () => {
     const openNewTab = (url: string) => (window as any).open(url, '_blank')
         .focus();
 
-    const navigateToPlayer = (descriptorCode: string) => navigate(applicationRoutes.playerRoute.watchRoute, { descriptorCode });
+    /**
+     * @deprecated use "navigate2"
+     */
+    const navigateToPlayer = (descriptorCode: string) => navigate2(applicationRoutes.playerRoute.watchRoute, { descriptorCode });
 
+    /**
+     * @deprecated use "navigate2"
+     */
     const navigateToCourseDetails = (courseId: Id<'Course'>, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode });
 
-    const navigateToWatchPrequiz = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.prequizRoute, { courseId });
+    /**
+     * @deprecated use "navigate2"
+     */
+    const navigateToWatchPrequiz = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId });
 
+    /**
+     * @deprecated use "navigate2"
+     */
     const navigateToPretestGreeting = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.pretestGreetingRoute, { courseId });
 
-    const navigateToPretest = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestRoute, { courseId });
+    /**
+     * @deprecated use "navigate2"
+     */
+    const navigateToPretest = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId });
 
-    const navigateToPretestResults = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
+    /**
+     * @deprecated use "navigate2"
+     */
+    const navigateToPretestResults = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
 
-    const navigateToCourseRating = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
+    /**
+     * @deprecated use "navigate2"
+     */
+    const navigateToCourseRating = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
 
-    const navigateToCourseOverview = (courseId: Id<'Course'>) => navigate(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
+    /**
+     * @deprecated use "navigate2"
+     */
+    const navigateToCourseOverview = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
 
     const playCourse = (courseId: Id<'Course'>, stageName: CourseStageNameType, currentItemCode: string | null) => {
 

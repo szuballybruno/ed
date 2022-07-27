@@ -1,22 +1,22 @@
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { usePretestData } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { Id } from '../../../shared/types/versionId';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestSubpage = () => {
 
-    const courseId = Id
-        .create<'Course'>(useIntParam('courseId')!);
+    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestRoute)
+        .getValue(x => x.courseId, 'int');
 
-    const { navigateToWatchPretestResults } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
 
-    const goToFirstWatchItem = () => {
+    const goToPretestResults = () => {
 
-        navigateToWatchPretestResults(courseId);
+        navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
     };
 
     return (
@@ -27,8 +27,8 @@ export const PretestSubpage = () => {
             {pretestData && <ExamQuestions
                 exam={pretestData?.exam}
                 answerSessionId={pretestData?.answerSessionId}
-                onExamFinished={goToFirstWatchItem}
-                handleAbortExam={goToFirstWatchItem}
+                onExamFinished={goToPretestResults}
+                handleAbortExam={goToPretestResults}
                 hideLoading />}
         </LoadingFrame>
     );

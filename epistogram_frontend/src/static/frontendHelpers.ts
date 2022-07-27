@@ -9,8 +9,8 @@ import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
@@ -319,7 +319,7 @@ export const useIsMatchingCurrentRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
 
-    return (appRoute: ApplicationRoute) => {
+    return (appRoute: ApplicationRoute<any>) => {
 
         if (!appRoute)
             throw new Error('Route is null or undefined!');
@@ -356,12 +356,12 @@ export const useGetCurrentAppRoute = () => {
 
     const isRouteProp = (x: any) => !!x.route;
 
-    const getMatchingRoutes = (appRoute: ApplicationRoute): ApplicationRoute => {
+    const getMatchingRoutes = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> => {
 
         // get subroutes 
         const subRoutes = Object
             .values(appRoute)
-            .filter(x => isRouteProp(x)) as ApplicationRoute[];
+            .filter(x => isRouteProp(x)) as ApplicationRoute<any>[];
 
         // exit if no subroutes found
         if (subRoutes.length === 0)
