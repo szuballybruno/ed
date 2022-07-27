@@ -76,4 +76,18 @@ export class PrequizController {
         return await this._prequizService
             .answerPrequizQuestionAsync(params.principalId, questionId, courseId, answerIdAsIdType, value);
     };
+
+    @XControllerAction(apiRoutes.prequiz.finishPrequiz, { isPost: true })
+    async finishPrequizAction(params: ActionParams) {
+
+        const body = params
+            .getFromParameterized(apiRoutes.prequiz.finishPrequiz)
+            .body;
+
+        const courseId = body
+            .getValue(x => x.courseId, 'int');
+
+        await this._prequizService
+            .finishPrequiz(params.principalId, courseId);
+    }
 }

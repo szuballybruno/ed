@@ -45,6 +45,7 @@ import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackS
 import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
+import { PrequizCompletion } from '../../models/entity/prequiz/PrequizCompletion';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
 import { Question } from '../../models/entity/question/Question';
@@ -420,6 +421,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         ],
 
         entities: [
+            PrequizCompletion,
             VideoVersion,
             Video,
             ExamVersion,

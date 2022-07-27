@@ -10,24 +10,37 @@ RETURNS TRIGGER
 LANGUAGE plpgsql 
 AS $$
 DECLARE
-  var_data record;
+  var_pretest_comp record;
+  var_prequiz_comp record;
 BEGIN
 
-    -- TODO: check prequiz
-    -- ...
+    -- check prequiz
+    SELECT *
+    FROM public.prequiz_completion pc
+    WHERE pc.user_id = NEW.user_id
+    AND pc.course_id = NEW.course_id
+    INTO var_prequiz_comp;
+
+	IF (var_prequiz_comp IS NULL AND 
+        (NEW.stage_name = 'pretest' OR 
+        NEW.stage_name = 'pretest_results' OR
+        NEW.stage_name = 'watch' OR 
+        NEW.stage_name = 'finished'))
+	    THEN RAISE EXCEPTION 'Trying to set stage to "%", but "prequiz" is not yet completed!', NEW.stage_name;
+	END IF;
 
     -- check pretest
 	SELECT *
 	FROM public.pretest_completion_view pcv
     WHERE pcv.course_id = NEW.course_id 
     AND pcv.user_id = NEW.user_id 
-	INTO var_data;
+	INTO var_pretest_comp;
 
-	IF (var_data.is_completed = false AND 
+	IF (var_pretest_comp.is_completed = false AND 
         (NEW.stage_name = 'pretest_results' OR
         NEW.stage_name = 'watch' OR 
         NEW.stage_name = 'finished'))
-	    THEN RAISE EXCEPTION 'Trying to set stage to "%", but pretest is not yet completed!', NEW.stage_name;
+	    THEN RAISE EXCEPTION 'Trying to set stage to "%", but "pretest" is not yet completed!', NEW.stage_name;
 	END IF;
 	
 	return NEW;
