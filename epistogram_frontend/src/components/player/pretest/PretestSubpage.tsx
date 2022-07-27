@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { usePretestData } from '../../../services/api/pretestApiService';
+import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { ExamQuestions } from '../../exam/ExamQuestions';
@@ -12,9 +12,14 @@ export const PretestSubpage = () => {
 
     const { navigate2 } = useNavigation();
 
-    const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
+    const { pretestData, pretestDataError, pretestDataState } = PretestApiService.usePretestData(courseId);
+    const { finishPretest } = PretestApiService.useFinishPretest();
 
-    const goToPretestResults = () => {
+    const answerSessionId = pretestData?.answerSessionId!;
+
+    const handleFinishPretest = async () => {
+
+        await finishPretest({ answerSessionId });
 
         navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
     };
@@ -27,8 +32,8 @@ export const PretestSubpage = () => {
             {pretestData && <ExamQuestions
                 exam={pretestData?.exam}
                 answerSessionId={pretestData?.answerSessionId}
-                onExamFinished={goToPretestResults}
-                handleAbortExam={goToPretestResults}
+                onExamFinished={handleFinishPretest}
+                handleAbortExam={handleFinishPretest}
                 hideLoading />}
         </LoadingFrame>
     );

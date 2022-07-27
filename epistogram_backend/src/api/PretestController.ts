@@ -49,4 +49,16 @@ export class PretestController {
         return this._pretestService
             .getPretestExamIdAsync(courseId);
     };
+
+    @XControllerAction(apiRoutes.pretest.finishPretest, { isPost: true })
+    async finishPretestAction(params: ActionParams) {
+
+        const answerSessionId = params
+            .getFromParameterized(apiRoutes.pretest.finishPretest)
+            .body
+            .getValue(x => x.answerSessionId, 'int');
+
+        return this._pretestService
+            .finishPretestAsync(params.principalId, answerSessionId);
+    }
 }

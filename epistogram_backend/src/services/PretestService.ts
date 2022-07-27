@@ -30,7 +30,7 @@ export class PretestService {
         private _questionAnswerService: QuestionAnswerService,
         tempomatService: TempomatService) {
 
-            this._tempomatService = tempomatService;
+        this._tempomatService = tempomatService;
     }
 
     async createPretestExamAsync(courseId: Id<'Course'>) {
@@ -138,7 +138,7 @@ export class PretestService {
                 tempomatCalculationData.startDate,
                 tempomatCalculationData.tempomatMode,
                 tempomatCalculationData.tempomatAdjustmentValue
-        );
+            );
 
         const recommendedItemsPerDay = this._tempomatService
             .calculateRecommendedItemsPerDay(
@@ -149,16 +149,16 @@ export class PretestService {
             );
 
         const {
-            originalPrevisionedCompletionDate, 
+            originalPrevisionedCompletionDate,
             requiredCompletionDate
         } = tempomatCalculationData;
 
         return this._mapperSerice
             .mapTo(PretestResultDTO, [
-                view, 
-                courseView, 
-                originalPrevisionedCompletionDate, 
-                requiredCompletionDate, 
+                view,
+                courseView,
+                originalPrevisionedCompletionDate,
+                requiredCompletionDate,
                 recommendedItemsPerDay
             ]);
     }
@@ -178,5 +178,17 @@ export class PretestService {
         // return {
         //     id: exam.id
         // } as IdResultDTO;
+    }
+
+    /**
+     * Finishes a pretest exam 
+     */
+    async finishPretestAsync(
+        principalId: PrincipalId,
+        answerSessionId: Id<'AnswerSession'>) {
+
+        await this
+            ._examService
+            .finishExamAsync(principalId, answerSessionId);
     }
 }

@@ -1,6 +1,6 @@
 import { Flex, Grid, Image } from '@chakra-ui/react';
 import { CourseApiService } from '../../../services/api/courseApiService';
-import { usePretestResults } from '../../../services/api/pretestApiService';
+import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { CourseModeType } from '../../../shared/types/sharedTypes';
@@ -64,7 +64,7 @@ export const PretestResultsSubpage = () => {
 
     const { navigateToPlayer } = useNavigation();
 
-    const { pretestResults, pretestResultsError, pretestResultsState } = usePretestResults(courseId);
+    const { pretestResults, pretestResultsError, pretestResultsState } = PretestApiService.usePretestResults(courseId);
     const correctAnswerRate = pretestResults?.correctAnswerRate ?? 0;
     const isBeginner = correctAnswerRate < 50;
 
