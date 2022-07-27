@@ -1,7 +1,7 @@
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from '../../../services/api/prequizApiService';
+import { PrequizApiService } from '../../../services/api/prequizApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
@@ -21,16 +21,27 @@ export const PrequizSubpage = () => {
 
     const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
-    const { questions } = usePrequizQuestions(courseId);
+    const { questions } = PrequizApiService.usePrequizQuestions(courseId);
+
+    const { finishPrequiz } = PrequizApiService.useFinishPrequiz();
+
+    const handleFinishPrequizAsync = async () => {
+
+        await finishPrequiz({
+            courseId
+        });
+
+        navigate2(r => r.playerRoute.pretestGreetingRoute, { courseId });
+    };
 
     const paging = usePaging({
         items: questions,
-        onNextOverNavigation: () => navigate2(r => r.playerRoute.pretestGreetingRoute, { courseId })
+        onNextOverNavigation: handleFinishPrequizAsync
     });
     const question = paging.currentItem;
 
-    const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(courseId, question?.id ?? null);
-    const { answerPrequizQuestionAsync, answerPrequizQuestionState } = useAnswerPrequizQuestion();
+    const { userAnswer, userAnswerError, userAnswerState } = PrequizApiService.usePrequizUserAnswer(courseId, question?.id ?? null);
+    const { answerPrequizQuestionAsync, answerPrequizQuestionState } = PrequizApiService.useAnswerPrequizQuestion();
 
     const currentQuestionIndex = paging.currentIndex;
     const totalQuestionsCount = questions.length;

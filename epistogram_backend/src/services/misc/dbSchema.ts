@@ -396,9 +396,8 @@ export const createDBSchema = (): XDBMSchemaType => {
                 tableName: 'role',
                 fileName: 'role_constraint'
             },
-            {
-                fileName: 'course_item_completion_constraints'
-            }
+            { fileName: 'course_item_completion_constraints' },
+            { fileName: 'prequiz_completion_constraints' }
         ],
 
         indices: [
