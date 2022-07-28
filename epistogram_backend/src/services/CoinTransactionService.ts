@@ -35,16 +35,16 @@ export class CoinTransactionService {
         await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
     }
 
-    getPrincipalCoinBalance(userId: PrincipalId): ControllerActionReturnType {
+    getPrincipalCoinBalance(principalId: PrincipalId): ControllerActionReturnType {
 
         return {
             action: async () => {
 
-                return await this.getCoinBalance(userId, Id.create<'User'>(userId.toSQLValue()));
+                return await this.getCoinBalance(principalId, principalId.getId());
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
             }
         }
     }
@@ -83,18 +83,18 @@ export class CoinTransactionService {
     }
 
     giftCoinsToUserAsync(
-        principalId: PrincipalId,
-        userId: Id<'User'>,
-        amount: number): ControllerActionReturnType {
+        principalId: PrincipalId
+    ): ControllerActionReturnType {
 
         return {
             action: async () => {
-                await this._ormConnectionService
-                    .createAsync(CoinTransaction, {
-                        userId,
-                        amount,
-                        isGifted: true
-                    } as CoinTransaction);
+                const coinTransactions = await this._ormConnectionService
+                    .query(CoinTransactionView, { userId: principalId.toSQLValue() })
+                    .where('userId', '=', 'userId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(CoinTransactionDTO, [coinTransactions]);
             },
             auth: async () => {
                 return this._authorizationService

@@ -2,10 +2,9 @@ WITH
 video_completed_view AS 
 (
 	SELECT 
-		uvpb.user_id,
-		uvpb.video_version_id
-	FROM public.user_video_progress_bridge uvpb
-	WHERE uvpb.completion_date IS NOT NULL
+		cicv.user_id,
+		cicv.video_version_id
+	FROM public.course_item_completion_view cicv
 ),
 exam_completed_view AS 
 (
@@ -54,7 +53,9 @@ latest_answer_session AS
 	ON asv.user_id = u.id
 	AND asv.exam_version_id = ev.id
 
-	WHERE asv.is_completed = true
+	INNER JOIN public.course_item_completion_view cicv
+	ON cicv.answer_session_id = asv.answer_session_id
+	AND cicv.user_id = u.id
 
 	GROUP BY u.id, ev.id
 ),

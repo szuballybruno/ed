@@ -33,30 +33,26 @@ export class CoinTransactionsController implements XController<CoinTransactionsC
     getCoinBalanceOfUserAction(params: ActionParams) {
 
         const userId = params
-            .getQuery<any>()
+            .getQuery<{ userId: Id<'User'> }>()
             .getValue(x => x.userId, 'int');
 
-        const userIdAsIdType = Id.create<'User'>(userId);
-
         return this._coinTransactionService
-            .getCoinBalanceAsync(params.principalId, userIdAsIdType);
+            .getCoinBalance(params.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
     giftCoinsToUser(params: ActionParams) {
 
         const dto = params
-            .getBody<{ userId: number, amount: number }>();
+            .getBody<{ userId: Id<'User'>, amount: number }>();
 
         const userId = dto
             .getValue(x => x.userId, 'int');
-
-        const userIdAsIdType = Id.create<'User'>(userId);
 
         const amount = dto
             .getValue(x => x.amount, 'int');
 
         return this._coinTransactionService
-            .giftCoinsToUserAsync(params.principalId, userIdAsIdType, amount);
+            .giftCoinsToUserAsync(params.principalId, userId, amount);
     };
 }

@@ -7,6 +7,9 @@ export class LoggerService {
 
     }
 
+    /**
+     * @deprecated use scoped logging 
+     */
     log(text: string) {
 
         log(text);

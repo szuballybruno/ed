@@ -15,11 +15,11 @@ export const HomePageCourseStats = (props: {
 }) => {
 
     const { activeCoursesPaging } = props;
-    const courseId = activeCoursesPaging?.currentItem?.courseId ?? null;
+    const courseId = activeCoursesPaging?.currentItem?.courseId;
 
-    const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId, !!courseId);
+    const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
-    const { recommendedItemQuota } = useRecommendedItemQuota(courseId!, !!currentCourse);
+    const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
 
     const estimatedCompletionDateString = recommendedItemQuota?.previsionedCompletionDate
         ? new Date(recommendedItemQuota?.previsionedCompletionDate)

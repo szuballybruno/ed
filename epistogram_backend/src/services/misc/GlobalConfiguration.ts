@@ -3,7 +3,7 @@ import { log } from './logger';
 
 type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
 
-export type LogScopeType = 'ORM' | 'BOOTSTRAP' | 'ROLLING SESSION';
+export type LogScopeType = 'ORM' | 'BOOTSTRAP' | 'ROLLING SESSION' | 'GIVEN ANSWER' | 'GENERIC';
 
 export class GlobalConfiguration {
 
@@ -73,7 +73,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['ROLLING SESSION'] as LogScopeType[],
+        enabledScopes: ['ROLLING SESSION', 'GENERIC'] as LogScopeType[],
     };
 
     constructor(rootDirectory: string) {

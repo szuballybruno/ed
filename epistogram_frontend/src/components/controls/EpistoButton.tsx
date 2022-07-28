@@ -12,6 +12,10 @@ export type EpistoButtonPropsType = {
     padding?: string,
     fontSize?: string,
     variant?: 'outlined' | 'plain' | 'colored' | 'light',
+
+    /**
+     * @deprecated use globalCssTypes
+     */
     style?: CSSProperties,
     className?: string,
     icon?: ReactNode,

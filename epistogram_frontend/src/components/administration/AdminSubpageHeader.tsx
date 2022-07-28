@@ -10,7 +10,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 
 export const AdminSubpageHeader = (props: {
-    tabMenuItems?: ApplicationRoute[],
+    tabMenuItems?: ApplicationRoute<any>[],
     children?: ReactNode,
     onSave?: () => void,
     headerButtons?: ButtonType[],

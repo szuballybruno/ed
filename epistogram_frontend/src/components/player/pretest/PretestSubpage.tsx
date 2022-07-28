@@ -1,22 +1,27 @@
-import { usePretestData } from '../../../services/api/pretestApiService';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { Id } from '../../../shared/types/versionId';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestSubpage = () => {
 
-    const courseId = Id
-        .create<'Course'>(useIntParam('courseId')!);
+    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestRoute)
+        .getValue(x => x.courseId, 'int');
 
-    const { navigateToWatchPretestResults } = useNavigation();
+    const { navigate2 } = useNavigation();
 
-    const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
+    const { pretestData, pretestDataError, pretestDataState } = PretestApiService.usePretestData(courseId);
+    const { finishPretest } = PretestApiService.useFinishPretest();
 
-    const goToFirstWatchItem = () => {
+    const answerSessionId = pretestData?.answerSessionId!;
 
-        navigateToWatchPretestResults(courseId);
+    const handleFinishPretest = async () => {
+
+        await finishPretest({ answerSessionId });
+
+        navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
     };
 
     return (
@@ -27,8 +32,8 @@ export const PretestSubpage = () => {
             {pretestData && <ExamQuestions
                 exam={pretestData?.exam}
                 answerSessionId={pretestData?.answerSessionId}
-                onExamFinished={goToFirstWatchItem}
-                handleAbortExam={goToFirstWatchItem}
+                onExamFinished={handleFinishPretest}
+                handleAbortExam={handleFinishPretest}
                 hideLoading />}
         </LoadingFrame>
     );

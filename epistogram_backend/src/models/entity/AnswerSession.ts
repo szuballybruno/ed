@@ -13,21 +13,13 @@ export class AnswerSession {
     @XViewColumn()
     id: Id<'AnswerSession'>;
 
-    @Column({ nullable: true, type: 'timestamptz' })
+    @Column({ type: 'timestamptz' })
     @XViewColumn()
-    startDate: Date | null;
-
-    @Column({ nullable: true, type: 'timestamptz' })
-    @XViewColumn()
-    endDate: Date | null;
+    startDate: Date;
 
     @Column()
     @XViewColumn()
     isPractise: boolean;
-
-    @Column()
-    @XViewColumn()
-    isCompleted: boolean;
 
     //
     // TO MANY

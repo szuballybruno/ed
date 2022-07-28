@@ -15,11 +15,13 @@ import { RolePermissionBridge } from '../../models/entity/authorization/RolePerm
 import { CoinTransaction } from '../../models/entity/CoinTransaction';
 import { Comment } from '../../models/entity/Comment';
 import { Company } from '../../models/entity/Company';
+import { ConstantValue } from '../../models/entity/ConstantValue';
 import { Course } from '../../models/entity/course/Course';
 import { CourseData } from '../../models/entity/course/CourseData';
 import { CourseVersion } from '../../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../../models/entity/CourseCategory';
+import { CourseItemCompletion } from '../../models/entity/CourseItemCompletion';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from '../../models/entity/courseRating/CourseRatingQuestionUserAnswer';
@@ -43,6 +45,7 @@ import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackS
 import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
 import { PrequizAnswer } from '../../models/entity/prequiz/PrequizAnswer';
+import { PrequizCompletion } from '../../models/entity/prequiz/PrequizCompletion';
 import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
 import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer';
 import { Question } from '../../models/entity/question/Question';
@@ -57,7 +60,6 @@ import { TeacherInfo } from '../../models/entity/TeacherInfo';
 import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
 import { User } from '../../models/entity/User';
 import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
-import { UserExamProgressBridge } from '../../models/entity/UserExamProgressBridge';
 import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
 import { Video } from '../../models/entity/video/Video';
@@ -106,6 +108,7 @@ import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTrai
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
+import { PretestCompletionView } from '../../models/views/PretestCompletionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
 import { QuestionDataView } from '../../models/views/QuestionDataView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
@@ -152,6 +155,7 @@ import { getAnswerVersionsSeedData } from '../../sql/seed/seed_answer_versions';
 import { getCommentsSeedData } from '../../sql/seed/seed_comments';
 import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
 import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
+import { getConstantValuesSeedData } from '../../sql/seed/seed_constant_values';
 import { getCourseSeedData } from '../../sql/seed/seed_courses';
 import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
 import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
@@ -199,6 +203,8 @@ import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 export const createDBSchema = (): XDBMSchemaType => {
 
     const injector = new XDInjector<Function>()
+        .add(getConstantValuesSeedData, [], ConstantValue)
+        .add(() => 1, [], CourseItemCompletion)
         .add(getQuestionTypeSeedData, [], QuestionType)
         .add(getPermissionsSeedData, [], Permission)
         .add(getJobTitlesSeedData, [], JobTitle)
@@ -263,12 +269,12 @@ export const createDBSchema = (): XDBMSchemaType => {
         views: [
             ['basic', 'given_answer_score_view', GivenAnswerScoreView],
             ['basic', 'activity_streak_view', ActivityStreakView],
+            ['basic', 'course_item_completion_view'],
             ['basic', 'answer_session_view', AnswerSessionView],
             ['basic', 'coin_acquire_per_course_view'],
             ['basic', 'coin_balance_view', CoinBalanceView],
             ['basic', 'comment_list_view', CommentListView],
             ['basic', 'company_permission_view'],
-            ['basic', 'course_item_completed_view'],
             ['basic', 'course_item_view'],
             ['basic', 'course_module_overview_view', CourseModuleOverviewView],
             ['basic', 'course_questions_success_view'],
@@ -298,6 +304,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'video_version_view', VideoVersionView],
             ['basic', 'exam_version_view', ExamVersionView],
             ['basic', 'course_shop_item_list_view', CourseShopItemListView],
+            ['basic', 'pretest_completion_view', PretestCompletionView],
             ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view
@@ -375,20 +382,22 @@ export const createDBSchema = (): XDBMSchemaType => {
         constraints: [
             {
                 tableName: 'coin_transaction',
-                name: 'coin_transaction_valid_relation_enforce_constraint'
+                fileName: 'coin_transaction_valid_relation_enforce_constraint'
             },
             {
                 tableName: 'activation_code',
-                name: 'activation_code_uniqe_constraint'
+                fileName: 'activation_code_uniqe_constraint'
             },
             {
                 tableName: 'role_permission_bridge',
-                name: 'role_permission_bridge_constraint'
+                fileName: 'role_permission_bridge_constraint'
             },
             {
                 tableName: 'role',
-                name: 'role_constraint'
-            }
+                fileName: 'role_constraint'
+            },
+            { fileName: 'course_item_completion_constraints' },
+            { fileName: 'prequiz_completion_constraints' }
         ],
 
         indices: [
@@ -406,10 +415,12 @@ export const createDBSchema = (): XDBMSchemaType => {
             'role_assignment_validity_check_trigger',
             'exam_pretest_module_integrity_trigger',
             'permission_assignment_validity_check_trigger',
-            'role_permission_bridge_validity_trigger'
+            'role_permission_bridge_validity_trigger',
+            'ucb_stage_trigger'
         ],
 
         entities: [
+            PrequizCompletion,
             VideoVersion,
             Video,
             ExamVersion,
@@ -476,8 +487,9 @@ export const createDBSchema = (): XDBMSchemaType => {
             CourseRatingQuestion,
             CourseRatingQuestionUserAnswer,
             UserVideoProgressBridge,
-            UserExamProgressBridge,
-            TempomatAdjustmentValue
+            TempomatAdjustmentValue,
+            CourseItemCompletion,
+            ConstantValue
         ],
     };
 

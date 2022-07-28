@@ -224,7 +224,8 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
              * Get controller action and execute it
              */
             const controllerAction: ApiActionType<TActionParams> = controllerInstance[functionName];
-            const controllerActionResultOrData = await controllerAction(actionParams);
+            const boundAction = controllerAction.bind(controllerInstance);
+            const controllerActionResultOrData = await boundAction(actionParams);
 
             /**
              * If controller action returned a ControllerActionReturnType 

@@ -35,11 +35,11 @@ export class CompanyService extends QueryServiceBase<Company> {
             .mapTo(CompanyDTO, [companies]);
     }
 
-    async getCompaniesAdminAsync(userId: PrincipalId) {
+    async getCompaniesAdminAsync(principalId: PrincipalId) {
 
         const companies = await this._ormService
-            .query(CompanyView, { userId })
-            .where('userId', '=', 'userId')
+            .query(CompanyView, { principalId })
+            .where('userId', '=', 'principalId')
             .getMany();
 
         return this._mapperService
@@ -62,16 +62,15 @@ export class CompanyService extends QueryServiceBase<Company> {
             }));
     }
 
-    async getAvailableCompaniesForNewRolesAsync(userId: PrincipalId) {
+    async getAvailableCompaniesForNewRolesAsync(principalId: PrincipalId) {
+
+        const permissionCode: PermissionCodeType = 'ASSIGN_CUSTOM_ROLES';
 
         const companies = await this._ormService
-            .query(Company, {
-                userId,
-                permissionCode: 'ASSIGN_CUSTOM_ROLES' as PermissionCodeType
-            })
+            .query(Company, { principalId, permissionCode })
             .select(Company)
             .innerJoin(User, builder => builder
-                .on('id', '=', 'userId'))
+                .on('id', '=', 'principalId'))
             .innerJoin(UserPermissionView, builder => builder
                 .on('assigneeUserId', '=', 'id', User)
                 .and('permissionCode', '=', 'permissionCode')

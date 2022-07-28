@@ -171,12 +171,12 @@ export class UserService {
         return {
             action: async () => {
 
-                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+                const userId = principalId.getId();
 
-                // save user 
+                // save user
                 await this._ormService
                     .save(User, {
-                        id: userIdAsIdType,
+                        id: userId,
                         lastName: dto.lastName,
                         firstName: dto.firstName,
                         phoneNumber: dto.phoneNumber
@@ -228,11 +228,11 @@ export class UserService {
 
         return {
             action: async () => {
-                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+                const userId = principalId.getId();
 
                 return this._ormService
                     .save(User, {
-                        id: userIdAsIdType,
+                        id: userId,
                         firstName: dto.firstName,
                         lastName: dto.lastName,
                         phoneNumber: dto.phoneNumber
@@ -381,7 +381,7 @@ export class UserService {
     /**
      * Delete a user entity by it's id.
      */
-    deleteUserAsync(userId: PrincipalId, deletedUserId: Id<'User'>) {
+    deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
         return {
             action: async () => {
@@ -398,7 +398,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'DELETE_USER')
+                    .getCheckPermissionResultAsync(principalId, 'DELETE_USER')
             }
         }
     };

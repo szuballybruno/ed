@@ -1,39 +1,40 @@
-import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
 import { PretestDataDTO } from '../../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostDataUnsafe } from '../core/httpClient';
 
-export const usePretestData = (courseId: Id<'Course'>) => {
+export const PretestApiService = {
 
-    const qr = useReactQuery2<PretestDataDTO>(apiRoutes.pretest.getPretestData, { courseId });
+    usePretestData: (courseId: Id<'Course'>) => {
 
-    return {
-        pretestData: qr.data,
-        pretestDataError: qr.error,
-        pretestDataState: qr.state
-    };
-};
+        const qr = useReactQuery2<PretestDataDTO>(apiRoutes.pretest.getPretestData, { courseId });
 
-export const usePretestResults = (courseId: Id<'Course'>) => {
+        return {
+            pretestData: qr.data,
+            pretestDataError: qr.error,
+            pretestDataState: qr.state
+        };
+    },
 
-    const qr = useReactQuery2<PretestResultDTO>(apiRoutes.pretest.getPretestResults, { courseId });
+    usePretestResults: (courseId: Id<'Course'>) => {
 
-    return {
-        pretestResults: qr.data,
-        pretestResultsError: qr.error,
-        pretestResultsState: qr.state
-    };
-};
+        const qr = useReactQuery2<PretestResultDTO>(apiRoutes.pretest.getPretestResults, { courseId });
 
-export const usePretestExamId = (courseId: Id<'Course'>) => {
+        return {
+            pretestResults: qr.data,
+            pretestResultsError: qr.error,
+            pretestResultsState: qr.state
+        };
+    },
 
-    const qr = useReactQuery2<IdResultDTO>(apiRoutes.pretest.getPretestExamId, { courseId });
+    useFinishPretest: () => {
 
-    return {
-        pretestExamId: qr.data?.id ?? null,
-        pretestExamIdError: qr.error,
-        pretestExamIdState: qr.state
-    };
+        const qr = usePostDataUnsafe(apiRoutes.pretest.finishPretest);
+
+        return {
+            finishPretest: qr.postDataAsync
+        };
+    }
 };

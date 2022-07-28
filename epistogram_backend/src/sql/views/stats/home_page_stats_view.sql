@@ -12,10 +12,12 @@ SELECT
     -- completed video count in the last 30 days
     (
         SELECT 
-            COUNT(uvpb.completion_date)::int
-        FROM public.user_video_progress_bridge uvpb
-        WHERE uvpb.user_id = u.id
-        AND uvpb.completion_date > CURRENT_DATE - 30 
+            COUNT(cicv.id)::int
+        FROM public.course_item_completion_view cicv
+        
+        WHERE cicv.user_id = u.id
+        AND cicv.completion_date > CURRENT_DATE - 30 
+        AND cicv.video_version_id IS NOT NULL 
     ) completed_videos_last_month,
 
     -- performance last month

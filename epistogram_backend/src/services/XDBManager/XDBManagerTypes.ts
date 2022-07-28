@@ -1,8 +1,8 @@
 import { PropConstraintType } from '../../utilities/misc';
 
 export type XDBMConstraintType = {
-    name: string;
-    tableName: string;
+    fileName: string;
+    tableName?: string;
 }
 
 export type XDMBIndexType = {

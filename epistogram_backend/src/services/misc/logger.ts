@@ -11,12 +11,24 @@ export const ConsoleColor = constraintFn<ConsoleColorType>()({
     yellow: { code: '33m' }
 });
 
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
 export const logWarning = (content: any) => log(content, { entryType: 'warning' });
 
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
 export const logError = (content: any) => log(content, { entryType: 'error' });
 
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
 export const logSecondary = (content: any) => log(content, { entryType: 'secondary' });
 
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
 export const log = (content: any, opts?: {
     entryType?: LogEntryType,
     color?: ConsoleColorType,

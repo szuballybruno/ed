@@ -97,7 +97,7 @@ export const httpDeleteAsync = async (urlEnding: string) => {
  * Post a json payload, without implicitly handling errors, 
  * meaning exceptions will bubble up, and must be handled by the caller funciton.
  */
-export const usePostDataUnsafe = <TData = any, TResult = void>(url: string) => {
+export const usePostDataUnsafe = <TData = any, TResult = void>(url: string | ParametrizedRouteType<RouteParameterType<TData, any>>) => {
 
     const [state, setState] = useState<LoadingStateType>('idle');
     const [result, setResult] = useState<TResult | null>(null);

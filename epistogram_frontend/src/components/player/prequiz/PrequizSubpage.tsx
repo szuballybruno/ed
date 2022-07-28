@@ -1,7 +1,7 @@
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useAnswerPrequizQuestion, usePrequizQuestions, usePrequizUserAnswer } from '../../../services/api/prequizApiService';
+import { PrequizApiService } from '../../../services/api/prequizApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
@@ -20,14 +20,28 @@ export const PrequizSubpage = () => {
         .create<'Course'>(useIntParam('courseId')!);
 
     const showError = useShowErrorDialog();
-    const { navigateToWatchPretestGreeting } = useNavigation();
-    const { questions } = usePrequizQuestions(courseId);
+    const { navigate2 } = useNavigation();
+    const { questions } = PrequizApiService.usePrequizQuestions(courseId);
 
-    const paging = usePaging({ items: questions });
+    const { finishPrequiz } = PrequizApiService.useFinishPrequiz();
+
+    const handleFinishPrequizAsync = async () => {
+
+        await finishPrequiz({
+            courseId
+        });
+
+        navigate2(r => r.playerRoute.pretestGreetingRoute, { courseId });
+    };
+
+    const paging = usePaging({
+        items: questions,
+        onNextOverNavigation: handleFinishPrequizAsync
+    });
     const question = paging.currentItem;
 
-    const { userAnswer, userAnswerError, userAnswerState } = usePrequizUserAnswer(courseId, question?.id ?? null);
-    const { answerPrequizQuestionAsync, answerPrequizQuestionState } = useAnswerPrequizQuestion();
+    const { userAnswer, userAnswerError, userAnswerState } = PrequizApiService.usePrequizUserAnswer(courseId, question?.id ?? null);
+    const { answerPrequizQuestionAsync, answerPrequizQuestionState } = PrequizApiService.useAnswerPrequizQuestion();
 
     const currentQuestionIndex = paging.currentIndex;
     const totalQuestionsCount = questions.length;
@@ -49,13 +63,7 @@ export const PrequizSubpage = () => {
                 courseId
             });
 
-            if (paging.isLast) {
-
-                navigateToWatchPretestGreeting(courseId);
-            } else {
-
-                paging.next();
-            }
+            paging.next();
 
         } catch (e) {
 
@@ -84,17 +92,19 @@ export const PrequizSubpage = () => {
 
     return (
         <ExamLayout
-            headerLeftItem={<Flex align="center">
+            headerLeftItem={(
+                <Flex align="center">
 
-                <img
-                    alt=""
-                    src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
-                    className="square35" />
+                    <img
+                        alt=""
+                        src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
+                        className="square35" />
 
-                <EpistoFont style={{ marginLeft: '10px' }}>
-                    {totalQuestionsCount}/{currentQuestionIndex + 1}
-                </EpistoFont>
-            </Flex>}
+                    <EpistoFont style={{ marginLeft: '10px' }}>
+                        {totalQuestionsCount}/{currentQuestionIndex + 1}
+                    </EpistoFont>
+                </Flex>
+            )}
             headerCenterText="Kurzus előtti felmérő"
             footerButtons={new ArrayBuilder()
                 .addIf(canContinue, {

@@ -30,7 +30,16 @@ export class PersonalityAssessmentService {
     /**
      * Returns the personality assessment DTO, that can be used externally.
      */
+<<<<<<< HEAD
     getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
+=======
+    async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
+
+        const userId = principalId.getId();
+
+        const chartData = await this.getUserPersonalityDataAsync(userId);
+        const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userId);
+>>>>>>> 39430a01ce8d8feac09824628a5eafba501b4414
 
         return {
             action: async () => {

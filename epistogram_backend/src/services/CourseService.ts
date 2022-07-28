@@ -117,21 +117,21 @@ export class CourseService {
      * Returns course detals 
      */
     getCourseDetailsAsync(
-        userId: PrincipalId,
+        principalId: PrincipalId,
         courseId: Id<'Course'>
     ): ControllerActionReturnType {
 
         return {
             action: async () => {
                 const courseDetailsView = await this._ormService
-                    .query(CourseDetailsView, { userId: userId.toSQLValue(), courseId })
-                    .where('userId', '=', 'userId')
+                    .query(CourseDetailsView, { principalId, courseId })
+                    .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
 
                 const moduleViews = await this._ormService
-                    .query(CourseItemPlaylistView, { userId, courseId })
-                    .where('userId', '=', 'userId')
+                    .query(CourseItemPlaylistView, { principalId, courseId })
+                    .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
 
@@ -144,7 +144,7 @@ export class CourseService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
 
             }
         }
@@ -559,7 +559,7 @@ export class CourseService {
      * Returns the currently available courses. 
      */
     getAvailableCoursesAsync(
-        userId: PrincipalId,
+        principalId: PrincipalId,
         searchTerm: string,
         filterCategoryId: number | null,
         isFeatured: boolean,
@@ -569,12 +569,12 @@ export class CourseService {
 
         return {
             auth: () => this._authorizationService
-                .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN'),
+                .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN'),
             action: async () => {
 
                 const courses = await this._ormService
-                    .query(AvailableCourseView, { userId })
-                    .where('userId', '=', 'userId')
+                    .query(AvailableCourseView, { principalId })
+                    .where('userId', '=', 'principalId')
                     .and('canView', '=', 'true')
                     .getMany();
 

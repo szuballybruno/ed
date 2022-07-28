@@ -1,3 +1,4 @@
+import { PrequizCompletion } from '../models/entity/prequiz/PrequizCompletion';
 import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
@@ -163,5 +164,18 @@ export class PrequizService {
                     .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
             }
         }
+    }
+
+    /**
+     * Finish prequiz
+     */
+    async finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>) {
+
+        await this
+            ._ormService
+            .createAsync(PrequizCompletion, {
+                courseId,
+                userId: principalId.getId()
+            });
     }
 }

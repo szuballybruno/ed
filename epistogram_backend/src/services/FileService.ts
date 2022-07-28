@@ -38,7 +38,7 @@ export class FileService {
 
         return {
             action: async () => {
-                const userId = Id.create<'User'>(principalId.toSQLValue());
+                const userId = principalId.getId();
 
                 //TODO: Create a validation function
                 if (!['image/png', 'image/jpeg'].includes(file.mimetype))

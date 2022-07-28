@@ -38,7 +38,7 @@ export const CourseItemSelector = (props: {
     const canChangeCourseMode = true;
 
     // http 
-    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, isPlayerLoaded);
+    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
 

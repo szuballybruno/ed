@@ -39,15 +39,15 @@ export class PretestController implements XController<PretestController> {
             .getPretestResultsAsync(params.principalId, courseId);
     };
 
-    @XControllerAction(apiRoutes.pretest.getPretestExamId)
-    getPretestExamIdAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.pretest.finishPretest, { isPost: true })
+    finishPretestAction(params: ActionParams) {
 
-        const courseId = Id
-            .create<'Course'>(params
-                .getQuery<any>()
-                .getValue(x => x.courseId, 'int'));
+        const answerSessionId = params
+            .getFromParameterized(apiRoutes.pretest.finishPretest)
+            .body
+            .getValue(x => x.answerSessionId, 'int');
 
         return this._pretestService
-            .getPretestExamIdAsync(courseId);
-    };
+            .finishPretestAsync(params.principalId, answerSessionId);
+    }
 }

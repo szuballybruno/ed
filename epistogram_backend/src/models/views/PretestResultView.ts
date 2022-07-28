@@ -18,9 +18,5 @@ export class PretestResultView {
 
 	@ViewColumn()
 	@XViewColumn()
-	isCompleted: boolean;
-
-	@ViewColumn()
-	@XViewColumn()
 	correctAnswerRate: number;
 }

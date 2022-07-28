@@ -362,7 +362,6 @@ const marray = [
         ) => {
 
             return instantiate<PretestResultDTO>({
-                isCompleted: prv.isCompleted,
                 correctAnswerRate: prv.correctAnswerRate,
                 firstItemCode: acv.firstItemCode,
                 estimatedCompletionDate: originalPrevisionedCompletionDate,
@@ -1212,7 +1211,7 @@ export const toExamResultDTO = (views: ExamResultView[], examResultStatsView: Ex
         correctAnswerRate: examResultStatsView.correctAnswerRate,
         examLengthSeconds: examResultStatsView.examLengthSeconds,
         examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany)
-    })
+    });
 };
 
 export const toResultAnswerDTO = (view: ExamResultView) => {

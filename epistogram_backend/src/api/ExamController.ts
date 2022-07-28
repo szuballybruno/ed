@@ -41,12 +41,15 @@ export class ExamController implements XController<ExamController> {
     @XControllerAction(apiRoutes.exam.completeExam, { isPost: true })
     completeExamAction(params: ActionParams) {
 
-        const body = params.getBody<{ answerSessionId: number }>();
+        const body = params
+            .getBody<{ answerSessionId: number }>();
+
         const answerSessionId = Id
-            .create<'AnswerSession'>(body.getValue(x => x.answerSessionId, 'int'));
+            .create<'AnswerSession'>(body
+                .getValue(x => x.answerSessionId, 'int'));
 
         return this._examService
-            .completeExamAsync(params.principalId, answerSessionId);
+            .finishExamAsync(params.principalId, answerSessionId);
     };
 
     @XControllerAction(apiRoutes.exam.getExamResults)

@@ -15,7 +15,8 @@ export type ErrorCodeType =
     'activation_code_issue' |
     'deleted' |
     'email_taken' |
-    'no permission';
+    'no permission' | 
+    'forbidden player stage';
 
 // tasks
 export type TaskObjectiveType = 'video' | 'playlist' | 'course' | 'exam';

@@ -6,7 +6,7 @@ import { HasPermissionFnType, useAuthorizationContext } from '../system/Authoriz
 
 export type RenderRoute = {
     element: JSX.Element;
-    route: ApplicationRoute;
+    route: ApplicationRoute<any>;
 
     /**
      * @deprecated

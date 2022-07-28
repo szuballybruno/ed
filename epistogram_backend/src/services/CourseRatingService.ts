@@ -30,15 +30,15 @@ export class CourseRatingService extends ServiceBase {
      * and questions in groups  
      */
     getCourseRatingGroupsAsync(
-        userId: PrincipalId,
+        principalId: PrincipalId,
         courseId: Id<'Course'>
     ): ControllerActionReturnType {
 
         return {
             action: async () => {
                 const views = await this._ormService
-                    .query(CourseRatingQuestionView, { userId: userId.toSQLValue(), courseId })
-                    .where('userId', '=', 'userId')
+                    .query(CourseRatingQuestionView, { principalId, courseId })
+                    .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
 
@@ -64,7 +64,7 @@ export class CourseRatingService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'WATCH_COURSE', { courseId })
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
             }
         }
     }
@@ -73,7 +73,7 @@ export class CourseRatingService extends ServiceBase {
      * Saves multiple course rating answers 
      */
     saveCourseRatingGroupAnswersAsync(
-        userId: PrincipalId,
+        principalId: PrincipalId,
         answersDTO: CourseRatingQuestionAnswersDTO
     ): ControllerActionReturnType {
 
@@ -83,13 +83,13 @@ export class CourseRatingService extends ServiceBase {
 
                 const prevAnswers = await this._ormService
                     .query(CourseRatingQuestionUserAnswer, {
-                        userId: Id.create<'User'>(userId.toSQLValue()),
+                        principalId,
                         courseId,
                         questionIds: answersDTO
                             .answers
                             .map(x => x.quesitonId)
                     })
-                    .where('userId', '=', 'userId')
+                    .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .and('courseRatingQuestionId', '=', 'questionIds')
                     .getMany();
@@ -99,7 +99,7 @@ export class CourseRatingService extends ServiceBase {
                     .map(x => ({
                         id: prevAnswers
                             .firstOrNull(y => y.courseRatingQuestionId === x.quesitonId)?.id!,
-                        userId: Id.create<'User'>(userId.toSQLValue()),
+                        principalId,
                         courseId: courseId,
                         text: x.text ?? undefined,
                         value: x.value ?? undefined,
@@ -111,7 +111,7 @@ export class CourseRatingService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'WATCH_COURSE', { courseId: answersDTO.courseId })
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId: answersDTO.courseId })
             }
         }
     }

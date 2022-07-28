@@ -4,7 +4,6 @@ import { Id } from '../../../shared/types/versionId';
 import { AnswerSession } from '../AnswerSession';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { QuestionVersion } from '../question/QuestionVersion';
-import { UserExamProgressBridge } from '../UserExamProgressBridge';
 import { UserSessionActivity } from '../UserSessionActivity';
 import { Exam } from './Exam';
 import { ExamData } from './ExamData';
@@ -27,10 +26,6 @@ export class ExamVersion {
     // answer sessions
     @XOneToMany<ExamVersion>()(() => AnswerSession, x => x.examVersion)
     answerSessions: AnswerSession[];
-
-    // userProgressBridges
-    @XOneToMany<ExamVersion>()(() => UserExamProgressBridge, x => x.examVersion)
-    userProgressBridges: UserExamProgressBridge[];
 
     // user session activity
     @XOneToMany<ExamVersion>()(() => UserSessionActivity, x => x.examVersion)

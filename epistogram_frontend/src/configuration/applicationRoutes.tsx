@@ -24,13 +24,13 @@ export type ApplicationRoutesType = {
     availableCoursesRoute: ApplicationRoute;
     courseDetailsRoute: ApplicationRoute;
     playerRoute: ApplicationRoute & {
-        watchRoute: ApplicationRoute;
-        prequizRoute: ApplicationRoute;
-        pretestRoute: ApplicationRoute;
-        pretestGreetingRoute: ApplicationRoute;
-        pretestResultsRoute: ApplicationRoute;
-        courseRatingRoute: ApplicationRoute;
-        courseOverviewRoute: ApplicationRoute;
+        watchRoute: ApplicationRoute<{ descriptorCode: string }>;
+        prequizRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
+        pretestRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
+        pretestGreetingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
+        pretestResultsRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
+        courseRatingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
+        courseOverviewRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
     };
     learningRoute: ApplicationRoute & {
         overviewRoute: ApplicationRoute;

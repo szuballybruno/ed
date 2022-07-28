@@ -25,7 +25,6 @@ import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
 import { UserCourseBridge } from './UserCourseBridge';
-import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
 import { VideoRating } from './VideoRating';
 
@@ -226,11 +225,6 @@ export class User {
     @JoinColumn()
     @OneToMany(_ => UserVideoProgressBridge, x => x.user)
     videoProgressBridges: Relation<UserVideoProgressBridge>[];
-
-    // videoProgressBridges
-    @JoinColumn()
-    @OneToMany(_ => UserExamProgressBridge, x => x.user)
-    examProgressBridges: Relation<UserExamProgressBridge>[];
 
     // role assingments
     @JoinColumn()

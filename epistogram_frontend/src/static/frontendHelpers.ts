@@ -4,13 +4,14 @@ import React, { ComponentType, ReactNode, useCallback, useEffect, useMemo, useSt
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { ApplicationRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
@@ -319,7 +320,7 @@ export const useIsMatchingCurrentRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
 
-    return (appRoute: ApplicationRoute) => {
+    return (appRoute: ApplicationRoute<any>) => {
 
         if (!appRoute)
             throw new Error('Route is null or undefined!');
@@ -356,12 +357,12 @@ export const useGetCurrentAppRoute = () => {
 
     const isRouteProp = (x: any) => !!x.route;
 
-    const getMatchingRoutes = (appRoute: ApplicationRoute): ApplicationRoute => {
+    const getMatchingRoutes = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> => {
 
         // get subroutes 
         const subRoutes = Object
             .values(appRoute)
-            .filter(x => isRouteProp(x)) as ApplicationRoute[];
+            .filter(x => isRouteProp(x)) as ApplicationRoute<any>[];
 
         // exit if no subroutes found
         if (subRoutes.length === 0)
@@ -659,12 +660,21 @@ export type QueryResult<T> = {
 
 export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
-    const queryValues = queryParams ? Object.values(queryParams) : [];
+    const queryValues1 = (queryParams
+        ? Object.values(queryParams)
+        : [])
+        .filter(x => !!x);
+
+    const queryValues = queryValues1.length > 0
+        ? queryValues1
+        : EMPTY_ARRAY;
 
     const getFunction = useCallback(() => {
 
         return httpGetAsync(url, queryParams);
     }, [url, queryParams]);
+
+    const queryingEnabled = isEnabled === false ? false : true;
 
     const queryResult = useQuery(
         [url, ...queryValues],
@@ -673,7 +683,7 @@ export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any,
             retry: false,
             refetchOnWindowFocus: false,
             keepPreviousData: true,
-            enabled: isEnabled === false ? false : true
+            enabled: queryingEnabled
         });
 
     const state = useMemo((): LoadingStateType => {
@@ -692,8 +702,11 @@ export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any,
 
     const refetch = useCallback(async () => {
 
+        if (!queryingEnabled)
+            return;
+
         await queryResult.refetch();
-    }, [queryResult.refetch]);
+    }, [queryingEnabled, queryResult.refetch]);
 
     const data = useMemo((): T => {
 

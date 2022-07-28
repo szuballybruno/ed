@@ -23,6 +23,8 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
 import { AuthorizationService } from './AuthorizationService';
 import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { PretestCompletionView } from '../models/views/PretestCompletionView';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 
 export class PlayerService {
 
@@ -54,48 +56,51 @@ export class PlayerService {
         return {
             action: async () => {
 
-                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+
+                const userId = principalId.getId();
 
                 // validate request
-                const { courseId, validItemCode } = await this._validatePlayerDataRequest(principalId, requestedItemCode);
+                const { courseId, validItemCode } = await this
+                    ._validatePlayerDataRequest(principalId, requestedItemCode);
 
                 // set current course 
                 await this._userCourseBridgeService
-                    .setCurrentCourse(userIdAsIdType, courseId, 'watch', validItemCode);
+                    .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
                 // course items list
                 const modules = await this
                     ._playlistService
-                    .getPlaylistModulesAsync(userIdAsIdType, courseId);
+                    .getPlaylistModulesAsync(userId, courseId);
+
 
                 // get course item dto
                 const { itemId, itemType } = readItemCode(validItemCode);
 
                 const videoPlayerDTO = itemType === 'video' ? await this
-                    ._getVideoPlayerDataDTOAsync(userIdAsIdType, itemId as Id<'Video'>) : null;
+                    ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
 
                 const examPlayerDTO = itemType === 'exam' ? await this._examService
-                    .getExamPlayerDTOAsync(userIdAsIdType, itemId as Id<'Exam'>) : null;
+                    .getExamPlayerDTOAsync(userId, itemId as Id<'Exam'>) : null;
 
                 const modulePlayerDTO = itemType === 'module' ? await this._moduleService
                     .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
 
-                //
+
                 // SET START DATE 
                 // SET WATCH STAGE
                 const userCourseBridge = await this._userCourseBridgeService
-                    .getUserCourseBridgeOrFailAsync(userIdAsIdType, courseId);
+                    .getUserCourseBridgeOrFailAsync(userId, courseId);
 
                 if (!userCourseBridge)
                     await this._userCourseBridgeService
                         .setCourseStartDateAsync(principalId, courseId);
-
                 //
                 // get new answer session
                 const answerSessionId = itemType === 'module'
                     ? null
                     : await this._questionAnswerService
-                        .createAnswerSessionAsync(userIdAsIdType, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
+                        .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
+
 
                 //
                 // get next item 
@@ -135,7 +140,8 @@ export class PlayerService {
      */
     private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        const userId = principalId
+            .getId();
 
         // get current course id
         const courseId = await this._courseService
@@ -143,7 +149,18 @@ export class PlayerService {
 
         // get valid course item 
         const validItemCode = await this
-            ._getValidCourseItemCodeAsync(userIdAsIdType, courseId, requestedPlaylistItemCode);
+            ._getValidCourseItemCodeAsync(userId, courseId, requestedPlaylistItemCode);
+
+        // check pretest 
+        const pcv = await this
+            ._ormService
+            .query(PretestCompletionView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
+
+        if (!pcv.isCompleted)
+            throw new ErrorWithCode('Tring to watch course, but "pretest" is not completed yet!', 'forbidden player stage');
 
         return { validItemCode, courseId };
     }

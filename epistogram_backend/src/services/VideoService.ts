@@ -53,7 +53,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
     }
 
     answerVideoQuestionAsync(
-        userId: PrincipalId,
+        principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>,
         questionVersionId: Id<'QuestionVersion'>,
         answerIds: Id<'Answer'>[],
@@ -65,11 +65,11 @@ export class VideoService extends QueryServiceBase<VideoData> {
                 // validation comes here
 
                 return this._questionAnswerService
-                    .answerQuestionAsync(Id.create<'User'>(userId.toSQLValue()), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
+                    .saveGivenAnswerAsync(principalId.getId(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
             }
         }
 

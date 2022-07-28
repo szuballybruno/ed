@@ -50,13 +50,12 @@ export class SignupService {
                     await this._ormService
                         .createAsync(AnswerSession, {
                             startDate: new Date(Date.now()),
-                            endDate: null,
                             isPractise: false,
-                            isCompleted: false,
                             examVersionId: Id.create<'ExamVersion'>(1),
                             videoVersionId: null,
                             userId: userId
                         });
+
 
                 await this._sqlFuncService
                     .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
@@ -66,8 +65,6 @@ export class SignupService {
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
             }
         }
-
-
     }
 
     getSignupDataAsync(principalId: PrincipalId): ControllerActionReturnType {

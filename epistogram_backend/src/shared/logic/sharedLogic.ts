@@ -124,3 +124,11 @@ export const userPermissionsEqual = (a: UserPermissionDTO, b: UserPermissionDTO)
 };
 
 export const instantiate = <T>(obj: T) => obj;
+
+export const notnull = (obj: any, name: string) => {
+
+    if (obj === null || obj === undefined)
+        throw new Error('Object is null or undefined: ' + name);
+
+    return obj;
+};

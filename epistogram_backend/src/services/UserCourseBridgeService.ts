@@ -1,27 +1,31 @@
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
+import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { log } from './misc/logger';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
     private _authorizationService: AuthorizationService;
+    private _loggerService: LoggerService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        loggerService: LoggerService) {
 
         super(mapperService, ormService, UserCourseBridge);
 
         this._authorizationService = authorizationService
+        this._loggerService = loggerService
     }
 
     /**
@@ -158,7 +162,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      * Sets the course mode (beginner / advanced).
      */
     setCourseModeAsync(
-        userId: PrincipalId,
+        principalId: PrincipalId,
         courseId: Id<'Course'>,
         mode: CourseModeType
     ): ControllerActionReturnType {
@@ -166,9 +170,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return {
             action: async () => {
 
-                const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
+                const userId = principalId.getId()
 
-                const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
+                const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
                 if (!userCourseBridge)
                     throw new Error('User course bridge not found!');
@@ -176,14 +180,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 await this._ormService
                     .save(UserCourseBridge, {
                         courseId: courseId,
-                        userId: userIdAsIdType,
+                        userId: userId,
                         id: userCourseBridge.id,
                         courseMode: mode
                     } as UserCourseBridge);
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'SET_COURSE_MODE_GLOBAL')
+                    .getCheckPermissionResultAsync(principalId, 'SET_COURSE_MODE_GLOBAL')
             }
         }
 
@@ -191,13 +195,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    setCourseStartDateAsync(userId: PrincipalId, courseId: Id<'Course'>) {
+    setCourseStartDateAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         return {
             action: async () => {
-                const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
 
-                const userCourseBridge = await this.getUserCourseBridgeAsync(userIdAsIdType, courseId);
+                const userId = principalId.getId();
+
+                const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
                 if (!userCourseBridge)
                     throw new Error('User course bridge not found!');
@@ -205,14 +210,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 await this._ormService
                     .save(UserCourseBridge, {
                         courseId: courseId,
-                        userId: userIdAsIdType,
+                        userId: userId,
                         id: userCourseBridge.id,
                         startDate: new Date(Date.now())
                     } as UserCourseBridge);
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
             }
 
         }
@@ -230,30 +235,33 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         return {
             action: async () => {
-                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+
+                const userId = principalId.getId();
 
                 const userCourseBridge = await this
-                    .getUserCourseBridgeAsync(userIdAsIdType, courseId);
+                    .getUserCourseBridgeAsync(userId, courseId);
 
                 if (userCourseBridge) {
 
-                    log('User course bridge exists, updating deadline...');
+                    this._loggerService
+                        .logScoped('GENERIC', 'User course bridge exists, updating deadline...');
 
                     return this.updateCompletionDate(userCourseBridge.id, new Date(requiredCompletionDate));
                 }
 
                 try {
 
-                    log('User course bridge is not exists, creating...');
+                    this._loggerService
+                        .logScoped('GENERIC', 'User course bridge is not exists, creating...');
 
-                    await this._createNewCourseBridge(courseId, userIdAsIdType, null, 'assigned');
+                    await this._createNewCourseBridge(courseId, userId, null, 'assigned');
                 } catch (e) {
 
                     throw new Error('Failed to create new user course bridge');
                 }
 
                 const newUserCourseBridge = await this
-                    .getUserCourseBridgeAsync(userIdAsIdType, courseId);
+                    .getUserCourseBridgeAsync(userId, courseId);
 
                 if (!newUserCourseBridge)
                     throw new Error('Failed to find new user course bridge');
@@ -265,7 +273,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
             }
         }
-
 
     }
 
@@ -338,22 +345,21 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     };
 
     getPrincipalCurrentItemCodeAsync(
-        userId: PrincipalId
+        principalId: PrincipalId
     ): ControllerActionReturnType {
         return {
             action: async () => {
-                const userIdAsIdType = Id.create<'User'>(userId.toSQLValue());
+                const userId = principalId.getId();
 
-                return await this.getCurrentItemCodeAsync(userIdAsIdType);
+                return await this.getCurrentItemCodeAsync(userId);
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
             }
         }
 
-
-    };
+    }
 
     private async getCurrentItemCodeAsync(
         userId: Id<'User'>

@@ -47,7 +47,8 @@ export class CreateDBService {
 
         // drop constraints
         const drops = constraints
-            .map(constraint => `ALTER TABLE public.${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.name};`);
+            .filter(x => !!x.tableName)
+            .map(constraint => `ALTER TABLE public.${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.fileName};`);
 
         await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
 
@@ -55,9 +56,9 @@ export class CreateDBService {
         for (let index = 0; index < constraints.length; index++) {
 
             const constraint = constraints[index];
-            const script = this.readSQLFile('constraints', constraint.name);
+            const script = this.readSQLFile('constraints', constraint.fileName);
 
-            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating constraint: [${constraint.tableName} <- ${constraint.name}]...`);
+            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating constraint(s): [${constraint.fileName}]...`);
             await this._sqlConnectionService.executeSQLAsync(script);
         }
     };

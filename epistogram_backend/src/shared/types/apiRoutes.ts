@@ -111,13 +111,14 @@ export const apiRoutes = {
     prequiz: {
         getQuestions: '/prequiz/get-questions',
         getUserAnswer: '/prequiz/get-user-answer',
-        answerPrequizQuestion: '/prequiz/answer-prequiz-question'
+        answerPrequizQuestion: '/prequiz/answer-prequiz-question',
+        finishPrequiz: '/prequiz/finish-prequiz' as ParametrizedRouteType<{ body: { courseId: Id<'Course'> } }>
     },
 
     pretest: {
         getPretestData: '/pretest/get-pretest-data',
         getPretestResults: '/pretest/get-pretest-results',
-        getPretestExamId: '/pretest/get-pretest-exam-id'
+        finishPretest: '/pretest/finish-pretest' as ParametrizedRouteType<{ body: { answerSessionId: Id<'AnswerSession'> } }>
     },
 
     courseRating: {

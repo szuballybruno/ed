@@ -4,7 +4,7 @@ WITH completed_items AS
 		cicv.user_id,
 		cicv.course_id,
 		DATE_TRUNC('day', cicv.completion_date) completion_date
-	FROM public.course_item_completed_view cicv
+	FROM public.course_item_completion_view cicv
 ),
 completed_item_groups AS
 (

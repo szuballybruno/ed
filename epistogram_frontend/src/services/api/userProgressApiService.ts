@@ -17,9 +17,9 @@ export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, en
     };
 };
 
-export const useRecommendedItemQuota = (courseId: Id<'Course'>, enabled: boolean) => {
+export const useRecommendedItemQuota = (courseId?: Id<'Course'>) => {
 
-    const qr = useReactQuery2<RecomendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, enabled);
+    const qr = useReactQuery2<RecomendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, !!courseId);
 
     return {
         recommendedItemQuota: qr.data,

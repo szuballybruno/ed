@@ -14,7 +14,7 @@ FROM
 				EXTRACT(EPOCH FROM SUM(sq.elapsed))
 			FROM (
 				SELECT 
-					ase.end_date - start_date AS elapsed
+					cicv.completion_date - start_date AS elapsed
 				FROM public.exam_version ev
 				
 				LEFT JOIN public.module_version mv
@@ -27,7 +27,9 @@ FROM
 				ON ase.exam_version_id = ev.id 
 					AND ase.user_id = u.id
 					AND ase.start_date IS NOT NULL
-					AND ase.end_date IS NOT NULL 
+
+				INNER JOIN public.course_item_completion_view cicv
+				ON cicv.answer_session_id = ase.id
 
 				WHERE ev.id <> 1
 			) sq
