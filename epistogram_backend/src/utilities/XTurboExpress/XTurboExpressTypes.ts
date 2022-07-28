@@ -21,5 +21,5 @@ export class AuthorizationResult {
 export type ControllerActionReturnType = { auth: () => Promise<AuthorizationResult>, action: () => Promise<any> };
 
 export type XController<T> = {
-    [K in keyof T]: (params: ActionParams) => ControllerActionReturnType | Promise<any>;
+    [K in keyof T]: (params: ActionParams) => ControllerActionReturnType; //| Promise<any>;
 }

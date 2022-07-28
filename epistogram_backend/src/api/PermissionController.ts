@@ -3,8 +3,9 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PermissionController {
+export class PermissionController implements XController<PermissionController> {
 
     private _permissionService: PermissionService;
 
@@ -14,9 +15,9 @@ export class PermissionController {
     }
 
     @XControllerAction(apiRoutes.permissions.getPermissions)
-    getPermissionsAction = (params: ActionParams) => {
+    getPermissionsAction(params: ActionParams) {
 
         return this._permissionService
-            .getPermissionsAsync();
+            .getPermissionsAsync(params.principalId);
     };
 }

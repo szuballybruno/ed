@@ -17,15 +17,24 @@ import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 import { ModulePlayerDTO } from '../shared/dtos/ModulePlayerDTO';
+import { AuthorizationService } from './AuthorizationService';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { User } from '../models/entity/User';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class ModuleService {
+
+    private _authorizationService: AuthorizationService;
 
     constructor(
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
         private _courseItemService: CourseItemService,
         private _versionSaveService: VersionSaveService,
-        private _fileService: FileService) {
+        private _fileService: FileService,
+        private authorizationService: AuthorizationService) {
+
+        this._authorizationService = authorizationService
     }
 
     /**
@@ -46,33 +55,65 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    async getModuleEditDTOsAsync(courseVersionId: Id<'CourseVersion'>) {
+    getModuleEditDTOsAsync(principalId: PrincipalId, courseVersionId: Id<'CourseVersion'>): ControllerActionReturnType {
 
-        const modules = await this._ormService
-            .query(ModuleEditView, { courseVersionId })
-            .where('courseVersionId', '=', 'courseVersionId')
-            .getMany();
+        return {
+            action: async () => {
+                const modules = await this._ormService
+                    .query(ModuleEditView, { courseVersionId })
+                    .where('courseVersionId', '=', 'courseVersionId')
+                    .getMany();
 
-        return this._mapperService
-            .mapTo(ModuleEditDTO, [modules]);
+                return this._mapperService
+                    .mapTo(ModuleEditDTO, [modules]);
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId: principalId.toSQLValue() })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
+
+
     }
 
     /**
      * Saves module's thumbnail image
      */
-    async saveModuleThumbnailImageAsync(moduleVersionId: Id<'ModuleVersion'>, fileBuffer: Buffer) {
+    saveModuleThumbnailImageAsync(principalId: PrincipalId, moduleVersionId: Id<'ModuleVersion'>, fileBuffer: Buffer): ControllerActionReturnType {
 
-        const moduleVersion = await this._ormService
-            .getSingleById(ModuleVersion, moduleVersionId);
+        return {
+            action: async () => {
 
-        await this._fileService
-            .uploadAssigendFileAsync({
-                entitySignature: ModuleData,
-                entityId: moduleVersion.moduleDataId,
-                fileBuffer: fileBuffer,
-                fileCode: 'module_thumbnail',
-                storageFileIdField: 'imageFileId'
-            });
+                const moduleVersion = await this._ormService
+                    .getSingleById(ModuleVersion, moduleVersionId);
+
+                await this._fileService
+                    .uploadAssigendFileAsync({
+                        entitySignature: ModuleData,
+                        entityId: moduleVersion.moduleDataId,
+                        fileBuffer: fileBuffer,
+                        fileCode: 'module_thumbnail',
+                        storageFileIdField: 'imageFileId'
+                    });
+            },
+
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId: principalId.toSQLValue() })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId })
+            }
+        }
     }
 
     /**

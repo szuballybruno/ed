@@ -1,5 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
 import fs from 'fs';
+import { User } from '../models/entity/User';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
@@ -7,8 +8,10 @@ import { LatestVideoView } from '../models/views/LatestVideoView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { throwNotImplemented } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
@@ -26,6 +29,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
     private _fileService: FileService;
     private _questionsService: QuestionService;
     private _assetUrlService: UrlService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormConnection: ORMConnectionService,
@@ -35,7 +39,8 @@ export class VideoService extends QueryServiceBase<VideoData> {
         questionsService: QuestionService,
         assetUrlService: UrlService,
         mapperService: MapperService,
-        private _globalConfig: GlobalConfiguration) {
+        private _globalConfig: GlobalConfiguration,
+        authorizationService: AuthorizationService) {
 
         super(mapperService, ormConnection, VideoData);
 
@@ -44,19 +49,30 @@ export class VideoService extends QueryServiceBase<VideoData> {
         this._fileService = fileService;
         this._questionsService = questionsService;
         this._assetUrlService = assetUrlService;
+        this._authorizationService = authorizationService;
     }
 
-    answerVideoQuestionAsync = async (
+    answerVideoQuestionAsync(
         principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>,
         questionVersionId: Id<'QuestionVersion'>,
         answerIds: Id<'Answer'>[],
-        elapsedSeconds: number) => {
+        elapsedSeconds: number) {
 
-        // validation comes here
+        return {
+            action: async () => {
 
-        return this._questionAnswerService
-            .saveGivenAnswerAsync(principalId.getId(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
+                // validation comes here
+
+                return this._questionAnswerService
+                    .saveGivenAnswerAsync(principalId.getId(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
     };
 
     setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
@@ -135,67 +151,84 @@ export class VideoService extends QueryServiceBase<VideoData> {
         return videoPlayerData;
     };
 
-    uploadVideoFileChunksAsync = async (
+    uploadVideoFileChunksAsync(
+        principalId: PrincipalId,
         videoId: Id<'Video'>,
         chunkIndex: number,
         chunksCount: number,
-        getFile: () => UploadedFile | undefined) => {
+        getFile: () => UploadedFile | undefined): ControllerActionReturnType {
 
-        const videoVersion = await this._ormService
-            .query(LatestVideoView, { videoId })
-            .getSingle();
+        return {
+            action: async () => {
+                const videoVersion = await this._ormService
+                    .query(LatestVideoView, { videoId })
+                    .getSingle();
 
-        const videoVersionId = videoVersion.videoVersionId;
+                const videoVersionId = videoVersion.videoVersionId;
 
-        const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
-        const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
+                const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
+                const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
 
-        try {
+                try {
 
-            if (chunkIndex !== 0 && !fs.existsSync(filePath))
-                throw new Error('Trying to append file that does not exist!');
+                    if (chunkIndex !== 0 && !fs.existsSync(filePath))
+                        throw new Error('Trying to append file that does not exist!');
 
-            const file = getFile();
-            if (!file)
-                throw new Error('File chunk data not sent!');
+                    const file = getFile();
+                    if (!file)
+                        throw new Error('File chunk data not sent!');
 
-            console.log('Recieved file chunk: #' + chunkIndex);
+                    console.log('Recieved file chunk: #' + chunkIndex);
 
-            // create temp folder 
-            if (!fs.existsSync(tempFolder)) {
-                fs.mkdirSync(tempFolder);
-            }
+                    // create temp folder 
+                    if (!fs.existsSync(tempFolder)) {
+                        fs.mkdirSync(tempFolder);
+                    }
 
-            // create & append file
-            if (chunkIndex === 0) {
+                    // create & append file
+                    if (chunkIndex === 0) {
 
-                fs.writeFileSync(filePath, file.data);
-            }
-            else {
+                        fs.writeFileSync(filePath, file.data);
+                    }
+                    else {
 
-                fs.appendFileSync(filePath, file.data);
-            }
+                        fs.appendFileSync(filePath, file.data);
+                    }
 
-            // upload is done 
-            if (chunkIndex + 1 === chunksCount) {
+                    // upload is done 
+                    if (chunkIndex + 1 === chunksCount) {
 
-                console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
+                        console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
 
-                // read tmp file 
-                const fullFile = fs.readFileSync(filePath);
+                        // read tmp file 
+                        const fullFile = fs.readFileSync(filePath);
 
-                // delete tmp file 
-                fs.rmSync(filePath);
+                        // delete tmp file 
+                        fs.rmSync(filePath);
 
-                // upload to cloud 
-                await this._uploadVideoFileAsync(videoVersionId, fullFile);
+                        // upload to cloud 
+                        await this._uploadVideoFileAsync(videoVersionId, fullFile);
+                    }
+                }
+                catch (e) {
+
+                    fs.unlinkSync(filePath);
+                    throw e;
+                }
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId: principalId.toSQLValue() })
+                    .where('id', '=', 'userId')
+                    .getSingle()
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId })
             }
         }
-        catch (e) {
 
-            fs.unlinkSync(filePath);
-            throw e;
-        }
+
     };
 
     private _uploadVideoFileAsync = async (videoVersionId: Id<'VideoVersion'>, videoFileBuffer: Buffer) => {

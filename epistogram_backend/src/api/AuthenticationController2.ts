@@ -7,8 +7,9 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { AuthorizationResult, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class ZAuthenticationController {
+export class ZAuthenticationController implements XController<ZAuthenticationController> {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfiguration;
@@ -20,42 +21,64 @@ export class ZAuthenticationController {
     }
 
     @XControllerAction(apiRoutes.authentication.loginUser, { isPost: true, isPublic: true })
-    logInUserAction = async (params: ActionParams) => {
+    logInUserAction(params: ActionParams) {
 
-        // check request 
-        if (!params.req.body)
-            throw new ErrorWithCode('Body is null.', 'bad request');
+        return {
+            action: async () => {
+                // check request 
+                if (!params.req.body)
+                    throw new ErrorWithCode('Body is null.', 'bad request');
 
-        // get credentials from request
-        const { email, password } = params.req.body;
+                // get credentials from request
+                const { email, password } = params.req.body;
 
-        const { accessToken, refreshToken } = await this._authenticationService
-            .logInUser(email, password);
+                const { accessToken, refreshToken } = await this._authenticationService
+                    .logInUser(email, password);
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
+                setAuthCookies(this._config, params.res, accessToken, refreshToken);
+            },
+            auth: async () => {
+                return AuthorizationResult.ok
+            }
+        }
     };
 
     @XControllerAction(apiRoutes.authentication.establishAuthHandshake, { isPublic: true })
-    establishAuthHandshakeAction = async (params: ActionParams) => {
+    establishAuthHandshakeAction(params: ActionParams) {
 
-        const { refreshToken } = getAuthCookies(params.req);
+        return {
+            action: async () => {
+                const { refreshToken } = getAuthCookies(params.req);
 
-        const data = await this._authenticationService
-            .establishAuthHandshakeAsync(refreshToken);
+                const data = await this._authenticationService
+                    .establishAuthHandshakeAsync(refreshToken);
 
-        setAuthCookies(this._config, params.res, data.newAccessToken, data.newRefreshToken);
+                setAuthCookies(this._config, params.res, data.newAccessToken, data.newRefreshToken);
 
-        return data.authData;
+                return data.authData;
+            },
+
+            auth: async () => {
+                return AuthorizationResult.ok
+            }
+        }
     };
 
     @XControllerAction(apiRoutes.authentication.logoutUser, { isPost: true, isUnauthorized: true })
-    logOutUserAction = async (params: ActionParams) => {
+    logOutUserAction(params: ActionParams) {
 
-        await this._authenticationService
-            .logOutUserAsync(params.principalId);
+        return {
+            action: async () => {
+                await this._authenticationService
+                    .logOutUserAsync(params.principalId);
 
-        // remove browser cookies
-        params.res.clearCookie(this._config.misc.accessTokenCookieName);
-        params.res.clearCookie(this._config.misc.refreshTokenCookieName);
+                // remove browser cookies
+                params.res.clearCookie(this._config.misc.accessTokenCookieName);
+                params.res.clearCookie(this._config.misc.refreshTokenCookieName);
+            },
+            auth: async () => {
+                return AuthorizationResult.ok
+            }
+        }
     };
 }

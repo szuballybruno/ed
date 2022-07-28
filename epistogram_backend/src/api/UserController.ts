@@ -7,8 +7,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class UserController {
+export class UserController implements XController<UserController> {
 
     private _userService: UserService;
 
@@ -17,7 +18,7 @@ export class UserController {
         this._userService = serviceProvider.getService(UserService);
     }
 
-    saveUserDataAction = async (params: ActionParams) => {
+    saveUserDataAction(params: ActionParams) {
 
         const dto = params
             .getBody<UserDTO>(['firstName', 'lastName', 'phoneNumber'])
@@ -28,7 +29,7 @@ export class UserController {
     };
 
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true, checkPermission: 'ACCESS_ADMIN' })
-    deleteUserAction = async (params: ActionParams) => {
+    deleteUserAction(params: ActionParams) {
 
         const deleteUserId = Id
             .create<'User'>(params
@@ -40,60 +41,60 @@ export class UserController {
     };
 
     @XControllerAction(apiRoutes.user.getEditUserData)
-    getEditUserDataAction = async (params: ActionParams) => {
+    getEditUserDataAction(params: ActionParams) {
 
         const editedUserId = Id
             .create<'User'>(params
                 .getQuery()
                 .getValue(x => x.editedUserId, 'int'));
 
-        return await this._userService
+        return this._userService
             .getEditUserDataAsync(params.principalId, editedUserId);
     };
 
     @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })
-    saveUserSimpleAction = async (params: ActionParams) => {
+    saveUserSimpleAction(params: ActionParams) {
 
         const dto = params
             .getBody<UserEditSimpleDTO>(['firstName', 'lastName', 'phoneNumber'])
             .data;
 
-        await this._userService
+        return this._userService
             .saveUserSimpleAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
-    saveUserAction = async (params: ActionParams) => {
+    saveUserAction(params: ActionParams) {
 
         const dto = params
             .getBody<UserEditDTO>(['firstName', 'lastName', 'companyId', 'email', 'id', 'isTeacher'])
             .data;
 
-        await this._userService
+        return this._userService
             .saveUserAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.user.getUserListForAdministration)
-    getUserAdministrationUserListAction = async (params: ActionParams) => {
+    getUserAdministrationUserListAction(params: ActionParams) {
 
         const searchText = params
             .getQuery<{ searchText?: string }>()
             .data
             .searchText ?? null;
 
-        return await this._userService
-            .getAdminPageUsersListAsync(searchText);
+        return this._userService
+            .getAdminPageUsersListAsync(params.principalId, searchText);
     };
 
     @XControllerAction(apiRoutes.user.getBriefUserData)
-    getBriefUserDataAction = async (params: ActionParams) => {
+    getBriefUserDataAction(params: ActionParams) {
 
         const userId = Id
             .create<'User'>(params
                 .getQuery()
                 .getValue(x => x.userId, 'int'));
 
-        return await this._userService
+        return this._userService
             .getBriefUserDataAsync(params.principalId, userId);
     };
 

@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class ModuleController {
+export class ModuleController implements XController<ModuleController> {
 
     private _moduleService: ModuleService;
 
@@ -15,7 +16,7 @@ export class ModuleController {
     }
 
     @XControllerAction(apiRoutes.module.getModuleListEditData)
-    getModuleListEditAction = async (params: ActionParams) => {
+    getModuleListEditAction(params: ActionParams) {
 
         const query = params
             .getQuery<any>();
@@ -25,11 +26,11 @@ export class ModuleController {
                 .getValue(x => x.courseVersionId, 'int'));
 
         return this._moduleService
-            .getModuleEditDTOsAsync(courseVersionId);
+            .getModuleEditDTOsAsync(params.principalId, courseVersionId);
     };
 
     @XControllerAction(apiRoutes.module.saveCoverFile, { isPost: true })
-    saveModuleThumbnailImageAction = async (params: ActionParams) => {
+    saveModuleThumbnailImageAction(params: ActionParams) {
 
         const { body } = params
             .getFromParameterized(apiRoutes.module.saveCoverFile);
@@ -40,8 +41,8 @@ export class ModuleController {
         const moduleVersionId = body
             .getValue(x => x.moduleVersionId, 'int');
 
-        await this
+        return this
             ._moduleService
-            .saveModuleThumbnailImageAsync(moduleVersionId, file.data);
+            .saveModuleThumbnailImageAsync(params.principalId, moduleVersionId, file.data);
     };
 }

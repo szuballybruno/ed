@@ -21,10 +21,14 @@ import { PlaylistService } from './PlaylistService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
+import { AuthorizationService } from './AuthorizationService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { PretestCompletionView } from '../models/views/PretestCompletionView';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 
 export class PlayerService {
+
+    private _authorizationService: AuthorizationService;
 
     constructor(
         private _ormService: ORMConnectionService,
@@ -36,79 +40,95 @@ export class PlayerService {
         private _questionAnswerService: QuestionAnswerService,
         private _playbackService: PlaybackService,
         private _userCourseBridgeService: UserCourseBridgeService,
-        private _mapperService: MapperService) {
+        private _mapperService: MapperService,
+        private authorizationService: AuthorizationService) {
+
+        this._authorizationService = authorizationService
     }
 
     /**
      * Gets the player data 
      */
-    getPlayerDataAsync = async (
+    getPlayerDataAsync(
         principalId: PrincipalId,
-        requestedItemCode: string) => {
+        requestedItemCode: string): ControllerActionReturnType {
 
-        const userId = principalId.getId();
+        return {
+            action: async () => {
 
-        // validate request
-        const { courseId, validItemCode } = await this
-            ._validatePlayerDataRequest(principalId, requestedItemCode);
 
-        // set current course 
-        await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+                const userId = principalId.getId();
 
-        // course items list
-        const modules = await this
-            ._playlistService
-            .getPlaylistModulesAsync(userId, courseId);
+                // validate request
+                const { courseId, validItemCode } = await this
+                    ._validatePlayerDataRequest(principalId, requestedItemCode);
 
-        // get course item dto
-        const { itemId, itemType } = readItemCode(validItemCode);
+                // set current course 
+                await this._userCourseBridgeService
+                    .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
-        const videoPlayerDTO = itemType === 'video' ? await this
-            ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
+                // course items list
+                const modules = await this
+                    ._playlistService
+                    .getPlaylistModulesAsync(userId, courseId);
 
-        const examPlayerDTO = itemType === 'exam' ? await this._examService
-            .getExamPlayerDTOAsync(userId, itemId as Id<'Exam'>) : null;
 
-        const modulePlayerDTO = itemType === 'module' ? await this._moduleService
-            .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
+                // get course item dto
+                const { itemId, itemType } = readItemCode(validItemCode);
 
-        //
-        // SET START DATE 
-        // SET WATCH STAGE
-        const userCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeOrFailAsync(userId, courseId);
+                const videoPlayerDTO = itemType === 'video' ? await this
+                    ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
 
-        if (!userCourseBridge)
-            await this._userCourseBridgeService
-                .setCourseStartDateAsync(principalId, courseId);
+                const examPlayerDTO = itemType === 'exam' ? await this._examService
+                    .getExamPlayerDTOAsync(userId, itemId as Id<'Exam'>) : null;
 
-        //
-        // get new answer session
-        const answerSessionId = itemType === 'module'
-            ? null
-            : await this._questionAnswerService
-                .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
+                const modulePlayerDTO = itemType === 'module' ? await this._moduleService
+                    .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
 
-        //
-        // get next item 
-        const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
 
-        log('nextPlaylistItemCode: ' + nextPlaylistItemCode);
-        log('nextItemState: ' + nextItemState);
+                // SET START DATE 
+                // SET WATCH STAGE
+                const userCourseBridge = await this._userCourseBridgeService
+                    .getUserCourseBridgeOrFailAsync(userId, courseId);
 
-        return instantiate<PlayerDataDTO>({
-            videoPlayerData: videoPlayerDTO,
-            examPlayerData: examPlayerDTO,
-            modulePlayerData: modulePlayerDTO,
-            answerSessionId: answerSessionId,
-            courseMode: userCourseBridge.courseMode,
-            courseId: courseId,
-            currentPlaylistItemCode: requestedItemCode,
-            modules: modules,
-            nextPlaylistItemCode,
-            nextPlaylistItemState: nextItemState
-        });
+                if (!userCourseBridge)
+                    await this._userCourseBridgeService
+                        .setCourseStartDateAsync(principalId, courseId);
+                //
+                // get new answer session
+                const answerSessionId = itemType === 'module'
+                    ? null
+                    : await this._questionAnswerService
+                        .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
+
+
+                //
+                // get next item 
+                const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
+
+                log('nextPlaylistItemCode: ' + nextPlaylistItemCode);
+                log('nextItemState: ' + nextItemState);
+
+                return instantiate<PlayerDataDTO>({
+                    videoPlayerData: videoPlayerDTO,
+                    examPlayerData: examPlayerDTO,
+                    modulePlayerData: modulePlayerDTO,
+                    answerSessionId: answerSessionId,
+                    courseMode: userCourseBridge.courseMode,
+                    courseId: courseId,
+                    currentPlaylistItemCode: requestedItemCode,
+                    modules: modules,
+                    nextPlaylistItemCode,
+                    nextPlaylistItemState: nextItemState
+                });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
+
     };
 
     //

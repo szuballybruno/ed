@@ -20,6 +20,8 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 
 export class UserService {
 
@@ -28,80 +30,105 @@ export class UserService {
     private _teacherInfoService: TeacherInfoService;
     private _hashService: HashService;
     private _roleService: RoleService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         teacherInfoService: TeacherInfoService,
         hashService: HashService,
-        roleService: RoleService) {
+        roleService: RoleService,
+        authorizationService: AuthorizationService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._teacherInfoService = teacherInfoService;
         this._hashService = hashService;
         this._roleService = roleService;
+        this._authorizationService = authorizationService;
     }
 
     /**
      * Get user edit data 
           */
-    async getEditUserDataAsync(principalId: PrincipalId, editedUserId: Id<'User'>): Promise<UserEditDTO> {
-
-        type ResType = User & {
-            teacherInfoId: number
-        };
-
-        const res = await this._ormService
-            .withResType<ResType>()
-            .query(User, { editedUserId })
-            .selectFrom(x => x
-                .columns(User, '*')
-                .columns(TeacherInfo, {
-                    teacherInfoId: 'id'
-                }))
-            .leftJoin(TeacherInfo, x => x
-                .on('userId', '=', 'editedUserId'))
-            .where('id', '=', 'editedUserId')
-            .getSingle();
+    getEditUserDataAsync(
+        principalId: PrincipalId,
+        editedUserId: Id<'User'>
+    ): ControllerActionReturnType {
 
         return {
-            id: res.id,
-            firstName: res.firstName,
-            lastName: res.lastName,
-            email: res.email,
-            isTeacher: !!res.teacherInfoId,
-            jobTitleId: res.jobTitleId,
-            companyId: res.companyId,
-            roles: new ChangeSet(),
-            permissions: new ChangeSet()
-        };
+            action: async () => {
+
+                type ResType = User & {
+                    teacherInfoId: number
+                };
+
+                const res = await this._ormService
+                    .withResType<ResType>()
+                    .query(User, { editedUserId })
+                    .selectFrom(x => x
+                        .columns(User, '*')
+                        .columns(TeacherInfo, {
+                            teacherInfoId: 'id'
+                        }))
+                    .leftJoin(TeacherInfo, x => x
+                        .on('userId', '=', 'editedUserId'))
+                    .where('id', '=', 'editedUserId')
+                    .getSingle();
+
+                return {
+                    id: res.id,
+                    firstName: res.firstName,
+                    lastName: res.lastName,
+                    email: res.email,
+                    isTeacher: !!res.teacherInfoId,
+                    jobTitleId: res.jobTitleId,
+                    companyId: res.companyId,
+                    roles: new ChangeSet(),
+                    permissions: new ChangeSet()
+                };
+
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
     }
 
     /**
      * Save user from admin page, where you can edit almost all fileds.
      */
-    async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
+    saveUserAsync(principalId: PrincipalId, dto: UserEditDTO): ControllerActionReturnType {
 
-        const userId = dto.id;
+        return {
+            action: async () => {
 
-        // save user 
-        await this._ormService
-            .save(User, {
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                companyId: dto.companyId,
-                jobTitleId: dto.jobTitleId
-            });
+                const userId = dto.id;
 
-        // save teacher info
-        await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+                // save user 
+                await this._ormService
+                    .save(User, {
+                        id: userId,
+                        lastName: dto.lastName,
+                        firstName: dto.firstName,
+                        email: dto.email,
+                        companyId: dto.companyId,
+                        jobTitleId: dto.jobTitleId
+                    });
 
-        // save auth items 
-        await this._roleService
-            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
+                // save teacher info
+                await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+
+                // save auth items 
+                await this._roleService
+                    .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
     }
 
     /**
@@ -136,75 +163,116 @@ export class UserService {
     /**
      * Save user data which the user itself can edit.  
      */
-    async saveUserSimpleAsync(principalId: PrincipalId, dto: UserEditSimpleDTO) {
+    saveUserSimpleAsync(
+        principalId: PrincipalId,
+        dto: UserEditSimpleDTO
+    ): ControllerActionReturnType {
 
-        const userId = principalId.getId();
+        return {
+            action: async () => {
 
-        // save user 
-        await this._ormService
-            .save(User, {
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                phoneNumber: dto.phoneNumber
-            });
+                const userId = principalId.getId();
+
+                // save user
+                await this._ormService
+                    .save(User, {
+                        id: userId,
+                        lastName: dto.lastName,
+                        firstName: dto.firstName,
+                        phoneNumber: dto.phoneNumber
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
     /**
      * Get user dto-s for the admin page user list.
      */
-    async getAdminPageUsersListAsync(searchText: string | null) {
+    getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null): ControllerActionReturnType {
 
-        const searchTextLower = searchText?.toLowerCase();
+        return {
+            action: async () => {
+                const searchTextLower = searchText?.toLowerCase();
 
-        const users = await this._ormService
-            .query(AdminUserListView)
-            .getMany();
+                const users = await this._ormService
+                    .query(AdminUserListView)
+                    .getMany();
 
-        const filteredUsers = searchTextLower
-            ? users
-                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
-                    .toLowerCase()
-                    .includes(searchTextLower))
-            : users;
+                const filteredUsers = searchTextLower
+                    ? users
+                        .filter(x => toFullName(x.firstName, x.lastName, 'hu')
+                            .toLowerCase()
+                            .includes(searchTextLower))
+                    : users;
 
-        return this._mapperService
-            .mapTo(AdminPageUserDTO, [filteredUsers]);
+                return this._mapperService
+                    .mapTo(AdminPageUserDTO, [filteredUsers]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     }
 
     /**
      * Save user data which the user itself can edit.  
      */
-    async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
+    saveUserDataAsync(principalId: PrincipalId, dto: UserDTO): ControllerActionReturnType {
 
-        const userId = principalId.getId();
+        return {
+            action: async () => {
+                const userId = principalId.getId();
 
-        return this._ormService
-            .save(User, {
-                id: userId,
-                firstName: dto.firstName,
-                lastName: dto.lastName,
-                phoneNumber: dto.phoneNumber
-            });
+                return this._ormService
+                    .save(User, {
+                        id: userId,
+                        firstName: dto.firstName,
+                        lastName: dto.lastName,
+                        phoneNumber: dto.phoneNumber
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
     /**
      * Get a very minimalistic user dto for displaying 
      * very minimal info about the user.
      */
-    async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
-
-        const user = await this._ormService
-            .query(User, { userId })
-            .where('id', '=', 'userId')
-            .getSingle();
+    getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: getFullName(user)
-        } as BriefUserDataDTO;
+
+            action: async () => {
+                const user = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle();
+
+                return {
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    fullName: getFullName(user)
+                } as BriefUserDataDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     }
 
     /**
@@ -313,20 +381,26 @@ export class UserService {
     /**
      * Delete a user entity by it's id.
      */
-    deleteUserAsync = async (principalId: PrincipalId, deletedUserId: Id<'User'>) => {
+    deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        // TODO permissions
+        return {
+            action: async () => {
+                const connectedCourses = await this._ormService
+                    .query(CourseData, { deletedUserId })
+                    .where('teacherId', '=', 'deletedUserId')
+                    .getMany();
 
-        const connectedCourses = await this._ormService
-            .query(CourseData, { deletedUserId })
-            .where('teacherId', '=', 'deletedUserId')
-            .getMany();
+                if (connectedCourses.length > 0)
+                    throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
-        if (connectedCourses.length > 0)
-            throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
-
-        return await this._ormService
-            .softDelete(User, [deletedUserId]);
+                return await this._ormService
+                    .softDelete(User, [deletedUserId]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'DELETE_USER')
+            }
+        }
     };
 
     /**

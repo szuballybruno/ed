@@ -12,39 +12,52 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { StorageService } from './StorageService';
 import { UserService } from './UserService';
 import { EntityType } from './XORM/XORMTypes';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 
 export class FileService {
 
     private _userService: UserService;
     private _storageService: StorageService;
     private _ormService: ORMConnectionService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         userService: UserService,
         storageService: StorageService,
-        ormService: ORMConnectionService) {
+        ormService: ORMConnectionService,
+        authorizationService: AuthorizationService) {
 
         this._userService = userService;
         this._storageService = storageService;
         this._ormService = ormService;
+        this._authorizationService = authorizationService;
     }
 
-    uploadAvatarFileAsync = async (principalId: PrincipalId, file: UploadedFile) => {
+    uploadAvatarFileAsync(principalId: PrincipalId, file: UploadedFile): ControllerActionReturnType {
 
-        const userId = principalId.getId();
+        return {
+            action: async () => {
+                const userId = principalId.getId();
 
-        //TODO: Create a validation function
-        if (!['image/png', 'image/jpeg'].includes(file.mimetype))
-            throw new ErrorWithCode('File upload failed: Only jpeg or png', 'bad request');
+                //TODO: Create a validation function
+                if (!['image/png', 'image/jpeg'].includes(file.mimetype))
+                    throw new ErrorWithCode('File upload failed: Only jpeg or png', 'bad request');
 
-        await this
-            .uploadAssigendFileAsync({
-                entityId: userId,
-                entitySignature: User,
-                fileBuffer: file.data,
-                fileCode: 'user_avatar',
-                storageFileIdField: 'avatarFileId'
-            });
+                await this
+                    .uploadAssigendFileAsync({
+                        entityId: userId,
+                        entitySignature: User,
+                        fileBuffer: file.data,
+                        fileCode: 'user_avatar',
+                        storageFileIdField: 'avatarFileId'
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     };
 
     async uploadAssigendFileAsync<TField extends StringKeyof<T>, T extends EntityType>({

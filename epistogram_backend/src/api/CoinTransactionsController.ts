@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class CoinTransactionsController {
+export class CoinTransactionsController implements XController<CoinTransactionsController> {
 
     private _coinTransactionService: CoinTransactionService;
 
@@ -15,21 +16,21 @@ export class CoinTransactionsController {
     }
 
     @XControllerAction(apiRoutes.coinTransactions.getCoinTransactions)
-    getCoinTransactionsAction = async (params: ActionParams) => {
+    getCoinTransactionsAction(params: ActionParams) {
 
         return this._coinTransactionService
             .getCoinTransactionsAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.coinTransactions.getCoinBalance)
-    getCoinBalanceAction = async (params: ActionParams) => {
+    getCoinBalanceAction(params: ActionParams) {
 
         return this._coinTransactionService
             .getPrincipalCoinBalance(params.principalId);
     };
 
     @XControllerAction(apiRoutes.coinTransactions.getCoinBalanceOfUser)
-    getCoinBalanceOfUserAction = async (params: ActionParams) => {
+    getCoinBalanceOfUserAction(params: ActionParams) {
 
         const userId = params
             .getQuery<{ userId: Id<'User'> }>()
@@ -40,7 +41,7 @@ export class CoinTransactionsController {
     };
 
     @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
-    giftCoinsToUser = async (params: ActionParams) => {
+    giftCoinsToUser(params: ActionParams) {
 
         const dto = params
             .getBody<{ userId: Id<'User'>, amount: number }>();
@@ -51,7 +52,7 @@ export class CoinTransactionsController {
         const amount = dto
             .getValue(x => x.amount, 'int');
 
-        return await this._coinTransactionService
-            .giftCoinsToUserAsync(userId, amount);
+        return this._coinTransactionService
+            .giftCoinsToUserAsync(params.principalId, userId, amount);
     };
 }

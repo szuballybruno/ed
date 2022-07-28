@@ -24,6 +24,7 @@ export class UserSessionActivityService {
         private _ormService: ORMConnectionService,
         private _coinAcquireService: CoinAcquireService,
         private _loggerService: LoggerService) {
+
     }
 
     saveUserSessionActivityAsync = async (
@@ -39,6 +40,7 @@ export class UserSessionActivityService {
         const coinAcquireResult = await this
             ._coinAcquireService
             .handleSessionActivityCoinsAsync(userId, activitySessionId);
+
     };
 
     private async _saveSessionActivity(

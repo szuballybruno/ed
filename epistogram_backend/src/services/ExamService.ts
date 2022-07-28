@@ -13,6 +13,8 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -30,6 +32,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
     private _userSessionActivityService: UserSessionActivityService;
     private _quesitonAnswerService: QuestionAnswerService;
     private _questionsService: QuestionService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         userCourseBridgeService: UserCourseBridgeService,
@@ -38,6 +41,7 @@ export class ExamService extends QueryServiceBase<ExamData> {
         quesitonAnswerService: QuestionAnswerService,
         questionsService: QuestionService,
         mapperService: MapperService,
+        authorizationService: AuthorizationService,
         private _loggerService: LoggerService) {
 
         super(mapperService, ormService, ExamData);
@@ -46,6 +50,8 @@ export class ExamService extends QueryServiceBase<ExamData> {
         this._userSessionActivityService = userSessionActivityService;
         this._quesitonAnswerService = quesitonAnswerService;
         this._questionsService = questionsService;
+        this._authorizationService = authorizationService;
+
     }
 
     /**
@@ -104,13 +110,22 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
      */
-    async startExamAsync(answerSessionId: Id<'AnswerSession'>) {
+    startExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
 
-        await this._ormService
-            .save(AnswerSession, {
-                id: answerSessionId,
-                startDate: new Date()
-            });
+        return {
+            action: async () => {
+                await this._ormService
+                    .save(AnswerSession, {
+                        id: answerSessionId,
+                        startDate: new Date()
+                    });
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 
     /**
@@ -125,125 +140,161 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Finish exam 
      */
-    async finishExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
+    finishExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
 
-        this._loggerService.logScoped('GENERIC', 'Finishing exam... ' + principalId);
+        return {
+            action: async () => {
 
-        const ans = await this
-            ._ormService
-            .getSingleById(AnswerSession, answerSessionId);
+                this._loggerService
+                    .logScoped('GENERIC', 'Finishing exam... ' + principalId);
 
-        await this
-            ._ormService
-            .createAsync(CourseItemCompletion, {
-                answerSessionId,
-                completionDate: new Date(),
-                examVersionId: ans.examVersionId,
-                userId: principalId.getId(),
-                videoVersionId: null
-            });
+                const ans = await this
+                    ._ormService
+                    .getSingleById(AnswerSession, answerSessionId);
+
+                await this
+                    ._ormService
+                    .createAsync(CourseItemCompletion, {
+                        answerSessionId,
+                        completionDate: new Date(),
+                        examVersionId: ans.examVersionId,
+                        userId: principalId.getId(),
+                        videoVersionId: null
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
     }
 
     /**
      * Answer a question in the exam. 
      */
-    answerExamQuestionAsync = async (principalId: PrincipalId, dto: AnswerQuestionDTO) => {
+    answerExamQuestionAsync(principalId: PrincipalId, dto: AnswerQuestionDTO): ControllerActionReturnType {
 
-        const userId = principalId
-            .getId();
+        return {
+            action: async () => {
+                const userId = principalId
+                    .getId();
 
-        const {
-            answerSessionId,
-            answerIds,
-            elapsedSeconds,
-            questionVersionId
-        } = dto;
+                const {
+                    answerSessionId,
+                    answerIds,
+                    elapsedSeconds,
+                    questionVersionId
+                } = dto;
 
-        /**
-         * Get exam version id 
-         */
-        const questionVersion = await this
-            ._ormService
-            .query(QuestionVersion, { questionVersionId })
-            .where('id', '=', 'questionVersionId')
-            .getSingle();
+                /**
+                 * Get exam version id
+                 */
+                const questionVersion = await this
+                    ._ormService
+                    .query(QuestionVersion, { questionVersionId })
+                    .where('id', '=', 'questionVersionId')
+                    .getSingle();
 
-        const examVersionId = questionVersion
-            .examVersionId!;
+                const examVersionId = questionVersion
+                    .examVersionId!;
 
-        /**
-         * Save given answer 
-         */
-        const result = this
-            ._quesitonAnswerService
-            .saveGivenAnswerAsync(
-                userId,
-                answerSessionId,
-                questionVersionId,
-                answerIds,
-                true,
-                elapsedSeconds);
+                /**
+                 * Save given answer
+                 */
+                const result = this
+                    ._quesitonAnswerService
+                    .saveGivenAnswerAsync(
+                        userId,
+                        answerSessionId,
+                        questionVersionId,
+                        answerIds,
+                        true,
+                        elapsedSeconds);
 
-        /**
-         * Save user activity 
-         */
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
+                /**
+                 * Save user activity
+                 */
+                await this._userSessionActivityService
+                    .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
 
-        /**
-         * If first successful, do something DUNNO WHAT 
-         * TODO
-         */
-        const isFirstSuccessfulAnswerSession = await this
-            ._checkIfFirstSuccessfulAnswerSessionAsync(userId, examVersionId, answerSessionId);
+                /**
+                 * If first successful, do something DUNNO WHAT
+                 * TODO
+                 */
+                const isFirstSuccessfulAnswerSession = await this
+                    ._checkIfFirstSuccessfulAnswerSessionAsync(userId, examVersionId, answerSessionId);
 
-        return result;
+                return result;
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
+
     };
 
     /**
      * Get the results of the particular exam.
      */
-    getExamResultsAsync = async (principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) => {
+    getExamResultsAsync(
+        principalId: PrincipalId,
+        answerSessionId: Id<'AnswerSession'>
+    ) {
 
-        const userId = principalId
-            .getId();
+        return {
+            action: async () => {
 
-        const currentItemCode = await this._userCourseBridgeService
-            .getCurrentItemCodeOrFailAsync(userId);
 
-        const { itemId, itemType } = readItemCode(currentItemCode);
+                const userId = principalId
+                    .getId();
 
-        if (itemType !== 'exam')
-            throw new Error('Current item is not an exam!');
+                const currentItemCode = await this._userCourseBridgeService
+                    .getCurrentItemCodeOrFailAsync(userId);
 
-        const latestExam = await this._ormService
-            .query(LatestExamView, { examId: itemId })
-            .where('examId', '=', 'examId')
-            .getSingle();
+                const { itemId, itemType } = readItemCode(currentItemCode);
 
-        const latestExamVersionId = latestExam.examVersionId;
+                if (itemType !== 'exam')
+                    throw new Error('Current item is not an exam!');
 
-        const examResultViews = await this._ormService
-            .query(ExamResultView, {
-                examVersionId: latestExamVersionId,
-                userId: userId,
-                answerSessionId
-            })
-            .where('examVersionId', '=', 'examVersionId')
-            .and('userId', '=', 'userId')
-            .and('answerSessionId', '=', 'answerSessionId')
-            .getMany();
+                const latestExam = await this._ormService
+                    .query(LatestExamView, { examId: itemId })
+                    .where('examId', '=', 'examId')
+                    .getSingle();
 
-        const examResultStatsView = await this._ormService
-            .query(ExamResultStatsView, {
-                answerSessionId,
-                userId
-            })
-            .where('answerSessionId', '=', 'answerSessionId')
-            .and('userId', '=', 'userId')
-            .getSingle();
+                const latestExamVersionId = latestExam.examVersionId;
 
-        return toExamResultDTO(examResultViews, examResultStatsView);
+                const examResultViews = await this._ormService
+                    .query(ExamResultView, {
+                        examVersionId: latestExamVersionId,
+                        userId: userId,
+                        answerSessionId
+                    })
+                    .where('examVersionId', '=', 'examVersionId')
+                    .and('userId', '=', 'userId')
+                    .and('answerSessionId', '=', 'answerSessionId')
+                    .getMany();
+
+                const examResultStatsView = await this._ormService
+                    .query(ExamResultStatsView, {
+                        answerSessionId,
+                        userId: principalId
+                    })
+                    .where('answerSessionId', '=', 'answerSessionId')
+                    .and('userId', '=', 'userId')
+                    .getSingle();
+
+                return toExamResultDTO(examResultViews, examResultStatsView);
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     };
 
     /**

@@ -6,8 +6,9 @@ import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecor
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { Id } from '../shared/types/versionId';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PlayerController {
+export class PlayerController implements XController<PlayerController> {
 
     private _courseService: CourseService;
     private _playerService: PlayerService;
@@ -21,7 +22,7 @@ export class PlayerController {
     }
 
     @XControllerAction(apiRoutes.player.answerVideoQuestion, { isPost: true })
-    answerVideoQuestionAction = async (params: ActionParams) => {
+    answerVideoQuestionAction(params: ActionParams) {
 
         const dto = params.getBody<any>();
 
@@ -46,12 +47,13 @@ export class PlayerController {
     };
 
     @XControllerAction(apiRoutes.player.getPlayerData)
-    getPlayerDataAction = (params: ActionParams) => {
+    getPlayerDataAction(params: ActionParams) {
 
         const descriptorCode = params
             .getQuery()
             .getValue(x => x.descriptorCode, 'string');
 
-        return this._playerService.getPlayerDataAsync(params.principalId, descriptorCode);
+        return this._playerService
+            .getPlayerDataAsync(params.principalId, descriptorCode);
     };
 }

@@ -12,32 +12,46 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
+import { AuthorizationService } from './AuthorizationService';
 
 export class PersonalityAssessmentService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
+    constructor(ormService: ORMConnectionService, mapperService: MapperService, authorizationService: AuthorizationService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._authorizationService = authorizationService;
     }
 
     /**
      * Returns the personality assessment DTO, that can be used externally.
      */
-    async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
-
-        const userId = principalId.getId();
-
-        const chartData = await this.getUserPersonalityDataAsync(userId);
-        const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userId);
+    getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
 
         return {
-            chartData: chartData,
-            personalityTraitCategories
-        } as PersonalityAssessmentDTO;
+            action: async () => {
+
+                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+
+                const chartData = await this.getUserPersonalityDataAsync(userIdAsIdType);
+                const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userIdAsIdType);
+
+                return {
+                    chartData: chartData,
+                    personalityTraitCategories
+                } as PersonalityAssessmentDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
+
     }
 
     /**

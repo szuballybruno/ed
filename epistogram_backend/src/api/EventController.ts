@@ -3,8 +3,9 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class EventController {
+export class EventController implements XController<EventController> {
 
     private _eventService: EventService;
 
@@ -14,8 +15,9 @@ export class EventController {
     }
 
     @XControllerAction(apiRoutes.event.getUnfulfilledEvent)
-    getUnfulfilledEventAction = async (params: ActionParams) => {
+    getUnfulfilledEventAction(params: ActionParams) {
 
-        return await this._eventService.getUnfulfilledEventAsync();
+        return this._eventService
+            .getUnfulfilledEventAsync();
     };
 }
