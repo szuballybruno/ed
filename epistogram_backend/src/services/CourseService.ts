@@ -392,7 +392,7 @@ export class CourseService {
 
                 const modules = await this._moduleService
                     .getModuleEditDTOsAsync(userId, courseVersionId)
-.action();
+                    .action();
 
                 const items = this._mapperService
                     .mapTo(CourseContentItemAdminDTO, [views]);

@@ -211,12 +211,13 @@ export class PretestService {
         answerSessionId: Id<'AnswerSession'>): ControllerActionReturnType {
 
         return {
-
             action: async () => {
+                
                 // finish pretest
                 await this
                     ._examService
-                    .finishExamAsync(principalId, answerSessionId);
+                    .finishExamAsync(principalId, answerSessionId)
+                    .action();
 
                 // start course
                 const courseId = await this
@@ -224,7 +225,8 @@ export class PretestService {
                     .getCurrentCourseIdOrFail(principalId.getId());
 
                 await this._courseBridgeService
-                    .setCourseStartDateAsync(principalId, courseId);
+                    .setCourseStartDateAsync(principalId, courseId)
+                    .action();
             },
             auth: async () => {
                 return this._authorizationService

@@ -20,7 +20,6 @@ export const PretestSubpage = () => {
     const handleFinishPretest = async () => {
 
         await finishPretest({ answerSessionId });
-
         navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
     };
 

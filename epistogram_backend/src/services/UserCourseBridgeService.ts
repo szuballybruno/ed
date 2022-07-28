@@ -202,7 +202,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 const userId = principalId.getId();
 
                 const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
-
                 if (!userCourseBridge)
                     throw new Error('User course bridge not found!');
 
@@ -211,14 +210,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                         courseId: courseId,
                         userId: userId,
                         id: userCourseBridge.id,
-                        startDate: new Date(Date.now())
-                    } as UserCourseBridge);
+                        startDate: new Date()
+                    });
             },
             auth: async () => {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-
         };
     }
 

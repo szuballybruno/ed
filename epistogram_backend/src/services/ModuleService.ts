@@ -78,8 +78,6 @@ export class ModuleService {
                     .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
-
-
     }
 
     /**

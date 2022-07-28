@@ -78,11 +78,6 @@ export const useNavigation = () => {
     /**
      * @deprecated use "navigate2"
      */
-    const navigateToPretestResults = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
-
-    /**
-     * @deprecated use "navigate2"
-     */
     const navigateToCourseRating = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.courseRatingRoute, { courseId });
 
     /**
@@ -106,7 +101,7 @@ export const useNavigation = () => {
 
         if (stageName === 'pretest_results') {
 
-            navigateToPretestResults(courseId);
+            navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
             return;
         }
 
@@ -125,7 +120,6 @@ export const useNavigation = () => {
         navigateToWatchPrequiz,
         navigateToPretest,
         navigateToPretestGreeting,
-        navigateToPretestResults,
         navigateToCourseRating,
         navigateToCourseOverview,
         playCourse,
