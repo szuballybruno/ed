@@ -6,7 +6,6 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { ServiceProvider } from '../startup/servicesDI';
 import { Id } from '../shared/types/versionId';
-import { AuthorizationService } from '../services/AuthorizationService';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class CommentController implements XController<CommentController> {
@@ -33,7 +32,7 @@ export class CommentController implements XController<CommentController> {
         return this
             ._commentService
             .createCommentAsync(params.principalId, dto);
-    };
+    }
 
     /**
      * Create new like/vote for a comment
@@ -51,7 +50,7 @@ export class CommentController implements XController<CommentController> {
         return this
             ._userCommentBridgeService
             .createUserCommentLikeBridgeAsync(principalId, commentId);
-    };
+    }
 
     /**
      * Get all comments for video
@@ -68,7 +67,7 @@ export class CommentController implements XController<CommentController> {
         return this
             ._commentService
             .getCommentsAsync(itemCode, principalId);
-    };
+    }
 
     /**
      * Delete like/vote for a comment
@@ -86,5 +85,5 @@ export class CommentController implements XController<CommentController> {
         return this
             ._userCommentBridgeService
             .softDeleteUserCommentLikeBridgeAsync(principalId, commentId);
-    };
+    }
 }

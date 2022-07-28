@@ -50,9 +50,9 @@ export class UserProgressService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
@@ -94,9 +94,9 @@ export class UserProgressService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
     }
@@ -200,8 +200,8 @@ export class UserProgressService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 }

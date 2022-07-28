@@ -14,7 +14,7 @@ import { AuthorizationService } from './AuthorizationService';
 
 export class CommentService extends QueryServiceBase<Comment> {
 
-    private _authorizationService: AuthorizationService
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
@@ -23,7 +23,7 @@ export class CommentService extends QueryServiceBase<Comment> {
 
         super(mapperService, ormService, Comment);
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     createCommentAsync(principalId: PrincipalId, comment: CommentCreateDTO) {
@@ -73,7 +73,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             }
         };
 
-    };
+    }
 
     getCommentsAsync(playlistItemCode: string, principalId: PrincipalId) {
 
@@ -101,5 +101,5 @@ export class CommentService extends QueryServiceBase<Comment> {
             }
         };
 
-    };
+    }
 }

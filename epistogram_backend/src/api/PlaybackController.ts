@@ -24,7 +24,7 @@ export class PlaybackController implements XController<PlaybackController> {
 
         return this._playbackService
             .saveVideoPlaybackSample(params.principalId, dto.data);
-    };
+    }
 
     @XControllerAction(apiRoutes.playback.saveVideoSeekEvent, { isPost: true })
     saveVideoSeekEventAction(params: ActionParams) {
@@ -34,5 +34,5 @@ export class PlaybackController implements XController<PlaybackController> {
 
         return this._playbackService
             .saveVideoSeekEventAsync(params.principalId, dto.data);
-    };
+    }
 }

@@ -25,7 +25,7 @@ export class PasswordChangeController implements XController<PasswordChangeContr
 
         return this._passwordChangeService
             .setNewPasswordAsync(params.principalId, password, passwordCompare, passwordResetToken);
-    };
+    }
 
     @XControllerAction(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, { isPost: true })
     requestPasswordChangeAuthenticatedAction(params: ActionParams) {
@@ -36,7 +36,7 @@ export class PasswordChangeController implements XController<PasswordChangeContr
 
         return this._passwordChangeService
             .requestPasswordChangeAuthenticatedAsync(params.principalId, oldPassword);
-    };
+    }
 
     @XControllerAction(apiRoutes.passwordChange.requestPasswordChange, { isPost: true, isPublic: true })
     requestPasswordChangeAction(params: ActionParams) {
@@ -47,5 +47,5 @@ export class PasswordChangeController implements XController<PasswordChangeContr
 
         return this._passwordChangeService
             .requestPasswordChangeAsync(params.principalId, email);
-    };
+    }
 }

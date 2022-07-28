@@ -31,5 +31,5 @@ export class CourseItemController implements XController<CourseItemController> {
 
         return this._courseItemService
             .getCourseItemEditDataAsync(params.principalId, videoVersionId, examVersionId);
-    };
+    }
 }

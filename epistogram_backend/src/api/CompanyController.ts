@@ -21,21 +21,21 @@ export class CompanyController implements XController<CompanyController> {
 
         return this._compService
             .getPrincipalCompaniesAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.getCompaniesAdmin)
     getCompaniesAdminAction(params: ActionParams) {
 
         return this._compService
             .getCompaniesAdminAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.getRoleAssignCompanies)
     getRoleAssignCompaniesAction(params: ActionParams) {
 
         return this._compService
             .getRoleAssignCompaniesAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.getCompanyEditData)
     getCompanyEditDataAction(params: ActionParams) {
@@ -47,21 +47,21 @@ export class CompanyController implements XController<CompanyController> {
 
         return this._compService
             .getCompanyEditDataAsync(params.principalId, companyId);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.getAvailableCompaniesForRoleCreation)
     getAvailableCompaniesForRoleCreationAction(params: ActionParams) {
 
         return this._compService
             .getAvailableCompaniesForNewRolesAsync(params.principalId,);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.createCompany, { isPost: true })
     createCompanyAction(params: ActionParams) {
 
         return this._compService
             .createCompanyAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.deleteCompany, { isPost: true })
     deleteCompanyAction(params: ActionParams) {
@@ -73,7 +73,7 @@ export class CompanyController implements XController<CompanyController> {
 
         return this._compService
             .deleteCompanyAsync(params.principalId, companyId);
-    };
+    }
 
     @XControllerAction(apiRoutes.companies.saveCompany, { isPost: true })
     saveCompanyAction(params: ActionParams) {
@@ -81,5 +81,5 @@ export class CompanyController implements XController<CompanyController> {
         return this._compService
             .saveCompanyAsync(params.principalId, params
                 .getBody<CompanyEditDataDTO>().data);
-    };
+    }
 }

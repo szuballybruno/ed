@@ -31,7 +31,7 @@ export class TempomatService {
         private _eventService: EventService,
         private authorizationService: AuthorizationService) {
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     /**
@@ -57,9 +57,9 @@ export class TempomatService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'SET_TEMPOMAT_MODE_GLOBAL')
+                    .getCheckPermissionResultAsync(principalId, 'SET_TEMPOMAT_MODE_GLOBAL');
             }
-        }
+        };
     }
 
     /**
@@ -100,9 +100,9 @@ export class TempomatService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
     }

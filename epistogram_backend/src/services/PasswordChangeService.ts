@@ -78,9 +78,9 @@ export class PasswordChangeService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     /**
@@ -117,12 +117,12 @@ export class PasswordChangeService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
-    };
+    }
 
     /**
      * This will set a new password for the user.
@@ -168,8 +168,8 @@ export class PasswordChangeService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
-    };
+        };
+    }
 }

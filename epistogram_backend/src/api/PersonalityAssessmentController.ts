@@ -20,7 +20,7 @@ export class PersonalityAssessmentController implements XController<PersonalityA
 
         return this._personalityAssessmentService
             .getPersonalityTraitCategoriesAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails)
     getPersonalityTraitCategoryDetailsAction(params: ActionParams) {
@@ -37,5 +37,5 @@ export class PersonalityAssessmentController implements XController<PersonalityA
 
         return this._personalityAssessmentService
             .getPersonalityTraitCategoryDetailsAsync(params.principalId, personalityTraitCategoryId, isMax);
-    };
+    }
 }

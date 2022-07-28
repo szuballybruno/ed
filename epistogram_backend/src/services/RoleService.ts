@@ -30,7 +30,7 @@ import { User } from '../models/entity/User';
 
 export class RoleService extends QueryServiceBase<Role> {
 
-    private _authorizationService: AuthorizationService
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
@@ -39,7 +39,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
         super(mapperService, ormService, Role);
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     getRolesListAdminAsync(principalId: PrincipalId) {
@@ -58,9 +58,9 @@ export class RoleService extends QueryServiceBase<Role> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_PREDEFINED_ROLES')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_PREDEFINED_ROLES');
             }
-        }
+        };
     }
 
     getAssignablePermissionsAsync(principalId: PrincipalId, courseId: Id<'Course'> | null, companyId: Id<'Company'> | null) {
@@ -90,9 +90,9 @@ export class RoleService extends QueryServiceBase<Role> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_PERMISSIONS')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_PERMISSIONS');
             }
-        }
+        };
     }
 
     getAssignableRolesAsync(principalId: PrincipalId, assigneeUserId: Id<'User'>, companyId: Id<'Company'>) {
@@ -131,9 +131,9 @@ export class RoleService extends QueryServiceBase<Role> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId });
             }
-        }
+        };
 
     }
 
@@ -164,9 +164,9 @@ export class RoleService extends QueryServiceBase<Role> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_PREDEFINED_ROLES')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_PREDEFINED_ROLES');
             }
-        }
+        };
     }
 
     getUserPermissionsAsync(principalId: PrincipalId, userId: Id<'User'>) {
@@ -194,9 +194,9 @@ export class RoleService extends QueryServiceBase<Role> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_PERMISSIONS')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_PERMISSIONS');
             }
-        }
+        };
     }
 
     saveUserAssignedAuthItemsAsync(
@@ -227,9 +227,9 @@ export class RoleService extends QueryServiceBase<Role> {
                     .where('id', '=', 'userId')
                     .getSingle();
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId });
             }
-        }
+        };
     }
 
     async _saveRolesAsync(principalId: PrincipalId, saveduserId: Id<'User'>, assignedRoles: ChangeSet<UserRoleDTO>) {
@@ -321,9 +321,9 @@ export class RoleService extends QueryServiceBase<Role> {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId });
             }
-        }
+        };
     }
 
     getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<'Role'>): ControllerActionReturnType {
@@ -398,9 +398,9 @@ export class RoleService extends QueryServiceBase<Role> {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_CUSTOM_ROLES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_CUSTOM_ROLES', { companyId });
             }
-        }
+        };
 
     }
 
@@ -421,9 +421,9 @@ export class RoleService extends QueryServiceBase<Role> {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'DELETE_CUSTOM_ROLES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'DELETE_CUSTOM_ROLES', { companyId });
             }
-        }
+        };
 
     }
 
@@ -471,9 +471,9 @@ export class RoleService extends QueryServiceBase<Role> {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId });
             }
-        }
+        };
 
     }
 }

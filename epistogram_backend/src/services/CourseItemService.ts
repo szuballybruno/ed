@@ -34,7 +34,7 @@ export class CourseItemService {
         private _answerService: QuestionAnswerService,
         private authorizationService: AuthorizationService) {
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     /**
@@ -61,7 +61,7 @@ export class CourseItemService {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'EDIT_COURSES');
             }
-        }
+        };
     }
 
     /**

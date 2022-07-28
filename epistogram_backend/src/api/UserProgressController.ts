@@ -23,7 +23,7 @@ export class UserProgressController implements XController<UserProgressControlle
                 .create<'Course'>(params
                     .getQuery<any>()
                     .getValue(x => x.courseId, 'int')));
-    };
+    }
 
     @XControllerAction(apiRoutes.userProgress.getActiveCourses)
     getActiveCoursesAction = (params: ActionParams) => {

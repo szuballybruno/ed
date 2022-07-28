@@ -25,7 +25,7 @@ export class TeacherInfoController implements XController<TeacherInfoController>
 
         return this._teacherInfoService
             .getTeacherInfoEditDTOAsync(params.principalId, userId);
-    };
+    }
 
     @XControllerAction(apiRoutes.teacherInfo.saveTeacherInfo, { isPost: true })
     saveTeacherInfoAction(params: ActionParams) {
@@ -34,5 +34,5 @@ export class TeacherInfoController implements XController<TeacherInfoController>
 
         return this._teacherInfoService
             .saveTeacherInfoAsync(params.principalId, dto.data);
-    };
+    }
 }

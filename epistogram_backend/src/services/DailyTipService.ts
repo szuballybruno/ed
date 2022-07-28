@@ -35,9 +35,9 @@ export class DailyTipService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN');
             }
-        }
+        };
     }
 
     /**
@@ -58,9 +58,9 @@ export class DailyTipService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN');
             }
-        }
+        };
     }
 
     /**
@@ -78,9 +78,9 @@ export class DailyTipService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN');
             }
-        }
+        };
 
 
     }
@@ -109,9 +109,9 @@ export class DailyTipService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_DAILY_TIP_ADMIN');
             }
-        }
+        };
 
 
     }
@@ -186,9 +186,9 @@ export class DailyTipService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
     }

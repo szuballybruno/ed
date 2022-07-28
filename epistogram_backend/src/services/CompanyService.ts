@@ -16,7 +16,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 
 export class CompanyService extends QueryServiceBase<Company> {
 
-    private _authorizationService: AuthorizationService
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
@@ -25,7 +25,7 @@ export class CompanyService extends QueryServiceBase<Company> {
 
         super(mapperService, ormService, Company);
 
-        this._authorizationService = authoirzationService
+        this._authorizationService = authoirzationService;
     }
 
     getPrincipalCompaniesAsync(principalId: PrincipalId) {
@@ -44,7 +44,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
     }
@@ -66,7 +66,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
             }
-        }
+        };
 
     }
 
@@ -91,7 +91,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
             }
-        }
+        };
 
 
     }
@@ -120,7 +120,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
             }
-        }
+        };
 
 
     }
@@ -142,7 +142,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY', { companyId });
             }
-        }
+        };
 
 
     }
@@ -162,7 +162,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
             }
-        }
+        };
 
 
     }
@@ -179,7 +179,7 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'DELETE_COMPANIES');
             }
-        }
+        };
 
 
     }
@@ -198,6 +198,6 @@ export class CompanyService extends QueryServiceBase<Company> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY', { companyId: dto.id });
             }
-        }
+        };
     }
 }

@@ -9,7 +9,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 
 export class LikeService extends QueryServiceBase<Like> {
 
-    private _authorizationService: AuthorizationService
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
@@ -18,7 +18,7 @@ export class LikeService extends QueryServiceBase<Like> {
 
         super(mapperService, ormService, Like);
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     // create like with current user
@@ -65,7 +65,7 @@ export class LikeService extends QueryServiceBase<Like> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     // delete like with current user
@@ -96,6 +96,6 @@ export class LikeService extends QueryServiceBase<Like> {
                 return this._authorizationService
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 }

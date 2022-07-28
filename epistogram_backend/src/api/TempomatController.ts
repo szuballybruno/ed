@@ -25,7 +25,7 @@ export class TempomatController implements XController<TempomatController> {
 
         return this._tempomatService
             .getTempomatModeAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.tempomat.setTempomatMode, { isPost: true })
     setTempomatModeAction(params: ActionParams) {
@@ -42,5 +42,5 @@ export class TempomatController implements XController<TempomatController> {
 
         return this._tempomatService
             .setTempomatModeAsync(params.principalId, courseId, mode);
-    };
+    }
 }

@@ -25,7 +25,7 @@ export class VideoRatingController implements XController<VideoRatingController>
 
         return this._videoRatingService
             .rateVideoDifficultyAsync(params.principalId, dto);
-    };
+    }
 
     @XControllerAction(apiRoutes.videoRating.rateVideoExperience, { isPost: true })
     rateVideoExperienceAction(params: ActionParams) {
@@ -36,7 +36,7 @@ export class VideoRatingController implements XController<VideoRatingController>
 
         return this._videoRatingService
             .rateVideoExperienceAsync(params.principalId, dto);
-    };
+    }
 
     @XControllerAction(apiRoutes.videoRating.getVideoRating)
     getVideoRatingAction(params: ActionParams) {
@@ -48,5 +48,5 @@ export class VideoRatingController implements XController<VideoRatingController>
 
         return this._videoRatingService
             .getVideoRatingAsync(params.principalId, videoVersionId);
-    };
+    }
 } 

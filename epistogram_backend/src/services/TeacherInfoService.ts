@@ -60,9 +60,9 @@ export class TeacherInfoService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_TEACHER_OVERVIEW')
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_TEACHER_OVERVIEW');
             }
-        }
+        };
     }
 
     /**
@@ -86,9 +86,9 @@ export class TeacherInfoService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_USER')
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_USER');
             }
-        }
+        };
     }
 
     /**
