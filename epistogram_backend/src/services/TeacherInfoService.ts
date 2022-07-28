@@ -2,6 +2,8 @@ import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
 import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
 import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -9,11 +11,13 @@ export class TeacherInfoService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
+    constructor(ormService: ORMConnectionService, mapperService: MapperService, authorizationService: AuthorizationService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._authorizationService = authorizationService;
     }
 
     /**
@@ -45,30 +49,46 @@ export class TeacherInfoService {
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
           */
-    async getTeacherInfoEditDTOAsync(userId: Id<'User'>) {
+    getTeacherInfoEditDTOAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        const teacherInfo = await this.getTeacherInfoAsync(userId);
+        return {
+            action: async () => {
+                const teacherInfo = await this.getTeacherInfoAsync(userId);
 
-        return this._mapperService
-            .mapTo(TeacherInfoEditDTO, [teacherInfo]);
+                return this._mapperService
+                    .mapTo(TeacherInfoEditDTO, [teacherInfo]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_TEACHER_OVERVIEW')
+            }
+        }
     }
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
           */
-    async saveTeacherInfoAsync(teacherInfoEditDTO: TeacherInfoEditDTO) {
+    saveTeacherInfoAsync(principalId: PrincipalId, teacherInfoEditDTO: TeacherInfoEditDTO) {
 
-        await this._ormService
-            .save(TeacherInfo, {
-                id: teacherInfoEditDTO.id,
-                videoCount: teacherInfoEditDTO.videoCount,
-                courseCount: teacherInfoEditDTO.courseCount,
-                rating: teacherInfoEditDTO.rating,
-                studentCount: teacherInfoEditDTO.studentCount,
-                skills: teacherInfoEditDTO.skills,
-                badges: teacherInfoEditDTO.badges.join(', '),
-                description: teacherInfoEditDTO.description
-            });
+        return {
+            action: async () => {
+                await this._ormService
+                    .save(TeacherInfo, {
+                        id: teacherInfoEditDTO.id,
+                        videoCount: teacherInfoEditDTO.videoCount,
+                        courseCount: teacherInfoEditDTO.courseCount,
+                        rating: teacherInfoEditDTO.rating,
+                        studentCount: teacherInfoEditDTO.studentCount,
+                        skills: teacherInfoEditDTO.skills,
+                        badges: teacherInfoEditDTO.badges.join(', '),
+                        description: teacherInfoEditDTO.description
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_USER')
+            }
+        }
     }
 
     /**
