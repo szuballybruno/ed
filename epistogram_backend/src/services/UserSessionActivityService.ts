@@ -26,7 +26,10 @@ export class UserSessionActivityService {
         private _loggerService: LoggerService) {
     }
 
-    saveUserSessionActivityAsync = async (userId: Id<'User'>, type: SessionActivityType, itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>) => {
+    saveUserSessionActivityAsync = async (
+        userId: Id<'User'>,
+        type: SessionActivityType,
+        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>) => {
 
         // save session activity
         const activitySessionId = await this
@@ -77,8 +80,8 @@ export class UserSessionActivityService {
         await this
             ._saveUserActivity({
                 prevActivitySessionId: activeSessionId,
-                examVersionId: type === 'video' ? itemVersionId! as any : null,
-                videoVersionId: type === 'exam' ? itemVersionId! as any : null,
+                examVersionId: type === 'exam' ? itemVersionId! as Id<'ExamVersion'> : null,
+                videoVersionId: type === 'video' ? itemVersionId! as Id<'VideoVersion'> : null,
                 type
             });
 
@@ -168,10 +171,6 @@ export class UserSessionActivityService {
             this
                 ._loggerService
                 .logScoped('ROLLING SESSION', 'Update rolling session...');
-
-            this
-                ._loggerService
-                .logScoped('ROLLING SESSION', saveData);
 
             await this._ormService
                 .save(entitySignature, saveData);
