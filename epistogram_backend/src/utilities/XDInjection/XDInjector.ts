@@ -4,10 +4,92 @@ import { RemapToFunctions } from '../../services/misc/advancedTypes/RemapToFunct
 
 type FnType<TProps> = { fn: Function, deps: Function[], props: TProps };
 
+type DepHierarchyItem = {
+    name: string;
+    deps: string[];
+}
+
 export class XDInjector<TProps = void> {
 
     private _functions: FnType<TProps>[] = [];
     private _instances: any;
+
+    static orderDepHierarchy(depHierarchyItems: DepHierarchyItem[]) {
+
+        /**
+         * State
+         */
+        const ordered: DepHierarchyItem[] = [];
+        let unordered: DepHierarchyItem[] = [...depHierarchyItems]
+            .orderBy(x => x.deps.length);
+
+        /**
+         * Check integrity
+         */
+        const allKeys = unordered
+            .map(w => w.name);
+
+        const allDeps = unordered
+            .flatMap(x => x.deps)
+            .groupBy(x => x)
+            .map(x => x.key);
+
+        const missingDeps = allDeps
+            .filter(x => allKeys
+                .none(y => y === x));
+
+        if (missingDeps.length > 0)
+            throw new Error(`Missing deps: [${missingDeps.join(', ')}]`);
+
+        /**
+         * Move function 
+         */
+        const move = (item: DepHierarchyItem) => {
+
+            // console.log(`[${ordered.length + 1}] Ordering... ${item.name}`);
+
+            // add to ordered
+            ordered
+                .push(item);
+
+            // remove from unordered
+            unordered = unordered
+                .filter(x => x.name !== item.name);
+        };
+
+        /**
+         * Begin ordering
+         */
+        console.log(`Ordering ${unordered.length} items...`);
+
+        while (unordered.length > 0) {
+
+            let itemToMove: DepHierarchyItem | null = null;
+
+            for (let index = 0; index < unordered.length; index++) {
+
+                const depHierarchyItem = unordered[index];
+                const hasZeroDeps = depHierarchyItem.deps.length === 0;
+                const allDepsInOrdered = depHierarchyItem
+                    .deps
+                    .all(x => ordered
+                        .any(orderedItem => orderedItem.name === x));
+
+                if (hasZeroDeps || allDepsInOrdered) {
+
+                    itemToMove = depHierarchyItem;
+                    break;
+                }
+            }
+
+            if (!itemToMove)
+                throw new Error('Dep hierarchy ordering iteration failed.');
+
+            move(itemToMove);
+        }
+
+        return ordered;
+    }
 
     add<T extends ParametrizedFunction>(fn: T, deps: RemapToFunctions<Parameters<T>>, props: TProps) {
 
@@ -58,7 +140,7 @@ export class XDInjector<TProps = void> {
         return this;
     }
 
-    getInstance(fn: Function): any | null; 
+    getInstance(fn: Function): any | null;
     getInstance<T>(fn: FunctionSignature<T>): T | null {
 
         if (!this._instances)

@@ -10,7 +10,7 @@ SELECT
 				SUM(upagv2.exam_correct_answer_rate) exam_correct_answer_rate,
 				SUM(upagv2.video_correct_answer_rate) video_correct_answer_rate,
 				SUM(upagv2.practise_correct_answer_rate) practise_correct_answer_rate
-			FROM user_performance_answer_group_view upagv2
+			FROM public.user_performance_answer_group_view upagv2
 			WHERE upagv2.user_id = u.id
 			GROUP BY upagv2.user_id
 		)
@@ -30,5 +30,5 @@ SELECT
     )::int / 5 performance_percentage
 FROM public.user u
 
-LEFT JOIN user_performance_answer_group_view upagv
+LEFT JOIN public.user_performance_answer_group_view upagv
 ON upagv.user_id = u.id
