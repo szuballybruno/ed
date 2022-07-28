@@ -24,7 +24,7 @@ export class DailyTipController {
                 .getValue(x => x.dailyTipId, 'int'));
 
         await this._dailyTipService
-            .deleteDailyTipAsync(tipId);
+            .deleteDailyTipAsync(params.principalId, tipId);
     };
 
     @XControllerAction(apiRoutes.dailyTip.createDailyTip, { isPost: true })
@@ -41,7 +41,7 @@ export class DailyTipController {
             .getValue(x => x.isMax, 'boolean');
 
         await this._dailyTipService
-            .createDailyTipAsync(personalityTraitCategoryId, isMax);
+            .createDailyTipAsync(params.principalId, personalityTraitCategoryId, isMax);
     };
 
     @XControllerAction(apiRoutes.dailyTip.getDailyTipEditData)
@@ -53,7 +53,7 @@ export class DailyTipController {
                 .getValue(x => x.dailyTipId, 'int'));
 
         return await this._dailyTipService
-            .getDailyTipEditDataAsync(dailyTipId);
+            .getDailyTipEditDataAsync(params.principalId, dailyTipId);
     };
 
     @XControllerAction(apiRoutes.dailyTip.saveDailyTip, { isPost: true })
@@ -64,7 +64,7 @@ export class DailyTipController {
             .data;
 
         return await this._dailyTipService
-            .saveDailyTipAsync(dto);
+            .saveDailyTipAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.dailyTip.getDailyTip)

@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PersonalityAssessmentController {
+export class PersonalityAssessmentController implements XController<PersonalityAssessmentController> {
 
     private _personalityAssessmentService: PersonalityAssessmentService;
 
@@ -15,14 +16,14 @@ export class PersonalityAssessmentController {
     }
 
     @XControllerAction(apiRoutes.personalityAssessment.getPersonalityTraitCategories)
-    getPersonalityTraitCategoriesAction = async () => {
+    getPersonalityTraitCategoriesAction(params: ActionParams) {
 
         return this._personalityAssessmentService
-            .getPersonalityTraitCategoriesAsync();
+            .getPersonalityTraitCategoriesAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails)
-    getPersonalityTraitCategoryDetailsAction = async (params: ActionParams) => {
+    getPersonalityTraitCategoryDetailsAction(params: ActionParams) {
 
         const query = params
             .getQuery<any>();
@@ -35,6 +36,6 @@ export class PersonalityAssessmentController {
             .getValue(x => x.isMax, 'boolean');
 
         return this._personalityAssessmentService
-            .getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId, isMax);
+            .getPersonalityTraitCategoryDetailsAsync(params.principalId, personalityTraitCategoryId, isMax);
     };
 }

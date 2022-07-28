@@ -5,8 +5,9 @@ import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecor
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { Id } from '../shared/types/versionId';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class TeacherInfoController {
+export class TeacherInfoController implements XController<TeacherInfoController> {
 
     private _teacherInfoService: TeacherInfoService;
 
@@ -16,22 +17,22 @@ export class TeacherInfoController {
     }
 
     @XControllerAction(apiRoutes.teacherInfo.getTeacherInfo)
-    getTeacherInfoAction = async (params: ActionParams) => {
+    getTeacherInfoAction(params: ActionParams) {
 
         const userId = Id
             .create<'User'>(params.getQuery<any>()
                 .getValue(x => x.userId, 'int'));
 
-        return await this._teacherInfoService
-            .getTeacherInfoEditDTOAsync(userId);
+        return this._teacherInfoService
+            .getTeacherInfoEditDTOAsync(params.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.teacherInfo.saveTeacherInfo, { isPost: true })
-    saveTeacherInfoAction = async (params: ActionParams) => {
+    saveTeacherInfoAction(params: ActionParams) {
 
         const dto = params.getBody<TeacherInfoEditDTO>();
 
-        return await this._teacherInfoService
-            .saveTeacherInfoAsync(dto.data);
+        return this._teacherInfoService
+            .saveTeacherInfoAsync(params.principalId, dto.data);
     };
 }

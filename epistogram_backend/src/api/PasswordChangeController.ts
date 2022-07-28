@@ -4,8 +4,9 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PasswordChangeController {
+export class PasswordChangeController implements XController<PasswordChangeController> {
 
     private _passwordChangeService: PasswordChangeService;
 
@@ -15,7 +16,7 @@ export class PasswordChangeController {
     }
 
     @XControllerAction(apiRoutes.passwordChange.setNewPassword, { isPost: true, isPublic: true })
-    setNewPasswordAction = async (params: ActionParams) => {
+    setNewPasswordAction(params: ActionParams) {
 
         const dto = params.getBody<ChangePasswordDTO>();
         const password = dto.getValue(x => x.password, 'string');
@@ -23,28 +24,28 @@ export class PasswordChangeController {
         const passwordResetToken = dto.getValue(x => x.passwordResetToken, 'string');
 
         return this._passwordChangeService
-            .setNewPasswordAsync(password, passwordCompare, passwordResetToken);
+            .setNewPasswordAsync(params.principalId, password, passwordCompare, passwordResetToken);
     };
 
     @XControllerAction(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, { isPost: true })
-    requestPasswordChangeAuthenticatedAction = async (params: ActionParams) => {
+    requestPasswordChangeAuthenticatedAction(params: ActionParams) {
 
         const oldPassword = params
             .getBody<any>()
             .getValue(x => x.oldPassword, 'string');
 
-        return await this._passwordChangeService
+        return this._passwordChangeService
             .requestPasswordChangeAuthenticatedAsync(params.principalId, oldPassword);
     };
 
     @XControllerAction(apiRoutes.passwordChange.requestPasswordChange, { isPost: true, isPublic: true })
-    requestPasswordChangeAction = async (params: ActionParams) => {
+    requestPasswordChangeAction(params: ActionParams) {
 
         const email = params
             .getBody()
             .getValue(x => x.email, 'string');
 
-        await this._passwordChangeService
-            .requestPasswordChangeAsync(email);
+        return this._passwordChangeService
+            .requestPasswordChangeAsync(params.principalId, email);
     };
 }

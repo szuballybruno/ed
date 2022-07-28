@@ -306,13 +306,13 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'exam_version_view', ExamVersionView],
             ['basic', 'course_shop_item_list_view', CourseShopItemListView],
             ['basic', 'pretest_completion_view', PretestCompletionView],
-            ['basic', 'course_all_items_completed_view', CourseAllItemsCompletedView],
             ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view
             ['common', 'answer_session_evaluation_view'], // 3 | 1 answer_session_view
             ['common', 'exam_completed_view', ExamCompletedView], // 6 | 1 answer_session_evaluation_view
             ['common', 'course_item_playlist_view', CourseItemPlaylistView], // 2 | latest_course_version_view, course_item_view, user_practise_recommendation_view
+            ['basic', 'course_all_items_completed_view', CourseAllItemsCompletedView],
             ['common', 'course_details_view', CourseDetailsView],
             ['common', 'available_course_view', AvailableCourseView], // 2
             ['common', 'exam_result_view', ExamResultView], // 1

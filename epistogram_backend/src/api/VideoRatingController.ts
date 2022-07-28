@@ -5,8 +5,9 @@ import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecor
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { Id } from '../shared/types/versionId';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class VideoRatingController {
+export class VideoRatingController implements XController<VideoRatingController> {
 
     private _videoRatingService: VideoRatingService;
 
@@ -16,36 +17,36 @@ export class VideoRatingController {
     }
 
     @XControllerAction(apiRoutes.videoRating.rateVideoDifficulty, { isPost: true })
-    rateVideoDifficultyAction = async (params: ActionParams) => {
+    rateVideoDifficultyAction(params: ActionParams) {
 
         const dto = params
             .getBody<VideoRatingDTO>()
             .data;
 
-        await this._videoRatingService
+        return this._videoRatingService
             .rateVideoDifficultyAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.videoRating.rateVideoExperience, { isPost: true })
-    rateVideoExperienceAction = async (params: ActionParams) => {
+    rateVideoExperienceAction(params: ActionParams) {
 
         const dto = params
             .getBody<VideoRatingDTO>()
             .data;
 
-        await this._videoRatingService
+        return this._videoRatingService
             .rateVideoExperienceAsync(params.principalId, dto);
     };
 
     @XControllerAction(apiRoutes.videoRating.getVideoRating)
-    getVideoRatingAction = async (params: ActionParams) => {
+    getVideoRatingAction(params: ActionParams) {
 
         const videoVersionId = Id
             .create<'VideoVersion'>(params
                 .getQuery<{ videoVersionId: number }>()
                 .getValue(x => x.videoVersionId, 'int'));
 
-        return await this._videoRatingService
+        return this._videoRatingService
             .getVideoRatingAsync(params.principalId, videoVersionId);
     };
 } 
