@@ -17,9 +17,7 @@ export class TypeORMConnectionService {
         const dbConnOpts = this._config.getDatabaseConnectionParameters();
 
         const views = this._schema
-            .views
-            .filter(x => !!x[2])
-            .map(x => x[2]!);
+            .views;
 
         const entities = this._schema
             .entities;
