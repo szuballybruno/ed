@@ -157,7 +157,7 @@ SELECT
     urp.reaction_time_percent_diff
 FROM public.user u
 
-LEFT JOIN user_performance_answer_group_view upagv
+LEFT JOIN public.user_performance_answer_group_view upagv
 ON upagv.user_id = u.id
 
 LEFT JOIN user_exam_points uep

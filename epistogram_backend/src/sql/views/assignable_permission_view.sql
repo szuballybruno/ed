@@ -13,7 +13,7 @@ permissions AS
 		pe.scope permission_scope
 	FROM public.permission pe
 	
-	INNER JOIN user_permission_view upv
+	INNER JOIN public.user_permission_view upv
 	ON (upv.permission_code = 'ASSIGN_COMPANY_PERMISSIONS' AND pe.scope = 'COMPANY')
 	OR (upv.permission_code = 'ASSIGN_GLOBAL_PERMISSIONS' AND pe.scope = 'USER')
 	OR (upv.permission_code = 'ASSIGN_COURSE_PERMISSIONS' AND pe.scope = 'COURSE')

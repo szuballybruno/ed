@@ -31,7 +31,7 @@ FROM
 				PARTITION BY vv.video_id
 				ORDER BY vpsv.creation_date
 			) grp
-			FROM video_playback_sample_view vpsv
+			FROM public.video_playback_sample_view vpsv
 		
 		LEFT JOIN public.video_version vv 
 		ON vv.id = vpsv.video_version_id

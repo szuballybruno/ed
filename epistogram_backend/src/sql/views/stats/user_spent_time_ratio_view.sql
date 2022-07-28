@@ -6,7 +6,7 @@ SELECT
     COALESCE(SUM(usv.length_seconds)::int - SUM(cstv.total_spent_seconds)::int, 0) other_total_spent_seconds
 FROM public.user u
 
-LEFT JOIN course_spent_time_view cstv
+LEFT JOIN public.course_spent_time_view cstv
 ON u.id = cstv.user_id
 
 LEFT JOIN user_session_view usv

@@ -56,6 +56,14 @@ export const toSQLSnakeCasing = (name: string) => {
         .toLowerCase();
 };
 
+/**
+ * Encapsulation of JS's fucked up regex match syntax
+ */
+export const regexMatchAll = (text: string, regex: RegExp): string[] => {
+
+    return text.match(regex) ?? [] as string[];
+};
+
 export const forN = <T>(iterations: number, action: (index: number) => T) => {
 
     const returnValues = [] as T[];
@@ -221,8 +229,8 @@ export const filterByProperty = <T extends Object, TKeyField extends keyof T>(
 
         if (typeof value === 'string' && typeof searchTerm === 'string')
             return value.toString()
-.toLowerCase()
-.includes(searchTerm.toLowerCase());
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase());
 
         if (typeof value === 'boolean' && typeof searchTerm === 'boolean')
             return value === searchTerm;
@@ -248,9 +256,9 @@ export const orderByProperty = <T extends Object, TKeyField extends keyof T>(
                 return 0;
 
             const aProp = aValue.toString()
-.toLowerCase();
+                .toLowerCase();
             const bProp = bValue.toString()
-.toLowerCase();
+                .toLowerCase();
 
             if (aProp < bProp && direction === 'asc')
                 return -1;

@@ -30,9 +30,6 @@ ON jt.id = u.job_title_id
 LEFT JOIN public.user_latest_activity_view ulav
 ON ulav.id = u.id
 
--- LEFT JOIN public.user_activity_flat_view uafv
--- ON uafv.user_id = u.id
-
 LEFT JOIN public.coin_balance_view cbv
 ON cbv.user_id = u.id
 

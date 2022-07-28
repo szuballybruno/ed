@@ -20,7 +20,7 @@ LEFT JOIN public.user_course_progress_view ucpv
 ON ucpv.course_id = ucb.course_id
 AND ucpv.user_id = ucb.user_id
 
-LEFT JOIN public.user_course_progress_actual ucpa
+LEFT JOIN public.user_course_progress_actual_view ucpa
 ON ucpa.course_id = ucb.course_id
 AND ucpa.user_id = ucb.user_id
 

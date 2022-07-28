@@ -1,11 +1,21 @@
 
-import { readFileSync } from 'fs';
-import { replaceAll } from '../../utilities/helpers';
+import { readdirSync, readFileSync } from 'fs';
+import { regexMatchAll } from '../../utilities/helpers';
 import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 import { TypeORMConnectionService } from './TypeORMConnectionService';
+
+type DepHierarchyItem = {
+    name: string;
+    deps: string[];
+}
+
+type ViewFile = {
+    name: string,
+    content: string
+}
 
 export class CreateDBService {
 
@@ -26,7 +36,7 @@ export class CreateDBService {
         }
 
         this._loggerService.logScoped('BOOTSTRAP', 'Recreating views...');
-        await this.recreateViewsAsync(this._dbSchema.views.map(x => x[0]), this._dbSchema.views.map(x => x[1]));
+        await this.recreateViewsAsync();
 
         this._loggerService.logScoped('BOOTSTRAP', 'Recreating functions...');
         await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
@@ -42,6 +52,128 @@ export class CreateDBService {
     };
 
     // PRIVATE
+
+    private orderDepHierarchy(depHierarchyItems: DepHierarchyItem[]) {
+
+        /**
+         * State
+         */
+        const ordered: DepHierarchyItem[] = [];
+        let unordered: DepHierarchyItem[] = [...depHierarchyItems]
+            .orderBy(x => x.deps.length);
+
+        /**
+         * Check integrity
+         */
+        const allKeys = unordered
+            .map(w => w.name);
+
+        const allDeps = unordered
+            .flatMap(x => x.deps)
+            .groupBy(x => x)
+            .map(x => x.key);
+
+        const missingDeps = allDeps
+            .filter(x => allKeys
+                .none(y => y === x));
+
+        if (missingDeps.length > 0)
+            throw new Error(`Missing deps: [${missingDeps.join(', ')}]`);
+
+        /**
+         * Move function 
+         */
+        const move = (item: DepHierarchyItem) => {
+
+            // console.log(`[${ordered.length + 1}] Ordering... ${item.name}`);
+
+            // add to ordered
+            ordered
+                .push(item);
+
+            // remove from unordered
+            unordered = unordered
+                .filter(x => x.name !== item.name);
+        };
+
+        /**
+         * Begin ordering
+         */
+        console.log(`Ordering ${unordered.length} items...`);
+
+        while (unordered.length > 0) {
+
+            let itemToMove: DepHierarchyItem | null = null;
+
+            for (let index = 0; index < unordered.length; index++) {
+
+                const depHierarchyItem = unordered[index];
+                const hasZeroDeps = depHierarchyItem.deps.length === 0;
+                const allDepsInOrdered = depHierarchyItem
+                    .deps
+                    .all(x => ordered
+                        .any(orderedItem => orderedItem.name === x));
+
+                if (hasZeroDeps || allDepsInOrdered) {
+
+                    itemToMove = depHierarchyItem;
+                    break;
+                }
+            }
+
+            if (!itemToMove)
+                throw new Error('Dep hierarchy ordering iteration failed.');
+
+            move(itemToMove);
+        }
+
+        return ordered;
+    }
+
+    private _getDepsOfViews(namesAndContents: ViewFile[]) {
+
+        return namesAndContents
+            .map(x => ({
+                name: x.name,
+                deps: this
+                    ._getDepsOfView(x.content)
+            }));
+    }
+
+    private _getDepsOfView(viewSql: string) {
+
+        const matches = regexMatchAll(viewSql, new RegExp('public\\..*_view', 'g'));
+        const filtered = matches
+            .map(x => x.replace('public.', ''))
+            .groupBy(x => x)
+            .map(x => x.key);
+
+        return filtered;
+    }
+
+    private _readViews(): ViewFile[] {
+
+        const readFolder = (readFolder: string) => {
+
+            const fileNames = readdirSync(readFolder);
+            const namesAndContents = fileNames
+                .filter(x => x.endsWith('.sql'))
+                .map(x => ({
+                    name: x.replace('.sql', ''),
+                    content: readFileSync(`${readFolder}\\${x}`, 'utf-8')
+                }));
+
+            return namesAndContents;
+        };
+
+        const rootFolder = this._getRootFolderPath('views');
+        const views = readFolder(rootFolder)
+            .concat(readFolder(rootFolder + '\\basic'))
+            .concat(readFolder(rootFolder + '\\common'))
+            .concat(readFolder(rootFolder + '\\stats'));
+
+        return views;
+    }
 
     private recreateConstraintsAsync = async (constraints: XDBMConstraintType[]) => {
 
@@ -117,29 +249,44 @@ export class CreateDBService {
         }
     };
 
-    private recreateViewsAsync = async (viewSubFolderNames: string[], viewNames: string[]) => {
+    private recreateViewsAsync = async () => {
 
-        await this.dropViews(viewNames);
-        await this.createViews(viewNames, viewSubFolderNames);
+        const viewFiles = this._readViews();
+        const nameAndDeps = this._getDepsOfViews(viewFiles);
+        const ordered = this.orderDepHierarchy(nameAndDeps);
+
+        const revereseOrderedViewNames = ordered
+            .map(x => x.name)
+            .reverse();
+
+        const viewFilesOrdered = ordered
+            .map(x => viewFiles
+                .single(y => y.name === x.name));
+
+        // drop in reverse
+        await this.dropViews(revereseOrderedViewNames);
+
+        // create 
+        await this.createViews(viewFilesOrdered);
     };
 
-    private replaceSymbols = (sql: string) => {
+    private createViews = async (viewFilesOrdered: ViewFile[]) => {
 
-        const url = this._config.fileStorage.assetStoreUrl;
-        return replaceAll(sql, '{CDN_BUCKET_URL}', url);
-    };
+        for (let index = 0; index < viewFilesOrdered.length; index++) {
 
-    private createViews = async (viewNames: string[], viewSubFolderNames: string[]) => {
+            const viewFile = viewFilesOrdered[index];
+            const viewName = viewFile.name;
 
-        for (let index = 0; index < viewNames.length; index++) {
+            this
+                ._loggerService
+                .logScoped('BOOTSTRAP', 'SECONDARY', `Creating view (${index + 1}): [${viewName}]...`);
 
-            const viewName = viewNames[index];
-            const viewSubFolderName = viewSubFolderNames[index];
-            const script = this.getViewCreationScript(viewName, viewSubFolderName);
+            const script = this
+                ._getViewCreationScript(viewFile.name, viewFile.content);
 
-            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating view: [${viewName}]...`);
-
-            await this._sqlConnectionService.executeSQLAsync(script);
+            await this
+                ._sqlConnectionService
+                .executeSQLAsync(script);
         }
     };
 
@@ -151,14 +298,18 @@ export class CreateDBService {
         await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
     };
 
-    private getViewCreationScript = (viewName: string, viewSubFolderName: string) => {
+    private _getViewCreationScript = (viewName: string, viewContent: string) => {
 
-        const sql = this.readSQLFile('views', viewName, viewSubFolderName);
-        return `CREATE VIEW ${viewName}\nAS\n${sql}`;
+        return `CREATE VIEW ${viewName}\nAS\n${viewContent}`;
     };
 
     private readSQLFile = (folderName: string, fileName: string, subFolder?: string) => {
 
         return readFileSync(this._config.getRootRelativePath(`/sql/${folderName}/${subFolder || ''}${subFolder ? '/' : ''}${fileName}.sql`), 'utf8');
     };
+
+    private _getRootFolderPath(folderName: string) {
+
+        return this._config.getRootRelativePath(`/sql/${folderName}`);
+    }
 }

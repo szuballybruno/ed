@@ -27,7 +27,7 @@ FROM
 		ucccv.remaining_days
 	FROM public.user_course_completion_current_view ucccv
 
-	LEFT JOIN public.user_course_progress_actual ucpa
+	LEFT JOIN public.user_course_progress_actual_view ucpa
 	ON ucpa.course_id = ucccv.course_id 
 		AND ucpa.user_id = ucccv.user_id
 ) sq
