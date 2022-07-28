@@ -43,7 +43,7 @@ export class PlayerService {
         private _mapperService: MapperService,
         private authorizationService: AuthorizationService) {
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     /**
@@ -124,12 +124,12 @@ export class PlayerService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
-    };
+    }
 
     //
     // PRIVATE

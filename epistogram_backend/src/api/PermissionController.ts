@@ -19,5 +19,5 @@ export class PermissionController implements XController<PermissionController> {
 
         return this._permissionService
             .getPermissionsAsync(params.principalId);
-    };
+    }
 }

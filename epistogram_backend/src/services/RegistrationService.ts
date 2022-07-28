@@ -124,9 +124,9 @@ export class RegistrationService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'CREATE_NEW_USER')
+                    .getCheckPermissionResultAsync(principalId, 'CREATE_NEW_USER');
             }
-        }
+        };
     }
 
     /**
@@ -222,7 +222,7 @@ export class RegistrationService extends ServiceBase {
 
         return tokens;
 
-    };
+    }
 
     /**
      * This function creates a new invited user, 

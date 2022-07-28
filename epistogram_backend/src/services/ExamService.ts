@@ -123,9 +123,9 @@ export class ExamService extends QueryServiceBase<ExamData> {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     /**
@@ -164,9 +164,9 @@ export class ExamService extends QueryServiceBase<ExamData> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
     }
 
@@ -230,12 +230,12 @@ export class ExamService extends QueryServiceBase<ExamData> {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
-    };
+    }
 
     /**
      * Get the results of the particular exam.
@@ -292,10 +292,10 @@ export class ExamService extends QueryServiceBase<ExamData> {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
-    };
+        };
+    }
 
     /**
      * Checks if answer session is indeed 

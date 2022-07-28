@@ -43,12 +43,12 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER')
+                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
             }
-        }
+        };
 
 
-    };
+    }
 
     @XControllerAction(apiRoutes.registration.registerUserViaInvitationToken, { isPublic: true, isPost: true })
     registerUserViaInvitationTokenAction(params: ActionParams) {
@@ -68,11 +68,11 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER')
+                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
             }
-        }
+        };
 
-    };
+    }
 
     @XControllerAction(apiRoutes.registration.registerUserViaActivationCode, { isPublic: true, isPost: true })
     registerUserViaActivationCodeAction(params: ActionParams) {
@@ -91,10 +91,10 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER')
+                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
             }
-        }
-    };
+        };
+    }
 
     @XControllerAction(apiRoutes.registration.inviteUser, { isPost: true })
     inviteUserAction(params: ActionParams) {
@@ -115,8 +115,8 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER')
+                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
             }
-        }
-    };
+        };
+    }
 }

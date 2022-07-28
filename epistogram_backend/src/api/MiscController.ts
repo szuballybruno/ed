@@ -44,12 +44,12 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(parms.principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(parms.principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
-    };
+    }
 
     @XControllerAction(apiRoutes.misc.getHomePageDTO)
     getOverviewPageDTOAction(params: ActionParams) {
@@ -62,12 +62,12 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
-    };
+    }
 
     @XControllerAction(apiRoutes.misc.getJobTitles)
     getJobTitlesAction(params: ActionParams) {
@@ -81,11 +81,11 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
-    };
+    }
 
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)
     getCourseOverviewDataAction(params: ActionParams) {
@@ -98,11 +98,11 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
-    };
+    }
 
     getRegistrationLinkAction(params: ActionParams) {
 
@@ -113,11 +113,11 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
-    };
+    }
 
     @XControllerAction(apiRoutes.questions.getPractiseQuestions)
     getPractiseQuestionAction(params: ActionParams) {
@@ -129,8 +129,8 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
             }
-        }
-    };
+        };
+    }
 }

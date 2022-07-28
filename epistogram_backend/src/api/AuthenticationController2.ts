@@ -38,10 +38,10 @@ export class ZAuthenticationController implements XController<ZAuthenticationCon
                 setAuthCookies(this._config, params.res, accessToken, refreshToken);
             },
             auth: async () => {
-                return AuthorizationResult.ok
+                return AuthorizationResult.ok;
             }
-        }
-    };
+        };
+    }
 
     @XControllerAction(apiRoutes.authentication.establishAuthHandshake, { isPublic: true })
     establishAuthHandshakeAction(params: ActionParams) {
@@ -59,10 +59,10 @@ export class ZAuthenticationController implements XController<ZAuthenticationCon
             },
 
             auth: async () => {
-                return AuthorizationResult.ok
+                return AuthorizationResult.ok;
             }
-        }
-    };
+        };
+    }
 
     @XControllerAction(apiRoutes.authentication.logoutUser, { isPost: true, isUnauthorized: true })
     logOutUserAction(params: ActionParams) {
@@ -77,8 +77,8 @@ export class ZAuthenticationController implements XController<ZAuthenticationCon
                 params.res.clearCookie(this._config.misc.refreshTokenCookieName);
             },
             auth: async () => {
-                return AuthorizationResult.ok
+                return AuthorizationResult.ok;
             }
-        }
-    };
+        };
+    }
 }

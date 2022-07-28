@@ -28,7 +28,7 @@ export class CourseRatingController implements XController<CourseRatingControlle
 
         return this._courseRatingService
             .getCourseRatingGroupsAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.courseRating.saveCourseRatingGroupAnswers, { isPost: true })
     saveCourseRatingGroupAnswersAction(params: ActionParams) {
@@ -39,5 +39,5 @@ export class CourseRatingController implements XController<CourseRatingControlle
 
         return this._courseRatingService
             .saveCourseRatingGroupAnswersAsync(params.principalId, dto);
-    };
+    }
 }

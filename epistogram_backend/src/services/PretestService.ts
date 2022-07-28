@@ -4,7 +4,6 @@ import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { PretestResultView } from '../models/views/PretestResultView';
-import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { Id } from '../shared/types/versionId';
 import { throwNotImplemented } from '../utilities/helpers';
@@ -33,7 +32,7 @@ export class PretestService {
         tempomatService: TempomatService) {
 
         this._tempomatService = tempomatService;
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     async createPretestExamAsync(courseId: Id<'Course'>) {
@@ -80,9 +79,9 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
             }
-        }
+        };
     }
 
     /**
@@ -168,9 +167,9 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
             }
-        }
+        };
     }
 
     getPretestExamIdAsync(courseId: Id<'Course'>) {
@@ -193,9 +192,9 @@ export class PretestService {
             },
             auth: async () => {
 
-                return AuthorizationResult.ok
+                return AuthorizationResult.ok;
             }
-        }
+        };
     }
 
     /**
@@ -223,8 +222,8 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 }

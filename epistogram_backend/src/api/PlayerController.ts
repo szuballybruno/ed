@@ -44,7 +44,7 @@ export class PlayerController implements XController<PlayerController> {
 
         return this._videoService
             .answerVideoQuestionAsync(params.principalId, answerSessionId, questionVersionId, answerIdsAsIdType, elapsedSeconds);
-    };
+    }
 
     @XControllerAction(apiRoutes.player.getPlayerData)
     getPlayerDataAction(params: ActionParams) {
@@ -55,5 +55,5 @@ export class PlayerController implements XController<PlayerController> {
 
         return this._playerService
             .getPlayerDataAsync(params.principalId, descriptorCode);
-    };
+    }
 }

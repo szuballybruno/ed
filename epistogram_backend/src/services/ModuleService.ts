@@ -34,7 +34,7 @@ export class ModuleService {
         private _fileService: FileService,
         private authorizationService: AuthorizationService) {
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     /**
@@ -72,12 +72,12 @@ export class ModuleService {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
 
 
     }
@@ -108,12 +108,12 @@ export class ModuleService {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
     }
 
     /**

@@ -3,7 +3,6 @@ import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
 import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
@@ -70,9 +69,9 @@ export class UserStatsService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     getUserLearningPageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
@@ -98,9 +97,9 @@ export class UserStatsService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     getImproveYourselfPageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
@@ -129,9 +128,9 @@ export class UserStatsService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     /**
@@ -170,9 +169,9 @@ export class UserStatsService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
             }
-        }
+        };
     }
 
     /**
@@ -197,12 +196,12 @@ export class UserStatsService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
             }
-        }
+        };
 
 
-    };
+    }
 
     /**
      * Gets the statistics for the users every completed exam
@@ -227,12 +226,12 @@ export class UserStatsService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
             }
-        }
+        };
 
 
-    };
+    }
 
     /**
      * Gets the learning overview statistics data for single user
@@ -302,12 +301,12 @@ export class UserStatsService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
             }
-        }
+        };
 
 
-    };
+    }
 
     calculateProductivityAsync = async (userId: Id<'User'>) => {
 

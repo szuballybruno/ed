@@ -27,7 +27,7 @@ export class SignupController implements XController<SignupController> {
 
         return this._signupService
             .answerSignupQuestionAsync(params.principalId, dto);
-    };
+    }
 
     @XControllerAction(apiRoutes.signup.getSignupData)
     getSignupDataAction = (params: ActionParams) => {
@@ -41,5 +41,5 @@ export class SignupController implements XController<SignupController> {
 
         return this._personalityAssessmentService
             .getUserPersonalityAssessmentDTOAsync(params.principalId);
-    };
+    }
 }

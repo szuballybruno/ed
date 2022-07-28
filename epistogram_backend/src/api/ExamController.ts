@@ -25,7 +25,7 @@ export class ExamController implements XController<ExamController> {
 
         return this._examService
             .answerExamQuestionAsync(params.principalId, questionAnswerDTO);
-    };
+    }
 
     @XControllerAction(apiRoutes.exam.startExam, { isPost: true })
     startExamAction(params: ActionParams) {
@@ -36,7 +36,7 @@ export class ExamController implements XController<ExamController> {
 
         return this._examService
             .startExamAsync(params.principalId, answerSessionId);
-    };
+    }
 
     @XControllerAction(apiRoutes.exam.completeExam, { isPost: true })
     completeExamAction(params: ActionParams) {
@@ -50,7 +50,7 @@ export class ExamController implements XController<ExamController> {
 
         return this._examService
             .finishExamAsync(params.principalId, answerSessionId);
-    };
+    }
 
     @XControllerAction(apiRoutes.exam.getExamResults)
     getExamResultsAction(params: ActionParams) {
@@ -62,5 +62,5 @@ export class ExamController implements XController<ExamController> {
 
         return this._examService
             .getExamResultsAsync(params.principalId, answerSessionId);
-    };
+    }
 }

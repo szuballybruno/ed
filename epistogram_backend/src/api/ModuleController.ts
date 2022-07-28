@@ -27,7 +27,7 @@ export class ModuleController implements XController<ModuleController> {
 
         return this._moduleService
             .getModuleEditDTOsAsync(params.principalId, courseVersionId);
-    };
+    }
 
     @XControllerAction(apiRoutes.module.saveCoverFile, { isPost: true })
     saveModuleThumbnailImageAction(params: ActionParams) {
@@ -44,5 +44,5 @@ export class ModuleController implements XController<ModuleController> {
         return this
             ._moduleService
             .saveModuleThumbnailImageAsync(params.principalId, moduleVersionId, file.data);
-    };
+    }
 }

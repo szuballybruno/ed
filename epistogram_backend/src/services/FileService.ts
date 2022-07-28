@@ -55,10 +55,10 @@ export class FileService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
-    };
+        };
+    }
 
     async uploadAssigendFileAsync<TField extends StringKeyof<T>, T extends EntityType>({
         entitySignature,

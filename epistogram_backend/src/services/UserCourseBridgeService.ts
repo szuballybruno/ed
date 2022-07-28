@@ -7,7 +7,6 @@ import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExp
 import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
-import { log } from './misc/logger';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -24,8 +23,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         super(mapperService, ormService, UserCourseBridge);
 
-        this._authorizationService = authorizationService
-        this._loggerService = loggerService
+        this._authorizationService = authorizationService;
+        this._loggerService = loggerService;
     }
 
     /**
@@ -151,9 +150,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_COURSE_PERMISSIONS')
+                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_COURSE_PERMISSIONS');
             }
-        }
+        };
 
 
     }
@@ -170,7 +169,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return {
             action: async () => {
 
-                const userId = principalId.getId()
+                const userId = principalId.getId();
 
                 const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
@@ -187,9 +186,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'SET_COURSE_MODE_GLOBAL')
+                    .getCheckPermissionResultAsync(principalId, 'SET_COURSE_MODE_GLOBAL');
             }
-        }
+        };
 
     }
     /**
@@ -217,10 +216,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
 
-        }
+        };
     }
 
     /**
@@ -270,9 +269,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
             }
-        }
+        };
 
     }
 
@@ -309,9 +308,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
 
@@ -342,7 +341,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         return currentItemCode;
 
-    };
+    }
 
     getPrincipalCurrentItemCodeAsync(
         principalId: PrincipalId
@@ -355,9 +354,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
     }
 
@@ -371,7 +370,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .getOneOrNull();
 
         return currentBridge?.currentItemCode ?? null;
-    };
+    }
 
     private async getUserCourseBridgeAsync(
         userId: Id<'User'>,
@@ -385,7 +384,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .getSingle();
 
         return userCourseBridge;
-    };
+    }
 
     async getUserCourseBridgeOrFailAsync(
         userId: Id<'User'>,
@@ -398,7 +397,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             throw new Error('User course bridge not found, maybe the course is not yet started!');
 
         return userCourseBridge;
-    };
+    }
 
     unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {
 
