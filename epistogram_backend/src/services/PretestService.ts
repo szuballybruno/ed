@@ -16,6 +16,7 @@ import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
+import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 
 export class PretestService {
 
