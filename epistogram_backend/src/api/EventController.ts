@@ -19,5 +19,5 @@ export class EventController implements XController<EventController> {
 
         return this._eventService
             .getUnfulfilledEventAsync();
-    };
+    }
 }

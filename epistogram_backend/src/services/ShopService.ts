@@ -76,12 +76,12 @@ export class ShopService {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
             }
-        }
+        };
 
 
     }
@@ -102,12 +102,12 @@ export class ShopService {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
             }
-        }
+        };
 
 
     }
@@ -190,12 +190,12 @@ export class ShopService {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
             }
-        }
+        };
 
 
     }
@@ -217,12 +217,12 @@ export class ShopService {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
             }
-        }
+        };
 
 
     }
@@ -242,9 +242,9 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP')
+                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
             }
-        }
+        };
     }
 
     getShopItemEditDTOAsync(principalId: PrincipalId, shopItemId: Id<'ShopItem'>) {
@@ -269,9 +269,9 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP')
+                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
             }
-        }
+        };
 
 
     }
@@ -290,9 +290,9 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP')
+                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
             }
-        }
+        };
 
 
     }
@@ -327,9 +327,9 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP')
+                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
             }
-        }
+        };
 
 
     }
@@ -358,9 +358,9 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP')
+                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
             }
-        }
+        };
 
 
     }

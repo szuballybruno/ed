@@ -79,6 +79,7 @@ import { CorrectAnswerRatesSplitView } from '../../models/views/CorrectAnswerRat
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
+import { CourseAllItemsCompletedView } from '../../models/views/CourseAllItemsCompletedView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
 import { CourseItemPlaylistView } from '../../models/views/CourseItemPlaylistView';
@@ -305,6 +306,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             ['basic', 'exam_version_view', ExamVersionView],
             ['basic', 'course_shop_item_list_view', CourseShopItemListView],
             ['basic', 'pretest_completion_view', PretestCompletionView],
+            ['basic', 'course_all_items_completed_view', CourseAllItemsCompletedView],
             ['common', 'exam_score_view', ExamScoreView],
             ['common', 'video_player_data_view', VideoPlayerDataView],
             ['common', 'user_permission_view'], // 6 | company_permission_view

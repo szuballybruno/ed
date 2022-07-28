@@ -20,21 +20,21 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getHomePageStatsAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.userStats.getUserLearningPageStats)
     getUserLearningPageStatsAction(params: ActionParams) {
 
         return this._userStatsService
             .getUserLearningPageStatsAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.userStats.getImproveYourselfPageStats)
     getImproveYourselfPageStatsAction(params: ActionParams) {
 
         return this._userStatsService
             .getImproveYourselfPageStatsAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStats)
     getUserCourseStatsAction(params: ActionParams) {
@@ -46,7 +46,7 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getUserCourseStatsAsync(params.principalId, userId);
-    };
+    }
 
     @XControllerAction(apiRoutes.userStats.getUserVideoStats)
     getUserVideoStatsAction(params: ActionParams) {
@@ -58,7 +58,7 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getUserVideoStatsAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.userStats.getUserExamStats)
     getUserExamStatsAction(params: ActionParams) {
@@ -70,7 +70,7 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getUserExamStatsAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.userStats.getUserLearningOverviewData)
     getUserLearningOverviewDataAction(params: ActionParams) {
@@ -84,5 +84,5 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getUserLearningOverviewDataAsync(params.principalId, userId);
-    };
+    }
 }

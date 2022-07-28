@@ -20,14 +20,14 @@ export class CoinTransactionsController implements XController<CoinTransactionsC
 
         return this._coinTransactionService
             .getCoinTransactionsAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.coinTransactions.getCoinBalance)
     getCoinBalanceAction(params: ActionParams) {
 
         return this._coinTransactionService
             .getPrincipalCoinBalance(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.coinTransactions.getCoinBalanceOfUser)
     getCoinBalanceOfUserAction(params: ActionParams) {
@@ -38,7 +38,7 @@ export class CoinTransactionsController implements XController<CoinTransactionsC
 
         return this._coinTransactionService
             .getCoinBalance(params.principalId, userId);
-    };
+    }
 
     @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
     giftCoinsToUser(params: ActionParams) {
@@ -54,5 +54,5 @@ export class CoinTransactionsController implements XController<CoinTransactionsC
 
         return this._coinTransactionService
             .giftCoinsToUserAsync(params.principalId, userId, amount);
-    };
+    }
 }

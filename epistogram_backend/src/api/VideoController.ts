@@ -35,5 +35,5 @@ export class VideoController implements XController<VideoController> {
 
         return this._videoService
             .uploadVideoFileChunksAsync(params.principalId, videoId, chunksCount, chunkIndex, getFile);
-    };
+    }
 }

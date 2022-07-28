@@ -64,7 +64,8 @@ export class PlaybackService extends ServiceBase {
             .saveUserSessionActivityAsync(userId, 'video', videoVersionId);
 
         // get max watched seconds
-        const maxWathcedSeconds = await this.getMaxWatchedSeconds(userId, videoVersionId);
+        const maxWathcedSeconds = await this
+            .getMaxWatchedSeconds(userId, videoVersionId);
 
         return {
             isWatchedStateChanged: isFirstCompletion,
@@ -175,7 +176,8 @@ export class PlaybackService extends ServiceBase {
         const completionDate = isFirstCompletion ? new Date() : undefined;
 
         // save user video progress bridge
-        await this._saveUserVideoProgressBridgeAsync(userId, videoVersionId, watchedPercent, toSeconds, completionDate);
+        await this
+            ._saveUserVideoProgressBridgeAsync(userId, videoVersionId, watchedPercent, toSeconds, completionDate);
 
         const videoVersion = await this._ormService
             .query(VideoVersion, { videoVersionId })

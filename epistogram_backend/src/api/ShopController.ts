@@ -21,14 +21,14 @@ export class ShopController implements XController<ShopController> {
 
         return this._shopService
             .getShopItemsAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.getShopItemCategories)
     getShopItemCategoriesAction(params: ActionParams) {
 
         return this._shopService
             .getShopItemCategoriesAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.purchaseShopItem, { isPost: true })
     purchaseShopItemAction(params: ActionParams) {
@@ -39,14 +39,14 @@ export class ShopController implements XController<ShopController> {
 
         return this._shopService
             .purchaseShopItemAsync(params.principalId, shopItemId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.getAdminShopItems)
     getAdminShopItemsAction(params: ActionParams) {
 
         return this._shopService
             .getAdminShopItemsAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.getShopItemBriefData)
     getShopItemBriefDataAction(params: ActionParams) {
@@ -54,11 +54,11 @@ export class ShopController implements XController<ShopController> {
         const shopItemId = Id
             .create<'ShopItem'>(params
                 .getQuery<any>()
-                .getValue(x => x.shopItemId, 'int'))
+                .getValue(x => x.shopItemId, 'int'));
 
         return this._shopService
             .getShopItemBriefDataAsync(params.principalId, shopItemId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.getShopItemEditData)
     getShopItemEditDTOAction(params: ActionParams) {
@@ -66,18 +66,18 @@ export class ShopController implements XController<ShopController> {
         const shopItemId = Id
             .create<'ShopItem'>(params
                 .getQuery<any>()
-                .getValue(x => x.shopItemId, 'int'))
+                .getValue(x => x.shopItemId, 'int'));
 
         return this._shopService
             .getShopItemEditDTOAsync(params.principalId, shopItemId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.getPrivateCourseList)
     getPrivateCourseListAction(params: ActionParams) {
 
         return this._shopService
             .getPrivateCourseListAsync(params.principalId);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.saveShopItem, { isPost: true, isMultipart: true })
     saveShopItemAction(params: ActionParams) {
@@ -91,12 +91,12 @@ export class ShopController implements XController<ShopController> {
 
         return this._shopService
             .saveShopItemAsync(params.principalId, dto, coverFile);
-    };
+    }
 
     @XControllerAction(apiRoutes.shop.createShopItem, { isPost: true })
     createShopItemAction(params: ActionParams) {
 
         return this._shopService
             .createShopItemAsync(params.principalId);
-    };
+    }
 }

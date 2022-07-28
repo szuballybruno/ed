@@ -5,7 +5,6 @@ import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -60,9 +59,9 @@ export class PermissionService extends QueryServiceBase<Permission> {
                     .mapTo(PermissionListDTO, [permissions]);
             },
             auth: async () => {
-                return AuthorizationResult.ok
+                return AuthorizationResult.ok;
             }
-        }
+        };
 
 
     }

@@ -69,11 +69,11 @@ export class VideoService extends QueryServiceBase<VideoData> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
-    };
+    }
 
     setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
 
@@ -221,15 +221,15 @@ export class VideoService extends QueryServiceBase<VideoData> {
                 const { companyId } = await this._ormService
                     .query(User, { userId: principalId.toSQLValue() })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId })
+                    .getCheckPermissionResultAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId });
             }
-        }
+        };
 
 
-    };
+    }
 
     private _uploadVideoFileAsync = async (videoVersionId: Id<'VideoVersion'>, videoFileBuffer: Buffer) => {
 

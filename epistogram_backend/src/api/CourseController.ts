@@ -9,7 +9,7 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams, PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
@@ -56,7 +56,7 @@ export class CourseController implements XController<CourseController> {
 
         const courseId = params
             .getQuery()
-            .getValue(x => x.courseId, 'int')
+            .getValue(x => x.courseId, 'int');
 
         return this._courseService
             .getCourseDetailsEditDataAsync(params.principalId, courseId);
@@ -112,7 +112,7 @@ export class CourseController implements XController<CourseController> {
     saveCourseDetailsAction = (params: ActionParams) => {
 
         const dto = params
-            .getBody<CourseDetailsEditDataDTO>().data
+            .getBody<CourseDetailsEditDataDTO>().data;
 
         return this._courseService
             .saveCourseDetailsAsync(

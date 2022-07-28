@@ -26,7 +26,7 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .saveUserDataAsync(params.principalId, dto);
-    };
+    }
 
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true, checkPermission: 'ACCESS_ADMIN' })
     deleteUserAction(params: ActionParams) {
@@ -38,7 +38,7 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .deleteUserAsync(params.principalId, deleteUserId);
-    };
+    }
 
     @XControllerAction(apiRoutes.user.getEditUserData)
     getEditUserDataAction(params: ActionParams) {
@@ -50,7 +50,7 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .getEditUserDataAsync(params.principalId, editedUserId);
-    };
+    }
 
     @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })
     saveUserSimpleAction(params: ActionParams) {
@@ -61,7 +61,7 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .saveUserSimpleAsync(params.principalId, dto);
-    };
+    }
 
     @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
     saveUserAction(params: ActionParams) {
@@ -72,7 +72,7 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .saveUserAsync(params.principalId, dto);
-    };
+    }
 
     @XControllerAction(apiRoutes.user.getUserListForAdministration)
     getUserAdministrationUserListAction(params: ActionParams) {
@@ -84,7 +84,7 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .getAdminPageUsersListAsync(params.principalId, searchText);
-    };
+    }
 
     @XControllerAction(apiRoutes.user.getBriefUserData)
     getBriefUserDataAction(params: ActionParams) {
@@ -96,6 +96,6 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .getBriefUserDataAsync(params.principalId, userId);
-    };
+    }
 
 }

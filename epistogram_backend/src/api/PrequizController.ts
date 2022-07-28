@@ -25,7 +25,7 @@ export class PrequizController implements XController<PrequizController> {
 
         return this._prequizService
             .getPrequizQuestionsAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.prequiz.getUserAnswer)
     getUserAnswerAction(params: ActionParams) {
@@ -43,7 +43,7 @@ export class PrequizController implements XController<PrequizController> {
 
         return this._prequizService
             .getUserAnswerAsync(params.principalId, courseId, questionId);
-    };
+    }
 
     @XControllerAction(apiRoutes.prequiz.answerPrequizQuestion, { isPost: true })
     answerPrequizQuestionAction(params: ActionParams) {
@@ -76,7 +76,7 @@ export class PrequizController implements XController<PrequizController> {
 
         return this._prequizService
             .answerPrequizQuestionAsync(params.principalId, questionId, courseId, answerIdAsIdType, value);
-    };
+    }
 
     @XControllerAction(apiRoutes.prequiz.finishPrequiz, { isPost: true })
     finishPrequizAction(params: ActionParams) {

@@ -25,7 +25,7 @@ export class PretestController implements XController<PretestController> {
 
         return this._pretestService
             .getPretestDataAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.pretest.getPretestResults)
     getPretestResultsAction(params: ActionParams) {
@@ -37,7 +37,7 @@ export class PretestController implements XController<PretestController> {
 
         return this._pretestService
             .getPretestResultsAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.pretest.finishPretest, { isPost: true })
     finishPretestAction(params: ActionParams) {

@@ -44,9 +44,9 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     getCoinBalance(
@@ -65,9 +65,9 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
 
     }
@@ -90,9 +90,9 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS')
+                    .getCheckPermissionResultAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS');
             }
-        }
+        };
     }
 
     getCoinTransactionsAsync(
@@ -111,9 +111,9 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     async getCoinsForQuestionAsync(

@@ -80,11 +80,11 @@ export class PractiseQuestionService extends ServiceBase {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
 
-    };
+    }
 
     getUserPractiseAnswerSession = async (userId: Id<'User'>) => {
 

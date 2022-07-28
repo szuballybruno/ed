@@ -79,9 +79,9 @@ export class EventService {
             },
             auth: async () => {
 
-                return AuthorizationResult.ok
+                return AuthorizationResult.ok;
             }
-        }
+        };
 
 
     }

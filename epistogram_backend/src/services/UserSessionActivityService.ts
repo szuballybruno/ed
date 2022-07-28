@@ -5,8 +5,6 @@ import { UserSessionActivity } from '../models/entity/UserSessionActivity';
 import { SessionActivityType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
@@ -22,22 +20,17 @@ type RollingSessionEntityType<TId extends string> = EntityType<TId> & {
 
 export class UserSessionActivityService {
 
-    private _authorizationService: AuthorizationService
-
     constructor(
         private _ormService: ORMConnectionService,
         private _coinAcquireService: CoinAcquireService,
-        private _loggerService: LoggerService,
-        private authorizationService: AuthorizationService) {
+        private _loggerService: LoggerService) {
 
-        this._authorizationService = authorizationService
     }
 
-    async saveUserSessionActivityAsync(
+    saveUserSessionActivityAsync = async (
         userId: Id<'User'>,
         type: SessionActivityType,
-        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>
-    ) {
+        itemVersionId?: Id<'VideoVersion'> | Id<'ExamVersion'>) => {
 
         // save session activity
         const activitySessionId = await this
@@ -89,8 +82,8 @@ export class UserSessionActivityService {
         await this
             ._saveUserActivity({
                 prevActivitySessionId: activeSessionId,
-                examVersionId: type === 'video' ? itemVersionId! as any : null,
-                videoVersionId: type === 'exam' ? itemVersionId! as any : null,
+                examVersionId: type === 'exam' ? itemVersionId! as Id<'ExamVersion'> : null,
+                videoVersionId: type === 'video' ? itemVersionId! as Id<'VideoVersion'> : null,
                 type
             });
 
@@ -180,10 +173,6 @@ export class UserSessionActivityService {
             this
                 ._loggerService
                 .logScoped('ROLLING SESSION', 'Update rolling session...');
-
-            this
-                ._loggerService
-                .logScoped('ROLLING SESSION', saveData);
 
             await this._ormService
                 .save(entitySignature, saveData);

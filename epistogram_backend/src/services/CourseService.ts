@@ -1,5 +1,4 @@
 import { UploadedFile } from 'express-fileupload';
-import { CourseController } from '../api/CourseController';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
@@ -29,7 +28,7 @@ import { Id } from '../shared/types/versionId';
 import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationHelpers } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult, ControllerActionReturnType, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
@@ -108,9 +107,9 @@ export class CourseService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
-        }
+        };
     }
 
     /**
@@ -144,10 +143,10 @@ export class CourseService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
 
             }
-        }
+        };
     }
 
 
@@ -193,12 +192,12 @@ export class CourseService {
                 const { companyId } = await this._ormService
                     .query(User, { userId })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
     }
 
     /**
@@ -226,12 +225,12 @@ export class CourseService {
                 const { companyId } = await this._ormService
                     .query(User, { userId })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
     }
 
     /**
@@ -295,12 +294,12 @@ export class CourseService {
                 const { companyId } = await this._ormService
                     .query(User, { userId })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
 
     }
     /**
@@ -352,19 +351,19 @@ export class CourseService {
                             .humanSkillBenefits
                             .map(x => `${x.text}: ${x.value}`)),
                         visibility: dto.visibility
-                    })
+                    });
             },
             auth: async () => {
 
                 const { companyId } = await this._ormService
                     .query(User, { userId })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
 
 
     }
@@ -392,7 +391,8 @@ export class CourseService {
                     .versionId;
 
                 const modules = await this._moduleService
-                    .getModuleEditDTOsAsync(userId, courseVersionId).action();
+                    .getModuleEditDTOsAsync(userId, courseVersionId)
+.action();
 
                 const items = this._mapperService
                     .mapTo(CourseContentItemAdminDTO, [views]);
@@ -405,9 +405,9 @@ export class CourseService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN');
             }
-        }
+        };
 
 
     }
@@ -445,12 +445,12 @@ export class CourseService {
                 const { companyId } = await this._ormService
                     .query(User, { userId })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
 
 
     }
@@ -520,9 +520,9 @@ export class CourseService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN')
+                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN');
             }
-        }
+        };
 
 
     }
@@ -547,12 +547,12 @@ export class CourseService {
                 const { companyId } = await this._ormService
                     .query(User, { userId })
                     .where('id', '=', 'userId')
-                    .getSingle()
+                    .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId })
+                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
-        }
+        };
     }
 
     /**

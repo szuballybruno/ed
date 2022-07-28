@@ -13,7 +13,7 @@ import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExp
 
 export class CourseRatingService extends ServiceBase {
 
-    private _authorizationService: AuthorizationService
+    private _authorizationService: AuthorizationService;
 
     constructor(
         mapperService: MapperService,
@@ -22,7 +22,7 @@ export class CourseRatingService extends ServiceBase {
 
         super(mapperService, ormService);
 
-        this._authorizationService = authorizationService
+        this._authorizationService = authorizationService;
     }
 
     /**
@@ -64,9 +64,9 @@ export class CourseRatingService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
             }
-        }
+        };
     }
 
     /**
@@ -111,8 +111,8 @@ export class CourseRatingService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId: answersDTO.courseId })
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId: answersDTO.courseId });
             }
-        }
+        };
     }
 }
