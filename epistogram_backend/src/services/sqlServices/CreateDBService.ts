@@ -1,16 +1,12 @@
 
 import { readdirSync, readFileSync } from 'fs';
 import { regexMatchAll } from '../../utilities/helpers';
+import { XDInjector } from '../../utilities/XDInjection/XDInjector';
 import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 import { TypeORMConnectionService } from './TypeORMConnectionService';
-
-type DepHierarchyItem = {
-    name: string;
-    deps: string[];
-}
 
 type ViewFile = {
     name: string,
@@ -52,83 +48,6 @@ export class CreateDBService {
     };
 
     // PRIVATE
-
-    private orderDepHierarchy(depHierarchyItems: DepHierarchyItem[]) {
-
-        /**
-         * State
-         */
-        const ordered: DepHierarchyItem[] = [];
-        let unordered: DepHierarchyItem[] = [...depHierarchyItems]
-            .orderBy(x => x.deps.length);
-
-        /**
-         * Check integrity
-         */
-        const allKeys = unordered
-            .map(w => w.name);
-
-        const allDeps = unordered
-            .flatMap(x => x.deps)
-            .groupBy(x => x)
-            .map(x => x.key);
-
-        const missingDeps = allDeps
-            .filter(x => allKeys
-                .none(y => y === x));
-
-        if (missingDeps.length > 0)
-            throw new Error(`Missing deps: [${missingDeps.join(', ')}]`);
-
-        /**
-         * Move function 
-         */
-        const move = (item: DepHierarchyItem) => {
-
-            // console.log(`[${ordered.length + 1}] Ordering... ${item.name}`);
-
-            // add to ordered
-            ordered
-                .push(item);
-
-            // remove from unordered
-            unordered = unordered
-                .filter(x => x.name !== item.name);
-        };
-
-        /**
-         * Begin ordering
-         */
-        console.log(`Ordering ${unordered.length} items...`);
-
-        while (unordered.length > 0) {
-
-            let itemToMove: DepHierarchyItem | null = null;
-
-            for (let index = 0; index < unordered.length; index++) {
-
-                const depHierarchyItem = unordered[index];
-                const hasZeroDeps = depHierarchyItem.deps.length === 0;
-                const allDepsInOrdered = depHierarchyItem
-                    .deps
-                    .all(x => ordered
-                        .any(orderedItem => orderedItem.name === x));
-
-                if (hasZeroDeps || allDepsInOrdered) {
-
-                    itemToMove = depHierarchyItem;
-                    break;
-                }
-            }
-
-            if (!itemToMove)
-                throw new Error('Dep hierarchy ordering iteration failed.');
-
-            move(itemToMove);
-        }
-
-        return ordered;
-    }
 
     private _getDepsOfViews(namesAndContents: ViewFile[]) {
 
@@ -253,7 +172,7 @@ export class CreateDBService {
 
         const viewFiles = this._readViews();
         const nameAndDeps = this._getDepsOfViews(viewFiles);
-        const ordered = this.orderDepHierarchy(nameAndDeps);
+        const ordered = XDInjector.orderDepHierarchy(nameAndDeps);
 
         const revereseOrderedViewNames = ordered
             .map(x => x.name)
