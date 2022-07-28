@@ -67,11 +67,41 @@ export class PlaybackService extends ServiceBase {
         const maxWathcedSeconds = await this
             .getMaxWatchedSeconds(userId, videoVersionId);
 
+        /**
+         * First time completion
+         */
+        if (isFirstCompletion)
+            await this._handleFirstTimeCompletionAsync(userId, videoVersionId);
+
         return {
             isWatchedStateChanged: isFirstCompletion,
             maxWathcedSeconds
         } as VideoSamplingResultDTO;
     };
+
+    /**
+     * handleFirstTimeCompletion
+     */
+    private async _handleFirstTimeCompletionAsync(
+        userId: Id<'User'>,
+        videoVersionId: Id<'VideoVersion'>) {
+
+        /**
+         * Reward coins
+         */
+        const videoVersion = await this._ormService
+            .query(VideoVersion, { videoVersionId })
+            .where('id', '=', 'videoVersionId')
+            .getSingle();
+
+        await this._coinAcquireService
+            .acquireVideoWatchedCoinsAsync(userId, videoVersion.videoId);
+
+        /**
+         * Course completion
+         */
+
+    }
 
     /**
      * Saves a video seek event
@@ -178,19 +208,6 @@ export class PlaybackService extends ServiceBase {
         // save user video progress bridge
         await this
             ._saveUserVideoProgressBridgeAsync(userId, videoVersionId, watchedPercent, toSeconds, completionDate);
-
-        const videoVersion = await this._ormService
-            .query(VideoVersion, { videoVersionId })
-            .where('id', '=', 'videoVersionId')
-            .getSingle();
-
-        // if is watched state changed 
-        // reward user with episto coins
-        if (isFirstCompletion) {
-
-            await this._coinAcquireService
-                .acquireVideoWatchedCoinsAsync(userId, videoVersion.videoId);
-        }
 
         return { isFirstCompletion };
     }
