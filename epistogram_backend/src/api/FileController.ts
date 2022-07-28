@@ -3,8 +3,9 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class FileController {
+export class FileController implements XController<FileController> {
 
     private _fileService: FileService;
 

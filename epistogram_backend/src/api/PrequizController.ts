@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PrequizController {
+export class PrequizController implements XController<PrequizController> {
 
     private _prequizService: PrequizService;
 
@@ -15,19 +16,19 @@ export class PrequizController {
     }
 
     @XControllerAction(apiRoutes.prequiz.getQuestions)
-    getQuestionsAction = async (params: ActionParams) => {
+    getQuestionsAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
-        return await this._prequizService
+        return this._prequizService
             .getPrequizQuestionsAsync(params.principalId, courseId);
     };
 
     @XControllerAction(apiRoutes.prequiz.getUserAnswer)
-    getUserAnswerAction = async (params: ActionParams) => {
+    getUserAnswerAction(params: ActionParams) {
 
         const query = params
             .getQuery<{ questionId: number, courseId: number }>();
@@ -40,12 +41,12 @@ export class PrequizController {
             .create<'Course'>(query
                 .getValue(x => x.courseId, 'int'));
 
-        return await this._prequizService
+        return this._prequizService
             .getUserAnswerAsync(params.principalId, courseId, questionId);
     };
 
     @XControllerAction(apiRoutes.prequiz.answerPrequizQuestion, { isPost: true })
-    answerPrequizQuestionAction = async (params: ActionParams) => {
+    answerPrequizQuestionAction(params: ActionParams) {
 
         const bod = params
             .getBody<{
@@ -73,7 +74,7 @@ export class PrequizController {
             ? Id.create<'PrequizAnswer'>(answerId)
             : null;
 
-        return await this._prequizService
+        return this._prequizService
             .answerPrequizQuestionAsync(params.principalId, questionId, courseId, answerIdAsIdType, value);
     };
 }

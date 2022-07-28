@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class VideoController {
+export class VideoController implements XController<VideoController> {
     private _videoService: VideoService;
 
     constructor(serviceProvider: ServiceProvider) {
@@ -14,7 +15,7 @@ export class VideoController {
     }
 
     @XControllerAction(apiRoutes.video.uploadVideoFileChunks, { isPost: true, isMultipart: true })
-    uploadVideoFileChunksAction = async (params: ActionParams) => {
+    uploadVideoFileChunksAction(params: ActionParams) {
 
         const getFile = () => params.getSingleFile();
 
@@ -32,7 +33,7 @@ export class VideoController {
         const chunksCount = body.getValue(x => x.chunksCount, 'int');
         const chunkIndex = body.getValue(x => x.chunkIndex, 'int');
 
-        await this._videoService
-            .uploadVideoFileChunksAsync(videoId, chunksCount, chunkIndex, getFile);
+        return this._videoService
+            .uploadVideoFileChunksAsync(params.principalId, videoId, chunksCount, chunkIndex, getFile);
     };
 }

@@ -17,7 +17,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 
 export class PretestService {
@@ -190,20 +190,30 @@ export class PretestService {
         }
     }
 
-    async getPretestExamIdAsync(courseId: Id<'Course'>) {
+    getPretestExamIdAsync(courseId: Id<'Course'>) {
 
-        throwNotImplemented();
-        // const exam = await this._ormService
-        //     .query(ExamData, {
-        //             courseId,
-        //             type: 'pretest'
-        //         })
-        //     .where('courseId', '=', 'courseId')
-        //     .and('type', '=', 'type')
-        //     .getOneOrNull();
+        return {
+            action: async () => {
+                throwNotImplemented();
+                // const exam = await this._ormService
+                //     .query(ExamData, {
+                //             courseId,
+                //             type: 'pretest'
+                //         })
+                //     .where('courseId', '=', 'courseId')
+                //     .and('type', '=', 'type')
+                //     .getOneOrNull();
 
-        // return {
-        //     id: exam.id
-        // } as IdResultDTO;
+                // return {
+                //     id: exam.id
+                // } as IdResultDTO;
+            },
+            auth: async () => {
+
+                return AuthorizationResult.ok
+            }
+        }
+
+
     }
 }

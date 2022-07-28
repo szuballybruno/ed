@@ -4,6 +4,7 @@ import { EventDTO } from '../shared/dtos/EventDTO';
 import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';
 import { EventCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
+import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -52,26 +53,36 @@ export class EventService {
             } as Event);
     }
 
-    async getUnfulfilledEventAsync() {
+    getUnfulfilledEventAsync() {
 
-        const events = await this._ormService
-            .query(Event)
-            .where('isFulfilled', '=', 'false')
-            .orderBy(['creationDate'])
-            .getMany();
+        return {
+            action: async () => {
+                const events = await this._ormService
+                    .query(Event)
+                    .where('isFulfilled', '=', 'false')
+                    .orderBy(['creationDate'])
+                    .getMany();
 
-        if (events.length === 0)
-            return null;
+                if (events.length === 0)
+                    return null;
 
-        const event = events[0];
+                const event = events[0];
 
-        await this._ormService
-            .save(Event, {
-                id: event.id,
-                isFulfilled: true
-            });
+                await this._ormService
+                    .save(Event, {
+                        id: event.id,
+                        isFulfilled: true
+                    });
 
-        return this._mapperService
-            .mapTo(EventDTO, [event]);
+                return this._mapperService
+                    .mapTo(EventDTO, [event]);
+            },
+            auth: async () => {
+
+                return AuthorizationResult.ok
+            }
+        }
+
+
     }
 }

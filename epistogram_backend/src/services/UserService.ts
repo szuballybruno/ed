@@ -192,23 +192,33 @@ export class UserService {
     /**
      * Get user dto-s for the admin page user list.
      */
-    async getAdminPageUsersListAsync(searchText: string | null) {
+    getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null): ControllerActionReturnType {
 
-        const searchTextLower = searchText?.toLowerCase();
+        return {
+            action: async () => {
+                const searchTextLower = searchText?.toLowerCase();
 
-        const users = await this._ormService
-            .query(AdminUserListView)
-            .getMany();
+                const users = await this._ormService
+                    .query(AdminUserListView)
+                    .getMany();
 
-        const filteredUsers = searchTextLower
-            ? users
-                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
-                    .toLowerCase()
-                    .includes(searchTextLower))
-            : users;
+                const filteredUsers = searchTextLower
+                    ? users
+                        .filter(x => toFullName(x.firstName, x.lastName, 'hu')
+                            .toLowerCase()
+                            .includes(searchTextLower))
+                    : users;
 
-        return this._mapperService
-            .mapTo(AdminPageUserDTO, [filteredUsers]);
+                return this._mapperService
+                    .mapTo(AdminPageUserDTO, [filteredUsers]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     }
 
     /**
@@ -239,19 +249,30 @@ export class UserService {
      * Get a very minimalistic user dto for displaying 
      * very minimal info about the user.
      */
-    async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
-
-        const user = await this._ormService
-            .query(User, { userId })
-            .where('id', '=', 'userId')
-            .getSingle();
+    getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: getFullName(user)
-        } as BriefUserDataDTO;
+
+            action: async () => {
+                const user = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle();
+
+                return {
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    fullName: getFullName(user)
+                } as BriefUserDataDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN')
+            }
+        }
+
+
     }
 
     /**
@@ -360,20 +381,26 @@ export class UserService {
     /**
      * Delete a user entity by it's id.
      */
-    deleteUserAsync = async (userId: PrincipalId, deletedUserId: Id<'User'>) => {
+    deleteUserAsync(userId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        // TODO permissions
+        return {
+            action: async () => {
+                const connectedCourses = await this._ormService
+                    .query(CourseData, { deletedUserId })
+                    .where('teacherId', '=', 'deletedUserId')
+                    .getMany();
 
-        const connectedCourses = await this._ormService
-            .query(CourseData, { deletedUserId })
-            .where('teacherId', '=', 'deletedUserId')
-            .getMany();
+                if (connectedCourses.length > 0)
+                    throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
-        if (connectedCourses.length > 0)
-            throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
-
-        return await this._ormService
-            .softDelete(User, [deletedUserId]);
+                return await this._ormService
+                    .softDelete(User, [deletedUserId]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(userId, 'DELETE_USER')
+            }
+        }
     };
 
     /**

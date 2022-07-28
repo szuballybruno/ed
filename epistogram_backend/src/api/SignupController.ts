@@ -5,8 +5,9 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class SignupController {
+export class SignupController implements XController<SignupController> {
 
     private _signupService: SignupService;
     private _personalityAssessmentService: PersonalityAssessmentService;
@@ -18,13 +19,13 @@ export class SignupController {
     }
 
     @XControllerAction(apiRoutes.signup.answerSignupQuestion, { isPost: true })
-    answerSignupQuestionAction = async (params: ActionParams) => {
+    answerSignupQuestionAction(params: ActionParams) {
 
         const dto = params
             .getBody<AnswerSignupQuestionDTO>(['answerId', 'questionId'])
             .data;
 
-        await this._signupService
+        return this._signupService
             .answerSignupQuestionAsync(params.principalId, dto);
     };
 
@@ -36,7 +37,7 @@ export class SignupController {
     };
 
     @XControllerAction(apiRoutes.signup.getUserPersonalityData)
-    getUserPersonalityDataAction = async (params: ActionParams) => {
+    getUserPersonalityDataAction(params: ActionParams) {
 
         return this._personalityAssessmentService
             .getUserPersonalityAssessmentDTOAsync(params.principalId);

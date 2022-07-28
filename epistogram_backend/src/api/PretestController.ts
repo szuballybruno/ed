@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PretestController {
+export class PretestController implements XController<PretestController> {
 
     private _pretestService: PretestService;
 
@@ -15,19 +16,19 @@ export class PretestController {
     }
 
     @XControllerAction(apiRoutes.pretest.getPretestData)
-    getPretestDataAction = async (params: ActionParams) => {
+    getPretestDataAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
-        return await this._pretestService
+        return this._pretestService
             .getPretestDataAsync(params.principalId, courseId);
     };
 
     @XControllerAction(apiRoutes.pretest.getPretestResults)
-    getPretestResultsAction = async (params: ActionParams) => {
+    getPretestResultsAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params
@@ -39,7 +40,7 @@ export class PretestController {
     };
 
     @XControllerAction(apiRoutes.pretest.getPretestExamId)
-    getPretestExamIdAction = async (params: ActionParams) => {
+    getPretestExamIdAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params

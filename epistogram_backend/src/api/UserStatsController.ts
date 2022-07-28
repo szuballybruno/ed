@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class UserStatsController {
+export class UserStatsController implements XController<UserStatsController> {
 
     private _userStatsService: UserStatsService;
 
@@ -15,64 +16,64 @@ export class UserStatsController {
     }
 
     @XControllerAction(apiRoutes.userStats.getHomePageStats)
-    getHomePageStatsAction = async (params: ActionParams) => {
+    getHomePageStatsAction(params: ActionParams) {
 
-        return await this._userStatsService
+        return this._userStatsService
             .getHomePageStatsAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserLearningPageStats)
-    getUserLearningPageStatsAction = async (params: ActionParams) => {
+    getUserLearningPageStatsAction(params: ActionParams) {
 
-        return await this._userStatsService
+        return this._userStatsService
             .getUserLearningPageStatsAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.userStats.getImproveYourselfPageStats)
-    getImproveYourselfPageStatsAction = async (params: ActionParams) => {
+    getImproveYourselfPageStatsAction(params: ActionParams) {
 
-        return await this._userStatsService
+        return this._userStatsService
             .getImproveYourselfPageStatsAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStats)
-    getUserCourseStatsAction = async (params: ActionParams) => {
+    getUserCourseStatsAction(params: ActionParams) {
 
         const userId = Id
             .create<'User'>(params
                 .getQuery<{ userId: number }>()
                 .getValue(x => x.userId, 'int'));
 
-        return await this._userStatsService
+        return this._userStatsService
             .getUserCourseStatsAsync(params.principalId, userId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserVideoStats)
-    getUserVideoStatsAction = async (params: ActionParams) => {
+    getUserVideoStatsAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
-        return await this._userStatsService
+        return this._userStatsService
             .getUserVideoStatsAsync(params.principalId, courseId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserExamStats)
-    getUserExamStatsAction = async (params: ActionParams) => {
+    getUserExamStatsAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
-        return await this._userStatsService
+        return this._userStatsService
             .getUserExamStatsAsync(params.principalId, courseId);
     };
 
     @XControllerAction(apiRoutes.userStats.getUserLearningOverviewData)
-    getUserLearningOverviewDataAction = async (params: ActionParams) => {
+    getUserLearningOverviewDataAction(params: ActionParams) {
 
         const query = params
             .getQuery<any>();

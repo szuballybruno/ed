@@ -5,8 +5,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class ExamController {
+export class ExamController implements XController<ExamController> {
 
     private _examService: ExamService;
 
@@ -16,7 +17,7 @@ export class ExamController {
     }
 
     @XControllerAction(apiRoutes.exam.answerExamQuestion, { isPost: true })
-    answerExamQuestionAction = async (params: ActionParams) => {
+    answerExamQuestionAction(params: ActionParams) {
 
         const questionAnswerDTO = params
             .getBody<AnswerQuestionDTO>()
@@ -27,29 +28,29 @@ export class ExamController {
     };
 
     @XControllerAction(apiRoutes.exam.startExam, { isPost: true })
-    startExamAction = async (params: ActionParams) => {
+    startExamAction(params: ActionParams) {
 
         const body = params.getBody<{ answerSessionId: number }>();
         const answerSessionId = Id
             .create<'AnswerSession'>(body.getValue(x => x.answerSessionId, 'int'));
 
-        await this._examService
-            .startExamAsync(answerSessionId);
+        return this._examService
+            .startExamAsync(params.principalId, answerSessionId);
     };
 
     @XControllerAction(apiRoutes.exam.completeExam, { isPost: true })
-    completeExamAction = async (params: ActionParams) => {
+    completeExamAction(params: ActionParams) {
 
         const body = params.getBody<{ answerSessionId: number }>();
         const answerSessionId = Id
             .create<'AnswerSession'>(body.getValue(x => x.answerSessionId, 'int'));
 
-        await this._examService
-            .completeExamAsync(answerSessionId);
+        return this._examService
+            .completeExamAsync(params.principalId, answerSessionId);
     };
 
     @XControllerAction(apiRoutes.exam.getExamResults)
-    getExamResultsAction = async (params: ActionParams) => {
+    getExamResultsAction(params: ActionParams) {
 
         const answerSessionId = Id
             .create<'AnswerSession'>(params

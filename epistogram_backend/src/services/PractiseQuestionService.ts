@@ -9,22 +9,27 @@ import { ServiceBase } from './misc/ServiceBase';
 import { MapperService } from './MapperService';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
+import { AuthorizationService } from './AuthorizationService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class PractiseQuestionService extends ServiceBase {
 
     private _questionAnswerService: QuestionAnswerService;
     private _playerService: PlayerService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormConnection: ORMConnectionService,
         questionAnswerService: QuestionAnswerService,
         playerService: PlayerService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        authorizationService: AuthorizationService) {
 
         super(mapperService, ormConnection);
 
         this._questionAnswerService = questionAnswerService;
         this._playerService = playerService;
+        this._authorizationService = authorizationService;
     }
 
     getPractiseQuestionAsync = async (principalId: PrincipalId) => {
@@ -60,14 +65,24 @@ export class PractiseQuestionService extends ServiceBase {
         return questionDTO;
     };
 
-    answerPractiseQuestionAsync = async (principalId: PrincipalId, qu: AnswerQuestionDTO) => {
+    answerPractiseQuestionAsync(principalId: PrincipalId, qu: AnswerQuestionDTO): ControllerActionReturnType {
 
-        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+        return {
+            action: async () => {
 
-        const practiseAnswerSession = await this.getUserPractiseAnswerSession(userIdAsIdType);
+                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
 
-        return await this._questionAnswerService
-            .answerQuestionAsync(userIdAsIdType, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
+                const practiseAnswerSession = await this.getUserPractiseAnswerSession(userIdAsIdType);
+
+                return await this._questionAnswerService
+                    .answerQuestionAsync(userIdAsIdType, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     };
 
     getUserPractiseAnswerSession = async (userId: Id<'User'>) => {

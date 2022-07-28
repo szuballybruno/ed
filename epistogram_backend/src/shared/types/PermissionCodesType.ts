@@ -44,6 +44,10 @@ export const permissionCodes = fn({
     },
 
     // permissions 
+    VIEW_PERMISSIONS: {
+        code: 'VIEW_PERMISSIONS',
+        scope: 'USER'
+    },
     ASSIGN_GLOBAL_PERMISSIONS: {
         code: 'ASSIGN_GLOBAL_PERMISSIONS',
         scope: 'COMPANY'
@@ -147,6 +151,14 @@ export const permissionCodes = fn({
 
     CREATE_NEW_USER: {
         code: 'CREATE_NEW_USER',
+        scope: 'USER'
+    },
+    EDIT_USER: {
+        code: 'EDIT_USER',
+        scope: 'USER'
+    },
+    DELETE_USER: {
+        code: 'DELETE_USER',
         scope: 'USER'
     },
 
