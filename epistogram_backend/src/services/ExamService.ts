@@ -140,24 +140,34 @@ export class ExamService extends QueryServiceBase<ExamData> {
     /**
      * Finish exam 
      */
-    async finishExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
+    finishExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
 
-        this._loggerService
-            .logScoped('GENERIC', 'Finishing exam... ' + principalId);
+        return {
+            action: async () => {
 
-        const ans = await this
-            ._ormService
-            .getSingleById(AnswerSession, answerSessionId);
+                this._loggerService
+                    .logScoped('GENERIC', 'Finishing exam... ' + principalId);
 
-        await this
-            ._ormService
-            .createAsync(CourseItemCompletion, {
-                answerSessionId,
-                completionDate: new Date(),
-                examVersionId: ans.examVersionId,
-                userId: principalId.getId(),
-                videoVersionId: null
-            });
+                const ans = await this
+                    ._ormService
+                    .getSingleById(AnswerSession, answerSessionId);
+
+                await this
+                    ._ormService
+                    .createAsync(CourseItemCompletion, {
+                        answerSessionId,
+                        completionDate: new Date(),
+                        examVersionId: ans.examVersionId,
+                        userId: principalId.getId(),
+                        videoVersionId: null
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
+
     }
 
     /**

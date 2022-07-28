@@ -169,13 +169,21 @@ export class PrequizService {
     /**
      * Finish prequiz
      */
-    async finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>) {
+    finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
 
-        await this
-            ._ormService
-            .createAsync(PrequizCompletion, {
-                courseId,
-                userId: principalId.getId()
-            });
+        return {
+            action: async () => {
+                await this
+                    ._ormService
+                    .createAsync(PrequizCompletion, {
+                        courseId,
+                        userId: principalId.getId()
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId })
+            }
+        }
     }
 }

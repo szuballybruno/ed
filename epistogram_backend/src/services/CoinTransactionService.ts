@@ -49,17 +49,7 @@ export class CoinTransactionService {
         }
     }
 
-    private async getCoinBalance(principalId: PrincipalId, userId: Id<'User'>) {
-
-        const coinBalance = await this._ormConnectionService
-            .query(CoinBalanceView, { userId })
-            .where('userId', '=', 'userId')
-            .getSingle();
-
-        return coinBalance.coinBalance;
-    }
-
-    getCoinBalanceAsync(
+    getCoinBalance(
         principalId: PrincipalId,
         userId: Id<'User'>
     ): ControllerActionReturnType {
@@ -83,18 +73,20 @@ export class CoinTransactionService {
     }
 
     giftCoinsToUserAsync(
-        principalId: PrincipalId
+        principalId: PrincipalId,
+        userId: Id<'User'>,
+        amount: number
     ): ControllerActionReturnType {
 
         return {
             action: async () => {
-                const coinTransactions = await this._ormConnectionService
-                    .query(CoinTransactionView, { userId: principalId.toSQLValue() })
-                    .where('userId', '=', 'userId')
-                    .getMany();
 
-                return this._mapperService
-                    .mapTo(CoinTransactionDTO, [coinTransactions]);
+                return this._ormConnectionService
+                    .createAsync(CoinTransaction, {
+                        userId,
+                        amount,
+                        isGifted: true
+                    } as CoinTransaction);
             },
             auth: async () => {
                 return this._authorizationService

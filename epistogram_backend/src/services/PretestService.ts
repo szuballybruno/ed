@@ -198,28 +198,33 @@ export class PretestService {
         }
     }
 
-
-
-
-
     /**
      * Finishes a pretest exam
      */
-    async finishPretestAsync(
+    finishPretestAsync(
         principalId: PrincipalId,
-        answerSessionId: Id<'AnswerSession'>) {
+        answerSessionId: Id<'AnswerSession'>): ControllerActionReturnType {
 
-        // finish pretest
-        await this
-            ._examService
-            .finishExamAsync(principalId, answerSessionId);
+        return {
 
-        // start course
-        const courseId = await this
-            ._courseBridgeService
-            .getCurrentCourseIdOrFail(principalId.getId());
+            action: async () => {
+                // finish pretest
+                await this
+                    ._examService
+                    .finishExamAsync(principalId, answerSessionId);
 
-        await this._courseBridgeService
-            .setCourseStartDateAsync(principalId, courseId);
+                // start course
+                const courseId = await this
+                    ._courseBridgeService
+                    .getCurrentCourseIdOrFail(principalId.getId());
+
+                await this._courseBridgeService
+                    .setCourseStartDateAsync(principalId, courseId);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION')
+            }
+        }
     }
 }

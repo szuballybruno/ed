@@ -79,7 +79,7 @@ export class PrequizController implements XController<PrequizController> {
     };
 
     @XControllerAction(apiRoutes.prequiz.finishPrequiz, { isPost: true })
-    async finishPrequizAction(params: ActionParams) {
+    finishPrequizAction(params: ActionParams) {
 
         const body = params
             .getFromParameterized(apiRoutes.prequiz.finishPrequiz)
@@ -88,7 +88,7 @@ export class PrequizController implements XController<PrequizController> {
         const courseId = body
             .getValue(x => x.courseId, 'int');
 
-        await this._prequizService
+        return this._prequizService
             .finishPrequiz(params.principalId, courseId);
     }
 }
