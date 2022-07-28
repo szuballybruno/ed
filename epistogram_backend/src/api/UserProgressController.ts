@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class UserProgressController {
+export class UserProgressController implements XController<UserProgressController> {
 
     private _userProgressService: UserProgressService;
 
@@ -15,9 +16,9 @@ export class UserProgressController {
     }
 
     @XControllerAction(apiRoutes.userProgress.getRecommendedItemQuota)
-    getRecommendedItemQuotaAction = async (params: ActionParams) => {
+    getRecommendedItemQuotaAction(params: ActionParams) {
 
-        return await this._userProgressService
+        return this._userProgressService
             .getRecommendedItemQuotaAsync(params.principalId, Id
                 .create<'Course'>(params
                     .getQuery<any>()

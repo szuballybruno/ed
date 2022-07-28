@@ -78,6 +78,10 @@ export const permissionCodes = fn({
         code: 'LIST_COMPANY_COURSES',
         scope: 'COMPANY'
     },
+    EDIT_COURSES: {
+        code: 'EDIT_COURSE',
+        scope: 'USER'
+    },
     WATCH_COURSE: {
         code: 'WATCH_COURSE',
         scope: 'COURSE'
@@ -127,6 +131,10 @@ export const permissionCodes = fn({
     VIEW_COURSE_ADMIN: {
         code: 'VIEW_COURSE_ADMIN',
         scope: 'COMPANY'
+    },
+    VIEW_DAILY_TIP_ADMIN: {
+        code: 'VIEW_DAILY_TIP_ADMIN',
+        scope: 'USER'
     },
 
     // misc company scoped 

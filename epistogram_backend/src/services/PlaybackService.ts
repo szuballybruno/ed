@@ -11,6 +11,7 @@ import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { CoinAcquireService } from './CoinAcquireService';
 import { MapperService } from './MapperService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
@@ -21,13 +22,16 @@ import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class PlaybackService extends ServiceBase {
 
+    private _authorizationService: AuthorizationService;
+
     constructor(
         mapperService: MapperService,
         ormService: ORMConnectionService,
         private _coinAcquireService: CoinAcquireService,
         private _userSessionActivityService: UserSessionActivityService,
         private _config: GlobalConfiguration,
-        private _sampleMergeService: SampleMergeService) {
+        private _sampleMergeService: SampleMergeService,
+        authorizationService: AuthorizationService) {
 
         super(mapperService, ormService);
     }
@@ -40,44 +44,52 @@ export class PlaybackService extends ServiceBase {
      * - Saves user activity.
      * Returns: the completion flag, and a value of maxWatchedSeconds 
      */
-    saveVideoPlaybackSample = async (principalId: PrincipalId, dto: VideoPlaybackSampleDTO) => {
-
-        const userId = principalId.getId();
-
-        const {
-            videoPlaybackSessionId,
-            videoVersionId,
-            fromSeconds,
-            toSeconds
-        } = dto;
-
-        // handle sample merge
-        const { mergedSamples } = await this
-            ._handleSampleMerge(userId, videoVersionId, videoPlaybackSessionId, fromSeconds, toSeconds);
-
-        // handle video progress
-        const { isFirstCompletion } = await this
-            ._handleVideoProgressAsync(userId, videoVersionId, toSeconds, mergedSamples);
-
-        // save user activity of video watching
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'video', videoVersionId);
-
-        // get max watched seconds
-        const maxWathcedSeconds = await this
-            .getMaxWatchedSeconds(userId, videoVersionId);
-
-        /**
-         * First time completion
-         */
-        if (isFirstCompletion)
-            await this._handleFirstTimeCompletionAsync(userId, videoVersionId);
+    saveVideoPlaybackSample(principalId: PrincipalId, dto: VideoPlaybackSampleDTO) {
 
         return {
-            isWatchedStateChanged: isFirstCompletion,
-            maxWathcedSeconds
-        } as VideoSamplingResultDTO;
-    };
+            action: async () => {
+                const userId = principalId.getId();
+
+                const {
+                    videoPlaybackSessionId,
+                    videoVersionId,
+                    fromSeconds,
+                    toSeconds
+                } = dto;
+
+                // handle sample merge
+                const { mergedSamples } = await this
+                    ._handleSampleMerge(userId, videoVersionId, videoPlaybackSessionId, fromSeconds, toSeconds);
+
+                // handle video progress
+                const { isFirstCompletion } = await this
+                    ._handleVideoProgressAsync(userId, videoVersionId, toSeconds, mergedSamples);
+
+                // save user activity of video watching
+                await this._userSessionActivityService
+                    .saveUserSessionActivityAsync(userId, 'video', videoVersionId);
+
+                // get max watched seconds
+                const maxWathcedSeconds = await this
+                    .getMaxWatchedSeconds(userId, videoVersionId);
+
+                /**
+                 * First time completion
+                 */
+                if (isFirstCompletion)
+                    await this._handleFirstTimeCompletionAsync(userId, videoVersionId);
+
+                return {
+                    isWatchedStateChanged: isFirstCompletion,
+                    maxWathcedSeconds
+                } as VideoSamplingResultDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
 
     /**
      * handleFirstTimeCompletion
@@ -106,27 +118,37 @@ export class PlaybackService extends ServiceBase {
     /**
      * Saves a video seek event
      */
-    async saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
+    saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
 
-        const userId = principalId.getId();
+        return {
+            action: async () => {
+                const userId = principalId.getId();
 
-        const {
-            fromSeconds,
-            toSeconds,
-            videoVersionId,
-            videoPlaybackSessionId
-        } = videoSeekEventDTO;
+                const {
+                    fromSeconds,
+                    toSeconds,
+                    videoVersionId,
+                    videoPlaybackSessionId
+                } = videoSeekEventDTO;
 
-        await this._ormService
-            .createAsync(VideoSeekEvent, {
-                creationDate: new Date(),
-                fromSeconds: fromSeconds,
-                toSeconds: toSeconds,
-                userId: userId,
-                videoVersionId,
-                videoPlaybackSessionId: videoPlaybackSessionId,
-                isForward: fromSeconds <= toSeconds
-            });
+                await this._ormService
+                    .createAsync(VideoSeekEvent, {
+                        creationDate: new Date(),
+                        fromSeconds: fromSeconds,
+                        toSeconds: toSeconds,
+                        userId: userId,
+                        videoVersionId,
+                        videoPlaybackSessionId: videoPlaybackSessionId,
+                        isForward: fromSeconds <= toSeconds
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+
+
     }
 
     /**

@@ -5,8 +5,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class CompanyController {
+export class CompanyController implements XController<CompanyController> {
 
     private _compService: CompanyService;
 
@@ -16,68 +17,68 @@ export class CompanyController {
     }
 
     @XControllerAction(apiRoutes.companies.getCompanies)
-    getCompaniesAction = async (params: ActionParams) => {
+    getCompaniesAction(params: ActionParams) {
 
-        return await this._compService
+        return this._compService
             .getPrincipalCompaniesAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.companies.getCompaniesAdmin)
-    getCompaniesAdminAction = async (params: ActionParams) => {
+    getCompaniesAdminAction(params: ActionParams) {
 
-        return await this._compService
+        return this._compService
             .getCompaniesAdminAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.companies.getRoleAssignCompanies)
-    getRoleAssignCompaniesAction = async (params: ActionParams) => {
+    getRoleAssignCompaniesAction(params: ActionParams) {
 
-        return await this._compService
+        return this._compService
             .getRoleAssignCompaniesAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.companies.getCompanyEditData)
-    getCompanyEditDataAction = async (params: ActionParams) => {
+    getCompanyEditDataAction(params: ActionParams) {
 
         const companyId = Id
             .create<'Company'>(params
                 .getQuery()
                 .getValue(x => x.companyId, 'int'));
 
-        return await this._compService
+        return this._compService
             .getCompanyEditDataAsync(params.principalId, companyId);
     };
 
     @XControllerAction(apiRoutes.companies.getAvailableCompaniesForRoleCreation)
-    getAvailableCompaniesForRoleCreationAction = async (params: ActionParams) => {
+    getAvailableCompaniesForRoleCreationAction(params: ActionParams) {
 
         return this._compService
             .getAvailableCompaniesForNewRolesAsync(params.principalId,);
     };
 
     @XControllerAction(apiRoutes.companies.createCompany, { isPost: true })
-    createCompanyAction = async (params: ActionParams) => {
+    createCompanyAction(params: ActionParams) {
 
-        await this._compService
+        return this._compService
             .createCompanyAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.companies.deleteCompany, { isPost: true })
-    deleteCompanyAction = async (params: ActionParams) => {
+    deleteCompanyAction(params: ActionParams) {
 
         const companyId = Id
             .create<'Company'>(params
                 .getBody()
                 .getValue(x => x.companyId, 'int'));
 
-        await this._compService
+        return this._compService
             .deleteCompanyAsync(params.principalId, companyId);
     };
 
     @XControllerAction(apiRoutes.companies.saveCompany, { isPost: true })
-    saveCompanyAction = async (params: ActionParams) => {
+    saveCompanyAction(params: ActionParams) {
 
-        await this._compService
+        return this._compService
             .saveCompanyAsync(params.principalId, params
                 .getBody<CompanyEditDataDTO>().data);
     };

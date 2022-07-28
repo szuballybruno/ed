@@ -4,8 +4,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class CourseItemController {
+export class CourseItemController implements XController<CourseItemController> {
 
     private _courseItemService: CourseItemService;
 
@@ -15,7 +16,7 @@ export class CourseItemController {
     }
 
     @XControllerAction(apiRoutes.courseItem.getCourseItemEditData)
-    getCourseItemEditDataAction = async (params: ActionParams) => {
+    getCourseItemEditDataAction(params: ActionParams) {
 
         const bod = params
             .getQuery();
@@ -29,6 +30,6 @@ export class CourseItemController {
                 .getValueOrNull(x => x.examVersionId, 'int'));
 
         return this._courseItemService
-            .getCourseItemEditDataAsync(videoVersionId, examVersionId);
+            .getCourseItemEditDataAsync(params.principalId, videoVersionId, examVersionId);
     };
 }

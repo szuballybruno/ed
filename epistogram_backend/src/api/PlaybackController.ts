@@ -5,8 +5,9 @@ import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PlaybackController {
+export class PlaybackController implements XController<PlaybackController> {
 
     private _playbackService: PlaybackService;
 
@@ -16,7 +17,7 @@ export class PlaybackController {
     }
 
     @XControllerAction(apiRoutes.playback.saveVideoPlaybackSample, { isPost: true })
-    saveVideoPlaybackSampleAction = (params: ActionParams) => {
+    saveVideoPlaybackSampleAction(params: ActionParams) {
 
         const dto = params
             .getBody<VideoPlaybackSampleDTO>(['fromSeconds', 'toSeconds', 'videoVersionId', 'videoPlaybackSessionId']);
@@ -26,7 +27,7 @@ export class PlaybackController {
     };
 
     @XControllerAction(apiRoutes.playback.saveVideoSeekEvent, { isPost: true })
-    saveVideoSeekEventAction = (params: ActionParams) => {
+    saveVideoSeekEventAction(params: ActionParams) {
 
         const dto = params
             .getBody<VideoSeekEventDTO>(['fromSeconds', 'toSeconds', 'videoVersionId', 'videoPlaybackSessionId']);

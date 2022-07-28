@@ -6,8 +6,10 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { ServiceProvider } from '../startup/servicesDI';
 import { Id } from '../shared/types/versionId';
+import { AuthorizationService } from '../services/AuthorizationService';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class CommentController {
+export class CommentController implements XController<CommentController> {
 
     private _commentService: CommentService;
     private _userCommentBridgeService: LikeService;
@@ -22,7 +24,7 @@ export class CommentController {
      * Create new comment
      */
     @XControllerAction(apiRoutes.comment.createComment, { isPost: true })
-    createCommentAction = async (params: ActionParams) => {
+    createCommentAction(params: ActionParams) {
 
         const dto = params
             .getBody<CommentCreateDTO>()
@@ -30,14 +32,14 @@ export class CommentController {
 
         return this
             ._commentService
-            .createCommentAsync(dto);
+            .createCommentAsync(params.principalId, dto);
     };
 
     /**
      * Create new like/vote for a comment
      */
     @XControllerAction(apiRoutes.comment.createLike, { isPost: true })
-    createUserCommentBridgeAction = async (params: ActionParams) => {
+    createUserCommentBridgeAction(params: ActionParams) {
 
         const principalId = params.principalId;
 
@@ -55,7 +57,7 @@ export class CommentController {
      * Get all comments for video
      */
     @XControllerAction(apiRoutes.comment.getComments)
-    getCommentsAction = async (params: ActionParams) => {
+    getCommentsAction(params: ActionParams) {
 
         const principalId = params.principalId;
 
@@ -72,7 +74,7 @@ export class CommentController {
      * Delete like/vote for a comment
      */
     @XControllerAction(apiRoutes.comment.deleteLike, { isPost: true })
-    softDeleteUserCommentBridgeAction = async (params: ActionParams) => {
+    softDeleteUserCommentBridgeAction(params: ActionParams) {
 
         const principalId = params.principalId;
 

@@ -11,6 +11,8 @@ import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { VersionCode } from '../shared/types/versionCode';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -22,12 +24,17 @@ type ItemMutationType = Mutation<CourseContentItemAdminDTO, 'versionCode'>;
 
 export class CourseItemService {
 
+    private _authorizationService: AuthorizationService;
+
     constructor(
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
         private _questionsService: QuestionService,
         private _versionSaveService: VersionSaveService,
-        private _answerService: QuestionAnswerService) {
+        private _answerService: QuestionAnswerService,
+        private authorizationService: AuthorizationService) {
+
+        this._authorizationService = authorizationService
     }
 
     /**
@@ -37,16 +44,24 @@ export class CourseItemService {
      * subtitle etc fields of the item,
      * just the questions & answers  
      */
-    async getCourseItemEditDataAsync(videoVersionId: Id<'VideoVersion'> | null, examVersionId: Id<'ExamVersion'> | null) {
+    getCourseItemEditDataAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'> | null, examVersionId: Id<'ExamVersion'> | null) {
 
-        const views = await this._ormService
-            .query(CourseItemEditView, { videoVersionId, examVersionId })
-            .where('examVersionId', '=', 'examVersionId')
-            .and('videoVersionId', '=', 'videoVersionId')
-            .getMany();
+        return {
+            action: async () => {
+                const views = await this._ormService
+                    .query(CourseItemEditView, { videoVersionId, examVersionId })
+                    .where('examVersionId', '=', 'examVersionId')
+                    .and('videoVersionId', '=', 'videoVersionId')
+                    .getMany();
 
-        return this._mapperService
-            .mapTo(CourseItemEditDTO, [views]);
+                return this._mapperService
+                    .mapTo(CourseItemEditDTO, [views]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COURSES');
+            }
+        }
     }
 
     /**

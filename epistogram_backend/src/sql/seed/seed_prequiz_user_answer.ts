@@ -12,29 +12,29 @@ export const getPrequizUserAnswerSeedData = (
     prequizAnswers: PrequizAnswersSeedDataType
 ) => getSeedList<PrequizUserAnswer>()({
 
-    prequiz_user_answer_excel_1: {
-        answerId: null,
-        value: 10,
-        questionId: prequizQuestions.prequiz_question_1.id,
-        userId: users.god.id,
-        courseId: courses.course_excel.id
-    },
-
-    prequiz_user_answer_excel_2: {
-        answerId: prequizAnswers.prequiz_answer_1.id,
-        value: null,
-        questionId: prequizQuestions.prequiz_question_2.id,
-        userId: users.god.id,
-        courseId: courses.course_excel.id
-    },
-
-    prequiz_user_answer_excel_3: {
-        answerId: null,
-        value: 2,
-        questionId: prequizQuestions.prequiz_question_3.id,
-        userId: users.god.id,
-        courseId: courses.course_excel.id
-    }
+    /*     prequiz_user_answer_excel_1: {
+            answerId: null,
+            value: 10,
+            questionId: prequizQuestions.prequiz_question_1.id,
+            userId: users.god.id,
+            courseId: courses.course_excel.id
+        },
+    
+        prequiz_user_answer_excel_2: {
+            answerId: prequizAnswers.prequiz_answer_1.id,
+            value: null,
+            questionId: prequizQuestions.prequiz_question_2.id,
+            userId: users.god.id,
+            courseId: courses.course_excel.id
+        },
+    
+        prequiz_user_answer_excel_3: {
+            answerId: null,
+            value: 2,
+            questionId: prequizQuestions.prequiz_question_3.id,
+            userId: users.god.id,
+            courseId: courses.course_excel.id
+        } */
 });
 
 export type PrequizUserAnswerSeedDataType = ReturnType<typeof getPrequizUserAnswerSeedData>;

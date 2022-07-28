@@ -16,6 +16,7 @@ import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
+import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 
 export class PretestService {
 
@@ -76,6 +77,11 @@ export class PretestService {
                 // get answer session
                 const answerSessionId = await this._questionAnswerService
                     .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
+
+                return {
+                    answerSessionId,
+                    exam: pretestExam
+                } as PretestDataDTO;
             },
             auth: async () => {
                 return this._authorizationService

@@ -16,112 +16,188 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 
 export class CompanyService extends QueryServiceBase<Company> {
 
+    private _authorizationService: AuthorizationService
+
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        private _authoirzationService: AuthorizationService) {
+        private authoirzationService: AuthorizationService) {
 
         super(mapperService, ormService, Company);
+
+        this._authorizationService = authoirzationService
     }
 
-    async getPrincipalCompaniesAsync(principalId: PrincipalId) {
+    getPrincipalCompaniesAsync(principalId: PrincipalId) {
 
-        const companies = await this._ormService
-            .query(CompanyView, { principalId })
-            .where('userId', '=', 'principalId')
-            .getMany();
+        return {
+            action: async () => {
+                const companies = await this._ormService
+                    .query(CompanyView, { principalId })
+                    .where('userId', '=', 'principalId')
+                    .getMany();
 
-        return this._mapperService
-            .mapTo(CompanyDTO, [companies]);
+                return this._mapperService
+                    .mapTo(CompanyDTO, [companies]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        }
+
+
     }
 
-    async getCompaniesAdminAsync(principalId: PrincipalId) {
+    getCompaniesAdminAsync(principalId: PrincipalId) {
 
-        const companies = await this._ormService
-            .query(CompanyView, { principalId })
-            .where('userId', '=', 'principalId')
-            .getMany();
+        return {
+            action: async () => {
 
-        return this._mapperService
-            .mapTo(CompanyDTO, [companies]);
+                const companies = await this._ormService
+                    .query(CompanyView, { principalId })
+                    .where('userId', '=', 'principalId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(CompanyDTO, [companies]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
+            }
+        }
+
     }
 
-    async getRoleAssignCompaniesAsync(principalId: PrincipalId) {
+    getRoleAssignCompaniesAsync(principalId: PrincipalId) {
 
-        const comapanies = await this
-            ._ormService
-            .query(UserRoleAssignCompanyView, { principalId })
-            .where('userId', '=', 'principalId')
-            .getMany();
+        return {
+            action: async () => {
+                const comapanies = await this
+                    ._ormService
+                    .query(UserRoleAssignCompanyView, { principalId })
+                    .where('userId', '=', 'principalId')
+                    .getMany();
 
-        return comapanies
-            .map((x): RoleAssignCompanyDTO => ({
-                name: x.companyName,
-                id: x.companyId,
-                canAssignRole: x.canAssign
-            }));
+                return comapanies
+                    .map((x): RoleAssignCompanyDTO => ({
+                        name: x.companyName,
+                        id: x.companyId,
+                        canAssignRole: x.canAssign
+                    }));
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
+            }
+        }
+
+
     }
 
-    async getAvailableCompaniesForNewRolesAsync(principalId: PrincipalId) {
+    getAvailableCompaniesForNewRolesAsync(principalId: PrincipalId) {
 
-        const permissionCode: PermissionCodeType = 'ASSIGN_CUSTOM_ROLES';
+        return {
+            action: async () => {
+                const permissionCode: PermissionCodeType = 'ASSIGN_CUSTOM_ROLES';
 
-        const companies = await this._ormService
-            .query(Company, { principalId, permissionCode })
-            .select(Company)
-            .innerJoin(User, builder => builder
-                .on('id', '=', 'principalId'))
-            .innerJoin(UserPermissionView, builder => builder
-                .on('assigneeUserId', '=', 'id', User)
-                .and('permissionCode', '=', 'permissionCode')
-                .and('contextCompanyId', '=', 'id', Company))
-            .getMany();
+                const companies = await this._ormService
+                    .query(Company, { principalId, permissionCode })
+                    .select(Company)
+                    .innerJoin(User, builder => builder
+                        .on('id', '=', 'principalId'))
+                    .innerJoin(UserPermissionView, builder => builder
+                        .on('assigneeUserId', '=', 'id', User)
+                        .and('permissionCode', '=', 'permissionCode')
+                        .and('contextCompanyId', '=', 'id', Company))
+                    .getMany();
 
-        return this._mapperService
-            .mapTo(CompanyDTO, [companies]);
+                return this._mapperService
+                    .mapTo(CompanyDTO, [companies]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
+            }
+        }
+
+
     }
 
-    async getCompanyEditDataAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
+    getCompanyEditDataAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
 
-        await this._authoirzationService
-            .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId });
+        return {
+            action: async () => {
 
-        const comp = await this._ormService
-            .query(Company, { companyId })
-            .where('id', '=', 'companyId')
-            .getSingle();
+                const comp = await this._ormService
+                    .query(Company, { companyId })
+                    .where('id', '=', 'companyId')
+                    .getSingle();
 
-        return this._mapperService
-            .mapTo(CompanyEditDataDTO, [comp]);
+                return this._mapperService
+                    .mapTo(CompanyEditDataDTO, [comp]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY', { companyId });
+            }
+        }
+
+
     }
 
-    async createCompanyAsync(principalId: PrincipalId) {
+    createCompanyAsync(principalId: PrincipalId) {
 
-        await this._authoirzationService
-            .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
+        return {
+            action: async () => {
 
-        await this._ormService
-            .createAsync(Company, {
-                name: 'New company',
-                deletionDate: null
-            });
+                await this._ormService
+                    .createAsync(Company, {
+                        name: 'New company',
+                        deletionDate: null
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'CREATE_COMPANIES');
+            }
+        }
+
+
     }
 
-    async deleteCompanyAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
+    deleteCompanyAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
 
-        await this._authoirzationService
-            .checkPermissionAsync(principalId, 'DELETE_COMPANIES');
+        return {
+            action: async () => {
 
-        await this._ormService
-            .softDelete(Company, [companyId]);
+                await this._ormService
+                    .softDelete(Company, [companyId]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'DELETE_COMPANIES');
+            }
+        }
+
+
     }
 
-    async saveCompanyAsync(principalId: PrincipalId, dto: CompanyEditDataDTO) {
+    saveCompanyAsync(principalId: PrincipalId, dto: CompanyEditDataDTO) {
 
-        await this._ormService
-            .save(Company, {
-                id: dto.id,
-                name: dto.name
-            });
+        return {
+            action: async () => {
+                await this._ormService
+                    .save(Company, {
+                        id: dto.id,
+                        name: dto.name
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY', { companyId: dto.id });
+            }
+        }
     }
 }
