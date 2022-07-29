@@ -9,13 +9,13 @@ FROM
 		ucb.user_id user_id,
 		ucb.course_id,
 		now()::date - ucb.start_date::date + 1 days_elapsed_since_start,
-		COUNT(cic.id)::int total_completed_item_count,
+		COUNT(cicv.course_item_completion_id)::int total_completed_item_count,
 		coicv.item_count total_item_count
 	FROM public.user_course_bridge ucb 
 
-	LEFT JOIN public.course_item_completion_view cic
-	ON cic.user_id = ucb.user_id
-	AND cic.course_id = ucb.course_id
+	LEFT JOIN public.course_item_completion_view cicv
+	ON cicv.user_id = ucb.user_id
+	AND cicv.course_id = ucb.course_id
 
 	LEFT JOIN public.course_item_count_view coicv
 	ON ucb.course_id = coicv.course_id

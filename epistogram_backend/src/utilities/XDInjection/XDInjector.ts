@@ -4,9 +4,40 @@ import { RemapToFunctions } from '../../services/misc/advancedTypes/RemapToFunct
 
 type FnType<TProps> = { fn: Function, deps: Function[], props: TProps };
 
-type DepHierarchyItem = {
-    name: string;
-    deps: string[];
+class DepHierarchyItem<T extends string | Function = string | Function> {
+    private _key: T;
+    private _deps: T[];
+
+    getCompareKey() {
+
+        return this
+            ._getCompareKeyFromValue(this._key);
+    }
+
+    getDepsCompareKeys() {
+
+        return this     
+            ._deps
+            .map(x => this
+                ._getCompareKeyFromValue(x));
+    }
+
+    private _getCompareKeyFromValue(value: T) {
+
+        return typeof value === 'string'
+            ? value
+            : value.name;
+    }
+}
+
+export class XDependencyHierarchyBuilder<T> {
+    constructor() {
+    }
+
+    // addDependencyItem<T extends >(n: T, deps: RemapToFunctions<Parameters<T>>, props: TProps) {
+
+
+    // }
 }
 
 export class XDInjector<TProps = void> {
@@ -21,16 +52,16 @@ export class XDInjector<TProps = void> {
          */
         const ordered: DepHierarchyItem[] = [];
         let unordered: DepHierarchyItem[] = [...depHierarchyItems]
-            .orderBy(x => x.deps.length);
+            .orderBy(x => x.getDepsCompareKeys().length);
 
         /**
          * Check integrity
          */
         const allKeys = unordered
-            .map(w => w.name);
+            .map(w => w.getCompareKey());
 
         const allDeps = unordered
-            .flatMap(x => x.deps)
+            .flatMap(x => x.getDepsCompareKeys())
             .groupBy(x => x)
             .map(x => x.key);
 
@@ -54,7 +85,7 @@ export class XDInjector<TProps = void> {
 
             // remove from unordered
             unordered = unordered
-                .filter(x => x.name !== item.name);
+                .filter(x => x.getCompareKey() !== item.getCompareKey());
         };
 
         /**
@@ -69,11 +100,11 @@ export class XDInjector<TProps = void> {
             for (let index = 0; index < unordered.length; index++) {
 
                 const depHierarchyItem = unordered[index];
-                const hasZeroDeps = depHierarchyItem.deps.length === 0;
+                const hasZeroDeps = depHierarchyItem.getDepsCompareKeys().length === 0;
                 const allDepsInOrdered = depHierarchyItem
-                    .deps
+                    .getDepsCompareKeys()
                     .all(x => ordered
-                        .any(orderedItem => orderedItem.name === x));
+                        .any(orderedItem => orderedItem.getCompareKey() === x));
 
                 if (hasZeroDeps || allDepsInOrdered) {
 

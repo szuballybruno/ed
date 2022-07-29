@@ -12,7 +12,7 @@ SELECT
     -- completed video count in the last 30 days
     (
         SELECT 
-            COUNT(cicv.id)::int
+            COUNT(cicv.course_item_completion_id)::int
         FROM public.course_item_completion_view cicv
         
         WHERE cicv.user_id = u.id

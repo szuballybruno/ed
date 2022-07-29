@@ -21,6 +21,7 @@ import { CourseData } from '../../models/entity/course/CourseData';
 import { CourseVersion } from '../../models/entity/course/CourseVersion';
 import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
 import { CourseCategory } from '../../models/entity/CourseCategory';
+import { CourseCompletion } from '../../models/entity/CourseCompletion';
 import { CourseItemCompletion } from '../../models/entity/CourseItemCompletion';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
@@ -209,6 +210,7 @@ export const createDBSchema = (): XDBMSchemaType => {
         .add(getPermissionsSeedData, [], Permission)
         .add(getJobTitlesSeedData, [], JobTitle)
         .add(getCompaniesSeedData, [], Company)
+        .add(() => 1, [], CourseCompletion)
         .add(getStorageFileSeedData, [], StorageFile)
         .add(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
         .add(getQuestionDatasSeedData, [], QuestionData)

@@ -58,7 +58,7 @@ SELECT
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
-	cicv.id IS NOT NULL is_completed,
+	cicv.course_item_completion_id IS NOT NULL is_completed,
 	cicv.completion_date end_date,
 	CASE 
 		WHEN ase.is_practise

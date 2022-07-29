@@ -1,6 +1,8 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { CourseItemCompletion } from '../models/entity/CourseItemCompletion';
 import { ExamData } from '../models/entity/exam/ExamData';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
@@ -15,43 +17,29 @@ import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
+import { CourseCompletionService } from './CourseCompletionService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { toExamResultDTO } from './misc/mappings';
-import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 
-export class ExamService extends QueryServiceBase<ExamData> {
-
-    private _userCourseBridgeService: UserCourseBridgeService;
-    private _userSessionActivityService: UserSessionActivityService;
-    private _quesitonAnswerService: QuestionAnswerService;
-    private _questionsService: QuestionService;
-    private _authorizationService: AuthorizationService;
+export class ExamService {
 
     constructor(
-        userCourseBridgeService: UserCourseBridgeService,
-        ormService: ORMConnectionService,
-        userSessionActivityService: UserSessionActivityService,
-        quesitonAnswerService: QuestionAnswerService,
-        questionsService: QuestionService,
-        mapperService: MapperService,
-        authorizationService: AuthorizationService,
-        private _loggerService: LoggerService) {
-
-        super(mapperService, ormService, ExamData);
-
-        this._userCourseBridgeService = userCourseBridgeService;
-        this._userSessionActivityService = userSessionActivityService;
-        this._quesitonAnswerService = quesitonAnswerService;
-        this._questionsService = questionsService;
-        this._authorizationService = authorizationService;
-
+        private _userCourseBridgeService: UserCourseBridgeService,
+        private _ormService: ORMConnectionService,
+        private _userSessionActivityService: UserSessionActivityService,
+        private _quesitonAnswerService: QuestionAnswerService,
+        private _questionsService: QuestionService,
+        private _mapperService: MapperService,
+        private _authorizationService: AuthorizationService,
+        private _loggerService: LoggerService,
+        private _courseCompletionService: CourseCompletionService) {
     }
 
     /**
@@ -161,6 +149,25 @@ export class ExamService extends QueryServiceBase<ExamData> {
                         userId: principalId.getId(),
                         videoVersionId: null
                     });
+
+                /**
+                 * Try finish course 
+                 */
+                const moduleVersion = await this
+                    ._ormService
+                    .query(ModuleVersion, { examVersionId: ans.examVersionId })
+                    .select(ModuleVersion)
+                    .innerJoin(ExamVersion, x => x
+                        .on('id', '=', 'examVersionId')
+                        .and('moduleVersionId', '=', 'id', ModuleVersion))
+                    .getSingle();
+
+                if (!moduleVersion.courseVersionId)
+                    return;
+
+                await this
+                    ._courseCompletionService
+                    .tryFinishCourseAsync(principalId.getId(), moduleVersion.courseVersionId);
             },
             auth: async () => {
                 return this._authorizationService

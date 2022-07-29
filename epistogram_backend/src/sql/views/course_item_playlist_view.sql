@@ -1,27 +1,4 @@
 WITH 
-video_completed_view AS 
-(
-	SELECT 
-		cicv.user_id,
-		cicv.video_version_id
-	FROM public.course_item_completion_view cicv
-),
-exam_completed_view AS 
-(
-	SELECT
-		ecv.user_id,
-		ecv.exam_version_id
-	FROM public.exam_completed_view ecv
-	WHERE ecv.has_successful_session
-),
-completed_items AS 
-(
-	SELECT vcv.user_id, vcv.video_version_id, NULL::int exam_version_id, true is_completed
-	FROM video_completed_view vcv
-	UNION
-	SELECT ecv.user_id, NULL::int video_version_id, ecv.exam_version_id, true is_completed
-	FROM exam_completed_view ecv
-),
 latest_course_items AS 
 (
 	SELECT 
@@ -70,11 +47,11 @@ states AS
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
 				THEN 'current'
-			WHEN ci.is_completed
+			WHEN cicv.course_item_completion_id IS NOT NULL
 				THEN 'completed'
 			WHEN ucb.course_mode = 'advanced' OR (civ.item_order_index = 0 AND civ.module_order_index = 1) 
 				THEN 'available'
-			WHEN LAG(ci.is_completed, 1) OVER (PARTITION BY civ.course_version_id) IS NOT DISTINCT FROM true 
+			WHEN LAG(cicv.course_item_completion_id IS NOT NULL, 1) OVER (PARTITION BY civ.course_version_id) IS NOT DISTINCT FROM true 
 				THEN 'available'
 				ELSE 'locked'
 		END item_state,
@@ -85,9 +62,9 @@ states AS
 	LEFT JOIN public.course_version cv 
 	ON cv.id = civ.course_version_id
 	
-	LEFT JOIN completed_items ci
-	ON ci.exam_version_id = civ.exam_version_id
-	OR ci.video_version_id = civ.video_version_id
+	LEFT JOIN public.course_item_completion_view cicv
+	ON cicv.exam_version_id = civ.exam_version_id
+	OR cicv.video_version_id = civ.video_version_id
 	
 	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id

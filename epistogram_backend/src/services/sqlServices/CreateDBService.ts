@@ -87,8 +87,6 @@ export class CreateDBService {
 
         const rootFolder = this._getRootFolderPath('views');
         const views = readFolder(rootFolder)
-            .concat(readFolder(rootFolder + '\\basic'))
-            .concat(readFolder(rootFolder + '\\common'))
             .concat(readFolder(rootFolder + '\\stats'));
 
         return views;
@@ -175,12 +173,12 @@ export class CreateDBService {
         const ordered = XDInjector.orderDepHierarchy(nameAndDeps);
 
         const revereseOrderedViewNames = ordered
-            .map(x => x.name)
+            .map(x => x.key)
             .reverse();
 
         const viewFilesOrdered = ordered
             .map(x => viewFiles
-                .single(y => y.name === x.name));
+                .single(y => y.name === x.key));
 
         // drop in reverse
         await this.dropViews(revereseOrderedViewNames);

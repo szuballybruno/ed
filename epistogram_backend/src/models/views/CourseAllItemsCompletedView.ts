@@ -4,7 +4,7 @@ import { Id } from '../../shared/types/versionId';
 export class CourseAllItemsCompletedView {
 
     @XViewColumn()
-    courseId: Id<'Course'>;
+    courseVersionId: Id<'Course'>;
     
     @XViewColumn()
     userId: Id<'User'>;

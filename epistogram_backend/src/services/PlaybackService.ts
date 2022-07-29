@@ -1,4 +1,5 @@
 import { CourseItemCompletion } from '../models/entity/CourseItemCompletion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
 import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
@@ -13,6 +14,7 @@ import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { CoinAcquireService } from './CoinAcquireService';
+import { CourseCompletionService } from './CourseCompletionService';
 import { MapperService } from './MapperService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { ServiceBase } from './misc/ServiceBase';
@@ -22,8 +24,6 @@ import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class PlaybackService extends ServiceBase {
 
-    private _authorizationService: AuthorizationService;
-
     constructor(
         mapperService: MapperService,
         ormService: ORMConnectionService,
@@ -31,7 +31,8 @@ export class PlaybackService extends ServiceBase {
         private _userSessionActivityService: UserSessionActivityService,
         private _config: GlobalConfiguration,
         private _sampleMergeService: SampleMergeService,
-        authorizationService: AuthorizationService) {
+        private _authorizationService: AuthorizationService,
+        private _courseCompletionService: CourseCompletionService) {
 
         super(mapperService, ormService);
     }
@@ -112,7 +113,14 @@ export class PlaybackService extends ServiceBase {
         /**
          * Course completion
          */
+        const moduleVersion = await this._ormService
+            .query(ModuleVersion, { id: videoVersion.moduleVersionId})
+            .where('id', '=', 'id')
+            .getSingle();
 
+        await this
+            ._courseCompletionService
+            .tryFinishCourseAsync(userId, moduleVersion.courseVersionId!);
     }
 
     /**
@@ -147,8 +155,6 @@ export class PlaybackService extends ServiceBase {
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
-
-
     }
 
     /**

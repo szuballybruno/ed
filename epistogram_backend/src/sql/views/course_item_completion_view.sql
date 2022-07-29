@@ -14,7 +14,7 @@ latest_id AS
         cic.exam_version_id
 )
 SELECT 
-    latest_id.id id,
+    latest_id.id course_item_completion_id,
     cic.user_id,
     cic.video_version_id,
     cic.exam_version_id,

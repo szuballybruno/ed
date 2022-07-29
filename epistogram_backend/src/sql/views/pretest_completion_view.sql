@@ -2,7 +2,7 @@ SELECT
     u.id user_id,
     co.id course_id,
     cv.id course_version_id,
-    cicv.id IS NOT NULL is_completed
+    cicv.course_item_completion_id IS NOT NULL is_completed
 FROM public.course co
 
 CROSS JOIN public.user u

@@ -39,7 +39,7 @@ WITH stats AS
 
 		-- completed video count D
 		(
-			SELECT COUNT(cicv.id)::int
+			SELECT COUNT(cicv.course_item_completion_id)::int
 			FROM public.course_item_completion_view cicv
 			WHERE cicv.user_id = u.id
 			AND cicv.video_version_id IS NOT NULL
@@ -83,7 +83,7 @@ WITH stats AS
 
 		-- average watched videos per day
 		(
-			SELECT COUNT(cicv.id)::double precision / 30
+			SELECT COUNT(cicv.course_item_completion_id)::double precision / 30
 			FROM public.course_item_completion_view cicv
 			WHERE cicv.user_id = u.id
 			AND cicv.completion_date > CURRENT_DATE - 30

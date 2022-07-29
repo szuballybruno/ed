@@ -28,8 +28,6 @@ import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 
 export class PlayerService {
 
-    private _authorizationService: AuthorizationService;
-
     constructor(
         private _ormService: ORMConnectionService,
         private _courseService: CourseService,
@@ -41,9 +39,7 @@ export class PlayerService {
         private _playbackService: PlaybackService,
         private _userCourseBridgeService: UserCourseBridgeService,
         private _mapperService: MapperService,
-        private authorizationService: AuthorizationService) {
-
-        this._authorizationService = authorizationService;
+        private _authorizationService: AuthorizationService) {
     }
 
     /**
@@ -55,7 +51,6 @@ export class PlayerService {
 
         return {
             action: async () => {
-
 
                 const userId = principalId.getId();
 
@@ -72,7 +67,6 @@ export class PlayerService {
                     ._playlistService
                     .getPlaylistModulesAsync(userId, courseId);
 
-
                 // get course item dto
                 const { itemId, itemType } = readItemCode(validItemCode);
 
@@ -85,15 +79,8 @@ export class PlayerService {
                 const modulePlayerDTO = itemType === 'module' ? await this._moduleService
                     .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
 
-
-                // SET START DATE 
-                // SET WATCH STAGE
                 const userCourseBridge = await this._userCourseBridgeService
                     .getUserCourseBridgeOrFailAsync(userId, courseId);
-
-                if (!userCourseBridge)
-                    await this._userCourseBridgeService
-                        .setCourseStartDateAsync(principalId, courseId);
                 //
                 // get new answer session
                 const answerSessionId = itemType === 'module'
@@ -101,13 +88,9 @@ export class PlayerService {
                     : await this._questionAnswerService
                         .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
 
-
                 //
                 // get next item 
                 const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
-
-                log('nextPlaylistItemCode: ' + nextPlaylistItemCode);
-                log('nextItemState: ' + nextItemState);
 
                 return instantiate<PlayerDataDTO>({
                     videoPlayerData: videoPlayerDTO,
@@ -127,8 +110,6 @@ export class PlayerService {
                     .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
-
-
     }
 
     //
