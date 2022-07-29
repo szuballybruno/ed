@@ -1,11 +1,10 @@
-import { Request } from 'express';
-import { UploadedFile } from 'express-fileupload';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { KeyofConstrained } from './misc';
+import { ITurboRequest } from './XTurboExpress/XTurboExpressTypes';
 
 export const snoozeAsync = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -186,21 +185,6 @@ export const parseType = (obj: any, type: ParsableValueType) => {
     return obj;
 };
 
-export const requestHasFiles = (req: Request) => {
-
-    return !!req.files;
-};
-
-export const getSingleFileFromRequest = (req: Request) => {
-
-    if (!req.files)
-        throw new ErrorWithCode('Request contains no files.', 'bad request');
-
-    // TODO multiple file error check
-
-    return req.files.file as UploadedFile;
-};
-
 export const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 
     const objWithValue = withValue<T>(obj, () => {
@@ -294,37 +278,11 @@ export const sleepAsync = (seconds: number) => {
     });
 };
 
-export const getBearerTokenFromRequest = (req: Request) => {
-
-    const authHeader = req.headers.authorization;
-    return authHeader?.split(' ')[1];
-};
-
-export const getCookies = (req: Request) => {
-
-    const cookieString = (req.headers.cookie as string);
-    if (!cookieString)
-        return [];
-
-    return cookieString
-        .split('; ')
-        .map(x => ({
-            key: x.split('=')[0],
-            value: x.split('=')[1]
-        }));
-};
-
-export const getCookie = (req: Request, key: string) => {
-
-    return getCookies(req)
-        .filter(x => x.key === key)[0]?.value as string | null;
-};
-
-export const getAuthCookies = (req: Request) => {
+export const getAuthCookies = (req: ITurboRequest) => {
 
     return {
-        accessToken: getCookie(req, 'accessToken'),
-        refreshToken: getCookie(req, 'refreshToken')
+        accessToken: req.getCookie('accessToken'),
+        refreshToken: req.getCookie('refreshToken')
     };
 };
 

@@ -1,9 +1,9 @@
 import { AuthorizationService } from '../services/AuthorizationService';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
-import { ITurboMiddlewareInstance, MiddlewareParams } from '../utilities/XTurboExpress/TurboExpress';
+import { ITurboMiddlewareInstance, ITurboRequest, ITurboResponse, MiddlewareParams } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionParams, ActionParams> {
+export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionParams, ITurboRequest, ITurboResponse, ActionParams> {
 
     private _authorizationService: AuthorizationService;
 
@@ -12,7 +12,7 @@ export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionP
         this._authorizationService = serviceProvider.getService(AuthorizationService);
     }
 
-    async runMiddlewareAsync(params: MiddlewareParams<ActionParams>): Promise<ActionParams> {
+    async runMiddlewareAsync(params: MiddlewareParams<ActionParams, ITurboRequest, ITurboResponse>): Promise<ActionParams> {
 
         if (params.options.isPublic)
             return params.inParams;

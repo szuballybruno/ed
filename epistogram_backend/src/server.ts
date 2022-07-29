@@ -8,10 +8,11 @@ import { RecreateDBService } from './services/sqlServices/RecreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
 import { initServiceProvider } from './startup/initApp';
+import { initTurboExpressListener } from './startup/initTurboExpressListener';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { ServiceProvider } from './startup/servicesDI';
 import { snoozeAsync } from './utilities/helpers';
-import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
+import { GetServiceProviderType } from './utilities/XTurboExpress/XTurboExpressTypes';
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
 
@@ -58,8 +59,12 @@ const startServerAsync = async (
     getServiceProviderAsync: () => Promise<ServiceProvider>) => {
 
     // 
+    // INIT TURBO EXPRESS LISTENER
+    const listener = initTurboExpressListener(singletonServiceProvider.getService(GlobalConfiguration));
+
+    // 
     // INIT TURBO EXPRESS
-    const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync);
+    const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync, listener);
 
     // 
     // LISTEN (start server)

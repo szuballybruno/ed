@@ -1,11 +1,12 @@
-import bodyParser from 'body-parser';
-import fileUpload from 'express-fileupload';
+
 import { CourseProgressController } from '../api/CourseProgressController';
 import { PlaylistController } from '../api/PlaylistController';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { ActionWrapperFunctionType, GetServiceProviderType, ITurboRequest, ITurboResponse, IXTurboExpressListener } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ZAuthenticationController } from './../api/AuthenticationController2';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
 import { CommentController } from './../api/CommentController';
@@ -37,12 +38,10 @@ import { UserProgressController } from './../api/UserProgressController';
 import { UserStatsController } from './../api/UserStatsController';
 import { VideoController } from './../api/VideoController';
 import { VideoRatingController } from './../api/VideoRatingController';
-import { getCORSMiddleware, getUnderMaintanenceMiddleware } from './../services/misc/middlewareService';
 import { AuthenticationMiddleware } from './../turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddleware';
-import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { onActionError, onActionSuccess } from './../utilities/apiHelpers';
-import { ActionWrapperFunctionType, GetServiceProviderType, TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
+import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProvider } from './servicesDI';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {
@@ -82,12 +81,15 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
     }
 };
 
-export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceProvider: GetServiceProviderType) => {
+export const initTurboExpress = (
+    singletonProvider: ServiceProvider, 
+    getServiceProvider: GetServiceProviderType,
+    listener: IXTurboExpressListener) => {
 
     const globalConfig = singletonProvider.getService(GlobalConfiguration);
     const loggerService = singletonProvider.getService(LoggerService);
 
-    const turboExpress = new TurboExpressBuilder<ActionParams>(loggerService, globalConfig)
+    const turboExpress = new TurboExpressBuilder<ActionParams, ITurboRequest, ITurboResponse>(loggerService, listener)
         .setServicesCreationFunction(getServiceProvider)
         .addActionWrapperFunction(actionWrapper)
         .setPort(globalConfig.misc.hostPort)
@@ -95,11 +97,6 @@ export const initTurboExpress = (singletonProvider: ServiceProvider, getServiceP
         .setSuccessHandler(onActionSuccess)
         .setTurboMiddleware<void, ActionParams>(AuthenticationMiddleware)
         .setTurboMiddleware<ActionParams, ActionParams>(AuthorizationMiddleware)
-        .setExpressMiddleware(getCORSMiddleware(globalConfig))
-        .setExpressMiddleware(bodyParser.json({ limit: '32mb' }))
-        .setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }))
-        .setExpressMiddleware(fileUpload())
-        .setExpressMiddleware(getUnderMaintanenceMiddleware(globalConfig))
         .addController(MiscController)
         .addController(UserController)
         .addController(CourseItemController)

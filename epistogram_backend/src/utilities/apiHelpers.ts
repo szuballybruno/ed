@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
 import { logError, logSecondary } from '../services/misc/logger';
 import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
-import { ErrorCodeType } from '../shared/types/sharedTypes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { ITurboRequest, ITurboResponse } from './XTurboExpress/XTurboExpressTypes';
 
-export const onActionError = (errorin: any, req: Request, res: Response) => {
+export const onActionError = (errorin: any, req: ITurboRequest, res: ITurboResponse) => {
 
     const requestPath = req.path;
     const error = errorin as Error;
@@ -16,45 +16,15 @@ export const onActionError = (errorin: any, req: Request, res: Response) => {
     respondError(res, '', ((error as ErrorWithCode).code ?? 'internal server error') as ErrorCodeType);
 };
 
-export const onActionSuccess = (value: any, req: Request, res: Response) => {
+export const onActionSuccess = (value: any, req: ITurboRequest, res: ITurboResponse) => {
 
     const requestPath = req.path;
 
     logSecondary(`${requestPath}: Succeeded...`);
-    respond(res, 200, value);
+    res.respond(200, value);
 };
 
-export const respond = (res: Response, code: number, data?: any) => {
-
-    if (data === undefined) {
-
-        logSecondary('Responding, code: ' + code);
-        res.sendStatus(code);
-    } else {
-
-        logSecondary(`Responding with data, code: ${code}`);
-        res.status(code)
-            .send(data);
-    }
-};
-
-export const getAsyncMiddlewareHandler = (wrappedAction: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
-
-    const wrapperFunction = (wrapperReq: Request, wrapperRes: Response, wrapperNext: NextFunction) => {
-
-        wrappedAction(wrapperReq, wrapperRes, wrapperNext)
-            .then(() => wrapperNext())
-            .catch((error: any) => {
-
-                logError(error);
-                respondError(wrapperRes, error.message, ((error as ErrorWithCode).code ?? 'internal server error') as ErrorCodeType);
-            });
-    };
-
-    return wrapperFunction;
-};
-
-export const respondError = (res: Response, msg: string, code: ErrorCodeType) => {
+export const respondError = (res: ITurboResponse, msg: string, code: ErrorCodeType) => {
 
     logSecondary(`Responding typed error: Type: ${code} Msg: ${msg}`);
 
@@ -65,23 +35,23 @@ export const respondError = (res: Response, msg: string, code: ErrorCodeType) =>
 
     switch (code) {
         case 'bad request':
-            respond(res, 400, errorDTO);
+            res.respond(400, errorDTO);
             break;
 
         case 'forbidden':
-            respond(res, 403, errorDTO);
+            res.respond(403, errorDTO);
             break;
 
         case 'internal server error':
-            respond(res, 500, errorDTO);
+            res.respond(500, errorDTO);
             break;
 
         case 'under maintenance':
-            respond(res, 503, errorDTO);
+            res.respond(503, errorDTO);
             break;
 
         default:
-            respond(res, 500, errorDTO);
+            res.respond(500, errorDTO);
             break;
     }
 };

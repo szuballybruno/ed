@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { logSecondary } from '../../services/misc/logger';
 import { XSafeObjectWrapper } from '../../shared/logic/XSafeObjectWrapper';
@@ -6,6 +5,7 @@ import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/ap
 import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { Id } from '../../shared/types/versionId';
 import { withValueOrBadRequest } from '../helpers';
+import { ITurboRequest, ITurboResponse } from './XTurboExpressTypes';
 
 export class PrincipalId {
 
@@ -32,16 +32,17 @@ export type ParamsData<T extends RouteParameterType> = {
     query: XSafeObjectWrapper<T['query']>
 }
 
-export class ActionParams {
+export class ActionParams<
+    TRequest extends ITurboRequest = ITurboRequest,
+    TResponse extends ITurboResponse = ITurboResponse> {
 
     isMultipart: boolean;
     principalId: PrincipalId;
 
     constructor(
-        public req: Request,
-        public res: Response,
-        userId: Id<'User'>,
-        isMultipart: boolean) {
+        public req: TRequest,
+        public res: TResponse,
+        userId: Id<'User'>) {
 
         this.principalId = new PrincipalId(Id.read(userId));
         this.isMultipart = !!this.req.body.document;

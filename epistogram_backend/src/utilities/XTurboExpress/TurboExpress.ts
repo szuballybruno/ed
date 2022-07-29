@@ -1,61 +1,27 @@
-import express, { Application, NextFunction, Request, Response } from 'express';
 import { LoggerService } from '../../services/LoggerService';
-import { GlobalConfiguration } from '../../services/misc/GlobalConfiguration';
-import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { ServiceProvider } from '../../startup/servicesDI';
 import { ITurboExpressLayer } from './ITurboExpressLayer';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';
-import { ControllerActionReturnType } from './XTurboExpressTypes';
+import { ActionWrapperFunctionType, ApiActionType, ControllerActionReturnType, EndpointOptionsType, GetServiceProviderType, ITurboMiddleware, ITurboRequest, ITurboResponse, IXTurboExpressListener, MiddlwareFnType, TurboActionType } from './XTurboExpressTypes';
 
-export interface ITurboMiddlewareInstance<TInParams, TOutParams> {
-
-    runMiddlewareAsync: (params: MiddlewareParams<TInParams>) => Promise<TOutParams>;
-}
-
-export type ITurboMiddleware<TInParams, TOutParams> = ITurboExpressLayer<ITurboMiddlewareInstance<TInParams, TOutParams>>
-
-export interface IRouteOptions {
-    isPost?: boolean
-}
-
-export type MiddlewareParams<TInParams> = {
-    req: Request;
-    res: Response;
-    options: EndpointOptionsType;
-    inParams: TInParams;
-};
-
-export type ApiActionType<TActionParams> = (params: TActionParams) => Promise<any>;
-
-export class EndpointOptionsType implements IRouteOptions {
-    isPublic?: boolean;
-    isPost?: boolean;
-    isMultipart?: boolean;
-    isUnauthorized?: boolean;
-    checkPermission?: PermissionCodeType;
-}
-
-type MiddlwareFnType = (req: any, res: any, next: any) => void;
-
-export type GetServiceProviderType = () => Promise<ServiceProvider>;
-
-export type ActionWrapperFunctionType = (serviceProvider: ServiceProvider, action: () => Promise<any>) => Promise<any>;
-
-export class TurboExpressBuilder<TActionParams> {
+export class TurboExpressBuilder<
+    TActionParams,
+    TRequest extends ITurboRequest,
+    TResponse extends ITurboResponse> {
 
     private _port: string;
-    private _middlewares: ITurboMiddleware<any, any>[];
-    private _onError: (e: any, req: Request, res: Response) => void;
-    private _onSuccess: (value: any, req: Request, res: Response) => void;
+    private _middlewares: ITurboMiddleware<any, TRequest, TResponse, any>[];
+    private _onError: (e: any, req: TRequest, res: TResponse) => void;
+    private _onSuccess: (value: any, req: TRequest, res: TResponse) => void;
     private _expressMiddlewares: MiddlwareFnType[];
     private _controllers: ITurboExpressLayer[];
-    private _serviceCreationFunction: GetServiceProviderType;
+    private _getServiceProvider: GetServiceProviderType;
     private _actionWrapperFunction: ActionWrapperFunctionType;
 
     constructor(
         private _loggerService: LoggerService,
-        private _config: GlobalConfiguration) {
+        private _listener: IXTurboExpressListener<TRequest, TResponse>) {
 
         this._middlewares = [];
         this._expressMiddlewares = [];
@@ -64,36 +30,36 @@ export class TurboExpressBuilder<TActionParams> {
 
     setServicesCreationFunction(createServices: GetServiceProviderType) {
 
-        this._serviceCreationFunction = createServices;
-        return this as Pick<TurboExpressBuilder<TActionParams>, 'addActionWrapperFunction'>;
+        this._getServiceProvider = createServices;
+        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'addActionWrapperFunction'>;
     }
 
     addActionWrapperFunction(avFunction: ActionWrapperFunctionType) {
 
         this._actionWrapperFunction = avFunction;
-        return this as Pick<TurboExpressBuilder<TActionParams>, 'setPort'>;
+        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setPort'>;
     }
 
     setPort(port: string) {
 
         this._port = port;
-        return this as Pick<TurboExpressBuilder<TActionParams>, 'setErrorHandler'>;
+        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setErrorHandler'>;
     }
 
-    setErrorHandler(onError: (e: any, req: Request, res: Response) => void) {
+    setErrorHandler(onError: (e: any, req: TRequest, res: TResponse) => void) {
 
         this._onError = onError;
-        return this as Pick<TurboExpressBuilder<TActionParams>, 'setSuccessHandler'>;
+        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setSuccessHandler'>;
     }
 
-    setSuccessHandler(onSuccess: (value: any, req: Request, res: Response) => void) {
+    setSuccessHandler(onSuccess: (value: any, req: TRequest, res: TResponse) => void) {
 
         this._onSuccess = onSuccess;
-        return this as Pick<TurboExpressBuilder<TActionParams>, 'setTurboMiddleware'>;
+        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setTurboMiddleware'>;
     }
 
-    setTurboMiddleware<TInParams, TOutParams>(middleware: ITurboMiddleware<TInParams, TOutParams>):
-        Pick<TurboExpressBuilder<TActionParams>, 'setTurboMiddleware' | 'addController' | 'setExpressMiddleware'> {
+    setTurboMiddleware<TInParams, TOutParams>(middleware: ITurboMiddleware<TInParams, TRequest, TResponse, TOutParams>):
+        Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setTurboMiddleware' | 'addController' | 'setExpressMiddleware'> {
 
         this._middlewares
             .push(middleware);
@@ -101,7 +67,7 @@ export class TurboExpressBuilder<TActionParams> {
         return this;
     }
 
-    setExpressMiddleware(middleware: MiddlwareFnType): Pick<TurboExpressBuilder<TActionParams>, 'addController' | 'setExpressMiddleware'> {
+    setExpressMiddleware(middleware: MiddlwareFnType): Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'addController' | 'setExpressMiddleware'> {
 
         this._expressMiddlewares
             .push(middleware);
@@ -109,7 +75,7 @@ export class TurboExpressBuilder<TActionParams> {
         return this;
     }
 
-    addController(signature: ITurboExpressLayer): Pick<TurboExpressBuilder<TActionParams>, 'build' | 'addController'> {
+    addController(signature: ITurboExpressLayer): Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'build' | 'addController'> {
 
         this._controllers
             .push(signature);
@@ -117,65 +83,24 @@ export class TurboExpressBuilder<TActionParams> {
         return this;
     }
 
-    build() {
+    build(): Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'listen'> {
 
-        const turboExpress = new TurboExpress<TActionParams>(
-            this._loggerService,
-            this._middlewares,
-            this._expressMiddlewares,
-            this._port,
-            this._actionWrapperFunction,
-            this._serviceCreationFunction,
-            this._onError,
-            this._onSuccess);
+        this._getActions()
+            .forEach(x => this
+                ._addAPIEndpoint(x.path, x.sign, x.propName, x.meta));
 
-        this._controllers
-            .forEach((sign) => {
-
-                const controllerMetadatas = getControllerActionMetadatas(sign);
-
-                this._loggerService.logScoped('BOOTSTRAP', `Controller: ${sign.name}`);
-
-                controllerMetadatas
-                    .orderBy(meta => meta.metadata.isPost + '')
-                    .forEach(meta => {
-
-                        const path = meta.metadata.path;
-
-                        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
-
-                        turboExpress
-                            .addAPIEndpoint(path, sign, meta.propName, meta.metadata);
-                    });
-            });
-
-        return turboExpress;
-    }
-}
-
-export class TurboExpress<TActionParams extends IRouteOptions> {
-
-    private _expressServer: Application;
-
-    constructor(
-        private _loggerService: LoggerService,
-        private _middlewares: ITurboMiddleware<any, any>[],
-        private expressMiddlewares: MiddlwareFnType[],
-        private _port: string,
-        private _actionWrapper: ActionWrapperFunctionType,
-        private _getServiceProviderAsync: GetServiceProviderType,
-        private _onError: (e: any, req: Request, res: Response) => void,
-        private _onSuccess: (value: any, req: Request, res: Response) => void,
-        private _onListen?: () => void) {
-
-        this._expressServer = express();
-
-        expressMiddlewares
-            .forEach(x => this._expressServer
-                .use(x));
+        return this;
     }
 
-    addAPIEndpoint = (
+    listen() {
+
+        this._listener
+            .listen(this._port);
+    }
+
+    // ------------------------- PRIVATE
+
+    private _addAPIEndpoint = (
         path: string,
         controllerSignature: ITurboExpressLayer,
         functionName: string,
@@ -184,7 +109,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
         /**
          * Handles middleware execution
          */
-        const runMiddlewaresAsync = async (req: Request, res: Response, serviceProvider: ServiceProvider) => {
+        const runMiddlewaresAsync = async (req: TRequest, res: TResponse, serviceProvider: ServiceProvider) => {
 
             // run middlewares 
             let prevMiddlewareParam: any = {};
@@ -267,7 +192,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
          * - execute middleware
          * - execute action  
          */
-        const asyncStuff = async (req: Request, res: Response, next: NextFunction) => {
+        const asyncStuff = async (req: TRequest, res: TResponse) => {
 
             this._loggerService
                 .log(`${req.path}: REQUEST ARRIVED`);
@@ -276,7 +201,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
              * Instatiate all services, 
              * establish connection to DB
              */
-            const serviceProvider = await this._getServiceProviderAsync();
+            const serviceProvider = await this._getServiceProvider();
 
             /**
              * Executes the middlewares, 
@@ -294,7 +219,7 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
              * which is an external async wrapper (for flexibility)
              */
             const actionWrapperResult = await this
-                ._actionWrapper(serviceProvider, executeMiddlewaresAndControllerAction);
+                ._actionWrapperFunction(serviceProvider, executeMiddlewaresAndControllerAction);
 
             return actionWrapperResult;
         };
@@ -303,9 +228,9 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
          * SYNC wrapper for async execution, 
          * this will be supplied directly to Express.js 
          */
-        const syncActionWrapper = (req: Request, res: Response, next: NextFunction) => {
+        const syncActionWrapper = (req: TRequest, res: TResponse) => {
 
-            asyncStuff(req, res, next)
+            asyncStuff(req, res)
                 .then((returnValue: any) => {
 
                     this._onSuccess(returnValue, req, res);
@@ -317,24 +242,18 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
         };
 
         /**
-         * Register sync wrapper on Express.js
+         * Reg endpoint on listener
          */
-        if (options?.isPost) {
-
-            this._expressServer.post(path, syncActionWrapper);
-        } else {
-
-            this._expressServer.get(path, syncActionWrapper);
-        }
+        this
+            ._listener
+            .registerEndpoint({
+                path,
+                syncAction: syncActionWrapper,
+                isPost: !!options?.isPost,
+            });
     };
 
-    listen() {
-
-        this._expressServer
-            .listen(this._port, this._onListen);
-    }
-
-    _isAuthResult(obj: any) {
+    private _isAuthResult(obj: any) {
 
         const returnObj = obj as ControllerActionReturnType;
 
@@ -351,5 +270,36 @@ export class TurboExpress<TActionParams extends IRouteOptions> {
             return false;
 
         return true;
+    }
+
+    private _getActions(): TurboActionType[] {
+
+        const actions = this._controllers
+            .flatMap((sign) => {
+
+                const controllerMetadatas = getControllerActionMetadatas(sign);
+
+                this._loggerService.logScoped('BOOTSTRAP', `Controller: ${sign.name}`);
+
+                const actions = controllerMetadatas
+                    .orderBy(meta => meta.metadata.isPost + '')
+                    .map(meta => {
+
+                        const path = meta.metadata.path;
+
+                        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
+
+                        return {
+                            path,
+                            sign,
+                            propName: meta.propName,
+                            meta: meta.metadata
+                        };
+                    });
+
+                return actions;
+            });
+
+        return actions;
     }
 }

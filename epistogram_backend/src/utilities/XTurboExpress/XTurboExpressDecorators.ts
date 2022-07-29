@@ -1,6 +1,6 @@
 import { ConstructorSignature } from '../../services/misc/advancedTypes/ConstructorSignature';
 import { XMetadataHandler } from '../XMetadata/XMetadataHandler';
-import { EndpointOptionsType } from './TurboExpress';
+import { EndpointOptionsType } from './XTurboExpressTypes';
 
 const CONTROLLER_ACTION_METADATA_KEY = 'CONTROLLER_ACTION_METADATA_KEY';
 

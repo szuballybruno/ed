@@ -5,9 +5,9 @@ import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { getAuthCookies } from '../utilities/helpers';
-import { ITurboMiddlewareInstance, MiddlewareParams } from '../utilities/XTurboExpress/TurboExpress';
+import { ITurboMiddlewareInstance, MiddlewareParams, ITurboRequest, ITurboResponse } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, ActionParams> {
+export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, ITurboRequest, ITurboResponse, ActionParams> {
 
     private _authenticationService: AuthenticationService;
     private _loggerService: LoggerService;
@@ -18,13 +18,12 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
         this._loggerService = serviceProvider.getService(LoggerService);
     }
 
-    runMiddlewareAsync = async (params: MiddlewareParams<void>): Promise<ActionParams> => {
+    runMiddlewareAsync = async (params: MiddlewareParams<void, ITurboRequest, ITurboResponse>): Promise<ActionParams> => {
 
         const { req, res, options } = params;
 
         const { accessToken } = getAuthCookies(req);
         const requestPath = req.path;
-        const isMultipart = !!options.isMultipart;
 
         this._loggerService
             .logSecondary(`${requestPath}: Authorizing request...`);
@@ -35,7 +34,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
             this._loggerService
                 .log(`${requestPath}: Route is open, skipping authentication...`);
 
-            return new ActionParams(req, res, Id.create<'User'>(-1), isMultipart);
+            return new ActionParams(req, res, Id.create<'User'>(-1));
         }
 
         // private (authenticated) route
@@ -52,7 +51,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
             this._loggerService
                 .logSecondary(`${requestPath}: Request permitted. UserId: ${userId} Proceeding...`);
 
-            return new ActionParams(req, res, userId, isMultipart);
+            return new ActionParams(req, res, userId);
         }
     };
 }
