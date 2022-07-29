@@ -27,6 +27,11 @@ export class SQLConnectionService {
         this._client?.release();
     }
 
+    async endPoolAsync(){
+
+        await this._poolService.endPool();
+    }
+
     executeSQLAsync = async (sql: string, values?: any[]) => {
 
         try {

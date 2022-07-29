@@ -42,4 +42,9 @@ export class SQLPoolService {
 
         return await this._pool.connect();
     }
+
+    async endPool(){
+
+        await this._pool.end();
+    }
 }

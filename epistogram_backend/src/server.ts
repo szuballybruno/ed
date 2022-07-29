@@ -7,10 +7,13 @@ import { CreateDBService } from './services/sqlServices/CreateDBService';
 import { RecreateDBService } from './services/sqlServices/RecreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
+import { initServiceProvider } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
-import { instansiateSingletonServices, instatiateServices, ServiceProvider } from './startup/servicesDI';
+import { ServiceProvider } from './startup/servicesDI';
 import { snoozeAsync } from './utilities/helpers';
 import { GetServiceProviderType } from './utilities/XTurboExpress/TurboExpress';
+
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
 
@@ -50,26 +53,6 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
         .releaseConnectionClient();
 };
 
-const initServiceProvider = (rootDir: string) => {
-
-    const singletonServiceProvider = instansiateSingletonServices(rootDir);
-
-    const getServiceProviderAsync = async () => {
-
-        const serviceProvider = instatiateServices(singletonServiceProvider);
-
-        //
-        // INIT CONNECTION
-        await serviceProvider
-            .getService(SQLConnectionService)
-            .createConnectionClientAsync();
-
-        return serviceProvider;
-    };
-
-    return { getServiceProviderAsync, singletonServiceProvider };
-};
-
 const startServerAsync = async (
     singletonServiceProvider: ServiceProvider,
     getServiceProviderAsync: () => Promise<ServiceProvider>) => {
@@ -89,7 +72,6 @@ const main = async () => {
     log('------------- APPLICATION STARTED ----------------');
     log('');
 
-    const rootDir = dirname(fileURLToPath(import.meta.url));
     const isPurgeMode = process.argv.any(x => x === '--purge');
     const isLightRecreateMode = process.argv.any(x => x === '--lightRecreate');
     const isShortLife = process.argv.any(x => x === '--shortLife');
@@ -112,4 +94,4 @@ const main = async () => {
         await startServerAsync(singletonServiceProvider, getServiceProviderAsync);
 };
 
-await main();
+main();

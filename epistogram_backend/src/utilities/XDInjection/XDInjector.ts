@@ -4,9 +4,11 @@ import { RemapToFunctions } from '../../services/misc/advancedTypes/RemapToFunct
 
 type FnType<TProps> = { fn: Function, deps: Function[], props: TProps };
 
-class DepHierarchyItem<T extends string | Function = string | Function> {
-    private _key: T;
-    private _deps: T[];
+export class DepHierarchyItem<T extends string | Function = string | Function> {
+
+    constructor(private _key: T, private _deps: T[]) {
+
+    }
 
     getCompareKey() {
 
@@ -16,7 +18,7 @@ class DepHierarchyItem<T extends string | Function = string | Function> {
 
     getDepsCompareKeys() {
 
-        return this     
+        return this
             ._deps
             .map(x => this
                 ._getCompareKeyFromValue(x));

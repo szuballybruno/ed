@@ -1,4 +1,4 @@
-export const extensions = true;
+export const initJsExtensions = () => console.log('Init JS extensions...');
 
 declare global {
 
