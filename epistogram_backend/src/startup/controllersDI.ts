@@ -1,4 +1,4 @@
-import { ZAuthenticationController } from './../api/AuthenticationController2';
+import { AuthenticationController } from '../api/AuthenticationController';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
 import { CommentController } from './../api/CommentController';
 import { CompanyController } from './../api/CompanyController';
@@ -45,7 +45,7 @@ export const instatiateControllers = (serviceProvider: ServiceProvider) => {
     controllers.coinTransactionsController = new CoinTransactionsController(serviceProvider);
     controllers.registrationController = new RegistrationController(serviceProvider);
     controllers.miscController = new MiscController(serviceProvider);
-    controllers.authenticationController = new ZAuthenticationController(serviceProvider);
+    controllers.authenticationController = new AuthenticationController(serviceProvider);
     controllers.userController = new UserController(serviceProvider);
     controllers.fileController = new FileController(serviceProvider);
     controllers.signupController = new SignupController(serviceProvider);

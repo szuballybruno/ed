@@ -12,8 +12,6 @@ export class TurboExpressBuilder<
 
     private _port: string;
     private _middlewares: ITurboMiddleware<any, TRequest, TResponse, any>[];
-    private _onError: (e: any, req: TRequest, res: TResponse) => void;
-    private _onSuccess: (value: any, req: TRequest, res: TResponse) => void;
     private _expressMiddlewares: MiddlwareFnType[];
     private _controllers: ITurboExpressLayer[];
     private _getServiceProvider: GetServiceProviderType;
@@ -43,18 +41,6 @@ export class TurboExpressBuilder<
     setPort(port: string) {
 
         this._port = port;
-        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setErrorHandler'>;
-    }
-
-    setErrorHandler(onError: (e: any, req: TRequest, res: TResponse) => void) {
-
-        this._onError = onError;
-        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setSuccessHandler'>;
-    }
-
-    setSuccessHandler(onSuccess: (value: any, req: TRequest, res: TResponse) => void) {
-
-        this._onSuccess = onSuccess;
         return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setTurboMiddleware'>;
     }
 
@@ -225,30 +211,13 @@ export class TurboExpressBuilder<
         };
 
         /**
-         * SYNC wrapper for async execution, 
-         * this will be supplied directly to Express.js 
-         */
-        const syncActionWrapper = (req: TRequest, res: TResponse) => {
-
-            asyncStuff(req, res)
-                .then((returnValue: any) => {
-
-                    this._onSuccess(returnValue, req, res);
-                })
-                .catch((error: any) => {
-
-                    this._onError(error, req, res);
-                });
-        };
-
-        /**
          * Reg endpoint on listener
          */
         this
             ._listener
             .registerEndpoint({
                 path,
-                syncAction: syncActionWrapper,
+                action: asyncStuff,
                 isPost: !!options?.isPost,
             });
     };

@@ -9,7 +9,7 @@ import { getAuthCookies } from '../utilities/helpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { AuthorizationResult, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class ZAuthenticationController implements XController<ZAuthenticationController> {
+export class AuthenticationController implements XController<AuthenticationController> {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfiguration;

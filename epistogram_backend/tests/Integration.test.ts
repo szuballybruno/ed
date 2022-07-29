@@ -1,5 +1,6 @@
+import { AuthenticationController } from '../src/api/AuthenticationController';
 import { UserController } from '../src/api/UserController';
-import { setupTest as setupIntegrationTest } from './base';
+import { setupTest as setupIntegrationTest } from './misc/base';
 
 setupIntegrationTest((getInitData) => {
 
@@ -9,23 +10,33 @@ setupIntegrationTest((getInitData) => {
     describe('integration test 1', () => {
         it('is getting user 1', async () => {
 
-            // const user = await getInitData()
-            //     .serviceProvider
-            //     .getService(UserService)
-            //     .getUserById(1 as any);
+            const { api } = getInitData();
 
-            // expect(user.lastName)
-            //     .toBe('Marosi');
-
-            const result = getInitData()
-                .listener
-                .callEndpoint(UserController, 'saveUserAction', {
+            const loginResult = await api
+                .callEndpoint(AuthenticationController, 'logInUserAction', {
                     body: {
-                        hello: 1
+                        email: 'endre.marosi@gmail.com',
+                        password: 'admin'
                     }
                 });
 
-            console.log(result);
+            const accessToken = loginResult.getCookieOrFail('accessToken');
+
+            const result = await api
+                .callEndpoint(UserController, 'getBriefUserDataAction', {
+                    query: {
+                        userId: 1
+                    },
+                    cookies: [
+                        {
+                            key: 'accessToken',
+                            value: accessToken
+                        }
+                    ]
+                });
+
+            expect(result.response.data.fullName)
+                .toBe('Endre Marosi');
         });
     });
 
@@ -36,11 +47,6 @@ setupIntegrationTest((getInitData) => {
         it('is doing something', async () => {
 
             console.log('Something...');
-            // const user = await getServiceProvider()
-            //     .getService(UserService)
-            //     .getUserById(1 as any);
-
-            // console.log(user);
         });
     });
 });

@@ -52,16 +52,6 @@ export class TurboRequest implements ITurboRequest {
 
         return this._req.files.file as UploadedFile;
     }
-
-    getBearerToken() {
-
-        const authHeader = this._req.headers.authorization;
-        const token = authHeader?.split(' ')[1];
-        if (!token)
-            throw new Error('Error getting bearer token!');
-
-        return token;
-    }
 }
 
 export class TurboResponse implements ITurboResponse {
@@ -76,7 +66,7 @@ export class TurboResponse implements ITurboResponse {
     }
 
     clearCookie(key: string): void {
-        
+
         this._res.clearCookie(key);
     }
 
@@ -104,15 +94,27 @@ export class TurboResponse implements ITurboResponse {
 export class XTurboExpressListener implements IXTurboExpressListener {
 
     private _expressServer: Application;
+    private _onError: (e: any, req: TurboRequest, res: TurboResponse) => void;
+    private _onSuccess: (value: any, req: TurboRequest, res: TurboResponse) => void;
 
-    private constructor() {
+    constructor() {
 
         this._expressServer = express();
     }
 
-    static create(): Pick<XTurboExpressListener, 'setExpressMiddleware' | 'build'> {
+    static create(): Pick<XTurboExpressListener, 'setHandlers'> {
 
         return new XTurboExpressListener();
+    }
+
+    setHandlers(
+        onError: (e: any, req: TurboRequest, res: TurboResponse) => void,
+        onSuccess: (value: any, req: TurboRequest, res: TurboResponse) => void): Pick<XTurboExpressListener, 'setExpressMiddleware' | 'build'> {
+
+        this._onError = onError;
+        this._onSuccess = onSuccess;
+
+        return this;
     }
 
     setExpressMiddleware(expressMiddleware: any): Pick<XTurboExpressListener, 'setExpressMiddleware' | 'build'> {
@@ -131,14 +133,34 @@ export class XTurboExpressListener implements IXTurboExpressListener {
     registerEndpoint(opts: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>) {
 
         /**
+         * SYNC wrapper for async execution, 
+         * this will be supplied directly to Express.js 
+         */
+        const syncActionWrapper = (req: TurboRequest, res: TurboResponse) => {
+
+            opts.action(req, res)
+                .then((returnValue: any) => {
+
+                    this._onSuccess(returnValue, req, res);
+                })
+                .catch((error: any) => {
+
+                    this._onError(error, req, res);
+                });
+        };
+
+        /**
          * Wrapping express 'Request'
          * to conform it to the interface 
          */
         const reqResWrapper = (req: Request, res: Response) => {
 
-            opts.syncAction(new TurboRequest(req), new TurboResponse(res));
+            syncActionWrapper(new TurboRequest(req), new TurboResponse(res));
         };
 
+        /**
+         * Reg
+         */
         if (opts.isPost) {
 
             this._expressServer.post(opts.path, reqResWrapper);

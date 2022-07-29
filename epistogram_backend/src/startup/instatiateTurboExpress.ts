@@ -7,7 +7,7 @@ import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnec
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { ActionWrapperFunctionType, GetServiceProviderType, ITurboRequest, ITurboResponse, IXTurboExpressListener } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { ZAuthenticationController } from './../api/AuthenticationController2';
+import { AuthenticationController } from '../api/AuthenticationController';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
 import { CommentController } from './../api/CommentController';
 import { CompanyController } from './../api/CompanyController';
@@ -40,7 +40,6 @@ import { VideoController } from './../api/VideoController';
 import { VideoRatingController } from './../api/VideoRatingController';
 import { AuthenticationMiddleware } from './../turboMiddleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddleware';
-import { onActionError, onActionSuccess } from './../utilities/apiHelpers';
 import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProvider } from './servicesDI';
 
@@ -93,8 +92,6 @@ export const initTurboExpress = (
         .setServicesCreationFunction(getServiceProvider)
         .addActionWrapperFunction(actionWrapper)
         .setPort(globalConfig.misc.hostPort)
-        .setErrorHandler(onActionError)
-        .setSuccessHandler(onActionSuccess)
         .setTurboMiddleware<void, ActionParams>(AuthenticationMiddleware)
         .setTurboMiddleware<ActionParams, ActionParams>(AuthorizationMiddleware)
         .addController(MiscController)
@@ -104,7 +101,7 @@ export const initTurboExpress = (
         .addController(RoleController)
         .addController(CompanyController)
         .addController(CommentController)
-        .addController(ZAuthenticationController)
+        .addController(AuthenticationController)
         .addController(ExamController)
         .addController(RegistrationController)
         .addController(TempomatController)

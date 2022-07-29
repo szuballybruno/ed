@@ -28,22 +28,21 @@ export type XController<T> = {
     [K in keyof T]: (params: ActionParams) => ControllerActionReturnType; //| Promise<any>;
 }
 
-export interface ITurboRequest {
-    path: string;
-    body: any;
-    query: any;
-    files: any;
-    getCookie(key: string): string | null;
-    hasFiles(): boolean;
-    getSingleFile(): UploadedFile;
-    getBearerToken(): string;
-}
-
 export interface ICookieOptions {
     secure?: boolean;
     httpOnly?: boolean;
     expires?: Date;
     sameSite?: 'none';
+}
+
+export interface ITurboRequest {
+    path: string;
+    body: any;
+    query: any;
+    files: { file: any };
+    getCookie(key: string): string | null;
+    hasFiles(): boolean;
+    getSingleFile(): UploadedFile;
 }
 
 export type ITurboResponse = {
@@ -54,7 +53,7 @@ export type ITurboResponse = {
 
 export type RegisterEndpointOptsType<TRequest, TResponse> = {
     path: string;
-    syncAction: (req: TRequest, res: TResponse) => void;
+    action: (req: TRequest, res: TResponse) => Promise<void>;
     isPost: boolean;
 }
 
