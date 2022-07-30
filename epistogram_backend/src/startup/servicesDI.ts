@@ -9,7 +9,7 @@ import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
-import { XDependency } from '../utilities/XDInjection/XDInjector';
+import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
 import { ActivationCodeService } from './../services/ActivationCodeService';
 import { AuthenticationService } from './../services/AuthenticationService';
 import { AuthorizationService } from './../services/AuthorizationService';
@@ -98,7 +98,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
     // INIT DB SCHEMA
     const dbSchema = createDBSchema();
 
-    const singletons = XDependency
+    const container = XDependency
         .getClassBuilder()
         .addClassInstance(XDBMSchemaType, dbSchema)
         .addClassInstance(GlobalConfiguration, globalConfiguration)
@@ -106,15 +106,15 @@ export const instansiateSingletonServices = (rootDir: string) => {
         .addClass(MapperService, [UrlService])
         .addClass(LoggerService, [GlobalConfiguration])
         .addClass(SQLPoolService, [GlobalConfiguration])
-        .getDependencyHierarchy();
+        .getContainer();
 
     const { instances } = XDependency
-        .instatiate(singletons);
+        .instantiate(container);
 
     return new ServiceProvider(instances);
 };
 
-export const instatiateServices = (singletonProvider: ServiceProvider): ServiceProvider => {
+export const getTransientServiceContainer = (singletonProvider: ServiceProvider) => {
 
     // create transients
     const container = XDependency
@@ -185,10 +185,16 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
         .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService])
-        .getDependencyHierarchy();
+        .getContainer();
+
+    return XDependency
+        .orderDepHierarchy(container);
+};
+
+export const instatiateServices = (container: DependencyContainer<DepHierarchyFunction>): ServiceProvider => {
 
     const { instances } = XDependency
-        .instatiate(container);
+        .instatiateOnly(container);
 
     return new ServiceProvider(instances);
 };

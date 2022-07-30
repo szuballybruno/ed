@@ -5,6 +5,7 @@ import { RemapToFunctions } from '../../services/misc/advancedTypes/RemapToFunct
 
 export type DepHierarchyFunction = ParametrizedFunction | ParametrizedConstructor;
 export type DepHierarchyItemConstraint = string | DepHierarchyFunction;
+export type DependencyContainer<T extends DepHierarchyItemConstraint = DepHierarchyItemConstraint> = DepHierarchyItem<T>[];
 
 export class DepHierarchyItem<T extends DepHierarchyItemConstraint = DepHierarchyItemConstraint> {
 
@@ -49,7 +50,7 @@ export class DepHierarchyItem<T extends DepHierarchyItemConstraint = DepHierarch
 
 class XDependencyHierarchyBuilder<T extends DepHierarchyFunction> {
 
-    private _items: DepHierarchyItem<T>[] = [];
+    private _items: DependencyContainer<T> = [];
 
     constructor() {
     }
@@ -89,7 +90,7 @@ class XDependencyHierarchyBuilder<T extends DepHierarchyFunction> {
         return this;
     }
 
-    getDependencyHierarchy() {
+    getContainer() {
 
         return this._items;
     }
@@ -107,11 +108,18 @@ export class XDependency {
         return new XDependencyHierarchyBuilder<ParametrizedConstructor>();
     }
 
-    static instatiate(items: DepHierarchyItem<DepHierarchyFunction>[]) {
+    static instantiate(container: DependencyContainer<DepHierarchyFunction>) {
 
         // order items 
-        const orderedItems = this
-            .orderDepHierarchy(items);
+        const orderedContainer = this
+            .orderDepHierarchy(container);
+
+        // instantiate 
+        return this
+            .instatiateOnly(orderedContainer);
+    }
+
+    static instatiateOnly(orderedContainer: DepHierarchyItem<DepHierarchyFunction>[]) {
 
         // instance container 
         const instances = {} as any;
@@ -155,7 +163,7 @@ export class XDependency {
                         return getInstance(dependencyKey);
 
                     // new item
-                    return instatiateItem(orderedItems
+                    return instatiateItem(orderedContainer
                         .single(x => x
                             .getCompareKey() === dependencyKey));
                 });
@@ -168,10 +176,10 @@ export class XDependency {
         };
 
         // instantiate items
-        orderedItems
+        orderedContainer
             .forEach(item => instatiateItem(item));
 
-        const itemInstancePairs = orderedItems
+        const itemInstancePairs = orderedContainer
             .map((item): [DepHierarchyItem<DepHierarchyFunction>, any] => [item, getInstance(item.getCompareKey())]);
 
         return {
@@ -181,13 +189,13 @@ export class XDependency {
         };
     }
 
-    static orderDepHierarchy<T extends DepHierarchyItemConstraint>(depHierarchyItems: DepHierarchyItem<T>[]) {
+    static orderDepHierarchy<T extends DepHierarchyItemConstraint>(container: DependencyContainer<T>): DependencyContainer<T> {
 
         /**
          * State
          */
         const ordered: DepHierarchyItem<T>[] = [];
-        let unordered: DepHierarchyItem<T>[] = [...depHierarchyItems]
+        let unordered: DepHierarchyItem<T>[] = [...container]
             .orderBy(x => x.getDepsCompareKeys().length);
 
         /**

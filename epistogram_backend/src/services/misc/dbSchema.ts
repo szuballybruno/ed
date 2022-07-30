@@ -257,10 +257,10 @@ export const createDBSchema = (): XDBMSchemaType => {
         .addFunction(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .addFunction(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
         .addFunction(getPrequizUserAnswerSeedData, [getUserSeedData, getCourseSeedData, getPrequizQuestionsSeedData, getPrequizAnswersSeedData], PrequizUserAnswer)
-        .getDependencyHierarchy();
+        .getContainer();
 
     const { itemInstancePairs } = XDependency
-        .instatiate(hierarchy);
+        .instantiate(hierarchy);
 
     const seedScripts = itemInstancePairs
         .map(([item, instance]): [Function, any] => {

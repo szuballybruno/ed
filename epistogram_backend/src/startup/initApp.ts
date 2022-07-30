@@ -1,18 +1,18 @@
 
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
 import { initJsExtensions } from '../shared/logic/jsExtensions';
-import { initTurboExpress } from './instatiateTurboExpress';
-import { instansiateSingletonServices, instatiateServices } from './servicesDI';
+import { getTransientServiceContainer, instansiateSingletonServices, instatiateServices } from './servicesDI';
 
 export const initServiceProvider = (rootDir: string) => {
 
     initJsExtensions();
 
     const singletonServiceProvider = instansiateSingletonServices(rootDir);
+    const transientServiceContainer = getTransientServiceContainer(singletonServiceProvider);
 
     const getServiceProviderAsync = async () => {
 
-        const serviceProvider = instatiateServices(singletonServiceProvider);
+        const serviceProvider = instatiateServices(transientServiceContainer);
 
         //
         // INIT CONNECTION
