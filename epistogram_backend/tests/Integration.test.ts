@@ -9,19 +9,14 @@ setupIntegrationTest((getInitData) => {
     describe('integration test 1', () => {
         it('is getting user 1', async () => {
 
-            const { api, accessToken } = getInitData();
+            const { api, cookies } = getInitData();
 
             const result = await api
                 .callEndpoint(UserController, 'getBriefUserDataAction', {
                     query: {
                         userId: 1
                     },
-                    cookies: [
-                        {
-                            key: 'accessToken',
-                            value: accessToken
-                        }
-                    ]
+                    cookies
                 });
 
             expect(result.response.data.fullName)

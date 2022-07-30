@@ -3,12 +3,12 @@ import { ITurboExpressLayer } from '../../src/utilities/XTurboExpress/ITurboExpr
 import { getControllerActionMetadatas } from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
 import { ITurboRequest, ITurboResponse, IXTurboExpressListener, RegisterEndpointOptsType } from '../../src/utilities/XTurboExpress/XTurboExpressTypes';
 
-type TestCookie = {
+export type TestCookie = {
     key: string;
     value: string;
 }
 
-type TestCallEndpointOptions = {
+export type TestCallEndpointOptions = {
     body?: any,
     query?: any,
     cookies?: TestCookie[],

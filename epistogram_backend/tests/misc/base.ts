@@ -3,14 +3,15 @@ import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnecti
 import { initServiceProvider } from '../../src/startup/initApp';
 import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
 import { ServiceProvider } from '../../src/startup/servicesDI';
-import { TestListener } from './TestListener';
+import { TestCookie, TestListener } from './TestListener';
 
 type ApiType = Pick<TestListener, 'callEndpoint'>;
 
 type InitData = {
     serviceProvider: ServiceProvider,
     api: ApiType,
-    accessToken: string
+    accessToken: string,
+    cookies: TestCookie[]
 }
 
 const loginUserAsync = async (api: ApiType) => {
@@ -51,7 +52,13 @@ export const setupTest = (tests: (getInitData: () => InitData) => void, login?: 
             initDataContainer.initData = {
                 serviceProvider,
                 api,
-                accessToken
+                accessToken,
+                cookies: [
+                    {
+                        key: 'accessToken',
+                        value: accessToken
+                    }
+                ]
             };
         });
     });
