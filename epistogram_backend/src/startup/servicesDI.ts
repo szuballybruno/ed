@@ -91,7 +91,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
     // 
     // INIT GLOBAL CONFIG
-    const globalConfig = GlobalConfiguration
+    const globalConfiguration = GlobalConfiguration
         .initGlobalConfig(rootDir);
 
     // 
@@ -101,7 +101,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
     const singletons = XDependency
         .getClassBuilder()
         .addClassInstance(XDBMSchemaType, dbSchema)
-        .addClassInstance(GlobalConfiguration, globalConfig)
+        .addClassInstance(GlobalConfiguration, globalConfiguration)
         .addClass(UrlService, [GlobalConfiguration])
         .addClass(MapperService, [UrlService])
         .addClass(LoggerService, [GlobalConfiguration])
@@ -116,143 +116,79 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
 export const instatiateServices = (singletonProvider: ServiceProvider): ServiceProvider => {
 
-    // get singletons
-    const globalConfig = singletonProvider.getService(GlobalConfiguration);
-    const dbSchema = singletonProvider.getService(XDBMSchemaType);
-    const mapperService = singletonProvider.getService(MapperService);
-    const urlService = singletonProvider.getService(UrlService);
-    const loggerService = singletonProvider.getService(LoggerService);
-    const poolService = singletonProvider.getService(SQLPoolService);
-
     // create transients
-    // const container = XDependency
-    //     .getClassBuilder()
-    //     .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
-    //     .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
-    //     .addClassInstance(MapperService, singletonProvider.getService(MapperService))
-    //     .addClassInstance(UrlService, singletonProvider.getService(UrlService))
-    //     .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
-    //     .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
-    //     .addClass(HashService, [GlobalConfiguration])
-    //     .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-    //     .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-    //     .getDependencyHierarchy();
+    const container = XDependency
+        .getClassBuilder()
 
-    const hashService = new HashService(globalConfig);
-    const sqlConnectionService = new SQLConnectionService(poolService, loggerService);
-    const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);
-    const createDBService = new CreateDBService(sqlConnectionService, dbSchema, globalConfig, typeOrmConnectionService, loggerService);
-    const ormConnectionService = new ORMConnectionService(globalConfig, sqlConnectionService);
-    const permissionService = new PermissionService(ormConnectionService, mapperService);
-    const authorizationService = new AuthorizationService(permissionService, ormConnectionService);
-    const sqlFunctionService = new SQLFunctionsService(sqlConnectionService, globalConfig);
-    const eventService = new EventService(mapperService, ormConnectionService, authorizationService);
-    const coinTransactionService = new CoinTransactionService(sqlFunctionService, ormConnectionService, mapperService, authorizationService);
-    const coinAcquireService = new CoinAcquireService(coinTransactionService, ormConnectionService, eventService);
-    const userSessionActivityService = new UserSessionActivityService(ormConnectionService, coinAcquireService, loggerService);
-    const activationCodeService = new ActivationCodeService(ormConnectionService);
-    const emailService = new EmailService(globalConfig, urlService);
-    const versionSaveService = new VersionSaveService(ormConnectionService);
-    const signupService = new SignupService(emailService, sqlFunctionService, ormConnectionService, mapperService, authorizationService);
-    const questionAnswerService = new QuestionAnswerService(ormConnectionService, sqlFunctionService, coinAcquireService, versionSaveService, loggerService);
-    const teacherInfoService = new TeacherInfoService(ormConnectionService, mapperService, authorizationService);
-    const roleService = new RoleService(ormConnectionService, mapperService, authorizationService);
-    const userService = new UserService(ormConnectionService, mapperService, teacherInfoService, hashService, roleService, authorizationService);
-    const tokenService = new TokenService(globalConfig);
-    const authenticationService = new AuthenticationService(ormConnectionService, userService, tokenService, userSessionActivityService, hashService, permissionService, globalConfig);
-    const passwordChangeService = new PasswordChangeService(userService, tokenService, emailService, urlService, ormConnectionService, globalConfig, hashService, authorizationService);
-    const seedService = new SeedService(dbSchema, globalConfig, sqlConnectionService, loggerService);
-    const recreateDBservice = new RecreateDBService(createDBService, seedService, dbSchema, sqlConnectionService);
-    const questionService = new QuestionService(ormConnectionService, versionSaveService);
-    const courseItemService = new CourseItemService(ormConnectionService, mapperService, questionService, versionSaveService, questionAnswerService, authorizationService);
-    const userCourseBridgeService = new UserCourseBridgeService(ormConnectionService, mapperService, authorizationService, loggerService);
-    const courseCompletionService = new CourseCompletionService(mapperService, ormConnectionService);
-    const examService = new ExamService(userCourseBridgeService, ormConnectionService, userSessionActivityService, questionAnswerService, questionService, mapperService, authorizationService, loggerService, courseCompletionService);
-    const storageService = new StorageService(globalConfig);
-    const fileService = new FileService(userService, storageService, ormConnectionService, authorizationService);
-    const videoService = new VideoService(ormConnectionService, userCourseBridgeService, questionAnswerService, fileService, questionService, urlService, mapperService, globalConfig, authorizationService);
-    const moduleService = new ModuleService(ormConnectionService, mapperService, courseItemService, versionSaveService, fileService, authorizationService);
-    const playlistService = new PlaylistService(userCourseBridgeService, ormConnectionService, mapperService);
-    const courseProgressService = new CourseProgressService(userCourseBridgeService, ormConnectionService, mapperService, playlistService);
-    const miscService = new MiscService(courseProgressService, ormConnectionService, mapperService, userCourseBridgeService);
-    const sampleMergeService = new SampleMergeService();
-    const playbackService = new PlaybackService(mapperService, ormConnectionService, coinAcquireService, userSessionActivityService, globalConfig, sampleMergeService, authorizationService, courseCompletionService);
-    const personalityAssessmentService = new PersonalityAssessmentService(ormConnectionService, mapperService, authorizationService);
-    const videoRatingService = new VideoRatingService(ormConnectionService, authorizationService);
-    const dailyTipService = new DailyTipService(ormConnectionService, mapperService, authorizationService);
-    const tempomatService = new TempomatService(ormConnectionService, loggerService, eventService, authorizationService);
-    const pretestService = new PretestService(ormConnectionService, mapperService, examService, userCourseBridgeService, questionAnswerService, authorizationService, tempomatService);
-    const courseService = new CourseService(moduleService, ormConnectionService, mapperService, fileService, pretestService, authorizationService);
-    const shopService = new ShopService(ormConnectionService, mapperService, coinTransactionService, courseService, emailService, fileService, urlService, authorizationService);
-    const playerService = new PlayerService(ormConnectionService, courseService, playlistService, examService, moduleService, videoService, questionAnswerService, playbackService, userCourseBridgeService, mapperService, authorizationService);
-    const practiseQuestionService = new PractiseQuestionService(ormConnectionService, questionAnswerService, playerService, mapperService, authorizationService);
-    const userStatsService = new UserStatsService(ormConnectionService, mapperService, tempomatService, authorizationService);
-    const prequizService = new PrequizService(ormConnectionService, mapperService, userCourseBridgeService, authorizationService);
-    const registrationService = new RegistrationService(activationCodeService, emailService, userService, authenticationService, authorizationService, tokenService, ormConnectionService, roleService, mapperService);
-    const courseRatingService = new CourseRatingService(mapperService, ormConnectionService, authorizationService);
-    const userProgressService = new UserProgressService(mapperService, ormConnectionService, tempomatService, authorizationService);
-    const commentService = new CommentService(ormConnectionService, mapperService, authorizationService);
-    const likeService = new LikeService(ormConnectionService, mapperService, authorizationService);
-    const companyService = new CompanyService(ormConnectionService, mapperService, authorizationService);
+        // add singleton instances 
+        .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
+        .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
+        .addClassInstance(MapperService, singletonProvider.getService(MapperService))
+        .addClassInstance(UrlService, singletonProvider.getService(UrlService))
+        .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
+        .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
 
-    const services = {
-        globalConfig,
-        urlService,
-        mapperService,
-        loggerService,
-        hashService,
-        sqlConnectionService,
-        createDBService,
-        ormConnectionService,
-        sqlFunctionService,
-        eventService,
-        coinTransactionService,
-        coinAcquireService,
-        userSessionActivityService,
-        activationCodeService,
-        emailService,
-        questionAnswerService,
-        signupService,
-        teacherInfoService,
-        roleService,
-        userService,
-        tokenService,
-        permissionService,
-        authenticationService,
-        passwordChangeService,
-        seedService,
-        recreateDBservice,
-        courseItemService,
-        userCourseBridgeService,
-        questionService,
-        examService,
-        storageService,
-        fileService,
-        videoService,
-        moduleService,
-        pretestService,
-        courseService,
-        miscService,
-        sampleMergeService,
-        playbackService,
-        authorizationService,
-        playerService,
-        practiseQuestionService,
-        shopService,
-        personalityAssessmentService,
-        videoRatingService,
-        dailyTipService,
-        tempomatService,
-        userStatsService,
-        prequizService,
-        registrationService,
-        courseRatingService,
-        userProgressService,
-        commentService,
-        likeService,
-        companyService,
-        typeOrmConnectionService
-    };
+        // add transient signatures
+        .addClass(HashService, [GlobalConfiguration])
+        .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
+        .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaType])
+        .addClass(CreateDBService, [SQLConnectionService, XDBMSchemaType, GlobalConfiguration, TypeORMConnectionService, LoggerService])
+        .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService])
+        .addClass(PermissionService, [ORMConnectionService, MapperService])
+        .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
+        .addClass(SQLFunctionsService, [SQLConnectionService, GlobalConfiguration])
+        .addClass(EventService, [MapperService, ORMConnectionService, AuthorizationService])
+        .addClass(CoinTransactionService, [SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(CoinAcquireService, [CoinTransactionService, ORMConnectionService, EventService])
+        .addClass(UserSessionActivityService, [ORMConnectionService, CoinAcquireService, LoggerService])
+        .addClass(ActivationCodeService, [ORMConnectionService])
+        .addClass(EmailService, [GlobalConfiguration, UrlService])
+        .addClass(VersionSaveService, [ORMConnectionService])
+        .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(QuestionAnswerService, [ORMConnectionService, SQLFunctionsService, CoinAcquireService, VersionSaveService, LoggerService])
+        .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(RoleService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(UserService, [ORMConnectionService, MapperService, TeacherInfoService, HashService, RoleService, AuthorizationService])
+        .addClass(TokenService, [GlobalConfiguration])
+        .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfiguration])
+        .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService])
+        .addClass(SeedService, [XDBMSchemaType, GlobalConfiguration, SQLConnectionService, LoggerService])
+        .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaType, SQLConnectionService])
+        .addClass(QuestionService, [ORMConnectionService, VersionSaveService])
+        .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, QuestionAnswerService, AuthorizationService])
+        .addClass(UserCourseBridgeService, [ORMConnectionService, MapperService, AuthorizationService, LoggerService])
+        .addClass(CourseCompletionService, [MapperService, ORMConnectionService])
+        .addClass(ExamService, [UserCourseBridgeService, ORMConnectionService, UserSessionActivityService, QuestionAnswerService, QuestionService, MapperService, AuthorizationService, LoggerService, CourseCompletionService])
+        .addClass(StorageService, [GlobalConfiguration])
+        .addClass(FileService, [UserService, StorageService, ORMConnectionService, AuthorizationService])
+        .addClass(VideoService, [ORMConnectionService, UserCourseBridgeService, QuestionAnswerService, FileService, QuestionService, UrlService, MapperService, GlobalConfiguration, AuthorizationService])
+        .addClass(ModuleService, [ORMConnectionService, MapperService, CourseItemService, VersionSaveService, FileService, AuthorizationService])
+        .addClass(PlaylistService, [UserCourseBridgeService, ORMConnectionService, MapperService])
+        .addClass(CourseProgressService, [UserCourseBridgeService, ORMConnectionService, MapperService, PlaylistService])
+        .addClass(MiscService, [CourseProgressService, ORMConnectionService, MapperService, UserCourseBridgeService])
+        .addClass(SampleMergeService, [])
+        .addClass(PlaybackService, [MapperService, ORMConnectionService, CoinAcquireService, UserSessionActivityService, GlobalConfiguration, SampleMergeService, AuthorizationService, CourseCompletionService])
+        .addClass(PersonalityAssessmentService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(VideoRatingService, [ORMConnectionService, AuthorizationService])
+        .addClass(DailyTipService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(TempomatService, [ORMConnectionService, LoggerService, EventService, AuthorizationService])
+        .addClass(PretestService, [ORMConnectionService, MapperService, ExamService, UserCourseBridgeService, QuestionAnswerService, AuthorizationService, TempomatService])
+        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, PretestService, AuthorizationService])
+        .addClass(ShopService, [ORMConnectionService, MapperService, CoinTransactionService, CourseService, EmailService, FileService, UrlService, AuthorizationService])
+        .addClass(PlayerService, [ORMConnectionService, CourseService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, AuthorizationService])
+        .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, PlayerService, MapperService, AuthorizationService])
+        .addClass(UserStatsService, [ORMConnectionService, MapperService, TempomatService, AuthorizationService])
+        .addClass(PrequizService, [ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
+        .addClass(RegistrationService, [ActivationCodeService, EmailService, UserService, AuthenticationService, AuthorizationService, TokenService, ORMConnectionService, RoleService, MapperService])
+        .addClass(CourseRatingService, [MapperService, ORMConnectionService, AuthorizationService])
+        .addClass(UserProgressService, [MapperService, ORMConnectionService, TempomatService, AuthorizationService])
+        .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService])
+        .getDependencyHierarchy();
 
-    return new ServiceProvider(services);
+    const { instances } = XDependency
+        .instatiate(container);
+
+    return new ServiceProvider(instances);
 };
