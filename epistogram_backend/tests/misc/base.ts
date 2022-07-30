@@ -1,15 +1,34 @@
+import { AuthenticationController } from '../../src/api/AuthenticationController';
 import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnectionService';
 import { initServiceProvider } from '../../src/startup/initApp';
 import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
 import { ServiceProvider } from '../../src/startup/servicesDI';
 import { TestListener } from './TestListener';
 
+type ApiType = Pick<TestListener, 'callEndpoint'>;
+
 type InitData = {
     serviceProvider: ServiceProvider,
-    api: Pick<TestListener, 'callEndpoint'>
+    api: ApiType,
+    accessToken: string
 }
 
-export const setupTest = (tests: (getInitData: () => InitData) => void) => {
+const loginUserAsync = async (api: ApiType) => {
+
+    const loginResult = await api
+        .callEndpoint(AuthenticationController, 'logInUserAction', {
+            body: {
+                email: 'endre.marosi@gmail.com',
+                password: 'admin'
+            }
+        });
+
+    const accessToken = loginResult.getCookieOrFail('accessToken');
+
+    return { accessToken };
+};
+
+export const setupTest = (tests: (getInitData: () => InitData) => void, login?: 'NO LOGIN') => {
 
     const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider('');
     const api = new TestListener();
@@ -23,10 +42,16 @@ export const setupTest = (tests: (getInitData: () => InitData) => void) => {
     describe('init tests', () => {
         it('should init tests', async () => {
 
+            const serviceProvider = await getServiceProviderAsync();
+            const accessToken = login === 'NO LOGIN'
+                ? ''
+                : (await loginUserAsync(api)).accessToken;
+
             // create init data
             initDataContainer.initData = {
-                serviceProvider: await getServiceProviderAsync(),
+                serviceProvider,
                 api,
+                accessToken
             };
         });
     });

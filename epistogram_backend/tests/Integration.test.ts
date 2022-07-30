@@ -1,4 +1,3 @@
-import { AuthenticationController } from '../src/api/AuthenticationController';
 import { UserController } from '../src/api/UserController';
 import { setupTest as setupIntegrationTest } from './misc/base';
 
@@ -10,17 +9,7 @@ setupIntegrationTest((getInitData) => {
     describe('integration test 1', () => {
         it('is getting user 1', async () => {
 
-            const { api } = getInitData();
-
-            const loginResult = await api
-                .callEndpoint(AuthenticationController, 'logInUserAction', {
-                    body: {
-                        email: 'endre.marosi@gmail.com',
-                        password: 'admin'
-                    }
-                });
-
-            const accessToken = loginResult.getCookieOrFail('accessToken');
+            const { api, accessToken } = getInitData();
 
             const result = await api
                 .callEndpoint(UserController, 'getBriefUserDataAction', {
