@@ -1,1 +1,1 @@
-export type ParametrizedFunction<T = any> = (...args: any) => T;
+export type ParametrizedFunction<T = any> = (...args: any[]) => T;

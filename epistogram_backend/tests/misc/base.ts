@@ -63,6 +63,9 @@ export const setupTest = (tests: (getInitData: () => InitData) => void, login?: 
         });
     });
 
+    /**
+     * Run tests 
+     */
     tests(getInitData);
 
     /**

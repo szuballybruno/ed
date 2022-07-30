@@ -1,8 +1,15 @@
+import { CourseCompletionService } from '../services/CourseCompletionService';
+import { CourseProgressService } from '../services/CourseProgressService';
 import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { PlaylistService } from '../services/PlaylistService';
+import { CreateDBService } from '../services/sqlServices/CreateDBService';
+import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
+import { VersionSaveService } from '../services/VersionSaveService';
 import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
+import { XDependency } from '../utilities/XDInjection/XDInjector';
 import { ActivationCodeService } from './../services/ActivationCodeService';
 import { AuthenticationService } from './../services/AuthenticationService';
 import { AuthorizationService } from './../services/AuthorizationService';
@@ -40,10 +47,8 @@ import { RoleService } from './../services/RoleService';
 import { SampleMergeService } from './../services/SampleMergeService';
 import { ShopService } from './../services/ShopService';
 import { SignupService } from './../services/SignupService';
-import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
 import { SQLFunctionsService } from './../services/sqlServices/FunctionsService';
 import { SeedService } from './../services/sqlServices/SeedService';
-import { CreateDBService } from '../services/sqlServices/CreateDBService';
 import { SQLConnectionService } from './../services/sqlServices/SQLConnectionService';
 import { StorageService } from './../services/StorageService';
 import { TeacherInfoService } from './../services/TeacherInfoService';
@@ -57,10 +62,6 @@ import { UserSessionActivityService } from './../services/UserSessionActivitySer
 import { UserStatsService } from './../services/UserStatsService';
 import { VideoRatingService } from './../services/VideoRatingService';
 import { VideoService } from './../services/VideoService';
-import { VersionSaveService } from '../services/VersionSaveService';
-import { CourseProgressService } from '../services/CourseProgressService';
-import { PlaylistService } from '../services/PlaylistService';
-import { CourseCompletionService } from '../services/CourseCompletionService';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -97,19 +98,20 @@ export const instansiateSingletonServices = (rootDir: string) => {
     // INIT DB SCHEMA
     const dbSchema = createDBSchema();
 
-    const urlService = new UrlService(globalConfig);
-    const mapperService = new MapperService(urlService);
-    const loggerService = new LoggerService(globalConfig);
-    const poolService = new SQLPoolService(globalConfig);
+    const singletons = XDependency
+        .getClassBuilder()
+        .addClassInstance(XDBMSchemaType, dbSchema)
+        .addClassInstance(GlobalConfiguration, globalConfig)
+        .addClass(UrlService, [GlobalConfiguration])
+        .addClass(MapperService, [UrlService])
+        .addClass(LoggerService, [GlobalConfiguration])
+        .addClass(SQLPoolService, [GlobalConfiguration])
+        .getDependencyHierarchy();
 
-    return new ServiceProvider({
-        globalConfig,
-        dbSchema,
-        mapperService,
-        loggerService,
-        urlService,
-        poolService
-    });
+    const { instances } = XDependency
+        .instatiate(singletons);
+
+    return new ServiceProvider(instances);
 };
 
 export const instatiateServices = (singletonProvider: ServiceProvider): ServiceProvider => {
@@ -123,6 +125,19 @@ export const instatiateServices = (singletonProvider: ServiceProvider): ServiceP
     const poolService = singletonProvider.getService(SQLPoolService);
 
     // create transients
+    // const container = XDependency
+    //     .getClassBuilder()
+    //     .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
+    //     .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
+    //     .addClassInstance(MapperService, singletonProvider.getService(MapperService))
+    //     .addClassInstance(UrlService, singletonProvider.getService(UrlService))
+    //     .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
+    //     .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
+    //     .addClass(HashService, [GlobalConfiguration])
+    //     .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
+    //     .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
+    //     .getDependencyHierarchy();
+
     const hashService = new HashService(globalConfig);
     const sqlConnectionService = new SQLConnectionService(poolService, loggerService);
     const typeOrmConnectionService = new TypeORMConnectionService(globalConfig, dbSchema);

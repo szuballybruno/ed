@@ -10,7 +10,7 @@ setupIntegrationTest((getInitData) => {
         it('is getting user 1', async () => {
 
             const { api, cookies } = getInitData();
-
+            
             const result = await api
                 .callEndpoint(UserController, 'getBriefUserDataAction', {
                     query: {

@@ -4,11 +4,6 @@ import { Id } from '../../shared/types/versionId';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
 
-function logType(target: any, key: string) {
-    const t = Reflect.getMetadata('design:type', target, key);
-    console.log(`${key} type: ${t.name}`);
-}
-
 @Entity()
 export class DiscountCode {
 
@@ -21,7 +16,6 @@ export class DiscountCode {
     code: string;
 
     // user 
-    @logType
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
     userId: Id<'User'> | null;
