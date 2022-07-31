@@ -13,7 +13,6 @@ import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
-import { log } from './misc/logger';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlaybackService } from './PlaybackService';

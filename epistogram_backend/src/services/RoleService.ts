@@ -258,6 +258,27 @@ export class RoleService extends QueryServiceBase<Role> {
             .hardDelete(RoleAssignmentBridge, roleBridgeIdsToDeassign);
     }
 
+    async _flushUserPermissionsAndRolesAsync(userId: Id<'User'>) {
+
+        const userPermissions = await this._ormService
+            .query(PermissionAssignmentBridge, { userId })
+            .where('assigneeUserId', '=', 'userId')
+            .getMany();
+
+        await this._ormService
+            .hardDelete(PermissionAssignmentBridge, userPermissions
+                .map(x => x.id));
+
+        const userRoles = await this._ormService
+            .query(RoleAssignmentBridge, { userId })
+            .where('assigneeUserId', '=', 'userId')
+            .getMany();
+
+        await this._ormService
+            .hardDelete(RoleAssignmentBridge, userRoles
+                .map(x => x.id));
+    }
+
     async _savePermissionsAsync(
         savedUserId: Id<'User'>,
         changeset: ChangeSet<UserPermissionDTO>) {
@@ -267,6 +288,8 @@ export class RoleService extends QueryServiceBase<Role> {
             .deletedItems
             .filter(x => !!x.permissionAssignmentBridgeId)
             .map(x => x.permissionAssignmentBridgeId!);
+
+        console.log(idsToDeassign);
 
         await this._ormService
             .hardDelete(PermissionAssignmentBridge, idsToDeassign);
@@ -282,6 +305,8 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCourseId: x.contextCourseId,
                 permissionId: x.permissionId
             }));
+
+        console.log(permBridges);
 
         await this._ormService
             .createManyAsync(PermissionAssignmentBridge, permBridges);
