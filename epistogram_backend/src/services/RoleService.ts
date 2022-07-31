@@ -289,8 +289,6 @@ export class RoleService extends QueryServiceBase<Role> {
             .filter(x => !!x.permissionAssignmentBridgeId)
             .map(x => x.permissionAssignmentBridgeId!);
 
-        console.log(idsToDeassign);
-
         await this._ormService
             .hardDelete(PermissionAssignmentBridge, idsToDeassign);
 
@@ -305,8 +303,6 @@ export class RoleService extends QueryServiceBase<Role> {
                 contextCourseId: x.contextCourseId,
                 permissionId: x.permissionId
             }));
-
-        console.log(permBridges);
 
         await this._ormService
             .createManyAsync(PermissionAssignmentBridge, permBridges);

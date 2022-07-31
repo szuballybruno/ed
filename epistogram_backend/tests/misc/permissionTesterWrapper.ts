@@ -7,8 +7,14 @@ import { permissionCodes } from '../../src/shared/types/PermissionCodesType';
 import { PermissionCodeType } from '../../src/shared/types/sharedTypes';
 import { Id } from '../../src/shared/types/versionId';
 import { ServiceProvider } from '../../src/startup/servicesDI';
-import { PrincipalId } from '../../src/utilities/XTurboExpress/ActionParams';
 
+/**
+ * Tests callback function (endpoint) with 
+ * every permission possible one-by-one
+ * 
+ * @param serviceProvider 
+ * @param callbackFn 
+ */
 export const permissionTesterWrapper = async (
 
     serviceProvider: ServiceProvider,
@@ -17,18 +23,23 @@ export const permissionTesterWrapper = async (
     ) => Promise<void>
 ) => {
 
+    // role service
     const roleService = serviceProvider.getService(RoleService);
 
+    // all permissions
     const permissions = Object.values(permissionCodes) as any as Permission[];
 
-    const assigneeUserId = Id.create<'User'>(2);
-    const principalId = new PrincipalId(1);
+    // current user -> needs to be the same as the login user in base.ts
+    const assigneeUserId = Id.create<'User'>(3);
 
+    // removes all permissions and roles from user
+    // TODO: NOT WORKING WITH USER WITH ISGOD FLAG!!
     await roleService
         ._flushUserPermissionsAndRolesAsync(assigneeUserId);
 
     for (let i = 0; i < permissions.length; i++) {
-        console.log(permissions[i].code);
+
+        console.log(`Running with permission: ${permissions[i].code}`);
 
         const {
             id,
@@ -36,7 +47,7 @@ export const permissionTesterWrapper = async (
             scope
         } = permissions[i];
 
-        // adds the current permission to user
+        // adds the current and access_application permission to user
         await roleService
             ._savePermissionsAsync(
                 assigneeUserId,
@@ -53,12 +64,23 @@ export const permissionTesterWrapper = async (
                             parentRoleId: null,
                             parentRoleName: null,
                             permissionAssignmentBridgeId: null
+                        }),
+                        instantiate<UserPermissionDTO>({
+                            permissionId: Id.create<'Permission'>(41),
+                            permissionCode: 'ACCESS_APPLICATION',
+                            assigneeUserId: assigneeUserId,
+                            contextCompanyId: scope === 'COMPANY' ? Id.create<'Company'>(1) : null,
+                            contextCourseId: scope === 'COURSE' ? Id.create<'Course'>(1) : null,
+                            contextCompanyName: '',
+                            contextCourseName: '',
+                            parentRoleId: null,
+                            parentRoleName: null,
+                            permissionAssignmentBridgeId: null
                         })
                     ],
                     deletedItems: []
                 } as ChangeSet<UserPermissionDTO>
             );
-
 
         await callbackFn(code as PermissionCodeType);
 

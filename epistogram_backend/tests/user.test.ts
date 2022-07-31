@@ -6,9 +6,9 @@ setupIntegrationTest((getInitData) => {
 
 
     /**
-     * Flush user permissions
+     * Get brief user data
      */
-    describe('Flushing user permissions', () => {
+    describe('Get brief user data', () => {
         it('is getting ', async () => {
 
             const { api, cookies, serviceProvider } = getInitData();
@@ -25,10 +25,20 @@ setupIntegrationTest((getInitData) => {
                             cookies
                         });
 
-                    if (currentCode === 'ACCESS_ADMIN') {
+                    if (currentCode === 'ADD_EPISTO_COIN_TO_USERS') {
+
                         expect(result.response.code)
                             .toBe(200);
+
+                        expect(result.response.data)
+                            .not
+                            .toBeNull();
+
+                        expect(result.response.data)
+                            .toHaveProperty('firstName');
+
                     } else {
+
                         expect(result.response.code)
                             .not
                             .toBe(200);

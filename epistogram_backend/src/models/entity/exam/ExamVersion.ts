@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { AnswerSession } from '../AnswerSession';
@@ -46,9 +46,9 @@ export class ExamVersion {
     @Column()
     @XViewColumn()
     moduleVersionId: Id<'ModuleVersion'>;
-    @ManyToOne(_ => ModuleVersion, x => x.examVersions)
+    @XManyToOne<ExamVersion>()(() => ModuleVersion, x => x.examVersions)
     @XJoinColumn<ExamVersion>('moduleVersionId')
-    moduleVersion: ModuleVersion;
+    moduleVersion: Relation<ModuleVersion>;
 
     // exam
     @Column()

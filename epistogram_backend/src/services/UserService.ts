@@ -268,7 +268,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
+                    .getCheckPermissionResultAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS');
             }
         };
 
