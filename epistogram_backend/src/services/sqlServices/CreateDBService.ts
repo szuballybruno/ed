@@ -1,7 +1,7 @@
 
 import { readdirSync, readFileSync } from 'fs';
 import { regexMatchAll } from '../../utilities/helpers';
-import { DepHierarchyItem, XDInjector } from '../../utilities/XDInjection/XDInjector';
+import { DepHierarchyItem, XDependency } from '../../utilities/XDInjection/XDInjector';
 import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
@@ -52,8 +52,11 @@ export class CreateDBService {
     private _getDepsOfViews(namesAndContents: ViewFile[]) {
 
         return namesAndContents
-            .map(x => new DepHierarchyItem(x.name, this
-                ._getDepsOfView(x.content)));
+            .map(x => new DepHierarchyItem({
+                key: x.name,
+                deps: this
+                    ._getDepsOfView(x.content)
+            }));
     }
 
     private _getDepsOfView(viewSql: string) {
@@ -167,7 +170,7 @@ export class CreateDBService {
 
         const viewFiles = this._readViews();
         const nameAndDeps = this._getDepsOfViews(viewFiles);
-        const ordered = XDInjector.orderDepHierarchy(nameAndDeps);
+        const ordered = XDependency.orderDepHierarchy(nameAndDeps);
 
         const revereseOrderedViewNames = ordered
             .map(x => x.getCompareKey())

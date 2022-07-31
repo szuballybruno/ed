@@ -26,6 +26,8 @@ export const logError = (content: any) => log(content, { entryType: 'error' });
  */
 export const logSecondary = (content: any) => log(content, { entryType: 'secondary' });
 
+const loggingEnabled = false;
+
 /**
  * @deprecated DO NOT USE - use LoggerService 
  */
@@ -34,6 +36,9 @@ export const log = (content: any, opts?: {
     color?: ConsoleColorType,
     noStamp?: boolean
 }) => {
+
+    if (!loggingEnabled)
+        return;
 
     const dateTime = new Date();
     const miliseconds = dateTime.getMilliseconds();

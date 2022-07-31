@@ -198,71 +198,74 @@ import { getVideosSeedData } from '../../sql/seed/seed_videos';
 import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
 import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
-import { XDInjector } from '../../utilities/XDInjection/XDInjector';
+import { XDependency } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
-    const injector = new XDInjector<Function>()
-        .add(getConstantValuesSeedData, [], ConstantValue)
-        .add(() => 1, [], CourseItemCompletion)
-        .add(getQuestionTypeSeedData, [], QuestionType)
-        .add(getPermissionsSeedData, [], Permission)
-        .add(getJobTitlesSeedData, [], JobTitle)
-        .add(getCompaniesSeedData, [], Company)
-        .add(() => 1, [], CourseCompletion)
-        .add(getStorageFileSeedData, [], StorageFile)
-        .add(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
-        .add(getQuestionDatasSeedData, [], QuestionData)
-        .add(getCourseCategoriesSeedData, [], CourseCategory)
-        .add(getCourseRatingGroupSeedData, [], CourseRatingGroup)
-        .add(getShopItemCategoriesSeedData, [], ShopItemCategory)
-        .add(getPrequizQuestionsSeedData, [], PrequizQuestion)
-        .add(getExamDatasSeedData, [], ExamData)
-        .add(getVideosSeedData, [], Video)
-        .add(getExamSeedData, [], Exam)
-        .add(getModulesSeedData, [], Module)
-        .add(getCourseSeedData, [], Course)
-        .add(getQuestionSeedData, [], Question)
-        .add(getAnswersSeedData, [], Answer)
-        .add(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
-        .add(getRolesSeedData, [getCompaniesSeedData], Role)
-        .add(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
-        .add(getPrequizAnswersSeedData, [getPrequizQuestionsSeedData], PrequizAnswer)
-        .add(getTempomatAdjustmentValueSeedData, [getPrequizAnswersSeedData], TempomatAdjustmentValue)
-        .add(getShopItemSeedData, [getStorageFileSeedData, getShopItemCategoriesSeedData], ShopItem)
-        .add(getDiscountCodesSeedData, [getShopItemSeedData], DiscountCode)
-        .add(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData], CourseRatingQuestion)
-        .add(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData], User)
-        .add(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
-        .add(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
-        .add(getAnswerSessionSeedData, [getUserSeedData], AnswerSession)
-        .add(getCourseDatasSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
-        .add(getModuleDatasSeedData, [getCourseDatasSeedData], ModuleData)
-        .add(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
-        .add(getCourseVersionsSeedData, [getCourseDatasSeedData, getCourseSeedData], CourseVersion)
-        .add(getVideoFilesSeedData, [getStorageFileSeedData], VideoFile)
-        .add(getVideoDataSeedData, [getVideoFilesSeedData], VideoData)
-        .add(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
-        .add(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
-        .add(getExamVersionsSeedData, [getModuleVersionsSeedData, getExamDatasSeedData, getExamSeedData], ExamVersion)
-        .add(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
-        .add(getSeedQuestionVersions, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
-        .add(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
-        .add(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getSeedQuestionVersions], AnswerVersion)
-        .add(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
-        .add(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData], UserCourseBridge)
-        .add(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
-        .add(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
-        .add(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
-        .add(getPrequizUserAnswerSeedData, [getUserSeedData, getCourseSeedData, getPrequizQuestionsSeedData, getPrequizAnswersSeedData], PrequizUserAnswer)
-        .build();
+    const hierarchy = XDependency
+        .getFunctionBuilder()
+        .addFunction(getConstantValuesSeedData, [], ConstantValue)
+        .addFunction(() => 1, [], CourseItemCompletion)
+        .addFunction(getQuestionTypeSeedData, [], QuestionType)
+        .addFunction(getPermissionsSeedData, [], Permission)
+        .addFunction(getJobTitlesSeedData, [], JobTitle)
+        .addFunction(getCompaniesSeedData, [], Company)
+        .addFunction(() => 1, [], CourseCompletion)
+        .addFunction(getStorageFileSeedData, [], StorageFile)
+        .addFunction(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
+        .addFunction(getQuestionDatasSeedData, [], QuestionData)
+        .addFunction(getCourseCategoriesSeedData, [], CourseCategory)
+        .addFunction(getCourseRatingGroupSeedData, [], CourseRatingGroup)
+        .addFunction(getShopItemCategoriesSeedData, [], ShopItemCategory)
+        .addFunction(getPrequizQuestionsSeedData, [], PrequizQuestion)
+        .addFunction(getExamDatasSeedData, [], ExamData)
+        .addFunction(getVideosSeedData, [], Video)
+        .addFunction(getExamSeedData, [], Exam)
+        .addFunction(getModulesSeedData, [], Module)
+        .addFunction(getCourseSeedData, [], Course)
+        .addFunction(getQuestionSeedData, [], Question)
+        .addFunction(getAnswersSeedData, [], Answer)
+        .addFunction(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
+        .addFunction(getRolesSeedData, [getCompaniesSeedData], Role)
+        .addFunction(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
+        .addFunction(getPrequizAnswersSeedData, [getPrequizQuestionsSeedData], PrequizAnswer)
+        .addFunction(getTempomatAdjustmentValueSeedData, [getPrequizAnswersSeedData], TempomatAdjustmentValue)
+        .addFunction(getShopItemSeedData, [getStorageFileSeedData, getShopItemCategoriesSeedData], ShopItem)
+        .addFunction(getDiscountCodesSeedData, [getShopItemSeedData], DiscountCode)
+        .addFunction(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData], CourseRatingQuestion)
+        .addFunction(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData], User)
+        .addFunction(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
+        .addFunction(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
+        .addFunction(getAnswerSessionSeedData, [getUserSeedData], AnswerSession)
+        .addFunction(getCourseDatasSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
+        .addFunction(getModuleDatasSeedData, [getCourseDatasSeedData], ModuleData)
+        .addFunction(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
+        .addFunction(getCourseVersionsSeedData, [getCourseDatasSeedData, getCourseSeedData], CourseVersion)
+        .addFunction(getVideoFilesSeedData, [getStorageFileSeedData], VideoFile)
+        .addFunction(getVideoDataSeedData, [getVideoFilesSeedData], VideoData)
+        .addFunction(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
+        .addFunction(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
+        .addFunction(getExamVersionsSeedData, [getModuleVersionsSeedData, getExamDatasSeedData, getExamSeedData], ExamVersion)
+        .addFunction(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
+        .addFunction(getSeedQuestionVersions, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
+        .addFunction(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
+        .addFunction(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getSeedQuestionVersions], AnswerVersion)
+        .addFunction(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
+        .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData], UserCourseBridge)
+        .addFunction(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
+        .addFunction(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
+        .addFunction(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
+        .addFunction(getPrequizUserAnswerSeedData, [getUserSeedData, getCourseSeedData, getPrequizQuestionsSeedData, getPrequizAnswersSeedData], PrequizUserAnswer)
+        .getContainer();
 
-    const seedScripts = injector
-        .getFunctions()
-        .map((func): [Function, any] => {
+    const { itemInstancePairs } = XDependency
+        .instantiate(hierarchy);
 
-            return [func.props, injector.getInstance(func.fn)];
+    const seedScripts = itemInstancePairs
+        .map(([item, instance]): [Function, any] => {
+
+            return [item.params, instance];
         });
 
     const schema: XDBMSchemaType = {
