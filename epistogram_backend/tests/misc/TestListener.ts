@@ -1,3 +1,4 @@
+import { respondError } from '../../src/startup/initTurboExpressListener';
 import { throwNotImplemented } from '../../src/utilities/helpers';
 import { ITurboExpressLayer } from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
 import { getControllerActionMetadatas } from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
@@ -91,10 +92,17 @@ export class TestListener implements IXTurboExpressListener {
             path: endpoint.path,
         };
 
-        const result = await endpoint
-            .action(req, res);
+        try {
 
-        res.respond(200, result);
+            const result = await endpoint
+                .action(req, res);
+
+            res.respond(200, result);
+        }
+        catch (e) {
+
+            respondError(res, e as any);
+        }
 
         return res;
     }

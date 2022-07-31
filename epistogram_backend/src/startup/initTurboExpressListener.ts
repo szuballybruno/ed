@@ -9,39 +9,39 @@ import { XTurboExpressListener } from '../utilities/XTurboExpress/XTurboExpressL
 import { ITurboRequest, ITurboResponse, IXTurboExpressListener } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { getCORSMiddleware } from './../services/misc/middlewareService';
 
-export const initTurboExpressListener = (globalConfig: GlobalConfiguration): IXTurboExpressListener => {
+export const respondError = (res: ITurboResponse, error: Error) => {
 
-    const respondError = (res: ITurboResponse, msg: string, code: ErrorCodeType) => {
+    const errorCode = ((error as ErrorWithCode).code ?? 'internal server error') as ErrorCodeType;
 
-        logSecondary(`Responding typed error: Type: ${code} Msg: ${msg}`);
-    
-        const errorDTO = {
-            code: code,
-            message: msg
-        } as HttpErrorResponseDTO;
-    
-        switch (code) {
-            case 'bad request':
-                res.respond(400, errorDTO);
-                break;
-    
-            case 'forbidden':
-                res.respond(403, errorDTO);
-                break;
-    
-            case 'internal server error':
-                res.respond(500, errorDTO);
-                break;
-    
-            case 'under maintenance':
-                res.respond(503, errorDTO);
-                break;
-    
-            default:
-                res.respond(500, errorDTO);
-                break;
-        }
+    const errorDTO: HttpErrorResponseDTO = {
+        code: errorCode,
+        message: '' // do not send messages
     };
+
+    switch (errorCode) {
+        case 'bad request':
+            res.respond(400, errorDTO);
+            break;
+
+        case 'forbidden':
+            res.respond(403, errorDTO);
+            break;
+
+        case 'internal server error':
+            res.respond(500, errorDTO);
+            break;
+
+        case 'under maintenance':
+            res.respond(503, errorDTO);
+            break;
+
+        default:
+            res.respond(500, errorDTO);
+            break;
+    }
+};
+
+export const initTurboExpressListener = (globalConfig: GlobalConfiguration): IXTurboExpressListener => {
 
     /**
      * Error 
@@ -50,21 +50,21 @@ export const initTurboExpressListener = (globalConfig: GlobalConfiguration): IXT
 
         const requestPath = req.path;
         const error = errorin as Error;
-    
+
         logError(`---------------- [${requestPath}] Failed! ----------------`);
         // logError(error.message);
         logError(error.stack);
-    
-        respondError(res, '', ((error as ErrorWithCode).code ?? 'internal server error') as ErrorCodeType);
+
+        respondError(res, error);
     };
-    
+
     /**
      * Success 
      */
     const onActionSuccess = (value: any, req: ITurboRequest, res: ITurboResponse) => {
-    
+
         const requestPath = req.path;
-    
+
         logSecondary(`${requestPath}: Succeeded...`);
         res.respond(200, value);
     };
