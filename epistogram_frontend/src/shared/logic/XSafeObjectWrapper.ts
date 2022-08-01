@@ -26,7 +26,14 @@ export class XSafeObjectWrapper<TObject> {
         if (getter(this.data) === undefined || getter(this.data) === null)
             return null;
 
-        return this.getValueCore(getter, castType, fn);
+        try {
+
+            return this.getValueCore(getter, castType, fn);
+        }
+        catch (e) {
+
+            return null;
+        }
     }
 
     /**

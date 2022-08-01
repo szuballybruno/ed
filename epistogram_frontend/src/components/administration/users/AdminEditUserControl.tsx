@@ -15,7 +15,6 @@ import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
-import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -30,22 +29,19 @@ import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
 import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
 
-export const AdminEditUserControl = (props: {
+export const AdminEditUserControl = ({
+    editDTO,
+    editedUserId,
+    refetchTrigger,
+    saveUserAsync,
+    showDeleteUserDialog
+}: {
+    editedUserId: Id<'User'> | null,
     editDTO: UserEditDTO | null,
     refetchTrigger: EventTriggerType,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
     showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void
 }) => {
-
-    const {
-        editDTO,
-        saveUserAsync,
-        showDeleteUserDialog,
-        refetchTrigger
-    } = props;
-
-    const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
-        .getValue(x => x.userId, 'int');
 
     const { hasPermission } = useAuthorizationContext();
 
@@ -114,7 +110,7 @@ export const AdminEditUserControl = (props: {
 
         try {
 
-            if (!coinAmountEntryState.validate())
+            if (!coinAmountEntryState.validate() || !editedUserId)
                 return;
 
             const amount = parseInt(coinAmountEntryState.value);
@@ -392,11 +388,11 @@ export const AdminEditUserControl = (props: {
         {/* access management */}
         <EditSection title="Jogosultságkezelés">
 
-            <PermissionAssignerControl
+            {editedUserId && <PermissionAssignerControl
                 userCompanyId={editDTO?.companyId ?? null}
                 userId={editedUserId}
                 onChange={onAuthItemsChanged}
-                refetchTrigger={refetchTrigger} />
+                refetchTrigger={refetchTrigger} />}
         </EditSection>
 
         <TailingAdminButtons

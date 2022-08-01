@@ -15,7 +15,7 @@ export const AdminUserList = (props: {
 }) => {
 
     const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
-        .getValue(x => x.userId, 'int');
+        .getValueOrNull(x => x.userId, 'int');
 
     const { users, navigationFunction } = props;
 
