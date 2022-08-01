@@ -92,6 +92,10 @@ export const permissionCodes = fn({
     },
 
     // manage company 
+    VIEW_COMPANY_USERS: {
+        code: 'VIEW_COMPANY_USERS',
+        scope: 'COMPANY'
+    },
     EDIT_COMPANY: {
         code: 'EDIT_COMPANY',
         scope: 'COMPANY'

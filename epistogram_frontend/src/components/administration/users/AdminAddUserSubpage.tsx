@@ -16,7 +16,7 @@ const AdminAddUserSubpage = (props: {
 }) => {
 
     const { users, refetchUsersFunction } = props;
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
     // http 
@@ -28,8 +28,8 @@ const AdminAddUserSubpage = (props: {
 
         showNotification('Felhasználó sikeresen hozzáadva');
         refetchUsersFunction();
-        navigate(applicationRoutes.administrationRoute.usersRoute);
-    }, [showNotification, refetchUsersFunction, navigate]);
+        navigate2(applicationRoutes.administrationRoute.usersRoute);
+    }, [showNotification, refetchUsersFunction, navigate2]);
 
     const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);
 
@@ -39,7 +39,7 @@ const AdminAddUserSubpage = (props: {
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
+                navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
         <AdminSubpageHeader background="var(--transparentWhite10)"
             className='roundBorders'>

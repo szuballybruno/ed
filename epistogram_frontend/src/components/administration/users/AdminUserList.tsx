@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { Id } from '../../../shared/types/versionId';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ProfileImage } from '../../ProfileImage';
 import { FlexList } from '../../universal/FlexList';
@@ -12,8 +13,9 @@ export const AdminUserList = (props: {
     users: AdminPageUserDTO[],
     navigationFunction: (userId: Id<'User'>) => void
 }) => {
-    const userId = Id
-        .create<'User'>(useIntParam('userId')!);
+
+    const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
+        .getValue(x => x.userId, 'int');
 
     const { users, navigationFunction } = props;
 

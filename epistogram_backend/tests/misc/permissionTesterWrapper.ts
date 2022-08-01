@@ -39,7 +39,7 @@ export const permissionTesterWrapper = async (
 
     for (let i = 0; i < permissions.length; i++) {
 
-        console.log(`Running with permission: ${permissions[i].code}`);
+        console.log(`Running with permission: ${permissions[i].code} ${permissions[i].id} ${permissions[i].scope}`);
 
         const {
             id,
@@ -69,7 +69,7 @@ export const permissionTesterWrapper = async (
                             permissionId: Id.create<'Permission'>(41),
                             permissionCode: 'ACCESS_APPLICATION',
                             assigneeUserId: assigneeUserId,
-                            contextCompanyId: scope === 'COMPANY' ? Id.create<'Company'>(1) : null,
+                            contextCompanyId: null,
                             contextCourseId: scope === 'COURSE' ? Id.create<'Course'>(1) : null,
                             contextCompanyName: '',
                             contextCourseName: '',

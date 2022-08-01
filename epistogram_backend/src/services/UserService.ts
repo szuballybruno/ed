@@ -259,6 +259,16 @@ export class UserService {
                     .where('id', '=', 'userId')
                     .getSingle();
 
+                const hasPermission = await this._authorizationService
+                    .hasPermissionAsync(
+                        principalId,
+                        'VIEW_COMPANY_USERS',
+                        { companyId: user.companyId }
+                    );
+
+                if (!hasPermission)
+                    throw new ErrorWithCode('no permission');
+
                 return {
                     id: user.id,
                     firstName: user.firstName,
@@ -268,11 +278,9 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS');
+                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
             }
         };
-
-
     }
 
     /**
