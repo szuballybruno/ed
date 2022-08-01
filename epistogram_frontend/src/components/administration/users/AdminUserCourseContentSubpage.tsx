@@ -50,6 +50,7 @@ export const AdminUserCourseContentSubpage = (props: {
     return <AdminBreadcrumbsHeader>
 
         <AdminUserList
+            currentUserId={userId}
             users={users}
             navigationFunction={(userId) => {
                 navigate2(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: userId });

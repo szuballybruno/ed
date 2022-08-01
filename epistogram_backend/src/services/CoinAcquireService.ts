@@ -203,7 +203,7 @@ export class CoinAcquireService {
             .makeCoinTransactionAsync({ userId, amount, activityStreakId: currentActivityStreakId });
 
         // add acquire event 
-        this._eventService
+        await this._eventService
             .addSessionStreakEventAsync(userId, { amount, reason });
     };
 }

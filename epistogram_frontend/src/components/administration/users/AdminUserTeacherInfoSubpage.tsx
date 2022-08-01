@@ -101,6 +101,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
         subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
         <AdminUserList
+            currentUserId={editedUserId}
             users={users}
             navigationFunction={(userId) => navigate2(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
 

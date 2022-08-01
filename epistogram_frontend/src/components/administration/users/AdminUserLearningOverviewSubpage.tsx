@@ -127,6 +127,7 @@ export const AdminUserStatisticsSubpage = (props: {
             subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
             <AdminUserList
+                currentUserId={userId}
                 users={users}
                 navigationFunction={(userId) => navigate2(usersRoute.statsRoute, { userId: userId })} />
 
@@ -150,8 +151,7 @@ export const AdminUserStatisticsSubpage = (props: {
                 <EditSection
                     isFirst
                     title={texts.sectionTitles.learningOverviewReport}
-                    rightSideComponent={
-
+                    rightSideComponent={(
                         /* set date range */
                         <Flex
                             justify="center"
@@ -162,8 +162,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                 h="30px"
                                 w="30px"
                                 mr="5px"
-                                src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
-                            />
+                                src={Environment.getAssetUrl('/images/tempomatdatechange.png')} />
 
                             <EpistoFont fontSize={'fontLarge'}
                                 style={{
@@ -188,7 +187,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                 />
                             </Tooltip>
                         </Flex>
-                    }>
+                    )}>
 
                     <Flex minH="400px">
 

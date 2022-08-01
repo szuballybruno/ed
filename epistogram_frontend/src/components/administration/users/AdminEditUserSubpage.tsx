@@ -117,19 +117,10 @@ export const AdminEditUserSubpage = (props: {
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
         viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute)}
-        breadcrumbDatas={[
-            // <BreadcrumbLink
-            //     key={1}
-            //     title="Felhasználók"
-            //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-            // <BreadcrumbLink
-            //     key={2}
-            //     title={userEditData?.lastName + ' ' + userEditData?.firstName}
-            //     isCurrent />
-        ]}>
+        breadcrumbDatas={[]}>
 
         <AdminUserList
+            currentUserId={editedUserId}
             users={users}
             navigationFunction={(userId) => {
                 navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });

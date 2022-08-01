@@ -13,7 +13,7 @@ export class CourseCompletionService {
 
     async tryFinishCourseAsync(userId: Id<'User'>, courseVersionId: Id<'CourseVersion'>) {
 
-        const view = this
+        const view = await this
             ._ormService
             .query(CourseAllItemsCompletedView, { userId, courseVersionId })
             .where('courseVersionId', '=', 'courseVersionId')

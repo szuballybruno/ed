@@ -36,19 +36,16 @@ export class SQLConnectionService {
 
         try {
 
-            // console.log('conn');
-            // this._currentClient = await this._pool
-            //     .connect();
-
             if (!this._client)
                 throw new Error('Trying to use a disconnected postgres client!');
 
             return await this._client
                 .query(sql, values);
         }
-        catch (e) {
-
-            const err = e as any;
+        catch (err: any) {
+            
+            // this._loggerService.logScoped('GENERIC', 'ERROR', err.message);
+            // this._loggerService.logScoped('GENERIC', 'ERROR', err.stack);
             throw new Error(`Message: ${err.message} Detail: ${err.detail}`);
         }
     };

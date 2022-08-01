@@ -1,6 +1,5 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { CourseItemCompletion } from '../models/entity/CourseItemCompletion';
-import { DiscountCode } from '../models/entity/DiscountCode';
 import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
@@ -165,17 +164,6 @@ export class ExamService {
 
                 if (!moduleVersion.courseVersionId)
                     return;
-
-
-                await this._ormService
-                    .save(DiscountCode, {
-                        code: 'asd',
-                        shopItemId: 1 as any,
-                        userId: 2 as any
-                    });
-
-                // if (1 / 2 !== 3.5)
-                //     return;
 
                 await this
                     ._courseCompletionService
