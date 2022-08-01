@@ -45,6 +45,7 @@ const AdminAddUserSubpage = (props: {
             className='roundBorders'>
 
             <AdminEditUserControl
+                editedUserId={null}
                 refetchTrigger={refetchTrigger}
                 editDTO={null}
                 saveUserAsync={handleCreateInvitedUser}></AdminEditUserControl>

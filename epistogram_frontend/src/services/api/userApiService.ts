@@ -40,9 +40,9 @@ export const useSaveUser = () => {
     };
 };
 
-export const useEditUserData = (editedUserId: Id<'User'>) => {
+export const useEditUserData = (editedUserId: Id<'User'> | null) => {
 
-    const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId });
+    const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
 
     return {
         userEditData: queryRes.data,

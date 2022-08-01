@@ -8,7 +8,6 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { Id } from '../../../shared/types/versionId';
 import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
@@ -26,7 +25,7 @@ export const AdminEditUserSubpage = (props: {
     const { users, refetchUsersFunction } = props;
 
     const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
-        .getValue(x => x.userId, 'int');
+        .getValueOrNull(x => x.userId, 'int');
 
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
@@ -37,9 +36,12 @@ export const AdminEditUserSubpage = (props: {
     const location = useLocation();
     const refetchTrigger = useEventTrigger();
 
+    /**
+     * Select first user if none selected
+     */
     useEffect(() => {
 
-        if (isNaN(Id.read(editedUserId)) && users)
+        if (!editedUserId && users.length > 0)
             return navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users.first().id });
     }, [editedUserId, users]);
 
@@ -146,12 +148,12 @@ export const AdminEditUserSubpage = (props: {
 
             <EpistoDialog logic={deleteWaningDialogLogic} />
 
-            <AdminEditUserControl
+            {editedUserId && <AdminEditUserControl
+                editedUserId={editedUserId}
                 refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
                 showDeleteUserDialog={showDeleteUserDialog}
-                saveUserAsync={handleSaveUserAsync} />
-
+                saveUserAsync={handleSaveUserAsync} />}
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>;
 };

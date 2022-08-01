@@ -27,9 +27,9 @@ export const useCoinBalance = () => {
     };
 };
 
-export const useCoinBalanceOfUser = (userId: Id<'User'>) => {
+export const useCoinBalanceOfUser = (userId: Id<'User'> | null) => {
 
-    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId });
+    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId }, !!userId);
 
     return {
         coinBalance: qr.data ?? 0,
