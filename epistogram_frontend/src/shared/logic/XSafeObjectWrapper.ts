@@ -1,4 +1,5 @@
 import { Id } from '../types/versionId';
+import { parseIntOrFail } from './sharedLogic';
 
 type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;
 
@@ -58,10 +59,10 @@ export class XSafeObjectWrapper<TObject> {
             return this.parseArray(value, x => x);
 
         if (castType === 'int')
-            return parseInt(value);
+            return parseIntOrFail(value);
 
         if (castType === 'int[]')
-            return this.parseArray(value, x => parseInt(x));
+            return this.parseArray(value, x => parseIntOrFail(x));
 
         if (castType === 'float')
             return parseFloat(value);

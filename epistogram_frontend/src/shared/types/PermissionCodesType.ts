@@ -44,6 +44,10 @@ export const permissionCodes = fn({
     },
 
     // permissions 
+    VIEW_PERMISSIONS: {
+        code: 'VIEW_PERMISSIONS',
+        scope: 'USER'
+    },
     ASSIGN_GLOBAL_PERMISSIONS: {
         code: 'ASSIGN_GLOBAL_PERMISSIONS',
         scope: 'COMPANY'
@@ -73,6 +77,10 @@ export const permissionCodes = fn({
     LIST_COMPANY_COURSES: {
         code: 'LIST_COMPANY_COURSES',
         scope: 'COMPANY'
+    },
+    EDIT_COURSES: {
+        code: 'EDIT_COURSE',
+        scope: 'USER'
     },
     WATCH_COURSE: {
         code: 'WATCH_COURSE',
@@ -124,6 +132,10 @@ export const permissionCodes = fn({
         code: 'VIEW_COURSE_ADMIN',
         scope: 'COMPANY'
     },
+    VIEW_DAILY_TIP_ADMIN: {
+        code: 'VIEW_DAILY_TIP_ADMIN',
+        scope: 'USER'
+    },
 
     // misc company scoped 
     VIEW_SHOP: {
@@ -140,6 +152,21 @@ export const permissionCodes = fn({
     },
     EDIT_COURSE_OWNER_TEACHER_DATA: {
         code: 'EDIT_COURSE_OWNER_TEACHER_DATA',
+        scope: 'USER'
+    },
+
+    // user
+
+    CREATE_NEW_USER: {
+        code: 'CREATE_NEW_USER',
+        scope: 'USER'
+    },
+    EDIT_USER: {
+        code: 'EDIT_USER',
+        scope: 'USER'
+    },
+    DELETE_USER: {
+        code: 'DELETE_USER',
         scope: 'USER'
     },
 

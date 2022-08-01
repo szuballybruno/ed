@@ -25,6 +25,16 @@ export const validatePassowrd = (password: string, passwordControl: string): Pas
     return null;
 };
 
+export const parseIntOrFail = (text: string, name?: string) => {
+
+    const parsed = parseInt(text);
+
+    if (Number.isNaN(parsed))
+        throw new Error(`Parsing int param "${name ?? '-'}" failed.`);
+
+    return parsed;
+};
+
 export const textContainsNumber = (text: string) => {
 
     return /\d/.test(text);

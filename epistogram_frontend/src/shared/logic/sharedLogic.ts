@@ -25,6 +25,16 @@ export const validatePassowrd = (password: string, passwordControl: string): Pas
     return null;
 };
 
+export const parseIntOrFail = (text: string, name?: string) => {
+
+    const parsed = parseInt(text);
+
+    if (Number.isNaN(parsed))
+        throw new Error(`Parsing int param "${name ?? '-'}" failed.`);
+
+    return parsed;
+};
+
 export const textContainsNumber = (text: string) => {
 
     return /\d/.test(text);
@@ -124,3 +134,11 @@ export const userPermissionsEqual = (a: UserPermissionDTO, b: UserPermissionDTO)
 };
 
 export const instantiate = <T>(obj: T) => obj;
+
+export const notnull = (obj: any, name: string) => {
+
+    if (obj === null || obj === undefined)
+        throw new Error('Object is null or undefined: ' + name);
+
+    return obj;
+};
