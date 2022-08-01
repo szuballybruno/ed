@@ -37,9 +37,11 @@ export const AdminEditUserSubpage = (props: {
     const location = useLocation();
     const refetchTrigger = useEventTrigger();
 
+    console.log(' asd ' + Id.read(editedUserId));
+
     useEffect(() => {
 
-        if (isNaN(Id.read(editedUserId)) && users)
+        if (!Id.read(editedUserId) && users)
             return navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users.first().id });
     }, [editedUserId, users]);
 
