@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
+import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { logError, logSecondary } from '../services/misc/logger';
 import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ErrorCodeType } from '../shared/types/sharedTypes';
@@ -41,7 +41,7 @@ export const respondError = (res: ITurboResponse, error: Error) => {
     }
 };
 
-export const initTurboExpressListener = (globalConfig: GlobalConfiguration): IXTurboExpressListener => {
+export const initTurboExpressListener = (globalConfig: GlobalConfiguration, loggerService: LoggerService): IXTurboExpressListener => {
 
     /**
      * Error 
@@ -51,9 +51,9 @@ export const initTurboExpressListener = (globalConfig: GlobalConfiguration): IXT
         const requestPath = req.path;
         const error = errorin as Error;
 
-        logError(`---------------- [${requestPath}] Failed! ----------------`);
-        // logError(error.message);
-        logError(error.stack);
+        loggerService.logScoped('GENERIC', 'ERROR', `---------------- [${requestPath}] Failed! ----------------`,);
+        loggerService.logScoped('GENERIC', 'ERROR', error.message);
+        loggerService.logScoped('GENERIC', 'ERROR', error.stack);
 
         respondError(res, error);
     };
@@ -65,7 +65,7 @@ export const initTurboExpressListener = (globalConfig: GlobalConfiguration): IXT
 
         const requestPath = req.path;
 
-        logSecondary(`${requestPath}: Succeeded...`);
+        loggerService.logScoped('GENERIC', `${requestPath}: Succeeded...`);
         res.respond(200, value);
     };
 

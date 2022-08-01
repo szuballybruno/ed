@@ -37,8 +37,8 @@ export const log = (content: any, opts?: {
     noStamp?: boolean
 }) => {
 
-    if (!loggingEnabled)
-        return;
+    // if (!loggingEnabled)
+    //     return;
 
     const dateTime = new Date();
     const miliseconds = dateTime.getMilliseconds();
