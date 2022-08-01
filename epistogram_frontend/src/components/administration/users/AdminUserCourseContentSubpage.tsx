@@ -5,7 +5,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { Id } from '../../../shared/types/versionId';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
@@ -21,15 +21,15 @@ export const AdminUserCourseContentSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const userId = Id
-        .create<'User'>(useIntParam('userId')!);
+    const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.courseContentRoute)
+        .getValue(x => x.userId, 'int');
 
     const { userEditData } = useEditUserData(userId);
     const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
     const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
     const handleSaveRequiredCompletionDate = (courseId: Id<'Course'> | null, requiredCompletionDate: Date | null) => {
@@ -52,7 +52,7 @@ export const AdminUserCourseContentSubpage = (props: {
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: userId });
+                navigate2(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: userId });
             }} />
 
         <AdminSubpageHeader

@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import React from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
@@ -10,8 +10,8 @@ import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { Id } from '../../../shared/types/versionId';
 import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
+import { useRouteParams } from '../../../static/locationHelpers';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
@@ -25,16 +25,23 @@ export const AdminEditUserSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const editedUserId = Id
-        .create<'User'>(useIntParam('userId')!);
+    const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
+        .getValue(x => x.userId, 'int');
+
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
-    const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute);
-    const navigateToUserCourses = () => navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { courseId: editedUserId });
+    const { navigate2 } = useNavigation();
+    const navigateToAddUser = () => navigate2(applicationRoutes.administrationRoute.usersRoute.addRoute);
+    const navigateToUserCourses = () => navigate2(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: editedUserId });
     const location = useLocation();
     const refetchTrigger = useEventTrigger();
+
+    useEffect(() => {
+
+        if (isNaN(Id.read(editedUserId)) && users)
+            return navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users.first().id });
+    }, [editedUserId, users]);
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -99,7 +106,7 @@ export const AdminEditUserSubpage = (props: {
         const isUserFound = users.some(user => user.id === editedUserId);
 
         if (!isUserFound && users[0]) {
-            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users[0].id });
+            navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users[0].id });
         }
     };
     checkIfCurrentUserFromUrl();
@@ -107,7 +114,7 @@ export const AdminEditUserSubpage = (props: {
 
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
-        viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute)}
+        viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute)}
         breadcrumbDatas={[
             // <BreadcrumbLink
             //     key={1}
@@ -123,7 +130,7 @@ export const AdminEditUserSubpage = (props: {
         <AdminUserList
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
+                navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
 
         <AdminSubpageHeader

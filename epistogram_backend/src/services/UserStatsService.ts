@@ -59,7 +59,6 @@ export class UserStatsService {
                     .where('userId', '=', 'userId')
                     .getSingle();
 
-
                 const { avgLagBehindPercentage } = await this
                     ._tempomatService
                     .getAvgLagBehindPercentage(userId);

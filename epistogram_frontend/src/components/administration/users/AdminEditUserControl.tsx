@@ -15,7 +15,7 @@ import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -44,8 +44,8 @@ export const AdminEditUserControl = (props: {
         refetchTrigger
     } = props;
 
-    const editedUserId = Id
-        .create<'User'>(useIntParam('userId')!);
+    const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
+        .getValue(x => x.userId, 'int');
 
     const { hasPermission } = useAuthorizationContext();
 

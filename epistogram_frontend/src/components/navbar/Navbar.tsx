@@ -20,8 +20,6 @@ const Navbar = memo((props: {
     const isDesktop = useIsDesktopView();
     const currentCourseItemCode = useCurrentCourseItemCode();
 
-    console.log(currentCourseItemCode.currentCourseItemCode);
-
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         backgroundContent={backgroundContent}

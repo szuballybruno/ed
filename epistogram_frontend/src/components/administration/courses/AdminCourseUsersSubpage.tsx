@@ -12,7 +12,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 export const AdminCourseUsersGrid = () => {
 
     const { users } = useUserListQuery('');
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const getRowsFromUsers = () => users.map((user) => {
         return {
@@ -79,7 +79,7 @@ export const AdminCourseUsersGrid = () => {
 
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
+                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
 
                     Tanulási jelentés
                 </EpistoButton>

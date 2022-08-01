@@ -46,10 +46,10 @@ export type ApplicationRoutesType = {
         usersRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
-            editRoute: ApplicationRoute;
-            statsRoute: ApplicationRoute;
-            teacherInfoRoute: ApplicationRoute;
-            courseContentRoute: ApplicationRoute;
+            editRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+            statsRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+            teacherInfoRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+            courseContentRoute: ApplicationRoute<{ userId: Id<'User'> }>;
         };
         coursesRoute: ApplicationRoute & {
             landingRoute: ApplicationRoute;

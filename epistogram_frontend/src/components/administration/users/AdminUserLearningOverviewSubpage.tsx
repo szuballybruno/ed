@@ -9,11 +9,10 @@ import { ButtonType } from '../../../models/types';
 import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { isCurrentAppRoute } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -76,11 +75,11 @@ export const AdminUserStatisticsSubpage = (props: {
 
     const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
-    const userId = Id
-        .create<'User'>(useIntParam('userId')!);
+    const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.statsRoute)
+        .getValue(x => x.userId, 'int');
 
-    const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(usersRoute.addRoute);
+    const { navigate2 } = useNavigation();
+    const navigateToAddUser = () => navigate2(usersRoute.addRoute);
 
     const { userEditData } = useEditUserData(userId);
     const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = useUserLearningOverviewData(userId);
@@ -124,12 +123,12 @@ export const AdminUserStatisticsSubpage = (props: {
 
         <AdminBreadcrumbsHeader
             viewSwitchChecked={isCurrentAppRoute(usersRoute)}
-            viewSwitchFunction={() => navigate(usersRoute)}
+            viewSwitchFunction={() => navigate2(usersRoute)}
             subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
             <AdminUserList
                 users={users}
-                navigationFunction={(userId) => navigate(usersRoute.statsRoute, { userId: userId })} />
+                navigationFunction={(userId) => navigate2(usersRoute.statsRoute, { userId: userId })} />
 
             {/* admin header */}
             <AdminSubpageHeader

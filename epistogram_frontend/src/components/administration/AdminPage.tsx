@@ -28,7 +28,7 @@ export const AdminPage = () => {
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
         .add(administrationRoutes.homeRoute.overviewRoute)
-        .add(administrationRoutes.usersRoute.editRoute)
+        .add(administrationRoutes.usersRoute.editRoute as any)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.coursesRoute, hasPermission), administrationRoutes.coursesRoute)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.shopRoute, hasPermission), administrationRoutes.shopRoute)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.personalityAssessmentRoute, hasPermission), administrationRoutes.personalityAssessmentRoute)
