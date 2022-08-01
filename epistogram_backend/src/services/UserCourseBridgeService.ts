@@ -367,8 +367,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .and('isCurrent', '=', 'true')
             .getOneOrNull();
 
-        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', currentBridge);
-
         return currentBridge?.currentItemCode ?? null;
     }
 

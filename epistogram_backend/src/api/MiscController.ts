@@ -36,19 +36,8 @@ export class MiscController implements XController<MiscController> {
     @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)
     getCurrentCourseItemCodeAction(params: ActionParams) {
 
-        return {
-            action: async () => {
-
-                return this._courseBridgeService
-                    .getPrincipalCurrentItemCodeAsync(params.principalId);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return this._courseBridgeService
+            .getPrincipalCurrentItemCodeAsync(params.principalId);
     }
 
     @XControllerAction(apiRoutes.misc.getHomePageDTO)

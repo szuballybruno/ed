@@ -151,8 +151,8 @@ export const DesktopNavbar = (props: {
                     ))}
 
                 {/* continue watching with or without text  */}
-                {currentCourseItemCode && <ContinueCourseButton
-                    title={translatableTexts.navbar.currentCourse} />}
+                <ContinueCourseButton
+                    title={translatableTexts.navbar.currentCourse} />
             </Flex>
         );
     };
@@ -177,7 +177,7 @@ export const DesktopNavbar = (props: {
                     })}
 
                 {/* continue watching  */}
-                {currentCourseItemCode && <ContinueCourseButton />}
+                <ContinueCourseButton />
             </Flex>
         );
     };

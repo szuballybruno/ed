@@ -40,7 +40,9 @@ export class CoinTransactionService {
         return {
             action: async () => {
 
-                return await this.getCoinBalance(principalId, principalId.getId());
+                return this
+                    .getCoinBalance(principalId, principalId.getId())
+                    .action();
             },
             auth: async () => {
                 return this._authorizationService
