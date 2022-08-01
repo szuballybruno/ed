@@ -1,6 +1,7 @@
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
+import { LoggerService } from './services/LoggerService';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { CreateDBService } from './services/sqlServices/CreateDBService';
@@ -60,7 +61,9 @@ const startServerAsync = async (
 
     // 
     // INIT TURBO EXPRESS LISTENER
-    const listener = initTurboExpressListener(singletonServiceProvider.getService(GlobalConfiguration));
+    const listener = initTurboExpressListener(
+        singletonServiceProvider.getService(GlobalConfiguration),
+        singletonServiceProvider.getService(LoggerService));
 
     // 
     // INIT TURBO EXPRESS

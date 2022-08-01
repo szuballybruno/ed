@@ -51,15 +51,24 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
     const sqlService = serviceProvider
         .getService(SQLConnectionService);
 
+    const loggerService = serviceProvider
+        .getService(LoggerService);
+
     // BEGIN
+    loggerService.logScoped('TRANSACTION', 'Begin transaction...');
+
     await ormService
         .beginTransactionAsync();
 
     try {
 
+        loggerService.logScoped('TRANSACTION', 'Running action in transaction...');
+
         const rv = await action();
 
         // COMMIT
+        loggerService.logScoped('TRANSACTION', 'Commit transaction...');
+
         await ormService
             .commitTransactionAsync();
 
@@ -67,7 +76,11 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
     }
     catch (e: any) {
 
+        loggerService.logScoped('TRANSACTION', 'ERROR', 'An error occured during the action: ' + e.message ?? '');
+
         // ROLLBACK
+        loggerService.logScoped('TRANSACTION', 'Rollback transaction...');
+
         await ormService
             .rollbackTransactionAsync();
 
@@ -75,13 +88,15 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
     }
     finally {
 
+        loggerService.logScoped('TRANSACTION', 'Release client...');
+
         sqlService
             .releaseConnectionClient();
     }
 };
 
 export const initTurboExpress = (
-    singletonProvider: ServiceProvider, 
+    singletonProvider: ServiceProvider,
     getServiceProvider: GetServiceProviderType,
     listener: IXTurboExpressListener) => {
 
