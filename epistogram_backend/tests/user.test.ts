@@ -25,7 +25,7 @@ setupIntegrationTest((getInitData) => {
                             cookies
                         });
 
-                    if (currentCode === 'ADD_EPISTO_COIN_TO_USERS') {
+                    if (currentCode === 'ACCESS_ADMIN') {
 
                         expect(result.response.code)
                             .toBe(200);

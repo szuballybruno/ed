@@ -34,17 +34,17 @@ export class MiscController implements XController<MiscController> {
     }
 
     @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)
-    getCurrentCourseItemCodeAction(parms: ActionParams) {
+    getCurrentCourseItemCodeAction(params: ActionParams) {
 
         return {
             action: async () => {
 
                 return this._courseBridgeService
-                    .getPrincipalCurrentItemCodeAsync(parms.principalId);
+                    .getPrincipalCurrentItemCodeAsync(params.principalId);
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(parms.principalId, 'ACCESS_APPLICATION');
+                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
 
