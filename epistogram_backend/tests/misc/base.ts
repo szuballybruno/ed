@@ -19,7 +19,7 @@ const loginUserAsync = async (api: ApiType) => {
     const loginResult = await api
         .callEndpoint(AuthenticationController, 'logInUserAction', {
             body: {
-                email: 'gyorgy.kelecsenyi@gmail.com',
+                email: 'endre.marosi@gmail.com', //'gyorgy.kelecsenyi@gmail.com',
                 password: 'admin'
             }
         });
