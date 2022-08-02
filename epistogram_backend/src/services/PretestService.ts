@@ -147,12 +147,13 @@ export class PretestService {
                 /**
                  * Get tempomat data
                  */
-                const {
-                    originalPrevisionedCompletionDate,
-                    recommendedItemsPerDay,
-                    requiredCompletionDate
-                } = await this._tempomatService
+                const tempomatValues = await this._tempomatService
                     .calculateTempomatValuesAsync(userId, courseId);
+
+                const originalPrevisionedCompletionDate = tempomatValues?.originalPrevisionedCompletionDate || null;
+                const recommendedItemsPerDay = tempomatValues?.recommendedItemsPerDay || null;
+                const requiredCompletionDate = tempomatValues?.requiredCompletionDate || null;
+
 
                 /**
                  * Set stage,
@@ -212,7 +213,7 @@ export class PretestService {
 
         return {
             action: async () => {
-                
+
                 // finish pretest
                 await this
                     ._examService

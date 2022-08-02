@@ -1,7 +1,6 @@
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
-import { notnull } from '../shared/logic/sharedLogic';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
@@ -140,20 +139,26 @@ export class TempomatService {
         const tempomatCalculationDatas = await this
             .getTempomatCalculationDatasAsync(userId);
 
+        if (!tempomatCalculationDatas)
+            return null;
+
         const allLagBehindPercentages = tempomatCalculationDatas
             .map(x => {
 
-                const { lagBehindPercentage } = this
+                const tempomatValues = this
                     .calculateTempomatValues(x);
 
-                return lagBehindPercentage;
+                return tempomatValues?.lagBehindPercentage!;
             });
+
+        if (allLagBehindPercentages.any(x => x === null))
+            return null;
 
         // wtf
         const avgLagBehindPercentage = allLagBehindPercentages
             .reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
 
-        return { avgLagBehindPercentage };
+        return avgLagBehindPercentage;
     }
 
     /**
@@ -185,7 +190,8 @@ export class TempomatService {
             requiredCompletionDate
         } = opts;
 
-        notnull(startDate, 'startDate');
+        if (!startDate)
+            return null;
 
         const previsionedCompletionDate = this
             ._calculatePrevisionedDate(

@@ -1,6 +1,6 @@
 export class RecomendedItemQuotaDTO {
     isDeadlineSet: boolean;
-    previsionedCompletionDate: Date;
+    previsionedCompletionDate: Date | null;
     recommendedItemsPerDay: number;
     recommendedItemsPerWeek: number;
     completedToday: number;
