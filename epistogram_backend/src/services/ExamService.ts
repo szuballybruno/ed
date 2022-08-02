@@ -168,8 +168,6 @@ export class ExamService {
                 await this
                     ._courseCompletionService
                     .tryFinishCourseAsync(principalId.getId(), moduleVersion.courseVersionId);
-
-                console.log('asd');
             },
             auth: async () => {
                 return this._authorizationService

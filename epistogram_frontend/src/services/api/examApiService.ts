@@ -16,13 +16,13 @@ export const useStartExam = () => {
     };
 };
 
-export const useCompleteExam = () => {
+export const useFinishExam = () => {
 
     const qr = usePostDataUnsafe<{ answerSessionId: Id<'AnswerSession'> }, void>(apiRoutes.exam.completeExam);
 
     return {
-        completeExamAsync: qr.postDataAsync,
-        completeExamState: qr.state,
+        finishExamAsync: qr.postDataAsync,
+        finishExamState: qr.state,
     };
 };
 

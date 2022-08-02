@@ -381,7 +381,8 @@ export const createDBSchema = (): XDBMSchemaType => {
                 fileName: 'role_constraint'
             },
             { fileName: 'course_item_completion_constraints' },
-            { fileName: 'prequiz_completion_constraints' }
+            { fileName: 'prequiz_completion_constraints' },
+            { fileName: 'course_completion_constraints' }
         ],
 
         indices: [
@@ -473,7 +474,8 @@ export const createDBSchema = (): XDBMSchemaType => {
             UserVideoProgressBridge,
             TempomatAdjustmentValue,
             CourseItemCompletion,
-            ConstantValue
+            ConstantValue,
+            CourseCompletion
         ],
     };
 

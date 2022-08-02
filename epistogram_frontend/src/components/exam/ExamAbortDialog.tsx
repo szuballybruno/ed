@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
-import { useCompleteExam } from '../../services/api/examApiService';
+import { useFinishExam } from '../../services/api/examApiService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { Id } from '../../shared/types/versionId';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -24,7 +24,7 @@ export const ExamAbortDialog = ({
     handleAbortExam: () => void
 }) => {
 
-    const { completeExamAsync } = useCompleteExam();
+    const { finishExamAsync: completeExamAsync } = useFinishExam();
 
     const skippedQuestionsCount = questions.length - answeredQuestionsCount;
 

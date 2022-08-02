@@ -29,6 +29,33 @@
             "options": {
                 "cwd": "${workspaceFolder}\\scripts\\permissionGen"
             },
+        },
+        // run
+        {
+            "type": "shell",
+            "label": "run frontend",
+            "command": "yarn --cwd ../epistogram_frontend start",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run backend",
+            "command": "yarn --cwd ../epistogram_backend nodenew",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "label": "run-all",
+            "dependsOn": [
+                "run frontend",
+                "run backend",
+            ],
+            "problemMatcher": []
         }
     ]
 }

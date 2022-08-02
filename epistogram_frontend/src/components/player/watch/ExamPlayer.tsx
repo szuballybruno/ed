@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStartExam } from '../../../services/api/examApiService';
+import { useFinishExam, useStartExam } from '../../../services/api/examApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
@@ -32,6 +32,8 @@ export const ExamPlayer = (props: {
 
     const slidesState = usePaging({ items: [1, 2, 3, 4] });
 
+    const { finishExamAsync } = useFinishExam();
+
     const handleStartExamAsync = async () => {
 
         try {
@@ -45,8 +47,9 @@ export const ExamPlayer = (props: {
         }
     };
 
-    const handleExamFinished = () => {
+    const handleExamFinished = async () => {
 
+        await finishExamAsync({ answerSessionId });
         slidesState.next();
     };
 
