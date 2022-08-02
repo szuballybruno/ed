@@ -27,8 +27,8 @@ export class CourseCompletionService {
             .getOneOrNull();
 
         // if not completed 
-        // if (!isCompleted)
-        //     return;
+        if (!isCompleted)
+            return;
 
         // if already inserted completion
         if (previousCompletion)

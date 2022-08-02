@@ -26,7 +26,8 @@ export class TurboResponse implements ITurboResponse {
 
             this
                 ._res
-                .sendStatus(code);
+                .status(code)
+                .send(null);
         } else {
 
             logSecondary(`Responding with data, code: ${code}`);
