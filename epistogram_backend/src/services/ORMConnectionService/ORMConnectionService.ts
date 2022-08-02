@@ -2,7 +2,6 @@ import { Id } from '../../shared/types/versionId';
 import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { ParamConstraintType, SaveEntityType } from '../XORM/XORMTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
@@ -19,23 +18,21 @@ export class ORMConnectionService {
         this._loggingEnabled = config.logging.enabledScopes.some(x => x === 'ORM');
     }
 
-    beginTransactionAsync() {
+    async beginTransactionAsync() {
 
-        return this._sqlConnectionService
+        return await this._sqlConnectionService
             .executeSQLAsync('BEGIN');
     }
 
-    commitTransactionAsync() {
+    async commitTransactionAsync() {
 
-        return this._sqlConnectionService
+        return await this._sqlConnectionService
             .executeSQLAsync('COMMIT');
     }
 
-    rollbackTransactionAsync() {
+    async rollbackTransactionAsync() {
 
-        log('Rollback!');
-
-        return this._sqlConnectionService
+        return await this._sqlConnectionService
             .executeSQLAsync('ROLLBACK');
     }
 

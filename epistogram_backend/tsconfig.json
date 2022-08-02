@@ -16,6 +16,11 @@
       "ESNext"
     ]
   },
+  "include": [
+    "src",
+    "tests",
+    "jest.config.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

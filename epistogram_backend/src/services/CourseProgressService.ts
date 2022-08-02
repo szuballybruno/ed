@@ -1,5 +1,5 @@
-import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
+import { CoursesProgressListView } from '../models/views/CoursesProgressListView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
@@ -26,7 +26,7 @@ export class CourseProgressService {
     async getCourseProgressDataAsync(principalId: PrincipalId) {
 
         const courses = await this._ormService
-            .query(CourseLearningStatsView, { principalId })
+            .query(CoursesProgressListView, { principalId })
             .where('userId', '=', 'principalId')
             .getMany();
 

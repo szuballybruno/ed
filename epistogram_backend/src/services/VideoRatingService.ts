@@ -34,7 +34,7 @@ export class VideoRatingService {
                     .and('videoVersionId', '=', 'videoVersionId')
                     .getOneOrNull();
 
-                this._ormService
+                await this._ormService
                     .saveOrInsertAsync(VideoRating, {
                         id: existingRating ? existingRating.id : undefined,
                         experience: dto.experience,
@@ -66,7 +66,7 @@ export class VideoRatingService {
                     .and('videoVersionId', '=', 'videoVersionId')
                     .getOneOrNull();
 
-                this._ormService
+                await this._ormService
                     .saveOrInsertAsync(VideoRating, {
                         id: existingRating
                             ? existingRating.id

@@ -1,23 +1,21 @@
 import { Flex } from '@chakra-ui/react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { Id } from '../../../shared/types/versionId';
-import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ProfileImage } from '../../ProfileImage';
 import { FlexList } from '../../universal/FlexList';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
-export const AdminUserList = (props: {
+export const AdminUserList = ({
+    currentUserId,
+    navigationFunction,
+    users
+}: {
+    currentUserId: Id<'User'> | null,
     users: AdminPageUserDTO[],
     navigationFunction: (userId: Id<'User'>) => void
 }) => {
-
-    const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
-        .getValueOrNull(x => x.userId, 'int');
-
-    const { users, navigationFunction } = props;
 
     return <Flex
         className="roundBorders"
@@ -56,7 +54,7 @@ export const AdminUserList = (props: {
                             firstName={user.firstName}
                             className="square40" />}
                         midContent={<FlexListTitleSubtitle
-                            isSelected={user.id === userId}
+                            isSelected={user.id === currentUserId}
                             title={`${user.name}`}
                             subTitle={user.email}
                         />}

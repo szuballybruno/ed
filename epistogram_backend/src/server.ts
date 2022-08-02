@@ -102,4 +102,4 @@ const main = async () => {
         await startServerAsync(singletonServiceProvider, getServiceProviderAsync);
 };
 
-main();
+await main();

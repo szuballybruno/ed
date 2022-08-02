@@ -37,10 +37,12 @@ const AdminAddUserSubpage = (props: {
         breadcrumbDatas={[]}>
 
         <AdminUserList
+            currentUserId={null}
             users={users}
             navigationFunction={(userId) => {
                 navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
+
         <AdminSubpageHeader background="var(--transparentWhite10)"
             className='roundBorders'>
 
