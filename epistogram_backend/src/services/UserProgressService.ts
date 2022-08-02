@@ -61,13 +61,13 @@ export class UserProgressService extends ServiceBase {
             action: async () => {
                 const userId = principalId.getId();
 
-                const {
-                    requiredCompletionDate,
-                    previsionedCompletionDate,
-                    recommendedItemsPerDay
-                } = await this
+                const tempomatData = await this
                     ._tempomatService
                     .calculateTempomatValuesAsync(userId, courseId);
+
+                const requiredCompletionDate = tempomatData?.requiredCompletionDate || null;
+                const previsionedCompletionDate = tempomatData?.previsionedCompletionDate || null;
+                const recommendedItemsPerDay = tempomatData?.recommendedItemsPerDay || null;
 
                 const currentDailyCompletedView = await this._ormService
                     .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -85,7 +85,7 @@ export class UserProgressService extends ServiceBase {
 
                 return instantiate<RecomendedItemQuotaDTO>({
                     isDeadlineSet: !!requiredCompletionDate,
-                    previsionedCompletionDate: previsionedCompletionDate ?? 0,
+                    previsionedCompletionDate: previsionedCompletionDate,
                     recommendedItemsPerDay: recommendedItemsPerDay ?? 0,
                     recommendedItemsPerWeek: recommendedItemsPerDay ? recommendedItemsPerDay * 7 : 0,
                     completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
@@ -108,19 +108,19 @@ export class UserProgressService extends ServiceBase {
 
                 const userId = principalId.getId();
 
-                const {
-                    originalPrevisionedCompletionDate,
-                    previsionedCompletionDate,
-                    startDate
-                } = await this
+                const tempomatData = await this
                     ._tempomatService
                     .calculateTempomatValuesAsync(userId, courseId);
 
-                const estimatedLengthInDays = previsionedCompletionDate
+                const originalPrevisionedCompletionDate = tempomatData?.originalPrevisionedCompletionDate || null;
+                const previsionedCompletionDate = tempomatData?.previsionedCompletionDate || null;
+                const startDate = tempomatData?.startDate || null;
+
+                const estimatedLengthInDays = (previsionedCompletionDate && startDate)
                     ? dateDiffInDays(startDate, previsionedCompletionDate)
                     : null;
 
-                const originalEstimatedLengthInDays = previsionedCompletionDate
+                const originalEstimatedLengthInDays = (originalPrevisionedCompletionDate && startDate)
                     ? dateDiffInDays(startDate, originalPrevisionedCompletionDate)
                     : null;
 
@@ -146,6 +146,9 @@ export class UserProgressService extends ServiceBase {
 
                 const estimatedDates = forN(estimatedLengthInDaysOrNull, index => {
 
+                    if (!startDate)
+                        return '';
+
                     const date = new Date(startDate)
                         .addDays(index);
 
@@ -157,6 +160,9 @@ export class UserProgressService extends ServiceBase {
 
                 const originalEstimatedDates = forN(originalEstimatedLengthInDaysOrNull, index => {
 
+                    if (!startDate)
+                        return null;
+
                     const date = new Date(startDate)
                         .addDays(index);
 
@@ -166,7 +172,14 @@ export class UserProgressService extends ServiceBase {
                     });
                 });
 
-                const datesUntilToday = forN(dateDiffInDays(new Date(startDate), new Date(Date.now())), index => index);
+
+                const daysFromStart = startDate
+                    ? dateDiffInDays(new Date(startDate), new Date(Date.now()))
+                    : null;
+
+                const datesUntilToday = daysFromStart
+                    ? forN(daysFromStart, index => index)
+                    : null;
 
                 const previsionedProgress = estimatedDates
                     .map((_, index) => (100 / estimatedDates.length) * (index + 1)) as EpistoLineChartDataType;
@@ -176,18 +189,20 @@ export class UserProgressService extends ServiceBase {
 
                 let latestCompletionDatePercentage = 0;
 
-                const actualProgress = datesUntilToday.map((_, index) => {
+                const actualProgress = datesUntilToday
+                    ? datesUntilToday.map((_, index) => {
 
-                    const up = dailyViews.find(x => x.offsetDaysFromStart === index + 1)?.completedPercentage || 0;
+                        const up = dailyViews.find(x => x.offsetDaysFromStart === index + 1)?.completedPercentage || 0;
 
-                    if (latestCompletionDatePercentage <= up) {
+                        if (latestCompletionDatePercentage <= up) {
 
-                        latestCompletionDatePercentage += up;
-                        return up;
-                    } else {
-                        return latestCompletionDatePercentage;
-                    }
-                });
+                            latestCompletionDatePercentage += up;
+                            return up;
+                        } else {
+                            return latestCompletionDatePercentage;
+                        }
+                    })
+                    : [];
 
                 const interval = Math.floor(estimatedDates.length / 7);
 

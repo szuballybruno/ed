@@ -2,6 +2,6 @@ export class PretestResultDTO {
     correctAnswerRate: number;
     firstItemCode: string;
     recommendedVideosPerDay: number | null;
-    estimatedCompletionDate: Date;
+    estimatedCompletionDate: Date | null;
     requiredCompletionDate: Date | null;
 }

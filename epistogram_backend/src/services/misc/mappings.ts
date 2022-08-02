@@ -356,8 +356,8 @@ const marray = [
         .addMapping(PretestResultDTO, () => (
             prv: PretestResultView,
             acv: AvailableCourseView,
-            originalPrevisionedCompletionDate: Date,
-            requiredCompletionDate: Date,
+            originalPrevisionedCompletionDate: Date | null,
+            requiredCompletionDate: Date | null,
             recommendedItemsPerDay: number | null
         ) => {
 
@@ -438,7 +438,7 @@ const marray = [
             });
         }),
     epistoMappingsBuilder
-        .addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number) => {
+        .addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number | null) => {
             return instantiate<UserLearningPageStatsDTO>({
                 userId: view.userId,
                 userEmail: view.userEmail,
@@ -453,7 +453,7 @@ const marray = [
             });
         }),
     epistoMappingsBuilder
-        .addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number) => {
+        .addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number | null) => {
             return instantiate<HomePageStatsDTO>({
                 userId: view.userId,
                 videosToBeRepeatedCount: view.videosToBeRepeatedCount,

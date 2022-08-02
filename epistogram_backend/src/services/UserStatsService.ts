@@ -59,7 +59,7 @@ export class UserStatsService {
                     .where('userId', '=', 'userId')
                     .getSingle();
 
-                const { avgLagBehindPercentage } = await this
+                const avgLagBehindPercentage = await this
                     ._tempomatService
                     .getAvgLagBehindPercentage(userId);
 
@@ -86,7 +86,7 @@ export class UserStatsService {
                     .where('userId', '=', 'userId')
                     .getSingle();
 
-                const { avgLagBehindPercentage } = await this
+                const avgLagBehindPercentage = await this
                     ._tempomatService
                     .getAvgLagBehindPercentage(userId);
 
@@ -151,8 +151,12 @@ export class UserStatsService {
                 const statsWithTempomatData = stats
                     .map(x => {
 
-                        const { previsionedCompletionDate, lagBehindPercentage, recommendedItemsPerWeek } = this._tempomatService
+                        const tempomatValues = this._tempomatService
                             .calculateTempomatValues(x);
+
+                        const previsionedCompletionDate = tempomatValues?.previsionedCompletionDate || null;
+                        const lagBehindPercentage = tempomatValues?.lagBehindPercentage || null;
+                        const recommendedItemsPerWeek = tempomatValues?.recommendedItemsPerWeek || null;
 
                         return {
                             ...x,
@@ -328,9 +332,12 @@ export class UserStatsService {
         const avgPerformancePercentage = userPerformanceViewFiltered
             .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViewFiltered.length;
 
-        const { avgLagBehindPercentage } = await this
+        const avgLagBehindPercentage = await this
             ._tempomatService
             .getAvgLagBehindPercentage(userId);
+
+        if (!avgLagBehindPercentage)
+            return null;
 
         const lagBehindPoints = 100 - avgLagBehindPercentage;
 
