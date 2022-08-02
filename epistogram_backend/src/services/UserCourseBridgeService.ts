@@ -1,4 +1,5 @@
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
+import { CourseStateView } from '../models/views/CourseStateView';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { throwNotImplemented } from '../utilities/helpers';
@@ -277,13 +278,16 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     async getCurrentCourseId(
         userId: Id<'User'>
     ) {
-        const courseBridge = await this._ormService
-            .query(UserCourseBridge, { userId })
+        const view = await this._ormService
+            .query(CourseStateView, { userId })
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
             .getOneOrNull();
 
-        return courseBridge?.courseId ?? null;
+        if (!view?.inProgress)
+            return null;
+
+        return view?.courseId ?? null;
     }
 
     /**

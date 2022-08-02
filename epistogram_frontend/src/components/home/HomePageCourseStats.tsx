@@ -15,6 +15,7 @@ export const HomePageCourseStats = (props: {
 }) => {
 
     const { activeCoursesPaging } = props;
+    console.log(activeCoursesPaging.items);
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
     const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);

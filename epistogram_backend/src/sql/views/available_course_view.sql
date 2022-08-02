@@ -12,29 +12,6 @@ assigned_courses AS
 	
 	INNER JOIN public.course co
 	ON co.id = upv.context_course_id
-),
-course_state_view AS
-(
-	SELECT 
-		co.id course_id,
-		u.id user_id,
-		ucb.id IS NOT NULL is_started,
-		ccv.user_id IS NOT NULL is_completed
-	FROM public.course co
-
-	CROSS JOIN public.user u
-
-	LEFT JOIN public.course_completion_view ccv
-	ON ccv.course_id = co.id
-	AND ccv.user_id = u.id
-		
-	LEFT JOIN public.user_course_bridge ucb
-	ON ucb.user_id = u.id
-	AND ucb.course_id = co.id
-		
-	ORDER BY 
-		u.id,
-		co.id
 )
 SELECT 
 	u.id user_id,
@@ -43,7 +20,7 @@ SELECT
 	true can_view,
 	sf.file_path file_path,
 	cosv.is_completed is_completed,
-	cosv.is_started is_started,
+	cosv.in_progress is_started,
 	csc.id sub_category_id,
 	cd.is_featured,
 	false is_recommended,
@@ -93,7 +70,7 @@ AND first_civ.item_order_index = 0
 AND first_civ.module_order_index = 1 
 AND first_civ.item_type != 'pretest'
 
-LEFT JOIN course_state_view cosv
+LEFT JOIN public.course_state_view cosv
 ON cosv.course_id = co.id 
 AND cosv.user_id = u.id 
 

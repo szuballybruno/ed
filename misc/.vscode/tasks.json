@@ -30,12 +30,10 @@
                 "cwd": "${workspaceFolder}\\scripts\\permissionGen"
             },
         },
-
-        // lr
         {
+            "label": "purge-db",
             "type": "shell",
-            "label": "backend lrmon",
-            "command": "yarn --cwd ../epistogram_backend lrmon",
+            "command": "yarn --cwd ../epistogram_backend purge",
             "problemMatcher": [],
             "presentation": {
                 "group": "run"
@@ -43,6 +41,15 @@
         },
 
         // run
+        {
+            "type": "shell",
+            "label": "run backend-lrmon",
+            "command": "yarn --cwd ../epistogram_backend lrmon",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
         {
             "type": "shell",
             "label": "run frontend",
@@ -67,7 +74,7 @@
             "label": "run-all",
             "dependsOn": [
                 "run frontend",
-                "run backend",
+                "run backend-lrmon",
             ],
             "problemMatcher": []
         }

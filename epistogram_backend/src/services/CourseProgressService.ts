@@ -75,7 +75,8 @@ export class CourseProgressService {
             return null;
 
         // get next items 
-        const nextItems = await this._getCourseNextItemsAsync(userId, currentCourseId);
+        const nextItems = await this
+            ._getCourseNextItemsAsync(userId, currentCourseId);
 
         return {
             title: courseProgress.courseTitle,
