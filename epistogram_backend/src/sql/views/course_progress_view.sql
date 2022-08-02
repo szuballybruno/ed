@@ -1,3 +1,6 @@
+-- user progress view 
+-- provides user course insights 
+
 SELECT 
 	clsv.user_id,
 	clsv.course_id course_id,

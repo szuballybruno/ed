@@ -22,7 +22,6 @@ export const LearningCourseStats = () => {
 
     const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
 
-
     const { navigateToPlayer } = useNavigation();
 
     const handleStartCourse = (course: CourseLearningDTO) => {

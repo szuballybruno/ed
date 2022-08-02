@@ -30,6 +30,18 @@
                 "cwd": "${workspaceFolder}\\scripts\\permissionGen"
             },
         },
+
+        // lr
+        {
+            "type": "shell",
+            "label": "backend lrmon",
+            "command": "yarn --cwd ../epistogram_backend lrmon",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+
         // run
         {
             "type": "shell",
@@ -49,6 +61,8 @@
                 "group": "run"
             }
         },
+
+        // run-all
         {
             "label": "run-all",
             "dependsOn": [

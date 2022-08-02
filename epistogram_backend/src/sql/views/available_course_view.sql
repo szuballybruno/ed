@@ -13,31 +13,20 @@ assigned_courses AS
 	INNER JOIN public.course co
 	ON co.id = upv.context_course_id
 ),
-any_final_exam_completion AS
-(
-	SELECT SUM(ecv.has_successful_session::int) > 0 is_completed_final_exam, cv.course_id, ecv.user_id
-	FROM public.course_version cv
-	
-	LEFT JOIN public.exam_completed_view ecv
-	ON ecv.course_version_id = cv.id
-	AND ecv.is_final_exam
-	
-	GROUP BY cv.course_id, ecv.user_id
-),
 course_state_view AS
 (
 	SELECT 
 		co.id course_id,
 		u.id user_id,
 		ucb.id IS NOT NULL is_started,
-		afec.is_completed_final_exam is_completed
+		ccv.user_id IS NOT NULL is_completed
 	FROM public.course co
 
 	CROSS JOIN public.user u
 
-	LEFT JOIN any_final_exam_completion afec
-	ON afec.course_id = co.id
-	AND afec.user_id = u.id
+	LEFT JOIN public.course_completion_view ccv
+	ON ccv.course_id = co.id
+	AND ccv.user_id = u.id
 		
 	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.user_id = u.id
@@ -53,8 +42,8 @@ SELECT
 	cd.title,
 	true can_view,
 	sf.file_path file_path,
-	csv.is_completed is_completed,
-	csv.is_started is_started,
+	cosv.is_completed is_completed,
+	cosv.is_started is_started,
 	csc.id sub_category_id,
 	cd.is_featured,
 	false is_recommended,
@@ -104,9 +93,9 @@ AND first_civ.item_order_index = 0
 AND first_civ.module_order_index = 1 
 AND first_civ.item_type != 'pretest'
 
-LEFT JOIN course_state_view csv
-ON csv.course_id = co.id 
-AND csv.user_id = u.id 
+LEFT JOIN course_state_view cosv
+ON cosv.course_id = co.id 
+AND cosv.user_id = u.id 
 
 LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id

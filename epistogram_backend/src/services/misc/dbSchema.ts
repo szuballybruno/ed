@@ -90,6 +90,7 @@ import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
 import { CourseRatingQuestionView } from '../../models/views/CourseRatingQuestionView';
 import { CourseShopItemListView } from '../../models/views/CourseShopItemListView';
+import { CoursesProgressListView } from '../../models/views/CoursesProgressListView';
 import { DailyTipView } from '../../models/views/DailyTipView';
 import { ExamCompletedView } from '../../models/views/ExamCompletedView';
 import { ExamPlayerDataView } from '../../models/views/ExamPlayerDataView';
@@ -340,6 +341,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             CourseLearningStatsView,
             ExamResultStatsView,
             CourseProgressView,
+            CoursesProgressListView,
             CourseOverviewView,
             UserInactiveCourseView,
             HomePageStatsView,
