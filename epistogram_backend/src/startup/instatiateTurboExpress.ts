@@ -38,8 +38,8 @@ import { UserProgressController } from './../api/UserProgressController';
 import { UserStatsController } from './../api/UserStatsController';
 import { VideoController } from './../api/VideoController';
 import { VideoRatingController } from './../api/VideoRatingController';
-import { AuthenticationMiddleware } from './../turboMiddleware/AuthenticationMiddleware';
-import { AuthorizationMiddleware } from './../turboMiddleware/AuthorizationMiddleware';
+import { AuthenticationMiddleware } from '../turboImplementations/AuthenticationMiddleware';
+import { AuthorizationMiddleware } from '../turboImplementations/AuthorizationMiddleware';
 import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProvider } from './servicesDI';
 

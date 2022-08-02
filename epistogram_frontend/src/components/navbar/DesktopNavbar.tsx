@@ -1,34 +1,34 @@
 import { Flex, useMediaQuery } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
-import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NavbarButton } from '../universal/NavbarButton';
+import { ContinueCourseButton } from './ContinueCourseButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
 
-export const DesktopNavbar = (props: {
+export const DesktopNavbar = ({
+    backgroundContent,
+    showLogo,
+    currentCourseItemCode,
+    isLowHeight: _isLowHeight,
+    isMinimalMode: _isMinimalMode,
+    hideLinks1
+}: {
     currentCourseItemCode: string | null
-    hideLinks: boolean
+    hideLinks1: boolean
     isLowHeight?: boolean
     showLogo?: boolean
     isMinimalMode?: boolean
     backgroundContent?: any
 }) => {
 
-    const {
-        backgroundContent,
-        showLogo,
-        currentCourseItemCode,
-        isLowHeight: _isLowHeight,
-        isMinimalMode: _isMinimalMode,
-    } = props;
+    console.log(currentCourseItemCode);
 
     const isLowHeight = !!_isLowHeight;
     const isMinimalMode = !!_isMinimalMode;
@@ -59,7 +59,6 @@ export const DesktopNavbar = (props: {
         .getArray() as ApplicationRoute[];
 
     const { navigateToPlayer, navigate } = useNavigation();
-    const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     // context
     const { isAuthenticated } = useAuthorizationContext();
@@ -69,54 +68,12 @@ export const DesktopNavbar = (props: {
     const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
 
     // util 
-    const hideLinks = props.hideLinks || !isAuthenticated;
+    const hideLinks = hideLinks1 || !isAuthenticated;
     const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
 
     // funcs
 
-    const ContinueCourseButton = (props: {
-        title?: string
-    }) => {
 
-        const { title } = props;
-
-        return <>
-            {currentCourseItemCode && (
-
-                <EpistoButton
-                    className="mildShadow"
-                    style={{
-                        color: '--epistoTeal',
-                        background:
-                            'var(--transparentWhite70)',
-                        border: 'none',
-                    }}
-                    variant="outlined"
-                    onClick={() => continueCourse()}
-                    icon={
-                        <img
-                            alt=""
-                            src={Environment.getAssetUrl(
-                                '/icons/play2.svg'
-                            )}
-                            style={{
-                                width: '25px',
-                                height: '25px',
-                            }}
-                        />}>
-
-                    <EpistoFont
-                        style={{
-                            margin: '0 0 0 5px'
-                        }}
-                        isUppercase>
-
-                        {title}
-                    </EpistoFont>
-                </EpistoButton>
-            )}
-        </>;
-    };
 
     const MinimalRender = () => {
 
@@ -142,6 +99,7 @@ export const DesktopNavbar = (props: {
             <Flex height="50px"
                 flex="1 0 600px">
 
+                {/* menu items */}
                 {menuItems
                     .map((route, index) => (
                         <NavbarButton
@@ -150,9 +108,9 @@ export const DesktopNavbar = (props: {
                             onClick={() => navigate(route)} />
                     ))}
 
-                {/* continue watching with or without text  */}
+                {/* continue course button */}
                 <ContinueCourseButton
-                    title={translatableTexts.navbar.currentCourse} />
+                    currentCourseItemCode={currentCourseItemCode} />
             </Flex>
         );
     };
@@ -177,7 +135,8 @@ export const DesktopNavbar = (props: {
                     })}
 
                 {/* continue watching  */}
-                <ContinueCourseButton />
+                <ContinueCourseButton
+                    currentCourseItemCode={currentCourseItemCode} />
             </Flex>
         );
     };

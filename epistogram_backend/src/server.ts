@@ -9,9 +9,9 @@ import { RecreateDBService } from './services/sqlServices/RecreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
 import { initServiceProvider } from './startup/initApp';
-import { initTurboExpressListener } from './startup/initTurboExpressListener';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { ServiceProvider } from './startup/servicesDI';
+import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
 import { snoozeAsync } from './utilities/helpers';
 import { GetServiceProviderType } from './utilities/XTurboExpress/XTurboExpressTypes';
 
@@ -61,9 +61,9 @@ const startServerAsync = async (
 
     // 
     // INIT TURBO EXPRESS LISTENER
-    const listener = initTurboExpressListener(
-        singletonServiceProvider.getService(GlobalConfiguration),
-        singletonServiceProvider.getService(LoggerService));
+    const listener = new XTurboExpressListener(
+        singletonServiceProvider.getService(LoggerService),
+        singletonServiceProvider.getService(GlobalConfiguration));
 
     // 
     // INIT TURBO EXPRESS

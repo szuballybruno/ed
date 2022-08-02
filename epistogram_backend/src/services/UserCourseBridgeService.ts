@@ -350,9 +350,9 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     ): ControllerActionReturnType {
         return {
             action: async () => {
-                const userId = principalId.getId();
 
-                return await this.getCurrentItemCodeAsync(userId);
+                return await this
+                    .getCurrentItemCodeAsync(principalId.getId());
             },
             auth: async () => {
                 return this._authorizationService
@@ -362,16 +362,35 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     }
 
+    /**
+     * Returns the current 
+     * course item code  
+     */
     private async getCurrentItemCodeAsync(
         userId: Id<'User'>
     ) {
-        const currentBridge = await this._ormService
-            .query(UserCourseBridge, { userId })
+        const stateView = await this
+            ._ormService
+            .query(CourseStateView, { userId })
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
+            .and('inProgress', '=', 'true')
             .getOneOrNull();
 
-        return currentBridge?.currentItemCode ?? null;
+        if (!stateView)
+            return;
+
+        const ucb = await this
+            ._ormService
+            .query(UserCourseBridge, {
+                courseId: stateView.courseId,
+                userId
+            })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
+
+        return ucb.currentItemCode;
     }
 
     private async getUserCourseBridgeAsync(

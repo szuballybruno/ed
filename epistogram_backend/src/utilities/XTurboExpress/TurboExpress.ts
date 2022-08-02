@@ -145,30 +145,20 @@ export class TurboExpressBuilder<
              * continue, and execute the action funciton, 
              * which returns the data to the client.
              */
-            if (this._isAuthResult(controllerActionResultOrData)) {
-
-                const controllerActionResult = controllerActionResultOrData as ControllerActionReturnType;
-
-                /**
-                 * Execute auth function. 
-                 * It returns an auth res, 
-                 * throw exceptions accordingly.
-                 */
-                const authRes = await controllerActionResult.auth();
-                if (authRes.state === 'FAILED')
-                    throw new ErrorWithCode('Authorization failed!', 'no permission');
-
-                return await controllerActionResult.action();
-            }
+            const controllerActionResult = controllerActionResultOrData as ControllerActionReturnType;
 
             /**
-             * If controller action just returns data (OLD SOLUTION) 
-             * return the data.
+             * Execute auth function. 
+             * It returns an auth res, 
+             * throw exceptions accordingly.
              */
-            else {
+            const authRes = await controllerActionResult.auth();
+            if (authRes.state === 'FAILED')
+                throw new ErrorWithCode('Authorization failed!', 'no permission');
 
-                return controllerActionResultOrData;
-            }
+            const actionRes = await controllerActionResult.action();
+
+            return actionRes;
         };
 
         /**
@@ -221,25 +211,6 @@ export class TurboExpressBuilder<
                 isPost: !!options?.isPost,
             });
     };
-
-    private _isAuthResult(obj: any) {
-
-        const returnObj = obj as ControllerActionReturnType;
-
-        if (!returnObj)
-            return false;
-
-        if (!returnObj.auth || !returnObj.action)
-            return false;
-
-        if (typeof returnObj.action !== 'function')
-            return false;
-
-        if (typeof returnObj.auth !== 'function')
-            return false;
-
-        return true;
-    }
 
     private _getActions(): TurboActionType[] {
 

@@ -24,7 +24,7 @@ const Navbar = memo((props: {
     const renderDesktopNavbar = () => <DesktopNavbar
         backgroundContent={backgroundContent}
         currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
-        hideLinks={!!hideLinks}
+        hideLinks1={!!hideLinks}
         isLowHeight={isLowHeight}
         isMinimalMode={isMinimalMode}
         showLogo={showLogo} />;
