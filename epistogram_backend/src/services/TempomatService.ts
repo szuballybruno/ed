@@ -72,7 +72,7 @@ export class TempomatService {
             return;
 
         this._loggerService
-            .log(`User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
+            .logScoped('TEMPOMAT', `User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
 
         await this._eventService
             .addLagBehindNotificationEventAsync(userId, {
@@ -289,19 +289,19 @@ export class TempomatService {
         const newPrevisionedDate = this
             ._calculateNewPrevisionedDateByTempomatMode(tempomatMode, originalPrevisionedCompletionDate, lagBehindDays, adjustmentCorrection);
 
-        this._loggerService.log('CURRENT TEMPOMAT CALCULATION: ');
-        this._loggerService.logSecondary(`Start date: ${startDate}`);
-        this._loggerService.logSecondary(`Original previsioned completion date: ${originalPrevisionedCompletionDate}`);
-        this._loggerService.logSecondary(`Original previsioned length: ${originalPrevisionedLength} days`);
-        this._loggerService.logSecondary(`Total item count: ${totalItemCount}`);
-        this._loggerService.logSecondary(`Original estimated videos per day: ${originalEstimatedVideosPerDay}`);
-        this._loggerService.logSecondary(`Days spent from start date: ${daysSpentFromStartDate}`);
-        this._loggerService.logSecondary(`Videos should have watched by now: ${howManyVideosShouldHaveWatchedByNow}`);
-        this._loggerService.logSecondary(`Watched videos: ${totalCompletedItemCount}`);
-        this._loggerService.logSecondary(`Lag behind: ${lagBehindDays} days`);
-        this._loggerService.logSecondary(`Mode: '${tempomatMode}'`);
-        this._loggerService.logSecondary(`Adjustment: ${adjustmentCorrection * 100}%`);
-        this._loggerService.logSecondary(`New previsoned date: ${newPrevisionedDate}`);
+        this._loggerService.logScoped('TEMPOMAT', 'CURRENT TEMPOMAT CALCULATION: ');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Start date: ${startDate}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Original previsioned completion date: ${originalPrevisionedCompletionDate}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Original previsioned length: ${originalPrevisionedLength} days`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Total item count: ${totalItemCount}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Original estimated videos per day: ${originalEstimatedVideosPerDay}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Days spent from start date: ${daysSpentFromStartDate}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Videos should have watched by now: ${howManyVideosShouldHaveWatchedByNow}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Watched videos: ${totalCompletedItemCount}`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Lag behind: ${lagBehindDays} days`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Mode: '${tempomatMode}'`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Adjustment: ${adjustmentCorrection * 100}%`);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `New previsoned date: ${newPrevisionedDate}`);
 
         return newPrevisionedDate;
     }

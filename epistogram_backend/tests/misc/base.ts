@@ -23,7 +23,7 @@ export type InitData = {
     cookies: TestCookie[]
 }
 
-type TestFunctionsType = (getInitData: () => InitData) => void;
+type TestFunctionsType = (getInitData: () => InitData) => Promise<void>;
 
 const loginUserAsync = async (api: ApiType) => {
 
@@ -43,12 +43,13 @@ const loginUserAsync = async (api: ApiType) => {
 const _setupTest = (opts: {
     tests: TestFunctionsType,
     loginEnabled: boolean,
-    purge: boolean
+    purge: boolean,
+    title: string
 }) => {
 
     JestLogger.logMain('Initializing integration tests...');
 
-    const { tests } = opts;
+    const { tests, title } = opts;
 
     const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(srcFolder);
     const api = new TestListener();
@@ -71,7 +72,7 @@ const _setupTest = (opts: {
     /**
      * --------------------- Init tests
      */
-    describe('init tests', () => {
+    describe('[INIT] Init tests...', () => {
         customIt('should init tests', async () => {
 
             JestLogger.logMain('Running init tests...');
@@ -116,13 +117,19 @@ const _setupTest = (opts: {
     /**
      * Run tests 
      */
-    tests(getInitData);
+
+    describe(title, () => {
+        customIt('is running the integration test.', async () => {
+
+            await tests(getInitData);
+        });
+    });
 
     /**
      * ----------------------- Destruct tests
      */
-    describe('Destruct tests', () => {
-        customIt('should descruct tests', async () => {
+    describe('[DESCRTUCT] Destruct tests...', () => {
+        customIt('should descruct tests.', async () => {
 
             JestLogger.logMain('Running destruct tests...');
 
@@ -139,22 +146,13 @@ const _setupTest = (opts: {
     });
 };
 
-export const setupTest = (tests: TestFunctionsType) => {
-
-    _setupTest({
-        tests,
-        loginEnabled: true,
-        purge: false
-    });
-};
-
 class IntegrationTestSetupBuilder {
 
     private _login: boolean = true;
     private _purge: boolean = false;
     private _tests: TestFunctionsType;
 
-    constructor() {
+    constructor(private _title: string) {
 
     }
 
@@ -178,12 +176,13 @@ class IntegrationTestSetupBuilder {
         _setupTest({
             loginEnabled: this._login,
             purge: this._purge,
-            tests: this._tests
+            tests: this._tests,
+            title: this._title
         });
     }
 }
 
-export const setupIntegrationTest = () => {
+export const setupIntegrationTest = (title: string) => {
 
-    return new IntegrationTestSetupBuilder();
+    return new IntegrationTestSetupBuilder(title);
 };

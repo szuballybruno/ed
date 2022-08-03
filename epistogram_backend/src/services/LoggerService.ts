@@ -1,20 +1,15 @@
 import { GlobalConfiguration, LogScopeType } from './misc/GlobalConfiguration';
-import { log, logError, logSecondary } from './misc/logger';
+import { logError } from './misc/logger';
 
 type LogType = 'SECONDARY' | 'ERROR';
 
 export class LoggerService {
 
+    private _logId: number = 0;
+    private _showLogId: boolean = true;
+
     constructor(private _config: GlobalConfiguration) {
 
-    }
-
-    /**
-     * @deprecated use scoped logging 
-     */
-    log(text: string) {
-
-        log(text);
     }
 
     logScoped(scope: LogScopeType, type: LogType, obj: any): void;
@@ -28,8 +23,11 @@ export class LoggerService {
         const logObj = isTyped ? obj : objOrType;
         const type = isTyped ? objOrType as LogType : undefined;
 
+        this._logId++;
+
         if (typeof logObj !== 'string') {
 
+            console.log(`Object log (${this._logId})`);
             console.log(logObj);
             return;
         }
@@ -40,14 +38,6 @@ export class LoggerService {
             return;
         }
 
-        console.log(`[${scope}] ${type === 'SECONDARY' ? '--' : ''}${logObj}`);
-    }
-
-    /**
-     * @deprecated use logScoped 
-     */
-    logSecondary(text: string) {
-
-        logSecondary(text);
+        console.log(`[${scope}] ${this._logId ? `(${this._logId}) ` : ''}${type === 'SECONDARY' ? '--' : ''}${logObj}`);
     }
 }

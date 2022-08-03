@@ -1,20 +1,19 @@
-import { ExamController } from '../../src/api/ExamController';
-import { PlayerController } from '../../src/api/PlayerController';
-import { PrequizController } from '../../src/api/PrequizController';
-import { PretestController } from '../../src/api/PretestController';
-import { Video } from '../../src/models/entity/video/Video';
-import { getItemCode } from '../../src/services/misc/encodeService';
-import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
-import { Id } from '../../src/shared/types/versionId';
-import { getAnswersSeedData } from '../../src/sql/seed/seed_answers';
-import { getCourseSeedData } from '../../src/sql/seed/seed_courses';
-import { getPrequizAnswersSeedData } from '../../src/sql/seed/seed_prequiz_answers';
-import { getPrequizQuestionsSeedData } from '../../src/sql/seed/seed_prequiz_questions';
-import { getQuestionSeedData } from '../../src/sql/seed/seed_questions';
-import { getVideosSeedData } from '../../src/sql/seed/seed_videos';
-import { InitData, setupIntegrationTest } from '../misc/base';
-import { customIt } from '../misc/customHooks';
-import { TestTurboResponse } from '../misc/TestListener';
+import { ExamController } from '../src/api/ExamController';
+import { PlayerController } from '../src/api/PlayerController';
+import { PrequizController } from '../src/api/PrequizController';
+import { PretestController } from '../src/api/PretestController';
+import { Video } from '../src/models/entity/video/Video';
+import { getItemCode } from '../src/services/misc/encodeService';
+import { initJsExtensions } from '../src/shared/logic/jsExtensions';
+import { Id } from '../src/shared/types/versionId';
+import { getAnswersSeedData } from '../src/sql/seed/seed_answers';
+import { getCourseSeedData } from '../src/sql/seed/seed_courses';
+import { getPrequizAnswersSeedData } from '../src/sql/seed/seed_prequiz_answers';
+import { getPrequizQuestionsSeedData } from '../src/sql/seed/seed_prequiz_questions';
+import { getQuestionSeedData } from '../src/sql/seed/seed_questions';
+import { getVideosSeedData } from '../src/sql/seed/seed_videos';
+import { InitData, setupIntegrationTest } from './misc/base';
+import { TestTurboResponse } from './misc/TestListener';
 
 initJsExtensions();
 
@@ -266,54 +265,50 @@ const getPlayerDataVideo = async ({ api, cookies }: InitData) => {
         .toBe(200);
 };
 
-setupIntegrationTest()
+setupIntegrationTest('Full course process, from start to finish')
     .purgeDB()
-    .addTests((getInitData) => {
-        describe('Complete prequiz', () => {
-            customIt('is getting prequiz questions', async () => {
+    .addTests(async (getInitData) => {
 
-                const initData = getInitData();
+        const initData = getInitData();
 
-                /**
-                 * Complete prequiz
-                 */
-                await getPrequizQuestions(initData);
+        /**
+         * Complete prequiz
+         */
+        await getPrequizQuestions(initData);
 
-                /**
-                 * Answer prequiz questions 
-                 */
-                await answerPrequizQuestions(initData);
+        /**
+         * Answer prequiz questions 
+         */
+        await answerPrequizQuestions(initData);
 
-                /**
-                 * Finish prequiz 
-                 */
-                await finishPrequiz(initData);
+        /**
+         * Finish prequiz 
+         */
+        await finishPrequiz(initData);
 
-                /**
-                 * Get prequiz data 
-                 */
-                const { pretestDataResult } = await getPretestData(initData);
+        /**
+         * Get prequiz data 
+         */
+        const { pretestDataResult } = await getPretestData(initData);
 
-                /**
-                 * Answer exam questions 
-                 */
-                await answerExamQuestions({ ...initData, pretestData: pretestDataResult });
+        /**
+         * Answer exam questions 
+         */
+        await answerExamQuestions({ ...initData, pretestData: pretestDataResult });
 
-                /**
-                 * Finish pretest
-                 */
-                await finishPretest({ ...initData, pretestData: pretestDataResult });
+        /**
+         * Finish pretest
+         */
+        await finishPretest({ ...initData, pretestData: pretestDataResult });
 
-                /**
-                 * Pretest results 
-                 */
-                await getPretestResults(initData);
+        /**
+         * Pretest results 
+         */
+        await getPretestResults(initData);
 
-                /**
-                 * Play course items
-                 */
-                await getPlayerDataVideo(initData);
-            });
-        });
+        /**
+         * Play course items
+         */
+        await getPlayerDataVideo(initData);
     })
     .build();

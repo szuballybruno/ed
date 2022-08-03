@@ -26,13 +26,13 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
         const requestPath = req.path;
 
         this._loggerService
-            .logSecondary(`${requestPath}: Authorizing request...`);
+            .logScoped('GENERIC', `${requestPath}: Authorizing request...`);
 
         // public route 
         if (options.isPublic) {
 
             this._loggerService
-                .log(`${requestPath}: Route is open, skipping authentication...`);
+                .logScoped('GENERIC', `${requestPath}: Route is open, skipping authentication...`);
 
             return new ActionParams(req, res, Id.create<'User'>(-1));
         }
@@ -49,7 +49,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
 
             // permitted. finalization             
             this._loggerService
-                .logSecondary(`${requestPath}: Request permitted. UserId: ${userId} Proceeding...`);
+                .logScoped('GENERIC', `${requestPath}: Request permitted. UserId: ${userId} Proceeding...`);
 
             return new ActionParams(req, res, userId);
         }

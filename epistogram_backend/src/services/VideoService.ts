@@ -126,8 +126,6 @@ export class VideoService extends QueryServiceBase<VideoData> {
             .where('videoVersionId', '=', 'videoVersionId')
             .getMany();
 
-        console.log(questionData);
-
         return questionData;
     }
 

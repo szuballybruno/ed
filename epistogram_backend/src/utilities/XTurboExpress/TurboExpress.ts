@@ -171,7 +171,7 @@ export class TurboExpressBuilder<
         const asyncStuff = async (req: TRequest, res: TResponse) => {
 
             this._loggerService
-                .log(`${req.path}: REQUEST ARRIVED`);
+                .logScoped('GENERIC', `${req.path}: REQUEST ARRIVED`);
 
             /**
              * Instatiate all services, 
