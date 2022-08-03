@@ -39,7 +39,12 @@
                 "group": "run"
             }
         },
-
+        {
+            "label": "run test-misc",
+            "type": "shell",
+            "command": "npx jest -i misc.test.ts",
+            "problemMatcher": [],
+        },
         // run
         {
             "type": "shell",
@@ -68,7 +73,6 @@
                 "group": "run"
             }
         },
-
         // run-all
         {
             "label": "run-all",

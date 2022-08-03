@@ -60,7 +60,9 @@ export const toSQLSnakeCasing = (name: string) => {
  */
 export const regexMatchAll = (text: string, regex: RegExp): string[] => {
 
-    return text.match(regex) ?? [] as string[];
+    const matches = text.match(regex) ?? [] as string[];
+
+    return matches.map(x => '' + x);
 };
 
 export const forN = <T>(iterations: number, action: (index: number) => T) => {
