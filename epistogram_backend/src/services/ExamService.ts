@@ -229,8 +229,8 @@ export class ExamService {
                  * If first successful, do something DUNNO WHAT
                  * TODO
                  */
-                const isFirstSuccessfulAnswerSession = await this
-                    ._checkIfFirstSuccessfulAnswerSessionAsync(userId, examVersionId, answerSessionId);
+                // const isFirstSuccessfulAnswerSession = await this
+                //     ._checkIfFirstSuccessfulAnswerSessionAsync(userId, examVersionId, answerSessionId);
 
                 return result;
             },

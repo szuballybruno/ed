@@ -222,7 +222,7 @@ const finishPretest = async ({ api, cookies, pretestData }: InitData & { pretest
             cookies
         });
 
-    expect(finishPretestResult.response.data)
+    expect(finishPretestResult.response.code)
         .toBe(200);
 };
 
