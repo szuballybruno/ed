@@ -8343,87 +8343,87 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
     * Precourse exam #43
     * Questions #580-584
     */
-    answer_data_2169: {
+    answer_data_pretest_excel_1_1_F: {
         text: 'Kezdőlap',
         isCorrect: false,
     },
-    answer_data_2170: {
+    answer_data_pretest_excel_1_2_F: {
         text: 'Beszúrás',
         isCorrect: false,
     },
-    answer_data_2171: {
+    answer_data_pretest_excel_1_3_T: {
         text: 'Adatok',
         isCorrect: true,
     },
-    answer_data_2172: {
+    answer_data_pretest_excel_1_4_F: {
         text: 'Képletek',
         isCorrect: false,
     },
 
-    answer_data_2173: {
+    answer_data_pretest_excel_2_1_F: {
         text: 'Nem lehet',
         isCorrect: false,
     },
-    answer_data_2174: {
+    answer_data_pretest_excel_2_2_F: {
         text: 'Formátum',
         isCorrect: false,
     },
-    answer_data_2175: {
+    answer_data_pretest_excel_2_3_F: {
         text: 'Adatok érvényesítése',
         isCorrect: false,
     },
-    answer_data_2176: {
+    answer_data_pretest_excel_2_4_T: {
         text: 'Adatok érvényesítése >> Hibajelzés fül',
         isCorrect: true,
     },
 
-    answer_data_2177: {
+    answer_data_pretest_excel_3_1_T: {
         text: 'Mert ha tagolva van és nem szám a formátum, akkor a tagolást szóköznek veszi az Excel és nem fog tudni számolni.',
         isCorrect: true,
     },
-    answer_data_2178: {
+    answer_data_pretest_excel_3_2_F: {
         text: 'Mert így kevesebb lesz az adat, amit át kell konvertálni',
         isCorrect: false,
     },
-    answer_data_2179: {
+    answer_data_pretest_excel_3_3_F: {
         text: 'Nem kell',
         isCorrect: false,
     },
-    answer_data_2180: {
+    answer_data_pretest_excel_3_4_F: {
         text: 'Mert tizedes törtet nem tud átkonvertálni',
         isCorrect: false,
     },
 
-    answer_data_2181: {
+    answer_data_pretest_excel_4_1_T: {
         text: 'Áttekinthetőbb lesz a táblázat de a felesleges adatokat nem törli az Excel, csak elrejti',
         isCorrect: true,
     },
-    answer_data_2182: {
+    answer_data_pretest_excel_4_2_F: {
         text: 'Áttekinthetőbb lesz a táblázat, a felesleges adatokat törli az Excel',
         isCorrect: false,
     },
-    answer_data_2183: {
+    answer_data_pretest_excel_4_3_F: {
         text: 'Áttekinthetőbb lesz a táblázat de a felesleges adatokat nem törli az Excel, csak másik munkalapra menti',
         isCorrect: false,
     },
-    answer_data_2184: {
+    answer_data_pretest_excel_4_4_F: {
         text: 'Az Excel a kiszűrt adatokat törli',
         isCorrect: false,
     },
 
-    answer_data_2185: {
+    answer_data_pretest_excel_5_1_F: {
         text: 'Igen, de csak szaggatott vonallal',
         isCorrect: false,
     },
-    answer_data_2186: {
+    answer_data_pretest_excel_5_2_F: {
         text: 'Igen, de csak dupla vonallal',
         isCorrect: false,
     },
-    answer_data_2187: {
+    answer_data_pretest_excel_5_3_T: {
         text: 'Igen',
         isCorrect: true,
     },
-    answer_data_2188: {
+    answer_data_pretest_excel_5_4_F: {
         text: 'Nem',
         isCorrect: false,
     },

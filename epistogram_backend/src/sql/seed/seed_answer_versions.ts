@@ -12437,124 +12437,128 @@ export const getAnswerVersionsSeedData = (
     },
 
 
-    // pretest answers
-    answer_version_2169: {
-        answerId: answers.answer_2169.id,
-        answerDataId: answerDatas.answer_data_2169.id,
+    // Excel pretest question 1 answers
+    answer_version_pretest_excel_1_1_F: {
+        answerId: answers.answer_pretest_excel_1_1_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_1_1_F.id,
         questionVersionId: questionVersions.question_version_580.id,
     },
 
-    answer_version_2170: {
-        answerId: answers.answer_2170.id,
-        answerDataId: answerDatas.answer_data_2170.id,
+    answer_version_pretest_excel_1_2_F: {
+        answerId: answers.answer_pretest_excel_1_2_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_1_2_F.id,
         questionVersionId: questionVersions.question_version_580.id,
     },
 
-    answer_version_2171: {
-        answerId: answers.answer_2171.id,
-        answerDataId: answerDatas.answer_data_2171.id,
+    answer_version_pretest_excel_1_3_T: {
+        answerId: answers.answer_pretest_excel_1_3_T.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_1_3_T.id,
         questionVersionId: questionVersions.question_version_580.id,
     },
 
-    answer_version_2172: {
-        answerId: answers.answer_2172.id,
-        answerDataId: answerDatas.answer_data_2172.id,
+    answer_version_pretest_excel_1_4_F: {
+        answerId: answers.answer_pretest_excel_1_4_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_1_4_F.id,
         questionVersionId: questionVersions.question_version_580.id,
     },
 
-    answer_version_2173: {
-        answerId: answers.answer_2173.id,
-        answerDataId: answerDatas.answer_data_2173.id,
+    // Excel pretest question 2 answers
+    answer_version_pretest_excel_2_1_F: {
+        answerId: answers.answer_pretest_excel_2_1_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_2_1_F.id,
         questionVersionId: questionVersions.question_version_581.id,
     },
 
-    answer_version_2174: {
-        answerId: answers.answer_2174.id,
-        answerDataId: answerDatas.answer_data_2174.id,
+    answer_version_pretest_excel_2_2_F: {
+        answerId: answers.answer_pretest_excel_2_2_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_2_2_F.id,
         questionVersionId: questionVersions.question_version_581.id,
     },
 
-    answer_version_2175: {
-        answerId: answers.answer_2175.id,
-        answerDataId: answerDatas.answer_data_2175.id,
+    answer_version_pretest_excel_2_3_F: {
+        answerId: answers.answer_pretest_excel_2_3_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_2_3_F.id,
         questionVersionId: questionVersions.question_version_581.id,
     },
 
-    answer_version_2176: {
-        answerId: answers.answer_2176.id,
-        answerDataId: answerDatas.answer_data_2176.id,
+    answer_version_pretest_excel_2_4_T: {
+        answerId: answers.answer_pretest_excel_2_4_T.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_2_4_T.id,
         questionVersionId: questionVersions.question_version_581.id,
     },
 
-    answer_version_2177: {
-        answerId: answers.answer_2177.id,
-        answerDataId: answerDatas.answer_data_2177.id,
+    // Excel pretest question 3 answers
+    answer_version_pretest_excel_3_1_T: {
+        answerId: answers.answer_pretest_excel_3_1_T.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_3_1_T.id,
         questionVersionId: questionVersions.question_version_582.id,
     },
 
-    answer_version_2178: {
-        answerId: answers.answer_2178.id,
-        answerDataId: answerDatas.answer_data_2178.id,
+    answer_version_pretest_excel_3_2_F: {
+        answerId: answers.answer_pretest_excel_3_2_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_3_2_F.id,
         questionVersionId: questionVersions.question_version_582.id,
     },
 
-    answer_version_2179: {
-        answerId: answers.answer_2179.id,
-        answerDataId: answerDatas.answer_data_2179.id,
+    answer_version_pretest_excel_3_3_F: {
+        answerId: answers.answer_pretest_excel_3_3_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_3_3_F.id,
         questionVersionId: questionVersions.question_version_582.id,
     },
 
-    answer_version_2180: {
-        answerId: answers.answer_2180.id,
-        answerDataId: answerDatas.answer_data_2180.id,
+    answer_version_pretest_excel_3_4_F: {
+        answerId: answers.answer_pretest_excel_3_4_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_3_4_F.id,
         questionVersionId: questionVersions.question_version_582.id,
     },
 
-    answer_version_2181: {
-        answerId: answers.answer_2181.id,
-        answerDataId: answerDatas.answer_data_2181.id,
+    // Excel pretest question 4 answers
+    answer_version_pretest_excel_4_1_T: {
+        answerId: answers.answer_pretest_excel_4_1_T.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_4_1_T.id,
         questionVersionId: questionVersions.question_version_583.id,
     },
 
-    answer_version_2182: {
-        answerId: answers.answer_2182.id,
-        answerDataId: answerDatas.answer_data_2182.id,
+    answer_version_pretest_excel_4_2_F: {
+        answerId: answers.answer_pretest_excel_4_2_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_4_2_F.id,
         questionVersionId: questionVersions.question_version_583.id,
     },
 
-    answer_version_2183: {
-        answerId: answers.answer_2183.id,
-        answerDataId: answerDatas.answer_data_2183.id,
+    answer_version_pretest_excel_4_3_F: {
+        answerId: answers.answer_pretest_excel_4_3_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_4_3_F.id,
         questionVersionId: questionVersions.question_version_583.id,
     },
 
-    answer_version_2184: {
-        answerId: answers.answer_2184.id,
-        answerDataId: answerDatas.answer_data_2184.id,
+    answer_version_pretest_excel_4_4_F: {
+        answerId: answers.answer_pretest_excel_4_4_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_4_4_F.id,
         questionVersionId: questionVersions.question_version_583.id,
     },
 
-    answer_version_2185: {
-        answerId: answers.answer_2185.id,
-        answerDataId: answerDatas.answer_data_2185.id,
+    // Excel pretest question 5 answers
+    answer_version_pretest_excel_5_1_F: {
+        answerId: answers.answer_pretest_excel_5_1_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_5_1_F.id,
         questionVersionId: questionVersions.question_version_584.id,
     },
 
-    answer_version_2186: {
-        answerId: answers.answer_2186.id,
-        answerDataId: answerDatas.answer_data_2186.id,
+    answer_version_pretest_excel_5_2_F: {
+        answerId: answers.answer_pretest_excel_5_2_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_5_2_F.id,
         questionVersionId: questionVersions.question_version_584.id,
     },
 
-    answer_version_2187: {
-        answerId: answers.answer_2187.id,
-        answerDataId: answerDatas.answer_data_2187.id,
+    answer_version_pretest_excel_5_3_T: {
+        answerId: answers.answer_pretest_excel_5_3_T.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_5_3_T.id,
         questionVersionId: questionVersions.question_version_584.id,
     },
 
-    answer_version_2188: {
-        answerId: answers.answer_2188.id,
-        answerDataId: answerDatas.answer_data_2188.id,
+    answer_version_pretest_excel_5_4_F: {
+        answerId: answers.answer_pretest_excel_5_4_F.id,
+        answerDataId: answerDatas.answer_data_pretest_excel_5_4_F.id,
         questionVersionId: questionVersions.question_version_584.id,
     },
 
