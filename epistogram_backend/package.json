@@ -18,6 +18,7 @@
     "purgeStart": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --purge",
     "purge": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --purge --shortLife",
     "test": "jest",
+    "integtest": "jest -i useCases/startCourse.test.ts",
     "testesm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {

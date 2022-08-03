@@ -15,7 +15,7 @@ export type TestCallEndpointOptions = {
     cookies?: TestCookie[],
 };
 
-class TestTurboResponse implements ITurboResponse {
+export class TestTurboResponse implements ITurboResponse {
 
     public cookies: TestCookie[] = [];
     public response: { code: number; data: any; };
@@ -101,6 +101,8 @@ export class TestListener implements IXTurboExpressListener {
         }
         catch (e) {
 
+            console.error('----------------------- ACTION ERROR --------------------------');
+            console.error(e);
             respondError(res, e as any);
         }
 

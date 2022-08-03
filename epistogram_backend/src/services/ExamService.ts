@@ -209,7 +209,7 @@ export class ExamService {
                 /**
                  * Save given answer
                  */
-                const result = this
+                const result = await this
                     ._quesitonAnswerService
                     .saveGivenAnswerAsync(
                         userId,
@@ -319,6 +319,9 @@ export class ExamService {
             .where('userId', '=', 'userId')
             .and('examVersionId', '=', 'examVersionId')
             .getMany();
+
+        if (answerSessionViews.length === 0)
+            throw new Error('0 answer session view found!');
 
         const currentAnswerSessionIsSuccessful = answerSessionViews
             .first(x => x.answerSessionId == answerSessionId);

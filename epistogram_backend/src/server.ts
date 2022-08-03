@@ -5,37 +5,17 @@ import { LoggerService } from './services/LoggerService';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
 import { CreateDBService } from './services/sqlServices/CreateDBService';
-import { RecreateDBService } from './services/sqlServices/RecreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
 import { initServiceProvider } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
+import { recreateDBAsync } from './startup/recreateDB';
 import { ServiceProvider } from './startup/servicesDI';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
 import { snoozeAsync } from './utilities/helpers';
 import { GetServiceProviderType } from './utilities/XTurboExpress/XTurboExpressTypes';
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
-
-const recreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
-
-    const serviceProvider = await getServiceProviderAsync();
-
-    // override logging scopes to show bootstrap
-    serviceProvider
-        .getService(GlobalConfiguration)
-        .overrideLogScopes(['BOOTSTRAP']);
-
-    //
-    // SEED DB
-    await serviceProvider
-        .getService(RecreateDBService)
-        .recreateDBAsync();
-
-    serviceProvider
-        .getService(SQLConnectionService)
-        .releaseConnectionClient();
-};
 
 const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderType) => {
 

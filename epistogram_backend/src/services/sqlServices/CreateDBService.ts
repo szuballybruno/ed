@@ -1,5 +1,5 @@
 
-import { readdirSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 import { regexMatchAll } from '../../utilities/helpers';
 import { DepHierarchyItem, XDependency } from '../../utilities/XDInjection/XDInjector';
 import { LoggerService } from '../LoggerService';
@@ -25,6 +25,8 @@ export class CreateDBService {
 
     createDatabaseSchemaAsync = async (createTables: boolean) => {
 
+        this._checkSqlFolder();
+
         if (createTables) {
 
             this._loggerService.logScoped('BOOTSTRAP', 'Creating tables with TypeORM...');
@@ -48,6 +50,17 @@ export class CreateDBService {
     };
 
     // PRIVATE
+
+    private _checkSqlFolder() {
+
+        const path = this._config.getRootRelativePath('/sql');
+        const exits = existsSync(path);
+
+        if (!exits)
+            throw new Error('SQL folder doesnt exist! Path: ' + path);
+
+        this._loggerService.logScoped('BOOTSTRAP', 'SQL folder found. Path: ' + path);
+    }
 
     private _getDepsOfViews(namesAndContents: ViewFile[]) {
 
@@ -74,7 +87,7 @@ export class CreateDBService {
 
         const readFolder = (readFolder: string) => {
 
-            const fileNames = readdirSync(readFolder);
+            const fileNames = Array.from(readdirSync(readFolder));
             const namesAndContents = fileNames
                 .filter(x => x.endsWith('.sql'))
                 .map(x => ({

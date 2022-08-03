@@ -1,25 +1,36 @@
 import { AuthenticationController } from '../../src/api/AuthenticationController';
 import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnectionService';
+import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
 import { initServiceProvider } from '../../src/startup/initApp';
 import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
+import { recreateDBAsync } from '../../src/startup/recreateDB';
 import { ServiceProvider } from '../../src/startup/servicesDI';
+import { customIt } from './customHooks';
+import { JestLogger } from './jestLogger';
+import { normalizeJestConsole } from './normalizeConsole';
+import { srcFolder } from './rootProvider';
 import { TestCookie, TestListener } from './TestListener';
 
-type ApiType = Pick<TestListener, 'callEndpoint'>;
+initJsExtensions();
+normalizeJestConsole();
 
-type InitData = {
+export type ApiType = Pick<TestListener, 'callEndpoint'>;
+
+export type InitData = {
     serviceProvider: ServiceProvider,
     api: ApiType,
     accessToken: string,
     cookies: TestCookie[]
 }
 
+type TestFunctionsType = (getInitData: () => InitData) => void;
+
 const loginUserAsync = async (api: ApiType) => {
 
     const loginResult = await api
         .callEndpoint(AuthenticationController, 'logInUserAction', {
             body: {
-                email: 'endre.marosi@gmail.com', //'gyorgy.kelecsenyi@gmail.com',
+                email: 'endre.marosi@gmail.com',
                 password: 'admin'
             }
         });
@@ -29,28 +40,67 @@ const loginUserAsync = async (api: ApiType) => {
     return { accessToken };
 };
 
-export const setupTest = (tests: (getInitData: () => InitData) => void, login?: 'NO LOGIN') => {
+const _setupTest = (opts: {
+    tests: TestFunctionsType,
+    loginEnabled: boolean,
+    purge: boolean
+}) => {
 
-    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider('');
+    JestLogger.logMain('Initializing integration tests...');
+
+    const { tests } = opts;
+
+    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(srcFolder);
     const api = new TestListener();
     const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync, api);
     const initDataContainer: { initData: InitData } = {} as any;
-    const getInitData = () => initDataContainer.initData;
+    const getInitData = () => {
+
+        JestLogger.logMain('Getting init data...');
+
+        const initData = initDataContainer.initData;
+        if (!initData)
+            throw new Error('Error, test init data is missing!');
+
+        return initData;
+    };
+
+    JestLogger.logMain('Setting timeout to 99999...');
+    jest.setTimeout(999999);
 
     /**
      * --------------------- Init tests
      */
     describe('init tests', () => {
-        it('should init tests', async () => {
+        customIt('should init tests', async () => {
 
-            const serviceProvider = await getServiceProviderAsync();
-            const accessToken = login === 'NO LOGIN'
-                ? ''
-                : (await loginUserAsync(api)).accessToken;
+            JestLogger.logMain('Running init tests...');
 
-            // create init data
+            /**
+             * PURGE
+             */
+            if (opts.purge) {
+
+                await recreateDBAsync(getServiceProviderAsync);
+            }
+
+            /**
+             * INIT MAIN SERVICE PROVIDER
+             */
+            const mainServiceProvider = await getServiceProviderAsync();
+
+            /**
+             * LOGIN USER 
+             */
+            const accessToken = opts.loginEnabled
+                ? (await loginUserAsync(api)).accessToken
+                : '';
+
+            /**
+             * SET INIT DATA
+             */
             initDataContainer.initData = {
-                serviceProvider,
+                serviceProvider: mainServiceProvider,
                 api,
                 accessToken,
                 cookies: [
@@ -72,7 +122,9 @@ export const setupTest = (tests: (getInitData: () => InitData) => void, login?: 
      * ----------------------- Destruct tests
      */
     describe('Destruct tests', () => {
-        it('should descruct tests', async () => {
+        customIt('should descruct tests', async () => {
+
+            JestLogger.logMain('Running destruct tests...');
 
             getInitData()
                 .serviceProvider
@@ -85,4 +137,53 @@ export const setupTest = (tests: (getInitData: () => InitData) => void, login?: 
                 .endPoolAsync();
         });
     });
+};
+
+export const setupTest = (tests: TestFunctionsType) => {
+
+    _setupTest({
+        tests,
+        loginEnabled: true,
+        purge: false
+    });
+};
+
+class IntegrationTestSetupBuilder {
+
+    private _login: boolean = true;
+    private _purge: boolean = false;
+    private _tests: TestFunctionsType;
+
+    constructor() {
+
+    }
+
+    noLogin() {
+        this._login = false;
+        return this;
+    }
+
+    purgeDB() {
+        this._purge = true;
+        return this;
+    }
+
+    addTests(tests: TestFunctionsType) {
+        this._tests = tests;
+        return this;
+    }
+
+    build() {
+
+        _setupTest({
+            loginEnabled: this._login,
+            purge: this._purge,
+            tests: this._tests
+        });
+    }
+}
+
+export const setupIntegrationTest = () => {
+
+    return new IntegrationTestSetupBuilder();
 };
