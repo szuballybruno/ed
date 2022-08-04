@@ -47,48 +47,14 @@ SELECT
 	
 	-- calculated
 	(
-		SELECT 
-			COALESCE(COUNT(v.id), 0)::int
-		FROM public.video v 
-		
-		LEFT JOIN public.video_version vv
-		ON vv.video_id = v.id
-		
-		LEFT JOIN public.module_version mv
-		ON mv.id = vv.module_version_id
-		
-		LEFT JOIN public.course_version cv
-		ON cv.id = mv.course_version_id
-		
-		LEFT JOIN public.course lco
-		ON lco.id = cv.course_id
-		
-		WHERE lco.id = co.id
+		SELECT cvcv.video_count
+		FROM public.course_video_count_view cvcv
+		WHERE cvcv.course_version_id = cv.id
 	) total_video_count,
 	(
-		SELECT 
-			COALESCE(SUM(vf.length_seconds), 0)::int
-		FROM public.video v
-		
-		LEFT JOIN public.video_version vv
-		ON vv.video_id = v.id
-		
-		LEFT JOIN public.video_data vd
-		ON vd.id = vv.video_data_id
-		
-		LEFT JOIN public.video_file vf
-		ON vf.id = vd.video_file_id
-		
-		LEFT JOIN public.module_version mv
-		ON mv.id = vv.module_version_id
-		
-		LEFT JOIN public.course_version cv
-		ON cv.id = mv.course_version_id
-		
-		LEFT JOIN public.course lco
-		ON lco.id = cv.course_id
-		
-		WHERE lco.id = co.id
+		SELECT cvlv.sum_length_seconds
+		FROM public.course_video_length_view cvlv
+		WHERE cvlv.course_version_id = cv.id
 	) total_video_sum_length_seconds,
 	(
 		SELECT 
@@ -131,8 +97,11 @@ SELECT
 	true can_start_course
 FROM public.course co
 
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
 LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
+ON cv.course_id = lcvv.version_id
 
 LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id

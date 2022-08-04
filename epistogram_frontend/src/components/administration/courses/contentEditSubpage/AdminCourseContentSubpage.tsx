@@ -40,8 +40,6 @@ export const AdminCourseContentSubpage = () => {
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
 
-    console.log(itemEditDialogLogic.isOpen);
-
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
 

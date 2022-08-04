@@ -1,14 +1,4 @@
 WITH 
-video_count AS 
-(
-	SELECT COUNT(vv.id) video_count, mv.course_version_id
-	FROM public.video_version vv
-	
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	
-	GROUP BY mv.course_version_id
-),
 exam_count AS 
 (
 	SELECT COUNT(ev.id) exam_count, mv.course_version_id
@@ -31,7 +21,7 @@ SELECT
 	u.first_name teacher_first_name,
 	u.last_name teacher_last_name,
 	sf.file_path cover_file_path,
-	vc.video_count,
+	cvcv.video_count,
 	ec.exam_count
 FROM public.latest_course_version_view lcvv
 
@@ -56,8 +46,8 @@ ON cc.id = cd.category_id
 LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
 
-LEFT JOIN video_count vc
-ON vc.course_version_id = lcvv.version_id
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_version_id = lcvv.version_id
 
 LEFT JOIN exam_count ec
 ON ec.course_version_id = lcvv.version_id

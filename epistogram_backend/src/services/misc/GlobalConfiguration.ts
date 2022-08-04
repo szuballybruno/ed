@@ -73,7 +73,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['GENERIC', 'TRANSACTION', 'ORM'] as LogScopeType[],
+        enabledScopes: ['GENERIC', 'TRANSACTION'] as LogScopeType[],
     };
 
     constructor(rootDirectory: string) {
