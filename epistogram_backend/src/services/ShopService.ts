@@ -79,7 +79,7 @@ export class ShopService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
+                    .checkPermissionAsync(principalId, 'VIEW_SHOP', { companyId });
             }
         };
 
@@ -105,7 +105,7 @@ export class ShopService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
+                    .checkPermissionAsync(principalId, 'VIEW_SHOP', { companyId });
             }
         };
 
@@ -193,7 +193,7 @@ export class ShopService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
+                    .checkPermissionAsync(principalId, 'VIEW_SHOP', { companyId });
             }
         };
 
@@ -220,7 +220,7 @@ export class ShopService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_SHOP', { companyId });
+                    .checkPermissionAsync(principalId, 'VIEW_SHOP', { companyId });
             }
         };
 
@@ -242,7 +242,7 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
+                    .checkPermissionAsync(principalId, 'MANAGE_SHOP');
             }
         };
     }
@@ -269,7 +269,7 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
+                    .checkPermissionAsync(principalId, 'MANAGE_SHOP');
             }
         };
 
@@ -290,7 +290,7 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
+                    .checkPermissionAsync(principalId, 'MANAGE_SHOP');
             }
         };
 
@@ -327,7 +327,7 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
+                    .checkPermissionAsync(principalId, 'MANAGE_SHOP');
             }
         };
 
@@ -358,7 +358,7 @@ export class ShopService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'MANAGE_SHOP');
+                    .checkPermissionAsync(principalId, 'MANAGE_SHOP');
             }
         };
 

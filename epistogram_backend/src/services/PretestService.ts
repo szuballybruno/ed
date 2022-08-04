@@ -85,7 +85,7 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
     }
@@ -174,7 +174,7 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
     }
@@ -231,7 +231,7 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }

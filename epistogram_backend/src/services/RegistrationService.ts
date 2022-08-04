@@ -124,7 +124,7 @@ export class RegistrationService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'CREATE_NEW_USER');
+                    .checkPermissionAsync(principalId, 'CREATE_NEW_USER');
             }
         };
     }

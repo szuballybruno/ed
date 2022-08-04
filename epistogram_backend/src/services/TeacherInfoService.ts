@@ -60,7 +60,7 @@ export class TeacherInfoService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_TEACHER_OVERVIEW');
+                    .checkPermissionAsync(principalId, 'VIEW_TEACHER_OVERVIEW');
             }
         };
     }
@@ -86,7 +86,7 @@ export class TeacherInfoService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_USER');
+                    .checkPermissionAsync(principalId, 'EDIT_USER');
             }
         };
     }

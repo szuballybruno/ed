@@ -64,7 +64,7 @@ export class CourseRatingService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
     }
@@ -111,7 +111,7 @@ export class CourseRatingService extends ServiceBase {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId: answersDTO.courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId: answersDTO.courseId });
             }
         };
     }

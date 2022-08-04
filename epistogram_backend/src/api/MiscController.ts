@@ -51,7 +51,7 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -70,7 +70,7 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -87,7 +87,7 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -102,7 +102,7 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -118,7 +118,7 @@ export class MiscController implements XController<MiscController> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
     }

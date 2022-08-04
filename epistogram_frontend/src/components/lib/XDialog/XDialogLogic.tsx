@@ -1,23 +1,22 @@
-import { useCallback, useMemo } from 'react';
 import { useXDialogHosterContext } from './XDialoContext';
 
 export const useXDialogLogic = (key: string) => {
 
     const xDialogHoster = useXDialogHosterContext(key);
 
-    const isOpen = useMemo(() => xDialogHoster.getOpenState(key), [key, xDialogHoster.getOpenState]);
+    const isOpen = xDialogHoster.getOpenState(key);
 
-    const openDialog = useCallback(() => xDialogHoster.openDialog(key), [key, xDialogHoster.openDialog]);
+    const openDialog = () => xDialogHoster.openDialog(key);
 
-    const closeDialog = useCallback(() => xDialogHoster.closeDialog(key), [key, xDialogHoster.closeDialog]);
+    const closeDialog = () => xDialogHoster.closeDialog(key);
 
-    const mountContent = useCallback(() => xDialogHoster.mountContent(key), [key, xDialogHoster.mountContent]);
+    const mountContent = () => xDialogHoster.mountContent(key);
 
-    const unmountContent = useCallback(() => xDialogHoster.unmountContent(key), [key, xDialogHoster.unmountContent]);
+    const unmountContent = () => xDialogHoster.unmountContent(key);
 
-    const getHostElement = useCallback(() => xDialogHoster.getHostElement(key), [key, xDialogHoster.getHostElement]);
+    const getHostElement = () => xDialogHoster.getHostElement(key);
 
-    const bundle = useMemo(() => ({
+    const bundle = {
         key,
         isOpen,
         openDialog,
@@ -25,16 +24,7 @@ export const useXDialogLogic = (key: string) => {
         mountContent,
         unmountContent,
         getHostElement
-    }),
-        [
-            key,
-            isOpen,
-            openDialog,
-            closeDialog,
-            mountContent,
-            unmountContent,
-            getHostElement
-        ]);
+    };
 
     return bundle;
 };

@@ -59,7 +59,7 @@ export class CourseItemService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_COURSES');
+                    .checkPermissionAsync(principalId, 'EDIT_COURSES');
             }
         };
     }

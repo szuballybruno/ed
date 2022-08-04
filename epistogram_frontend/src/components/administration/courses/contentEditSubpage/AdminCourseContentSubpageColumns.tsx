@@ -9,7 +9,7 @@ import { VersionCode } from '../../../../shared/types/versionCode';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
-import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
+import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
 import { ChipSmall } from '../ChipSmall';
 import { RowSchema } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
@@ -40,7 +40,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 export const useGridColumnDefinitions = (
     modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
-    itemsMutatorRef: MutableRefObject<XMutatorCore<CourseContentItemAdminDTO, 'versionCode', VersionCode>>) => {
+    itemsMutatorRef: MutableRefObject<IXMutator<CourseContentItemAdminDTO, 'versionCode', VersionCode>>) => {
 
     const TextCellRenderer = (props: {
         children: ReactNode,

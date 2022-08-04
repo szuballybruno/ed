@@ -13,8 +13,6 @@ export const ContinueCourseButton = ({
     const { navigateToPlayer, navigate } = useNavigation();
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
-    console.log(currentCourseItemCode);
-
     if (!currentCourseItemCode)
         return <></>;
 

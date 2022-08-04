@@ -91,7 +91,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
             }
         };
     }
@@ -126,7 +126,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
             }
         };
     }
@@ -184,7 +184,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }
@@ -214,7 +214,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
             }
         };
 
@@ -240,7 +240,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }
@@ -278,7 +278,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
             }
         };
     }
@@ -406,7 +406,7 @@ export class UserService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'DELETE_USER');
+                    .checkPermissionAsync(principalId, 'DELETE_USER');
             }
         };
     }

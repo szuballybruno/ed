@@ -37,11 +37,11 @@ export class XTurboExpressListener implements IXTurboExpressListener {
             opts.action(req, res)
                 .then((returnValue: any) => {
 
-                    this._onSuccess(returnValue, req, res);
+                    this._onSuccess(returnValue, req, res, opts);
                 })
                 .catch((error: any) => {
 
-                    this._onError(error, req, res);
+                    this._onError(error, req, res, opts);
                 });
         };
 
@@ -73,23 +73,23 @@ export class XTurboExpressListener implements IXTurboExpressListener {
 
     // ------------ PRIVATE
 
-    private _onError(errorin: any, req: ITurboRequest, res: ITurboResponse) {
+    private _onError(errorin: any, req: ITurboRequest, res: ITurboResponse, opts: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>) {
 
         const requestPath = req.path;
         const error = errorin as Error;
 
-        this._loggerService.logScoped('GENERIC', 'ERROR', `---------------- [${requestPath}] Failed! ----------------`,);
+        this._loggerService.logScoped('GENERIC', 'ERROR', `---------------- [${opts.controllerSignature.name}/${requestPath}] Failed! ----------------`,);
         this._loggerService.logScoped('GENERIC', 'ERROR', error.message);
         this._loggerService.logScoped('GENERIC', 'ERROR', error.stack);
 
         respondError(res, error);
     }
 
-    private _onSuccess(value: any, req: ITurboRequest, res: ITurboResponse) {
+    private _onSuccess(value: any, req: ITurboRequest, res: ITurboResponse, opts: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>) {
 
         const requestPath = req.path;
 
-        this._loggerService.logScoped('GENERIC', `${requestPath}: Succeeded...`);
+        this._loggerService.logScoped('GENERIC', `${opts.controllerSignature.name}/${requestPath}: Succeeded...`);
         res.respond(200, value);
     }
 

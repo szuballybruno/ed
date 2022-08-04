@@ -37,8 +37,10 @@ export const AdminCourseContentSubpage = () => {
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>('item_edit_dialog');
+    const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
+
+    console.log(itemEditDialogLogic.isOpen);
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);

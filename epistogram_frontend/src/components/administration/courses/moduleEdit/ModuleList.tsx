@@ -7,7 +7,7 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
-import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
+import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
 import { FlexListItem } from '../../../universal/FlexListItem';
 
 export const ModuleList = ({
@@ -15,7 +15,7 @@ export const ModuleList = ({
     editModule,
     mutator
 }: {
-    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
+    mutator: MutableRefObject<IXMutator<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
     editModule: (moduleVersionId: Id<'ModuleVersion'>) => void,
     canDelete: (moduleVersionId: Id<'ModuleVersion'>) => boolean
 }) => {
