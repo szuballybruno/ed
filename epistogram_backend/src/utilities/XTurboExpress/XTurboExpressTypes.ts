@@ -55,6 +55,8 @@ export type RegisterEndpointOptsType<TRequest, TResponse> = {
     path: string;
     action: (req: TRequest, res: TResponse) => Promise<void>;
     isPost: boolean;
+    controllerSignature: ITurboExpressLayer<any>,
+    options: any
 }
 
 export type TurboActionType = {

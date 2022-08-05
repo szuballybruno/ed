@@ -28,6 +28,8 @@ export const ItemEditDialog = ({
         isVideo
     } = dialogLogic.params;
 
+    const isExam = !isVideo;
+
     const handleCallback = useCallback((questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => {
 
         dialogLogic.closeDialog();
@@ -48,7 +50,7 @@ export const ItemEditDialog = ({
             content: () => <AdminVideoStatisticsModalPage />,
             title: 'Statisztika'
         })
-        .addIf(!isVideo, {
+        .addIf(isExam, {
             content: () => <ExamEditor
                 callback={handleCallback}
                 examVersionId={itemVersionId as Id<'ExamVersion'>}
@@ -57,7 +59,7 @@ export const ItemEditDialog = ({
                 answerMutations={answerMutations} />,
             title: 'Kérdések',
         })
-        .addIf(!isVideo, {
+        .addIf(isExam, {
             content: () => <AdminExamStatisticsModalPage />,
             title: 'Statisztika',
         })

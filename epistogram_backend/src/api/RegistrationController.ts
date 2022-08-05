@@ -43,7 +43,7 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
             }
         };
 
@@ -68,7 +68,7 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
             }
         };
 
@@ -91,7 +91,7 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
             }
         };
     }
@@ -115,7 +115,7 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(params.principalId, 'CREATE_NEW_USER');
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
             }
         };
     }

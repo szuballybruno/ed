@@ -25,21 +25,23 @@ export class AuthorizationService {
             .hasPermissionAsync(principalId, searchPermissionCode as any, params);
 
         if (!hasPermission)
-            throw new ErrorWithCode('User has no permission to access resource.', 'no permission');
-    }
-
-    async getCheckPermissionResultAsync<TCode extends PermissionCodeType>(
-        ...args: GetPermissionScope<TCode> extends 'USER'
-            ? [PrincipalId, TCode]
-            : [PrincipalId, TCode, GetParamByCodeType<TCode>]) {
-
-        const [principalId, searchPermissionCode, params] = args;
-
-        const hasPermission = await this
-            .hasPermissionAsync(principalId, searchPermissionCode as any, params);
+            throw new ErrorWithCode(`User (${principalId.toSQLValue()}) has no permission to access resource, protected by: "${searchPermissionCode}" permission.`, 'no permission');
 
         return hasPermission ? AuthorizationResult.ok : AuthorizationResult.failed;
     }
+
+    // async checkPermissionAsync<TCode extends PermissionCodeType>(
+    //     ...args: GetPermissionScope<TCode> extends 'USER'
+    //         ? [PrincipalId, TCode]
+    //         : [PrincipalId, TCode, GetParamByCodeType<TCode>]) {
+
+    //     const [principalId, searchPermissionCode, params] = args;
+
+    //     const hasPermission = await this
+    //         .hasPermissionAsync(principalId, searchPermissionCode as any, params);
+
+    //     return hasPermission ? AuthorizationResult.ok : AuthorizationResult.failed;
+    // }
 
     async hasPermissionAsync<TCode extends PermissionCodeType>(
         ...args: GetPermissionScope<TCode> extends 'USER'

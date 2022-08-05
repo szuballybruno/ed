@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { Id } from '../../../../shared/types/versionId';
-import { iterate, useForceUpdate } from '../../../../static/frontendHelpers';
-import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
+import { iterate } from '../../../../static/frontendHelpers';
+import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
 import { AnswerMutationsType, QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridLogic = (
@@ -16,25 +16,8 @@ export const useQuestionEditGridLogic = (
     showTiming?: boolean,
     getPlayedSeconds?: () => number,) => {
 
-    const forceUpdate = useForceUpdate();
-
-    const questionMutatorRef = useRef(new XMutatorCore<QuestionEditDataDTO, 'questionVersionId', Id<'QuestionVersion'>>({
-        keyPropertyName: 'questionVersionId',
-        onMutationsChanged: () => {
-
-            // console.log('-- Question mutations changed.');
-            forceUpdate();
-        }
-    }));
-
-    const answerMutatorRef = useRef(new XMutatorCore<AnswerEditDTO, 'answerVersionId', Id<'AnswerVersion'>>({
-        keyPropertyName: 'answerVersionId',
-        onMutationsChanged: () => {
-
-            // console.log('-- Answer mutations changed.');
-            forceUpdate();
-        }
-    }));
+    const questionMutatorRef = useXMutator(QuestionEditDataDTO, 'questionVersionId');
+    const answerMutatorRef = useXMutator(AnswerEditDTO, 'answerVersionId');
 
     // if video or exam version id changed
     // load questions, answers, and mutations 

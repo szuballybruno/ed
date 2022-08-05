@@ -107,7 +107,7 @@ export class CourseService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }
@@ -143,7 +143,7 @@ export class CourseService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
 
             }
         };
@@ -195,7 +195,7 @@ export class CourseService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
     }
@@ -228,7 +228,7 @@ export class CourseService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
     }
@@ -297,7 +297,7 @@ export class CourseService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
 
@@ -361,7 +361,7 @@ export class CourseService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
 
@@ -405,7 +405,7 @@ export class CourseService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(userId, 'ACCESS_ADMIN');
             }
         };
 
@@ -448,7 +448,7 @@ export class CourseService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
 
@@ -520,7 +520,7 @@ export class CourseService {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(userId, 'ACCESS_ADMIN');
             }
         };
 
@@ -550,7 +550,7 @@ export class CourseService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
     }
@@ -569,7 +569,7 @@ export class CourseService {
 
         return {
             auth: () => this._authorizationService
-                .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN'),
+                .checkPermissionAsync(principalId, 'ACCESS_ADMIN'),
             action: async () => {
 
                 const courses = await this._ormService

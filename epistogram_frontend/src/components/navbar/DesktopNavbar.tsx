@@ -28,8 +28,6 @@ export const DesktopNavbar = ({
     backgroundContent?: any
 }) => {
 
-    console.log(currentCourseItemCode);
-
     const isLowHeight = !!_isLowHeight;
     const isMinimalMode = !!_isMinimalMode;
 

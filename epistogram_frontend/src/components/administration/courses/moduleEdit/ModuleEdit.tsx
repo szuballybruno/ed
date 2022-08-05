@@ -5,14 +5,14 @@ import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
-import { XMutatorCore } from '../../../lib/XMutator/XMutatorCore';
+import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
 import { SelectImage } from '../../../universal/SelectImage';
 
 export const ModuleEdit = ({
     mutator,
     dto
 }: {
-    mutator: MutableRefObject<XMutatorCore<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
+    mutator: MutableRefObject<IXMutator<ModuleEditDTO, 'versionId', Id<'ModuleVersion'>>>,
     dto: ModuleEditDTO
 }) => {
 

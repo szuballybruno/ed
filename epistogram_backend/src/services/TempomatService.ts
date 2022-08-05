@@ -56,7 +56,7 @@ export class TempomatService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'SET_TEMPOMAT_MODE_GLOBAL');
+                    .checkPermissionAsync(principalId, 'SET_TEMPOMAT_MODE_GLOBAL');
             }
         };
     }
@@ -99,7 +99,7 @@ export class TempomatService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
 

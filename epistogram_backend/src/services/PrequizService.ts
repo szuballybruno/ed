@@ -68,7 +68,7 @@ export class PrequizService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
 
@@ -109,7 +109,7 @@ export class PrequizService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
 
@@ -161,7 +161,7 @@ export class PrequizService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
     }
@@ -182,7 +182,7 @@ export class PrequizService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
     }

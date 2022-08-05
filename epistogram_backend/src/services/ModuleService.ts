@@ -75,7 +75,7 @@ export class ModuleService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
     }
@@ -109,7 +109,7 @@ export class ModuleService {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
             }
         };
     }

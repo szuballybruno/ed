@@ -79,7 +79,7 @@ export const permissionCodes = fn({
         scope: 'COMPANY'
     },
     EDIT_COURSES: {
-        code: 'EDIT_COURSE',
+        code: 'EDIT_COURSES',
         scope: 'USER'
     },
     WATCH_COURSE: {

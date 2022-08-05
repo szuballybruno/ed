@@ -69,7 +69,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -97,7 +97,7 @@ export class CommentService extends QueryServiceBase<Comment> {
             auth: async () => {
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
 

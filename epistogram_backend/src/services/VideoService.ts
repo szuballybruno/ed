@@ -69,7 +69,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -222,7 +222,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
                     .getSingle();
 
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId });
+                    .checkPermissionAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId });
             }
         };
 

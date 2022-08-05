@@ -46,7 +46,7 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }
@@ -67,7 +67,7 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
 
@@ -92,7 +92,7 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS');
+                    .checkPermissionAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS');
             }
         };
     }
@@ -113,7 +113,7 @@ export class CoinTransactionService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(userId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(userId, 'ACCESS_APPLICATION');
             }
         };
     }

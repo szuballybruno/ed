@@ -2,6 +2,7 @@ import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
 import { Mutation } from '../../../shared/dtos/mutations/Mutation';
 import { getKeys } from '../../../shared/logic/sharedLogic';
 import { clone } from '../../../static/frontendHelpers';
+import { Logger } from '../../../static/Logger';
 
 export type StringKeyof<T> = (keyof T) & string;
 
@@ -43,6 +44,9 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         keyPropertyName: TKeyField,
         onMutationsChanged?: OnMutationHandlerType<TKey>,
     }) {
+
+        Logger.logScoped('MUTATIONS', 'Creating mutator... ' + opts.keyPropertyName);
+
         this._keyPropertyName = opts.keyPropertyName;
 
         if (opts.onMutationsChanged)
@@ -483,3 +487,5 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         return key;
     };
 }
+
+export type IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> = XMutatorCore<TMutatee, TKeyField, TKey>;

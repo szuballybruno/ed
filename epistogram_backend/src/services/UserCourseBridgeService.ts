@@ -151,7 +151,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ASSIGN_COURSE_PERMISSIONS');
+                    .checkPermissionAsync(principalId, 'ASSIGN_COURSE_PERMISSIONS');
             }
         };
 
@@ -187,7 +187,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'SET_COURSE_MODE_GLOBAL');
+                    .checkPermissionAsync(principalId, 'SET_COURSE_MODE_GLOBAL');
             }
         };
 
@@ -216,7 +216,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }
@@ -268,7 +268,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_ADMIN');
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
             }
         };
 
@@ -310,7 +310,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
     }
@@ -356,7 +356,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             },
             auth: async () => {
                 return this._authorizationService
-                    .getCheckPermissionResultAsync(principalId, 'ACCESS_APPLICATION');
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
 

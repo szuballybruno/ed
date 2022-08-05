@@ -152,9 +152,17 @@ export class TurboExpressBuilder<
              * It returns an auth res, 
              * throw exceptions accordingly.
              */
+            if (!controllerActionResult.auth)
+                throw new Error('Controller action declaration has no auth block!');
+
             const authRes = await controllerActionResult.auth();
-            if (authRes.state === 'FAILED')
+            if (authRes.state === 'FAILED') {
+
+                this._loggerService
+                    .logScoped('GENERIC', 'ERROR', 'Authorization function returned "FAILED" state.');
+
                 throw new ErrorWithCode('Authorization failed!', 'no permission');
+            }
 
             const actionRes = await controllerActionResult.action();
 
@@ -209,6 +217,8 @@ export class TurboExpressBuilder<
                 path,
                 action: asyncStuff,
                 isPost: !!options?.isPost,
+                options,
+                controllerSignature
             });
     };
 
