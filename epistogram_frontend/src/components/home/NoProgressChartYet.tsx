@@ -1,18 +1,15 @@
 
+import { Flex } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoHeader } from '../EpistoHeader';
 
 export const NoProgressChartYet = () => {
 
-    return <>
-        {/* locked overlay */}
-        <EpistoHeader
-            text={translatableTexts.homePage.statsSummary.mostImportantStatistics}
-            showDivider
-            variant="strongSub"
-            m="5px 10px 20px 10px" />
+    return <Flex
+        flex='1'
+        direction='column'
+        justify='center'>
 
         {/* bar chart */}
         <img
@@ -31,5 +28,5 @@ export const NoProgressChartYet = () => {
             }}>
             {translatableTexts.homePage.noStatsYet}
         </EpistoFont>
-    </>;
+    </Flex>;
 };

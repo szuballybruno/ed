@@ -139,7 +139,7 @@ export class TempomatService {
         const tempomatCalculationDatas = await this
             .getTempomatCalculationDatasAsync(userId);
 
-        if (!tempomatCalculationDatas)
+        if (tempomatCalculationDatas.length === 0)
             return null;
 
         const allLagBehindPercentages = tempomatCalculationDatas
@@ -154,7 +154,7 @@ export class TempomatService {
         if (allLagBehindPercentages.any(x => x === null))
             return null;
 
-        // wtf
+        // calculates the average lag beghind from all started course
         const avgLagBehindPercentage = allLagBehindPercentages
             .reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
 
@@ -413,7 +413,7 @@ export class TempomatService {
                     return addDays(originalPrevisionedCompletionDate, lagBehindDays);
                 case 'balanced':
 
-                    if (!adjustmentCorrection)
+                    if (!adjustmentCorrection || adjustmentCorrection === 0)
                         throw new Error('No adjustment correction provided');
 
                     return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
@@ -422,7 +422,7 @@ export class TempomatService {
                     return originalPrevisionedCompletionDate;
                 case 'auto':
 
-                    if (!adjustmentCorrection)
+                    if (!adjustmentCorrection || adjustmentCorrection === 0)
                         throw new Error('No adjustment correction provided');
 
                     return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);

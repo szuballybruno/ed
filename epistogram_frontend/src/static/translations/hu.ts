@@ -161,7 +161,7 @@ export const huTranslation: TranslationType = {
             mostRelevantStatistics: 'Legfontosabb statisztikáim',
             tasks: 'Feladatok',
             stats: 'Legfontosabb statisztikáid',
-            noStatsYet: 'Tanulási és felejtési görbéd kalkulálásához legalább 30 nap és minimum 20 órányi belépés szükséges',
+            noStatsYet: 'A haladási becslésed megtekintéséhez minimum 5 nap szükséges',
 
             statsSummary: {
                 mostImportantStatistics: 'Legfontosabb statisztikáid',

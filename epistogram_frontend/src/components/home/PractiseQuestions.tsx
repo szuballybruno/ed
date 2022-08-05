@@ -245,6 +245,6 @@ export const PractiseQuestions = () => {
             )
             : currentCourseItemCode
                 ? <NoQuestionsAvailable />
-                : <InitialGreetings />}
+                : <Flex></Flex>}
     </LoadingFrame>;
 };

@@ -1,8 +1,7 @@
-import { Flex, Image, Tooltip } from '@chakra-ui/react';
+import { Flex, Image } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
@@ -158,7 +157,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             align="center"
                             my="10px">
 
-                            <Image
+                            {/* <Image
                                 h="30px"
                                 w="30px"
                                 mr="5px"
@@ -172,7 +171,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                 {texts.dateRange}
                             </EpistoFont>
 
-                            {/* Date picker tooltip */}
+                            {/* Date picker tooltip 
                             <Tooltip title={'tiptool'}
                                 p="20px">
 
@@ -185,11 +184,12 @@ export const AdminUserStatisticsSubpage = (props: {
                                     endDate={endDate}
                                     selectsRange
                                 />
-                            </Tooltip>
+                            </Tooltip> */}
                         </Flex>
                     )}>
 
-                    <Flex minH="400px">
+                    <Flex
+                        mt='10px'>
 
                         <Flex
                             direction="column"
@@ -266,7 +266,7 @@ export const AdminUserStatisticsSubpage = (props: {
                         <Flex
                             direction="column"
                             flex="5"
-                            p="0 0 10px 5px">
+                            p="0 0 10px 20px">
 
                             <Flex h="150px">
 
@@ -286,7 +286,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                     title={texts.statisticsCards.watchedVideosInMonth} />
                             </Flex>
 
-                            <Flex p="10px">
+                            <Flex p="20px 10px 10px 2px">
 
                                 {texts.statisticsCards.userEngagementDescription}
                             </Flex>
@@ -411,7 +411,6 @@ export const AdminUserStatisticsSubpage = (props: {
                                 gridRow: 'auto / span 2'
                             }}>
 
-                            {console.log(userLearningOverviewData?.userActivityDistributionData.watchingVideosPercentage)}
                             <EpistoPieChart
                                 title=""
                                 isSortValues

@@ -1,5 +1,6 @@
 import { Flex, Grid } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
+import { useEffect } from 'react';
 import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { Environment } from '../../static/Environemnt';
@@ -15,12 +16,18 @@ export const HomePageCourseStats = (props: {
 }) => {
 
     const { activeCoursesPaging } = props;
-    console.log(activeCoursesPaging.items);
+
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
     const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
+
+    useEffect(() => {
+
+        if (!userProgressDataIsValid)
+            return;
+    }, [userProgressData]);
 
     const estimatedCompletionDateString = recommendedItemQuota?.previsionedCompletionDate
         ? new Date(recommendedItemQuota?.previsionedCompletionDate)
@@ -32,76 +39,86 @@ export const HomePageCourseStats = (props: {
 
     return <Flex
         mt='10px'
+        flex='1'
+        minHeight='450px'
+        minWidth='100%'
         direction='column'>
 
         <Flex
+            minHeight='400px'
+            width='100%'
+            align='center'
+            flexWrap='wrap'
+            justify='space-between'
             flex='1'>
 
-            {recommendedItemQuota
-                ? <Grid
-                    background='transparent'
-                    boxShadow="unset"
-                    direction="column"
-                    w='550px'
-                    minW={'550px'}
-                    p="10px"
-                    style={{
-                        gridColumn: 'auto / span 2',
-                        gridRow: 'auto / span 1',
-                        boxSizing: 'border-box',
-                        gap: '10px',
-                        gridAutoFlow: 'row dense',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                        gridAutoRows: '160px'
-                    }} >
-                    <img
-                        src={currentCourse?.coverFilePath ?? ''}
-                        alt=""
+            <Flex
+                flex='2'>
+
+                {recommendedItemQuota
+                    ? <Grid
+                        background='transparent'
+                        boxShadow="unset"
+                        direction="column"
+                        w='550px'
+                        minW={'550px'}
+                        p="10px"
                         style={{
-                            height: '100%',
-                            width: '100%',
-                            objectFit: 'cover'
-                        }}
-                        className="roundBorders" />
+                            boxSizing: 'border-box',
+                            gap: '10px',
+                            gridAutoFlow: 'row dense',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                            gridAutoRows: '160px'
+                        }} >
+                        <img
+                            src={currentCourse?.coverFilePath ?? ''}
+                            alt=""
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover'
+                            }}
+                            className="roundBorders" />
 
-                    <StatisticsCard
-                        title={'Teljesítve az ajánlott napi videókból'}
-                        value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
-                        suffix={''}
-                        iconPath={Environment.getAssetUrl('/images/dailyquota.png')}
-                        isOpenByDefault={false} />
+                        <StatisticsCard
+                            title={'Teljesítve az ajánlott napi videókból'}
+                            value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
+                            suffix={''}
+                            iconPath={Environment.getAssetUrl('/images/dailyquota.png')}
+                            isOpenByDefault={false} />
 
-                    <StatisticsCard
-                        title={'Teljesítve az ajánlott heti videókból'}
-                        value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
-                        suffix={''}
-                        iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
-                        isOpenByDefault={false} />
+                        <StatisticsCard
+                            title={'Teljesítve az ajánlott heti videókból'}
+                            value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
+                            suffix={''}
+                            iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
+                            isOpenByDefault={false} />
 
-                    <StatisticsCard
-                        title={'A kurzus várható befejezési ideje'}
-                        value={estimatedCompletionDateString}
-                        suffix={''}
-                        iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
-                        isOpenByDefault={false} />
+                        <StatisticsCard
+                            title={'A kurzus várható befejezési ideje'}
+                            value={estimatedCompletionDateString}
+                            suffix={''}
+                            iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
+                            isOpenByDefault={false} />
 
-                </Grid>
-                : <Flex
-                    align='center'
-                    justify='center'
-                    textAlign='center'
-                    style={{
-                        gridColumn: 'auto / span 2',
-                        gridRow: 'auto / span 2',
-                        boxSizing: 'border-box',
-                        gap: '10px',
-                        gridAutoFlow: 'row dense',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-                        gridAutoRows: '160px'
-                    }}>
+                    </Grid>
+                    : <Flex
+                        align='center'
+                        justify='center'
+                        textAlign='center'
+                        style={{
+                            boxSizing: 'border-box',
+                            gap: '10px',
+                            gridAutoFlow: 'row dense',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                            gridAutoRows: '160px'
+                        }}>
 
-                    Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
-                </Flex>}
+                        Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
+                    </Flex>}
+            </Flex>
+
+
 
 
             {/* chart item  */}
@@ -109,15 +126,12 @@ export const HomePageCourseStats = (props: {
                 flex='3'
                 background='transparent'
                 boxShadow="unset"
+                minW='500px'
+                h='100%'
                 direction="column"
-                p="10px"
-                minWidth={250}
-                style={{
-                    gridColumn: 'auto / span 3',
-                    gridRow: 'auto / span 1'
-                }} >
+                p="10px" >
 
-                {userProgressDataIsValid
+                {(userProgressDataIsValid && userProgressData.dates.length > 5)
                     ? <UserProgressChart userProgress={userProgressData!} />
                     : <NoProgressChartYet />}
             </FlexFloat>
@@ -125,6 +139,7 @@ export const HomePageCourseStats = (props: {
 
         {/* navigation buttons */}
         <Flex
+            flex='1'
             h="30px"
             mt='10px'
             align="center"

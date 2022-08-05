@@ -332,12 +332,10 @@ export class UserStatsService {
         const avgPerformancePercentage = userPerformanceViewFiltered
             .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViewFiltered.length;
 
+
         const avgLagBehindPercentage = await this
             ._tempomatService
-            .getAvgLagBehindPercentage(userId);
-
-        if (!avgLagBehindPercentage)
-            return null;
+            .getAvgLagBehindPercentage(userId) || 0;
 
         const lagBehindPoints = 100 - avgLagBehindPercentage;
 

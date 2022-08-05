@@ -108,6 +108,12 @@ export class UserProgressService extends ServiceBase {
 
                 const userId = principalId.getId();
 
+                const dailyViews = await this._ormService
+                    .query(UserDailyCourseItemProgressView, { userId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getMany();
+
                 const tempomatData = await this
                     ._tempomatService
                     .calculateTempomatValuesAsync(userId, courseId);
@@ -124,53 +130,23 @@ export class UserProgressService extends ServiceBase {
                     ? dateDiffInDays(startDate, originalPrevisionedCompletionDate)
                     : null;
 
-                const dailyViews = await this._ormService
-                    .query(UserDailyCourseItemProgressView, { userId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getMany();
+                const calculateDatesFromStart = (startDate: Date, estimatedLengthInDays: number) => {
 
-                const estimatedLengthInDaysOrNull = estimatedLengthInDays
-                    ? estimatedLengthInDays + 1
-                    : null;
+                    return forN(estimatedLengthInDays, index => {
 
-                const originalEstimatedLengthInDaysOrNull = originalEstimatedLengthInDays
-                    ? originalEstimatedLengthInDays + 1
-                    : null;
+                        const date = new Date(startDate)
+                            .addDays(index);
 
-                if (!estimatedLengthInDaysOrNull)
-                    throw new Error('Couldn\'t estimate course length');
-
-                if (!originalEstimatedLengthInDaysOrNull)
-                    throw new Error('Couldn\'t estimate course length');
-
-                const estimatedDates = forN(estimatedLengthInDaysOrNull, index => {
-
-                    if (!startDate)
-                        return '';
-
-                    const date = new Date(startDate)
-                        .addDays(index);
-
-                    return date.toLocaleDateString(undefined, {
-                        month: '2-digit',
-                        day: '2-digit'
+                        return date.toLocaleDateString(undefined, {
+                            month: '2-digit',
+                            day: '2-digit'
+                        });
                     });
-                });
 
-                const originalEstimatedDates = forN(originalEstimatedLengthInDaysOrNull, index => {
+                };
 
-                    if (!startDate)
-                        return null;
-
-                    const date = new Date(startDate)
-                        .addDays(index);
-
-                    return date.toLocaleDateString(undefined, {
-                        month: '2-digit',
-                        day: '2-digit'
-                    });
-                });
+                const estimatedDates = calculateDatesFromStart(startDate!, estimatedLengthInDays!);
+                const originalEstimatedDates = calculateDatesFromStart(startDate!, originalEstimatedLengthInDays!);
 
 
                 const daysFromStart = startDate
@@ -181,11 +157,13 @@ export class UserProgressService extends ServiceBase {
                     ? forN(daysFromStart, index => index)
                     : null;
 
-                const previsionedProgress = estimatedDates
-                    .map((_, index) => (100 / estimatedDates.length) * (index + 1)) as EpistoLineChartDataType;
+                const calculateEpistoLineChartData = (dates: string[]): EpistoLineChartDataType => {
+                    return dates
+                        .map((_, index) => (100 / dates.length) * (index + 1)) as EpistoLineChartDataType;
+                };
 
-                const originalPrevisionedProgress = originalEstimatedDates
-                    .map((_, index) => (100 / originalEstimatedDates.length) * (index + 1)) as EpistoLineChartDataType;
+                const previsionedProgress = calculateEpistoLineChartData(estimatedDates);
+                const originalPrevisionedProgress = calculateEpistoLineChartData(originalEstimatedDates);
 
                 let latestCompletionDatePercentage = 0;
 
@@ -204,7 +182,7 @@ export class UserProgressService extends ServiceBase {
                     })
                     : [];
 
-                const interval = Math.floor(estimatedDates.length / 7);
+                //const interval = Math.floor(estimatedDates.length / 7);
 
                 return instantiate<UserCourseProgressChartDTO>({
                     dates: estimatedDates,
