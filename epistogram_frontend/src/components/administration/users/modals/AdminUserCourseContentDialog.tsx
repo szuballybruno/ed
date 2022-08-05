@@ -34,7 +34,9 @@ export const AdminUserCourseContentDialog = (props: {
     const moreInfoDialogTabs = [
         {
             title: 'Áttekintés',
-            component: <AdminUserCourseStatsOverview />
+            component: <AdminUserCourseStatsOverview
+                courseId={courseId!}
+                userId={userId} />
         },
         {
             title: 'Videók',

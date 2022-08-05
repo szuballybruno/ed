@@ -27,7 +27,7 @@ export const AdminUserCourseContentSubpage = (props: {
     const { userEditData } = useEditUserData(userId);
     const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
+    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('userCourseContentDialog');
 
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();

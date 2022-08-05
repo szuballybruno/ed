@@ -28,6 +28,9 @@ WITH user_course_stats AS
         NULLIF(clsv.completed_course_item_count, 0) /
         NULLIF(clsv.total_course_item_count, 0)::double precision * 100 course_progress_percentage,
         
+        -- correct answer rate
+        clsv.question_success_rate correct_answer_rate,
+
         -- current performance per course
         (
             SELECT

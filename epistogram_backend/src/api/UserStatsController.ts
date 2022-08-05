@@ -85,4 +85,22 @@ export class UserStatsController implements XController<UserStatsController> {
         return this._userStatsService
             .getUserLearningOverviewDataAsync(params.principalId, userId);
     }
+
+    @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)
+    getUserCourseStatsOverviewDataAction(params: ActionParams) {
+
+        const query = params
+            .getQuery<any>();
+
+        const userId = Id
+            .create<'User'>(query
+                .getValue(x => x.userId, 'int'));
+
+        const courseId = Id
+            .create<'Course'>(query
+                .getValue(x => x.courseId, 'int'));
+
+        return this._userStatsService
+            .getUserCourseStatsOverviewData(params.principalId, userId, courseId);
+    }
 }

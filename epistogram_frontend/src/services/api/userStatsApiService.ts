@@ -1,6 +1,7 @@
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
+import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOverviewDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
@@ -27,6 +28,17 @@ export const useUserLearningPageStats = (userId: Id<'User'>) => {
         userLearningPageStats: queryRes.data,
         userLearningPageStatsStatus: queryRes.state,
         userLearningPageStatsError: queryRes.error
+    };
+};
+
+export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<'Course'>) => {
+
+    const queryRes = useReactQuery2<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });
+
+    return {
+        userCourseStatsOverviewData: queryRes.data,
+        userCourseStatsOverviewDataStatus: queryRes.state,
+        userCourseStatsOverviewDataError: queryRes.error
     };
 };
 

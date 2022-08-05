@@ -15,6 +15,7 @@ import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
+import { UserCourseStatsOverviewDTO } from '../shared/dtos/UserCourseStatsOverviewDTO';
 import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
@@ -26,6 +27,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
+import { UserProgressService } from './UserProgressService';
 
 export class UserStatsService {
 
@@ -33,17 +35,20 @@ export class UserStatsService {
     private _mapperService: MapperService;
     private _tempomatService: TempomatService;
     private _authorizationService: AuthorizationService;
+    private _userProgressService: UserProgressService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperSvc: MapperService,
         tempomatService: TempomatService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        userProgressService: UserProgressService) {
 
         this._ormService = ormService;
         this._mapperService = mapperSvc;
         this._tempomatService = tempomatService;
         this._authorizationService = authorizationService;
+        this._userProgressService = userProgressService;
     }
 
     getHomePageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
@@ -310,6 +315,43 @@ export class UserStatsService {
 
 
     }
+
+    getUserCourseStatsOverviewData = (
+        principalId: PrincipalId,
+        userId: Id<'User'>,
+        courseId: Id<'Course'>
+    ) => {
+
+        return {
+            action: async () => {
+
+                const courseStats = await this._ormService
+                    .query(UserCourseStatsView, { userId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('courseId', '=', 'courseId')
+                    .getSingle();
+
+                const userSpentTimeRatio = await this._ormService
+                    .query(UserSpentTimeRatioView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
+
+                const progressChartData = await this._userProgressService
+                    .getProgressChartDataAsync(principalId, courseId, userId)
+                    .action();
+
+                return this._mapperService
+                    .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData]);
+
+            },
+            auth: async () => {
+
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
+            }
+        };
+
+    };
 
     calculateProductivityAsync = async (userId: Id<'User'>) => {
 

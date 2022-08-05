@@ -534,6 +534,14 @@ export const huTranslation: TranslationType = {
                     averageSessionLength: 'Egy belépés átlagos hossza',
                     videosToBeRepeated: 'Ismétlésre ajánlott videó'
                 },
+                userCourseStatsOverviewDialog: {
+                    statisticsCards: {
+                        totalWatchedVideosCount: 'Megtekintett videó',
+                        totalPlaybackTime: 'Videónézéssel eltöltött idő',
+                        totalGivenAnswerCount: 'Megválaszolt kérdés',
+                        correctAnswerRate: 'Helyes válaszok aránya'
+                    }
+                },
                 dateRange: 'Vizsgált időszak'
             },
             editUserControl: {

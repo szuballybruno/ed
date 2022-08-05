@@ -15,6 +15,10 @@ export class UserPerformanceView {
 
     @ViewColumn()
     @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @ViewColumn()
+    @XViewColumn()
     performancePercentage: number;
 
     /*     @ViewColumn()

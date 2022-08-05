@@ -35,6 +35,10 @@ export class UserCourseStatsView {
 
     @ViewColumn()
     @XViewColumn()
+    correctAnswerRate: number;
+
+    @ViewColumn()
+    @XViewColumn()
     courseProgressPercentage: number;
 
     @ViewColumn()

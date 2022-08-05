@@ -101,22 +101,28 @@ export class UserProgressService extends ServiceBase {
 
     }
 
-    getProgressChartDataAsync(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
+    getProgressChartDataAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>,
+        userId?: Id<'User'>
+    ): ControllerActionReturnType {
 
         return {
             action: async (): Promise<UserCourseProgressChartDTO | 'NO DATA'> => {
 
-                const userId = principalId.getId();
+                const userIdOrPrincipalId = userId
+                    ? userId
+                    : principalId.getId();
 
                 const dailyViews = await this._ormService
-                    .query(UserDailyCourseItemProgressView, { userId, courseId })
-                    .where('userId', '=', 'userId')
+                    .query(UserDailyCourseItemProgressView, { userIdOrPrincipalId, courseId })
+                    .where('userId', '=', 'userIdOrPrincipalId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
 
                 const tempomatData = await this
                     ._tempomatService
-                    .calculateTempomatValuesAsync(userId, courseId);
+                    .calculateTempomatValuesAsync(userIdOrPrincipalId, courseId);
 
                 const originalPrevisionedCompletionDate = tempomatData?.originalPrevisionedCompletionDate || null;
                 const previsionedCompletionDate = tempomatData?.previsionedCompletionDate || null;

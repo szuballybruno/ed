@@ -47,10 +47,11 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
+import { UserCourseStatsViewWithTempomatData, UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
+import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
@@ -111,13 +112,16 @@ import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
 import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
+import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOverviewDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
+import { UserActivityDistributionChartData } from '../../shared/types/epistoChartTypes';
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
@@ -128,6 +132,32 @@ import { Mutable } from './XMapperService/XMapperTypes';
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
+
+    epistoMappingsBuilder
+        .addMapping(UserCourseStatsOverviewDTO, () => (
+            view: UserCourseStatsView,
+            userSpentTimeRatio: UserSpentTimeRatioView,
+            progressChartData: UserCourseProgressChartDTO
+        ) => instantiate<UserCourseStatsOverviewDTO>({
+            courseId: view.courseId,
+            userId: view.userId,
+            courseName: view.title,
+            answeredPractiseQuestionCount: view.answeredPractiseQuestionCount,
+            answeredVideoQuestionCount: view.answeredVideoQuestionCount,
+            courseProgressPercentage: view.courseProgressPercentage,
+            correctAnswerRate: view.correctAnswerRate,
+            performancePercentage: view.performancePercentage,
+            startDate: view.startDate,
+            totalCompletedItemCount: view.totalCompletedItemCount,
+            totalSpentSeconds: view.totalSpentSeconds,
+            userActivityDistributionChartData: instantiate<UserActivityDistributionChartData>({
+                watchingVideosPercentage: userSpentTimeRatio.totalVideoWatchElapsedTime,
+                completingExamsPercentage: userSpentTimeRatio.totalExamSessionElapsedTime,
+                answeringQuestionsPercentage: userSpentTimeRatio.totalQuestionElapsedTime,
+                noActivityPercentage: userSpentTimeRatio.otherTotalSpentSeconds
+            }),
+            progressChartData: progressChartData
+        })),
 
     epistoMappingsBuilder
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (

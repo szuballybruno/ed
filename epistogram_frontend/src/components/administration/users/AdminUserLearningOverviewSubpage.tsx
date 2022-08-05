@@ -8,6 +8,7 @@ import { ButtonType } from '../../../models/types';
 import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { isCurrentAppRoute } from '../../../static/frontendHelpers';
@@ -21,10 +22,12 @@ import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseSt
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
 import { AdminUserList } from './AdminUserList';
+import { AdminUserCourseContentDialog } from './modals/AdminUserCourseContentDialog';
 
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
@@ -80,6 +83,8 @@ export const AdminUserStatisticsSubpage = (props: {
     const { navigate2 } = useNavigation();
     const navigateToAddUser = () => navigate2(usersRoute.addRoute);
 
+    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('userCourseContentDialog');
+
     const { userEditData } = useEditUserData(userId);
     const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = useUserLearningOverviewData(userId);
 
@@ -92,7 +97,6 @@ export const AdminUserStatisticsSubpage = (props: {
     const completingExamsPercentage = userLearningOverviewData?.userActivityDistributionData.completingExamsPercentage || 0;
     const answeringQuestionsPercentage = userLearningOverviewData?.userActivityDistributionData.answeringQuestionsPercentage || 0;
     const noActivityPercentage = userLearningOverviewData?.userActivityDistributionData.noActivityPercentage || 0;
-
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(null);
@@ -145,6 +149,8 @@ export const AdminUserStatisticsSubpage = (props: {
                                 : [])
                 }
                 headerButtons={bulkEditButtons}>
+
+                <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
 
                 {/* learning insights header */}
                 <EditSection
@@ -307,7 +313,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             return <LearningCourseStatsTile
                                 actionButtons={[{
                                     children: translatableTexts.misc.details,
-                                    onClick: () => { return; }
+                                    onClick: () => { dialogLogic.openDialog({ params: { courseId: course.courseId } }); }
                                 }]}
                                 course={course}
                                 key={index} />;

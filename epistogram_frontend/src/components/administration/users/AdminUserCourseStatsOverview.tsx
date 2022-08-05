@@ -1,8 +1,52 @@
 import { Flex } from '@chakra-ui/react';
+import { useUserCourseStatsOverviewData } from '../../../services/api/userStatsApiService';
+import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
+import { Environment } from '../../../static/Environemnt';
+import { roundNumber } from '../../../static/frontendHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { NoProgressChartYet } from '../../home/NoProgressChartYet';
+import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 
-export const AdminUserCourseStatsOverview = () => {
+export const AdminUserCourseStatsOverview = (props: {
+    userId: Id<'User'>
+    courseId: Id<'Course'>
+}) => {
+
+    const {
+        userId,
+        courseId
+    } = props;
+
+    const texts = translatableTexts.administration.userLearningOverviewSubpage;
+
+    const { userCourseStatsOverviewData } = useUserCourseStatsOverviewData(userId, courseId);
+
+    const performancePercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.performancePercentage
+        : 0;
+
+    const courseProgressPercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.courseProgressPercentage
+        : 0;
+
+    const watchingVideosPercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.userActivityDistributionChartData.watchingVideosPercentage
+        : 0;
+
+    const completingExamsPercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.userActivityDistributionChartData.completingExamsPercentage
+        : 0;
+
+    const answeringQuestionsPercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.userActivityDistributionChartData.answeringQuestionsPercentage
+        : 0;
+
+    const noActivityPercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.userActivityDistributionChartData.noActivityPercentage
+        : 0;
 
     return <Flex
         direction="column"
@@ -22,8 +66,8 @@ export const AdminUserCourseStatsOverview = () => {
                     <EpistoPieChart
                         title="Teljesítmény"
                         segments={[
-                            { value: 70, name: 'Teljesítmény 70%' },
-                            { value: 30, name: '' },
+                            { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
+                            { value: 100 - performancePercentage, name: '' },
                         ]}
                         options={defaultCharts.twoSegmentGreenDoughnut} />
                 </Flex>
@@ -32,23 +76,35 @@ export const AdminUserCourseStatsOverview = () => {
                     <EpistoPieChart
                         title="Haladás"
                         segments={[
-                            { value: 20, name: '' },
-                            { value: 80, name: 'Haladás 20%' },
+                            { value: courseProgressPercentage, name: '' },
+                            { value: 100 - courseProgressPercentage, name: `Haladás ${roundNumber(courseProgressPercentage)}%` },
                         ]}
                         options={defaultCharts.twoSegmentRedDoughnut} />
                 </Flex>
                 <Flex flex="1">
 
                     <EpistoPieChart
-                        title="Aktivitás eloszlása"
+                        title=""
                         isSortValues
                         segments={[
-                            { value: 30, name: '' },
-                            { value: 17, name: '' },
-                            { value: 10, name: '' },
-                            { value: 20, name: '' }
+                            {
+                                value: watchingVideosPercentage,
+                                name: texts.activitiesPieChartTexts.watchingVideos
+                            },
+                            {
+                                value: completingExamsPercentage,
+                                name: texts.activitiesPieChartTexts.doingExamsOrTests
+                            },
+                            {
+                                value: answeringQuestionsPercentage,
+                                name: texts.activitiesPieChartTexts.answeringQuestions
+                            },
+                            {
+                                value: noActivityPercentage,
+                                name: texts.activitiesPieChartTexts.noActivity
+                            }
                         ]}
-                        options={defaultCharts.pie} />
+                        options={defaultCharts.pie3} />
                 </Flex>
             </Flex>
 
@@ -58,10 +114,10 @@ export const AdminUserCourseStatsOverview = () => {
                 flex="1"
                 direction="column"
                 background="var(--transparentWhite70)">
-                {/* 
-                {userStats.userProgressData
-                    ? <UserProgressChart userProgress={userStats.userProgressData} />
-                    : <NoProgressChartYet />} */}
+
+                {userCourseStatsOverviewData
+                    ? <UserProgressChart userProgress={userCourseStatsOverviewData.progressChartData} />
+                    : <NoProgressChartYet />}
             </Flex>
         </Flex>
 
@@ -77,38 +133,37 @@ export const AdminUserCourseStatsOverview = () => {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(23%, 1fr))',
                 gridAutoRows: '160px'
             }}>
-            {/* 
-            {/* total completed video count 
+            {/* total completed video count */}
             <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-                value={userStats ? userStats.completedVideoCount + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
+                title={translatableTexts.administration.userLearningOverviewSubpage.userCourseStatsOverviewDialog.statisticsCards.totalWatchedVideosCount}
+                value={userCourseStatsOverviewData ? userCourseStatsOverviewData.totalCompletedItemCount + '' : '0'}
+                suffix={translatableTexts.homePage.statsSummary.completedVideosLastMonth.suffix}
                 iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
                 isOpenByDefault={false} />
 
-            {/* total playback time 
+            {/* total playback time */}
             <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-                value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
+                title={translatableTexts.administration.userLearningOverviewSubpage.userCourseStatsOverviewDialog.statisticsCards.totalPlaybackTime}
+                value={userCourseStatsOverviewData ? roundNumber(userCourseStatsOverviewData.totalSpentSeconds / 60 / 60) + '' : '0'}
+                suffix={translatableTexts.misc.suffixes.hour}
                 iconPath={Environment.getAssetUrl('images/watch3D.png')}
                 isOpenByDefault={false} />
 
-            {/* total given answer count  
+            {/* total given answer count */}
             <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
-                value={userStats ? userStats.totalGivenAnswerCount + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
+                title={translatableTexts.administration.userLearningOverviewSubpage.userCourseStatsOverviewDialog.statisticsCards.totalGivenAnswerCount}
+                value={userCourseStatsOverviewData ? userCourseStatsOverviewData.answeredVideoQuestionCount + '' : '0'}
+                suffix={translatableTexts.misc.suffixes.count}
                 iconPath={Environment.getAssetUrl('images/answeredquestions3D.png')}
                 isOpenByDefault={false} />
 
-            {/* correct answer rate  
+            {/* correct answer rate */}
             <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
-                value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
+                title={translatableTexts.administration.userLearningOverviewSubpage.userCourseStatsOverviewDialog.statisticsCards.correctAnswerRate}
+                value={userCourseStatsOverviewData ? roundNumber(userCourseStatsOverviewData.correctAnswerRate) + '' : '0'}
+                suffix={translatableTexts.misc.suffixes.percentage}
                 iconPath={Environment.getAssetUrl('images/rightanswer3D.png')}
-                isOpenByDefault={false} /> */}
+                isOpenByDefault={false} />
         </div>
     </Flex>;
 };

@@ -495,6 +495,14 @@ export type TranslationType = {
                     averageSessionLength: string;
                     videosToBeRepeated: string
                 };
+                userCourseStatsOverviewDialog: {
+                    statisticsCards: {
+                        totalWatchedVideosCount: string;
+                        totalPlaybackTime: string;
+                        totalGivenAnswerCount: string;
+                        correctAnswerRate: string;
+                    }
+                }
                 dateRange: string
             };
             editUserControl: {
