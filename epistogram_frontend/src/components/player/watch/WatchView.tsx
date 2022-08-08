@@ -7,7 +7,7 @@ import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
 import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
-import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
+import { getRandomInteger, isBetweenThreshold, iterate, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -28,6 +28,7 @@ import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
 import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
 import { Id } from '../../../shared/types/versionId';
+import { Logger } from '../../../static/Logger';
 
 const autoplayTimeoutInS = 3;
 
@@ -186,29 +187,38 @@ export const WatchView = (props: {
     useEffect(() => {
 
         // only show when there are no questions
-        if (hasQuestions)
+        if (hasQuestions) {
+
+            Logger.logScoped('VIDEO_POPUPS', 'Video has pupup questions, adding focus popups is cancelled.');
             return;
+        }
 
         // only calculate when video is longer than delay
         // and when video length is loaded by the player
-        if (videoLength < stillWatchingDialogDelaySecs)
+        if (videoLength < stillWatchingDialogDelaySecs) {
+
+            Logger.logScoped('VIDEO_POPUPS', 'Video length is less than focus popup delay, adding focus popups is cancelled.');
             return;
+        }
 
         const remainingLength = videoLength - stillWatchingDialogShowUpThresholdSecs;
         const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs);
 
-        const dialogShowUpSeconds = [] as StillWatchingDialogMarker[];
-        for (let index = 1; index <= dialogCount + 1; index++) {
+        Logger.logScoped('VIDEO_POPUPS', 'Focus dialog count calculated: ' + dialogCount);
 
-            dialogShowUpSeconds.push({
-                showUpTimeSeconds: index * stillWatchingDialogDelaySecs,
+        const dialogShowUpSeconds: StillWatchingDialogMarker[] = iterate(dialogCount, index => {
+
+            return {
+                showUpTimeSeconds: (index + 1) * stillWatchingDialogDelaySecs,
                 answerOptionIndex: getRandomInteger(0, 2)
-            });
-        }
+            };
+        });
+
+        Logger.logScoped('VIDEO_POPUPS', 'Focus dialog show up seconds calculated: ' + dialogShowUpSeconds
+            .map(x => x.showUpTimeSeconds)
+            .join(', '));
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoLength]);
 
     // playback watcher
@@ -283,7 +293,8 @@ export const WatchView = (props: {
                 </AbsoluteFlexOverlay>
 
                 {/* still watching */}
-                <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker}
+                <AbsoluteFlexOverlay
+                    isVisible={!!currentStillWatchingMarker}
                     hasPointerEvents={true}>
                     <OverlayDialog showCloseButton={false}>
                         <StillWatching

@@ -6,7 +6,8 @@ export type LoggingKeysType =
     'AUTH' |
     'GRID' |
     'DIALOGS' |
-    'WARNING';
+    'WARNING' |
+    'VIDEO_POPUPS';
 
 export const Environment = (() => {
 
