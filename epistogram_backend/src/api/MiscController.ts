@@ -107,19 +107,4 @@ export class MiscController implements XController<MiscController> {
         };
 
     }
-
-    @XControllerAction(apiRoutes.questions.getPractiseQuestions)
-    getPractiseQuestionAction(params: ActionParams) {
-
-        return {
-            action: async () => {
-                return await this._practiseQuestionService
-                    .getPractiseQuestionAsync(params.principalId);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-    }
 }

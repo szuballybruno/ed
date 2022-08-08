@@ -22,9 +22,11 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
     const serviceProvider = await getServiceProviderAsync();
 
     // override logging scopes to show bootstrap
-    serviceProvider
-        .getService(GlobalConfiguration)
-        .overrideLogScopes(['BOOTSTRAP']);
+    const globalConfig = serviceProvider
+        .getService(GlobalConfiguration);
+
+    globalConfig
+        .overrideLogScopes(globalConfig.logging.enabledScopes.concat(['BOOTSTRAP']));
 
     await serviceProvider
         .getService(CreateDBService)

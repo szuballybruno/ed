@@ -183,7 +183,7 @@ import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_a
 import { getQuestionSeedData } from '../../sql/seed/seed_questions';
 import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
-import { getSeedQuestionVersions } from '../../sql/seed/seed_question_versions';
+import { getQuestionVersionsSeedData } from '../../sql/seed/seed_question_versions';
 import { getRolesSeedData } from '../../sql/seed/seed_roles';
 import { getRoleAssignmentBridgeSeedData } from '../../sql/seed/seed_role_assignment_bridges';
 import { getRolePermissionBridgeSeedData } from '../../sql/seed/seed_role_permission_bridges';
@@ -201,6 +201,7 @@ import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDependency } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { ParametrizedFunction } from './advancedTypes/ParametrizedFunction';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -249,9 +250,9 @@ export const createDBSchema = (): XDBMSchemaType => {
         .addFunction(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
         .addFunction(getExamVersionsSeedData, [getModuleVersionsSeedData, getExamDatasSeedData, getExamSeedData], ExamVersion)
         .addFunction(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
-        .addFunction(getSeedQuestionVersions, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
+        .addFunction(getQuestionVersionsSeedData, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
         .addFunction(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
-        .addFunction(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getSeedQuestionVersions], AnswerVersion)
+        .addFunction(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getQuestionVersionsSeedData], AnswerVersion)
         .addFunction(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
         .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData], UserCourseBridge)
         .addFunction(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
@@ -263,6 +264,12 @@ export const createDBSchema = (): XDBMSchemaType => {
     const { itemInstancePairs } = XDependency
         .instantiate(hierarchy);
 
+    const getSeedData = <T extends ParametrizedFunction>(fn: T): ReturnType<T> => {
+
+        return itemInstancePairs
+            .single(x => x[0].key.name === fn.name)[1];
+    };
+
     const seedScripts = itemInstancePairs
         .map(([item, instance]): [Function, any] => {
 
@@ -270,8 +277,11 @@ export const createDBSchema = (): XDBMSchemaType => {
         });
 
     const schema: XDBMSchemaType = {
-        seedScripts,
-
+        seed: {
+            data: seedScripts,
+            getSeedData
+        },
+        
         views: [
             GivenAnswerScoreView,
             ActivityStreakView,

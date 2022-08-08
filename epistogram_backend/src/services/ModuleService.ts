@@ -8,7 +8,7 @@ import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Id } from '../shared/types/versionId';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
-import { VersionCode } from '../shared/types/versionCode';
+import { VersionCode } from '../shared/types/VersionCode1';
 import { VersionMigrationResult } from '../utilities/misc';
 import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';
@@ -129,7 +129,7 @@ export class ModuleService {
 
         // get old course version id
         const oldCoruseVersionId = courseVersionMigrations
-            .single(x => true)
+            .single()
             .oldVersionId;
 
         // save modules

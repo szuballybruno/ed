@@ -1,3 +1,4 @@
+import { ClassType } from '../../src/services/misc/advancedTypes/ClassType';
 import { respondError } from '../../src/startup/initTurboExpressListener';
 import { throwNotImplemented } from '../../src/utilities/helpers';
 import { ITurboExpressLayer } from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
@@ -9,16 +10,17 @@ export type TestCookie = {
     value: string;
 }
 
-export type TestCallEndpointOptions = {
+export type TestCallEndpointOptions<T = any> = {
     body?: any,
     query?: any,
     cookies?: TestCookie[],
+    resultSignature?: ClassType<T>
 };
 
-export class TestTurboResponse implements ITurboResponse {
+export class TestTurboResponse<TData = any> implements ITurboResponse {
 
     public cookies: TestCookie[] = [];
-    public response: { code: number; data: any; };
+    public response: { code: number; data: TData; };
 
     setCookie(key: string, value: string) {
 
@@ -51,7 +53,7 @@ export class TestListener implements IXTurboExpressListener {
 
     private _endpoints: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>[] = [];
 
-    constructor() {
+    constructor(private _throwError: boolean = false) {
 
     }
 
@@ -65,10 +67,10 @@ export class TestListener implements IXTurboExpressListener {
         console.log('Test listener is listening...');
     }
 
-    async callEndpoint<TController, TAction extends keyof TController>(
+    async callEndpoint<TController, TAction extends keyof TController, TResult = any>(
         controllerSignature: ITurboExpressLayer<TController>,
         action: TAction,
-        opt: TestCallEndpointOptions) {
+        opt: TestCallEndpointOptions<TResult>): Promise<TestTurboResponse<TResult>> {
 
         const metas = getControllerActionMetadatas(controllerSignature);
         const actionMeta = metas
@@ -100,6 +102,9 @@ export class TestListener implements IXTurboExpressListener {
             res.respond(200, result);
         }
         catch (e) {
+
+            if (this._throwError)
+                throw e;
 
             console.error('----------------------- ACTION ERROR --------------------------');
             console.error(e);

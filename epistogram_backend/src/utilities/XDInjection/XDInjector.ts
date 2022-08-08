@@ -235,8 +235,6 @@ export class XDependency {
         /**
          * Begin ordering
          */
-        console.log(`Ordering ${unordered.length} items...`);
-
         while (unordered.length > 0) {
 
             let itemToMove: DepHierarchyItem<T> | null = null;

@@ -65,8 +65,6 @@ export class PretestService {
             action: async () => {
                 const userId = principalId.getId();
 
-                console.log('CourseId: ' + courseId);
-
                 // set course as started, and stage to pretest
                 await this._courseBridgeService
                     .setCurrentCourse(userId, courseId, 'pretest', null);

@@ -397,7 +397,7 @@ export class RoleService extends QueryServiceBase<Role> {
 
                 const group = roles
                     .groupBy(x => x.roleId)
-                    .single(x => true);
+                    .single();
 
                 const resultGroupFirst = group.first;
 

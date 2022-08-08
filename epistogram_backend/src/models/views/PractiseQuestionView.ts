@@ -22,14 +22,6 @@ export class PractiseQuestionView {
 
     @ViewColumn()
     @XViewColumn()
-    givenAnswerCount: number;
-
-    /*     @ViewColumn()
-        @XViewColumn()
-        practiseAnswerCount: number; */
-
-    @ViewColumn()
-    @XViewColumn()
     questionText: string;
 
     @ViewColumn()

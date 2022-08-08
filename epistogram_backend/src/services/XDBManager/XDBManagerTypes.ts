@@ -1,4 +1,5 @@
 import { PropConstraintType } from '../../utilities/misc';
+import { ParametrizedFunction } from '../misc/advancedTypes/ParametrizedFunction';
 
 export type XDBMConstraintType = {
     fileName: string;
@@ -11,7 +12,10 @@ export type XDMBIndexType = {
 }
 
 export class XDBMSchemaType {
-    seedScripts: [Function, PropConstraintType<any, any>][];
+    seed: {
+        data: [Function, PropConstraintType<any, any>][],
+        getSeedData: <T extends ParametrizedFunction>(fn: T) => ReturnType<T>
+    };
     functionScripts: string[];
     constraints: XDBMConstraintType[];
     views: Function[];
@@ -21,7 +25,7 @@ export class XDBMSchemaType {
 
     constructor(opts: XDBMSchemaType) {
 
-        this.seedScripts = opts.seedScripts;
+        this.seed = opts.seed;
         this.functionScripts = opts.functionScripts;
         this.constraints = opts.constraints;
         this.views = opts.views;

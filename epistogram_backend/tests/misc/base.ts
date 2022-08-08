@@ -1,5 +1,7 @@
 import { AuthenticationController } from '../../src/api/AuthenticationController';
+import { GlobalConfiguration } from '../../src/services/misc/GlobalConfiguration';
 import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnectionService';
+import { XDBMSchemaType } from '../../src/services/XDBManager/XDBManagerTypes';
 import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
 import { initServiceProvider } from '../../src/startup/initApp';
 import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
@@ -16,14 +18,15 @@ normalizeJestConsole();
 
 export type ApiType = Pick<TestListener, 'callEndpoint'>;
 
-export type InitData = {
+export type TestParams = {
     serviceProvider: ServiceProvider,
     api: ApiType,
     accessToken: string,
-    cookies: TestCookie[]
+    cookies: TestCookie[],
+    getSeedData: XDBMSchemaType['seed']['getSeedData']
 }
 
-type TestFunctionsType = (getInitData: () => InitData) => Promise<void>;
+type TestFunctionsType = (getTestParams: () => TestParams) => Promise<void>;
 
 const loginUserAsync = async (api: ApiType) => {
 
@@ -44,26 +47,36 @@ const _setupTest = (opts: {
     tests: TestFunctionsType,
     loginEnabled: boolean,
     purge: boolean,
-    title: string
+    title: string,
+    throwError: boolean
 }) => {
 
     JestLogger.logMain('Initializing integration tests...');
 
-    const { tests, title } = opts;
+    const { tests, title, throwError } = opts;
 
-    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(srcFolder);
-    const api = new TestListener();
+    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(srcFolder, singletonProvider => {
+
+        /**
+         * OVERRIDE SETTINGS
+         */
+        singletonProvider
+            .getService(GlobalConfiguration)
+            .overrideLogScopes([]);
+    });
+    
+    const api = new TestListener(throwError);
     const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync, api);
-    const initDataContainer: { initData: InitData } = {} as any;
-    const getInitData = () => {
+    const testParamsContainer: { testParams: TestParams } = {} as any;
+    const getTestParams = () => {
 
         JestLogger.logMain('Getting init data...');
 
-        const initData = initDataContainer.initData;
-        if (!initData)
+        const testParams = testParamsContainer.testParams;
+        if (!testParams)
             throw new Error('Error, test init data is missing!');
 
-        return initData;
+        return testParams;
     };
 
     JestLogger.logMain('Setting timeout to 99999...');
@@ -100,10 +113,11 @@ const _setupTest = (opts: {
             /**
              * SET INIT DATA
              */
-            initDataContainer.initData = {
+            testParamsContainer.testParams = {
                 serviceProvider: mainServiceProvider,
                 api,
                 accessToken,
+                getSeedData: mainServiceProvider.getService(XDBMSchemaType).seed.getSeedData,
                 cookies: [
                     {
                         key: 'accessToken',
@@ -121,7 +135,7 @@ const _setupTest = (opts: {
     describe(title, () => {
         customIt('is running the integration test.', async () => {
 
-            await tests(getInitData);
+            await tests(getTestParams);
         });
     });
 
@@ -133,12 +147,12 @@ const _setupTest = (opts: {
 
             JestLogger.logMain('Running destruct tests...');
 
-            getInitData()
+            getTestParams()
                 .serviceProvider
                 .getService(SQLConnectionService)
                 .releaseConnectionClient();
 
-            await getInitData()
+            await getTestParams()
                 .serviceProvider
                 .getService(SQLConnectionService)
                 .endPoolAsync();
@@ -149,7 +163,8 @@ const _setupTest = (opts: {
 class IntegrationTestSetupBuilder {
 
     private _login: boolean = true;
-    private _purge: boolean = false;
+    private _purge: boolean = true;
+    private _throwError: boolean = true;
     private _tests: TestFunctionsType;
 
     constructor(private _title: string) {
@@ -161,8 +176,14 @@ class IntegrationTestSetupBuilder {
         return this;
     }
 
-    purgeDB() {
-        this._purge = true;
+    noPurgeDB() {
+        this._purge = false;
+        return this;
+    }
+
+    noThrowError() {
+
+        this._throwError = false;
         return this;
     }
 
@@ -177,7 +198,8 @@ class IntegrationTestSetupBuilder {
             loginEnabled: this._login,
             purge: this._purge,
             tests: this._tests,
-            title: this._title
+            title: this._title,
+            throwError: this._throwError
         });
     }
 }

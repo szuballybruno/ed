@@ -1147,6 +1147,13 @@ const marray = [
             });
         }),
 
+    epistoMappingsBuilder
+        .addMapping(QuestionDTO, () => (questionData: QuestionDataView[]) => {
+
+            return toQuestionDTO(questionData)
+                .single();
+        })
+
 ] as const;
 
 export type EpistoMappingsType = Mutable<typeof marray>;
@@ -1259,9 +1266,12 @@ export const toQuestionDTO = (lqav: QuestionDataView[]) => {
     return lqav
         .groupBy(x => x.questionId)
         .map(questionGrouping => {
-            const viewAsQuestion = questionGrouping.items.first();
 
-            return {
+            const viewAsQuestion = questionGrouping
+                .items
+                .first();
+
+            return instantiate<QuestionDTO>({
                 questionVersionId: viewAsQuestion.questionVersionId,
                 orderIndex: viewAsQuestion.orderIndex,
                 questionText: viewAsQuestion.questionText,
@@ -1271,13 +1281,13 @@ export const toQuestionDTO = (lqav: QuestionDataView[]) => {
                 answers: questionGrouping
                     .items
                     .map(viewAsAnswer => {
-                        return {
+                        return instantiate<AnswerDTO>({
                             answerId: viewAsAnswer.answerId,
                             answerText: viewAsAnswer.answerText
-                        } as AnswerDTO;
+                        });
                     })
-            };
-        }) as QuestionDTO[];
+            });
+        });
 };
 
 export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
@@ -1309,13 +1319,3 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
         isCompleted: isCompletedSignup
     } as SignupDataDTO;
 };
-
-/* export const toAnswerDTO = (a: AnswerData) => {
-
-    return {
-        answerId: a.answerVersions.id,
-        answerText: a.text
-    } as AnswerDTO;
-};
-
- */

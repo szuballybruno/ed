@@ -1,8 +1,8 @@
 import { toSQLSnakeCasing } from '../../utilities/helpers';
-import { log } from '../misc/logger';
+import { LoggerService } from '../LoggerService';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
-import { SeedService } from './SeedService';
 import { CreateDBService } from './CreateDBService';
+import { SeedService } from './SeedService';
 import { ExecSQLFunctionType, SQLConnectionService } from './SQLConnectionService';
 
 export type SQLConnectionType = {
@@ -16,7 +16,8 @@ export class RecreateDBService {
         private _createDBService: CreateDBService,
         private _seedService: SeedService,
         private _dbSchema: XDBMSchemaType,
-        private _sqlConnectionService: SQLConnectionService) {
+        private _sqlConnectionService: SQLConnectionService,
+        private _logger: LoggerService) {
     }
 
     async recreateDBAsync() {
@@ -36,7 +37,7 @@ export class RecreateDBService {
 
     private _purgeDBAsync = async () => {
 
-        log('Purging DB / Start...', { entryType: 'strong' });
+        this._logger.logScoped('BOOTSTRAP', 'Purging DB / Start...');
 
         const dropDBScript = this._dbSchema
             .entities
@@ -46,6 +47,6 @@ export class RecreateDBService {
         const results = await this._sqlConnectionService
             .executeSQLAsync(dropDBScript);
 
-        log('Purging DB / Done.', { entryType: 'strong' });
+        this._logger.logScoped('BOOTSTRAP', 'Purging DB / Done.');
     };
 }

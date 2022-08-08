@@ -6,7 +6,7 @@ import { QuestionSeedDataType } from './seed_questions';
 import { QuestionDatasSeedType } from './seed_question_datas';
 import { VideoVersionSeedDataType } from './seed_video_versions';
 
-export const getSeedQuestionVersions = (
+export const getQuestionVersionsSeedData = (
     questions: QuestionSeedDataType,
     questionDatas: QuestionDatasSeedType,
     examVersions: ExamVersionSeedDataType,
@@ -312,9 +312,105 @@ export const getSeedQuestionVersions = (
         personalityTraitCategoryId: null,
     },
 
-    question_version_54: {
+    question_version_excel_exam_1: {
         questionId: questions.question_54.id,
         questionDataId: questionDatas.question_data_54.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_2: {
+        questionId: questions.question_53.id,
+        questionDataId: questionDatas.question_data_53.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_3: {
+        questionId: questions.question_55.id,
+        questionDataId: questionDatas.question_data_55.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_4: {
+        questionId: questions.question_56.id,
+        questionDataId: questionDatas.question_data_56.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_5: {
+        questionId: questions.question_52.id,
+        questionDataId: questionDatas.question_data_52.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_6: {
+        questionId: questions.question_199.id,
+        questionDataId: questionDatas.question_data_199.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_7: {
+        questionId: questions.question_200.id,
+        questionDataId: questionDatas.question_data_200.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_8: {
+        questionId: questions.question_201.id,
+        questionDataId: questionDatas.question_data_201.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_9: {
+        questionId: questions.question_202.id,
+        questionDataId: questionDatas.question_data_202.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_10: {
+        questionId: questions.question_203.id,
+        questionDataId: questionDatas.question_data_203.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_11: {
+        questionId: questions.question_204.id,
+        questionDataId: questionDatas.question_data_204.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_12: {
+        questionId: questions.question_205.id,
+        questionDataId: questionDatas.question_data_205.id,
+        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+
+    question_version_excel_exam_13: {
+        questionId: questions.question_206.id,
+        questionDataId: questionDatas.question_data_206.id,
         examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
@@ -341,38 +437,6 @@ export const getSeedQuestionVersions = (
         questionDataId: questionDatas.question_data_51.id,
         examVersionId: null,
         videoVersionId: videoVersions.video_version_40.id,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_53: {
-        questionId: questions.question_53.id,
-        questionDataId: questionDatas.question_data_53.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_55: {
-        questionId: questions.question_55.id,
-        questionDataId: questionDatas.question_data_55.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_56: {
-        questionId: questions.question_56.id,
-        questionDataId: questionDatas.question_data_56.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_52: {
-        questionId: questions.question_52.id,
-        questionDataId: questionDatas.question_data_52.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
         personalityTraitCategoryId: null,
     },
 
@@ -1480,30 +1544,6 @@ export const getSeedQuestionVersions = (
         personalityTraitCategoryId: null,
     },
 
-    question_version_199: {
-        questionId: questions.question_199.id,
-        questionDataId: questionDatas.question_data_199.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_200: {
-        questionId: questions.question_200.id,
-        questionDataId: questionDatas.question_data_200.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_201: {
-        questionId: questions.question_201.id,
-        questionDataId: questionDatas.question_data_201.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
     question_version_223: {
         questionId: questions.question_223.id,
         questionDataId: questionDatas.question_data_223.id,
@@ -1516,46 +1556,6 @@ export const getSeedQuestionVersions = (
         questionId: questions.question_230.id,
         questionDataId: questionDatas.question_data_230.id,
         examVersionId: examVersions.exam_version_15.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_202: {
-        questionId: questions.question_202.id,
-        questionDataId: questionDatas.question_data_202.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_203: {
-        questionId: questions.question_203.id,
-        questionDataId: questionDatas.question_data_203.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_204: {
-        questionId: questions.question_204.id,
-        questionDataId: questionDatas.question_data_204.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_205: {
-        questionId: questions.question_205.id,
-        questionDataId: questionDatas.question_data_205.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
-        videoVersionId: null,
-        personalityTraitCategoryId: null,
-    },
-
-    question_version_206: {
-        questionId: questions.question_206.id,
-        questionDataId: questionDatas.question_data_206.id,
-        examVersionId: examVersions.exam_version_excel_elso_temazaro.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -4337,42 +4337,42 @@ export const getSeedQuestionVersions = (
     },
 
     // pretest questions
-    question_version_580: {
+    question_version_pretest_excel_1: {
         questionId: questions.question_580.id,
         questionDataId: questionDatas.question_data_580.id,
-        examVersionId: examVersions.exam_version_pretest_43.id,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
 
-    question_version_581: {
+    question_version_pretest_excel_2: {
         questionId: questions.question_581.id,
         questionDataId: questionDatas.question_data_581.id,
-        examVersionId: examVersions.exam_version_pretest_43.id,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
 
-    question_version_582: {
+    question_version_pretest_excel_3: {
         questionId: questions.question_582.id,
         questionDataId: questionDatas.question_data_582.id,
-        examVersionId: examVersions.exam_version_pretest_43.id,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
 
-    question_version_583: {
+    question_version_pretest_excel_4: {
         questionId: questions.question_583.id,
         questionDataId: questionDatas.question_data_583.id,
-        examVersionId: examVersions.exam_version_pretest_43.id,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
 
-    question_version_584: {
+    question_version_pretest_excel_5: {
         questionId: questions.question_584.id,
         questionDataId: questionDatas.question_data_584.id,
-        examVersionId: examVersions.exam_version_pretest_43.id,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
@@ -4402,4 +4402,4 @@ export const getSeedQuestionVersions = (
     },
 });
 
-export type SeedQuestionVersionType = ReturnType<typeof getSeedQuestionVersions>;
+export type SeedQuestionVersionType = ReturnType<typeof getQuestionVersionsSeedData>;

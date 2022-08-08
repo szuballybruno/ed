@@ -13,7 +13,7 @@ declare global {
         none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
-        single(func: (item: T) => boolean): T;
+        single(func?: (item: T) => boolean): T;
         first(func?: (item: T) => boolean): T;
         last(func?: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
@@ -138,9 +138,9 @@ Array.prototype.first = function <T>(func?: (item: T) => boolean) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.single = function <T>(func: (item: T) => T) {
+Array.prototype.single = function <T>(func?: (item: T) => T) {
 
-    const filtered = this.filter(func);
+    const filtered = this.filter(func ?? (() => true));
 
     if (filtered.length === 0)
         throw new Error('Single operaion found no matching elements!');

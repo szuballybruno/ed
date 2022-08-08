@@ -38,9 +38,9 @@ export class SeedService {
 
         this._loggerService.logScoped('BOOTSTRAP', 'Seeding DB...');
 
-        for (let index = 0; index < this._dbSchema.seedScripts.length; index++) {
+        for (let index = 0; index < this._dbSchema.seed.data.length; index++) {
 
-            const scriptObject = this._dbSchema.seedScripts[index];
+            const scriptObject = this._dbSchema.seed.data[index];
 
             const [classType, seedObj] = scriptObject as NewSeedType;
 
