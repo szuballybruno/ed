@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION answer_question_fn
 )
 RETURNS TABLE 
 (
-	correct_answer_version_ids integer[], 
+	correct_answer_ids integer[], 
 	given_answer_id integer,
 	streak_id integer,
 	streak_length integer,

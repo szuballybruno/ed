@@ -6,6 +6,7 @@ import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
@@ -59,14 +60,6 @@ export class QuestionAnswerService {
         elapsedSeconds: number,
         isPractiseAnswer?: boolean) {
 
-        this._loggerService.logScoped('GIVEN ANSWER', 'userId: ' + userId);
-        this._loggerService.logScoped('GIVEN ANSWER', 'answerSessionId: ' + answerSessionId);
-        this._loggerService.logScoped('GIVEN ANSWER', 'questionVersionId: ' + questionVersionId);
-        this._loggerService.logScoped('GIVEN ANSWER', 'answerIds: ' + answerIds);
-        this._loggerService.logScoped('GIVEN ANSWER', 'isExamQuestion: ' + isExamQuestion);
-        this._loggerService.logScoped('GIVEN ANSWER', 'elapsedSeconds: ' + elapsedSeconds);
-        this._loggerService.logScoped('GIVEN ANSWER', 'isPractiseAnswer: ' + isPractiseAnswer);
-
         const {
             correctAnswerIds,
             givenAnswerId,
@@ -76,15 +69,17 @@ export class QuestionAnswerService {
         } = await this._sqlFunctionsService
             .answerQuestionFn(userId, answerSessionId, questionVersionId, answerIds, elapsedSeconds, !!isPractiseAnswer);
 
-        console.log('correctAnswerIds: ' + correctAnswerIds);
-        console.log('givenAnswerId: ' + givenAnswerId);
-        console.log('isCorrect: ' + isCorrect);
-        console.log('streakLength: ' + streakLength);
-        console.log('streakId: ' + streakId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'userId: ' + userId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'answerSessionId: ' + answerSessionId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'questionVersionId: ' + questionVersionId);
+        this._loggerService.logScoped('GIVEN ANSWER', 'answerIds: ' + answerIds);
+        this._loggerService.logScoped('GIVEN ANSWER', 'isExamQuestion: ' + isExamQuestion);
+        this._loggerService.logScoped('GIVEN ANSWER', 'elapsedSeconds: ' + elapsedSeconds);
+        this._loggerService.logScoped('GIVEN ANSWER', 'isPractiseAnswer: ' + isPractiseAnswer);
 
-        let coinAcquires = null as null | {
-            normal: CoinAcquireResultDTO | null,
-            bonus: CoinAcquireResultDTO | null
+        let coinAcquires = {
+            normal: null as CoinAcquireResultDTO | null,
+            bonus: null as CoinAcquireResultDTO | null
         };
 
         // if answer is correct give coin rewards 
@@ -102,12 +97,12 @@ export class QuestionAnswerService {
             };
         }
 
-        return {
+        return instantiate<AnswerResultDTO>({
             correctAnswerIds: correctAnswerIds,
             givenAnswerIds: answerIds,
             isCorrect: isCorrect,
             coinAcquires
-        } as AnswerResultDTO;
+        });
     }
 
     /**
