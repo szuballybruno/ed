@@ -101,6 +101,7 @@ ON vpsv.video_version_id = vv.id
 AND vpsv.user_id = u.id
 
 WHERE cisv.item_state = 'completed'
+AND cisv.video_id IS NOT NULL
 
 GROUP BY
     u.id,
