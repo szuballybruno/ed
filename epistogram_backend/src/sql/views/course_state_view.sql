@@ -2,9 +2,7 @@ WITH
 sq as 
 (
     SELECT 
-        co.id course_id,
-        u.id user_id,
-        ucb.is_current,
+        ucb.*,
         ucb.id IS NOT NULL has_bridge,
         ccv.user_id IS NOT NULL is_completed
     FROM public.course co
@@ -20,11 +18,9 @@ sq as
     AND ucb.course_id = co.id
 )
 SELECT 
-    sq.course_id,
-    sq.user_id,
-    COALESCE(sq.is_current, false) is_current,
-    sq.has_bridge = true AND sq.is_completed = false in_progress,
-    sq.is_completed
+    sq.*,
+    --COALESCE(sq.is_current, false) is_current,
+    sq.has_bridge = true AND sq.is_completed = false in_progress
 FROM sq
     
 ORDER BY 
