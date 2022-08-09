@@ -68,12 +68,28 @@ SELECT
 	u.id user_id,
 	co.id course_id,
 	cd.title,
+
+	true can_view, -- TODO AUTH
 	cc.id IS NOT NULL is_completed,
-	false is_started,
+	ucb.start_date IS NOT NULL is_started,
+	ucb.current_item_code current_item_code,
+	CASE WHEN ucb.current_item_code IS NULL 
+		THEN NULL --first_civ.item_code 
+		ELSE ucb.current_item_code 
+	END continue_item_code,
+	sf.file_path file_path,
+	ccat.name category_name,
+	csc.name sub_category_name,
+
+	teacher.id teacher_id,
+	teacher.first_name teacher_first_name,
+	teacher.last_name teacher_last_name,
+
 	cstv.total_spent_seconds,
 	ucpav.total_item_count total_course_item_count,
 	ucpav.total_completed_item_count completed_course_item_count,
 	cvc.completed_video_count,
+	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
 	avq.answered_video_question_count,
 	esra.exam_success_rate_average,
@@ -93,9 +109,28 @@ ON cv.course_id = co.id
 LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id
 
+LEFT JOIN public.user_course_bridge ucb
+ON ucb.user_id = u.id
+AND ucb.course_id = co.id
+
 LEFT JOIN public.course_completion cc
 ON cc.user_id = u.id
 AND cc.course_version_id = cv.id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_version_id = cv.id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id
+
+LEFT JOIN public.course_category ccat
+ON cc.id = cd.category_id
+	
+LEFT JOIN public.course_category csc
+ON csc.id = cd.sub_category_id
+	
+LEFT JOIN public.user teacher
+ON teacher.id = cd.teacher_id
 
 LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = u.id
