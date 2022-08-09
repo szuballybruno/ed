@@ -1,9 +1,11 @@
 import generatePassword from 'password-generator';
+import { Permission } from '../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
 import { TokenPair } from '../models/TokenPair';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { permissionCodes } from '../shared/types/PermissionCodesType';
 import { JobTitleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { getFullName, throwNotImplemented } from '../utilities/helpers';
@@ -168,11 +170,18 @@ export class RegistrationService {
         await this._userService
             .setUserInivitationDataAsync(userId, password);
 
+        const permissions = Object.values(permissionCodes) as any as Permission[];
+        const accessAdminId = permissions.find(x => x.code === 'ACCESS_APPLICATION')?.id;
+
+        if (!accessAdminId)
+            throw new ErrorWithCode('Couldn\'t get access permission.', 'internal server error');
+
+
         // Assign ACCESS_APPLICATION permission to user
         await this
             ._ormService
             .createAsync(PermissionAssignmentBridge, {
-                permissionId: Id.create<'Permission'>(35),
+                permissionId: accessAdminId,
                 assigneeUserId: userId,
                 assigneeCompanyId: null,
                 assigneeGroupId: null,

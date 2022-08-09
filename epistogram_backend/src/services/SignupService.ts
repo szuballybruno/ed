@@ -5,7 +5,7 @@ import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO'
 import { SignupDataDTO } from '../shared/dtos/SignupDataDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
@@ -62,8 +62,7 @@ export class SignupService {
                     .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);
             },
             auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+                return AuthorizationResult.ok;
             }
         };
     }
@@ -77,18 +76,17 @@ export class SignupService {
                 const userSignupCompltedView = await this._ormService
                     .query(SignupCompletedView, { userId })
                     .where('userId', '=', 'userId')
-                    .getSingle();
+                    .getOneOrNull();
 
                 const questions = await this._ormService
                     .query(SignupQuestionView, { userId })
                     .where('userId', '=', 'userId')
                     .getMany();
 
-                return this._mapperService.mapTo(SignupDataDTO, [questions, userSignupCompltedView.isSignupComplete]);
+                return this._mapperService.mapTo(SignupDataDTO, [questions, !!userSignupCompltedView?.isSignupComplete]);
             },
             auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+                return AuthorizationResult.ok;
             }
         };
     }

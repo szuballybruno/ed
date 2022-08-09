@@ -14,7 +14,7 @@ export type ApplicationRoutesType = {
     matchAll: ApplicationRoute;
     loginRoute: ApplicationRoute;
     underMaintanenceRoute: ApplicationRoute;
-    registrationRoute: ApplicationRoute;
+    registrationRoute: ApplicationRoute<{ token: string, isInvited: boolean }>;
     signupRoute: ApplicationRoute;
     setNewPasswordRoute: ApplicationRoute;
     registerViaActivationCodeRoute: ApplicationRoute;
@@ -121,8 +121,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         signupRoute: {
             title: translatableTexts.routeTitles.registration,
             route: new EpistoRoute('/', 'signup'),
-            ignoreAccessAppRestriction: true,
-            isUnauthorized: true
+            ignoreAccessAppRestriction: true
         },
 
         setNewPasswordRoute: {
