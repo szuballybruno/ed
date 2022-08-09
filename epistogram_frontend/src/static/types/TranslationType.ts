@@ -196,6 +196,7 @@ export type TranslationType = {
             pretestGreeting: string;
             pretestResults: string;
             prequiz: string;
+            prequizGreeting: string;
             setNewPassword: string;
             registerViaActivationCode: string;
             homePage: string;

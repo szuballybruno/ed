@@ -213,6 +213,7 @@ export const huTranslation: TranslationType = {
             pretestGreeting: 'Pretest greeting',
             pretestResults: 'Pretest results',
             prequiz: 'Prequiz',
+            prequizGreeting: 'Prequiz greeting',
             setNewPassword: 'Új jelszó beállítása',
             registerViaActivationCode: 'Kód beváltása',
             homePage: 'Kezdőlap',

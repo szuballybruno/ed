@@ -105,7 +105,7 @@ export const useNavigation = () => {
             return;
         }
 
-        navigateToWatchPrequiz(courseId);
+        navigate2(applicationRoutes.playerRoute.prequizGreetingRoute, { courseId });
     };
 
     const navigateToAdminCourseList = () => navigate(applicationRoutes.administrationRoute.coursesRoute);

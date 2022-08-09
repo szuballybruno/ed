@@ -25,6 +25,7 @@ export type ApplicationRoutesType = {
     courseDetailsRoute: ApplicationRoute;
     playerRoute: ApplicationRoute & {
         watchRoute: ApplicationRoute<{ descriptorCode: string }>;
+        prequizGreetingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
         prequizRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
         pretestRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
         pretestGreetingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
@@ -168,6 +169,11 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
             watchRoute: {
                 title: translatableTexts.routeTitles.player,
                 route: new EpistoRoute('/watch', ':descriptorCode'),
+            },
+
+            prequizGreetingRoute: {
+                title: translatableTexts.routeTitles.prequizGreeting,
+                route: new EpistoRoute('/watch', 'prequiz-greeting/:courseId')
             },
 
             prequizRoute: {

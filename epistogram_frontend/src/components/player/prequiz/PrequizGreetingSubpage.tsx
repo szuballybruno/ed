@@ -6,24 +6,24 @@ import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
 
-export const PretestGreetingSubpage = () => {
+export const PrequizGreetingSubpage = () => {
 
     const { navigate2 } = useNavigation();
 
-    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestGreetingRoute)
+    const courseId = useRouteParams(applicationRoutes.playerRoute.prequizGreetingRoute)
         .getValue(x => x.courseId, 'int');
 
-    const gotToPretest = () => {
+    const gotToPrequiz = () => {
 
-        navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId });
+        navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId });
     };
 
     return (
         <ExamLayout
-            headerCenterText='Szintfelmérő vizsga'
+            headerCenterText='Tanfolyami kérdőív'
             footerButtons={[{
                 title: 'Kezdés',
-                action: gotToPretest
+                action: gotToPrequiz
             }]}>
 
             <Flex
@@ -46,7 +46,7 @@ export const PretestGreetingSubpage = () => {
                 <EpistoFont
                     fontSize="fontHuge">
 
-                    {'Szintfelmérő vizsga'}
+                    {'Tanfolyami kérdőív'}
                 </EpistoFont>
 
                 <EpistoFont
@@ -56,7 +56,7 @@ export const PretestGreetingSubpage = () => {
                         textAlign: 'center'
                     }}>
 
-                    {'Most pedig felmérjük, hogy milyen előzetes tudással rendelkezel a tanfolyam témaköreivel kapcsolatban. Ez azért fontos, mert így személyre tudjuk szabni számodra a napi ajánlott videók mennyiségét, valamint azt is, hogy mely videókra érdemes nagyobb hangsúlyt fektetned.'}
+                    {'A tanfolyam előtt feltennénk neked pár kérdést, így pontosan tudni fogjuk, mennyi időt tudsz rászánni a tanulásra!'}
                 </EpistoFont>
             </Flex>
         </ExamLayout>

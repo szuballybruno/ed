@@ -142,7 +142,8 @@ export const PrequizSubpage = () => {
                             valueLabelFormat={value => `${value} óra`}
                             marks={true}
                             style={{
-                                color: 'var(--deepBlue)'
+                                color: 'var(--deepBlue)',
+                                marginTop: '40px'
                             }}
                             onChange={(_, value) => setNumericValue(value as any)}
                             value={numericValue} />
