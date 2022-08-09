@@ -13,7 +13,7 @@ SELECT
     ad.text answer_text,
     av.id answer_version_id,
     av.answer_id answer_id
-FROM  public.question_version qv
+FROM public.question_version qv
 
 LEFT JOIN public.exam_version ev
 ON ev.id = qv.exam_version_id

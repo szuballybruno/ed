@@ -1,9 +1,6 @@
-import moment from 'moment';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
-import { PractiseQuestionView } from '../models/views/PractiseQuestionView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { PractiseQuestionDTO } from '../shared/dtos/PractiseQuestionDTO';
 import { PractiseQuestionInfoDTO } from '../shared/dtos/PractiseQuestionInfoDTO';
 import { Id } from '../shared/types/versionId';
 import { isXMinutesAgo } from '../utilities/helpers';
@@ -53,7 +50,7 @@ export class PractiseQuestionService extends ServiceBase {
         if (!questionId)
             return null;
 
-        return this
+        return await this
             ._questionService
             .getQuestionDataById(questionId);
     };
