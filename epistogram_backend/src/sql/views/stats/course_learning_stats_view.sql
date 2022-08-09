@@ -1,4 +1,5 @@
-WITH video_question_count AS
+WITH 
+video_question_count AS
 (
 	SELECT 
 		COUNT(qv.id)::int video_question_count,
