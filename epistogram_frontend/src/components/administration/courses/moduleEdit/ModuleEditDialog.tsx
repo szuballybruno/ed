@@ -1,135 +1,97 @@
 import { Add } from '@mui/icons-material';
-import { useState } from 'react';
-import { useCreateModule, useModuleListEditData, useSaveModule } from '../../../../services/api/moduleApiService';
-import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
-import { ModuleAdminEditDTO } from '../../../../shared/dtos/ModuleAdminEditDTO';
+import { useEffect, useMemo } from 'react';
 import { usePaging } from '../../../../static/frontendHelpers';
-import { useIntParam } from '../../../../static/locationHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoDialogLogicType } from '../../../EpistoDialog';
+import { EpistoFlex } from '../../../controls/EpistoFlex';
 import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
-import { ModuleEditDialogPage } from './ModuleEditDialogPage';
-import { ModuleListEditDialogPage } from './ModuleListEditDialogPage';
+import { ModuleEditDialogLogicType } from './ModuleEditDialogLogic';
+import { ModuleEdit } from './ModuleEdit';
+import { ModuleList } from './ModuleList';
 
-export const ModuleEditDialog = (props: {
-    logic: EpistoDialogLogicType,
-    afterChangeCallback: () => void
+export const ModuleEditDialog = ({
+    logic,
+    courseName
+}: {
+    courseName: string,
+    logic: ModuleEditDialogLogicType
 }) => {
 
-    const { logic, afterChangeCallback } = props;
-
-    // util
-    const courseId = useIntParam('courseId')!;
-    const showError = useShowErrorDialog();
-
-    // state
-    const [editedModuleId, setEditedModuleId] = useState<number | null>(null);
-
-    // http
     const {
-        moduleListEditData,
-        moduleListEditDataState,
-        moduleListEditDataError,
-        refetchModuleListEditData
-    } = useModuleListEditData(courseId, logic.isOpen);
-    const { saveModuleAsync } = useSaveModule();
-    const { createModuleAsync } = useCreateModule();
+        createModule,
+        currentModule,
+        handleEditModule,
+        handleOk,
+        mutatorRef,
+        dialogLogic,
+        handleBackToList,
+        canDelete
+    } = logic;
 
-    // calc 
-    const modulesLength = moduleListEditData?.modules.length!;
-    const courseName = moduleListEditData?.courseName ?? '';
-    const moduleName = moduleListEditData?.modules
-        .find(x => x.id === editedModuleId)?.name ?? '';
-
-    // paging
-    const paging = usePaging<EditDialogSubpage>([
+    const pages = useMemo(() => [
         {
-            content: () => <ModuleListEditDialogPage
-                refetchModuleList={refetchModuleListEditData}
-                moduleListEditData={moduleListEditData}
-                moduleListEditDataState={moduleListEditDataState}
-                moduleListEditDataError={moduleListEditDataError}
-                handleEditModule={handleEditModule}
-                afterChangeCallback={afterChangeCallback} />,
+            content: () => (
+                <ModuleList
+                    editModule={handleEditModule}
+                    canDelete={canDelete}
+                    mutator={mutatorRef} />
+            ),
             title: 'Modulok szerkesztése'
 
         },
         {
-            content: () => <ModuleEditDialogPage
-                handleSaveModuleAsync={handleSaveModuleAsync}
-                editedModuleId={editedModuleId!} />,
-            title: moduleName,
+            content: () => (
+                <>
+                    {currentModule && <ModuleEdit
+                        dto={currentModule}
+                        mutator={mutatorRef} />}
+                </>
+            ),
+            title: currentModule?.name ?? '',
             isFocused: true
         }
-    ]);
+    ], [currentModule, handleEditModule, canDelete]);
 
-    //
-    // func
-    //
+    const paging = usePaging<EditDialogSubpage>({
+        items: pages,
+        onPrevious: handleBackToList
+    });
 
-    // sets edited module id, 
-    // navigates to editmodule page
-    const handleEditModule = (moduleId: number) => {
+    useEffect(() => {
 
-        setEditedModuleId(moduleId);
-        paging.next();
-    };
+        if (currentModule)
+            paging.next();
+    }, [currentModule]);
 
-    // save module
-    const handleSaveModuleAsync = async (module: ModuleAdminEditDTO, moduleImageFile: File | null) => {
+    return (
+        <EditDialogBase
+            hideTabs
+            paging={paging}
+            logic={dialogLogic}
+            headerButtons={<>
+                <EpistoButton
+                    onClick={createModule}
+                    icon={<Add />}>
 
-        try {
+                    Hozzáadás
+                </EpistoButton>
+            </>}
+            chipText='Module'
+            chipColor='var(--deepBlue)'
+            title={'Edit modules'}
+            subTitle={courseName}
+            footer={(
+                <EpistoFlex
+                    justify="flex-end"
+                    margin={{ all: 'px5' }}>
 
-            await saveModuleAsync(
-                module,
-                moduleImageFile ?? undefined);
+                    <EpistoButton
+                        variant='colored'
+                        onClick={handleOk}>
 
-            showNotification('Modul sikeresen mentve.');
-            refetchModuleListEditData();
-            paging.setItem(0);
-            afterChangeCallback();
-        }
-        catch (e) {
-
-            showError(e);
-        }
-    };
-
-    // add new module
-    const handleAddModuleAsync = async () => {
-
-        try {
-
-            await createModuleAsync({
-                courseId: courseId,
-                name: 'Új modul',
-                orderIndex: modulesLength
-            });
-
-            showNotification('Modul sikeresen hozzáadva!');
-            await refetchModuleListEditData();
-            afterChangeCallback();
-        }
-        catch (e) {
-
-            showError(e);
-        }
-    };
-
-    return <EditDialogBase
-        hideTabs
-        paging={paging}
-        logic={logic}
-        headerButtons={<>
-            <EpistoButton
-                onClick={() => handleAddModuleAsync()}
-                icon={<Add />}>
-
-                Hozzáadás
-            </EpistoButton>
-        </>}
-        chipText='Module'
-        chipColor='var(--deepBlue)'
-        title={'Edit modules'}
-        subTitle={courseName} />;
+                        {translatableTexts.misc.ok}
+                    </EpistoButton>
+                </EpistoFlex>
+            )} />
+    );
 };

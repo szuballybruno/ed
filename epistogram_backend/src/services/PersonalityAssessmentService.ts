@@ -10,80 +10,90 @@ import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCa
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { Id } from '../shared/types/versionId';
+import { AuthorizationService } from './AuthorizationService';
 
 export class PersonalityAssessmentService {
 
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(ormService: ORMConnectionService, mapperService: MapperService) {
+    constructor(ormService: ORMConnectionService, mapperService: MapperService, authorizationService: AuthorizationService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
+        this._authorizationService = authorizationService;
     }
 
     /**
      * Returns the personality assessment DTO, that can be used externally.
-     * 
-     * @param userId 
-     * @returns 
      */
-    async getUserPersonalityAssessmentDTOAsync(userId: number) {
-
-        const chartData = await this.getUserPersonalityDataAsync(userId);
-        const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userId);
+    getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
 
         return {
-            chartData: chartData,
-            personalityTraitCategories
-        } as PersonalityAssessmentDTO;
+            action: async () => {
+
+                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+
+                const chartData = await this.getUserPersonalityDataAsync(userIdAsIdType);
+                const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userIdAsIdType);
+
+                return {
+                    chartData: chartData,
+                    personalityTraitCategories
+                } as PersonalityAssessmentDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+
+
     }
 
     /**
      * Returns personality trait views for a specified user
-     * 
-     * @param userId 
-     * @returns 
      */
-    async getPersonalityTraitsAsync(userId: number) {
+    async getPersonalityTraitsAsync(userId: Id<'User'>) {
 
         return await this._ormService
-            .getRepository(PersonalityTraitView)
-            .find({
-                where: {
-                    userId: userId,
-                }
-            });
+            .query(PersonalityTraitView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
     }
 
     /**
      * Return the personality trait category with details, like tips etc.
-     * 
-     * @param personalityTraitCategoryId 
      */
-    async getPersonalityTraitCategoryDetailsAsync(personalityTraitCategoryId: number, isMax: number) {
+    getPersonalityTraitCategoryDetailsAsync(principalId: PrincipalId, personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) {
 
-        const category = await this._ormService
-            .getRepository(PersonalityTraitCategory)
-            .findOneOrFail({
-                where: {
-                    id: personalityTraitCategoryId
-                }
-            });
+        return {
+            action: async () => {
 
-        const tips = await this._ormService
-            .getMany(DailyTip,
-                [
-                    ['WHERE', 'isMax', '=', 'isMax'],
-                    ['AND', 'personalityTraitCategoryId', '=', 'personalityTraitCategoryId'],
-                ],
-                {
-                    isMax,
-                    personalityTraitCategoryId
-                });
+                const category = await this._ormService
+                    .query(PersonalityTraitCategory, { personalityTraitCategoryId })
+                    .where('id', '=', 'personalityTraitCategoryId')
+                    .getSingle();
 
-        return this._mapperService
-            .map(PersonalityTraitCategory, PersonalityTraitCategoryDTO, category, tips);
+                const tips = await this._ormService
+                    .query(DailyTip, { isMax, personalityTraitCategoryId })
+                    .where('isMax', '=', 'isMax')
+                    .and('personalityTraitCategoryId', '=', 'personalityTraitCategoryId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(PersonalityTraitCategoryDTO, [category, tips]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+
+
     }
 
     /**
@@ -91,41 +101,49 @@ export class PersonalityAssessmentService {
      * Expanded, so in the return data one category will 
      * be split to 2 objects, min <> max value
      */
-    async getPersonalityTraitCategoriesAsync() {
+    getPersonalityTraitCategoriesAsync(principalId: PrincipalId) {
 
-        const categories = await this._ormService
-            .getRepository(PersonalityTraitCategoryView)
-            .find();
+        return {
+            action: async () => {
 
-        const minMaxCatList = categories
-            .flatMap(category => {
+                const categories = await this._ormService
+                    .query(PersonalityTraitCategoryView)
+                    .getMany();
 
-                const minCat = this._mapperService
-                    .map(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, category, false);
+                const minMaxCatList = categories
+                    .flatMap(category => {
 
-                const maxCat = this._mapperService
-                    .map(PersonalityTraitCategoryView, PersonalityTraitCategoryShortDTO, category, true);
+                        const minCat = this._mapperService
+                            .mapTo(PersonalityTraitCategoryShortDTO, [category, false]);
 
-                return [minCat, maxCat];
-            });
+                        const maxCat = this._mapperService
+                            .mapTo(PersonalityTraitCategoryShortDTO, [category, true]);
 
-        return minMaxCatList;
+                        return [minCat, maxCat];
+                    });
+
+                return minMaxCatList;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+
+
     }
 
     /**
      * This returns the active descriptions of the users traits. 
-     * 
-     * @param userId 
-     * @returns 
      */
-    private getPersonalityDescriptionsDTOAsync = async (userId: number) => {
+    private getPersonalityDescriptionsDTOAsync = async (userId: Id<'User'>) => {
 
         const personalityTraits = await this.getPersonalityTraitsAsync(userId);
 
         return personalityTraits
             .map(x => ({
                 activeDescription: x.activeDescription,
-                categoryTitle: x.taritCategoryTitle
+                categoryTitle: x.traitCategoryTitle
             }) as PersonalityCategoryTraitDTO);
     };
 
@@ -134,15 +152,11 @@ export class PersonalityAssessmentService {
      * pre-generates the data for a circular (radar) chart.
      * What it does is creates a virtual circle consisting of opposing traits,
      * on opposing sides. Like so: 
-     * 
-     *   Trait 2 min - * *
+     *
      * Trait 1 min - *     * - Trait 1 max
      *                *  * - Trait 2 max
-     * 
-     * @param userId 
-     * @returns 
      */
-    private async getUserPersonalityDataAsync(userId: number) {
+    private async getUserPersonalityDataAsync(userId: Id<'User'>) {
 
         const categoryViews = await this.getPersonalityTraitsAsync(userId);
         const traits = [] as PersonalityTraitDataDTO[];

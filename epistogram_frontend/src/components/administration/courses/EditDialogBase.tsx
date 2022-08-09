@@ -1,11 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
-import { PagingType, usePaging } from '../../../static/frontendHelpers';
+import { PagingType } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { ChipSmall } from './ChipSmall';
 
@@ -15,15 +16,16 @@ export type EditDialogSubpage = {
     content: (isCurrent: boolean) => JSX.Element
 };
 
-export const EditDialogBase = (props: {
+export const EditDialogBase = <TParams,>(props: {
     title?: string,
     subTitle?: string,
     chipText?: string,
     chipColor?: string,
     hideTabs?: boolean,
     headerButtons?: ReactNode,
-    logic: EpistoDialogLogicType,
-    paging: PagingType<EditDialogSubpage>
+    logic: EpistoDialogLogicType<TParams>,
+    paging: PagingType<EditDialogSubpage>,
+    footer?: ReactNode
 }) => {
 
     const {
@@ -34,13 +36,15 @@ export const EditDialogBase = (props: {
         logic: dialogLogic,
         headerButtons,
         hideTabs,
-        paging
+        paging,
+        footer
     } = props;
 
     const focusedTab = !!paging.currentItem?.isFocused;
     const subpages = paging.items;
 
     return <EpistoDialog
+        closeButtonType="top"
         logic={dialogLogic}
         fullScreenX
         fullScreenY>
@@ -144,6 +148,9 @@ export const EditDialogBase = (props: {
             <EpistoPaging
                 index={paging.currentIndex}
                 slides={subpages.map(x => x.content)} />
+
+            {/* footer */}
+            {footer}
         </Flex>
 
     </EpistoDialog>;

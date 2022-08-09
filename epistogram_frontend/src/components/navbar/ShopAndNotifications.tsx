@@ -1,13 +1,14 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
-import { getAssetUrl } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NotificationsPopper } from './NotificationsPopper';
 import { UserContextMenu } from './UserContextMenu';
 
@@ -21,8 +22,7 @@ export const ShopAndNotifications = (props: {
 
     const { navigate } = useNavigation();
 
-    const user = useContext(CurrentUserContext);
-    const isUserLoggedIn = !!user;
+    const { isAuthenticated } = useAuthorizationContext();
 
     // refs 
     const userSettingsRef = useRef<HTMLDivElement>(null);
@@ -48,9 +48,10 @@ export const ShopAndNotifications = (props: {
                 isOpen={settingsPopperOpen} />
 
             <Flex
-                pr={isLowHeight ? 0 : '10px'}
+                paddingRight={isLowHeight ? 0 : '10px'}
                 align="center"
-                mr={isLowHeight ? 0 : '15px'}>
+                marginRight={isLowHeight ? 0 : '15px'}
+                flexShrink="0">
 
                 {/* shop button */}
                 <EpistoButton
@@ -74,7 +75,7 @@ export const ShopAndNotifications = (props: {
 
                     <img
                         className="square50"
-                        src={getAssetUrl('/images/shop3D.png')}
+                        src={Environment.getAssetUrl('/images/shop3D.png')}
                         alt=""
                         style={{
                             objectFit: 'contain',
@@ -90,10 +91,9 @@ export const ShopAndNotifications = (props: {
                     bg="var(--mildGrey)"></Box>
 
                 {/* profile pic */}
-                {isUserLoggedIn && (
+                {isAuthenticated && (
 
                     <ProfileImage
-                        url={user!.avatarUrl}
                         onClick={() => setSettingsPopperOpen(true)}
                         cursor="pointer"
                         className="square50"

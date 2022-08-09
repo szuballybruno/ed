@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
 
@@ -6,24 +8,26 @@ import { User } from './User';
 export class DiscountCode {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'DiscountCode'>;
 
     @Column()
+    @XViewColumn()
     code: string;
 
     // user 
-    @Column({ type: 'integer', nullable: true })
-    userId: number | null;
-
+    @Column({ type: 'int', nullable: true })
+    @XViewColumn()
+    userId: Id<'User'> | null;
     @ManyToOne(_ => User, x => x.discountCodes)
     @JoinColumn({ name: 'user_id' })
     user: User | null;
 
     // shop item
-    @Column()
-    shopItemId: number;
-
+    @Column({ type: 'int' })
+    @XViewColumn()
+    shopItemId: Id<'ShopItem'>;
     @OneToMany(_ => ShopItem, x => x.discountCodes)
     @JoinColumn({ name: 'shop_item_id' })
-    shopItem: ShopItem;
+    shopItem: Relation<ShopItem>;
 }

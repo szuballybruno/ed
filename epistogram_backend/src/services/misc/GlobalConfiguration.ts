@@ -1,7 +1,9 @@
-import { log, logError } from './logger';
 import dotenv from 'dotenv';
+import { log } from './logger';
 
 type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
+
+export type LogScopeType = 'ORM' | 'BOOTSTRAP' | 'ROLLING SESSION' | 'GIVEN ANSWER' | 'GENERIC' | 'TRANSACTION' | 'TEMPOMAT';
 
 export class GlobalConfiguration {
 
@@ -16,7 +18,7 @@ export class GlobalConfiguration {
             setNewPasswordTokenSecret: 'sdajwd99839d8y9ac9ayw7dya398yd9aysdas'
         },
         tokenLifespans: {
-            accessTokenLifespanInS: 15 * 60, // 15 minutes
+            accessTokenLifespanInS: 2 * 60 * 60, // 2 hours
             refreshTokenLifespanInS: 72 * 60 * 60, // 72 hours
             setNewPasswordTokenLifespanInS: 8 * 60 * 60, // 8 hours,
             registrationTokenLifespanInS: 127 * 60 * 60, // 127 hours,
@@ -67,13 +69,28 @@ export class GlobalConfiguration {
         serviceUserPassword: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_PASSWORD'),
         isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED') === 'true',
         isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED') === 'true',
-        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true'
+        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true',
+    };
+
+    logging = {
+        enabledScopes: ['GENERIC', 'TRANSACTION'] as LogScopeType[],
+    };
+
+    practiseQuestions = {
+        incorrectQuestionDelayMinutes: 5,
+        correctQuestionDelayMinutes: 20,
+        incorrectPractiseQuestionDelayMinutes: 60
     };
 
     constructor(rootDirectory: string) {
 
         this.rootDirectory = rootDirectory;
     }
+
+    overrideLogScopes = (scopes: LogScopeType[]) => {
+
+        this.logging.enabledScopes = scopes;
+    };
 
     getIsProdEnvironment = () => {
 
@@ -118,7 +135,7 @@ export class GlobalConfiguration {
         if (!value && value !== 'false' && !allowEmptyStr)
             throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${GlobalConfiguration.getCurrentEnvironmentName()}'!`);
 
-        log(entryName + ' -> ' + value);
+        // log(entryName + ' -> ' + value);
         return value ?? '';
     };
 
@@ -137,7 +154,7 @@ export class GlobalConfiguration {
         log('Loading config.env...');
 
         dotenv
-            .config({ path: 'config.env' });
+            .config({ path: 'config/config.env' });
 
         const globalConfig = new GlobalConfiguration(rootDirectory);
 

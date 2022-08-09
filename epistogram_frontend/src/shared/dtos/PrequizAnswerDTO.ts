@@ -1,4 +1,6 @@
+import { Id } from '../types/versionId';
+
 export class PrequizAnswerDTO {
-    id: number;
+    id: Id<'Answer'>;
     text: string;
 }

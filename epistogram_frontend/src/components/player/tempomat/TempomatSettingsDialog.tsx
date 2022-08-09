@@ -2,16 +2,18 @@ import { Divider, Flex, Image } from '@chakra-ui/react';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Id } from '../../../shared/types/versionId';
+import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog, EpistoDialogLogicType } from '../../EpistoDialog';
+import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { TempomatModeTile } from './TempomatModeTile';
 
 export const TempomatSettingsDialog = (props: {
     tempomatDialogLogic: EpistoDialogLogicType,
-    courseId: number,
-    onTempomatModeChanged: () => void,
+    courseId: Id<'Course'>,
+    onTempomatModeChanged: () => Promise<void>,
     tempomatMode: TempomatModeType
 }) => {
 
@@ -26,14 +28,14 @@ export const TempomatSettingsDialog = (props: {
         try {
 
             await setTempomatMode({ mode, courseId });
-            onTempomatModeChanged();
+            await onTempomatModeChanged();
         }
         catch (e) {
 
             showError(e);
         }
     };
-    
+
     // "& .MuiDialog-container": {
     //     justifyContent: "center",
     //     alignItems: "center"
@@ -47,11 +49,13 @@ export const TempomatSettingsDialog = (props: {
     return (
         <EpistoDialog
             fullScreenX
-            logic={tempomatDialogLogic}>
+            title='A tanfolyam tempójának beállítása'
+            closeButtonType='top'
+            logic={tempomatDialogLogic} >
 
             <Flex direction="column"
-align="center"
-flex="1" >
+                align="center"
+                flex="1" >
                 <Divider
                     h="1px"
                     w="calc(100% - 20px)"
@@ -125,7 +129,7 @@ flex="1" >
                             h="30px"
                             w="30px"
                             mr="5px"
-                            src={getAssetUrl('/images/tempomatdatechange.png')}
+                            src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
                         />
 
                         <EpistoFont>
@@ -134,6 +138,6 @@ flex="1" >
                     </Flex>
                 </Flex>
             </Flex>
-        </EpistoDialog>
+        </EpistoDialog >
     );
 };

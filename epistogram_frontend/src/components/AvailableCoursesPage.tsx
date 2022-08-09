@@ -1,14 +1,17 @@
 import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React from 'react';
-import { useUserCourses } from '../services/api/courseApiService';
+import { CourseApiService } from '../services/api/courseApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
-import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
-import { distinct } from '../static/frontendHelpers';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
+import { OrderType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
+import { distinctByAllKeys } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFlex } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { LeftPane } from './LeftPane';
@@ -19,12 +22,13 @@ import { EpistoSearch } from './universal/EpistoSearch';
 
 const AvailableCoursesPage = () => {
 
-    const [searchText, setSearchText] = React.useState('');
-    const [searchCategory, setSearchCategory] = React.useState('');
+    const [searchText, setSearchText] = React.useState<string | null>(null);
+    const [filterCategoryId, setFilterCategoryId] = React.useState<Id<'CourseCategory'> | null>(null);
     const [isFeatured, setIsFeatured] = React.useState(false);
     const [isRecommended, setIsRecommended] = React.useState(false);
+    const [orderBy, setOrderBy] = React.useState<OrderType | null>(null);
 
-    const { courses, coursesState, coursesError } = useUserCourses();
+    const { courses, coursesState, coursesError } = CourseApiService.useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
 
     const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
@@ -32,21 +36,27 @@ const AvailableCoursesPage = () => {
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const clearFilters = () => {
-        setSearchCategory('');
-        setSearchText('');
+        setFilterCategoryId(null);
+        setSearchText(null);
         setIsFeatured(false);
         setIsRecommended(false);
+        setOrderBy(null);
     };
 
-    const categoryOptions = distinct(courses
-        .map((course, index) => course.subCategoryName));
+    const categoryOptions = distinctByAllKeys(courses
+        .map((course, index) => ({
+            subCategoryId: course.subCategoryId,
+            subCategoryName: course.subCategoryName
+        })),
+        ['subCategoryId']
+    );
 
-    const navigateToDetailsPage = (course: CourseShortDTO) => {
+    const navigateToDetailsPage = (course: AvailableCourseDTO) => {
 
         navigateToCourseDetails(course.courseId, course.currentItemCode ?? undefined);
     };
 
-    const handlePlayCourse = async (course: CourseShortDTO) => {
+    const handlePlayCourse = async (course: AvailableCourseDTO) => {
 
         playCourse(course.courseId, course.stageName, course.currentItemCode);
     };
@@ -56,7 +66,7 @@ const AvailableCoursesPage = () => {
         <LeftPane>
 
             {/* categories  */}
-            <Flex direction="column">
+            <EpistoFlex direction='vertical'>
 
                 {/* categories title */}
                 <EpistoFont
@@ -76,6 +86,11 @@ const AvailableCoursesPage = () => {
                     orientation={'vertical'}>
 
                     {categoryOptions
+                        .sort((a, b) => a.subCategoryName > b.subCategoryName
+                            ? 1
+                            : a.subCategoryName < b.subCategoryName
+                                ? -1
+                                : 0)
                         .map((categoryOption, index) => {
                             return <ToggleButton
                                 value={categoryOption}
@@ -88,7 +103,7 @@ const AvailableCoursesPage = () => {
                                     border: 'none'
                                 }}
                                 onClick={() => {
-                                    setSearchCategory(categoryOption);
+                                    setFilterCategoryId(categoryOption.subCategoryId);
                                 }}
                                 key={index}>
                                 <Flex
@@ -97,16 +112,18 @@ const AvailableCoursesPage = () => {
                                     p="3px"
                                     height="30px"
                                     m="2px 10px 2px 0px"
-                                    bgColor="var(--epistoTeal)" />
+                                    bgColor={filterCategoryId === categoryOption.subCategoryId
+                                        ? 'var(--deepBlue)'
+                                        : 'var(--epistoTeal)'} />
 
-                                {categoryOption}
+                                {categoryOption.subCategoryName}
                             </ToggleButton>;
                         })}
                 </ToggleButtonGroup>
-            </Flex>
+            </EpistoFlex>
         </LeftPane>
 
-        <ContentPane>
+        <ContentPane noMaxWidth>
 
             <Flex
                 id="coursesPanelRoot"
@@ -163,7 +180,6 @@ const AvailableCoursesPage = () => {
                         {/* show all */}
                         <ToggleButton
                             onClick={() => clearFilters()}
-                            selected={isRecommended && isFeatured}
                             value="showAll"
                             style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
@@ -171,13 +187,20 @@ const AvailableCoursesPage = () => {
                         </ToggleButton>
                     </ToggleButtonGroup>
 
-                    <EpistoSearch flex="5"
+                    <EpistoSearch
+                        onChange={(e) => {
+                            setSearchText(e.currentTarget.value);
+                        }}
+                        value={searchText || ''}
+                        flex="5"
                         height="40px"
                         mx="10px" />
 
                     <Select
                         native
-                        onChange={() => { throw new Error('Not implemented!'); }}
+                        onChange={(e) => {
+                            setOrderBy(e.target.value as OrderType | null);
+                        }}
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
                             name: 'A-Z',
@@ -195,10 +218,8 @@ const AvailableCoursesPage = () => {
                             color: '3F3F3F',
                             flex: 1
                         }}>
-                        <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                        <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                        <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
-                        <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
+                        <option value={'nameASC'}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
+                        <option value={'nameDESC'}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
                     </Select>
                 </Flex>
 
@@ -213,18 +234,8 @@ const AvailableCoursesPage = () => {
                         <EpistoGrid auto="fill"
                             gap="15"
                             minColumnWidth="250px">
-                            {courses
-                                .sort((a, b) => {
-                                    if (a.courseId > b.courseId) {
-                                        return -1;
-                                    }
-                                    if (a.courseId < b.courseId) {
-                                        return 1;
-                                    } else {
 
-                                        return 0;
-                                    }
-                                })
+                            {courses
                                 .map((course, index) => {
 
                                     return <GridItem

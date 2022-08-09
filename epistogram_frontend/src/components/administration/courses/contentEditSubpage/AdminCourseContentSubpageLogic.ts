@@ -1,18 +1,21 @@
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
-import { CourseModuleShortDTO } from '../../../../shared/dtos/admin/CourseModuleShortDTO';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { instantiate } from '../../../../shared/logic/sharedLogic';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
+import { VersionCode } from '../../../../shared/types/versionCode';
+import { Id } from '../../../../shared/types/versionId';
 import { formatTime } from '../../../../static/frontendHelpers';
 
 export type RowSchemaModule = {
-    id: number;
+    versionId: Id<'ModuleVersion'>;
     isPretestModule: boolean;
     name: string;
     orderIndex: number;
 };
 
 export type RowSchema = {
-    rowKey: string;
+    rowKey: VersionCode;
     rowNumber: number;
     itemOrderIndex: string;
     itemTitle: string;
@@ -33,13 +36,14 @@ export type RowSchema = {
         color: any;
     };
     videoFile: string;
-    quickMenu: number;
+    quickMenu: Id<'VideoVersion'> | Id<'ExamVersion'>;
     changedProperties: {
         itemOrderIndex: boolean;
         itemTitle: boolean;
         itemSubtitle: boolean;
         moduleId: boolean;
     };
+    data: CourseContentItemAdminDTO;
 };
 
 const getItemTypeValues = (itemType: CourseItemType): { label: string, color: any } => {
@@ -91,9 +95,9 @@ const getIssueText = (dto: CourseContentItemIssueDTO) => {
 export const mapToRowSchema = (
     item: CourseContentItemAdminDTO,
     rowNumber: number,
-    modules: CourseModuleShortDTO[],
-    getItemKey: (item: CourseContentItemAdminDTO) => string,
-    isModified: (key: string, field: keyof CourseContentItemAdminDTO) => boolean): RowSchema => {
+    modules: ModuleEditDTO[],
+    getItemKey: (item: CourseContentItemAdminDTO) => VersionCode,
+    isModified: (key: VersionCode, field: keyof CourseContentItemAdminDTO) => boolean): RowSchema => {
 
     const { color, label } = getItemTypeValues(item.itemType);
 
@@ -109,27 +113,40 @@ export const mapToRowSchema = (
 
     const isPretest = item.itemType === 'pretest';
 
+    const getItemModule = () => {
+
+        const module = modules
+            .firstOrNull(x => x.versionId === item.moduleVersionId);
+
+        if (!module)
+            throw new Error(`Module for item (verisonCode: ${item.versionCode}) not found by moduleVersionId: ${item.moduleVersionId}`);
+
+        return module;
+    };
+
+    // 
     const module = isPretest
-        ? {
-            id: -1,
+        ? instantiate<ModuleEditDTO>({
+            versionId: Id.create<'ModuleVersion'>(-1),
             name: 'none',
-            orderIndex: -1
-        } as CourseModuleShortDTO
-        : modules
-            .single(x => x.id === item.moduleId);
+            orderIndex: -1,
+            description: '',
+            imageFilePath: ''
+        })
+        : getItemModule();
 
     return ({
-        rowKey: item.itemCode,
+        rowKey: item.versionCode,
         rowNumber: rowNumber,
         itemOrderIndex: isPretest ? '-' : item.itemOrderIndex + '',
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
-        module: {
+        module: instantiate<RowSchemaModule>({
             isPretestModule: isPretest,
-            id: module.id,
+            versionId: module.versionId,
             name: module.name,
-            orderIndex: module.orderIndex
-        },
+            orderIndex: module.orderIndex,
+        }),
         itemType: {
             label,
             color,
@@ -157,13 +174,14 @@ export const mapToRowSchema = (
                 ? 'var(--intenseRed)'
                 : 'var(--intenseGreen)'
         },
-        quickMenu: item.itemId,
+        quickMenu: item.videoVersionId! || item.examVersionId!,
         videoFile: 'vf',
         changedProperties: {
             itemOrderIndex: isModified(key, 'itemOrderIndex'),
             itemTitle: isModified(key, 'itemTitle'),
             itemSubtitle: isModified(key, 'itemSubtitle'),
-            moduleId: isModified(key, 'moduleId'),
-        }
+            moduleId: isModified(key, 'moduleVersionId'),
+        },
+        data: item
     });
 };

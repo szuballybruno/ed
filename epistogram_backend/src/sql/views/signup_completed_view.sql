@@ -1,11 +1,14 @@
 SELECT 
 	u.id user_id,
-	assv.is_completed is_signup_complete
+	asev.is_completed is_signup_complete
 FROM public.user u
 
-LEFT JOIN public.answer_session_view assv 
-	ON assv.user_id = u.id 
-		AND assv.exam_id = 1
+LEFT JOIN public.answer_session_view asv 
+ON asv.user_id = u.id 
+AND asv.answer_session_type = 'signup'
+
+LEFT JOIN public.answer_session_evaluation_view asev
+ON asev.answer_session_id = asv.answer_session_id
 		
 ORDER BY
 	u.id

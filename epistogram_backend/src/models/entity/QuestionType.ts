@@ -1,17 +1,22 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Question } from './Question';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { QuestionData } from './question/QuestionData';
 
 @Entity()
 export class QuestionType {
 
     @PrimaryGeneratedColumn()
+    @XViewColumn()
     id: number;
 
     @Column()
+    @XViewColumn()
     name: string;
 
+    // TO MANY
+
     // questions
-    @OneToMany(_ => Question, x => x.type)
+    @OneToMany(_ => QuestionData, x => x.type)
     @JoinColumn()
-    questions: Question[];
+    questions: QuestionData[];
 }

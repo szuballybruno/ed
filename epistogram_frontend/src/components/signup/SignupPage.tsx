@@ -1,25 +1,24 @@
-import { Flex } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
-import { getAssetUrl, usePaging } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { ContentPane } from '../ContentPane';
 import { EpistoFont } from '../controls/EpistoFont';
-import { SignupQuestions } from '../SignupQuestions';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { PageRootContainer } from '../PageRootContainer';
+import { SignupQuestions } from '../SignupQuestions';
+import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SignupWrapper } from './SignupWrapper';
-import { ContentPane } from '../ContentPane';
 
 export const SignupPage = () => {
 
     // slides
-    const slidesState = usePaging([1, 2, 3]);
-    const user = useContext(CurrentUserContext)!;
+    const slidesState = usePaging({ items: [1, 2, 3] });
     const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
-    const isInvitedUser = user.isTrusted;
+    const isInvitedUser = true;
 
     const { navigate } = useNavigation();
 
@@ -39,7 +38,7 @@ export const SignupPage = () => {
 
     const GreetSlide = () => <SignupWrapper
         title={translatableTexts.signupPage.greetSlideTitle}
-        currentImage={getAssetUrl('/signupQuestionImages/regisztracio.svg')}
+        currentImage={Environment.getAssetUrl('/signupQuestionImages/regisztracio.svg')}
         description={translatableTexts.signupPage.greetSlideDescription}
         onNext={() => slidesState.next()}
         nextButtonTitle={translatableTexts.signupPage.greetSlideNextButton}>
@@ -51,7 +50,7 @@ export const SignupPage = () => {
         onJumpToResults={slidesState.jumpToLast} />;
 
     const SummarySlide = (isCurrent: boolean) => <SignupWrapper
-        currentImage={getAssetUrl('/images/analysis3D.png')}
+        currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
         description={<EpistoFont isMultiline>
 
             {/* this part should be bolder */}
@@ -84,7 +83,7 @@ export const SignupPage = () => {
 
     return (
         <PageRootContainer noBackground
-noMaxWidth>
+            noMaxWidth>
 
             <ContentPane
                 align="center"

@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { ActivitySession } from './ActivitySession';
 import { CoinTransaction } from './CoinTransaction';
 import { User } from './User';
@@ -7,31 +9,40 @@ import { User } from './User';
 export class ActivityStreak {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ActivityStreak'>;
 
     @Column({ type: 'timestamptz' })
+    @XViewColumn()
     startDate: Date;
 
     @Column({ type: 'timestamptz' })
+    @XViewColumn()
     endDate: Date;
 
     @Column()
+    @XViewColumn()
     isFinalized: boolean;
 
-    // user 
-    userId: number;
+    // TO ONE
 
+    // user 
+    @Column()
+    @XViewColumn()
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
+
+    // TO MANY
 
     // activities 
     @OneToMany(_ => ActivitySession, x => x.activityStreak)
     @JoinColumn()
-    activitySessions: ActivitySession[];
+    activitySessions: Relation<ActivitySession>[];
 
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activityStreak)
-    coinAcquires: CoinTransaction[];
+    coinAcquires: Relation<CoinTransaction>[];
 }

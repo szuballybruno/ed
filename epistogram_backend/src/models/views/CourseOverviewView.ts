@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,29 +9,38 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class CourseOverviewView {
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @ViewColumn()
+    @XViewColumn()
     totalSpentSeconds: number;
 
     @ViewColumn()
+    @XViewColumn()
     completedVideoCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     answeredVideoQuestionCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     questionSuccessRate: number;
 
     @ViewColumn()
+    @XViewColumn()
     examSuccessRateAverage: number;
 
     @ViewColumn()
+    @XViewColumn()
     finalExamSuccessRate: number;
 
     @ViewColumn()
+    @XViewColumn()
     coinsAcquired: number;
 }

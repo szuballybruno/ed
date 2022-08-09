@@ -1,6 +1,7 @@
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 
 export const usePersonalityTraitCategories = () => {
@@ -15,7 +16,7 @@ export const usePersonalityTraitCategories = () => {
     };
 };
 
-export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: number, isMax: boolean) => {
+export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) => {
 
     const qr = useReactQuery2<PersonalityTraitCategoryDTO>(
         apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails,

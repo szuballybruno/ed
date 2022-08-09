@@ -1,5 +1,5 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
-import { Divider, Typography } from '@mui/material';
+import { Divider } from '@mui/material';
 import { EpistoFont } from './controls/EpistoFont';
 
 export const EpistoHeader = (props: {
@@ -23,8 +23,8 @@ export const EpistoHeader = (props: {
     })();
 
     return <Flex id="epistoHeaderRoot"
-direction="column"
-{...css}>
+        direction="column"
+        {...css}>
 
         <EpistoFont
             fontSize={variant === 'giant'

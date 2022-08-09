@@ -1,6 +1,7 @@
+import { Id } from '../types/versionId';
 import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
 
 export class PretestDataDTO {
-    answerSessionId: number;
+    answerSessionId: Id<'AnswerSession'>;
     exam: ExamPlayerDataDTO;
 }

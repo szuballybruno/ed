@@ -1,8 +1,10 @@
+import { Id } from '../types/versionId';
+
 export type CreateInvitedUserDTO = {
     firstName: string;
     lastName: string;
     email: string;
-    organizationId?: number;
-    roleId: number;
-    jobTitleId: number;
+    companyId?: Id<'Company'>;
+    roleId: Id<'Role'>;
+    jobTitleId: Id<'JobTitle'>;
 }

@@ -1,62 +1,48 @@
-import { ModuleCreateDTO } from '../shared/dtos/ModuleCreateDTO';
-import { ModuleAdminEditDTO } from '../shared/dtos/ModuleAdminEditDTO';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
 import { ModuleService } from '../services/ModuleService';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class ModuleController {
+export class ModuleController implements XController<ModuleController> {
 
     private _moduleService: ModuleService;
 
-    constructor(moduleService: ModuleService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._moduleService = moduleService;
+        this._moduleService = serviceProvider.getService(ModuleService);
     }
 
-    createModuleAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.module.getModuleListEditData)
+    getModuleListEditAction(params: ActionParams) {
 
-        await this._moduleService
-            .createModuleAsync(params.getBody<ModuleCreateDTO>().data);
-    };
-
-    deleteModuleAction = async (params: ActionParams) => {
-
-        const moduleId = params
-            .getBody<{ moduleId: number }>()
-            .getValue(x => x.moduleId, 'int');
-
-        await this._moduleService
-            .deleteModulesAsync([moduleId]);
-    };
-
-    getModuleEditDataAction = async (params: ActionParams) => {
-
-        const moduleId = withValueOrBadRequest<number>(params.req.query.moduleId, 'number');
-
-        return this._moduleService
-            .getModuleEditDataAsync(moduleId);
-    };
-
-    saveModuleAction = async (params: ActionParams) => {
-
-        const dto = params
-            .getBody<ModuleAdminEditDTO>();
-
-        const file = params
-            .getSingleFile();
-
-        return this._moduleService
-            .saveModuleAsync(dto.data, file);
-    };
-
-    getModuleListEditAction = async (params: ActionParams) => {
-        
         const query = params
             .getQuery<any>();
 
-        const courseId = query
-            .getValue(x => x.courseId);
+        const courseVersionId = Id
+            .create<'CourseVersion'>(query
+                .getValue(x => x.courseVersionId, 'int'));
 
         return this._moduleService
-            .getModuleListEditDataAsync(courseId);
-    };
+            .getModuleEditDTOsAsync(params.principalId, courseVersionId);
+    }
+
+    @XControllerAction(apiRoutes.module.saveCoverFile, { isPost: true })
+    saveModuleThumbnailImageAction(params: ActionParams) {
+
+        const { body } = params
+            .getFromParameterized(apiRoutes.module.saveCoverFile);
+
+        const file = params
+            .getSingleFileOrFail();
+
+        const moduleVersionId = body
+            .getValue(x => x.moduleVersionId, 'int');
+
+        return this
+            ._moduleService
+            .saveModuleThumbnailImageAsync(params.principalId, moduleVersionId, file.data);
+    }
 }

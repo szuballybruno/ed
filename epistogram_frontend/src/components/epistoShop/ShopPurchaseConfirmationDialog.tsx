@@ -8,7 +8,8 @@ import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoDialog, EpistoDialogLogicType } from '../EpistoDialog';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
 import { EpistoPaging } from '../universal/EpistoPaging';
 
 export const ShopPurchaseConfirmationDialog = (props: {
@@ -18,7 +19,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 }) => {
 
     const { dialogLogic, shopItem, onSuccessfulPurchase } = props;
-    const paging = usePaging([1, 2]);
+    const paging = usePaging({ items: [1, 2] });
     const isCourse = !!shopItem?.courseId;
     const { navigateToPlayer } = useNavigation();
 
@@ -54,11 +55,11 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
     const confirmationSlide = () => (
         <Flex direction="column"
-align="center"
-w="500px">
+            align="center"
+            w="500px">
 
             <EpistoFont
-                classes={['dividerBorderBottom']}
+                className="dividerBorderBottom"
                 style={{
                     padding: '10px'
                 }}>
@@ -149,7 +150,9 @@ w="500px">
         </Flex>
     );
 
-    return <EpistoDialog logic={dialogLogic}>
+    return <EpistoDialog
+        closeButtonType="top"
+        logic={dialogLogic}>
 
         <EpistoPaging
             slides={[confirmationSlide, feedbackSlide]}

@@ -1,36 +1,47 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseRatingQuesitonType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
     expression: ''
 })
 export class CourseRatingQuestionView {
-    
-    @ViewColumn()
-    userId: number;
 
     @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @ViewColumn()
+    @XViewColumn()
     groupId: number;
 
     @ViewColumn()
-	groupName: string;
-	
+    @XViewColumn()
+    groupName: string;
+
     @ViewColumn()
-    questionId: number;
-	
+    @XViewColumn()
+    questionId: Id<'CourseRatingQuestion'>;
+
     @ViewColumn()
+    @XViewColumn()
     questionText: string;
-	
+
     @ViewColumn()
+    @XViewColumn()
     questionType: CourseRatingQuesitonType;
-	
+
     @ViewColumn()
+    @XViewColumn()
     answerValue: number;
-	
+
     @ViewColumn()
+    @XViewColumn()
     answerText: string;
 }

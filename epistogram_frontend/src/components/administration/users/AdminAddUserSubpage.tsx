@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CreateInvitedUserDTO } from '../../../shared/dtos/CreateInvitedUserDTO';
-import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { inviteUserAsync } from '../../../services/api/registrationApiService';
+import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
 import { AdminUserList } from './AdminUserList';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 
 const AdminAddUserSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -17,59 +16,41 @@ const AdminAddUserSubpage = (props: {
 }) => {
 
     const { users, refetchUsersFunction } = props;
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const submitAddUserRequestAsync = async (userEditDTO: UserEditDTO) => {
+    // http 
+    const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
 
-        const createInvitedUserDTO = {
-            firstName: userEditDTO.firstName,
-            lastName: userEditDTO.lastName,
-            email: userEditDTO.email,
-            jobTitleId: userEditDTO.jobTitle?.id ?? null,
-            roleId: userEditDTO.role?.id ?? null,
-            organizationId: userEditDTO.organization?.id ?? null
-        } as CreateInvitedUserDTO;
+    const refetchTrigger = useEventTrigger();
 
-        try {
+    const postCreateInvitedUser = useCallback(() => {
 
-            await inviteUserAsync(createInvitedUserDTO);
+        showNotification('Felhasználó sikeresen hozzáadva');
+        refetchUsersFunction();
+        navigate2(applicationRoutes.administrationRoute.usersRoute);
+    }, [showNotification, refetchUsersFunction, navigate2]);
 
-            showNotification('Felhasználó sikeresen hozzáadva');
-            refetchUsersFunction();
-            navigate(applicationRoutes.administrationRoute.usersRoute);
-        } catch (error) {
+    const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);
 
-            // TODO
-            // if field error 
-            // show error without dialog
-
-            showError(error);
-        }
-    };
-
-    return <AdminBreadcrumbsHeader breadcrumbDatas={[
-        // <BreadcrumbLink
-        //     key={1}
-        //     title="Felhasználók"
-        //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-        //     to={applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '/a/edit'} />,
-        // <BreadcrumbLink
-        //     key={2}
-        //     title={'Felhasználó hozzáadása'}
-        //     isCurrent />
-    ]}>
+    return <AdminBreadcrumbsHeader
+        breadcrumbDatas={[]}>
 
         <AdminUserList
+            currentUserId={null}
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
+                navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
+
         <AdminSubpageHeader background="var(--transparentWhite10)"
             className='roundBorders'>
+
             <AdminEditUserControl
+                editedUserId={null}
+                refetchTrigger={refetchTrigger}
                 editDTO={null}
-                saveUserAsync={submitAddUserRequestAsync}></AdminEditUserControl>
+                saveUserAsync={handleCreateInvitedUser}></AdminEditUserControl>
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>;
 };

@@ -1,6 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { CoinTransaction } from './CoinTransaction';
-import { Course } from './Course';
+import { Course } from './course/Course';
 import { DiscountCode } from './DiscountCode';
 import { ShopItemCategory } from './ShopItemCategory';
 import { StorageFile } from './StorageFile';
@@ -9,46 +11,56 @@ import { StorageFile } from './StorageFile';
 export class ShopItem {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ShopItem'>;
 
     @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     name: string | null;
 
     @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     purchaseLimit: number | null;
 
     @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     detailsUrl: string | null;
 
     @Column()
+    @XViewColumn()
     coinPrice: number;
 
     @Column()
+    @XViewColumn()
     currencyPrice: number;
+
+    // TO ONE
 
     // shop item category 
     @Column()
-    shopItemCategoryId: number;
-
+    @XViewColumn()
+    shopItemCategoryId: Id<'ShopItemCategory'>;
     @ManyToOne(_ => ShopItemCategory, x => x.shopItems)
     @JoinColumn({ name: 'shop_item_category_id' })
     shopItemCategory: ShopItemCategory;
 
     // shop item category 
-    @Column({ nullable: true, type: 'integer' })
-    coverFileId: number | null;
-
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
+    coverFileId: Id<'StorageFile'> | null;
     @ManyToOne(_ => StorageFile, x => x.shopItems)
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: StorageFile | null;
 
     // course
-    @Column({ nullable: true, type: 'integer' })
-    courseId: number | null;
-
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
+    courseId: Id<'Course'> | null;
     @ManyToOne(_ => Course, x => x.shopItems)
     @JoinColumn({ name: 'course_id' })
-    course: Course | null;
+    course: Relation<Course>;
+
+    // TO MANY
 
     // coin acquires 
     @JoinColumn()

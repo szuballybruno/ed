@@ -1,6 +1,8 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseItemType } from '../../shared/types/sharedTypes';
+import { VersionCode } from '../../shared/types/VersionCode1';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -8,55 +10,48 @@ import { CourseItemType } from '../../shared/types/sharedTypes';
 })
 export class CourseAdminContentView {
 
-    @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
-    @ViewColumn()
-	moduleName: string;
+    @XViewColumn()
+    courseVersionId: Id<'CourseVersion'>;
 
-    @ViewColumn()
-	moduleOrderIndex: number;
+    @XViewColumn()
+    videoVersionId: Id<'VideoVersion'>;
 
-    @ViewColumn()
-	moduleId: number;
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
 
-    @ViewColumn()
-	moduleCode: string;
+    @XViewColumn()
+    moduleName: string;
 
-    @ViewColumn()
-	videoId: number;
+    @XViewColumn()
+    moduleOrderIndex: number;
 
-    @ViewColumn()
-	examId: number;
+    @XViewColumn()
+    moduleVersionId: Id<'ModuleVersion'>;
 
-    @ViewColumn()
-	itemId: number;
+    @XViewColumn()
+    itemOrderIndex: number;
 
-    @IsDeletedFlag('bool')
-    @ViewColumn()
-    itemIsDeleted: boolean;
+    @XViewColumn()
+    itemTitle: string;
 
-    @ViewColumn()
-	itemOrderIndex: number;
+    @XViewColumn()
+    itemSubtitle: string;
 
-    @ViewColumn()
-	itemTitle: string;
+    @XViewColumn()
+    versionCode: VersionCode;
 
-    @ViewColumn()
-	itemSubtitle: string;
+    @XViewColumn()
+    errors: string;
 
-    @ViewColumn()
-	itemCode: string;
+    @XViewColumn()
+    warnings: string;
 
-    @ViewColumn()
-	errors: string;
+    @XViewColumn()
+    videoLength: number;
 
-    @ViewColumn()
-	warnings: string;
-
-    @ViewColumn()
-	videoLength: number;
-
-    @ViewColumn()
+    @XViewColumn()
     itemType: CourseItemType;
 }

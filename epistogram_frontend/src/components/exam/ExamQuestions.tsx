@@ -1,54 +1,69 @@
 import { Grid } from '@chakra-ui/layout';
-import { Flex, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { QuestionTypeEnum } from '../../shared/types/sharedTypes';
+import { Flex } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useSaveExamAnswer } from '../../services/api/examApiService';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { getAssetUrl, usePaging } from '../../static/frontendHelpers';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder, epochDates, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { ExamAbortDialog } from './ExamAbortDialog';
 import { ExamLayout } from './ExamLayout';
+import { ExamLayoutContent } from './ExamLayoutContent';
 import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
-    answerSessionId: number,
+    answerSessionId: Id<'AnswerSession'>,
     onExamFinished: () => void,
-    exitExamAction?: () => void,
+    handleAbortExam: () => void
     hideLoading?: boolean
 }) => {
 
     const {
         answerSessionId,
         onExamFinished,
-        exitExamAction,
+        handleAbortExam,
         exam,
         hideLoading
     } = props;
+    const {
+        questions
+    } = exam;
 
-    const questions = exam.questions;
+    const questionPaging = usePaging({
+        items: questions,
+        onNextOverNavigation: onExamFinished
+    });
+
+    const [completedQuestionIds, setCompletedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
     const showError = useShowErrorDialog();
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
-    const questionPaging = usePaging(questions, undefined, onExamFinished);
     const currentQuestion = questionPaging.currentItem!;
-    const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([]);
-    const progressPercentage = (100 / questions.length) * questionPaging.currentIndex;
-    const isSingleAnswerMode = currentQuestion.typeId === QuestionTypeEnum.singleAnswer;
+    const [selectedAnswerIds, setSelectedAnswerIds] = useState<Id<'Answer'>[]>([]);
     const hasSelectedAnswer = selectedAnswerIds.length > 0;
+    const [showUpTime, setShowUpTime] = useState<Date>(new Date());
+    const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
 
     const handleNextAsync = async () => {
+
+        const timeElapsed = epochDates(new Date(), showUpTime);
 
         try {
 
             await saveExamAnswer({
                 answerSessionId: answerSessionId,
                 answerIds: selectedAnswerIds!,
-                questionId: currentQuestion.questionId,
-                elapsedSeconds: 0
+                questionVersionId: currentQuestion.questionVersionId,
+                elapsedSeconds: timeElapsed
             });
 
+            setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
+            setShowUpTime(new Date());
             setSelectedAnswerIds([]);
             questionPaging.next();
         } catch (e) {
@@ -57,18 +72,22 @@ export const ExamQuestions = (props: {
         }
     };
 
-    const setAnswerSelectedState = (answerId: number, isSelected: boolean) => {
+    const handleOpenDialog = () => {
+
+        abortDialog.openDialog();
+    };
+
+    const handleSelectCurrent = <T extends string>(id: Id<T>) => {
+
+        const itemIndex = questions.findIndex(x => x.questionVersionId === id);
+        questionPaging.setItem(itemIndex);
+    };
+
+    const setAnswerSelectedState = (answerId: Id<'Answer'>, isSelected: boolean) => {
 
         if (isSelected) {
 
-            if (isSingleAnswerMode) {
-
-                setSelectedAnswerIds([answerId]);
-            }
-            else {
-
-                setSelectedAnswerIds([...selectedAnswerIds, answerId]);
-            }
+            setSelectedAnswerIds([...selectedAnswerIds, answerId]);
         }
         else {
 
@@ -78,70 +97,63 @@ export const ExamQuestions = (props: {
     };
 
     return <LoadingFrame
-        className="whall"
         loadingState={hideLoading ? undefined : saveExamAnswerState}
         flex="1"
         direction={'column'}
         alignItems={'center'}
-        width="100%"
-        px={40}>
+        width="100%">
+
+        {/* abort dialog */}
+        <ExamAbortDialog
+            dialogLogic={abortDialog}
+            answerSessionId={answerSessionId}
+            answeredQuestionsCount={completedQuestionIds.length}
+            handleAbortExam={handleAbortExam}
+            onExamFinished={onExamFinished}
+            questions={questions} />
 
         <ExamLayout
-            headerLeftItem={<Flex align="center">
-
-                <img
-                    alt=""
-                    src={getAssetUrl('course_page_icons/curriculum_test.svg')}
-                    className="square35" />
-
-                <EpistoFont style={{ marginLeft: '10px' }}>
-                    {questions.length}/{questionPaging.currentIndex + 1}
-                </EpistoFont>
-            </Flex>}
-            headerCenterText={exam.title}
-            exitExamAction={exitExamAction}
-            handleNext={handleNextAsync}
-            showNextButton={hasSelectedAnswer}
-            nextButtonTitle={translatableTexts.exam.nextQuestion}
-            progressValue={progressPercentage}>
-
-            <Flex
-                direction={'column'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                width={'80%'}
-                flex={1}>
-
-                <Flex
-                    p="20px"
-                    align="center">
-
+            headerLeftItem={(
+                <Flex align="center">
                     <img
-                        style={{
-                            borderRadius: '50%',
-                            padding: '8px',
-                            width: '50px',
-                            height: '50px',
-                            marginRight: '30px'
-                        }}
                         alt=""
-                        src="https://static.thenounproject.com/png/92068-200.png"
-                        className="tinyShadow" />
+                        src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
+                        className="square35" />
 
-                    <Text
-                        as="text"
-                        fontSize="1.3rem">
-                        {currentQuestion.questionText}
-                    </Text>
+                    <EpistoFont style={{ marginLeft: '10px' }}>
+                        {questions.length}/{questionPaging.currentIndex + 1}
+                    </EpistoFont>
                 </Flex>
+            )}
+            stepperLogic={{
+                ids: questions.map(x => x.questionVersionId),
+                currentId: currentQuestion.questionVersionId,
+                completedIds: completedQuestionIds,
+                selectCurrentHandler: handleSelectCurrent
+            }}
+            headerCenterText={exam.title}
+            headerButtons={[
+                {
+                    title: 'Vizsga befejezése',
+                    action: handleOpenDialog
+                }
+            ]}
+            footerButtons={new ArrayBuilder()
+                .addIf(hasSelectedAnswer, {
+                    title: translatableTexts.exam.nextQuestion,
+                    action: handleNextAsync
+                })
+                .getArray()}>
+
+            <ExamLayoutContent
+                title={currentQuestion.questionText}>
 
                 {/* answers */}
                 <Flex
                     direction={'row'}
                     justifyContent={'center'}
                     pt={10}
-                    width="100%"
-                    mx={200}>
+                    width="100%">
 
                     <Grid
                         templateColumns="repeat(2, 1fr)"
@@ -157,13 +169,14 @@ export const ExamQuestions = (props: {
 
                                 return <QuestionAnswer
                                     key={index}
+                                    minWidth={400}
                                     onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
                                     answerText={answer.answerText}
                                     isSelected={isAnswerSelected} />;
                             })}
                     </Grid>
                 </Flex>
-            </Flex>
+            </ExamLayoutContent>
         </ExamLayout>
     </LoadingFrame>;
 };

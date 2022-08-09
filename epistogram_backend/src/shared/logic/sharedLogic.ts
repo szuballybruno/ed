@@ -1,3 +1,5 @@
+import { UserPermissionDTO } from '../dtos/role/UserPermissionDTO';
+import { UserRoleDTO } from '../dtos/role/UserRoleDTO';
 import { PasswordValidationIssueType } from '../types/sharedTypes';
 
 export const validatePassowrd = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
@@ -21,6 +23,16 @@ export const validatePassowrd = (password: string, passwordControl: string): Pas
         return 'hasNoNumber';
 
     return null;
+};
+
+export const parseIntOrFail = (text: string, name?: string) => {
+
+    const parsed = parseInt(text);
+
+    if (Number.isNaN(parsed))
+        throw new Error(`Parsing int param "${name ?? '-'}" failed.`);
+
+    return parsed;
 };
 
 export const textContainsNumber = (text: string) => {
@@ -47,14 +59,86 @@ export const getKeys = <T>(obj: T): (keyof T)[] => {
     return keys;
 };
 
+export const getKeyValues = <T>(obj: T) => {
+
+    return Object
+        .keys(obj)
+        .map((key) => ({
+            key: key as keyof T,
+            value: (obj as any)[key]
+        }));
+};
+
 export const noUndefined = <T>(obj: Partial<T>) => {
+
+    const objAny = obj as any;
 
     getKeys(obj)
         .forEach(key => {
 
-            if (obj[key] === undefined)
-                delete obj[key];
+            if (objAny[key] === undefined)
+                delete objAny[key];
         });
+
+    return obj;
+};
+
+export const trimChar = (str: string, char: string) => {
+
+    if (str.length < 2)
+        return str;
+
+    return str.replace(new RegExp(`^${char}+|${char}+$`, 'g'), '');
+};
+
+export const trimEndChar = (str: string, char: string) => {
+
+    if (str.length < 2)
+        return str;
+
+    return str.replace(new RegExp(`${char}+$`, 'g'), '');
+};
+
+export const userRolesEqual = (a: UserRoleDTO, b: UserRoleDTO) => {
+
+    if (a.roleId !== b.roleId)
+        return false;
+
+    if (a.contextCompanyId !== b.contextCompanyId)
+        return false;
+
+    if (a.assigneeUserId !== b.assigneeUserId)
+        return false;
+
+    return true;
+};
+
+export const userPermissionsEqual = (a: UserPermissionDTO, b: UserPermissionDTO) => {
+
+    if (a.permissionId !== b.permissionId)
+        return false;
+
+    if (a.contextCompanyId !== b.contextCompanyId)
+        return false;
+
+    if (a.assigneeUserId !== b.assigneeUserId)
+        return false;
+
+    if (a.parentRoleId !== b.parentRoleId)
+        return false;
+
+    if (a.contextCourseId !== b.contextCourseId)
+        return false;
+
+    return true;
+};
+
+export const instantiate = <T>(obj: T) => obj;
+
+export const notnull = (obj: any, name: string) => {
+
+    if (obj === null || obj === undefined)
+        throw new Error('Object is null or undefined: ' + name);
 
     return obj;
 };

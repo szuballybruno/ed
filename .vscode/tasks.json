@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "nodenew",
+			"path": "epistogram_backend",
+			"problemMatcher": [],
+			"label": "npm: nodenew - epistogram_backend",
+			"detail": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts"
+		}
+	]
+}

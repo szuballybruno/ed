@@ -1,12 +1,22 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, useContext, useEffect } from 'react';
+import { useForceUpdate } from '../../../static/frontendHelpers';
+import { XDialogHoster } from './XDialogHoster';
 
-type XDialogContextType = {
-    openDialog: (key: string) => void,
-    closeDialog: () => void,
-    mountContent: (key: string) => void,
-    unmountContent: (key: string) => void,
-    getOpenState: (key: string) => boolean,
-    getHostElement: (key: string) => Element
+export const XDialogHosterContext = createContext<XDialogHoster>({} as any);
+
+export const useXDialogHosterContext = (key: string) => {
+
+    const xDialogHoster = useContext(XDialogHosterContext);
+    const forceUpdate = useForceUpdate();
+
+    useEffect(() => {
+
+        xDialogHoster
+            .addOnUpdateListener(key, forceUpdate);
+
+        return () => xDialogHoster
+            .removeUpdateListener(key);
+    }, []);
+
+    return xDialogHoster;
 };
-
-export const XDialogContext = createContext<XDialogContextType>({} as any);

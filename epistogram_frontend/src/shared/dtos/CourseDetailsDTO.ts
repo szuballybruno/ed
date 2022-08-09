@@ -1,6 +1,7 @@
-import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
-import { ModuleShortDTO } from './ModuleShortDTO';
 import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from '../types/sharedTypes';
+import { Id } from '../types/versionId';
+import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
+import { PlaylistModuleDTO } from './PlaylistModuleDTO';
 
 export class CourseDetailsDTO {
     title: string;
@@ -10,7 +11,7 @@ export class CourseDetailsDTO {
     categoryName: string;
     subCategoryName: string;
     canStartCourse: boolean;
-    courseId: number;
+    courseId: Id<'Course'>;
     shortDescription: string;
     difficulty: number;
     benchmark: number;
@@ -42,5 +43,5 @@ export class CourseDetailsDTO {
     totalModuleCount: number;
     totalVideoQuestionCount: number;
 
-    modules: ModuleShortDTO[];
+    modules: PlaylistModuleDTO[];
 }

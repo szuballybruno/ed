@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Course } from '../Course';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { PrequizAnswer } from './PrequizAnswer';
 import { PrequizUserAnswer } from './PrequizUserAnswer';
 
@@ -7,31 +8,42 @@ import { PrequizUserAnswer } from './PrequizUserAnswer';
 export class PrequizQuestion {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'PrequizQuestion'>;
 
     @Column()
+    @XViewColumn()
     text: string;
 
     @Column()
+    @XViewColumn()
     isNumericAnswer: boolean;
 
     @Column({ type: 'int', nullable: true })
-    minValue: number;
+    @XViewColumn()
+    minValue: number | null;
 
     @Column({ type: 'int', nullable: true })
-    maxValue: number;
+    @XViewColumn()
+    maxValue: number | null;
 
     @Column({ type: 'text', nullable: true })
-    minLabel: string;
+    @XViewColumn()
+    minLabel: string | null;
 
     @Column({ type: 'text', nullable: true })
-    maxLabel: string;
+    @XViewColumn()
+    maxLabel: string | null;
 
     @Column({ type: 'int', nullable: true })
-    stepValue: number;
+    @XViewColumn()
+    stepValue: number | null;
 
     @Column({ type: 'text', nullable: true })
-    valuePostfix: string;
+    @XViewColumn()
+    valuePostfix: string | null;
+
+    // TO MANY
 
     // answers 
     @OneToMany(_ => PrequizAnswer, x => x.question)

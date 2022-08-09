@@ -1,100 +1,122 @@
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { RegistrationService } from '../services/RegistrationService';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
-import { RoleIdEnum } from '../shared/types/sharedTypes';
-import { EmailService } from '../services/EmailService';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { RegistrationService } from '../services/RegistrationService';
-import { TokenService } from '../services/TokenService';
-import { UserService } from '../services/UserService';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams, ErrorCode } from '../utilities/helpers';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { AuthorizationService } from '../services/AuthorizationService';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class RegistrationController {
+export class RegistrationController implements XController<RegistrationController> {
 
     private _registrationService: RegistrationService;
-    private _userService: UserService;
     private _config: GlobalConfiguration;
+    private _authorizationService: AuthorizationService;
 
-    constructor(
-        res: RegistrationService,
-        userService: UserService,
-        config: GlobalConfiguration) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._registrationService = res;
-        this._userService = userService;
-        this._config = config;
+        this._registrationService = serviceProvider.getService(RegistrationService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
+        this._authorizationService = serviceProvider.getService(AuthorizationService);
     }
 
-    registerUserViaPublicTokenAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.registration.registerUserViaPublicToken, { isPublic: true, isPost: true })
+    registerUserViaPublicTokenAction(params: ActionParams) {
 
-        const body = params.getBody<RegisterUserViaPublicTokenDTO>();
+        return {
+            action: async () => {
+                const body = params.getBody<RegisterUserViaPublicTokenDTO>();
 
-        const { accessToken, refreshToken } = await this._registrationService
-            .registerUserViaPublicTokenAsync(
-                body.getValue<string>(x => x.emailAddress),
-                body.getValue<string>(x => x.firstName),
-                body.getValue<string>(x => x.lastName),
-                body.getValue<string>(x => x.registrationToken));
+                const { accessToken, refreshToken } = await this._registrationService
+                    .registerUserViaPublicTokenAsync(
+                        body.getValue(x => x.emailAddress, 'string'),
+                        body.getValue(x => x.firstName, 'string'),
+                        body.getValue(x => x.lastName, 'string'),
+                        body.getValue(x => x.registrationToken, 'string'));
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
-    };
+                setAuthCookies(this._config, params.res, accessToken, refreshToken);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
+            }
+        };
 
-    registerUserViaInvitationTokenAction = async (params: ActionParams) => {
 
-        const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
+    }
 
-        const { accessToken, refreshToken } = await this._registrationService
-            .registerInvitedUserAsync(
-                body.getValue<string>(x => x.invitationToken),
-                body.getValue<string>(x => x.password),
-                body.getValue<string>(x => x.passwordCompare));
+    @XControllerAction(apiRoutes.registration.registerUserViaInvitationToken, { isPublic: true, isPost: true })
+    registerUserViaInvitationTokenAction(params: ActionParams) {
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
-    };
+        return {
+            action: async () => {
 
-    registerUserViaActivationCodeAction = async (params: ActionParams) => {
+                const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
 
-        const body = params.getBody<RegisterUserViaActivationCodeDTO>();
+                const { accessToken, refreshToken } = await this._registrationService
+                    .registerInvitedUserAsync(
+                        body.getValue(x => x.invitationToken, 'string'),
+                        body.getValue(x => x.password, 'string'),
+                        body.getValue(x => x.passwordCompare, 'string'));
 
-        await this._registrationService
-            .registerUserViaActivationCodeAsync(
-                body.getValue<string>(x => x.activationCode),
-                body.getValue<string>(x => x.emailAddress),
-                body.getValue<string>(x => x.firstName),
-                body.getValue<string>(x => x.lastName));
-    };
+                setAuthCookies(this._config, params.res, accessToken, refreshToken);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
+            }
+        };
 
-    inviteUserAction = async (params: ActionParams) => {
+    }
 
-        const dto = params.getBody<CreateInvitedUserDTO>();
+    @XControllerAction(apiRoutes.registration.registerUserViaActivationCode, { isPublic: true, isPost: true })
+    registerUserViaActivationCodeAction(params: ActionParams) {
 
-        // handle organizationId
-        const currentUser = await this._userService
-            .getUserById(params.currentUserId);
+        return {
+            action: async () => {
+                const body = params.getBody<RegisterUserViaActivationCodeDTO>();
 
-        // if user is admin require organizationId to be provided
-        // otherwise use the current user's organization
-        const organizationId = currentUser.roleId === RoleIdEnum.administrator
-            ? dto.data.organizationId
-            : currentUser.organizationId;
+                await this._registrationService
+                    .registerUserViaActivationCodeAsync(
+                        params.principalId,
+                        body.getValue(x => x.activationCode, 'string'),
+                        body.getValue(x => x.emailAddress, 'string'),
+                        body.getValue(x => x.firstName, 'string'),
+                        body.getValue(x => x.lastName, 'string'));
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
+            }
+        };
+    }
 
-        if (!organizationId)
-            throw new ErrorCode(
-                `Current user is not an administrator, 
-                but has rights to add users, but has no organization, 
-                in which he/she could add users.`, 'bad request');
+    @XControllerAction(apiRoutes.registration.inviteUser, { isPost: true })
+    inviteUserAction(params: ActionParams) {
 
-        // create user
-        await this._registrationService
-            .createInvitedUserAsync({
-                email: dto.getValue<string>(x => x.email),
-                jobTitleId: dto.getValue<number>(x => x.jobTitleId),
-                firstName: dto.getValue<string>(x => x.firstName),
-                lastName: dto.getValue<string>(x => x.lastName),
-                roleId: dto.getValue<number>(x => x.roleId),
-                organizationId,
-            });
-    };
+        return {
+            action: async () => {
+                const dto = params
+                    .getBody<CreateInvitedUserDTO>([
+                        'companyId',
+                        'email',
+                        'firstName',
+                        'lastName',
+                        'jobTitleId'
+                    ]).data;
+
+                return await this._registrationService
+                    .inviteUserAsync(params.principalId, dto);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
+            }
+        };
+    }
 }

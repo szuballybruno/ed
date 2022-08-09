@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
-import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
@@ -8,10 +8,11 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { isCurrentAppRoute } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 import { AdminUserList } from './AdminUserList';
@@ -23,14 +24,26 @@ export const AdminEditUserSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const editedUserId = useIntParam('userId')!;
+    const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
+        .getValueOrNull(x => x.userId, 'int');
+
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveUserAsync } = useSaveUser();
     const showError = useShowErrorDialog();
-    const { navigate } = useNavigation();
-    const navigateToAddUser = () => navigate(applicationRoutes.administrationRoute.usersRoute.addRoute);
-    const navigateToUserCourses = () => navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { courseId: editedUserId });
+    const { navigate2 } = useNavigation();
+    const navigateToAddUser = () => navigate2(applicationRoutes.administrationRoute.usersRoute.addRoute);
+    const navigateToUserCourses = () => navigate2(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: editedUserId });
     const location = useLocation();
+    const refetchTrigger = useEventTrigger();
+
+    /**
+     * Select first user if none selected
+     */
+    useEffect(() => {
+
+        if (!editedUserId && users.length > 0)
+            return navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users.first().id });
+    }, [editedUserId, users]);
 
     const handleSaveUserAsync = async (dto: UserEditDTO) => {
 
@@ -38,13 +51,16 @@ export const AdminEditUserSubpage = (props: {
 
             await saveUserAsync(dto);
             showNotification('A változtatások sikeresen mentésre kerültek.');
-            refetchEditUserData();
+            refetchTrigger.fireEvent();
         }
         catch (e) {
 
             showError(e);
         }
     };
+
+    // subscribe refetch trigger
+    useSubscribeEventTrigger(refetchTrigger, refetchEditUserData);
 
     const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn');
 
@@ -92,7 +108,7 @@ export const AdminEditUserSubpage = (props: {
         const isUserFound = users.some(user => user.id === editedUserId);
 
         if (!isUserFound && users[0]) {
-            navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users[0].id });
+            navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users[0].id });
         }
     };
     checkIfCurrentUserFromUrl();
@@ -100,23 +116,14 @@ export const AdminEditUserSubpage = (props: {
 
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
-        viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute)}
-        breadcrumbDatas={[
-            // <BreadcrumbLink
-            //     key={1}
-            //     title="Felhasználók"
-            //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-            // <BreadcrumbLink
-            //     key={2}
-            //     title={userEditData?.lastName + ' ' + userEditData?.firstName}
-            //     isCurrent />
-        ]}>
+        viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute)}
+        breadcrumbDatas={[]}>
 
         <AdminUserList
+            currentUserId={editedUserId}
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
+                navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
 
         <AdminSubpageHeader
@@ -132,11 +139,12 @@ export const AdminEditUserSubpage = (props: {
 
             <EpistoDialog logic={deleteWaningDialogLogic} />
 
-            <AdminEditUserControl
+            {editedUserId && <AdminEditUserControl
+                editedUserId={editedUserId}
+                refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
                 showDeleteUserDialog={showDeleteUserDialog}
-                saveUserAsync={handleSaveUserAsync} />
-
+                saveUserAsync={handleSaveUserAsync} />}
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>;
 };

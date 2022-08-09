@@ -1,23 +1,29 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Organization } from './Organization';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { Company } from './Company';
 
 @Entity()
 export class ActivationCode {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ActivationCode'>;
 
     @Column()
+    @XViewColumn()
     code: string;
 
     @Column()
+    @XViewColumn()
     isUsed: boolean;
 
-    // organization
+    // company
     @Column()
-    organizationId: number;
+    @XViewColumn()
+    companyId: Id<'Company'>;
 
-    @JoinColumn({ name: 'organization_id' })
-    @ManyToOne(_ => Organization, x => x.activationCodes)
-    organization: Organization;
+    @JoinColumn({ name: 'company_id' })
+    @ManyToOne(_ => Company, x => x.activationCodes)
+    company: Relation<Company>;
 }

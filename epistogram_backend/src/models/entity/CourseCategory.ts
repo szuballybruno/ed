@@ -1,22 +1,30 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Course } from './Course';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { CourseData } from './course/CourseData';
 
 @Entity()
 export class CourseCategory {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'CourseCategory'>;
 
     @Column()
+    @XViewColumn()
     name: string;
+
+    // TO ONE
 
     // parent category 
     @Column({ nullable: true })
-    parentCategoryId: number;
-
+    @XViewColumn()
+    parentCategoryId: Id<'CourseCategory'> | null;
     @ManyToOne(_ => CourseCategory, x => x.childCategories)
     @JoinColumn({ name: 'parent_category_id' })
     parentCategory: CourseCategory;
+
+    // TO MANY
 
     // child categories 
     @OneToMany(_ => CourseCategory, x => x.parentCategory, { cascade: true })
@@ -24,12 +32,12 @@ export class CourseCategory {
     childCategories: CourseCategory[];
 
     // courses
-    @OneToMany(_ => Course, x => x.category)
+    @OneToMany(_ => CourseData, x => x.category)
     @JoinColumn()
-    categoryCourses: Course[];
+    categoryCourses: CourseData[];
 
     // courses
-    @OneToMany(_ => Course, x => x.subCategory)
+    @OneToMany(_ => CourseData, x => x.subCategory)
     @JoinColumn()
-    subCategoryCourses: Course[];
+    subCategoryCourses: CourseData[];
 }

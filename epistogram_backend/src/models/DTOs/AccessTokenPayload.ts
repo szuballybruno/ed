@@ -1,8 +1,5 @@
-import { RoleType } from '../../shared/types/sharedTypes';
-import { UserActivityFlatView } from '../views/UserActivityFlatView';
+import { Id } from '../../shared/types/versionId';
 
 export type AccessTokenPayload = {
-    userId: number,
-    userRole: RoleType,
-    userActivity: UserActivityFlatView
+    userId: Id<'User'>;
 }

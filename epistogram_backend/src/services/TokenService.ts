@@ -1,10 +1,12 @@
-import { sign, verify } from 'jsonwebtoken';
+import JsonWebToken from 'jsonwebtoken';
 import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
 import { User } from '../models/entity/User';
-import { InvitationTokenPayload, RoleIdEnum } from '../shared/types/sharedTypes';
-import { UserActivityFlatView } from '../models/views/UserActivityFlatView';
-import { ErrorCode } from '../utilities/helpers';
+import { InvitationTokenPayload } from '../shared/types/sharedTypes';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { Id } from '../shared/types/versionId';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
+
+const { sign, verify } = JsonWebToken;
 
 export class TokenService {
 
@@ -41,7 +43,7 @@ export class TokenService {
 
     verifySetNewPasswordToken = (token: string) => {
 
-        return this.verifyJWTToken<{ userId: number }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
+        return this.verifyJWTToken<{ userId: Id<'User'> }>(token, this._config.security.secrets.setNewPasswordTokenSecret);
     };
 
     //
@@ -56,13 +58,11 @@ export class TokenService {
             `${this._config.security.tokenLifespans.invitationTokenLifespanInS}s`);
     };
 
-    createAccessToken = (user: User, userActivity: UserActivityFlatView) => {
+    createAccessToken = (user: User) => {
 
         return this.getJWTToken<AccessTokenPayload>(
             {
-                userId: user.id,
-                userRole: RoleIdEnum.toRoleType(user.roleId),
-                userActivity
+                userId: user.id
             },
             this._config.security.secrets.accessTokenSecret,
             `${this._config.security.tokenLifespans.accessTokenLifespanInS}s`);
@@ -76,7 +76,7 @@ export class TokenService {
             `${this._config.security.tokenLifespans.refreshTokenLifespanInS}s`);
     };
 
-    createSetNewPasswordToken = (userId: number) => {
+    createSetNewPasswordToken = (userId: Id<'User'>) => {
 
         return this.getJWTToken(
             { userId },
@@ -106,7 +106,7 @@ export class TokenService {
         const payload = verify(token, secret) as any as TTokenPayload;
 
         if (!payload)
-            throw new ErrorCode('Token verification failed!', 'forbidden');
+            throw new ErrorWithCode('Token verification failed!', 'forbidden');
 
         return payload;
     };

@@ -43,7 +43,6 @@ const defaultCharts = {
             radius: '70%',
             center: ['50%', '50%'],
             roseType: 'radius',
-
             color: ['#FB4D3D', '#03CEA4', '#345995', '#EAC435'],
             label: {
                 color: 'rgba(0,0,0, 0.6)'
@@ -99,6 +98,34 @@ const defaultCharts = {
         }
 
     } as EpistoPieChartOptionsType,
+
+    pie3: {
+        seriesOptions: {
+            radius: '70%',
+            center: ['50%', '50%'],
+            color: ['#FB4D3D', '#03CEA4', '#345995', '#EEE'],
+            label: {
+                color: 'rgba(0,0,0, 0.6)'
+            },
+            labelLine: {
+                lineStyle: {
+                    color: 'rgba(255, 255, 255, 0.3)'
+                },
+                smooth: 0.2,
+                length: 10,
+                length2: 20
+            },
+            itemStyle: {
+                shadowBlur: 200,
+                shadowColor: 'transparent'
+            },
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function () {
+                return Math.random() * 200;
+            }
+        }
+    },
 
     redRadiusPie: {
         visualMap: {
@@ -249,13 +276,66 @@ const defaultCharts = {
 
     } as EpistoBarChartOptionsType,
 
+
+    blueGreenBarChart2: {
+        legend: {
+            orient: 'horizontal',
+            icon: 'circle',
+            itemHeight: 10,
+            top: 30,
+            textStyle: {
+                fontWeight: 700,
+                color: 'black'
+            }
+        },
+        xAxis: {
+            nameLocation: 'middle',
+            nameGap: 40,
+            nameTextStyle: {
+                fontWeight: 600
+            },
+            boundaryGap: true,
+            type: 'category',
+            axisLabel: {
+                show: true,
+                rotate: 15,
+                interval: 0,
+                margin: 20
+            },
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                alignWithLabel: true
+            }
+        },
+        yAxis: {
+            nameLocation: 'middle',
+            nameGap: 30,
+            nameTextStyle: {
+                fontWeight: 600
+            },
+            type: 'value',
+        },
+        seriesOptions: {
+            type: 'bar',
+            itemStyle: {
+                shadowColor: 'rgba(0, 0, 0, 0.3)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2,
+                shadowBlur: 10
+            }
+        }
+
+    } as EpistoBarChartOptionsType,
+
     simpleLineChart: {
         tooltip: {
             trigger: 'axis',
             formatter: (params) => {
                 return 'Időpont: ' + new Date(params[0].axisValue * 1000)
-.toISOString()
-.substr(14, 5) + ' <br />Felhasználók akik ezen a ponton elhagyták a videót: ' + params[0].data[0];
+                    .toISOString()
+                    .substr(14, 5) + ' <br />Felhasználók akik ezen a ponton elhagyták a videót: ' + params[0].data[0];
             }
 
         },
@@ -264,8 +344,8 @@ const defaultCharts = {
             axisLabel: {
                 formatter: (params) => {
                     return new Date(params * 1000)
-.toISOString()
-.substr(14, 5);
+                        .toISOString()
+                        .substr(14, 5);
                 }
             }
 

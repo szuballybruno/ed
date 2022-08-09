@@ -2,14 +2,15 @@ import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { GridOn, List } from '@mui/icons-material';
 import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { useCourseBriefData } from '../../services/api/courseApiService';
+import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
 import { useBriefUserData } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
+import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoFont } from '../controls/EpistoFont';
 
@@ -95,25 +96,37 @@ export const AdminBreadcrumbsHeader = (props: {
 
     // params
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
-    const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
-    const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
-    const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
+    const userId = urlParams.userId
+        ? Id.create<'User'>(parseInt(urlParams.userId))
+        : null;
+    const courseId = urlParams.courseId
+        ? Id.create<'Course'>(parseInt(urlParams.courseId))
+        : null;
+    const shopItemId = urlParams.shopItemId
+        ? Id.create<'ShopItem'>(parseInt(urlParams.shopItemId))
+        : null;
 
     // util
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
 
     // http
     const { briefUserData } = useBriefUserData(userId);
-    const { courseBriefData } = useCourseBriefData(courseId);
+    const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 
     // calc
-    const isApplicationRoute = (obj: any) => !!obj.route;
 
-    const currentRoute = getKeys(applicationRoutes.administrationRoute)
-        .map(x => applicationRoutes.administrationRoute[x] as ApplicationRoute)
-        .filter(x => isApplicationRoute(x))
-        .single(route => isMatchingCurrentRoute(route).isMatchingRoute);
+    const getCurrentRoute = useCallback(() => {
+
+        const isApplicationRoute = (obj: any) => !!obj.route;
+
+        return getKeys(applicationRoutes.administrationRoute)
+            .map(x => applicationRoutes.administrationRoute[x] as ApplicationRoute)
+            .filter(x => isApplicationRoute(x))
+            .single(route => isMatchingCurrentRoute(route).isMatchingRoute);
+    }, [isMatchingCurrentRoute]);
+
+    const currentRoute = getCurrentRoute();
 
     const subRouteName = subRouteLabel
         ? subRouteLabel
@@ -124,8 +137,8 @@ export const AdminBreadcrumbsHeader = (props: {
         : null;
 
     return <Flex
+        id={AdminBreadcrumbsHeader.name}
         flex="1"
-        mb="20px"
         direction={'column'}>
 
         <Flex

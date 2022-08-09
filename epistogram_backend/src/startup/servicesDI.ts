@@ -1,0 +1,200 @@
+import { CourseCompletionService } from '../services/CourseCompletionService';
+import { CourseProgressService } from '../services/CourseProgressService';
+import { createDBSchema } from '../services/misc/dbSchema';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { PlaylistService } from '../services/PlaylistService';
+import { CreateDBService } from '../services/sqlServices/CreateDBService';
+import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
+import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
+import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
+import { VersionSaveService } from '../services/VersionSaveService';
+import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
+import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
+import { ActivationCodeService } from './../services/ActivationCodeService';
+import { AuthenticationService } from './../services/AuthenticationService';
+import { AuthorizationService } from './../services/AuthorizationService';
+import { CoinAcquireService } from './../services/CoinAcquireService';
+import { CoinTransactionService } from './../services/CoinTransactionService';
+import { CommentService } from './../services/CommentService';
+import { CompanyService } from './../services/CompanyService';
+import { CourseItemService } from './../services/CourseItemService';
+import { CourseRatingService } from './../services/CourseRatingService';
+import { CourseService } from './../services/CourseService';
+import { DailyTipService } from './../services/DailyTipService';
+import { EmailService } from './../services/EmailService';
+import { EventService } from './../services/EventService';
+import { ExamService } from './../services/ExamService';
+import { FileService } from './../services/FileService';
+import { HashService } from './../services/HashService';
+import { LikeService } from './../services/LikeService';
+import { LoggerService } from './../services/LoggerService';
+import { MapperService } from './../services/MapperService';
+import { MiscService } from './../services/MiscService';
+import { ModuleService } from './../services/ModuleService';
+import { ORMConnectionService } from './../services/ORMConnectionService/ORMConnectionService';
+import { PasswordChangeService } from './../services/PasswordChangeService';
+import { PermissionService } from './../services/PermissionService';
+import { PersonalityAssessmentService } from './../services/PersonalityAssessmentService';
+import { PlaybackService } from './../services/PlaybackService';
+import { PlayerService } from './../services/PlayerService';
+import { PractiseQuestionService } from './../services/PractiseQuestionService';
+import { PrequizService } from './../services/PrequizService';
+import { PretestService } from './../services/PretestService';
+import { QuestionAnswerService } from './../services/QuestionAnswerService';
+import { QuestionService } from './../services/QuestionService';
+import { RegistrationService } from './../services/RegistrationService';
+import { RoleService } from './../services/RoleService';
+import { SampleMergeService } from './../services/SampleMergeService';
+import { ShopService } from './../services/ShopService';
+import { SignupService } from './../services/SignupService';
+import { SQLFunctionsService } from './../services/sqlServices/FunctionsService';
+import { SeedService } from './../services/sqlServices/SeedService';
+import { SQLConnectionService } from './../services/sqlServices/SQLConnectionService';
+import { StorageService } from './../services/StorageService';
+import { TeacherInfoService } from './../services/TeacherInfoService';
+import { TempomatService } from './../services/TempomatService';
+import { TokenService } from './../services/TokenService';
+import { UrlService } from './../services/UrlService';
+import { UserCourseBridgeService } from './../services/UserCourseBridgeService';
+import { UserProgressService } from './../services/UserProgressService';
+import { UserService } from './../services/UserService';
+import { UserSessionActivityService } from './../services/UserSessionActivityService';
+import { UserStatsService } from './../services/UserStatsService';
+import { VideoRatingService } from './../services/VideoRatingService';
+import { VideoService } from './../services/VideoService';
+
+type CTAnyArgs<T> = { new(...args: any[]): T };
+
+export class ServiceProvider {
+
+    private _services: any;
+
+    constructor(services: any) {
+
+        this._services = { ...this._services, ...services };
+    }
+
+    getService<T>(ct: CTAnyArgs<T>) {
+
+        const service = Object
+            .values(this._services)
+            .firstOrNull(x => (x as any).constructor.name === ct.name) as T;
+
+        if (!service)
+            throw new Error(`Service ${ct.name} not found in service provider!`);
+
+        return service;
+    }
+}
+
+export const instansiateSingletonServices = (rootDir: string) => {
+
+    // 
+    // INIT GLOBAL CONFIG
+    const globalConfiguration = GlobalConfiguration
+        .initGlobalConfig(rootDir);
+
+    // 
+    // INIT DB SCHEMA
+    const dbSchema = createDBSchema();
+
+    const container = XDependency
+        .getClassBuilder()
+        .addClassInstance(XDBMSchemaType, dbSchema)
+        .addClassInstance(GlobalConfiguration, globalConfiguration)
+        .addClass(UrlService, [GlobalConfiguration])
+        .addClass(MapperService, [UrlService])
+        .addClass(LoggerService, [GlobalConfiguration])
+        .addClass(SQLPoolService, [GlobalConfiguration])
+        .getContainer();
+
+    const { instances } = XDependency
+        .instantiate(container);
+
+    return new ServiceProvider(instances);
+};
+
+export const getTransientServiceContainer = (singletonProvider: ServiceProvider) => {
+
+    // create transients
+    const container = XDependency
+        .getClassBuilder()
+
+        // add singleton instances 
+        .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
+        .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
+        .addClassInstance(MapperService, singletonProvider.getService(MapperService))
+        .addClassInstance(UrlService, singletonProvider.getService(UrlService))
+        .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
+        .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
+
+        // add transient signatures
+        .addClass(HashService, [GlobalConfiguration])
+        .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
+        .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaType])
+        .addClass(CreateDBService, [SQLConnectionService, XDBMSchemaType, GlobalConfiguration, TypeORMConnectionService, LoggerService])
+        .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService])
+        .addClass(PermissionService, [ORMConnectionService, MapperService])
+        .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
+        .addClass(SQLFunctionsService, [SQLConnectionService, GlobalConfiguration])
+        .addClass(EventService, [MapperService, ORMConnectionService, AuthorizationService])
+        .addClass(CoinTransactionService, [SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(CoinAcquireService, [CoinTransactionService, ORMConnectionService, EventService])
+        .addClass(UserSessionActivityService, [ORMConnectionService, CoinAcquireService, LoggerService])
+        .addClass(ActivationCodeService, [ORMConnectionService])
+        .addClass(EmailService, [GlobalConfiguration, UrlService])
+        .addClass(VersionSaveService, [ORMConnectionService])
+        .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(QuestionAnswerService, [ORMConnectionService, SQLFunctionsService, CoinAcquireService, VersionSaveService, LoggerService])
+        .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(RoleService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(UserService, [ORMConnectionService, MapperService, TeacherInfoService, HashService, RoleService, AuthorizationService])
+        .addClass(TokenService, [GlobalConfiguration])
+        .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfiguration])
+        .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService])
+        .addClass(SeedService, [XDBMSchemaType, GlobalConfiguration, SQLConnectionService, LoggerService])
+        .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaType, SQLConnectionService, LoggerService])
+        .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService])
+        .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, QuestionAnswerService, AuthorizationService])
+        .addClass(UserCourseBridgeService, [ORMConnectionService, MapperService, AuthorizationService, LoggerService])
+        .addClass(CourseCompletionService, [MapperService, ORMConnectionService])
+        .addClass(ExamService, [UserCourseBridgeService, ORMConnectionService, UserSessionActivityService, QuestionAnswerService, QuestionService, MapperService, AuthorizationService, LoggerService, CourseCompletionService])
+        .addClass(StorageService, [GlobalConfiguration])
+        .addClass(FileService, [UserService, StorageService, ORMConnectionService, AuthorizationService])
+        .addClass(VideoService, [ORMConnectionService, UserCourseBridgeService, QuestionAnswerService, FileService, QuestionService, UrlService, MapperService, GlobalConfiguration, AuthorizationService])
+        .addClass(ModuleService, [ORMConnectionService, MapperService, CourseItemService, VersionSaveService, FileService, AuthorizationService])
+        .addClass(PlaylistService, [UserCourseBridgeService, ORMConnectionService, MapperService])
+        .addClass(CourseProgressService, [UserCourseBridgeService, ORMConnectionService, MapperService, PlaylistService])
+        .addClass(MiscService, [CourseProgressService, ORMConnectionService, MapperService, UserCourseBridgeService])
+        .addClass(SampleMergeService, [])
+        .addClass(PlaybackService, [MapperService, ORMConnectionService, CoinAcquireService, UserSessionActivityService, GlobalConfiguration, SampleMergeService, AuthorizationService, CourseCompletionService])
+        .addClass(PersonalityAssessmentService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(VideoRatingService, [ORMConnectionService, AuthorizationService])
+        .addClass(DailyTipService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(TempomatService, [ORMConnectionService, LoggerService, EventService, AuthorizationService])
+        .addClass(PretestService, [ORMConnectionService, MapperService, ExamService, UserCourseBridgeService, QuestionAnswerService, AuthorizationService, TempomatService])
+        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, PretestService, AuthorizationService])
+        .addClass(ShopService, [ORMConnectionService, MapperService, CoinTransactionService, CourseService, EmailService, FileService, UrlService, AuthorizationService])
+        .addClass(PlayerService, [ORMConnectionService, CourseService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, AuthorizationService])
+        .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, MapperService, AuthorizationService, GlobalConfiguration, QuestionService])
+        .addClass(UserStatsService, [ORMConnectionService, MapperService, TempomatService, AuthorizationService, UserProgressService])
+        .addClass(PrequizService, [ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
+        .addClass(RegistrationService, [ActivationCodeService, EmailService, UserService, AuthenticationService, AuthorizationService, TokenService, ORMConnectionService, RoleService, MapperService])
+        .addClass(CourseRatingService, [MapperService, ORMConnectionService, AuthorizationService])
+        .addClass(UserProgressService, [MapperService, ORMConnectionService, TempomatService, AuthorizationService])
+        .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService])
+        .getContainer();
+
+    return XDependency
+        .orderDepHierarchy(container);
+};
+
+export const instatiateServices = (container: DependencyContainer<DepHierarchyFunction>): ServiceProvider => {
+
+    const { instances } = XDependency
+        .instatiateOnly(container);
+
+    return new ServiceProvider(instances);
+};

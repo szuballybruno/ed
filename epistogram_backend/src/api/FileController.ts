@@ -1,25 +1,26 @@
 import { FileService } from '../services/FileService';
-import { ActionParams, ErrorCode } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class FileController {
+export class FileController implements XController<FileController> {
 
     private _fileService: FileService;
 
-    constructor(fileService: FileService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._fileService = fileService;
+        this._fileService = serviceProvider.getService(FileService);
     }
 
+    @XControllerAction(apiRoutes.file.uploadUserAvatar, { isPost: true })
     uploadAvatarFileAction = (params: ActionParams) => {
 
         const file = params
             .getSingleFileOrFail();
 
-        //TODO: Create a validation function
-        if (!['image/png', 'image/jpeg'].includes(file.mimetype))
-            throw new ErrorCode('File upload failed: Only jpeg or png', 'bad request');
-
         return this._fileService
-            .uploadAvatarFileAsync(params.currentUserId, file);
+            .uploadAvatarFileAsync(params.principalId, file);
     };
 }

@@ -1,58 +1,84 @@
-
 import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
-import { ActionParams, getCookie, ErrorCode } from '../utilities/helpers';
+import { getAuthCookies } from '../utilities/helpers';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { AuthorizationResult, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class AuthenticationController {
+export class AuthenticationController implements XController<AuthenticationController> {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfiguration;
 
-    constructor(authenticationService: AuthenticationService, globalConfig: GlobalConfiguration) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._authenticationService = authenticationService;
-        this._config = globalConfig;
+        this._authenticationService = serviceProvider.getService(AuthenticationService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
     }
 
-    renewUserSessionAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.authentication.loginUser, { isPost: true, isPublic: true })
+    logInUserAction(params: ActionParams) {
 
-        const prevRefreshToken = getCookie(params.req, 'refreshToken')?.value;
+        return {
+            action: async () => {
+                // check request 
+                if (!params.req.body)
+                    throw new ErrorWithCode('Body is null.', 'bad request');
 
-        const { accessToken, refreshToken } = await this._authenticationService
-            .renewUserSessionAsync(prevRefreshToken);
+                // get credentials from request
+                const { email, password } = params.req.body;
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
-    };
+                const { accessToken, refreshToken } = await this._authenticationService
+                    .logInUser(email, password);
 
-    logInUserAction = async (params: ActionParams) => {
+                setAuthCookies(this._config, params.res, accessToken, refreshToken);
+            },
+            auth: async () => {
+                return AuthorizationResult.ok;
+            }
+        };
+    }
 
-        // check request 
-        if (!params.req.body)
-            throw new ErrorCode('Body is null.', 'bad request');
+    @XControllerAction(apiRoutes.authentication.establishAuthHandshake, { isPublic: true })
+    establishAuthHandshakeAction(params: ActionParams) {
 
-        // get credentials from request
-        const { email, password } = params.req.body;
+        return {
+            action: async () => {
+                const { refreshToken } = getAuthCookies(params.req);
 
-        const { accessToken, refreshToken } = await this._authenticationService
-            .logInUser(email, password);
+                const data = await this._authenticationService
+                    .establishAuthHandshakeAsync(refreshToken);
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
-    };
+                setAuthCookies(this._config, params.res, data.newAccessToken, data.newRefreshToken);
 
-    getCurrentUserAction = async (params: ActionParams) => {
+                return data.authData;
+            },
 
-        return this._authenticationService
-            .getCurrentUserAsync(params.currentUserId);
-    };
+            auth: async () => {
+                return AuthorizationResult.ok;
+            }
+        };
+    }
 
-    logOutUserAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.authentication.logoutUser, { isPost: true, isUnauthorized: true })
+    logOutUserAction(params: ActionParams) {
 
-        await this._authenticationService
-            .logOutUserAsync(params.currentUserId);
+        return {
+            action: async () => {
+                await this._authenticationService
+                    .logOutUserAsync(params.principalId);
 
-        // remove browser cookies
-        params.res.clearCookie(this._config.misc.accessTokenCookieName);
-        params.res.clearCookie(this._config.misc.refreshTokenCookieName);
-    };
+                // remove browser cookies
+                params.res.clearCookie(this._config.misc.accessTokenCookieName);
+                params.res.clearCookie(this._config.misc.refreshTokenCookieName);
+            },
+            auth: async () => {
+                return AuthorizationResult.ok;
+            }
+        };
+    }
 }

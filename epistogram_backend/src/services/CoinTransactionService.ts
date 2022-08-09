@@ -5,18 +5,29 @@ import { CoinTransactionView } from '../models/views/CoinTransactionView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { GivenAnswer } from '../models/entity/GivenAnswer';
+import { Id } from '../shared/types/versionId';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 
 export class CoinTransactionService {
 
     private _funcService: SQLFunctionsService;
     private _mapperService: MapperService;
     private _ormConnectionService: ORMConnectionService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(funcService: SQLFunctionsService, ormConnService: ORMConnectionService, mapperService: MapperService) {
+    constructor(
+        funcService: SQLFunctionsService,
+        ormConnService: ORMConnectionService,
+        mapperService: MapperService,
+        authorizationService: AuthorizationService) {
 
         this._funcService = funcService;
         this._mapperService = mapperService;
         this._ormConnectionService = ormConnService;
+        this._authorizationService = authorizationService;
     }
 
     async makeCoinTransactionAsync(insertCoinFnParamsType: InsertCoinFnParamsType) {
@@ -24,88 +35,135 @@ export class CoinTransactionService {
         await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
     }
 
-    async getCoinBalance(userId: number) {
+    getPrincipalCoinBalance(principalId: PrincipalId): ControllerActionReturnType {
 
-        const coinBalance = await this._ormConnectionService
-            .getRepository(CoinBalanceView)
-            .findOneOrFail({
-                where: {
-                    userId
-                }
-            });
+        return {
+            action: async () => {
 
-        return coinBalance.coinBalance;
+                return this
+                    .getCoinBalance(principalId, principalId.getId())
+                    .action();
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
     }
 
-    async giftCoinsToUserAsync(userId: number, amount: number) {
+    getCoinBalance(
+        principalId: PrincipalId,
+        userId: Id<'User'>
+    ): ControllerActionReturnType {
 
-        await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .insert({
-                userId,
-                amount,
-                isGifted: true
-            });
+        return {
+            action: async () => {
+                const coinBalance = await this._ormConnectionService
+                    .query(CoinBalanceView, { userId })
+                    .where('userId', '=', 'userId')
+                    .getSingle();
+
+                return coinBalance.coinBalance;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+
+
     }
 
-    async getCoinTransactionsAsync(userId: number) {
+    giftCoinsToUserAsync(
+        principalId: PrincipalId,
+        userId: Id<'User'>,
+        amount: number
+    ): ControllerActionReturnType {
 
-        const coinTransactions = await this._ormConnectionService
-            .getRepository(CoinTransactionView)
-            .find({
-                where: {
-                    userId
-                }
-            });
+        return {
+            action: async () => {
 
-        return coinTransactions
-            .map(x => this._mapperService
-                .map(CoinTransactionView, CoinTransactionDTO, x));
+                return this._ormConnectionService
+                    .createAsync(CoinTransaction, {
+                        userId,
+                        amount,
+                        isGifted: true
+                    } as CoinTransaction);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ADD_EPISTO_COIN_TO_USERS');
+            }
+        };
     }
 
-    async getCoinsForQuestionAsync(userId: number, questionId: number) {
+    getCoinTransactionsAsync(
+        userId: PrincipalId
+    ): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+                const coinTransactions = await this._ormConnectionService
+                    .query(CoinTransactionView, { userId: userId.toSQLValue() })
+                    .where('userId', '=', 'userId')
+                    .getMany();
+
+                return this._mapperService
+                    .mapTo(CoinTransactionDTO, [coinTransactions]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(userId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
+
+    async getCoinsForQuestionAsync(
+        userId: Id<'User'>,
+        questionVersionId: Id<'QuestionVersion'>
+    ) {
 
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .createQueryBuilder('ca')
-            .leftJoinAndSelect('ca.givenAnswer', 'ga')
-            .where('ca.userId = :userId', { userId })
-            .andWhere('ga.question_id = :questionId', { questionId })
-            .andWhere('ca.given_answer_id IS NOT NULL')
+            .query(CoinTransaction, { userId, questionVersionId })
+            .leftJoin(GivenAnswer, x => x
+                .on('id', '=', 'givenAnswerId', CoinTransaction)
+                .and('questionVersionId', '=', 'questionVersionId'))
+            .where('userId', '=', 'userId')
+            .and('givenAnswerId', 'IS NOT', 'NULL')
             .getMany();
     }
 
-    async getCoinsForActivitySession(userId: number, activitySessionId: number) {
-
+    async getCoinsForActivitySession(
+        userId: Id<'User'>,
+        activitySessionId: Id<'ActivitySession'>
+    ) {
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .findOne({
-                where: {
-                    userId,
-                    activitySessionId
-                }
-            });
+            .query(CoinTransaction, { userId, activitySessionId })
+            .where('userId', '=', 'userId')
+            .and('activitySessionId', '=', 'activitySessionId')
+            .getOneOrNull();
     }
 
-    async getCoinsForActivityStreakAsync(userId: number, activityStreakId: number) {
-
+    async getCoinsForActivityStreakAsync(
+        userId: Id<'User'>,
+        activityStreakId: Id<'ActivityStreak'>
+    ) {
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .find({
-                where: {
-                    userId: userId,
-                    activityStreakId
-                }
-            });
+            .query(CoinTransaction, { userId, activityStreakId })
+            .where('userId', '=', 'userId')
+            .and('activityStreakId', '=', 'activityStreakId')
+            .getMany();
     }
 
-    async getCoinsForAnswerStreakAsync(userId: number, answerStreakId: number) {
+    async getCoinsForAnswerStreakAsync(
+        userId: Id<'User'>,
+        answerStreakId: Id<'GivenAnswerStreak'>
+    ) {
 
         return await this._ormConnectionService
-            .getRepository(CoinTransaction)
-            .createQueryBuilder('ca')
-            .where('ca.userId = :userId', { userId })
-            .andWhere('ca.given_answer_streak_id = :gasid', { gasid: answerStreakId })
+            .query(CoinTransaction, { userId, answerStreakId })
+            .where('userId', '=', 'userId')
+            .and('givenAnswerStreakId', '=', 'answerStreakId')
             .getMany();
     }
 }

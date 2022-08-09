@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,17 +9,22 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserCourseCompletionOriginalEstimationView {
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @ViewColumn()
+    @XViewColumn()
     previsionedItemsPerDay: number;
 
     @ViewColumn()
+    @XViewColumn()
     previsionedDurationDays: number;
 
     @ViewColumn()
+    @XViewColumn()
     previsionedCompletionDate: Date;
 }

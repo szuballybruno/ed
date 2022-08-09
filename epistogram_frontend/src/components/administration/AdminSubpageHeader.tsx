@@ -10,7 +10,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 
 export const AdminSubpageHeader = (props: {
-    tabMenuItems?: ApplicationRoute[],
+    tabMenuItems?: ApplicationRoute<any>[],
     children?: ReactNode,
     onSave?: () => void,
     headerButtons?: ButtonType[],
@@ -41,7 +41,7 @@ export const AdminSubpageHeader = (props: {
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
     const currentMatchingRoute = tabMenuItemsList
-        .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRoute);
+        .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRouteExactly);
 
     const handleNavigateToTab = (path: string) => {
 
@@ -57,6 +57,9 @@ export const AdminSubpageHeader = (props: {
         }
         else {
 
+            // if (loggingSettings.routing)
+            // console.log('navto: ' + targetRoute.route.getAbsolutePath());
+
             navigate(targetRoute, {
                 userId,
                 courseId,
@@ -68,7 +71,10 @@ export const AdminSubpageHeader = (props: {
         }
     };
 
+    const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath();
+
     return <Flex
+        id={AdminSubpageHeader.name}
         direction={'column'}
         className="whall roundBorders"
         background={!isInverseBackground ? 'var(--transparentWhite70)' : undefined}
@@ -90,7 +96,7 @@ export const AdminSubpageHeader = (props: {
                     p="10px"
                     flex="1">
 
-                    {tabMenuItems && <Tabs
+                    {(tabMenuItems && currentMatchingAbsUrl) && <Tabs
                         className="roundBorders"
                         TabIndicatorProps={{
                             style: {
@@ -106,7 +112,7 @@ export const AdminSubpageHeader = (props: {
                                 minHeight: 0
                             }
                         }}
-                        value={currentMatchingRoute?.route?.getAbsolutePath() ?? ''}
+                        value={currentMatchingAbsUrl}
                         onChange={(_, path: string) => handleNavigateToTab(path)}>
 
                         {tabMenuItems
@@ -131,9 +137,9 @@ export const AdminSubpageHeader = (props: {
                                             lineHeight: '0px'
                                         },
                                         '&.Mui-selected': {
-                                            color: '#444',
+                                            color: 'white',
                                             fontWeight: 'bold',
-                                            background: 'var(--transparentIntenseTeal)'
+                                            background: 'var(--funkyHighlight)'
                                         }
                                     }}
                                     label={tabRoute.title}
@@ -150,13 +156,12 @@ export const AdminSubpageHeader = (props: {
                         .map((button, index) => <EpistoButton
                             key={index}
                             style={{
-                                color: '#555',
+                                // color: '#555',
                                 marginRight: '10px',
-                                //background: "var(--transparentIntenseTeal)",
-                                fontWeight: 'bold',
+                                // fontWeight: 'bold',
                                 height: 41
                             }}
-                            variant="plain"
+                            variant={button.variant ?? 'plain'}
                             isDisabled={button.disabled}
                             onClick={button.action}>
                             {button.icon}

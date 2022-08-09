@@ -1,40 +1,53 @@
 import { PretestService } from '../services/PretestService';
-import { ActionParams } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PretestController {
+export class PretestController implements XController<PretestController> {
 
     private _pretestService: PretestService;
 
-    constructor(pretestService: PretestService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._pretestService = pretestService;
+        this._pretestService = serviceProvider.getService(PretestService);
     }
 
-    getPretestDataAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.pretest.getPretestData)
+    getPretestDataAction(params: ActionParams) {
 
-        const query = params
-            .getQuery<{ courseId: number }>();
-
-        const courseId = query
-            .getValue(x => x.courseId, 'int');
-
-        return await this._pretestService
-            .getPretestDataAsync(params.currentUserId, courseId);
-    };
-
-    getPretestResultsAction = async (params: ActionParams) => {
+        const courseId = Id
+            .create<'Course'>(params
+                .getQuery<any>()
+                .getValue(x => x.courseId, 'int'));
 
         return this._pretestService
-            .getPretestResultsAsync(params.currentUserId, params
-                .getQuery<any>()
-                .getValue(x => x.courseId));
-    };
+            .getPretestDataAsync(params.principalId, courseId);
+    }
 
-    getPretestExamIdAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.pretest.getPretestResults)
+    getPretestResultsAction(params: ActionParams) {
+
+        const courseId = Id
+            .create<'Course'>(params
+                .getQuery<any>()
+                .getValue(x => x.courseId, 'int'));
 
         return this._pretestService
-            .getPretestExamIdAsync(params
-                .getQuery<any>()
-                .getValue(x => x.courseId));
-    };
+            .getPretestResultsAsync(params.principalId, courseId);
+    }
+
+    @XControllerAction(apiRoutes.pretest.finishPretest, { isPost: true })
+    finishPretestAction(params: ActionParams) {
+
+        const answerSessionId = params
+            .getFromParameterized(apiRoutes.pretest.finishPretest)
+            .body
+            .getValue(x => x.answerSessionId, 'int');
+
+        return this._pretestService
+            .finishPretestAsync(params.principalId, answerSessionId);
+    }
 }

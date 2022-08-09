@@ -1,28 +1,31 @@
 import { Box, Flex } from '@chakra-ui/layout';
-import { Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogInUser } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { getAssetUrl, useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { useQueryVal } from '../../static/locationHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
-import { useEpistoDialogLogic } from '../EpistoDialog';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext,  RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 
 const LoginScreen = () => {
 
     // util
-    const { navigate } = useNavigation();
+    const { navigate, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
-    const user = useContext(CurrentUserContext);
+    const { hasPermission } = useAuthorizationContext();
+    const dest = useQueryVal('dest');
 
     // state
     const [errorMessage, setErrorMessage] = useState('');
@@ -31,9 +34,7 @@ const LoginScreen = () => {
     const emailRef = React.useRef<HTMLInputElement>(null);
     const pwRef = React.useRef<HTMLInputElement>(null);
 
-    const passwordResetDialogLogic = useEpistoDialogLogic('pwreset', {
-        defaultCloseButtonType: 'top'
-    });
+    const passwordResetDialogLogic = useEpistoDialogLogic('pwreset');
 
     const isDesktopView = useIsScreenWiderThan(1200);
 
@@ -85,9 +86,16 @@ const LoginScreen = () => {
 
         if (authState === 'authenticated') {
 
-            if (user!.userActivity.canAccessApplication) {
+            if (hasPermission('ACCESS_APPLICATION')) {
 
-                navigate(applicationRoutes.homeRoute);
+                if (dest) {
+
+                    navigateToHref(dest);
+                }
+                else {
+
+                    navigate(applicationRoutes.homeRoute);
+                }
             }
             else {
 
@@ -157,7 +165,7 @@ const LoginScreen = () => {
 
                         {/* epi logo */}
                         <img
-                            src={getAssetUrl('/images/logo.png')}
+                            src={Environment.getAssetUrl('/images/logo.png')}
                             style={{
                                 width: '250px',
                                 maxHeight: '100px',
@@ -169,7 +177,7 @@ const LoginScreen = () => {
 
                         {/* 3d redeem image */}
                         <img
-                            src={getAssetUrl('/images/redeem3D.png')}
+                            src={Environment.getAssetUrl('/images/redeem3D.png')}
                             style={{
                                 width: '100%',
                                 maxHeight: '350px',
@@ -227,7 +235,7 @@ const LoginScreen = () => {
 
                                 <EpistoFont
                                     fontSize="fontSmall"
-                                    classes={['fontGrey']}
+                                    color="fontGray"
                                     style={{
                                         textTransform: 'none',
                                         marginTop: '5px',
@@ -293,7 +301,7 @@ const LoginScreen = () => {
                         objectFit: 'contain',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl('/images/bg-art-2.png')}
+                    src={Environment.getAssetUrl('/images/bg-art-2.png')}
                     alt="" />
 
                 {/* Magic powder bottom-left */}
@@ -305,7 +313,7 @@ const LoginScreen = () => {
                         transform: 'rotate(-90deg) scale(50%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl('/images/bg-art-5.png')}
+                    src={Environment.getAssetUrl('/images/bg-art-5.png')}
                     alt="" />
 
                 {/* Magic powder top-left */}
@@ -317,7 +325,7 @@ const LoginScreen = () => {
                         transform: 'rotate(270deg) scale(70%)',
                         zIndex: 0,
                     }}
-                    src={getAssetUrl('/images/bg-art-6.png')}
+                    src={Environment.getAssetUrl('/images/bg-art-6.png')}
                     alt="" />
             </LoadingFrame>
         </Flex>

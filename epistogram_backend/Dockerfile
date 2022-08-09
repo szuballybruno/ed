@@ -20,7 +20,7 @@ RUN npx tsc
 # copy runtime dependnecy files, 
 # note, these are not built and copied to the /build
 # folder by the compiler, since these are not source files. 
-COPY config.env ./config.env
+COPY /config ./config
 COPY /src/emails ./build/emails
 COPY /src/sql ./build/sql
 
@@ -28,4 +28,4 @@ COPY /src/sql ./build/sql
 EXPOSE 5000
 
 # start container 
-CMD node ./build/server.js
+CMD node --es-module-specifier-resolution=node ./build/server.js

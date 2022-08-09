@@ -1,35 +1,35 @@
-import { StorageFile } from '../models/entity/StorageFile';
-import { Video } from '../models/entity/Video';
-import { CourseItemQuestionEditView } from '../models/views/CourseItemQuestionEditView';
-import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { VideoQuestionEditDTO } from '../shared/dtos/VideoQuestionEditDTO';
+import { UploadedFile } from 'express-fileupload';
+import fs from 'fs';
+import { User } from '../models/entity/User';
+import { VideoData } from '../models/entity/video/VideoData';
+import { VideoFile } from '../models/entity/video/VideoFile';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { LatestVideoView } from '../models/views/LatestVideoView';
+import { QuestionDataView } from '../models/views/QuestionDataView';
+import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
+import { Id } from '../shared/types/versionId';
+import { throwNotImplemented } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { toVideoQuestionEditDTO } from './misc/mappings';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { getVideoLengthSecondsAsync } from './misc/videoDurationService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
-import { mapMutationToPartialObject } from './misc/xmutatorHelpers';
-import { Question } from '../models/entity/Question';
-import { withValue } from '../utilities/helpers';
-import { Answer } from '../models/entity/Answer';
-import { X509Certificate } from 'crypto';
-import { CourseController } from '../api/CourseController';
-import { Index } from 'typeorm';
 
-export class VideoService extends QueryServiceBase<Video> {
+export class VideoService extends QueryServiceBase<VideoData> {
 
     private _userCourseBridgeService: UserCourseBridgeService;
     private _questionAnswerService: QuestionAnswerService;
     private _fileService: FileService;
     private _questionsService: QuestionService;
     private _assetUrlService: UrlService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormConnection: ORMConnectionService,
@@ -38,213 +38,234 @@ export class VideoService extends QueryServiceBase<Video> {
         fileService: FileService,
         questionsService: QuestionService,
         assetUrlService: UrlService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        private _globalConfig: GlobalConfiguration,
+        authorizationService: AuthorizationService) {
 
-        super(mapperService, ormConnection, Video);
+        super(mapperService, ormConnection, VideoData);
 
         this._questionAnswerService = questionAnswerService;
         this._userCourseBridgeService = userCourseBridgeService;
         this._fileService = fileService;
         this._questionsService = questionsService;
         this._assetUrlService = assetUrlService;
+        this._authorizationService = authorizationService;
     }
 
-    answerVideoQuestionAsync = async (
-        userId: number,
-        answerSessionId: number,
-        questionId: number,
-        answerIds: number[],
-        elapsedSeconds: number) => {
+    answerVideoQuestionAsync(
+        principalId: PrincipalId,
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
+        elapsedSeconds: number) {
 
-        // validation comes here
+        return {
+            action: async () => {
 
-        return this._questionAnswerService
-            .answerQuestionAsync(userId, answerSessionId, questionId, answerIds, false, elapsedSeconds);
-    };
+                // validation comes here
 
-    insertVideoAsync = async (video: Video, filePath?: string) => {
+                return this._questionAnswerService
+                    .saveGivenAnswerAsync(principalId.getId(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
 
-        if (video.id)
-            throw new Error('Cannot insert with id!');
+    }
 
-        if (filePath) {
-            const videoFileUrl = this._assetUrlService
-                .getAssetUrl(filePath)!;
+    setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
 
-            video.videoFile = {
-                filePath: filePath
-            } as StorageFile;
-
-            video.lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
-        }
-        else {
-
-            video.lengthSeconds = 0;
-        }
-
-        await this._ormService
-            .getRepository(Video)
-            .save(video);
-    };
-
-    setVideoFileIdAsync = async (videoId: number, videoFileId: number) => {
+        const videoVersion = await this._ormService
+            .query(VideoVersion, { videoVersionId })
+            .leftJoin(VideoData, x => x
+                .on('id', '=', 'videoDataId', VideoVersion))
+            .leftJoin(VideoFile, x => x
+                .on('id', '=', 'videoFileId', VideoData))
+            .where('id', '=', 'videoVersionId')
+            .getSingle();
 
         await this._ormService
-            .getRepository(Video)
-            .save({
-                id: videoId,
-                videoFileId: videoFileId
+            .save(VideoFile, {
+                id: videoVersion.videoData.videoFile.id,
+                storageFileId: storageFileId
             });
     };
 
-    async softDeleteVideosAsync(videoIds: number[], unsetCurrentCourseItem: boolean) {
+    setVideoThumbnailFileId = async (videoId: Id<'Video'>, thumbnailFileId: Id<'StorageFile'>) => {
 
-        // if (videoIds.length === 0)
-        //     return;
+        const videoData = await this._ormService
+            .withResType<VideoData>()
+            .query(LatestVideoView, { videoId })
+            .select(VideoData)
+            .leftJoin(VideoVersion, (x => x
+                .on('id', '=', 'videoVersionId', LatestVideoView)))
+            .leftJoin(VideoData, (x => x
+                .on('id', '=', 'videoDataId', VideoVersion)))
+            .where('videoId', '=', 'videoId')
+            .getSingle();
 
-        // // delete questions
-        // const questions = await this._ormService
-        //     .getRepository(Question)
-        //     .createQueryBuilder("q")
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .getMany();
-
-        // await this._questionsService
-        //     .softDeleteQuesitonsAsync(questions.map(x => x.id));
-
-        // // delete answer sessions
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(AnswerSession)
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // // set current course item on users
-        // if (unsetCurrentCourseItem) {
-        //     for (let index = 0; index < videoIds.length; index++) {
-
-        //         const videoId = videoIds[index];
-        //         await this._userCourseBridgeService
-        //             .unsetUsersCurrentCourseItemAsync(undefined, videoId);
-        //     }
-        // }
-
-        // // delete playback samples 
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(VideoPlaybackSample)
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // // delete ratings 
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(VideoRating)
-        //     .where('video_id IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // // delete playback samples 
-        // await this._ormService
-        //     .getOrmConnection()
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(UserVideoProgressBridge)
-        //     .where('"video_id" IN (:...videoIds)', { videoIds })
-        //     .execute();
-
-        // delete video
-        await this._ormService
-            .softDelete(Video, videoIds);
-    }
-
-    uploadVideoFileAsync = async (videoId: number, videoFileBuffer: Buffer) => {
-
-        // upload file
-        const filePath = this._fileService
-            .getFilePath('videos', 'video', videoId, 'mp4');
-
-        await this._fileService
-            .uploadAssigendFileAsync<Video>(
-                filePath,
-                () => this.getVideoByIdAsync(videoId),
-                (fileId) => this.setVideoFileIdAsync(videoId, fileId),
-                (entity) => entity.videoFileId,
-                videoFileBuffer);
-
-        // set video length
-        const videoFileUrl = this._assetUrlService
-            .getAssetUrl(filePath);
-
-        const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+        const videoDataId = videoData.id;
 
         await this._ormService
-            .getRepository(Video)
-            .save({
-                id: videoId,
-                lengthSeconds: lengthSeconds
-            });
-    };
-
-    setVideoThumbnailFileId = async (videoId: number, thumbnailFileId: number) => {
-
-        await this._ormService
-            .getRepository(Video)
-            .save({
-                id: videoId,
+            .save(VideoData, {
+                id: videoDataId,
                 thumbnailFileId: thumbnailFileId
             });
     };
 
-    getVideoByIdAsync = async (videoId: number) => {
 
-        const video = await this._ormService
-            .getSingleById(Video, videoId);
+    /**
+     * Get questions for a particular video.
+     */
+    async _getQuestionDataByVideoVersionId(videoVersionId: Id<'VideoVersion'>) {
 
-        return video;
-    };
-
-    getVideoPlayerDataAsync = async (videoId: number) => {
-
-        const video = await this._ormService
-            .getRepository(Video)
-            .createQueryBuilder('v')
-            .where('v.id = :videoId', { videoId })
-            .leftJoinAndSelect('v.videoFile', 'vf')
-            .leftJoinAndSelect('v.questions', 'q')
-            .leftJoinAndSelect('q.answers', 'a')
-            .getOneOrFail();
-
-        return video;
-    };
-
-    getVideoQuestionEditDataAsync = async (
-        videoId?: number
-    ) => {
-
-        const questionEditView = await this._ormService
-            .getRepository(CourseItemQuestionEditView)
-            .createQueryBuilder('vq')
-            .where('vq.videoId = :videoId', { videoId })
+        const questionData = await this._ormService
+            .query(QuestionDataView, { videoVersionId })
+            .where('videoVersionId', '=', 'videoVersionId')
             .getMany();
 
-        const videoQuestionEditDTO = toVideoQuestionEditDTO(questionEditView, this._assetUrlService.getAssetUrl);
-
-        return videoQuestionEditDTO;
-    };
-
-    async saveVideoQuestionEditDataAsync(mutations: Mutation<QuestionEditDataDTO, 'questionId'>[]) {
-
-        await this._questionsService.saveNewQuestionsAndAnswers(mutations);
-        await this._questionsService.saveUpdatedQuestions(mutations);
-        await this._questionsService.saveUpdatedAnswers(mutations);
-        await this._questionsService.saveNewAnswers(mutations);
+        return questionData;
     }
 
+    getVideoByVersionIdAsync = async (videoVersionId: Id<'VideoVersion'>) => {
 
+        const video = await this._ormService
+            .query(VideoPlayerDataView, { videoVersionId })
+            .where('videoVersionId', '=', 'videoVersionId')
+            .getSingle();
+
+        return video;
+    };
+
+    getVideoPlayerDataAsync = async (videoVersionId: Id<'VideoVersion'>) => {
+
+        const videoPlayerData = await this._ormService
+            .query(VideoPlayerDataView, { videoVersionId })
+            .where('videoVersionId', '=', 'videoVersionId')
+            .getSingle();
+
+        return videoPlayerData;
+    };
+
+    uploadVideoFileChunksAsync(
+        principalId: PrincipalId,
+        videoId: Id<'Video'>,
+        chunkIndex: number,
+        chunksCount: number,
+        getFile: () => UploadedFile | undefined): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+                const videoVersion = await this._ormService
+                    .query(LatestVideoView, { videoId })
+                    .getSingle();
+
+                const videoVersionId = videoVersion.videoVersionId;
+
+                const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
+                const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
+
+                try {
+
+                    if (chunkIndex !== 0 && !fs.existsSync(filePath))
+                        throw new Error('Trying to append file that does not exist!');
+
+                    const file = getFile();
+                    if (!file)
+                        throw new Error('File chunk data not sent!');
+
+                    console.log('Recieved file chunk: #' + chunkIndex);
+
+                    // create temp folder 
+                    if (!fs.existsSync(tempFolder)) {
+                        fs.mkdirSync(tempFolder);
+                    }
+
+                    // create & append file
+                    if (chunkIndex === 0) {
+
+                        fs.writeFileSync(filePath, file.data);
+                    }
+                    else {
+
+                        fs.appendFileSync(filePath, file.data);
+                    }
+
+                    // upload is done 
+                    if (chunkIndex + 1 === chunksCount) {
+
+                        console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
+
+                        // read tmp file 
+                        const fullFile = fs.readFileSync(filePath);
+
+                        // delete tmp file 
+                        fs.rmSync(filePath);
+
+                        // upload to cloud 
+                        await this._uploadVideoFileAsync(videoVersionId, fullFile);
+                    }
+                }
+                catch (e) {
+
+                    fs.unlinkSync(filePath);
+                    throw e;
+                }
+            },
+            auth: async () => {
+
+                const { companyId } = await this._ormService
+                    .query(User, { userId: principalId.toSQLValue() })
+                    .where('id', '=', 'userId')
+                    .getSingle();
+
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId });
+            }
+        };
+
+
+    }
+
+    private _uploadVideoFileAsync = async (videoVersionId: Id<'VideoVersion'>, videoFileBuffer: Buffer) => {
+
+        throwNotImplemented();
+        // upload file
+        // const filePath = this._fileService
+        //     .getFilePath('video_file', videoVersionId);
+
+        // const videoData = await this._ormService
+        //     .withResType<VideoData>()
+        //     .query(VideoVersion, { videoVersionId })
+        //     .select(VideoData)
+        //     .leftJoin(VideoData, x => x
+        //         .on('id', '=', 'videoDataId', VideoVersion))
+        //     .where('id', '=', 'videoVersionId')
+        //     .getSingle();
+
+        // await this._fileService
+        //     .uploadAssigendFile2Async({
+        //         entitySignature: VideoFile,
+        //         entityId: videoData.videoFileId,
+        //         fileBuffer: videoFileBuffer,
+        //         fileCode: 'video_file',
+        //         storageFileIdField: 'storageFileId'
+        //     });
+
+        // const videoFile = await getVideoFile()
+
+        // // set video length
+        // const videoFileUrl = this._assetUrlService
+        //     .getAssetUrl(filePath);
+
+        // const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
+
+        // await this._ormService
+        //     .save(VideoFile, {
+        //         id: videoFile.id,
+        //         lengthSeconds: lengthSeconds
+        //     });
+    };
 }

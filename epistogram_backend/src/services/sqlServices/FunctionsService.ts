@@ -1,33 +1,39 @@
 import { TaskCodeType } from '../../models/Types';
-import { SessionActivityType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
-    userId: number,
+    userId: Id<'User'>,
     amount: number,
-    activitySessionId?: number,
-    videoId?: number,
-    givenAnswerId?: number,
-    givenAnswerStreakId?: number,
-    activityStreakId?: number,
-    shopItemId?: number
+    activitySessionId?: Id<'ActivitySession'>,
+    videoId?: Id<'Video'>,
+    givenAnswerId?: Id<'GivenAnswer'>,
+    givenAnswerStreakId?: Id<'GivenAnswerStreak'>,
+    activityStreakId?: Id<'ActivityStreak'>,
+    shopItemId?: Id<'ShopItem'>
 };
 
 export class SQLFunctionsService {
 
     private _connectionService: SQLConnectionService;
+    private _loggingEnabled: boolean;
 
-    constructor(conn: SQLConnectionService) {
+    constructor(conn: SQLConnectionService, config: GlobalConfiguration) {
 
         this._connectionService = conn;
+        this._loggingEnabled = config.logging.enabledScopes.some(x => x === 'ORM');
     }
 
     execSQLFunctionAsync = async <T>(fnName: string, args: any[], isMultiResult?: boolean) => {
 
-        logObject('');
-        logObject(`Executing SQL funciton (${fnName})... Args: `);
-        logObject(args);
+        if (this._loggingEnabled) {
+
+            logObject('');
+            logObject(`Executing SQL funciton (${fnName})... Args: `);
+            logObject(args);
+        }
 
         // create args indicies
         const argsIndicies = [] as string[];
@@ -48,8 +54,11 @@ export class SQLFunctionsService {
 
             const returnObject = firstRow as T;
 
-            logObject('Return value: ');
-            logObject(returnObject);
+            if (this._loggingEnabled) {
+
+                logObject('Return value: ');
+                logObject(returnObject);
+            }
 
             return returnObject;
         }
@@ -57,14 +66,17 @@ export class SQLFunctionsService {
 
             const fnReturnValue = firstRow[fnName];
 
-            logObject('Return value: ');
-            logObject(fnReturnValue);
+            if (this._loggingEnabled) {
+
+                logObject('Return value: ');
+                logObject(fnReturnValue);
+            }
 
             return fnReturnValue as T;
         }
     };
 
-    answerSignupQuestionFn = (userId: number, questionId: number, answerId: number) => {
+    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerId: Id<'Answer'>) => {
 
         return this.execSQLFunctionAsync(
             'answer_signup_question_fn',
@@ -76,17 +88,17 @@ export class SQLFunctionsService {
     };
 
     answerQuestionFn = async (
-        userId: number,
-        answerSessionId: number,
-        questionId: number,
-        answerIds: number[],
+        userId: Id<'User'>,
+        answerSessionId: Id<'AnswerSession'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        answerIds: Id<'Answer'>[],
         elapsedSeconds: number,
         isPractiseAnswer: boolean) => {
 
         type ReType = {
-            correct_answer_ids: number[],
-            given_answer_id: number,
-            streak_id: number,
+            correct_answer_ids: Id<'Answer'>[],
+            given_answer_id: Id<'GivenAnswer'>,
+            streak_id: Id<'GivenAnswerStreak'>,
             streak_length: number,
             is_correct: boolean,
         };
@@ -97,7 +109,7 @@ export class SQLFunctionsService {
                 [
                     userId,
                     answerSessionId,
-                    questionId,
+                    questionVersionId,
                     answerIds,
                     elapsedSeconds,
                     isPractiseAnswer
@@ -131,27 +143,14 @@ export class SQLFunctionsService {
     };
 
     getUserSessionFirstActivityId = (
-        userId: number,
-        sessionActivityId: number) => {
+        userId: Id<'User'>,
+        sessionActivityId: Id<'ActivitySession'>) => {
 
         return this.execSQLFunctionAsync<number>(
             'get_user_session_first_activity_id',
             [
                 userId,
                 sessionActivityId
-            ]
-        );
-    };
-
-    saveUserSessionActivity = (
-        userId: number,
-        param_activity_type: SessionActivityType) => {
-
-        return this.execSQLFunctionAsync<number>(
-            'save_user_session_activity',
-            [
-                userId,
-                param_activity_type
             ]
         );
     };

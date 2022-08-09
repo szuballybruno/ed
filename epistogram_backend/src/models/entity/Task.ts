@@ -1,26 +1,34 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
 
 @Entity()
 export class Task {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'Task'>;
 
     @Column()
+    @XViewColumn()
     name: string;
 
     @Column()
+    @XViewColumn()
     dueData: Date;
 
     @Column()
+    @XViewColumn()
     objective: string;
 
-    // users 
-    @Column()
-    userId: number;
+    // TO ONE 
 
+    // user
+    @Column()
+    @XViewColumn()
+    userId: Id<'User'>;
     @ManyToOne(type => User, user => user.tasks)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 }

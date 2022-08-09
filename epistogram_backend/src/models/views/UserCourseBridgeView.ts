@@ -1,4 +1,4 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
+import { ViewEntity } from 'typeorm';
 
 @ViewEntity({
     synchronize: false,

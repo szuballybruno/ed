@@ -1,4 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
 import { TempomatAdjustmentValue } from '../TempomatAdjustmentValue';
 import { PrequizQuestion } from './PrequizQuestion';
 import { PrequizUserAnswer } from './PrequizUserAnswer';
@@ -7,21 +9,28 @@ import { PrequizUserAnswer } from './PrequizUserAnswer';
 export class PrequizAnswer {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'PrequizAnswer'>;
 
     @Column()
+    @XViewColumn()
     text: string;
 
     @Column({ type: 'double precision', nullable: true })
-    value: number;
+    @XViewColumn()
+    value: number | null;
+
+    // TO ONE
 
     // question 
     @Column()
-    questionId: number;
-
+    @XViewColumn()
+    questionId: Id<'PrequizQuestion'>;
     @ManyToOne(_ => PrequizQuestion, x => x.answers)
     @JoinColumn({ name: 'question_id' })
     question: PrequizQuestion;
+
+    // TO MANY
 
     // user answers 
     @OneToMany(_ => PrequizUserAnswer, x => x.answer)

@@ -1,28 +1,43 @@
 import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { createClassBuiler } from '../../helpers/classBuilder';
-import { isNumber, isString } from '../../static/frontendHelpers';
+import { isNumber, isString, useCSSOptionClasses } from '../../static/frontendHelpers';
+import { CSSOptionsFont } from '../../styles/globalCssTypes';
 import styles from './css/EpistoFont.module.css';
 
-type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
+export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
 
 export const EpistoFont = (params: {
     children: ReactNode,
-    classes?: string[],
+    
+    /**
+     * @deprecated use globalCss
+     */
     className?: string,
+
+    /**
+     * @deprecated use globalCss
+     */
     style?: CSSProperties,
+
+    /**
+     * @deprecated
+     */
     fontSize?: FontSizeType,
     onClick?: any,
     allowedLines?: number,
     maxFontSize?: number,
     isMultiline?: boolean,
     noLineBreak?: boolean,
+    
+    /**
+     * @deprecated
+     */
     isUppercase?: boolean,
     isAutoFontSize?: boolean,
     tooltip?: string
-}) => {
+} & CSSOptionsFont) => {
 
     const {
-        classes,
         className,
         style,
         fontSize,
@@ -34,8 +49,11 @@ export const EpistoFont = (params: {
         isUppercase,
         isAutoFontSize,
         children,
-        tooltip
+        tooltip,
+        ...cssOptions
     } = params;
+
+    const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
 
     const ref = useRef<HTMLParagraphElement>(null);
 
@@ -83,11 +101,9 @@ export const EpistoFont = (params: {
             .custom(styles['episto-font-main'])
             .if(isString(fontSize), builder => builder
                 .custom(fontSize as string))
-            .if(!!classes, builder => builder
-                .appendList(classes!))
             .if(!!className, builder => builder
                 .custom(className!))
-            .build()}>
+            .build() + ' ' + cssOptionClasses}>
 
         {children}
     </p>;

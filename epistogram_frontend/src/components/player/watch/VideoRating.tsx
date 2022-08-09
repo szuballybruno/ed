@@ -1,20 +1,19 @@
 import { Flex } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from '../../../services/api/videoRatingApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { getAssetUrl, iterate } from '../../../static/frontendHelpers';
+import { Id } from '../../../shared/types/versionId';
+import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { RatingStars } from '../../universal/RatingStars';
 
-export const VideoRating = (props: { videoId: number }) => {
+export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
 
-    const { videoId } = props;
+    const { videoVersionId } = props;
 
     // http
-    const { videoRating, refetchVideoRating } = useVideoRating(videoId);
+    const { videoRating, refetchVideoRating } = useVideoRating(videoVersionId);
     const { rateVideoExperienceAsync } = useRateVideoExperience();
     const { rateVideoDifficultyAsync } = useRateVideoDifficulty();
 
@@ -31,7 +30,7 @@ export const VideoRating = (props: { videoId: number }) => {
 
         try {
 
-            await rateVideoExperienceAsync({ videoId, experience: rating });
+            await rateVideoExperienceAsync({ videoVersionId, experience: rating });
             await refetchVideoRating();
             setShowDificultyRating(true);
         }
@@ -45,7 +44,7 @@ export const VideoRating = (props: { videoId: number }) => {
 
         try {
 
-            await rateVideoDifficultyAsync({ videoId, difficulty: rating });
+            await rateVideoDifficultyAsync({ videoVersionId, difficulty: rating });
             await refetchVideoRating();
             setShowDificultyRating(false);
         }
@@ -58,7 +57,7 @@ export const VideoRating = (props: { videoId: number }) => {
     useEffect(() => {
 
         setShowDificultyRating(false);
-    }, [videoId]);
+    }, [videoVersionId]);
 
     useEffect(() => {
 
@@ -107,7 +106,7 @@ export const VideoRating = (props: { videoId: number }) => {
                 <RatingStars
                     selectedIndex={difficultyRating}
                     setSelectedIndex={handleRateVideoDifficultyAsync}
-                    iconUrl={getAssetUrl('images/difficulty3D.png')} />
+                    iconUrl={Environment.getAssetUrl('images/difficulty3D.png')} />
             </Flex>}
         </Flex>
     );

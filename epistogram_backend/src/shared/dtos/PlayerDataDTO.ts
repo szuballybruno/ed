@@ -1,18 +1,19 @@
-import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
-import { ModuleDetailedDTO } from './ModuleDetailedDTO';
-import { ModuleDTO } from './ModuleDTO';
 import { CourseItemStateType, CourseModeType } from '../types/sharedTypes';
-import { VideoDTO } from './VideoDTO';
+import { Id } from '../types/versionId';
+import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
+import { ModulePlayerDTO } from './ModulePlayerDTO';
+import { PlaylistModuleDTO } from './PlaylistModuleDTO';
+import { VideoPlayerDataDTO } from './VideoDTO';
 
-export type PlayerDataDTO = {
-    video: VideoDTO | null;
-    exam: ExamPlayerDataDTO | null;
-    module: ModuleDetailedDTO;
-    answerSessionId: number | null;
-    mode: CourseModeType;
-    courseId: number;
-    courseItemCode: string;
-    modules: ModuleDTO[];
-    nextItemCode: string | null;
-    nextItemState: CourseItemStateType | null;
+export class PlayerDataDTO {
+    videoPlayerData: VideoPlayerDataDTO | null;
+    examPlayerData: ExamPlayerDataDTO | null;
+    modulePlayerData: ModulePlayerDTO | null;
+    answerSessionId: Id<'AnswerSession'> | null;
+    courseMode: CourseModeType;
+    courseId: Id<'Course'>;
+    modules: PlaylistModuleDTO[];
+    currentPlaylistItemCode: string;
+    nextPlaylistItemCode: string | null;
+    nextPlaylistItemState: CourseItemStateType | null;
 }

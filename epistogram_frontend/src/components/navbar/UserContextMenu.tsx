@@ -5,13 +5,15 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { currentVersion } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 
 export const UserContextMenu = (props: {
     isOpen: boolean,
@@ -22,12 +24,11 @@ export const UserContextMenu = (props: {
     const { anchorRef, close, isOpen } = props;
 
     // context
-    const user = useContext(CurrentUserContext)!;
+    const { hasPermission } = useAuthorizationContext();
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const canAccessAdmin = user!.userActivity!.canAccessAdministration;
-    const { navigate } = useNavigation();
+    const { navigate, openNewTab } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
 
@@ -42,29 +43,24 @@ export const UserContextMenu = (props: {
         }
     };
 
-    const userMenuItems = [
-        {
+    const userMenuItems = new ArrayBuilder<{ name: string, icon: any, color?: any, onClick: () => void }>()
+        .add({
             name: applicationRoutes.settingsRoute.title,
             icon: applicationRoutes.settingsRoute.icon,
             onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute),
-        },
-        {
+        })
+        .add({
             name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
             icon: applicationRoutes.settingsRoute.featurePreviewRoute.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.featurePreviewRoute),
-        },
-        {
-            name: applicationRoutes.settingsRoute.developmentNotes.title,
-            icon: applicationRoutes.settingsRoute.developmentNotes.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotes),
-        },
-        {
+            onClick: () => openNewTab('https://epistogram.com/upcoming-features'),
+        })
+        .add({
             name: translatableTexts.navbar.signout,
             icon: <LogoutIcon></LogoutIcon>,
             color: 'var(--mildRed)',
             onClick: handleLogout,
-        },
-    ];
+        })
+        .getArray();
 
     return (
         <EpistoPopper
@@ -85,7 +81,7 @@ export const UserContextMenu = (props: {
                 bgColor={'black'} />
 
             {/* admin menu item */}
-            {canAccessAdmin && (
+            {/* {canAccessAdmin && (
                 <EpistoButton
                     onClick={() => navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute)}>
 
@@ -107,7 +103,7 @@ export const UserContextMenu = (props: {
                         </EpistoFont>
                     </Flex>
                 </EpistoButton>
-            )}
+            )} */}
 
             {/* menu items */}
             {userMenuItems
@@ -150,7 +146,7 @@ export const UserContextMenu = (props: {
                 fontSize="fontNormal14">
 
                 {translatableTexts.navbar.version}
-                {currentVersion ?? '1999.01.01.01:01'}
+                {Environment.currentVersion ?? '1999.01.01.01:01'}
             </EpistoFont>
         </EpistoPopper >
     );

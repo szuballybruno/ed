@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { DailyTip } from './DailyTip';
 import { User } from './User';
 
@@ -6,24 +8,27 @@ import { User } from './User';
 export class DailyTipOccurrence {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'DailyTipOccurrence'>;
 
     @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
     creationDate: Date;
 
+    // TO ONE
+
     // daily tip
     @Column()
-    dailyTipId: number;
-
+    @XViewColumn()
+    dailyTipId: Id<'DailyTip'>;
     @ManyToOne(_ => DailyTip, x => x.occurrences)
     @JoinColumn({ name: 'daily_tip_id' })
-    dailyTip: DailyTip;
+    dailyTip: Relation<DailyTip>;
 
     // user
     @Column()
-    userId: number;
-
+    @XViewColumn()
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.dailyTipOccurrences)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 }

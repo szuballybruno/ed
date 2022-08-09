@@ -1,12 +1,14 @@
-import { useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseBriefData } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useEditUserData } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { useIntParam } from '../../../static/locationHelpers';
-import { useEpistoDialogLogic } from '../../EpistoDialog';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { Id } from '../../../shared/types/versionId';
+import { useRouteParams } from '../../../static/locationHelpers';
+import { } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminUserList } from './AdminUserList';
 import { AdminUserCoursesDataGridControl } from './dataGrids/AdminUserCoursesDataGridControl';
@@ -19,37 +21,39 @@ export const AdminUserCourseContentSubpage = (props: {
 
     const { users, refetchUsersFunction } = props;
 
-    const userId = useIntParam('userId')!;
-    const courseId = useIntParam('courseId')!;
+    const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.courseContentRoute)
+        .getValue(x => x.userId, 'int');
 
-    // TODO: Fix useBriefUserData
     const { userEditData } = useEditUserData(userId);
-    const { courseBriefData } = useCourseBriefData(courseId);
+    const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
-    const dialogLogic = useEpistoDialogLogic('sasd', {
-        defaultCloseButtonType: 'top'
-    });
+    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('userCourseContentDialog');
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
+    const showError = useShowErrorDialog();
 
-    return <AdminBreadcrumbsHeader
-        breadcrumbDatas={[
-            // <BreadcrumbLink
-            //     key={1}
-            //     title="Felhasználók"
-            //     iconComponent={applicationRoutes.administrationRoute.usersRoute.icon}
-            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/a/edit'} />,
-            // <BreadcrumbLink
-            //     key={2}
-            //     title={userEditData?.lastName + ' ' + userEditData?.firstName}
-            //     to={applicationRoutes.administrationRoute.usersRoute.route + '/' + userId + '/edit'}
-            //     isCurrent />
-        ]}>
+    const handleSaveRequiredCompletionDate = (courseId: Id<'Course'> | null, requiredCompletionDate: Date | null) => {
+
+        if (!courseId || !requiredCompletionDate)
+            showError('Hiba történt');
+
+        console.log(requiredCompletionDate!.toISOString());
+
+        setRequiredCourseCompletionDateAsync({
+            courseId: courseId!,
+            requiredCourseCompletionDate: requiredCompletionDate!.toISOString()
+        });
+
+
+    };
+
+    return <AdminBreadcrumbsHeader>
 
         <AdminUserList
+            currentUserId={userId}
             users={users}
             navigationFunction={(userId) => {
-                navigate(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: userId });
+                navigate2(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: userId });
             }} />
 
         <AdminSubpageHeader
@@ -62,69 +66,13 @@ export const AdminUserCourseContentSubpage = (props: {
                 ]
                     .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
-            <AdminUserCourseContentDialog
-                userCourseStatsData={{
-                    userProgressData: {
-                        startDate: new Date('2022. 04. 10.'),
-                        estimatedCompletionDate: new Date('2022. 05. 10.'),
-                        estimatedLengthInDays: 30,
-                        days: [
-                            {
-                                completionDate: new Date('2022. 05. 10.'),
-                                completedItemCount: 4,
-                                completedPercentage: 5,
-                                offsetDaysFromStart: 0,
-                                completedPercentageSum: 5
-                            },
-                            {
-                                completionDate: new Date('2022. 05. 12.'),
-                                completedItemCount: 4,
-                                completedPercentage: 8,
-                                offsetDaysFromStart: 0,
-                                completedPercentageSum: 13
-                            },
-                            {
-                                completionDate: new Date('2022. 05. 12.'),
-                                completedItemCount: 4,
-                                completedPercentage: 2,
-                                offsetDaysFromStart: 0,
-                                completedPercentageSum: 15
-                            },
-                            {
-                                completionDate: new Date('2022. 05. 12.'),
-                                completedItemCount: 4,
-                                completedPercentage: 2,
-                                offsetDaysFromStart: 0,
-                                completedPercentageSum: 17
-                            },
-                            {
-                                completionDate: new Date('2022. 05. 12.'),
-                                completedItemCount: 4,
-                                completedPercentage: 8,
-                                offsetDaysFromStart: 0,
-                                completedPercentageSum: 25
-                            },
-                            {
-                                completionDate: new Date('2022. 05. 12.'),
-                                completedItemCount: 4,
-                                completedPercentage: 8,
-                                offsetDaysFromStart: 0,
-                                completedPercentageSum: 33
-                            }
-                        ]
-                    },
-                    completedVideoCount: 48,
-                    totalVideoPlaybackSeconds: 60 * 60 * 3.5,
-                    totalGivenAnswerCount: 39,
-                    totalCorrectAnswerRate: 74
-
-                }}
-                dialogLogic={dialogLogic} />
+            <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
 
             <AdminUserCoursesDataGridControl
                 handleMoreButton={
-                    () => dialogLogic.openDialog()
-                } />
+                    (courseId: Id<'Course'> | null) => dialogLogic.openDialog({ params: { courseId: courseId } })
+                }
+                handleSaveRequiredCompletionDate={handleSaveRequiredCompletionDate} />
         </AdminSubpageHeader >
     </AdminBreadcrumbsHeader >;
 };

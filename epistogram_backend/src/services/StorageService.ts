@@ -46,8 +46,9 @@ export class StorageService {
         try {
 
             const bucket = this.getBucket();
-            await bucket.file(filePath)
-.delete();
+            await bucket
+                .file(filePath)
+                .delete();
         }
         catch (e) {
 

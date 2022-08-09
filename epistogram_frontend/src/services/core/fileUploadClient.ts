@@ -1,4 +1,4 @@
-import { serverUrl } from '../../static/Environemnt';
+import { Environment } from '../../static/Environemnt';
 import { postMultipartAsync } from './httpClient';
 
 const mbToByte = 1000000;
@@ -11,7 +11,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
     const trimmedUrlEnding = urlEnding.substring(0, 1) === '/'
         ? urlEnding.substring(1)
         : urlEnding;
-    const url = serverUrl + trimmedUrlEnding;
+    const url = Environment.serverUrl + trimmedUrlEnding;
     const bytesToBeUploaded = file.size;
     const chunksCount = Math.ceil(bytesToBeUploaded / maxChunkSizeBytes);
 

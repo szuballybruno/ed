@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useState } from 'react';
-import { getAssetUrl, isNullOrUndefined, iterate } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { isNullOrUndefined, iterate } from '../../static/frontendHelpers';
 
 export const RatingStars = (props: {
     setSelectedIndex: (index: number) => void,
@@ -19,10 +20,11 @@ export const RatingStars = (props: {
         <Flex>
             {iterate(5, (index) => (
                 <img
+                    key={index}
                     onMouseEnter={() => { setIsHovered({ hovered: true, index: index }); }}
                     onMouseLeave={() => setIsHovered({ hovered: false, index: 0 })}
                     onClick={() => setSelectedIndex(index)}
-                    src={iconUrl ? iconUrl : getAssetUrl('images/star3D.png')}
+                    src={iconUrl ? iconUrl : Environment.getAssetUrl('images/star3D.png')}
                     alt=""
                     className="square30"
                     style={{

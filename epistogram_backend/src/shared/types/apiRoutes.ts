@@ -1,3 +1,8 @@
+import { Id } from './versionId';
+
+export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
+export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
+
 export const apiRoutes = {
 
     registration: {
@@ -9,14 +14,37 @@ export const apiRoutes = {
 
     misc: {
         getJobTitles: '/misc/get-job-titles',
-        getOrganizations: '/misc/get-organizations',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
         getCourseOverviewData: '/misc/get-course-overview-data'
     },
 
-    scheduledJobs: {
-        evaluateUserProgress: '/scheduledjobs/evaluate-user-progress'
+    roles: {
+        getRoles: '/roles/get-roles',
+        createRole: '/roles/create-role',
+        getRoleEditData: '/roles/get-role-edit-data',
+        deleteRole: '/roles/delete-role',
+        saveRole: '/roles/save-role',
+        getUserRoles: '/roles/get-user-roles',
+        getUserPermissions: '/roles/get-user-permissions',
+        getAssignableRoles: '/roles/get-assignable-roles',
+        getAssignablePermissions: '/roles/get-assignable-permissions',
+        getUserAssignedAuthItems: '/roles/get-user-assigned-auth-items'
+    },
+
+    permissions: {
+        getPermissions: '/permissions/get-permissions'
+    },
+
+    companies: {
+        getCompanies: '/companies/get-companies',
+        getCompaniesAdmin: '/companies/get-companies-admin',
+        getCompanyEditData: '/companies/get-company-edit-data',
+        createCompany: '/companies/create-company',
+        deleteCompany: '/companies/delete-company',
+        saveCompany: '/companies/save-company',
+        getAvailableCompaniesForRoleCreation: '/companies/get-available-companies-for-role-creation',
+        getRoleAssignCompanies: '/companies/get-role-assign-companies',
     },
 
     teacherInfo: {
@@ -42,10 +70,13 @@ export const apiRoutes = {
     },
 
     authentication: {
-        getCurrentUser: '/authentication/get-current-user',
-        renewUserSession: '/authentication/renew-user-session',
+        establishAuthHandshake: '/authentication/establish-auth-handshake',
         logoutUser: '/authentication/logout-user',
         loginUser: '/authentication/login-user',
+    },
+
+    courseItem: {
+        getCourseItemEditData: '/courseitem/get-course-item-edit-data'
     },
 
     personalityAssessment: {
@@ -80,13 +111,14 @@ export const apiRoutes = {
     prequiz: {
         getQuestions: '/prequiz/get-questions',
         getUserAnswer: '/prequiz/get-user-answer',
-        answerPrequizQuestion: '/prequiz/answer-prequiz-question'
+        answerPrequizQuestion: '/prequiz/answer-prequiz-question',
+        finishPrequiz: '/prequiz/finish-prequiz' as ParametrizedRouteType<{ body: { courseId: Id<'Course'> } }>
     },
 
     pretest: {
         getPretestData: '/pretest/get-pretest-data',
         getPretestResults: '/pretest/get-pretest-results',
-        getPretestExamId: '/pretest/get-pretest-exam-id'
+        finishPretest: '/pretest/finish-pretest' as ParametrizedRouteType<{ body: { answerSessionId: Id<'AnswerSession'> } }>
     },
 
     courseRating: {
@@ -96,11 +128,18 @@ export const apiRoutes = {
     },
 
     userStats: {
-        getUserStats: '/userstats/get-user-stats'
+        getHomePageStats: '/userstats/get-home-page-stats',
+        getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
+        getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
+        getUserCourseStats: '/userstats/get-user-course-stats',
+        getUserVideoStats: '/userstats/get-user-video-stats',
+        getUserExamStats: '/userstats/get-user-exam-stats',
+        getUserLearningOverviewData: '/userstats/get-user-learning-overview-data',
+        getUserCourseStatsOverviewData: '/userstats/get-user-course-stats-overview-data'
     },
 
     userProgress: {
-        getUserProgressData: '/userprogress/get-user-progress-data',
+        getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
         getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
         getActiveCourses: '/userprogress/get-active-courses'
     },
@@ -133,15 +172,20 @@ export const apiRoutes = {
 
     player: {
         getPlayerData: '/player/get-player-data',
-        getCourseItems: '/player/get-course-items',
         answerVideoQuestion: '/questions/answer-video-question'
+    },
+
+    playlist: {
+        getPlaylist: '/playlist/get-playlist',
     },
 
     playback: {
         saveVideoPlaybackSample: '/playback/save-video-playback-sample',
+        saveVideoSeekEvent: '/playback/save-video-seek-event',
     },
 
     course: {
+        getPermissionAssignCourses: '/course/get-permission-assign-courses',
         getCourseContentEditData: '/course/get-course-content-edit-data',
         getCourseDetailsEditData: '/course/get-course-details-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',
@@ -154,45 +198,40 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
-        getCourseProgressData: '/course/get-course-progress-data',
-        getCourseProgressShort: '/course/get-course-progress-short'
+        setRequiredCompletionDate: '/course/set-required-completion-date',
+    },
+
+    courseProgress: {
+        getCourseProgressData: '/courseprogress/get-course-progress-data',
+        getCourseProgressShort: '/courseprogress/get-course-progress-short'
     },
 
     module: {
-        createModule: '/module/create-module',
-        deleteModule: '/module/delete-module',
-        getModuleEditData: '/module/get-edit-data',
-        saveModule: '/module/save-module',
-        getModuleListEditData: '/module/get-modules'
+        getModuleListEditData: '/module/get-modules',
+        saveCoverFile: '/module/save-cover-file' as ParametrizedRouteType<{ body: { moduleVersionId: Id<'ModuleVersion'> } }>
     },
 
     video: {
-        createVideo: '/video/create-video',
-        deleteVideo: '/video/delete-video',
         uploadVideoFile: '/video/upload-video-file',
         uploadVideoFileChunks: '/video/upload-video-file-chunks',
-        saveVideo: '/video/save-video',
-        getVideoEditData: '/video/get-video-edit-data',
-        getVideoQuestionEditData: '/video/get-video-question-edit-data',
-        saveVideoQuestionEditData: '/video/save-video-question-edit-data'
     },
 
     questions: {
-        getQuestionEditData: '/questions/get-question-edit-data',
-        saveQuestion: '/questions/save-question',
         answerPractiseQuestion: '/questions/answer-practise-question',
         getPractiseQuestions: '/questions/get-practise-question',
     },
 
     exam: {
-        getExamEditData: '/exam/get-exam-edit-data',
-        getExamQuestionEditData: '/exam/get-exam-question-edit-data',
-        saveExamQuestionEditData: '/exam/save-exam-question-edit-data',
-        saveExam: '/exam/save-exam',
-        createExam: '/exam/create-exam',
-        deleteExam: '/exam/delete-exam',
         answerExamQuestion: '/exam/answer-exam-question',
         getExamResults: '/exam/get-exam-results',
-        startExam: '/exam/start-exam'
+        startExam: '/exam/start-exam',
+        completeExam: '/exam/complete-exam'
+    },
+
+    comment: {
+        createComment: '/comment/create-comment',
+        createLike: '/comment/create-like',
+        getComments: '/comment/get-comments',
+        deleteLike: '/comment/delete-like'
     }
 };

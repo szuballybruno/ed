@@ -1,7 +1,8 @@
+import { Id } from '../types/versionId';
 import { PrequizAnswerDTO } from './PrequizAnswerDTO';
 
 export class PrequizQuestionDTO {
-    id: number;
+    id: Id<'Question'>;
     text: string;
     isNumeric: boolean;
     minValue: number;

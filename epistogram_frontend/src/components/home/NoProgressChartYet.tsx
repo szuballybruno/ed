@@ -1,21 +1,19 @@
-import { getAssetUrl } from '../../static/frontendHelpers';
+
+import { Flex } from '@chakra-ui/react';
+import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoHeader } from '../EpistoHeader';
 
 export const NoProgressChartYet = () => {
 
-    return <>
-        {/* locked overlay */}
-        <EpistoHeader
-            text={translatableTexts.homePage.statsSummary.mostImportantStatistics}
-            showDivider
-variant="strongSub"
-            m="5px 10px 20px 10px" />
+    return <Flex
+        flex='1'
+        direction='column'
+        justify='center'>
 
         {/* bar chart */}
         <img
-            src={getAssetUrl('/images/learningcurve3D.png')}
+            src={Environment.getAssetUrl('/images/learningcurve3D.png')}
             alt={''}
             style={{
                 maxHeight: 180,
@@ -24,11 +22,11 @@ variant="strongSub"
             }} />
 
         <EpistoFont fontSize="fontSmall"
-style={{
-            textAlign: 'center',
-            margin: '0 20px'
-        }}>
+            style={{
+                textAlign: 'center',
+                margin: '0 20px'
+            }}>
             {translatableTexts.homePage.noStatsYet}
         </EpistoFont>
-    </>;
+    </Flex>;
 };

@@ -1,8 +1,8 @@
+import { Id } from '../types/versionId';
 import { QuestionDTO } from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
-    id: number;
-    courseId: number;
+    examVersionId: Id<'ExamVersion'>;
     subTitle: string;
     title: string;
     type: 'exam';
@@ -12,6 +12,12 @@ export class ExamPlayerDataDTO {
     questions: QuestionDTO[];
     correctAnswerCount: number;
     totalQuestionCount: number;
-    correctAnswerRate: number;
     isCompletedPreviously: boolean;
+
+    fullyCorrectlyAnsweredQuestionsCount: number;
+    questionsCount: number;
+    examSuccessRateDiffFromCompany: number;
+    correctAnswerRate: number;
+    examLengthSeconds: number;
+    answeredQuestionCount: number;
 }

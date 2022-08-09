@@ -1,20 +1,20 @@
-import { useReactQuery2 } from '../../static/frontendHelpers';
 import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
-import { QuestionEditDataDTO } from '../../shared/dtos/QuestionEditDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { usePostData, usePostDataUnsafe } from '../core/httpClient';
+import { Id } from '../../shared/types/versionId';
+import { useReactQuery2 } from '../../static/frontendHelpers';
+import { usePostData } from '../core/httpClient';
 
 export const useAnswerPractiseQuestion = () => {
 
     const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
-    const answerQuestionAsync = (answerIds: number[], questionId: number) => {
+    const answerQuestionAsync = (answerIds: Id<'Answer'>[], questionVersionId: Id<'QuestionVersion'>) => {
 
         const dto = {
             answerIds,
-            questionId
+            questionVersionId
         } as AnswerQuestionDTO;
 
         return postDataQuery.postDataAsync(dto);
@@ -38,27 +38,5 @@ export const usePractiseQuestion = () => {
         practiseQuestionState: qr.state,
         practiseQuestionError: qr.error,
         refetchPractiseQuestion: qr.refetch,
-    };
-};
-
-export const useEditQuestionData = (questionId: number | null) => {
-
-    const qr = useReactQuery2<QuestionEditDataDTO>(apiRoutes.questions.getQuestionEditData, { questionId }, !!questionId);
-
-    return {
-        questionEditData: qr.data,
-        questionEditDataError: qr.error,
-        questionEditDataState: qr.state,
-        refetchQuestionEditData: qr.refetch
-    };
-};
-
-export const useSaveQuestion = () => {
-
-    const qr = usePostDataUnsafe<QuestionEditDataDTO, void>(apiRoutes.questions.saveQuestion);
-
-    return {
-        saveQuesitonAsync: qr.postDataAsync,
-        saveQuesitonState: qr.state,
     };
 };

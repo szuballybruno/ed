@@ -1,14 +1,13 @@
 import { Flex } from '@chakra-ui/layout';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Typography } from '@mui/material';
-import { ModuleDetailedDTO } from '../../../shared/dtos/ModuleDetailedDTO';
+import { ModulePlayerDTO } from '../../../shared/dtos/ModulePlayerDTO';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoHeader } from '../../EpistoHeader';
 
 export const ModuleView = (params: {
-    module?: ModuleDetailedDTO,
+    module?: ModulePlayerDTO,
     startModule: () => void,
 }) => {
 
@@ -16,34 +15,40 @@ export const ModuleView = (params: {
     const isVisible = !!module;
 
     return <Flex
-        className="roundBorders mildShadow"
+        className="whall roundBorders mildShadow"
+        maxH="calc(100vh - 120px)"
         display={isVisible ? undefined : 'none'}
         direction="column"
         background="var(--transparentWhite70)">
 
         <Flex
-            height="500px"
-            maxH="500px"
+            flex='1'
+            maxH="calc(100vh - 120px)"
             align="center"
             justify="center">
 
-            <Flex direction="row"
-align="center">
+            <Flex
+                p='20px'
+                direction="row"
+                align="center">
 
-                {module?.imageFilePath && <Flex>
-                    <img
-                        className="roundBorders"
-                        src={module?.imageFilePath ?? ''}
-                        style={{
-                            width: '100px',
-                            height: '100px',
-                            objectFit: 'cover',
-                            margin: 10
-                        }} />
-                </Flex>}
+                {module?.imageFilePath
+                    && <Flex
+                        justify='flex-end'>
+
+                        <img
+                            className="roundBorders"
+                            src={module?.imageFilePath ?? ''}
+                            style={{
+                                width: '200px',
+                                objectFit: 'cover',
+                                margin: 10
+                            }} />
+                    </Flex>}
 
                 <Flex
-                    maxW="300px"
+                    flex='2'
+                    p='20px'
                     direction="column"
                     justify="center">
 
@@ -58,16 +63,19 @@ align="center">
             </Flex>
         </Flex>
 
-        <Flex height="60px"
-borderTop="1px solid var(--mildGrey)"
-justify="flex-end"
-p="10px">
+        <Flex
+            height="60px"
+            borderTop="1px solid var(--mildGrey)"
+            justify="flex-end"
+            p="10px">
+
             <EpistoButton variant="colored"
-onClick={startModule}
-padding="0">
+                onClick={startModule}
+                padding="0">
+
                 <Flex className="whall"
-mx="15px"
-align="center">
+                    mx="15px"
+                    align="center">
                     <EpistoFont
                         isUppercase
                         style={{ marginRight: '5px' }}

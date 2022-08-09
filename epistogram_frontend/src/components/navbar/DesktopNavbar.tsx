@@ -1,102 +1,77 @@
 import { Flex, useMediaQuery } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
-import { loggingSettings } from '../../static/Environemnt';
-import { getAssetUrl, getUrl } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NavbarButton } from '../universal/NavbarButton';
+import { ContinueCourseButton } from './ContinueCourseButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
 
-const menuItems = [
-    applicationRoutes.homeRoute,
-    applicationRoutes.availableCoursesRoute,
-    applicationRoutes.learningRoute,
-] as ApplicationRoute[];
-
-export const DesktopNavbar = (props: {
+export const DesktopNavbar = ({
+    backgroundContent,
+    showLogo,
+    currentCourseItemCode,
+    isLowHeight: _isLowHeight,
+    isMinimalMode: _isMinimalMode,
+    hideLinks1
+}: {
     currentCourseItemCode: string | null
-    hideLinks: boolean
+    hideLinks1: boolean
     isLowHeight?: boolean
     showLogo?: boolean
     isMinimalMode?: boolean
     backgroundContent?: any
 }) => {
 
-    const {
-        backgroundContent,
-        showLogo,
-        currentCourseItemCode,
-        isLowHeight: _isLowHeight,
-        isMinimalMode: _isMinimalMode,
-    } = props;
-
     const isLowHeight = !!_isLowHeight;
     const isMinimalMode = !!_isMinimalMode;
 
+    const { hasPermission } = useAuthorizationContext();
+
+    const menuItems = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
+        .addIf(hasPermission('ACCESS_ADMIN'), {
+            title: applicationRoutes.administrationRoute.title,
+            route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route,
+            icon: applicationRoutes.administrationRoute.icon
+        })
+        .add({
+            title: applicationRoutes.homeRoute.title,
+            route: applicationRoutes.homeRoute.route,
+            icon: applicationRoutes.homeRoute.icon
+        })
+        .add({
+            title: applicationRoutes.availableCoursesRoute.title,
+            route: applicationRoutes.availableCoursesRoute.route,
+            icon: applicationRoutes.availableCoursesRoute.icon
+        })
+        .add({
+            title: applicationRoutes.learningRoute.title,
+            route: applicationRoutes.learningRoute.route,
+            icon: applicationRoutes.learningRoute.icon
+        })
+        .getArray() as ApplicationRoute[];
+
     const { navigateToPlayer, navigate } = useNavigation();
-    const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     // context
-    const user = useContext(CurrentUserContext);
+    const { isAuthenticated } = useAuthorizationContext();
 
     // media 
     const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');
     const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
 
     // util 
-    const hideLinks = props.hideLinks || !user;
+    const hideLinks = hideLinks1 || !isAuthenticated;
     const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
 
     // funcs
 
-    const ContinueCourseButton = (props: {
-        title?: string
-    }) => {
 
-        const { title } = props;
-
-        return <>
-            {currentCourseItemCode && (
-
-                <EpistoButton
-                    className="mildShadow"
-                    style={{
-                        color: '--epistoTeal',
-                        background:
-                            'var(--transparentWhite70)',
-                        border: 'none',
-                    }}
-                    variant="outlined"
-                    onClick={() => continueCourse()}
-                    icon={
-                        <img
-                            alt=""
-                            src={getAssetUrl(
-                                '/icons/play2.svg'
-                            )}
-                            style={{
-                                width: '25px',
-                                height: '25px',
-                            }}
-                        />}>
-
-                    <EpistoFont
-                        style={{
-                            margin: '0 0 0 5px'
-                        }}
-                        isUppercase>
-
-                        {title}
-                    </EpistoFont>
-                </EpistoButton>
-            )}
-        </>;
-    };
 
     const MinimalRender = () => {
 
@@ -122,6 +97,7 @@ export const DesktopNavbar = (props: {
             <Flex height="50px"
                 flex="1 0 600px">
 
+                {/* menu items */}
                 {menuItems
                     .map((route, index) => (
                         <NavbarButton
@@ -130,9 +106,9 @@ export const DesktopNavbar = (props: {
                             onClick={() => navigate(route)} />
                     ))}
 
-                {/* continue watching with or without text  */}
+                {/* continue course button */}
                 <ContinueCourseButton
-                    title={translatableTexts.navbar.currentCourse} />
+                    currentCourseItemCode={currentCourseItemCode} />
             </Flex>
         );
     };
@@ -157,13 +133,13 @@ export const DesktopNavbar = (props: {
                     })}
 
                 {/* continue watching  */}
-                <ContinueCourseButton />
+                <ContinueCourseButton
+                    currentCourseItemCode={currentCourseItemCode} />
             </Flex>
         );
     };
 
-    if (loggingSettings.render)
-        console.log('Rendering navbar');
+    Logger.logScoped('RENDER', 'Rendering navbar');
 
     return (
         <Flex
@@ -179,7 +155,7 @@ export const DesktopNavbar = (props: {
             {/* logo link */}
             {showLogo && (
                 <img
-                    src={getAssetUrl('/images/logo.svg')}
+                    src={Environment.getAssetUrl('/images/logo.svg')}
                     style={{
                         width: isMinimalMode ? '80px' : '150px',
                         height: isMinimalMode ? '50px' : '50px',
@@ -187,9 +163,10 @@ export const DesktopNavbar = (props: {
                         cursor: 'pointer',
                     }}
                     alt=""
-                    onClick={user?.userActivity?.canAccessApplication
-                        ? () => navigate(applicationRoutes.homeRoute)
-                        : undefined} />
+                    // onClick={(//user?.userActivity?.canAccessApplication
+                    //     ? () => navigate(applicationRoutes.homeRoute)
+                    //     : undefined}
+                    onClick={() => navigate(applicationRoutes.homeRoute)} />
             )}
 
             {/* menu items */}

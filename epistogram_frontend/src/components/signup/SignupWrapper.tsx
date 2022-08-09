@@ -1,11 +1,11 @@
 import { Box, Flex, Image, useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
-import { Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
-import { getAssetUrl, hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
-import { EpistoButton } from '../controls/EpistoButton';
 
 export const SignupWrapper = (props: {
     children?: ReactNode,
@@ -72,7 +72,7 @@ export const SignupWrapper = (props: {
                 align={'center'}>
 
                 <Image maxH={50}
-src={getAssetUrl('/images/logo.svg')} />
+                    src={Environment.getAssetUrl('/images/logo.svg')} />
             </Flex>
 
             {/* header top */}
@@ -89,7 +89,7 @@ src={getAssetUrl('/images/logo.svg')} />
                     alignItems={'center'}>
 
                     <Image maxH={80}
-src={getAssetUrl('/images/logo.svg')} />
+                        src={Environment.getAssetUrl('/images/logo.svg')} />
                 </Flex>
 
             </Flex>
@@ -125,14 +125,14 @@ src={getAssetUrl('/images/logo.svg')} />
                     justifyContent={isDesktop ? 'flex-end' : 'center'}>
 
                     <Image maxW={350}
-minWidth="300px"
-maxH="300px"
-height="100%"
-style={{
-                        objectFit: 'contain',
-                        margin: '0 30px'
-                    }}
-src={currentImage!} />
+                        minWidth="300px"
+                        maxH="300px"
+                        height="100%"
+                        style={{
+                            objectFit: 'contain',
+                            margin: '0 30px'
+                        }}
+                        src={currentImage!} />
                 </Flex>}
 
                 {/* question content */}
@@ -156,8 +156,9 @@ src={currentImage!} />
                     {hasDescription && <Box maxWidth="400px">
                         {
                             isString(description!)
-                                ? <EpistoFont isMultiline
-classes={['fontNormal14']}>
+                                ? <EpistoFont
+                                    isMultiline
+                                    fontSize2="normal">
                                     {description!}
                                 </EpistoFont>
                                 : description
@@ -204,8 +205,8 @@ classes={['fontNormal14']}>
             </EpistoButton>}
 
             <Box id="footerBox"
-flex="1"
-mx="20">
+                flex="1"
+                mx="20">
                 {props.bottomComponent}
             </Box>
 
@@ -241,8 +242,8 @@ mx="20">
                 objectFit: 'contain',
                 zIndex: -1,
             }}
-            src={getAssetUrl('/images/bg-art-2.png')}
-alt="" />
+            src={Environment.getAssetUrl('/images/bg-art-2.png')}
+            alt="" />
 
         {/* magic powder top right */}
         <img
@@ -255,7 +256,7 @@ alt="" />
                 objectFit: 'contain',
                 zIndex: -1,
             }}
-            src={getAssetUrl('/images/bg-art-6.png')}
-alt="" />
+            src={Environment.getAssetUrl('/images/bg-art-6.png')}
+            alt="" />
     </Flex>;
 };

@@ -1,67 +1,101 @@
+import { UserService } from '../services/UserService';
+import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { UserService } from '../services/UserService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class UserController {
+export class UserController implements XController<UserController> {
 
     private _userService: UserService;
 
-    constructor(userService: UserService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._userService = userService;
+        this._userService = serviceProvider.getService(UserService);
     }
 
-    deleteUserAction = async (params: ActionParams) => {
+    saveUserDataAction(params: ActionParams) {
 
-        const dto = withValueOrBadRequest<any>(params.req.body);
-        const deleteUserId = withValueOrBadRequest<number>(dto.userId, 'number');
+        const dto = params
+            .getBody<UserDTO>(['firstName', 'lastName', 'phoneNumber'])
+            .data;
 
         return this._userService
-            .deleteUserAsync(params.currentUserId, deleteUserId);
-    };
+            .saveUserDataAsync(params.principalId, dto);
+    }
 
-    getEditUserDataAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.user.deleteUser, { isPost: true, checkPermission: 'ACCESS_ADMIN' })
+    deleteUserAction(params: ActionParams) {
 
-        const editedUserId = withValueOrBadRequest<number>(params.req.query?.editedUserId, 'number');
+        const deleteUserId = Id
+            .create<'User'>(params
+                .getBody()
+                .getValue(x => x.userId, 'int'));
 
-        return await this._userService
-            .getEditUserDataAsync(editedUserId);
-    };
+        return this._userService
+            .deleteUserAsync(params.principalId, deleteUserId);
+    }
 
-    saveUserSimpleAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.user.getEditUserData)
+    getEditUserDataAction(params: ActionParams) {
 
-        const dto = withValueOrBadRequest<UserEditSimpleDTO>(params.req.body);
+        const editedUserId = Id
+            .create<'User'>(params
+                .getQuery()
+                .getValue(x => x.editedUserId, 'int'));
 
-        await this._userService
-            .saveUserSimpleAsync(params.currentUserId, dto);
-    };
+        return this._userService
+            .getEditUserDataAsync(params.principalId, editedUserId);
+    }
 
-    saveUserAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.user.saveUserSimple, { isPost: true })
+    saveUserSimpleAction(params: ActionParams) {
 
-        const dto = withValueOrBadRequest<UserEditDTO>(params.req.body);
+        const dto = params
+            .getBody<UserEditSimpleDTO>(['firstName', 'lastName', 'phoneNumber'])
+            .data;
 
-        await this._userService
-            .saveUserAsync(dto);
-    };
+        return this._userService
+            .saveUserSimpleAsync(params.principalId, dto);
+    }
 
-    getUserAdministrationUserListAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
+    saveUserAction(params: ActionParams) {
+
+        const dto = params
+            .getBody<UserEditDTO>(['firstName', 'lastName', 'companyId', 'email', 'id', 'isTeacher'])
+            .data;
+
+        return this._userService
+            .saveUserAsync(params.principalId, dto);
+    }
+
+    @XControllerAction(apiRoutes.user.getUserListForAdministration)
+    getUserAdministrationUserListAction(params: ActionParams) {
 
         const searchText = params
             .getQuery<{ searchText?: string }>()
             .data
             .searchText ?? null;
 
-        return await this._userService
-            .getAdminPageUsersListAsync(searchText);
-    };
+        return this._userService
+            .getAdminPageUsersListAsync(params.principalId, searchText);
+    }
 
-    getBriefUserDataAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.user.getBriefUserData)
+    getBriefUserDataAction(params: ActionParams) {
 
-        const userId = params.getQuery()
-.getValue(x => x.userId);
+        const userId = Id
+            .create<'User'>(params
+                .getQuery()
+                .getValue(x => x.userId, 'int'));
 
-        await this._userService
-            .getBriefUserDataAsync(userId);
-    };
+        return this._userService
+            .getBriefUserDataAsync(params.principalId, userId);
+    }
+
 }

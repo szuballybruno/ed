@@ -1,21 +1,12 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage';
 import { AdminInteractiveCourseSubpage } from './AdminInteractiveCourseSubpage';
+import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
-import { DetailsEditSubpage } from './DetailsEditSubpage';
-import { MemoTest } from '../../MemoTest';
-import { EpistoRoute } from '../../../models/types';
+import { EditCourseDetailsSubpage } from './EditCourseDetailsSubpage';
 
 export const CourseAdministartionSubpage = () => {
-
-    // useRedirectOnExactMatch({
-    //     route: applicationRoutes.administrationRoute.coursesRoute,
-    //     redirectRoute: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-    //     params: { courseId: -1 }
-    // });
 
     return (
         <EpistoRoutes
@@ -26,7 +17,7 @@ export const CourseAdministartionSubpage = () => {
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    element: <DetailsEditSubpage />
+                    element: <EditCourseDetailsSubpage />
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,

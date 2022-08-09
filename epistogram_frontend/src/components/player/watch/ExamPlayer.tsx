@@ -1,8 +1,9 @@
 import React from 'react';
-import { useStartExam } from '../../../services/api/examApiService';
+import { useFinishExam, useStartExam } from '../../../services/api/examApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../../shared/types/versionId';
 import { usePaging } from '../../../static/frontendHelpers';
 import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
 import { ExamQuestions } from '../../exam/ExamQuestions';
@@ -11,8 +12,8 @@ import { EpistoPaging } from '../../universal/EpistoPaging';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
-    answerSessionId: number,
-    courseId: number,
+    answerSessionId: Id<'AnswerSession'>,
+    courseId: Id<'Course'>,
     continueCourse: () => void,
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
@@ -29,7 +30,9 @@ export const ExamPlayer = (props: {
     const showError = useShowErrorDialog();
     const { navigateToCourseRating } = useNavigation();
 
-    const slidesState = usePaging([1, 2, 3, 4]);
+    const slidesState = usePaging({ items: [1, 2, 3, 4] });
+
+    const { finishExamAsync } = useFinishExam();
 
     const handleStartExamAsync = async () => {
 
@@ -44,9 +47,16 @@ export const ExamPlayer = (props: {
         }
     };
 
-    const handleExamFinished = () => {
+    const handleExamFinished = async () => {
 
+        await finishExamAsync({ answerSessionId });
         slidesState.next();
+    };
+
+    const handleAbortExam = () => {
+
+        slidesState.setItem(0);
+        setIsExamInProgress(false);
     };
 
     const goToCourseRating = () => {
@@ -68,7 +78,8 @@ export const ExamPlayer = (props: {
         () => <ExamQuestions
             exam={exam}
             answerSessionId={answerSessionId}
-            onExamFinished={handleExamFinished} />,
+            onExamFinished={handleExamFinished}
+            handleAbortExam={handleAbortExam} />,
 
         () => <ExamResultsSlide
             continueCourse={handleContinueCourse}
@@ -80,6 +91,8 @@ export const ExamPlayer = (props: {
 
     return <EpistoPaging
         flex="1"
+        pt='10px'
+        pb='100px'
         slides={slides}
         index={slidesState.currentIndex} />;
 };

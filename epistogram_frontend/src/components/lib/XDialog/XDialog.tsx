@@ -1,19 +1,6 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { XDialogContext } from './XDialoContext';
-
-export const useXDialogLogic = (key: string) => {
-
-    const [isOpen, setIsOpen] = useState(false);
-
-    return {
-        key,
-        isOpen,
-        setIsOpen
-    };
-};
-
-export type XDialogLogicType = ReturnType<typeof useXDialogLogic>;
+import { XDialogLogicType } from './XDialogLogic';
 
 export const XDialog = (props: {
     children: ReactNode,
@@ -21,51 +8,18 @@ export const XDialog = (props: {
 }) => {
 
     const { children, logic } = props;
-
-    const {
-        mountContent,
-        unmountContent,
-        getOpenState,
-        openDialog,
-        closeDialog,
-        getHostElement
-    } = useContext(XDialogContext);
-
-    const isReallyOpen = getOpenState(logic.key);
-    const hostElement = getHostElement(logic.key);
+    const { getHostElement, mountContent, unmountContent } = logic;
 
     // mount / unmount from content pool
     useEffect(() => {
 
-        mountContent(logic.key);
-
-        return () => {
-
-            unmountContent(logic.key);
-        };
+        mountContent();
+        return unmountContent;
     }, []);
 
-    // open close dialog based on logic
-    useEffect(() => {
+    const hostElement = getHostElement();
 
-        if (logic.isOpen) {
-
-            openDialog(logic.key);
-        }
-        else {
-
-            closeDialog();
-        }
-    }, [logic.isOpen]);
-
-    // sync logic state with global state, 
-    // since global state can change by itself 
-    useEffect(() => {
-
-        if (logic.isOpen != isReallyOpen)
-            logic.setIsOpen(isReallyOpen);
-    }, [isReallyOpen]);
-
+    // render 
     if (!hostElement)
         return <></>;
 

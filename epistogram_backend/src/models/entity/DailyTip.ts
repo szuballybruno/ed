@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { PersonalityTraitCategory } from './PersonalityTraitCategory';
 import { StorageFile } from './StorageFile';
@@ -7,35 +9,43 @@ import { StorageFile } from './StorageFile';
 export class DailyTip {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'DailyTip'>;
 
     @Column()
+    @XViewColumn()
     description: string;
 
     @Column()
+    @XViewColumn()
     isLive: boolean;
 
     @Column()
+    @XViewColumn()
     isMax: boolean;
 
-    // video file
-    @Column({ nullable: true, type: 'int' })
-    videoFileId: number | null;
-
-    @OneToOne(_ => StorageFile)
-    @JoinColumn({ name: 'video_file_id' })
-    videoFile: StorageFile | null;
+    // TO MANY
 
     // occurrances
     @OneToMany(_ => DailyTipOccurrence, x => x.dailyTip)
     @JoinColumn()
-    occurrences: DailyTipOccurrence[];
+    occurrences: Relation<DailyTipOccurrence>[];
+
+    // TO ONE 
 
     // personality trait 
-    @Column()
-    personalityTraitCategoryId: number;
-
+    @Column({ type: 'int' })
+    @XViewColumn()
+    personalityTraitCategoryId: Id<'PersonalityTraitCategory'>;
     @OneToMany(_ => PersonalityTraitCategory, x => x.tips)
     @JoinColumn({ name: 'personality_trait_category_id' })
-    personalityTraitCategory: PersonalityTraitCategory;
+    personalityTraitCategory: Relation<PersonalityTraitCategory>;
+
+    // video file
+    @Column({ type: 'int', nullable: true })
+    @XViewColumn()
+    videoFileId: Id<'StorageFile'> | null;
+    @OneToOne(_ => StorageFile)
+    @JoinColumn({ name: 'video_file_id' })
+    videoFile: Relation<StorageFile> | null;
 }

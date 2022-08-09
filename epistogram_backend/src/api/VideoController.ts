@@ -1,93 +1,23 @@
-import fs from 'fs';
-import { Video } from '../models/entity/Video';
-import { MapperService } from '../services/MapperService';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { QuestionService } from '../services/QuestionService';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { VideoService } from '../services/VideoService';
-import { VideoEditDTO } from '../shared/dtos/VideoEditDTO';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class VideoController {
-
+export class VideoController implements XController<VideoController> {
     private _videoService: VideoService;
-    private _questionService: QuestionService;
-    private _ormService: ORMConnectionService;
-    private _config: GlobalConfiguration;
-    private _mapperService: MapperService;
 
-    constructor(
-        videoService: VideoService,
-        questionService: QuestionService,
-        ormService: ORMConnectionService,
-        config: GlobalConfiguration,
-        mapperService: MapperService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._videoService = videoService;
-        this._questionService = questionService;
-        this._ormService = ormService;
-        this._config = config;
-        this._mapperService = mapperService;
+        this._videoService = serviceProvider.getService(VideoService);
     }
 
-    saveVideoAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.video.uploadVideoFileChunks, { isPost: true, isMultipart: true })
+    uploadVideoFileChunksAction(params: ActionParams) {
 
-        const dto = withValueOrBadRequest<VideoEditDTO>(params.req.body);
-        const videoId = dto.id;
-
-        // update vidoeo data
-        await this._ormService
-            .getRepository(Video)
-            .save({
-                id: videoId,
-                title: dto.title,
-                subtitle: dto.subtitle,
-                description: dto.description
-            });
-
-        await this._questionService
-            .saveAssociatedQuestionsAsync(dto.questions, videoId);
-    };
-
-    getVideoEditDataAction = async (params: ActionParams) => {
-
-        const videoId = withValueOrBadRequest<number>(params.req.query.videoId, 'number');
-
-        const video = await this._ormService
-            .getRepository(Video)
-            .createQueryBuilder('v')
-            .leftJoinAndSelect('v.videoFile', 'vf')
-            .leftJoinAndSelect('v.questions', 'vq')
-            .leftJoinAndSelect('vq.answers', 'vqa')
-            .where('v.id = :videoId', { videoId })
-            .getOneOrFail();
-
-        return this._mapperService
-            .map(Video, VideoEditDTO, video);
-    };
-
-    getVideoQuestionEditDataAction = async (params: ActionParams) => {
-
-        const query = params
-            .getQuery<any>();
-
-        const videoId = query
-            .getValue(x => x.videoId);
-
-        return await this._videoService
-            .getVideoQuestionEditDataAsync(videoId);
-    };
-
-    saveVideoQuestionEditDataAction = async (params: ActionParams) => {
-        const mutations = params
-            .getBody()
-            .data;
-
-        await this._videoService
-            .saveVideoQuestionEditDataAsync(mutations);
-    };
-
-    uploadVideoFileChunksAction = async (params: ActionParams) => {
+        const getFile = () => params.getSingleFile();
 
         const body = params
             .getBody<{
@@ -96,58 +26,14 @@ export class VideoController {
                 chunksCount: number
             }>();
 
-        const videoId = body.getValue(x => x.videoId, 'int');
+        const videoId = Id
+            .create<'Video'>(body
+                .getValue(x => x.videoId, 'int'));
+
         const chunksCount = body.getValue(x => x.chunksCount, 'int');
         const chunkIndex = body.getValue(x => x.chunkIndex, 'int');
 
-        const tempFolder = this._config.rootDirectory + '\\uploads_temp';
-        const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
-
-        try {
-
-            if (chunkIndex !== 0 && !fs.existsSync(filePath))
-                throw new Error('Trying to append file that does not exist!');
-
-            const file = params.getSingleFile();
-            if (!file)
-                throw new Error('File chunk data not sent!');
-
-            console.log('Recieved file chunk: #' + chunkIndex);
-
-            // create temp folder 
-            if (!fs.existsSync(tempFolder)) {
-                fs.mkdirSync(tempFolder);
-            }
-
-            // create & append file
-            if (chunkIndex === 0) {
-
-                fs.writeFileSync(filePath, file.data);
-            }
-            else {
-
-                fs.appendFileSync(filePath, file.data);
-            }
-
-            // upload is done 
-            if (chunkIndex + 1 === chunksCount) {
-
-                console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
-
-                // read tmp file 
-                const fullFile = fs.readFileSync(filePath);
-
-                // delete tmp file 
-                fs.rmSync(filePath);
-
-                // upload to cloud 
-                await this._videoService.uploadVideoFileAsync(videoId, fullFile);
-            }
-        }
-        catch (e) {
-
-            fs.unlinkSync(filePath);
-            throw e;
-        }
-    };
+        return this._videoService
+            .uploadVideoFileChunksAsync(params.principalId, videoId, chunksCount, chunkIndex, getFile);
+    }
 }

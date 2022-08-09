@@ -1,26 +1,20 @@
-import { JoinColumn, OneToOne, ViewColumn, ViewEntity } from 'typeorm';
-import { Course } from '../entity/Course';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
-@ViewEntity({
-    synchronize: false,
-    expression: ''
-})
 export class CourseStateView {
 
-    @ViewColumn()
-    userId: number;
-
-    @ViewColumn()
-    courseId: number;
-
-    @ViewColumn()
+    @XViewColumn()
+    courseId: Id<'Course'>;
+    
+    @XViewColumn()
+    userId: Id<'User'>;
+    
+    @XViewColumn()
+    isCurrent: boolean;
+    
+    @XViewColumn()
+    inProgress: boolean;
+    
+    @XViewColumn()
     isCompleted: boolean;
-
-    @ViewColumn()
-    isStarted: boolean;
-
-    // course 
-    @OneToOne(_ => Course, x => x.courseState)
-    @JoinColumn({ name: 'course_id' })
-    course: Course;
 }

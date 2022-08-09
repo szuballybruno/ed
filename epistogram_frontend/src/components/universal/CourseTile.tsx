@@ -1,41 +1,14 @@
 import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
-import React from 'react';
-import { useCourseDetails } from '../../services/api/courseApiService';
-import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
-import { formatTimespan, getAssetUrl } from '../../static/frontendHelpers';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
-
-const SmallStat = (props: { iconUrl: string, text: string, title: string }) => {
-
-    return <Flex
-        title={props.title}
-        align="center"
-        mr={5}>
-
-        {/* icon */}
-        <img
-            src={props.iconUrl}
-            alt={''}
-            style={{
-                width: 22,
-                height: 22,
-                margin: '0 2px 0 2px'
-            }} />
-
-        {/* spent time stat */}
-        <Text
-            fontSize="13px"
-            as={'text'}
-            color={'grey'}>
-
-            {props.text}
-        </Text>
-    </Flex>;
-};
+import { SmallStat } from './SmallStat';
 
 const CourseTile = (props: {
-    course: CourseShortDTO
+    course: AvailableCourseDTO
 } & FlexProps) => {
 
     const { course, children, ...css } = props;
@@ -44,8 +17,6 @@ const CourseTile = (props: {
     const courseSubCategory = course.subCategoryName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
-
-    const { courseDetails } = useCourseDetails(course.courseId);
 
     return <FlexFloat
         className="whall roundBorders"
@@ -90,7 +61,7 @@ const CourseTile = (props: {
                     borderRadius="7px 0 0 7px">
 
                     <img
-                        src={getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
+                        src={Environment.getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
                         alt={''}
                         style={{
                             width: 20,
@@ -116,11 +87,13 @@ const CourseTile = (props: {
                 flex="5">
 
                 {/* category  */}
-                <Text as="text"
-                    fontSize="13px"
-                    color="grey">
+                <EpistoFont
+                    style={{
+                        fontSize: '13px',
+                        color: 'gray'
+                    }}>
                     {courseSubCategory}
-                </Text>
+                </EpistoFont>
 
                 {/* title */}
                 <Flex direction="column">
@@ -137,26 +110,26 @@ const CourseTile = (props: {
                 {/* length */}
                 <SmallStat
                     title="Ennyi idő alatt tudod elvégezni a kurzust"
-                    iconUrl={getAssetUrl('images/time3D.png')}
-                    text={formatTimespan(courseDetails?.totalVideoSumLengthSeconds || 0)} />
+                    iconUrl={Environment.getAssetUrl('images/time3D.png')}
+                    text={formatTimespan(course.totalVideoSumLengthSeconds)} />
 
                 {/* videos count */}
                 <SmallStat
                     title="Ennyi videót tartalmaz a kurzus"
-                    iconUrl={getAssetUrl('images/videos3D.png')}
-                    text={courseDetails?.totalVideoCount + '' || '0'} />
+                    iconUrl={Environment.getAssetUrl('images/videos3D.png')}
+                    text={course.totalVideoCount + ''} />
 
                 {/* difficulty */}
                 <SmallStat
                     title="A kurzus nehézsége 1-5-ig értékelve"
-                    iconUrl={getAssetUrl('images/difficulty3D.png')}
-                    text={courseDetails?.difficulty + ''} />
+                    iconUrl={Environment.getAssetUrl('images/difficulty3D.png')}
+                    text={course.difficulty + ''} />
 
                 {/* rating */}
                 <SmallStat
                     title="1-5-ig ennyire érékelték a hallgatók a tanfolyamot"
-                    iconUrl={getAssetUrl('images/star3D.png')}
-                    text={courseDetails?.benchmark + ''} />
+                    iconUrl={Environment.getAssetUrl('images/star3D.png')}
+                    text={course.benchmark + ''} />
             </Flex>
 
             {/* rating */}
@@ -167,7 +140,7 @@ const CourseTile = (props: {
                 {/* teacher name */}
                 <SmallStat
                     title="A kurzus nyelve"
-                    iconUrl={getAssetUrl('images/flag3D.png')}
+                    iconUrl={Environment.getAssetUrl('images/flag3D.png')}
                     text={courseTeacherName} />
 
             </Flex>

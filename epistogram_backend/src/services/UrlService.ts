@@ -15,6 +15,14 @@ export class UrlService {
         return this._config.fileStorage.assetStoreUrl + assetPath;
     };
 
+    getAssetUrlNullable = (assetPath: string | null) => {
+
+        if (!assetPath)
+            return null;
+
+        return this.getAssetUrl(assetPath);
+    };
+
     getFrontendUrl = (ending: string) => {
 
         ending = ('/' + ending).replace('//', '/');

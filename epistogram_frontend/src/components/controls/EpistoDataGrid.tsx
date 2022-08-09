@@ -1,7 +1,23 @@
 import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
-import { loggingSettings } from '../../static/Environemnt';
-import { typedMemo } from '../../static/frontendHelpers';
+import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
+
+const removeOverlay = () => {
+
+    const key = 'MUI X: Missing license key';
+    const xpath = `//div[text()='${key}']`;
+    const matchingElement = document
+        .evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+        .singleNodeValue;
+
+    if (!matchingElement)
+        return;
+
+    (matchingElement as any).remove();
+    // console.log();
+    // matchingElement.parentElement
+};
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {
     key: TKey,
@@ -24,7 +40,7 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     renderCell?: (params: RenderCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     renderEditCell?: (params: RenderEditCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     width?: number;
-    editHandler?: (params: { rowKey: TKey, value: TRow[TField] }) => void;
+    editHandler?: (params: { rowKey: TKey, value: TRow[TField], row: TRow }) => void;
     resizable?: boolean;
     type?: 'int'
 };
@@ -36,68 +52,78 @@ export type InitialStateType<TSchema> = {
     }
 }
 
-export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
-    rows: TSchema[],
-    columns: GridColumnType<TSchema, TKey, any>[],
-    getKey: (row: TSchema) => TKey,
-    handleEdit: <TField extends keyof TSchema>(rowKey: TKey, field: TField, value: TSchema[TField]) => void,
-    initialState?: InitialStateType<TSchema>,
-}) => {
+const mapColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
 
-    const { columns, rows, initialState, handleEdit, getKey } = props;
+    const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
 
-    const columnsProcessed = columns
-        .map(column => {
+    const def: GridColDef = {
+        ...others,
+        field: field as any,
+        editable: !!editHandler
+    };
 
-            const { renderCell, type, editHandler, renderEditCell, ...others } = column;
+    if (renderCell)
+        def.renderCell = (cellData: GridRenderCellParams<any, any, any>) => renderCell({
+            key: getKey(cellData.row),
+            field: column.field,
+            value: cellData.row[column.field],
+            row: cellData.row
+        });
 
-            const def: GridColDef = {
-                ...others,
-                editable: !!editHandler || !!renderEditCell
-            };
+    if (renderEditCell)
+        def.renderEditCell = (cellData: any) => {
 
-            if (renderCell)
-                def.renderCell = (cellData: GridRenderCellParams<any, any, any>) => renderCell({
-                    key: getKey(cellData.row),
-                    field: column.field,
-                    value: cellData.row[column.field],
-                    row: cellData.row
-                });
+            const useCommitNewValue = () => {
 
-            if (renderEditCell)
-                def.renderEditCell = (cellData: any) => {
+                const apiContextRef = useGridApiContext();
 
-                    const useCommitNewValue = () => {
+                const commitNewValue = <TField extends keyof TSchema,>(key: TKey, field: TField, value: TSchema[TField]) => {
 
-                        const apiContextRef = useGridApiContext();
+                    apiContextRef
+                        .current
+                        .setEditCellValue({ id: key as any, field: field as any, value: value as any });
 
-                        const commitNewValue = <TField extends keyof TSchema,>(key: TKey, field: TField, value: TSchema[TField]) => {
-
-                            apiContextRef
-                                .current
-                                .setEditCellValue({ id: key as any, field: field as any, value: value as any });
-
-                            apiContextRef
-                                .current
-                                .commitCellChange({ id: key as any, field: field as any });
-                        };
-
-                        return {
-                            commitNewValue
-                        };
-                    };
-
-                    return renderEditCell({
-                        key: getKey(cellData.row),
-                        field: column.field,
-                        value: cellData.row[column.field],
-                        row: cellData.row,
-                        useCommitNewValue
-                    });
+                    apiContextRef
+                        .current
+                        .commitCellChange({ id: key as any, field: field as any });
                 };
 
-            return def;
-        });
+                return {
+                    commitNewValue
+                };
+            };
+
+            return renderEditCell({
+                key: getKey(cellData.row),
+                field: column.field,
+                value: cellData.row[column.field],
+                row: cellData.row,
+                useCommitNewValue
+            });
+        };
+
+    return def;
+};
+
+export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
+    rows: TSchema[],
+    columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
+    getKey: (row: TSchema) => TKey,
+    initialState?: InitialStateType<TSchema>,
+    deps?: any[],
+    density?: 'dense' | 'spaced',
+    hideFooter?: boolean,
+    id?: string
+}) => {
+
+    const { columns, id, rows, initialState, density, hideFooter, getKey } = props;
+
+    Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
+
+    removeOverlay();
+
+    const columnsProcessed = columns
+        .map(column => mapColumn(column, getKey));
 
     const apiRef = useGridApiRef();
 
@@ -127,8 +153,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                 });
     }, []);
 
-    if (loggingSettings.render)
-        console.log('rendering grid');
+    Logger.logScoped('GRID', 'Rendering...');
 
     return (
         <DataGridPro
@@ -137,6 +162,12 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             apiRef={apiRef}
             onCellClick={handleCellClick}
             initialState={initialState as any}
+            density={density === 'dense'
+                ? 'compact'
+                : density === 'spaced'
+                    ? 'standard'
+                    : undefined}
+            hideFooter={hideFooter}
             onCellEditCommit={(params) => {
 
                 const value = params.value as any;
@@ -150,11 +181,13 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                     ? parseInt(value as any)
                     : value;
 
-                column.editHandler!({ rowKey, value: val });
+                const row = rows
+                    .single(x => getKey(x) === rowKey);
 
-                //     const writeField = 
+                if (!column.editHandler)
+                    throw new Error('Trying to edit a cell but it has no edit handler!');
 
-                // handleEdit(rowId, field, val);
+                column.editHandler({ rowKey, value: val, row });
             }}
             isRowSelectable={x => false}
             columns={columnsProcessed}
@@ -165,25 +198,31 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     );
 }, (prev, next) => {
 
-    if (prev.getKey !== next.getKey) {
+    const [isUnhanged, cause] = (() => {
 
-        return false;
-    }
+        if (prev.getKey !== next.getKey) {
 
-    if (prev.handleEdit !== next.handleEdit) {
+            return [false, 'getKey'];
+        }
 
-        return false;
-    }
+        if (!areArraysEqual(prev.columns, next.columns)) {
 
-    if (JSON.stringify(prev.columns) !== JSON.stringify(next.columns)) {
+            return [false, 'columns'];
+        }
 
-        return false;
-    }
+        if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
 
-    if (JSON.stringify(prev.rows) !== JSON.stringify(next.rows)) {
+            return [false, 'rows'];
+        }
 
-        return false;
-    }
+        if (JSON.stringify(prev.deps) !== JSON.stringify(prev.deps))
+            return [false, 'deps'];
 
-    return true;
+        return [true, null];
+    })();
+
+    if (!isUnhanged)
+        Logger.logScoped('GRID', `${prev.id ? `[id: ${prev.id}] ` : ''}Grid params changed, cause: ${cause}`);
+
+    return isUnhanged;
 });

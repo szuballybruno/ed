@@ -1,19 +1,26 @@
-import { usePretestData } from '../../../services/api/pretestApiService';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestSubpage = () => {
 
-    const courseId = useIntParam('courseId')!;
-    const { navigateToWatchPretestResults } = useNavigation();
+    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestRoute)
+        .getValue(x => x.courseId, 'int');
 
-    const { pretestData, pretestDataError, pretestDataState } = usePretestData(courseId);
+    const { navigate2 } = useNavigation();
 
-    const goToFirstWatchItem = () => {
+    const { pretestData, pretestDataError, pretestDataState } = PretestApiService.usePretestData(courseId);
+    const { finishPretest } = PretestApiService.useFinishPretest();
 
-        navigateToWatchPretestResults(courseId);
+    const answerSessionId = pretestData?.answerSessionId!;
+
+    const handleFinishPretest = async () => {
+
+        await finishPretest({ answerSessionId });
+        navigate2(applicationRoutes.playerRoute.pretestResultsRoute, { courseId });
     };
 
     return (
@@ -24,7 +31,8 @@ export const PretestSubpage = () => {
             {pretestData && <ExamQuestions
                 exam={pretestData?.exam}
                 answerSessionId={pretestData?.answerSessionId}
-                onExamFinished={goToFirstWatchItem}
+                onExamFinished={handleFinishPretest}
+                handleAbortExam={handleFinishPretest}
                 hideLoading />}
         </LoadingFrame>
     );

@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
 	synchronize: false,
@@ -7,20 +9,26 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class VideoCompletedView {
 
 	@ViewColumn()
-	videoId: number;
+	@XViewColumn()
+	videoId: Id<'Video'>;
 
 	@ViewColumn()
-	userId: number;
+	@XViewColumn()
+	userId: Id<'User'>;
 
 	@ViewColumn()
-	courseId: number;
+	@XViewColumn()
+	courseId: Id<'Course'>;
 
 	@ViewColumn()
+	@XViewColumn()
 	orderIndex: number;
 
 	@ViewColumn()
+	@XViewColumn()
 	watchedPercent: number;
 
 	@ViewColumn()
+	@XViewColumn()
 	isCompleted: boolean;
 }

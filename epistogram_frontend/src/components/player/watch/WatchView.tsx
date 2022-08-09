@@ -1,40 +1,43 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { Divider, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Divider } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
-import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
-import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
-import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
-import { VideoDTO } from '../../../shared/dtos/VideoDTO';
 import { StillWatchingDialogMarker } from '../../../models/types';
-import { getRandomInteger, isBetweenThreshold, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
+import { PlaybackApiService } from '../../../services/api/playbackApiService';
+import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
+import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
+import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
+import { getRandomInteger, isBetweenThreshold, iterate, useIsDesktopView, usePaging } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoHeader } from '../../EpistoHeader';
-import { NavigateToCourseItemActionType } from '../../universal/CourseItemList';
+import { NavigateToCourseItemActionType } from '../../courseItemList/Playlist';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
-import { CourseItemSelector } from './CourseItemSelector';
-import Comments from '../description/Comments';
+import Comments from '../comments/Comments';
 import PlayerDescription from '../description/PlayerDescription';
-import { VideoContent } from '../description/VideoContent';
+import PlayerNotes from '../description/PlayerNotes';
+import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { CourseItemSelector } from './CourseItemSelector';
 import { OverlayDialog } from './OverlayDialog';
 import { usePlaybackWatcher } from './PlaybackWatcherLogic';
 import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
-import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
+import { Id } from '../../../shared/types/versionId';
+import { Logger } from '../../../static/Logger';
 
-const autoplayTimeoutInS = 8;
+const autoplayTimeoutInS = 3;
 
 export const WatchView = (props: {
-    video: VideoDTO,
-    answerSessionId: number,
-    modules: ModuleDTO[],
+    videoPlayerData: VideoPlayerDataDTO,
+    answerSessionId: Id<'AnswerSession'>,
+    modules: PlaylistModuleDTO[],
     courseMode: CourseModeType,
-    courseId: number,
+    courseId: Id<'Course'>,
     continueCourse: () => void,
     navigateToCourseItem: NavigateToCourseItemActionType,
     refetchPlayerData: () => Promise<void>,
@@ -46,7 +49,7 @@ export const WatchView = (props: {
     const {
         nextItemState,
         currentItemCode,
-        video,
+        videoPlayerData,
         modules,
         answerSessionId,
         courseMode,
@@ -56,18 +59,33 @@ export const WatchView = (props: {
         refetchPlayerData
     } = props;
 
-    const { questions } = video;
+    const { questions } = videoPlayerData;
     const isDesktopView = useIsDesktopView();
-    const descCommentPaging = usePaging<string>(['Leírás', 'A kurzus segédanyagai', 'Hozzászólások']);
+    const descCommentPaging = usePaging<string>({ items: ['Leírás', 'Hozzászólások', 'Jegyzetek'] });
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
-    const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(video.maxWatchedSeconds);
+    const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(videoPlayerData.maxWatchedSeconds);
     const reactTimer = useReactTimer(continueCourse, autoplayTimeoutInS * 1000);
+    const videoPlaybackSessionId = videoPlayerData.videoPlaybackSessionId;
+    const videoVersionId = videoPlayerData.videoVersionId;
+
+    // http
+    const { postVideoSeekEvent } = PlaybackApiService.usePostVideoSeekEvent();
+
+    const handleVideoSeekEvent = useCallback((fromSeconds: number, toSeconds: number) => {
+
+        postVideoSeekEvent({
+            fromSeconds,
+            toSeconds,
+            videoVersionId,
+            videoPlaybackSessionId
+        });
+    }, [currentItemCode, videoPlaybackSessionId]);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
     const isQuestionVisible = !!currentQuestion;
-    const [answeredQuestionIds, setAnsweredQuestionIds] = useState<number[]>([]);
+    const [answeredQuestionIds, setAnsweredQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
     const hasQuestions = questions.length > 0;
 
     // still watching
@@ -79,12 +97,21 @@ export const WatchView = (props: {
     // video player
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const limitSeek = courseMode === 'beginner';
-    const videoPlayerState = useVideoPlayerState(video, isShowingOverlay, maxWatchedSeconds, limitSeek,);
+    const videoPlayerState = useVideoPlayerState(videoPlayerData, isShowingOverlay, maxWatchedSeconds, limitSeek, handleVideoSeekEvent);
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
 
-    const VideoDescription = () => <PlayerDescription description={video!.description} />;
-    const VideoContents = () => <VideoContent />;
-    const VideoComments = () => <Comments />;
+    const VideoDescription = () => <PlayerDescription
+        paging={descCommentPaging}
+        description={videoPlayerData.description} />;
+
+
+    const VideoComments = () => <Comments
+        paging={descCommentPaging}
+        currentItemCode={currentItemCode} />;
+
+    const VideoNotes = () => <PlayerNotes
+        paging={descCommentPaging} />;
+
 
     // const currentQuestionAnswered = answeredQuestionIds
     //     .some(qid => currentQuestion?.questionId === qid);
@@ -129,7 +156,7 @@ export const WatchView = (props: {
         // and have not been answered during this video session
         const unansweredQuestion = questions
             .filter(x => x.showUpTimeSeconds! < playedSeconds
-                && !answeredQuestionIds.some(qid => x.questionId === qid))[0];
+                && !answeredQuestionIds.some(qid => x.questionVersionId === qid))[0];
 
         if (unansweredQuestion) {
 
@@ -160,29 +187,38 @@ export const WatchView = (props: {
     useEffect(() => {
 
         // only show when there are no questions
-        if (hasQuestions)
+        if (hasQuestions) {
+
+            Logger.logScoped('VIDEO_POPUPS', 'Video has pupup questions, adding focus popups is cancelled.');
             return;
+        }
 
         // only calculate when video is longer than delay
         // and when video length is loaded by the player
-        if (videoLength < stillWatchingDialogDelaySecs)
+        if (videoLength < stillWatchingDialogDelaySecs) {
+
+            Logger.logScoped('VIDEO_POPUPS', 'Video length is less than focus popup delay, adding focus popups is cancelled.');
             return;
+        }
 
         const remainingLength = videoLength - stillWatchingDialogShowUpThresholdSecs;
         const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs);
 
-        const dialogShowUpSeconds = [] as StillWatchingDialogMarker[];
-        for (let index = 1; index <= dialogCount + 1; index++) {
+        Logger.logScoped('VIDEO_POPUPS', 'Focus dialog count calculated: ' + dialogCount);
 
-            dialogShowUpSeconds.push({
-                showUpTimeSeconds: index * stillWatchingDialogDelaySecs,
+        const dialogShowUpSeconds: StillWatchingDialogMarker[] = iterate(dialogCount, index => {
+
+            return {
+                showUpTimeSeconds: (index + 1) * stillWatchingDialogDelaySecs,
                 answerOptionIndex: getRandomInteger(0, 2)
-            });
-        }
+            };
+        });
+
+        Logger.logScoped('VIDEO_POPUPS', 'Focus dialog show up seconds calculated: ' + dialogShowUpSeconds
+            .map(x => x.showUpTimeSeconds)
+            .join(', '));
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoLength]);
 
     // playback watcher
@@ -191,7 +227,9 @@ export const WatchView = (props: {
         isPlaying,
         handleVideoCompletedStateChanged,
         setMaxWatchedSeconds,
-        !isSeeking);
+        !isSeeking,
+        videoVersionId,
+        videoPlaybackSessionId);
 
     return <>
 
@@ -201,7 +239,7 @@ export const WatchView = (props: {
                 //height="calc((var(--playerWidth) - 420px) / 1.80)" 
                 className="largeSoftShadow"
                 zIndex="5"
-                videoItem={video}
+                videoItem={videoPlayerData}
                 videoPlayerState={videoPlayerState}>
 
                 {/* next video */}
@@ -245,7 +283,7 @@ export const WatchView = (props: {
                             isShowing={isQuestionVisible}
                             onAnswered={() => setAnsweredQuestionIds([
                                 ...answeredQuestionIds,
-                                currentQuestion?.questionId!
+                                currentQuestion?.questionVersionId!
                             ])}
                             onClosed={() => {
                                 setCurrentQuestion(null);
@@ -255,7 +293,8 @@ export const WatchView = (props: {
                 </AbsoluteFlexOverlay>
 
                 {/* still watching */}
-                <AbsoluteFlexOverlay isVisible={!!currentStillWatchingMarker}
+                <AbsoluteFlexOverlay
+                    isVisible={!!currentStillWatchingMarker}
                     hasPointerEvents={true}>
                     <OverlayDialog showCloseButton={false}>
                         <StillWatching
@@ -308,15 +347,15 @@ export const WatchView = (props: {
                             fontWeight: 500
                         }}>
 
-                        {video!.title}
+                        {videoPlayerData!.title}
                     </EpistoFont>
 
                     <EpistoHeader variant="sub"
-                        text={video!.subTitle} />
+                        text={videoPlayerData!.subTitle} />
                 </Flex>
 
                 {/* ratings */}
-                <VideoRating videoId={video!.id} />
+                <VideoRating videoVersionId={videoPlayerData!.videoVersionId} />
             </Flex>
 
             <Divider
@@ -331,10 +370,12 @@ export const WatchView = (props: {
             <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
-                    VideoComments,
                     VideoDescription,
-                    VideoContents,
-                ]}></EpistoPaging>
+                    VideoComments,
+                    VideoNotes,
+                ]}>
+
+            </EpistoPaging>
         </Box>
     </>;
 };

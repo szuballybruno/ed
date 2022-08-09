@@ -1,7 +1,6 @@
-import { Box, Flex } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 import { Input } from '@chakra-ui/react';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useRequestPasswordChange } from '../../services/api/passwordChangeApiService';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
@@ -10,8 +9,9 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoLabel } from '../controls/EpistoLabel';
 import { FlexFloat } from '../controls/FlexFloat';
-import { EpistoDialog, EpistoDialogLogicType } from '../EpistoDialog';
 import { EpistoHeader } from '../EpistoHeader';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
 
 export const LoginPasswordResetDialog = (params: {
     passwordResetDialogLogic: EpistoDialogLogicType
@@ -42,7 +42,10 @@ export const LoginPasswordResetDialog = (params: {
     };
 
     return (
-        <EpistoDialog logic={passwordResetDialogLogic}>
+        <EpistoDialog
+            closeButtonType="top"
+            logic={passwordResetDialogLogic}>
+
             <Flex
                 id="dialogFlex"
                 width="500px"
@@ -111,13 +114,13 @@ export const LoginPasswordResetDialog = (params: {
                 {/* affirmation */}
                 <EpistoFont
                     fontSize="fontSmall"
-                    classes={['fontGrey']}
+                    color="fontGray"
                     style={{
                         marginTop: '20px',
                         padding: '15px',
                     }}>
 
-                    Kattints a visszaállítás gombra, és küldjük is a linket! 
+                    Kattints a visszaállítás gombra, és küldjük is a linket!
                 </EpistoFont>
 
                 {/* buttons */}

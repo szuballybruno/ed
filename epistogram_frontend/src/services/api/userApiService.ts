@@ -1,8 +1,10 @@
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../../shared/dtos/BriefUserDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
 import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
+import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
 
@@ -38,9 +40,9 @@ export const useSaveUser = () => {
     };
 };
 
-export const useEditUserData = (editedUserId: number) => {
+export const useEditUserData = (editedUserId: Id<'User'> | null) => {
 
-    const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId });
+    const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
 
     return {
         userEditData: queryRes.data,
@@ -50,7 +52,20 @@ export const useEditUserData = (editedUserId: number) => {
     };
 };
 
-export const useBriefUserData = (userId: number | null) => {
+export const useUserLearningOverviewData = (userId: Id<'User'>) => {
+
+    const queryRes = useReactQuery2<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+
+    return {
+        userLearningOverviewData: queryRes.data,
+        userLearningOverviewDataStatus: queryRes.state,
+        userLearningOverviewDataError: queryRes.error,
+        refetchUserLearningOverviewData: queryRes.refetch
+    };
+};
+
+
+export const useBriefUserData = (userId: Id<'User'> | null) => {
 
     const queryRes = useReactQuery2<BriefUserDataDTO>(apiRoutes.user.getBriefUserData, { userId: userId }, !!userId);
 
@@ -61,7 +76,7 @@ export const useBriefUserData = (userId: number | null) => {
     };
 };
 
-export const deleteUserAsync = (userId: number) => {
+export const deleteUserAsync = (userId: Id<'User'>) => {
 
     return httpPostAsync(apiRoutes.user.deleteUser, { userId });
 };

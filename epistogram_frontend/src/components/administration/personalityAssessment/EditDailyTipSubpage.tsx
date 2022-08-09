@@ -3,6 +3,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useDailyTipEditData, useSaveDailyTip } from '../../../services/api/dailyTipApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { Id } from '../../../shared/types/versionId';
 import { useBoolParam, useIntParam } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
@@ -15,9 +16,11 @@ export const EditDailyTipSubpage = () => {
     //util
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
-    const traitCategoryId = useIntParam('traitCategoryId');
+    const traitCategoryId = Id
+        .create<'PersonalityTraitCategory'>(useIntParam('traitCategoryId')!);
     const isMax = useBoolParam('isMax');
-    const dailyTipId = useIntParam('dailyTipId')!;
+    const dailyTipId = Id
+        .create<'DailyTip'>(useIntParam('dailyTipId')!);
 
     // http 
     const { dailyTipEditData, dailyTipEditState, dailyTipEditError } = useDailyTipEditData(dailyTipId);
@@ -67,8 +70,8 @@ export const EditDailyTipSubpage = () => {
             <AdminSubpageHeader
                 direction="column"
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips,
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute,
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute
                 ]}
                 subRouteLabel={'Tipp ' + dailyTipEditData?.id}
                 onSave={handleSaveAsync}

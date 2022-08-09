@@ -1,100 +1,124 @@
 WITH
-answer_agg as 
+question_version_answer_counts AS 
 (
 	SELECT 
-		sq.*,
-		sq.answer_count = 0 issue_answers_missing,
-		sq.correct_answer_count = 0 issue_correct_answers_missing
-	FROM 
-	(
-		SELECT 
-			q.id question_id, 
-			q.question_text question_text, 
-			q.video_id,
-			q.exam_id,
-			COUNT(an.id) answer_count,
-			COALESCE(SUM(an.is_correct::int), 0) correct_answer_count
-		FROM public.question q 
+		qv.id question_version_id, 
+		COUNT(av.id) answer_count,
+		COALESCE(SUM(ad.is_correct::int), 0) correct_answer_count
+	FROM public.question_version qv 
 
-		LEFT JOIN public.answer an
-		ON an.question_id = q.id
+	LEFT JOIN public.answer_version av
+	ON av.question_version_id = qv.id
 
-		GROUP BY
-			q.id,
-			q.video_id,
-			q.exam_id
-	) sq
+	LEFT JOIN public.answer_data ad
+	ON ad.id = av.answer_data_id
+
+	GROUP BY
+		qv.id,
+		qv.video_version_id,
+		qv.exam_version_id
 ),
-question_agg as 
+questions AS 
 (
 	SELECT 
-		sq.video_id,
-		sq.exam_id,
+		qv.id question_version_id, 
+		qd.question_text question_text, 
+		qv.video_version_id,
+		qv.exam_version_id,
+		qvac.answer_count,
+		qvac.correct_answer_count,
+		qvac.answer_count = 0 issue_answers_missing,
+		qvac.correct_answer_count = 0 issue_correct_answers_missing
+	FROM public.question_version qv 
+
+	LEFT JOIN public.question_data qd
+	ON qd.id = qv.question_data_id
+
+	LEFT JOIN public.answer_version av
+	ON av.question_version_id = qv.id
+
+	LEFT JOIN public.answer_data ad
+	ON ad.id = av.answer_data_id
+	
+	LEFT JOIN question_version_answer_counts qvac
+	ON qvac.question_version_id = qv.id
+),
+items AS
+(
+	SELECT 
+		sq.video_version_id,
+		sq.exam_version_id,
 		sq.question_count,
 		sq.question_count = 0 issue_questions_missing,
 		sq.question_issues question_issues
 	FROM 
 	(
 		SELECT 
-			civ.video_id,
-			civ.exam_id,
-			COUNT(aa.question_id) question_count,
-			STRING_AGG(aa.question_text || CASE WHEN aa.issue_answers_missing THEN ': ans_miss' ELSE ': corr_ans_miss' END, CHR(10)) 
-				FILTER (WHERE aa.issue_answers_missing OR aa.issue_correct_answers_missing) question_issues,
-			COALESCE(SUM(aa.issue_answers_missing::int), 0) missing_answers_issues_count,
-			COALESCE(SUM(aa.issue_correct_answers_missing::int), 0) missing_correct_answers_count
+			civ.video_version_id,
+			civ.exam_version_id,
+			COUNT(qs.question_version_id) question_count,
+			STRING_AGG(qs.question_text || CASE WHEN qs.issue_answers_missing THEN ': ans_miss' ELSE ': corr_ans_miss' END, CHR(10)) 
+				FILTER (WHERE qs.issue_answers_missing OR qs.issue_correct_answers_missing) question_issues,
+			COALESCE(SUM(qs.issue_answers_missing::int), 0) missing_answers_issues_count,
+			COALESCE(SUM(qs.issue_correct_answers_missing::int), 0) missing_correct_answers_count
 		FROM public.course_item_view civ
 		
-		LEFT JOIN answer_agg aa
-		ON aa.video_id = civ.video_id 
-			OR aa.exam_id = civ.exam_id
+		LEFT JOIN questions qs
+		ON qs.video_version_id = civ.video_version_id 
+		OR qs.exam_version_id = civ.exam_version_id
 
 		GROUP BY
-			civ.video_id,
-			civ.exam_id
+			civ.video_version_id,
+			civ.exam_version_id
 	) sq
 	
 	ORDER BY
 		sq.question_count DESC
 )
-
 SELECT 
-	casv.id course_id,
+	casv.course_id,
+	lcvv.version_id course_version_id,
 	civ.module_name,
 	civ.module_order_index,
-	civ.module_id,
-	civ.module_code,
-	civ.video_id,
-	civ.exam_id,
-	civ.item_id,
-	civ.item_is_deleted,
+	civ.module_version_id,
+	civ.video_version_id,
+	civ.exam_version_id,
 	civ.item_order_index,
 	civ.item_title,
 	civ.item_subtitle,
-	civ.item_code,
 	civ.item_type,
+	civ.version_code,
 	CONCAT_WS(
 		CHR(10), 
-		CASE WHEN qagg.issue_questions_missing THEN 'questions_missing' END, 
-		qagg.question_issues) errors,
+		CASE WHEN it.issue_questions_missing THEN 'questions_missing' END, 
+		it.question_issues) errors,
 	CONCAT_WS(
 		CHR(10), 
-		CASE WHEN civ.item_type = 'video' AND v.length_seconds > 480 
+		CASE WHEN civ.item_type = 'video' AND vf.length_seconds > 480 
 			THEN 'video_too_long' END) warnings,
-	v.length_seconds video_length
+	vf.length_seconds video_length
 FROM public.course_admin_short_view casv
 
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = casv.course_id
+
 LEFT JOIN public.course_item_view civ
-ON civ.course_id = casv.id
+ON civ.course_version_id = lcvv.version_id
 
-LEFT JOIN question_agg qagg
-ON qagg.video_id = civ.video_id 
-	OR qagg.exam_id = civ.exam_id
+LEFT JOIN items it
+ON it.video_version_id = civ.video_version_id 
+OR it.exam_version_id = civ.exam_version_id
 
-LEFT JOIN public.video v
-ON v.id = civ.video_id
+LEFT JOIN public.video_version vv
+ON vv.id = it.video_version_id
+
+LEFT JOIN public.video_data vd
+ON vd.id = vv.video_data_id
+
+LEFT JOIN public.video_file vf
+ON vf.id = vd.video_file_id
 
 ORDER BY 
-	casv.id, 
+	casv.course_id, 
 	civ.module_order_index,
 	civ.item_order_index

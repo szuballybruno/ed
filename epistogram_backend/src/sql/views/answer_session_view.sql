@@ -1,94 +1,95 @@
-WITH latest_given_answer AS 
+-- total and total correct given answer count, 
+-- and answered question count
+WITH 
+answer_stats AS 
 (
 	SELECT 
-		sq.question_id,
-		ga.id given_answer_id,
-		ga.answer_session_id,
-		ga.is_correct
-	FROM (
-		SELECT 
-			q.id question_id,
-			MAX(ga.id) latest_given_answer_id
-		FROM public.question q
+		ase.user_id,
+		ase.id answer_session_id,
+		COUNT (ga.id)::int given_answer_count,
+		SUM (ga.is_correct::int)::int correct_given_answer_count,
+		(
+			SELECT 
+				COUNT(*)
+			FROM public.question_version qv
 
-		LEFT JOIN public.given_answer ga
-		ON ga.question_id = q.id
+			LEFT JOIN public.given_answer ga
+			ON ga.question_version_id = qv.id
 
-		GROUP BY
-			q.id
-	) sq
+			WHERE ga.answer_session_id = ase.id
+		) answered_question_count
+	FROM public.given_answer ga
+
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
 	
-	LEFT JOIN public.given_answer ga
-	ON ga.id = sq.latest_given_answer_id
-	
-	ORDER BY 
-		sq.question_id
+	GROUP BY ase.user_id, ase.id
+), 
+answer_session_score AS
+(
+	SELECT
+		gasv.answer_session_id,
+		SUM(gasv.given_answer_points) answer_session_acquired_points,
+		COUNT(gasv.question_version_id) * points_per_question.value answer_session_maximum_points
+	FROM public.given_answer_score_view gasv
+
+	LEFT JOIN public.constant_value points_per_question
+	ON points_per_question.key = 'POINTS_PER_QUESTION'
+
+	GROUP BY 
+		gasv.answer_session_id,
+		points_per_question.value
 )
 SELECT 
 	ase.id answer_session_id,
-	u.id user_id,
-	e.id exam_id,
-	e.course_id course_id,
-	
-	-- total_question_count
-	CASE WHEN e.id IS NULL 
-		THEN (
-			SELECT COUNT(lga.question_id)::int
-			FROM latest_given_answer lga
-			WHERE lga.answer_session_id = ase.id
-		)
-		ELSE question_count.question_count
-	END total_question_count,
-	
-	-- answered_question_count
-	COALESCE(jq_details.answered_question_count, 0) answered_question_count,
-	
-	-- is_completed
-	COALESCE(question_count.question_count = jq_details.answered_question_count 
-		AND jq_details.answered_question_count > 0, false) is_completed,
-		
-	-- correct_answer_count
-	COALESCE(jq_details.correct_answer_count, 0) correct_answer_count,
-	
-	-- is_successful
-	COALESCE(question_count.question_count = jq_details.correct_answer_count 
-		AND jq_details.answered_question_count > 0, false) is_successful,
-		
-	-- correct_answer_rate
-	COALESCE(CASE WHEN question_count.question_count > 0
-		THEN ROUND(jq_details.correct_answer_count::decimal / question_count.question_count * 100)
-		ELSE 0
-	END, 0) correct_answer_rate
-	
+	ase.user_id,
+	ase.exam_version_id,
+	ase.video_version_id,
+    ase.start_date,
+	ass.answer_session_acquired_points,
+	ROUND(
+		(ass.answer_session_acquired_points::double precision 
+		/ ass.answer_session_maximum_points * 100)::numeric, 1
+	)::double precision answer_session_success_rate,
+	ROUND(
+		(ass.answer_session_acquired_points::double precision 
+		/ ass.answer_session_maximum_points * 100)::numeric, 1
+	) > COALESCE(ed.acceptance_threshold, 60) is_successful,
+	ast.answered_question_count,
+	ast.correct_given_answer_count,
+	ast.given_answer_count,
+	cicv.course_item_completion_id IS NOT NULL is_completed,
+	cicv.completion_date end_date,
+	CASE 
+		WHEN ase.is_practise
+			THEN 'practise'
+		WHEN e.id = 0
+			THEN 'signup'
+		WHEN e.is_pretest
+			THEN 'pretest'
+		WHEN ase.video_version_id IS NOT NULL
+			THEN 'video'
+		WHEN ase.exam_version_id IS NOT NULL
+			THEN 'exam'
+		ELSE NULL
+	END answer_session_type
 FROM public.answer_session ase
 
+LEFT JOIN answer_stats ast
+ON ast.user_id = ase.user_id
+AND ast.answer_session_id = ase.id
+
+LEFT JOIN answer_session_score ass
+ON ass.answer_session_id = ase.id
+
+LEFT JOIN public.exam_version ev
+ON ev.id = ase.exam_version_id
+
+LEFT JOIN public.exam_data ed
+ON ed.id = ev.exam_data_id
+
 LEFT JOIN public.exam e
-ON e.id = ase.exam_id
+ON ev.exam_id = e.id
 
-LEFT JOIN public.user u
-ON u.id = ase.user_id
-
-LEFT JOIN 
-(
-	SELECT 
-		e.id exam_id,
-		COUNT(q.id)::int question_count
-	FROM public.exam e
-	LEFT JOIN public.question q
-	ON q.exam_id = e.id
-	GROUP BY e.id
-) question_count
-ON question_count.exam_id = e.id
-
-LEFT JOIN 
-(
-	SELECT 
-		lga.answer_session_id,
-		COUNT(1)::int answered_question_count,
-		COALESCE(SUM((lga.is_correct IS NOT DISTINCT FROM true)::int)::int, 0) correct_answer_count
-	FROM latest_given_answer lga
-	
-	GROUP BY
-		lga.answer_session_id
-) jq_details
-ON jq_details.answer_session_id = ase.id
+LEFT JOIN public.course_item_completion_view cicv
+ON cicv.answer_session_id = ase.id

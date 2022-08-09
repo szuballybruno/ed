@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
 	synchronize: false,
@@ -7,26 +9,34 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class ExamCompletedView {
 
 	@ViewColumn()
-	userId: number;
+	@XViewColumn()
+	userId: Id<'User'>;
 
 	@ViewColumn()
-	examId: number;
+	@XViewColumn()
+	examId: Id<'Exam'>;
 
 	@ViewColumn()
-	courseId: number;
+	@XViewColumn()
+	courseId: Id<'Course'>;
 
 	@ViewColumn()
+	@XViewColumn()
 	isFinalExam: number;
 
 	@ViewColumn()
+	@XViewColumn()
 	orderIndex: number;
 
 	@ViewColumn()
+	@XViewColumn()
 	successfulSessionCount: boolean;
 
 	@ViewColumn()
+	@XViewColumn()
 	hasSuccessfulSession: boolean;
 
 	@ViewColumn()
+	@XViewColumn()
 	singleSuccessfulSession: boolean;
 }

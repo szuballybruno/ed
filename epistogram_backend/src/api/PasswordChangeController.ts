@@ -1,44 +1,51 @@
 import { ChangePasswordDTO } from '../shared/dtos/SetNewPasswordDTO';
 import { PasswordChangeService } from '../services/PasswordChangeService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PasswordChangeController {
+export class PasswordChangeController implements XController<PasswordChangeController> {
 
     private _passwordChangeService: PasswordChangeService;
 
-    constructor(passwordChangeService: PasswordChangeService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._passwordChangeService = passwordChangeService;
+        this._passwordChangeService = serviceProvider.getService(PasswordChangeService);
     }
 
-    setNewPasswordAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.passwordChange.setNewPassword, { isPost: true, isPublic: true })
+    setNewPasswordAction(params: ActionParams) {
 
         const dto = params.getBody<ChangePasswordDTO>();
-        const password = dto.getValue<string>(x => x.password);
-        const passwordCompare = dto.getValue<string>(x => x.passwordCompare);
-        const passwordResetToken = dto.getValue<string>(x => x.passwordResetToken);
+        const password = dto.getValue(x => x.password, 'string');
+        const passwordCompare = dto.getValue(x => x.passwordCompare, 'string');
+        const passwordResetToken = dto.getValue(x => x.passwordResetToken, 'string');
 
         return this._passwordChangeService
-            .setNewPasswordAsync(password, passwordCompare, passwordResetToken);
-    };
+            .setNewPasswordAsync(params.principalId, password, passwordCompare, passwordResetToken);
+    }
 
-    requestPasswordChangeAuthenticatedAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, { isPost: true })
+    requestPasswordChangeAuthenticatedAction(params: ActionParams) {
 
         const oldPassword = params
             .getBody<any>()
-            .getValue(x => x.oldPassword);
+            .getValue(x => x.oldPassword, 'string');
 
-        return await this._passwordChangeService
-            .requestPasswordChangeAuthenticatedAsync(params.currentUserId, oldPassword);
-    };
+        return this._passwordChangeService
+            .requestPasswordChangeAuthenticatedAsync(params.principalId, oldPassword);
+    }
 
-    requestPasswordChangeAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.passwordChange.requestPasswordChange, { isPost: true, isPublic: true })
+    requestPasswordChangeAction(params: ActionParams) {
 
         const email = params
-            .getBody<{ email: string }>()
-            .getValue(x => x.email);
+            .getBody()
+            .getValue(x => x.email, 'string');
 
-        await this._passwordChangeService
-            .requestPasswordChangeAsync(email);
-    };
+        return this._passwordChangeService
+            .requestPasswordChangeAsync(params.principalId, email);
+    }
 }

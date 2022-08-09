@@ -9,15 +9,14 @@ import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { LearningCourseStats } from './LearningCourseStats';
-import { LearningStatistics } from './LearningStatistics';
 
 const LearningInsightsPage = () => {
 
-    const user = useContext(CurrentUserContext)!;
+    const { id } = useContext(CurrentUserContext);
 
     useRedirectOnExactMatch({
         route: applicationRoutes.learningRoute,
-        redirectRoute: applicationRoutes.learningRoute.overview
+        redirectRoute: applicationRoutes.learningRoute.overviewRoute
     });
 
     return <PageRootContainer>
@@ -26,23 +25,18 @@ const LearningInsightsPage = () => {
 
             <NavigationLinkList
                 routes={[
-                    applicationRoutes.learningRoute.overview,
-                    applicationRoutes.learningRoute.myStatisticsRoute,
+                    applicationRoutes.learningRoute.overviewRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
                 ]} />
         </LeftPane>
 
-        <ContentPane>
+        <ContentPane noMaxWidth>
 
             <EpistoRoutes
                 renderRoutes={[
                     {
-                        route: applicationRoutes.learningRoute.overview,
+                        route: applicationRoutes.learningRoute.overviewRoute,
                         element: <LearningInsightsOverview />
-                    },
-                    {
-                        route: applicationRoutes.learningRoute.myStatisticsRoute,
-                        element: <LearningStatistics userId={user.id} />
                     },
                     {
                         route: applicationRoutes.learningRoute.myCoursesRoute,

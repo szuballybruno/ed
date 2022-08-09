@@ -1,5 +1,6 @@
-import { JoinColumn, ManyToOne, ViewColumn, ViewEntity } from 'typeorm';
-import { User } from '../entity/User';
+import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -8,77 +9,98 @@ import { User } from '../entity/User';
 export class CourseLearningStatsView {
 
     @ViewColumn()
-    id: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @ViewColumn()
+    @XViewColumn()
     canView: boolean;
 
     @ViewColumn()
-    teacherId: number;
+    @XViewColumn()
+    teacherId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
     isCompleted: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     isStarted: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     currentItemCode: string;
 
     @ViewColumn()
-    firstItemCode: string;
-
-    @ViewColumn()
+    @XViewColumn()
     continueItemCode: string;
 
     @ViewColumn()
+    @XViewColumn()
     title: string;
 
     @ViewColumn()
+    @XViewColumn()
     filePath: string;
 
     @ViewColumn()
+    @XViewColumn()
     categoryName: string;
 
     @ViewColumn()
+    @XViewColumn()
     subCategoryName: string;
 
     @ViewColumn()
+    @XViewColumn()
     teacherFirstName: string;
 
     @ViewColumn()
+    @XViewColumn()
     teacherLastName: string;
 
     @ViewColumn()
+    @XViewColumn()
     totalSpentSeconds: number;
 
     @ViewColumn()
+    @XViewColumn()
     totalCourseItemCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     completedCourseItemCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     totalVideoCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     completedVideoCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     totalVideoQuestionCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     answeredVideoQuestionCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     examSuccessRateAverage: number;
 
     @ViewColumn()
+    @XViewColumn()
     questionSuccessRate: number;
 
     @ViewColumn()
+    @XViewColumn()
     finalExamSuccessRate: number;
 }

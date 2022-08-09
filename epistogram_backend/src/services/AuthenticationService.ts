@@ -1,115 +1,114 @@
+import { DiscountCode } from '../models/entity/DiscountCode';
 import { User } from '../models/entity/User';
-import { UserActivityFlatView } from '../models/views/UserActivityFlatView';
-import { ErrorCode } from '../utilities/helpers';
+import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { HashService } from './HashService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { log } from './misc/logger';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class AuthenticationService {
 
-    private _userService: UserService;
-    private _tokenService: TokenService;
-    private _userSessionActivityService: UserSessionActivityService;
-    private _hashService: HashService;
-
     constructor(
-        userService: UserService,
-        tokenService: TokenService,
-        userSessionActivityService: UserSessionActivityService,
-        hashService: HashService) {
-
-        this._userService = userService;
-        this._tokenService = tokenService;
-        this._userSessionActivityService = userSessionActivityService;
-        this._hashService = hashService;
+        private _ormService: ORMConnectionService,
+        private _userService: UserService,
+        private _tokenService: TokenService,
+        private _userSessionActivityService: UserSessionActivityService,
+        private _hashService: HashService,
+        private _permissionService: PermissionService,
+        private _globalConfig: GlobalConfiguration) {
     }
 
     getRequestAccessTokenPayload = (accessToken: string) => {
 
-        if (!accessToken)
-            throw new ErrorCode('Token not sent.', 'bad request');
-
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
-            throw new ErrorCode('Token is invalid.', 'bad request');
+            throw new ErrorWithCode('Token is invalid.', 'bad request');
 
         return tokenPayload;
     };
 
-    async getCurrentUserAsync(userId: number) {
+    async establishAuthHandshakeAsync(refreshToken: string | null) {
 
+        log('Establishing auth handshake...');
+
+        await this._ormService
+            .save(DiscountCode, [
+                {
+                    id: Id.create<'DiscountCode'>(1),
+                    code: 'upd1',
+                    userId: null
+                },
+                {
+                    id: Id.create<'DiscountCode'>(1),
+                    code: 'upd2',
+                    userId: null
+                }
+            ]);
+
+        if (!refreshToken)
+            throw new ErrorWithCode('Refresh token not found!', 'forbidden');
+
+        const { userId } = this._tokenService
+            .verifyRefreshToken(refreshToken);
+
+        // get user 
         const currentUser = await this._userService
             .getUserDTOById(userId);
 
         if (!currentUser)
             throw new Error('User not found by id.');
 
+        // save session activity
         await this._userSessionActivityService
             .saveUserSessionActivityAsync(currentUser.id, 'generic');
 
-        return currentUser;
-    }
+        // get permissions 
+        const permissions = await this._permissionService
+            .getPermissionMatrixAsync(userId, currentUser.companyId);
 
-    renewUserSessionAsync = async (prevRefreshToken: string) => {
+        // get new tokens
+        const {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
+        } = await this._renewUserSessionAsync(userId, refreshToken);
 
-        log('Renewing user session...');
-
-        // check if there is a refresh token sent in the request 
-        if (!prevRefreshToken)
-            throw new ErrorCode('Refresh token not sent.', 'bad request');
-
-        // check sent refresh token if invalid by signature or expired
-        const tokenMeta = this._tokenService.verifyRefreshToken(prevRefreshToken);
-
-        // check if this refresh token is associated to the user
-        const refreshTokenFromDb = await this._userService
-            .getUserRefreshTokenById(tokenMeta.userId);
-
-        if (!refreshTokenFromDb)
-            throw new ErrorCode(`User has no active token, or it's not the same as the one in request! User id '${tokenMeta.userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
-
-        // get user 
-        const user = await this._userService
-            .getUserById(tokenMeta.userId);
-
-        if (!user)
-            throw new ErrorCode('User not found by id ' + tokenMeta.userId, 'internal server error');
-
-        // get tokens
-        const { accessToken, refreshToken } = await this.getUserLoginTokens(user, user.userActivity);
-
-        // save refresh token to DB
-        await this._userService
-            .setUserActiveRefreshToken(user.id, prevRefreshToken);
+        const authData: AuthDataDTO = {
+            currentUser,
+            permissions
+        };
 
         return {
-            accessToken,
-            refreshToken
+            authData,
+            newAccessToken,
+            newRefreshToken
         };
-    };
+    }
 
     logInUser = async (email: string, password: string) => {
 
-        log(`Logging in user... ${email} - ${password}`);
-
         // further validate request 
         if (!email || !password)
-            throw new ErrorCode('Email or password is null.', 'bad request');
+            throw new ErrorWithCode('Email or password is null.', 'bad request');
 
         // authenticate
         const user = await this._userService
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new ErrorCode('Invalid email.', 'forbidden');
+            throw new ErrorWithCode('Invalid email.', 'forbidden');
 
         const isPasswordCorrect = await this._hashService
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
-            throw new ErrorCode('Invalid password.', 'forbidden');
+            throw new ErrorWithCode('Invalid password.', 'forbidden');
 
         const userId = user.id;
 
@@ -117,7 +116,7 @@ export class AuthenticationService {
             .saveUserSessionActivityAsync(userId, 'login');
 
         // get auth tokens 
-        const tokens = await this.getUserLoginTokens(user, user.userActivity);
+        const tokens = await this.getUserLoginTokens(user);
 
         // set user current refresh token 
         await this._userService
@@ -126,21 +125,54 @@ export class AuthenticationService {
         return tokens;
     };
 
-    logOutUserAsync = async (userId: number) => {
+    logOutUserAsync = async (principalId: PrincipalId) => {
 
         await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'logout');
+            .saveUserSessionActivityAsync(principalId.getId(), 'logout');
 
         // remove refresh token, basically makes it invalid from now on
         await this._userService
-            .removeRefreshToken(userId);
+            .removeRefreshToken(principalId.getId());
     };
 
-    getUserLoginTokens = async (user: User, activity: UserActivityFlatView) => {
+    getUserLoginTokens = async (user: User) => {
 
         // get tokens
-        const accessToken = this._tokenService.createAccessToken(user, activity);
+        const accessToken = this._tokenService.createAccessToken(user);
         const refreshToken = this._tokenService.createRefreshToken(user);
+
+        return {
+            accessToken,
+            refreshToken
+        };
+    };
+
+    private _renewUserSessionAsync = async (userId: Id<'User'>, prevRefreshToken: string) => {
+
+        // BYPASS TOKEN IN DB CHECK IF LOCALHOST 
+        if (!this._globalConfig.misc.isLocalhost) {
+
+            // check if this refresh token is associated to the user
+            const refreshTokenFromDb = await this._userService
+                .getUserRefreshTokenById(userId);
+
+            if (!refreshTokenFromDb)
+                throw new ErrorWithCode(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+        }
+
+        // get user 
+        const user = await this._userService
+            .getUserById(userId);
+
+        if (!user)
+            throw new ErrorWithCode('User not found by id ' + userId, 'internal server error');
+
+        // get tokens
+        const { accessToken, refreshToken } = await this.getUserLoginTokens(user);
+
+        // save refresh token to DB
+        await this._userService
+            .setUserActiveRefreshToken(user.id, prevRefreshToken);
 
         return {
             accessToken,

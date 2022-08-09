@@ -1,84 +1,52 @@
 
-import { Organization } from '../models/entity/Organization';
-import { User } from '../models/entity/User';
-import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
-import { CourseShortDTO } from '../shared/dtos/CourseShortDTO';
-import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
-import { UserDTO } from '../shared/dtos/UserDTO';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
-import { CourseService } from './CourseService';
+import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
+import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { CourseProgressService } from './CourseProgressService';
 import { MapperService } from './MapperService';
-import { toOrganizationDTO } from './misc/mappings';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {
 
-    private _courseService: CourseService;
-    private _ormService: ORMConnectionService;
-    private _mapperService: MapperService;
-    private _userCourseBridgeService: UserCourseBridgeService;
-
     constructor(
-        courseService: CourseService,
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        userCourseBridgeService: UserCourseBridgeService) {
-
-        this._courseService = courseService;
-        this._ormService = ormService;
-        this._mapperService = mapperService;
-        this._userCourseBridgeService = userCourseBridgeService;
+        private _courseProgressService: CourseProgressService,
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _userCourseBridgeService: UserCourseBridgeService) {
     }
 
-    getOrganizationsAsync = async (userId: number) => {
+    async getCourseOverviewDataAsync(principalId: PrincipalId) {
 
-        const orgs = await this._ormService
-            .getRepository(Organization)
-            .find();
-
-        return orgs
-            .map(org => toOrganizationDTO(org));
-    };
-
-    saveUserDataAsync = async (userId: number, dto: UserDTO) => {
-
-        return this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                firstName: dto.firstName,
-                lastName: dto.lastName,
-                phoneNumber: dto.phoneNumber
-            });
-    };
-
-    async getCourseOverviewDataAsync(userId: number) {
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
         const courseId = await this._userCourseBridgeService
             .getCurrentCourseIdOrFail(userId);
 
         const view = await this._ormService
-            .getSingle(CourseOverviewView,
-                [
-                    ['WHERE', 'courseId', '=', 'courseId'],
-                    ['AND', 'userId', '=', 'userId']
-                ],
-                {
-                    courseId,
-                    userId
-                });
+            .query(CourseOverviewView, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         return this._mapperService
-            .map(CourseOverviewView, CourseOverviewDataDTO, view);
+            .mapTo(CourseOverviewDataDTO, [view]);
     }
 
-    getOverviewPageDTOAsync = async (userId: number) => {
+    async getOverviewPageDTOAsync(principalId: PrincipalId) {
 
-        const recommendedCourseDTOs = [] as CourseShortDTO[];
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
+
+        const recommendedCourseDTOs = [] as AvailableCourseDTO[];
         const developmentChartData = this.getDevelopmentChart();
 
-        const currentCourseProgress = await this._courseService
+        const currentCourseProgress = await this
+            ._courseProgressService
             .getCurrentCourseProgressAsync(userId);
 
         const overviewPageDTO = {
@@ -89,7 +57,7 @@ export class MiscService {
         } as OverviewPageDTO;
 
         return overviewPageDTO;
-    };
+    }
 
     private getTipOfTheDay = () => 'Előzetes kérdőívünk alapján Interperszonális (társasági) típusba tartozol, ez pedig azt jelenti, hogy tanulócsoportokkal, esetleg tanulótárssal tudsz a leghatékonyabban tanulni. Ha átbeszélitek a problémás részeket, ismétlő jelleggel végigmentek akár teljes anyagrészeken, illetve közösen töltitek ki az időközi teszteket, mind-mind segíti az ismeretanyag mélyebb beszívódását. Tudjuk, ez céges környezetben más, mint a közép vagy felsőoktatásban volt, ugyanakkor érdemes lehet akár közös Facebook csoportot létrehozni (de valószínűleg a munkahelyi kollaborációs platform is tökéletes erre a feladatra). Ha szeretnéd, össze is köthetünk a hozzád hasonló munkatársaiddal, de akár cégen kívüli tanulótársakra is szert tehetesz!';
 

@@ -1,4 +1,6 @@
-export const extensions = true;
+console.log('Extending prototypes...');
+
+export const initJsExtensions = () => 1;
 
 declare global {
 
@@ -7,13 +9,13 @@ declare global {
         remove(func: (item: T) => boolean): Array<T>;
         orderBy(func: (item: T) => number | string | Date): Array<T>;
         groupBy<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
-        any(func?: (item: T) => boolean): boolean;
+        any(funcOrItem?: T | ((item: T) => boolean)): boolean;
         none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func: (item: T) => boolean): T;
         first(func?: (item: T) => boolean): T;
-        last(func: (item: T) => boolean): T;
+        last(func?: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
         count(func: (item: T) => boolean): number;
         insert(index: number, newItem: T): Array<T>;
@@ -22,6 +24,10 @@ declare global {
     interface Date {
         addDays(days: number): Date;
     }
+
+    interface String {
+        trimChar(char: string): string;
+    }
 }
 
 export type Grouping<TItem, TKey> = {
@@ -29,6 +35,11 @@ export type Grouping<TItem, TKey> = {
     items: TItem[],
     first: TItem
 }
+
+String.prototype.trimChar = function (char: string) {
+
+    return this.replace(new RegExp(`^${char}+|${char}+$`, 'g'), '');
+};
 
 // eslint-disable-next-line no-extend-native
 Date.prototype.addDays = function (days: number) {
@@ -100,7 +111,9 @@ Array.prototype.firstOrNull = function <T>(func?: (item: T) => boolean) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.last = function <T>(func: (item: T) => T) {
+Array.prototype.last = function <T>(fn?: (item: T) => T) {
+
+    const func = fn ? fn : () => true;
 
     const filtered = this.filter(func);
 
@@ -156,12 +169,15 @@ Array.prototype.all = function <T>(func: (item: T) => boolean) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.any = function <T>(func?: (item: T) => boolean) {
+Array.prototype.any = function <T>(funcOrItem?: T | ((item: T) => boolean)) {
 
-    if (!func)
+    if (!funcOrItem)
         return this.some(x => true);
 
-    return this.some(func);
+    if (typeof funcOrItem === 'function')
+        return this.some(funcOrItem as any);
+
+    return this.some(x => x === funcOrItem);
 };
 
 // eslint-disable-next-line no-extend-native

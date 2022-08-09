@@ -9,7 +9,7 @@ FROM
 	SELECT 
 		udcipv.*,
 		DATE_TRUNC('week', udcipv.completion_date) completion_date_trunc
-	FROM user_daily_course_item_progress_view udcipv
+	FROM public.user_daily_course_item_progress_view udcipv
 ) sq
 
 GROUP BY

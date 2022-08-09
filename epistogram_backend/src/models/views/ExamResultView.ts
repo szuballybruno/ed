@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,59 +9,74 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class ExamResultView {
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
-    examId: number;
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
+    @XViewColumn()
     isFinalExam: boolean;
 
     @ViewColumn()
-    questionId: number;
+    @XViewColumn()
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
+    @XViewColumn()
     questionText: string;
 
     @ViewColumn()
-    answerSessionId: number;
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
+    @XViewColumn()
     isCompletedSession: boolean;
 
     @ViewColumn()
-    correctGivenAnswerCount: number;
-
-    @ViewColumn()
-    questionCount: number;
-
-    @ViewColumn()
+    @XViewColumn()
     isSuccessfulSession: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     onlySuccessfulSession: boolean;
 
     @ViewColumn()
-    givenAnswerId: number;
+    @XViewColumn()
+    givenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
+    @XViewColumn()
     isCorrect: boolean;
 
     @ViewColumn()
-    answerBridgeId: number;
+    @XViewColumn()
+    answerBridgeId: Id<'AnswerGivenAnswerBridge'>;
 
     @ViewColumn()
-    userAnswerId: number;
+    @XViewColumn()
+    userAnswerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
-    answerId: number;
+    @XViewColumn()
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
+    @XViewColumn()
+    correctAnswerRatePerQuestion: number;
+
+    @ViewColumn()
+    @XViewColumn()
     isAnswerCorrect: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     isGivenAnswer: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     answerText: string;
 }

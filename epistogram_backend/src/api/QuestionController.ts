@@ -1,64 +1,46 @@
-import { Question } from '../models/entity/Question';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
-import { toAnswerEditDTO } from '../services/misc/mappings';
+import { AuthorizationService } from '../services/AuthorizationService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
-import { QuestionService } from '../services/QuestionService';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class QuestionController {
 
     private _practiseQuestionService: PractiseQuestionService;
-    private _questionService: QuestionService;
-    private _ormService: ORMConnectionService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
-        practiseQuestionService: PractiseQuestionService,
-        questionService: QuestionService,
-        ormService: ORMConnectionService) {
+        serviceProvider: ServiceProvider) {
 
-        this._practiseQuestionService = practiseQuestionService;
-        this._questionService = questionService;
-        this._ormService = ormService;
+        this._practiseQuestionService = serviceProvider.getService(PractiseQuestionService);
+        this._authorizationService = serviceProvider.getService(AuthorizationService);
     }
 
+    @XControllerAction(apiRoutes.questions.answerPractiseQuestion, { isPost: true })
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
-        const dto = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
+        const dto = params
+            .getBody<AnswerQuestionDTO>(['answerIds', 'questionVersionId'])
+            .data;
 
         return this._practiseQuestionService
-            .answerPractiseQuestionAsync(params.currentUserId, dto);
+            .answerPractiseQuestionAsync(params.principalId, dto);
     };
 
-    getQuestionEditDataAction = async (params: ActionParams) => {
-
-        const questionId = withValueOrBadRequest<number>(params.req.query.questionId, 'number');
-
-        const question = await this._ormService
-            .getRepository(Question)
-            .createQueryBuilder('q')
-            .leftJoinAndSelect('q.answers', 'qa')
-            .where('q.id = :questionId', { questionId })
-            .getOneOrFail();
+    @XControllerAction(apiRoutes.questions.getPractiseQuestions)
+    getPractiseQuestionAction(params: ActionParams) {
 
         return {
-            videoId: question.videoId,
-            examId: question.examId,
-            questionId: question.id,
-            questionText: question.questionText,
-            questionShowUpTimeSeconds: question.showUpTimeSeconds,
-            typeId: question.typeId,
-            answers: (question.answers ?? []).map(x => toAnswerEditDTO(x))
-        } as QuestionEditDataDTO;
-    };
-
-    saveQuestionAction = async (params: ActionParams) => {
-
-        const dto = withValueOrBadRequest<QuestionEditDataDTO>(params.req.body);
-        const questionId = dto.questionId;
-
-        await this._questionService
-            .saveQuestionAsync(questionId, dto);
-    };
+            action: async () => {
+                return await this._practiseQuestionService
+                    .getPractiseQuestionAsync(params.principalId);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
 }

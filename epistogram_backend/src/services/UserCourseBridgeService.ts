@@ -1,90 +1,131 @@
-import { Exam } from '../models/entity/Exam';
 import { UserCourseBridge } from '../models/entity/UserCourseBridge';
-import { Video } from '../models/entity/Video';
-import { CourseItemDTO } from '../shared/dtos/CourseItemDTO';
+import { CourseStateView } from '../models/views/CourseStateView';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
-import { CourseItemsService } from './CourseItemsService';
+import { Id } from '../shared/types/versionId';
+import { throwNotImplemented } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
+import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
-import { getItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
-    private _courseItemsService: CourseItemsService;
+    private _authorizationService: AuthorizationService;
+    private _loggerService: LoggerService;
 
     constructor(
-        courseItemsService: CourseItemsService,
         ormService: ORMConnectionService,
-        mapperService: MapperService) {
+        mapperService: MapperService,
+        authorizationService: AuthorizationService,
+        loggerService: LoggerService) {
 
         super(mapperService, ormService, UserCourseBridge);
-        this._courseItemsService = courseItemsService;
+
+        this._authorizationService = authorizationService;
+        this._loggerService = loggerService;
     }
 
     /**
      * Set current course and course current item code.
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param itemCode 
      */
     async setCurrentCourse(
-        userId: number,
-        courseId: number,
+        userId: Id<'User'>,
+        courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         itemCode: string | null) {
 
-        const currentCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
 
-        // insert new bridge
-        if (!currentCourseBridge) {
+        const currentCourseBridge = await this._ormService
+            .query(UserCourseBridge, {
+                userId,
+                isCurrent: true
+            })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'isCurrent')
+            .getOneOrNull();
 
-            await this.createNewCourseBridge(courseId, userId, itemCode, stageName);
+        if (currentCourseBridge) {
+            await this._ormService.save(UserCourseBridge, {
+                id: currentCourseBridge.id,
+                isCurrent: false
+            });
         }
 
+        const nextCourseBridge = await this._ormService
+            .query(UserCourseBridge, {
+                userId,
+                courseId
+            })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getOneOrNull();
+
+        if (nextCourseBridge) {
+
+            await this._ormService.save(UserCourseBridge, {
+                id: nextCourseBridge.id,
+                currentItemCode: itemCode,
+                stageName,
+                isCurrent: true
+            });
+        } else {
+
+            await this._createNewCourseBridge(courseId, userId, itemCode, stageName);
+        }
+
+        /* const currentCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+ 
+        // insert new bridge
+        if (!currentCourseBridge) {
+ 
+            await this._createNewCourseBridge(courseId, userId, itemCode, stageName);
+        }
+ 
         // update current video/exam id 
         else {
-
+ 
             await this._ormService
-                .getRepository(UserCourseBridge)
-                .save({
+                .save(UserCourseBridge, {
                     id: currentCourseBridge.id,
                     currentItemCode: itemCode,
                     stageName,
                     isCurrent: true
                 } as UserCourseBridge);
         }
-
+ 
         // get all bridges for user 
         const bridges = await this._ormService
-            .getRepository(UserCourseBridge)
-            .find({
-                where: {
-                    userId
-                }
-            });
-
+            .query(UserCourseBridge, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+ 
         // update current bridge 
         await this._ormService
-            .getRepository(UserCourseBridge)
-            .save(bridges
-                .map(bridge => ({
+            .save(UserCourseBridge, bridges
+                .map((bridge: UserCourseBridge): SaveEntityType<UserCourseBridge> => ({
                     id: bridge.id,
-                    isCurrent: bridge.courseId === courseId,
-                } as UserCourseBridge)));
+                    isCurrent: bridge.courseId === courseId
+                }))); */
+
+
+
     }
 
-    async createNewCourseBridge(
-        courseId: number,
-        userId: number,
+    /**
+     * Creates a new course bridge 
+     */
+    private async _createNewCourseBridge(
+        courseId: Id<'Course'>,
+        userId: Id<'User'>,
         currentItemCode: string | null,
         stageName: CourseStageNameType,
     ) {
 
         await this._ormService
-            .getRepository(UserCourseBridge)
-            .insert({
+            .createAsync(UserCourseBridge, {
                 courseId: courseId,
                 userId: userId,
                 courseMode: 'advanced',
@@ -97,64 +138,190 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     /**
      * Deletes all course bridges associated with the specified course  
-     * @param courseId 
      */
-    async deleteAllBridgesAsync(courseId: number) {
+    deleteAllBridgesAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>
+    ): ControllerActionReturnType {
 
-        await this._ormService
-            .getOrmConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(UserCourseBridge)
-            .where('courseId = :courseId', { courseId })
-            .execute();
+        return {
+            action: async () => {
+                await this._ormService
+                    .hardDelete(UserCourseBridge, [courseId]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ASSIGN_COURSE_PERMISSIONS');
+            }
+        };
+
+
     }
 
     /**
      * Sets the course mode (beginner / advanced).
-     * 
-     * @param userId 
-     * @param courseId 
-     * @param mode 
      */
-    async setCourseModeAsync(userId: number, courseId: number, mode: CourseModeType) {
+    setCourseModeAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>,
+        mode: CourseModeType
+    ): ControllerActionReturnType {
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+        return {
+            action: async () => {
 
-        if (!userCourseBridge)
-            throw new Error('User course bridge not found!');
+                const userId = principalId.getId();
 
-        await this._ormService
-            .getRepository(UserCourseBridge)
-            .save({
-                courseId: courseId,
-                userId: userId,
-                id: userCourseBridge.id,
-                courseMode: mode
-            } as UserCourseBridge);
+                const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+
+                if (!userCourseBridge)
+                    throw new Error('User course bridge not found!');
+
+                await this._ormService
+                    .save(UserCourseBridge, {
+                        courseId: courseId,
+                        userId: userId,
+                        id: userCourseBridge.id,
+                        courseMode: mode
+                    } as UserCourseBridge);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'SET_COURSE_MODE_GLOBAL');
+            }
+        };
+
+    }
+    /**
+     * Sets the course mode (beginner / advanced).
+     */
+    setCourseStartDateAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+
+        return {
+            action: async () => {
+
+                const userId = principalId.getId();
+
+                const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+                if (!userCourseBridge)
+                    throw new Error('User course bridge not found!');
+
+                await this._ormService
+                    .save(UserCourseBridge, {
+                        courseId: courseId,
+                        userId: userId,
+                        id: userCourseBridge.id,
+                        startDate: new Date()
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
     }
 
     /**
-     * Returns the current course id 
+     * Sets the requiredCompletionDate for a course. Either updates the
+     * existing userCourseBridge, or creates a new one.
      */
-    async getCurrentCourseId(userId: number) {
+    setRequiredCompletionDateAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>,
+        requiredCompletionDate: string
+    ): ControllerActionReturnType {
 
-        const courseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId,
-                    isCurrent: true
+        return {
+            action: async () => {
+
+                const userId = principalId.getId();
+
+                const userCourseBridge = await this
+                    .getUserCourseBridgeAsync(userId, courseId);
+
+                if (userCourseBridge) {
+
+                    this._loggerService
+                        .logScoped('GENERIC', 'User course bridge exists, updating deadline...');
+
+                    return this.updateCompletionDate(userCourseBridge.id, new Date(requiredCompletionDate));
                 }
-            });
 
-        return courseBridge?.courseId ?? null;
+                try {
+
+                    this._loggerService
+                        .logScoped('GENERIC', 'User course bridge is not exists, creating...');
+
+                    await this._createNewCourseBridge(courseId, userId, null, 'assigned');
+                } catch (e) {
+
+                    throw new Error('Failed to create new user course bridge');
+                }
+
+                const newUserCourseBridge = await this
+                    .getUserCourseBridgeAsync(userId, courseId);
+
+                if (!newUserCourseBridge)
+                    throw new Error('Failed to find new user course bridge');
+
+                return this.updateCompletionDate(newUserCourseBridge.id, new Date(requiredCompletionDate));
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
+            }
+        };
+
+    }
+
+
+    async getCurrentCourseId(
+        userId: Id<'User'>
+    ) {
+        const view = await this._ormService
+            .query(CourseStateView, { userId })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'true')
+            .getOneOrNull();
+
+        if (!view?.inProgress)
+            return null;
+
+        return view?.courseId ?? null;
     }
 
     /**
      * Returns the current course id 
      */
-    async getCurrentCourseIdOrFail(userId: number) {
+    getCurrentCourseIdAsync(
+        principalId: PrincipalId,
+        userId: Id<'User'>
+    ): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+                const courseBridge = await this._ormService
+                    .query(UserCourseBridge, { userId })
+                    .where('userId', '=', 'userId')
+                    .and('isCurrent', '=', 'true')
+                    .getOneOrNull();
+
+                return courseBridge?.courseId ?? null;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
+
+
+    /**
+     * Returns the current course id 
+     */
+    async getCurrentCourseIdOrFail(
+        userId: Id<'User'>
+    ) {
 
         const id = await this.getCurrentCourseId(userId);
 
@@ -164,115 +331,167 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return id;
     }
 
-    getCurrentItemCodeOrFailAsync = async (userId: number) => {
+    async getCurrentItemCodeOrFailAsync(
+        userId: Id<'User'>
+    ) {
 
-        const currentItemCode = await this.getCurrentItemCodeAsync(userId);
+        const currentItemCode = await this
+            .getCurrentItemCodeAsync(userId);
 
         if (!currentItemCode)
             throw new Error('Course has no current item!');
 
         return currentItemCode;
-    };
 
-    getCurrentItemCodeAsync = async (userId: number) => {
+    }
 
-        const currentBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId,
-                    isCurrent: true
-                }
-            });
+    getPrincipalCurrentItemCodeAsync(
+        principalId: PrincipalId
+    ): ControllerActionReturnType {
+        return {
+            action: async () => {
 
-        return currentBridge?.currentItemCode ?? null;
-    };
+                return await this
+                    .getCurrentItemCodeAsync(principalId.getId());
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
 
-    getUserCourseBridgeAsync = async (userId: number, courseId: number) => {
+    }
+
+    /**
+     * Returns the current 
+     * course item code  
+     */
+    private async getCurrentItemCodeAsync(
+        userId: Id<'User'>
+    ) {
+        const stateView = await this
+            ._ormService
+            .query(CourseStateView, { userId })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'true')
+            .and('inProgress', '=', 'true')
+            .getOneOrNull();
+
+        if (!stateView)
+            return;
+
+        const ucb = await this
+            ._ormService
+            .query(UserCourseBridge, {
+                courseId: stateView.courseId,
+                userId
+            })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
+
+        return ucb.currentItemCode;
+    }
+
+    private async getUserCourseBridgeAsync(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>
+    ) {
 
         const userCourseBridge = await this._ormService
-            .getRepository(UserCourseBridge)
-            .findOne({
-                where: {
-                    userId: userId,
-                    courseId: courseId
-                }
-            });
+            .query(UserCourseBridge, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
         return userCourseBridge;
-    };
+    }
 
-    getUserCourseBridgeOrFailAsync = async (userId: number, courseId: number) => {
+    async getUserCourseBridgeOrFailAsync(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>
+    ) {
+        const userCourseBridge = await this
+            .getUserCourseBridgeAsync(userId, courseId);
 
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
         if (!userCourseBridge)
             throw new Error('User course bridge not found, maybe the course is not yet started!');
 
         return userCourseBridge;
-    };
+    }
 
     unsetUsersCurrentCourseItemAsync = async (examId?: number, videoId?: number) => {
 
-        const isExam = !!examId;
+        throwNotImplemented();
+        // const isExam = !!examId;
 
-        // unset user current course item
-        const item = isExam
-            ? await this._ormService
-                .getSingleById(Exam, examId!)
+        // // unset user current course item
+        // const item = isExam
+        //     ? await this._ormService
+        //         .getSingleById(ExamData, examId!)
 
-            : await this._ormService
-                .getSingleById(Video, videoId!);
+        //     : await this._ormService
+        //         .getSingleById(VideoData, videoId!);
 
-        const currentItemDTO = isExam
-            ? this._mapperService.map(Exam, CourseItemDTO, item)
-            : this._mapperService.map(Video, CourseItemDTO, item);
+        // const currentItemDTO = isExam
+        //     ? this._mapperService.map(ExamData, CourseItemDTO, item)
+        //     : this._mapperService.map(VideoData, CourseItemDTO, item);
 
-        const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? 'exam' : 'video');
+        // const currentItemCode = getItemCode(isExam ? examId! : videoId!, isExam ? 'exam' : 'video');
 
-        const courseId = item.courseId;
+        // const courseId = item.courseId;
 
-        const courseItemListDTO = await this._courseItemsService
-            .getCourseItemDTOs(courseId);
+        // const courseItemListDTO = await this._courseItemsService
+        //     .getCourseItemDTOs(courseId!);
 
-        const prevIndex = courseItemListDTO
-            .courseItems
-            .findIndex(x => x.descriptorCode === currentItemDTO.descriptorCode) - 1;
+        // const prevIndex = courseItemListDTO
+        //     .courseItems
+        //     .findIndex(x => x.descriptorCode === currentItemDTO.descriptorCode) - 1;
 
-        const courseItemsWithoutCurrent = courseItemListDTO
-            .courseItems
-            .filter(x => x.descriptorCode !== currentItemDTO.descriptorCode);
+        // const courseItemsWithoutCurrent = courseItemListDTO
+        //     .courseItems
+        //     .filter(x => x.descriptorCode !== currentItemDTO.descriptorCode);
 
-        const previousCourseItem = prevIndex > 0
-            ? courseItemListDTO.courseItems[prevIndex - 1]
-            : courseItemsWithoutCurrent.length > 0
-                ? courseItemsWithoutCurrent[0]
-                : null;
+        // const previousCourseItem = prevIndex > 0
+        //     ? courseItemListDTO.courseItems[prevIndex - 1]
+        //     : courseItemsWithoutCurrent.length > 0
+        //         ? courseItemsWithoutCurrent[0]
+        //         : null;
 
-        // update bridges
-        const courseBridges = await this._ormService
-            .getRepository(UserCourseBridge)
-            .find({
-                where: {
-                    currentItemCode: currentItemCode,
-                    courseId
-                }
+        // // update bridges
+        // const courseBridges = await this._ormService
+        //     .getRepository(UserCourseBridge)
+        //     .find({
+        //         where: {
+        //             currentItemCode: currentItemCode,
+        //             courseId: courseId!
+        //         }
+        //     });
+
+        // courseBridges
+        //     .forEach(x => x.currentItemCode = previousCourseItem?.descriptorCode ?? null);
+
+        // await this._ormService
+        //     .getRepository(UserCourseBridge)
+        //     .save(courseBridges);
+
+        // // remove current course bridge
+        // if (!previousCourseItem)
+        //     await this._ormService
+        //         .getOrmConnection()
+        //         .createQueryBuilder()
+        //         .delete()
+        //         .from(UserCourseBridge)
+        //         .where('courseId = :courseId', { courseId })
+        //         .execute();
+    };
+
+    private updateCompletionDate = async (userCourseBridgeId: Id<'UserCourseBridge'>, requiredCompletionDate: Date) => {
+        return this._ormService
+            .save(UserCourseBridge, {
+                id: userCourseBridgeId,
+                requiredCompletionDate: requiredCompletionDate,
+                tempomatMode: 'strict' // Automatically updating tempomat mode to strict
             });
-
-        courseBridges
-            .forEach(x => x.currentItemCode = previousCourseItem?.descriptorCode ?? null);
-
-        await this._ormService
-            .getRepository(UserCourseBridge)
-            .save(courseBridges);
-
-        // remove current course bridge
-        if (!previousCourseItem)
-            await this._ormService
-                .getOrmConnection()
-                .createQueryBuilder()
-                .delete()
-                .from(UserCourseBridge)
-                .where('courseId = :courseId', { courseId })
-                .execute();
     };
 }

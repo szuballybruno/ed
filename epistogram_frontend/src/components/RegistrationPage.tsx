@@ -1,14 +1,14 @@
 import { Image } from '@chakra-ui/image';
 import { Flex } from '@chakra-ui/layout';
 import { Checkbox, TextField } from '@mui/material';
-import { useContext, useState } from 'react';
-import { useParams } from 'react-router';
+import { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { getAssetUrl, usePasswordEntryState } from '../static/frontendHelpers';
-import { useBoolParam, useStringParam } from '../static/locationHelpers';
+import { Environment } from '../static/Environemnt';
+import { usePasswordEntryState } from '../static/frontendHelpers';
+import { useQueryVal } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFont } from './controls/EpistoFont';
@@ -17,12 +17,12 @@ import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegistrationPage = () => {
 
-    //const token = useStringParam('token')!;
-    const params = useParams();
-    const token = params.token + '';
 
-    const isInvited = !!params.isInvited;
-    //const isInvited = useBoolParam('isInvited')!;
+    const token = useQueryVal('token')!;
+
+    const isInvitedString = useQueryVal('isInvited')!;
+
+    const isInvited = isInvitedString === 'true' ? true : false;
 
     const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 
@@ -43,12 +43,17 @@ export const RegistrationPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const showErrorDialog = useShowErrorDialog();
     const { navigate } = useNavigation();
+    const showErrorDialog = useShowErrorDialog();
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
 
     const refetchUser = useContext(RefetchUserAsyncContext);
+
+    useEffect(() => {
+        if (!token)
+            navigate(applicationRoutes.loginRoute);
+    }, [token]);
 
     const handleRegistration = async () => {
 
@@ -98,11 +103,11 @@ export const RegistrationPage = () => {
 
 
             <Flex width="100%"
-maxH={50}
-my="25px"
-justifyContent={'center'}>
+                maxH={50}
+                my="25px"
+                justifyContent={'center'}>
                 <Image width="50%"
-src={getAssetUrl('/images/logo.svg')} />
+                    src={Environment.getAssetUrl('/images/logo.svg')} />
             </Flex>
 
             {!isInvited && <EpistoFont>{translatableTexts.registrationPage.learningStyleSurvey}</EpistoFont>}
@@ -164,7 +169,7 @@ src={getAssetUrl('/images/logo.svg')} />
             </>}
 
             <Flex direction={'row'}
-alignItems={'center'}>
+                alignItems={'center'}>
 
                 <Checkbox
                     checked={acceptPrivacyPolicy}

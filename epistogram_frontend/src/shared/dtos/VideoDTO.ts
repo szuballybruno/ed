@@ -1,8 +1,8 @@
+import { Id } from '../types/versionId';
 import { QuestionDTO } from './QuestionDTO';
 
-export class VideoDTO {
-    id: number;
-    courseId: number;
+export class VideoPlayerDataDTO {
+    videoVersionId: Id<'VideoVersion'>;
     subTitle: string;
     title: string;
     thumbnailUrl: string;
@@ -10,4 +10,5 @@ export class VideoDTO {
     description: string;
     questions: QuestionDTO[];
     maxWatchedSeconds: number;
+    videoPlaybackSessionId: Id<'VideoPlaybackSession'>;
 }

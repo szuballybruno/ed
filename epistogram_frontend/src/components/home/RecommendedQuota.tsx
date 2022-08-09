@@ -1,10 +1,8 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
-import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { PagingType } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { RecommendedItemQuota } from './RecommendedItemQuota';
 
@@ -14,7 +12,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
     const { dailyTipData } = useDailyTip();
 
     const currentCourse = activeCoursesPaging.currentItem;
-    const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId ?? 0, !!currentCourse);
+    const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId);
 
     if (!currentCourse)
         return <Flex>
@@ -63,31 +61,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             </Flex>
         </Flex>
 
-        {/* navigation buttons */}
-        <Flex
-            h="30px"
-            align="center"
-            justify="center">
 
-            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
-                <ArrowBack />
-            </EpistoButton>
-
-            {activeCoursesPaging
-                .items
-                .map((x, index) => <FiberManualRecord
-                    key={index}
-                    style={{
-                        width: '10px',
-                        height: '8px',
-                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
-                    }} />)}
-
-            <EpistoButton onClick={() => activeCoursesPaging.next()}>
-                <ArrowForward />
-            </EpistoButton>
-
-        </Flex>
 
         {/* text daily tip */}
         {dailyTipData?.description && <Flex

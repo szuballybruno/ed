@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,23 +9,30 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class DailyTipView {
 
     @ViewColumn()
-    dailyTipId: number;
+    @XViewColumn()
+    dailyTipId: Id<'DailyTip'>;
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
     description: string;
 
     @ViewColumn()
+    @XViewColumn()
     videoFilePath: string;
 
     @ViewColumn()
+    @XViewColumn()
     lastOccurrenceDate: Date;
 
     @ViewColumn()
+    @XViewColumn()
     isNew: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     isCurrentTip: boolean;
 }

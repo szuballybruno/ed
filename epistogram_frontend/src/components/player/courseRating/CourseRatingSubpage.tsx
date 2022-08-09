@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from '../../../services/api/courseRatingApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { usePaging } from '../../../static/frontendHelpers';
+import { Id } from '../../../shared/types/versionId';
+import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -16,23 +17,21 @@ import { RatingStars } from '../../universal/RatingStars';
 
 export const CourseRatingSubpage = () => {
 
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
+
     const { navigateToCourseOverview } = useNavigation();
 
     const { courseRatingGroups, courseRatingGroupsError, courseRatingGroupsState, refetchCourseRatingGroupsAsync } = useCourseRatingGroups(courseId);
 
     const showError = useShowErrorDialog();
 
-    const paging = usePaging(
-        courseRatingGroups ?? [],
-        undefined,
-        () => {
+    const paging = usePaging({
+        items: courseRatingGroups ?? [],
+        onNextOverNavigation: () => navigateToCourseOverview(courseId)
+    });
 
-            console.log('asdasdaw');
-            navigateToCourseOverview(courseId);
-        });
-
-    const [questionAnswers, setQuestionAnswers] = useState<{ quesitionId: number, value: number | null, text: string | null }[]>([]);
+    const [questionAnswers, setQuestionAnswers] = useState<{ quesitionId: Id<'CourseRatingQuestion'>, value: number | null, text: string | null }[]>([]);
     const currentRatingGroup = paging.currentItem;
     const currentQuestions = currentRatingGroup?.questions ?? [];
     const currentGroupIndex = paging.currentIndex;
@@ -91,11 +90,13 @@ export const CourseRatingSubpage = () => {
             height="100%">
 
             <ExamLayout
-                headerCenterText="Kurzus ertekelese"
-                handleNext={handleNextAsync}
-                showNextButton={canContinue}
-                nextButtonTitle={translatableTexts.exam.nextQuestion}
-                progressValue={progressPercentage}
+                headerCenterText="Kurzus értékelése"
+                footerButtons={new ArrayBuilder()
+                    .addIf(canContinue, {
+                        title: translatableTexts.exam.nextQuestion,
+                        action: handleNextAsync
+                    })
+                    .getArray()}
                 handleBack={currentGroupIndex !== 0 ? handleBackAsync : undefined}>
 
                 <ExamLayoutContent

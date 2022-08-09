@@ -1,90 +1,110 @@
 import { JobTitle } from '../models/entity/JobTitle';
-import { AuthenticationService } from '../services/AuthenticationService';
-import { MapperService } from '../services/MapperService';
+import { AuthorizationService } from '../services/AuthorizationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { MiscService } from '../services/MiscService';
-import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
+import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
-import { UserDTO } from '../shared/dtos/UserDTO';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class MiscController {
+export class MiscController implements XController<MiscController> {
 
     private _miscService: MiscService;
     private _practiseQuestionService: PractiseQuestionService;
-    private _authService: AuthenticationService;
     private _tokenService: TokenService;
     private _ormService: ORMConnectionService;
     private _config: GlobalConfiguration;
-    private _mapperService: MapperService;
     private _courseBridgeService: UserCourseBridgeService;
+    private _authorizationService: AuthorizationService;
 
-    constructor(
-        miscService: MiscService,
-        practiseQuestionService: PractiseQuestionService,
-        authService: AuthenticationService,
-        tokenService: TokenService,
-        ormService: ORMConnectionService,
-        config: GlobalConfiguration,
-        mapperService: MapperService,
-        courseBridgeService: UserCourseBridgeService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._miscService = miscService;
-        this._practiseQuestionService = practiseQuestionService;
-        this._authService = authService;
-        this._tokenService = tokenService;
-        this._ormService = ormService;
-        this._config = config;
-        this._mapperService = mapperService;
-        this._courseBridgeService = courseBridgeService;
+        this._miscService = serviceProvider.getService(MiscService);
+        this._practiseQuestionService = serviceProvider.getService(PractiseQuestionService);
+        this._tokenService = serviceProvider.getService(TokenService);
+        this._ormService = serviceProvider.getService(ORMConnectionService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
+        this._courseBridgeService = serviceProvider.getService(UserCourseBridgeService);
+        this._authorizationService = serviceProvider.getService(AuthorizationService);
     }
 
-    getCurrentCourseItemCodeAction = async (parms: ActionParams) => {
+    @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)
+    getCurrentCourseItemCodeAction(params: ActionParams) {
 
         return this._courseBridgeService
-            .getCurrentItemCodeAsync(parms.currentUserId);
-    };
+            .getPrincipalCurrentItemCodeAsync(params.principalId);
+    }
 
-    getOverviewPageDTOAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.misc.getHomePageDTO)
+    getOverviewPageDTOAction(params: ActionParams) {
 
-        return this._miscService.getOverviewPageDTOAsync(params.currentUserId);
-    };
+        return {
+            action: async () => {
 
-    getOrganizationsAction = (params: ActionParams) => {
+                return this._miscService
+                    .getOverviewPageDTOAsync(params.principalId);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
+            }
+        };
 
-        return this._miscService.getOrganizationsAsync(params.currentUserId);
-    };
 
-    getJobTitlesAction = async (params: ActionParams) => {
+    }
 
-        return await this._ormService
-            .getRepository(JobTitle)
-            .find();
-    };
+    @XControllerAction(apiRoutes.misc.getJobTitles)
+    getJobTitlesAction(params: ActionParams) {
 
-    getRegistrationLinkAction = async (params: ActionParams) => {
+        return {
+            action: async () => {
 
-        return Promise.resolve(`${this._config.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
-    };
+                return await this._ormService
+                    .query(JobTitle)
+                    .getMany();
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
+            }
+        };
 
-    saveUserDataAction = async (params: ActionParams) => {
+    }
 
-        const dto = withValueOrBadRequest<UserDTO>(params.req.body);
+    @XControllerAction(apiRoutes.misc.getCourseOverviewData)
+    getCourseOverviewDataAction(params: ActionParams) {
 
-        return this._miscService.saveUserDataAsync(params.currentUserId, dto);
-    };
+        return {
+            action: async () => {
 
-    getPractiseQuestionAction = async (params: ActionParams) => {
+                return this._miscService
+                    .getCourseOverviewDataAsync(params.principalId);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
+            }
+        };
 
-        return await this._practiseQuestionService
-            .getPractiseQuestionAsync(params.currentUserId);
-    };
+    }
 
-    getCourseOverviewDataAction = async (params: ActionParams) => {
+    getRegistrationLinkAction(params: ActionParams) {
 
-        return this._miscService
-            .getCourseOverviewDataAsync(params.currentUserId);
-    };
+        return {
+            action: async () => {
+
+                return Promise.resolve(`${this._config.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
+            }
+        };
+
+    }
 }

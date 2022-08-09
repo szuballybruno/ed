@@ -1,11 +1,11 @@
+import { Id } from '../types/versionId';
 import { JobTitleDTO } from './JobTitleDTO';
-import { UserActivityDTO } from './UserActivityDTO';
 
 export class UserDTO {
-    id: number;
+    id: Id<'User'>;
     firstName: string;
     lastName: string;
-    organizationId: number;
+    companyId: Id<'Company'>;
     isTrusted: boolean;
     email: string;
     phoneNumber: string;
@@ -13,5 +13,4 @@ export class UserDTO {
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
     jobTitle: JobTitleDTO | null;
-    userActivity: UserActivityDTO;
 }

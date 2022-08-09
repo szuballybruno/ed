@@ -1,41 +1,50 @@
 import { CoinTransactionService } from '../services/CoinTransactionService';
-import { ActionParams } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class CoinTransactionsController {
+export class CoinTransactionsController implements XController<CoinTransactionsController> {
 
     private _coinTransactionService: CoinTransactionService;
 
-    constructor(cts: CoinTransactionService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._coinTransactionService = cts;
+        this._coinTransactionService = serviceProvider.getService(CoinTransactionService);
     }
 
-    getCoinTransactionsAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.coinTransactions.getCoinTransactions)
+    getCoinTransactionsAction(params: ActionParams) {
 
         return this._coinTransactionService
-            .getCoinTransactionsAsync(params.currentUserId);
-    };
+            .getCoinTransactionsAsync(params.principalId);
+    }
 
-    getCoinBalanceAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.coinTransactions.getCoinBalance)
+    getCoinBalanceAction(params: ActionParams) {
 
         return this._coinTransactionService
-            .getCoinBalance(params.currentUserId);
-    };
+            .getPrincipalCoinBalance(params.principalId);
+    }
 
-    getCoinBalanceOfUserAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.coinTransactions.getCoinBalanceOfUser)
+    getCoinBalanceOfUserAction(params: ActionParams) {
 
         const userId = params
-            .getQuery<any>()
+            .getQuery<{ userId: Id<'User'> }>()
             .getValue(x => x.userId, 'int');
 
         return this._coinTransactionService
-            .getCoinBalance(userId);
-    };
+            .getCoinBalance(params.principalId, userId);
+    }
 
-    giftCoinsToUser = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.coinTransactions.giftCoinsToUser, { isPost: true })
+    giftCoinsToUser(params: ActionParams) {
 
         const dto = params
-            .getBody<{ userId: number, amount: number }>();
+            .getBody<{ userId: Id<'User'>, amount: number }>();
 
         const userId = dto
             .getValue(x => x.userId, 'int');
@@ -43,7 +52,7 @@ export class CoinTransactionsController {
         const amount = dto
             .getValue(x => x.amount, 'int');
 
-        return await this._coinTransactionService
-            .giftCoinsToUserAsync(userId, amount);
-    };
+        return this._coinTransactionService
+            .giftCoinsToUserAsync(params.principalId, userId, amount);
+    }
 }

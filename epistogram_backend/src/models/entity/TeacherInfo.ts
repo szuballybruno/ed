@@ -1,38 +1,50 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
 
 @Entity()
 export class TeacherInfo {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'TeacherInfo'>;
 
     @Column()
+    @XViewColumn()
     skills: string;
 
     @Column()
+    @XViewColumn()
     courseCount: number;
 
     @Column()
+    @XViewColumn()
     videoCount: number;
 
     @Column()
+    @XViewColumn()
     studentCount: number;
 
     @Column({ type: 'double precision' })
+    @XViewColumn()
     rating: number;
 
     @Column()
+    @XViewColumn()
     description: string;
 
     @Column()
+    @XViewColumn()
     badges: string;
+
+    // TO ONE
 
     // user 
     @Column()
-    userId: number;
-
+    @XViewColumn()
+    userId: Id<'User'>;
     @OneToOne(_ => User, x => x.teacherInfo)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
 }

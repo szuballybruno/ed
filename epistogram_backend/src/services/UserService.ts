@@ -1,20 +1,27 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
-import { Course } from '../models/entity/Course';
+import { CourseData } from '../models/entity/course/CourseData';
+import { JobTitle } from '../models/entity/JobTitle';
+import { StorageFile } from '../models/entity/StorageFile';
+import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
+import { RegistrationType } from '../models/Types';
+import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
-import { RoleIdEnum } from '../shared/types/sharedTypes';
+import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { RegistrationType } from '../models/Types';
-import { AdminUserListView } from '../models/views/UserAdminListView';
-import { getFullName, toFullName, ErrorCode } from '../utilities/helpers';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { getFullName, throwNotImplemented, toFullName } from '../utilities/helpers';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 
 export class UserService {
 
@@ -22,116 +29,120 @@ export class UserService {
     private _mapperService: MapperService;
     private _teacherInfoService: TeacherInfoService;
     private _hashService: HashService;
+    private _roleService: RoleService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         teacherInfoService: TeacherInfoService,
-        hashService: HashService) {
+        hashService: HashService,
+        roleService: RoleService,
+        authorizationService: AuthorizationService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._teacherInfoService = teacherInfoService;
         this._hashService = hashService;
+        this._roleService = roleService;
+        this._authorizationService = authorizationService;
     }
 
     /**
      * Get user edit data 
-     * @param editedUserId 
-     * @returns 
-     */
-    async getEditUserDataAsync(editedUserId: number) {
+          */
+    getEditUserDataAsync(
+        principalId: PrincipalId,
+        editedUserId: Id<'User'>
+    ): ControllerActionReturnType {
 
-        const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('u')
-            .leftJoinAndSelect('u.organization', 'o')
-            .leftJoinAndSelect('u.role', 'r')
-            .leftJoinAndSelect('u.jobTitle', 'jt')
-            .leftJoinAndSelect('u.teacherInfo', 'ti')
-            .where('u.id = :userId', { userId: editedUserId })
-            .getOneOrFail();
+        return {
+            action: async () => {
 
-        return this._mapperService
-            .map(User, UserEditDTO, user);
-    }
+                type ResType = User & {
+                    teacherInfoId: number
+                };
 
-    /**
-     * Get user dto-s for the admin page user list.
-     * 
-     * @param searchText 
-     * @returns 
-     */
-    async getAdminPageUsersListAsync(searchText: string | null) {
+                const res = await this._ormService
+                    .withResType<ResType>()
+                    .query(User, { editedUserId })
+                    .selectFrom(x => x
+                        .columns(User, '*')
+                        .columns(TeacherInfo, {
+                            teacherInfoId: 'id'
+                        }))
+                    .leftJoin(TeacherInfo, x => x
+                        .on('userId', '=', 'editedUserId'))
+                    .where('id', '=', 'editedUserId')
+                    .getSingle();
 
-        const searchTextLower = searchText?.toLowerCase();
+                return {
+                    id: res.id,
+                    firstName: res.firstName,
+                    lastName: res.lastName,
+                    email: res.email,
+                    isTeacher: !!res.teacherInfoId,
+                    jobTitleId: res.jobTitleId,
+                    companyId: res.companyId,
+                    roles: new ChangeSet(),
+                    permissions: new ChangeSet()
+                };
 
-        const users = await this._ormService
-            .getRepository(AdminUserListView)
-            .createQueryBuilder('ualv')
-            .getMany();
-
-        const filteredUsers = searchTextLower
-            ? users
-                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
-                    .toLowerCase()
-                    .includes(searchTextLower))
-            : users;
-
-        return this._mapperService
-            .mapMany(AdminUserListView, AdminPageUserDTO, filteredUsers);
-    }
-
-    /**
-     * Save user data which the user itself can edit.  
-     * 
-     * @param userId 
-     * @param dto 
-     */
-    async saveUserSimpleAsync(userId: number, dto: UserEditSimpleDTO) {
-
-        // save user 
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                phoneNumber: dto.phoneNumber
-            });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
+            }
+        };
     }
 
     /**
      * Save user from admin page, where you can edit almost all fileds.
-     * 
-     * @param dto 
      */
-    async saveUserAsync(dto: UserEditDTO) {
+    saveUserAsync(principalId: PrincipalId, dto: UserEditDTO): ControllerActionReturnType {
 
-        const userId = dto.id;
+        return {
+            action: async () => {
 
-        // save user 
-        await this._ormService
-            .getRepository(User)
-            .save({
-                id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                isTeacher: dto.isTeacher,
-                organizationId: dto.organization?.id,
-                roleId: dto.role?.id,
-                jobTitleId: dto.jobTitle?.id
-            });
+                const userId = dto.id;
 
-        // save teacher info
+                // save user 
+                await this._ormService
+                    .save(User, {
+                        id: userId,
+                        lastName: dto.lastName,
+                        firstName: dto.firstName,
+                        email: dto.email,
+                        companyId: dto.companyId,
+                        jobTitleId: dto.jobTitleId
+                    });
+
+                // save teacher info
+                await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+
+                // save auth items 
+                await this._roleService
+                    .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
+            }
+        };
+    }
+
+    /**
+     * Saves user teacher info
+     */
+    private async _saveTeacherInfoAsync(userId: Id<'User'>, isTeacher: boolean) {
+
         const teacherInfo = await this._teacherInfoService
-            .getTeacherInfoAsync(dto.id);
+            .getTeacherInfoAsync(userId);
 
         // teacher info exists
         if (teacherInfo) {
 
-            if (!dto.isTeacher) {
+            if (!isTeacher) {
 
                 await this._teacherInfoService
                     .deleteTeacherInfoAsync(teacherInfo.id);
@@ -141,7 +152,7 @@ export class UserService {
         // teacher info doesn't exist
         else {
 
-            if (!teacherInfo && dto.isTeacher) {
+            if (!teacherInfo && isTeacher) {
 
                 await this._teacherInfoService
                     .createTeacherInfoAsync(userId);
@@ -150,35 +161,130 @@ export class UserService {
     }
 
     /**
-     * Get a very minimalistic user dto for displaying 
-     * very minimal info about the user.
-     * 
-     * @param userId 
-     * @returns 
+     * Save user data which the user itself can edit.  
      */
-    async getBriefUserDataAsync(userId: number) {
-
-        const user = await this._ormService
-            .getRepository(User)
-            .findOneOrFail({
-                where: {
-                    id: userId
-                }
-            });
+    saveUserSimpleAsync(
+        principalId: PrincipalId,
+        dto: UserEditSimpleDTO
+    ): ControllerActionReturnType {
 
         return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: getFullName(user)
-        } as BriefUserDataDTO;
+            action: async () => {
+
+                const userId = principalId.getId();
+
+                // save user
+                await this._ormService
+                    .save(User, {
+                        id: userId,
+                        lastName: dto.lastName,
+                        firstName: dto.firstName,
+                        phoneNumber: dto.phoneNumber
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
+
+    /**
+     * Get user dto-s for the admin page user list.
+     */
+    getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+                const searchTextLower = searchText?.toLowerCase();
+
+                const users = await this._ormService
+                    .query(AdminUserListView)
+                    .getMany();
+
+                const filteredUsers = searchTextLower
+                    ? users
+                        .filter(x => toFullName(x.firstName, x.lastName, 'hu')
+                            .toLowerCase()
+                            .includes(searchTextLower))
+                    : users;
+
+                return this._mapperService
+                    .mapTo(AdminPageUserDTO, [filteredUsers]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
+            }
+        };
+
+
+    }
+
+    /**
+     * Save user data which the user itself can edit.  
+     */
+    saveUserDataAsync(principalId: PrincipalId, dto: UserDTO): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+                const userId = principalId.getId();
+
+                return this._ormService
+                    .save(User, {
+                        id: userId,
+                        firstName: dto.firstName,
+                        lastName: dto.lastName,
+                        phoneNumber: dto.phoneNumber
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
+
+    /**
+     * Get a very minimalistic user dto for displaying 
+     * very minimal info about the user.
+     */
+    getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+
+        return {
+
+            action: async () => {
+                const user = await this._ormService
+                    .query(User, { userId })
+                    .where('id', '=', 'userId')
+                    .getSingle();
+
+                const hasPermission = await this._authorizationService
+                    .hasPermissionAsync(
+                        principalId,
+                        'VIEW_COMPANY_USERS',
+                        { companyId: user.companyId }
+                    );
+
+                if (!hasPermission)
+                    throw new ErrorWithCode('no permission');
+
+                return {
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    fullName: getFullName(user)
+                } as BriefUserDataDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
+            }
+        };
     }
 
     /**
      * Create a new user.
-     * 
-     * @param opts 
-     * @returns 
      */
     createUserAsync = async (opts: {
         email: string,
@@ -186,79 +292,76 @@ export class UserService {
         firstName: string,
         lastName: string,
         registrationType: RegistrationType,
-        organizationId?: number,
+        companyId?: number,
         phoneNumber?: string,
-        roleId?: number,
         jobTitleId?: number,
-        invitationToken?: string
+        invitationToken?: string,
+        isGod?: boolean
     }) => {
 
-        const regType = opts.registrationType;
+        throwNotImplemented();
+        // const regType = opts.registrationType;
 
-        // does user already exist?
-        const existingUser = await this.getUserByEmailAsync(opts.email);
-        if (existingUser)
-            throw new ErrorCode('User already exists. Email: ' + opts.email, 'email_taken');
+        // // does user already exist?
+        // const existingUser = await this.getUserByEmailAsync(opts.email);
+        // if (existingUser)
+        //     throw new VerboseError('User already exists. Email: ' + opts.email, 'email_taken');
 
-        // hash user password 
-        const hashedPassword = await this._hashService
-            .hashPasswordAsync(opts.password);
+        // // hash user password 
+        // const hashedPassword = await this._hashService
+        //     .hashPasswordAsync(opts.password);
 
-        // set default user fileds
-        const user = {
-            email: opts.email,
-            roleId: opts.roleId ?? RoleIdEnum.user,
-            firstName: opts.firstName,
-            lastName: opts.lastName,
-            jobTitleId: opts.jobTitleId,
-            phoneNumber: opts.phoneNumber,
-            organizationId: opts.organizationId,
-            password: hashedPassword,
-            isInvitationAccepted: false,
-            isTrusted: regType === 'Invitation',
-            registrationType: regType,
-            invitationToken: opts.invitationToken
-        } as User;
+        // // set default user fileds
+        // const user = {
+        //     email: opts.email,
+        //     firstName: opts.firstName,
+        //     lastName: opts.lastName,
+        //     jobTitleId: opts.jobTitleId,
+        //     phoneNumber: opts.phoneNumber,
+        //     companyId: opts.companyId,
+        //     password: hashedPassword,
+        //     isInvitationAccepted: false,
+        //     isTrusted: regType === 'Invitation',
+        //     registrationType: regType,
+        //     invitationToken: opts.invitationToken,
+        //     isGod: !!opts.isGod
+        // } as User;
 
-        // insert user
-        await this._ormService
-            .getRepository(User)
-            .insert(user);
+        // // insert user
+        // await this._ormService
+        //     .getRepository(User)
+        //     .insert(user);
 
-        const userId = user.id;
+        // const userId = user.id;
 
-        // insert signup answer session
-        await this._ormService
-            .getRepository(AnswerSession)
-            .insert({
-                examId: 1, // 1 always points to signup exam 
-                type: 'signup',
-                userId: userId
-            });
+        // // insert signup answer session
+        // await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .insert({
+        //         examId: 1, // 1 always points to signup exam 
+        //         type: 'signup',
+        //         userId: userId
+        //     });
 
-        // insert practise answer session
-        await this._ormService
-            .getRepository(AnswerSession)
-            .insert({
-                userId: userId,
-                type: 'practise'
-            });
+        // // insert practise answer session
+        // await this._ormService
+        //     .getRepository(AnswerSession)
+        //     .insert({
+        //         userId: userId,
+        //         type: 'practise'
+        //     });
 
-        return user;
+        // return user;
     };
 
     /**
      * Accept the invitation, 
      * whilst giving the user a password, for further logins.
-     * 
-     * @param userId 
-     * @param rawPassword 
      */
-    setUserInivitationDataAsync = async (userId: number, rawPassword: string,) => {
+    setUserInivitationDataAsync = async (userId: Id<'User'>, rawPassword: string,) => {
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 isInvitationAccepted: true,
                 password: await this._hashService
@@ -268,74 +371,64 @@ export class UserService {
 
     /**
      * Get user entity by it's id.
-     * 
-     * @param userId 
-     * @returns 
      */
-    getUserById = async (userId: number) => {
+    getUserById = async (userId: Id<'User'>) => {
 
         const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('user')
-            .where('user.id = :userId', { userId: userId })
-            .leftJoinAndSelect('user.avatarFile', 'a')
-            .leftJoinAndSelect('user.userActivity', 'ua')
-            .leftJoinAndSelect('user.jobTitle', 'jt')
-            .getOneOrFail();
+            .query(User, { userId })
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'avatarFileId', User))
+            .leftJoin(JobTitle, x => x
+                .on('id', '=', 'jobTitleId', User))
+            .where('id', '=', 'userId')
+            .getSingle();
 
         return user;
     };
 
     /**
      * Delete a user entity by it's id.
-     * 
-     * @param userId 
-     * @param deletedUserId 
-     * @returns 
      */
-    deleteUserAsync = async (userId: number, deletedUserId: number) => {
+    deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        // TODO permissions
+        return {
+            action: async () => {
+                const connectedCourses = await this._ormService
+                    .query(CourseData, { deletedUserId })
+                    .where('teacherId', '=', 'deletedUserId')
+                    .getMany();
 
-        const connectedCourses = await this._ormService
-            .getRepository(Course)
-            .find({
-                where: {
-                    teacherId: deletedUserId
-                }
-            });
+                if (connectedCourses.length > 0)
+                    throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
 
-        if (connectedCourses.length > 0)
-            throw new ErrorCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
-
-        return await this._ormService
-            .getRepository(User)
-            .softDelete(deletedUserId);
-    };
+                return await this._ormService
+                    .softDelete(User, [deletedUserId]);
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'DELETE_USER');
+            }
+        };
+    }
 
     /**
      * Get user dto by userId.
-     * 
-     * @param userId 
-     * @returns 
      */
-    getUserDTOById = async (userId: number) => {
+    getUserDTOById = async (userId: Id<'User'>) => {
 
         const foundUser = await this.getUserById(userId);
+
         if (!foundUser)
             return null;
 
         return this._mapperService
-            .map(User, UserDTO, foundUser);
+            .mapTo(UserDTO, [foundUser]);
     };
 
     /**
      * Get user's active refresh token by userId.
-     * 
-     * @param userId 
-     * @returns 
      */
-    getUserRefreshTokenById = async (userId: number) => {
+    getUserRefreshTokenById = async (userId: Id<'User'>) => {
 
         const user = await this.getUserById(userId);
         if (!user)
@@ -347,18 +440,13 @@ export class UserService {
     /**
      * Get a user by it's email address. 
      * Which is also a unique identifier, like the id. 
-     * 
-     * @param email 
-     * @returns 
      */
     getUserByEmailAsync = async (email: string) => {
 
         const user = await this._ormService
-            .getRepository(User)
-            .createQueryBuilder('user')
-            .leftJoinAndSelect('user.userActivity', 'ua')
-            .where('user.email = :email', { email: email })
-            .getOne();
+            .query(User, { email })
+            .where('email', '=', 'email')
+            .getSingle();
 
         if (!user)
             return null;
@@ -368,15 +456,11 @@ export class UserService {
 
     /**
      * Set user's avatar file id.
-     * 
-     * @param userId 
-     * @param avatarFileId 
      */
-    setUserAvatarFileId = async (userId: number, avatarFileId: number) => {
+    setUserAvatarFileId = async (userId: Id<'User'>, avatarFileId: Id<'StorageFile'>) => {
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 avatarFileId: avatarFileId
             });
@@ -384,18 +468,11 @@ export class UserService {
 
     /**
      * Set user's refresh token.
-     * 
-     * @param userId 
-     * @param refreshToken 
-     * @returns 
      */
-    setUserActiveRefreshToken = (userId: number, refreshToken: string) => {
-
-        log(`Setting refresh token of user '${userId}' to '${refreshToken}'`);
+    setUserActiveRefreshToken = (userId: Id<'User'>, refreshToken: string) => {
 
         return this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 refreshToken: refreshToken
             });
@@ -403,15 +480,11 @@ export class UserService {
 
     /**
      * Set user's invitation token.
-     * 
-     * @param userId 
-     * @param invitationToken 
      */
-    setUserInvitationTokenAsync = async (userId: number, invitationToken: string) => {
+    setUserInvitationTokenAsync = async (userId: Id<'User'>, invitationToken: string) => {
 
         await this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 invitationToken
             });
@@ -421,24 +494,19 @@ export class UserService {
      * Remove user's refresh token, 
      * so it can't get a new activation token, 
      * even if it holds a valid refresh token on the client side.
-     * 
-     * @param userId 
-     * @returns 
      */
-    removeRefreshToken = (userId: number) => {
+    removeRefreshToken = (userId: Id<'User'>) => {
 
         return this._ormService
-            .getRepository(User)
-            .save({
+            .save(User, {
                 id: userId,
                 refreshToken: ''
             });
     };
 
+
     /**
      * Get a list of the users marked as teacher.
-     * 
-     * @returns 
      */
     getTeachersAsync = async () => {
 
@@ -446,7 +514,7 @@ export class UserService {
         //     .getRepository(User)
         //     .find({
         //         where: {
-                    
+
         //         },
         //         relations: {
         //             teacherInfo: {

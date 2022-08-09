@@ -1,17 +1,17 @@
 import { Flex } from '@chakra-ui/layout';
 import { Close } from '@mui/icons-material';
 import { ButtonType } from '../../models/types';
+import { Id } from '../../shared/types/versionId';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoCheckbox } from '../controls/EpistoCheckbox';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoSearch } from '../controls/EpistoSearch';
-import { EpistoSelect } from '../controls/EpistoSelect';
 import { BulkEditButtons, BulkEditButtonType } from './BulkEditButtons';
 
 export const AdminListEditHeader = (props: {
     isAllSelected?: boolean,
     selectAllOrNone?: (isAll: boolean) => void,
-    selectedIds?: number[],
+    selectedIds?: Id<'ShopItem'>[],
     headerButtons?: BulkEditButtonType[],
     itemLabel?: string,
     onSearchChanged?: (value: string) => void,
@@ -116,15 +116,15 @@ export const AdminListEditHeader = (props: {
             className="align-center"
             height="100%"
             mx={10}>
-            <EpistoSelect
-                minWidth={'fit-content'}
-                items={[]}
+
+            {/* <EpistoSelect
+                items={[] as string[]}
                 onSelected={x => { throw new Error('Not implemented!'); }}
-                selectedValue="1"
-                getCompareKey={x => x}
+                selectedValue={'1' as string}
+                getCompareKey={x => x as string}
                 defaultValue="Rendezés...">
 
-            </EpistoSelect>
+            </EpistoSelect> */}
         </Flex>
 
         {/* buttons */}

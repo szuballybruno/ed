@@ -1,11 +1,11 @@
 import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { ActivityStreakView } from '../models/views/ActivityStreakView';
-import { UserSessionDailyView } from '../models/views/UserActivityDailyView';
-import { trimTimeFromDate } from '../utilities/helpers';
+import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { Id } from '../shared/types/versionId';
 
 export class CoinAcquireService {
 
@@ -34,11 +34,8 @@ export class CoinAcquireService {
     /**
      * This will add reward coins for session activity,
      * and also, new notification events, if necessary 
-     * 
-     * @param userId 
-     * @param activitySessionId 
      */
-    handleSessionActivityCoinsAsync = async (userId: number, activitySessionId: number) => {
+    handleSessionActivityCoinsAsync = async (userId: Id<'User'>, activitySessionId: Id<'ActivitySession'>) => {
 
         await this.acquireGenericActivityCoin(userId, activitySessionId);
         await this.acquireActivityStreakCoin(userId);
@@ -46,11 +43,8 @@ export class CoinAcquireService {
 
     /**
      * Reward user after a video is watched fo the first time 
-     * 
-     * @param userId 
-     * @param videoId 
      */
-    acquireVideoWatchedCoinsAsync = async (userId: number, videoId: number) => {
+    acquireVideoWatchedCoinsAsync = async (userId: Id<'User'>, videoId: Id<'Video'>) => {
 
         await this._coinTransactionService
             .makeCoinTransactionAsync({ userId, amount: this._coinRewardAmounts.videoWatched, videoId });
@@ -58,11 +52,8 @@ export class CoinAcquireService {
 
     /**
      * Reward user after a question is answered correctly for the first time 
-     * 
-     * @param userId 
-     * @param givenAnswerId 
      */
-    acquireQuestionAnswerCoinsAsync = async (userId: number, givenAnswerId: number) => {
+    acquireQuestionAnswerCoinsAsync = async (userId: Id<'User'>, givenAnswerId: Id<'GivenAnswer'>) => {
 
         // do not reward user if the question is already answered 
         // correctly and a coin is previously acquired for that 
@@ -70,7 +61,7 @@ export class CoinAcquireService {
             .getSingleById(GivenAnswer, givenAnswerId);
 
         const alreadyAcquiredCoinsForCurrentQuestionId = await this._coinTransactionService
-            .getCoinsForQuestionAsync(userId, newGivenAnswer.questionId);
+            .getCoinsForQuestionAsync(userId, newGivenAnswer.questionVersionId);
 
         if (alreadyAcquiredCoinsForCurrentQuestionId.length > 0)
             return null;
@@ -87,9 +78,8 @@ export class CoinAcquireService {
 
     /**
      * Reward user with coins based on the given answer streak length  
-     * 
      */
-    handleGivenAnswerStreakCoinsAsync = async (userId: number, streakId: number, streakLength: number) => {
+    handleGivenAnswerStreakCoinsAsync = async (userId: Id<'User'>, streakId: Id<'GivenAnswerStreak'>, streakLength: number) => {
 
         const prevCoinsGivenForStreak = await this._coinTransactionService
             .getCoinsForAnswerStreakAsync(userId, streakId);
@@ -122,19 +112,14 @@ export class CoinAcquireService {
     /**
      * Generic activity coins are given at the start of each new activity session,
      * only 3 can be given in one day's period (by date, not 24h)  
-     * 
-     * @param userId 
-     * @param activitySessionId 
-     * @returns 
      */
-    private acquireGenericActivityCoin = async (userId: number, activitySessionId: number) => {
+    private acquireGenericActivityCoin = async (userId: Id<'User'>, activitySessionId: Id<'ActivitySession'>) => {
 
         // check if it's not more than 3 sessions today
         const todaysInfo = await this._ormService
-            .getRepository(UserSessionDailyView)
-            .createQueryBuilder('us')
-            .where('us.userId = :userId', { userId })
-            .getOneOrFail();
+            .query(UserSessionDailyView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
         if (todaysInfo.sessionCount > 3)
             return;
@@ -154,19 +139,14 @@ export class CoinAcquireService {
     /**
      * Activity streak coins are given after 3-5-10 days of countinous activity
      * the cuntion also adds a notification event that the frontend will pick up and display. 
-     * 
-     * @param userId 
-     * @returns 
      */
-    private acquireActivityStreakCoin = async (userId: number) => {
+    private acquireActivityStreakCoin = async (userId: Id<'User'>) => {
 
         const currentActivityStreak = await this._ormService
-            .getRepository(ActivityStreakView)
-            .findOneOrFail({
-                where: {
-                    isFinalized: false
-                }
-            });
+            .query(ActivityStreakView, { userId })
+            .where('isFinalized', 'IS', 'false')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
         const coinsForActivityStreak = await this._coinTransactionService
             .getCoinsForActivityStreakAsync(userId, currentActivityStreak.id);
@@ -223,7 +203,7 @@ export class CoinAcquireService {
             .makeCoinTransactionAsync({ userId, amount, activityStreakId: currentActivityStreakId });
 
         // add acquire event 
-        this._eventService
+        await this._eventService
             .addSessionStreakEventAsync(userId, { amount, reason });
     };
 }

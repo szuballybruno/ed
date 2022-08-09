@@ -1,5 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -8,42 +10,55 @@ import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnection
 export class CourseAdminShortView {
 
     @ViewColumn()
-    id: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @IsDeletedFlag('bool')
     @ViewColumn()
+    @XViewColumn()
     isDeleted: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     title: string;
 
     @ViewColumn()
-    categoryId: number;
+    @XViewColumn()
+    categoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
+    @XViewColumn()
     categoryName: string;
 
     @ViewColumn()
-    subCategoryId: number;
+    @XViewColumn()
+    subCategoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
+    @XViewColumn()
     subCategoryName: string;
 
     @ViewColumn()
-    teacherId: number;
+    @XViewColumn()
+    teacherId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
     teacherFirstName: string;
 
     @ViewColumn()
+    @XViewColumn()
     teacherLastName: string;
 
     @ViewColumn()
+    @XViewColumn()
     coverFilePath: string;
 
     @ViewColumn()
+    @XViewColumn()
     videoCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     examCount: number;
 }

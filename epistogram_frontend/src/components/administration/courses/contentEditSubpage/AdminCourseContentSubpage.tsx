@@ -1,183 +1,147 @@
+import { Flex } from '@chakra-ui/react';
 import { Add, Edit } from '@mui/icons-material';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
-import { useCourseContentAdminData, useSaveCourseContentData } from '../../../../services/api/courseApiService';
+import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
+import { CourseApiService } from '../../../../services/api/courseApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../../services/core/notifications';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { loggingSettings } from '../../../../static/Environemnt';
+import { VersionCode } from '../../../../shared/types/versionCode';
+import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
+import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
-import { EpistoDialog, useEpistoDialogLogic } from '../../../EpistoDialog';
-import { useXListMutator } from '../../../lib/XMutator/XMutator';
-import { LoadingFrame } from '../../../system/LoadingFrame';
+import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
+import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
+import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { ExamEditDialog } from '../ExamEditDialog';
+import { ItemEditDialog } from '../itemEditDialog/ItemEditDialog';
+import { ItemEditDialogParams } from '../itemEditDialog/ItemEditDialogTypes';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
-import { VideoEditDialog } from '../VideoEditDialog';
+import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
-
-type ItemType = CourseContentItemAdminDTO;
 
 export const AdminCourseContentSubpage = () => {
 
     // util
     const ref = useRef(null);
-    const courseId = useIntParam('courseId')!;
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const videoEditDialogLogic = useEpistoDialogLogic<{ videoId: number, currentPage: 'details' | 'statistics' }>('video_edit_dialog', { defaultCloseButtonType: 'top' });
-    const examEditDialogLogic = useEpistoDialogLogic<{ examId: number, currentPage: 'details' | 'statistics' }>('exam_edit_dialog', { defaultCloseButtonType: 'top' });
-    const moduleEditDialogLogic = useEpistoDialogLogic('module_edit_dialog', { defaultCloseButtonType: 'top' });
-    const isAnySelected = !!courseId && (courseId != -1);
+    const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
+    const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
-    const [preprocessedItems, setPreprocessedItems] = useState<RowSchema[]>([]);
 
     // http
     const {
         courseContentAdminData,
-        courseContentAdminDataError,
         courseContentAdminDataState,
         refetchCourseContentAdminData
-    } = useCourseContentAdminData(courseId, isAnySelected, true);
-    const { saveCourseDataAsync, saveCourseDataState } = useSaveCourseContentData();
+    } = CourseApiService.useCourseContentAdminData(courseId, isAnySelected, true);
+    const {
+        saveCourseDataAsync,
+        saveCourseDataState
+    } = CourseApiService.useSaveCourseContentData();
 
-    // computed
-    const modules = courseContentAdminData?.modules ?? [];
-    const originalItems = courseContentAdminData?.items ?? [];
-
-    const getItemKey = useCallback((row: ItemType) => row.itemCode, []);
+    // misc
+    const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
+    const itemsMutatorRef = useXMutator(CourseContentItemAdminDTO, 'versionCode');
 
-    const preprocessItems = useCallback((items: ItemType[]) => {
+    // busy state
+    useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
+    useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
 
-        console.log('Preprocessing items...');
+    // module edit dialog logic
+    const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorRef
+        .current
+        .mutatedItems
+        .any(x => x.moduleVersionId === moduleVersionId), []);
+
+    const moduleEditDialogLogic = useModuleEditDialogLogic({
+        canDelete,
+        modules: courseContentAdminData?.modules ?? EMPTY_ARRAY
+    });
+
+    const isSaveEnabled = itemsMutatorRef.current.isAnyItemsMutated
+        || moduleEditDialogLogic.mutatorRef.current.isAnyItemsMutated;
+
+    const modules = moduleEditDialogLogic
+        .mutatorRef
+        .current
+        .mutatedItems;
+
+    // preprocess items 
+    const gridRowItems = useMemo(() => {
+
+        if (modules.length === 0)
+            return [];
+
+        const items = itemsMutatorRef
+            .current
+            .mutatedItems;
 
         const preproItems = items
-            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, isRowModified))
+            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, itemsMutatorRef.current.isMutated))
             .orderBy(x => x.module.orderIndex)
-            .groupBy(x => x.module.id)
+            .groupBy(x => x.module.versionId)
             .flatMap(x => x
                 .items
                 .orderBy(i => i.itemOrderIndex));
 
-        setPreprocessedItems(preproItems);
-    }, [setPreprocessedItems, modules]);
+        return preproItems;
+    }, [itemsMutatorRef.current.mutatedItems, modules]);
 
-    const mutationEndCallback = useCallback(({ newMutatedItems }) => {
+    // recalc  
+    const recalcOrderIndices = useCallback(() => {
 
-        preprocessItems(newMutatedItems);
-    }, [preprocessItems]);
+        itemsMutatorRef
+            .current
+            .mutatedItems
+            .groupBy(x => x.moduleVersionId)
+            .forEach(x => x
+                .items
+                .forEach((x, i) => {
 
-    const {
-        add: addRow,
-        mutate: mutateRow,
-        remove: removeRow,
-        isMutated: isRowModified,
-        isAnyMutated: isAnyRowsMutated,
-        mutations,
-        resetMutations,
-        addOnMutationHandlers,
-        mutatedData: mutatedItems
-    } = useXListMutator<ItemType, 'itemCode', string>(originalItems, 'itemCode', mutationEndCallback);
+                    itemsMutatorRef
+                        .current
+                        .mutate({
+                            key: x.versionCode,
+                            field: 'itemOrderIndex',
+                            newValue: i
+                        });
+                }));
+    }, []);
 
-    // set preprocessed items, 
-    // this works as a sort of caching
+    // set - on post mutations changed 
+    useEffect(() => {
+
+        itemsMutatorRef
+            .current
+            .setOnPostMutationChanged(recalcOrderIndices);
+    }, []);
+
+    // set - original items if loaded
     useEffect(() => {
 
         if (!courseContentAdminData)
             return;
 
-        preprocessItems(courseContentAdminData.items);
+        itemsMutatorRef
+            .current
+            .setOriginalItems(courseContentAdminData.items ?? []);
     }, [courseContentAdminData]);
-
-    const setNewOrderIndices = (items: ItemType[], mutatedRowKey: string, mutateSelf?: boolean) => {
-
-        const mapped = items
-            .map((item, index) => ({
-                key: getItemKey(item),
-                newOrderIndex: index
-            }));
-
-        const filtered = mutateSelf
-            ? mapped
-            : mapped
-                .filter(x => x.key !== mutatedRowKey);
-
-        filtered
-            .forEach(x => mutateRow({
-                key: x.key,
-                field: 'itemOrderIndex',
-                newValue: x.newOrderIndex
-            }));
-    };
-
-    // mutation handlers 
-    addOnMutationHandlers([
-        {
-            field: 'itemOrderIndex',
-            action: 'update',
-            callback: ({ key, newValue, item }) => {
-
-                const newItemOrderIndex = newValue as number;
-                const isNewSmaller = newItemOrderIndex < item!.itemOrderIndex;
-
-                const orderedItems = mutatedItems
-                    .filter(row => row.moduleId === item!.moduleId)
-                    .orderBy(row => {
-
-                        if (getItemKey(row) === key)
-                            return isNewSmaller
-                                ? newItemOrderIndex - 0.5
-                                : newItemOrderIndex + 0.5;
-
-                        return row.itemOrderIndex;
-                    });
-
-                setNewOrderIndices(orderedItems, key);
-            }
-        },
-        {
-            action: 'update',
-            field: 'moduleId',
-            callback: ({ key, item, newValue }) => {
-
-                const oldModuleId = item!.moduleId;
-                const newModuleId = newValue as number;
-
-                const oldModuleItems = mutatedItems
-                    .filter(x => x.moduleId === oldModuleId && getItemKey(x) !== key)
-                    .orderBy(x => x.itemOrderIndex);
-
-                const newModuleItems = mutatedItems
-                    .filter(x => x.moduleId === newModuleId || getItemKey(x) === key)
-                    .orderBy(x => getItemKey(x) === key ? -1 : x.itemOrderIndex);
-
-                setNewOrderIndices(oldModuleItems, key);
-                setNewOrderIndices(newModuleItems, key, true);
-            }
-        },
-        {
-            action: 'delete',
-            callback: ({ item, key }) => {
-
-                const moduleItems = mutatedItems
-                    .filter(x => x.moduleId === item!.moduleId)
-                    .filter(x => getItemKey(x) !== key)
-                    .orderBy(x => x.itemOrderIndex);
-
-                setNewOrderIndices(moduleItems, key);
-            }
-        }
-    ]);
 
     // 
     // FUNCS
@@ -185,49 +149,69 @@ export const AdminCourseContentSubpage = () => {
 
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (
-        type: 'video' | 'exam' | 'module',
-        currentPage?: 'details' | 'statistics',
-        itemId?: number
-    ) => {
-        console.log('Dolgok ' + itemId + ' ' + currentPage);
+    const openDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
 
-        if (type === 'video')
-            videoEditDialogLogic.openDialog({ params: { videoId: itemId, currentPage: currentPage } });
+        const data = row?.data!;
+        const isVideo = !!data?.videoVersionId;
 
-        if (type === 'exam')
-            examEditDialogLogic.openDialog({ params: { examId: itemId, currentPage: currentPage } });
+        if (type === 'exam' || type === 'video')
+            itemEditDialogLogic
+                .openDialog({
+                    params: {
+                        isVideo,
+                        itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
+                        itemTitle: data.itemTitle,
+                        courseTitle: 'Course name',
+                        versionCode: data.versionCode,
+                        questionMutations: data.questionMutations,
+                        answerMutations: data.answerMutations
+                    }
+                });
 
         if (type === 'module')
-            moduleEditDialogLogic.openDialog();
+            moduleEditDialogLogic
+                .dialogLogic
+                .openDialog();
 
     };
 
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleId = modules[0].id;
+        const moduleVersionId = modules[0].versionId;
 
-        const foundModule = mutatedItems
-            .firstOrNull(x => x.moduleId === moduleId);
+        const foundModule = itemsMutatorRef
+            .current
+            .mutatedItems
+            .firstOrNull(x => x.moduleVersionId === moduleVersionId);
 
         const moduleInfo = foundModule
             ? {
                 name: foundModule.moduleName,
-                id: foundModule.moduleId,
+                id: foundModule.moduleVersionId,
                 orderIndex: foundModule.moduleOrderIndex
             }
             : {
                 name: 'no module',
-                id: -1,
+                id: Id.create<'ModuleVersion'>(-1),
                 orderIndex: -1
             };
 
-        const itemOrderIndex = mutatedItems
-            .filter(x => x.moduleId === moduleId && x.itemType !== 'pretest')
+        const itemOrderIndex = itemsMutatorRef
+            .current
+            .mutatedItems
+            .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
             .length;
 
-        const newId = getVirtualId();
-        const newItemCode = `new_${type}_${newId}`;
+        const itemVersionId = type === 'video'
+            ? Id.create<'VideoVersion'>(getVirtualId())
+            : Id.create<'ExamVersion'>(getVirtualId());
+
+        const newVersionCode = VersionCode
+            .create(
+                type === 'video'
+                    ? 'video_version'
+                    : 'exam_version',
+                itemVersionId);
 
         const dto: CourseContentItemAdminDTO = {
             itemType: type === 'exam' ? 'exam' : 'video',
@@ -237,60 +221,63 @@ export const AdminCourseContentSubpage = () => {
             courseId,
             warnings: [],
             errors: [],
-            itemCode: newItemCode,
-            itemId: newId,
-            examId: type === 'exam' ? newId : -1,
-            videoId: type === 'exam' ? -1 : newId,
-            moduleId: moduleInfo.id,
+            versionCode: newVersionCode,
+            examVersionId: type === 'exam' ? itemVersionId as Id<'ExamVersion'> : null,
+            videoVersionId: type === 'video' ? itemVersionId as Id<'VideoVersion'> : null,
+            moduleVersionId: moduleInfo.id,
             moduleOrderIndex: moduleInfo.orderIndex,
             moduleName: moduleInfo.name,
-            moduleCode: '',
-            videoLength: 0
+            videoLength: 0,
+            questionMutations: [],
+            answerMutations: []
         };
 
-        addRow(newItemCode, dto);
+        itemsMutatorRef
+            .current
+            .create(newVersionCode, dto);
         closeAddPopper();
     };
 
-    const handleSaveAsync = async () => {
+    const handleSaveAsync = useCallback(async () => {
 
         try {
 
-            await saveCourseDataAsync(mutations);
-            resetMutations();
-            refetchCourseContentAdminData();
+            await saveCourseDataAsync({
+                courseId,
+                itemMutations: itemsMutatorRef
+                    .current
+                    .mutations,
+                moduleMutations: moduleEditDialogLogic
+                    .mutatorRef
+                    .current
+                    .mutations
+            });
+
+            itemsMutatorRef
+                .current
+                .resetMutations('NO CALLBACK');
+
+            await refetchCourseContentAdminData();
+
+            showNotification('Mentve', { autoCloseMs: 1000 });
         }
         catch (e) {
 
             showError(e);
         }
-    };
+    }, []);
 
-    const gridColumns = useGridColumnDefinitions(
-        modules,
-        openDialog,
-        removeRow,
-        mutateRow);
+    const gridColumns = useGridColumnDefinitions(modules, openDialog, itemsMutatorRef);
 
     //
     // EFFECTS
     //
 
-    if (loggingSettings.render)
-        console.log('Rendering AdminCourseContentSubpage');
+    Logger.logScoped('RENDER', 'Rendering AdminCourseContentSubpage');
 
-    const handleEdit = useCallback((key: any, field: any, value: any) => {
-
-        mutateRow({ key, field, newValue: value });
-    }, [mutateRow]);
-
-    return <LoadingFrame
-        loadingState={[saveCourseDataState, courseContentAdminDataState]}
-        error={courseContentAdminDataError}
-        className="whall">
-
-        {/* frame */}
+    return (
         <CourseAdministartionFrame
+            noHeightOverflow
             isAnySelected={isAnySelected}>
 
             {/* Right side content */}
@@ -316,18 +303,37 @@ export const AdminCourseContentSubpage = () => {
                     {
                         action: handleSaveAsync,
                         title: 'Mentés',
-                        disabled: !isAnyRowsMutated
+                        disabled: !isSaveEnabled
                     }
                 ]}>
 
                 {/* dialogs */}
                 <EpistoDialog logic={deleteWarningDialogLogic} />
-                <VideoEditDialog logic={videoEditDialogLogic} />
-                <ExamEditDialog logic={examEditDialogLogic} />
+
+                <ItemEditDialog
+                    callback={(questionMutations, answerMutations) => {
+
+                        itemsMutatorRef
+                            .current
+                            .mutate({
+                                key: itemEditDialogLogic.params.versionCode,
+                                field: 'questionMutations',
+                                newValue: questionMutations
+                            });
+
+                        itemsMutatorRef
+                            .current
+                            .mutate({
+                                key: itemEditDialogLogic.params.versionCode,
+                                field: 'answerMutations',
+                                newValue: answerMutations
+                            });
+                    }}
+                    dialogLogic={itemEditDialogLogic} />
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic}
-                    afterChangeCallback={refetchCourseContentAdminData} />
+                    courseName={'Course name'} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper
@@ -337,18 +343,23 @@ export const AdminCourseContentSubpage = () => {
                     onClose={closeAddPopper} />
 
                 {/* data grid */}
-                <EpistoDataGrid
-                    columns={gridColumns}
-                    rows={preprocessedItems}
-                    handleEdit={handleEdit}
-                    getKey={getRowKey}
-                    initialState={{
-                        pinnedColumns: {
-                            left: ['rowNumber', 'itemTitle'],
-                            right: ['quickMenu']
-                        }
-                    }} />
+                <Flex
+                    flex="1"
+                    overflow="hidden">
+
+                    <EpistoDataGrid
+                        columns={gridColumns}
+                        rows={gridRowItems}
+                        getKey={getRowKey}
+                        hideFooter
+                        initialState={{
+                            pinnedColumns: {
+                                left: ['rowNumber', 'itemTitle'],
+                                right: ['quickMenu']
+                            }
+                        }} />
+                </Flex>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
-    </LoadingFrame >;
+    );
 };

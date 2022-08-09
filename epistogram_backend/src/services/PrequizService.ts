@@ -1,11 +1,15 @@
+import { PrequizCompletion } from '../models/entity/prequiz/PrequizCompletion';
 import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
 import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PrequizService {
@@ -13,126 +17,173 @@ export class PrequizService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _courseBridgeService: UserCourseBridgeService;
-    private _tempomatService: TempomatService;
+    private _authorizationService: AuthorizationService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         courseBridgeService: UserCourseBridgeService,
-        tempomatService: TempomatService) {
+        authorizationService: AuthorizationService) {
 
-        this._tempomatService = tempomatService;
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._courseBridgeService = courseBridgeService;
+        this._authorizationService = authorizationService;
     }
 
     /**
      * Returns a list of prequiz questions 
-     * 
-     * @returns 
      */
-    async getQuestionsAsync(userId: number, courseId: number) {
+    getPrequizQuestionsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        // set course as started, and stage to prequiz
-        await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, 'prequiz', null);
+        return {
+            action: async () => {
+                const userId = Id
+                    .create<'User'>(principalId.toSQLValue());
 
-        const views = await this._ormService
-            .getRepository(PrequizQuestionView)
-            .createQueryBuilder('pqv')
-            .getMany();
+                // set course as started, and stage to prequiz
+                await this._courseBridgeService
+                    .setCurrentCourse(userId, courseId, 'prequiz', null);
 
-        const questions = views
-            .groupBy(view => view.questionId)
-            .map(questionGroup => {
+                const views = await this._ormService
+                    .query(PrequizQuestionView)
+                    .getMany();
 
-                const viewAsQuestion = questionGroup.first;
+                const questions = views
+                    .groupBy(view => view.questionId)
+                    .map(questionGroup => {
 
-                const answers = questionGroup
-                    .items
-                    .map(viewAsAnswer => this._mapperService
-                        .map(PrequizQuestionView, PrequizAnswerDTO, viewAsAnswer));
+                        const viewAsQuestion = questionGroup.first;
 
-                return this._mapperService
-                    .map(PrequizQuestionView, PrequizQuestionDTO, viewAsQuestion, answers);
-            });
+                        const answers = questionGroup
+                            .items
+                            .map(viewAsAnswer => this._mapperService
+                                .mapTo(PrequizAnswerDTO, [viewAsAnswer]));
 
-        return questions;
+                        return this._mapperService
+                            .mapTo(PrequizQuestionDTO, [viewAsQuestion, answers]);
+                    });
+
+                return questions;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+            }
+        };
+
+
     }
 
     /**
      * Returns an answer that the user 
      * has previously given to the specified quesiton
-     * 
-     * @param questionId 
-     * @param userId 
-     * @returns 
      */
-    async getUserAnswerAsync(userId: number, courseId: number, questionId: number) {
-
-        const userAnswer = await this._ormService
-            .getRepository(PrequizUserAnswer)
-            .createQueryBuilder('pua')
-            .leftJoinAndSelect('pua.answer', 'puaa')
-            .where('pua.userId = :userId', { userId })
-            .andWhere('pua.questionId = :questionId', { questionId })
-            .andWhere('pua.courseId = :courseId', { courseId })
-            .getOne();
-
-        if (!userAnswer)
-            return null;
-
-        const answer = userAnswer.answer;
+    getUserAnswerAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>,
+        questionId: Id<'Question'>
+    ): ControllerActionReturnType {
 
         return {
-            answerId: answer?.id ?? null,
-            answerValue: userAnswer.value ?? null
-        } as PrequizUserAnswerDTO;
+            action: async () => {
+                const userId = Id
+                    .create<'User'>(principalId.toSQLValue());
+
+                const userAnswer = await this._ormService
+                    .query(PrequizUserAnswer, { userId, questionId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('questionId', '=', 'questionId')
+                    .and('courseId', '=', 'courseId')
+                    .getOneOrNull();
+
+                if (!userAnswer)
+                    return null;
+
+                const answer = userAnswer.answer;
+
+                return {
+                    answerId: answer?.id ?? null,
+                    answerValue: userAnswer.value ?? null
+                } as PrequizUserAnswerDTO;
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+            }
+        };
+
+
     }
 
     /**
      * Answers a prequiz question
-     * 
-     * @param questionId 
-     * @param answerId 
-     * @param value 
      */
-    async answerPrequizQuestionAsync(
-        userId: number,
-        questionId: number,
-        courseId: number,
-        answerId: number | null,
-        value: number | null) {
+    answerPrequizQuestionAsync(
+        principalId: PrincipalId,
+        questionId: Id<'PrequizQuestion'>,
+        courseId: Id<'Course'>,
+        answerId: Id<'PrequizAnswer'> | null,
+        value: number | null): ControllerActionReturnType {
 
-        const previousAnswer = await this._ormService
-            .getRepository(PrequizUserAnswer)
-            .findOne({
-                where: {
-                    questionId,
-                    userId,
-                    courseId
+        return {
+            action: async () => {
+                const userId = Id
+                    .create<'User'>(principalId.toSQLValue());
+
+                const previousAnswer = await this._ormService
+                    .query(PrequizUserAnswer, { userId, questionId, courseId })
+                    .where('userId', '=', 'userId')
+                    .and('questionId', '=', 'questionId')
+                    .and('courseId', '=', 'courseId')
+                    .getOneOrNull();
+
+                if (previousAnswer) {
+                    await this._ormService
+                        .save(PrequizUserAnswer, {
+                            id: previousAnswer.id,
+                            answerId,
+                            questionId,
+                            courseId,
+                            userId,
+                            value
+                        });
+                } else {
+                    await this._ormService
+                        .createAsync(PrequizUserAnswer, {
+                            answerId,
+                            questionId,
+                            courseId,
+                            userId,
+                            value
+                        });
                 }
-            });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+            }
+        };
+    }
 
-        await this._ormService
-            .getRepository(PrequizUserAnswer)
-            .save({
-                id: previousAnswer?.id,
-                answerId,
-                questionId,
-                courseId,
-                userId,
-                value
-            });
+    /**
+     * Finish prequiz
+     */
+    finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
 
-        // handle tempomat
-        // qId: 4 is the question about how much 
-        // time do you have for this per week 
-        if (questionId === 3) {
-
-            await this._tempomatService
-                .calcOriginalPrevisionedScheduleAsync(userId, courseId);
-        }
+        return {
+            action: async () => {
+                await this
+                    ._ormService
+                    .createAsync(PrequizCompletion, {
+                        courseId,
+                        userId: principalId.getId()
+                    });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+            }
+        };
     }
 }

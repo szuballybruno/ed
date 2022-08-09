@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { LagBehindNotificationDTO } from '../../shared/dtos/LagBehindNotificationDTO';
-import { EpistoDialog, useEpistoDialogLogic } from '../EpistoDialog';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 
 export const LagBehindNotificationEventHandler = (props: {
     data: LagBehindNotificationDTO | null,
@@ -9,9 +10,7 @@ export const LagBehindNotificationEventHandler = (props: {
 
     const { data, key } = props;
 
-    const dialogLogic = useEpistoDialogLogic('lagbehind', {
-        defaultCloseButtonType: 'top'
-    });
+    const dialogLogic = useEpistoDialogLogic('lagbehind');
 
     useEffect(() => {
 
@@ -23,6 +22,7 @@ export const LagBehindNotificationEventHandler = (props: {
 
     return <>
         <EpistoDialog
+            closeButtonType="top"
             key={key}
             logic={dialogLogic}>
 

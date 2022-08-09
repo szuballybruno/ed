@@ -1,28 +1,31 @@
 import { Flex } from '@chakra-ui/react';
-import { memo, ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useAdminCourseList } from '../../../services/api/courseApiService';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { Id } from '../../../shared/types/versionId';
 import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { AdminBreadcrumbsHeader, BreadcrumbLink } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminCourseList } from './AdminCourseList';
 
 export const CourseAdministartionFrame = (params: {
     children?: ReactNode,
-    isAnySelected: boolean
+    isAnySelected: boolean,
+    noHeightOverflow?: boolean
 }) => {
 
-    const { children, isAnySelected } = params;
+    const { children, isAnySelected, noHeightOverflow } = params;
 
     // util
     const { navigate } = useNavigation();
-    const courseId = useIntParam('courseId');
+    const courseId = Id
+        .create<'Course'>(useIntParam('courseId')!);
     const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
 
     // http
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = useAdminCourseList('');
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = CourseApiService.useAdminCourseList('');
 
     // dt
     const currentCourse = courses
@@ -32,7 +35,7 @@ export const CourseAdministartionFrame = (params: {
         setPageTitle(`Kurzus szerkesztese - ${currentCourse.title}`);
 
     // func
-    const navToCourse = useCallback((courseId: number) => {
+    const navToCourse = useCallback((courseId: Id<'Course'>) => {
 
         const url = (() => {
 
@@ -52,14 +55,16 @@ export const CourseAdministartionFrame = (params: {
 
     return (
         <Flex
-            id="CourseAdministartionFrame"
-            className="whall">
+            id={CourseAdministartionFrame.name}
+            flex="1"
+            overflowY="scroll">
 
             {/* header */}
             <AdminBreadcrumbsHeader>
 
                 {/* course list */}
                 <AdminCourseList
+                    noOverflow={noHeightOverflow}
                     onCourseClick={navToCourse}
                     courses={courses} />
 

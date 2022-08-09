@@ -1,5 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -8,68 +10,90 @@ import { CourseVisibilityType } from '../../shared/types/sharedTypes';
 export class CourseAdminDetailedView {
 
     @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @ViewColumn()
+    @XViewColumn()
     title: string;
 
     @ViewColumn()
+    @XViewColumn()
     shortDescription: string;
 
     @ViewColumn()
+    @XViewColumn()
     description: string;
 
     @ViewColumn()
+    @XViewColumn()
     difficulty: number;
 
     @ViewColumn()
+    @XViewColumn()
     benchmark: number;
 
     @ViewColumn()
+    @XViewColumn()
     previouslyCompletedCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     humanSkillBenefitsDescription: string;
 
     @ViewColumn()
+    @XViewColumn()
     technicalRequirementsDescription: string;
 
     @ViewColumn()
+    @XViewColumn()
     visibility: CourseVisibilityType;
 
     @ViewColumn()
+    @XViewColumn()
     languageName: string;
 
     @ViewColumn()
+    @XViewColumn()
     technicalRequirements: string;
 
     @ViewColumn()
+    @XViewColumn()
     skillBenefits: string;
 
     @ViewColumn()
+    @XViewColumn()
     humanSkillBenefits: string;
 
     @ViewColumn()
-    categoryId: number;
+    @XViewColumn()
+    categoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
+    @XViewColumn()
     categoryName: string;
 
     @ViewColumn()
-    subCategoryId: number;
+    @XViewColumn()
+    subCategoryId: Id<'CourseCategory'>;
 
     @ViewColumn()
+    @XViewColumn()
     subCategoryName: string;
 
     @ViewColumn()
-    teacherId: number;
+    @XViewColumn()
+    teacherId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
     teacherFirstName: string;
 
     @ViewColumn()
+    @XViewColumn()
     teacherLastName: string;
 
     @ViewColumn()
+    @XViewColumn()
     coverFilePath: string;
 }

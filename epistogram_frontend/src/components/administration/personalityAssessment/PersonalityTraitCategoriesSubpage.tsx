@@ -25,7 +25,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
 
     const handleEdit = (traitCategoryId: number, isMax: boolean) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips, { traitCategoryId, isMax });
+        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute, { traitCategoryId, isMax });
     };
 
     const rowButtons = [

@@ -1,128 +1,166 @@
-import { Video } from '../models/entity/Video';
-import { ModuleDTO } from '../shared/dtos/ModuleDTO';
+import moment from 'moment';
+import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
+import { CourseItemView } from '../models/views/CourseItemView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
-import { VideoDTO } from '../shared/dtos/VideoDTO';
+import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
+import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { instatiateInsertEntity } from '../utilities/misc';
 import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
-import { ServiceBase } from './misc/ServiceBase';
 import { ModuleService } from './ModuleService';
-import { PlaybackService } from './PlaybackService';
-import { QuestionAnswerService } from './QuestionAnswerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PlaybackService } from './PlaybackService';
+import { PlaylistService } from './PlaylistService';
+import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-import { Course } from '../models/entity/Course';
-import { ErrorCode } from '../utilities/helpers';
+import { AuthorizationService } from './AuthorizationService';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { PretestCompletionView } from '../models/views/PretestCompletionView';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 
-export class PlayerService extends ServiceBase {
-
-    private _courseService: CourseService;
-    private _examService: ExamService;
-    private _moduleService: ModuleService;
-    private _userCourseBridgeService: UserCourseBridgeService;
-    private _videoService: VideoService;
-    private _questionAnswerService: QuestionAnswerService;
-    private _playbackService: PlaybackService;
+export class PlayerService {
 
     constructor(
-        ormService: ORMConnectionService,
-        courseService: CourseService,
-        examService: ExamService,
-        moduleService: ModuleService,
-        userCourseBridge: UserCourseBridgeService,
-        videoService: VideoService,
-        questionAnswerService: QuestionAnswerService,
-        mappserService: MapperService,
-        playbackService: PlaybackService) {
-
-        super(mappserService, ormService);
-
-        this._courseService = courseService;
-        this._examService = examService;
-        this._moduleService = moduleService;
-        this._userCourseBridgeService = userCourseBridge;
-        this._videoService = videoService;
-        this._questionAnswerService = questionAnswerService;
-        this._playbackService = playbackService;
+        private _ormService: ORMConnectionService,
+        private _courseService: CourseService,
+        private _playlistService: PlaylistService,
+        private _examService: ExamService,
+        private _moduleService: ModuleService,
+        private _videoService: VideoService,
+        private _questionAnswerService: QuestionAnswerService,
+        private _playbackService: PlaybackService,
+        private _userCourseBridgeService: UserCourseBridgeService,
+        private _mapperService: MapperService,
+        private _authorizationService: AuthorizationService) {
     }
 
-    getPlayerDataAsync = async (
-        userId: number,
-        currentItemCode: string) => {
+    /**
+     * Gets the player data 
+     */
+    getPlayerDataAsync(
+        principalId: PrincipalId,
+        requestedItemCode: string): ControllerActionReturnType {
+
+        return {
+            action: async () => {
+
+                const userId = principalId.getId();
+
+                // validate request
+                const { courseId, validItemCode } = await this
+                    ._validatePlayerDataRequest(principalId, requestedItemCode);
+
+                // set current course 
+                await this._userCourseBridgeService
+                    .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+
+                // course items list
+                const modules = await this
+                    ._playlistService
+                    .getPlaylistModulesAsync(userId, courseId);
+
+                // get course item dto
+                const { itemId, itemType } = readItemCode(validItemCode);
+
+                const videoPlayerDTO = itemType === 'video' ? await this
+                    ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
+
+                const examPlayerDTO = itemType === 'exam' ? await this._examService
+                    .getExamPlayerDTOAsync(userId, itemId as Id<'Exam'>) : null;
+
+                const modulePlayerDTO = itemType === 'module' ? await this._moduleService
+                    .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
+
+                const userCourseBridge = await this._userCourseBridgeService
+                    .getUserCourseBridgeOrFailAsync(userId, courseId);
+                //
+                // get new answer session
+                const answerSessionId = itemType === 'module'
+                    ? null
+                    : await this._questionAnswerService
+                        .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
+
+                //
+                // get next item 
+                const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
+
+                return instantiate<PlayerDataDTO>({
+                    videoPlayerData: videoPlayerDTO,
+                    examPlayerData: examPlayerDTO,
+                    modulePlayerData: modulePlayerDTO,
+                    answerSessionId: answerSessionId,
+                    courseMode: userCourseBridge.courseMode,
+                    courseId: courseId,
+                    currentPlaylistItemCode: requestedItemCode,
+                    modules: modules,
+                    nextPlaylistItemCode,
+                    nextPlaylistItemState: nextItemState
+                });
+            },
+            auth: async () => {
+                return this._authorizationService
+                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
+            }
+        };
+    }
+
+    //
+    // PRIVATE
+    //
+
+    /**
+     * Validates request 
+     */
+    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
+
+        const userId = principalId
+            .getId();
 
         // get current course id
         const courseId = await this._courseService
-            .getCourseIdByItemCodeAsync(currentItemCode);
-
-        const course = await this._ormService
-            .query(Course, { courseId })
-            .allowDeleted()
-            .where('id', '=', 'courseId')
-            .getSingle();
-
-        if (course.deletionDate)
-            throw new ErrorCode('Course has been deleted!', 'deleted');
+            .getCourseIdOrFailAsync(requestedPlaylistItemCode);
 
         // get valid course item 
-        const validItemCode = await this.getValidCourseItemCodeAsync(userId, courseId, currentItemCode);
+        const validItemCode = await this
+            ._getValidCourseItemCodeAsync(userId, courseId, requestedPlaylistItemCode);
 
-        // set current course 
-        await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+        // check pretest 
+        const pcv = await this
+            ._ormService
+            .query(PretestCompletionView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
-        // course items list
-        const modules = await this._courseService
-            .getCourseModulesAsync(userId, courseId);
+        if (!pcv.isCompleted)
+            throw new ErrorWithCode('Tring to watch course, but "pretest" is not completed yet!', 'forbidden player stage');
 
-        // get course item dto
-        const { itemId, itemType } = readItemCode(validItemCode);
-        const videoDTO = itemType === 'video' ? await this.getVideoDTOAsync(userId, itemId) : null;
-        const examDTO = itemType === 'exam' ? await this._examService.getExamPlayerDTOAsync(userId, itemId) : null;
-        const moduleDetailedDTO = itemType === 'module' ? await this._moduleService.getModuleDetailedDTOAsync(itemId) : null;
+        return { validItemCode, courseId };
+    }
 
-        // get user course bridge
-        const userCourseBridge = await this._userCourseBridgeService
-            .getUserCourseBridgeOrFailAsync(userId, courseId);
+    /**
+     * Gets the next item in modules list 
+     */
+    private _getNextPlaylistItem(modules: PlaylistModuleDTO[], validItemCode: string) {
 
-        // get new answer session
-        const answerSessionId = itemType === 'module'
-            ? null
-            : await this._questionAnswerService
-                .createAnswerSessionAsync(userId, examDTO?.id, videoDTO?.id);
-
-        // next 
-        const { nextItemCode, nextItemState } = this.getNextItem(modules, validItemCode);
-
-        return {
-            video: videoDTO,
-            exam: examDTO,
-            module: moduleDetailedDTO,
-            answerSessionId: answerSessionId,
-            mode: userCourseBridge.courseMode,
-            courseId: courseId!,
-            courseItemCode: currentItemCode,
-            modules: modules,
-            nextItemCode,
-            nextItemState
-        } as PlayerDataDTO;
-    };
-
-    getNextItem(modules: ModuleDTO[], validItemCode: string) {
-
-        const flat = this.getCourseItemsFlat(modules);
+        const flat = this._getPlaylistItemsFlatList(modules);
 
         const currentItemIndexInFlatList = flat
-            .findIndex(x => x.code === validItemCode);
+            .findIndex(x => x.playlistItemCode === validItemCode);
 
         const nextItem = flat[currentItemIndexInFlatList + 1];
-        const nextItemCode = nextItem?.code ?? null;
-        const nextItemState = nextItem?.state ?? null;
+        const nextPlaylistItemCode = nextItem?.playlistItemCode ?? null;
+        const nextItemState = nextItem?.playlistItemState ?? null;
 
         return {
-            nextItemCode,
+            nextPlaylistItemCode,
             nextItemState
         };
     }
@@ -130,85 +168,118 @@ export class PlayerService extends ServiceBase {
     /**
      * Finds the closest valid course item code to the target. 
      * This is to ensure a user is not recieving an item they should not access.
-     *
-     * @param {number} userId UserId.
-     * @param {number} courseId CourseId.
-     * @param {string} targetItemCode The code of the target item, if it's accessable for the user, it will be returned.
-     * @return {string} the code of the closest valid itme found in course.
      */
-    getValidCourseItemCodeAsync = async (userId: number, courseId: number, targetItemCode: string) => {
+    private async _getValidCourseItemCodeAsync(userId: Id<'User'>, courseId: Id<'Course'>, targetItemCode: string) {
 
-        const modules = await this._courseService
-            .getCourseModulesAsync(userId, courseId);
+        const modules = await this
+            ._playlistService
+            .getPlaylistModulesAsync(userId, courseId);
 
-        const courseItemsFlat = this.getCourseItemsFlat(modules);
+        const courseItemsFlat = this._getPlaylistItemsFlatList(modules);
 
         const targetItem = courseItemsFlat
-            .firstOrNull(x => x.code === targetItemCode);
+            .firstOrNull(x => x.playlistItemCode === targetItemCode);
 
-        if (targetItem && targetItem.state !== 'locked')
-            return targetItem.code;
+        if (targetItem && targetItem.playlistItemState !== 'locked')
+            return targetItem.playlistItemCode;
 
         // target item is locked, fallback...
         const firstLockedIndex = courseItemsFlat
-            .findIndex(x => x.state === 'locked');
+            .findIndex(x => x.playlistItemState === 'locked');
 
         const prevIndex = firstLockedIndex - 1;
 
         return (courseItemsFlat[prevIndex]
             ? courseItemsFlat[prevIndex]
-            : courseItemsFlat[0]).code;
-    };
+            : courseItemsFlat[0]).playlistItemCode;
+    }
 
     /**
      * Returns a list of objects symbolizing the items present in the specified course. 
      * The list is ordered, and can be traversed by list item indicies.
-     *
-     * @param {ModuleDTO[]} modules Modules present in course.
-     * @return a flat list of items in course.
      */
-    getCourseItemsFlat = (modules: ModuleDTO[]) => {
+    private _getPlaylistItemsFlatList(modules: PlaylistModuleDTO[]) {
 
-        type CourseItemFlatListTyle = {
-            code: string,
-            index: number,
-            state: CourseItemStateType
+        type CourseItemFlatListType = {
+            playlistItemCode: string,
+            playlistItemState: CourseItemStateType,
+            orderIndex: number,
         };
 
-        const flatList = [] as CourseItemFlatListTyle[];
+        const courseItemFlatList = [] as CourseItemFlatListType[];
 
         modules
             .forEach(module => {
 
-                flatList
+                courseItemFlatList
                     .push({
-                        code: module.code,
-                        index: module.orderIndex,
-                        state: module.state
+                        playlistItemCode: module.moduleCode,
+                        orderIndex: module.moduleOrderIndex,
+                        playlistItemState: module.moduleState
                     });
 
                 module
                     .items
-                    .forEach(x => flatList
+                    .forEach(moduleItem => courseItemFlatList
                         .push({
-                            code: x.descriptorCode,
-                            index: x.orderIndex,
-                            state: x.state
+                            playlistItemCode: moduleItem.playlistItemCode,
+                            orderIndex: moduleItem.orderIndex,
+                            playlistItemState: moduleItem.state
                         }));
             });
 
-        return flatList;
-    };
+        return courseItemFlatList;
+    }
 
-    getVideoDTOAsync = async (userId: number, videoId: number) => {
+    /**
+     * Gets teh video watch dto 
+     */
+    private async _getVideoPlayerDataDTOAsync(userId: Id<'User'>, videoId: Id<'Video'>) {
 
-        const maxWathcedSeconds = await this._playbackService
-            .getMaxWatchedSeconds(userId, videoId);
+        // get latest video version id
+        const videoVersionId = (await this._ormService
+            .query(CourseItemView, { videoId })
+            .where('videoId', '=', 'videoId')
+            .getSingle())
+            .videoVersionId!;
 
-        const video = await this._videoService
-            .getVideoPlayerDataAsync(videoId);
+        const maxWatchedSeconds = await this._playbackService
+            .getMaxWatchedSeconds(userId, videoVersionId);
 
-        return this._mapperService
-            .map(Video, VideoDTO, video, maxWathcedSeconds);
-    };
+        const videoPlayerData = await this._videoService
+            .getVideoPlayerDataAsync(videoVersionId);
+
+        const videoQuestionData = await this._videoService
+            ._getQuestionDataByVideoVersionId(videoVersionId);
+
+        const currentDateMinThreshold = moment(new Date())
+            .subtract(5, 'minutes')
+            .toDate();
+
+        const oldSessions = await this._ormService
+            .query(VideoPlaybackSession, { userId, videoVersionId, currentDateMinThreshold })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .and('lastUsageDate', '>', 'currentDateMinThreshold')
+            .getMany();
+
+        const oldSession = oldSessions
+            .orderBy(x => x.lastUsageDate)
+            .firstOrNull();
+
+        const videoPlaybackSessionId = oldSession
+            ? oldSession.id
+            : await this._ormService
+                .createAsync(VideoPlaybackSession, instatiateInsertEntity<VideoPlaybackSession>({
+                    creationDate: new Date(),
+                    lastUsageDate: new Date(),
+                    userId,
+                    videoVersionId
+                }));
+
+        const dto = this._mapperService
+            .mapTo(VideoPlayerDataDTO, [videoPlayerData, videoQuestionData, videoPlaybackSessionId, maxWatchedSeconds]);
+
+        return dto;
+    }
 }

@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { showNotification } from '../services/core/notifications';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
-import { getAssetUrl } from '../static/frontendHelpers';
+import { Id } from '../shared/types/versionId';
+import { Environment } from '../static/Environemnt';
 import { EpistoFont } from './controls/EpistoFont';
 import { LoadingFramePropsType } from './system/LoadingFrame';
 import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
 import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
 export const QuesitionView = (props: {
-    answerQuesitonAsync: (answerId: number[]) => Promise<void>,
-    correctAnswerIds: number[],
+    answerQuesitonAsync: (answerId: Id<'Answer'>[]) => Promise<void>,
+    correctAnswerIds: Id<'Answer'>[],
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
@@ -32,9 +33,9 @@ export const QuesitionView = (props: {
 
     const isAnswered = correctAnswerIds.length > 0;
 
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+    const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>(null);
 
-    const handleSelectedAnswerAsync = async (answerId: number) => {
+    const handleSelectedAnswerAsync = async (answerId: Id<'Answer'>) => {
 
         setSelectedAnswerId(answerId);
         await answerQuesitonAsync([answerId]);
@@ -44,7 +45,7 @@ export const QuesitionView = (props: {
     useEffect(() => {
 
         setSelectedAnswerId(null);
-    }, [question.questionId]);
+    }, [question.questionVersionId]);
 
     // bonus coin 
     useEffect(() => {
@@ -56,13 +57,15 @@ export const QuesitionView = (props: {
 
         showNotification(
             `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
-            'warning',
             {
-                style: {
-                    border: 'solid 2px gold',
-                },
-                icon: <img
-                    src={getAssetUrl('images/epistoCoin.png')} />
+                type: 'warning',
+                options: {
+                    style: {
+                        border: 'solid 2px gold',
+                    },
+                    icon: <img
+                        src={Environment.getAssetUrl('images/epistoCoin.png')} />
+                }
             });
     }, [bonusCoinsAcquired]);
 
@@ -108,11 +111,11 @@ export const QuesitionView = (props: {
             align="center">
 
             <EpistoFont>
-                +1 EpistoCoin megszerezve!
+                +1 EpistoCoinnal gazdagodtál!
             </EpistoFont>
 
             <img
-                src={getAssetUrl('images/epistoCoin.png')}
+                src={Environment.getAssetUrl('images/epistoCoin.png')}
                 className="square25"
                 style={{ margin: '0px 0px 4px 4px' }} />
         </Flex>}

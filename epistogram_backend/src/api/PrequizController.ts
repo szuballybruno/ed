@@ -1,41 +1,52 @@
 import { PrequizService } from '../services/PrequizService';
-import { ActionParams } from '../utilities/helpers';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class PrequizController {
+export class PrequizController implements XController<PrequizController> {
 
     private _prequizService: PrequizService;
 
-    constructor(prequizService: PrequizService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._prequizService = prequizService;
+        this._prequizService = serviceProvider.getService(PrequizService);
     }
 
-    getQuestionsAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.prequiz.getQuestions)
+    getQuestionsAction(params: ActionParams) {
 
-        const courseId = params
-            .getQuery<any>()
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<'Course'>(params
+                .getQuery<any>()
+                .getValue(x => x.courseId, 'int'));
 
-        return await this._prequizService
-            .getQuestionsAsync(params.currentUserId, courseId);
-    };
+        return this._prequizService
+            .getPrequizQuestionsAsync(params.principalId, courseId);
+    }
 
-    getUserAnswerAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.prequiz.getUserAnswer)
+    getUserAnswerAction(params: ActionParams) {
 
         const query = params
             .getQuery<{ questionId: number, courseId: number }>();
 
-        const questionId = query
-            .getValue(x => x.questionId, 'int');
+        const questionId = Id
+            .create<'Question'>(query
+                .getValue(x => x.questionId, 'int'));
 
-        const courseId = query
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<'Course'>(query
+                .getValue(x => x.courseId, 'int'));
 
-        return await this._prequizService
-            .getUserAnswerAsync(params.currentUserId, courseId, questionId);
-    };
+        return this._prequizService
+            .getUserAnswerAsync(params.principalId, courseId, questionId);
+    }
 
-    answerPrequizQuestionAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.prequiz.answerPrequizQuestion, { isPost: true })
+    answerPrequizQuestionAction(params: ActionParams) {
 
         const bod = params
             .getBody<{
@@ -45,11 +56,13 @@ export class PrequizController {
                 courseId: number
             }>();
 
-        const questionId = bod
-            .getValue(x => x.questionId, 'int');
+        const questionId = Id
+            .create<'PrequizQuestion'>(bod
+                .getValue(x => x.questionId, 'int'));
 
-        const courseId = bod
-            .getValue(x => x.courseId, 'int');
+        const courseId = Id
+            .create<'Course'>(bod
+                .getValue(x => x.courseId, 'int'));
 
         const value = bod
             .getValueOrNull(x => x.value, 'int');
@@ -57,7 +70,25 @@ export class PrequizController {
         const answerId = bod
             .getValueOrNull(x => x.answerId, 'int');
 
-        return await this._prequizService
-            .answerPrequizQuestionAsync(params.currentUserId, questionId, courseId, answerId, value);
-    };
+        const answerIdAsIdType = answerId
+            ? Id.create<'PrequizAnswer'>(answerId)
+            : null;
+
+        return this._prequizService
+            .answerPrequizQuestionAsync(params.principalId, questionId, courseId, answerIdAsIdType, value);
+    }
+
+    @XControllerAction(apiRoutes.prequiz.finishPrequiz, { isPost: true })
+    finishPrequizAction(params: ActionParams) {
+
+        const body = params
+            .getFromParameterized(apiRoutes.prequiz.finishPrequiz)
+            .body;
+
+        const courseId = body
+            .getValue(x => x.courseId, 'int');
+
+        return this._prequizService
+            .finishPrequiz(params.principalId, courseId);
+    }
 }

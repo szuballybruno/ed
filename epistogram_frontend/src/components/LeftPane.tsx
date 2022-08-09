@@ -1,20 +1,26 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
-import React, { useContext } from 'react';
+import { Flex } from '@chakra-ui/react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useNavigation } from '../services/core/navigatior';
 import { startUserGuideHelp } from '../services/core/userGuidingService';
-import { getAssetUrl } from '../static/frontendHelpers';
-import { CurrentUserContext } from './system/AuthenticationFrame';
-import { EpistoButton } from './controls/EpistoButton';
-import { FlexFloat } from './controls/FlexFloat';
-import { EpistoFont } from './controls/EpistoFont';
+import { Environment } from '../static/Environemnt';
+import { PropsWithChildren } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFont } from './controls/EpistoFont';
+import { FlexFloat } from './controls/FlexFloat';
+import { useAuthorizationContext } from './system/AuthorizationContext';
 
-export const LeftPane = (props: FlexProps) => {
+export const LeftPane = ({
+    padding,
+    basis,
+    children
+}: {
+    padding?: string,
+    basis?: string
+} & PropsWithChildren) => {
 
     const homeRoute = applicationRoutes.rootHomeRoute;
-    const user = useContext(CurrentUserContext);
+    const { hasPermission } = useAuthorizationContext();
     const { navigate } = useNavigation();
 
     return (
@@ -27,12 +33,11 @@ export const LeftPane = (props: FlexProps) => {
             maxW="320px"
             direction="column"
             align="stretch"
-            padding="25px 15px 0 15px"
+            padding={padding ? padding : '25px 15px 0 15px'}
+            basis={basis ?? undefined}
             className="dividerBorderRight"
             position="relative"
-            //borderLeft="2px solid #e2e2e2"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
-            {...props}>
+            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
             <Flex
@@ -40,9 +45,9 @@ export const LeftPane = (props: FlexProps) => {
                 alignItems={'center'}
                 justifyContent="flex-start"
                 mb="20px">
-                
+
                 <img
-                    src={getAssetUrl('/images/logo.svg')}
+                    src={Environment.getAssetUrl('/images/logo.svg')}
                     style={{
                         height: '50px',
                         objectFit: 'cover',
@@ -53,7 +58,7 @@ export const LeftPane = (props: FlexProps) => {
                     alt=""
                     onClick={() => {
 
-                        if (user?.userActivity?.canAccessApplication)
+                        if (hasPermission('ACCESS_APPLICATION'))
                             navigate(homeRoute);
                     }} />
             </Flex>
@@ -69,10 +74,10 @@ export const LeftPane = (props: FlexProps) => {
                     objectFit: 'contain',
                     zIndex: -1,
                 }}
-                src={getAssetUrl('/images/bg-art-6.png')}
+                src={Environment.getAssetUrl('/images/bg-art-6.png')}
                 alt="" />
 
-            {props.children}
+            {children}
 
             {/* magic powder top right */}
             <img
@@ -85,7 +90,7 @@ export const LeftPane = (props: FlexProps) => {
                     objectFit: 'contain',
                     zIndex: -1,
                 }}
-                src={getAssetUrl('/images/bela3D.png')}
+                src={Environment.getAssetUrl('/images/bela3D.png')}
                 alt="" />
 
             {/* tina image */}

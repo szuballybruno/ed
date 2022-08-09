@@ -3,6 +3,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useUserListQuery } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
+import { Id } from '../../../shared/types/versionId';
 import { formatTimespan } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { ProfileImage } from '../../ProfileImage';
@@ -11,7 +12,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 export const AdminCourseUsersGrid = () => {
 
     const { users } = useUserListQuery('');
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const getRowsFromUsers = () => users.map((user) => {
         return {
@@ -78,7 +79,7 @@ export const AdminCourseUsersGrid = () => {
 
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
+                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
 
                     Tanulási jelentés
                 </EpistoButton>
@@ -96,7 +97,7 @@ export const AdminCourseUsersGrid = () => {
 export const AdminCourseUsersSubpage = (props: {
     courses: CourseAdminListItemDTO[],
     refetchCoursesFunction: () => void,
-    navigationFunction: (courseId: number) => void
+    navigationFunction: (courseId: Id<'Course'>) => void
 }) => {
 
     const { courses, navigationFunction } = props;

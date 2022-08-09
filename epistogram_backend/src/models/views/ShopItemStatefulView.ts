@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,41 +9,54 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class ShopItemStatefulView {
 
     @ViewColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ShopItem'>;
 
     @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
     name: string;
 
     @ViewColumn()
+    @XViewColumn()
     detailsUrl: string;
 
     @ViewColumn()
+    @XViewColumn()
     purchaseCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     canPurchase: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     purchaseLimit: number;
 
     @ViewColumn()
+    @XViewColumn()
     coinPrice: number;
 
     @ViewColumn()
+    @XViewColumn()
     currencyPrice: number;
 
     @ViewColumn()
-    shopItemCategoryId: number;
+    @XViewColumn()
+    shopItemCategoryId: Id<'ShopItemCategory'>;
 
     @ViewColumn()
+    @XViewColumn()
     shopItemCategoryName: string;
 
     @ViewColumn()
+    @XViewColumn()
     coverFilePath: string;
 }

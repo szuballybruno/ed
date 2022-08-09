@@ -1,4 +1,4 @@
-import { CourseItemDTO } from './CourseItemDTO';
+import { PlaylistItemDTO } from './PlaylistItemDTO';
 
 export class CourseProgressDTO {
     title: string;
@@ -6,5 +6,5 @@ export class CourseProgressDTO {
     progressPercentage: number;
     totalCourseItemCount: number;
     completedCourseItemCount: number;
-    nextItems: CourseItemDTO[];
+    nextItems: PlaylistItemDTO[];
 }

@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION answer_question_fn
 (
 	param_user_id integer,
 	param_answer_session_id integer,
-	param_question_id integer,
+	param_question_version_id integer,
 	param_answer_ids integer[],
 	param_elapsed_seconds double precision,
 	param_is_practise_answer boolean
@@ -20,6 +20,7 @@ AS $$
 
 DECLARE
 	var_correct_answer_ids integer[]; 
+	var_answer_version_ids integer[]; 
 	var_given_answer_id integer;
 	var_is_previous_streak_out_of_date boolean;
 	
@@ -35,12 +36,29 @@ BEGIN
 	-- CORRECT ANSWER IDS
 	SELECT ARRAY
 	(
-		SELECT a.id	
-		FROM public.answer AS a
-		WHERE a.question_id = param_question_id 
-			AND a.is_correct = true
+		SELECT av.answer_id
+		FROM public.answer_version AS av
+
+		LEFT JOIN public.question_version qv
+		ON qv.id = av.question_version_id
+
+		LEFT JOIN public.answer_data ad
+		ON ad.id = av.answer_data_id
+		
+		WHERE av.question_version_id = param_question_version_id 
+			AND ad.is_correct = true
 	)		
 	INTO var_correct_answer_ids;
+
+	-- ANSWER IDS TO ANSWER VERSION IDS
+	SELECT ARRAY
+	(
+		SELECT av.id answer_version_id
+		FROM public.answer_version AS av
+
+		WHERE av.answer_id = ANY(param_answer_ids)
+	)		
+	INTO var_answer_version_ids;
 	
 	-- IS CORRECTLY ANSWERED BEFORE
 	SELECT COUNT(ga.id) > 0 
@@ -48,7 +66,7 @@ BEGIN
 	LEFT JOIN public.answer_session ase
 	ON ase.id = ga.answer_session_id
 	WHERE ga.is_correct 
-		AND ga.question_id = param_question_id
+		AND ga.question_version_id = param_question_version_id
 		AND ase.user_id = param_user_id
 	INTO var_is_correctly_answered_before;
 	
@@ -95,7 +113,7 @@ BEGIN
 	(
 		creation_date,
 		is_practise_answer,
-		question_id,
+		question_version_id,
 		answer_session_id,
 		is_correct,
 		given_answer_streak_id,
@@ -105,7 +123,7 @@ BEGIN
 	(
 		NOW(),
 		param_is_practise_answer,
-		param_question_id,
+		param_question_version_id,
 		param_answer_session_id,
 		var_is_correct,
 		var_previous_streak_id,
@@ -118,12 +136,12 @@ BEGIN
 	INSERT INTO public.answer_given_answer_bridge 
 	(
 		given_answer_id,
-		answer_id
+		answer_version_id
 	)
 	SELECT 
 		var_given_answer_id,
-		answer_ids.*
-	FROM UNNEST (param_answer_ids) AS answer_ids;
+		answer_version_ids.*
+	FROM UNNEST (var_answer_version_ids) AS answer_version_ids;
 	
 	-- STREAK LENGTH 
 	SELECT COUNT(ga.id) 

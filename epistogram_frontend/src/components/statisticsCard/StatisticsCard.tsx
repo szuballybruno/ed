@@ -1,16 +1,15 @@
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
-import { ArrowDropDown, ArrowDropUp, ArrowRight, ArrowUpward, FiberManualRecord, Lock } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp, ArrowRight, FiberManualRecord, Fullscreen, FullscreenExit, Lock } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
-import { EpistoHeader } from '../EpistoHeader';
 
 export type StatisticsCardProps = {
     iconPath?: string
     suffix?: string
     title?: string
-    value?: string
+    value?: string | number | null
     isOpenByDefault?: boolean
     children?: React.ReactNode
     chartSize?: 'normal' | 'large',
@@ -146,31 +145,44 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             align="center">
 
             {/* image */}
-            {iconPath && <img
-                style={{
-                    margin: '5px 10px 5px 20px',
-                    width: 70,
-                    height: 70,
-                    objectFit: 'contain'
-                }}
-                alt=""
-                src={iconPath} />}
+            {iconPath
+                ? <img
+                    style={{
+                        margin: '5px 10px 5px 20px',
+                        width: 70,
+                        height: 70,
+                        objectFit: 'contain'
+                    }}
+                    alt=""
+                    src={iconPath} />
+                : <Flex w='20px' />}
 
             {/* texts */}
-            <Flex direction="column"
+            <Flex
+                maxWidth='calc(100% - 80px)'
+                width='calc(100% - 80px)'
+                direction="column"
                 pr="10px">
 
                 {/* value and suffix */}
-                <Flex align="flex-end">
+                <Flex
+                    width='100%'
+                    align="flex-end">
 
                     {/* value */}
                     <EpistoFont
-                        fontSize={40}
+                        allowedLines={1}
+                        fontSize={typeof value === 'string'
+                            ? (value?.length < 8 ? 40 : 25)
+                            : 40}
                         style={{
                             lineHeight: 1,
+                            maxWidth: 'calc(100% - 10px)'
                         }}>
 
-                        {value ?? '-'}
+                        {value
+                            ? value
+                            : '-'}
                     </EpistoFont>
 
                     {/* suffix */}
@@ -203,17 +215,19 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
             <ArrowRight />
         </EpistoButton>}
 
-        {/* open / close button 
+        {/* open / close button */}
         {children && <Box position="absolute">
             <EpistoButton
                 style={{
-                    alignSelf: "flex-start"
+                    alignSelf: 'flex-start'
                 }}
-                onClick={() => { setIsOpen(p => !p) }}>
+                onClick={() => {
+                    setIsOpen(p => !p);
+                }}>
 
                 {isOpen ? <FullscreenExit /> : <Fullscreen />}
             </EpistoButton>
-        </Box>}*/}
+        </Box>}
     </FlexFloat>;
 };
 

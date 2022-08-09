@@ -8,22 +8,21 @@ export const ContentPane = (props: {
     isNavbarLowHeight?: boolean,
     noMaxWidth?: boolean,
     showLogo?: boolean,
-    isMinimalMode?: boolean
+    isMinimalMode?: boolean,
+    noOverflow?: boolean
 } & FlexProps) => {
 
-    const { noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, ...css } = props;
+    const { children, noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, noOverflow, ...css } = props;
 
     return (
         <Flex
             id="contentPane"
-            p={props.noPadding ? undefined : '0 30px 40px 30px'}
+            padding={noPadding ? undefined : '0 30px 0px 30px'}
             flex="1"
             maxWidth={noMaxWidth ? undefined : '1400px'}
             direction="column"
-            margin="auto"
-            overflowY="scroll"
+            overflowY={noOverflow ? 'hidden' : 'scroll'}
             overflowX="hidden"
-            className="whall"
             {...css}>
 
             {!hideNavbar && <Navbar
@@ -32,7 +31,7 @@ export const ContentPane = (props: {
                 isMinimalMode={isMinimalMode}
                 backgroundContent={navbarBg} />}
 
-            {props.children}
+            {children}
         </Flex>
     );
 };

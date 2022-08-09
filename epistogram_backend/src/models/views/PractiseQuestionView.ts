@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,29 +9,30 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class PractiseQuestionView {
 
     @ViewColumn()
-    questionId: number;
+    @XViewColumn()
+    questionVersionId: Id<'QuestionVersion'>;
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
-    latestGivenAnswerId: number;
+    @XViewColumn()
+    latestGivenAnswerId: Id<'GivenAnswer'>;
 
     @ViewColumn()
-    givenAnswerCount: number;
-
-    @ViewColumn()
-    practiseAnswerCount: number;
-
-    @ViewColumn()
+    @XViewColumn()
     questionText: string;
 
     @ViewColumn()
+    @XViewColumn()
     questionTypeId: number;
 
     @ViewColumn()
-    answerId: number;
+    @XViewColumn()
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
+    @XViewColumn()
     answerText: string;
 }

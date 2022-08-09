@@ -1,10 +1,12 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { serverUrl } from '../../static/Environemnt';
-import { getErrorTypeByHTTPCode, getUrl, ErrorCode } from '../../static/frontendHelpers';
+import { Environment } from '../../static/Environemnt';
+import { getErrorTypeByHTTPCode, getUrl } from '../../static/frontendHelpers';
 import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
 import { LoadingStateType } from '../../models/types';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
 
 export class HTTPResponse {
     code: number;
@@ -20,7 +22,7 @@ const instance = (() => {
 
     const axiosInst = axios
         .create({
-            baseURL: serverUrl,
+            baseURL: Environment.serverUrl,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -94,16 +96,13 @@ export const httpDeleteAsync = async (urlEnding: string) => {
 /**
  * Post a json payload, without implicitly handling errors, 
  * meaning exceptions will bubble up, and must be handled by the caller funciton.
- * 
- * @param url 
- * @returns 
  */
-export const usePostDataUnsafe = <TData, TResult>(url: string) => {
+export const usePostDataUnsafe = <TData = any, TResult = void>(url: string | ParametrizedRouteType<RouteParameterType<TData, any>>) => {
 
     const [state, setState] = useState<LoadingStateType>('idle');
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data?: TData) => {
+    const postDataAsync = useCallback(async (data?: TData) => {
 
         try {
 
@@ -122,13 +121,13 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
             setState('idle');
             throw e;
         }
-    };
+    }, [setState, setResult]);
 
-    const clearCache = () => {
+    const clearCache = useCallback(() => {
 
         setResult(null);
         setState('idle');
-    };
+    }, [setState, setResult]);
 
     return {
         postDataAsync,
@@ -142,11 +141,8 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
  * Post a multipart payload, containing a file, 
  * and or a data object as a json document.
  * This is also unsafe, as in errors are not handled implicitly.
- * 
- * @param url 
- * @returns 
  */
-export const usePostMultipartDataUnsafe = <TData>(url: string) => {
+export const usePostMultipartDataUnsafe = <TData>(url: string | ParametrizedRouteType<RouteParameterType<TData, any>>) => {
 
     const [state, setState] = useState<LoadingStateType>('idle');
 
@@ -177,14 +173,11 @@ export const usePostMultipartDataUnsafe = <TData>(url: string) => {
  * Post a json payload, and implicitly handle errors, 
  * which will be set to the error output const. 
  * State is set accordingly. 
- * 
- * @param url 
- * @returns 
  */
 export const usePostData = <TData, TResult>(url: string) => {
 
     const [state, setState] = useState<LoadingStateType>('success');
-    const [error, setError] = useState<ErrorCode | null>(null);
+    const [error, setError] = useState<ErrorWithCode | null>(null);
     const [result, setResult] = useState<TResult | null>(null);
 
     const postDataAsync = async (data: TData) => {
@@ -201,7 +194,7 @@ export const usePostData = <TData, TResult>(url: string) => {
         catch (e) {
 
             setState('error');
-            setError(e as ErrorCode);
+            setError(e as ErrorWithCode);
         }
     };
 
@@ -222,11 +215,6 @@ export const usePostData = <TData, TResult>(url: string) => {
 /**
  * Post multipart form data. 
  * This allows sending files to the server, and also a data object as json.
- * 
- * @param url 
- * @param file 
- * @param data 
- * @returns 
  */
 export const postMultipartAsync = async (url: string, file?: File, data?: any) => {
 
@@ -276,16 +264,16 @@ const handleHttpError = (error: any) => {
         // get & check error response data
         const error = response.data as HttpErrorResponseDTO;
         if (!error)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // get & check error response data properties
         if (!error.message && !error.code)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // message only
         // throw with a more informative message
         if (error.message && !error.code)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
 
         // error type and maybe message as well
         const message = error.message
@@ -294,6 +282,6 @@ const handleHttpError = (error: any) => {
 
         // throw with a more informative message
         // and error type
-        throw new ErrorCode(message, error.code);
+        throw new ErrorWithCode(message, error.code);
     }
 };

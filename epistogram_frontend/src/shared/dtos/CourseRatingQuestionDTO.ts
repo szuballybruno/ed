@@ -1,7 +1,8 @@
 import { CourseRatingQuesitonType } from '../types/sharedTypes';
+import { Id } from '../types/versionId';
 
 export class CourseRatingQuestionDTO {
-    id: number;
+    id: Id<'CourseRatingQuestion'>;
     text: string;
     type: CourseRatingQuesitonType;
     answerValue: number | null;

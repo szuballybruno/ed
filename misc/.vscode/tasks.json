@@ -20,6 +20,67 @@
             "type": "shell",
             "command": "cmd /c node scripts\\styleGen\\styleGen.js",
             "problemMatcher": []
+        },
+        {
+            "label": "getPermissionsType",
+            "type": "shell",
+            "command": "cmd /c start.bat",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}\\scripts\\permissionGen"
+            },
+        },
+        {
+            "label": "purge-db",
+            "type": "shell",
+            "command": "yarn --cwd ../epistogram_backend purge",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "label": "run test-misc",
+            "type": "shell",
+            "command": "npx jest -i misc.test.ts",
+            "problemMatcher": [],
+        },
+        // run
+        {
+            "type": "shell",
+            "label": "run backend-lrmon",
+            "command": "yarn --cwd ../epistogram_backend lrmon",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run frontend",
+            "command": "yarn --cwd ../epistogram_frontend start",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run backend",
+            "command": "yarn --cwd ../epistogram_backend nodenew",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        // run-all
+        {
+            "label": "run-all",
+            "dependsOn": [
+                "run frontend",
+                "run backend-lrmon",
+            ],
+            "problemMatcher": []
         }
     ]
 }

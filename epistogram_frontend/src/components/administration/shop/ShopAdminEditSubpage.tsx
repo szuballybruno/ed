@@ -1,7 +1,6 @@
 import { Flex, Image } from '@chakra-ui/react';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { CourseShopItemListDTO } from '../../../shared/dtos/CourseShopItemListDTO';
 import { DiscountCodeDTO } from '../../../shared/dtos/DiscountCodeDTO';
 import { ShopItemCategoryDTO } from '../../../shared/dtos/ShopItemCategoryDTO';
@@ -22,12 +21,15 @@ import { EpistoSelect } from '../../controls/EpistoSelect';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { useIntParam } from '../../../static/locationHelpers';
+import { Id } from '../../../shared/types/versionId';
 
 export const ShopAdminEditSubpage = () => {
 
     //util
     const { navigate } = useNavigation();
-    const shopItemId = useIntParam('shopItemId')!;
+
+    const shopItemId = Id
+        .create<'ShopItem'>(useIntParam('shopItemId')!);
     const showError = useShowErrorDialog();
 
     // http
@@ -137,8 +139,6 @@ export const ShopAdminEditSubpage = () => {
         if (!shopItemEditData || shopItemCategories.length === 0 || privateCourses.length === 0)
             return;
 
-        console.log('asd');
-
         setName(shopItemEditData.name);
         setPurchaseLimit(shopItemEditData.purchaseLimit + '');
         setIsPurchaseLimited(!!shopItemEditData.purchaseLimit);
@@ -165,7 +165,7 @@ export const ShopAdminEditSubpage = () => {
         if (isCourse) {
 
             setShopItemCategory(shopItemCategories
-                .filter(x => x.id === 1)[0]);
+                .filter(x => x.id === Id.create<'ShopItemCategory'>(1))[0]);
 
             if (!course)
                 setCourse(privateCourses[0]);
@@ -173,7 +173,7 @@ export const ShopAdminEditSubpage = () => {
         else {
 
             setShopItemCategory(shopItemCategories
-                .filter(x => x.id === 3)[0]);
+                .filter(x => x.id === Id.create<'ShopItemCategory'>(3))[0]);
 
             setCoverFilePath(shopItemEditData?.coverFilePath ?? '');
             setName(shopItemEditData?.name ?? '');

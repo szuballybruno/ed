@@ -2,7 +2,7 @@ WITH user_trait_choices AS
 (
 	SELECT 
 		ptv.user_id,
-		ptv.personality_trait_category_id,
+		ptv.trait_category_id,
 		ptv.max_score > ptv.min_score is_max
 	FROM public.personality_trait_view ptv
 )
@@ -40,7 +40,7 @@ ON sf.id = dt.video_file_id
 
 LEFT JOIN user_trait_choices utc
 ON utc.user_id = u.id 
-	AND utc.personality_trait_category_id = dt.personality_trait_category_id
+	AND utc.trait_category_id = dt.personality_trait_category_id
 	
 WHERE dt.is_max = utc.is_max
 	

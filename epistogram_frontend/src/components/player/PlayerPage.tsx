@@ -5,6 +5,7 @@ import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';
 import { CourseRatingSubpage } from './courseRating/CourseRatingSubpage';
 import { PrequizSubpage } from './prequiz/PrequizSubpage';
+import { PretestGreetingSubpage } from './pretest/PretestGreetingSubpage';
 import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
 import { PretestSubpage } from './pretest/PretestSubpage';
 import { WatchSubpage } from './watch/WatchSubpage';
@@ -22,6 +23,8 @@ export const PlayerPage = () => {
                 width="var(--playerWidth)"
                 margin="auto"
                 maxHeight='100vh'
+                minHeight='100vh'
+                minWidth='100%'
                 overflowY='hidden'
                 isMinimalMode
                 showLogo>
@@ -31,6 +34,10 @@ export const PlayerPage = () => {
                         {
                             route: applicationRoutes.playerRoute.prequizRoute,
                             element: <PrequizSubpage />
+                        },
+                        {
+                            route: applicationRoutes.playerRoute.pretestGreetingRoute,
+                            element: <PretestGreetingSubpage />
                         },
                         {
                             route: applicationRoutes.playerRoute.pretestRoute,

@@ -1,202 +1,243 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag } from '../../services/ORMConnectionService/ORMConnectionDecorators';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { RegistrationType } from '../Types';
-import { UserActivityFlatView } from '../views/UserActivityFlatView';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
+import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
+import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { CoinTransaction } from './CoinTransaction';
-import { Course } from './Course';
+import { Comment } from './Comment';
+import { Company } from './Company';
+import { CourseData } from './course/CourseData';
+import { CourseAccessBridge } from './CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from './courseRating/CourseRatingQuestionUserAnswer';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { DiscountCode } from './DiscountCode';
 import { Event } from './Event';
 import { JobTitle } from './JobTitle';
-import { Organization } from './Organization';
+import { Like } from './Like';
+import { VideoPlaybackSample } from './playback/VideoPlaybackSample';
+import { VideoPlaybackSession } from './playback/VideoPlaybackSession';
+import { VideoSeekEvent } from './playback/VideoSeekEvent';
 import { PrequizUserAnswer } from './prequiz/PrequizUserAnswer';
-import { Role } from './Role';
 import { StorageFile } from './StorageFile';
 import { Task } from './Task';
 import { TeacherInfo } from './TeacherInfo';
-import { UserCourseAccessBridge } from './UserCourseAccessBridge';
 import { UserCourseBridge } from './UserCourseBridge';
-import { UserExamProgressBridge } from './UserExamProgressBridge';
 import { UserVideoProgressBridge } from './UserVideoProgressBridge';
-import { VideoPlaybackSample } from './VideoPlaybackSample';
 import { VideoRating } from './VideoRating';
 
 @Entity()
 export class User {
+
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'User'>;
 
     @IsDeletedFlag()
     @DeleteDateColumn()
-    deletionDate: Date;
+    @XViewColumn()
+    deletionDate: Date | null;
+
+    @Column({ default: false })
+    @XViewColumn()
+    isGod: boolean;
 
     @Column()
+    @XViewColumn()
     isInvitationAccepted: boolean;
 
     @Column({ type: 'text' })
+    @XViewColumn()
     registrationType: RegistrationType;
 
     // a trusted user has been invited to use the application,
     // users can join without invitation but they will be considered untrusted, 
     // thus cannot access the application, except the unprotected parts
     @Column()
+    @XViewColumn()
     isTrusted: boolean;
 
     @Column()
+    @XViewColumn()
     email: string;
 
     @Column({ nullable: true })
+    @XViewColumn()
     username: string;
 
     @Column()
+    @XViewColumn()
     firstName: string;
 
     @Column()
+    @XViewColumn()
     lastName: string;
 
-    @Column({ nullable: true })
-    phoneNumber: string;
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
+    phoneNumber: string | null;
 
-    @Column({ nullable: true })
-    userDescription: string;
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
+    userDescription: string | null;
 
-    @Column({ nullable: true })
-    linkedInUrl: string;
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
+    linkedInUrl: string | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     password: string;
 
     // tokens 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     refreshToken: string | null;
 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     resetPasswordToken: string | null;
 
-    @Column({ nullable: true, type: 'text' })
+    @Column({ type: 'text', nullable: true })
+    @XViewColumn()
     invitationToken: string | null;
 
-    // user activity 
-    @OneToOne(_ => UserActivityFlatView, x => x.user)
-    @JoinColumn({ name: 'id' })
-    userActivity: UserActivityFlatView;
-
-    // user role
-    @Column()
-    roleId: number;
-
-    @ManyToOne(_ => Role, x => x.users)
-    @JoinColumn({ name: 'role_id' })
-    role: Role;
+    // TO ONE
 
     // Avatar file
-    @Column({ nullable: true })
-    avatarFileId: number;
-
+    @Column({ type: 'int', nullable: true })
+    @XViewColumn()
+    avatarFileId: Id<'StorageFile'> | null;
     @ManyToOne(() => StorageFile, sf => sf.users)
     @JoinColumn({ name: 'avatar_file_id' })
-    avatarFile: StorageFile | null;
+    avatarFile: Relation<StorageFile> | null;
 
-    // Organization 
-    @Column({ nullable: true, type: 'number' })
-    organizationId: number | null;
-
-    @ManyToOne(() => Organization, organization => organization.users)
-    @JoinColumn({ name: 'organization_id' })
-    organization: Organization;
+    // company 
+    @Column()
+    @XViewColumn()
+    companyId: Id<'Company'>;
+    @ManyToOne(() => Company, x => x.users)
+    @JoinColumn({ name: 'company_id' })
+    company: Relation<Company>;
 
     // job title 
     @Column({ nullable: true, type: 'number' })
-    jobTitleId: number | null;
-
+    @XViewColumn()
+    jobTitleId: Id<'JobTitle'> | null;
     @ManyToOne(_ => JobTitle, x => x.users)
     @JoinColumn({ name: 'job_title_id' })
-    jobTitle: JobTitle | null;
+    jobTitle: Relation<JobTitle> | null;
+
+    // TO MANY
 
     // teacher info
     @OneToOne(_ => TeacherInfo, x => x.user)
-    teacherInfo: TeacherInfo;
+    teacherInfo: Relation<TeacherInfo>;
 
     // Tasks
     @OneToMany(() => Task, task => task.user)
     @JoinColumn()
-    tasks: Task[];
+    tasks: Relation<Task>[];
 
     // teacher
-    @OneToMany(() => Course, course => course.teacher)
+    @OneToMany(() => CourseData, course => course.teacher)
     @JoinColumn()
-    teachedCourses: Course[];
+    teachedCourses: Relation<CourseData>[];
+
+    // comment
+    @OneToMany(() => Comment, comment => comment.user)
+    @JoinColumn()
+    comments: Relation<Comment>[];
 
     // answer sessions
     @OneToMany(_ => AnswerSession, as => as.user)
     @JoinColumn()
-    answerSessions: AnswerSession[];
+    answerSessions: Relation<AnswerSession>[];
 
     // video playback samples 
     @OneToMany(_ => VideoPlaybackSample, x => x.user)
     @JoinColumn()
-    videoPlaybackSamples: VideoPlaybackSample[];
+    videoPlaybackSamples: Relation<VideoPlaybackSample>[];
+
+    // video seek events 
+    @XOneToMany<User>()(() => VideoSeekEvent, x => x.user)
+    @JoinColumn()
+    videoSeekEvents: Relation<VideoSeekEvent>[];
 
     // user course bridges 
     @OneToMany(_ => UserCourseBridge, x => x.user)
     @JoinColumn()
-    userCourseBridges: UserCourseBridge[];
+    userCourseBridges: Relation<UserCourseBridge>[];
+
+    // likes
+    @OneToMany(_ => Like, x => x.comment)
+    @JoinColumn()
+    likes: Relation<Like>[];
 
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activitySession)
-    coinAcquires: CoinTransaction[];
+    coinAcquires: Relation<CoinTransaction>[];
 
     // sessions
     @JoinColumn()
     @OneToMany(_ => ActivitySession, x => x.user)
-    activitySessions: ActivitySession[];
+    activitySessions: Relation<ActivitySession>[];
 
     // events 
     @JoinColumn()
     @OneToMany(_ => Event, x => x.user)
-    events: Event[];
+    events: Relation<Event>[];
 
     // courseAccessBridges
     @JoinColumn()
-    @OneToMany(_ => UserCourseAccessBridge, x => x.user)
-    courseAccessBridges: UserCourseAccessBridge[];
+    @OneToMany(_ => CourseAccessBridge, x => x.user)
+    courseAccessBridges: Relation<CourseAccessBridge>[];
 
     // discountCodes
     @JoinColumn()
     @OneToMany(_ => DiscountCode, x => x.user)
-    discountCodes: DiscountCode[];
+    discountCodes: Relation<DiscountCode>[];
 
     // ratings
     @JoinColumn()
     @OneToMany(_ => VideoRating, x => x.user)
-    videoRatings: VideoRating[];
+    videoRatings: Relation<VideoRating>[];
 
     // dailyTipOccurrences
     @JoinColumn()
     @OneToMany(_ => DailyTipOccurrence, x => x.user)
-    dailyTipOccurrences: DailyTipOccurrence[];
+    dailyTipOccurrences: Relation<DailyTipOccurrence>[];
 
     // answers 
     @OneToMany(_ => PrequizUserAnswer, x => x.question)
     @JoinColumn()
-    prequizAnswers: PrequizUserAnswer[];
+    prequizAnswers: Relation<PrequizUserAnswer>[];
 
     // courseRatingAnswers
     @OneToMany(_ => CourseRatingQuestionUserAnswer, x => x.user)
     @JoinColumn()
-    courseRatingAnswers: CourseRatingQuestionUserAnswer[];
+    courseRatingAnswers: Relation<CourseRatingQuestionUserAnswer>[];
 
     // videoProgressBridges
     @JoinColumn()
     @OneToMany(_ => UserVideoProgressBridge, x => x.user)
-    videoProgressBridges: UserVideoProgressBridge[];
+    videoProgressBridges: Relation<UserVideoProgressBridge>[];
 
-    // videoProgressBridges
+    // role assingments
     @JoinColumn()
-    @OneToMany(_ => UserExamProgressBridge, x => x.user)
-    examProgressBridges: UserExamProgressBridge[];
+    @OneToMany(_ => RoleAssignmentBridge, x => x.assigneeUser)
+    roleAssignmentBridges: Relation<RoleAssignmentBridge>[];
+
+    // companyOwnerBridges
+    @JoinColumn()
+    @OneToMany(_ => CompanyOwnerBridge, x => x.user)
+    companyOwnerBridges: Relation<CompanyOwnerBridge>[];
+
+    // video playback samples 
+    @OneToMany(_ => VideoPlaybackSession, x => x.user)
+    @JoinColumn()
+    videoPlaybackSessions: Relation<VideoPlaybackSession>[];
 }

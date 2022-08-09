@@ -1,19 +1,19 @@
 import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
-import { Select, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import { useContext, useState } from 'react';
-import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { useState } from 'react';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
 import { useShopItemCategories, useShopItems } from '../../services/api/shopApiService';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { Id } from '../../shared/types/versionId';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { useEpistoDialogLogic } from '../EpistoDialog';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { EpistoGrid } from '../controls/EpistoGrid';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoSearch } from '../universal/EpistoSearch';
 import { ShopItem } from './ShopItem';
 import { ShopPurchaseConfirmationDialog } from './ShopPurchaseConfirmationDialog';
@@ -25,17 +25,15 @@ export const ShopPage = () => {
     const { shopItemCategories } = useShopItemCategories();
     const { coinBalance, refetchCoinBalance } = useCoinBalance();
 
-    const user = useContext(CurrentUserContext)!;
-
-    const [categoryFilterId, setCategoryFilterId] = useState(-1);
+    const [categoryFilterId, setCategoryFilterId] = useState<Id<'ShopItemCategory'>>(Id.create<'ShopItemCategory'>(-1));
     const [currentShopItem, setCurrentShopItem] = useState<null | ShopItemDTO>(null);
 
-    const confirmationDilaogLogic = useEpistoDialogLogic('confirm', { defaultCloseButtonType: 'top' });
+    const confirmationDilaogLogic = useEpistoDialogLogic('confirm');
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
     const filteredItems = shopItems
-        .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === -1);
+        .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === Id.create<'ShopItemCategory'>(-1));
 
     const hasItems = filteredItems.length > 0;
 
@@ -57,9 +55,7 @@ export const ShopPage = () => {
             }} />
 
         {/* category filters left pane */}
-        <LeftPane
-            direction="column"
-            align="stretch">
+        <LeftPane>
 
             {/* categories title */}
             <EpistoFont
@@ -81,7 +77,7 @@ export const ShopPage = () => {
                 }}
                 orientation={'vertical'}>
 
-                {[{ id: -1, name: 'Mutasd mindet' }]
+                {[{ id: Id.create<'ShopItemCategory'>(-1), name: 'Mutasd mindet' }]
                     .concat(shopItemCategories)
                     .map((category, index) => {
 
@@ -118,7 +114,7 @@ export const ShopPage = () => {
         </LeftPane>
 
         {/* content */}
-        <ContentPane>
+        <ContentPane noMaxWidth>
             <Flex
                 id="coursesPanelRoot"
                 direction="column"
@@ -141,7 +137,6 @@ export const ShopPage = () => {
                         pr="20px"
                         minWidth="300px">
                         <ProfileImage
-                            url={user.avatarUrl}
                             cursor="pointer"
                             className="square50"
                             style={{

@@ -10,25 +10,31 @@ practise_question_spent_time AS
 		(COUNT(ga.id) * 15)::integer spent_seconds 
 	FROM public.user u
 
-	LEFT JOIN public.answer_session ase
-	ON ase.user_id = u.id AND ase.type = 'practise'
+	LEFT JOIN public.answer_session_view asv
+	ON asv.user_id = u.id AND asv.answer_session_type = 'practise'
 
 	LEFT JOIN 
 	(
 		SELECT 
 			ga.id,
-			v.course_id,
+			cv.course_id,
 			ga.answer_session_id,
 			DATE_TRUNC('day', ga.creation_date) creation_date
 		FROM public.given_answer ga
 	
-		LEFT JOIN public.question q
-		ON q.id = ga.question_id
+		LEFT JOIN public.question_version qv
+		ON qv.id = ga.question_version_id
 
-		LEFT JOIN public.video v
-		ON v.id = q.video_id
+		LEFT JOIN public.video_version vv
+		ON vv.id = qv.video_version_id
+		
+		LEFT JOIN public.module_version mv
+		ON mv.id = vv.module_version_id
+		
+		LEFT JOIN public.course_version cv
+		ON cv.id = mv.course_version_id
 	) ga
-	ON ga.answer_session_id = ase.id
+	ON ga.answer_session_id = asv.answer_session_id
 
 	WHERE ga.id IS NOT NULL
 	
@@ -48,39 +54,49 @@ exam_spent_time AS
 (
 	SELECT 
 		u.id user_id,
-		e.course_id,
-		ase.creation_date,
-		SUM(ase.elapsed_seconds) spent_seconds
+		asv.course_id,
+		asv.creation_date,
+		SUM(asv.elapsed_seconds) spent_seconds
 	FROM public.user u
 
 	LEFT JOIN 
 	(
 		SELECT 
-			ase.id,
-			ase.user_id,
-			ase.exam_id,
-			DATE_TRUNC('day', ase.end_date) creation_date,
-			EXTRACT(EPOCH FROM ase.end_date - start_date) elapsed_seconds	
-		FROM public.answer_session ase
+			asv.answer_session_id,
+			asv.user_id,
+			cv.course_id,
+			ev.exam_id,
+			DATE_TRUNC('day', asv.end_date) creation_date,
+			EXTRACT(EPOCH FROM asv.end_date - start_date) elapsed_seconds	
+		FROM public.answer_session_view asv
+		
+		LEFT JOIN public.exam_version ev
+		ON ev.id = asv.exam_version_id
+		
+		LEFT JOIN public.module_version mv
+		ON mv.id = ev.module_version_id
+		
+		LEFT JOIN public.course_version cv
+		ON cv.id = mv.course_version_id
 
-		WHERE ase.start_date IS NOT NULL AND ase.end_date IS NOT NULL 
-	) ase
-	ON ase.user_id = u.id
+		WHERE asv.start_date IS NOT NULL AND asv.end_date IS NOT NULL 
+	) asv
+	ON asv.user_id = u.id
 
 	LEFT JOIN public.exam e
-	ON e.id = ase.exam_id
+	ON e.id = asv.exam_id
 
 	WHERE e.id <> 1 AND e.id IS NOT NULL
 
 	GROUP BY
 		u.id,
-		e.course_id,
-		ase.creation_date
+		asv.course_id,
+		asv.creation_date
 
 	ORDER BY
 		u.id,
-		e.course_id,
-		ase.creation_date
+		asv.course_id,
+		asv.creation_date
 ),
 
 -- video watch spent time 
@@ -88,7 +104,7 @@ video_watch_spent_time AS
 (
 	SELECT 
 		u.id user_id,
-		v.course_id,
+		vps.course_id,
 		vps.creation_date,
 		COALESCE(SUM(vps.elapsed_seconds), 0) spent_seconds
 	FROM public.user u
@@ -99,9 +115,19 @@ video_watch_spent_time AS
 			vps.id,
 			DATE_TRUNC('day', vps.creation_date) creation_date,
 			vps.user_id,
-			vps.video_id,
+			vv.video_id,
+			cv.course_id,
 			vps.to_seconds - vps.from_seconds elapsed_seconds
 		FROM public.video_playback_sample vps
+		
+		LEFT JOIN public.video_version vv
+		ON vv.id = vps.video_version_id
+		
+		LEFT JOIN public.module_version mv
+		ON mv.id = vv.module_version_id
+		
+		LEFT JOIN public.course_version cv
+		ON cv.id = mv.course_version_id
 	) vps
 	ON vps.user_id = u.id
 	
@@ -112,12 +138,12 @@ video_watch_spent_time AS
 	
 	GROUP BY
 		u.id,
-		v.course_id,
+		vps.course_id,
 		vps.creation_date
 
 	ORDER BY
 		u.id,
-		v.course_id,
+		vps.course_id,
 		vps.creation_date
 ),
 
@@ -126,14 +152,14 @@ video_question_spent_time AS
 (
 	SELECT 
 		u.id user_id,
-		v.course_id course_id,
+		cv.course_id course_id,
 		ga.creation_date,
 		COALESCE(SUM(ga.elapsed_seconds), 0) spent_seconds
 	FROM public.user u
 
-	LEFT JOIN public.answer_session ase
-	ON ase.video_id IS NOT NULL 
-		AND ase.user_id = u.id
+	LEFT JOIN public.answer_session_view asv
+	ON asv.video_version_id IS NOT NULL 
+		AND asv.user_id = u.id
 
 	LEFT JOIN 
 	(
@@ -144,21 +170,27 @@ video_question_spent_time AS
 			DATE_TRUNC('day', ga.creation_date) creation_date
 		FROM public.given_answer ga
 	) ga
-	ON ga.answer_session_id = ase.id
+	ON ga.answer_session_id = asv.answer_session_id
 
-	LEFT JOIN public.video v
-	ON v.id = ase.video_id
+	LEFT JOIN public.video_version vv
+	ON vv.id = asv.video_version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
 
 	WHERE ga.creation_date IS NOT NULL
 
 	GROUP BY
 		u.id,
-		v.course_id,
+		cv.course_id,
 		ga.creation_date
 
 	ORDER BY
 		u.id,
-		v.course_id,
+		cv.course_id,
 		ga.creation_date
 )
 

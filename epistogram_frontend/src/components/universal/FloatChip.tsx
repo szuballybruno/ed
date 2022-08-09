@@ -1,4 +1,5 @@
-import { FlexProps, Text } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
+import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 
 export const FloatChip = (props: FlexProps & { name: string, icon: any }) => {
@@ -12,11 +13,15 @@ export const FloatChip = (props: FlexProps & { name: string, icon: any }) => {
         margin="5px"
         {...css}>
         <svg width="40px"
-color={css.color as any ?? 'var(--epistoTeal)'}>
+            color={css.color as any ?? 'var(--epistoTeal)'}>
             {icon}
         </svg>
-        <Text as="text"
-fontSize="small"
-mr="10px">{name}</Text>
+        <EpistoFont
+            style={{
+                fontSize: 'small',
+                marginRight: '10px'
+            }}>
+            {name}
+        </EpistoFont>
     </FlexFloat>;
 };

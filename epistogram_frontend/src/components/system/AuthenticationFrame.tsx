@@ -1,65 +1,118 @@
 import { createContext, useEffect } from 'react';
-import { hotjar } from 'react-hotjar';
-import { isLocalhost, oneSignalAppId, verboseLogging } from '../../static/Environemnt';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
+import { useNavigation } from '../../services/core/navigatior';
 import { UserDTO } from '../../shared/dtos/UserDTO';
-import setTheme from '../../services/core/setTheme';
-import OneSignal from 'react-onesignal';
-import { useLocation } from 'react-router-dom';
-import { AuthenticationStateType, useRenewUserSessionPooling, useUserFetching } from '../../services/api/authenticationApiService';
+import { PermissionCodeType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
+import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
+import { AuthorizationContext, getAuthorizationContextLogic, useAuthorizationContext } from './AuthorizationContext';
 
-export const CurrentUserContext = createContext<UserDTO | null>(null);
+const userDefaults: UserDTO = {
+    avatarUrl: '',
+    companyId: Id.create<'Company'>(-1),
+    email: '',
+    firstName: '',
+    id: Id.create<'User'>(-1),
+    isInvitationAccepted: true,
+    isTrusted: true,
+    jobTitle: {
+        id: Id.create<'JobTitle'>(-1),
+        name: ''
+    },
+    lastName: '',
+    name: '',
+    phoneNumber: ''
+};
+
+export const CurrentUserContext = createContext<UserDTO>(userDefaults);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
 export const AuthenticationStateContext = createContext<AuthenticationStateType>('loading');
 
-export const AuthenticationFrame = (props) => {
+const AuthFirewall = (props: PropsWithChildren & {
+    authState: AuthenticationStateType
+}): JSX.Element => {
 
-    //SET THEME
-    setTheme('nextGenTheme');
+    const { authState, children } = props;
+    const dest = useCurrentUrlPathname();
+    const loginRoute = applicationRoutes.loginRoute;
+    const signupRoute = applicationRoutes.signupRoute;
+    const { navigate } = useNavigation();
+    const currentRoute = useGetCurrentAppRoute();
+    const { hasPermission } = useAuthorizationContext();
+    const isUnauthorized = !!currentRoute.isUnauthorized;
 
-    // initialize hotjar
-    if (!isLocalhost) {
+    // check for error before render, redirect to login if necessary
+    useEffect(() => {
 
-        console.log('Initing hotjar');
-        hotjar.initialize(2675412, 6);
+        // error
+        if (authState === 'error') {
+
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
+
+            navigate(loginRoute);
+        }
+    }, [authState]);
+
+    Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
+
+    // if loading return blank page
+    if (authState === 'loading') {
+
+        Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering empty div until loaded.`);
+
+        return <div></div>;
     }
 
-    // initialzie OneSignal
-    // This appId only work on dev
-    useEffect(() => {
+    // check authentication 
+    if (authState === 'forbidden' && !isUnauthorized) {
 
-        if (!oneSignalAppId)
-            return;
+        Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
 
-        OneSignal
-            .init({
-                appId: oneSignalAppId
-            });
-    }, []);
+        navigate(loginRoute, undefined, { dest });
+
+        return <div></div>;
+    }
+
+    // check authorization
+    const canAccess = hasPermission('ACCESS_APPLICATION');
+    const ignoreAccessAppRestriction = !!currentRoute.ignoreAccessAppRestriction;
+    if (!canAccess && !ignoreAccessAppRestriction && !isUnauthorized) {
+
+        Logger.logScoped('AUTH', `canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
+        Logger.logScoped('AUTH', `Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
+
+        navigate(signupRoute, undefined);
+
+        return <div></div>;
+    }
+
+    Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering content...`);
+
+    return <>
+        {children}
+    </>;
+};
+
+export const AuthenticationFrame = (props) => {
 
     // start auth pooling
-    const { isSuccess } = useRenewUserSessionPooling();
+    const { authData, authState, refetchAuthHandshake } = useGetAuthHandshake();
 
-    if (verboseLogging)
-        console.log('Renewing token: ' + isSuccess);
+    Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
-    // fetch current user
-    const { currentUser, refetchUserAsync, authState } = useUserFetching(isSuccess);
-
-    if (verboseLogging)
-        console.log('Authentication state: ' + authState);
-
-    // refetch user on route change
-    const location = useLocation();
-
-    useEffect(() => {
-
-        refetchUserAsync();
-    }, [location.pathname]);
+    // authorization context 
+    const authContextData = getAuthorizationContextLogic(authData?.permissions ?? []);
 
     return <AuthenticationStateContext.Provider value={authState}>
-        <RefetchUserAsyncContext.Provider value={refetchUserAsync}>
-            <CurrentUserContext.Provider value={currentUser}>
-                {props.children}
+        <RefetchUserAsyncContext.Provider value={() => refetchAuthHandshake()}>
+            <CurrentUserContext.Provider value={authData?.currentUser ?? userDefaults}>
+                <AuthorizationContext.Provider value={authContextData}>
+                    <AuthFirewall authState={authState}>
+                        {props.children}
+                    </AuthFirewall>
+                </AuthorizationContext.Provider>
             </CurrentUserContext.Provider>
         </RefetchUserAsyncContext.Provider>
     </AuthenticationStateContext.Provider> as JSX.Element;

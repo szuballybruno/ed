@@ -1,4 +1,7 @@
 import { ReactNode } from 'react';
+import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
+import { HasPermissionFnType } from '../components/system/AuthorizationContext';
+import { trimEndChar } from '../shared/logic/sharedLogic';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -15,7 +18,9 @@ export class EpistoRoute {
 
     constructor(root: string, relativePath: string, matchMore?: '*') {
 
-        this._absolutePath = this.removeDuplicateBreak(root + '/' + relativePath);
+        this._absolutePath = trimEndChar(this
+            .removeDuplicateBreak(root + '/' + relativePath), '/');
+
         this._relativePath = relativePath;
         this._matchMore = !!matchMore;
     }
@@ -30,33 +35,35 @@ export class EpistoRoute {
         return this.removeDuplicateBreak(this._relativePath + (this._matchMore ? '/*' : ''));
     }
 
+    isMatchMore() {
+
+        return this._matchMore;
+    }
+
     private removeDuplicateBreak(path: string) {
 
         return path.replaceAll('//', '/');
     }
 }
 
-export type ApplicationRoute = {
+export type ApplicationRoute<T = void> = {
     title: string;
     route: EpistoRoute;
     icon?: JSX.Element;
     navAction?: () => void;
+    paramsType?: T;
+    isUnauthorized?: boolean;
+    ignoreAccessAppRestriction?: boolean;
+    isAuthoirziedToVisit?: (hasPermission: HasPermissionFnType) => boolean
 }
 
-export type DialogOptions<TParams> = {
-    title?: string;
-    description?: string;
-    buttons?: ButtonType[];
-    defaultCloseButtonType?: 'none' | 'bottom' | 'top';
-    params?: TParams;
-}
-
-export type ButtonType = {
+export type ButtonType<T = undefined> = {
     title: string,
     icon?: ReactNode,
-    action: () => void,
-    disabled?: boolean
-}
+    disabled?: boolean,
+    action?: T extends undefined ? () => void : (params: T) => void,
+    variant?: EpistoButtonPropsType['variant']
+};
 
 export type VolumeSettingsType = {
     volume: number;

@@ -1,50 +1,59 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { AnswerSessionType } from '../../shared/types/sharedTypes';
-import { Exam } from './Exam';
+import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { ExamVersion } from './exam/ExamVersion';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
-import { Video } from './Video';
+import { VideoVersion } from './video/VideoVersion';
 
 @Entity()
 export class AnswerSession {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'AnswerSession'>;
 
-    @Column({ nullable: true, type: 'timestamptz' })
-    startDate: Date | null;
+    @Column({ type: 'timestamptz' })
+    @XViewColumn()
+    startDate: Date;
 
-    @Column({ nullable: true, type: 'timestamptz' })
-    endDate: Date | null;
+    @Column()
+    @XViewColumn()
+    isPractise: boolean;
 
-    @Column({ default: 'exam' as AnswerSessionType })
-    type: AnswerSessionType;
+    //
+    // TO MANY
+    //
 
     // given answers
     @OneToMany(_ => GivenAnswer, x => x.answerSession)
     @JoinColumn()
     givenAnswers: GivenAnswer[];
 
+    //
+    // TO ONE
+    //
+
     // exam
     @Column({ nullable: true })
-    examId: number | null;
-
-    @ManyToOne(_ => Exam, e => e.answerSessions)
-    @JoinColumn({ name: 'exam_id' })
-    exam: Exam | null;
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'> | null;
+    @XManyToOne<AnswerSession>()(() => ExamVersion, e => e.answerSessions)
+    @XJoinColumn<AnswerSession>('examVersionId')
+    examVersion: ExamVersion | null;
 
     // video 
     @Column({ nullable: true })
-    videoId: number | null;
-
-    @ManyToOne(_ => Video, e => e.answerSessions)
-    @JoinColumn({ name: 'video_id' })
-    video: Video | null;
+    @XViewColumn()
+    videoVersionId: Id<'VideoVersion'> | null;
+    @XManyToOne<AnswerSession>()(() => VideoVersion, x => x.answerSessions)
+    @XJoinColumn<AnswerSession>('videoVersionId')
+    videoVersion: VideoVersion | null;
 
     // user 
     @Column({ nullable: true })
-    userId: number | null;
-
+    @XViewColumn()
+    userId: Id<'User'> | null;
     @ManyToOne(_ => User, e => e.answerSessions)
     @JoinColumn({ name: 'user_id' })
     user: User | null;

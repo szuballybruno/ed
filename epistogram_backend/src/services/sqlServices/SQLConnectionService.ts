@@ -1,52 +1,50 @@
-import { Pool, QueryResult } from 'pg';
-import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { log } from '../misc/logger';
+import Postgres from 'pg';
+import { LoggerService } from '../LoggerService';
+import { SQLPoolService } from './SQLPoolService';
 
-export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<QueryResult<any>>;
+export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Postgres.QueryResult<any>>;
 
 export class SQLConnectionService {
 
-    private _pool: Pool;
-    private _config: GlobalConfiguration;
+    private _client: Postgres.PoolClient | null;
 
-    constructor(config: GlobalConfiguration) {
+    constructor(
+        private _poolService: SQLPoolService,
+        private _loggerService: LoggerService) {
 
-        this._config = config;
     }
 
-    async establishConnectionAsync() {
+    async createConnectionClientAsync() {
 
-        log('Connecting to SQL...');
+        this._loggerService.logScoped('TRANSACTION', 'SECONDARY', 'Connecting postgres client...');
+        this._client = await this._poolService.connectClientAsync();
+    }
 
-        const dbConfig = this._config
-            .getDatabaseConnectionParameters();
+    releaseConnectionClient() {
 
-        const pool = new Pool({
-            port: dbConfig.port,
-            host: dbConfig.host,
-            user: dbConfig.username,
-            database: dbConfig.databaseName,
-            password: dbConfig.password,
-        });
+        this._loggerService.logScoped('TRANSACTION', 'Releasing postgres client...');
+        this._client?.release();
+    }
 
-        // listen to errors 
-        pool.on('error', x => console.error(x));
+    async endPoolAsync() {
 
-        // test connection
-        await pool.query('CREATE TABLE IF NOT EXISTS public."connection_test_table" ("columnA" integer);');
-
-        this._pool = pool;
+        await this._poolService.endPool();
     }
 
     executeSQLAsync = async (sql: string, values?: any[]) => {
 
         try {
 
-            return await this._pool.query(sql, values);
-        }
-        catch (e) {
+            if (!this._client)
+                throw new Error('Trying to use a disconnected postgres client!');
 
-            const err = e as any;
+            return await this._client
+                .query(sql, values);
+        }
+        catch (err: any) {
+
+            // this._loggerService.logScoped('GENERIC', 'ERROR', err.message);
+            // this._loggerService.logScoped('GENERIC', 'ERROR', err.stack);
             throw new Error(`Message: ${err.message} Detail: ${err.detail}`);
         }
     };

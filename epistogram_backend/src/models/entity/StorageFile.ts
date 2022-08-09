@@ -1,23 +1,33 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Course } from './Course';
-import { CourseModule } from './CourseModule';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
+import { CourseData } from './course/CourseData';
+import { ModuleData } from './module/ModuleData';
 import { ShopItem } from './ShopItem';
 import { User } from './User';
-import { Video } from './Video';
+import { VideoData } from './video/VideoData';
+import { VideoFile } from './video/VideoFile';
 
 @Entity()
 export class StorageFile {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'StorageFile'>;
 
     @Column()
+    @XViewColumn()
     filePath: string;
 
-    // videos
-    @OneToMany(type => Video, v => v.videoFile)
-    @JoinColumn()
-    videos: Video[];
+    // TO MANY
+
+    // video files
+    @XOneToMany<StorageFile>()(() => VideoFile, v => v.storageFile)
+    videoFiles: VideoFile[];
+
+    // videos 
+    @XOneToMany<StorageFile>()(() => VideoData, x => x.thumbnailFile)
+    videos: VideoData[];
 
     // users
     @OneToMany(type => User, u => u.avatarFile)
@@ -25,9 +35,9 @@ export class StorageFile {
     users: User[];
 
     // course
-    @OneToMany(_ => Course, c => c.coverFile)
+    @OneToMany(_ => CourseData, c => c.coverFile)
     @JoinColumn()
-    courses: Course[];
+    courses: CourseData[];
 
     // shop items
     @OneToMany(_ => ShopItem, x => x.coverFile)
@@ -35,6 +45,6 @@ export class StorageFile {
     shopItems: ShopItem[];
 
     // course module 
-    @OneToOne(_ => CourseModule, x => x.imageFile)
-    courseModule: CourseModule;
+    @OneToOne(_ => ModuleData, x => x.imageFile)
+    courseModule: Relation<ModuleData>;
 }

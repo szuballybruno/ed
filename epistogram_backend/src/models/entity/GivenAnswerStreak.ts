@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { CoinTransaction } from './CoinTransaction';
 import { GivenAnswer } from './GivenAnswer';
 import { User } from './User';
@@ -7,25 +9,32 @@ import { User } from './User';
 export class GivenAnswerStreak {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'GivenAnswerStreak'>;
 
     @Column()
+    @XViewColumn()
     isFinalized: boolean;
 
-    // user 
-    userId: number;
+    // TO ONE
 
+    // user 
+    @Column()
+    @XViewColumn()
+    userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.activitySessions)
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user: Relation<User>;
+
+    // TO MANY
 
     // given answers
     @JoinColumn()
     @OneToMany(_ => GivenAnswer, x => x.givenAnswerStreak)
-    givenAnswers: GivenAnswer[];
+    givenAnswers: Relation<GivenAnswer>[];
 
     // coin acquires 
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.activitySession)
-    coinAcquires: CoinTransaction[];
+    coinAcquires: Relation<CoinTransaction>[];
 }

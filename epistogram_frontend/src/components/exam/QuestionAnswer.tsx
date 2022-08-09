@@ -1,5 +1,5 @@
 import { FlexProps } from '@chakra-ui/layout';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 
@@ -7,10 +7,11 @@ export const QuestionAnswer = (props: {
     onClick?: (selected: boolean) => void,
     isSelected: boolean,
     answerText: string,
+    minWidth?: number,
     isCorrect?: boolean
 } & FlexProps) => {
 
-    const { onClick, isSelected, isCorrect, answerText, ...css } = props;
+    const { onClick, isSelected, isCorrect, answerText, minWidth, ...css } = props;
 
     const getBgColor = () => {
 
@@ -29,7 +30,7 @@ export const QuestionAnswer = (props: {
     return <FlexFloat
         alignItems={'center'}
         borderRadius={7}
-        minWidth={150}
+        minWidth={minWidth || 150}
         cursor={onClick ? 'pointer' : undefined}
         onClick={onClick ? () => onClick(!isSelected) : undefined}
         style={{

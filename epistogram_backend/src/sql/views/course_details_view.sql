@@ -1,21 +1,21 @@
 SELECT 
 	co.id course_id,
 	u.id user_id,
-    co.title title,
-    co.short_description short_description,
-    co.description description,
-    co.difficulty difficulty,
-    co.benchmark benchmark,
-    co.previously_completed_count previously_completed_count,
-    co.language language_name,
-    co.technical_requirements technical_requirements,
-	co.skill_benefits skill_benefits,
-	co.visibility visibility,
-	co.human_skill_benefits human_skill_benefits,
-	co.human_skill_benefits_description human_skill_benefits_description,
-	co.modification_date modification_date,
-	cv.stage_name stage_name,
-	cv.current_item_code current_item_code,
+    cd.title title,
+    cd.short_description short_description,
+    cd.description description,
+    cd.difficulty difficulty,
+    cd.benchmark benchmark,
+    cd.previously_completed_count previously_completed_count,
+    cd.language language_name,
+    cd.technical_requirements technical_requirements,
+	cd.skill_benefits skill_benefits,
+	cd.visibility visibility,
+	cd.human_skill_benefits human_skill_benefits,
+	cd.human_skill_benefits_description human_skill_benefits_description,
+	cd.modification_date modification_date,
+	ucb.current_item_code,
+	ucb.stage_name,
 	
 	-- cat 
 	cc.id category_id,
@@ -47,50 +47,72 @@ SELECT
 	
 	-- calculated
 	(
-		SELECT COALESCE(COUNT(v.id), 0)::int
-		FROM public.video v 
-		LEFT JOIN public.course_module cm
-		ON cm.course_id = co.id AND cm.id = v.module_id
-		WHERE cm.course_id = co.id
+		SELECT cvcv.video_count
+		FROM public.course_video_count_view cvcv
+		WHERE cvcv.course_version_id = cv.id
 	) total_video_count,
 	(
-		SELECT COALESCE(SUM(v.length_seconds), 0)::int
-		FROM public.video v 
-		LEFT JOIN public.course_module cm
-		ON cm.course_id = co.id AND cm.id = v.module_id
-		WHERE cm.course_id = co.id
+		SELECT cvlv.sum_length_seconds
+		FROM public.course_video_length_view cvlv
+		WHERE cvlv.course_version_id = cv.id
 	) total_video_sum_length_seconds,
 	(
-		SELECT COALESCE(COUNT(cm.id), 0)::int
-		FROM public.course_module cm
-		WHERE cm.course_id = co.id
+		SELECT 
+			COALESCE(COUNT(mo.id), 0)::int
+		FROM public.module mo
+		
+		LEFT JOIN public.module_version mv
+		ON mv.id = mo.id
+		
+		LEFT JOIN public.course_version cv
+		ON cv.id = mv.course_version_id
+		
+		LEFT JOIN public.course lco
+		ON lco.id = cv.course_id
+		
+		WHERE lco.id = co.id
 	) total_module_count,
 	(
-		SELECT COALESCE(COUNT(q.id), 0)::int
+		SELECT 
+			COALESCE(COUNT(qv.id), 0)::int
 		FROM public.video v 
-		LEFT JOIN public.course_module cm
-		ON cm.course_id = co.id AND cm.id = v.module_id
-		LEFT JOIN public.question q
-		ON q.video_id = v.id
-		WHERE cm.course_id = co.id
+		
+		LEFT JOIN public.video_version vv
+		ON vv.video_id = v.id
+		
+			LEFT JOIN public.module_version mv
+		ON mv.id = vv.module_version_id
+		
+		LEFT JOIN public.course_version cv
+		ON cv.id = mv.course_version_id
+		
+		LEFT JOIN public.course lco
+		ON lco.id = cv.course_id
+		
+		LEFT JOIN public.question_version qv
+		ON qv.video_version_id = vv.id
+		
+		WHERE lco.id = co.id
 	) total_video_question_count,
-	(
-		SELECT (cv.can_view)
-		FROM public.course_view cv
-		WHERE (cv.user_id = u.id AND cv.course_id = co.id)
-	) can_start_course
+	true can_start_course
 FROM public.course co
+
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = lcvv.version_id
+
+LEFT JOIN public.course_data cd
+ON cd.id = cv.course_data_id
 
 CROSS JOIN public.user u
 
-LEFT JOIN public.course_view cv
-ON cv.user_id = u.id AND cv.course_id = co.id
-
 LEFT JOIN public.storage_file sf
-ON sf.id = co.cover_file_id
+ON sf.id = cd.cover_file_id
 
 LEFT JOIN public.user tuser
-ON tuser.id = co.teacher_id
+ON tuser.id = cd.teacher_id
 
 LEFT JOIN public.storage_file tavatarsf
 ON tavatarsf.id = tuser.avatar_file_id
@@ -99,10 +121,14 @@ LEFT JOIN public.teacher_info tinfo
 ON tinfo.user_id = tuser.id
 
 LEFT JOIN public.course_category cc
-ON cc.id = co.category_id
+ON cc.id = cd.category_id
+
+LEFT JOIN public.user_course_bridge ucb
+ON ucb.user_id = u.id
+AND ucb.course_id = co.id
 
 LEFT JOIN public.course_category scc
-ON scc.id = co.sub_category_id
+ON scc.id = cd.sub_category_id
 	
 ORDER BY
 	u.id,

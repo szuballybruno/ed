@@ -1,22 +1,28 @@
+WITH 
+sq as 
+(
+    SELECT 
+        ucb.*,
+        ucb.id IS NOT NULL has_bridge,
+        ccv.user_id IS NOT NULL is_completed
+    FROM public.course co
+
+    CROSS JOIN public.user u
+
+    LEFT JOIN public.course_completion_view ccv
+    ON ccv.course_id = co.id
+    AND ccv.user_id = u.id
+        
+    INNER JOIN public.user_course_bridge ucb
+    ON ucb.user_id = u.id
+    AND ucb.course_id = co.id
+)
 SELECT 
-	"course"."id" AS "course_id",
-	"user"."id" AS "user_id",
-	"ucb"."id" IS NOT NULL AS "is_started",
-	"ecv"."has_successful_session" AS "is_completed"
-FROM public."course" 
-
-LEFT JOIN public."user"
-ON 1 = 1
-
-LEFT JOIN public."exam_completed_view" AS "ecv"
-ON "ecv"."course_id" = "course"."id"
-	AND "ecv"."user_id" = "user"."id"
-	AND "ecv"."is_final_exam" = true
-	
-LEFT JOIN public."user_course_bridge" AS "ucb"
-ON "ucb"."user_id" = "user"."id"
-	AND "ucb"."course_id" = "course"."id"
-	
+    sq.*,
+    --COALESCE(sq.is_current, false) is_current,
+    sq.has_bridge = true AND sq.is_completed = false in_progress
+FROM sq
+    
 ORDER BY 
-	"user"."id",
-	"course"."id"
+    sq.user_id,
+    sq.course_id

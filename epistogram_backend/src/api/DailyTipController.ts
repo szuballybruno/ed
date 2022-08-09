@@ -1,51 +1,62 @@
 import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
 import { DailyTipService } from '../services/DailyTipService';
-import { ActionParams } from '../utilities/helpers';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { Id } from '../shared/types/versionId';
 
 export class DailyTipController {
 
     private _dailyTipService: DailyTipService;
 
-    constructor(dailyTipService: DailyTipService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._dailyTipService = dailyTipService;
+        this._dailyTipService = serviceProvider.getService(DailyTipService);
     }
 
+    @XControllerAction(apiRoutes.dailyTip.getDailyTip, { isPost: true })
     deleteDailyTipAction = async (params: ActionParams) => {
 
-        const tipId = params
-            .getBody<any>()
-            .getValue(x => x.dailyTipId, 'int');
+        const tipId = Id
+            .create<'DailyTip'>(params
+                .getBody<any>()
+                .getValue(x => x.dailyTipId, 'int'));
 
         await this._dailyTipService
-            .deleteDailyTipAsync(tipId);
+            .deleteDailyTipAsync(params.principalId, tipId);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.createDailyTip, { isPost: true })
     createDailyTipAction = async (params: ActionParams) => {
 
         const body = params
             .getBody<any>();
 
-        const personalityTraitCategoryId = body
-            .getValue(x => x.personalityTraitCategoryId, 'int');
+        const personalityTraitCategoryId = Id
+            .create<'PersonalityTraitCategory'>(body
+                .getValue(x => x.personalityTraitCategoryId, 'int'));
 
         const isMax = body
             .getValue(x => x.isMax, 'boolean');
 
         await this._dailyTipService
-            .createDailyTipAsync(personalityTraitCategoryId, isMax);
+            .createDailyTipAsync(params.principalId, personalityTraitCategoryId, isMax);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.getDailyTipEditData)
     getDailyTipEditDataAction = async (params: ActionParams) => {
 
-        const dailyTipId = params
-            .getQuery<any>()
-            .getValue(x => x.dailyTipId, 'int');
+        const dailyTipId = Id
+            .create<'DailyTip'>(params
+                .getQuery<any>()
+                .getValue(x => x.dailyTipId, 'int'));
 
         return await this._dailyTipService
-            .getDailyTipEditDataAsync(dailyTipId);
+            .getDailyTipEditDataAsync(params.principalId, dailyTipId);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.saveDailyTip, { isPost: true })
     saveDailyTipAction = async (params: ActionParams) => {
 
         const dto = params
@@ -53,12 +64,13 @@ export class DailyTipController {
             .data;
 
         return await this._dailyTipService
-            .saveDailyTipAsync(dto);
+            .saveDailyTipAsync(params.principalId, dto);
     };
 
+    @XControllerAction(apiRoutes.dailyTip.getDailyTip)
     getDailyTipAction = async (params: ActionParams) => {
 
         return await this._dailyTipService
-            .getDailyTipAsync(params.currentUserId);
+            .getDailyTipAsync(params.principalId);
     };
 }

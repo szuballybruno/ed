@@ -1,15 +1,14 @@
-import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { Done, LocalOffer } from '@mui/icons-material';
-import { Typography } from '@mui/material';
 import React from 'react';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
-import { getAssetUrl } from '../../static/frontendHelpers';
+
 import { translatableTexts } from '../../static/translatableTexts';
-import StarsIcon from '@mui/icons-material/Stars';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';
 import { EpistoFont } from '../controls/EpistoFont';
+import { Environment } from '../../static/Environemnt';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -48,9 +47,9 @@ export const ShopItem = (props: {
 
         {/* cover image box */}
         <Box flex="7"
-position="relative"
-minH={150}
-maxH={150}>
+            position="relative"
+            minH={150}
+            maxH={150}>
 
             {/* cover image */}
             <img
@@ -84,18 +83,16 @@ maxH={150}>
                 }} />
 
                 <EpistoFont
-                    classes={['fontLight']}
+                    color="fontLight"
                     isUppercase
                     fontSize="fontSmall"
-                    style={{
-                        fontWeight: 500
-                    }}>
+                    fontWeight="normal">
 
                     Megvásárolva
                 </EpistoFont>
             </Flex>}
 
-           {/*  purchase overlay 
+            {/*  purchase overlay 
             {isPurchased && <Flex
                 className="whall"
                 position="absolute"
@@ -125,15 +122,17 @@ maxH={150}>
 
         {/* title */}
         <Box flex="3"
-flexBasis="80px"
-zIndex={1}>
+            flexBasis="80px"
+            zIndex={1}>
 
             <Flex direction="column"
-p="10px" >
+                p="10px" >
 
                 {/* category  */}
-                <EpistoFont classes={['fontGrey']}
-fontSize="fontSmall">
+                <EpistoFont
+                    color='fontGray'
+                    fontSize="fontSmall">
+
                     {shopItemCategoryName}
                 </EpistoFont>
 
@@ -152,8 +151,8 @@ fontSize="fontSmall">
         {/* prices */}
         {!isPurchased &&
             <Flex alignItems={'center'}
-justifyContent={'center'}
-mb="5px">
+                justifyContent={'center'}
+                mb="5px">
                 <Flex alignItems={'center'}>
                     <LocalOffer style={{
                         height: 17,
@@ -170,8 +169,8 @@ mb="5px">
                             height: 20,
                             margin: 2
                         }}
-                        src={getAssetUrl('/images/epistoCoin.png')}
-alt={''} />
+                        src={Environment.getAssetUrl('/images/epistoCoin.png')}
+                        alt={''} />
 
                     {/* currency price
                 {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}*/}
@@ -180,7 +179,7 @@ alt={''} />
 
         {/* buttons */}
         <Flex height="40px"
-margin="5px 5px 5px 5px">
+            margin="5px 5px 5px 5px">
 
             {/* item details */}
             <EpistoButton

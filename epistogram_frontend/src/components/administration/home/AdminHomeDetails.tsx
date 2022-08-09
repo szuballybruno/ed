@@ -1,13 +1,15 @@
 import { Flex, Grid } from '@chakra-ui/react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { defaultCharts } from '../../../static/defaultChartOptions';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { StatisticsGroupType } from '../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../../universal/charts/base_charts/EpistoBarChart';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+
+const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
 export const AdminHomeDetails = () => {
 
@@ -26,7 +28,7 @@ export const AdminHomeDetails = () => {
                     title: 'Kurzus teljesítési ráta',
                     value: '79',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic1.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic1.png'),
                     isOpenByDefault: false
                 },
 
@@ -35,7 +37,7 @@ export const AdminHomeDetails = () => {
                     title: 'Átlagos tanulással töltött idő/hét',
                     value: '3.5',
                     suffix: 'óra',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic2.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic2.png'),
                     isOpenByDefault: false
                 },
 
@@ -49,7 +51,7 @@ export const AdminHomeDetails = () => {
                     title: 'Teljesítés a vizsgákon',
                     value: '67',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic3.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic3.png'),
                     isOpenByDefault: false
                 },
 
@@ -58,7 +60,7 @@ export const AdminHomeDetails = () => {
                     title: 'Átlagosan eltöltött idő/alkalom',
                     value: '38',
                     suffix: 'perc',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic4.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic4.png'),
                     isOpenByDefault: false
                 },
 
@@ -77,7 +79,7 @@ export const AdminHomeDetails = () => {
                                 data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
                             }
                         ]}
-                        xAxisData={translatableTexts.misc.daysOfWeekFromMonday}
+                        xAxisData={weekdayLabels}
                         xAxisLabel="A hét napjai"
                         yAxisLabel="Belépések száma"
                         yAxisLabelSuffix="db"
@@ -117,7 +119,7 @@ export const AdminHomeDetails = () => {
                     title: 'Átlagosan megtekintett videók naponta',
                     value: '6',
                     suffix: 'videó',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic5.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic5.png'),
                     isOpenByDefault: false
                 },
 
@@ -126,7 +128,7 @@ export const AdminHomeDetails = () => {
                     title: 'Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)',
                     value: '38',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic6.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic6.png'),
                     isOpenByDefault: false
                 },
 
@@ -135,7 +137,7 @@ export const AdminHomeDetails = () => {
                     title: 'Lemorzsolódás',
                     value: '12',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic7.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic7.png'),
                     isOpenByDefault: false,
                 },
 
@@ -144,7 +146,7 @@ export const AdminHomeDetails = () => {
                     title: 'Elköteleződés',
                     value: '73',
                     suffix: '%',
-                    iconPath: getAssetUrl('images/teacherdashboardstatistic8.png'),
+                    iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic8.png'),
                     isOpenByDefault: false,
                 }
             ]

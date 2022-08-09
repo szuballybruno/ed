@@ -1,5 +1,7 @@
+import { Id } from '../types/versionId';
+
 export class CourseProgressShortDTO {
-    courseId: number;
+    courseId: Id<'Course'>;
     totalCourseItemCount: number;
     completedCourseItemCount: number;
     progressPercentage: number;

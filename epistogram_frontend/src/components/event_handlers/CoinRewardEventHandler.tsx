@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { EventCoinAcquireNotificationDTO } from '../../shared/dtos/EventCoinAcquireNotificationDTO';
 import { translatableTexts } from '../../static/translatableTexts';
 import { CoinRewardDialog } from '../CoinRewardDialog';
-import { useEpistoDialogLogic } from '../EpistoDialog';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 
 export const CoinRewardEventHandler = (props: {
     data: EventCoinAcquireNotificationDTO | null,
@@ -11,7 +11,7 @@ export const CoinRewardEventHandler = (props: {
 
     const { data, key } = props;
 
-    const dialogLogic = useEpistoDialogLogic('reward', { defaultCloseButtonType: 'none' });
+    const dialogLogic = useEpistoDialogLogic('reward');
     const [coinRewardAmount, setCoinRewardAmount] = useState(0);
     const [coinRewardLottie, setCoinRewardLottie] = useState('');
     const [coinRewardText, setCoinRewardText] = useState('');

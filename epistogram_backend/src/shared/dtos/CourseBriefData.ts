@@ -1,4 +1,6 @@
+import { Id } from '../types/versionId';
+
 export class CourseBriefData {
-    id: number;
+    id: Id<'Course'>;
     title: string;
 }

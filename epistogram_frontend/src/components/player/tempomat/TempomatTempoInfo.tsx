@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
-import { getAssetUrl } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { TempomatModeImage } from './TempomatModeImage';
@@ -70,7 +70,7 @@ export const TempomatTempoInfo = (props: {
                     </EpistoFont>
 
                     <img
-                        src={getAssetUrl('/images/tempomatsettings.png')}
+                        src={Environment.getAssetUrl('/images/tempomatsettings.png')}
                         alt=""
                         style={{
                             height: '20px',

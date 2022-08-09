@@ -1,14 +1,16 @@
-import { JobTitleDTO } from './JobTitleDTO';
-import { OrganizationDTO } from './OrganizationDTO';
-import { RoleDTO } from './RoleDTO';
+import { Id } from '../types/versionId';
+import { ChangeSet } from './changeSet/ChangeSet';
+import { UserPermissionDTO } from './role/UserPermissionDTO';
+import { UserRoleDTO } from './role/UserRoleDTO';
 
 export class UserEditDTO {
-    id: number;
+    id: Id<'User'>;
     firstName: string;
     lastName: string;
     email: string;
     isTeacher: boolean;
-    organization: OrganizationDTO | null;
-    role: RoleDTO | null;
-    jobTitle: JobTitleDTO | null;
+    companyId: Id<'Company'>;
+    jobTitleId: Id<'JobTitle'> | null;
+    roles: ChangeSet<UserRoleDTO>;
+    permissions: ChangeSet<UserPermissionDTO>;
 }

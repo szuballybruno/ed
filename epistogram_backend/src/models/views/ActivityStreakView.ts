@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,20 +9,26 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class ActivityStreakView {
 
     @ViewColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'ActivityStreak'>;
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
+    @XViewColumn()
     startDate: Date;
 
     @ViewColumn()
+    @XViewColumn()
     endDate: Date;
 
     @ViewColumn()
+    @XViewColumn()
     isFinalized: boolean;
 
     @ViewColumn()
+    @XViewColumn()
     length_days: number;
 }

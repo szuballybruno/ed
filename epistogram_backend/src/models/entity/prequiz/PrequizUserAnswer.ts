@@ -1,47 +1,51 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { Id } from '../../../shared/types/versionId';
+import { Course } from '../course/Course';
+import { User } from '../User';
 import { PrequizAnswer } from './PrequizAnswer';
 import { PrequizQuestion } from './PrequizQuestion';
-import { User } from '../User';
-import { Course } from '../Course';
 
 @Entity()
 export class PrequizUserAnswer {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'PrequizUserAnswer'>;
 
     @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     value: number | null;
 
     // question 
     @Column()
-    questionId: number;
-
+    @XViewColumn()
+    questionId: Id<'PrequizQuestion'>;
     @JoinColumn({ name: 'question_id' })
     @ManyToOne(_ => PrequizQuestion, x => x.userAnswers)
-    question: PrequizQuestion;
+    question: Relation<PrequizQuestion>;
 
     // answer 
     @Column({ type: 'int', nullable: true })
-    answerId: number | null;
-
+    @XViewColumn()
+    answerId: Id<'PrequizAnswer'> | null;
     @JoinColumn({ name: 'answer_id' })
     @ManyToOne(_ => PrequizAnswer, x => x.userAnswers)
-    answer: PrequizAnswer | null;
+    answer: Relation<PrequizAnswer> | null;
 
     // user  
     @Column()
-    userId: number;
-
+    @XViewColumn()
+    userId: Id<'User'>;
     @JoinColumn({ name: 'user_id' })
     @ManyToOne(_ => User, x => x.prequizAnswers)
-    user: User;
-    
+    user: Relation<User>;
+
     // course 
     @Column()
-    courseId: number;
-
+    @XViewColumn()
+    courseId: Id<'Course'>;
     @JoinColumn({ name: 'course_id' })
     @ManyToOne(_ => Course, x => x.prequizUserAnswers)
-    course: Course;
+    course: Relation<Course>;
 }

@@ -1,24 +1,23 @@
 import { Flex } from '@chakra-ui/react';
-import { Checkbox, Slider, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Checkbox, Slider } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
+import { useEditUserData } from '../../../services/api/userApiService';
+import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';
+import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
-import { AdminUserList } from './AdminUserList';
-import { useEditUserData } from '../../../services/api/userApiService';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { useNavigation } from '../../../services/core/navigatior';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
-import { useIntParam } from '../../../static/locationHelpers';
+import { AdminUserList } from './AdminUserList';
 
 export const AdminUserTeacherInfoSubpage = (props: {
     users: AdminPageUserDTO[]
@@ -26,11 +25,13 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
     const { users } = props;
 
-    const editedUserId = useIntParam('userId')!;
+    const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute)
+        .getValue(x => x.userId, 'int');
+
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
     const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
     const [skills, setSkills] = useState('');
@@ -100,8 +101,9 @@ export const AdminUserTeacherInfoSubpage = (props: {
         subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
         <AdminUserList
+            currentUserId={editedUserId}
             users={users}
-            navigationFunction={(userId) => navigate(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
+            navigationFunction={(userId) => navigate2(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
 
         {/* admin header */}
         <AdminSubpageHeader

@@ -1,85 +1,141 @@
-import { Flex, Text } from '@chakra-ui/react';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import { LinearProgress, Typography } from '@mui/material';
-import React, { ReactNode } from 'react';
+import { Flex, FlexProps } from '@chakra-ui/react';
+import { ArrowBack } from '@mui/icons-material';
+import { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
+
+type ExamLayoutButtonProps = {
+    title: string,
+    action: () => void,
+    icon?: any,
+    iconPosition?: 'start' | 'end'
+};
 
 export const ExamLayout = (props: {
     children: ReactNode,
-    handleNext: () => void,
-    handleBack?: () => void,
-    nextButtonTitle: string,
-    showNextButton?: boolean,
-    exitExamAction?: () => void,
-    headerCenterText?: string,
     headerLeftItem?: string | ReactNode,
-    progressValue?: number,
-    footerButtons?: ({ text: string, action: () => void })[]
-}) => {
+    headerCenterText?: string,
+    isHeightMaximized?: boolean,
+    stepperLogic?: StepperLogicType<'QuestionVersion'>,
+    handleBack?: () => void,
+    showFooterButtonsOnTop?: boolean,
+    footerButtons?: (ExamLayoutButtonProps)[],
+    headerButtons?: (ExamLayoutButtonProps)[],
+} & FlexProps) => {
 
-    const { exitExamAction, footerButtons, headerCenterText, showNextButton, headerLeftItem, children, progressValue, handleNext, handleBack, nextButtonTitle } = props;
+    const {
+        headerButtons,
+        footerButtons,
+        headerCenterText,
+        headerLeftItem,
+        children,
+        handleBack,
+        isHeightMaximized,
+        showFooterButtonsOnTop,
+        stepperLogic,
+        ...css
+    } = props;
 
-    const footerButton = (title: string, action: () => void, icon?: any, iconFront?: any) => <EpistoButton
-        variant={'colored'}
-        onClick={action}
-        style={{
-            height: '40px',
-            marginLeft: '10px'
-        }}>
-        {iconFront}
-        {title}
-        {icon}
-    </EpistoButton>;
+    const ExamLayoutButton = (args: ExamLayoutButtonProps) => {
+
+        const {
+            title,
+            action,
+            icon,
+            iconPosition
+        } = args;
+
+        return <EpistoButton
+            variant={'colored'}
+            onClick={action}
+            style={{
+                height: '40px',
+                marginLeft: '10px'
+            }}>
+            {iconPosition === 'start' && icon}
+            {title}
+            {iconPosition === 'end' && icon}
+        </EpistoButton>;
+    };
+
+    const HeaderButtons = () => {
+        return <Flex>
+
+            {/* other buttons */}
+            {headerButtons && headerButtons
+                .map((x, i) => <ExamLayoutButton
+                    key={i}
+                    {...x} />)}
+        </Flex>;
+    };
+
+    const FooterButtons = () => {
+
+        return <Flex>
+
+            {/* other buttons */}
+            {footerButtons && footerButtons
+                .map((x, i) => <ExamLayoutButton
+                    key={i}
+                    {...x} />)}
+        </Flex>;
+    };
 
     return <Flex
-        className="whall"
+        minH='calc(100vh - 120px)'
+        maxH={isHeightMaximized ? '1080px' : 'unset'}
+        width='100%'
+        px='5px'
         direction="column"
-        alignItems="center"
-        px={40}>
+        alignItems="center">
 
         {/* header */}
         <Flex
             direction={'row'}
             alignItems={'center'}
+            position={!isHeightMaximized ? 'sticky' : undefined}
+            top={!isHeightMaximized ? '0' : undefined}
             className="roundBorders mildShadow"
-            background="var(--transparentWhite70)"
+            background={!isHeightMaximized ? 'white' : 'var(--transparentWhite70)'}
             width="100%"
+            zIndex='1000'
             height={60}
             pl={20}>
 
             <Flex minWidth="200">
-                {(headerLeftItem && isString(headerLeftItem)) && <Text as="text">
-                    {headerLeftItem}
-                </Text>}
-                {(headerLeftItem && !isString(headerLeftItem)) && headerLeftItem}
-            </Flex>
 
+                {headerLeftItem && (
+                    isString(headerLeftItem)
+                        ? (
+                            <EpistoFont>
+                                {headerLeftItem}
+                            </EpistoFont>
+                        )
+                        : (
+                            headerLeftItem
+                        )
+                )}
+            </Flex>
 
             <Flex
                 flex="1"
                 align="center"
                 justify="center">
-                <Text
-                    as="text"
-                    fontSize={'1.1rem'}>
+
+                <EpistoFont>
                     {headerCenterText}
-                </Text>
+                </EpistoFont>
             </Flex>
 
             <Flex minWidth="200"
-justify="flex-end">
-                {exitExamAction && <EpistoButton
-                    onClick={exitExamAction}
-                    style={{
-                        minWidth: 170
-                    }}
-                    variant={'outlined'}>
+                justify="flex-end"
+                pr='10px'>
 
-                    {translatableTexts.exam.exitExam}
-                </EpistoButton>}
+                {headerButtons && <HeaderButtons />}
+
+                {(showFooterButtonsOnTop && !headerButtons) && <FooterButtons />}
             </Flex>
 
         </Flex>
@@ -92,7 +148,8 @@ justify="flex-end">
             width="100%"
             align="center"
             justify="center"
-            direction="column">
+            direction="column"
+            {...css}>
 
             {children}
         </Flex>
@@ -102,40 +159,30 @@ justify="flex-end">
             width="100%"
             className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
-            height="80px"
+            height="60px"
+            align='center'
             p={20}>
 
             {/* back button */}
-            {handleBack && footerButton('Vissza', handleBack, undefined, <ArrowBack />)}
+            {handleBack && ExamLayoutButton({
+                title: 'Vissza',
+                action: handleBack,
+                icon: <ArrowBack />,
+                iconPosition: 'start'
+            })}
 
             {/* progress line */}
             <Flex
                 flex={1}
                 px={10}
+                justify='center'
                 alignItems={'center'}>
 
-                {progressValue !== undefined && <>
-                    <LinearProgress
-                        variant="determinate"
-                        value={progressValue}
+                {stepperLogic && <EpistoStepper stepperLogic={stepperLogic} />}
 
-                        style={{
-                            flex: '1',
-                            marginRight: '10px'
-                        }} />
-
-                    <EpistoFont fontSize={'fontNormal14'}>
-                        {`${Math.round(progressValue)}%`}
-                    </EpistoFont>
-                </>}
             </Flex>
 
-            {/* other buttons */}
-            {footerButtons && footerButtons
-                .map(x => footerButton(x.text, x.action))}
-
-            {/* continue button */}
-            {showNextButton && footerButton(nextButtonTitle, handleNext, <ArrowForward />)}
+            <FooterButtons />
         </Flex>
     </Flex>;
 };

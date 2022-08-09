@@ -1,7 +1,8 @@
+import { Id } from '../types/versionId';
 import { AnswerDTO } from './AnswerDTO';
 
 export type PractiseQuestionDTO = {
-    questionId: number;
+    questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     answers: AnswerDTO[];
     typeId: number;

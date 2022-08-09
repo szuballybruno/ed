@@ -1,29 +1,30 @@
 import { Divider, Flex } from '@chakra-ui/layout';
 import { FilterAlt, Search } from '@mui/icons-material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Radio, RadioGroup } from '@mui/material';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useSetCourseMode } from '../../../services/api/courseApiService';
+import { RadioGroup } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { ModuleDTO } from '../../../shared/dtos/ModuleDTO';
+import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
 import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
-import { EpistoDialog, useEpistoDialogLogic } from '../../EpistoDialog';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
-import { CourseItemList } from '../../universal/CourseItemList';
+import { Playlist } from '../../courseItemList/Playlist';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
+import { Id } from '../../../shared/types/versionId';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
-    modules: ModuleDTO[],
-    courseId: number,
+    modules: PlaylistModuleDTO[],
+    courseId: Id<'Course'>,
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
@@ -34,23 +35,17 @@ export const CourseItemSelector = (props: {
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
-    const user = useContext(CurrentUserContext)!;
-    const canChangeCourseMode = user.userActivity.canChangeCourseMode;
+    const canChangeCourseMode = true;
 
     // http 
-    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId, isPlayerLoaded);
+    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
-    const { setCourseModeAsync } = useSetCourseMode();
+    const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
 
     // dialog state 
-    const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog', {
-        defaultCloseButtonType: 'top'
-    });
+    const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
 
-    const tempomatDialogLogic = useEpistoDialogLogic('tempomat', {
-        title: 'A tanfolyam tempójának beállítása',
-        defaultCloseButtonType: 'top'
-    });
+    const tempomatDialogLogic = useEpistoDialogLogic('tempomat');
 
     // func 
 
@@ -65,6 +60,11 @@ export const CourseItemSelector = (props: {
                     }
                 ]
             });
+    };
+
+    const onTempomatModeChanged = async () => {
+        await refetchTempomatMode();
+        await refetchRecommendedItemQuota();
     };
 
     const setCourseMode = async (mode: CourseModeType) => {
@@ -92,13 +92,16 @@ export const CourseItemSelector = (props: {
 
         {/* Tempomat info dialog */}
         <TempomatSettingsDialog
-            onTempomatModeChanged={refetchTempomatMode}
+            onTempomatModeChanged={onTempomatModeChanged}
             tempomatMode={tempomatMode ?? 'auto'}
             courseId={courseId}
             tempomatDialogLogic={tempomatDialogLogic} />
 
         {/* warning dialog */}
-        <EpistoDialog logic={dialogLogic}>
+        <EpistoDialog
+            logic={dialogLogic}
+            closeButtonType="top">
+
             Point of no return
         </EpistoDialog>
 
@@ -113,26 +116,27 @@ export const CourseItemSelector = (props: {
             height="100px">
 
             {/* tempomat tempo  */}
-            <Flex
+            {!recommendedItemQuota?.isDeadlineSet && <Flex
                 flex="1">
 
                 <TempomatTempoInfo
                     tempomatMode={tempomatMode ?? 'auto'}
                     onClick={() => tempomatDialogLogic.openDialog()} />
-            </Flex>
+            </Flex>}
 
-            <Divider
+            {!recommendedItemQuota?.isDeadlineSet && <Divider
                 flexBasis="1px"
                 mx="10px"
                 height="calc(100% - 20px)"
                 orientation="vertical"
-                background="grey" />
+                background="grey" />}
 
             {/* daily recommended video count */}
             <Flex flex="1">
 
                 <RecommendedItemQuota
                     isDaily
+                    isDeadlineSet={recommendedItemQuota?.isDeadlineSet ?? false}
                     completedCount={recommendedItemQuota?.completedToday ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
             </Flex>
@@ -241,6 +245,6 @@ export const CourseItemSelector = (props: {
             </EpistoFont>
         </EpistoPopper>
 
-        <CourseItemList modules={modules}></CourseItemList>
+        <Playlist modules={modules}></Playlist>
     </>;
 };

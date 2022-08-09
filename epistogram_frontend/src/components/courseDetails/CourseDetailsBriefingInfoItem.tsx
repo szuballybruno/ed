@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -7,20 +7,21 @@ export const CourseDetailsBriefingInfoItem = (props: {
     icon?: string | ReactNode,
     title: string,
     subTitle?: string
-}) => {
+} & FlexProps) => {
 
-    const { title, icon, subTitle } = props;
+    const { title, icon, subTitle, ...css } = props;
 
     return <Flex
         direction={'row'}
-        width={200}
+        minWidth={200}
+        flex='1'
         height={60}
         background="var(--transparentWhite70)"
         backdropFilter="blur(7px)"
-        mr="5px"
         borderWidth={1}
         borderRadius={5}
-        shadow={'#00000024 0px 0px 3px 0px'}>
+        shadow={'#00000024 0px 0px 3px 0px'}
+        {...css}>
 
         <Flex
             width={60}

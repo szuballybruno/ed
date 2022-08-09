@@ -1,18 +1,20 @@
 import { Box, Divider, Flex } from '@chakra-ui/react';
-import { Button, Checkbox } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Checkbox } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { useJobTitles, useOrganizations } from '../../../services/api/miscApiService';
+import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
+import { useJobTitles } from '../../../services/api/miscApiService';
+import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
-import { OrganizationDTO } from '../../../shared/dtos/OrganizationDTO';
-import { RoleDTO } from '../../../shared/dtos/RoleDTO';
-import { UserDTO } from '../../../shared/dtos/UserDTO';
+import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
+import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
-import { isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
+import { Id } from '../../../shared/types/versionId';
+import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -20,60 +22,50 @@ import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryN
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
-import { LoadingFrame } from '../../system/LoadingFrame';
+import { useAuthorizationContext } from '../../system/AuthorizationContext';
+import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
+import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
 
-export const roles = [
-    {
-        name: 'admin',
-        id: 1,
-        optionText: translatableTexts.roleNames.administrator,
-    },
-    {
-        name: 'supervisor',
-        id: 2,
-        optionText: translatableTexts.roleNames.supervisor,
-    },
-    {
-        name: 'user',
-        id: 3,
-        optionText: translatableTexts.roleNames.user
-    }
-];
-
-export const AdminEditUserControl = (props: {
+export const AdminEditUserControl = ({
+    editDTO,
+    editedUserId,
+    refetchTrigger,
+    saveUserAsync,
+    showDeleteUserDialog
+}: {
+    editedUserId: Id<'User'> | null,
     editDTO: UserEditDTO | null,
+    refetchTrigger: EventTriggerType,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
     showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void
 }) => {
 
-    const { editDTO, saveUserAsync, showDeleteUserDialog } = props;
-
-    const editedUserId = useIntParam('userId')!;
+    const { hasPermission } = useAuthorizationContext();
 
     // editable fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [selectedRole, setSelectedRole] = useState<RoleDTO | null>(null);
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
-    const [selectedOrganization, setSelectedOrganization] = useState<OrganizationDTO | null>(null);
+    const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
+    const [rolesChangeSet, setRolesChangeSet] = useState<ChangeSet<UserRoleDTO>>(new ChangeSet<UserRoleDTO>());
+    const [permissionsChangeSet, setPermissionsChangeSet] = useState<ChangeSet<UserPermissionDTO>>(new ChangeSet<UserPermissionDTO>());
 
     const showError = useShowErrorDialog();
-    const location = useLocation();
 
-    const user = useContext(CurrentUserContext) as UserDTO;
-    const canSetInvitedUserOrganization = user.userActivity.canSetInvitedUserOrganization;
-
+    const canSetInvitedUserCompany = true;//hasPermission('i');
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
-    const { organizations } = useOrganizations();
+    const { roleAssignCompanies } = useRoleAssignCompanies();
     const { jobTitles } = useJobTitles();
+    const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
+
+    useSetBusy(useCoinBalanceOfUser, coinBalanceStatus);
 
     useEffect(() => {
 
@@ -83,11 +75,22 @@ export const AdminEditUserControl = (props: {
         setFirstName(editDTO.firstName);
         setLastName(editDTO.lastName);
         setEmail(editDTO.email);
-        setSelectedRole(editDTO.role);
-        setSelectedJobTitle(editDTO.jobTitle);
-        setSelectedOrganization(editDTO.organization);
         setIsTeacher(editDTO.isTeacher);
-    }, [editDTO]);
+
+        if (jobTitles.length === 0 || roleAssignCompanies.length === 0)
+            return;
+
+        const comp = roleAssignCompanies
+            .single(x => x.id === editDTO.companyId);
+
+        const jt = jobTitles
+            .single(x => x.id === editDTO.jobTitleId);
+
+        setSelectedJobTitle(jt);
+        setSelectedCompany(comp);
+
+
+    }, [editDTO, jobTitles, roleAssignCompanies]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -107,7 +110,7 @@ export const AdminEditUserControl = (props: {
 
         try {
 
-            if (!coinAmountEntryState.validate())
+            if (!coinAmountEntryState.validate() || !editedUserId)
                 return;
 
             const amount = parseInt(coinAmountEntryState.value);
@@ -124,19 +127,59 @@ export const AdminEditUserControl = (props: {
 
     const handleSaveUserAsync = async () => {
 
-        const editedUserDTO = {
-            id: editDTO?.id,
-            firstName,
-            lastName,
-            email,
-            jobTitle: selectedJobTitle,
-            organization: selectedOrganization,
-            role: selectedRole,
-            isTeacher
-        } as UserEditDTO;
+        console.log(JSON.stringify(editDTO));
+        console.log(JSON.stringify(selectedCompany));
+        console.log(JSON.stringify(selectedJobTitle));
 
-        await saveUserAsync(editedUserDTO);
+        if (!selectedCompany || !selectedJobTitle)
+            return;
+
+        if (!editedUserId) {
+            const newUser: UserEditDTO = {
+                id: Id.create<'User'>(-1),
+                firstName,
+                lastName,
+                email,
+                companyId: selectedCompany.id,
+                jobTitleId: selectedJobTitle!.id || null,
+                isTeacher,
+                permissions: permissionsChangeSet,
+                roles: rolesChangeSet
+            };
+
+            return createInvitedUser(newUser);
+        }
+
+        if (editedUserId && editDTO) {
+            const editedUserDTO: UserEditDTO = {
+                id: editDTO.id,
+                firstName,
+                lastName,
+                email,
+                companyId: selectedCompany.id,
+                jobTitleId: selectedJobTitle.id,
+                isTeacher,
+                permissions: permissionsChangeSet,
+                roles: rolesChangeSet
+            };
+
+            return saveUserAsync(editedUserDTO);
+        }
     };
+
+    useEffect(() => console.log('Useredit dto reloaded'), [editDTO]);
+
+    const onAuthItemsChanged = useCallback((data: {
+        assignedRoles?: ChangeSet<UserRoleDTO>,
+        assignedPermissions?: ChangeSet<UserPermissionDTO>
+    }) => {
+
+        if (data.assignedRoles)
+            setRolesChangeSet(data.assignedRoles);
+
+        if (data.assignedPermissions)
+            setPermissionsChangeSet(data.assignedPermissions);
+    }, [setRolesChangeSet, setPermissionsChangeSet]);
 
     return <Flex direction="column"
         flex="1">
@@ -154,6 +197,7 @@ export const AdminEditUserControl = (props: {
                     {/* first & last name */}
                     <Flex flex="1"
                         justify="space-between">
+
                         <EpistoEntry
                             style={{
                                 flex: 1,
@@ -164,6 +208,7 @@ export const AdminEditUserControl = (props: {
                             setValue={setLastName}
                             labelVariant={'top'}
                             label={translatableTexts.misc.lastName} />
+
                         <EpistoEntry
                             style={{
                                 flex: 1
@@ -187,8 +232,8 @@ export const AdminEditUserControl = (props: {
                 {/* company section */}
                 <EditSection title="Cég és beosztás">
 
-                    {/* organization */}
-                    {canSetInvitedUserOrganization && <Flex
+                    {/* company */}
+                    {canSetInvitedUserCompany && <Flex
                         direction="column"
                         align="stretch"
                         mt="5px"
@@ -206,15 +251,15 @@ export const AdminEditUserControl = (props: {
                         </EpistoFont>
 
                         <EpistoSelect
-                            items={organizations}
-                            selectedValue={selectedOrganization}
-                            onSelected={setSelectedOrganization}
+                            items={roleAssignCompanies}
+                            selectedValue={selectedCompany}
+                            onSelected={setSelectedCompany}
                             getDisplayValue={x => '' + x?.name}
-                            getCompareKey={organization => '' + organization?.id} />
+                            getCompareKey={company => '' + company?.id} />
                     </Flex>}
 
                     {/* job title */}
-                    {canSetInvitedUserOrganization && <Flex
+                    {canSetInvitedUserCompany && <Flex
                         direction="column"
                         align="stretch"
                         mt="5px"
@@ -239,40 +284,8 @@ export const AdminEditUserControl = (props: {
                             getCompareKey={jt => '' + jt?.id} />
                     </Flex>}
                 </EditSection>
-
-                {/* access management */}
-                <EditSection title="Jogosultságkezelés">
-                    {/* role */}
-                    <Flex
-                        direction="column"
-                        align="stretch"
-                        width="100%">
-
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontExtraSmall"
-                            style={{
-                                marginTop: '10px',
-                                letterSpacing: '1.2px'
-                            }}>
-
-                            {translatableTexts.misc.role}
-                        </EpistoFont>
-
-                        <EpistoSelect
-                            selectedValue={selectedRole}
-                            items={roles}
-                            onSelected={setSelectedRole}
-                            getDisplayValue={x => '' + (x as any)?.optionText}
-                            getCompareKey={x => '' + x?.id} />
-                    </Flex>
-                </EditSection>
-
-
-
-
-
             </Flex>
+
             <Divider orientation='vertical'
                 h="calc(100% - 20px)"
                 w="1px"
@@ -283,16 +296,11 @@ export const AdminEditUserControl = (props: {
                 className='roundBorders'
                 flex="1"
                 p="0 10px 10px 10px"
-                minWidth="300px"
-            >
+                minWidth="300px">
 
                 {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
 
-                    <LoadingFrame
-                        loadingState={[coinBalanceStatus, giftCoinsToUserState]}
-                        error={coinBalanceError}
-                        direction="column">
-
+                    <>
                         <EditSection isFirst
                             title="EpistoCoin">
                             <EpistoLabel
@@ -345,8 +353,7 @@ export const AdminEditUserControl = (props: {
 
                             </EpistoLabel>
                         </EditSection>
-
-                    </LoadingFrame>
+                    </>
                 )}
 
                 <EditSection
@@ -378,6 +385,16 @@ export const AdminEditUserControl = (props: {
             </Box>
         </Flex>
 
+        {/* access management */}
+        <EditSection title="Jogosultságkezelés">
+
+            {editedUserId && <PermissionAssignerControl
+                userCompanyId={editDTO?.companyId ?? null}
+                userId={editedUserId}
+                onChange={onAuthItemsChanged}
+                refetchTrigger={refetchTrigger} />}
+        </EditSection>
+
         <TailingAdminButtons
             onDeleteCallback={() => {
 
@@ -391,5 +408,5 @@ export const AdminEditUserControl = (props: {
                 }
             }}
             onSaveCallback={handleSaveUserAsync} />
-    </Flex >;
+    </Flex>;
 };

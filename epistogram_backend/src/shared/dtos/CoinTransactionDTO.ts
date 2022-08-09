@@ -1,7 +1,8 @@
+import { Id } from '../types/versionId';
 
 export class CoinTransactionDTO {
-    id: number;
-    userId: number;
+    id: Id<'CoinTransaction'>;
+    userId: Id<'User'>;
     creationDate: Date;
     amount: number;
     videoTitle: string;

@@ -1,36 +1,73 @@
+import { constraintFn } from '../../utilities/misc';
+
 type LogEntryType = 'error' | 'info' | 'warning' | 'strong' | 'secondary';
+type ConsoleColorType = { code: string };
 
-export const logWarning = (content: any) => log(content, 'warning');
+export const ConsoleColor = constraintFn<ConsoleColorType>()({
+    red: { code: '31m' },
+    gray: { code: '90m' },
+    blue: { code: '94m' },
+    purple: { code: '95m' },
+    yellow: { code: '33m' }
+});
 
-export const logError = (content: any) => log(content, 'error');
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
+export const logWarning = (content: any) => log(content, { entryType: 'warning' });
 
-export const logSecondary = (content: any) => log(content, 'secondary');
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
+export const logError = (content: any) => log(content, { entryType: 'error' });
 
-export const log = (content: any, entryType?: LogEntryType) => {
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
+export const logSecondary = (content: any) => log(content, { entryType: 'secondary' });
+
+const loggingEnabled = false;
+
+/**
+ * @deprecated DO NOT USE - use LoggerService 
+ */
+export const log = (content: any, opts?: {
+    entryType?: LogEntryType,
+    color?: ConsoleColorType,
+    noStamp?: boolean
+}) => {
+
+    // if (!loggingEnabled)
+    //     return;
 
     const dateTime = new Date();
     const miliseconds = dateTime.getMilliseconds();
     const options = { hour12: false };
     const dateTimeString = dateTime.toLocaleString('en-US', options);
+    const entryType = opts?.entryType ?? 'info';
+    const color = opts?.color ?? null;
+    const noStamp = !!opts?.noStamp;
 
-    const getColor = (code: string) => `\x1b[${code}%s\x1b[0m`;
+    const getColor = (code: ConsoleColorType) => '\x1b[' + code.code + '%s\x1b[0m';
 
     const stamp = `[${dateTimeString}.${miliseconds}]`;
 
-    if (!entryType)
-        entryType = 'info';
-
     if (entryType === 'warning')
-        console.warn(content);
+        console.warn(getColor(ConsoleColor.yellow), content);
 
     if (entryType === 'error')
-        console.error(getColor('31m'), content);
+        console.error(getColor(ConsoleColor.red), content);
 
-    if (entryType === 'info')
-        console.log(`${stamp} ${content}`);
+    if (entryType === 'info') {
+
+        const line = `${noStamp ? '' : stamp + ' '}${content}`;
+        color
+            ? console.log(getColor(color), line)
+            : console.log(line);
+    }
 
     if (entryType === 'secondary')
-        console.log(getColor('90m'), `${stamp} -- ${content}`);
+        console.log(getColor(ConsoleColor.gray), `${stamp} -- ${content}`);
 
     if (entryType === 'strong') {
 

@@ -1,124 +1,66 @@
-import { Course } from '../models/entity/Course';
-import { Exam } from '../models/entity/Exam';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { CreateExamDTO } from '../shared/dtos/CreateExamDTO';
-import { ExamEditDataDTO } from '../shared/dtos/ExamEditDataDTO';
-import { IdResultDTO } from '../shared/dtos/IdResultDTO';
 import { ExamService } from '../services/ExamService';
-import { toQuestionDTO } from '../services/misc/mappings';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class ExamController {
+export class ExamController implements XController<ExamController> {
 
     private _examService: ExamService;
-    private _ormService: ORMConnectionService;
 
-    constructor(examService: ExamService, ormService: ORMConnectionService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._examService = examService;
-        this._ormService = ormService;
+        this._examService = serviceProvider.getService(ExamService);
     }
 
-    answerExamQuestionAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.exam.answerExamQuestion, { isPost: true })
+    answerExamQuestionAction(params: ActionParams) {
 
-        const questionAnswerDTO = withValueOrBadRequest<AnswerQuestionDTO>(params.req.body);
-
-        return this._examService
-            .answerExamQuestionAsync(params.currentUserId, questionAnswerDTO);
-    };
-
-    startExamAction = async (params: ActionParams) => {
-
-        const body = params.getBody<{ answerSessionId: number }>();
-        const answerSessionId = body.getValue(x => x.answerSessionId);
-
-        await this._examService
-            .startExamAsync(answerSessionId);
-    };
-
-    getExamResultsAction = async (params: ActionParams) => {
-
-        const answerSessionId = withValueOrBadRequest<number>(params.req.query.answerSessionId, 'number');
-
-        return this._examService
-            .getExamResultsAsync(params.currentUserId, answerSessionId);
-    };
-
-    getExamEditDataAction = async (params: ActionParams) => {
-
-        const examId = params
-            .getQuery<{ examId: number }>()
-            .getValue(x => x.examId, 'int');
-
-        return await this._examService
-            .getExamEditDataAsync(examId);
-    };
-
-    getExamQuestionEditDataAction = async (params: ActionParams) => {
-        const examId = params
-            .getQuery<{ examId: number }>()
-            .getValue(x => x.examId, 'int');
-
-        return await this._examService
-            .getExamQuestionEditDataAsync(examId);
-    };
-
-    saveExamQuestionEditDataAction = async (params: ActionParams) => {
-        const mutations = params
-            .getBody()
+        const questionAnswerDTO = params
+            .getBody<AnswerQuestionDTO>()
             .data;
 
-        await this._examService
-            .saveExamQuestionEditDataAsync(mutations);
-    };
+        return this._examService
+            .answerExamQuestionAsync(params.principalId, questionAnswerDTO);
+    }
 
-    saveExamAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.exam.startExam, { isPost: true })
+    startExamAction(params: ActionParams) {
 
-        const dto = params
-            .getBody<ExamEditDataDTO>();
+        const body = params.getBody<{ answerSessionId: number }>();
+        const answerSessionId = Id
+            .create<'AnswerSession'>(body.getValue(x => x.answerSessionId, 'int'));
 
-        await this._examService
-            .saveExamAsync(dto.data);
-    };
+        return this._examService
+            .startExamAsync(params.principalId, answerSessionId);
+    }
 
-    createExamAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.exam.completeExam, { isPost: true })
+    completeExamAction(params: ActionParams) {
 
-        const dto = withValueOrBadRequest<CreateExamDTO>(params.req.body);
+        const body = params
+            .getBody<{ answerSessionId: number }>();
 
-        const course = await this._ormService
-            .getRepository(Course)
-            .createQueryBuilder('c')
-            .leftJoinAndSelect('c.videos', 'v')
-            .leftJoinAndSelect('c.exams', 'e')
-            .leftJoinAndSelect('c.modules', 'm')
-            .where('m.id = :moduleId', { moduleId: dto.moduleId })
-            .getOneOrFail();
+        const answerSessionId = Id
+            .create<'AnswerSession'>(body
+                .getValue(x => x.answerSessionId, 'int'));
 
-        const courseItemsLength = course.videos.length + course.exams.length;
+        return this._examService
+            .finishExamAsync(params.principalId, answerSessionId);
+    }
 
-        const newExam = {
-            courseId: course.id,
-            moduleId: dto.moduleId,
-            title: dto.title,
-            subtitle: dto.subtitle,
-            orderIndex: courseItemsLength
-        } as Exam;
+    @XControllerAction(apiRoutes.exam.getExamResults)
+    getExamResultsAction(params: ActionParams) {
 
-        await this._ormService
-            .getRepository(Exam)
-            .insert(newExam);
+        const answerSessionId = Id
+            .create<'AnswerSession'>(params
+                .getQuery()
+                .getValue(x => x.answerSessionId, 'int'));
 
-        return {
-            id: newExam.id
-        } as IdResultDTO;
-    };
-
-    deleteExamAction = async (params: ActionParams) => {
-
-        const examId = withValueOrBadRequest<IdResultDTO>(params.req.body).id;
-
-        await this._examService
-            .softDeleteExamsAsync([examId], true);
-    };
+        return this._examService
+            .getExamResultsAsync(params.principalId, answerSessionId);
+    }
 }

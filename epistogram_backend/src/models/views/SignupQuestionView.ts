@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
 	synchronize: false,
@@ -7,32 +9,54 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class SignupQuestionView {
 
 	@ViewColumn()
-	userId: number;
+	@XViewColumn()
+	userId: Id<'User'>;
 
 	@ViewColumn()
-	questionId: number;
+	@XViewColumn()
+	questionId: Id<'Question'>;
 
 	@ViewColumn()
+	@XViewColumn()
+	questionVersionId: Id<'QuestionVersion'>;
+
+	@ViewColumn()
+	@XViewColumn()
 	questionText: string;
 
 	@ViewColumn()
+	@XViewColumn()
 	imageUrl: string;
 
 	@ViewColumn()
+	@XViewColumn()
 	typeId: number;
 
 	@ViewColumn()
-	answerId: number;
+	@XViewColumn()
+	answerId: Id<'Answer'>;
 
 	@ViewColumn()
+	@XViewColumn()
+	answerVersionId: Id<'AnswerVersion'>;
+
+	@ViewColumn()
+	@XViewColumn()
 	answerText: string;
 
 	@ViewColumn()
-	givenAnswerId: number;
+	@XViewColumn()
+	givenAnswerId: Id<'GivenAnswer'>;
 
 	@ViewColumn()
-	userAnswerId: number;
+	@XViewColumn()
+	isCorrect: boolean;
 
 	@ViewColumn()
+	@XViewColumn()
+	givenAnswerVersionId: Id<'AnswerVersion'>;
+
+	@ViewColumn()
+	@XViewColumn()
 	isGivenAnswer: boolean;
 }

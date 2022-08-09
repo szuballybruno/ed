@@ -1,10 +1,11 @@
+import { CourseVisibilityType } from '../types/sharedTypes';
+import { Id } from '../types/versionId';
 import { CourseCategoryDTO } from './CourseCategoryDTO';
 import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
 import { TeacherDTO } from './TeacherDTO';
-import { CourseVisibilityType } from '../types/sharedTypes';
 
 export class CourseDetailsEditDataDTO {
-    courseId: number;
+    courseId: Id<'Course'>;
     title: string;
     thumbnailURL: string;
     shortDescription: string;
@@ -14,7 +15,7 @@ export class CourseDetailsEditDataDTO {
     previouslyCompletedCount: number;
     language: string;
     visibility: CourseVisibilityType;
-    teacherId: number;
+    teacherId: Id<'User'>;
     humanSkillBenefitsDescription: string;
     technicalRequirementsDescription: string;
 

@@ -1,10 +1,9 @@
-import { NavigateNextTwoTone } from '@mui/icons-material';
-import { GridRowsProp, GridColDef, DataGrid } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { formatTimespan, isCurrentAppRoute } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { ProfileImage } from '../../../ProfileImage';
@@ -15,25 +14,24 @@ export const AdminUserDataGridSubpage = (props: {
 }) => {
 
     const { users } = props;
-    const { navigate } = useNavigation();
-    const location = useLocation();
+    const { navigate2 } = useNavigation();
+    const [currentUserId, setCurrentUserId] = useState<Id<'User'> | null>(null);
 
-    const getRowsFromUsers = () => users.map((user) => {
-        return {
-            id: user.id,
-            avatar: {
-                avatarUrl: user.avatarUrl,
-                firstName: user.firstName,
-                lastName: user.lastName
-            },
-            name: `${user.lastName} ${user.firstName}`,
-            email: user.email,
-            coinBalance: `${user.coinBalance} EC`,
-            totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
-        };
-    });
-
-    const userRows: GridRowsProp = getRowsFromUsers();
+    const userRows = users
+        .map((user) => {
+            return {
+                id: user.id,
+                avatar: {
+                    avatarUrl: user.avatarUrl,
+                    firstName: user.firstName,
+                    lastName: user.lastName
+                },
+                name: `${user.lastName} ${user.firstName}`,
+                email: user.email,
+                coinBalance: `${user.coinBalance} EC`,
+                totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
+            };
+        });
 
     const userColumns: GridColDef[] = [
         {
@@ -83,15 +81,19 @@ export const AdminUserDataGridSubpage = (props: {
 
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => navigate(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value })}>
+                    onClick={() => {
+                        setCurrentUserId(params.value);
+                        return navigate2(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value });
+                    }}>
 
                     Tanulási jelentés
                 </EpistoButton>
         }
     ];
+
     return <AdminBreadcrumbsHeader
         viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
-        viewSwitchFunction={() => navigate(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: 'a' })}>
+        viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: currentUserId })}>
         <DataGrid
             columns={userColumns}
             rows={userRows}

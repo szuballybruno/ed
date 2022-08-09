@@ -1,5 +1,7 @@
+import { Id } from '../types/versionId';
+
 export class VideoRatingDTO {
     experience?: number;
     difficulty?: number;
-    videoId: number;
+    videoVersionId: Id<'VideoVersion'>;
 }

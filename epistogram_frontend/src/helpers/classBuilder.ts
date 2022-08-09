@@ -4,6 +4,9 @@ export type StyleSizeType = '0' | '5' | '10' | '15' | '40';
 
 export type ClassBuilderCustomizationFnType = (classBuilder: ClassBuilder) => void;
 
+/**
+ * @deprecated
+ */
 export class ClassBuilder {
 
     private _classes: string[];

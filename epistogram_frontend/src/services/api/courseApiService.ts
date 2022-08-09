@@ -1,165 +1,182 @@
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../../shared/dtos/admin/CourseContentAdminDTO';
+import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
-import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
-import { CourseShortDTO } from '../../shared/dtos/CourseShortDTO';
+import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAssignDTO';
 import { CreateCourseDTO } from '../../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
-import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
+import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
+import { Mutation } from '../../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { CourseModeType } from '../../shared/types/sharedTypes';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { Id } from '../../shared/types/versionId';
+import { useReactQuery2, useXQueryArray } from '../../static/frontendHelpers';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
-import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { Mutation } from '../../shared/dtos/mutations/Mutation';
 
-export const useAdminCourseList = (searchText: string) => {
+export const CourseApiService = {
 
-    const qr = useReactQuery2<CourseAdminListItemDTO[]>(apiRoutes.course.getAdminCourseList, { searchText });
+    usePermissionAssignCourses: (userId: Id<'User'>) => {
 
-    return {
-        courses: qr.data ?? [],
-        coursesError: qr.error,
-        coursesStatus: qr.state,
-        refetchCoursesAsync: qr.refetch
-    };
-};
+        const qr = useReactQuery2<CoursePermissionAssignDTO[]>(apiRoutes.course.getPermissionAssignCourses, { userId });
 
-export const useSetCourseMode = () => {
+        return {
+            permissionAssignCourses: qr.data ?? [],
+        };
+    },
 
-    const qr = usePostDataUnsafe<{ courseId: number, mode: CourseModeType }, void>(apiRoutes.course.setCourseMode);
+    useAdminCourseList: (searchText: string) => {
 
-    return {
-        setCourseModeAsync: qr.postDataAsync,
-        setCourseModeState: qr.state
-    };
-};
+        const qr = useReactQuery2<CourseAdminListItemDTO[]>(apiRoutes.course.getAdminCourseList, { searchText });
 
-export const useCourseDetailsEditData = (courseId: number) => {
+        return {
+            courses: qr.data ?? [],
+            coursesError: qr.error,
+            coursesStatus: qr.state,
+            refetchCoursesAsync: qr.refetch
+        };
+    },
 
-    const qr = useReactQuery2<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
+    useSetCourseMode: () => {
 
-    return {
-        courseDetailsEditData: qr.data,
-        courseDetailsEditDataError: qr.error,
-        courseDetailsEditDataState: qr.state,
-        refetchCourseDetailsEditData: qr.refetch
-    };
-};
+        const qr = usePostDataUnsafe<{ courseId: Id<'Course'>, mode: CourseModeType }, void>(apiRoutes.course.setCourseMode);
 
-export const useCourseContentAdminData = (courseId: number, isEnabled: boolean, loadDeleted: boolean) => {
+        return {
+            setCourseModeAsync: qr.postDataAsync,
+            setCourseModeState: qr.state
+        };
+    },
 
-    const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted }, isEnabled);
+    useSetRequiredCompletionDate: () => {
 
-    return {
-        courseContentAdminData: qr.data,
-        courseContentAdminDataError: qr.error,
-        courseContentAdminDataState: qr.state,
-        refetchCourseContentAdminData: qr.refetch
-    };
-};
+        const qr = usePostDataUnsafe<{ courseId: Id<'Course'>, requiredCourseCompletionDate: string }, void>(apiRoutes.course.setRequiredCompletionDate);
 
-export const useCreateCourse = () => {
+        return {
+            setRequiredCourseCompletionDateAsync: qr.postDataAsync,
+            setRequiredCourseCompletionDateState: qr.state
+        };
+    },
 
-    const qr = usePostDataUnsafe<CreateCourseDTO, void>(apiRoutes.course.createCourse);
+    useCourseDetailsEditData: (courseId: Id<'Course'>) => {
 
-    return {
-        createCourseAsync: qr.postDataAsync,
-        createCourseState: qr.state,
-    };
-};
+        const qr = useReactQuery2<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
 
-export const useDeleteCourse = () => {
+        return {
+            courseDetailsEditData: qr.data,
+            courseDetailsEditDataError: qr.error,
+            courseDetailsEditDataState: qr.state,
+            refetchCourseDetailsEditData: qr.refetch
+        };
+    },
 
-    const qr = usePostDataUnsafe<IdResultDTO, void>(apiRoutes.course.deleteCourse);
+    useCourseContentAdminData: (courseId: Id<'Course'>, isEnabled: boolean, loadDeleted: boolean) => {
 
-    return {
-        deleteCourseAsync: qr.postDataAsync,
-        deleteCourseState: qr.state,
-    };
-};
+        const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted }, isEnabled);
 
-export const useSaveCourseDetailsData = () => {
+        return {
+            courseContentAdminData: qr.data,
+            courseContentAdminDataError: qr.error,
+            courseContentAdminDataState: qr.state,
+            refetchCourseContentAdminData: qr.refetch
+        };
+    },
 
-    const qr = usePostDataUnsafe<CourseDetailsEditDataDTO, void>(apiRoutes.course.saveCourseDetails);
+    useCreateCourse: () => {
 
-    return {
-        saveCourseDataAsync: qr.postDataAsync,
-        saveCourseDataState: qr.state,
-    };
-};
+        const qr = usePostDataUnsafe<CreateCourseDTO, void>(apiRoutes.course.createCourse);
 
-export const useSaveCourseContentData = () => {
+        return {
+            createCourseAsync: qr.postDataAsync,
+            createCourseState: qr.state,
+        };
+    },
 
-    const qr = usePostDataUnsafe<Mutation<CourseContentItemAdminDTO, 'itemCode'>[], void>(apiRoutes.course.saveCourseContent);
+    useDeleteCourse: () => {
 
-    return {
-        saveCourseDataAsync: qr.postDataAsync,
-        saveCourseDataState: qr.state,
-    };
-};
+        const qr = usePostDataUnsafe<IdResultDTO, void>(apiRoutes.course.deleteCourse);
 
-export const useUploadCourseThumbnailAsync = () => {
+        return {
+            deleteCourseAsync: qr.postDataAsync,
+            deleteCourseState: qr.state,
+        };
+    },
 
-    const qr = usePostMultipartDataUnsafe<{ courseId: number }>(apiRoutes.course.saveCourseThumbnail);
+    useSaveCourseDetailsData: () => {
 
-    return {
-        saveCourseThumbnailAsync: (courseId: number, file: File) => qr.postMultipartDataAsync({ courseId }, file),
-        saveCourseThumbnailState: qr.state,
-    };
-};
+        const qr = usePostDataUnsafe<CourseDetailsEditDataDTO, void>(apiRoutes.course.saveCourseDetails);
 
-export const useCourseBriefData = (courseId: number | null) => {
+        return {
+            saveCourseDataAsync: qr.postDataAsync,
+            saveCourseDataState: qr.state,
+        };
+    },
 
-    const qr = useReactQuery2<CourseBriefData>(apiRoutes.course.getCourseBriefData, { courseId }, !!courseId);
+    useSaveCourseContentData: () => {
 
-    return {
-        courseBriefData: qr.data,
-        courseBriefDataError: qr.error,
-        courseBriefDataState: qr.state
-    };
-};
+        const qr = usePostDataUnsafe<{
+            courseId: Id<'Course'>,
+            itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
+            moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
+        }, void>(apiRoutes.course.saveCourseContent);
 
-export const useCourseDetails = (courseId: number) => {
+        return {
+            saveCourseDataAsync: qr.postDataAsync,
+            saveCourseDataState: qr.state,
+        };
+    },
 
-    const qr = useReactQuery2<CourseDetailsDTO>(apiRoutes.course.getCourseDetails, { courseId });
+    useUploadCourseThumbnailAsync: () => {
 
-    return {
-        courseDetails: qr.data
-    };
-};
+        const qr = usePostMultipartDataUnsafe<{ courseId: Id<'Course'> }>(apiRoutes.course.saveCourseThumbnail);
 
-export const useUserCourses = () => {
+        return {
+            saveCourseThumbnailAsync: (courseId: Id<'Course'>, file: File) => qr.postMultipartDataAsync({ courseId }, file),
+            saveCourseThumbnailState: qr.state,
+        };
+    },
 
-    const qr = useReactQuery2<CourseShortDTO[]>(apiRoutes.course.getAvailableCourses);
+    useCourseBriefData: (courseId: Id<'Course'> | null) => {
 
-    return {
-        courses: qr.data ?? [],
-        coursesError: qr.error,
-        coursesState: qr.state
-    };
-};
+        const qr = useReactQuery2<CourseBriefData>(apiRoutes.course.getCourseBriefData, { courseId }, !!courseId);
 
-export const useUserCourseData = () => {
+        return {
+            courseBriefData: qr.data,
+            courseBriefDataError: qr.error,
+            courseBriefDataState: qr.state
+        };
+    },
 
-    const qr = useReactQuery2<UserCoursesDataDTO>(apiRoutes.course.getCourseProgressData);
+    useCourseDetails: (courseId: Id<'Course'>) => {
 
-    return {
-        coursesData: qr.data,
-        coursesDataError: qr.error,
-        coursesDataStatus: qr.state
-    };
-};
+        const qr = useReactQuery2<CourseDetailsDTO>(apiRoutes.course.getCourseDetails, { courseId });
 
-export const useCourseProgressShortDtos = () => {
+        return {
+            courseDetails: qr.data
+        };
+    },
 
-    const qr = useReactQuery2<CourseProgressShortDTO[]>(apiRoutes.course.getCourseProgressShort);
+    useUserCourses: (
+        searchTerm: string | null,
+        filterCategoryId: Id<'CourseCategory'> | null,
+        isFeatured: boolean,
+        isRecommended: boolean,
+        orderBy: string | null
+    ) => {
 
-    return {
-        courseProgressShortDtos: qr.data ?? [],
-        courseProgressShortError: qr.error,
-        courseProgressShortState: qr.state
-    };
+        const qr = useXQueryArray<AvailableCourseDTO>(apiRoutes.course.getAvailableCourses, {
+            searchTerm,
+            filterCategoryId,
+            isFeatured,
+            isRecommended,
+            orderBy
+        });
+
+        return {
+            courses: qr.data,
+            coursesError: qr.error,
+            coursesState: qr.state
+        };
+    }
 };

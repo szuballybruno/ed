@@ -1,174 +1,60 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
-import { UserCourseProgressChartDTO } from '../../../../shared/dtos/UserCourseProgressChartDTO';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
-import { getAssetUrl, roundNumber } from '../../../../static/frontendHelpers';
-import { translatableTexts } from '../../../../static/translatableTexts';
+import { CourseApiService } from '../../../../services/api/courseApiService';
+import { useBriefUserData } from '../../../../services/api/userApiService';
+import { Id } from '../../../../shared/types/versionId';
+import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { TabPanel } from '../../../courseDetails/TabPanel';
-import { EpistoDialog, EpistoDialogLogicType } from '../../../EpistoDialog';
-import { NoProgressChartYet } from '../../../home/NoProgressChartYet';
-import { UserProgressChart } from '../../../universal/charts/UserProgressChart';
-import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
+import { AdminUserCourseStatsOverview } from '../AdminUserCourseStatsOverview';
+import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGridControl';
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
-import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
-
-export const AdminUserCourseContentDialogSubpage = (props: {
-    userStats: {
-        userProgressData: UserCourseProgressChartDTO,
-        completedVideoCount: number,
-        totalVideoPlaybackSeconds: number,
-        totalGivenAnswerCount: number,
-        totalCorrectAnswerRate: number
-    }
-}) => {
-
-    const { userStats } = props;
-
-    return <Flex
-        direction="column"
-        p="20px"
-        flex="1">
-
-        <Flex
-            flex="1">
-
-            <Flex
-                h="350px"
-                flex="1"
-                align="stretch">
-
-                <Flex flex="1">
-
-                    <EpistoPieChart
-                        title="Teljesítmény"
-                        segments={[
-                            { value: 70, name: 'Teljesítmény 70%' },
-                            { value: 30, name: '' },
-                        ]}
-                        options={defaultCharts.twoSegmentGreenDoughnut} />
-                </Flex>
-                <Flex flex="1">
-
-                    <EpistoPieChart
-                        title="Haladás"
-                        segments={[
-                            { value: 20, name: '' },
-                            { value: 80, name: 'Haladás 20%' },
-                        ]}
-                        options={defaultCharts.twoSegmentRedDoughnut} />
-                </Flex>
-                <Flex flex="1">
-
-                    <EpistoPieChart
-                        title="Aktivitás eloszlása"
-                        isSortValues
-                        segments={[
-                            { value: 30, name: '' },
-                            { value: 17, name: '' },
-                            { value: 10, name: '' },
-                            { value: 20, name: '' }
-                        ]}
-                        options={defaultCharts.pie} />
-                </Flex>
-            </Flex>
-
-            <Flex
-                h="350px"
-                className="roundBorders"
-                flex="1"
-                direction="column"
-                background="var(--transparentWhite70)">
-
-                {userStats.userProgressData && userStats.userProgressData.days.length > 0
-                    ? <UserProgressChart userProgress={userStats.userProgressData} />
-                    : <NoProgressChartYet />}
-            </Flex>
-        </Flex>
-
-        <div
-            style={{
-                width: '100%',
-                maxWidth: '100%',
-                display: 'grid',
-                boxSizing: 'border-box',
-                marginTop: '20px',
-                gap: '10px',
-                gridAutoFlow: 'row dense',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(23%, 1fr))',
-                gridAutoRows: '160px'
-            }}>
-
-            {/* total completed video count */}
-            <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.title}
-                value={userStats ? userStats.completedVideoCount + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.watchedVideosInThisMonth.suffix}
-                iconPath={getAssetUrl('images/watchedvideos3Dsmaller.png')}
-                isOpenByDefault={false} />
-
-            {/* total playback time */}
-            <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.title}
-                value={userStats ? roundNumber(userStats.totalVideoPlaybackSeconds / 60 / 60) + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.timeSpentWithWatchingVideosInThisMonth.suffix}
-                iconPath={getAssetUrl('images/watch3D.png')}
-                isOpenByDefault={false} />
-
-            {/* total given answer count  */}
-            <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.title}
-                value={userStats ? userStats.totalGivenAnswerCount + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.totalGivenAnswersCount.suffix}
-                iconPath={getAssetUrl('images/answeredquestions3D.png')}
-                isOpenByDefault={false} />
-
-            {/* correct answer rate  */}
-            <StatisticsCard
-                title={translatableTexts.homePage.statsSummary.correctAnswerRate.title}
-                value={userStats ? roundNumber(userStats.totalCorrectAnswerRate) + '' : '0'}
-                suffix={translatableTexts.homePage.statsSummary.correctAnswerRate.suffix}
-                iconPath={getAssetUrl('images/rightanswer3D.png')}
-                isOpenByDefault={false} />
-        </div>
-    </Flex>;
-};
-
-
 
 export const AdminUserCourseContentDialog = (props: {
-    userCourseStatsData: {
-        userProgressData: UserCourseProgressChartDTO,
-        completedVideoCount: number,
-        totalVideoPlaybackSeconds: number,
-        totalGivenAnswerCount: number,
-        totalCorrectAnswerRate: number
-    },
-    dialogLogic: EpistoDialogLogicType
+    dialogLogic: EpistoDialogLogicType<{ courseId: Id<'Course'> | null }>
 }) => {
 
-    const { userCourseStatsData: userStats, dialogLogic } = props;
+    const { dialogLogic } = props;
 
     const [currentTab, setCurrentTab] = useState(0);
 
+    const courseId = dialogLogic.params.courseId;
+    const userId = Id
+        .create<'User'>(useIntParam('userId')!);
+
+    const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
+    const { briefUserData } = useBriefUserData(userId);
+
+    const courseTitle = courseBriefData?.title || '';
+    const userFullName = briefUserData?.fullName || '';
 
     const moreInfoDialogTabs = [
         {
             title: 'Áttekintés',
-            component: <AdminUserCourseContentDialogSubpage userStats={userStats} />
+            component: <AdminUserCourseStatsOverview
+                courseId={courseId!}
+                userId={userId} />
         },
         {
             title: 'Videók',
-            component: <Flex>
-                <AdminUserVideosDataGridControl />
-            </Flex>
+            component: <AdminUserVideosDataGridControl
+                courseId={courseId}
+                handleMoreButton={
+                    function (): void {
+                        throw new Error('Function not implemented.');
+                    }} />
         },
         {
             title: 'Vizsgák',
-            component: <Flex>
-
-            </Flex>
+            component: <AdminUserExamsDataGridControl
+                courseId={courseId}
+                handleMoreButton={
+                    function (): void {
+                        throw new Error('Function not implemented.');
+                    }} />
         },
         {
             title: 'Kommentek/kérdések',
@@ -178,12 +64,14 @@ export const AdminUserCourseContentDialog = (props: {
         }
     ];
 
-    return <EpistoDialog fullScreenX
+    return <EpistoDialog
+        closeButtonType="top"
+        fullScreenX
         fullScreenY
         logic={dialogLogic}>
+
         <Flex
-            overflowY="scroll"
-            className="roundBorders"
+            className="roundBorders whall"
             flex="1"
             flexDirection="column">
 
@@ -199,8 +87,7 @@ export const AdminUserCourseContentDialog = (props: {
                 maxH="80px"
                 p="20px 30px 20px 30px"
                 className="mildShadow"
-                zIndex="1000"
-                flex="1">
+                zIndex="1000">
 
                 <Flex
                     align="center"
@@ -218,10 +105,10 @@ export const AdminUserCourseContentDialog = (props: {
                                 flexDirection: 'row',
                                 fontWeight: 600
                             }}>
-                            Microsoft PowerPoint alapok
+                            {courseTitle}
                         </EpistoFont>
                         <EpistoFont fontSize={'fontMid'}>
-                            Kiss Edina
+                            {userFullName}
                         </EpistoFont>
                     </Flex>
                 </Flex>
@@ -236,7 +123,7 @@ export const AdminUserCourseContentDialog = (props: {
                     }}
                     sx={{
                         '&.MuiTabs-root': {
-                            //background: "var(--transparentIntenseBlue85)",
+                            //background: 'var(--transparentIntenseBlue85)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -279,14 +166,23 @@ export const AdminUserCourseContentDialog = (props: {
             </Flex>
 
             { /* tab contents */}
-            {moreInfoDialogTabs
-                .map((x, index) => <TabPanel
-                    key={index}
-                    value={currentTab}
-                    index={index}>
+            <Flex
+                flex='1'
+                className='whall'>
 
-                    {x.component}
-                </TabPanel>)}
+                {moreInfoDialogTabs
+                    .map((x, index) => <TabPanel
+                        style={{
+                            height: '100%',
+                            width: '100%',
+                        }}
+                        key={index}
+                        value={currentTab}
+                        index={index}>
+
+                        {x.component}
+                    </TabPanel>)}
+            </Flex>
         </Flex>
     </EpistoDialog>;
 };

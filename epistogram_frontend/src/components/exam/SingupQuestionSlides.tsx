@@ -1,16 +1,16 @@
 import { Flex } from '@chakra-ui/react';
-import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { usePaging } from '../../static/frontendHelpers';
 import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { LinearProgressWithLabel } from '../signup/ProgressIndicator';
 import { SignupWrapper } from '../signup/SignupWrapper';
-import { borderRadius } from '@mui/system';
 import { EpistoFont } from '../controls/EpistoFont';
+import { Id } from '../../shared/types/versionId';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
-    answerQuestionAsync: (answerId: number, questionId: number) => Promise<void>,
+    answerQuestionAsync: (answerId: Id<'Answer'>, questionId: Id<'Question'>) => Promise<void>,
     upperTitle?: string,
     onPrevoiusOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
@@ -29,7 +29,11 @@ export const useSignupQuestionsState = (options: {
     } = options;
 
     // questionnaire
-    const questionnaireState = usePaging(questions, onPrevoiusOverNavigation, onNextOverNavigation);
+    const questionnaireState = usePaging({
+        items: questions,
+        onPreviousOverNavigation: onPrevoiusOverNavigation,
+        onNextOverNavigation
+    });
     const currentQuestion = questionnaireState.currentItem;
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
     const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
@@ -72,7 +76,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         allowQuickNext
     } = state;
 
-    const handleAnswerSelectedAsync = async (answerId: number) => {
+    const handleAnswerSelectedAsync = async (answerId: Id<'Answer'>) => {
 
         try {
 
@@ -112,7 +116,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
     }*/}
 
     const selectedAnswerId = (currentQuestion?.answers ?? [])
-        .filter(x => x.isGiven)[0]?.answerId as null | number;
+        .filter(x => x.isGiven)[0]?.answerId as null | Id<'Answer'>;
 
     return <>
         {currentQuestion && <SignupWrapper
@@ -124,8 +128,8 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
             upperComponent={<Flex alignItems={'center'}
-justifyContent={'flex-end'}
-width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
+                justifyContent={'flex-end'}
+                width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
 
             <RadioGroup
                 id="answers"
@@ -133,13 +137,13 @@ width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
                 name="radioGroup1"
                 onChange={(e) => {
 
-                    const selectedAnswerId = parseInt(e.currentTarget.value);
+                    const selectedAnswerId = Id.create<'Answer'>(parseInt(e.currentTarget.value));
                     handleAnswerSelectedAsync(selectedAnswerId);
                 }}>
                 {currentQuestion!
                     .answers
                     .map((answer) => <FormControlLabel
-                        key={answer.answerId}
+                        key={Id.read(answer.answerId)}
                         value={answer.answerId}
                         style={{
                             margin: '5px 0px 0px 0px',
@@ -147,7 +151,7 @@ width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
                             padding: '5px 10px',
                             border: '1px solid var(--mildGrey)',
                             borderRadius: '6px'
-                           
+
                         }}
                         control={<Radio checked={answer.answerId === selectedAnswerId} />}
                         label={answer.answerText} />)}

@@ -1,4 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -7,23 +9,30 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 export class UserDailyCourseItemProgressView {
 
     @ViewColumn()
-    userId: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @ViewColumn()
-    courseId: number;
+    @XViewColumn()
+    courseId: Id<'Course'>;
 
     @ViewColumn()
+    @XViewColumn()
     completionDate: Date;
 
     @ViewColumn()
+    @XViewColumn()
     completedItemCount: number;
 
     @ViewColumn()
+    @XViewColumn()
     completedPercentage: number;
 
     @ViewColumn()
+    @XViewColumn()
     isCurrent: number;
 
     @ViewColumn()
+    @XViewColumn()
     offsetDaysFromStart: number;
 }

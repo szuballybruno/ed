@@ -1,32 +1,39 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 import { User } from './User';
-import { Video } from './Video';
+import { VideoVersion } from './video/VideoVersion';
 
 @Entity()
 export class VideoRating {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    @XViewColumn()
+    id: Id<'VideoRating'>;
 
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     experience: number | null;
 
-    @Column({ nullable: true, type: 'int' })
+    @Column({ type: 'int', nullable: true })
+    @XViewColumn()
     difficulty: number | null;
+
+    // TO ONE
 
     // video 
     @Column()
-    videoId: number;
-
-    @ManyToOne(_ => Video, x => x.videoPlaybackSamples)
-    @JoinColumn({ name: 'video_id' })
-    video: Video;
+    @XViewColumn()
+    videoVersionId: Id<'VideoVersion'>;
+    @XManyToOne<VideoRating>()(() => VideoVersion, x => x.videoRatings)
+    @XJoinColumn<VideoRating>('videoVersionId')
+    videoVersion: Relation<VideoVersion>;
 
     // user
     @Column()
-    userId: number;
-
-    @ManyToOne(_ => User, x => x.videoPlaybackSamples)
-    @JoinColumn({ name: 'user_id' })
-    user: User;
+    @XViewColumn()
+    userId: Id<'User'>;
+    @XManyToOne<VideoRating>()(() => User, x => x.videoRatings)
+    @XJoinColumn<VideoRating>('userId')
+    user: Relation<User>;
 }

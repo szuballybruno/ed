@@ -1,36 +1,45 @@
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { SignupService } from '../services/SignupService';
-import { ActionParams, withValueOrBadRequest } from '../utilities/helpers';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class SignupController {
+export class SignupController implements XController<SignupController> {
 
     private _signupService: SignupService;
     private _personalityAssessmentService: PersonalityAssessmentService;
 
-    constructor(signupService: SignupService, personalityAssessmentService: PersonalityAssessmentService) {
+    constructor(serviceProvider: ServiceProvider) {
 
-        this._signupService = signupService;
-        this._personalityAssessmentService = personalityAssessmentService;
+        this._signupService = serviceProvider.getService(SignupService);
+        this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }
 
-    answerSignupQuestionAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.signup.answerSignupQuestion, { isPost: true })
+    answerSignupQuestionAction(params: ActionParams) {
 
-        const dto = withValueOrBadRequest<AnswerSignupQuestionDTO>(params.req.body);
+        const dto = params
+            .getBody<AnswerSignupQuestionDTO>(['answerId', 'questionId'])
+            .data;
 
-        await this._signupService
-            .answerSignupQuestionAsync(params.currentUserId, dto);
-    };
+        return this._signupService
+            .answerSignupQuestionAsync(params.principalId, dto);
+    }
 
+    @XControllerAction(apiRoutes.signup.getSignupData)
     getSignupDataAction = (params: ActionParams) => {
 
         return this._signupService
-            .getSignupDataAsync(params.currentUserId);
+            .getSignupDataAsync(params.principalId);
     };
 
-    getUserPersonalityDataAction = async (params: ActionParams) => {
+    @XControllerAction(apiRoutes.signup.getUserPersonalityData)
+    getUserPersonalityDataAction(params: ActionParams) {
 
         return this._personalityAssessmentService
-            .getUserPersonalityAssessmentDTOAsync(params.currentUserId);
-    };
+            .getUserPersonalityAssessmentDTOAsync(params.principalId);
+    }
 }
