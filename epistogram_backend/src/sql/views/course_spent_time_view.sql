@@ -23,15 +23,17 @@ FROM
 				LEFT JOIN public.course_version cv
 				ON cv.id = mv.course_version_id
 
-				LEFT JOIN public.answer_session ase
-				ON ase.exam_version_id = ev.id 
-					AND ase.user_id = u.id
-					AND ase.start_date IS NOT NULL
+				LEFT JOIN public.answer_session_view asev
+				ON asev.exam_version_id = ev.id 
+					AND asev.user_id = u.id
+					AND asev.start_date IS NOT NULL
 
 				INNER JOIN public.course_item_completion_view cicv
-				ON cicv.answer_session_id = ase.id
+				ON cicv.answer_session_id = asev.answer_session_id
 
-				WHERE ev.id <> 1
+				WHERE asev.answer_session_type = 'exam'
+				AND cv.course_id = co.id
+				AND asev.user_id = u.id
 			) sq
 		) total_exam_session_elapsed_time,
 		(
@@ -48,6 +50,9 @@ FROM
 
 			LEFT JOIN public.course_version cv
 			ON cv.id = mv.course_version_id
+
+			WHERE cv.course_id = co.id
+			AND vps.user_id = u.id
 			
 		) total_video_watch_elapsed_time,
 		(
@@ -68,6 +73,9 @@ FROM
 
 			LEFT JOIN public.course_version cv
 			ON cv.id = mv.course_version_id
+
+			WHERE asev.user_id = u.id
+			AND cv.course_id = co.id
 		) total_video_question_elapsed_time,
 		(
 			SELECT 
@@ -87,11 +95,13 @@ FROM
 
 			LEFT JOIN public.course_version cv
 			ON cv.id = mv.course_version_id
+
+			WHERE asev.user_id = u.id
+			AND cv.course_id = u.id
 		) total_practise_question_elapsed_time
 	FROM public.course co
 
-	LEFT JOIN public.user u
-	ON 1 = 1
+	CROSS JOIN public.user u
 
 	ORDER BY u.id, co.id
 ) sq

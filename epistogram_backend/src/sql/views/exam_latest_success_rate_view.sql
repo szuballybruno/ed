@@ -3,6 +3,7 @@ SELECT
 	asev.answered_question_count,
 	asev.correct_given_answer_count,
 	esv.exam_acquired_points,
+	ed.is_final,
 	ROUND((esv.exam_acquired_points::double precision / esv.exam_maximum_points * 100)::numeric, 1) success_rate
 FROM 
 (

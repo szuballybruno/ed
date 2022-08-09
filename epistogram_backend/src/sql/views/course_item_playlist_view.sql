@@ -3,7 +3,11 @@ latest_course_items AS
 (
 	SELECT 
 		civ.*,
+	
+		-- module code
 		(SELECT encode((civ.module_id || '@module')::bytea, 'base64')) module_code,
+		
+		-- playlist item code
 		CASE WHEN civ.video_id IS NULL
 			THEN (SELECT encode((civ.exam_id || '@exam')::bytea, 'base64'))
 			ELSE (SELECT encode((civ.video_id || '@video')::bytea, 'base64')) 
@@ -17,24 +21,18 @@ latest_course_items AS
 	WHERE civ.module_order_index != 0
 ),
 latest_answer_session AS
-(
+(	
 	SELECT
-		u.id user_id,
-		ev.id exam_version_id,
+		asv.user_id,
+		asv.exam_version_id,
 		MAX(asv.answer_session_id)::int answer_session_id
-	FROM public.user u
+	FROM public.answer_session_view asv
 	
-	CROSS JOIN public.exam_version ev
-	
-	LEFT JOIN public.answer_session_view asv
-	ON asv.user_id = u.id
-	AND asv.exam_version_id = ev.id
-
 	INNER JOIN public.course_item_completion_view cicv
 	ON cicv.answer_session_id = asv.answer_session_id
-	AND cicv.user_id = u.id
-
-	GROUP BY u.id, ev.id
+	AND cicv.user_id = asv.user_id
+	
+	GROUP BY asv.user_id, asv.exam_version_id
 ),
 states AS
 (
@@ -96,7 +94,9 @@ combined AS
 	ON uprv.video_version_id = lci.video_version_id
 	AND uprv.user_id = st.user_id
 )
-SELECT * FROM combined
+SELECT 
+	* 
+FROM combined
 	
 ORDER BY
 	user_id,
