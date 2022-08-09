@@ -214,7 +214,7 @@ export const getExamVersionsSeedData = (
             examId: exams.pretest_exam_42.id
         },
 
-        exam_version_pretest_43: {
+        exam_version_pretest_excel: {
             moduleVersionId: moduleVersions.module_version_excel_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_43.id,
             examId: exams.pretest_exam_43.id

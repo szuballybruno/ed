@@ -68,6 +68,7 @@ video_is_recommended AS
 )
 SELECT 
     vv.id video_version_id,
+	vv.video_id,
     vir.user_id,
 	cv.id course_version_id,
     ac.total_given_answer_count::int,

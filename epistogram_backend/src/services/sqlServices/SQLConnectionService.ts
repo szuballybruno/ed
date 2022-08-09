@@ -1,6 +1,5 @@
 import Postgres from 'pg';
 import { LoggerService } from '../LoggerService';
-import { logSecondary } from '../misc/logger';
 import { SQLPoolService } from './SQLPoolService';
 
 export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Postgres.QueryResult<any>>;
@@ -17,17 +16,17 @@ export class SQLConnectionService {
 
     async createConnectionClientAsync() {
 
-        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', 'Connecting postgres client...');
+        this._loggerService.logScoped('TRANSACTION', 'SECONDARY', 'Connecting postgres client...');
         this._client = await this._poolService.connectClientAsync();
     }
 
     releaseConnectionClient() {
 
-        logSecondary('Releasing postgres client...');
+        this._loggerService.logScoped('TRANSACTION', 'Releasing postgres client...');
         this._client?.release();
     }
 
-    async endPoolAsync(){
+    async endPoolAsync() {
 
         await this._poolService.endPool();
     }
@@ -43,7 +42,7 @@ export class SQLConnectionService {
                 .query(sql, values);
         }
         catch (err: any) {
-            
+
             // this._loggerService.logScoped('GENERIC', 'ERROR', err.message);
             // this._loggerService.logScoped('GENERIC', 'ERROR', err.stack);
             throw new Error(`Message: ${err.message} Detail: ${err.detail}`);

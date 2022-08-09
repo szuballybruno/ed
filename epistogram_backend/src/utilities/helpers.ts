@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
@@ -16,6 +17,13 @@ export const toFullName = (firstName: string, lastName: string, culture?: 'en' |
         return `${lastName} ${firstName}`;
 
     return `${firstName} ${lastName}`;
+};
+
+export const isXMinutesAgo = (date: Date, minutes: number) => {
+
+    return moment(date)
+        .add(minutes, 'minutes')
+        .toDate() < new Date();
 };
 
 export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, Id<any> | null>) => {

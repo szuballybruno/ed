@@ -3,10 +3,9 @@ import { setupIntegrationTest } from './misc/base';
 import { permissionTesterWrapper } from './misc/permissionTesterWrapper';
 
 setupIntegrationTest('Testing permissions')
-    .purgeDB()
-    .addTests(async (getInitData) => {
+    .addTests(async (getTestParams) => {
 
-        const { api, cookies, serviceProvider } = getInitData();
+        const { api, cookies, serviceProvider } = getTestParams();
 
         await permissionTesterWrapper(
             serviceProvider,

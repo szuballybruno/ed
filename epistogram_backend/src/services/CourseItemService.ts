@@ -8,7 +8,7 @@ import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { VersionCode } from '../shared/types/versionCode';
+import { VersionCode } from '../shared/types/VersionCode1';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';

@@ -1,10 +1,13 @@
 import { Question } from '../models/entity/question/Question';
 import { QuestionData } from '../models/entity/question/QuestionData';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { QuestionDataView } from '../models/views/QuestionDataView';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { QuestionDTO } from '../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationResult } from '../utilities/misc';
+import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
@@ -15,7 +18,8 @@ export class QuestionService {
 
     constructor(
         private _ormService: ORMConnectionService,
-        private _versionSaveService: VersionSaveService) {
+        private _versionSaveService: VersionSaveService,
+        private _mapper: MapperService) {
     }
 
     /**
@@ -76,5 +80,21 @@ export class QuestionService {
             });
 
         return result;
+    }
+
+    /**
+     * Returns question data by id 
+     */
+    async getQuestionDataById(questionId: Id<'Question'>) {
+
+        const question = await this
+            ._ormService
+            .query(QuestionDataView, { questionId })
+            .where('questionId', '=', 'questionId')
+            .getMany();
+
+        return this
+            ._mapper
+            .mapTo(QuestionDTO, [question]);
     }
 }

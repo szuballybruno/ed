@@ -76,6 +76,12 @@ export class GlobalConfiguration {
         enabledScopes: ['GENERIC', 'TRANSACTION'] as LogScopeType[],
     };
 
+    practiseQuestions = {
+        incorrectQuestionDelayMinutes: 5,
+        correctQuestionDelayMinutes: 20,
+        incorrectPractiseQuestionDelayMinutes: 60
+    };
+
     constructor(rootDirectory: string) {
 
         this.rootDirectory = rootDirectory;
@@ -83,7 +89,7 @@ export class GlobalConfiguration {
 
     overrideLogScopes = (scopes: LogScopeType[]) => {
 
-        this.logging.enabledScopes = this.logging.enabledScopes.concat(scopes);
+        this.logging.enabledScopes = scopes;
     };
 
     getIsProdEnvironment = () => {
