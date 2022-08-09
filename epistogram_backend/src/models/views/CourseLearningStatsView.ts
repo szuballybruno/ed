@@ -36,10 +36,6 @@ export class CourseLearningStatsView {
     @XViewColumn()
     currentItemCode: string;
 
-    /*     @ViewColumn()
-        @XViewColumn()
-        firstItemCode: string; */
-
     @ViewColumn()
     @XViewColumn()
     continueItemCode: string;
