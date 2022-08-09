@@ -5,6 +5,8 @@ WITH completed_items AS
 		cicv.course_id,
 		DATE_TRUNC('day', cicv.completion_date) completion_date
 	FROM public.course_item_completion_view cicv
+
+	WHERE cicv.is_pretest IS NOT TRUE
 ),
 completed_item_groups AS
 (

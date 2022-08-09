@@ -21,7 +21,8 @@ SELECT
     cic.answer_session_id,
     cic.completion_date,
     cv.id course_version_id,
-    cv.course_id
+    cv.course_id,
+    ex.is_pretest
 FROM latest_id
 
 LEFT JOIN public.course_item_completion cic
@@ -32,6 +33,9 @@ ON vv.id = cic.video_version_id
 
 LEFT JOIN public.exam_version ev
 ON ev.id = cic.exam_version_id
+
+LEFT JOIN public.exam ex
+ON ex.id = ev.exam_id
 
 LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id 

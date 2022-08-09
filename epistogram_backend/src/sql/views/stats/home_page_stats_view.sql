@@ -17,7 +17,8 @@ SELECT
         
         WHERE cicv.user_id = u.id
         AND cicv.completion_date > CURRENT_DATE - 30 
-        AND cicv.video_version_id IS NOT NULL 
+        AND cicv.video_version_id IS NOT NULL
+        AND cicv.is_pretest IS NOT TRUE
     ) completed_videos_last_month,
 
     -- performance last month
