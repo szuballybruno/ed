@@ -138,8 +138,8 @@ export class EmailService {
                 port: 465,
                 secure: true,
                 auth: {
-                    user: this._config.mail.senderEmail,
-                    pass: this._config.mail.senderPassword
+                    user: 'apikey',//this._config.mail.senderEmail,
+                    pass: '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'//this._config.mail.senderPassword
                 },
                 tls: {
                     rejectUnauthorized: false
