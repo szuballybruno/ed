@@ -88,7 +88,7 @@ SELECT
     
 FROM public.user u
 
-INNER JOIN public.course_item_playlist_view cisv
+INNER JOIN public.playlist_view cisv
 ON cisv.user_id = u.id 
 AND cisv.item_state = 'completed'
 
