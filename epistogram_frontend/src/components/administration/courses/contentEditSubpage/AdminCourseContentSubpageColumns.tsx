@@ -264,12 +264,7 @@ export const useGridColumnDefinitions = (
                         </EpistoButton>
 
                         <EpistoButton
-                            onClick={() => openDialog(
-                                row.itemType?.type === 'video'
-                                    ? 'video'
-                                    : 'exam',
-                                'statistics',
-                                row.quickMenu)}>
+                            onClick={() => { throw new Error('Not implemented!'); }}>
 
                             <Equalizer />
                         </EpistoButton>
