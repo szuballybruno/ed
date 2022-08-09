@@ -35,7 +35,6 @@ export type EnvConfigBaseType = {
         DB_SERVICE_USER_NAME: string;
         DB_SERVICE_USER_PASSWORD: string;
         DB_IS_ORM_LOGGING_ENABLED: boolean;
-        IS_DANGEROUS_DB_PURGE_ENABLED: boolean;
     },
 
     gcp: {
@@ -113,7 +112,6 @@ const getBaseConfig = (
             DB_SERVICE_USER_NAME: secrets.DB_SERVICE_USER_NAME, // 'dev_service_user',
             DB_SERVICE_USER_PASSWORD: secrets.DB_SERVICE_USER_PASSWORD, // 'epistogram',
             DB_IS_ORM_LOGGING_ENABLED: true,
-            IS_DANGEROUS_DB_PURGE_ENABLED: false,
         }
     });
 
