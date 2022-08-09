@@ -10,7 +10,7 @@ import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
-import { CourseItemPlaylistView } from '../models/views/CourseItemPlaylistView';
+import { PlaylistView } from '../models/views/PlaylistView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
@@ -129,7 +129,7 @@ export class CourseService {
                     .getSingle();
 
                 const moduleViews = await this._ormService
-                    .query(CourseItemPlaylistView, { principalId, courseId })
+                    .query(PlaylistView, { principalId, courseId })
                     .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
@@ -242,7 +242,7 @@ export class CourseService {
 
 
         const viewIfPlaylistItemCode = await this._ormService
-            .query(CourseItemPlaylistView, { playlistItemCode })
+            .query(PlaylistView, { playlistItemCode })
             .where('playlistItemCode', '=', 'playlistItemCode')
             .getOneOrNull();
 
@@ -250,7 +250,7 @@ export class CourseService {
             return viewIfPlaylistItemCode.courseId;
 
         const viewIfModuleCode = await this._ormService
-            .query(CourseItemPlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
+            .query(PlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
             .where('moduleCode', '=', 'moduleCode')
             .and('itemOrderIndex', '=', 'itemOrderIndex')
             .getSingle();

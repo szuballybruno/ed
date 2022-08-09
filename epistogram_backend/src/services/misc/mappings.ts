@@ -23,7 +23,7 @@ import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedV
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { CourseItemPlaylistView } from '../../models/views/CourseItemPlaylistView';
+import { PlaylistView } from '../../models/views/PlaylistView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
@@ -314,7 +314,7 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(PlaylistModuleDTO, () => (views: CourseItemPlaylistView[]) => {
+        .addArrayMapping(PlaylistModuleDTO, () => (views: PlaylistView[]) => {
 
             return views
                 .groupBy(x => x.moduleId)

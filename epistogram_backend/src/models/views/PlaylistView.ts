@@ -7,7 +7,7 @@ import { Id } from '../../shared/types/versionId';
     synchronize: false,
     expression: ''
 })
-export class CourseItemPlaylistView {
+export class PlaylistView {
 
     @ViewColumn()
     @XViewColumn()
