@@ -38,12 +38,13 @@ export class SignupService {
 
         return {
             action: async () => {
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
+
+                const userId = principalId.getId();
 
                 const signupAnswerSession = await this._ormService
-                    .query(AnswerSession, { examVersionId: 1 })
+                    .query(AnswerSession, { examVersionId: 1, userId })
                     .where('examVersionId', '=', 'examVersionId')
+                    .and('userId', '=', 'userId')
                     .getOneOrNull();
 
                 if (!signupAnswerSession)

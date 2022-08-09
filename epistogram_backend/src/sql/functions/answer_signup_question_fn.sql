@@ -28,7 +28,8 @@ BEGIN
 	ON ev.id = ase.exam_version_id
 
 	WHERE ev.exam_id = 1 
-		AND ase.user_id = param_user_id
+	AND ase.user_id = param_user_id
+	
 	INTO var_signup_answer_session_id;
 		
 	-- question version id
@@ -72,17 +73,17 @@ BEGIN
 	(
 		creation_date,
 		question_version_id,
-		answer_session_id,
 		is_correct,
-		elapsed_seconds
+		elapsed_seconds,
+		answer_session_id
 	)
 	VALUES
 	(
 		NOW(),
 		var_question_version_id,
-		var_signup_answer_session_id,
 		var_is_correct,
-		0
+		0,
+		var_signup_answer_session_id
 	)
 	RETURNING id
 	INTO var_given_answer_id;
