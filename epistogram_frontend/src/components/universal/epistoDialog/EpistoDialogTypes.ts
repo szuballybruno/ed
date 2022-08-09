@@ -20,7 +20,7 @@ export type EpistoDialogLogicType<TParams = void> = {
     buttons: ButtonType<EpistoDialogLogicType<TParams>>[];
     closeDialog: () => void;
     xlogic: XDialogLogicType;
-    params: TParams;
+    params: TParams | null;
     declareOptions?: DeclareDialogOptionsType;
     openDialog: (opt?: OpenDialogOptionsType<TParams>) => void;
 };

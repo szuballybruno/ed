@@ -5,10 +5,9 @@ import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
-import { useEditUserData, useUserLearningOverviewData } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { isCurrentAppRoute } from '../../../static/frontendHelpers';
@@ -22,12 +21,12 @@ import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseSt
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
+import { useAdminCourseContentDialogLogic } from './adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from './adminCourseContentDialog/AdminUserCourseContentDialog';
 import { AdminUserList } from './AdminUserList';
-import { AdminUserCourseContentDialog } from './modals/AdminUserCourseContentDialog';
 
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
@@ -83,13 +82,13 @@ export const AdminUserStatisticsSubpage = (props: {
     const { navigate2 } = useNavigation();
     const navigateToAddUser = () => navigate2(usersRoute.addRoute);
 
-    const dialogLogic = useEpistoDialogLogic<{
-        courseId: Id<'Course'>,
-        userId: Id<'User'> | null
-    }>('userCourseContentDialog');
+    const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
-    const { userEditData } = useEditUserData(userId);
-    const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = useUserLearningOverviewData(userId);
+    const { userEditData } = UserApiService
+        .useEditUserData(userId);
+
+    const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = UserApiService
+        .useUserLearningOverviewData(userId);
 
     const engagementPoints = userLearningOverviewData?.engagementPoints || 0;
     const performancePoints = Math.floor(userLearningOverviewData?.performancePercentage || 0);
@@ -153,47 +152,20 @@ export const AdminUserStatisticsSubpage = (props: {
                 }
                 headerButtons={bulkEditButtons}>
 
-                <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
+                <AdminUserCourseContentDialog
+                    dialogLogic={adminCourseContentDialogLogic} />
 
                 {/* learning insights header */}
                 <EditSection
                     isFirst
                     title={texts.sectionTitles.learningOverviewReport}
                     rightSideComponent={(
+
                         /* set date range */
                         <Flex
                             justify="center"
                             align="center"
                             my="10px">
-
-                            {/* <Image
-                                h="30px"
-                                w="30px"
-                                mr="5px"
-                                src={Environment.getAssetUrl('/images/tempomatdatechange.png')} />
-
-                            <EpistoFont fontSize={'fontLarge'}
-                                style={{
-                                    minWidth: 150
-                                }}>
-
-                                {texts.dateRange}
-                            </EpistoFont>
-
-                            {/* Date picker tooltip 
-                            <Tooltip title={'tiptool'}
-                                p="20px">
-
-                                <DatePicker
-                                    dateFormat="yyyy-MM-dd"
-                                    calendarStartDay={1}
-                                    selected={startDate}
-                                    onChange={onChange}
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    selectsRange
-                                />
-                            </Tooltip> */}
                         </Flex>
                     )}>
 
@@ -316,14 +288,13 @@ export const AdminUserStatisticsSubpage = (props: {
                             return <LearningCourseStatsTile
                                 actionButtons={[{
                                     children: translatableTexts.misc.details,
-                                    onClick: () => {
-                                        dialogLogic.openDialog({
+                                    onClick: () => adminCourseContentDialogLogic
+                                        .openDialog({
                                             params: {
                                                 courseId: course.courseId,
                                                 userId: userId
                                             }
-                                        });
-                                    }
+                                        })
                                 }]}
                                 course={course}
                                 key={index} />;

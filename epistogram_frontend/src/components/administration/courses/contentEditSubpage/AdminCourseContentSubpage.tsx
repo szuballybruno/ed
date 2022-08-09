@@ -38,6 +38,7 @@ export const AdminCourseContentSubpage = () => {
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
+    const dialogParams = itemEditDialogLogic.params!; 
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
 
     // state
@@ -316,7 +317,7 @@ export const AdminCourseContentSubpage = () => {
                         itemsMutatorRef
                             .current
                             .mutate({
-                                key: itemEditDialogLogic.params.versionCode,
+                                key: dialogParams.versionCode,
                                 field: 'questionMutations',
                                 newValue: questionMutations
                             });
@@ -324,7 +325,7 @@ export const AdminCourseContentSubpage = () => {
                         itemsMutatorRef
                             .current
                             .mutate({
-                                key: itemEditDialogLogic.params.versionCode,
+                                key: dialogParams.versionCode,
                                 field: 'answerMutations',
                                 newValue: answerMutations
                             });

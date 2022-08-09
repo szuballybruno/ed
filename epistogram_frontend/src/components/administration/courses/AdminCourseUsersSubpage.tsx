@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useUserListQuery } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
 import { Id } from '../../../shared/types/versionId';
@@ -11,7 +11,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 export const AdminCourseUsersGrid = () => {
 
-    const { users } = useUserListQuery('');
+    const { users } = UserApiService.useUserListQuery('');
     const { navigate2 } = useNavigation();
 
     const getRowsFromUsers = () => users.map((user) => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useUserListQuery } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import AdminAddUserSubpage from './AdminAddUserSubpage';
 import AdminEditUserSubpage from './AdminEditUserSubpage';
@@ -17,7 +17,8 @@ export const UserAdminSubpage = () => {
 
     const [searchText, setSearchText] = useState<string | null>(null);
 
-    const { users, usersStatus, usersError, refetchUsers } = useUserListQuery(searchText);
+    const { users, usersStatus, usersError, refetchUsers } = UserApiService
+        .useUserListQuery(searchText);
 
     const handleSearch = (value: string) => {
 

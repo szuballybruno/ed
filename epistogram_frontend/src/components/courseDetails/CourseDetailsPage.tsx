@@ -9,14 +9,15 @@ import { Environment } from '../../static/Environemnt';
 import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
+import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
-import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { useCurrentUserId } from '../system/AuthenticationFrame';
 import { FlexListItem } from '../universal/FlexListItem';
 import { CourseDetailsBriefingInfoItem } from './CourseDetailsBriefingInfoItem';
 import { CourseDetailsContentSection } from './CourseDetailsContentSection';
@@ -32,16 +33,15 @@ const CourseDetailsPage = () => {
     const { playCourse } = useNavigation();
     const showError = useShowErrorDialog();
 
+    const { userId } = useCurrentUserId();
+
     const { courseDetails } = CourseApiService.useCourseDetails(courseId);
     const { colors } = useImageColor(courseDetails?.thumbnailURL!);
 
     const [currentTab, setCurrentTab] = useState(0);
     const [color, setColor] = useState<string>('white');
 
-    const dialogLogic = useEpistoDialogLogic<{
-        courseId: Id<'Course'>,
-        userId: Id<'User'> | null
-    }>('sasd');
+    const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
     useEffect(() => {
         if (colors) {
@@ -133,7 +133,8 @@ const CourseDetailsPage = () => {
         noBackground
         background={`linear-gradient(160deg, ${color}, white)`}>
 
-        <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
+        <AdminUserCourseContentDialog
+            dialogLogic={adminCourseContentDialogLogic} />
 
         <ContentPane
             noMaxWidth
@@ -384,12 +385,13 @@ const CourseDetailsPage = () => {
                                     if (!courseDetails.courseId)
                                         return;
 
-                                    dialogLogic.openDialog({
-                                        params: {
-                                            courseId: courseDetails.courseId,
-                                            userId: null
-                                        }
-                                    });
+                                    adminCourseContentDialogLogic
+                                        .openDialog({
+                                            params: {
+                                                courseId: courseDetails.courseId,
+                                                userId: userId
+                                            }
+                                        });
                                 }}>
 
                                 {translatableTexts.learningOverview.myStatisticsTitle}
@@ -401,27 +403,6 @@ const CourseDetailsPage = () => {
 
                 </Flex>
             </Flex>
-
-            {/* side tit 
-            <Flex
-                _before={{
-                    position: 'absolute',
-                    content: '""',
-                    top: -400,
-                    left: 500,
-                    width: 1000,
-                    height: 1000,
-                    borderRadius: '50%',
-                    backgroundColor: '#EFF9FFFF',
-                }}
-                position={'absolute'}
-                top={0}
-                left={0}
-                width={'70%'}
-                height={300}
-                bg={'#eff9ff'}
-                zIndex={-1}
-                backgroundClip={'padding-box'} />*/}
 
         </ContentPane>
     </PageRootContainer>;

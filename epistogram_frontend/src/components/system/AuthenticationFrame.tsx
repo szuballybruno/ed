@@ -1,4 +1,4 @@
-import { createContext, useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -29,6 +29,12 @@ const userDefaults: UserDTO = {
 export const CurrentUserContext = createContext<UserDTO>(userDefaults);
 export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
 export const AuthenticationStateContext = createContext<AuthenticationStateType>('loading');
+
+export const useCurrentUserId = () => {
+
+    const ct = useContext(CurrentUserContext);
+    return { userId: ct.id };
+};
 
 const AuthFirewall = (props: PropsWithChildren & {
     authState: AuthenticationStateType

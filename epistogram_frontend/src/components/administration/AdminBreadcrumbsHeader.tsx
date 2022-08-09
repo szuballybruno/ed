@@ -8,7 +8,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
-import { useBriefUserData } from '../../services/api/userApiService';
+import { UserApiService } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
@@ -110,7 +110,7 @@ export const AdminBreadcrumbsHeader = (props: {
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
 
     // http
-    const { briefUserData } = useBriefUserData(userId);
+    const { briefUserData } = UserApiService.useBriefUserData(userId);
     const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 

@@ -1,15 +1,14 @@
 import { Flex } from '@chakra-ui/react';
-import React from 'react';
 import { CourseProgressApiService } from '../../services/api/CourseProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
-import { Id } from '../../shared/types/versionId';
-import { AdminUserCourseContentDialog } from '../administration/users/modals/AdminUserCourseContentDialog';
+import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
+import { useCurrentUserId } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { DashboardSection } from '../universal/DashboardSection';
-import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LearningCourseStatsTile } from './LearningCourseStatsTile';
 
 export const LearningCourseStats = () => {
@@ -20,10 +19,9 @@ export const LearningCourseStats = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    const dialogLogic = useEpistoDialogLogic<{
-        courseId: Id<'Course'>,
-        userId: Id<'User'> | null
-    }>('sasd');
+    const { userId } = useCurrentUserId();
+
+    const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
     const { navigateToPlayer } = useNavigation();
 
@@ -49,7 +47,8 @@ export const LearningCourseStats = () => {
         minWidth="100%"
         flex="1">
 
-        <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
+        <AdminUserCourseContentDialog
+            dialogLogic={adminCourseContentDialogLogic} />
 
         {/* in progress courses  */}
         <DashboardSection width="100%"
@@ -66,12 +65,13 @@ export const LearningCourseStats = () => {
                             return <LearningCourseStatsTile
                                 actionButtons={[{
                                     children: 'Részletek',
-                                    onClick: () => dialogLogic.openDialog({
-                                        params: {
-                                            courseId: course.courseId,
-                                            userId: null
-                                        }
-                                    })
+                                    onClick: () => adminCourseContentDialogLogic
+                                        .openDialog({
+                                            params: {
+                                                courseId: course.courseId,
+                                                userId: userId
+                                            }
+                                        })
                                 }, {
                                     children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
                                     variant: 'colored',
@@ -108,12 +108,13 @@ export const LearningCourseStats = () => {
                         .map((course, index) => <LearningCourseStatsTile
                             actionButtons={[{
                                 children: 'Részletek',
-                                onClick: () => dialogLogic.openDialog({
-                                    params: {
-                                        courseId: course.courseId,
-                                        userId: null
-                                    }
-                                })
+                                onClick: () => adminCourseContentDialogLogic
+                                    .openDialog({
+                                        params: {
+                                            courseId: course.courseId,
+                                            userId: userId
+                                        }
+                                    })
                             }, {
                                 children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
                                 variant: 'colored',

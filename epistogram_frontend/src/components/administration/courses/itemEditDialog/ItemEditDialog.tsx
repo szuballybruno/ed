@@ -26,7 +26,7 @@ export const ItemEditDialog = ({
         questionMutations,
         answerMutations,
         isVideo
-    } = dialogLogic.params;
+    } = dialogLogic.params!;
 
     const isExam = !isVideo;
 

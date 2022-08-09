@@ -8,75 +8,77 @@ import { Id } from '../../shared/types/versionId';
 import { useReactQuery2 } from '../../static/frontendHelpers';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
 
-export const useUserListQuery = (searchText: string | null) => {
+export const UserApiService = {
 
-    const queryResult = useReactQuery2<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });
+    useUserListQuery: (searchText: string | null) => {
 
-    return {
-        users: queryResult.data ?? [],
-        usersStatus: queryResult.state,
-        usersError: queryResult.error,
-        refetchUsers: queryResult.refetch,
-    };
-};
+        const queryResult = useReactQuery2<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });
 
-export const useSaveUserSimple = () => {
+        return {
+            users: queryResult.data ?? [],
+            usersStatus: queryResult.state,
+            usersError: queryResult.error,
+            refetchUsers: queryResult.refetch,
+        };
+    },
 
-    const postDataResult = usePostDataUnsafe<UserEditSimpleDTO, void>(apiRoutes.user.saveUserSimple);
+    useSaveUserSimple: () => {
 
-    return {
-        saveUserSimpleState: postDataResult.state,
-        saveUserSimpleAsync: postDataResult.postDataAsync
-    };
-};
+        const postDataResult = usePostDataUnsafe<UserEditSimpleDTO, void>(apiRoutes.user.saveUserSimple);
 
-export const useSaveUser = () => {
+        return {
+            saveUserSimpleState: postDataResult.state,
+            saveUserSimpleAsync: postDataResult.postDataAsync
+        };
+    },
 
-    const queryRes = usePostDataUnsafe<UserEditDTO, void>(apiRoutes.user.saveUser);
+    useSaveUser: () => {
 
-    return {
-        saveUserStatus: queryRes.state,
-        saveUserAsync: queryRes.postDataAsync
-    };
-};
+        const queryRes = usePostDataUnsafe<UserEditDTO, void>(apiRoutes.user.saveUser);
 
-export const useEditUserData = (editedUserId: Id<'User'> | null) => {
+        return {
+            saveUserStatus: queryRes.state,
+            saveUserAsync: queryRes.postDataAsync
+        };
+    },
 
-    const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
+    useEditUserData: (editedUserId: Id<'User'> | null) => {
 
-    return {
-        userEditData: queryRes.data,
-        userEditDataStatus: queryRes.state,
-        userEditDataError: queryRes.error,
-        refetchEditUserData: queryRes.refetch
-    };
-};
+        const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
 
-export const useUserLearningOverviewData = (userId: Id<'User'>) => {
+        return {
+            userEditData: queryRes.data,
+            userEditDataStatus: queryRes.state,
+            userEditDataError: queryRes.error,
+            refetchEditUserData: queryRes.refetch
+        };
+    },
 
-    const queryRes = useReactQuery2<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+    useUserLearningOverviewData: (userId: Id<'User'>) => {
 
-    return {
-        userLearningOverviewData: queryRes.data,
-        userLearningOverviewDataStatus: queryRes.state,
-        userLearningOverviewDataError: queryRes.error,
-        refetchUserLearningOverviewData: queryRes.refetch
-    };
-};
+        const queryRes = useReactQuery2<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
 
+        return {
+            userLearningOverviewData: queryRes.data,
+            userLearningOverviewDataStatus: queryRes.state,
+            userLearningOverviewDataError: queryRes.error,
+            refetchUserLearningOverviewData: queryRes.refetch
+        };
+    },
 
-export const useBriefUserData = (userId: Id<'User'> | null) => {
+    useBriefUserData: (userId: Id<'User'> | null) => {
 
-    const queryRes = useReactQuery2<BriefUserDataDTO>(apiRoutes.user.getBriefUserData, { userId: userId }, !!userId);
+        const queryRes = useReactQuery2<BriefUserDataDTO>(apiRoutes.user.getBriefUserData, { userId: userId }, !!userId);
 
-    return {
-        briefUserData: queryRes.data,
-        briefUserDataStatus: queryRes.state,
-        briefUserDataError: queryRes.error
-    };
-};
+        return {
+            briefUserData: queryRes.data,
+            briefUserDataStatus: queryRes.state,
+            briefUserDataError: queryRes.error
+        };
+    },
 
-export const deleteUserAsync = (userId: Id<'User'>) => {
+    deleteUserAsync: (userId: Id<'User'>) => {
 
-    return httpPostAsync(apiRoutes.user.deleteUser, { userId });
+        return httpPostAsync(apiRoutes.user.deleteUser, { userId });
+    }
 };

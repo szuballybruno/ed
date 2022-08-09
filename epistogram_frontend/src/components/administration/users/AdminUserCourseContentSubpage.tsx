@@ -1,18 +1,18 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CourseApiService } from '../../../services/api/courseApiService';
-import { useEditUserData } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { Id } from '../../../shared/types/versionId';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { useAdminCourseContentDialogLogic } from './adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from './adminCourseContentDialog/AdminUserCourseContentDialog';
 import { AdminUserList } from './AdminUserList';
 import { AdminUserCoursesDataGridControl } from './dataGrids/AdminUserCoursesDataGridControl';
-import { AdminUserCourseContentDialog } from './modals/AdminUserCourseContentDialog';
 
 export const AdminUserCourseContentSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -24,13 +24,10 @@ export const AdminUserCourseContentSubpage = (props: {
     const userId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.courseContentRoute)
         .getValue(x => x.userId, 'int');
 
-    const { userEditData } = useEditUserData(userId);
+    const { userEditData } = UserApiService.useEditUserData(userId);
     const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
-    const dialogLogic = useEpistoDialogLogic<{
-        courseId: Id<'Course'>,
-        userId: Id<'User'> | null
-    }>('userCourseContentDialog');
+    const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
@@ -69,19 +66,17 @@ export const AdminUserCourseContentSubpage = (props: {
                 ]
                     .concat(userEditData?.isTeacher ? applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute : [])}>
 
-            <AdminUserCourseContentDialog dialogLogic={dialogLogic} />
+            <AdminUserCourseContentDialog
+                dialogLogic={adminCourseContentDialogLogic} />
 
             <AdminUserCoursesDataGridControl
-                handleMoreButton={
-                    (courseId: Id<'Course'>) => {
-
-                        return dialogLogic.openDialog({
-                            params: {
-                                courseId: courseId,
-                                userId: userId
-                            }
-                        });
-                    }}
+                handleMoreButton={(courseId: Id<'Course'>) => adminCourseContentDialogLogic
+                    .openDialog({
+                        params: {
+                            courseId: courseId,
+                            userId: userId
+                        }
+                    })}
                 handleSaveRequiredCompletionDate={handleSaveRequiredCompletionDate} />
         </AdminSubpageHeader >
     </AdminBreadcrumbsHeader >;

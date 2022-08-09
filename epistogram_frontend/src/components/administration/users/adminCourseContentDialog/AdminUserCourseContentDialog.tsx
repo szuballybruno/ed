@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
-import { useBriefUserData } from '../../../../services/api/userApiService';
+import { UserApiService } from '../../../../services/api/userApiService';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { TabPanel } from '../../../courseDetails/TabPanel';
@@ -15,55 +15,61 @@ import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosData
 export const AdminUserCourseContentDialog = (props: {
     dialogLogic: EpistoDialogLogicType<{
         courseId: Id<'Course'>,
-        userId: Id<'User'> | null
+        userId: Id<'User'>
     }>
 }) => {
 
     const { dialogLogic } = props;
+    const dialogParams = dialogLogic.params;
 
     const [currentTab, setCurrentTab] = useState(0);
 
-    const courseId = dialogLogic.params.courseId;
-    const userId = dialogLogic.params.userId;
+    // http 
+    const { courseBriefData } = CourseApiService
+        .useCourseBriefData(dialogParams?.courseId ?? null);
 
-    const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
-    const { briefUserData } = useBriefUserData(userId);
+    const { briefUserData } = UserApiService
+        .useBriefUserData(dialogParams?.userId ?? null);
 
     const courseTitle = courseBriefData?.title || '';
     const userFullName = briefUserData?.fullName || '';
 
-    const moreInfoDialogTabs = [
-        {
-            title: 'Áttekintés',
-            component: <AdminUserCourseStatsOverview
-                courseId={courseId}
-                userId={userId!} />
-        },
-        {
-            title: 'Videók',
-            component: <AdminUserVideosDataGridControl
-                courseId={courseId}
-                handleMoreButton={
-                    function (): void {
-                        throw new Error('Function not implemented.');
-                    }} />
-        },
-        {
-            title: 'Vizsgák',
-            component: <AdminUserExamsDataGridControl
-                courseId={courseId}
-                handleMoreButton={
-                    function (): void {
-                        throw new Error('Function not implemented.');
-                    }} />
-        },
-        {
-            title: 'Kommentek/kérdések',
-            component: <Flex>
-                Kommentek/kérdések
-            </Flex>
-        }
-    ];
+    console.log(dialogParams);
+
+    const moreInfoDialogTabs = dialogParams
+        ? [
+            {
+                title: 'Áttekintés',
+                component: <AdminUserCourseStatsOverview
+                    courseId={dialogParams.courseId}
+                    userId={dialogParams.userId} />
+            },
+            {
+                title: 'Videók',
+                component: <AdminUserVideosDataGridControl
+                    courseId={dialogParams.courseId}
+                    handleMoreButton={
+                        function (): void {
+                            throw new Error('Function not implemented.');
+                        }} />
+            },
+            {
+                title: 'Vizsgák',
+                component: <AdminUserExamsDataGridControl
+                    courseId={dialogParams.courseId}
+                    handleMoreButton={
+                        function (): void {
+                            throw new Error('Function not implemented.');
+                        }} />
+            },
+            {
+                title: 'Kommentek/kérdések',
+                component: <Flex>
+                    Kommentek/kérdések
+                </Flex>
+            }
+        ]
+        : [];
 
     return <EpistoDialog
         closeButtonType="top"
@@ -161,7 +167,7 @@ export const AdminUserCourseContentDialog = (props: {
                                     }
                                 }}
                                 label={x.title}
-                                id={`simple-tab-${index}`} />;
+                                id={index + ''} />;
                         })}
                 </Tabs>
             </Flex>

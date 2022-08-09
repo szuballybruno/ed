@@ -3,7 +3,7 @@ import { Checkbox, Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
-import { useEditUserData } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
@@ -29,7 +29,8 @@ export const AdminUserTeacherInfoSubpage = (props: {
         .getValue(x => x.userId, 'int');
 
     const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
-    const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
+    const { userEditData, refetchEditUserData } = UserApiService
+        .useEditUserData(editedUserId);
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();

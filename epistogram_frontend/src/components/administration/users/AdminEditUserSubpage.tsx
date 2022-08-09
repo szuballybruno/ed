@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
-import { deleteUserAsync, useEditUserData, useSaveUser } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
@@ -27,8 +27,8 @@ export const AdminEditUserSubpage = (props: {
     const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
         .getValueOrNull(x => x.userId, 'int');
 
-    const { userEditData, refetchEditUserData } = useEditUserData(editedUserId);
-    const { saveUserAsync } = useSaveUser();
+    const { userEditData, refetchEditUserData } = UserApiService.useEditUserData(editedUserId);
+    const { saveUserAsync } = UserApiService.useSaveUser();
     const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
     const navigateToAddUser = () => navigate2(applicationRoutes.administrationRoute.usersRoute.addRoute);
@@ -79,7 +79,7 @@ export const AdminEditUserSubpage = (props: {
 
                             try {
 
-                                await deleteUserAsync(user.id);
+                                await UserApiService.deleteUserAsync(user.id);
                                 await refetchUsersFunction();
                             }
                             catch (e) {

@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
-import { useSaveUserSimple } from '../../services/api/userApiService';
+import { UserApiService } from '../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { reloadPage } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -29,7 +29,10 @@ export const Preferences = () => {
 
     const showErrorDialog = useShowErrorDialog();
 
-    const { saveUserSimpleAsync, saveUserSimpleState } = useSaveUserSimple();
+    // http
+    const { saveUserSimpleAsync, saveUserSimpleState } = UserApiService
+        .useSaveUserSimple();
+
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
     const { requestChangePasswordAsync, requestChangePasswordState } = useRequestPasswordChangeAuthenticated();
 

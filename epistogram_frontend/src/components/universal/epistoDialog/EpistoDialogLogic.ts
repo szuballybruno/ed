@@ -9,7 +9,7 @@ export const useEpistoDialogLogic = <TParams = void,>(
 
     const [title, setTitle] = useState(declareOptions?.title ?? '');
     const [description, setDescription] = useState(declareOptions?.description ?? '');
-    const [params, setParams] = useState<TParams>({} as TParams);
+    const [params, setParams] = useState<TParams | null>(null);
     const xlogic = useXDialogLogic(typeof dialogKey === 'function' ? dialogKey.name : dialogKey);
 
     const [buttons, setButtons] = useState<ButtonType<EpistoDialogLogicType<TParams>>[]>([]);

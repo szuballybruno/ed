@@ -10,15 +10,15 @@ import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
 import { UserProgressChart } from '../../universal/charts/UserProgressChart';
 
-export const AdminUserCourseStatsOverview = (props: {
+export const AdminUserCourseStatsOverview = ({
+    userId,
+    courseId
+}: {
     userId: Id<'User'>
     courseId: Id<'Course'>
 }) => {
 
-    const {
-        userId,
-        courseId
-    } = props;
+    console.log(courseId);
 
     const texts = translatableTexts.administration.userLearningOverviewSubpage;
 
