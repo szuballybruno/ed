@@ -83,7 +83,10 @@ export const AdminUserStatisticsSubpage = (props: {
     const { navigate2 } = useNavigation();
     const navigateToAddUser = () => navigate2(usersRoute.addRoute);
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('userCourseContentDialog');
+    const dialogLogic = useEpistoDialogLogic<{
+        courseId: Id<'Course'>,
+        userId: Id<'User'> | null
+    }>('userCourseContentDialog');
 
     const { userEditData } = useEditUserData(userId);
     const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = useUserLearningOverviewData(userId);
@@ -313,7 +316,14 @@ export const AdminUserStatisticsSubpage = (props: {
                             return <LearningCourseStatsTile
                                 actionButtons={[{
                                     children: translatableTexts.misc.details,
-                                    onClick: () => { dialogLogic.openDialog({ params: { courseId: course.courseId } }); }
+                                    onClick: () => {
+                                        dialogLogic.openDialog({
+                                            params: {
+                                                courseId: course.courseId,
+                                                userId: userId
+                                            }
+                                        });
+                                    }
                                 }]}
                                 course={course}
                                 key={index} />;

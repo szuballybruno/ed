@@ -318,26 +318,28 @@ export class UserStatsService {
 
     getUserCourseStatsOverviewData = (
         principalId: PrincipalId,
-        userId: Id<'User'>,
-        courseId: Id<'Course'>
+        courseId: Id<'Course'>,
+        userId: Id<'User'>
     ) => {
 
         return {
             action: async () => {
 
+                const currentUserId = principalId.getId() || userId;
+
                 const courseStats = await this._ormService
-                    .query(UserCourseStatsView, { userId, courseId })
+                    .query(UserCourseStatsView, { userId: currentUserId, courseId })
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
 
                 const userSpentTimeRatio = await this._ormService
-                    .query(UserSpentTimeRatioView, { userId })
+                    .query(UserSpentTimeRatioView, { userId: currentUserId })
                     .where('userId', '=', 'userId')
                     .getSingle();
 
                 const progressChartData = await this._userProgressService
-                    .getProgressChartDataAsync(principalId, courseId, userId)
+                    .getProgressChartDataAsync(principalId, courseId, currentUserId)
                     .action();
 
                 return this._mapperService

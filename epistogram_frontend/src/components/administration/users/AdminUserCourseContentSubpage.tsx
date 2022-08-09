@@ -27,12 +27,15 @@ export const AdminUserCourseContentSubpage = (props: {
     const { userEditData } = useEditUserData(userId);
     const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService.useSetRequiredCompletionDate();
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('userCourseContentDialog');
+    const dialogLogic = useEpistoDialogLogic<{
+        courseId: Id<'Course'>,
+        userId: Id<'User'> | null
+    }>('userCourseContentDialog');
 
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
-    const handleSaveRequiredCompletionDate = (courseId: Id<'Course'> | null, requiredCompletionDate: Date | null) => {
+    const handleSaveRequiredCompletionDate = (courseId: Id<'Course'>, requiredCompletionDate: Date | null) => {
 
         if (!courseId || !requiredCompletionDate)
             showError('Hiba történt');
@@ -40,7 +43,7 @@ export const AdminUserCourseContentSubpage = (props: {
         console.log(requiredCompletionDate!.toISOString());
 
         setRequiredCourseCompletionDateAsync({
-            courseId: courseId!,
+            courseId: courseId,
             requiredCourseCompletionDate: requiredCompletionDate!.toISOString()
         });
 
@@ -70,8 +73,15 @@ export const AdminUserCourseContentSubpage = (props: {
 
             <AdminUserCoursesDataGridControl
                 handleMoreButton={
-                    (courseId: Id<'Course'> | null) => dialogLogic.openDialog({ params: { courseId: courseId } })
-                }
+                    (courseId: Id<'Course'>) => {
+
+                        return dialogLogic.openDialog({
+                            params: {
+                                courseId: courseId,
+                                userId: userId
+                            }
+                        });
+                    }}
                 handleSaveRequiredCompletionDate={handleSaveRequiredCompletionDate} />
         </AdminSubpageHeader >
     </AdminBreadcrumbsHeader >;

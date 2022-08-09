@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
 import { useBriefUserData } from '../../../../services/api/userApiService';
 import { Id } from '../../../../shared/types/versionId';
-import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { TabPanel } from '../../../courseDetails/TabPanel';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
@@ -14,7 +13,10 @@ import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGr
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
 
 export const AdminUserCourseContentDialog = (props: {
-    dialogLogic: EpistoDialogLogicType<{ courseId: Id<'Course'> | null }>
+    dialogLogic: EpistoDialogLogicType<{
+        courseId: Id<'Course'>,
+        userId: Id<'User'> | null
+    }>
 }) => {
 
     const { dialogLogic } = props;
@@ -22,8 +24,7 @@ export const AdminUserCourseContentDialog = (props: {
     const [currentTab, setCurrentTab] = useState(0);
 
     const courseId = dialogLogic.params.courseId;
-    const userId = Id
-        .create<'User'>(useIntParam('userId')!);
+    const userId = dialogLogic.params.userId;
 
     const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { briefUserData } = useBriefUserData(userId);
@@ -35,8 +36,8 @@ export const AdminUserCourseContentDialog = (props: {
         {
             title: 'Áttekintés',
             component: <AdminUserCourseStatsOverview
-                courseId={courseId!}
-                userId={userId} />
+                courseId={courseId}
+                userId={userId!} />
         },
         {
             title: 'Videók',

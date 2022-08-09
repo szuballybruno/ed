@@ -20,7 +20,10 @@ export const LearningCourseStats = () => {
     const completedCourses = coursesData?.completedCourses ?? [];
     const inProgressCourses = coursesData?.inProgressCourses ?? [];
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
+    const dialogLogic = useEpistoDialogLogic<{
+        courseId: Id<'Course'>,
+        userId: Id<'User'> | null
+    }>('sasd');
 
     const { navigateToPlayer } = useNavigation();
 
@@ -63,7 +66,12 @@ export const LearningCourseStats = () => {
                             return <LearningCourseStatsTile
                                 actionButtons={[{
                                     children: 'Részletek',
-                                    onClick: () => dialogLogic.openDialog()
+                                    onClick: () => dialogLogic.openDialog({
+                                        params: {
+                                            courseId: course.courseId,
+                                            userId: null
+                                        }
+                                    })
                                 }, {
                                     children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
                                     variant: 'colored',
@@ -100,7 +108,12 @@ export const LearningCourseStats = () => {
                         .map((course, index) => <LearningCourseStatsTile
                             actionButtons={[{
                                 children: 'Részletek',
-                                onClick: () => dialogLogic.openDialog()
+                                onClick: () => dialogLogic.openDialog({
+                                    params: {
+                                        courseId: course.courseId,
+                                        userId: null
+                                    }
+                                })
                             }, {
                                 children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
                                 variant: 'colored',

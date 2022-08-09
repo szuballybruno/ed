@@ -22,8 +22,8 @@ export const EmptyCell = () => <EpistoFont>
 </EpistoFont>;
 
 export const AdminUserCoursesDataGridControl = (props: {
-    handleMoreButton: (courseId: Id<'Course'> | null) => void
-    handleSaveRequiredCompletionDate: (courseId: Id<'Course'> | null, requiredCompletionDate: Date | null) => void
+    handleMoreButton: (courseId: Id<'Course'>) => void
+    handleSaveRequiredCompletionDate: (courseId: Id<'Course'>, requiredCompletionDate: Date | null) => void
 }) => {
 
     const { handleMoreButton, handleSaveRequiredCompletionDate } = props;
@@ -285,8 +285,12 @@ export const AdminUserCoursesDataGridControl = (props: {
                 disableMaskedInput
                 value={params.value?.requiredCompletionDate ? params.value?.requiredCompletionDate : new Date(Date.now())}
                 onChange={(value: DateTime | null) => {
+
+                    if (!params.value)
+                        return;
+
                     console.log(value?.toJSDate());
-                    handleSaveRequiredCompletionDate(params.value?.courseId || null, value ? value.toJSDate() : null);
+                    handleSaveRequiredCompletionDate(params.value.courseId, value ? value.toJSDate() : null);
                     refetchUserCourseStats();
                 }}
                 renderInput={(textFieldParams) => {
@@ -309,7 +313,11 @@ export const AdminUserCoursesDataGridControl = (props: {
                 <EpistoButton
                     variant="outlined"
                     onClick={() => {
-                        handleMoreButton(params.value || null);
+
+                        if (!params.value)
+                            return;
+
+                        handleMoreButton(params.value);
                     }} >
 
                     Bővebben

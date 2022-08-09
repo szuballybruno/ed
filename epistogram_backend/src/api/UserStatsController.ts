@@ -89,6 +89,8 @@ export class UserStatsController implements XController<UserStatsController> {
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)
     getUserCourseStatsOverviewDataAction(params: ActionParams) {
 
+        console.log(params.getQuery());
+
         const query = params
             .getQuery<any>();
 
@@ -101,6 +103,6 @@ export class UserStatsController implements XController<UserStatsController> {
                 .getValue(x => x.courseId, 'int'));
 
         return this._userStatsService
-            .getUserCourseStatsOverviewData(params.principalId, userId, courseId);
+            .getUserCourseStatsOverviewData(params.principalId, courseId, userId);
     }
 }

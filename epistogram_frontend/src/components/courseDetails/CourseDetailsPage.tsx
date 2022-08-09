@@ -38,7 +38,10 @@ const CourseDetailsPage = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [color, setColor] = useState<string>('white');
 
-    const dialogLogic = useEpistoDialogLogic<{ courseId: Id<'Course'> | null }>('sasd');
+    const dialogLogic = useEpistoDialogLogic<{
+        courseId: Id<'Course'>,
+        userId: Id<'User'> | null
+    }>('sasd');
 
     useEffect(() => {
         if (colors) {
@@ -377,11 +380,14 @@ const CourseDetailsPage = () => {
                                 }}
                                 variant="outlined"
                                 onClick={() => {
+
+                                    if (!courseDetails.courseId)
+                                        return;
+
                                     dialogLogic.openDialog({
                                         params: {
-                                            courseId: courseDetails?.courseId
-                                                ? courseDetails.courseId
-                                                : null
+                                            courseId: courseDetails.courseId,
+                                            userId: null
                                         }
                                     });
                                 }}>

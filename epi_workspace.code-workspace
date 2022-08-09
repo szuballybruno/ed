@@ -28,6 +28,7 @@
 				"username": "postgres",
 				"password": "admin"
 			}
-		]
+		],
+		"task.allowAutomaticTasks": true
 	}
 }
