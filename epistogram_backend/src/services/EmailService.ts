@@ -22,7 +22,7 @@ export class EmailService {
         userEmail: string,
         userFullName: string) => {
 
-        const url = `${this._config.misc.frontendUrl}/registration?token=${invitationToken}&isInvited=true`;
+        const url = `${this._config.misc.frontendUrl}/signup?token=${invitationToken}&isInvited=true`;
 
         const epistoEmail = {
             to: userEmail,

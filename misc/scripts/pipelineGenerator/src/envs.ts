@@ -133,19 +133,15 @@ export const environemnts: EnvConfigBaseType[] = [
     // demo
     getBaseConfig('demo', 'demo', 'demo', config => {
 
-        config.database.IS_DANGEROUS_DB_PURGE_ENABLED = true;
     }),
 
     // dev
     getBaseConfig('dev', 'dev', 'dev', config => {
 
-        config.database.IS_DANGEROUS_DB_PURGE_ENABLED = true;
     })
 ];
 
 export const localConfig = getBaseConfig('local', 'local', 'local', config => {
-
-    config.database.IS_DANGEROUS_DB_PURGE_ENABLED = true;
 
     config.misc.FRONTEND_URL = 'http://localhost:3000';
 

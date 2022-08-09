@@ -72,9 +72,9 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             p="10px"
             fontSize="13px">
 
-            <EpistoFont>
+            {/* <EpistoFont>
                 {dailyTipData?.description}
-            </EpistoFont>
+            </EpistoFont> */}
         </Flex>}
     </Flex >;
 };

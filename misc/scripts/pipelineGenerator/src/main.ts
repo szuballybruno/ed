@@ -1,92 +1,91 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import { EnvConfigBaseType, environemnts, localConfig } from './envs';
+import { removeAllFilesInFolder, replaceAll, writeFile } from './helpers';
 
-const replaceAll = (str: string, find: string, replace: string) => {
+(() => {
 
-    // return str.replace(new RegExp(find, 'g'), replace);
-    const pieces = str.split(find);
-    return pieces.join(replace);
-}
+    const onlyLocalConfigGen = process.argv.some(x => x === '--genc');
 
-const removeAllFilesInFolder = (directoryPath: string) => {
+    const rootDir = __dirname;
+    const pipelineTemplateFilePath = rootDir + "/../template/pipelineTemplate.yml";
+    const outputDirectoryPath = rootDir + "/../../../../.github/workflows";
+    const backendConfigEnvPath = rootDir + "/../../../../epistogram_backend/config/config.env";
+    const localConfigGenOutDir = rootDir + "/../out/configGen.bat";
+    const pipelineText = fs.readFileSync(pipelineTemplateFilePath, 'utf8');
 
-    const files = fs.readdirSync(directoryPath);
+    /**
+     * This script is going to be run
+     * by the CI/CD pipeline, and it will generate a config.env
+     * file, based on the provided 'environment' options.
+     */
+    const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string, indent: string) => {
 
-    for (const file of files) {
+        const echo = (line: string, op: '>' | '>>' = '>>') => `echo ${line} ${op} ${configPath}`;
 
-        fs.unlinkSync(path.join(directoryPath, file));
-    }
-}
+        return indent + echo('\\# ---- CONFIG FILE ---', '>') + '\n' + Object
+            .keys(environemnt)
+            .flatMap(groupKey => {
 
-const writeFile = (path: string, cont: string) => {
+                const groupCommentEcho = indent + echo(`\\# ---- ${groupKey}`) + '\n';
 
-    fs.writeFileSync(path, cont, 'utf-8');
-}
-
-const isGenc = process.argv.some(x => x === '--genc');
-
-const rootDir = __dirname;
-const pipelineTemplateFilePath = rootDir + "/../template/pipelineTemplate.yml";
-const outputDirectoryPath = rootDir + "/../../../../.github/workflows";
-const backendConfigEnvPath = rootDir + "/../../../../epistogram_backend/config/config.env";
-const localConfigGenOutDir = rootDir + "/../out/configGen.bat";
-const pipelineText = fs.readFileSync(pipelineTemplateFilePath, 'utf8');
-
-const getSetEnvScript = (environemnt: EnvConfigBaseType, configPath: string, indent: string) => {
-
-    const echo = (line: string, op: '>' | '>>' = '>>') => `echo ${line} ${op} ${configPath}`;
-
-    return indent + echo('\\# ---- CONFIG FILE ---', '>') + '\n' + Object
-        .keys(environemnt)
-        .flatMap(groupKey => {
-
-            const groupCommentEcho = indent + echo(`\\# ---- ${groupKey}`) + '\n';
-
-            return groupCommentEcho + Object
-                .keys(environemnt[groupKey])
-                .map(key => indent + echo(`${key} = ${environemnt[groupKey][key]}`))
-                .join('\n')
-        })
-        .join('\n');
-}
-
-// gen local config
-if (isGenc) {
-
-    const localScript = getSetEnvScript(localConfig, backendConfigEnvPath, '');
-    writeFile(localConfigGenOutDir, localScript);
-}
-
-// gen pipelines
-else {
-
-    const getOutPipelinePath = (branchName: string) => `${outputDirectoryPath}/${branchName}_pipeline.yml`;
-
-    // clear out dir
-    removeAllFilesInFolder(outputDirectoryPath);
-
-    const envGroupKeys = Object
-        .keys(environemnts[0]);
-
-    environemnts
-        .forEach(environemnt => {
-
-            const replaceValues = envGroupKeys
-                .flatMap(groupKey => Object
+                return groupCommentEcho + Object
                     .keys(environemnt[groupKey])
-                    .map(valueKey => [`$${valueKey}$`, environemnt[groupKey][valueKey] + '']));
+                    .map(key => indent + echo(`${key} = ${environemnt[groupKey][key]}`))
+                    .join('\n')
+            })
+            .join('\n');
+    }
 
-            let replaced = pipelineText;
+    /**
+     * Returns the out path for a 
+     * pipeline based on branch name 
+     */
+    const getGeneratedPipelineFilePath = (branchName: string) => {
 
-            replaceValues
-                .concat([['$GEN_ENV_SCRIPT$', getSetEnvScript(environemnt, 'config/config.env', '          ')]])
-                .forEach(x => {
+        return `${outputDirectoryPath}/${branchName}_pipeline.yml`;
+    }
 
-                    const [tag, value] = x;
-                    replaced = replaceAll(replaced, tag, value);
-                });
+    /**
+     * Generate local config, 
+     * than exit 
+     */
+    if (onlyLocalConfigGen) {
 
-            writeFile(getOutPipelinePath(environemnt.gcp.BRANCH_NAME), replaced);
-        });
-}
+        const localScript = getSetEnvScript(localConfig, backendConfigEnvPath, '');
+        writeFile(localConfigGenOutDir, localScript);
+        return;
+    }
+
+    /**
+     * Generate pipelines
+     */
+    else {
+
+        // clear out dir
+        removeAllFilesInFolder(outputDirectoryPath);
+
+        const envGroupKeys = Object
+            .keys(environemnts[0]);
+
+        environemnts
+            .forEach(environemnt => {
+
+                const replaceValues = envGroupKeys
+                    .flatMap(groupKey => Object
+                        .keys(environemnt[groupKey])
+                        .map(valueKey => [`$${valueKey}$`, environemnt[groupKey][valueKey] + '']));
+
+                let replaced = pipelineText;
+
+                replaceValues
+                    .concat([['$GEN_ENV_SCRIPT$', getSetEnvScript(environemnt, 'config/config.env', '          ')]])
+                    .forEach(x => {
+
+                        const [tag, value] = x;
+                        replaced = replaceAll(replaced, tag, value);
+                    });
+
+                writeFile(getGeneratedPipelineFilePath(environemnt.gcp.BRANCH_NAME), replaced);
+            });
+    }
+})();
