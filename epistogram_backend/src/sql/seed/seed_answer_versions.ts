@@ -577,25 +577,25 @@ export const getAnswerVersionsSeedData = (
     answer_version_132: {
         answerId: answers.answer_132.id,
         answerDataId: answerDatas.answer_data_132.id,
-        questionVersionId: questionVersions.question_version_excel_exam_3.id,
+        questionVersionId: questionVersions.question_version_excel_exam_1.id,
     },
 
     answer_version_133: {
         answerId: answers.answer_133.id,
         answerDataId: answerDatas.answer_data_133.id,
-        questionVersionId: questionVersions.question_version_excel_exam_3.id,
+        questionVersionId: questionVersions.question_version_excel_exam_1.id,
     },
 
     answer_version_134: {
         answerId: answers.answer_134.id,
         answerDataId: answerDatas.answer_data_134.id,
-        questionVersionId: questionVersions.question_version_excel_exam_3.id,
+        questionVersionId: questionVersions.question_version_excel_exam_1.id,
     },
 
     answer_version_135: {
         answerId: answers.answer_135.id,
         answerDataId: answerDatas.answer_data_135.id,
-        questionVersionId: questionVersions.question_version_excel_exam_3.id,
+        questionVersionId: questionVersions.question_version_excel_exam_1.id,
     },
 
     answer_version_136: {
