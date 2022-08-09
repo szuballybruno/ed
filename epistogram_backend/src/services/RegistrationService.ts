@@ -1,77 +1,43 @@
 import generatePassword from 'password-generator';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
+import { TokenPair } from '../models/TokenPair';
 import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { JobTitleIdEnum } from '../shared/types/sharedTypes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { JobTitleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
+import { getFullName, throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { throwNotImplemented } from '../utilities/helpers';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthorizationService } from './AuthorizationService';
 import { EmailService } from './EmailService';
+import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
-import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class RegistrationService extends ServiceBase {
-
-    private _activationCodeService: ActivationCodeService;
-    private _emailService: EmailService;
-    private _userService: UserService;
-    private _authenticationService: AuthenticationService;
-    private _authorizationService: AuthorizationService;
-    private _tokenService: TokenService;
-    private _roleService: RoleService;
+export class RegistrationService {
 
     constructor(
-        acs: ActivationCodeService,
-        emailService: EmailService,
-        userService: UserService,
-        authenticationService: AuthenticationService,
-        authorizationService: AuthorizationService,
-        tokenService: TokenService,
-        ormService: ORMConnectionService,
-        roleService: RoleService,
-        mapperService: MapperService) {
-
-        super(mapperService, ormService);
-
-        this._userService = userService;
-        this._authenticationService = authenticationService;
-        this._authorizationService = authorizationService;
-        this._activationCodeService = acs;
-        this._emailService = emailService;
-        this._tokenService = tokenService;
-        this._ormService = ormService;
-        this._roleService = roleService;
+        private _activationCodeService: ActivationCodeService,
+        private _emailService: EmailService,
+        private _userService: UserService,
+        private _authenticationService: AuthenticationService,
+        private _authorizationService: AuthorizationService,
+        private _tokenService: TokenService,
+        private _ormService: ORMConnectionService,
+        private _roleService: RoleService,
+        private _mapperService: MapperService,
+        private _loggerService: LoggerService) {
     }
 
     inviteUserAsync = async (principalId: PrincipalId, dto: CreateInvitedUserDTO) => {
 
-        const userId = principalId.toSQLValue();
-
-        if (!dto.companyId)
-            return;
-
-        const companyId = dto.companyId;
-
-        // const hasSetUserCompanyPermission = this._roleService
-        //     .findPermissionAsync(userId,  'canSetInvitedUserCompany');
-
-        // // if user is admin require companyId to be provided
-        // // otherwise use the current user's company
-        // const companyId = currentUser.roleId === RoleIdEnum.administrator
-        //     ? dto.data.companyId
-        //     : currentUser.companyId;
-
-        // TODO
-
+        const { companyId } = dto;
         if (!companyId)
             throw new ErrorWithCode(
                 `Current user is not an administrator, 
@@ -80,7 +46,7 @@ export class RegistrationService extends ServiceBase {
 
         // create user
         await this
-            .createInvitedUserAsync({
+            .inviteNewUserAsync({
                 email: dto.email,
                 jobTitleId: dto.jobTitleId,
                 firstName: dto.firstName,
@@ -110,7 +76,7 @@ export class RegistrationService extends ServiceBase {
                     throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
                 // create user 
-                await this.createInvitedUserAsync({
+                await this.inviteNewUserAsync({
                     email,
                     firstName,
                     lastName,
@@ -137,9 +103,9 @@ export class RegistrationService extends ServiceBase {
         publicRegToken: string,
         email: string,
         firstName: string,
-        lastName: string) => {
+        lastName: string): Promise<TokenPair> => {
 
-        return throwNotImplemented();
+        throw throwNotImplemented();
         // // verify public reg token
         // this._tokenService.verifyPublicRegistrationToken(publicRegToken);
 
@@ -181,7 +147,9 @@ export class RegistrationService extends ServiceBase {
         passwordControl: string) {
 
         // verify token 
-        const { userEmail } = this._tokenService.verifyInvitaionToken(invitationToken);
+        const { userEmail } = this
+            ._tokenService
+            .verifyInvitaionToken(invitationToken);
 
         // check if user exists  
         const user = await this._userService
@@ -221,7 +189,6 @@ export class RegistrationService extends ServiceBase {
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
-
     }
 
     /**
@@ -229,49 +196,57 @@ export class RegistrationService extends ServiceBase {
      * generates an invitation token, 
      * and sends it as a mail to the given email address. 
      */
-    async createInvitedUserAsync(
+    async inviteNewUserAsync(
         options: {
             email: string;
             firstName: string;
             lastName: string;
             companyId: Id<'Company'>;
             jobTitleId: Id<'JobTitle'>;
-            isGod?: boolean;
         },
         noEmailNotification?: boolean) {
 
-        throwNotImplemented();
-        // const email = options.email;
+        const { email, companyId, firstName, jobTitleId, lastName } = options;
 
-        // // create invitation token
-        // const invitationToken = this._tokenService
-        //     .createInvitationToken(email);
+        // create invitation token
+        const invitationToken = this._tokenService
+            .createInvitationToken(email);
 
-        // // create user 
-        // const createdUser = await this._userService
-        //     .createUserAsync({
-        //         email,
-        //         firstName: options.firstName,
-        //         lastName: options.lastName,
-        //         companyId: options.companyId,
-        //         roleId: options.roleId,
-        //         jobTitleId: options.jobTitleId,
-        //         registrationType: 'Invitation',
-        //         password: 'guest',
-        //         invitationToken,
-        //         isGod: options.isGod
-        //     });
+        // create user 
+        const createdUser = await this._userService
+            .createUserAsync({
+                email,
+                firstName,
+                lastName,
+                companyId,
+                jobTitleId,
+                registrationType: 'Invitation',
+                password: 'guest',
+                invitationToken,
+                isGod: false,
+                avatarFileId: null,
+                deletionDate: null,
+                isInvitationAccepted: false,
+                isTrusted: true,
+                linkedInUrl: null,
+                phoneNumber: null,
+                refreshToken: null,
+                resetPasswordToken: null,
+                userDescription: null,
+                username: ''
+            }, 'guest');
 
-        // // send email
-        // if (!noEmailNotification) {
+        // send email
+        if (!noEmailNotification) {
 
-        //     log('Sending mail... to: ' + email);
+            this._loggerService
+                .logScoped('REGISTRATION', 'Sending mail... to: ' + email);
 
-        //     await this._emailService
-        //         .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));
-        // }
+            await this._emailService
+                .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));
+        }
 
-        // return { invitationToken, createdUser };
+        return { invitationToken, createdUser };
     }
 
     /**

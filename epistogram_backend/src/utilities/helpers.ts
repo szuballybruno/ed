@@ -50,7 +50,7 @@ export function replaceAll(originalText: string, searchText: string, replaceText
     return result;
 }
 
-export const throwNotImplemented = () => {
+export const throwNotImplemented = (): Error => {
 
     throw new Error('Not implemented!');
     return {} as any;

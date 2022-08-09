@@ -128,49 +128,59 @@ export class EmailService {
 
     /**
      * Sends the mail.
-          */
+     */
     private sendMailAsync = async (email: EpistoEmail) => {
 
-        const transporter = createTransport({
-            host: this._config.mail.mailHost,
-            port: 465,
-            secure: true,
-            auth: {
-                user: this._config.mail.senderEmail,
-                pass: this._config.mail.senderPassword
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
+        try {
 
-        const to = this._config
-            .misc
-            .isLocalhost
-            ? 'spengler.manfred@epistogram.com'
-            : email.to;
-
-        const templatePath = `${this._config.rootDirectory}/emails/${email.template.name}.html`;
-        const templateHtml = readFileSync(templatePath, 'utf8');
-        let replacedHtml = '' + templateHtml;
-
-        const templateParams = email.template.params;
-        for (const paramName in templateParams) {
-            if (Object.prototype.hasOwnProperty.call(templateParams, paramName)) {
-
-                const paramValue = templateParams[paramName];
-                const replaceTag = `{{${paramName}}}`;
-
-                replacedHtml = replaceAll(replacedHtml, replaceTag, paramValue);
-            }
-        }
-
-        const result = await transporter
-            .sendMail({
-                to: to,
-                from: 'noreply@epistogram.com',
-                subject: email.subject,
-                html: replacedHtml
+            const transporter = createTransport({
+                host: this._config.mail.mailHost,
+                port: 465,
+                secure: true,
+                auth: {
+                    user: this._config.mail.senderEmail,
+                    pass: this._config.mail.senderPassword
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
             });
+
+            const isLocalhost = this
+                ._config
+                .misc
+                .isLocalhost;
+
+            const to = isLocalhost
+                ? 'spengler.manfred@epistogram.com'
+                : email.to;
+
+            const templatePath = `${this._config.rootDirectory}/emails/${email.template.name}.html`;
+            const templateHtml = readFileSync(templatePath, 'utf8');
+            let replacedHtml = '' + templateHtml;
+
+            const templateParams = email.template.params;
+            for (const paramName in templateParams) {
+                if (Object.prototype.hasOwnProperty.call(templateParams, paramName)) {
+
+                    const paramValue = templateParams[paramName];
+                    const replaceTag = `{{${paramName}}}`;
+
+                    replacedHtml = replaceAll(replacedHtml, replaceTag, paramValue);
+                }
+            }
+
+            const result = await transporter
+                .sendMail({
+                    to: to,
+                    from: 'noreply@epistogram.com',
+                    subject: email.subject,
+                    html: replacedHtml
+                });
+        }
+        catch (e: any) {
+
+            throw new Error('Nodemailed error. Msg: ' + e.message);
+        }
     };
 }

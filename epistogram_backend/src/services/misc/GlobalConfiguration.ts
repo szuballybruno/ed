@@ -3,7 +3,15 @@ import { log } from './logger';
 
 type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
 
-export type LogScopeType = 'ORM' | 'BOOTSTRAP' | 'ROLLING SESSION' | 'GIVEN ANSWER' | 'GENERIC' | 'TRANSACTION' | 'TEMPOMAT';
+export type LogScopeType =
+    'ORM' |
+    'BOOTSTRAP' |
+    'ROLLING SESSION' |
+    'GIVEN ANSWER' |
+    'GENERIC' |
+    'TRANSACTION' |
+    'TEMPOMAT' | 
+    'REGISTRATION';
 
 export class GlobalConfiguration {
 

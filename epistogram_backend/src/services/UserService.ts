@@ -1,9 +1,9 @@
+import { AnswerSession } from '../models/entity/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
 import { JobTitle } from '../models/entity/JobTitle';
 import { StorageFile } from '../models/entity/StorageFile';
 import { TeacherInfo } from '../models/entity/TeacherInfo';
 import { User } from '../models/entity/User';
-import { RegistrationType } from '../models/Types';
 import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
@@ -13,15 +13,16 @@ import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
+import { getFullName, toFullName } from '../utilities/helpers';
+import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { getFullName, throwNotImplemented, toFullName } from '../utilities/helpers';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
 
 export class UserService {
 
@@ -286,72 +287,47 @@ export class UserService {
     /**
      * Create a new user.
      */
-    createUserAsync = async (opts: {
-        email: string,
-        password: string,
-        firstName: string,
-        lastName: string,
-        registrationType: RegistrationType,
-        companyId?: number,
-        phoneNumber?: string,
-        jobTitleId?: number,
-        invitationToken?: string,
-        isGod?: boolean
-    }) => {
+    createUserAsync = async (user: InsertEntity<User>, unhashedPassword: string): Promise<User> => {
 
-        throwNotImplemented();
-        // const regType = opts.registrationType;
+        // check if user already exists with email
+        const existingUser = await this.getUserByEmailAsync(user.email);
+        if (existingUser)
+            throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
 
-        // // does user already exist?
-        // const existingUser = await this.getUserByEmailAsync(opts.email);
-        // if (existingUser)
-        //     throw new VerboseError('User already exists. Email: ' + opts.email, 'email_taken');
+        // hash user password 
+        const hashedPassword = await this
+            ._hashService
+            .hashPasswordAsync(unhashedPassword);
 
-        // // hash user password 
-        // const hashedPassword = await this._hashService
-        //     .hashPasswordAsync(opts.password);
+        user.password = hashedPassword;
 
-        // // set default user fileds
-        // const user = {
-        //     email: opts.email,
-        //     firstName: opts.firstName,
-        //     lastName: opts.lastName,
-        //     jobTitleId: opts.jobTitleId,
-        //     phoneNumber: opts.phoneNumber,
-        //     companyId: opts.companyId,
-        //     password: hashedPassword,
-        //     isInvitationAccepted: false,
-        //     isTrusted: regType === 'Invitation',
-        //     registrationType: regType,
-        //     invitationToken: opts.invitationToken,
-        //     isGod: !!opts.isGod
-        // } as User;
+        // insert user
+        const userId = await this._ormService
+            .createAsync(User, user);
 
-        // // insert user
-        // await this._ormService
-        //     .getRepository(User)
-        //     .insert(user);
+        // insert signup answer session
+        await this
+            ._ormService
+            .createAsync(AnswerSession, {
+                userId: userId,
+                examVersionId: Id.create<'ExamVersion'>(1),
+                isPractise: false,
+                startDate: new Date(),
+                videoVersionId: null // 1 always points to signup exam 
+            });
 
-        // const userId = user.id;
+        // insert practise answer session
+        await this
+            ._ormService
+            .createAsync(AnswerSession, {
+                userId: userId,
+                isPractise: true,
+                examVersionId: null,
+                startDate: new Date(),
+                videoVersionId: null
+            });
 
-        // // insert signup answer session
-        // await this._ormService
-        //     .getRepository(AnswerSession)
-        //     .insert({
-        //         examId: 1, // 1 always points to signup exam 
-        //         type: 'signup',
-        //         userId: userId
-        //     });
-
-        // // insert practise answer session
-        // await this._ormService
-        //     .getRepository(AnswerSession)
-        //     .insert({
-        //         userId: userId,
-        //         type: 'practise'
-        //     });
-
-        // return user;
+        return user as User;
     };
 
     /**
@@ -446,10 +422,7 @@ export class UserService {
         const user = await this._ormService
             .query(User, { email })
             .where('email', '=', 'email')
-            .getSingle();
-
-        if (!user)
-            return null;
+            .getOneOrNull();
 
         return user;
     };
