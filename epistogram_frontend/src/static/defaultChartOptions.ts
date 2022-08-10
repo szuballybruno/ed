@@ -178,7 +178,11 @@ const defaultCharts = {
             },
             label: {
                 show: true,
-                position: 'center'
+                formatter: '{b}',
+                position: 'center',
+                emphasis: {
+                    show: true
+                }
             },
             emphasis: {
 
@@ -209,13 +213,17 @@ const defaultCharts = {
             },
             label: {
                 show: true,
-                position: 'center'
+                formatter: '{b}',
+                position: 'center',
+                emphasis: {
+                    show: true
+                }
             },
             emphasis: {
 
                 label: {
                     formatter: '{b}',
-                    show: true,
+                    show: false,
                     fontSize: '18',
                     fontWeight: 'bold'
                 }

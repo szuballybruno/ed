@@ -3,7 +3,7 @@ import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getPrequizQuestionsSeedData = () => getSeedList<PrequizQuestion>()({
     prequiz_question_1: {
-        text: 'Tapasztalat szinted?',
+        text: 'Mennyire érzed magad tapasztaltnak?',
         isNumericAnswer: true,
         minValue: 1,
         maxValue: 10,
@@ -13,7 +13,7 @@ export const getPrequizQuestionsSeedData = () => getSeedList<PrequizQuestion>()(
         valuePostfix: null
     },
     prequiz_question_2: {
-        text: 'Mire szeretnéd használni a kurzuson tanultakat?',
+        text: 'Mire szeretnéd használni a kurzuson tanultakat? (Azt válaszd, amelyik a leginkább közelebb áll a célodhoz)',
         isNumericAnswer: false,
         minValue: null,
         maxValue: null,

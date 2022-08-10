@@ -139,9 +139,11 @@ export const ExamQuestions = (props: {
                 }
             ]}
             footerButtons={new ArrayBuilder()
-                .addIf(hasSelectedAnswer, {
+                .add({
                     title: translatableTexts.exam.nextQuestion,
-                    action: handleNextAsync
+                    action: hasSelectedAnswer
+                        ? handleNextAsync
+                        : () => questionPaging.next()
                 })
                 .getArray()}>
 

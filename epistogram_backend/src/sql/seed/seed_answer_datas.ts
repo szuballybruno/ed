@@ -11,12 +11,12 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
         isCorrect: true,
     },
     answer_data_2: {
-        text: 'A tények és az objektív adatok',
+        text: 'Inkább egyedül vágnék neki a feladatnak',
         isCorrect: false,
     },
     // 1.2 answers
     answer_data_3: {
-        text: 'Segít, ha megvitatom azt másokkal',
+        text: 'Segít, ha megvitathatom azt másokkal',
         isCorrect: true,
     },
     answer_data_4: {
@@ -152,7 +152,7 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
         isCorrect: true,
     },
     answer_data_32: {
-        text: 'Analizálni kell, és döntéseket hoznom ',
+        text: 'Analizálni kell és döntéseket hoznom ',
         isCorrect: false,
     },
     // 3.3 answers
@@ -218,7 +218,7 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
         isCorrect: true,
     },
     answer_data_46: {
-        text: 'Olvasnám el  a könyvet, melyre az előadás alapszik',
+        text: 'Olvasnám el  a könyvet, amelyről az előadás szól',
         isCorrect: false,
     },
     // 4.3 answers
@@ -236,7 +236,7 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
         isCorrect: true,
     },
     answer_data_50: {
-        text: 'Videókkal, filmek segítségével mutatja be az adott témát',
+        text: 'Videók, filmek segítségével mutatja be az adott témát',
         isCorrect: false,
     },
     // 4.5 answers
@@ -289,7 +289,7 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
     },
     // 5.3 answers
     answer_data_61: {
-        text: 'Szívesen teszem azt zenével, írással, művészet segítségével',
+        text: 'Szívesen teszem azt zenén, íráson keresztül, művészet segítségével',
         isCorrect: true,
     },
     answer_data_62: {

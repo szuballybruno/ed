@@ -10,6 +10,8 @@ export const getAnswerVersionsSeedData = (
     questionVersions: SeedQuestionVersionType
 ) => getSeedList<AnswerVersion>()({
 
+    // ----- SIGNUP START -----
+
     answer_version_1: {
         answerId: answers.answer_1.id,
         answerDataId: answerDatas.answer_data_1.id,
@@ -427,8 +429,10 @@ export const getAnswerVersionsSeedData = (
     answer_version_70: {
         answerId: answers.answer_70.id,
         answerDataId: answerDatas.answer_data_70.id,
-        questionVersionId: questionVersions.question_version_3.id,
+        questionVersionId: questionVersions.question_version_35.id,
     },
+
+    // ----- SIGNUP END -----
 
     answer_version_108: {
         answerId: answers.answer_108.id,

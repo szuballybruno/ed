@@ -134,19 +134,50 @@ export const PrequizSubpage = () => {
                             </EpistoFont>
                         </Flex>
 
-                        <Slider
-                            max={question.maxValue}
-                            min={question.minValue}
-                            step={question.stepValue}
-                            valueLabelDisplay="auto"
-                            valueLabelFormat={value => `${value} óra`}
-                            marks={true}
-                            style={{
-                                color: 'var(--deepBlue)',
-                                marginTop: '40px'
-                            }}
-                            onChange={(_, value) => setNumericValue(value as any)}
-                            value={numericValue} />
+                        <Flex
+                            width='100%'
+                            align='center'
+                            justify='stretch'
+                            mt='40px'>
+
+                            <EpistoFont
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '60px',
+                                    margin: '0 20px 0 0'
+                                }}>
+
+                                {paging.currentIndex === 2 ? '1 óra' : '1'}
+                            </EpistoFont>
+
+                            <Slider
+                                max={question.maxValue}
+                                min={question.minValue}
+                                step={question.stepValue}
+                                valueLabelDisplay="auto"
+                                valueLabelFormat={value => `${value}${paging.currentIndex === 2 ? ' óra' : ''}`}
+                                marks={true}
+                                style={{
+                                    color: 'var(--deepBlue)'
+                                }}
+                                onChange={(_, value) => setNumericValue(value as any)}
+                                value={numericValue} />
+
+                            <EpistoFont
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '60px',
+                                    margin: '0 0 0 20px'
+                                }}>
+
+                                {paging.currentIndex === 2 ? '10 óra' : '10'}
+                            </EpistoFont>
+                        </Flex>
+
 
                     </Flex>
                     : <Grid

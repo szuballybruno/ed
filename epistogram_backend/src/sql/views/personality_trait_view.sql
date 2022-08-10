@@ -2,18 +2,24 @@ WITH
 latest_question_versions AS
 (
 	SELECT 
-		MAX(qv.id) version_id, 
+		qv.id version_id, 
 		qv.personality_trait_category_id
 	FROM public.question_version qv
-	GROUP BY 
-		qv.personality_trait_category_id
+	
+	WHERE qv.personality_trait_category_id IS NOT NULL
+	
 ),
 latest_given_answer AS
 (
-	SELECT MAX(ga.id) ga_id, ga.question_version_id, ase.user_id
+	SELECT 
+		MAX(ga.id) ga_id, 
+		ga.question_version_id, 
+		ase.user_id
 	FROM public.given_answer ga
+	
 	LEFT JOIN public.answer_session ase
 	ON ase.id = ga.answer_session_id
+	
 	GROUP BY ga.question_version_id, ase.user_id
 ),
 calc_scores AS

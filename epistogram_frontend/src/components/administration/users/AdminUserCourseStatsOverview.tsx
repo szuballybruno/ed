@@ -67,7 +67,7 @@ export const AdminUserCourseStatsOverview = ({
                         title="Teljesítmény"
                         segments={[
                             { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
-                            { value: 100 - performancePercentage, name: '' },
+                            { value: 100 - performancePercentage, name: `Teljesítmény ${performancePercentage}%` }
                         ]}
                         options={defaultCharts.twoSegmentRedDoughnut} />
                 </Flex>

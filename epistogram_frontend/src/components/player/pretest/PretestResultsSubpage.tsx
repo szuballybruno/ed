@@ -158,13 +158,13 @@ export const PretestResultsSubpage = () => {
                     flex='1'
                     direction='column'
                     align='center'
-                    pt='50px'
+                    pt='30px'
                     maxW='1120px'
                     justify='flex-start'>
 
                     <Flex
                         flex='1'
-                        width='100%'
+                        width='600px'
                         maxH='100px'
                         direction='column'>
 
@@ -177,11 +177,9 @@ export const PretestResultsSubpage = () => {
                             description='A kurzus várható befejezése: ' />
                     </Flex>
 
-
-
                     <Flex
                         px="10px"
-                        pt='50px'
+                        pb='40px'
                         justify="center"
                         align="center">
 
@@ -192,32 +190,34 @@ export const PretestResultsSubpage = () => {
                             Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!
                         </EpistoFont>
                     </Flex>
+
+                    {
+                        pretestResults && <Flex
+                            my="15px"
+                            justify="center"
+                            align="center">
+
+                            <EpistoButton
+                                onClick={() => setModeAndNavigateAsync('beginner')}
+                                variant={isBeginner ? 'colored' : 'plain'}>
+
+                                Kezdő üzemmóddal indulok
+                            </EpistoButton>
+
+                            <EpistoButton
+                                style={{
+                                    marginLeft: 10
+                                }}
+                                onClick={() => setModeAndNavigateAsync('advanced')}
+                                variant={isBeginner ? 'plain' : 'colored'}>
+
+                                Inkább haladó üzemmóddal kezdek
+                            </EpistoButton>
+                        </Flex>
+                    }
+
                 </Flex>
 
-                {
-                    pretestResults && <Flex
-                        my="15px"
-                        justify="center"
-                        align="center">
-
-                        <EpistoButton
-                            onClick={() => setModeAndNavigateAsync('beginner')}
-                            variant={isBeginner ? 'colored' : 'plain'}>
-
-                            Kezdő üzemmóddal indulok
-                        </EpistoButton>
-
-                        <EpistoButton
-                            style={{
-                                marginLeft: 10
-                            }}
-                            onClick={() => setModeAndNavigateAsync('advanced')}
-                            variant={isBeginner ? 'plain' : 'colored'}>
-
-                            Inkább haladó üzemmóddal kezdek
-                        </EpistoButton>
-                    </Flex>
-                }
             </Flex>
 
         </LoadingFrame >

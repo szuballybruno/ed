@@ -37,7 +37,7 @@ export const getPrequizQuestions = async ({ api, cookies }: TestParams) => {
         .toStrictEqual({
             id: 1,
             isNumeric: true,
-            text: 'Tapasztalat szinted?',
+            text: 'Mennyire érzed magad tapasztaltnak?',
             minValue: 1,
             maxValue: 10,
             stepValue: 1,
