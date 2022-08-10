@@ -19,8 +19,7 @@ export class PlaylistService {
      */
     async getCurrentCoursePlaylistModulesAsync(principalId: PrincipalId) {
 
-        const userId = Id
-            .create<'User'>(principalId.toSQLValue());
+        const userId = principalId.getId();
 
         const courseId = await this._userCourseBridgeService
             .getCurrentCourseId(userId);

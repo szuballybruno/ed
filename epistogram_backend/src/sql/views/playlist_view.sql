@@ -70,10 +70,22 @@ latest_course_items AS
 items_with_user AS
 (
 	SELECT 
-        civ.*,
+		civ.module_order_index,
+		civ.item_order_index,
+		civ.video_version_id,
+		civ.item_title,
+		civ.course_version_id,
+		civ.video_id,
+		civ.exam_id,
+		civ.module_id,
+		civ.module_name,
+		civ.module_code,
+		civ.item_type,
+		civ.item_subtitle,
+		civ.playlist_item_code,
 	
-        -- user related
-        ucb.user_id,
+		ucb.user_id,
+		ucb.course_id,
         ucb.current_item_code = civ.module_code module_is_current,
 		asv.answer_session_success_rate correct_answer_rate,
         uprv.is_recommended_for_practise IS NOT NULL is_recommended_for_practise,
@@ -116,7 +128,7 @@ items_with_user AS
     AND uprv.user_id = ucb.user_id
 )
 SELECT * 
-FROM items_with_user
+FROM items_with_user 
 	
 ORDER BY
 	user_id,
