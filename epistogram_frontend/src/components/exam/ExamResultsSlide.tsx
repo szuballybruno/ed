@@ -42,28 +42,28 @@ export const ExamResultsSlide = (props: {
         isHeightMaximized={false}
         headerCenterText={exam.title}
         showFooterButtonsOnTop
-        footerButtons={new ArrayBuilder<any>()
-            .addIf(exam.isFinalExam, {
-                text: 'Kurzus értékelése',
+        footerButtons={new ArrayBuilder()
+            .addIf(!exam.isFinalExam, {
+                title: translatableTexts.exam.continueCourse,
+                action: continueCourse
+            })
+            .addIf(!!exam.isFinalExam, {
+                title: 'Kurzus értékelése',
                 action: goToCourseRating
             })
-            .addIf(exam.isFinalExam, {
-                text: 'Kurzus összegzése',
+            .addIf(!!exam.isFinalExam, {
+                title: 'Kurzus összegzése',
                 action: () => {
 
                     navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
                 }
             })
-            .addIf(exam.isFinalExam, {
-                text: 'Vissza a tanfolyamkeresőbe',
+            .addIf(!!exam.isFinalExam, {
+                title: 'Vissza a tanfolyamkeresőbe',
                 action: () => {
 
                     navigate2(applicationRoutes.availableCoursesRoute);
                 }
-            })
-            .addIf(!exam.isFinalExam, {
-                text: translatableTexts.exam.continueCourse,
-                action: continueCourse
             })
             .getArray()}>
 
