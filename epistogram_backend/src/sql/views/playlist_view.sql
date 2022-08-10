@@ -66,6 +66,7 @@ latest_course_items AS
     ON civ.exam_version_id = cilv.exam_version_id 
     OR civ.video_version_id = cilv.video_version_id
 ),
+
 items_with_user AS
 (
 	SELECT 
@@ -94,12 +95,13 @@ items_with_user AS
 	LEFT JOIN public.course_version cv 
 	ON cv.id = civ.course_version_id
 	
-	LEFT JOIN public.course_item_completion_view cicv
-	ON cicv.exam_version_id = civ.exam_version_id
-	OR cicv.video_version_id = civ.video_version_id
-	
 	INNER JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
+	
+	LEFT JOIN public.course_item_completion_view cicv
+	ON (cicv.exam_version_id = civ.exam_version_id
+	OR cicv.video_version_id = civ.video_version_id)
+	AND cicv.user_id = ucb.user_id
 
 	LEFT JOIN latest_answer_session las
 	ON las.exam_version_id = civ.exam_version_id
@@ -107,6 +109,7 @@ items_with_user AS
 
 	LEFT JOIN public.answer_session_view asv
 	ON asv.answer_session_id = las.answer_session_id
+	AND asv.user_id = ucb.user_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id
