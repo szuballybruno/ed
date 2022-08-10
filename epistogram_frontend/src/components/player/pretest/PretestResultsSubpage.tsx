@@ -96,11 +96,13 @@ export const PretestResultsSubpage = () => {
                 minHeight='calc(100vh - 100px)'
                 p="20px"
                 align='center'
-                justify='space-between'
+                justify='center'
                 className="roundBorders largeSoftShadow"
                 background="var(--transparentWhite70)">
 
                 <Flex
+                    position='absolute'
+                    top='20px'
                     align="center"
                     justify="center"
                     h="50px">
@@ -145,41 +147,46 @@ export const PretestResultsSubpage = () => {
                         title="Üzemmód ajánlott" />
 
                     <StatisticsCard
+                        title={pretestResults?.requiredCompletionDate
+                            ? 'Munkáltatód által megszabott befejezési határidő'
+                            : 'A kurzus várható befejezési ideje'}
+                        value={pretestResults?.requiredCompletionDate
+                            ? new Date(pretestResults.requiredCompletionDate)
+                                .toLocaleString('hu-hu', {
+                                    month: '2-digit',
+                                    day: '2-digit'
+                                })
+                            : pretestResults?.estimatedCompletionDate
+                                ? new Date(pretestResults.estimatedCompletionDate)
+                                    .toLocaleString('hu-hu', {
+                                        month: '2-digit',
+                                        day: '2-digit'
+                                    })
+                                : null}
+                        suffix={''}
+                        iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
+                        isOpenByDefault={false} />
+
+                    {/*   <StatisticsCard
                         iconPath={Environment.getAssetUrl('/images/pretest4.png')}
                         value={pretestResults?.requiredCompletionDate
                             ? 'Szigorú'
                             : 'Automata'}
                         suffix=""
-                        title="módban indul a tempomat" />
+                        title="módban indul a tempomat" /> */}
 
                 </Grid>
 
                 <Flex
-                    flex='1'
                     direction='column'
                     align='center'
-                    pt='30px'
                     maxW='1120px'
                     justify='flex-start'>
 
                     <Flex
-                        flex='1'
-                        width='600px'
-                        maxH='100px'
-                        direction='column'>
-
-                        {pretestResults?.requiredCompletionDate && <PretestDateInfo
-                            description='Munkáltatód által megszabott befejezési határidő: '
-                            date={pretestResults.requiredCompletionDate} />}
-
-                        <PretestDateInfo
-                            date={pretestResults?.estimatedCompletionDate!}
-                            description='A kurzus várható befejezése: ' />
-                    </Flex>
-
-                    <Flex
                         px="10px"
                         pb='40px'
+                        pt='50px'
                         justify="center"
                         align="center">
 
@@ -217,9 +224,7 @@ export const PretestResultsSubpage = () => {
                     }
 
                 </Flex>
-
             </Flex>
-
         </LoadingFrame >
     );
 };
