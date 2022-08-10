@@ -185,12 +185,10 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-    getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
+    getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>): ControllerActionReturnType {
 
         return {
             action: async () => {
-
-                const userId = principalId.toSQLValue();
 
                 const stats = await this._ormService
                     .query(UserVideoStatsView, { userId, courseId })
@@ -215,12 +213,10 @@ export class UserStatsService {
      * Gets the statistics for the users every completed exam
      */
 
-    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
+    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>): ControllerActionReturnType {
 
         return {
             action: async () => {
-
-                const userId = principalId.toSQLValue();
 
                 const stats = await this._ormService
                     .query(UserExamStatsView, { userId, courseId })
@@ -325,7 +321,9 @@ export class UserStatsService {
         return {
             action: async () => {
 
-                const currentUserId = principalId.getId() || userId;
+                const currentUserId = userId
+                    ? userId
+                    : principalId.getId();
 
                 const courseStats = await this._ormService
                     .query(UserCourseStatsView, { userId: currentUserId, courseId })

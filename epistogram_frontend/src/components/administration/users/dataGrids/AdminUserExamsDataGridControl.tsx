@@ -23,7 +23,7 @@ export const AdminUserExamsDataGridControl = (props: {
     const userId = Id
         .create<'User'>(useIntParam('userId')!);
 
-    const { userExamStats, userExamStatsStatus, userExamStatsError } = useUserExamStats(courseId!);
+    const { userExamStats, userExamStatsStatus, userExamStatsError } = useUserExamStats(courseId!, userId);
 
     const userExams = userExamStats ?? [];
 

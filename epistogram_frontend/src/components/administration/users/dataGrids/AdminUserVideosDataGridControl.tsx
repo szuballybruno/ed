@@ -23,7 +23,7 @@ export const AdminUserVideosDataGridControl = (props: {
     const userId = Id
         .create<'User'>(useIntParam('userId')!);
 
-    const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(courseId!);
+    const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(courseId!, userId);
 
     const userVideos = userVideoStats ?? [];
 
