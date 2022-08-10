@@ -128,6 +128,7 @@ import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
+import { CoursesProgressListView } from '../../models/views/CoursesProgressListView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -628,6 +629,37 @@ const marray = [
                         name: shopItemCategory.name
                     });
                 });
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(CourseLearningDTO, ([urlService]) => (stats: CoursesProgressListView[]) => {
+
+            return stats.map(stat => {
+                const thumbnailImageURL = stat.filePath
+                    ? urlService.getAssetUrl(stat.filePath)
+                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
+
+                return instantiate<CourseLearningDTO>({
+                    courseId: stat.courseId,
+                    title: stat.title,
+                    categoryName: stat.categoryName,
+                    subCategoryName: stat.subCategoryName,
+                    currentItemCode: stat.currentItemCode,
+                    teacherName: toFullName(stat.teacherFirstName, stat.teacherLastName),
+                    thumbnailImageURL: thumbnailImageURL,
+                    firstItemCode: '',
+                    isComplete: stat.isCompleted,
+                    totalSpentSeconds: stat.totalVideoSumLengthSeconds,
+                    totalCourseItemCount: stat.totalCourseItemCount,
+                    completedCourseItemCount: stat.completedCourseItemCount,
+                    totalVideoCount: stat.totalVideoCount,
+                    completedVideoCount: stat.completedVideoCount,
+                    totalVideoQuestionCount: stat.totalVideoQuestionCount,
+                    answeredVideoQuestionCount: stat.answeredVideoQuestionCount,
+                    examSuccessRateAverage: stat.examSuccessRateAverage,
+                    questionSuccessRate: stat.questionSuccessRate,
+                    finalExamSuccessRate: stat.finalExamSuccessRate
+                });
+            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseLearningDTO, ([urlService]) => (stats: CourseLearningStatsView[]) => {

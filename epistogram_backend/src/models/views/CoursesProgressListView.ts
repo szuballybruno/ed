@@ -70,7 +70,7 @@ export class CoursesProgressListView {
 
     @ViewColumn()
     @XViewColumn()
-    totalSpentSeconds: number;
+    totalVideoSumLengthSeconds: number;
 
     @ViewColumn()
     @XViewColumn()

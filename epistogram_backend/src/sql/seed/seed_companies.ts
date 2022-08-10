@@ -9,14 +9,6 @@ export const getCompaniesSeedData = () => getSeedList<Company>()({
     EpistoGram: {
         deletionDate: null,
         name: 'EpistoGram'
-    },
-    Manni_BT: {
-        deletionDate: null,
-        name: 'Manni BT'
-    },
-    Henkel: {
-        deletionDate: null,
-        name: 'Henkel'
     }
 });
 

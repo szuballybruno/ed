@@ -8,42 +8,35 @@ export const getCourseAccessBridgeSeedData = (
     courses: CourseSeedDataType) => getSeedList<CourseAccessBridge>()({
 
         // pcworld
-        pw_course_17: {
+        pw_course_obs: {
             companyId: companies.PCWorld.id,
             courseId: courses.course_obs.id,
             userId: null
         },
-        pw_course_22: {
+        pw_course_pp: {
             companyId: companies.PCWorld.id,
             courseId: courses.course_powerPoint.id,
             userId: null
         },
-        pw_course_27: {
-            companyId: companies.PCWorld.id,
-            courseId: courses.course_excel.id,
-            userId: null
-        },
 
         // episto
-        episto_course_17: {
+        episto_course_obs: {
             companyId: companies.EpistoGram.id,
             courseId: courses.course_obs.id,
             userId: null
         },
-        episto_course_25: {
+        episto_course_linkedin: {
             companyId: companies.EpistoGram.id,
             courseId: courses.course_linked_in.id,
             userId: null
         },
-
-        // henkel
-        henkel_course_24: {
-            companyId: companies.Henkel.id,
+        episto_course_ads: {
+            companyId: companies.EpistoGram.id,
             courseId: courses.course_google_ads.id,
             userId: null
         },
-        henkel_course_24a: {
-            companyId: companies.Henkel.id,
+        episto_course_excel: {
+            companyId: companies.EpistoGram.id,
             courseId: courses.course_excel.id,
             userId: null
         }

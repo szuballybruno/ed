@@ -9,23 +9,18 @@ export const getRoleAssignmentBridgeSeedData = (
     roles: RolesSeedDataType,
     users: UserSeedDataType
 ) => getSeedList<RoleAssignmentBridge>()({
+
     pcworld_company_user_role: {
         roleId: roles.Company_User.id,
         assigneeCompanyId: companies.PCWorld.id,
         assigneeUserId: null,
         contextCompanyId: companies.PCWorld.id,
     },
-    henkel_company_user_role: {
-        roleId: roles.Company_User.id,
-        assigneeCompanyId: companies.Henkel.id,
-        assigneeUserId: null,
-        contextCompanyId: companies.Henkel.id,
-    },
 
-    almostgod_a: {
-        roleId: roles.Company_Owner.id,
-        assigneeCompanyId: null,
-        assigneeUserId: users.almostGod.id,
+    episto_company_user_role: {
+        roleId: roles.Company_User.id,
+        assigneeCompanyId: companies.EpistoGram.id,
+        assigneeUserId: null,
         contextCompanyId: companies.EpistoGram.id,
     }
 });

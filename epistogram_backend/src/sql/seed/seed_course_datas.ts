@@ -27,7 +27,7 @@ export const getCourseDatasSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_canva.id,
         },
         course_data_cyber: {
@@ -48,7 +48,7 @@ export const getCourseDatasSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_cyber.id,
         },
         course_data_insta: {
@@ -69,7 +69,7 @@ export const getCourseDatasSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_10.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_insta.id,
         },
 
@@ -91,7 +91,7 @@ export const getCourseDatasSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_4.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_ads.id,
         },
 
@@ -113,7 +113,7 @@ export const getCourseDatasSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_3.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_py.id,
         },
 
@@ -135,7 +135,7 @@ export const getCourseDatasSeedData = (
             visibility: 'private',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_10.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_linkedin.id,
         },
 
@@ -157,7 +157,7 @@ export const getCourseDatasSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_word.id,
         },
 
@@ -179,7 +179,7 @@ export const getCourseDatasSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_9.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_obs.id,
         },
 
@@ -201,7 +201,7 @@ export const getCourseDatasSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_pp.id,
         },
 
@@ -223,7 +223,7 @@ export const getCourseDatasSeedData = (
             visibility: 'public',
             categoryId: courseCategories.course_category_1.id,
             subCategoryId: courseCategories.course_category_5.id,
-            teacherId: users.god.id,
+            teacherId: users.marosiEndre.id,
             coverFileId: storageFiles.storage_file_course_cover_excel.id,
         }
     });
