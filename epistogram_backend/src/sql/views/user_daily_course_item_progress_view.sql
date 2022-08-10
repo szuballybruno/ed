@@ -3,10 +3,19 @@ WITH completed_items AS
 	SELECT 
 		cicv.user_id,
 		cicv.course_id,
+		cicv.video_version_id,
+		vd.title,
 		DATE_TRUNC('day', cicv.completion_date) completion_date
 	FROM public.course_item_completion_view cicv
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = cicv.video_version_id
+	
+	LEFT JOIN public.video_data vd
+	ON vd.id = vv.video_data_id
 
 	WHERE cicv.is_pretest IS NOT TRUE
+	AND cicv.video_version_id IS NOT NULL
 ),
 completed_item_groups AS
 (
@@ -34,7 +43,8 @@ SELECT
 FROM completed_item_groups cig
 
 LEFT JOIN public.user_course_bridge ucb
-ON ucb.course_id = cig.course_id AND ucb.user_id = cig.user_id
+ON ucb.course_id = cig.course_id 
+AND ucb.user_id = cig.user_id
 
 LEFT JOIN public.course_item_count_view cicv
 ON cicv.course_id = cig.course_id 
