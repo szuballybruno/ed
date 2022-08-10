@@ -23,7 +23,6 @@ import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedV
 import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { PlaylistView } from '../../models/views/PlaylistView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
 import { CourseProgressView } from '../../models/views/CourseProgressView';
@@ -39,6 +38,7 @@ import { ModuleEditView } from '../../models/views/ModuleEditView';
 import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
+import { PlaylistView } from '../../models/views/PlaylistView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
 import { QuestionDataView } from '../../models/views/QuestionDataView';
@@ -47,7 +47,7 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserCourseStatsViewWithTempomatData, UserCourseStatsView } from '../../models/views/UserCourseStatsView';
+import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
@@ -128,7 +128,6 @@ import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
-import { CoursesProgressListView } from '../../models/views/CoursesProgressListView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -629,37 +628,6 @@ const marray = [
                         name: shopItemCategory.name
                     });
                 });
-        }),
-    epistoMappingsBuilder
-        .addArrayMapping(CourseLearningDTO, ([urlService]) => (stats: CoursesProgressListView[]) => {
-
-            return stats.map(stat => {
-                const thumbnailImageURL = stat.filePath
-                    ? urlService.getAssetUrl(stat.filePath)
-                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
-
-                return instantiate<CourseLearningDTO>({
-                    courseId: stat.courseId,
-                    title: stat.title,
-                    categoryName: stat.categoryName,
-                    subCategoryName: stat.subCategoryName,
-                    currentItemCode: stat.currentItemCode,
-                    teacherName: toFullName(stat.teacherFirstName, stat.teacherLastName),
-                    thumbnailImageURL: thumbnailImageURL,
-                    firstItemCode: '',
-                    isComplete: stat.isCompleted,
-                    totalSpentSeconds: stat.totalVideoSumLengthSeconds,
-                    totalCourseItemCount: stat.totalCourseItemCount,
-                    completedCourseItemCount: stat.completedCourseItemCount,
-                    totalVideoCount: stat.totalVideoCount,
-                    completedVideoCount: stat.completedVideoCount,
-                    totalVideoQuestionCount: stat.totalVideoQuestionCount,
-                    answeredVideoQuestionCount: stat.answeredVideoQuestionCount,
-                    examSuccessRateAverage: stat.examSuccessRateAverage,
-                    questionSuccessRate: stat.questionSuccessRate,
-                    finalExamSuccessRate: stat.finalExamSuccessRate
-                });
-            });
         }),
     epistoMappingsBuilder
         .addArrayMapping(CourseLearningDTO, ([urlService]) => (stats: CourseLearningStatsView[]) => {

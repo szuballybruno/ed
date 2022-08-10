@@ -1,11 +1,12 @@
+import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
-import { CoursesProgressListView } from '../models/views/CoursesProgressListView';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlaylistService } from './PlaylistService';
@@ -23,33 +24,48 @@ export class CourseProgressService {
     /**
      * Returns the /learning/courses data.  
      */
-    async getCourseProgressDataAsync(principalId: PrincipalId) {
-
-        const courses = await this._ormService
-            .query(CoursesProgressListView, { principalId })
-            .where('userId', '=', 'principalId')
-            .getMany();
-
-        // in progress courses 
-        const inProgressCourses = courses
-            .filter(x => x.isStarted && !x.isCompleted);
-
-        const inProgressCoursesAsCourseShortDTOs = this._mapperService
-            .mapTo(CourseLearningDTO, [inProgressCourses]);
-
-        // completed corurses
-        const completedCourses = courses
-            .filter(x => x.isCompleted);
-
-        const completedCoursesAsCourseShortDTOs = this._mapperService
-            .mapTo(CourseLearningDTO, [completedCourses]);
+    getCourseProgressDataAsync(principalId: PrincipalId): ControllerActionReturnType {
 
         return {
-            isAnyCoursesComplete: completedCourses.any(x => true),
-            isAnyCoursesInProgress: inProgressCourses.any(x => true),
-            completedCourses: completedCoursesAsCourseShortDTOs,
-            inProgressCourses: inProgressCoursesAsCourseShortDTOs
-        } as UserCoursesDataDTO;
+            action: async () => {
+                const courses = await this._ormService
+                    .query(CourseLearningStatsView, {
+                        principalId: principalId.getId(),
+                        isCompleted: true,
+                        isStarted: true
+                    })
+                    .where('userId', '=', 'principalId')
+                    .and('isCompleted', '=', 'isCompleted')
+                    .or('isStarted', '=', 'isStarted')
+                    .getMany();
+
+                console.log(courses);
+
+                // in progress courses 
+                const inProgressCourses = courses
+                    .filter(x => x.isStarted && !x.isCompleted);
+
+                const inProgressCoursesAsCourseShortDTOs = this._mapperService
+                    .mapTo(CourseLearningDTO, [inProgressCourses]);
+
+                // completed corurses
+                const completedCourses = courses
+                    .filter(x => x.isCompleted);
+
+                const completedCoursesAsCourseShortDTOs = this._mapperService
+                    .mapTo(CourseLearningDTO, [completedCourses]);
+
+                return {
+                    isAnyCoursesComplete: completedCourses.any(x => true),
+                    isAnyCoursesInProgress: inProgressCourses.any(x => true),
+                    completedCourses: completedCoursesAsCourseShortDTOs,
+                    inProgressCourses: inProgressCoursesAsCourseShortDTOs
+                } as UserCoursesDataDTO;
+            },
+            auth: async () => {
+                return AuthorizationResult.ok;
+            }
+        };
     }
 
     /**

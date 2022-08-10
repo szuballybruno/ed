@@ -22,7 +22,7 @@ export class CourseProgressController {
     };
 
     @XControllerAction(apiRoutes.courseProgress.getCourseProgressData)
-    getCourseProgressDataAction = async (params: ActionParams) => {
+    getCourseProgressDataAction = (params: ActionParams) => {
 
         return this._courseProgressService
             .getCourseProgressDataAsync(params.principalId);
