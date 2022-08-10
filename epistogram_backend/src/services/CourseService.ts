@@ -568,8 +568,7 @@ export class CourseService {
     ): ControllerActionReturnType {
 
         return {
-            auth: () => this._authorizationService
-                .checkPermissionAsync(principalId, 'ACCESS_ADMIN'),
+            auth: () => Promise.resolve(AuthorizationResult.ok),
             action: async () => {
 
                 const courses = await this._ormService
