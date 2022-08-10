@@ -17,11 +17,9 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
+import { PermissionService } from './PermissionService';
 
 export class PretestService {
-
-    private _tempomatService: TempomatService;
-    private _authorizationService: AuthorizationService;
 
     constructor(
         private _ormService: ORMConnectionService,
@@ -29,11 +27,9 @@ export class PretestService {
         private _examService: ExamService,
         private _courseBridgeService: UserCourseBridgeService,
         private _questionAnswerService: QuestionAnswerService,
-        private authorizationService: AuthorizationService,
-        tempomatService: TempomatService) {
-
-        this._tempomatService = tempomatService;
-        this._authorizationService = authorizationService;
+        private _authorizationService: AuthorizationService,
+        private _tempomatService: TempomatService,
+        private _permissionService: PermissionService) {
     }
 
     async createPretestExamAsync(courseId: Id<'Course'>) {
@@ -226,6 +222,14 @@ export class PretestService {
                 await this._courseBridgeService
                     .setCourseStartDateAsync(principalId, courseId)
                     .action();
+
+                /**
+                 * Assign SET_COURSE_MODE permission to allow user 
+                 * to start course in their preferred mode
+                 */
+                await this
+                    ._permissionService
+                    .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
             },
             auth: async () => {
                 return this._authorizationService

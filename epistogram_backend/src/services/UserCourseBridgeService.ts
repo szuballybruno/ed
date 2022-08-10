@@ -10,6 +10,7 @@ import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -20,7 +21,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         ormService: ORMConnectionService,
         mapperService: MapperService,
         authorizationService: AuthorizationService,
-        loggerService: LoggerService) {
+        loggerService: LoggerService,
+        private _permissionService: PermissionService) {
 
         super(mapperService, ormService, UserCourseBridge);
 
@@ -168,14 +170,18 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     ): ControllerActionReturnType {
 
         return {
+            auth: async () => {
+
+                return this
+                    ._authorizationService
+                    .checkPermissionAsync(principalId, 'SET_COURSE_MODE', { courseId });
+            },
             action: async () => {
 
                 const userId = principalId.getId();
 
-                const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
-
-                if (!userCourseBridge)
-                    throw new Error('User course bridge not found!');
+                const userCourseBridge = await this
+                    .getUserCourseBridgeOrFailAsync(userId, courseId);
 
                 await this._ormService
                     .save(UserCourseBridge, {
@@ -184,10 +190,20 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                         id: userCourseBridge.id,
                         courseMode: mode
                     } as UserCourseBridge);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'SET_COURSE_MODE_GLOBAL');
+
+                /**
+                 * If advanced mode is set, 
+                 * take away SET_COURSE_MODE permission.
+                 * Only gods will be able to change it from 
+                 * now on, since their permission can't be taken 
+                 * away. (it's from a view rather than from an assignment bridge)
+                 */
+                if (mode === 'advanced') {
+
+                    await this
+                        ._permissionService
+                        .removePersmission(userId, 'SET_COURSE_MODE', { courseId });
+                }
             }
         };
 

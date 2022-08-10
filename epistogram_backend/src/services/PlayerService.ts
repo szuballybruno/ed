@@ -24,6 +24,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { PretestCompletionView } from '../models/views/PretestCompletionView';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { PermissionService } from './PermissionService';
 
 export class PlayerService {
 
@@ -38,7 +39,8 @@ export class PlayerService {
         private _playbackService: PlaybackService,
         private _userCourseBridgeService: UserCourseBridgeService,
         private _mapperService: MapperService,
-        private _authorizationService: AuthorizationService) {
+        private _authorizationService: AuthorizationService,
+        private _permissionService: PermissionService) {
     }
 
     /**
@@ -91,6 +93,13 @@ export class PlayerService {
                 // get next item 
                 const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
 
+                /**
+                 * Get SET_COURSE_MODE permission
+                 */
+                const hasPermission = await this
+                    ._permissionService
+                    .getPermissionAsync(userId, 'SET_COURSE_MODE', { courseId });
+
                 return instantiate<PlayerDataDTO>({
                     videoPlayerData: videoPlayerDTO,
                     examPlayerData: examPlayerDTO,
@@ -101,7 +110,8 @@ export class PlayerService {
                     currentPlaylistItemCode: requestedItemCode,
                     modules: modules,
                     nextPlaylistItemCode,
-                    nextPlaylistItemState: nextItemState
+                    nextPlaylistItemState: nextItemState,
+                    canChangeMode: !!hasPermission
                 });
             },
             auth: async () => {

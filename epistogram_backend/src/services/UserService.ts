@@ -260,15 +260,12 @@ export class UserService {
                     .where('id', '=', 'userId')
                     .getSingle();
 
-                const hasPermission = await this._authorizationService
-                    .hasPermissionAsync(
+                await this._authorizationService
+                    .checkPermissionAsync(
                         principalId,
                         'VIEW_COMPANY_USERS',
                         { companyId: user.companyId }
                     );
-
-                if (!hasPermission)
-                    throw new ErrorWithCode('no permission');
 
                 return {
                     id: user.id,

@@ -1,25 +1,22 @@
 import { Divider, Flex } from '@chakra-ui/layout';
-import { FilterAlt, Search } from '@mui/icons-material';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { RadioGroup } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
 import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoPopper } from '../../controls/EpistoPopper';
-import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
 import { Playlist } from '../../courseItemList/Playlist';
+import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
-import { Id } from '../../../shared/types/versionId';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -28,14 +25,14 @@ export const CourseItemSelector = (props: {
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
-    isPlayerLoaded: boolean
+    isPlayerLoaded: boolean,
+    canChangeMode?: boolean
 }) => {
 
-    const { currentItemCode, nextItemState: itemState, isPlayerLoaded, mode, refetchPlayerData, courseId, modules } = props;
+    const { currentItemCode, nextItemState: itemState, isPlayerLoaded, mode, refetchPlayerData, courseId, modules, canChangeMode } = props;
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
-    const canChangeCourseMode = true;
 
     // http 
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
@@ -141,95 +138,91 @@ export const CourseItemSelector = (props: {
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
             </Flex>
 
-        </Flex >
+        </Flex>
 
         {/* option to enable advanced mode
         IF STARTED COURSE  IN BEGINNER MODE */}
-        {
-            (mode === 'beginner' && !canChangeCourseMode) && <>
-                <EpistoButton
-                    style={{
-                        margin: '30px'
-                    }}
-                    variant="colored"
-                    onClick={changeToAdvancedModePermanently}>
+        {canChangeMode && <>
+            <EpistoButton
+                style={{
+                    margin: '30px'
+                }}
+                variant="colored"
+                onClick={changeToAdvancedModePermanently}>
 
-                    Change to advanced mode
-                </EpistoButton>
-            </>
-        }
+                Change to advanced mode
+            </EpistoButton>
+        </>}
 
         {/* learning type selector FOR ADMINS ONLY */}
-        {
-            canChangeCourseMode && <RadioGroup
-                value={mode}
-                style={{
-                    position: 'relative'
-                }}>
+        {/* {canChangeMode && <RadioGroup
+            value={mode}
+            style={{
+                position: 'relative'
+            }}>
 
-                <Flex
-                    height="50px"
-                    padding="0 20px"
-                    justify="center">
-
-                    <EpistoButton
-                        variant="outlined"
-                        onClick={() => setCourseMode(mode === 'beginner' ? 'advanced' : 'beginner')}
-                        style={{
-                            margin: '5px',
-                            padding: '0 10px 0 10px',
-                            flex: '1',
-                            border: mode === 'beginner' ? '2px solid var(--epistoTeal)' : undefined
-                        }}>
-
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontNormal14">
-
-                            {mode === 'advanced'
-                                ? translatableTexts.player.courseItemSelector.beginner
-                                : translatableTexts.player.courseItemSelector.advanced}
-                        </EpistoFont>
-                    </EpistoButton>
-                    <EpistoButton
-                        variant="colored"
-                        style={{
-                            margin: '5px',
-                            padding: '0 10px 0 10px',
-                            width: '40px',
-                            border: '2px solid var(--epistoTeal)'
-                        }}>
-
-                        <Search />
-                    </EpistoButton>
-                    <EpistoButton
-                        variant="colored"
-                        style={{
-                            margin: '5px',
-                            padding: '0 10px 0 10px',
-                            width: '40px',
-                            border: '2px solid var(--epistoTeal)'
-                        }}>
-
-                        <FilterAlt />
-                    </EpistoButton>
-                </Flex>
+            <Flex
+                height="50px"
+                padding="0 20px"
+                justify="center">
 
                 <EpistoButton
-                    ref={ref}
+                    variant="outlined"
+                    onClick={() => setCourseMode(mode === 'beginner' ? 'advanced' : 'beginner')}
                     style={{
-                        padding: '0',
-                        alignSelf: 'flex-start',
-                        color: 'var(--epistoTeal)',
-                        position: 'absolute',
-                        zIndex: 3,
-                        right: 10,
-                        top: -20
-                    }}
-                    icon={<HelpOutlineIcon />}
-                    onClick={() => setIsInfoDialogOpen(true)} />
-            </RadioGroup>
-        }
+                        margin: '5px',
+                        padding: '0 10px 0 10px',
+                        flex: '1',
+                        border: mode === 'beginner' ? '2px solid var(--epistoTeal)' : undefined
+                    }}>
+
+                    <EpistoFont
+                        isUppercase
+                        fontSize="fontNormal14">
+
+                        {mode === 'advanced'
+                            ? translatableTexts.player.courseItemSelector.beginner
+                            : translatableTexts.player.courseItemSelector.advanced}
+                    </EpistoFont>
+                </EpistoButton>
+                <EpistoButton
+                    variant="colored"
+                    style={{
+                        margin: '5px',
+                        padding: '0 10px 0 10px',
+                        width: '40px',
+                        border: '2px solid var(--epistoTeal)'
+                    }}>
+
+                    <Search />
+                </EpistoButton>
+                <EpistoButton
+                    variant="colored"
+                    style={{
+                        margin: '5px',
+                        padding: '0 10px 0 10px',
+                        width: '40px',
+                        border: '2px solid var(--epistoTeal)'
+                    }}>
+
+                    <FilterAlt />
+                </EpistoButton>
+            </Flex>
+
+            <EpistoButton
+                ref={ref}
+                style={{
+                    padding: '0',
+                    alignSelf: 'flex-start',
+                    color: 'var(--epistoTeal)',
+                    position: 'absolute',
+                    zIndex: 3,
+                    right: 10,
+                    top: -20
+                }}
+                icon={<HelpOutlineIcon />}
+                onClick={() => setIsInfoDialogOpen(true)} />
+        </RadioGroup>} */}
 
         <EpistoPopper
             isOpen={isInfoDialogOpen}

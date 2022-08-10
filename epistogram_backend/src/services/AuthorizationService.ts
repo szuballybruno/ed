@@ -1,10 +1,10 @@
-import { GetParamByCodeType, GetPermissionScope } from '../shared/types/PermissionCodesType';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { GetParamByCodeType, GetPermissionScope, PermissionScopeParamType } from '../shared/types/PermissionCodesType';
+import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { ContextOptions, PermissionService } from './PermissionService';
+import { PermissionService } from './PermissionService';
 
 export class AuthorizationService {
 
@@ -20,42 +20,21 @@ export class AuthorizationService {
             : [PrincipalId, TCode, GetParamByCodeType<TCode>]) {
 
         const [principalId, searchPermissionCode, params] = args;
+        const contextCompanyId = (params as PermissionScopeParamType)?.companyId ?? null;
+        const contextCourseId = (params as PermissionScopeParamType)?.courseId ?? null;
 
         const hasPermission = await this
-            .hasPermissionAsync(principalId, searchPermissionCode as any, params);
+            ._permissionService
+            .getPermissionByOptionsAsync({
+                userId: principalId.getId(),
+                code: searchPermissionCode,
+                contextCompanyId,
+                contextCourseId
+            });
 
         if (!hasPermission)
             throw new ErrorWithCode(`User (${principalId.toSQLValue()}) has no permission to access resource, protected by: "${searchPermissionCode}" permission.`, 'no permission');
 
         return hasPermission ? AuthorizationResult.ok : AuthorizationResult.failed;
-    }
-
-    // async checkPermissionAsync<TCode extends PermissionCodeType>(
-    //     ...args: GetPermissionScope<TCode> extends 'USER'
-    //         ? [PrincipalId, TCode]
-    //         : [PrincipalId, TCode, GetParamByCodeType<TCode>]) {
-
-    //     const [principalId, searchPermissionCode, params] = args;
-
-    //     const hasPermission = await this
-    //         .hasPermissionAsync(principalId, searchPermissionCode as any, params);
-
-    //     return hasPermission ? AuthorizationResult.ok : AuthorizationResult.failed;
-    // }
-
-    async hasPermissionAsync<TCode extends PermissionCodeType>(
-        ...args: GetPermissionScope<TCode> extends 'USER'
-            ? [PrincipalId, TCode]
-            : [PrincipalId, TCode, GetParamByCodeType<TCode>]) {
-
-        const [principalId, searchPermissionCode, params] = args;
-
-        const userId = principalId
-            .getId();
-
-        const perm = await this._permissionService
-            .getPermissionAsync(userId, searchPermissionCode, params as ContextOptions | undefined);
-
-        return !!perm;
     }
 }

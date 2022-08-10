@@ -37,7 +37,8 @@ export const WatchSubpage = () => {
         courseMode: 'beginner',
         currentPlaylistItemCode: '',
         nextPlaylistItemState: null,
-        modules: [] as any
+        modules: [] as any,
+        canChangeMode: false
     } as PlayerDataDTO)), [playerData]);
 
     const {
@@ -209,6 +210,7 @@ export const WatchSubpage = () => {
                                     courseId={courseId!}
                                     mode={courseMode}
                                     modules={modules}
+                                    canChangeMode={playerDataWithDefaults.canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData} />
                             </Flex>}

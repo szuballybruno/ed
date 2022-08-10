@@ -8,7 +8,8 @@ const ADMIN_PASSWORD_HASHED = '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1u
 export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: JobTitlesSeedDataType) => getSeedList<User>()({
     
     /**
-     * GOD 
+     * GOD (has ALL permissions and ALL roles)
+     * also, owner of EpistoGram
      */
     marosiEndre: {
         deletionDate: null,

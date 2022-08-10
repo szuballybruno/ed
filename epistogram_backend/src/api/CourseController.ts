@@ -197,7 +197,8 @@ export class CourseController implements XController<CourseController> {
 
         const courseMode = dto.getValue(x => x.mode, 'custom', value => value === 'advanced' || value === 'beginner');
 
-        return this._userCourseBridgeService
+        return this
+            ._userCourseBridgeService
             .setCourseModeAsync(
                 params.principalId,
                 courseId,

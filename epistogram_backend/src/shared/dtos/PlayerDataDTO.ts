@@ -16,4 +16,5 @@ export class PlayerDataDTO {
     currentPlaylistItemCode: string;
     nextPlaylistItemCode: string | null;
     nextPlaylistItemState: CourseItemStateType | null;
+    canChangeMode: boolean;
 }

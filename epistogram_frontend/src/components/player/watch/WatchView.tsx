@@ -104,7 +104,6 @@ export const WatchView = (props: {
         paging={descCommentPaging}
         description={videoPlayerData.description} />;
 
-
     const VideoComments = () => <Comments
         paging={descCommentPaging}
         currentItemCode={currentItemCode} />;

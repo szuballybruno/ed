@@ -221,6 +221,12 @@ export type PermissionCodesObjectType = typeof permissionCodes;
 
 export type PermissionCodeType = keyof typeof permissionCodes;
 
+export type PermissionScopeParamType = {
+    companyId?: Id<'Company'>
+    courseId?: Id<'Course'>
+    commentId?: Id<'Comment'>
+} | undefined;
+
 type ScopeParamByScopeType<T extends PermissionScopeType> = T extends 'COMPANY'
     ? {
         companyId: Id<'Company'>
