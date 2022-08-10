@@ -5,7 +5,6 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
-import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
@@ -36,7 +35,7 @@ export const AdminEditUserControl = ({
     saveUserAsync,
     showDeleteUserDialog
 }: {
-    editedUserId: Id<'User'> | null,
+    editedUserId: Id<'User'>,
     editDTO: UserEditDTO | null,
     refetchTrigger: EventTriggerType,
     saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
@@ -44,6 +43,7 @@ export const AdminEditUserControl = ({
 }) => {
 
     const { hasPermission } = useAuthorizationContext();
+    const mode = (editedUserId as any) < 0 ? 'ADD' : 'EDIT';
 
     // editable fields
     const [firstName, setFirstName] = useState('');
@@ -59,11 +59,10 @@ export const AdminEditUserControl = ({
 
     const canSetInvitedUserCompany = true;//hasPermission('i');
 
-    const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(editedUserId);
+    const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(mode === 'EDIT' ? editedUserId : null);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
     const { roleAssignCompanies } = useRoleAssignCompanies();
     const { jobTitles } = useJobTitles();
-    const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
 
     useSetBusy(useCoinBalanceOfUser, coinBalanceStatus);
 
@@ -110,7 +109,7 @@ export const AdminEditUserControl = ({
 
         try {
 
-            if (!coinAmountEntryState.validate() || !editedUserId)
+            if (!coinAmountEntryState.validate() || mode === 'ADD')
                 return;
 
             const amount = parseInt(coinAmountEntryState.value);
@@ -127,44 +126,22 @@ export const AdminEditUserControl = ({
 
     const handleSaveUserAsync = async () => {
 
-        console.log(JSON.stringify(editDTO));
-        console.log(JSON.stringify(selectedCompany));
-        console.log(JSON.stringify(selectedJobTitle));
-
         if (!selectedCompany || !selectedJobTitle)
             return;
 
-        if (!editedUserId) {
-            const newUser: UserEditDTO = {
-                id: Id.create<'User'>(-1),
-                firstName,
-                lastName,
-                email,
-                companyId: selectedCompany.id,
-                jobTitleId: selectedJobTitle!.id || null,
-                isTeacher,
-                permissions: permissionsChangeSet,
-                roles: rolesChangeSet
-            };
+        const editedUserDTO: UserEditDTO = {
+            id: editedUserId,
+            firstName,
+            lastName,
+            email,
+            companyId: selectedCompany.id,
+            jobTitleId: selectedJobTitle.id,
+            isTeacher,
+            permissions: permissionsChangeSet,
+            roles: rolesChangeSet
+        };
 
-            return createInvitedUser(newUser);
-        }
-
-        if (editedUserId && editDTO) {
-            const editedUserDTO: UserEditDTO = {
-                id: editDTO.id,
-                firstName,
-                lastName,
-                email,
-                companyId: selectedCompany.id,
-                jobTitleId: selectedJobTitle.id,
-                isTeacher,
-                permissions: permissionsChangeSet,
-                roles: rolesChangeSet
-            };
-
-            return saveUserAsync(editedUserDTO);
-        }
+        return saveUserAsync(editedUserDTO);
     };
 
     useEffect(() => console.log('Useredit dto reloaded'), [editDTO]);

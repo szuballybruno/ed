@@ -4,6 +4,7 @@ import { useCreateInviteUserAsync } from '../../../services/api/registrationApiS
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { Id } from '../../../shared/types/versionId';
 import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
@@ -28,7 +29,7 @@ const AdminAddUserSubpage = (props: {
 
         showNotification('Felhasználó sikeresen hozzáadva');
         refetchUsersFunction();
-        navigate2(applicationRoutes.administrationRoute.usersRoute);
+        navigate2(applicationRoutes.administrationRoute.usersRoute.indexRoute);
     }, [showNotification, refetchUsersFunction, navigate2]);
 
     const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);
@@ -47,7 +48,7 @@ const AdminAddUserSubpage = (props: {
             className='roundBorders'>
 
             <AdminEditUserControl
-                editedUserId={null}
+                editedUserId={Id.create(-1)}
                 refetchTrigger={refetchTrigger}
                 editDTO={null}
                 saveUserAsync={handleCreateInvitedUser}></AdminEditUserControl>
