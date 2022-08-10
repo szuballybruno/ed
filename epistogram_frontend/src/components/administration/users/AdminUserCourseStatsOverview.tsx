@@ -69,7 +69,7 @@ export const AdminUserCourseStatsOverview = ({
                             { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
                             { value: 100 - performancePercentage, name: '' },
                         ]}
-                        options={defaultCharts.twoSegmentGreenDoughnut} />
+                        options={defaultCharts.twoSegmentRedDoughnut} />
                 </Flex>
                 <Flex flex="1">
 
@@ -79,13 +79,12 @@ export const AdminUserCourseStatsOverview = ({
                             { value: courseProgressPercentage, name: '' },
                             { value: 100 - courseProgressPercentage, name: `Haladás ${roundNumber(courseProgressPercentage)}%` },
                         ]}
-                        options={defaultCharts.twoSegmentRedDoughnut} />
+                        options={defaultCharts.twoSegmentGreenDoughnut} />
                 </Flex>
                 <Flex flex="1">
 
                     <EpistoPieChart
-                        title=""
-                        isSortValues
+                        title="Aktivitás eloszlása"
                         segments={[
                             {
                                 value: watchingVideosPercentage,
@@ -104,7 +103,7 @@ export const AdminUserCourseStatsOverview = ({
                                 name: texts.activitiesPieChartTexts.noActivity
                             }
                         ]}
-                        options={defaultCharts.pie3} />
+                        options={defaultCharts.twoSegmentGreenDoughnut} />
                 </Flex>
             </Flex>
 

@@ -10,7 +10,7 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { AuthorizationService } from '../services/AuthorizationService';
-import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class RegistrationController implements XController<RegistrationController> {
 
@@ -67,8 +67,7 @@ export class RegistrationController implements XController<RegistrationControlle
                 setAuthCookies(this._config, params.res, accessToken, refreshToken);
             },
             auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
+                return AuthorizationResult.ok;
             }
         };
 
@@ -91,7 +90,7 @@ export class RegistrationController implements XController<RegistrationControlle
             },
             auth: async () => {
                 return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
+                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
             }
         };
     }
