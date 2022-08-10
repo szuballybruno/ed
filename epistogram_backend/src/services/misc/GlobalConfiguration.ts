@@ -10,7 +10,7 @@ export type LogScopeType =
     'GIVEN ANSWER' |
     'GENERIC' |
     'TRANSACTION' |
-    'TEMPOMAT' | 
+    'TEMPOMAT' |
     'REGISTRATION';
 
 export class GlobalConfiguration {
@@ -85,9 +85,9 @@ export class GlobalConfiguration {
     };
 
     practiseQuestions = {
-        incorrectQuestionDelayMinutes: 5,
-        correctQuestionDelayMinutes: 20,
-        incorrectPractiseQuestionDelayMinutes: 60
+        incorrectQuestionDelayMinutes: 1,
+        correctQuestionDelayMinutes: 3,
+        incorrectPractiseQuestionDelayMinutes: 5
     };
 
     constructor(rootDirectory: string) {
