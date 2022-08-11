@@ -148,28 +148,32 @@ export class UserStatsService {
 
         return {
             action: async () => {
+
                 const stats = await this._ormService
                     .query(UserCourseStatsView, { userId })
                     .where('userId', '=', 'userId')
                     .getMany();
 
                 const statsWithTempomatData = stats
-                    .map(x => {
+                    .map((x): UserCourseStatsViewWithTempomatData => {
 
-                        const tempomatValues = this._tempomatService
+                        const tempomatValues = this
+                            ._tempomatService
                             .calculateTempomatValues(x);
 
-                        const previsionedCompletionDate = tempomatValues?.previsionedCompletionDate || null;
-                        const lagBehindPercentage = tempomatValues?.lagBehindPercentage || null;
-                        const recommendedItemsPerWeek = tempomatValues?.recommendedItemsPerWeek || null;
+                        const previsionedCompletionDate = tempomatValues?.previsionedCompletionDate ?? null;
+                        const lagBehindPercentage = tempomatValues?.lagBehindPercentage ?? null;
+                        const recommendedItemsPerWeek = tempomatValues?.recommendedItemsPerWeek ?? null;
+
+                        // TODO nullable
 
                         return {
                             ...x,
-                            previsionedCompletionDate: previsionedCompletionDate,
-                            lagBehindPercentage: lagBehindPercentage,
-                            recommendedItemsPerWeek
+                            previsionedCompletionDate: previsionedCompletionDate!,
+                            lagBehindPercentage: lagBehindPercentage!,
+                            recommendedItemsPerWeek: recommendedItemsPerWeek!
                         };
-                    }) as UserCourseStatsViewWithTempomatData[];
+                    });
 
                 return this._mapperService
                     .mapTo(UserCourseStatsDTO, [statsWithTempomatData]);
