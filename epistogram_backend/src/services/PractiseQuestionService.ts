@@ -1,7 +1,6 @@
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { PractiseQuestionInfoDTO } from '../shared/dtos/PractiseQuestionInfoDTO';
 import { Id } from '../shared/types/versionId';
 import { isXMinutesAgo } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -58,16 +57,16 @@ export class PractiseQuestionService extends ServiceBase {
     /**
      * Returns question ids that should be practised 
      */
-    private _getPractiseQuestionsIdsAsync(dtos: PractiseQuestionInfoDTO[]): Id<'Question'>[] {
+    private _getPractiseQuestionsIdsAsync(dtos: PractiseQuestionInfoView[]): Id<'Question'>[] {
 
         return dtos
             .filter(questionInfo => {
 
                 const {
                     practiseAnswerCount,
-                    lastAnswerDate,
-                    lastAnswerIsCorrect,
-                    lastAnswerIsPractise
+                    givenAnswerDate: lastAnswerDate,
+                    isCorrect: lastAnswerIsCorrect,
+                    isPractise: lastAnswerIsPractise
                 } = questionInfo;
 
                 const {

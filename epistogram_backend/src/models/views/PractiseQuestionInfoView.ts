@@ -18,11 +18,11 @@ export class PractiseQuestionInfoView {
     practiseAnswerCount: number;
     
     @XViewColumn()
-    lastAnswerIsCorrect: boolean;
+    isCorrect: boolean;
     
     @XViewColumn()
-    lastAnswerDate: Date;
+    givenAnswerDate: Date;
     
     @XViewColumn()
-    lastAnswerIsPractise: boolean;
+    isPractise: boolean;
 }
