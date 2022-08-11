@@ -8468,22 +8468,61 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
         isCorrect: false,
     },
 
-    answer_data_2197: {
-        text: 'a',
-        isCorrect: false,
-    },
-    answer_data_2198: {
-        text: 'b',
-        isCorrect: false,
-    },
-    answer_data_2199: {
-        text: 'c',
+    // --------------------- PP PRETEST ANSWERS 
+
+    // pp pretest answers / question 1
+    pp_pretest_question_1_answer_data_1: {
+        text: 'Ctrl',
         isCorrect: true,
     },
-    answer_data_2200: {
-        text: 'd',
+    pp_pretest_question_1_answer_data_2: {
+        text: 'Shift',
         isCorrect: false,
-    }
+    },
+    pp_pretest_question_1_answer_data_3: {
+        text: 'Alt',
+        isCorrect: false,
+    },
+    pp_pretest_question_1_answer_data_4: {
+        text: 'Win',
+        isCorrect: false,
+    },
+
+    // pp pretest answers / question 2
+    pp_pretest_question_2_answer_data_1: {
+        text: 'Többen látják a fájlt.',
+        isCorrect: false,
+    },
+    pp_pretest_question_2_answer_data_2: {
+        text: 'Egyszerre többen is dolgozhatunk egy fájlon.',
+        isCorrect: true,
+    },
+    pp_pretest_question_2_answer_data_3: {
+        text: 'Elküldhetem a fájlt bárkinek.',
+        isCorrect: false,
+    },
+    pp_pretest_question_2_answer_data_4: {
+        text: 'Felváltva többen is dolgozhatuk egy fájlon.',
+        isCorrect: false,
+    },
+
+    // pp pretest answers / question 3
+    pp_pretest_question_3_answer_data_1: {
+        text: 'sorok',
+        isCorrect: false,
+    },
+    pp_pretest_question_3_answer_data_2: {
+        text: 'betűk',
+        isCorrect: false,
+    },
+    pp_pretest_question_3_answer_data_3: {
+        text: 'bekezdések',
+        isCorrect: true,
+    },
+    pp_pretest_question_3_answer_data_4: {
+        text: 'diák',
+        isCorrect: false,
+    },
 });
 
 export type AnswerDatasSeedDataType = ReturnType<typeof getAnswerDatasSeedData>;

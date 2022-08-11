@@ -12570,73 +12570,117 @@ export const getAnswerVersionsSeedData = (
     answer_version_2189: {
         answerId: answers.answer_2189.id,
         answerDataId: answerDatas.answer_data_2189.id,
-        questionVersionId: questionVersions.question_version_585.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
     },
 
     answer_version_2190: {
         answerId: answers.answer_2190.id,
         answerDataId: answerDatas.answer_data_2190.id,
-        questionVersionId: questionVersions.question_version_585.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
     },
 
     answer_version_2191: {
         answerId: answers.answer_2191.id,
         answerDataId: answerDatas.answer_data_2191.id,
-        questionVersionId: questionVersions.question_version_585.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
     },
 
     answer_version_2192: {
         answerId: answers.answer_2192.id,
         answerDataId: answerDatas.answer_data_2192.id,
-        questionVersionId: questionVersions.question_version_585.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
     },
 
     answer_version_2193: {
         answerId: answers.answer_2193.id,
         answerDataId: answerDatas.answer_data_2193.id,
-        questionVersionId: questionVersions.question_version_586.id,
+        questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
 
     answer_version_2194: {
         answerId: answers.answer_2194.id,
         answerDataId: answerDatas.answer_data_2194.id,
-        questionVersionId: questionVersions.question_version_586.id,
+        questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
 
     answer_version_2195: {
         answerId: answers.answer_2195.id,
         answerDataId: answerDatas.answer_data_2195.id,
-        questionVersionId: questionVersions.question_version_586.id,
+        questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
 
     answer_version_2196: {
         answerId: answers.answer_2196.id,
         answerDataId: answerDatas.answer_data_2196.id,
-        questionVersionId: questionVersions.question_version_586.id,
+        questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
 
-    answer_version_2197: {
-        answerId: answers.answer_2197.id,
-        answerDataId: answerDatas.answer_data_2197.id,
-        questionVersionId: questionVersions.question_version_587.id,
+    // --------------------- PP PRETEST ANSWERS 
+
+    // pp pretest answers / question 1
+    answer_version_pp_pretest_question_1_answer_1: {
+        answerId: answers.pp_pretest_question_1_answer_1.id,
+        answerDataId: answerDatas.pp_pretest_question_1_answer_data_1.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_1.id,
+    },
+    answer_version_pp_pretest_question_1_answer_2: {
+        answerId: answers.pp_pretest_question_1_answer_2.id,
+        answerDataId: answerDatas.pp_pretest_question_1_answer_data_2.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_1.id,
+    },
+    answer_version_pp_pretest_question_1_answer_3: {
+        answerId: answers.pp_pretest_question_1_answer_3.id,
+        answerDataId: answerDatas.pp_pretest_question_1_answer_data_3.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_1.id,
+    },
+    answer_version_pp_pretest_question_1_answer_4: {
+        answerId: answers.pp_pretest_question_1_answer_4.id,
+        answerDataId: answerDatas.pp_pretest_question_1_answer_data_4.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_1.id,
     },
 
-    answer_version_2198: {
-        answerId: answers.answer_2198.id,
-        answerDataId: answerDatas.answer_data_2198.id,
-        questionVersionId: questionVersions.question_version_587.id,
+    // pp pretest answers / question 2
+    answer_version_pp_pretest_question_2_answer_1: {
+        answerId: answers.pp_pretest_question_2_answer_1.id,
+        answerDataId: answerDatas.pp_pretest_question_2_answer_data_1.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_2.id,
+    },
+    answer_version_pp_pretest_question_2_answer_2: {
+        answerId: answers.pp_pretest_question_2_answer_2.id,
+        answerDataId: answerDatas.pp_pretest_question_2_answer_data_2.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_2.id,
+    },
+    answer_version_pp_pretest_question_2_answer_3: {
+        answerId: answers.pp_pretest_question_2_answer_3.id,
+        answerDataId: answerDatas.pp_pretest_question_2_answer_data_3.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_2.id,
+    },
+    answer_version_pp_pretest_question_2_answer_4: {
+        answerId: answers.pp_pretest_question_2_answer_4.id,
+        answerDataId: answerDatas.pp_pretest_question_2_answer_data_4.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_2.id,
     },
 
-    answer_version_2199: {
-        answerId: answers.answer_2199.id,
-        answerDataId: answerDatas.answer_data_2199.id,
-        questionVersionId: questionVersions.question_version_587.id,
+    // pp pretest answers / question 3
+    answer_version_pp_pretest_question_3_answer_1: {
+        answerId: answers.pp_pretest_question_3_answer_1.id,
+        answerDataId: answerDatas.pp_pretest_question_3_answer_data_1.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_3.id,
     },
-
-    answer_version_2200: {
-        answerId: answers.answer_2200.id,
-        answerDataId: answerDatas.answer_data_2200.id,
-        questionVersionId: questionVersions.question_version_587.id,
+    answer_version_pp_pretest_question_3_answer_2: {
+        answerId: answers.pp_pretest_question_3_answer_2.id,
+        answerDataId: answerDatas.pp_pretest_question_3_answer_data_2.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_3.id,
+    },
+    answer_version_pp_pretest_question_3_answer_3: {
+        answerId: answers.pp_pretest_question_3_answer_3.id,
+        answerDataId: answerDatas.pp_pretest_question_3_answer_data_3.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_3.id,
+    },
+    answer_version_pp_pretest_question_3_answer_4: {
+        answerId: answers.pp_pretest_question_3_answer_4.id,
+        answerDataId: answerDatas.pp_pretest_question_3_answer_data_4.id,
+        questionVersionId: questionVersions.question_version_pp_pretest_3.id,
     },
 });
 

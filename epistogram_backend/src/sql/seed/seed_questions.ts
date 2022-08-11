@@ -1133,25 +1133,33 @@ export const getQuestionSeedData = () => getSeedList<Question>()({
     question_570: {
     },
 
-    question_580: {
+    // excel pretest
+    question_excel_pretest_1: {
     },
-    question_581: {
+    question_excel_pretest_2: {
     },
-    question_582: {
+    question_excel_pretest_3: {
     },
-    question_583: {
+    question_excel_pretest_4: {
     },
-    question_584: {
-    },
-
-    question_585: {
-    },
-    question_586: {
-    },
-    question_587: {
+    question_excel_pretest_5: {
     },
 
+    // word pretest 
+    question_word_pretest_1: {
+    },
 
+    // obs pretest 
+    question_obs_pretest_1: {
+    },
+
+    // pp pretest
+    question_pp_pretest_1: {
+    },
+    question_pp_pretest_2: {
+    },
+    question_pp_pretest_3: {
+    },
 });
 
 export type QuestionSeedDataType = ReturnType<typeof getQuestionSeedData>;

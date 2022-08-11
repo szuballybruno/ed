@@ -184,14 +184,14 @@ export const getExamVersionsSeedData = (
         },
 
         // WORD
-        exam_version_pretest_39: {
+        exam_version_word_pretest_1: {
             moduleVersionId: moduleVersions.module_version_word_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_39.id,
             examId: exams.pretest_exam_39.id
         },
 
         // OBS -------------------------------------
-        exam_version_pretest_40: {
+        exam_version_obs_pretest_1: {
             moduleVersionId: moduleVersions.module_version_obs_pretest.id,
             examDataId: examDatas.pretest_exam_data_obs.id,
             examId: exams.pretest_exam_obs.id
@@ -202,7 +202,8 @@ export const getExamVersionsSeedData = (
             examId: exams.exam_obs_test.id
         },
 
-        exam_version_pretest_41: {
+        // pp pretest exam
+        exam_version_pretest_pp: {
             moduleVersionId: moduleVersions.module_version_powerPoint_pretest_1.id,
             examDataId: examDatas.pretest_exam_data_41.id,
             examId: exams.pretest_exam_41.id

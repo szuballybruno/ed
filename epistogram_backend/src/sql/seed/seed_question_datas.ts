@@ -4364,8 +4364,8 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
     },
 
-    // pretest questions
-    question_data_580: {
+    // excel pretest
+    question_data_excel_pretest_1: {
         deletionDate: null,
         questionText: 'Melyik menüben találom a szövegből oszlopok varázslóját, a Szövegdarabolót?',
         imageUrl: null,
@@ -4373,7 +4373,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
-    question_data_581: {
+    question_data_excel_pretest_2: {
         deletionDate: null,
         questionText: 'Hol tudom testreszabni az Adatérvényesítés hibaüzenetét?',
         imageUrl: null,
@@ -4381,7 +4381,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
-    question_data_582: {
+    question_data_excel_pretest_3: {
         deletionDate: null,
         questionText: 'Adatimportálásnál miért kell a Power Query-ben a számokat megfelelő formátumúra pl. "Egész szám" beállítani?',
         imageUrl: null,
@@ -4389,7 +4389,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
-    question_data_583: {
+    question_data_excel_pretest_4: {
         deletionDate: null,
         questionText: 'Mi történik a szűrésnél?',
         imageUrl: null,
@@ -4397,7 +4397,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
-    question_data_584: {
+    question_data_excel_pretest_5: {
         deletionDate: null,
         questionText: 'Tudom-e szegélyezni az Excel diagramok adatfeliratait?',
         imageUrl: null,
@@ -4406,7 +4406,8 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
     },
 
-    question_data_585: {
+    // word pretest
+    question_data_word_pretest_1: {
         deletionDate: null,
         questionText: 'Word',
         imageUrl: null,
@@ -4414,7 +4415,9 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
-    question_data_586: {
+    
+    // obs pretest
+    question_data_obs_pretest_1: {
         deletionDate: null,
         questionText: 'OBS',
         imageUrl: null,
@@ -4422,11 +4425,29 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
-    question_data_587: {
+
+    // power point pretest
+    question_data_pp_pretest_1: {
         deletionDate: null,
-        questionText: 'PowerPoint',
+        questionText: 'Milyen billentyűt kell lenyomva tartanom ahhoz, hogy az áthelyezéshez egyszerre több diát is kijelölhessek?',
         imageUrl: null,
-        orderIndex: 5,
+        orderIndex: 1,
+        showUpTimeSeconds: null,
+        typeId: 1,
+    },
+    question_data_pp_pretest_2: {
+        deletionDate: null,
+        questionText: 'Mi a megosztás lényege?',
+        imageUrl: null,
+        orderIndex: 2,
+        showUpTimeSeconds: null,
+        typeId: 1,
+    },
+    question_data_pp_pretest_3: {
+        deletionDate: null,
+        questionText: 'Mi között tart távolságot a térköz?',
+        imageUrl: null,
+        orderIndex: 3,
         showUpTimeSeconds: null,
         typeId: 1,
     },
