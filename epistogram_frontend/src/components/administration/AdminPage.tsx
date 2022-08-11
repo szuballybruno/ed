@@ -1,14 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { ApplicationRoute } from '../../models/types';
-import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder } from '../../static/frontendHelpers';
-import { RouteHelpers } from '../../static/RouteHelpers';
 import { ContentPane } from '../ContentPane';
-import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
-import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { AdminLeftPane } from './AdminLeftPane';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
 import { DebugPage } from './debug/DebugPage';
@@ -23,62 +17,12 @@ import { UserAdminSubpage } from './users/UserAdminSubpage';
 
 export const AdminPage = () => {
 
-    const { hasPermission } = useAuthorizationContext();
-    const administrationRoutes = applicationRoutes.administrationRoute;
-
-    const menuItems = new ArrayBuilder<ApplicationRoute>()
-        .add(administrationRoutes.homeRoute.overviewRoute)
-        .add(administrationRoutes.usersRoute.editRoute as any)
-        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.coursesRoute, hasPermission), administrationRoutes.coursesRoute)
-        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.shopRoute, hasPermission), administrationRoutes.shopRoute)
-        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.personalityAssessmentRoute, hasPermission), administrationRoutes.personalityAssessmentRoute)
-        .add(administrationRoutes.companiesRoute)
-        .add(administrationRoutes.rolesRoute)
-        .add(administrationRoutes.debugRoute)
-        .getArray();
+    const adminRoute = applicationRoutes.administrationRoute;
 
     return <PageRootContainer>
 
         {/* admin left pane */}
-        <Flex
-            borderRadius="none"
-            id="leftPane"
-            bg="white"
-            zIndex={2}
-            flexBasis="60px"
-            maxW="320px"
-            direction="column"
-            align="stretch"
-            padding="25px 15px 0 15px"
-            className="dividerBorderRight"
-            position="relative"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
-
-            {/* logo link */}
-            <Flex width="100%"
-                alignItems={'center'}
-                justifyContent="center"
-                mt="10px"
-                mb="20px">
-                <img
-                    src={Environment.getAssetUrl('/images/logo_min.svg')}
-                    style={{
-                        height: '50px',
-                        objectFit: 'cover',
-                        cursor: 'pointer',
-                        padding: 0
-                    }}
-                    alt=""
-                    onClick={() => {
-
-                        // navigate(homeUrl);
-                    }} />
-            </Flex>
-
-            <NavigationLinkList
-                isNoText
-                routes={menuItems} />
-        </Flex>
+        <AdminLeftPane />
 
         {/* admin content pane */}
         <ContentPane
@@ -91,15 +35,15 @@ export const AdminPage = () => {
 
                     // administration home
                     {
-                        route: administrationRoutes.homeRoute,
+                        route: adminRoute.homeRoute,
                         element: <EpistoRoutes
                             renderRoutes={[
                                 {
-                                    route: administrationRoutes.homeRoute.overviewRoute,
+                                    route: adminRoute.homeRoute.overviewRoute,
                                     element: <AdminHomeOverview />,
                                 },
                                 {
-                                    route: administrationRoutes.homeRoute.detailsRoute,
+                                    route: adminRoute.homeRoute.detailsRoute,
                                     element: <AdminHomeDetails />
                                 },
                             ]} />
@@ -107,54 +51,54 @@ export const AdminPage = () => {
 
                     // user administration
                     {
-                        route: administrationRoutes.usersRoute,
+                        route: adminRoute.usersRoute,
                         element: <UserAdminSubpage />
                     },
 
                     // course administartion
                     {
-                        route: administrationRoutes.coursesRoute,
+                        route: adminRoute.coursesRoute,
                         element: <CourseAdministartionSubpage />
                     },
 
                     // shop administartion
                     {
-                        route: administrationRoutes.shopRoute,
+                        route: adminRoute.shopRoute,
                         element: <ShopAdminSubpage />
                     },
 
                     // personality assessment administartion
                     {
-                        route: administrationRoutes.personalityAssessmentRoute,
+                        route: adminRoute.personalityAssessmentRoute,
                         element: <EpistoRoutes
                             renderRoutes={[
                                 {
-                                    route: administrationRoutes.personalityAssessmentRoute.indexRoute,
+                                    route: adminRoute.personalityAssessmentRoute.indexRoute,
                                     element: <PersonalityTraitCategoriesSubpage />
                                 },
                                 {
-                                    route: administrationRoutes.personalityAssessmentRoute.editTipsRoute,
+                                    route: adminRoute.personalityAssessmentRoute.editTipsRoute,
                                     element: <EditPersonalityTraitCategorySubpage />
                                 },
                                 {
-                                    route: administrationRoutes.personalityAssessmentRoute.editTipsRoute.editTipRoute,
+                                    route: adminRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute,
                                     element: <EditDailyTipSubpage />
                                 }
                             ]} />,
                     },
 
                     {
-                        route: administrationRoutes.companiesRoute,
+                        route: adminRoute.companiesRoute,
                         element: <CompanyAdminPage />
                     },
 
                     {
-                        route: administrationRoutes.rolesRoute,
+                        route: adminRoute.rolesRoute,
                         element: <RoleAdminPage />
                     },
 
                     {
-                        route: administrationRoutes.debugRoute,
+                        route: adminRoute.debugRoute,
                         element: <DebugPage />
                     }
                 ]} />

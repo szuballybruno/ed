@@ -35,14 +35,6 @@ const HomePage = () => {
 
         <LeftPane>
 
-            {/*             <EpistoButton onClick={() => setLs('loading')}>
-                Load
-            </EpistoButton>
-
-            <EpistoButton onClick={() => setLs('success')}>
-                Stop load
-            </EpistoButton> */}
-
             {/* current course items and progress */}
             {pageDTO?.currentCourseProgress && <Flex
                 className='roundBorders'
