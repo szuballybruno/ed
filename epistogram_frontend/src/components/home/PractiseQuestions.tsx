@@ -1,10 +1,6 @@
 import { Flex } from '@chakra-ui/layout';
-import { Player } from '@lottiefiles/react-lottie-player';
-import { useContext } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
 import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
-import { useNavigation } from '../../services/core/navigatior';
 import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
 import { getRandomInteger } from '../../static/frontendHelpers';
@@ -12,124 +8,9 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { QuesitionView } from '../QuestionView';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
-import { LoadingFrame } from '../system/LoadingFrame';
 import { EpistoConinImage } from '../universal/EpistoCoinImage';
-
-const NoQuestionsAvailable = () => {
-    const { navigate } = useNavigation();
-    return <Flex pr="20px">
-
-        <Flex direction={'column'}>
-
-            <EpistoFont
-                style={{
-                    padding: '20px 20px 10px 10px',
-                    fontSize: '13px'
-                }}>
-                {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosOne}
-            </EpistoFont>
-
-            <EpistoFont
-                style={{
-                    padding: '10px 20px 10px 10px',
-                    fontSize: '13px'
-                }}>
-
-                {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
-
-                {/* VALIDATE DOM NESTING */}
-                {/* <EpistoFont
-                    onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
-                    style={{
-                        color: 'var(--epistoTeal)',
-                        fontWeight: 'bold',
-                        cursor: 'pointer'
-                    }}>
-                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
-                </EpistoFont> */}
-            </EpistoFont>
-        </Flex>
-
-        <Flex>
-            <img
-                src={Environment.getAssetUrl('/images/welcome3D.png')}
-                alt=""
-                style={{
-                    objectFit: 'contain',
-                }} />
-        </Flex>
-    </Flex>;
-};
-
-const InitialGreetings = () => {
-
-    const { navigate } = useNavigation();
-    const { firstName } = useContext(CurrentUserContext);
-
-    return <Flex
-        direction="row"
-        alignItems="center">
-
-        <Flex
-            direction="column"
-            justifyContent="flex-start"
-            height="100%">
-
-            <EpistoFont
-                fontSize2="small"
-                style={{
-                    padding: '20px 20px 10px 10px'
-                }}>
-
-                {translatableTexts.practiseQuestions.initialGreetingsFirst + ' ' + firstName + ','}
-            </EpistoFont>
-
-            <EpistoFont
-                fontSize2="small"
-                style={{
-                    padding: '20px 20px 10px 10px'
-                }}>
-
-                {translatableTexts.practiseQuestions.initialGreetingsSecond}
-            </EpistoFont>
-
-            <EpistoFont
-                fontSize2="small"
-                style={{
-                    padding: '20px 20px 10px 10px'
-                }}>
-
-                {translatableTexts.practiseQuestions.initialGreetingsThird}
-            </EpistoFont>
-
-            <Flex
-                direction="column"
-                width="100%"
-                alignItems="center"
-                mt="10px">
-
-                <EpistoButton
-                    variant={'colored'}
-                    onClick={() => {
-                        navigate(applicationRoutes.availableCoursesRoute);
-                    }}>
-
-                    {translatableTexts.practiseQuestions.goToCourses}
-                </EpistoButton>
-            </Flex>
-        </Flex>
-
-        <Flex>
-            <Player
-                autoplay
-                loop
-                src={Environment.getAssetUrl('lottie_json/initial_greetings.json')}
-                style={{ height: '300px', width: '300px' }}
-            />
-        </Flex>
-    </Flex>;
-};
+import { Greetings } from './Greetings';
+import { NoQuestionsAvailable } from './NoQuestionsAvailable';
 
 export const PractiseQuestions = () => {
 
@@ -169,10 +50,7 @@ export const PractiseQuestions = () => {
         ? 'correct_' + getRandomInteger(1, 3)
         : 'incorrect_' + getRandomInteger(1, 3)) + '.gif');
 
-    return <LoadingFrame
-        className="whall"
-        error={practiseQuestionError}>
-
+    return <>
         {/* if practise question is found */}
         {practiseQuestion
             ? (
@@ -245,6 +123,6 @@ export const PractiseQuestions = () => {
             )
             : currentCourseItemCode
                 ? <NoQuestionsAvailable />
-                : <Flex></Flex>}
-    </LoadingFrame>;
+                : <Greetings />}
+    </>;
 };
