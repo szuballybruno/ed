@@ -4245,21 +4245,39 @@ export const getAnswersSeedData = () => getSeedList<Answer>()({
     answer_pretest_excel_5_4_F: {
     },
 
-    /* Precourse exam answers for 
-    * PP/Word/OBS courses #28,#17,#22
-    * Precourse exam #39,#40,#41
-    * Questions #585-587
-    */
+    // --------------------- WORD PRETEST ANSWERS 
 
-    answer_2189: {
+    // word pretest answers / question 1
+    word_pretest_question_1_answer_1: {
     },
-    answer_2190: {
+    word_pretest_question_1_answer_2: {
     },
-    answer_2191: {
+    word_pretest_question_1_answer_3: {
     },
-    answer_2192: {
+    word_pretest_question_1_answer_4: {
     },
 
+    // word pretest answers / question 2
+    word_pretest_question_2_answer_1: {
+    },
+    word_pretest_question_2_answer_2: {
+    },
+    word_pretest_question_2_answer_3: {
+    },
+    word_pretest_question_2_answer_4: {
+    },
+
+    // word pretest answers / question 3
+    word_pretest_question_3_answer_1: {
+    },
+    word_pretest_question_3_answer_2: {
+    },
+    word_pretest_question_3_answer_3: {
+    },
+    word_pretest_question_3_answer_4: {
+    },
+
+    // --------------------- OBS PRETEST ANSWERS 
     answer_2193: {
     },
     answer_2194: {
@@ -4270,7 +4288,7 @@ export const getAnswersSeedData = () => getSeedList<Answer>()({
     },
 
     // --------------------- PP PRETEST ANSWERS 
-    
+
     // pp pretest answers / question 1
     pp_pretest_question_1_answer_1: {
     },

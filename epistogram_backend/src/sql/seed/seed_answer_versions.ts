@@ -12440,6 +12440,7 @@ export const getAnswerVersionsSeedData = (
         questionVersionId: questionVersions.question_version_576.id,
     },
 
+    // --------------------- PP PRETEST ANSWERS 
 
     // Excel pretest question 1 answers
     answer_version_pretest_excel_1_1_F: {
@@ -12447,19 +12448,16 @@ export const getAnswerVersionsSeedData = (
         answerDataId: answerDatas.answer_data_pretest_excel_1_1_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_1.id,
     },
-
     answer_version_pretest_excel_1_2_F: {
         answerId: answers.answer_pretest_excel_1_2_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_1_2_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_1.id,
     },
-
     answer_version_pretest_excel_1_3_T: {
         answerId: answers.answer_pretest_excel_1_3_T.id,
         answerDataId: answerDatas.answer_data_pretest_excel_1_3_T.id,
         questionVersionId: questionVersions.question_version_pretest_excel_1.id,
     },
-
     answer_version_pretest_excel_1_4_F: {
         answerId: answers.answer_pretest_excel_1_4_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_1_4_F.id,
@@ -12472,19 +12470,16 @@ export const getAnswerVersionsSeedData = (
         answerDataId: answerDatas.answer_data_pretest_excel_2_1_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_2.id,
     },
-
     answer_version_pretest_excel_2_2_F: {
         answerId: answers.answer_pretest_excel_2_2_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_2_2_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_2.id,
     },
-
     answer_version_pretest_excel_2_3_F: {
         answerId: answers.answer_pretest_excel_2_3_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_2_3_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_2.id,
     },
-
     answer_version_pretest_excel_2_4_T: {
         answerId: answers.answer_pretest_excel_2_4_T.id,
         answerDataId: answerDatas.answer_data_pretest_excel_2_4_T.id,
@@ -12497,19 +12492,16 @@ export const getAnswerVersionsSeedData = (
         answerDataId: answerDatas.answer_data_pretest_excel_3_1_T.id,
         questionVersionId: questionVersions.question_version_pretest_excel_3.id,
     },
-
     answer_version_pretest_excel_3_2_F: {
         answerId: answers.answer_pretest_excel_3_2_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_3_2_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_3.id,
     },
-
     answer_version_pretest_excel_3_3_F: {
         answerId: answers.answer_pretest_excel_3_3_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_3_3_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_3.id,
     },
-
     answer_version_pretest_excel_3_4_F: {
         answerId: answers.answer_pretest_excel_3_4_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_3_4_F.id,
@@ -12522,19 +12514,16 @@ export const getAnswerVersionsSeedData = (
         answerDataId: answerDatas.answer_data_pretest_excel_4_1_T.id,
         questionVersionId: questionVersions.question_version_pretest_excel_4.id,
     },
-
     answer_version_pretest_excel_4_2_F: {
         answerId: answers.answer_pretest_excel_4_2_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_4_2_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_4.id,
     },
-
     answer_version_pretest_excel_4_3_F: {
         answerId: answers.answer_pretest_excel_4_3_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_4_3_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_4.id,
     },
-
     answer_version_pretest_excel_4_4_F: {
         answerId: answers.answer_pretest_excel_4_4_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_4_4_F.id,
@@ -12547,49 +12536,91 @@ export const getAnswerVersionsSeedData = (
         answerDataId: answerDatas.answer_data_pretest_excel_5_1_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_5.id,
     },
-
     answer_version_pretest_excel_5_2_F: {
         answerId: answers.answer_pretest_excel_5_2_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_5_2_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_5.id,
     },
-
     answer_version_pretest_excel_5_3_T: {
         answerId: answers.answer_pretest_excel_5_3_T.id,
         answerDataId: answerDatas.answer_data_pretest_excel_5_3_T.id,
         questionVersionId: questionVersions.question_version_pretest_excel_5.id,
     },
-
     answer_version_pretest_excel_5_4_F: {
         answerId: answers.answer_pretest_excel_5_4_F.id,
         answerDataId: answerDatas.answer_data_pretest_excel_5_4_F.id,
         questionVersionId: questionVersions.question_version_pretest_excel_5.id,
     },
+    
+    // --------------------- WORD PRETEST ANSWERS 
 
-    // WORD PRETEST ANSWERS
-    answer_version_2189: {
-        answerId: answers.answer_2189.id,
-        answerDataId: answerDatas.answer_data_2189.id,
+    // word pretest answers / question 1
+    word_pretest_question_1_answer_1: {
+        answerId: answers.word_pretest_question_1_answer_1.id,
+        answerDataId: answerDatas.word_pretest_question_1_answer_data_1.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
+    },
+    word_pretest_question_1_answer_2: {
+        answerId: answers.word_pretest_question_1_answer_2.id,
+        answerDataId: answerDatas.word_pretest_question_1_answer_data_2.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
+    },
+    word_pretest_question_1_answer_3: {
+        answerId: answers.word_pretest_question_1_answer_3.id,
+        answerDataId: answerDatas.word_pretest_question_1_answer_data_3.id,
+        questionVersionId: questionVersions.question_version_word_pretest_1.id,
+    },
+    word_pretest_question_1_answer_4: {
+        answerId: answers.word_pretest_question_1_answer_4.id,
+        answerDataId: answerDatas.word_pretest_question_1_answer_data_4.id,
         questionVersionId: questionVersions.question_version_word_pretest_1.id,
     },
 
-    answer_version_2190: {
-        answerId: answers.answer_2190.id,
-        answerDataId: answerDatas.answer_data_2190.id,
-        questionVersionId: questionVersions.question_version_word_pretest_1.id,
+    // word pretest answers / question 2
+    word_pretest_question_2_answer_1: {
+        answerId: answers.word_pretest_question_2_answer_1.id,
+        answerDataId: answerDatas.word_pretest_question_2_answer_data_1.id,
+        questionVersionId: questionVersions.question_version_word_pretest_2.id,
+    },
+    word_pretest_question_2_answer_2: {
+        answerId: answers.word_pretest_question_2_answer_2.id,
+        answerDataId: answerDatas.word_pretest_question_2_answer_data_2.id,
+        questionVersionId: questionVersions.question_version_word_pretest_2.id,
+    },
+    word_pretest_question_2_answer_3: {
+        answerId: answers.word_pretest_question_2_answer_3.id,
+        answerDataId: answerDatas.word_pretest_question_2_answer_data_3.id,
+        questionVersionId: questionVersions.question_version_word_pretest_2.id,
+    },
+    word_pretest_question_2_answer_4: {
+        answerId: answers.word_pretest_question_2_answer_4.id,
+        answerDataId: answerDatas.word_pretest_question_2_answer_data_4.id,
+        questionVersionId: questionVersions.question_version_word_pretest_2.id,
     },
 
-    answer_version_2191: {
-        answerId: answers.answer_2191.id,
-        answerDataId: answerDatas.answer_data_2191.id,
-        questionVersionId: questionVersions.question_version_word_pretest_1.id,
+    // word pretest answers / question 3
+    word_pretest_question_3_answer_1: {
+        answerId: answers.word_pretest_question_3_answer_1.id,
+        answerDataId: answerDatas.word_pretest_question_3_answer_data_1.id,
+        questionVersionId: questionVersions.question_version_word_pretest_3.id,
     },
-
-    answer_version_2192: {
-        answerId: answers.answer_2192.id,
-        answerDataId: answerDatas.answer_data_2192.id,
-        questionVersionId: questionVersions.question_version_word_pretest_1.id,
+    word_pretest_question_3_answer_2: {
+        answerId: answers.word_pretest_question_3_answer_2.id,
+        answerDataId: answerDatas.word_pretest_question_3_answer_data_2.id,
+        questionVersionId: questionVersions.question_version_word_pretest_3.id,
     },
+    word_pretest_question_3_answer_3: {
+        answerId: answers.word_pretest_question_3_answer_3.id,
+        answerDataId: answerDatas.word_pretest_question_3_answer_data_3.id,
+        questionVersionId: questionVersions.question_version_word_pretest_3.id,
+    },
+    word_pretest_question_3_answer_4: {
+        answerId: answers.word_pretest_question_3_answer_4.id,
+        answerDataId: answerDatas.word_pretest_question_3_answer_data_4.id,
+        questionVersionId: questionVersions.question_version_word_pretest_3.id,
+    },
+    
+    // --------------------- OBS PRETEST ANSWERS 
 
     answer_version_2193: {
         answerId: answers.answer_2193.id,

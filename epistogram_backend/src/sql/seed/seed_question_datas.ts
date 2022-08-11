@@ -4409,9 +4409,25 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
     // word pretest
     question_data_word_pretest_1: {
         deletionDate: null,
-        questionText: 'Word',
+        questionText: 'Milyen hatása van a széles margónak?',
         imageUrl: null,
-        orderIndex: 5,
+        orderIndex: 1,
+        showUpTimeSeconds: null,
+        typeId: 1,
+    },
+    question_data_word_pretest_2: {
+        deletionDate: null,
+        questionText: 'Mivel állítom a bekezdések közötti "helyet"?',
+        imageUrl: null,
+        orderIndex: 2,
+        showUpTimeSeconds: null,
+        typeId: 1,
+    },
+    question_data_word_pretest_3: {
+        deletionDate: null,
+        questionText: 'Mi a tabulátor előnye?',
+        imageUrl: null,
+        orderIndex: 3,
         showUpTimeSeconds: null,
         typeId: 1,
     },

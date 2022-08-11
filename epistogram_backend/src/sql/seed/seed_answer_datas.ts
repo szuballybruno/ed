@@ -8428,28 +8428,63 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
         isCorrect: false,
     },
 
-    /* Precourse exam answers for 
-    * PP/Word/OBS courses #28,#17,#22
-    * Precourse exam #39,#40,#41
-    * Questions #585-587
-    */
+    // --------------------- WORD PRETEST ANSWERS 
 
-    answer_data_2189: {
-        text: 'a',
+    // word pretest answers / question 1
+    word_pretest_question_1_answer_data_1: {
+        text: 'Adott lapra kevesebb szöveg kerül fel, azaz ugyanannyi szöveghez kevesebb oldal kell',
         isCorrect: false,
     },
-    answer_data_2190: {
-        text: 'b',
+    word_pretest_question_1_answer_data_2: {
+        text: 'Adott lapra több szöveg kerül fel, azaz ugyanannyi szöveghez több oldal kell',
         isCorrect: false,
     },
-    answer_data_2191: {
-        text: 'c',
+    word_pretest_question_1_answer_data_3: {
+        text: 'Adott lapra több szöveg kerül fel, azaz ugyanannyi szöveghez kevesebb oldal kell',
+        isCorrect: false,
+    },
+    word_pretest_question_1_answer_data_4: {
+        text: 'Adott lapra kevesebb szöveg kerül fel, azaz ugyanannyi szöveghez több oldal kell',
         isCorrect: true,
     },
-    answer_data_2192: {
-        text: 'd',
+
+    // word pretest answers / question 2
+    word_pretest_question_2_answer_data_1: {
+        text: 'Térköz',
+        isCorrect: true,
+    },
+    word_pretest_question_2_answer_data_2: {
+        text: 'Sorköz',
         isCorrect: false,
     },
+    word_pretest_question_2_answer_data_3: {
+        text: 'Behúzás',
+        isCorrect: false,
+    },
+    word_pretest_question_2_answer_data_4: {
+        text: 'Enter',
+        isCorrect: false,
+    },
+
+    // word pretest answers / question 3
+    word_pretest_question_3_answer_data_1: {
+        text: 'Gyorsabb a szóköznél',
+        isCorrect: false,
+    },
+    word_pretest_question_3_answer_data_2: {
+        text: 'Ritkítja a betűk közti távolságot.',
+        isCorrect: false,
+    },
+    word_pretest_question_3_answer_data_3: {
+        text: 'Térközt is ad.',
+        isCorrect: false,
+    },
+    word_pretest_question_3_answer_data_4: {
+        text: 'Stabilabban tartja a távolságot, mint a szóközök.',
+        isCorrect: true,
+    },
+
+    // --------------------- OBS PRETEST ANSWERS 
 
     answer_data_2193: {
         text: 'a',

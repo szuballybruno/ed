@@ -4344,7 +4344,6 @@ export const getQuestionVersionsSeedData = (
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
-
     question_version_pretest_excel_2: {
         questionId: questions.question_excel_pretest_2.id,
         questionDataId: questionDatas.question_data_excel_pretest_2.id,
@@ -4352,7 +4351,6 @@ export const getQuestionVersionsSeedData = (
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
-
     question_version_pretest_excel_3: {
         questionId: questions.question_excel_pretest_3.id,
         questionDataId: questionDatas.question_data_excel_pretest_3.id,
@@ -4360,7 +4358,6 @@ export const getQuestionVersionsSeedData = (
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
-
     question_version_pretest_excel_4: {
         questionId: questions.question_excel_pretest_4.id,
         questionDataId: questionDatas.question_data_excel_pretest_4.id,
@@ -4368,7 +4365,6 @@ export const getQuestionVersionsSeedData = (
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
-
     question_version_pretest_excel_5: {
         questionId: questions.question_excel_pretest_5.id,
         questionDataId: questionDatas.question_data_excel_pretest_5.id,
@@ -4381,6 +4377,20 @@ export const getQuestionVersionsSeedData = (
     question_version_word_pretest_1: {
         questionId: questions.question_word_pretest_1.id,
         questionDataId: questionDatas.question_data_word_pretest_1.id,
+        examVersionId: examVersions.exam_version_word_pretest_1.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+    question_version_word_pretest_2: {
+        questionId: questions.question_word_pretest_2.id,
+        questionDataId: questionDatas.question_data_word_pretest_2.id,
+        examVersionId: examVersions.exam_version_word_pretest_1.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
+    question_version_word_pretest_3: {
+        questionId: questions.question_word_pretest_3.id,
+        questionDataId: questionDatas.question_data_word_pretest_3.id,
         examVersionId: examVersions.exam_version_word_pretest_1.id,
         videoVersionId: null,
         personalityTraitCategoryId: null,
