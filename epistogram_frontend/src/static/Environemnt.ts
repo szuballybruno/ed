@@ -22,7 +22,7 @@ export const Environment = (() => {
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'VIDEO_POPUPS'];
 
     if (loggingEnabled) {
 

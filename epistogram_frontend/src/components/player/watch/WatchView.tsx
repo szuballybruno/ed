@@ -200,8 +200,13 @@ export const WatchView = (props: {
             return;
         }
 
+        Logger.logScoped('VIDEO_POPUPS', 'Calculating...');
+
         const remainingLength = videoLength - stillWatchingDialogShowUpThresholdSecs;
-        const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs);
+        Logger.logScoped('VIDEO_POPUPS', `\nVideo length: ${videoLength} \nThreshold: ${stillWatchingDialogShowUpThresholdSecs}`);
+
+        const dialogCount = Math.floor(remainingLength / stillWatchingDialogDelaySecs) + 1;
+        Logger.logScoped('VIDEO_POPUPS', `\nRemaining length: ${remainingLength} \nDelay: ${stillWatchingDialogDelaySecs}`);
 
         Logger.logScoped('VIDEO_POPUPS', 'Focus dialog count calculated: ' + dialogCount);
 
@@ -213,9 +218,10 @@ export const WatchView = (props: {
             };
         });
 
-        Logger.logScoped('VIDEO_POPUPS', 'Focus dialog show up seconds calculated: ' + dialogShowUpSeconds
-            .map(x => x.showUpTimeSeconds)
-            .join(', '));
+        if (dialogShowUpSeconds.length > 0)
+            Logger.logScoped('VIDEO_POPUPS', 'Focus dialog show up seconds calculated: ' + dialogShowUpSeconds
+                .map(x => x.showUpTimeSeconds)
+                .join(', '));
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
     }, [videoLength]);
