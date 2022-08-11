@@ -35,11 +35,11 @@ export class CourseProgressService {
                         isStarted: true
                     })
                     .where('userId', '=', 'principalId')
+                    .openBracket()
                     .and('isCompleted', '=', 'isCompleted')
                     .or('isStarted', '=', 'isStarted')
+                    .closeBracket()
                     .getMany();
-
-                console.log(courses);
 
                 // in progress courses 
                 const inProgressCourses = courses
