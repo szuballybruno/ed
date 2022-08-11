@@ -34,17 +34,17 @@ export const CourseItemSelector = (props: {
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
 
-    // http 
+    // http
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
 
-    // dialog state 
+    // dialog state
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
 
     const tempomatDialogLogic = useEpistoDialogLogic('tempomat');
 
-    // func 
+    // func
 
     const changeToAdvancedModePermanently = () => {
 
@@ -53,7 +53,7 @@ export const CourseItemSelector = (props: {
                 buttons: [
                     {
                         action: () => setCourseMode('advanced'),
-                        title: 'Go ahead',
+                        title: 'Váltás haladó módra',
                     }
                 ]
             });
@@ -99,7 +99,15 @@ export const CourseItemSelector = (props: {
             logic={dialogLogic}
             closeButtonType="top">
 
-            Point of no return
+            <Flex
+                w='450px'
+                h='120px'
+                align='center'
+                justify='center'
+                padding='20px'>
+
+                Biztosan váltasz haladó módra? Ez a művelet nem vonható vissza!
+            </Flex>
         </EpistoDialog>
 
         {/* Tempomat */}
@@ -142,15 +150,16 @@ export const CourseItemSelector = (props: {
 
         {/* option to enable advanced mode
         IF STARTED COURSE  IN BEGINNER MODE */}
-        {canChangeMode && <>
+        {(canChangeMode && mode === 'beginner') && <>
             <EpistoButton
                 style={{
-                    margin: '30px'
+                    margin: '30px',
+                    padding: '20px 0'
                 }}
                 variant="colored"
                 onClick={changeToAdvancedModePermanently}>
 
-                Change to advanced mode
+                Váltás haladó módra
             </EpistoButton>
         </>}
 
