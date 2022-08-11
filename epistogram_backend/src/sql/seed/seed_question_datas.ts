@@ -3,7 +3,7 @@ import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
 
-    // -------------------------------- SIGNUP QUESTIONS 
+    // -------------------------------- SIGNUP QUESTIONS
 
     // SECTION 1
     // 1.1 Question
@@ -11,7 +11,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Ha egy olyan feladatot kell megoldanom, melyhez kutatnom kell egy témában',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.1.png',
+        imageUrl: 'signupQuestionImages/1.1.png',
         showUpTimeSeconds: null,
     },
     // 1.2 Question
@@ -19,7 +19,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Amikor egy bonyolult személyes problémával kell megküzdenem',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.2.png',
+        imageUrl: 'signupQuestionImages/1.2.png',
         showUpTimeSeconds: null,
     },
     // 1.3 Question
@@ -27,7 +27,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Véleményem szerint hasznosabb, ha egy képzés során',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.3.png',
+        imageUrl: 'signupQuestionImages/1.3.png',
         showUpTimeSeconds: null,
     },
     // 1.4 Question
@@ -35,7 +35,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Egy előadás során, amennyiben interaktivitásra van lehetőség',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.4.png',
+        imageUrl: 'signupQuestionImages/1.4.png',
         showUpTimeSeconds: null,
     },
     // 1.5 Question
@@ -43,7 +43,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Egy csapatban elvégzendő projekt esetén a következőt preferálom',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.5.png',
+        imageUrl: 'signupQuestionImages/1.5.png',
         showUpTimeSeconds: null,
     },
     // 1.6 Question
@@ -51,7 +51,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Az ügyeimet intézni, vásárolni inkább',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.6.png',
+        imageUrl: 'signupQuestionImages/1.6.png',
         showUpTimeSeconds: null,
     },
     // 1.7 Question
@@ -59,7 +59,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Mikor irodából dolgozom, jobban szeretem, ha',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/1.7.png',
+        imageUrl: 'signupQuestionImages/1.7.png',
         showUpTimeSeconds: null,
     },
 
@@ -69,7 +69,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Ha egy matematikai problémát kellene megoldanom',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.1.png',
+        imageUrl: 'signupQuestionImages/2.1.png',
         showUpTimeSeconds: null,
     },
     // 2.2 Question
@@ -77,7 +77,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         orderIndex: null,
         typeId: 1, deletionDate: null,
         questionText: 'Hogy megjegyezzek valamit, számomra hatékonyabb, ha',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.2.png',
+        imageUrl: 'signupQuestionImages/2.2.png',
         showUpTimeSeconds: null,
     },
     // 2.3 Question
@@ -86,7 +86,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Összeszerelni egy darabokból álló bútort használati útmutató alapján',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.3.png',
+        imageUrl: 'signupQuestionImages/2.3.png',
         showUpTimeSeconds: null,
     },
     // 2.4 Question
@@ -95,7 +95,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Az olyan képzéseket szeretem, ahol',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.4.png',
+        imageUrl: 'signupQuestionImages/2.4.png',
         showUpTimeSeconds: null,
     },
     // 2.5 Question
@@ -104,7 +104,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Hogy megértsem és emlékezzek arra, hogyan működik egy gép',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.5.png',
+        imageUrl: 'signupQuestionImages/2.5.png',
         showUpTimeSeconds: null,
     },
     // 2.6 Question
@@ -113,7 +113,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Jobban élvezem, mikor',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.6.png',
+        imageUrl: 'signupQuestionImages/2.6.png',
         showUpTimeSeconds: null,
     },
     // 2.7 Question
@@ -122,7 +122,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha egy számomra ismeretlen irodát kellene megtalálnom egy komplexumban, erre kérném a portást',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/2.7.png',
+        imageUrl: 'signupQuestionImages/2.7.png',
         showUpTimeSeconds: null,
     },
 
@@ -133,7 +133,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Jobban szeretek',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.1.png',
+        imageUrl: 'signupQuestionImages/3.1.png',
         showUpTimeSeconds: null,
     },
     // 3.2 Question
@@ -142,7 +142,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Olyan munkát preferálok jobban, ahol',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.2.png',
+        imageUrl: 'signupQuestionImages/3.2.png',
         showUpTimeSeconds: null,
     },
     // 3.3 Question
@@ -151,7 +151,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Jobban szeretek',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.3.png',
+        imageUrl: 'signupQuestionImages/3.3.png',
         showUpTimeSeconds: null,
     },
     // 3.4 Question
@@ -160,7 +160,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha esszét kéne írnom',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.4.png',
+        imageUrl: 'signupQuestionImages/3.4.png',
         showUpTimeSeconds: null,
     },
     // 3.5 Question
@@ -169,7 +169,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Az olyan feladatokat kedvelem inkább, ahol',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.5.png',
+        imageUrl: 'signupQuestionImages/3.5.png',
         showUpTimeSeconds: null,
     },
     // 3.6 Question
@@ -178,7 +178,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha egy kerti kisházat szeretnék készíteni, ',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.6.png',
+        imageUrl: 'signupQuestionImages/3.6.png',
         showUpTimeSeconds: null,
     },
     // 3.7 Question
@@ -187,7 +187,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha szeretnék többet megtudni nagysebességű nyomtatókról',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/3.7.png',
+        imageUrl: 'signupQuestionImages/3.7.png',
         showUpTimeSeconds: null,
     },
 
@@ -198,7 +198,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Jobban szeretem, ha az instrukciókat',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.1.png',
+        imageUrl: 'signupQuestionImages/4.1.png',
         showUpTimeSeconds: null,
     },
     // 4.2 Question
@@ -207,7 +207,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Szívesebben,',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.2.png',
+        imageUrl: 'signupQuestionImages/4.2.png',
         showUpTimeSeconds: null,
     },
     // 4.3 Question
@@ -216,7 +216,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Jobban megjegyzem',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.3.png',
+        imageUrl: 'signupQuestionImages/4.3.png',
         showUpTimeSeconds: null,
     },
     // 4.4 Question
@@ -225,7 +225,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Jobban szeretem az olyan előadásokat, ahol',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.4.png',
+        imageUrl: 'signupQuestionImages/4.4.png',
         showUpTimeSeconds: null,
     },
     // 4.5 Question
@@ -234,7 +234,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Könnyebben jegyzek meg új információkat',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.5.png',
+        imageUrl: 'signupQuestionImages/4.5.png',
         showUpTimeSeconds: null,
     },
     // 4.6 Question
@@ -243,7 +243,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha informálódni szeretnék a hétköznapi élettel kapcsolatban',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.6.png',
+        imageUrl: 'signupQuestionImages/4.6.png',
         showUpTimeSeconds: null,
     },
     // 4.7 Question
@@ -252,7 +252,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha meg akarom tudni, hogyan használjam a faxgépet',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/4.7.png',
+        imageUrl: 'signupQuestionImages/4.7.png',
         showUpTimeSeconds: null,
     },
 
@@ -263,7 +263,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Döntéshozatalnál fajsúlyosabbak számomra',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.1.png',
+        imageUrl: 'signupQuestionImages/5.1.png',
         showUpTimeSeconds: null,
     },
     // 5.2 Question
@@ -272,7 +272,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Egy feladat hatékony elvégzéséhez',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.2.png',
+        imageUrl: 'signupQuestionImages/5.2.png',
         showUpTimeSeconds: null,
     },
     // 5.3 Question
@@ -281,7 +281,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha ki szeretném fejezni a gondolataimat, érzéseimet',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.3.png',
+        imageUrl: 'signupQuestionImages/5.3.png',
         showUpTimeSeconds: null,
     },
     // 5.4 Question
@@ -290,7 +290,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Az olyan előadókat, oktatókat kedvelem, akik',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.4.png',
+        imageUrl: 'signupQuestionImages/5.4.png',
         showUpTimeSeconds: null,
     },
     // 5.5 Question
@@ -299,7 +299,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Általában',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.5.png',
+        imageUrl: 'signupQuestionImages/5.5.png',
         showUpTimeSeconds: null,
     },
     // 5.6 Question
@@ -308,7 +308,7 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha vizsgáznom kellene, a következőt preferálnám',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.6.png',
+        imageUrl: 'signupQuestionImages/5.6.png',
         showUpTimeSeconds: null,
     },
     // 5.7 Question
@@ -317,11 +317,11 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         typeId: 1,
         deletionDate: null,
         questionText: 'Ha kapok egy megbízást, feladatot, jobban szeretem',
-        imageUrl: '{CDN_BUCKET_URL}/signupQuestionImages/5.7.png',
+        imageUrl: 'signupQuestionImages/5.7.png',
         showUpTimeSeconds: null,
     },
 
-    // -------------------------------- NORMAL QUESTIONS 
+    // -------------------------------- NORMAL QUESTIONS
 
     question_data_48: {
         deletionDate: null,
