@@ -123,7 +123,8 @@ export class UserService {
 
                 // save auth items 
                 await this._roleService
-                    .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
+                    .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions)
+                    .action();
             },
             auth: async () => {
                 return this._authorizationService
