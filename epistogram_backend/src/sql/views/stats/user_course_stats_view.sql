@@ -42,7 +42,18 @@ avg_performance_cte AS
     WHERE upv.performance_percentage != 0
     GROUP BY
         upv.course_id
+),
+completed_video_count AS
+(
+	SELECT
+		cicv.user_id,
+		cicv.course_id,
+		COUNT(cicv.video_version_id) completed_video_count
+	FROM public.course_item_completion_view cicv
+	
+	GROUP BY cicv.user_id, cicv.course_id
 )
+
 SELECT
     co.id course_id,
     cd.title,
@@ -50,7 +61,7 @@ SELECT
     sf.file_path cover_file_path,
     cosv.start_date,
     ucpav.completed_percentage course_progress_percentage,
-    ucpav.total_completed_item_count completed_video_count,
+    cvc.completed_video_count,
     cstv.total_spent_seconds total_spent_seconds,
     qac.video_quesiton_answer_count answered_video_question_count,
     qac.practise_quesiton_answer_count answered_practise_question_count,
@@ -163,6 +174,10 @@ AND ucpav.course_id = co.id
 LEFT JOIN public.course_state_view cosv
 ON cosv.course_id = co.id
 AND cosv.user_id = u.id
+
+LEFT JOIN completed_video_count cvc
+ON cvc.user_id = u.id
+AND cvc.course_id = co.id
 
 LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = u.id
