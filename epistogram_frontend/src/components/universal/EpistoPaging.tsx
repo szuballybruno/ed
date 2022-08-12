@@ -22,7 +22,9 @@ export const EpistoPaging = (props: FlexProps & {
             </Box>;
         });
 
-    const renderCurrentSlide = slides[index](true);
+    const renderCurrentSlide = slides.length > 0
+        ? slides[index](true)
+        : <></>;
 
     return (
         <Flex
