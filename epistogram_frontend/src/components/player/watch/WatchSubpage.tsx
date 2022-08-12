@@ -69,7 +69,7 @@ export const WatchSubpage = () => {
             return navigate(applicationRoutes.homeRoute);
     }, [playerDataStatus]);
 
-    // redirect if current item should be locked 
+    // redirect if current item should be locked
     useEffect(() => {
 
         console.log('Redirect effect runs...');
@@ -178,6 +178,7 @@ export const WatchSubpage = () => {
                                 answerSessionId={answerSessionId!}
                                 setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
                                 courseId={courseId!}
+                                isExamInProgress={isSidebarHidden}
                                 exam={examPlayerData} />}
 
                             {/* MODULE */}

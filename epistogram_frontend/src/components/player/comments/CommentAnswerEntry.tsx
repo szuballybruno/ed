@@ -113,7 +113,7 @@ export const CommentAnswerEntry = (props: {
                             } />
 
                         <EpistoFont>
-                            Anoním közzététel
+                            Közzététel névtelenül
                         </EpistoFont>
                     </Flex>
                 </Flex>

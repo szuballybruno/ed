@@ -40,6 +40,7 @@ export const TempomatTempoInfo = (props: {
                 </EpistoFont>
 
                 <InfoOutlined
+                    onClick={onClick}
                     style={{
                         height: '15px'
                     }} />

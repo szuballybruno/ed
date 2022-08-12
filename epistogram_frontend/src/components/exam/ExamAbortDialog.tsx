@@ -27,6 +27,7 @@ export const ExamAbortDialog = ({
     const { finishExamAsync: completeExamAsync } = useFinishExam();
 
     const skippedQuestionsCount = questions.length - answeredQuestionsCount;
+    const isCompletedProperly = skippedQuestionsCount === 0;
 
     const handleCompleteAsync = useCallback(() => {
 
@@ -60,6 +61,7 @@ export const ExamAbortDialog = ({
                     margin={{
                         top: 'px20'
                     }}>
+
                     {'A \'Befejezem\' gombra való kattintás után már nem módosíthatod a válaszaidat'}
                 </EpistoFont>
 
@@ -67,7 +69,8 @@ export const ExamAbortDialog = ({
                     margin={{
                         top: 'px20'
                     }}>
-                    Átugrott kérdések száma: {skippedQuestionsCount} db
+
+                   {!isCompletedProperly && `Átugrott kérdések száma: ${skippedQuestionsCount} db`}
                 </EpistoFont>
 
                 {/* buttons */}

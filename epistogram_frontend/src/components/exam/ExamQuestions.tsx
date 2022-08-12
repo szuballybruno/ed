@@ -1,27 +1,29 @@
-import { Grid } from '@chakra-ui/layout';
-import { Flex } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useSaveExamAnswer } from '../../services/api/examApiService';
-import { useShowErrorDialog } from '../../services/core/notifications';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { Id } from '../../shared/types/versionId';
-import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder, epochDates, usePaging } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFont } from '../controls/EpistoFont';
-import { LoadingFrame } from '../system/LoadingFrame';
-import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
-import { ExamAbortDialog } from './ExamAbortDialog';
-import { ExamLayout } from './ExamLayout';
-import { ExamLayoutContent } from './ExamLayoutContent';
-import { QuestionAnswer } from './QuestionAnswer';
+import {Grid} from '@chakra-ui/layout';
+import {Flex} from '@chakra-ui/react';
+import {useState} from 'react';
+import {useSaveExamAnswer} from '../../services/api/examApiService';
+import {useShowErrorDialog} from '../../services/core/notifications';
+import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
+import {Id} from '../../shared/types/versionId';
+import {Environment} from '../../static/Environemnt';
+import {ArrayBuilder, epochDates, usePaging} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoFont} from '../controls/EpistoFont';
+import {LoadingFrame} from '../system/LoadingFrame';
+import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
+import {ExamAbortDialog} from './ExamAbortDialog';
+import {ExamLayout} from './ExamLayout';
+import {ExamLayoutContent} from './ExamLayoutContent';
+import {QuestionAnswer} from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
     answerSessionId: Id<'AnswerSession'>,
     onExamFinished: () => void,
     handleAbortExam: () => void
+    isExamInProgress: boolean
     hideLoading?: boolean
+
 }) => {
 
     const {
@@ -29,7 +31,8 @@ export const ExamQuestions = (props: {
         onExamFinished,
         handleAbortExam,
         exam,
-        hideLoading
+        hideLoading,
+        isExamInProgress
     } = props;
     const {
         questions
@@ -48,9 +51,9 @@ export const ExamQuestions = (props: {
     const hasSelectedAnswer = selectedAnswerIds.length > 0;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
     const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
+    const isLastQuestion = questionPaging.currentIndex === questions.length - 1;
 
-    const handleNextAsync = async () => {
-
+    const handleAnswerQuestionAsync = async () => {
         const timeElapsed = epochDates(new Date(), showUpTime);
 
         try {
@@ -65,16 +68,59 @@ export const ExamQuestions = (props: {
             setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
             setShowUpTime(new Date());
             setSelectedAnswerIds([]);
-            questionPaging.next();
         } catch (e) {
 
             showError(e);
         }
     };
 
+    const handleNextAsync = async () => {
+
+        await handleAnswerQuestionAsync();
+        questionPaging.next();
+    };
+
+    const handleBack = () => {
+
+        questionPaging.previous();
+    };
+
     const handleOpenDialog = () => {
 
         abortDialog.openDialog();
+    };
+
+    const handleNextButton = async () => {
+
+        // do nothing if exam not started
+        if (!isExamInProgress)
+            return;
+
+        // if last question and answered then
+        // save answer then open dialog
+        if (isLastQuestion && hasSelectedAnswer) {
+
+            await handleAnswerQuestionAsync();
+            return handleOpenDialog();
+        }
+
+        // if last question and not answered then
+        // open dialog without saving answer
+        if (isLastQuestion && !hasSelectedAnswer) {
+
+            return handleOpenDialog();
+        }
+
+        // if not last question and has answer selected
+        // save answer and jump to next else jump without
+        // saving.
+        if (hasSelectedAnswer) {
+
+            return handleNextAsync();
+        } else {
+
+            return questionPaging.next();
+        }
     };
 
     const handleSelectCurrent = <T extends string>(id: Id<T>) => {
@@ -138,14 +184,16 @@ export const ExamQuestions = (props: {
                     action: handleOpenDialog
                 }
             ]}
+            handleBack={handleBack}
             footerButtons={new ArrayBuilder()
                 .add({
-                    title: translatableTexts.exam.nextQuestion,
-                    action: hasSelectedAnswer
-                        ? handleNextAsync
-                        : () => questionPaging.next()
+                    title: isLastQuestion
+                        ? 'Vizsga befejezése'
+                        : translatableTexts.exam.nextQuestion,
+                    action: () => handleNextButton()
                 })
-                .getArray()}>
+                .getArray()}
+            isFirst={questionPaging.currentIndex === 0}>
 
             <ExamLayoutContent
                 title={currentQuestion.questionText}>

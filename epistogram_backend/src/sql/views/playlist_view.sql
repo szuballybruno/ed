@@ -88,7 +88,7 @@ items_with_user AS
 		ucb.course_id,
         ucb.current_item_code = civ.module_code module_is_current,
 		asv.answer_session_success_rate correct_answer_rate,
-        uprv.is_recommended_for_practise IS NOT NULL is_recommended_for_practise,
+        uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
     
         -- state
 		CASE 

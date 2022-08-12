@@ -33,6 +33,7 @@ export const PretestSubpage = () => {
                 answerSessionId={pretestData?.answerSessionId}
                 onExamFinished={handleFinishPretest}
                 handleAbortExam={handleFinishPretest}
+                isExamInProgress={true}
                 hideLoading />}
         </LoadingFrame>
     );

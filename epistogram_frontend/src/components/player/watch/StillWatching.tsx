@@ -27,13 +27,15 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-    return <QuestionnaireLayout buttonWrapperStyles={{
-        display: 'flex',
-        flexDirection: 'row',
-    }}
-loadingProps={{ loadingState: 'success' }}
+    return <QuestionnaireLayout
+        buttonWrapperStyles={{
+            display: 'flex',
+            flexDirection: 'row',
+        }}
+        loadingProps={{ loadingState: 'success' }}
         title={`Kérlek válaszd ki a ${correctOption.displayName}!`}
-contentClickable={true}>
+        contentClickable={true}>
+
         {options
             .map((option, index) => <StillWatchingAnswer
                 key={index}
@@ -42,7 +44,8 @@ contentClickable={true}>
                 isIncorrect={selectedIndex === index && index !== correctOptionIndex}
                 onClick={() => {
                     setSelectedIndex(index);
-                    setTimeout(() => props.onClose(), 500);
+                    if (index === correctOptionIndex)
+                        setTimeout(() => props.onClose(), 500);
                 }}>
                 {option.component}
             </StillWatchingAnswer>)}

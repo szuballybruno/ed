@@ -76,7 +76,7 @@ export const CommentItem = (props: {
                             textAlign: 'left'
                         }}>
 
-                        {fullName || 'Anoním felhasználó'}
+                        {fullName || 'Névtelen felhasználó'}
                     </h4>
 
                     <EpistoFont

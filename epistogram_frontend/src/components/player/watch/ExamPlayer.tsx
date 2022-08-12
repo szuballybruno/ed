@@ -15,6 +15,7 @@ export const ExamPlayer = (props: {
     answerSessionId: Id<'AnswerSession'>,
     courseId: Id<'Course'>,
     continueCourse: () => void,
+    isExamInProgress: boolean,
     setIsExamInProgress: (isExamStarted: boolean) => void
 }) => {
 
@@ -23,7 +24,8 @@ export const ExamPlayer = (props: {
         setIsExamInProgress,
         answerSessionId,
         continueCourse,
-        courseId
+        courseId,
+        isExamInProgress
     } = props;
 
     const { startExamAsync, startExamState } = useStartExam();
@@ -79,7 +81,8 @@ export const ExamPlayer = (props: {
             exam={exam}
             answerSessionId={answerSessionId}
             onExamFinished={handleExamFinished}
-            handleAbortExam={handleAbortExam} />,
+            handleAbortExam={handleAbortExam}
+            isExamInProgress={isExamInProgress}/>,
 
         () => <ExamResultsSlide
             continueCourse={handleContinueCourse}

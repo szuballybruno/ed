@@ -23,6 +23,7 @@ export const ExamLayout = (props: {
     showFooterButtonsOnTop?: boolean,
     footerButtons?: (ExamLayoutButtonProps)[],
     headerButtons?: (ExamLayoutButtonProps)[],
+    isFirst?: boolean
 } & FlexProps) => {
 
     const {
@@ -35,6 +36,7 @@ export const ExamLayout = (props: {
         isHeightMaximized,
         showFooterButtonsOnTop,
         stepperLogic,
+        isFirst,
         ...css
     } = props;
 
@@ -164,7 +166,7 @@ export const ExamLayout = (props: {
             p={20}>
 
             {/* back button */}
-            {handleBack && ExamLayoutButton({
+            {(handleBack && !isFirst) && ExamLayoutButton({
                 title: 'Vissza',
                 action: handleBack,
                 icon: <ArrowBack />,
