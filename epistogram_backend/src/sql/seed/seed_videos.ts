@@ -101,18 +101,24 @@ export const getVideosSeedData = () => getSeedList<Video>()({
 	},
     video_84: { 
 	},
-    video_86: { 
+
+    // -------------------- obs
+
+    video_obs_1: { 
 	},
-    video_85: { 
+    video_obs_2: { 
 	},
-    video_88: { 
+    video_obs_3: { 
 	},
-    video_89: { 
+    video_obs_4: { 
 	},
-    video_90: { 
+    video_obs_5: { 
 	},
-    video_87: { 
+    video_obs_6: { 
 	},
+
+    // ------------------------ other
+
     video_44: { 
 	},
     video_51: { 
@@ -173,9 +179,9 @@ export const getVideosSeedData = () => getSeedList<Video>()({
 	},
     video_124: { 
 	},
-    video_91: { 
+    video_obs_8: { 
 	},
-    video_92: { 
+    video_obs_7: { 
 	},
     video_150: { 
 	},

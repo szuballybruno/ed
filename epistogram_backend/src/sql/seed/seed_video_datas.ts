@@ -398,54 +398,80 @@ export const getVideoDataSeedData = (
         orderIndex: 50,
         videoFileId: videoFiles.video_file_84.id,
     },
-    video_data_86: {
-        thumbnailFileId: null,
-        title: 'Telepítsük az OBS Studiot',
-        subtitle: 'Másodpercek alatt használhatjuk is',
-        description: '',
-        orderIndex: 1,
-        videoFileId: videoFiles.video_file_86.id,
-    },
-    video_data_85: {
+
+    // ----------------------------- obs
+
+    // module 1
+    video_data_obs_1: {
         thumbnailFileId: null,
         title: 'Az OBS letöltése',
         subtitle: 'Ingyenesen, bármilyen asztali rendszerre',
         description: '',
         orderIndex: 0,
-        videoFileId: videoFiles.video_file_85.id,
+        videoFileId: videoFiles.video_file_obs_1.id,
     },
-    video_data_88: {
+    video_data_obs_2: {
         thumbnailFileId: null,
-        title: 'Audio & video beállítások',
-        subtitle: 'Hangforrások és felbontás finomhangolása',
+        title: 'Telepítsük az OBS Studiot',
+        subtitle: 'Másodpercek alatt használhatjuk is',
         description: '',
-        orderIndex: 3,
-        videoFileId: videoFiles.video_file_88.id,
+        orderIndex: 1,
+        videoFileId: videoFiles.video_file_obs_2.id,
     },
-    video_data_89: {
-        thumbnailFileId: null,
-        title: 'Képernyőfelvétel beállítása',
-        subtitle: 'Jelenetek, források konfigurálása',
-        description: '',
-        orderIndex: 4,
-        videoFileId: videoFiles.video_file_89.id,
-    },
-    video_data_90: {
-        thumbnailFileId: null,
-        title: 'Varázsoljunk hangot OBS-ben',
-        subtitle: 'Bemeneti hangfelvevő eszközök beállítása',
-        description: '',
-        orderIndex: 5,
-        videoFileId: videoFiles.video_file_90.id,
-    },
-    video_data_87: {
+    video_data_obs_3: {
         thumbnailFileId: null,
         title: 'Alapvető konfigurálás offline felvételhez',
         subtitle: 'Formátumok, minőség beállítása',
         description: '',
-        orderIndex: 2,
-        videoFileId: videoFiles.video_file_87.id,
+        orderIndex: 3,
+        videoFileId: videoFiles.video_file_obs_3.id,
     },
+    video_data_obs_4: {
+        thumbnailFileId: null,
+        title: 'Audio & video beállítások',
+        subtitle: 'Hangforrások és felbontás finomhangolása',
+        description: '',
+        orderIndex: 4,
+        videoFileId: videoFiles.video_file_obs_4.id,
+    },
+    video_data_obs_5: {
+        thumbnailFileId: null,
+        title: 'Képernyőfelvétel beállítása',
+        subtitle: 'Jelenetek, források konfigurálása',
+        description: '',
+        orderIndex: 5,
+        videoFileId: videoFiles.video_file_obs_5.id,
+    },
+    video_data_obs_6: {
+        thumbnailFileId: null,
+        title: 'Varázsoljunk hangot OBS-ben',
+        subtitle: 'Bemeneti hangfelvevő eszközök beállítása',
+        description: '',
+        orderIndex: 6,
+        videoFileId: videoFiles.video_file_obs_6.id,
+    },
+
+    // module 2
+    video_data_obs_7: {
+        thumbnailFileId: null,
+        title: 'Zajszűrés beállítása',
+        subtitle: 'Viszlát széknyikorgás!',
+        description: '',
+        orderIndex: 0,
+        videoFileId: videoFiles.video_file_obs_7.id,
+    },
+    
+    // module 3
+    video_data_obs_8: {
+        thumbnailFileId: null,
+        title: 'Próbafelvétel OBS-ben',
+        subtitle: 'Figyeljünk, hogy mire nyomunk!',
+        description: '',
+        orderIndex: 0,
+        videoFileId: videoFiles.video_file_obs_8.id,
+    },
+
+    // -------------------------------------------- other
     video_data_44: {
         thumbnailFileId: null,
         title: 'Ismerkedés a Word-el',
@@ -685,22 +711,6 @@ export const getVideoDataSeedData = (
         description: '',
         orderIndex: 24,
         videoFileId: videoFiles.video_file_124.id,
-    },
-    video_data_91: {
-        thumbnailFileId: null,
-        title: 'Próbafelvétel OBS-ben',
-        subtitle: 'Figyeljünk, hogy mire nyomunk!',
-        description: '',
-        orderIndex: 0,
-        videoFileId: videoFiles.video_file_91.id,
-    },
-    video_data_92: {
-        thumbnailFileId: null,
-        title: 'Zajszűrés beállítása',
-        subtitle: 'Viszlát széknyikorgás!',
-        description: '',
-        orderIndex: 0,
-        videoFileId: videoFiles.video_file_92.id,
     },
     video_data_150: {
         thumbnailFileId: null,

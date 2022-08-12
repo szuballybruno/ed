@@ -304,41 +304,55 @@ export const getVideoVersionSeedData = (
         videoDataId: videoDatas.video_data_84.id,
     },
 
-    video_version_86: {
-        videoId: videos.video_86.id,
+    // ----------------------------- obs
+
+    // module 1
+    video_version_obs_1: {
+        videoId: videos.video_obs_1.id,
         moduleVersionId: moduleVersions.module_version_obs_1.id,
-        videoDataId: videoDatas.video_data_86.id,
+        videoDataId: videoDatas.video_data_obs_1.id,
+    },
+    video_version_obs_2: {
+        videoId: videos.video_obs_2.id,
+        moduleVersionId: moduleVersions.module_version_obs_1.id,
+        videoDataId: videoDatas.video_data_obs_2.id,
+    },
+    video_version_obs_3: {
+        videoId: videos.video_obs_3.id,
+        moduleVersionId: moduleVersions.module_version_obs_1.id,
+        videoDataId: videoDatas.video_data_obs_3.id,
+    },
+    video_version_obs_4: {
+        videoId: videos.video_obs_4.id,
+        moduleVersionId: moduleVersions.module_version_obs_1.id,
+        videoDataId: videoDatas.video_data_obs_4.id,
+    },
+    video_version_obs_5: {
+        videoId: videos.video_obs_5.id,
+        moduleVersionId: moduleVersions.module_version_obs_1.id,
+        videoDataId: videoDatas.video_data_obs_5.id,
+    },
+    video_version_obs_6: {
+        videoId: videos.video_obs_6.id,
+        moduleVersionId: moduleVersions.module_version_obs_1.id,
+        videoDataId: videoDatas.video_data_obs_6.id,
     },
 
-    video_version_85: {
-        videoId: videos.video_85.id,
-        moduleVersionId: moduleVersions.module_version_obs_1.id,
-        videoDataId: videoDatas.video_data_85.id,
+    // module 2
+    video_version_obs_7: {
+        videoId: videos.video_obs_7.id,
+        moduleVersionId: moduleVersions.module_version_obs_2.id,
+        videoDataId: videoDatas.video_data_obs_7.id,
     },
 
-    video_version_88: {
-        videoId: videos.video_88.id,
-        moduleVersionId: moduleVersions.module_version_obs_1.id,
-        videoDataId: videoDatas.video_data_88.id,
+    // module 3
+    video_version_obs_8: {
+        videoId: videos.video_obs_8.id,
+        moduleVersionId: moduleVersions.module_version_obs_3.id,
+        videoDataId: videoDatas.video_data_obs_8.id,
     },
 
-    video_version_89: {
-        videoId: videos.video_89.id,
-        moduleVersionId: moduleVersions.module_version_obs_1.id,
-        videoDataId: videoDatas.video_data_89.id,
-    },
-
-    video_version_90: {
-        videoId: videos.video_90.id,
-        moduleVersionId: moduleVersions.module_version_obs_1.id,
-        videoDataId: videoDatas.video_data_90.id,
-    },
-
-    video_version_87: {
-        videoId: videos.video_87.id,
-        moduleVersionId: moduleVersions.module_version_obs_1.id,
-        videoDataId: videoDatas.video_data_87.id,
-    },
+    // ----------------------------- other
 
     video_version_44: {
         videoId: videos.video_44.id,
@@ -518,18 +532,6 @@ export const getVideoVersionSeedData = (
         videoId: videos.video_124.id,
         moduleVersionId: moduleVersions.module_version_cyber_1.id,
         videoDataId: videoDatas.video_data_124.id,
-    },
-
-    video_version_91: {
-        videoId: videos.video_91.id,
-        moduleVersionId: moduleVersions.module_version_obs_3.id,
-        videoDataId: videoDatas.video_data_91.id,
-    },
-
-    video_version_92: {
-        videoId: videos.video_92.id,
-        moduleVersionId: moduleVersions.module_version_obs_2.id,
-        videoDataId: videoDatas.video_data_92.id,
     },
 
     video_version_150: {

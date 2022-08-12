@@ -200,27 +200,27 @@ export const getVideoFilesSeedData = (storageFiles: StorageFileSeedDataType) => 
         lengthSeconds: 227.766667,
         storageFileId: storageFiles.storage_file_105.id,
     },
-    video_file_86: {
+    video_file_obs_2: {
         lengthSeconds: 78.433333,
         storageFileId: storageFiles.storage_file_107.id,
     },
-    video_file_85: {
+    video_file_obs_1: {
         lengthSeconds: 103.133333,
         storageFileId: storageFiles.storage_file_106.id,
     },
-    video_file_88: {
+    video_file_obs_4: {
         lengthSeconds: 144,
         storageFileId: storageFiles.storage_file_112.id,
     },
-    video_file_89: {
+    video_file_obs_5: {
         lengthSeconds: 287.333333,
         storageFileId: storageFiles.storage_file_110.id,
     },
-    video_file_90: {
+    video_file_obs_6: {
         lengthSeconds: 173.733333,
         storageFileId: storageFiles.storage_file_111.id,
     },
-    video_file_87: {
+    video_file_obs_3: {
         lengthSeconds: 292.066667,
         storageFileId: storageFiles.storage_file_108.id,
     },
@@ -344,11 +344,11 @@ export const getVideoFilesSeedData = (storageFiles: StorageFileSeedDataType) => 
         lengthSeconds: 112.633333,
         storageFileId: storageFiles.storage_file_147.id,
     },
-    video_file_91: {
+    video_file_obs_8: {
         lengthSeconds: 98,
         storageFileId: storageFiles.storage_file_114.id,
     },
-    video_file_92: {
+    video_file_obs_7: {
         lengthSeconds: 64.633333,
         storageFileId: storageFiles.storage_file_113.id,
     },

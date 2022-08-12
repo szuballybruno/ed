@@ -492,7 +492,7 @@ export const getQuestionVersionsSeedData = (
         questionId: questions.question_64.id,
         questionDataId: questionDatas.question_data_64.id,
         examVersionId: null,
-        videoVersionId: videoVersions.video_version_87.id,
+        videoVersionId: videoVersions.video_version_obs_3.id,
         personalityTraitCategoryId: null,
     },
 
@@ -500,7 +500,7 @@ export const getQuestionVersionsSeedData = (
         questionId: questions.question_65.id,
         questionDataId: questionDatas.question_data_65.id,
         examVersionId: null,
-        videoVersionId: videoVersions.video_version_88.id,
+        videoVersionId: videoVersions.video_version_obs_4.id,
         personalityTraitCategoryId: null,
     },
 
@@ -508,7 +508,7 @@ export const getQuestionVersionsSeedData = (
         questionId: questions.question_67.id,
         questionDataId: questionDatas.question_data_67.id,
         examVersionId: null,
-        videoVersionId: videoVersions.video_version_89.id,
+        videoVersionId: videoVersions.video_version_obs_5.id,
         personalityTraitCategoryId: null,
     },
 
@@ -748,7 +748,7 @@ export const getQuestionVersionsSeedData = (
         questionId: questions.question_66.id,
         questionDataId: questionDatas.question_data_66.id,
         examVersionId: null,
-        videoVersionId: videoVersions.video_version_89.id,
+        videoVersionId: videoVersions.video_version_obs_5.id,
         personalityTraitCategoryId: null,
     },
 

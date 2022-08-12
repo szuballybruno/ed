@@ -65,25 +65,23 @@ export const getModuleVersionsSeedData = (
         moduleId: modules.module_canva_pretest_1.id
     },
 
-    // obs course pretest module version
+    // ------------------------------------------ obs
+     
     module_version_obs_pretest: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_obs_pretest_1.id,
         moduleId: modules.module_obs_pretest_1.id
     },
-
     module_version_obs_1: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_3.id,
         moduleId: modules.module_obs_1.id
     },
-
     module_version_obs_2: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_7.id,
         moduleId: modules.module_obs_2.id
     },
-
     module_version_obs_3: {
         courseVersionId: courseVersions.course_version_obs.id,
         moduleDataId: moduleDatas.module_data_8.id,
