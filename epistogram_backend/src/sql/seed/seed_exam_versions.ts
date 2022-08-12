@@ -196,7 +196,7 @@ export const getExamVersionsSeedData = (
             examDataId: examDatas.pretest_exam_data_obs.id,
             examId: exams.pretest_exam_obs.id
         },
-        exam_version_obs_test: {
+        exam_version_obs_test_exam: {
             moduleVersionId: moduleVersions.module_version_obs_1.id,
             examDataId: examDatas.exam_data_obs_test.id,
             examId: exams.exam_obs_test.id
