@@ -1,8 +1,8 @@
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity, VersionMigrationHelpers, VersionMigrationResult } from '../utilities/misc';
+import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
-import { log } from './misc/logger';
 import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -17,7 +17,8 @@ type SaveActionType = {
 export class VersionSaveService {
 
     constructor(
-        private _ormService: ORMConnectionService) {
+        private _ormService: ORMConnectionService,
+        private _loggerService: LoggerService) {
     }
 
     /**
@@ -30,7 +31,24 @@ export class VersionSaveService {
         TData extends EntityType,
         TEntity extends EntityType,
         TParentVersionName extends String
-    >(opts: {
+    >({
+        muts,
+        parentVersionIdMigrations,
+        dtoSignature,
+        versionSignature,
+        dataSignature,
+        entitySignature,
+        parentVersionIdField,
+        getParentOldVersionId,
+        getDataId,
+        getDefaultData,
+        getEntityId,
+        getVersionId,
+        getNewEntity,
+        getNewVersion,
+        overrideDataProps,
+        getDataDisplayName
+    }: {
         dtoSignature: ClassType<TDTO>,
         versionSignature: ClassType<TVersion>,
         dataSignature: ClassType<TData>,
@@ -45,28 +63,12 @@ export class VersionSaveService {
         getDefaultData: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         getNewEntity: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TEntity>,
-        getNewVersion: (opts: { newDataId: TData['id'], entityId: TEntity['id'], newParentVersionId: Id<TParentVersionName> }) => InsertEntity<TVersion>
+        getNewVersion: (opts: { newDataId: TData['id'], entityId: TEntity['id'], newParentVersionId: Id<TParentVersionName> }) => InsertEntity<TVersion>,
+        getDataDisplayName?: (data: TData) => string
     }) {
 
-        const {
-            muts,
-            parentVersionIdMigrations,
-            dtoSignature,
-            versionSignature,
-            dataSignature,
-            entitySignature,
-            parentVersionIdField,
-            getParentOldVersionId,
-            getDataId,
-            getDefaultData,
-            getEntityId,
-            getVersionId,
-            getNewEntity,
-            getNewVersion,
-            overrideDataProps
-        } = opts;
-
-        this._log(`Saving ${entitySignature.name}...`);
+        this._loggerService
+            .logScoped('VERSION SAVE', `Saving ${entitySignature.name}...`);
 
         // get all old versions of parent 
         const oldVersions = await this
@@ -82,7 +84,7 @@ export class VersionSaveService {
             ._getOldVersionIds(muts, oldVersions, getVersionId);
 
         // get old data
-        const { getOldData } = await this
+        const { getOldData, oldData } = await this
             ._getOldDataView({
                 data: dataSignature,
                 entity: entitySignature,
@@ -91,16 +93,49 @@ export class VersionSaveService {
                 getEntityId,
             });
 
-        // mutations
+        // get ordered non-delete mutations
+        // order by add/update:
+        // adds go first, updates go last
         const mutaitonsOrdered = muts
             .filter(x => x.action !== 'delete')
             .orderBy(x => x.action === 'add' ? 1 : 2);
 
-        // get increment save actions
+        // get save actions for incrementing
+        // unchanged items 
         const incrementSaveActions = oldVersionIds
             .filter(oldVersionId => !mutaitonsOrdered
                 .some(mut => getVersionId(mut) === oldVersionId))
             .map(oldVersionId => ({ oldVersionId }));
+
+        /**
+         * Get save actions,
+         * these will decide on what will happen to the item 
+         */
+        const saveActions = mutaitonsOrdered
+            .map(x => ({
+                mutation: x,
+                oldVersionId: getVersionId(x),
+                action: x.action === 'add' ? 'ADD' : 'UPDATE'
+            }) as SaveActionType)
+            .concat(incrementSaveActions
+                .map(x => ({
+                    mutation: null,
+                    oldVersionId: x.oldVersionId,
+                    action: 'INCREMENT'
+                } as SaveActionType)));
+
+        this._loggerService
+            .logScoped('VERSION SAVE', 'Actions: ');
+
+        this._loggerService
+            .logScoped('VERSION SAVE', '\n' + saveActions
+                .map(saveAction => {
+
+                    const data = getOldData(saveAction.oldVersionId);
+
+                    return `Display name: ${getDataDisplayName?.call(this, data.oldData)} Old version id: ${data.oldVersion.id}`;
+                })
+                .join('\n'));
 
         //
         // CREATE VIDEO DATAS
@@ -132,18 +167,6 @@ export class VersionSaveService {
 
         //
         // CREATE VERSIONS 
-        const saveActions = mutaitonsOrdered
-            .map(x => ({
-                mutation: x,
-                oldVersionId: getVersionId(x),
-                action: x.action === 'add' ? 'ADD' : 'UPDATE'
-            }) as SaveActionType)
-            .concat(incrementSaveActions
-                .map(x => ({
-                    mutation: null,
-                    oldVersionId: x.oldVersionId,
-                    action: 'INCREMENT'
-                } as SaveActionType)));
 
         const newVersions = saveActions
             .map(({ mutation, oldVersionId }, i) => {
@@ -194,11 +217,15 @@ export class VersionSaveService {
         const res = VersionMigrationHelpers
             .create(oldVersionIds, newVersionIds);
 
-        this._log(res
+        const log = res
             .map((x, i) => `${x.oldVersionId} -> ${x.newVersionId} [${saveActions[i].action}]`)
-.join('\n'));
+            .join('\n');
 
-        this._log(`Saved ${entitySignature.name}.`);
+        this._loggerService
+            .logScoped('VERSION SAVE', log);
+
+        this._loggerService
+            .logScoped('VERSION SAVE', `Saved ${entitySignature.name}.`);
 
         return res;
     }
@@ -280,7 +307,7 @@ export class VersionSaveService {
                 .single(x => x.oldVersion.id === versionId);
         };
 
-        return { getOldData };
+        return { getOldData, oldData };
     }
 
     /**
@@ -302,13 +329,5 @@ export class VersionSaveService {
             .concat(oldVersions.map(x => x.id));
 
         return { oldVersionIds };
-    }
-
-    /**
-     * Log
-     */
-    private _log(text: string) {
-
-        log(text, { noStamp: true });
     }
 }

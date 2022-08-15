@@ -1,5 +1,5 @@
 import { CourseItemType } from '../../types/sharedTypes';
-import { VersionCode } from '../../types/versionCode';
+import { VersionCode } from '../../types/VersionCode1';
 import { Id } from '../../types/versionId';
 import { AnswerEditDTO } from '../AnswerEditDTO';
 import { Mutation } from '../mutations/Mutation';

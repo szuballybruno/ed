@@ -8,7 +8,7 @@ import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { VersionCode } from '../../../../shared/types/versionCode';
+import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { Logger } from '../../../../static/Logger';

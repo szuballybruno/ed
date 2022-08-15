@@ -5,7 +5,7 @@ import { MutableRefObject, ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
-import { VersionCode } from '../../../../shared/types/versionCode';
+import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
