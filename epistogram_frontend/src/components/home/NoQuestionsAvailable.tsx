@@ -3,9 +3,10 @@ import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
+import {applicationRoutes} from '../../configuration/applicationRoutes';
 
 export const NoQuestionsAvailable = () => {
-    
+
     const { navigate } = useNavigation();
     return <Flex pr="20px">
 
@@ -22,21 +23,23 @@ export const NoQuestionsAvailable = () => {
             <EpistoFont
                 style={{
                     padding: '10px 20px 10px 10px',
-                    fontSize: '13px'
+                    fontSize: '13px',
+                    display: 'inline-block'
                 }}>
 
                 {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
 
-                {/* VALIDATE DOM NESTING */}
-                {/* <EpistoFont
+                {/* TODO Currently not working with EpistoFont: needs <a> tag */}
+                <a
                     onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
                     style={{
                         color: 'var(--epistoTeal)',
                         fontWeight: 'bold',
                         cursor: 'pointer'
                     }}>
+
                     {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
-                </EpistoFont> */}
+                </a>
             </EpistoFont>
         </Flex>
 

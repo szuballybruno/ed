@@ -69,7 +69,7 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
                                 : 'lightgrey'}>
 
                         {!isCompleted && <EpistoFont fontSize2='normal'>
-                            {index}
+                            {index + 1}
                         </EpistoFont>}
 
                         {isCompleted && <Check />}
