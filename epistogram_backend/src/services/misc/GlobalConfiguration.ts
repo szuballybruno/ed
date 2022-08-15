@@ -11,7 +11,8 @@ export type LogScopeType =
     'GENERIC' |
     'TRANSACTION' |
     'TEMPOMAT' |
-    'REGISTRATION';
+    'REGISTRATION' |
+    'VERSION SAVE';
 
 export class GlobalConfiguration {
 
@@ -81,7 +82,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['GENERIC', 'TRANSACTION'] as LogScopeType[],
+        enabledScopes: ['GENERIC', 'VERSION SAVE'] as LogScopeType[],
     };
 
     practiseQuestions = {

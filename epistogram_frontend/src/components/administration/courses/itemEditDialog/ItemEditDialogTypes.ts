@@ -1,4 +1,4 @@
-import { VersionCode } from '../../../../shared/types/versionCode';
+import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 

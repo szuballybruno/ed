@@ -1,7 +1,7 @@
 import { Id } from '../types/versionId';
 import { AnswerDTO } from './AnswerDTO';
 
-export type QuestionDTO = {
+export class QuestionDTO {
     questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     orderIndex: null | number;

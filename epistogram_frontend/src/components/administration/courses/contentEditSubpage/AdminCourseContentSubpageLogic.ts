@@ -3,7 +3,7 @@ import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseC
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { instantiate } from '../../../../shared/logic/sharedLogic';
 import { CourseItemType } from '../../../../shared/types/sharedTypes';
-import { VersionCode } from '../../../../shared/types/versionCode';
+import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { formatTime } from '../../../../static/frontendHelpers';
 
