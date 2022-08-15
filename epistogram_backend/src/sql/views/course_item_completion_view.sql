@@ -1,7 +1,7 @@
-WITH 
-latest_id AS 
+WITH
+latest_id AS
 (
-    SELECT 
+    SELECT
         MAX(cic.id) id,
         cic.user_id,
         cic.video_version_id,
@@ -13,7 +13,7 @@ latest_id AS
         cic.video_version_id,
         cic.exam_version_id
 )
-SELECT 
+SELECT
     latest_id.id course_item_completion_id,
     cic.user_id,
     cic.video_version_id,
@@ -38,8 +38,8 @@ LEFT JOIN public.exam ex
 ON ex.id = ev.exam_id
 
 LEFT JOIN public.module_version mv
-ON mv.id = vv.module_version_id 
-OR mv.id = ev.module_version_id 
+ON mv.id = vv.module_version_id
+OR mv.id = ev.module_version_id
 
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id

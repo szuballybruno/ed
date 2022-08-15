@@ -1,7 +1,7 @@
 WITH
-exam_item AS 
+exam_item AS
 (
-	SELECT 
+	SELECT
 		mv.course_version_id,
 		NULL::int video_version_id,
 		NULL::int video_id,
@@ -11,22 +11,22 @@ exam_item AS
 		ed.order_index item_order_index,
 		ed.title item_title,
 		ed.subtitle item_subtitle,
-		CASE WHEN e.is_signup 
-			THEN 'signup' 
-			ELSE CASE WHEN e.is_pretest 
+		CASE WHEN e.is_signup
+			THEN 'signup'
+			ELSE CASE WHEN e.is_pretest
 				THEN 'pretest'
 				ELSE 'exam'
-			END 
+			END
 		END item_type,
 		'exam_version@' || ev.id version_code
 	FROM public.exam_version ev
-	
+
 	LEFT JOIN public.module_version mv
 	ON mv.id = ev.module_version_id
-	
+
 	LEFT JOIN public.exam e
 	ON e.id = ev.exam_id
-	
+
 	LEFT JOIN public.exam_data ed
 	ON ed.id = ev.exam_data_id
 ),
@@ -45,23 +45,23 @@ video_item AS
 		'video' item_type,
 		'video_version@' || vv.id version_code
 	FROM public.video_version vv
-	
+
 	LEFT JOIN public.module_version mv
 	ON mv.id = vv.module_version_id
-	
+
 	LEFT JOIN public.video_data vd
 	ON vd.id = vv.video_data_id
-	
+
 	LEFT JOIN public.video v
 	ON v.id = vv.video_id
 ),
-items_combined AS 
+items_combined AS
 (
 	SELECT * FROM video_item
 	UNION ALL
 	SELECT * FROM exam_item
 )
-SELECT 
+SELECT
 	cv.id course_version_id,
 	md.name module_name,
 	md.order_index module_order_index,
@@ -76,7 +76,10 @@ SELECT
 	ic.item_subtitle,
 	ic.item_type,
 	ic.version_code
-FROM public.course_version cv
+FROM public.latest_course_version_view lcvv
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
 
 LEFT JOIN public.module_version mv
 ON mv.course_version_id = cv.id
@@ -90,8 +93,8 @@ ON mo.id = mv.module_id
 INNER JOIN items_combined ic
 ON ic.course_version_id = cv.id
 AND ic.module_version_id = mv.id
-	
-ORDER BY 
-	cv.id, 
+
+ORDER BY
+	cv.id,
 	md.order_index,
 	ic.item_order_index
