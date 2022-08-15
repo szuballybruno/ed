@@ -11,6 +11,8 @@ export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
 export class EntityType<TEntityName extends string = any> { id: Id<TEntityName>; }
 
+export type GetIdType<T> = T extends Id<infer P> ? P : never;
+
 export type SaveEntityType<TEntity> = Partial<TEntity>;
 
 export type InsertTokenValuePair = {

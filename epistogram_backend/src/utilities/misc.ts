@@ -32,46 +32,74 @@ export type GenericPropNameType<TProperty extends string, TValue> = { [P in TPro
 
 export type StringKeyof<T> = (keyof T) & string;
 
-export type VersionMigrationResult<TId extends String> = { oldVersionId: Id<TId>, newVersionId: Id<TId> };
+type VersionMigrationResult<TId extends String> = {
+    oldVersionId: Id<TId>,
+    newVersionId: Id<TId>,
+    slug: string
+};
 
-export const VersionMigrationHelpers = {
+export class VersionMigrationContainer<TId extends String>  {
 
-    getNewVersionId: <TId extends String>(migrations: VersionMigrationResult<TId>[], oldVersionId: Id<TId>): Id<TId> => {
+    private _migrations: VersionMigrationResult<TId>[];
 
-        const asd = migrations
+    constructor(
+        private _oldVersionIds: Id<TId>[],
+        private _newVersionIds: Id<TId>[],
+        private _slugs: string[]) {
+
+        this
+            ._newVersionIds
+            .forEach(newVersionId => {
+
+                if (newVersionId === null || newVersionId === undefined)
+                    throw new Error('Version migration result cannot contain null or undefined!');
+            });
+
+        this
+            ._oldVersionIds
+            .forEach(oldVersionId => {
+
+                if (oldVersionId === null || oldVersionId === undefined)
+                    throw new Error('Version migration result cannot contain null or undefined!');
+            });
+
+        this._migrations = this
+            ._oldVersionIds
+            .map((oldVersionId, index) => ({
+                oldVersionId,
+                newVersionId: this._newVersionIds[index],
+                slug: this._slugs[index]
+            } as VersionMigrationResult<TId>));
+    }
+
+    getNewVersionId(oldVersionId: Id<TId>): Id<TId> {
+
+        const asd = this._migrations
             .firstOrNull(x => x.oldVersionId === oldVersionId);
 
         if (!asd)
             throw new Error(`Version migrations do not contain migration from old versionId: ${oldVersionId}!`);
 
         return asd.newVersionId;
-    },
+    }
 
-    create: <TId extends String>(oldVersionIds: Id<TId>[], newVersionIds: Id<TId>[]) => {
+    asText() {
 
-        return oldVersionIds
-            .map((x, i) => {
-
-                const newVersionId = newVersionIds[i];
-                const oldVersionId = x;
-
-                if (newVersionId === null || newVersionId === undefined)
-                    throw new Error('Version migration result cannot contain null or undefined!');
-
-                if (oldVersionId === null || oldVersionId === undefined)
-                    throw new Error('Version migration result cannot contain null or undefined!');
-
-                return ({
-                    newVersionId,
-                    oldVersionId
-                } as VersionMigrationResult<TId>);
-            });
-    },
-
-    asText: <TId extends String>(migrations: VersionMigrationResult<TId>[]) => {
-
-        return migrations
+        return this._migrations
             .map(x => `${x.oldVersionId} -> ${x.newVersionId}`)
             .join('\n');
     }
-};
+
+    getMigrations() {
+
+        return this._migrations;
+    }
+
+    getSlug(newVersionId: any) {
+
+        return this
+            ._migrations
+            .single(x => x.newVersionId === newVersionId)
+            .slug;
+    }
+}

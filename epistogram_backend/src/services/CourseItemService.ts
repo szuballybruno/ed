@@ -10,7 +10,7 @@ import { CourseItemEditDTO } from '../shared/dtos/CourseItemEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { VersionCode } from '../shared/types/VersionCode1';
 import { Id } from '../shared/types/versionId';
-import { VersionMigrationResult } from '../utilities/misc';
+import { VersionMigrationContainer } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
@@ -68,7 +68,7 @@ export class CourseItemService {
      * Save
      */
     async saveAsync(
-        moduleMigrations: VersionMigrationResult<'ModuleVersion'>[],
+        moduleMigrations: VersionMigrationContainer<'ModuleVersion'>,
         videoMutations: ItemMutationType[],
         examMutations: ItemMutationType[]) {
 
@@ -81,7 +81,7 @@ export class CourseItemService {
      * attached to a CourseVersion
      */
     private async _saveExamsAsync(
-        moduleMigrations: VersionMigrationResult<'ModuleVersion'>[],
+        moduleMigrations: VersionMigrationContainer<'ModuleVersion'>,
         examMutations: ItemMutationType[]) {
 
         // SAVE EXAMS
@@ -133,7 +133,8 @@ export class CourseItemService {
                     examId: entityId
                 }),
                 muts: examMutations,
-                parentVersionIdMigrations: moduleMigrations
+                parentVersionIdMigrations: moduleMigrations,
+                getDataDisplayNameArg: x => x.title
             });
 
         // SAVE QUESTIONS 
@@ -144,7 +145,7 @@ export class CourseItemService {
      * Saves videos 
      */
     private async _saveVideosAsync(
-        moduleMigrations: VersionMigrationResult<'ModuleVersion'>[],
+        moduleMigrations: VersionMigrationContainer<'ModuleVersion'>,
         videoMutations: ItemMutationType[]) {
 
         // SAVE VIDEOS
@@ -191,7 +192,8 @@ export class CourseItemService {
                     videoId: entityId
                 }),
                 muts: videoMutations,
-                parentVersionIdMigrations: moduleMigrations
+                parentVersionIdMigrations: moduleMigrations,
+                getDataDisplayNameArg: x => x.title
             });
 
         // SAVE QUESTIONS
@@ -203,7 +205,7 @@ export class CourseItemService {
      */
     private async _saveQuestionsAsync(
         mutations: ItemMutationType[],
-        itemVersionIdMigrations: VersionMigrationResult<'VideoVersion' | 'ExamVersion'>[],
+        itemVersionIdMigrations: VersionMigrationContainer<'VideoVersion' | 'ExamVersion'>,
         isVideo: boolean) {
 
         // SAVE ANSWERS 

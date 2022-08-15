@@ -10,8 +10,8 @@ import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
-import { PlaylistView } from '../models/views/PlaylistView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { PlaylistView } from '../models/views/PlaylistView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -26,7 +26,7 @@ import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { OrderType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
-import { VersionMigrationHelpers } from '../utilities/misc';
+import { VersionMigrationContainer } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
@@ -473,8 +473,7 @@ export class CourseService {
         const newCourseVersionId = await this
             ._createNewCourseVersionAsync(courseId, oldCourseVersionId);
 
-        const courseVersionMigrations = VersionMigrationHelpers
-            .create([oldCourseVersionId], [newCourseVersionId]);
+        const courseVersionMigrations = new VersionMigrationContainer([oldCourseVersionId], [newCourseVersionId], ['Course']);
 
         return { courseVersionMigrations };
     }

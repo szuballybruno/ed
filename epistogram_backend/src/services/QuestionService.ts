@@ -6,7 +6,7 @@ import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
 import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { Id } from '../shared/types/versionId';
-import { VersionMigrationResult } from '../utilities/misc';
+import { VersionMigrationContainer } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -26,7 +26,7 @@ export class QuestionService {
      * Saves course item questions based on mutations  
      */
     async saveQuestionsAsync(
-        itemVersionIdMigrations: VersionMigrationResult<'VideoVersion' | 'ExamVersion'>[],
+        itemVersionIdMigrations: VersionMigrationContainer<'VideoVersion' | 'ExamVersion'>,
         questionMutations: QuestionMutationType[],
         isVideo: boolean) {
 
@@ -76,7 +76,8 @@ export class QuestionService {
                         data.questionText = questionText;
 
                     return data;
-                }
+                },
+                getDataDisplayNameArg: x => x.questionText
             });
 
         return result;

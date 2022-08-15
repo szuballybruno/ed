@@ -8,7 +8,7 @@ import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
-import { VersionMigrationResult } from '../utilities/misc';
+import { VersionMigrationContainer } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
@@ -110,7 +110,7 @@ export class QuestionAnswerService {
      */
     async saveAnswersAsync(
         mutations: AnswerMutationsType,
-        questionVersionIdMigrations: VersionMigrationResult<'QuestionVersion'>[]) {
+        questionVersionIdMigrations: VersionMigrationContainer<'QuestionVersion'>) {
 
         return await this._versionSaveService
             .saveAsync({
@@ -147,7 +147,8 @@ export class QuestionAnswerService {
                     return data;
                 },
                 muts: mutations,
-                parentVersionIdMigrations: questionVersionIdMigrations
+                parentVersionIdMigrations: questionVersionIdMigrations,
+                getDataDisplayNameArg: x => x.text
             });
     }
 }

@@ -1,26 +1,26 @@
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
+import { User } from '../models/entity/User';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
-import { Id } from '../shared/types/versionId';
+import { ModulePlayerDTO } from '../shared/dtos/ModulePlayerDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { CourseItemSimpleType } from '../shared/types/sharedTypes';
 import { VersionCode } from '../shared/types/VersionCode1';
-import { VersionMigrationResult } from '../utilities/misc';
+import { Id } from '../shared/types/versionId';
+import { VersionMigrationContainer } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
-import { ModulePlayerDTO } from '../shared/dtos/ModulePlayerDTO';
-import { AuthorizationService } from './AuthorizationService';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { User } from '../models/entity/User';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class ModuleService {
 
@@ -122,13 +122,14 @@ export class ModuleService {
         itemMutations,
         moduleMutations
     }: {
-        courseVersionMigrations: VersionMigrationResult<'CourseVersion'>[],
+        courseVersionMigrations: VersionMigrationContainer<'CourseVersion'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
         moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
     }) {
 
         // get old course version id
         const oldCoruseVersionId = courseVersionMigrations
+            .getMigrations()
             .single()
             .oldVersionId;
 
@@ -174,7 +175,8 @@ export class ModuleService {
                 },
                 parentVersionIdField: 'courseVersionId',
                 getParentOldVersionId: _ => oldCoruseVersionId,
-                parentVersionIdMigrations: courseVersionMigrations
+                parentVersionIdMigrations: courseVersionMigrations,
+                getDataDisplayNameArg: x => x.name
             });
 
         // save items
