@@ -148,7 +148,7 @@ const marray = [
             correctAnswerRate: view.correctAnswerRate,
             performancePercentage: view.performancePercentage,
             startDate: view.startDate,
-            totalCompletedItemCount: view.totalCompletedItemCount,
+            completedVideoCount: view.completedVideoCount,
             totalSpentSeconds: view.totalSpentSeconds,
             userActivityDistributionChartData: instantiate<UserActivityDistributionChartData>({
                 watchingVideosPercentage: userSpentTimeRatio.totalVideoWatchElapsedTime,
@@ -256,7 +256,7 @@ const marray = [
                             .map((viewAsPermission): PermissionListDTO => ({
                                 code: viewAsPermission.permissionCode,
                                 id: viewAsPermission.permissionId,
-                                scope: 'USER' // not used 
+                                scope: 'USER' // not used
                             }))
                     };
                 });
@@ -280,7 +280,7 @@ const marray = [
                 videoLengthSeconds: viewAsItem.videoLengthSeconds,
                 videoUrl: videoFileUrl,
 
-                // map questions 
+                // map questions
                 questions: views
                     .filter(x => !!x.questionVersionId)
                     .groupBy(x => x.questionVersionId)
@@ -296,7 +296,7 @@ const marray = [
                             examVersionId: viewAsQuestion.examVersionId,
                             videoVersionId: viewAsQuestion.videoVersionId,
 
-                            // map answers 
+                            // map answers
                             answers: questionGroup
                                 .items
                                 .filter(x => !!x.answerVersionId)
