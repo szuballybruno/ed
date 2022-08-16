@@ -55,7 +55,7 @@ export class PractiseQuestionService extends ServiceBase {
     };
 
     /**
-     * Returns question ids that should be practised 
+     * Returns question ids that should be practised
      */
     private _getPractiseQuestionsIdsAsync(dtos: PractiseQuestionInfoView[]): Id<'Question'>[] {
 
@@ -75,7 +75,7 @@ export class PractiseQuestionService extends ServiceBase {
                     incorrectQuestionDelayMinutes
                 } = this._globalConfig.practiseQuestions;
 
-                // if more than 2 practise answers 
+                // if more than 2 practise answers
                 // for the question, ignore it
                 if (practiseAnswerCount > 2)
                     return false;

@@ -11,7 +11,7 @@ export class UserCourseStatsOverviewDTO {
     courseProgressPercentage: number;
     correctAnswerRate: number;
     totalSpentSeconds: number;
-    totalCompletedItemCount: number;
+    completedVideoCount: number;
     answeredVideoQuestionCount: number;
     answeredPractiseQuestionCount: number;
 

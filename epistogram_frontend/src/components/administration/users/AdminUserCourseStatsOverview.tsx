@@ -135,7 +135,7 @@ export const AdminUserCourseStatsOverview = ({
             {/* total completed video count */}
             <StatisticsCard
                 title={translatableTexts.administration.userLearningOverviewSubpage.userCourseStatsOverviewDialog.statisticsCards.totalWatchedVideosCount}
-                value={userCourseStatsOverviewData ? userCourseStatsOverviewData.totalCompletedItemCount + '' : '0'}
+                value={userCourseStatsOverviewData ? userCourseStatsOverviewData.completedVideoCount + '' : '0'}
                 suffix={translatableTexts.homePage.statsSummary.completedVideosLastMonth.suffix}
                 iconPath={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
                 isOpenByDefault={false} />

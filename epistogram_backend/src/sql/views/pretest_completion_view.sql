@@ -1,7 +1,7 @@
 SELECT 
     u.id user_id,
     co.id course_id,
-    cv.id course_version_id,
+    MAX(cv.id) course_version_id,
     cicv.course_item_completion_id IS NOT NULL is_completed
 FROM public.course co
 
@@ -21,8 +21,12 @@ ON ex.id = ev.exam_id
 AND ex.is_pretest = true
 
 LEFT JOIN public.course_item_completion_view cicv 
-ON cicv.exam_version_id = ev.id
-AND cicv.user_id = u.id
+ON cicv.user_id = u.id
+AND cicv.course_id = co.id
+
+WHERE cicv.is_pretest = true
+
+GROUP BY u.id, co.id, cicv.course_item_completion_id
 
 ORDER BY 
 	u.id,
