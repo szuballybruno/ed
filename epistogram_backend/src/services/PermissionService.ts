@@ -144,7 +144,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
             ._getPermissionAssignment(permissionId, userId, contextCompanyId, contextCourseId);
 
         if (exists)
-            throw new Error(`Permission ${permissionId} is already assigned to user ${userId}!`);
+            throw new Error(`Permission ${permission.code} (${permission.id}) is already assigned to user ${userId}!`);
 
         await this
             ._ormService

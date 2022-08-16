@@ -1,4 +1,12 @@
 WITH 
+latest_exam_version_cte AS (
+    SELECT
+        ev.exam_id,
+        MAX(ev.id) version_id
+    FROM public.exam_version ev
+    GROUP BY
+        ev.exam_id
+),
 successful_answer_sessions AS (
 	SELECT 
 		* 
@@ -75,8 +83,11 @@ SELECT
 	lasd.total_question_count IS NOT NULL is_completed_previously
 FROM public.exam ex
 
+LEFT JOIN latest_exam_version_cte levc
+ON levc.exam_id = ex.id
+
 LEFT JOIN public.exam_version ev
-ON ex.id = ev.exam_id
+ON ev.id = levc.version_id
 
 LEFT JOIN public.exam_data ed
 ON ed.id = ev.exam_data_id
