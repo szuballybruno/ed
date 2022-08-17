@@ -135,38 +135,41 @@ export class TurboExpressBuilder<
              * Get controller action and execute it
              */
             const controllerAction: ApiActionType<TActionParams> = controllerInstance[functionName];
-            const boundAction = controllerAction.bind(controllerInstance);
-            const controllerActionResultOrData = await boundAction(actionParams);
+            const boundControllerAction: (params: TActionParams) => ControllerActionReturnType = controllerAction.bind(controllerInstance);
+            const controllerActionResultOrData: ControllerActionReturnType = await boundControllerAction(actionParams);
 
             /**
-             * If controller action returned a ControllerActionReturnType 
-             * meaning it has an authentication function,
-             * execute the auth function, and only if it passes, 
-             * continue, and execute the action funciton, 
-             * which returns the data to the client.
+             * Complicated solution 
              */
-            const controllerActionResult = controllerActionResultOrData as ControllerActionReturnType;
+            if ((controllerActionResultOrData as any).auth) {
 
-            /**
-             * Execute auth function. 
-             * It returns an auth res, 
-             * throw exceptions accordingly.
-             */
-            if (!controllerActionResult.auth)
-                throw new Error('Controller action declaration has no auth block!');
+                const controllerActionResult = controllerActionResultOrData as any;
 
-            const authRes = await controllerActionResult.auth();
-            if (authRes.state === 'FAILED') {
+                if (!controllerActionResult.auth)
+                    throw new Error('Controller action declaration has no auth block!');
 
-                this._loggerService
-                    .logScoped('GENERIC', 'ERROR', 'Authorization function returned "FAILED" state.');
+                const authRes = await controllerActionResult.auth();
+                if (authRes.state === 'FAILED') {
 
-                throw new ErrorWithCode('Authorization failed!', 'no permission');
+                    this._loggerService
+                        .logScoped('GENERIC', 'ERROR', 'Authorization function returned "FAILED" state.');
+
+                    throw new ErrorWithCode('Authorization failed!', 'no permission');
+                }
+
+                const actionRes = await controllerActionResult
+                    .action();
+
+                return actionRes;
             }
 
-            const actionRes = await controllerActionResult.action();
+            /**
+             * Simple solution
+             */
+            else {
 
-            return actionRes;
+                return controllerActionResultOrData;
+            }
         };
 
         /**

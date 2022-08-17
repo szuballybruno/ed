@@ -55,7 +55,7 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync(principalId: PrincipalId, courseVersionId: Id<'CourseVersion'>): ControllerActionReturnType {
+    getModuleEditDTOsAsync(principalId: PrincipalId, courseVersionId: Id<'CourseVersion'>) {
 
         return {
             action: async () => {

@@ -345,7 +345,7 @@ export class UserStatsService {
                     .action();
 
                 return this._mapperService
-                    .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData]);
+                    .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
 
             },
             auth: async () => {
