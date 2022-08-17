@@ -22,10 +22,10 @@ export class AuthorizationResult {
     }
 }
 
-export type ControllerActionReturnType = { auth: () => Promise<AuthorizationResult>, action: () => Promise<any> };
+export type ControllerActionReturnType = { auth: () => Promise<AuthorizationResult>, action: () => Promise<any> } | Promise<any>;
 
 export type XController<T> = {
-    [K in keyof T]: (params: ActionParams) => ControllerActionReturnType; //| Promise<any>;
+    [K in keyof T]: (params: ActionParams) => ControllerActionReturnType;
 }
 
 export interface ICookieOptions {
@@ -92,7 +92,7 @@ export type MiddlewareParams<TInParams, TRequest, TResponse> = {
     inParams: TInParams;
 };
 
-export type ApiActionType<TActionParams> = (params: TActionParams) => Promise<any>;
+export type ApiActionType<TActionParams> = (params: TActionParams) => ControllerActionReturnType;
 
 export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;

@@ -9,7 +9,6 @@ import { EpistoLineChartDataType } from '../shared/types/epistoChartTypes';
 import { Id } from '../shared/types/versionId';
 import { dateDiffInDays, forN } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
@@ -105,7 +104,7 @@ export class UserProgressService extends ServiceBase {
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         userId?: Id<'User'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async (): Promise<UserCourseProgressChartDTO | 'NO DATA'> => {

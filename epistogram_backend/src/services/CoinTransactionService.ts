@@ -54,7 +54,7 @@ export class CoinTransactionService {
     getCoinBalance(
         principalId: PrincipalId,
         userId: Id<'User'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -70,8 +70,6 @@ export class CoinTransactionService {
                     .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
             }
         };
-
-
     }
 
     giftCoinsToUserAsync(
