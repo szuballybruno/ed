@@ -133,9 +133,6 @@ items_with_user AS
 )
 SELECT * 
 FROM items_with_user 
-
--- select * from course_item_completion_view
-Where user_id = 1 AND course_id = 8
     
 ORDER BY
 	user_id,
