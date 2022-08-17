@@ -194,57 +194,57 @@ export class UserService {
     /**
      * Get user dto-s for the admin page user list.
      */
-    getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null): ControllerActionReturnType {
+    async getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null) {
 
-        return {
-            action: async () => {
-                const searchTextLower = searchText?.toLowerCase();
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
 
-                const users = await this._ormService
-                    .query(AdminUserListView)
-                    .getMany();
+        const user = await this._ormService
+            .query(User, { userId: principalId.getId() })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                const filteredUsers = searchTextLower
-                    ? users
-                        .filter(x => toFullName(x.firstName, x.lastName, 'hu')
-                            .toLowerCase()
-                            .includes(searchTextLower))
-                    : users;
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'VIEW_COMPANY_USERS',
+                { companyId: user.companyId }
+            );
 
-                return this._mapperService
-                    .mapTo(AdminPageUserDTO, [filteredUsers]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
+       const searchTextLower = searchText?.toLowerCase();
 
+        const users = await this._ormService
+            .query(AdminUserListView)
+            .getMany();
 
+        const filteredUsers = searchTextLower
+            ? users
+                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
+                    .toLowerCase()
+                    .includes(searchTextLower))
+            : users;
+
+        return this._mapperService
+            .mapTo(AdminPageUserDTO, [filteredUsers]);
     }
 
     /**
      * Save user data which the user itself can edit.
      */
-    saveUserDataAsync(principalId: PrincipalId, dto: UserDTO): ControllerActionReturnType {
+    async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
 
-        return {
-            action: async () => {
-                const userId = principalId.getId();
+        const userId = principalId.getId();
 
-                return this._ormService
-                    .save(User, {
-                        id: userId,
-                        firstName: dto.firstName,
-                        lastName: dto.lastName,
-                        phoneNumber: dto.phoneNumber
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this._ormService
+            .save(User, {
+                id: userId,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                phoneNumber: dto.phoneNumber
+            });
     }
 
     /**
@@ -367,28 +367,32 @@ export class UserService {
     };
 
     /**
-     * Delete a user entity by it's id.
+     * Delete a user entity by its id.
      */
-    deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
+    async deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        return {
-            action: async () => {
-                const connectedCourses = await this._ormService
-                    .query(CourseData, { deletedUserId })
-                    .where('teacherId', '=', 'deletedUserId')
-                    .getMany();
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
 
-                if (connectedCourses.length > 0)
-                    throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'DELETE_USER'
+            );
 
-                return await this._ormService
-                    .softDelete(User, [deletedUserId]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'DELETE_USER');
-            }
-        };
+        const connectedCourses = await this._ormService
+            .query(CourseData, { deletedUserId })
+            .where('teacherId', '=', 'deletedUserId')
+            .getMany();
+
+        if (connectedCourses.length > 0)
+            throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+
+        return this._ormService
+            .softDelete(User, [deletedUserId]);
     }
 
     /**
