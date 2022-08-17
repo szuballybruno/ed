@@ -87,7 +87,7 @@ export class UserController implements XController<UserController> {
     }
 
     @XControllerAction(apiRoutes.user.getBriefUserData)
-    getBriefUserDataAction(params: ActionParams) {
+    async getBriefUserDataAction(params: ActionParams) {
 
         const userId = Id
             .create<'User'>(params

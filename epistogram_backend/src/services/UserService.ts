@@ -50,7 +50,7 @@ export class UserService {
     }
 
     /**
-     * Get user edit data 
+     * Get user edit data
           */
     getEditUserDataAsync(
         principalId: PrincipalId,
@@ -107,7 +107,7 @@ export class UserService {
 
                 const userId = dto.id;
 
-                // save user 
+                // save user
                 await this._ormService
                     .save(User, {
                         id: userId,
@@ -121,7 +121,7 @@ export class UserService {
                 // save teacher info
                 await this._saveTeacherInfoAsync(userId, dto.isTeacher);
 
-                // save auth items 
+                // save auth items
                 await this._roleService
                     .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions)
                     .action();
@@ -163,7 +163,7 @@ export class UserService {
     }
 
     /**
-     * Save user data which the user itself can edit.  
+     * Save user data which the user itself can edit.
      */
     saveUserSimpleAsync(
         principalId: PrincipalId,
@@ -224,7 +224,7 @@ export class UserService {
     }
 
     /**
-     * Save user data which the user itself can edit.  
+     * Save user data which the user itself can edit.
      */
     saveUserDataAsync(principalId: PrincipalId, dto: UserDTO): ControllerActionReturnType {
 
@@ -248,38 +248,35 @@ export class UserService {
     }
 
     /**
-     * Get a very minimalistic user dto for displaying 
+     * Get a very minimalistic user dto for displaying
      * very minimal info about the user.
      */
-    getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
+
+        const user = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'VIEW_COMPANY_USERS',
+                { companyId: user.companyId }
+            );
 
         return {
-
-            action: async () => {
-                const user = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                await this._authorizationService
-                    .checkPermissionAsync(
-                        principalId,
-                        'VIEW_COMPANY_USERS',
-                        { companyId: user.companyId }
-                    );
-
-                return {
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    fullName: getFullName(user)
-                } as BriefUserDataDTO;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            fullName: getFullName(user)
+        } as BriefUserDataDTO;
     }
 
     /**
@@ -293,7 +290,7 @@ export class UserService {
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
 
         // set all episto users as GOD
-        // TODO 
+        // TODO
         console.warn('-------------------------------------------------------');
         console.warn('---------- SETTING NEW USER AS GOD!!!! ----------------');
         console.warn('-------------------------------------------------------');
@@ -301,7 +298,7 @@ export class UserService {
         if (user.companyId === 2 as any)
             user.isGod = true;
 
-        // hash user password 
+        // hash user password
         const hashedPassword = await this
             ._hashService
             .hashPasswordAsync(unhashedPassword);
@@ -320,7 +317,7 @@ export class UserService {
                 examVersionId: Id.create<'ExamVersion'>(1),
                 isPractise: false,
                 startDate: new Date(),
-                videoVersionId: null // 1 always points to signup exam 
+                videoVersionId: null // 1 always points to signup exam
             });
 
         // insert practise answer session
@@ -338,7 +335,7 @@ export class UserService {
     };
 
     /**
-     * Accept the invitation, 
+     * Accept the invitation,
      * whilst giving the user a password, for further logins.
      */
     setUserInivitationDataAsync = async (userId: Id<'User'>, rawPassword: string,) => {
@@ -421,8 +418,8 @@ export class UserService {
     };
 
     /**
-     * Get a user by it's email address. 
-     * Which is also a unique identifier, like the id. 
+     * Get a user by it's email address.
+     * Which is also a unique identifier, like the id.
      */
     getUserByEmailAsync = async (email: string) => {
 
@@ -471,8 +468,8 @@ export class UserService {
     };
 
     /**
-     * Remove user's refresh token, 
-     * so it can't get a new activation token, 
+     * Remove user's refresh token,
+     * so it can't get a new activation token,
      * even if it holds a valid refresh token on the client side.
      */
     removeRefreshToken = (userId: Id<'User'>) => {

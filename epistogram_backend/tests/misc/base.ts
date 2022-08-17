@@ -33,7 +33,7 @@ const loginUserAsync = async (api: ApiType) => {
     const loginResult = await api
         .callEndpoint(AuthenticationController, 'logInUserAction', {
             body: {
-                email: 'endre.marosi@gmail.com',
+                email: 'bill.murry@epistogram.com',
                 password: 'admin'
             }
         });
@@ -64,7 +64,7 @@ const _setupTest = (opts: {
             .getService(GlobalConfiguration)
             .overrideLogScopes([]);
     });
-    
+
     const api = new TestListener(throwError);
     const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync, api);
     const testParamsContainer: { testParams: TestParams } = {} as any;
@@ -95,6 +95,7 @@ const _setupTest = (opts: {
              */
             if (opts.purge) {
 
+                JestLogger.logMain('Purging db...');
                 await recreateDBAsync(getServiceProviderAsync);
             }
 
@@ -104,8 +105,9 @@ const _setupTest = (opts: {
             const mainServiceProvider = await getServiceProviderAsync();
 
             /**
-             * LOGIN USER 
+             * LOGIN USER
              */
+            JestLogger.logMain('Logging in user...');
             const accessToken = opts.loginEnabled
                 ? (await loginUserAsync(api)).accessToken
                 : '';
@@ -113,6 +115,7 @@ const _setupTest = (opts: {
             /**
              * SET INIT DATA
              */
+            JestLogger.logMain('Setting init data...');
             testParamsContainer.testParams = {
                 serviceProvider: mainServiceProvider,
                 api,
@@ -129,7 +132,7 @@ const _setupTest = (opts: {
     });
 
     /**
-     * Run tests 
+     * Run tests
      */
 
     describe(title, () => {
@@ -147,7 +150,7 @@ const _setupTest = (opts: {
 
             JestLogger.logMain('Running destruct tests...');
 
-            getTestParams()
+            await getTestParams()
                 .serviceProvider
                 .getService(SQLConnectionService)
                 .releaseConnectionClient();
@@ -165,6 +168,7 @@ class IntegrationTestSetupBuilder {
     private _login: boolean = true;
     private _purge: boolean = true;
     private _throwError: boolean = true;
+    private _logResError: boolean = true;
     private _tests: TestFunctionsType;
 
     constructor(private _title: string) {
@@ -184,6 +188,12 @@ class IntegrationTestSetupBuilder {
     noThrowError() {
 
         this._throwError = false;
+        return this;
+    }
+
+    noLogResError() {
+
+        this._logResError = false;
         return this;
     }
 

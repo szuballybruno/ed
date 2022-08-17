@@ -1,9 +1,14 @@
-import { ClassType } from '../../src/services/misc/advancedTypes/ClassType';
-import { respondError } from '../../src/startup/initTurboExpressListener';
-import { throwNotImplemented } from '../../src/utilities/helpers';
-import { ITurboExpressLayer } from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
-import { getControllerActionMetadatas } from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
-import { ITurboRequest, ITurboResponse, IXTurboExpressListener, RegisterEndpointOptsType } from '../../src/utilities/XTurboExpress/XTurboExpressTypes';
+import {ClassType} from '../../src/services/misc/advancedTypes/ClassType';
+import {respondError} from '../../src/startup/initTurboExpressListener';
+import {throwNotImplemented} from '../../src/utilities/helpers';
+import {ITurboExpressLayer} from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
+import {getControllerActionMetadatas} from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
+import {
+    ITurboRequest,
+    ITurboResponse,
+    IXTurboExpressListener,
+    RegisterEndpointOptsType
+} from '../../src/utilities/XTurboExpress/XTurboExpressTypes';
 
 export type TestCookie = {
     key: string;
@@ -53,7 +58,7 @@ export class TestListener implements IXTurboExpressListener {
 
     private _endpoints: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>[] = [];
 
-    constructor(private _throwError: boolean = false) {
+    constructor(private _throwError: boolean = false, private  _logResError: boolean = false) {
 
     }
 
@@ -80,17 +85,17 @@ export class TestListener implements IXTurboExpressListener {
             ._endpoints
             .single(x => x.path === actionMeta.metadata.path);
 
-        // test response 
+        // test response
         const res = new TestTurboResponse();
 
-        // test request 
+        // test request
         const req: ITurboRequest = {
             body: opt.body ?? {},
             query: opt.query ?? {},
             files: { file: null },
             getCookie: (key) => (opt.cookies ?? []).firstOrNull(x => x.key === key)?.value ?? null,
-            getSingleFile: () => throwNotImplemented(),
-            hasFiles: () => throwNotImplemented(),
+            getSingleFile: () => opt.query.params.files,
+            hasFiles: () => false,
             path: endpoint.path,
         };
 
@@ -106,8 +111,12 @@ export class TestListener implements IXTurboExpressListener {
             if (this._throwError)
                 throw e;
 
-            console.error('----------------------- ACTION ERROR --------------------------');
-            console.error(e);
+            if (this._logResError) {
+
+                console.error('----------------------- ACTION ERROR --------------------------');
+                console.error(e);
+            }
+
             respondError(res, e as any);
         }
 
