@@ -96,7 +96,7 @@ CROSS JOIN public.user u
 
 LEFT JOIN latest_answer_session_data lasd
 ON lasd.user_id = u.id
-AND lasd.exam_version_id = lev.exam_version_id
+AND lasd.exam_version_id = levc.version_id
 
 ORDER BY
 	u.id,
