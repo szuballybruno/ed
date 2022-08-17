@@ -1,3 +1,1 @@
-SELECT 
-    '0.03' schema_version,
-    'precommit test' msg
+SELECT '11:25:15 2022-08-17 CEDT' last_modification_date

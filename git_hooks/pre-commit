@@ -1,4 +1,4 @@
 #!/bin/sh
-echo off
-echo hello
-exit 1
+now=$(date '+%H:%M:%S %Y-%m-%d %Z')
+echo "SELECT '$now' last_modification_date" > epistogram_backend/src/sql/views/schema_version_view.sql
+exit 0
