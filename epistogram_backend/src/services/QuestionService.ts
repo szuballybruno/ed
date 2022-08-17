@@ -86,12 +86,12 @@ export class QuestionService {
     /**
      * Returns question data by id 
      */
-    async getQuestionDataById(questionId: Id<'Question'>) {
+    async getQuestionDataByVersionId(questionVersionId: Id<'QuestionVersion'>) {
 
         const question = await this
             ._ormService
-            .query(QuestionDataView, { questionId })
-            .where('questionId', '=', 'questionId')
+            .query(QuestionDataView, { questionVersionId })
+            .where('questionVersionId', '=', 'questionVersionId')
             .getMany();
 
         return this

@@ -12,7 +12,7 @@ export class PractiseQuestionInfoView {
     userId: Id<'User'>;
 
     @XViewColumn()
-    questionId: Id<'Question'>;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @XViewColumn()
     practiseAnswerCount: number;

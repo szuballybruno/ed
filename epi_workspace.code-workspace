@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "misc"
+		},
+		{
+			"path": ".git"
 		}
 	],
 	"settings": {

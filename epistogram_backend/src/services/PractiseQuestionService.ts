@@ -40,24 +40,24 @@ export class PractiseQuestionService extends ServiceBase {
             .where('userId', '=', 'principalId')
             .getMany();
 
-        const questionIds = this
-            ._getPractiseQuestionsIdsAsync(infoViews);
+        const questionVersionIds = this
+            ._getPractiseQuestionsVersionIdsAsync(infoViews);
 
-        const questionId = questionIds
+        const questionVersionId = questionVersionIds
             .firstOrNull();
 
-        if (!questionId)
+        if (!questionVersionId)
             return null;
 
         return await this
             ._questionService
-            .getQuestionDataById(questionId);
+            .getQuestionDataByVersionId(questionVersionId);
     };
 
     /**
      * Returns question ids that should be practised
      */
-    private _getPractiseQuestionsIdsAsync(dtos: PractiseQuestionInfoView[]): Id<'Question'>[] {
+    private _getPractiseQuestionsVersionIdsAsync(dtos: PractiseQuestionInfoView[]): Id<'QuestionVersion'>[] {
 
         return dtos
             .filter(questionInfo => {
@@ -94,7 +94,7 @@ export class PractiseQuestionService extends ServiceBase {
 
                 return false;
             })
-            .map(x => x.questionId);
+            .map(x => x.questionVersionId);
     }
 
     answerPractiseQuestionAsync(principalId: PrincipalId, qu: AnswerQuestionDTO): ControllerActionReturnType {
