@@ -20,7 +20,7 @@
     "test": "jest -i ",
     "integtest": "jest -i StartCourse.test.ts",
     "testesm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "preinstall": "git config core.hooksPath hooks"
+    "preinstall": "git config core.hooksPath git_hooks"
   },
   "dependencies": {
     "@google-cloud/storage": "5.19.1",
