@@ -13,27 +13,26 @@ latest_answer_session AS
         ase.user_id, 
         ase.exam_version_id
 ),
-uni AS 
-(
-    SELECT 
-        vv.module_version_id, 
-        vv.id video_version_id,
-        null exam_version_id
-    FROM public.video_version vv
-    UNION
-    SELECT 
-        ev.module_version_id, 
-        null video_version_id,
-        ev.id exam_version_id
-    FROM public.exam_version ev
-),
 course_item_light_view AS 
 (
     SELECT 
         uni.*, 
         mv.course_version_id,
         mv.module_id
-    FROM uni
+    FROM 
+    (
+        SELECT 
+            vv.module_version_id, 
+            vv.id video_version_id,
+            null exam_version_id
+        FROM public.video_version vv
+        UNION
+        SELECT 
+            ev.module_version_id, 
+            null video_version_id,
+            ev.id exam_version_id
+        FROM public.exam_version ev
+    ) uni
     
     LEFT JOIN public.module_version mv
     ON mv.id = uni.module_version_id 
@@ -42,6 +41,8 @@ course_item_light_view AS
     INNER JOIN public.module_data md
     ON md.id = mv.module_data_id
     AND md.order_index != 0
+    
+    order by uni.video_version_id
 ),
 latest_course_items AS 
 (
@@ -66,7 +67,6 @@ latest_course_items AS
     ON civ.exam_version_id = cilv.exam_version_id 
     OR civ.video_version_id = cilv.video_version_id
 ),
-
 items_with_user AS
 (
 	SELECT 
@@ -96,9 +96,13 @@ items_with_user AS
 				THEN 'current'
 			WHEN cicv.course_item_completion_id IS NOT NULL
 				THEN 'completed'
-			WHEN ucb.course_mode = 'advanced' OR (civ.item_order_index = 0 AND civ.module_order_index = 1) 
+			WHEN ucb.course_mode = 'advanced' 
 				THEN 'available'
-			WHEN LAG(cicv.course_item_completion_id IS NOT NULL, 1) OVER (PARTITION BY civ.course_version_id) IS NOT DISTINCT FROM true 
+            WHEN civ.item_order_index = 0 AND civ.module_order_index = 1
+                THEN 'available'
+			WHEN LAG(cicv.course_item_completion_id, 1) OVER (
+                PARTITION BY civ.course_version_id 
+                ORDER BY module_order_index, item_order_index) IS NOT NULL 
 				THEN 'available'
 				ELSE 'locked'
 		END item_state
@@ -129,7 +133,10 @@ items_with_user AS
 )
 SELECT * 
 FROM items_with_user 
-	
+
+-- select * from course_item_completion_view
+Where user_id = 1 AND course_id = 8
+    
 ORDER BY
 	user_id,
 	course_id,

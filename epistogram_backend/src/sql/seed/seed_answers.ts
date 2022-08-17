@@ -4278,6 +4278,8 @@ export const getAnswersSeedData = () => getSeedList<Answer>()({
     },
 
     // --------------------- OBS PRETEST ANSWERS 
+
+    // pretest / question 1
     answer_2193: {
     },
     answer_2194: {
@@ -4285,6 +4287,16 @@ export const getAnswersSeedData = () => getSeedList<Answer>()({
     answer_2195: {
     },
     answer_2196: {
+    },
+
+    // obs test exam / question 1
+    answer_version_1_obs_test_exam_question_1: {
+    },
+    answer_version_2_obs_test_exam_question_1: {
+    },
+    answer_version_3_obs_test_exam_question_1: {
+    },
+    answer_version_4_obs_test_exam_question_1: {
     },
 
     // --------------------- PP PRETEST ANSWERS 

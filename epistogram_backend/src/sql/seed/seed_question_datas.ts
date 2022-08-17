@@ -4441,6 +4441,14 @@ export const getQuestionDatasSeedData = () => getSeedList<QuestionData>()({
         showUpTimeSeconds: null,
         typeId: 1,
     },
+    question_data_obs_test_exam_1: {
+        deletionDate: null,
+        questionText: 'Obs test exam question?',
+        imageUrl: null,
+        orderIndex: 1,
+        showUpTimeSeconds: null,
+        typeId: 1,
+    },
 
     // power point pretest
     question_data_pp_pretest_1: {

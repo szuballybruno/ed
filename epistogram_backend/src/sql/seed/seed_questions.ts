@@ -1153,8 +1153,10 @@ export const getQuestionSeedData = () => getSeedList<Question>()({
     question_word_pretest_3: {
     },
 
-    // obs pretest 
+    // obs 
     question_obs_pretest_1: {
+    },
+    question_obs_test_exam_1: {
     },
 
     // pp pretest

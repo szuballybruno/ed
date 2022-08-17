@@ -12622,28 +12622,48 @@ export const getAnswerVersionsSeedData = (
     
     // --------------------- OBS PRETEST ANSWERS 
 
+    // pretest / question 1
     answer_version_2193: {
         answerId: answers.answer_2193.id,
         answerDataId: answerDatas.answer_data_2193.id,
         questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
-
     answer_version_2194: {
         answerId: answers.answer_2194.id,
         answerDataId: answerDatas.answer_data_2194.id,
         questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
-
     answer_version_2195: {
         answerId: answers.answer_2195.id,
         answerDataId: answerDatas.answer_data_2195.id,
         questionVersionId: questionVersions.question_version_obs_pretest_1.id,
     },
-
     answer_version_2196: {
         answerId: answers.answer_2196.id,
         answerDataId: answerDatas.answer_data_2196.id,
         questionVersionId: questionVersions.question_version_obs_pretest_1.id,
+    },
+
+    // test exam / question 1
+    answer_version_1_obs_test_exam_question_1: {
+        answerId: answers.answer_version_1_obs_test_exam_question_1.id,
+        answerDataId: answerDatas.answer_data_1_obs_test_exam_question_1.id,
+        questionVersionId: questionVersions.question_obs_test_exam_1.id,
+    },
+    answer_version_2_obs_test_exam_question_1: {
+        answerId: answers.answer_version_2_obs_test_exam_question_1.id,
+        answerDataId: answerDatas.answer_data_2_obs_test_exam_question_1.id,
+        questionVersionId: questionVersions.question_obs_test_exam_1.id,
+    },
+    answer_version_3_obs_test_exam_question_1: {
+        answerId: answers.answer_version_3_obs_test_exam_question_1.id,
+        answerDataId: answerDatas.answer_data_3_obs_test_exam_question_1.id,
+        questionVersionId: questionVersions.question_obs_test_exam_1.id,
+    },
+    answer_version_4_obs_test_exam_question_1: {
+        answerId: answers.answer_version_4_obs_test_exam_question_1.id,
+        answerDataId: answerDatas.answer_data_4_obs_test_exam_question_1.id,
+        questionVersionId: questionVersions.question_obs_test_exam_1.id,
     },
 
     // --------------------- PP PRETEST ANSWERS 

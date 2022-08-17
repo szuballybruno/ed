@@ -8486,6 +8486,7 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
 
     // --------------------- OBS PRETEST ANSWERS 
 
+    // obs pretest / question 1
     answer_data_2193: {
         text: 'a',
         isCorrect: false,
@@ -8500,6 +8501,24 @@ export const getAnswerDatasSeedData = (questions: QuestionDatasSeedType) => getS
     },
     answer_data_2196: {
         text: 'd',
+        isCorrect: false,
+    },
+
+    // obs test exam / question 1
+    answer_data_1_obs_test_exam_question_1: {
+        text: 'A (incorrect)',
+        isCorrect: false,
+    },
+    answer_data_2_obs_test_exam_question_1: {
+        text: 'B (incorrect)',
+        isCorrect: false,
+    },
+    answer_data_3_obs_test_exam_question_1: {
+        text: 'C (correct)',
+        isCorrect: true,
+    },
+    answer_data_4_obs_test_exam_question_1: {
+        text: 'D (incorrect)',
         isCorrect: false,
     },
 

@@ -4404,6 +4404,13 @@ export const getQuestionVersionsSeedData = (
         videoVersionId: null,
         personalityTraitCategoryId: null,
     },
+    question_obs_test_exam_1: {
+        questionId: questions.question_obs_test_exam_1.id,
+        questionDataId: questionDatas.question_data_obs_test_exam_1.id,
+        examVersionId: examVersions.exam_version_obs_test_exam.id,
+        videoVersionId: null,
+        personalityTraitCategoryId: null,
+    },
 
     // pp pretest 
     question_version_pp_pretest_1: {
