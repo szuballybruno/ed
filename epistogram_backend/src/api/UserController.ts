@@ -18,7 +18,7 @@ export class UserController implements XController<UserController> {
         this._userService = serviceProvider.getService(UserService);
     }
 
-    saveUserDataAction(params: ActionParams) {
+    async saveUserDataAction(params: ActionParams) {
 
         const dto = params
             .getBody<UserDTO>(['firstName', 'lastName', 'phoneNumber'])
@@ -28,8 +28,10 @@ export class UserController implements XController<UserController> {
             .saveUserDataAsync(params.principalId, dto);
     }
 
-    @XControllerAction(apiRoutes.user.deleteUser, { isPost: true, checkPermission: 'ACCESS_ADMIN' })
-    deleteUserAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
+    async deleteUserAction(params: ActionParams) {
+
+        console.log(JSON.stringify(params));
 
         const deleteUserId = Id
             .create<'User'>(params
@@ -87,7 +89,7 @@ export class UserController implements XController<UserController> {
     }
 
     @XControllerAction(apiRoutes.user.getBriefUserData)
-    getBriefUserDataAction(params: ActionParams) {
+    async getBriefUserDataAction(params: ActionParams) {
 
         const userId = Id
             .create<'User'>(params

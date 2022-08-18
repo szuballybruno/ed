@@ -50,7 +50,7 @@ export class UserService {
     }
 
     /**
-     * Get user edit data 
+     * Get user edit data
           */
     getEditUserDataAsync(
         principalId: PrincipalId,
@@ -107,7 +107,7 @@ export class UserService {
 
                 const userId = dto.id;
 
-                // save user 
+                // save user
                 await this._ormService
                     .save(User, {
                         id: userId,
@@ -121,7 +121,7 @@ export class UserService {
                 // save teacher info
                 await this._saveTeacherInfoAsync(userId, dto.isTeacher);
 
-                // save auth items 
+                // save auth items
                 await this._roleService
                     .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions)
                     .action();
@@ -163,7 +163,7 @@ export class UserService {
     }
 
     /**
-     * Save user data which the user itself can edit.  
+     * Save user data which the user itself can edit.
      */
     saveUserSimpleAsync(
         principalId: PrincipalId,
@@ -194,92 +194,89 @@ export class UserService {
     /**
      * Get user dto-s for the admin page user list.
      */
-    getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null): ControllerActionReturnType {
+    async getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null) {
 
-        return {
-            action: async () => {
-                const searchTextLower = searchText?.toLowerCase();
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
 
-                const users = await this._ormService
-                    .query(AdminUserListView)
-                    .getMany();
+        const user = await this._ormService
+            .query(User, { userId: principalId.getId() })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                const filteredUsers = searchTextLower
-                    ? users
-                        .filter(x => toFullName(x.firstName, x.lastName, 'hu')
-                            .toLowerCase()
-                            .includes(searchTextLower))
-                    : users;
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'VIEW_COMPANY_USERS',
+                { companyId: user.companyId }
+            );
 
-                return this._mapperService
-                    .mapTo(AdminPageUserDTO, [filteredUsers]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
+       const searchTextLower = searchText?.toLowerCase();
 
+        const users = await this._ormService
+            .query(AdminUserListView)
+            .getMany();
 
+        const filteredUsers = searchTextLower
+            ? users
+                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
+                    .toLowerCase()
+                    .includes(searchTextLower))
+            : users;
+
+        return this._mapperService
+            .mapTo(AdminPageUserDTO, [filteredUsers]);
     }
 
     /**
-     * Save user data which the user itself can edit.  
+     * Save user data which the user itself can edit.
      */
-    saveUserDataAsync(principalId: PrincipalId, dto: UserDTO): ControllerActionReturnType {
+    async saveUserDataAsync(principalId: PrincipalId, dto: UserDTO) {
 
-        return {
-            action: async () => {
-                const userId = principalId.getId();
+        const userId = principalId.getId();
 
-                return this._ormService
-                    .save(User, {
-                        id: userId,
-                        firstName: dto.firstName,
-                        lastName: dto.lastName,
-                        phoneNumber: dto.phoneNumber
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this._ormService
+            .save(User, {
+                id: userId,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                phoneNumber: dto.phoneNumber
+            });
     }
 
     /**
-     * Get a very minimalistic user dto for displaying 
+     * Get a very minimalistic user dto for displaying
      * very minimal info about the user.
      */
-    getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
+
+        const user = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'VIEW_COMPANY_USERS',
+                { companyId: user.companyId }
+            );
 
         return {
-
-            action: async () => {
-                const user = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                await this._authorizationService
-                    .checkPermissionAsync(
-                        principalId,
-                        'VIEW_COMPANY_USERS',
-                        { companyId: user.companyId }
-                    );
-
-                return {
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    fullName: getFullName(user)
-                } as BriefUserDataDTO;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            fullName: getFullName(user)
+        } as BriefUserDataDTO;
     }
 
     /**
@@ -293,7 +290,7 @@ export class UserService {
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
 
         // set all episto users as GOD
-        // TODO 
+        // TODO
         console.warn('-------------------------------------------------------');
         console.warn('---------- SETTING NEW USER AS GOD!!!! ----------------');
         console.warn('-------------------------------------------------------');
@@ -301,7 +298,7 @@ export class UserService {
         if (user.companyId === 2 as any)
             user.isGod = true;
 
-        // hash user password 
+        // hash user password
         const hashedPassword = await this
             ._hashService
             .hashPasswordAsync(unhashedPassword);
@@ -320,7 +317,7 @@ export class UserService {
                 examVersionId: Id.create<'ExamVersion'>(1),
                 isPractise: false,
                 startDate: new Date(),
-                videoVersionId: null // 1 always points to signup exam 
+                videoVersionId: null // 1 always points to signup exam
             });
 
         // insert practise answer session
@@ -338,7 +335,7 @@ export class UserService {
     };
 
     /**
-     * Accept the invitation, 
+     * Accept the invitation,
      * whilst giving the user a password, for further logins.
      */
     setUserInivitationDataAsync = async (userId: Id<'User'>, rawPassword: string,) => {
@@ -370,28 +367,32 @@ export class UserService {
     };
 
     /**
-     * Delete a user entity by it's id.
+     * Delete a user entity by its id.
      */
-    deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
+    async deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        return {
-            action: async () => {
-                const connectedCourses = await this._ormService
-                    .query(CourseData, { deletedUserId })
-                    .where('teacherId', '=', 'deletedUserId')
-                    .getMany();
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
 
-                if (connectedCourses.length > 0)
-                    throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'DELETE_USER'
+            );
 
-                return await this._ormService
-                    .softDelete(User, [deletedUserId]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'DELETE_USER');
-            }
-        };
+        const connectedCourses = await this._ormService
+            .query(CourseData, { deletedUserId })
+            .where('teacherId', '=', 'deletedUserId')
+            .getMany();
+
+        if (connectedCourses.length > 0)
+            throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+
+        return this._ormService
+            .softDelete(User, [deletedUserId]);
     }
 
     /**
@@ -421,8 +422,8 @@ export class UserService {
     };
 
     /**
-     * Get a user by it's email address. 
-     * Which is also a unique identifier, like the id. 
+     * Get a user by it's email address.
+     * Which is also a unique identifier, like the id.
      */
     getUserByEmailAsync = async (email: string) => {
 
@@ -471,8 +472,8 @@ export class UserService {
     };
 
     /**
-     * Remove user's refresh token, 
-     * so it can't get a new activation token, 
+     * Remove user's refresh token,
+     * so it can't get a new activation token,
      * even if it holds a valid refresh token on the client side.
      */
     removeRefreshToken = (userId: Id<'User'>) => {
