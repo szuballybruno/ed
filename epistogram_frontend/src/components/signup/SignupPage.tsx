@@ -32,7 +32,6 @@ export const SignupPage = () => {
 
         navigate(applicationRoutes.homeRoute);
 
-        console.log('Showing guide...');
         startUserGuide();
     };
 

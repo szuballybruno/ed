@@ -61,8 +61,6 @@ export const CourseOverviewSubpage = () => {
         }
     ];
 
-    console.log(courseOverviewData);
-
     return (
         <ExamLayout
             headerCenterText={'A kurzus során elért eredményed'}

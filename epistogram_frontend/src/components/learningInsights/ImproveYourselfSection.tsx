@@ -24,8 +24,6 @@ export const ImproveYourselfSection = () => {
             return;
 
         setAsd(improveYourselfPageStats?.mostProductiveTimeRangeChartData);
-
-        console.log(asd);
     }, [improveYourselfPageStats]);
 
     return <Flex

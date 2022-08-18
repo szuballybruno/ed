@@ -7,7 +7,9 @@ export type LoggingKeysType =
     'GRID' |
     'DIALOGS' |
     'WARNING' |
-    'VIDEO_POPUPS';
+    'VIDEO_POPUPS' | 
+    'PLAYBACK' |
+    'FILE UPLOAD';
 
 export const Environment = (() => {
 
@@ -23,13 +25,6 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const loggingEnabled = false;
     const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'VIDEO_POPUPS'];
-
-    if (loggingEnabled) {
-
-        console.log('Current version: ' + currentVersion);
-        console.log('Server url: ' + serverUrl);
-        console.log('CDN url: ' + assetCDNStorageUrl);
-    }
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 

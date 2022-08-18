@@ -3,6 +3,7 @@ import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { isBetweenThreshold } from '../../../static/frontendHelpers';
+import { Logger } from '../../../static/Logger';
 
 export const usePlaybackWatcher = (
     playedSeconds: number,
@@ -42,8 +43,7 @@ export const usePlaybackWatcher = (
             && elapsedSeconds > 0
             && elapsedSeconds > minSampleSeconds) {
 
-            if (Environment.loggingEnabled)
-                console.log(`Watched ${elapsedSeconds}s`);
+            Logger.logScoped('PLAYBACK', `Watched ${elapsedSeconds}s`);
 
             postVideoPlaybackSample({
                 fromSeconds: lastSampleSeconds,

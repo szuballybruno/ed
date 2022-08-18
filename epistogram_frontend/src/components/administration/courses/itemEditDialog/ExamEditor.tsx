@@ -23,8 +23,6 @@ export const ExamEditor = ({
     answerMutations: AnswerMutationsType
 }) => {
 
-    console.log('asd' + endabled);
-
     // http
     const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
         .useCourseItemEditData(null, examVersionId, endabled);

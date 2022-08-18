@@ -57,9 +57,6 @@ export const AdminSubpageHeader = (props: {
         }
         else {
 
-            // if (loggingSettings.routing)
-            // console.log('navto: ' + targetRoute.route.getAbsolutePath());
-
             navigate(targetRoute, {
                 userId,
                 courseId,

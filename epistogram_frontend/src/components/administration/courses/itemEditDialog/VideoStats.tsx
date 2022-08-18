@@ -121,7 +121,7 @@ export const AdminVideoStatisticsModalPage = () => {
                             getDisplayValue={x => x}
                             items={['Ismétlések aránya']}
                             selectedValue={'Ismétlések aránya'}
-                            onSelected={() => { console.log(''); }}
+                            onSelected={() => 1}
                             getCompareKey={() => 'asd'} />
                     </Flex>
 

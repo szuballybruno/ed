@@ -348,7 +348,7 @@ export const AdminExamStatisticsModalPage = () => {
                             getDisplayValue={x => x}
                             items={['Ismétlések aránya']}
                             selectedValue={'Ismétlések aránya'}
-                            onSelected={() => { console.log('asd'); }}
+                            onSelected={() => 1}
                             getCompareKey={() => 'asd'} />
                     </Flex>
 

@@ -3,7 +3,6 @@ import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { PagingType } from '../../static/frontendHelpers';
-import { EpistoFont } from '../controls/EpistoFont';
 import { RecommendedItemQuota } from './RecommendedItemQuota';
 
 export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & FlexProps) => {

@@ -17,7 +17,6 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
 
     entries.forEach((entry: IntersectionObserverEntry) => {
       updatedEntries[entry.target.getAttribute('name') as string] = entry.isIntersecting;
-      console.log(entry.intersectionRatio);
     });
 
 
@@ -38,7 +37,6 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
     // only if we have the data attribute observerid on the child elemeent
     const elements: Element[] | null = (navRef && navRef.current && navRef.current.children) && Array.from(navRef.current.children);
     elements && elements.forEach((item: Element) => {
-      console.log(item.getAttribute('name'));
       if (item.getAttribute('name')) {
         observer.observe(item);
       }

@@ -41,55 +41,6 @@ export const EpistoRadarChart = (props: {
         height: '100%',
     };
 
-    console.log({
-        title: {
-            show: !!title,
-            text: title
-        },
-        radar:
-            radar
-                ? Object.assign(
-                    {
-                        indicator: radarIndicators
-                    },
-                    radar
-                )
-                : undefined,
-        legend:
-            legend
-                ? Object.assign(
-                    {
-                        show: true,
-                        data: areas.map((data) => ({
-                            name: data.name
-                        }))
-                    },
-                    legend)
-                : undefined,
-        tooltip: tooltip,
-        visualMap: visualMap,
-        series: [
-            Object.assign(
-                {
-                    data: areas.map((data, index) => ({
-                        value: data.value,
-                        name: data.name,
-                        lineStyle: {
-                            color: seriesOptions.color[index],
-                            shadowColor: seriesOptions.color[index]
-                        },
-                        areaStyle: {
-                            color: seriesOptions.color[index]
-                        }
-                    }))
-                },
-                seriesOptions,
-                {
-                    type: 'radar'
-                })
-        ]
-    });
-
     return <ReactECharts
         option={{
             title: {

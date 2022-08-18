@@ -1,4 +1,5 @@
 import { Environment } from '../../static/Environemnt';
+import { Logger } from '../../static/Logger';
 import { postMultipartAsync } from './httpClient';
 
 const mbToByte = 1000000;
@@ -15,13 +16,13 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
     const bytesToBeUploaded = file.size;
     const chunksCount = Math.ceil(bytesToBeUploaded / maxChunkSizeBytes);
 
-    console.log(`Starting upload, chunks count: ${chunksCount}...`);
+    Logger.logScoped('FILE UPLOAD', `Starting upload, chunks count: ${chunksCount}...`);
 
     while (uploadedBytesCount < bytesToBeUploaded) {
 
         const currentChunkArrayBuffer = await getFileChunkAsync(uploadedBytesCount, file);
 
-        console.log(`Uploading chunk: #${chunkIndex} - ${currentChunkArrayBuffer.byteLength * 0.000001}mb`);
+        Logger.logScoped('FILE UPLOAD', `Uploading chunk: #${chunkIndex} - ${currentChunkArrayBuffer.byteLength * 0.000001}mb`);
 
         await postMultipartAsync(url, new File([currentChunkArrayBuffer], 'chunk'), {
             chunkIndex,
@@ -33,7 +34,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
         chunkIndex++;
     }
 
-    console.log('Upload finished!');
+    Logger.logScoped('FILE UPLOAD', 'Upload finished!');
 };
 
 const getFileChunkAsync = (uploadedBytesCount: number, file: File): Promise<ArrayBuffer> => {

@@ -24,7 +24,6 @@ const initActions: (() => void)[] = [
         if (Environment.isLocalhost)
             return;
 
-        console.log('Initing hotjar');
         hotjar.initialize(2675412, 6);
     },
 

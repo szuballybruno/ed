@@ -164,7 +164,6 @@ export const WatchView = (props: {
 
         if (unansweredQuestion) {
 
-            console.log('asd');
             setShowNewDialogsEnabled(false);
             setCurrentQuestion(unansweredQuestion);
         }

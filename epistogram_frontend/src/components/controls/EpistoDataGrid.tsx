@@ -15,8 +15,6 @@ const removeOverlay = () => {
         return;
 
     (matchingElement as any).remove();
-    // console.log();
-    // matchingElement.parentElement
 };
 
 export type RenderCellParamsType<TKey, TRow, TField extends keyof TRow> = {

@@ -144,8 +144,6 @@ export const AdminEditUserControl = ({
         return saveUserAsync(editedUserDTO);
     };
 
-    useEffect(() => console.log('Useredit dto reloaded'), [editDTO]);
-
     const onAuthItemsChanged = useCallback((data: {
         assignedRoles?: ChangeSet<UserRoleDTO>,
         assignedPermissions?: ChangeSet<UserPermissionDTO>

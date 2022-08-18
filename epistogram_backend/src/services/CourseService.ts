@@ -415,44 +415,28 @@ export class CourseService {
     /**
      * Saves the course content 
      */
-    saveCourseContentAsync(
+    async saveCourseContentAsync(
         userId: PrincipalId,
         courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
         moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
-    ): ControllerActionReturnType {
+    ) {
 
-        return {
-            action: async () => {
-                if (itemMutations.length === 0 && moduleMutations.length === 0)
-                    return;
+        if (itemMutations.length === 0 && moduleMutations.length === 0)
+            return;
 
-                // save course 
-                const { courseVersionMigrations } = await this
-                    ._saveCourseVersionAsync(courseId);
+        // save course 
+        const { courseVersionMigrations } = await this
+            ._saveCourseVersionAsync(courseId);
 
-                // save modules 
-                await this
-                    ._moduleService
-                    .saveModulesAsync({
-                        courseVersionMigrations,
-                        moduleMutations,
-                        itemMutations
-                    });
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
-
-
+        // save modules 
+        await this
+            ._moduleService
+            .saveModulesAsync({
+                courseVersionMigrations,
+                moduleMutations,
+                itemMutations
+            });
     }
 
     /**

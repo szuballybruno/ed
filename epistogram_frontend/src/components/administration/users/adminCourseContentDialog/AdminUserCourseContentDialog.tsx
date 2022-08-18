@@ -34,8 +34,6 @@ export const AdminUserCourseContentDialog = (props: {
     const courseTitle = courseBriefData?.title || '';
     const userFullName = briefUserData?.fullName || '';
 
-    console.log(dialogParams);
-
     const moreInfoDialogTabs = dialogParams
         ? [
             {

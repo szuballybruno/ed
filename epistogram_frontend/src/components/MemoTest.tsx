@@ -6,8 +6,6 @@ export const MemoTest = typedMemo(<TProp,>(props: {
     prop2: TProp
 }) => {
 
-    console.log('------ Rendering Memo Test ----------');
-
     return <div>{props.prop1}</div>;
 });
 

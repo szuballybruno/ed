@@ -37,14 +37,10 @@ export const AdminUserCourseContentSubpage = (props: {
         if (!courseId || !requiredCompletionDate)
             showError('Hiba történt');
 
-        console.log(requiredCompletionDate!.toISOString());
-
         setRequiredCourseCompletionDateAsync({
             courseId: courseId,
             requiredCourseCompletionDate: requiredCompletionDate!.toISOString()
         });
-
-
     };
 
     return <AdminBreadcrumbsHeader>

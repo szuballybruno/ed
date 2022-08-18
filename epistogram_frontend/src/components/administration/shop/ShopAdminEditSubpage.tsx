@@ -73,8 +73,6 @@ export const ShopAdminEditSubpage = () => {
             } as DiscountCodeDTO));
     })();
 
-    console.log(coverFilePath);
-
     // func
 
     const addCodes = () => {

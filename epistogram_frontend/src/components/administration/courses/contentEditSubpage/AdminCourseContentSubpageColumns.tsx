@@ -79,8 +79,6 @@ export const useGridColumnDefinitions = (
 
                 setId(versionId + '');
 
-                console.log('asdasdw');
-
                 setAndCommitCellValue(rowKey, 'module', {
                     versionId: versionId,
                     isPretestModule: false,

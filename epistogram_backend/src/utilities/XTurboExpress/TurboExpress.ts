@@ -141,7 +141,7 @@ export class TurboExpressBuilder<
             /**
              * Complicated solution 
              */
-            if ((controllerActionResultOrData as any).auth) {
+            if ((controllerActionResultOrData as any)?.auth) {
 
                 const controllerActionResult = controllerActionResultOrData as any;
 

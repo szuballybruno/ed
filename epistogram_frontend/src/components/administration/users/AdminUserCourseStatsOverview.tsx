@@ -18,8 +18,6 @@ export const AdminUserCourseStatsOverview = ({
     courseId: Id<'Course'>
 }) => {
 
-    console.log(courseId);
-
     const texts = translatableTexts.administration.userLearningOverviewSubpage;
 
     const { userCourseStatsOverviewData } = useUserCourseStatsOverviewData(userId, courseId);

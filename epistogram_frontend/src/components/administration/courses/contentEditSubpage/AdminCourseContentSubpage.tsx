@@ -34,11 +34,12 @@ export const AdminCourseContentSubpage = () => {
     const ref = useRef(null);
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
+
     const { navigate } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
-    const dialogParams = itemEditDialogLogic.params!; 
+    const dialogParams = itemEditDialogLogic.params!;
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
 
     // state
@@ -266,7 +267,7 @@ export const AdminCourseContentSubpage = () => {
 
             showError(e);
         }
-    }, []);
+    }, [courseId, itemsMutatorRef, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
 
     const gridColumns = useGridColumnDefinitions(modules, openDialog, itemsMutatorRef);
 

@@ -17,6 +17,7 @@ import { WatchView } from './WatchView';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Logger } from '../../../static/Logger';
 
 export const WatchSubpage = () => {
 
@@ -61,7 +62,7 @@ export const WatchSubpage = () => {
     // logs playerDataStatus if change happens
     useEffect(() => {
 
-        console.log('PlayerDataStatus: ' + playerDataStatus);
+        Logger.logScoped('PLAYBACK', 'PlayerDataStatus: ' + playerDataStatus);
 
         // TODO: Create a proper error message: 'Video doesn't exists' with
         //       options to navigate to available courses
@@ -72,8 +73,8 @@ export const WatchSubpage = () => {
     // redirect if current item should be locked
     useEffect(() => {
 
-        console.log('Redirect effect runs...');
-        console.log('CurrentPlaylistItemCode: ' + currentPlaylistItemCode);
+        Logger.logScoped('PLAYBACK', 'Redirect effect runs...');
+        Logger.logScoped('PLAYBACK', 'CurrentPlaylistItemCode: ' + currentPlaylistItemCode);
 
         // Prevent navigating to empty url because of loading
         if (playerDataStatus !== 'success')
@@ -83,7 +84,7 @@ export const WatchSubpage = () => {
         if (currentPlaylistItemCode)
             return;
 
-        console.log('Invalid course item code: ' + urlPlaylistItemCode);
+        Logger.logScoped('PLAYBACK', 'Invalid course item code: ' + urlPlaylistItemCode);
         navigateToPlayer(urlPlaylistItemCode);
     }, [currentPlaylistItemCode]);
 
@@ -112,7 +113,7 @@ export const WatchSubpage = () => {
 
     const handleContinueCourse = () => {
 
-        console.log('Continue course, next item code: ' + nextPlaylistItemCode);
+        Logger.logScoped('PLAYBACK','Continue course, next item code: ' + nextPlaylistItemCode);
 
         if (nextPlaylistItemCode)
             navigateToPlayer(nextPlaylistItemCode);

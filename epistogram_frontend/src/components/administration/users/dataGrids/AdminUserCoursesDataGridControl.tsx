@@ -289,7 +289,6 @@ export const AdminUserCoursesDataGridControl = (props: {
                     if (!params.value)
                         return;
 
-                    console.log(value?.toJSDate());
                     handleSaveRequiredCompletionDate(params.value.courseId, value ? value.toJSDate() : null);
                     refetchUserCourseStats();
                 }}
