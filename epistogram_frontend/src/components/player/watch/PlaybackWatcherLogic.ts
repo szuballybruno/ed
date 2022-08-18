@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { Id } from '../../../shared/types/versionId';
-import { Environment } from '../../../static/Environemnt';
 import { isBetweenThreshold } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 
