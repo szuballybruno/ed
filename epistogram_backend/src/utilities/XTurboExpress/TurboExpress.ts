@@ -152,7 +152,7 @@ export class TurboExpressBuilder<
                 if (authRes.state === 'FAILED') {
 
                     this._loggerService
-                        .logScoped('GENERIC', 'ERROR', 'Authorization function returned "FAILED" state.');
+                        .logScoped('SERVER', 'ERROR', 'Authorization function returned "FAILED" state.');
 
                     throw new ErrorWithCode('Authorization failed!', 'no permission');
                 }
@@ -182,7 +182,7 @@ export class TurboExpressBuilder<
         const asyncStuff = async (req: TRequest, res: TResponse) => {
 
             this._loggerService
-                .logScoped('GENERIC', `${req.path}: REQUEST ARRIVED`);
+                .logScoped('SERVER', `${req.path}: REQUEST ARRIVED`);
 
             /**
              * Instatiate all services, 

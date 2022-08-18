@@ -65,7 +65,14 @@ export class VideoService extends QueryServiceBase<VideoData> {
                 // validation comes here
 
                 return this._questionAnswerService
-                    .saveGivenAnswerAsync(principalId.getId(), answerSessionId, questionVersionId, answerIds, false, elapsedSeconds);
+                    .saveGivenAnswerAsync({
+                        userId: principalId.getId(),
+                        answerSessionId,
+                        questionVersionId,
+                        answerIds,
+                        isExamQuestion: false,
+                        elapsedSeconds
+                    });
             },
             auth: async () => {
                 return this._authorizationService

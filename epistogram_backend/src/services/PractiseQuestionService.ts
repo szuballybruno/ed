@@ -4,7 +4,6 @@ import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { Id } from '../shared/types/versionId';
 import { isXMinutesAgo } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
@@ -32,6 +31,10 @@ export class PractiseQuestionService extends ServiceBase {
         this._authorizationService = authorizationService;
     }
 
+    /**
+     * Get Principal's practise question, 
+     * or return null if there's none 
+     */
     getPractiseQuestionAsync = async (principalId: PrincipalId) => {
 
         const infoViews = await this
@@ -52,6 +55,45 @@ export class PractiseQuestionService extends ServiceBase {
         return await this
             ._questionService
             .getQuestionDataByVersionId(questionVersionId);
+    };
+
+    /**
+     * Answer a Practise question 
+     * by the Principal account
+     * returns AnswerResultDTO, with coin acquire data, and correct answers   
+     */
+    async answerPractiseQuestionAsync(principalId: PrincipalId, qu: AnswerQuestionDTO) {
+
+        const userId = principalId.getId();
+
+        const practiseAnswerSession = await this
+            ._getUserPractiseAnswerSession(userId);
+
+        return await this
+            ._questionAnswerService
+            .saveGivenAnswerAsync({
+                userId,
+                answerSessionId: practiseAnswerSession.id,
+                questionVersionId: qu.questionVersionId,
+                answerIds: qu.answerIds,
+                isExamQuestion: false,
+                elapsedSeconds: 0,
+                isPractiseAnswer: true
+            });
+    }
+
+    // ------------- PRIVATE
+
+    /**
+     * Get practise answer session 
+     */
+    private _getUserPractiseAnswerSession = async (userId: Id<'User'>) => {
+
+        return this._ormService
+            .query(AnswerSession, { userId })
+            .where('isPractise', '=', 'true')
+            .and('userId', '=', 'userId')
+            .getSingle();
     };
 
     /**
@@ -96,34 +138,4 @@ export class PractiseQuestionService extends ServiceBase {
             })
             .map(x => x.questionVersionId);
     }
-
-    answerPractiseQuestionAsync(principalId: PrincipalId, qu: AnswerQuestionDTO): ControllerActionReturnType {
-
-        return {
-            action: async () => {
-
-                const userId = principalId.getId();
-
-                const practiseAnswerSession = await this.getUserPractiseAnswerSession(userId);
-
-                return await this._questionAnswerService
-                    .saveGivenAnswerAsync(userId, practiseAnswerSession.id, qu.questionVersionId, qu.answerIds, false, 0, true);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-    }
-
-    getUserPractiseAnswerSession = async (userId: Id<'User'>) => {
-
-        return this._ormService
-            .query(AnswerSession, { userId })
-            .where('isPractise', '=', 'true')
-            .and('userId', '=', 'userId')
-            .getSingle();
-    };
 }

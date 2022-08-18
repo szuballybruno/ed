@@ -10,6 +10,7 @@ import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { Id } from '../shared/types/versionId';
 import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
+import { LoggerService } from './LoggerService';
 
 export class CoinTransactionService {
 
@@ -22,7 +23,8 @@ export class CoinTransactionService {
         funcService: SQLFunctionsService,
         ormConnService: ORMConnectionService,
         mapperService: MapperService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        private _loggerService: LoggerService) {
 
         this._funcService = funcService;
         this._mapperService = mapperService;
@@ -30,9 +32,14 @@ export class CoinTransactionService {
         this._authorizationService = authorizationService;
     }
 
-    async makeCoinTransactionAsync(insertCoinFnParamsType: InsertCoinFnParamsType) {
+    async makeCoinTransactionAsync(params: InsertCoinFnParamsType) {
 
-        await this._funcService.insertCoinAcquiredFn(insertCoinFnParamsType);
+        this._loggerService
+            .logScoped('COINS', `Adding new coin... ${params.userId} - ${params.amount}`);
+
+        await this
+            ._funcService
+            .insertCoinAcquiredFn(params);
     }
 
     getPrincipalCoinBalance(principalId: PrincipalId): ControllerActionReturnType {
@@ -123,11 +130,10 @@ export class CoinTransactionService {
 
         return await this._ormConnectionService
             .query(CoinTransaction, { userId, questionVersionId })
-            .leftJoin(GivenAnswer, x => x
+            .innerJoin(GivenAnswer, x => x
                 .on('id', '=', 'givenAnswerId', CoinTransaction)
                 .and('questionVersionId', '=', 'questionVersionId'))
             .where('userId', '=', 'userId')
-            .and('givenAnswerId', 'IS NOT', 'NULL')
             .getMany();
     }
 

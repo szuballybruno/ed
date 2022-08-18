@@ -12,7 +12,9 @@ export type LogScopeType =
     'TRANSACTION' |
     'TEMPOMAT' |
     'REGISTRATION' |
-    'VERSION SAVE';
+    'VERSION SAVE' |
+    'COINS' |
+    'SERVER';
 
 export class GlobalConfiguration {
 
@@ -82,13 +84,24 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['GENERIC'] as LogScopeType[],
+        enabledScopes: ['GENERIC', 'COINS'] as LogScopeType[],
     };
 
     practiseQuestions = {
         incorrectQuestionDelayMinutes: 1,
         correctQuestionDelayMinutes: 3,
         incorrectPractiseQuestionDelayMinutes: 5
+    };
+
+    coinRewardAmounts = {
+        questionCorrectAnswer: 1,
+        videoWatched: 1,
+        answerStreak5: 5,
+        answerStreak10: 15,
+        genericActivity: 10,
+        activityStreak3Days: 10,
+        activityStreak5Days: 20,
+        activityStreak10Days: 50,
     };
 
     constructor(rootDirectory: string) {

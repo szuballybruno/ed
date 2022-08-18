@@ -5,8 +5,8 @@ import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { HashService } from './HashService';
+import { LoggerService } from './LoggerService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
@@ -22,7 +22,8 @@ export class AuthenticationService {
         private _userSessionActivityService: UserSessionActivityService,
         private _hashService: HashService,
         private _permissionService: PermissionService,
-        private _globalConfig: GlobalConfiguration) {
+        private _globalConfig: GlobalConfiguration,
+        private _loggerService: LoggerService) {
     }
 
     getRequestAccessTokenPayload = (accessToken: string) => {
@@ -36,7 +37,8 @@ export class AuthenticationService {
 
     async establishAuthHandshakeAsync(refreshToken: string | null) {
 
-        log('Establishing auth handshake...');
+        this._loggerService
+            .logScoped('GENERIC', 'Establishing auth handshake...');
 
         await this._ormService
             .save(DiscountCode, [

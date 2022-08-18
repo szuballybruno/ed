@@ -101,7 +101,7 @@ export const PractiseQuestions = () => {
                             loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
                             question={practiseQuestion}
                             onlyShowAnswers={isAnswered}
-                            coinsAcquired={null}
+                            coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}
                             bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
 
                         <Flex

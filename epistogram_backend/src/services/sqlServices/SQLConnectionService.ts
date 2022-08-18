@@ -43,8 +43,6 @@ export class SQLConnectionService {
         }
         catch (err: any) {
 
-            // this._loggerService.logScoped('GENERIC', 'ERROR', err.message);
-            // this._loggerService.logScoped('GENERIC', 'ERROR', err.stack);
             throw new Error(`Message: ${err.message} Detail: ${err.detail}`);
         }
     };

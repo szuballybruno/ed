@@ -211,13 +211,14 @@ export class ExamService {
                  */
                 const result = await this
                     ._quesitonAnswerService
-                    .saveGivenAnswerAsync(
+                    .saveGivenAnswerAsync({
                         userId,
                         answerSessionId,
                         questionVersionId,
                         answerIds,
-                        true,
-                        elapsedSeconds);
+                        isExamQuestion: true,
+                        elapsedSeconds
+                    });
 
                 /**
                  * Save user activity

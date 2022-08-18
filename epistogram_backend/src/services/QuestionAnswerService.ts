@@ -4,7 +4,6 @@ import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerSession } from '../models/entity/AnswerSession';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
-import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
@@ -51,14 +50,23 @@ export class QuestionAnswerService {
     /**
      * Answer question  
      */
-    async saveGivenAnswerAsync(
+    async saveGivenAnswerAsync({
+        answerIds,
+        answerSessionId,
+        elapsedSeconds,
+        isExamQuestion,
+        userId,
+        questionVersionId,
+        isPractiseAnswer
+    }: {
         userId: Id<'User'>,
         answerSessionId: Id<'AnswerSession'>,
         questionVersionId: Id<'QuestionVersion'>,
         answerIds: Id<'Answer'>[],
         isExamQuestion: boolean,
         elapsedSeconds: number,
-        isPractiseAnswer?: boolean) {
+        isPractiseAnswer?: boolean
+    }) {
 
         const {
             correctAnswerIds,
@@ -77,25 +85,20 @@ export class QuestionAnswerService {
         this._loggerService.logScoped('GIVEN ANSWER', 'elapsedSeconds: ' + elapsedSeconds);
         this._loggerService.logScoped('GIVEN ANSWER', 'isPractiseAnswer: ' + isPractiseAnswer);
 
-        let coinAcquires = {
-            normal: null as CoinAcquireResultDTO | null,
-            bonus: null as CoinAcquireResultDTO | null
+        const canAcquireCoin = isCorrect && !isExamQuestion;
+
+        const coinAcquires = {
+            normal: canAcquireCoin
+                ? await this
+                    ._coinAcquireService
+                    .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId)
+                : null,
+            bonus: canAcquireCoin
+                ? await this
+                    ._coinAcquireService
+                    .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength)
+                : null
         };
-
-        // if answer is correct give coin rewards 
-        if (isCorrect && !isExamQuestion) {
-
-            const acquire = await this._coinAcquireService
-                .acquireQuestionAnswerCoinsAsync(userId, givenAnswerId);
-
-            const streakAcquire = await this._coinAcquireService
-                .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
-
-            coinAcquires = {
-                normal: acquire,
-                bonus: streakAcquire
-            };
-        }
 
         return instantiate<AnswerResultDTO>({
             correctAnswerIds: correctAnswerIds,

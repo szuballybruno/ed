@@ -1,10 +1,12 @@
 import { Response } from 'express';
-import { logSecondary } from '../services/misc/logger';
+import { LoggerService } from '../services/LoggerService';
 import { ICookieOptions, ITurboResponse } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class TurboResponse implements ITurboResponse {
 
-    constructor(private _res: Response) {
+    constructor(
+        private _res: Response,
+        private _loggerService: LoggerService) {
 
     }
 
@@ -22,7 +24,8 @@ export class TurboResponse implements ITurboResponse {
 
         if (data === undefined) {
 
-            logSecondary('Responding, code: ' + code);
+            this._loggerService
+                .logScoped('SERVER', 'Responding, code: ' + code);
 
             this
                 ._res
@@ -30,7 +33,8 @@ export class TurboResponse implements ITurboResponse {
                 .send(null);
         } else {
 
-            logSecondary(`Responding with data, code: ${code}`);
+            this._loggerService
+                .logScoped('SERVER', `Responding with data, code: ${code}`);
 
             this
                 ._res

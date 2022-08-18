@@ -51,7 +51,7 @@ export class XTurboExpressListener implements IXTurboExpressListener {
          */
         const reqResWrapper = (req: Request, res: Response) => {
 
-            syncActionWrapper(new TurboRequest(req), new TurboResponse(res));
+            syncActionWrapper(new TurboRequest(req), new TurboResponse(res, this._loggerService));
         };
 
         /**
@@ -78,9 +78,9 @@ export class XTurboExpressListener implements IXTurboExpressListener {
         const requestPath = req.path;
         const error = errorin as Error;
 
-        this._loggerService.logScoped('GENERIC', 'ERROR', `---------------- [${opts.controllerSignature.name}/${requestPath}] Failed! ----------------`,);
-        this._loggerService.logScoped('GENERIC', 'ERROR', error.message);
-        this._loggerService.logScoped('GENERIC', 'ERROR', error.stack);
+        this._loggerService.logScoped('SERVER', 'ERROR', `---------------- [${opts.controllerSignature.name}/${requestPath}] Failed! ----------------`,);
+        this._loggerService.logScoped('SERVER', 'ERROR', error.message);
+        this._loggerService.logScoped('SERVER', 'ERROR', error.stack);
 
         respondError(res, error);
     }
@@ -89,7 +89,7 @@ export class XTurboExpressListener implements IXTurboExpressListener {
 
         const requestPath = req.path;
 
-        this._loggerService.logScoped('GENERIC', `${opts.controllerSignature.name}/${requestPath}: Succeeded...`);
+        this._loggerService.logScoped('SERVER', `${opts.controllerSignature.name}/${requestPath}: Succeeded...`);
         res.respond(200, value);
     }
 
