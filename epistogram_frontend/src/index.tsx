@@ -10,7 +10,7 @@ import { ErrorDialogFrame } from './components/system/ErrorDialogFrame';
 import { EventListener } from './components/system/EventListener';
 import { InitFrame } from './components/system/InitFrame';
 import { BusyBarFrame } from './components/system/LoadingFrame/BusyBarFrame';
-import { MUIThemeFrame } from './components/system/MUIThemeFrame';
+import { MUISetupFrame } from './components/system/MUISetupFrame';
 import { NotificationsFrame } from './components/system/NotificationsFrame';
 import { PreventMobileFrame } from './components/system/PreventMobileFrame';
 import { TitleSetterFrame } from './components/system/TitleSetterFrame';
@@ -25,6 +25,12 @@ import { ArrayBuilder } from './static/frontendHelpers';
 import './styles/globalCssClasses.css';
 import './styles/globalCssTypes';
 import './styles/index.css';
+import { LicenseInfo } from '@mui/x-license-pro';
+
+LicenseInfo.setLicenseKey('YOUR_LICENSE_KEY');
+// set MUI license key
+const LICENSE_KEY = '692967e82163b6d3d8887b2f05b06718Tz00OTM0OSxFPTE2OTI0NDQ2MDU1MzcsUz1wcm8sTE09c3Vic2NyaXB0aW9uLEtWPTI=';
+LicenseInfo.setLicenseKey(LICENSE_KEY);
 
 // react query
 const queryClient = new QueryClient();
@@ -33,7 +39,7 @@ const app = (
     <UserGuidingFrame>
         <InitFrame>
             <ChakraThemeFrame>
-                <MUIThemeFrame>
+                <MUISetupFrame>
                     <LocalizationProvider dateAdapter={AdapterLuxon}>
                         <XDialogHost>
                             <QueryClientProvider client={queryClient}>
@@ -71,7 +77,7 @@ const app = (
                             </QueryClientProvider>
                         </XDialogHost>
                     </LocalizationProvider>
-                </MUIThemeFrame>
+                </MUISetupFrame>
             </ChakraThemeFrame>
         </InitFrame>
     </UserGuidingFrame >

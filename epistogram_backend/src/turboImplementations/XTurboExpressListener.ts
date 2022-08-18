@@ -78,9 +78,9 @@ export class XTurboExpressListener implements IXTurboExpressListener {
         const requestPath = req.path;
         const error = errorin as Error;
 
-        this._loggerService.logScoped('SERVER', 'ERROR', `---------------- [${opts.controllerSignature.name}/${requestPath}] Failed! ----------------`,);
-        this._loggerService.logScoped('SERVER', 'ERROR', error.message);
-        this._loggerService.logScoped('SERVER', 'ERROR', error.stack);
+        this._loggerService.logScoped('ERROR', `---------------- [${opts.controllerSignature.name}/${requestPath}] Failed! ----------------`,);
+        this._loggerService.logScoped('ERROR', error.message);
+        this._loggerService.logScoped('ERROR', error.stack);
 
         respondError(res, error);
     }

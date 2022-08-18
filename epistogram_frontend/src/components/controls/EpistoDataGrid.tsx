@@ -164,9 +164,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             initialState={initialState as any}
             density={density === 'dense'
                 ? 'compact'
-                : density === 'spaced'
-                    ? 'standard'
-                    : undefined}
+                : 'standard'}
             hideFooter={hideFooter}
             onCellEditCommit={(params) => {
 

@@ -76,7 +76,7 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
     }
     catch (e: any) {
 
-        loggerService.logScoped('TRANSACTION', 'ERROR', 'An error occured during the action: ' + e.message ?? '');
+        loggerService.logScoped('TRANSACTION', 'An error occured during the action: ' + e.message ?? '');
 
         // ROLLBACK
         loggerService.logScoped('TRANSACTION', 'Rollback transaction...');

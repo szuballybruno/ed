@@ -14,7 +14,8 @@ export type LogScopeType =
     'REGISTRATION' |
     'VERSION SAVE' |
     'COINS' |
-    'SERVER';
+    'SERVER' | 
+    'ERROR';
 
 export class GlobalConfiguration {
 

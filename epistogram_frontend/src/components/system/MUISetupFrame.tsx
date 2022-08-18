@@ -26,7 +26,7 @@ const muiTheme = createTheme({
     },
 });
 
-export const MUIThemeFrame = (props: PropsWithChildren) => {
+export const MUISetupFrame = (props: PropsWithChildren) => {
 
     return <>
         <ThemeProvider theme={muiTheme}>

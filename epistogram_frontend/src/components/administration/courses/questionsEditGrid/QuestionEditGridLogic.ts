@@ -23,23 +23,23 @@ export const useQuestionEditGridLogic = (
     // load questions, answers, and mutations 
     useEffect(() => {
 
-        const q = questions ?? [];
-        const a = q.flatMap(x => x.answers);
-        const qmut = questionMutations ?? [];
+        const originalQuestions = questions ?? [];
+        const originalAnswers = originalQuestions.flatMap(x => x.answers);
+        const questionMutationsNonNull = questionMutations ?? [];
 
         // questions 
         questionMutatorRef
             .current
-            .setOriginalItems(q);
+            .setOriginalItems(originalQuestions);
 
         questionMutatorRef
             .current
-            .setMutations(qmut);
+            .setMutations(questionMutationsNonNull);
 
         // answers 
         answerMutatorRef
             .current
-            .setOriginalItems(a);
+            .setOriginalItems(originalAnswers);
 
         answerMutatorRef
             .current

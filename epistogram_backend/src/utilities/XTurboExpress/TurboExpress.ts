@@ -152,7 +152,7 @@ export class TurboExpressBuilder<
                 if (authRes.state === 'FAILED') {
 
                     this._loggerService
-                        .logScoped('SERVER', 'ERROR', 'Authorization function returned "FAILED" state.');
+                        .logScoped('ERROR', 'Authorization function returned "FAILED" state.');
 
                     throw new ErrorWithCode('Authorization failed!', 'no permission');
                 }

@@ -1,7 +1,7 @@
 import { GlobalConfiguration, LogScopeType } from './misc/GlobalConfiguration';
 import { logError } from './misc/logger';
 
-type LogType = 'SECONDARY' | 'ERROR';
+type LogType = 'SECONDARY';
 
 export class LoggerService {
 
@@ -16,7 +16,7 @@ export class LoggerService {
     logScoped(scope: LogScopeType, obj: any): void;
     logScoped(scope: LogScopeType, objOrType: any, obj?: any): void {
 
-        if (!this._config.logging.enabledScopes.some(x => x === scope))
+        if (!this._config.logging.enabledScopes.some(x => x === scope) && scope !== 'ERROR')
             return;
 
         const isTyped = !!obj;
@@ -32,7 +32,7 @@ export class LoggerService {
             return;
         }
 
-        if (type === 'ERROR') {
+        if (scope === 'ERROR') {
 
             logError(`[${scope}] ${logObj}`);
             return;
