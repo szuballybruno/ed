@@ -41,6 +41,8 @@ export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends S
     create(key: TKey, obj: TMutatee): void;
     isMutated(key: TKey, field: StringKeyof<TMutatee>): boolean;
     resetMutations(callback?: 'NO CALLBACK'): void;
+    getMutatedItems: () => TMutatee[];
+    getMutations: () => Mutation<TMutatee, TKeyField>[];
 }
 
 export interface IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
@@ -79,6 +81,16 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
         if (opts.onMutationsChanged)
             this.setOnMutationsChanged(opts.onMutationsChanged);
+    }
+
+    getMutatedItems() {
+
+        return this.mutatedItems;
+    }
+
+    getMutations() {
+
+        return this.mutations;
     }
 
     setOnPostMutationChanged(callback: () => void) {
@@ -159,6 +171,9 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
+
+        if (!this.mutatedItems.some(x => this._getCompareKey(x) === key))
+            throw new Error(`Trying to mutate item (${key}) that does not exist!`);
 
         const newMutations = [...this.mutations];
 

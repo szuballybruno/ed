@@ -106,8 +106,8 @@ export const AdminCourseContentSubpage = () => {
     // recalc  
     const recalcOrderIndices = useCallback(() => {
 
-        itemsMutatorState
-            .mutatedItems
+        itemsMutatorFunctions
+            .getMutatedItems()
             .groupBy(x => x.moduleVersionId)
             .forEach(x => x
                 .items
@@ -120,7 +120,7 @@ export const AdminCourseContentSubpage = () => {
                             newValue: i
                         });
                 }));
-    }, [itemsMutatorFunctions, itemsMutatorState]);
+    }, [itemsMutatorFunctions]);
 
     // set - on post mutations changed 
     useEffect(() => {
