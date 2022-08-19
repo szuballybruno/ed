@@ -25,22 +25,21 @@ export type MutateFnType<TMutatee, TKey> = <TField extends StringKeyof<TMutatee>
 }) => void;
 
 export interface IXMutatorState<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> {
-
     mutatedItems: TMutatee[];
     mutations: Mutation<TMutatee, TKeyField>[];
+    get isAnyItemsMutated(): boolean;
 }
 
 export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> {
-    getIsAnyItemsMutated: () => boolean;
     setOnPostMutationChanged(callback: () => void): void;
     setOnMutationsChanged(callback: () => void): void;
     setOriginalItems(originalItems: TMutatee[]): void;
     setMutations(muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey, onMutationChanged?: 'NO CALLBACK'): void;
     mutate: MutateFnType<TMutatee, TKey>;
+    isAnyFieldMutated(key: TKey): boolean;
     remove(removeKey: TKey): void;
     create(key: TKey, obj: TMutatee): void;
     isMutated(key: TKey, field: StringKeyof<TMutatee>): boolean;
-    isAnyFieldMutated(key: TKey): boolean;
     resetMutations(callback?: 'NO CALLBACK'): void;
 }
 
@@ -121,10 +120,10 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     }
 
     // getter for isAnyMutated
-    getIsAnyItemsMutated(): boolean {
+    get isAnyItemsMutated(): boolean {
 
         return this.mutations.length > 0;
-    }
+    };
 
     // 
     // FUNCTION: [this.setMutations] 

@@ -138,8 +138,8 @@ export const useQuestionEditGridLogic = (
      */
     const isAnyQuestionsMutated = useMemo(() => {
 
-        return questionMutatorFunctions.getIsAnyItemsMutated() || answerMutatorFunctions.getIsAnyItemsMutated();
-    }, [answerMutatorFunctions, questionMutatorFunctions]);
+        return questionMutatorState.isAnyItemsMutated || answerMutatorState.isAnyItemsMutated;
+    }, [questionMutatorState, answerMutatorState]);
 
     return {
         questionRows,
@@ -151,12 +151,12 @@ export const useQuestionEditGridLogic = (
         getKey,
         handleAddQuestion,
         getPlayedSeconds,
-        removeQuestion: questionMutatorFunctions.remove,
-        mutateQuestion: questionMutatorFunctions.mutate,
-        resetMutations: questionMutatorFunctions.resetMutations,
-        createAnswer: answerMutatorFunctions.create,
-        mutateAnswer: answerMutatorFunctions.mutate,
-        deleteAnswer: answerMutatorFunctions.remove
+        removeQuestion: questionMutatorFunctions.remove.bind(questionMutatorFunctions),
+        mutateQuestion: questionMutatorFunctions.mutate.bind(questionMutatorFunctions),
+        resetMutations: questionMutatorFunctions.resetMutations.bind(questionMutatorFunctions),
+        createAnswer: answerMutatorFunctions.create.bind(answerMutatorFunctions),
+        mutateAnswer: answerMutatorFunctions.mutate.bind(answerMutatorFunctions),
+        deleteAnswer: answerMutatorFunctions.remove.bind(answerMutatorFunctions)
     };
 };
 

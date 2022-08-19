@@ -75,8 +75,8 @@ export const AdminCourseContentSubpage = () => {
         modules: courseContentAdminData?.modules ?? EMPTY_ARRAY
     });
 
-    const isSaveEnabled = itemsMutatorFunctions.getIsAnyItemsMutated()
-        || moduleEditDialogLogic.mutatorRef.current.getIsAnyItemsMutated();
+    const isSaveEnabled = itemsMutatorState.isAnyItemsMutated
+        || moduleEditDialogLogic.mutatorRef.current.isAnyItemsMutated;
 
     const modules = moduleEditDialogLogic
         .mutatorRef

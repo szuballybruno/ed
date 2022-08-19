@@ -47,7 +47,8 @@ export const useXMutatorNew = <
 
         const stateInstance: IXMutatorState<TMutatee, TKeyField, TMutatee[TKeyField]> = {
             mutatedItems: mutatorCore.mutatedItems,
-            mutations: mutatorCore.mutations
+            mutations: mutatorCore.mutations,
+            isAnyItemsMutated: mutatorCore.isAnyItemsMutated
         };
 
         setState(stateInstance);
