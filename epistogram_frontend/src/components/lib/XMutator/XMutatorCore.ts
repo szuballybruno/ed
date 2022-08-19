@@ -24,7 +24,33 @@ export type MutateFnType<TMutatee, TKey> = <TField extends StringKeyof<TMutatee>
     newValue: TMutatee[TField];
 }) => void;
 
-export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>{
+export interface IXMutatorState<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> {
+
+    mutatedItems: TMutatee[];
+    mutations: Mutation<TMutatee, TKeyField>[];
+}
+
+export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> {
+    getIsAnyItemsMutated: () => boolean;
+    setOnPostMutationChanged(callback: () => void): void;
+    setOnMutationsChanged(callback: () => void): void;
+    setOriginalItems(originalItems: TMutatee[]): void;
+    setMutations(muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey, onMutationChanged?: 'NO CALLBACK'): void;
+    mutate: MutateFnType<TMutatee, TKey>;
+    remove(removeKey: TKey): void;
+    create(key: TKey, obj: TMutatee): void;
+    isMutated(key: TKey, field: StringKeyof<TMutatee>): boolean;
+    isAnyFieldMutated(key: TKey): boolean;
+    resetMutations(callback?: 'NO CALLBACK'): void;
+}
+
+export interface IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
+    extends IXMutatorFunctions<TMutatee, TKeyField, TKey>, IXMutatorState<TMutatee, TKeyField, TKey> {
+
+}
+
+export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
+    implements IXMutator<TMutatee, TKeyField, TKey> {
 
     // public 
     public mutatedItems: TMutatee[] = [];
@@ -38,16 +64,19 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
     // constructor input
     private _keyPropertyName: TKeyField;
+    private _mutatorId: string;
 
     // ctor
     constructor(opts: {
         keyPropertyName: TKeyField,
         onMutationsChanged?: OnMutationHandlerType<TKey>,
+        mutatorId?: string
     }) {
 
-        Logger.logScoped('MUTATIONS', 'Creating mutator... ' + opts.keyPropertyName);
-
+        this._mutatorId = opts.mutatorId ? `[${opts.mutatorId}] ` : '';
         this._keyPropertyName = opts.keyPropertyName;
+
+        this._logEvent('Creating mutator... ');
 
         if (opts.onMutationsChanged)
             this.setOnMutationsChanged(opts.onMutationsChanged);
@@ -73,14 +102,18 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
     setOnMutationsChanged(callback: () => void) {
 
+        this._logEvent('Setting on mutations changed action.');
+
         this._onMutationsChanged = () => {
 
-            this._logEvent('-- On mutations changed');
+            this._logEvent('Triggered - onMutationsChanged event.');
             callback();
         };
     }
 
     setOriginalItems(originalItems: TMutatee[]) {
+
+        this._logEvent('Setting original items.');
 
         this._originalItems = originalItems;
         this.mutatedItems = originalItems;
@@ -88,7 +121,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     }
 
     // getter for isAnyMutated
-    get isAnyItemsMutated(): boolean {
+    getIsAnyItemsMutated(): boolean {
 
         return this.mutations.length > 0;
     }
@@ -98,7 +131,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // applies mutations on the items array,
     // returns a new array that's been mutated
     //
-    setMutations = (muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey, onMutationChanged?: 'NO CALLBACK') => {
+    setMutations(muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey, onMutationChanged?: 'NO CALLBACK') {
 
         // set mutations 
         this.mutations = muts ?? [];
@@ -117,11 +150,11 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [Mutate] 
     // updates an item in the list  
     //
-    mutate: MutateFnType<TMutatee, TKey> = <TField extends StringKeyof<TMutatee>>(params: {
+    mutate<TField extends StringKeyof<TMutatee>>(params: {
         key: TKey,
         field: TField,
         newValue: TMutatee[TField]
-    }) => {
+    }) {
 
         const { field, key, newValue } = params;
 
@@ -220,7 +253,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [Remove] 
     // remove an item from the list 
     //
-    remove = (removeKey: TKey) => {
+    remove(removeKey: TKey) {
 
         if (removeKey === null || removeKey === undefined)
             throw new Error('Mutation error, key is null or undefined!');
@@ -264,7 +297,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [Add] 
     // add an item to the list 
     //
-    create = (key: TKey, obj: TMutatee) => {
+    create(key: TKey, obj: TMutatee) {
 
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
@@ -295,7 +328,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [IsMutated] 
     // check if item's field has been mutated 
     //
-    isMutated = (key: TKey, field: StringKeyof<TMutatee>) => {
+    isMutated(key: TKey, field: StringKeyof<TMutatee>) {
 
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
@@ -318,7 +351,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [IsMutated] 
     // check if item's field has been mutated 
     //
-    isAnyFieldMutated = (key: TKey) => {
+    isAnyFieldMutated(key: TKey) {
 
         if (key === null || key === undefined)
             throw new Error('Mutation error, key is null or undefined!');
@@ -333,7 +366,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // FUNCTION: [setMutations] 
     // reset/clear mutations  
     //
-    resetMutations = (callback?: 'NO CALLBACK') => {
+    resetMutations(callback?: 'NO CALLBACK') {
 
         this.setMutations([], undefined, callback);
     };
@@ -467,7 +500,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     //
     private _logEvent = (text: string) => {
 
-        // console.log(`MUTATION: ${text}`);
+        Logger.logScoped('MUTATIONS', `${this._mutatorId}${text}`);
     };
 
     // 
@@ -487,5 +520,3 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         return key;
     };
 }
-
-export type IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> = XMutatorCore<TMutatee, TKeyField, TKey>;

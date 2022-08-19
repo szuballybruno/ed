@@ -14,7 +14,7 @@ import { useIntParam } from '../../../../static/locationHelpers';
 import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
-import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
+import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
@@ -59,15 +59,14 @@ export const AdminCourseContentSubpage = () => {
     // misc
     const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
-    const itemsMutatorRef = useXMutator(CourseContentItemAdminDTO, 'versionCode');
+    const [itemsMutatorState, itemsMutatorFunctions] = useXMutatorNew(CourseContentItemAdminDTO, 'versionCode', 'ItemMutator');
 
     // busy state
     useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
     useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
 
     // module edit dialog logic
-    const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorRef
-        .current
+    const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorState
         .mutatedItems
         .any(x => x.moduleVersionId === moduleVersionId), []);
 
@@ -76,8 +75,8 @@ export const AdminCourseContentSubpage = () => {
         modules: courseContentAdminData?.modules ?? EMPTY_ARRAY
     });
 
-    const isSaveEnabled = itemsMutatorRef.current.isAnyItemsMutated
-        || moduleEditDialogLogic.mutatorRef.current.isAnyItemsMutated;
+    const isSaveEnabled = itemsMutatorFunctions.getIsAnyItemsMutated()
+        || moduleEditDialogLogic.mutatorRef.current.getIsAnyItemsMutated();
 
     const modules = moduleEditDialogLogic
         .mutatorRef
@@ -90,12 +89,11 @@ export const AdminCourseContentSubpage = () => {
         if (modules.length === 0)
             return [];
 
-        const items = itemsMutatorRef
-            .current
+        const items = itemsMutatorState
             .mutatedItems;
 
         const preproItems = items
-            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, itemsMutatorRef.current.isMutated))
+            .map((item, index) => mapToRowSchema(item, index, modules, getItemKey, itemsMutatorFunctions.isMutated.bind(itemsMutatorFunctions)))
             .orderBy(x => x.module.orderIndex)
             .groupBy(x => x.module.versionId)
             .flatMap(x => x
@@ -103,36 +101,33 @@ export const AdminCourseContentSubpage = () => {
                 .orderBy(i => i.itemOrderIndex));
 
         return preproItems;
-    }, [itemsMutatorRef.current.mutatedItems, modules]);
+    }, [itemsMutatorFunctions, itemsMutatorState, modules, getItemKey]);
 
     // recalc  
     const recalcOrderIndices = useCallback(() => {
 
-        itemsMutatorRef
-            .current
+        itemsMutatorState
             .mutatedItems
             .groupBy(x => x.moduleVersionId)
             .forEach(x => x
                 .items
                 .forEach((x, i) => {
 
-                    itemsMutatorRef
-                        .current
+                    itemsMutatorFunctions
                         .mutate({
                             key: x.versionCode,
                             field: 'itemOrderIndex',
                             newValue: i
                         });
                 }));
-    }, []);
+    }, [itemsMutatorFunctions, itemsMutatorState]);
 
     // set - on post mutations changed 
     useEffect(() => {
 
-        itemsMutatorRef
-            .current
+        itemsMutatorFunctions
             .setOnPostMutationChanged(recalcOrderIndices);
-    }, []);
+    }, [itemsMutatorFunctions, recalcOrderIndices]);
 
     // set - original items if loaded
     useEffect(() => {
@@ -140,10 +135,9 @@ export const AdminCourseContentSubpage = () => {
         if (!courseContentAdminData)
             return;
 
-        itemsMutatorRef
-            .current
+        itemsMutatorFunctions
             .setOriginalItems(courseContentAdminData.items ?? []);
-    }, [courseContentAdminData]);
+    }, [courseContentAdminData, itemsMutatorFunctions]);
 
     // 
     // FUNCS
@@ -181,8 +175,7 @@ export const AdminCourseContentSubpage = () => {
 
         const moduleVersionId = modules[0].versionId;
 
-        const foundModule = itemsMutatorRef
-            .current
+        const foundModule = itemsMutatorState
             .mutatedItems
             .firstOrNull(x => x.moduleVersionId === moduleVersionId);
 
@@ -198,8 +191,7 @@ export const AdminCourseContentSubpage = () => {
                 orderIndex: -1
             };
 
-        const itemOrderIndex = itemsMutatorRef
-            .current
+        const itemOrderIndex = itemsMutatorState
             .mutatedItems
             .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
             .length;
@@ -234,8 +226,7 @@ export const AdminCourseContentSubpage = () => {
             answerMutations: []
         };
 
-        itemsMutatorRef
-            .current
+        itemsMutatorFunctions
             .create(newVersionCode, dto);
         closeAddPopper();
     };
@@ -246,8 +237,7 @@ export const AdminCourseContentSubpage = () => {
 
             await saveCourseDataAsync({
                 courseId,
-                itemMutations: itemsMutatorRef
-                    .current
+                itemMutations: itemsMutatorState
                     .mutations,
                 moduleMutations: moduleEditDialogLogic
                     .mutatorRef
@@ -255,8 +245,7 @@ export const AdminCourseContentSubpage = () => {
                     .mutations
             });
 
-            itemsMutatorRef
-                .current
+            itemsMutatorFunctions
                 .resetMutations('NO CALLBACK');
 
             await refetchCourseContentAdminData();
@@ -267,9 +256,9 @@ export const AdminCourseContentSubpage = () => {
 
             showError(e);
         }
-    }, [courseId, itemsMutatorRef, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
+    }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
 
-    const gridColumns = useGridColumnDefinitions(modules, openDialog, itemsMutatorRef);
+    const gridColumns = useGridColumnDefinitions(modules, openDialog, itemsMutatorFunctions);
 
     //
     // EFFECTS
@@ -315,16 +304,14 @@ export const AdminCourseContentSubpage = () => {
                 <ItemEditDialog
                     callback={(questionMutations, answerMutations) => {
 
-                        itemsMutatorRef
-                            .current
+                        itemsMutatorFunctions
                             .mutate({
                                 key: dialogParams.versionCode,
                                 field: 'questionMutations',
                                 newValue: questionMutations
                             });
 
-                        itemsMutatorRef
-                            .current
+                        itemsMutatorFunctions
                             .mutate({
                                 key: dialogParams.versionCode,
                                 field: 'answerMutations',
