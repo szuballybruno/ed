@@ -28,7 +28,7 @@ import { Id } from '../shared/types/versionId';
 import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
@@ -236,32 +236,31 @@ export class CourseService {
     /**
      * Returns the course id from an item code.
      */
-    async getCourseIdOrFailAsync(
-        playlistItemCode: string
-    ) {
+    async getCourseIdOrFailAsync(playlistItemCode: string) {
 
-
-        const viewIfPlaylistItemCode = await this._ormService
+        const playlistViewByItemCode = await this._ormService
             .query(PlaylistView, { playlistItemCode })
             .where('playlistItemCode', '=', 'playlistItemCode')
             .getOneOrNull();
 
-        if (viewIfPlaylistItemCode)
-            return viewIfPlaylistItemCode.courseId;
+        if (playlistViewByItemCode)
+            return playlistViewByItemCode.courseId;
 
-        const viewIfModuleCode = await this._ormService
+        const playlistViewByModuleCode = await this._ormService
             .query(PlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
             .where('moduleCode', '=', 'moduleCode')
             .and('itemOrderIndex', '=', 'itemOrderIndex')
-            .getSingle();
+            .getOneOrNull();
 
-        return viewIfModuleCode.courseId;
+        if (playlistViewByModuleCode)
+            return playlistViewByModuleCode.courseId;
 
+        throw new Error(`Playlist code (${playlistItemCode}) is corrupt: not found in playlist view!`);
     }
 
     /**
      * Gets the course details edit DTO.
-          */
+     */
     getCourseDetailsEditDataAsync(
         userId: PrincipalId,
         courseId: number

@@ -94,7 +94,7 @@ export class CourseLearningStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    examSuccessRateAverage: number;
+    avgExamScorePercentage: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -102,5 +102,5 @@ export class CourseLearningStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    finalExamSuccessRate: number;
+    finalExamScorePercentage: number;
 }

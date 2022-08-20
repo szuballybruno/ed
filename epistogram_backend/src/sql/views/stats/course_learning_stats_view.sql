@@ -25,7 +25,7 @@ exam_avg_score_percentage AS
 	SELECT 
 		ase.user_id,
 		cv.course_id,
-		ROUND(AVG(esv.score_percentage)) avg_score_percentage
+		ROUND(AVG(esv.score_percentage)) avg_exam_score_percentage
 	FROM public.answer_session ase
 
 	LEFT JOIN public.exam_version ev 
@@ -43,6 +43,42 @@ exam_avg_score_percentage AS
 	GROUP BY
 		ase.user_id,
 		cv.course_id
+),
+latest_answer_session_cte AS 
+(
+	SELECT 
+		ase.user_id,
+		ase.exam_version_id,
+		ase.video_version_id,
+		MAX(ase.id) answer_session_id
+	FROM public.answer_session ase
+	WHERE ase.exam_version_id IS NOT NULL 
+	OR ase.video_version_id IS NOT NULL
+	GROUP BY
+		ase.user_id,
+		ase.exam_version_id,
+		ase.video_version_id
+),
+final_exam_score_percentage AS
+(
+	SELECT 
+		lasc.user_id,
+		lev.course_id,
+		esv.exam_score
+	FROM latest_answer_session_cte lasc
+	
+	INNER JOIN public.latest_exam_view lev
+	ON lev.exam_version_id = lasc.exam_version_id
+	
+	INNER JOIN public.exam_version ev
+	ON ev.id = lev.exam_version_id 
+	
+	INNER JOIN public.exam_data ed
+	ON ed.id = ev.exam_data_id
+	AND ed.is_final = true
+	
+	LEFT JOIN public.exam_score_view esv
+	ON esv.exam_version_id = ev.id
 ),
 answered_video_question AS
 (
@@ -106,16 +142,20 @@ SELECT
 	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
 	avq.answered_video_question_count,
-	easp.avg_score_percentage,
+	easp.avg_exam_score_percentage,
+	fesp.exam_score final_exam_score_percentage,
 	CASE 
 		WHEN cqsv.total_answer_count > 0
 			THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
 		ELSE 0
-	END question_success_rate,
-	elsrv_final.success_rate::int final_exam_success_rate
+	END question_success_rate
 FROM public.user u
 
-CROSS JOIN public.course co
+INNER JOIN public.user_course_bridge ucb
+ON ucb.user_id = u.id
+
+INNER JOIN public.course co
+ON co.id = ucb.course_id
 
 LEFT JOIN public.latest_course_version_view lcvv
 ON lcvv.course_id = co.id
@@ -125,10 +165,6 @@ ON cv.id = lcvv.version_id
 
 LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id
-
-LEFT JOIN public.user_course_bridge ucb
-ON ucb.user_id = u.id
-AND ucb.course_id = co.id
 
 LEFT JOIN public.course_completion cc
 ON cc.user_id = u.id
@@ -157,10 +193,9 @@ LEFT JOIN public.user_course_progress_actual_view ucpav
 ON ucpav.user_id = u.id
 AND ucpav.course_id = co.id
 
-LEFT JOIN public.exam_latest_success_rate_view elsrv_final
-ON elsrv_final.user_id = u.id
-AND elsrv_final.course_id = co.id
-AND elsrv_final.is_final IS TRUE
+LEFT JOIN final_exam_score_percentage fesp
+ON fesp.user_id = u.id
+AND fesp.course_id = co.id
 
 LEFT JOIN public.course_questions_success_view cqsv
 ON cqsv.user_id = u.id

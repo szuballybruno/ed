@@ -5,8 +5,8 @@ SELECT
 	clsv.completed_video_count,
 	clsv.answered_video_question_count,
 	clsv.question_success_rate,
-	clsv.exam_success_rate_average,
-	clsv.final_exam_success_rate,
+	clsv.avg_exam_score_percentage,
+	clsv.final_exam_score_percentage,
 	(
 		SELECT COALESCE(SUM (coapcv.amount), 0) 
 		FROM public.coin_acquire_per_course_view coapcv
