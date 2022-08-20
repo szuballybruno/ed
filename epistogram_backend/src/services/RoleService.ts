@@ -347,7 +347,7 @@ export class RoleService extends QueryServiceBase<Role> {
         };
     }
 
-    getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<'Role'>): ControllerActionReturnType {
+    getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<'Role'>) {
 
         return {
             action: async (): Promise<RoleEditDTO> => {

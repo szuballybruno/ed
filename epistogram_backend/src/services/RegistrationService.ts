@@ -66,7 +66,7 @@ export class RegistrationService {
         activationCode: string,
         email: string,
         firstName: string,
-        lastName: string): ControllerActionReturnType {
+        lastName: string) {
 
         return {
             action: async () => {

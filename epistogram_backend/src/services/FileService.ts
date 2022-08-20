@@ -34,7 +34,7 @@ export class FileService {
         this._authorizationService = authorizationService;
     }
 
-    uploadAvatarFileAsync(principalId: PrincipalId, file: UploadedFile): ControllerActionReturnType {
+    uploadAvatarFileAsync(principalId: PrincipalId, file: UploadedFile) {
 
         return {
             action: async () => {

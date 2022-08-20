@@ -32,7 +32,7 @@ export class CourseRatingService extends ServiceBase {
     getCourseRatingGroupsAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -75,7 +75,7 @@ export class CourseRatingService extends ServiceBase {
     saveCourseRatingGroupAnswersAsync(
         principalId: PrincipalId,
         answersDTO: CourseRatingQuestionAnswersDTO
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {

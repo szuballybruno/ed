@@ -144,7 +144,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     deleteAllBridgesAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -167,7 +167,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         mode: CourseModeType
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             auth: async () => {
@@ -245,7 +245,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         requiredCompletionDate: string
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -312,7 +312,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     getCurrentCourseIdAsync(
         principalId: PrincipalId,
         userId: Id<'User'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -363,7 +363,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     getPrincipalCurrentItemCodeAsync(
         principalId: PrincipalId
-    ): ControllerActionReturnType {
+    ) {
         return {
             action: async () => {
 

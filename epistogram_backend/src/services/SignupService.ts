@@ -34,7 +34,7 @@ export class SignupService {
         this._authorizationService = authorizationService;
     }
 
-    answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO): ControllerActionReturnType {
+    answerSignupQuestionAsync(principalId: PrincipalId, questionAnswer: AnswerSignupQuestionDTO) {
 
         return {
             action: async () => {
@@ -67,7 +67,7 @@ export class SignupService {
         };
     }
 
-    getSignupDataAsync(principalId: PrincipalId): ControllerActionReturnType {
+    getSignupDataAsync(principalId: PrincipalId) {
 
         return {
             action: async () => {

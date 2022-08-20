@@ -24,48 +24,44 @@ export class CourseProgressService {
     /**
      * Returns the /learning/courses data.  
      */
-    getCourseProgressDataAsync(principalId: PrincipalId): ControllerActionReturnType {
+    async getCourseProgressDataAsync(principalId: PrincipalId) {
+
+        const courses = await this._ormService
+            .query(CourseLearningStatsView, {
+                principalId: principalId.getId(),
+                isCompleted: true,
+                isStarted: true
+            })
+            .where('userId', '=', 'principalId')
+            .openBracket()
+            .and('isCompleted', '=', 'isCompleted')
+            .or('isStarted', '=', 'isStarted')
+            .closeBracket()
+            .getMany();
+
+        if (!courses.isDistinctBy(x => x.courseId))
+            throw new Error('Courses are not distinct by course id!');
+
+        // in progress courses 
+        const inProgressCourses = courses
+            .filter(x => x.isStarted && !x.isCompleted);
+
+        const inProgressCoursesAsCourseShortDTOs = this._mapperService
+            .mapTo(CourseLearningDTO, [inProgressCourses]);
+
+        // completed corurses
+        const completedCourses = courses
+            .filter(x => x.isCompleted);
+
+        const completedCoursesAsCourseShortDTOs = this._mapperService
+            .mapTo(CourseLearningDTO, [completedCourses]);
 
         return {
-            action: async () => {
-                const courses = await this._ormService
-                    .query(CourseLearningStatsView, {
-                        principalId: principalId.getId(),
-                        isCompleted: true,
-                        isStarted: true
-                    })
-                    .where('userId', '=', 'principalId')
-                    .openBracket()
-                    .and('isCompleted', '=', 'isCompleted')
-                    .or('isStarted', '=', 'isStarted')
-                    .closeBracket()
-                    .getMany();
-
-                // in progress courses 
-                const inProgressCourses = courses
-                    .filter(x => x.isStarted && !x.isCompleted);
-
-                const inProgressCoursesAsCourseShortDTOs = this._mapperService
-                    .mapTo(CourseLearningDTO, [inProgressCourses]);
-
-                // completed corurses
-                const completedCourses = courses
-                    .filter(x => x.isCompleted);
-
-                const completedCoursesAsCourseShortDTOs = this._mapperService
-                    .mapTo(CourseLearningDTO, [completedCourses]);
-
-                return {
-                    isAnyCoursesComplete: completedCourses.any(x => true),
-                    isAnyCoursesInProgress: inProgressCourses.any(x => true),
-                    completedCourses: completedCoursesAsCourseShortDTOs,
-                    inProgressCourses: inProgressCoursesAsCourseShortDTOs
-                } as UserCoursesDataDTO;
-            },
-            auth: async () => {
-                return AuthorizationResult.ok;
-            }
-        };
+            isAnyCoursesComplete: completedCourses.any(x => true),
+            isAnyCoursesInProgress: inProgressCourses.any(x => true),
+            completedCourses: completedCoursesAsCourseShortDTOs,
+            inProgressCourses: inProgressCoursesAsCourseShortDTOs
+        } as UserCoursesDataDTO;
     }
 
     /**

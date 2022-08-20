@@ -180,7 +180,7 @@ export class ExamService {
     /**
      * Answer a question in the exam. 
      */
-    answerExamQuestionAsync(principalId: PrincipalId, dto: AnswerQuestionDTO): ControllerActionReturnType {
+    answerExamQuestionAsync(principalId: PrincipalId, dto: AnswerQuestionDTO) {
 
         return {
             action: async () => {

@@ -52,7 +52,7 @@ export class CourseService {
      * Returns courses that the principal can use as context
      * when assigning permissions to a user 
      */
-    getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
+    getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         // TODO: CourseDataId is not CourseId
         throwNotImplemented();
@@ -118,7 +118,7 @@ export class CourseService {
     getCourseDetailsAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -156,7 +156,7 @@ export class CourseService {
     createCourseAsync(
         userId: PrincipalId,
         dto: CreateCourseDTO
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -207,7 +207,7 @@ export class CourseService {
         userId: PrincipalId,
         file: UploadedFile,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -265,7 +265,7 @@ export class CourseService {
     getCourseDetailsEditDataAsync(
         userId: PrincipalId,
         courseId: number
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -313,7 +313,7 @@ export class CourseService {
     saveCourseDetailsAsync(
         userId: PrincipalId,
         dto: CourseDetailsEditDataDTO
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -375,7 +375,7 @@ export class CourseService {
         userId: PrincipalId,
         courseId: Id<'Course'>,
         loadDeleted: boolean
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -488,7 +488,7 @@ export class CourseService {
      */
     getAdminCoursesAsync(
         userId: PrincipalId
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -516,7 +516,7 @@ export class CourseService {
     softDeleteCourseAsync(
         userId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -548,7 +548,7 @@ export class CourseService {
         isFeatured: boolean,
         isRecommended: boolean,
         orderBy: OrderType
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             auth: () => Promise.resolve(AuthorizationResult.ok),

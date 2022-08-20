@@ -69,7 +69,6 @@ SELECT
 	u.id user_id,
 	co.id course_id,
 	cd.title,
-
 	true can_view, -- TODO AUTH
 	cc.id IS NOT NULL is_completed,
 	ucb.start_date IS NOT NULL is_started,
@@ -104,8 +103,11 @@ FROM public.user u
 
 CROSS JOIN public.course co
 
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
 LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
+ON cv.id = lcvv.version_id
 
 LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id

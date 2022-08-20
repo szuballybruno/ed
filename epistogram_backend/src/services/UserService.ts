@@ -55,7 +55,7 @@ export class UserService {
     getEditUserDataAsync(
         principalId: PrincipalId,
         editedUserId: Id<'User'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -100,7 +100,7 @@ export class UserService {
     /**
      * Save user from admin page, where you can edit almost all fileds.
      */
-    saveUserAsync(principalId: PrincipalId, dto: UserEditDTO): ControllerActionReturnType {
+    saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
 
         return {
             action: async () => {
@@ -168,7 +168,7 @@ export class UserService {
     saveUserSimpleAsync(
         principalId: PrincipalId,
         dto: UserEditSimpleDTO
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {

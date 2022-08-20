@@ -83,7 +83,7 @@ export class PrequizService {
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         questionId: Id<'Question'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -124,7 +124,7 @@ export class PrequizService {
         questionId: Id<'PrequizQuestion'>,
         courseId: Id<'Course'>,
         answerId: Id<'PrequizAnswer'> | null,
-        value: number | null): ControllerActionReturnType {
+        value: number | null) {
 
         return {
             action: async () => {
@@ -169,7 +169,7 @@ export class PrequizService {
     /**
      * Finish prequiz
      */
-    finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>): ControllerActionReturnType {
+    finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         return {
             action: async () => {
