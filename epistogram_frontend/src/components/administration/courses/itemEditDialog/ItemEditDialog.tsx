@@ -10,6 +10,7 @@ import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid
 import { VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
 import { Id } from '../../../../shared/types/versionId';
+import { Logger } from '../../../../static/Logger';
 
 export const ItemEditDialog = ({
     dialogLogic,
@@ -27,6 +28,10 @@ export const ItemEditDialog = ({
     const questionMutations = dialogParams?.questionMutations;
 
     const handleCallback = useCallback((questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => {
+
+        Logger.logScoped('MUTATIONS', 'Finishing item edits. Final mutations: ');
+        Logger.logScoped('MUTATIONS', questionMutations);
+        Logger.logScoped('MUTATIONS', answerMutations);
 
         dialogLogic.closeDialog();
         callback(questionMutations, answerMutations);

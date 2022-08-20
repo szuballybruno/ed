@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { Id } from '../../../../shared/types/versionId';
+import { useStateAndRef } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex } from '../../../controls/EpistoFlex';
@@ -36,12 +37,14 @@ export const VideoEditor = ({
     const videoUrl = courseItemEditData?.videoUrl ?? '';
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, videoVersionId, null, true, getPlayedSeconds);
+    const [questionGridHasFocusRef, questionGridHasFocus, setQuestionGridHasFocus] = useStateAndRef(false);
+
+    const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, videoVersionId, null, true, getPlayedSeconds, setQuestionGridHasFocus);
 
     const onCloseHandler = useCallback(() => {
 
         onClose(logic.questionMutations, logic.answerMutations);
-    }, [onClose, logic.questionMutations, logic.answerMutations]);
+    }, [onClose, logic]);
 
     return <Flex
         direction="column"
@@ -82,6 +85,7 @@ export const VideoEditor = ({
             justify="flex-end">
 
             <EpistoButton
+                isDisabled={questionGridHasFocus}
                 variant="colored"
                 onClick={onCloseHandler}>
                 {translatableTexts.misc.ok}

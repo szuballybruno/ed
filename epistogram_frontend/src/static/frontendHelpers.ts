@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import quantize from 'quantize';
-import React, { ComponentType, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../configuration/applicationRoutes';
@@ -27,6 +27,15 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     }
 
     return results;
+};
+
+export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void]=> {
+
+    const [stateValue, stateSetter] = useState(defaultValue);
+    const ref = useRef(stateValue);
+    ref.current = stateValue;
+
+    return [ref, stateValue, stateSetter];
 };
 
 export const useCSSOptionClasses = (cssOptions: CSSOptionsType) => {

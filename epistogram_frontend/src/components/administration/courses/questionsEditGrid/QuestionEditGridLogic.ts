@@ -14,7 +14,8 @@ export const useQuestionEditGridLogic = (
     videoVersionId: Id<'VideoVersion'> | null,
     examVersionId: Id<'ExamVersion'> | null,
     showTiming?: boolean,
-    getPlayedSeconds?: () => number,) => {
+    getPlayedSeconds?: () => number,
+    onFocusChanged?: (hasFocus: boolean) => void) => {
 
     const [questionMutatorState, questionMutatorFunctions] = useXMutatorNew(QuestionEditDataDTO, 'questionVersionId', 'QuestionMutator');
     const [answerMutatorState, answerMutatorFunctions] = useXMutatorNew(AnswerEditDTO, 'answerVersionId', 'AnswerMutator');
@@ -156,7 +157,8 @@ export const useQuestionEditGridLogic = (
         resetMutations: questionMutatorFunctions.resetMutations.bind(questionMutatorFunctions),
         createAnswer: answerMutatorFunctions.create.bind(answerMutatorFunctions),
         mutateAnswer: answerMutatorFunctions.mutate.bind(answerMutatorFunctions),
-        deleteAnswer: answerMutatorFunctions.remove.bind(answerMutatorFunctions)
+        deleteAnswer: answerMutatorFunctions.remove.bind(answerMutatorFunctions),
+        onFocusChanged
     };
 };
 

@@ -111,10 +111,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     deps?: any[],
     density?: 'dense' | 'spaced',
     hideFooter?: boolean,
-    id?: string
+    id?: string,
+    onFocusChanged?: (hasFocus: boolean) => void
 }) => {
 
-    const { columns, id, rows, initialState, density, hideFooter, getKey } = props;
+    const { columns, id, rows, initialState, density, hideFooter, getKey, onFocusChanged } = props;
 
     Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
@@ -145,6 +146,8 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                 (params, event) => {
 
                     event.defaultMuiPrevented = true;
+                    if (onFocusChanged)
+                        onFocusChanged(params.cellMode === 'edit');
                 },
                 {
                     isFirst: true
