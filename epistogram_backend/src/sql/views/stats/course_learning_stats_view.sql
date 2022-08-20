@@ -20,15 +20,29 @@ video_question_count AS
 	
 	GROUP BY cv.id
 ),
-exam_success_rate_average AS
+exam_avg_score_percentage AS
 (
 	SELECT 
-		elsrv.user_id,
-		elsrv.course_id,
-		COALESCE(AVG(elsrv.success_rate), 0)::int exam_success_rate_average
-	FROM public.exam_latest_success_rate_view elsrv
-	
-	GROUP BY elsrv.user_id, elsrv.course_id
+		ase.user_id,
+		cv.course_id,
+		ROUND(AVG(esv.score_percentage)) avg_score_percentage
+	FROM public.answer_session ase
+
+	LEFT JOIN public.exam_version ev 
+	ON ev.id = ase.exam_version_id
+
+	LEFT JOIN public.module_version mv
+	ON mv.id = ev.module_version_id
+
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+
+	LEFT JOIN public.exam_score_view esv
+	ON esv.exam_version_id = ev.id
+
+	GROUP BY
+		ase.user_id,
+		cv.course_id
 ),
 answered_video_question AS
 (
@@ -92,7 +106,7 @@ SELECT
 	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
 	avq.answered_video_question_count,
-	esra.exam_success_rate_average,
+	easp.avg_score_percentage,
 	CASE 
 		WHEN cqsv.total_answer_count > 0
 			THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
@@ -152,9 +166,9 @@ LEFT JOIN public.course_questions_success_view cqsv
 ON cqsv.user_id = u.id
 AND cqsv.course_id = co.id
 
-LEFT JOIN exam_success_rate_average esra
-ON esra.user_id = u.id
-AND esra.course_id = co.id
+LEFT JOIN exam_avg_score_percentage easp
+ON easp.user_id = u.id
+AND easp.course_id = co.id
 
 LEFT JOIN answered_video_question avq
 ON avq.user_id = u.id
