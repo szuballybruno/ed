@@ -363,7 +363,7 @@ const marray = [
         .addMapping(ExamPlayerDataDTO, () => (
             view: ExamPlayerDataView,
             questions: QuestionDataView[],
-            statsView: ExamResultStatsView) => {
+            statsView: ExamResultStatsView | null) => {
 
             return instantiate<ExamPlayerDataDTO>({
                 examVersionId: view.examVersionId,
@@ -377,7 +377,7 @@ const marray = [
                 totalQuestionCount: view.totalQuestionCount,
                 questions: toQuestionDTO(questions),
                 type: 'exam',
-                examStats: toStatsDTO(statsView)
+                examStats: statsView ? toStatsDTO(statsView) : null
             });
         }),
 

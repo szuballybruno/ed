@@ -75,7 +75,7 @@ export class ExamService {
             })
             .where('examVersionId', '=', 'examVersionId')
             .and('userId', '=', 'userId')
-            .getSingle();
+            .getOneOrNull();
 
         return this._mapperService
             .mapTo(ExamPlayerDataDTO, [examView, questions, examResultView]);
