@@ -1,15 +1,15 @@
-WITH 
+WITH
 question_answer_cte AS
 (
-	SELECT 
+	SELECT
 		asv.user_id,
 		cv.course_id,
 		SUM(asv.answered_question_count) answered_question_count,
-        SUM(CASE WHEN asv.answer_session_type = 'practise' 
-            THEN asv.answered_question_count 
+        SUM(CASE WHEN asv.answer_session_type = 'practise'
+            THEN asv.answered_question_count
             ELSE 0 END) practise_quesiton_answer_count,
-        SUM(CASE WHEN asv.answer_session_type = 'video' 
-            THEN asv.answered_question_count 
+        SUM(CASE WHEN asv.answer_session_type = 'video'
+            THEN asv.answered_question_count
             ELSE 0 END) video_quesiton_answer_count
 	FROM public.given_answer ga
 
@@ -24,16 +24,16 @@ question_answer_cte AS
 
 	INNER JOIN public.course_version cv
 	ON cv.id = mv.course_version_id
-    
+
     GROUP BY
 		asv.user_id,
 		cv.course_id
-	
+
 	ORDER BY
 		asv.user_id,
 		cv.course_id
 ),
-avg_performance_cte AS 
+avg_performance_cte AS
 (
     SELECT
         upv.course_id,
@@ -50,12 +50,13 @@ completed_video_count AS
 		cicv.course_id,
 		COUNT(cicv.video_version_id) completed_video_count
 	FROM public.course_item_completion_view cicv
-	
+
 	GROUP BY cicv.user_id, cicv.course_id
 )
 
 SELECT
     co.id course_id,
+    cv.id,
     cd.title,
     u.id user_id,
     sf.file_path cover_file_path,
@@ -75,17 +76,17 @@ SELECT
     upv.performance_percentage performance_percentage,
     apc.avg_performance average_performance_on_course,
 
-    -- correct answer rate	
+    -- correct answer rate
     (
-        SELECT 
-            CASE 
+        SELECT
+            CASE
                 WHEN cqsv.total_answer_count > 0
                     THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
                 ELSE 0
             END
         FROM public.course_questions_success_view cqsv
         WHERE cqsv.course_id = co.id
-        AND cqsv.user_id = u.id 
+        AND cqsv.user_id = u.id
     ) correct_answer_rate,
 
     -- completed exam count
@@ -154,15 +155,18 @@ SELECT
 FROM public.course co
 
 INNER JOIN public.user_course_bridge ucb
-ON ucb.course_id = co.id 
-AND (ucb.stage_name = 'watch' 
+ON ucb.course_id = co.id
+AND (ucb.stage_name = 'watch'
     OR ucb.stage_name = 'finished')
 
 LEFT JOIN public.user u
 ON u.id = ucb.user_id
 
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
 LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
+ON cv.id = lcvv.version_id
 
 LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id
@@ -201,5 +205,5 @@ AND upv.course_id = co.id
 LEFT JOIN avg_performance_cte apc
 ON apc.course_id = co.id
 
-ORDER BY 
+ORDER BY
     u.id
