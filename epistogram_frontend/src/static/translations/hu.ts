@@ -463,8 +463,8 @@ export const huTranslation: TranslationType = {
                     suffix: '%'
                 },
                 correctAnswersCount: {
-                    title: 'Helyes válasz a kérdésekre',
-                    suffix: 'db'
+                    title: 'Pont szerezve a kérdésekre',
+                    suffix: 'pont'
                 },
                 examDoneInMinutes: {
                     title: 'Alatt teljesítetted a tesztet',

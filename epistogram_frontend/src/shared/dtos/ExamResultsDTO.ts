@@ -1,14 +1,11 @@
 import { ExamResultQuestionDTO } from './ExamResultQuestionDTO';
+import { ExamStatsDTO } from './ExamStatsDTO';
 
-export type ExamResultsDTO = {
+export class ExamResultsDTO {
     isSuccessful: boolean;
-    correctAnswerRate: number;
-    questionsCount: number;
-    examSuccessRateDiffFromCompany: number;
-    examLengthSeconds: number;
     questions: ExamResultQuestionDTO[];
     isFinalExam: boolean;
     isCompletedPrevoiusly: boolean;
     shouldShowCourseCompleted: boolean;
-    fullyCorrectlyAnsweredQuestionsCount: number;
+    examStats: ExamStatsDTO;
 }

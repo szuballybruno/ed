@@ -13,15 +13,14 @@ import { LatestExamView } from '../models/views/LatestExamView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
+import { ExamResultsDTO } from '../shared/dtos/ExamResultsDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseCompletionService } from './CourseCompletionService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
-import { toExamResultDTO } from './misc/mappings';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
@@ -128,121 +127,100 @@ export class ExamService {
     /**
      * Finish exam 
      */
-    finishExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
+    async finishExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
 
-        return {
-            action: async () => {
+        this._loggerService
+            .logScoped('GENERIC', 'Finishing exam... ' + principalId);
 
-                this._loggerService
-                    .logScoped('GENERIC', 'Finishing exam... ' + principalId);
+        const ans = await this
+            ._ormService
+            .getSingleById(AnswerSession, answerSessionId);
 
-                const ans = await this
-                    ._ormService
-                    .getSingleById(AnswerSession, answerSessionId);
+        await this
+            ._ormService
+            .createAsync(CourseItemCompletion, {
+                answerSessionId,
+                completionDate: new Date(),
+                examVersionId: ans.examVersionId,
+                userId: principalId.getId(),
+                videoVersionId: null
+            });
 
-                await this
-                    ._ormService
-                    .createAsync(CourseItemCompletion, {
-                        answerSessionId,
-                        completionDate: new Date(),
-                        examVersionId: ans.examVersionId,
-                        userId: principalId.getId(),
-                        videoVersionId: null
-                    });
+        /**
+         * Try finish course 
+         */
+        const moduleVersion = await this
+            ._ormService
+            .query(ModuleVersion, { examVersionId: ans.examVersionId })
+            .select(ModuleVersion)
+            .innerJoin(ExamVersion, x => x
+                .on('id', '=', 'examVersionId')
+                .and('moduleVersionId', '=', 'id', ModuleVersion))
+            .getSingle();
 
-                /**
-                 * Try finish course 
-                 */
-                const moduleVersion = await this
-                    ._ormService
-                    .query(ModuleVersion, { examVersionId: ans.examVersionId })
-                    .select(ModuleVersion)
-                    .innerJoin(ExamVersion, x => x
-                        .on('id', '=', 'examVersionId')
-                        .and('moduleVersionId', '=', 'id', ModuleVersion))
-                    .getSingle();
+        if (!moduleVersion.courseVersionId)
+            return;
 
-                if (!moduleVersion.courseVersionId)
-                    return;
-
-                await this
-                    ._courseCompletionService
-                    .tryFinishCourseAsync(principalId.getId(), moduleVersion.courseVersionId);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        await this
+            ._courseCompletionService
+            .tryFinishCourseAsync(principalId.getId(), moduleVersion.courseVersionId);
     }
 
     /**
      * Answer a question in the exam. 
      */
-    answerExamQuestionAsync(principalId: PrincipalId, dto: AnswerQuestionDTO) {
+    async answerExamQuestionAsync(principalId: PrincipalId, dto: AnswerQuestionDTO) {
 
-        return {
-            action: async () => {
-                const userId = principalId
-                    .getId();
+        const userId = principalId
+            .getId();
 
-                const {
-                    answerSessionId,
-                    answerIds,
-                    elapsedSeconds,
-                    questionVersionId
-                } = dto;
+        const {
+            answerSessionId,
+            answerIds,
+            elapsedSeconds,
+            questionVersionId
+        } = dto;
 
-                /**
-                 * Get exam version id
-                 */
-                const questionVersion = await this
-                    ._ormService
-                    .query(QuestionVersion, { questionVersionId })
-                    .where('id', '=', 'questionVersionId')
-                    .getSingle();
+        /**
+         * Get exam version id
+         */
+        const questionVersion = await this
+            ._ormService
+            .query(QuestionVersion, { questionVersionId })
+            .where('id', '=', 'questionVersionId')
+            .getSingle();
 
-                const examVersionId = questionVersion
-                    .examVersionId!;
+        const examVersionId = questionVersion
+            .examVersionId!;
 
-                /**
-                 * Save given answer
-                 */
-                const result = await this
-                    ._quesitonAnswerService
-                    .saveGivenAnswerAsync({
-                        userId,
-                        answerSessionId,
-                        questionVersionId,
-                        answerIds,
-                        isExamQuestion: true,
-                        elapsedSeconds
-                    });
+        /**
+         * Save given answer
+         */
+        const result = await this
+            ._quesitonAnswerService
+            .saveGivenAnswerAsync({
+                userId,
+                answerSessionId,
+                questionVersionId,
+                answerIds,
+                isExamQuestion: true,
+                elapsedSeconds
+            });
 
-                /**
-                 * Save user activity
-                 */
-                await this._userSessionActivityService
-                    .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
+        /**
+         * Save user activity
+         */
+        await this._userSessionActivityService
+            .saveUserSessionActivityAsync(userId, 'exam', examVersionId);
 
-                /**
-                 * If first successful, do something DUNNO WHAT
-                 * TODO
-                 */
-                // const isFirstSuccessfulAnswerSession = await this
-                //     ._checkIfFirstSuccessfulAnswerSessionAsync(userId, examVersionId, answerSessionId);
+        /**
+         * If first successful, do something DUNNO WHAT
+         * TODO
+         */
+        // const isFirstSuccessfulAnswerSession = await this
+        //     ._checkIfFirstSuccessfulAnswerSessionAsync(userId, examVersionId, answerSessionId);
 
-                return result;
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return result;
     }
 
     /**
@@ -291,7 +269,9 @@ export class ExamService {
             .and('userId', '=', 'userId')
             .getSingle();
 
-        return toExamResultDTO(examResultViews, examResultStatsView);
+        return this
+            ._mapperService
+            .mapTo(ExamResultsDTO, [examResultViews, examResultStatsView]);
     }
 
     /**

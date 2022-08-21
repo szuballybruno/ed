@@ -4,20 +4,20 @@ import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { PretestResultView } from '../models/views/PretestResultView';
+import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { Id } from '../shared/types/versionId';
 import { throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
-import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
-import { PermissionService } from './PermissionService';
 
 export class PretestService {
 
@@ -201,40 +201,30 @@ export class PretestService {
     /**
      * Finishes a pretest exam
      */
-    finishPretestAsync(
+    async finishPretestAsync(
         principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>) {
 
-        return {
-            action: async () => {
+        // finish pretest
+        await this
+            ._examService
+            .finishExamAsync(principalId, answerSessionId);
 
-                // finish pretest
-                await this
-                    ._examService
-                    .finishExamAsync(principalId, answerSessionId)
-                    .action();
+        // start course
+        const courseId = await this
+            ._courseBridgeService
+            .getCurrentCourseIdOrFail(principalId.getId());
 
-                // start course
-                const courseId = await this
-                    ._courseBridgeService
-                    .getCurrentCourseIdOrFail(principalId.getId());
+        await this._courseBridgeService
+            .setCourseStartDateAsync(principalId, courseId)
+            .action();
 
-                await this._courseBridgeService
-                    .setCourseStartDateAsync(principalId, courseId)
-                    .action();
-
-                /**
-                 * Assign SET_COURSE_MODE permission to allow user 
-                 * to start course in their preferred mode
-                 */
-                await this
-                    ._permissionService
-                    .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        /**
+         * Assign SET_COURSE_MODE permission to allow user 
+         * to start course in their preferred mode
+         */
+        await this
+            ._permissionService
+            .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
     }
 }

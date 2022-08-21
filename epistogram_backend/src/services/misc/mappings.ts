@@ -84,6 +84,7 @@ import { EventDTO } from '../../shared/dtos/EventDTO';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { ExamResultQuestionDTO } from '../../shared/dtos/ExamResultQuestionDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
+import { ExamStatsDTO } from '../../shared/dtos/ExamStatsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
@@ -124,7 +125,7 @@ import { instantiate } from '../../shared/logic/sharedLogic';
 import { UserActivityDistributionChartData } from '../../shared/types/epistoChartTypes';
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
+import { toFullName } from '../../utilities/helpers';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
@@ -359,7 +360,10 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addMapping(ExamPlayerDataDTO, () => (view: ExamPlayerDataView, questions: QuestionDataView[], examResultStatsView: ExamResultStatsView) => {
+        .addMapping(ExamPlayerDataDTO, () => (
+            view: ExamPlayerDataView,
+            questions: QuestionDataView[],
+            statsView: ExamResultStatsView) => {
 
             return instantiate<ExamPlayerDataDTO>({
                 examVersionId: view.examVersionId,
@@ -373,12 +377,40 @@ const marray = [
                 totalQuestionCount: view.totalQuestionCount,
                 questions: toQuestionDTO(questions),
                 type: 'exam',
-                fullyCorrectlyAnsweredQuestionsCount: examResultStatsView.fullyCorrectlyAnsweredQuestionsCount,
-                questionsCount: examResultStatsView.questionCount,
-                correctAnswerRate: examResultStatsView.correctAnswerRate,
-                examLengthSeconds: examResultStatsView.examLengthSeconds,
-                examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany),
-                answeredQuestionCount: examResultStatsView.answeredQuestionCount
+                examStats: toStatsDTO(statsView)
+            });
+        }),
+
+    epistoMappingsBuilder
+        .addMapping(ExamResultsDTO, () => (
+            views: ExamResultView[],
+            statsView: ExamResultStatsView) => {
+
+            const viewAsExam = views
+                .first();
+
+            const questionDTOs = views
+                .groupBy(x => x.questionVersionId)
+                .map(questsionGroup => {
+
+                    const viewAsQuestion = questsionGroup.items.first();
+
+                    return {
+                        text: viewAsQuestion.questionText,
+                        correctAnswerRate: viewAsQuestion.correctAnswerRatePerQuestion,
+                        answers: questsionGroup
+                            .items
+                            .map(x => toResultAnswerDTO(x)),
+                    } as ExamResultQuestionDTO;
+                });
+
+            return instantiate<ExamResultsDTO>({
+                isSuccessful: viewAsExam.isCompletedSession,
+                questions: questionDTOs,
+                isCompletedPrevoiusly: !viewAsExam.onlySuccessfulSession,
+                isFinalExam: viewAsExam.isFinalExam,
+                shouldShowCourseCompleted: viewAsExam.onlySuccessfulSession && viewAsExam.isFinalExam,
+                examStats: toStatsDTO(statsView)
             });
         }),
 
@@ -1192,6 +1224,20 @@ const parseSkillBenefits = (str: string) => {
         });
 };
 
+const toStatsDTO = (statsView: ExamResultStatsView) => {
+
+    return instantiate<ExamStatsDTO>({
+        fullyCorrectlyAnsweredQuestionsCount: statsView.fullyCorrectlyAnsweredQuestionsCount,
+        questionsCount: statsView.questionCount,
+        scorePercentage: statsView.scorePercentage,
+        examLengthSeconds: statsView.examLengthSeconds,
+        scorePercentageDiffFromAvg: statsView.scorePercentageDiffFromAvg,
+        answeredQuestionCount: statsView.answeredQuestionCount,
+        examMaxScore: statsView.examMaxScore,
+        examScore: statsView.examScore
+    });
+};
+
 export const toRoleDTO = (role: Role) => {
 
     return {
@@ -1215,40 +1261,6 @@ export const toTaskDTO = (task: Task) => {
         dueDate: task.dueData,
         objective: task.objective
     } as TaskDTO;
-};
-
-export const toExamResultDTO = (views: ExamResultView[], examResultStatsView: ExamResultStatsView) => {
-
-    const viewAsExam = views.first();
-
-    const questionDTOs = views
-        .groupBy(x => x.questionVersionId)
-        .map(questsionGroup => {
-
-            const viewAsQuestion = questsionGroup.items.first();
-
-            return {
-                text: viewAsQuestion.questionText,
-                correctAnswerRate: viewAsQuestion.correctAnswerRatePerQuestion,
-                answers: questsionGroup
-                    .items
-                    .map(x => toResultAnswerDTO(x)),
-            } as ExamResultQuestionDTO;
-        });
-
-    return instantiate<ExamResultsDTO>({
-        isSuccessful: viewAsExam.isCompletedSession,
-        questions: questionDTOs,
-        isCompletedPrevoiusly: !viewAsExam.onlySuccessfulSession,
-        isFinalExam: viewAsExam.isFinalExam,
-        shouldShowCourseCompleted: viewAsExam.onlySuccessfulSession && viewAsExam.isFinalExam,
-
-        fullyCorrectlyAnsweredQuestionsCount: examResultStatsView.fullyCorrectlyAnsweredQuestionsCount,
-        questionsCount: examResultStatsView.questionCount,
-        correctAnswerRate: examResultStatsView.correctAnswerRate,
-        examLengthSeconds: examResultStatsView.examLengthSeconds,
-        examSuccessRateDiffFromCompany: relativeDiffInPercentage(examResultStatsView.correctAnswerRate, examResultStatsView.examSuccessRateByCompany)
-    });
 };
 
 export const toResultAnswerDTO = (view: ExamResultView) => {

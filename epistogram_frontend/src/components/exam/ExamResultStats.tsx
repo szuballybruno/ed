@@ -1,33 +1,35 @@
+import { ExamStatsDTO } from '../../shared/dtos/ExamStatsDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTime } from '../../static/frontendHelpers';
-
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
 
-export const ExamResultStats = (props: {
-    correctAnswerRate: number,
-    correctAnswerCount: number,
-    totalQuestionCount: number,
-    examLengthSeconds: number | null,
-    examSuccessRateDiffFromCompany: number | null
-}) => {
+export const ExamResultStats = ({ stats }: { stats: ExamStatsDTO | null }) => {
 
-    const { correctAnswerRate, correctAnswerCount, totalQuestionCount, examLengthSeconds, examSuccessRateDiffFromCompany } = props;
+    const {
+        examLengthSeconds,
+        scorePercentageDiffFromAvg,
+        scorePercentage,
+        examScore,
+        examMaxScore
+    } = (stats ?? {
+        examLengthSeconds: 0,
+        scorePercentage: 0,
+        scorePercentageDiffFromAvg: 0,
+        examScore: 0,
+        examMaxScore: 0
+    });
 
-    const successRateDiffInText = ((successRateDiff: number | null = examSuccessRateDiffFromCompany) => {
+    const successRateDiffInText = (() => {
 
-        if (!successRateDiff)
-            return null;
-
-        if (successRateDiff > 30)
+        if (scorePercentageDiffFromAvg > 30)
             return 'Kimagasló';
 
-        if (successRateDiff < -30)
+        if (scorePercentageDiffFromAvg < -30)
             return 'Átlag alatti';
 
         return 'Átlagos';
-
     })();
 
     return <EpistoGrid
@@ -36,26 +38,28 @@ export const ExamResultStats = (props: {
         gap={'10px'}
         auto={'fill'}>
 
+        {/* score percentage */}
         <StatisticsCard
             height="150px"
             iconPath={Environment.getAssetUrl('/icons/exam_result_good_answer_count.svg')}
             suffix={translatableTexts.exam.examResultStats.correctAnswersRatio.suffix}
             title={translatableTexts.exam.examResultStats.correctAnswersRatio.title}
-            value={'' + correctAnswerRate} />
+            value={scorePercentage} />
 
+        {/* score / max score */}
         <StatisticsCard
             height="150px"
             iconPath={Environment.getAssetUrl('/icons/exam_result_good_answer_percent.svg')}
             suffix={translatableTexts.exam.examResultStats.correctAnswersCount.suffix}
             title={translatableTexts.exam.examResultStats.correctAnswersCount.title}
-            value={`${correctAnswerCount}/${totalQuestionCount}`} />
+            value={`${examScore}/${examMaxScore}`} />
 
         <StatisticsCard
             height="150px"
             iconPath={Environment.getAssetUrl('/icons/exam_result_time.svg')}
             suffix={translatableTexts.misc.suffixes.second}
             title={translatableTexts.exam.examResultStats.examDoneInMinutes.title}
-            value={examLengthSeconds ? formatTime(examLengthSeconds) : null} />
+            value={formatTime(examLengthSeconds)} />
 
         <StatisticsCard
             height="150px"

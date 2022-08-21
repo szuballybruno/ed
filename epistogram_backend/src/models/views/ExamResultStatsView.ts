@@ -30,11 +30,23 @@ export class ExamResultStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    examSuccessRateByCompany: number;
+    avgScorePercentage: number;
 
     @ViewColumn()
     @XViewColumn()
-    correctAnswerRate: number;
+    scorePercentage: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    examMaxScore: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    examScore: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    scorePercentageDiffFromAvg: number;
 
     @ViewColumn()
     @XViewColumn()

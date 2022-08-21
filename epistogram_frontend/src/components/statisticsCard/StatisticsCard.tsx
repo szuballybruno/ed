@@ -180,9 +180,9 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                             maxWidth: 'calc(100% - 10px)'
                         }}>
 
-                        {value
-                            ? value
-                            : '-'}
+                        {(value === undefined || value === null)
+                            ? '-'
+                            : value}
                     </EpistoFont>
 
                     {/* suffix */}

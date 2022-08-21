@@ -1,4 +1,5 @@
 import { Id } from '../types/versionId';
+import { ExamStatsDTO } from './ExamStatsDTO';
 import { QuestionDTO } from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
@@ -13,11 +14,5 @@ export class ExamPlayerDataDTO {
     correctAnswerCount: number;
     totalQuestionCount: number;
     isCompletedPreviously: boolean;
-
-    fullyCorrectlyAnsweredQuestionsCount: number;
-    questionsCount: number;
-    examSuccessRateDiffFromCompany: number;
-    correctAnswerRate: number;
-    examLengthSeconds: number;
-    answeredQuestionCount: number;
+    examStats: ExamStatsDTO;
 }

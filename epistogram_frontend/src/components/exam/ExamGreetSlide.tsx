@@ -80,11 +80,7 @@ export const ExamGreetSlide = (props: {
                     width="100%">
 
                     <ExamResultStats
-                        correctAnswerRate={exam!.correctAnswerRate}
-                        totalQuestionCount={exam!.questionsCount}
-                        correctAnswerCount={exam!.fullyCorrectlyAnsweredQuestionsCount}
-                        examLengthSeconds={exam!.examLengthSeconds}
-                        examSuccessRateDiffFromCompany={exam!.examSuccessRateDiffFromCompany} />
+                        stats={exam.examStats} />
                 </Flex>
             </>}
         </Flex>

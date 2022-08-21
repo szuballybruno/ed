@@ -36,9 +36,9 @@ grouped_cte AS
 		flat.user_id,
 		flat.exam_version_id,
 		flat.answer_session_id,
-		COUNT(*) question_count,
-		COALESCE(SUM(flat.score), 0) exam_score,
-		COUNT(*) * consts.question_max_score exam_max_score
+		COUNT(*)::int question_count,
+		COALESCE(SUM(flat.score), 0)::int exam_score,
+		(COUNT(*) * consts.question_max_score)::int exam_max_score
 	FROM flat_cte flat
 
 	CROSS JOIN public.constant_values_view consts
@@ -56,5 +56,5 @@ grouped_cte AS
 )
 SELECT 
 	grouped.*,
-	ROUND(grouped.exam_score::numeric / grouped.exam_max_score::numeric * 100, 1) score_percentage
+	ROUND(grouped.exam_score::numeric / grouped.exam_max_score::numeric * 100, 1)::int score_percentage
 FROM grouped_cte grouped

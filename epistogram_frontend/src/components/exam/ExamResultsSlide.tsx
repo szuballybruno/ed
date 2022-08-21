@@ -86,11 +86,7 @@ export const ExamResultsSlide = (props: {
 
             {/* stats */}
             <ExamResultStats
-                correctAnswerCount={examResults?.fullyCorrectlyAnsweredQuestionsCount ?? 0}
-                totalQuestionCount={examResults?.questionsCount ?? 0}
-                correctAnswerRate={examResults?.correctAnswerRate ?? 0}
-                examLengthSeconds={examResults?.examLengthSeconds ?? null}
-                examSuccessRateDiffFromCompany={examResults?.examSuccessRateDiffFromCompany ?? null} />
+                stats={examResults?.examStats ?? null} />
 
             {/* results */}
             <Flex
