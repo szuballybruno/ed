@@ -1,18 +1,19 @@
-import { Box, Flex, Grid } from '@chakra-ui/react';
-import { Slider } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { PrequizApiService } from '../../../services/api/prequizApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../services/core/notifications';
-import { Id } from '../../../shared/types/versionId';
-import { Environment } from '../../../static/Environemnt';
-import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { ExamLayout } from '../../exam/ExamLayout';
-import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
-import { QuestionAnswer } from '../../exam/QuestionAnswer';
+import {Box, Flex, Grid} from '@chakra-ui/react';
+import {Slider} from '@mui/material';
+import {useEffect, useState} from 'react';
+import {PrequizApiService} from '../../../services/api/prequizApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {useShowErrorDialog} from '../../../services/core/notifications';
+import {Id} from '../../../shared/types/versionId';
+import {Environment} from '../../../static/Environemnt';
+import {ArrayBuilder, usePaging} from '../../../static/frontendHelpers';
+import {useIntParam} from '../../../static/locationHelpers';
+import {translatableTexts} from '../../../static/translatableTexts';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {ExamLayout} from '../../exam/ExamLayout';
+import {ExamLayoutContent} from '../../exam/ExamLayoutContent';
+import {QuestionAnswer} from '../../exam/QuestionAnswer';
+import {CourseApiService} from '../../../services/api/courseApiService';
 
 export const PrequizSubpage = () => {
 
@@ -24,6 +25,7 @@ export const PrequizSubpage = () => {
     const { questions } = PrequizApiService.usePrequizQuestions(courseId);
 
     const { finishPrequiz } = PrequizApiService.useFinishPrequiz();
+    const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
 
     const handleFinishPrequizAsync = async () => {
 
@@ -105,7 +107,9 @@ export const PrequizSubpage = () => {
                     </EpistoFont>
                 </Flex>
             )}
-            headerCenterText="Kurzus előtti felmérő"
+            headerCenterText={'Kurzus előtti felmérő' + (courseBriefData?.title
+                ? ' - ' + courseBriefData?.title
+                : '')}
             footerButtons={new ArrayBuilder()
                 .addIf(canContinue, {
                     title: translatableTexts.exam.nextQuestion,
@@ -117,7 +121,9 @@ export const PrequizSubpage = () => {
                 : undefined}>
 
             <ExamLayoutContent
-                title={question?.text ?? ''}>
+                title={paging.currentIndex === 0
+                    ? question?.text + ' "' + courseBriefData?.title + '" témakörben?'
+                    : question?.text!}>
 
                 {question?.isNumeric
                     ? <Flex direction="column"

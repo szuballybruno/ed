@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { showNotification } from '../services/core/notifications';
 import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
@@ -41,13 +41,13 @@ export const QuesitionView = (props: {
         await answerQuesitonAsync([answerId]);
     };
 
-    // reset when question id changed 
+    // reset when question id changed
     useEffect(() => {
 
         setSelectedAnswerId(null);
     }, [question.questionVersionId]);
 
-    // bonus coin 
+    // bonus coin
     useEffect(() => {
 
         if (!bonusCoinsAcquired)
@@ -75,6 +75,7 @@ export const QuesitionView = (props: {
         loadingProps={loadingProps}
         onlyShowAnswers={onlyShowAnswers}
         {...css}>
+
         {question
             .answers
             .map((answer, index) => {
@@ -103,21 +104,5 @@ export const QuesitionView = (props: {
                     </EpistoFont>
                 </QuestionnaierAnswer>;
             })}
-
-        {!!coinsAcquired && <Flex
-            mt="10px"
-            borderRadius="5px"
-            p="7px"
-            align="center">
-
-            <EpistoFont>
-                +1 EpistoCoinnal gazdagodtál!
-            </EpistoFont>
-
-            <img
-                src={Environment.getAssetUrl('images/epistoCoin.png')}
-                className="square25"
-                style={{ margin: '0px 0px 4px 4px' }} />
-        </Flex>}
     </QuestionnaireLayout>;
 };

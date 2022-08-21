@@ -191,7 +191,7 @@ export const WatchSubpage = () => {
                         <FlexFloat
                             id="courseItemListSidebar"
                             justify="flex-start"
-                            zIndex="10"
+                            zIndex="4"
                             ml={isSidebarHidden ? '0' : '10px'}
                             bg="var(--transparentWhite70)"
                             maxWidth={isSidebarHidden ? '0px' : '420px'}

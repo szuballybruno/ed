@@ -55,7 +55,9 @@ export const VideoQuestionnaire = (props: {
         setShowUpTime(new Date());
     }, [isShowing]);
 
-    return <Flex direction="column">
+    return <Flex
+        zIndex='6'
+        direction="column">
 
         <QuesitionView
             answerQuesitonAsync={handleAnswerQuestionAsync}
@@ -80,6 +82,7 @@ export const VideoQuestionnaire = (props: {
                         fontSize="fontNormal14"
                         style={{
                             position: 'relative',
+                            zIndex: '8',
                             margin: '10px'
                         }}>
 

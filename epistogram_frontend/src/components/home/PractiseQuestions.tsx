@@ -1,18 +1,23 @@
-import { Flex } from '@chakra-ui/layout';
-import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
-import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
-import { Id } from '../../shared/types/versionId';
-import { Environment } from '../../static/Environemnt';
-import { getRandomInteger } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { QuesitionView } from '../QuestionView';
-import { EpistoConinImage } from '../universal/EpistoCoinImage';
-import { Greetings } from './Greetings';
-import { NoQuestionsAvailable } from './NoQuestionsAvailable';
+import {Flex} from '@chakra-ui/layout';
+import {useCurrentCourseItemCode} from '../../services/api/miscApiService';
+import {useAnswerPractiseQuestion, usePractiseQuestion} from '../../services/api/questionApiService';
+import {Id} from '../../shared/types/versionId';
+import {Environment} from '../../static/Environemnt';
+import {getRandomInteger} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoFont} from '../controls/EpistoFont';
+import {QuesitionView} from '../QuestionView';
+import {EpistoConinImage} from '../universal/EpistoCoinImage';
+import {Greetings} from './Greetings';
+import {NoQuestionsAvailable} from './NoQuestionsAvailable';
+import React, {Dispatch, SetStateAction, useEffect} from 'react';
 
-export const PractiseQuestions = () => {
+export const PractiseQuestions = (props: {
+    setCoinsAcquired: Dispatch<SetStateAction<boolean>>
+}) => {
+
+    const {setCoinsAcquired} = props;
 
     const {
         practiseQuestion,
@@ -37,6 +42,10 @@ export const PractiseQuestions = () => {
         await answerQuestionAsync(answerId, practiseQuestion!.questionVersionId);
     };
 
+    useEffect(() => {
+        setCoinsAcquired(!!answerResults?.coinAcquires?.normal?.amount);
+    }, [answerResults?.coinAcquires]);
+
     const handleNextQuestion = () => {
 
         clearAnswerResults();
@@ -54,7 +63,8 @@ export const PractiseQuestions = () => {
         {/* if practise question is found */}
         {practiseQuestion
             ? (
-                <Flex className="whall"
+                <Flex
+                    className="whall"
                     wrap="wrap">
 
                     <Flex
@@ -68,11 +78,13 @@ export const PractiseQuestions = () => {
                             {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
                         </EpistoFont>
 
-                        <EpistoConinImage />
+                        <EpistoConinImage/>
 
                         <EpistoFont>
                             {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
                         </EpistoFont>
+
+
                     </Flex>
 
                     {/* question section */}
@@ -85,28 +97,39 @@ export const PractiseQuestions = () => {
                         <EpistoFont
                             style={{
                                 display: isAnswered ? undefined : 'none',
-                                marginTop: 10,
-                                fontSize: 18,
+                                marginTop: 20,
+                                fontSize: 16,
                                 alignSelf: 'center'
                             }}>
 
-                            {isCorrectAnswer
-                                ? translatableTexts.practiseQuestions.answerIsCorrect
-                                : translatableTexts.practiseQuestions.answerIsIncorrect}
+                            {practiseQuestion.questionText}
                         </EpistoFont>
 
                         <QuesitionView
                             answerQuesitonAsync={handleAnswerQuestionAsync}
                             correctAnswerIds={answerResults?.correctAnswerIds ?? []}
-                            loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+                            loadingProps={{loadingState: answerQuestionState, error: answerQuestionError}}
                             question={practiseQuestion}
                             onlyShowAnswers={isAnswered}
                             coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}
-                            bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
+                            bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null}/>
 
                         <Flex
                             justifyContent="center"
                             display={isAnswered ? undefined : 'none'}>
+
+                            <EpistoFont
+                                style={{
+                                    display: isAnswered ? undefined : 'none',
+                                    fontSize: 16,
+                                    marginRight: 15,
+                                    alignSelf: 'center'
+                                }}>
+
+                                {isCorrectAnswer
+                                    ? translatableTexts.practiseQuestions.answerIsCorrect
+                                    : translatableTexts.practiseQuestions.answerIsIncorrect}
+                            </EpistoFont>
 
                             <EpistoButton
                                 variant="colored"
@@ -122,7 +145,7 @@ export const PractiseQuestions = () => {
                 </Flex>
             )
             : currentCourseItemCode
-                ? <NoQuestionsAvailable />
-                : <Greetings />}
+                ? <NoQuestionsAvailable/>
+                : <Greetings/>}
     </>;
 };

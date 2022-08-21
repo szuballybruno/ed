@@ -1,15 +1,17 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
-import { Divider } from '@mui/material';
-import { EpistoFont } from './controls/EpistoFont';
+import {Flex, FlexProps} from '@chakra-ui/layout';
+import {Divider} from '@mui/material';
+import {EpistoFont} from './controls/EpistoFont';
+import {ReactNode} from 'react';
 
 export const EpistoHeader = (props: {
     text: string,
     variant?: 'main' | 'sub' | 'strongSub' | 'giant' | 'xxl',
     type?: 'strong' | 'normal',
-    showDivider?: boolean
+    showDivider?: boolean,
+    children?: ReactNode
 } & FlexProps) => {
 
-    const { text, showDivider, type, variant, ...css } = props;
+    const {text, showDivider, type, variant, children, ...css} = props;
 
     const h = (() => {
 
@@ -22,23 +24,33 @@ export const EpistoHeader = (props: {
         return 'h6';
     })();
 
-    return <Flex id="epistoHeaderRoot"
-        direction="column"
+    return <Flex
+        id='epistoHeaderRoot'
+        direction='column'
         {...css}>
 
-        <EpistoFont
-            fontSize={variant === 'giant'
-                ? 'fontGiant'
-                : variant === 'xxl'
-                    ? 'fontXXL'
-                    : 'fontLarge'}
-            style={{
-                fontWeight: type === 'strong' ? 500 : 'normal',
-                color: variant === 'sub' ? 'black' : undefined
-            }}>
-            {text}
-        </EpistoFont>
+        <Flex
+            align='center'
+            justify='space-between'
+            h='25px'>
 
-        {!!showDivider && <Divider style={{ background: 'var(--transparentWhite70)', marginTop: '10px' }} />}
+            <EpistoFont
+                fontSize={variant === 'giant'
+                    ? 'fontGiant'
+                    : variant === 'xxl'
+                        ? 'fontXXL'
+                        : 'fontLarge'}
+                style={{
+                    fontWeight: type === 'strong' ? 500 : 'normal',
+                    color: variant === 'sub' ? 'black' : undefined
+                }}>
+
+                {text}
+            </EpistoFont>
+
+            {children}
+        </Flex>
+
+        {!!showDivider && <Divider style={{background: 'var(--transparentWhite70)', marginTop: '10px'}}/>}
     </Flex>;
 };

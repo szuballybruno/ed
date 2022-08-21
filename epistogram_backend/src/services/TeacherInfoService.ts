@@ -68,32 +68,25 @@ export class TeacherInfoService {
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
           */
-    saveTeacherInfoAsync(principalId: PrincipalId, teacherInfoEditDTO: TeacherInfoEditDTO) {
+    async saveTeacherInfoAsync(principalId: PrincipalId, teacherInfoEditDTO: TeacherInfoEditDTO) {
 
-        return {
-            action: async () => {
-                await this._ormService
-                    .save(TeacherInfo, {
-                        id: teacherInfoEditDTO.id,
-                        videoCount: teacherInfoEditDTO.videoCount,
-                        courseCount: teacherInfoEditDTO.courseCount,
-                        rating: teacherInfoEditDTO.rating,
-                        studentCount: teacherInfoEditDTO.studentCount,
-                        skills: teacherInfoEditDTO.skills,
-                        badges: teacherInfoEditDTO.badges.join(', '),
-                        description: teacherInfoEditDTO.description
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_USER');
-            }
-        };
+        await this._ormService
+            .save(TeacherInfo, {
+                id: teacherInfoEditDTO.id,
+                videoCount: teacherInfoEditDTO.videoCount,
+                courseCount: teacherInfoEditDTO.courseCount,
+                rating: teacherInfoEditDTO.rating,
+                studentCount: teacherInfoEditDTO.studentCount,
+                skills: teacherInfoEditDTO.skills,
+                badges: teacherInfoEditDTO.badges.join(', '),
+                description: teacherInfoEditDTO.description
+            });
+
     }
 
     /**
-     * Creates a new teacher info entity with default values, 
-     * persists it in the DB, and returns it. 
+     * Creates a new teacher info entity with default values,
+     * persists it in the DB, and returns it.
      */
     async createTeacherInfoAsync(userId: Id<'User'>) {
 

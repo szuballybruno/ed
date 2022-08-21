@@ -18,6 +18,9 @@ import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { HomePageCourseStats } from './HomePageCourseStats';
 import { HomePageUserStats } from './HomePageUserStats';
 import { PractiseQuestions } from './PractiseQuestions';
+import {EpistoFont} from '../controls/EpistoFont';
+import {Environment} from '../../static/Environemnt';
+import React, {useState} from 'react';
 
 const HomePage = () => {
 
@@ -27,6 +30,7 @@ const HomePage = () => {
     useSetBusy(useOverviewPageDTO, status);
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [coinsAcquired, setCoinsAcquired] = useState(false);
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging({ items: activeCourses });
@@ -92,6 +96,21 @@ const HomePage = () => {
                     {/* test your knowledge */}
                     <DashboardSection
                         title={translatableTexts.homePage.practiseTitle}
+                        headerContent={coinsAcquired && <Flex
+                            borderRadius="5px"
+                            p="7px"
+                            align="center">
+
+                            <EpistoFont>
+                                +1 EpistoCoinnal gazdagodtál!
+                            </EpistoFont>
+
+                            <img
+                                src={Environment.getAssetUrl('images/epistoCoin.png')}
+                                className="square25"
+                                style={{ margin: '0px 0px 4px 4px' }} />
+
+                        </Flex>}
                         background="var(--transparentIntenseBlue85)"
                         className="largeSoftShadow roundBorders"
                         color="white"
@@ -100,7 +119,7 @@ const HomePage = () => {
                         m="0 5px 10px 0"
                         flex="3 3 550px">
 
-                        <PractiseQuestions />
+                        <PractiseQuestions setCoinsAcquired={setCoinsAcquired}  />
                     </DashboardSection>
 
                     {/* tip of the day */}

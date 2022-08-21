@@ -43,7 +43,7 @@ export const permissionCodes = fn({
         scope: 'COMPANY'
     },
 
-    // permissions 
+    // permissions
     VIEW_PERMISSIONS: {
         code: 'VIEW_PERMISSIONS',
         scope: 'USER'
@@ -61,7 +61,7 @@ export const permissionCodes = fn({
         scope: 'USER'
     },
 
-    // courses 
+    // courses
     EDIT_COMPANY_COURSES: {
         code: 'EDIT_COMPANY_COURSES',
         scope: 'COMPANY'
@@ -91,7 +91,7 @@ export const permissionCodes = fn({
         scope: 'COMPANY'
     },
 
-    // manage company 
+    // manage company
     VIEW_COMPANY_USERS: {
         code: 'VIEW_COMPANY_USERS',
         scope: 'COMPANY'
@@ -113,7 +113,7 @@ export const permissionCodes = fn({
         scope: 'COMPANY'
     },
 
-    // player 
+    // player
     SET_COURSE_MODE: {
         code: 'SET_COURSE_MODE',
         scope: 'COURSE'
@@ -141,7 +141,7 @@ export const permissionCodes = fn({
         scope: 'USER'
     },
 
-    // misc company scoped 
+    // misc company scoped
     VIEW_SHOP: {
         code: 'VIEW_SHOP',
         scope: 'COMPANY'
@@ -161,17 +161,17 @@ export const permissionCodes = fn({
 
     // user
 
-    CREATE_NEW_USER: {
-        code: 'CREATE_NEW_USER',
-        scope: 'USER'
+    CREATE_COMPANY_USER: {
+        code: 'CREATE_COMPANY_USER',
+        scope: 'COMPANY'
     },
-    EDIT_USER: {
-        code: 'EDIT_USER',
-        scope: 'USER'
+    EDIT_COMPANY_USER: {
+        code: 'EDIT_COMPANY_USER',
+        scope: 'COMPANY'
     },
-    DELETE_USER: {
-        code: 'DELETE_USER',
-        scope: 'USER'
+    DELETE_COMPANY_USER: {
+        code: 'DELETE_COMPANY_USER',
+        scope: 'COMPANY'
     },
 
     // misc
