@@ -282,8 +282,10 @@ export const WatchView = (props: {
                 </AbsoluteFlexOverlay>
 
                 {/* questionnaire */}
-                <AbsoluteFlexOverlay isVisible={isQuestionVisible}
+                <AbsoluteFlexOverlay
+                    isVisible={isQuestionVisible}
                     hasPointerEvents={true}>
+
                     <OverlayDialog
                         showCloseButton={false}>
                         <VideoQuestionnaire

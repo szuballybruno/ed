@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React, { CSSProperties, ReactNode } from 'react';
 import { EpistoFont } from '../controls/EpistoFont';
+import {Environment} from '../../static/Environemnt';
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
@@ -35,16 +36,15 @@ export const ExamLayoutContent = (props: {
 
                     <img
                         style={{
-                            borderRadius: '50%',
                             padding: '8px',
-                            width: '50px',
-                            height: '50px',
+                            width: '70px',
+                            height: '70px',
+                            objectFit: 'contain',
                             marginRight: '30px',
                             marginLeft: '-5px'
                         }}
                         alt=""
-                        src="https://static.thenounproject.com/png/92068-200.png"
-                        className="mildShadow" />
+                        src={Environment.getAssetUrl('/images/rightanswer3D.png')} />
 
                     <EpistoFont fontWeight='heavy'>
                         {title}

@@ -1,9 +1,9 @@
-import { PrequizQuestion } from '../../models/entity/prequiz/PrequizQuestion';
-import { getSeedList } from '../../services/sqlServices/SeedService';
+import {PrequizQuestion} from '../../models/entity/prequiz/PrequizQuestion';
+import {getSeedList} from '../../services/sqlServices/SeedService';
 
 export const getPrequizQuestionsSeedData = () => getSeedList<PrequizQuestion>()({
     prequiz_question_1: {
-        text: 'Mennyire érzed magad tapasztaltnak?',
+        text: 'Mennyire érzed magad tapasztaltnak',
         isNumericAnswer: true,
         minValue: 1,
         maxValue: 10,
@@ -23,7 +23,7 @@ export const getPrequizQuestionsSeedData = () => getSeedList<PrequizQuestion>()(
         valuePostfix: null
     },
     prequiz_question_3: {
-        text: 'Mennyi időt tudsz hetente rászánni?',
+        text: 'Mennyi időt tudsz heti szinten a tanulásra fordítani?',
         isNumericAnswer: true,
         minValue: 1,
         maxValue: 10,

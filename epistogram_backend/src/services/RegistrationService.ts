@@ -58,47 +58,39 @@ export class RegistrationService {
     };
 
     /**
-     * This function registers a user using an activation code. 
+     * This function registers a user using an activation code.
      * If said code is valid, it will be marked as used as there can not be another registration made with it.
      */
-    registerUserViaActivationCodeAsync(
+    async registerUserViaActivationCodeAsync(
         principalId: PrincipalId,
         activationCode: string,
         email: string,
         firstName: string,
-        lastName: string): ControllerActionReturnType {
+        lastName: string) {
 
-        return {
-            action: async () => {
-                // check code 
-                const activationCodeEntity = await this._activationCodeService
-                    .isValidCodeAsync(activationCode);
+        // check code
+        const activationCodeEntity = await this._activationCodeService
+            .isValidCodeAsync(activationCode);
 
-                if (!activationCodeEntity)
-                    throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
+        if (!activationCodeEntity)
+            throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
-                // create user 
-                await this.inviteNewUserAsync({
-                    email,
-                    firstName,
-                    lastName,
-                    companyId: activationCodeEntity.companyId,
-                    jobTitleId: JobTitleIdEnum.genericUser
-                });
+        // create user
+        await this.inviteNewUserAsync({
+            email,
+            firstName,
+            lastName,
+            companyId: activationCodeEntity.companyId,
+            jobTitleId: JobTitleIdEnum.genericUser
+        });
 
-                // invalidate activation code 
-                await this._activationCodeService
-                    .invalidateCodeAsync(activationCodeEntity.id);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'CREATE_NEW_USER');
-            }
-        };
+        // invalidate activation code
+        await this._activationCodeService
+            .invalidateCodeAsync(activationCodeEntity.id);
     }
 
     /**
-     * This function registers a new user using a public access token. 
+     * This function registers a new user using a public access token.
      * Public access tokens come from public links, such as QR codes.
      */
     registerUserViaPublicTokenAsync = async (
@@ -111,10 +103,10 @@ export class RegistrationService {
         // // verify public reg token
         // this._tokenService.verifyPublicRegistrationToken(publicRegToken);
 
-        // // get new password 
+        // // get new password
         // const generatedPassword = this.getDefaultPassword();
 
-        // // create user 
+        // // create user
         // const user = await this._userService
         //     .createUserAsync({
         //         email,
@@ -130,11 +122,11 @@ export class RegistrationService {
         // await this._emailService
         //     .sendSuccessfulRegistrationEmailAsync(user, generatedPassword);
 
-        // // get auth tokens 
+        // // get auth tokens
         // const tokens = await this._authenticationService
         //     .getUserLoginTokens(user);
 
-        // // set user current refresh token 
+        // // set user current refresh token
         // await this._userService
         //     .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
@@ -148,12 +140,12 @@ export class RegistrationService {
         password: string,
         passwordControl: string) {
 
-        // verify token 
+        // verify token
         const { userEmail } = this
             ._tokenService
             .verifyInvitaionToken(invitationToken);
 
-        // check if user exists  
+        // check if user exists
         const user = await this._userService
             .getUserByEmailAsync(userEmail);
 
@@ -162,11 +154,11 @@ export class RegistrationService {
 
         const userId = user.id;
 
-        // check passwords 
+        // check passwords
         if (validatePassowrd(password, passwordControl))
             throw new ErrorWithCode('Password is invalid.', 'bad request');
 
-        // update user 
+        // update user
         await this._userService
             .setUserInivitationDataAsync(userId, password);
 
@@ -189,11 +181,11 @@ export class RegistrationService {
                 contextCourseId: null
             });
 
-        // get auth tokens 
+        // get auth tokens
         const tokens = await this._authenticationService
             .getUserLoginTokens(user);
 
-        // set user current refresh token 
+        // set user current refresh token
         await this._userService
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
@@ -201,9 +193,9 @@ export class RegistrationService {
     }
 
     /**
-     * This function creates a new invited user, 
-     * generates an invitation token, 
-     * and sends it as a mail to the given email address. 
+     * This function creates a new invited user,
+     * generates an invitation token,
+     * and sends it as a mail to the given email address.
      */
     async inviteNewUserAsync(
         options: {
@@ -221,7 +213,7 @@ export class RegistrationService {
         const invitationToken = this._tokenService
             .createInvitationToken(email);
 
-        // create user 
+        // create user
         const createdUser = await this._userService
             .createUserAsync({
                 email,
@@ -259,7 +251,7 @@ export class RegistrationService {
     }
 
     /**
-     * Get a default password that can be sent to users, 
+     * Get a default password that can be sent to users,
      * and they can change it later to something stronger.
      */
     private getDefaultPassword = () => {

@@ -16,11 +16,13 @@ export const QuestionnaireLayout = (props: {
     const { title, answerAction, contentClickable, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 
     return (
-        <Flex id="questionnaireLayoutRoot"
-direction="column"
-p="0 0 20px 0"
-align="center"
-{...css}>
+        <Flex
+            id="questionnaireLayoutRoot"
+            zIndex='6'
+            direction="column"
+            p="0 0 20px 0"
+            align="center"
+            {...css}>
 
             {/* header */}
             <Flex
@@ -38,6 +40,7 @@ align="center"
                         text={title}
                         style={{ width: '100%', fontSize: 17, fontWeight: 500 }} />
                 </Flex>
+
             </Flex>
 
             {/* content */}

@@ -21,6 +21,14 @@ export const AbsoluteFlexOverlay = (props: {
         opacity={isVisible ? 1 : 0}
         pointerEvents={isVisible && hasPointerEvents ? 'all' : 'none'}
         {...css}>
+
+        <Flex
+            width='100vw'
+            height='100vh'
+            position='fixed'
+            top='0'
+            zIndex='5'/>
+
         {isVisible && children}
     </Flex>;
 };

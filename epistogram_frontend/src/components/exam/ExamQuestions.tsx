@@ -34,6 +34,7 @@ export const ExamQuestions = (props: {
         hideLoading,
         isExamInProgress
     } = props;
+
     const {
         questions
     } = exam;
@@ -44,30 +45,79 @@ export const ExamQuestions = (props: {
     });
 
     const [completedQuestionIds, setCompletedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
+
     const showError = useShowErrorDialog();
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const currentQuestion = questionPaging.currentItem!;
+
     const [selectedAnswerIds, setSelectedAnswerIds] = useState<Id<'Answer'>[]>([]);
+
     const hasSelectedAnswer = selectedAnswerIds.length > 0;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
     const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
     const isLastQuestion = questionPaging.currentIndex === questions.length - 1;
+
+    const removeFromCompletedQuestions = (questionVersionId: Id<'QuestionVersion'>) => {
+
+        const array = [...completedQuestionIds]; // make a separate copy of the array
+        const index = array.indexOf(questionVersionId);
+
+        if (index !== -1) {
+            array.splice(index, 1);
+            setCompletedQuestionIds(array);
+        }
+    };
 
     const handleAnswerQuestionAsync = async () => {
         const timeElapsed = epochDates(new Date(), showUpTime);
 
         try {
 
+            console.log('Saving exam answer');
             await saveExamAnswer({
                 answerSessionId: answerSessionId,
                 answerIds: selectedAnswerIds!,
                 questionVersionId: currentQuestion.questionVersionId,
                 elapsedSeconds: timeElapsed
             });
+      /*      console.log('Checking if there are questions...');
+            if (questions.length === 0)
+                return;
 
-            setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
+            console.log('Checking if currentQuestion is completed...');
+            if (completedQuestionIds.any(currentQuestion.questionVersionId))
+                console.log('CurrentQuestion is completed');
+
+            console.log('Checking if there are answers selected');
+            if (selectedAnswerIds.length === 0)
+                return;*/
+
+            console.log('Checking if there are answers selected from the current question answers');
+            const currentQuestionHasSelectedAnswers = currentQuestion.answers.some(x => selectedAnswerIds.includes(x.answerId));
+            console.log(currentQuestionHasSelectedAnswers);
+
+
+
+            console.log('SelectedAnswerIds. ' + JSON.stringify(selectedAnswerIds));
+            if (currentQuestionHasSelectedAnswers) {
+                setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
+            } else {
+                const removeFromCompletedQuestions = (questionVersionId: Id<'QuestionVersion'>) => {
+
+                    const array = [...completedQuestionIds]; // make a separate copy of the array
+                    const index = array.indexOf(questionVersionId);
+
+                    if (index !== -1) {
+                        array.splice(index, 1);
+                        setCompletedQuestionIds(array);
+                    }
+                };
+
+                removeFromCompletedQuestions(currentQuestion.questionVersionId);
+            }
+
+
             setShowUpTime(new Date());
-            setSelectedAnswerIds([]);
         } catch (e) {
 
             showError(e);
@@ -86,6 +136,19 @@ export const ExamQuestions = (props: {
     };
 
     const handleOpenDialog = () => {
+
+        console.log(completedQuestionIds);
+
+        const currentQuestionHasSelectedAnswers = currentQuestion.answers.some(x => selectedAnswerIds.includes(x.answerId));
+        console.log('Current question has answers selected: ' + currentQuestionHasSelectedAnswers);
+        const currentQuestionIsCompleted = completedQuestionIds.any(currentQuestion.questionVersionId);
+        console.log('Current question is completed: ' + currentQuestionIsCompleted);
+
+        if (!currentQuestionHasSelectedAnswers)
+            removeFromCompletedQuestions(currentQuestion.questionVersionId);
+
+        if (currentQuestionHasSelectedAnswers && !currentQuestionIsCompleted)
+            setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
 
         abortDialog.openDialog();
     };
@@ -190,7 +253,9 @@ export const ExamQuestions = (props: {
                     title: isLastQuestion
                         ? 'Vizsga befejezése'
                         : translatableTexts.exam.nextQuestion,
-                    action: () => handleNextButton()
+                    action: isLastQuestion
+                        ? handleOpenDialog
+                        : handleNextButton
                 })
                 .getArray()}
             isFirst={questionPaging.currentIndex === 0}>

@@ -26,27 +26,18 @@ export class RegistrationController implements XController<RegistrationControlle
     }
 
     @XControllerAction(apiRoutes.registration.registerUserViaPublicToken, { isPublic: true, isPost: true })
-    registerUserViaPublicTokenAction(params: ActionParams) {
+    async registerUserViaPublicTokenAction(params: ActionParams) {
 
-        return {
-            action: async () => {
-                const body = params.getBody<RegisterUserViaPublicTokenDTO>();
+        const body = params.getBody<RegisterUserViaPublicTokenDTO>();
 
-                const { accessToken, refreshToken } = await this._registrationService
-                    .registerUserViaPublicTokenAsync(
-                        body.getValue(x => x.emailAddress, 'string'),
-                        body.getValue(x => x.firstName, 'string'),
-                        body.getValue(x => x.lastName, 'string'),
-                        body.getValue(x => x.registrationToken, 'string'));
+        const { accessToken, refreshToken } = await this._registrationService
+            .registerUserViaPublicTokenAsync(
+                body.getValue(x => x.emailAddress, 'string'),
+                body.getValue(x => x.firstName, 'string'),
+                body.getValue(x => x.lastName, 'string'),
+                body.getValue(x => x.registrationToken, 'string'));
 
-                setAuthCookies(this._config, params.res, accessToken, refreshToken);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
-            }
-        };
-
+        setAuthCookies(this._config, params.res, accessToken, refreshToken);
 
     }
 
@@ -96,10 +87,8 @@ export class RegistrationController implements XController<RegistrationControlle
     }
 
     @XControllerAction(apiRoutes.registration.inviteUser, { isPost: true })
-    inviteUserAction(params: ActionParams) {
+    async inviteUserAction(params: ActionParams) {
 
-        return {
-            action: async () => {
                 const dto = params
                     .getBody<CreateInvitedUserDTO>([
                         'companyId',
@@ -111,11 +100,6 @@ export class RegistrationController implements XController<RegistrationControlle
 
                 return await this._registrationService
                     .inviteUserAsync(params.principalId, dto);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'CREATE_NEW_USER');
-            }
-        };
+
     }
 }

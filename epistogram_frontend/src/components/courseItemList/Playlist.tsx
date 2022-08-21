@@ -83,6 +83,7 @@ export const Playlist = (props: {
         <Flex
             id="courseItemListRoot"
             direction="column"
+            zIndex='4'
             justifyContent={'flex-start'}>
 
             {modules

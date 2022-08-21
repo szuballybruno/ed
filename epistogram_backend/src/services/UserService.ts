@@ -52,48 +52,56 @@ export class UserService {
     /**
      * Get user edit data
           */
-    getEditUserDataAsync(
+    async getEditUserDataAsync(
         principalId: PrincipalId,
         editedUserId: Id<'User'>
-    ): ControllerActionReturnType {
+    ) {
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ACCESS_ADMIN'
+            );
+
+        const user = await this._ormService
+            .query(User, { userId: editedUserId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'EDIT_COMPANY_USER',
+                { companyId: user.companyId }
+            );
+
+
+        type ResType = User & {
+            teacherInfoId: number
+        };
+
+        const res = await this._ormService
+            .withResType<ResType>()
+            .query(User, {editedUserId})
+            .selectFrom(x => x
+                .columns(User, '*')
+                .columns(TeacherInfo, {
+                    teacherInfoId: 'id'
+                }))
+            .leftJoin(TeacherInfo, x => x
+                .on('userId', '=', 'editedUserId'))
+            .where('id', '=', 'editedUserId')
+            .getSingle();
 
         return {
-            action: async () => {
-
-                type ResType = User & {
-                    teacherInfoId: number
-                };
-
-                const res = await this._ormService
-                    .withResType<ResType>()
-                    .query(User, { editedUserId })
-                    .selectFrom(x => x
-                        .columns(User, '*')
-                        .columns(TeacherInfo, {
-                            teacherInfoId: 'id'
-                        }))
-                    .leftJoin(TeacherInfo, x => x
-                        .on('userId', '=', 'editedUserId'))
-                    .where('id', '=', 'editedUserId')
-                    .getSingle();
-
-                return {
-                    id: res.id,
-                    firstName: res.firstName,
-                    lastName: res.lastName,
-                    email: res.email,
-                    isTeacher: !!res.teacherInfoId,
-                    jobTitleId: res.jobTitleId,
-                    companyId: res.companyId,
-                    roles: new ChangeSet(),
-                    permissions: new ChangeSet()
-                };
-
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
+            id: res.id,
+            firstName: res.firstName,
+            lastName: res.lastName,
+            email: res.email,
+            isTeacher: !!res.teacherInfoId,
+            jobTitleId: res.jobTitleId,
+            companyId: res.companyId,
+            roles: new ChangeSet(),
+            permissions: new ChangeSet()
         };
     }
 
@@ -216,6 +224,7 @@ export class UserService {
 
        const searchTextLower = searchText?.toLowerCase();
 
+       // TODO CHECK VIEW COMPANY USERS PERMISSION
         const users = await this._ormService
             .query(AdminUserListView)
             .getMany();
@@ -377,10 +386,16 @@ export class UserService {
                 'ACCESS_ADMIN'
             );
 
+        const user = await this._ormService
+            .query(User, { userId: deletedUserId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
         await this._authorizationService
             .checkPermissionAsync(
                 principalId,
-                'DELETE_USER'
+                'DELETE_COMPANY_USER',
+                { companyId: user.companyId }
             );
 
         const connectedCourses = await this._ormService

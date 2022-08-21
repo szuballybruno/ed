@@ -43,7 +43,7 @@ export class UserController implements XController<UserController> {
     }
 
     @XControllerAction(apiRoutes.user.getEditUserData)
-    getEditUserDataAction(params: ActionParams) {
+    async getEditUserDataAction(params: ActionParams) {
 
         const editedUserId = Id
             .create<'User'>(params
