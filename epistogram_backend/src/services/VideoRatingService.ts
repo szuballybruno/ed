@@ -17,7 +17,7 @@ export class VideoRatingService {
         this._authorizationService = authorizationService;
     }
 
-    rateVideoExperienceAsync(principalId: PrincipalId, dto: VideoRatingDTO): ControllerActionReturnType {
+    rateVideoExperienceAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
 
         return {
             action: async () => {
@@ -50,7 +50,7 @@ export class VideoRatingService {
 
     }
 
-    rateVideoDifficultyAsync(principalId: PrincipalId, dto: VideoRatingDTO): ControllerActionReturnType {
+    rateVideoDifficultyAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
 
         return {
             action: async () => {
@@ -85,7 +85,7 @@ export class VideoRatingService {
 
     }
 
-    getVideoRatingAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'>): ControllerActionReturnType {
+    getVideoRatingAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'>) {
 
         return {
             action: async () => {

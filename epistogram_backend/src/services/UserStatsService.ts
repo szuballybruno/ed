@@ -51,7 +51,7 @@ export class UserStatsService {
         this._userProgressService = userProgressService;
     }
 
-    getHomePageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
+    getHomePageStatsAsync(principalId: PrincipalId) {
 
         return {
             action: async () => {
@@ -78,7 +78,7 @@ export class UserStatsService {
         };
     }
 
-    getUserLearningPageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
+    getUserLearningPageStatsAsync(principalId: PrincipalId) {
 
         return {
             action: async () => {
@@ -106,7 +106,7 @@ export class UserStatsService {
         };
     }
 
-    getImproveYourselfPageStatsAsync(principalId: PrincipalId): ControllerActionReturnType {
+    getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
 
         return {
             action: async () => {
@@ -144,7 +144,7 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of [] 
      */
-    getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
+    getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         return {
             action: async () => {
@@ -189,7 +189,7 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-    getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>): ControllerActionReturnType {
+    getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
 
         return {
             action: async () => {
@@ -217,7 +217,7 @@ export class UserStatsService {
      * Gets the statistics for the users every completed exam
      */
 
-    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>): ControllerActionReturnType {
+    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
 
         return {
             action: async () => {
@@ -245,7 +245,7 @@ export class UserStatsService {
      * Gets the learning overview statistics data for single user
      * TODO: Correct mapping
      */
-    getUserLearningOverviewDataAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
+    getUserLearningOverviewDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         return {
             action: async () => {

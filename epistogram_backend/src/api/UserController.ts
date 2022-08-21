@@ -31,8 +31,6 @@ export class UserController implements XController<UserController> {
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
     async deleteUserAction(params: ActionParams) {
 
-        console.log(JSON.stringify(params));
-
         const deleteUserId = Id
             .create<'User'>(params
                 .getBody()

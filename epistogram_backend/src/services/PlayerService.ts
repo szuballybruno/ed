@@ -48,7 +48,7 @@ export class PlayerService {
      */
     getPlayerDataAsync(
         principalId: PrincipalId,
-        requestedItemCode: string): ControllerActionReturnType {
+        requestedItemCode: string) {
 
         return {
             action: async () => {

@@ -42,7 +42,7 @@ export class CoinTransactionService {
             .insertCoinAcquiredFn(params);
     }
 
-    getPrincipalCoinBalance(principalId: PrincipalId): ControllerActionReturnType {
+    getPrincipalCoinBalance(principalId: PrincipalId) {
 
         return {
             action: async () => {
@@ -83,7 +83,7 @@ export class CoinTransactionService {
         principalId: PrincipalId,
         userId: Id<'User'>,
         amount: number
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -104,7 +104,7 @@ export class CoinTransactionService {
 
     getCoinTransactionsAsync(
         userId: PrincipalId
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {

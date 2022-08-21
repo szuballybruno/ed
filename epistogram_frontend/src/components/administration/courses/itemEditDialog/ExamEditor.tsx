@@ -31,11 +31,10 @@ export const ExamEditor = ({
 
     const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, null, examVersionId);
 
-    const finish = useCallback(() => {
+    const handleFinishItemEdit = useCallback(() => {
 
         callback(logic.questionMutations, logic.answerMutations);
-    }, [callback, logic.questionMutations]);
-
+    }, [callback, logic]);
     return <LoadingFrame
         loadingState={'success'}
         flex='1'
@@ -75,7 +74,7 @@ export const ExamEditor = ({
                 <EpistoButton
                     margin={{ left: 'px10' }}
                     isDisabled={!logic.isQuestionsMutated}
-                    onClick={finish}
+                    onClick={handleFinishItemEdit}
                     variant="colored">
 
                     {translatableTexts.misc.ok}

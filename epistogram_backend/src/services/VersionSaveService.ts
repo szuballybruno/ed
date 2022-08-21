@@ -71,7 +71,7 @@ export class VersionSaveService {
         // that returns the data enituy's id
         const getDataDisplayName = getDataDisplayNameArg
             ? (x: TData) => getDataDisplayNameArg(x)
-                .substring(0, 10)
+                .substring(0, 15)
             : (data: TData) => (data.id ?? '-') + '';
 
         this._loggerService
@@ -99,6 +99,13 @@ export class VersionSaveService {
                 getDataId,
                 getEntityId,
             });
+
+        const oldDataLog = oldData
+            .map(x => `     Old version id: ${x.oldVersion.id} - ${getDataDisplayName(x.oldData)}`)
+            .join('\n');
+
+        this._loggerService
+            .logScoped('VERSION SAVE', `Old data: \n${oldDataLog}`);
 
         // get ordered non-delete mutations
         // order by add/update:

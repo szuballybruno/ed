@@ -28,7 +28,7 @@ import { Id } from '../shared/types/versionId';
 import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
@@ -52,7 +52,7 @@ export class CourseService {
      * Returns courses that the principal can use as context
      * when assigning permissions to a user 
      */
-    getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>): ControllerActionReturnType {
+    getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         // TODO: CourseDataId is not CourseId
         throwNotImplemented();
@@ -118,7 +118,7 @@ export class CourseService {
     getCourseDetailsAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -156,7 +156,7 @@ export class CourseService {
     createCourseAsync(
         userId: PrincipalId,
         dto: CreateCourseDTO
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -207,7 +207,7 @@ export class CourseService {
         userId: PrincipalId,
         file: UploadedFile,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -236,36 +236,35 @@ export class CourseService {
     /**
      * Returns the course id from an item code.
      */
-    async getCourseIdOrFailAsync(
-        playlistItemCode: string
-    ) {
+    async getCourseIdOrFailAsync(playlistItemCode: string) {
 
-
-        const viewIfPlaylistItemCode = await this._ormService
+        const playlistViewByItemCode = await this._ormService
             .query(PlaylistView, { playlistItemCode })
             .where('playlistItemCode', '=', 'playlistItemCode')
             .getOneOrNull();
 
-        if (viewIfPlaylistItemCode)
-            return viewIfPlaylistItemCode.courseId;
+        if (playlistViewByItemCode)
+            return playlistViewByItemCode.courseId;
 
-        const viewIfModuleCode = await this._ormService
+        const playlistViewByModuleCode = await this._ormService
             .query(PlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
             .where('moduleCode', '=', 'moduleCode')
             .and('itemOrderIndex', '=', 'itemOrderIndex')
-            .getSingle();
+            .getOneOrNull();
 
-        return viewIfModuleCode.courseId;
+        if (playlistViewByModuleCode)
+            return playlistViewByModuleCode.courseId;
 
+        throw new Error(`Playlist code (${playlistItemCode}) is corrupt: not found in playlist view!`);
     }
 
     /**
      * Gets the course details edit DTO.
-          */
+     */
     getCourseDetailsEditDataAsync(
         userId: PrincipalId,
         courseId: number
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -313,7 +312,7 @@ export class CourseService {
     saveCourseDetailsAsync(
         userId: PrincipalId,
         dto: CourseDetailsEditDataDTO
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -375,7 +374,7 @@ export class CourseService {
         userId: PrincipalId,
         courseId: Id<'Course'>,
         loadDeleted: boolean
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -488,7 +487,7 @@ export class CourseService {
      */
     getAdminCoursesAsync(
         userId: PrincipalId
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -516,7 +515,7 @@ export class CourseService {
     softDeleteCourseAsync(
         userId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -548,7 +547,7 @@ export class CourseService {
         isFeatured: boolean,
         isRecommended: boolean,
         orderBy: OrderType
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             auth: () => Promise.resolve(AuthorizationResult.ok),

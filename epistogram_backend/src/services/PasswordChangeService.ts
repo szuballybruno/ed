@@ -48,7 +48,7 @@ export class PasswordChangeService {
      * This will request a passowrd change for a user that's not authenticated, 
      * an email will be sent out with the pw change link.
      */
-    requestPasswordChangeAsync(principalId: PrincipalId, email: string): ControllerActionReturnType {
+    requestPasswordChangeAsync(principalId: PrincipalId, email: string) {
 
         return {
             action: async () => {
@@ -88,7 +88,7 @@ export class PasswordChangeService {
      * an email will be sent out with the pw change link. 
      * The old password will be requested from the user an an extra safety step. 
      */
-    requestPasswordChangeAuthenticatedAsync(principalId: PrincipalId, oldPassword: string): ControllerActionReturnType {
+    requestPasswordChangeAuthenticatedAsync(principalId: PrincipalId, oldPassword: string) {
 
         return {
             action: async () => {
@@ -131,7 +131,7 @@ export class PasswordChangeService {
         principalId: PrincipalId,
         password: string,
         passwordCompare: string,
-        passwordResetToken: string): ControllerActionReturnType {
+        passwordResetToken: string) {
 
         return {
             action: async () => {

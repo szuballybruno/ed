@@ -1,7 +1,7 @@
 import { Equalizer, Quiz } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import { useGridApiContext } from '@mui/x-data-grid';
-import { MutableRefObject, ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
@@ -9,7 +9,7 @@ import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
-import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
+import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { ChipSmall } from '../ChipSmall';
 import { RowSchema } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
@@ -40,7 +40,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 export const useGridColumnDefinitions = (
     modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
-    itemsMutatorRef: MutableRefObject<IXMutator<CourseContentItemAdminDTO, 'versionCode', VersionCode>>) => {
+    itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>) => {
 
     const TextCellRenderer = (props: {
         children: ReactNode,
@@ -108,8 +108,7 @@ export const useGridColumnDefinitions = (
         columnDefGen('itemOrderIndex', {
             headerName: 'Elhelyezkedés',
             width: 80,
-            editHandler: ({ rowKey, value }) => itemsMutatorRef
-                .current
+            editHandler: ({ rowKey, value }) => itemsMutatorFunctions
                 .mutate({
                     field: 'itemOrderIndex',
                     key: rowKey,
@@ -129,8 +128,7 @@ export const useGridColumnDefinitions = (
             headerName: 'Cím',
             width: 220,
             resizable: true,
-            editHandler: ({ rowKey, value }) => itemsMutatorRef
-                .current
+            editHandler: ({ rowKey, value }) => itemsMutatorFunctions
                 .mutate({
                     field: 'itemTitle',
                     key: rowKey,
@@ -149,8 +147,7 @@ export const useGridColumnDefinitions = (
             headerName: 'Alcím',
             width: 220,
             resizable: true,
-            editHandler: ({ rowKey, value }) => itemsMutatorRef
-                .current
+            editHandler: ({ rowKey, value }) => itemsMutatorFunctions
                 .mutate({
                     field: 'itemSubtitle',
                     key: rowKey,
@@ -170,8 +167,7 @@ export const useGridColumnDefinitions = (
             width: 250,
             editHandler: ({ rowKey, value }) => {
 
-                itemsMutatorRef
-                    .current
+                itemsMutatorFunctions
                     .mutate({
                         key: rowKey,
                         field: 'moduleVersionId',
@@ -268,8 +264,7 @@ export const useGridColumnDefinitions = (
                         </EpistoButton>
 
                         <EpistoButton
-                            onClickNoPropagation={() => itemsMutatorRef
-                                .current
+                            onClickNoPropagation={() => itemsMutatorFunctions
                                 .remove(key)}>
 
                             <Delete />

@@ -9,6 +9,7 @@ declare global {
         remove(func: (item: T) => boolean): Array<T>;
         orderBy(func: (item: T) => number | string | Date): Array<T>;
         groupBy<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
+        isDistinctBy<TKey>(func: (item: T) => TKey): boolean;
         any(funcOrItem?: T | ((item: T) => boolean)): boolean;
         none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
@@ -90,6 +91,14 @@ Array.prototype.groupBy = function <T, TKey>(func: (item: T) => TKey) {
         });
 
     return groups;
+};
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.isDistinctBy = function <T, TKey>(func: (item: T) => TKey) {
+
+    return !this
+        .groupBy(func)
+        .some(x => x.items.length > 1);
 };
 
 // eslint-disable-next-line no-extend-native

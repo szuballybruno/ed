@@ -161,7 +161,7 @@ export class VideoService extends QueryServiceBase<VideoData> {
         videoId: Id<'Video'>,
         chunkIndex: number,
         chunksCount: number,
-        getFile: () => UploadedFile | undefined): ControllerActionReturnType {
+        getFile: () => UploadedFile | undefined) {
 
         return {
             action: async () => {

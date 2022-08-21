@@ -83,7 +83,7 @@ export class ModuleService {
     /**
      * Saves module's thumbnail image
      */
-    saveModuleThumbnailImageAsync(principalId: PrincipalId, moduleVersionId: Id<'ModuleVersion'>, fileBuffer: Buffer): ControllerActionReturnType {
+    saveModuleThumbnailImageAsync(principalId: PrincipalId, moduleVersionId: Id<'ModuleVersion'>, fileBuffer: Buffer) {
 
         return {
             action: async () => {

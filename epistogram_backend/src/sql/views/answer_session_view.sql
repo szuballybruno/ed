@@ -24,21 +24,6 @@ answer_stats AS
 	ON ase.id = ga.answer_session_id
 	
 	GROUP BY ase.user_id, ase.id
-), 
-answer_session_score AS
-(
-	SELECT
-		gasv.answer_session_id,
-		SUM(gasv.given_answer_points) answer_session_acquired_points,
-		COUNT(gasv.question_version_id) * points_per_question.value answer_session_maximum_points
-	FROM public.given_answer_score_view gasv
-
-	LEFT JOIN public.constant_value points_per_question
-	ON points_per_question.key = 'POINTS_PER_QUESTION'
-
-	GROUP BY 
-		gasv.answer_session_id,
-		points_per_question.value
 )
 SELECT 
 	ase.id answer_session_id,
@@ -46,15 +31,9 @@ SELECT
 	ase.exam_version_id,
 	ase.video_version_id,
     ase.start_date,
-	ass.answer_session_acquired_points,
-	ROUND(
-		(ass.answer_session_acquired_points::double precision 
-		/ ass.answer_session_maximum_points * 100)::numeric, 1
-	)::double precision answer_session_success_rate,
-	ROUND(
-		(ass.answer_session_acquired_points::double precision 
-		/ ass.answer_session_maximum_points * 100)::numeric, 1
-	) > COALESCE(ed.acceptance_threshold, 60) is_successful,
+	esv.exam_score answer_session_acquired_points,
+	esv.score_percentage answer_session_success_rate,
+	esv.score_percentage > COALESCE(ed.acceptance_threshold, 60) is_successful,
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
@@ -79,8 +58,8 @@ LEFT JOIN answer_stats ast
 ON ast.user_id = ase.user_id
 AND ast.answer_session_id = ase.id
 
-LEFT JOIN answer_session_score ass
-ON ass.answer_session_id = ase.id
+LEFT JOIN public.exam_score_view esv
+ON esv.answer_session_id = ase.id
 
 LEFT JOIN public.exam_version ev
 ON ev.id = ase.exam_version_id

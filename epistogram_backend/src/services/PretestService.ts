@@ -55,7 +55,7 @@ export class PretestService {
     getPretestDataAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -114,7 +114,7 @@ export class PretestService {
     getPretestResultsAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
-    ): ControllerActionReturnType {
+    ) {
 
         return {
             action: async () => {
@@ -203,7 +203,7 @@ export class PretestService {
      */
     finishPretestAsync(
         principalId: PrincipalId,
-        answerSessionId: Id<'AnswerSession'>): ControllerActionReturnType {
+        answerSessionId: Id<'AnswerSession'>) {
 
         return {
             action: async () => {

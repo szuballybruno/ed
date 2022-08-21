@@ -4,7 +4,7 @@ import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { iterate } from '../../../../static/frontendHelpers';
-import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
+import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { AnswerMutationsType, QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 
 export const useQuestionEditGridLogic = (
@@ -14,13 +14,16 @@ export const useQuestionEditGridLogic = (
     videoVersionId: Id<'VideoVersion'> | null,
     examVersionId: Id<'ExamVersion'> | null,
     showTiming?: boolean,
-    getPlayedSeconds?: () => number,) => {
+    getPlayedSeconds?: () => number,
+    onFocusChanged?: (hasFocus: boolean) => void) => {
 
-    const questionMutatorRef = useXMutator(QuestionEditDataDTO, 'questionVersionId');
-    const answerMutatorRef = useXMutator(AnswerEditDTO, 'answerVersionId');
+    const [questionMutatorState, questionMutatorFunctions] = useXMutatorNew(QuestionEditDataDTO, 'questionVersionId', 'QuestionMutator');
+    const [answerMutatorState, answerMutatorFunctions] = useXMutatorNew(AnswerEditDTO, 'answerVersionId', 'AnswerMutator');
 
-    // if video or exam version id changed
-    // load questions, answers, and mutations 
+    /**
+     * if video or exam version id changed
+     * load questions, answers, and mutations 
+     */
     useEffect(() => {
 
         const originalQuestions = questions ?? [];
@@ -28,26 +31,31 @@ export const useQuestionEditGridLogic = (
         const questionMutationsNonNull = questionMutations ?? [];
 
         // questions 
-        questionMutatorRef
-            .current
+        questionMutatorFunctions
             .setOriginalItems(originalQuestions);
 
-        questionMutatorRef
-            .current
+        questionMutatorFunctions
             .setMutations(questionMutationsNonNull);
 
         // answers 
-        answerMutatorRef
-            .current
+        answerMutatorFunctions
             .setOriginalItems(originalAnswers);
 
-        answerMutatorRef
-            .current
+        answerMutatorFunctions
             .setMutations(answerMutations);
-    }, [questions, questionMutations, answerMutations, videoVersionId, examVersionId]);
+    }, [
+        questions,
+        questionMutations,
+        answerMutations,
+        videoVersionId,
+        examVersionId,
+        answerMutatorFunctions,
+        questionMutatorFunctions
+    ]);
 
-    //
-    // add question
+    /**
+     * Add new quesiton
+     */
     const handleAddQuestion = useCallback(() => {
 
         const questionVersionId = Id
@@ -58,8 +66,7 @@ export const useQuestionEditGridLogic = (
             const newAnswerVersionId = Id
                 .create<'AnswerVersion'>(getVirtualId());
 
-            answerMutatorRef
-                .current
+            answerMutatorFunctions
                 .create(newAnswerVersionId, {
                     answerVersionId: newAnswerVersionId,
                     isCorrect: false,
@@ -77,20 +84,19 @@ export const useQuestionEditGridLogic = (
             answers: []
         };
 
-        questionMutatorRef
-            .current
+        questionMutatorFunctions
             .create(question.questionVersionId, question);
-    }, [videoVersionId, examVersionId]);
+    }, [videoVersionId, examVersionId, answerMutatorFunctions, questionMutatorFunctions]);
 
-    //
-    // rows
+    /**
+     * get rows 
+     */
     const questionRows = useMemo((): RowSchema[] => {
 
-        if (questionMutatorRef.current.mutatedItems.length === 0)
+        if (questionMutatorState.mutatedItems.length === 0)
             return [];
 
-        return questionMutatorRef
-            .current
+        return questionMutatorState
             .mutatedItems
             .flatMap((question): RowSchema[] => {
 
@@ -104,8 +110,7 @@ export const useQuestionEditGridLogic = (
                     itemText: question.questionText
                 } as RowSchema;
 
-                const answerRows = answerMutatorRef
-                    .current
+                const answerRows = answerMutatorState
                     .mutatedItems
                     .filter(x => x.questionVersionId === question.questionVersionId)
                     .map((answer): RowSchema => ({
@@ -121,28 +126,39 @@ export const useQuestionEditGridLogic = (
 
                 return [headerRow, ...answerRows];
             });
-    }, [questionMutatorRef.current.mutatedItems, answerMutatorRef.current.mutatedItems]);
+    }, [questionMutatorState, answerMutatorState]);
 
-    //
-    // get key
+    /**
+     * Get key from row
+     */
     const getKey = useCallback(x => x.rowKey, []);
+
+    /**
+     * Calculate if something has 
+     * been mutated or not 
+     */
+    const isAnyQuestionsMutated = useMemo(() => {
+
+        return questionMutatorState.isAnyItemsMutated || answerMutatorState.isAnyItemsMutated;
+    }, [questionMutatorState, answerMutatorState]);
 
     return {
         questionRows,
         showTiming,
-        isQuestionsMutated: questionMutatorRef.current.isAnyItemsMutated,
-        mutatedQuestions: questionMutatorRef.current.mutatedItems,
-        questionMutations: questionMutatorRef.current.mutations,
-        answerMutations: answerMutatorRef.current.mutations,
+        isQuestionsMutated: isAnyQuestionsMutated,
+        mutatedQuestions: questionMutatorState.mutatedItems,
+        questionMutations: questionMutatorState.mutations,
+        answerMutations: answerMutatorState.mutations,
         getKey,
         handleAddQuestion,
         getPlayedSeconds,
-        removeQuestion: questionMutatorRef.current.remove,
-        mutateQuestion: questionMutatorRef.current.mutate,
-        resetMutations: questionMutatorRef.current.resetMutations,
-        createAnswer: answerMutatorRef.current.create,
-        mutateAnswer: answerMutatorRef.current.mutate,
-        deleteAnswer: answerMutatorRef.current.remove
+        removeQuestion: questionMutatorFunctions.remove.bind(questionMutatorFunctions),
+        mutateQuestion: questionMutatorFunctions.mutate.bind(questionMutatorFunctions),
+        resetMutations: questionMutatorFunctions.resetMutations.bind(questionMutatorFunctions),
+        createAnswer: answerMutatorFunctions.create.bind(answerMutatorFunctions),
+        mutateAnswer: answerMutatorFunctions.mutate.bind(answerMutatorFunctions),
+        deleteAnswer: answerMutatorFunctions.remove.bind(answerMutatorFunctions),
+        onFocusChanged
     };
 };
 

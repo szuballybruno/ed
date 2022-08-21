@@ -654,9 +654,9 @@ const marray = [
                     completedVideoCount: stat.completedVideoCount,
                     totalVideoQuestionCount: stat.totalVideoQuestionCount,
                     answeredVideoQuestionCount: stat.answeredVideoQuestionCount,
-                    examSuccessRateAverage: stat.examSuccessRateAverage,
+                    examSuccessRateAverage: stat.avgExamScorePercentage,
                     questionSuccessRate: stat.questionSuccessRate,
-                    finalExamSuccessRate: stat.finalExamSuccessRate
+                    finalExamSuccessRate: stat.finalExamScorePercentage
                 });
             });
         }),
