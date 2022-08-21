@@ -1,6 +1,6 @@
 WITH question_correct_answer_rates AS
 (
-	SELECT 
+	SELECT
 		ase.id answer_session_id,
 		ase.user_id,
 		qv.id question_version_id,
@@ -78,7 +78,7 @@ ON qcar.user_id = u.id
 AND qcar.answer_session_id = asv.answer_session_id
 AND qcar.question_version_id = qv.id
 
-WHERE e.id != 1
+WHERE e.id != 1 
 
 ORDER BY 
 	u.id,
