@@ -1,20 +1,20 @@
-import {Grid} from '@chakra-ui/layout';
-import {Flex} from '@chakra-ui/react';
-import {useState} from 'react';
-import {useSaveExamAnswer} from '../../services/api/examApiService';
-import {useShowErrorDialog} from '../../services/core/notifications';
-import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
-import {Id} from '../../shared/types/versionId';
-import {Environment} from '../../static/Environemnt';
-import {ArrayBuilder, epochDates, usePaging} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoFont} from '../controls/EpistoFont';
-import {LoadingFrame} from '../system/LoadingFrame';
-import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
-import {ExamAbortDialog} from './ExamAbortDialog';
-import {ExamLayout} from './ExamLayout';
-import {ExamLayoutContent} from './ExamLayoutContent';
-import {QuestionAnswer} from './QuestionAnswer';
+import { Grid } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useSaveExamAnswer } from '../../services/api/examApiService';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { epochDates, usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { ExamAbortDialog } from './ExamAbortDialog';
+import { ExamLayout } from './ExamLayout';
+import { ExamLayoutContent } from './ExamLayoutContent';
+import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -57,77 +57,73 @@ export const ExamQuestions = (props: {
     const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
     const isLastQuestion = questionPaging.currentIndex === questions.length - 1;
 
-    const removeFromCompletedQuestions = (questionVersionId: Id<'QuestionVersion'>) => {
+    const removeCompletedQuestion = (questionVersionId: Id<'QuestionVersion'>) => {
 
-        const array = [...completedQuestionIds]; // make a separate copy of the array
-        const index = array.indexOf(questionVersionId);
-
-        if (index !== -1) {
-            array.splice(index, 1);
-            setCompletedQuestionIds(array);
-        }
+        setCompletedQuestionIds(completedQuestionIds
+            .filter(x => x !== questionVersionId));
     };
 
+    const addCompletedQuestion = (questionVersionId: Id<'QuestionVersion'>) => {
+
+        setCompletedQuestionIds([...completedQuestionIds, questionVersionId]);
+    };
+
+    const handleOpenAbortDialog = () => {
+
+        abortDialog.openDialog();
+    };
+
+    /**
+     * Answers a question. 
+     * Saves the answer to client side state,
+     * and also sends it to the server. 
+     * TODO: This is a known bug, should be fixed.
+     */
     const handleAnswerQuestionAsync = async () => {
-        const timeElapsed = epochDates(new Date(), showUpTime);
 
         try {
 
-            console.log('Saving exam answer');
-            await saveExamAnswer({
-                answerSessionId: answerSessionId,
-                answerIds: selectedAnswerIds!,
-                questionVersionId: currentQuestion.questionVersionId,
-                elapsedSeconds: timeElapsed
-            });
-      /*      console.log('Checking if there are questions...');
-            if (questions.length === 0)
-                return;
+            // get elapsed time 
+            const timeElapsed = epochDates(new Date(), showUpTime);
 
-            console.log('Checking if currentQuestion is completed...');
-            if (completedQuestionIds.any(currentQuestion.questionVersionId))
-                console.log('CurrentQuestion is completed');
+            const questionVersionId = currentQuestion
+                .questionVersionId;
 
-            console.log('Checking if there are answers selected');
-            if (selectedAnswerIds.length === 0)
-                return;*/
+            const anyAnswersSelected = currentQuestion
+                .answers
+                .some(x => selectedAnswerIds
+                    .includes(x.answerId));
 
-            console.log('Checking if there are answers selected from the current question answers');
-            const currentQuestionHasSelectedAnswers = currentQuestion.answers.some(x => selectedAnswerIds.includes(x.answerId));
-            console.log(currentQuestionHasSelectedAnswers);
+            // TODO this will definitely cause bugs in the future 
+            // answered questions state should come from the server
+            // selected any answers 
+            if (anyAnswersSelected) {
 
+                addCompletedQuestion(questionVersionId);
 
-
-            console.log('SelectedAnswerIds. ' + JSON.stringify(selectedAnswerIds));
-            if (currentQuestionHasSelectedAnswers) {
-                setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
-            } else {
-                const removeFromCompletedQuestions = (questionVersionId: Id<'QuestionVersion'>) => {
-
-                    const array = [...completedQuestionIds]; // make a separate copy of the array
-                    const index = array.indexOf(questionVersionId);
-
-                    if (index !== -1) {
-                        array.splice(index, 1);
-                        setCompletedQuestionIds(array);
-                    }
-                };
-
-                removeFromCompletedQuestions(currentQuestion.questionVersionId);
+                await saveExamAnswer({
+                    answerSessionId: answerSessionId,
+                    answerIds: selectedAnswerIds!,
+                    questionVersionId,
+                    elapsedSeconds: timeElapsed
+                });
             }
 
+            // no answers are selected 
+            else {
 
-            setShowUpTime(new Date());
-        } catch (e) {
+                removeCompletedQuestion(questionVersionId);
+            }
+        }
+        catch (e) {
 
             showError(e);
         }
-    };
+        finally {
 
-    const handleNextAsync = async () => {
-
-        await handleAnswerQuestionAsync();
-        questionPaging.next();
+            // clear show up time
+            setShowUpTime(new Date());
+        }
     };
 
     const handleBack = () => {
@@ -135,55 +131,25 @@ export const ExamQuestions = (props: {
         questionPaging.previous();
     };
 
-    const handleOpenDialog = () => {
+    const handleNextAsync = async () => {
 
-        console.log(completedQuestionIds);
-
-        const currentQuestionHasSelectedAnswers = currentQuestion.answers.some(x => selectedAnswerIds.includes(x.answerId));
-        console.log('Current question has answers selected: ' + currentQuestionHasSelectedAnswers);
-        const currentQuestionIsCompleted = completedQuestionIds.any(currentQuestion.questionVersionId);
-        console.log('Current question is completed: ' + currentQuestionIsCompleted);
-
-        if (!currentQuestionHasSelectedAnswers)
-            removeFromCompletedQuestions(currentQuestion.questionVersionId);
-
-        if (currentQuestionHasSelectedAnswers && !currentQuestionIsCompleted)
-            setCompletedQuestionIds(prevState => ([...prevState, currentQuestion.questionVersionId]));
-
-        abortDialog.openDialog();
-    };
-
-    const handleNextButton = async () => {
-
-        // do nothing if exam not started
         if (!isExamInProgress)
             return;
 
-        // if last question and answered then
-        // save answer then open dialog
-        if (isLastQuestion && hasSelectedAnswer) {
+        await handleAnswerQuestionAsync();
 
-            await handleAnswerQuestionAsync();
-            return handleOpenDialog();
-        }
+        isLastQuestion
+            ? handleOpenAbortDialog()
+            : questionPaging.next();
+    };
 
-        // if last question and not answered then
-        // open dialog without saving answer
-        if (isLastQuestion && !hasSelectedAnswer) {
+    const handleAbortAsync = async () => {
 
-            return handleOpenDialog();
-        }
+        if (!isExamInProgress)
+            return;
 
-        // if not last question and has answer selected
-        // save answer and jump to next else jump without
-        // saving.
-        if (hasSelectedAnswer) {
-
-            return handleNextAsync();
-        } else {
-
-            return questionPaging.next();
-        }
+        await handleAnswerQuestionAsync();
+        handleOpenAbortDialog();
     };
 
     const handleSelectCurrent = <T extends string>(id: Id<T>) => {
@@ -244,20 +210,18 @@ export const ExamQuestions = (props: {
             headerButtons={[
                 {
                     title: 'Vizsga befejezése',
-                    action: handleOpenDialog
+                    action: handleAbortAsync
                 }
             ]}
             handleBack={handleBack}
-            footerButtons={new ArrayBuilder()
-                .add({
+            footerButtons={[
+                {
                     title: isLastQuestion
                         ? 'Vizsga befejezése'
                         : translatableTexts.exam.nextQuestion,
-                    action: isLastQuestion
-                        ? handleOpenDialog
-                        : handleNextButton
-                })
-                .getArray()}
+                    action: handleNextAsync
+                }
+            ]}
             isFirst={questionPaging.currentIndex === 0}>
 
             <ExamLayoutContent
