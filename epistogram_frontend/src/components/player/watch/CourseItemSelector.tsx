@@ -1,22 +1,22 @@
-import { Divider, Flex } from '@chakra-ui/layout';
-import { useEffect, useRef, useState } from 'react';
-import { CourseApiService } from '../../../services/api/courseApiService';
-import { useTempomatMode } from '../../../services/api/tempomatApiService';
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
-import { useShowErrorDialog } from '../../../services/core/notifications';
-import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
-import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoPopper } from '../../controls/EpistoPopper';
-import { Playlist } from '../../courseItemList/Playlist';
-import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
-import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
-import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
+import {Divider, Flex} from '@chakra-ui/layout';
+import {useEffect, useRef, useState} from 'react';
+import {CourseApiService} from '../../../services/api/courseApiService';
+import {useTempomatMode} from '../../../services/api/tempomatApiService';
+import {useRecommendedItemQuota} from '../../../services/api/userProgressApiService';
+import {useShowErrorDialog} from '../../../services/core/notifications';
+import {PlaylistModuleDTO} from '../../../shared/dtos/PlaylistModuleDTO';
+import {CourseItemStateType, CourseModeType} from '../../../shared/types/sharedTypes';
+import {Id} from '../../../shared/types/versionId';
+import {translatableTexts} from '../../../static/translatableTexts';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {EpistoPopper} from '../../controls/EpistoPopper';
+import {Playlist} from '../../courseItemList/Playlist';
+import {RecommendedItemQuota} from '../../home/RecommendedItemQuota';
+import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
+import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
+import {TempomatSettingsDialog} from '../tempomat/TempomatSettingsDialog';
+import {TempomatTempoInfo} from '../tempomat/TempomatTempoInfo';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -115,7 +115,7 @@ export const CourseItemSelector = (props: {
             align="center"
             padding="20px"
             position='sticky'
-            zIndex='1'
+            zIndex='5'
             top='0'
             background='white'
             height="100px">
