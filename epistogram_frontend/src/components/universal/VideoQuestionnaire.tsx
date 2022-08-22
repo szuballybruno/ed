@@ -1,15 +1,15 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useReactTimer } from '../../helpers/reactTimer';
-import { PlayerApiService } from '../../services/api/PPlayerApiService';
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
-import { Id } from '../../shared/types/versionId';
-import { epochDates } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { QuesitionView } from '../QuestionView';
-import { TimeoutFrame } from './TimeoutFrame';
+import {Flex, FlexProps} from '@chakra-ui/react';
+import React, {useEffect, useState} from 'react';
+import {useReactTimer} from '../../helpers/reactTimer';
+import {PlayerApiService} from '../../services/api/PPlayerApiService';
+import {QuestionDTO} from '../../shared/dtos/QuestionDTO';
+import {Id} from '../../shared/types/versionId';
+import {epochDates} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoFont} from '../controls/EpistoFont';
+import {QuesitionView} from '../QuestionView';
+import {TimeoutFrame} from './TimeoutFrame';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -65,6 +65,7 @@ export const VideoQuestionnaire = (props: {
             loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
             question={question}
             coinsAcquired={answerResult?.coinAcquires?.normal?.amount ?? null}
+            showCoinsAcquired={true}
             bonusCoinsAcquired={answerResult?.coinAcquires?.bonus ?? null}
             {...css} />
 

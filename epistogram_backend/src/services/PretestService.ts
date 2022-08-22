@@ -1,23 +1,23 @@
-import { Exam } from '../models/entity/exam/Exam';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { AvailableCourseView } from '../models/views/AvailableCourseView';
-import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { PretestResultView } from '../models/views/PretestResultView';
-import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
-import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
-import { Id } from '../shared/types/versionId';
-import { throwNotImplemented } from '../utilities/helpers';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
-import { ExamService } from './ExamService';
-import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PermissionService } from './PermissionService';
-import { QuestionAnswerService } from './QuestionAnswerService';
-import { TempomatService } from './TempomatService';
-import { UserCourseBridgeService } from './UserCourseBridgeService';
+import {Exam} from '../models/entity/exam/Exam';
+import {ExamVersion} from '../models/entity/exam/ExamVersion';
+import {ModuleVersion} from '../models/entity/module/ModuleVersion';
+import {AvailableCourseView} from '../models/views/AvailableCourseView';
+import {LatestCourseVersionView} from '../models/views/LatestCourseVersionView';
+import {PretestResultView} from '../models/views/PretestResultView';
+import {PretestDataDTO} from '../shared/dtos/PretestDataDTO';
+import {PretestResultDTO} from '../shared/dtos/PretestResultDTO';
+import {Id} from '../shared/types/versionId';
+import {throwNotImplemented} from '../utilities/helpers';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationResult} from '../utilities/XTurboExpress/XTurboExpressTypes';
+import {AuthorizationService} from './AuthorizationService';
+import {ExamService} from './ExamService';
+import {MapperService} from './MapperService';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {PermissionService} from './PermissionService';
+import {QuestionAnswerService} from './QuestionAnswerService';
+import {TempomatService} from './TempomatService';
+import {UserCourseBridgeService} from './UserCourseBridgeService';
 
 export class PretestService {
 
@@ -50,63 +50,30 @@ export class PretestService {
     }
 
     /**
-     * Returns pretest data for the principal user - and a course 
+     * Returns pretest data for the principal user - and a course
      */
-    getPretestDataAsync(
+    async getPretestDataAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
     ) {
+        const userId = principalId.getId();
+
+        // set course as started, and stage to pretest
+        await this._courseBridgeService
+            .setCurrentCourse(userId, courseId, 'pretest', null);
+
+        // get pretest exam
+        const pretestExam = await this._getPretestExamPlayerData(userId, courseId);
+
+        // get answer session
+        const answerSessionId = await this._questionAnswerService
+            .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
 
         return {
-            action: async () => {
-                const userId = principalId.getId();
-
-                // set course as started, and stage to pretest
-                await this._courseBridgeService
-                    .setCurrentCourse(userId, courseId, 'pretest', null);
-
-                // get pretest exam 
-                const pretestExam = await this._getPretestExamPlayerData(userId, courseId);
-
-                // get answer session
-                const answerSessionId = await this._questionAnswerService
-                    .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
-
-                return {
-                    answerSessionId,
-                    exam: pretestExam
-                } as PretestDataDTO;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
-            }
-        };
+            answerSessionId,
+            exam: pretestExam
+        } as PretestDataDTO;
     }
-
-    /**
-     * Returns the single pretest exam for a course 
-     */
-    private async _getPretestExamPlayerData(userId: Id<'User'>, courseId: Id<'Course'>) {
-
-        const pretestExam = await this._ormService
-            .withResType<ExamVersion>()
-            .query(LatestCourseVersionView, { courseId })
-            .select(ExamVersion)
-            .leftJoin(ModuleVersion, (x) => x
-                .on('courseVersionId', '=', 'versionId', LatestCourseVersionView))
-            .leftJoin(ExamVersion, (x) => x
-                .on('moduleVersionId', '=', 'id', ModuleVersion))
-            .innerJoin(Exam, (x) => x
-                .on('id', '=', 'examId', ExamVersion)
-                .and('isPretest', '=', 'true'))
-            .where('courseId', '=', 'courseId')
-            .getSingle();
-
-        return await this._examService
-            .getExamPlayerDTOAsync(userId, pretestExam.examId);
-    }
-
 
     /**
      * Get pretest results
@@ -124,7 +91,7 @@ export class PretestService {
                  * Get pretest results view
                  */
                 const pretestResultsView = await this._ormService
-                    .query(PretestResultView, { userId: userId, courseId })
+                    .query(PretestResultView, {userId: userId, courseId})
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
@@ -133,7 +100,7 @@ export class PretestService {
                  * Get course view
                  */
                 const courseView = await this._ormService
-                    .query(AvailableCourseView, { userId: userId, courseId })
+                    .query(AvailableCourseView, {userId: userId, courseId})
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
@@ -168,7 +135,7 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', {courseId});
             }
         };
     }
@@ -220,11 +187,34 @@ export class PretestService {
             .action();
 
         /**
-         * Assign SET_COURSE_MODE permission to allow user 
+         * Assign SET_COURSE_MODE permission to allow user
          * to start course in their preferred mode
          */
         await this
             ._permissionService
-            .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
+            .assignPermission(principalId.getId(), 'SET_COURSE_MODE', {courseId});
+    }
+
+    /**
+     * Returns the single pretest exam for a course
+     */
+    private async _getPretestExamPlayerData(userId: Id<'User'>, courseId: Id<'Course'>) {
+
+        const pretestExam = await this._ormService
+            .withResType<ExamVersion>()
+            .query(LatestCourseVersionView, {courseId})
+            .select(ExamVersion)
+            .leftJoin(ModuleVersion, (x) => x
+                .on('courseVersionId', '=', 'versionId', LatestCourseVersionView))
+            .leftJoin(ExamVersion, (x) => x
+                .on('moduleVersionId', '=', 'id', ModuleVersion))
+            .innerJoin(Exam, (x) => x
+                .on('id', '=', 'examId', ExamVersion)
+                .and('isPretest', '=', 'true'))
+            .where('courseId', '=', 'courseId')
+            .getSingle();
+
+        return await this._examService
+            .getExamPlayerDTOAsync(userId, pretestExam.examId);
     }
 }

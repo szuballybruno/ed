@@ -1,15 +1,15 @@
--- total and total correct given answer count, 
+-- total and total correct given answer count,
 -- and answered question count
-WITH 
-answer_stats AS 
+WITH
+answer_stats AS
 (
-	SELECT 
+	SELECT
 		ase.user_id,
 		ase.id answer_session_id,
 		COUNT (ga.id)::int given_answer_count,
 		SUM (ga.is_correct::int)::int correct_given_answer_count,
 		(
-			SELECT 
+			SELECT
 				COUNT(*)
 			FROM public.question_version qv
 
@@ -22,10 +22,10 @@ answer_stats AS
 
 	LEFT JOIN public.answer_session ase
 	ON ase.id = ga.answer_session_id
-	
+
 	GROUP BY ase.user_id, ase.id
 )
-SELECT 
+SELECT
 	ase.id answer_session_id,
 	ase.user_id,
 	ase.exam_version_id,
@@ -39,7 +39,7 @@ SELECT
 	ast.given_answer_count,
 	cicv.course_item_completion_id IS NOT NULL is_completed,
 	cicv.completion_date end_date,
-	CASE 
+	CASE
 		WHEN ase.is_practise
 			THEN 'practise'
 		WHEN e.id = 0

@@ -1,4 +1,4 @@
-import { TranslationType } from '../types/TranslationType';
+import {TranslationType} from '../types/TranslationType';
 
 export const huTranslation: TranslationType = {
     languageCode: 'hu',
@@ -445,7 +445,7 @@ export const huTranslation: TranslationType = {
         exam: {
             greetText: 'Készülj fel, ha a kezdés gombra kattintasz a vizsga elindul!',
             greetTextRetry: 'Készülj fel, ha az újrakezdés gombra kattintasz a vizsga elindul! Ha újrakezded a vizsgát, mindig a jobb eredményt vesszük figyelembe!',
-            statsLabelText: 'Utolsó kitöltésed eredményei:',
+            statsLabelText: 'Eddig elért legjobb eredményed:',
             hello: 'üdv!',
             nextQuestion: 'Következő',
             resultsTitle: 'Egy újabb tesztet oldottál meg, íme az eredményed:',

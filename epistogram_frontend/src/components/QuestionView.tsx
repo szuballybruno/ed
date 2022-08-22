@@ -1,14 +1,14 @@
-import { FlexProps } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { showNotification } from '../services/core/notifications';
-import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
-import { QuestionDTO } from '../shared/dtos/QuestionDTO';
-import { Id } from '../shared/types/versionId';
-import { Environment } from '../static/Environemnt';
-import { EpistoFont } from './controls/EpistoFont';
-import { LoadingFramePropsType } from './system/LoadingFrame';
-import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
-import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
+import {Flex, FlexProps} from '@chakra-ui/react';
+import React, {useEffect, useState} from 'react';
+import {showNotification} from '../services/core/notifications';
+import {CoinAcquireResultDTO} from '../shared/dtos/CoinAcquireResultDTO';
+import {QuestionDTO} from '../shared/dtos/QuestionDTO';
+import {Id} from '../shared/types/versionId';
+import {Environment} from '../static/Environemnt';
+import {EpistoFont} from './controls/EpistoFont';
+import {LoadingFramePropsType} from './system/LoadingFrame';
+import {QuestionnaierAnswer} from './universal/QuestionnaireAnswer';
+import {QuestionnaireLayout} from './universal/QuestionnaireLayout';
 
 export const QuesitionView = (props: {
     answerQuesitonAsync: (answerId: Id<'Answer'>[]) => Promise<void>,
@@ -17,6 +17,7 @@ export const QuesitionView = (props: {
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
     coinsAcquired: number | null,
+    showCoinsAcquired?: boolean,
     bonusCoinsAcquired: CoinAcquireResultDTO | null
 } & FlexProps) => {
 
@@ -27,6 +28,7 @@ export const QuesitionView = (props: {
         loadingProps,
         onlyShowAnswers,
         coinsAcquired,
+        showCoinsAcquired,
         bonusCoinsAcquired,
         ...css
     } = props;
@@ -104,5 +106,21 @@ export const QuesitionView = (props: {
                     </EpistoFont>
                 </QuestionnaierAnswer>;
             })}
+
+        {(!!coinsAcquired && showCoinsAcquired) && <Flex
+            mt="10px"
+            borderRadius="5px"
+            p="7px"
+            align="center">
+
+            <EpistoFont>
+                +1 EpistoCoinnal gazdagodtál!
+            </EpistoFont>
+
+            <img
+                src={Environment.getAssetUrl('images/epistoCoin.png')}
+                className="square25"
+                style={{ margin: '0px 0px 4px 4px' }} />
+        </Flex>}
     </QuestionnaireLayout>;
 };

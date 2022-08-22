@@ -1,4 +1,4 @@
-WITH 
+WITH
 latest_exam_version_cte AS (
     SELECT
         ev.exam_id,
@@ -57,7 +57,7 @@ SELECT
 		WHERE sas.exam_version_id = ev.id
 		AND sas.user_id = u.id
 	) can_retake,
-	lasd.answer_session_id,
+	lasd.asid,
 	lasd.correct_answer_count,
 	lasd.total_question_count,
 	lasd.correct_answer_rate,
