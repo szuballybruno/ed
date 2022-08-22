@@ -1,5 +1,6 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { GivenAnswerStateType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
@@ -50,7 +51,15 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    isCorrect: boolean;
+    questionScore: number;
+    
+    @ViewColumn()
+    @XViewColumn()
+    questionMaxScore: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    givenAnswerState: GivenAnswerStateType;
 
     @ViewColumn()
     @XViewColumn()
@@ -62,11 +71,11 @@ export class ExamResultView {
 
     @ViewColumn()
     @XViewColumn()
-    answerId: Id<'Answer'>;
+    answerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
-    correctAnswerRatePerQuestion: number;
+    answerId: Id<'Answer'>;
 
     @ViewColumn()
     @XViewColumn()

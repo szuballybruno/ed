@@ -393,13 +393,15 @@ const marray = [
 
                     const viewAsQuestion = questsionGroup.items.first();
 
-                    return {
+                    return instantiate<ExamResultQuestionDTO>({
                         text: viewAsQuestion.questionText,
-                        correctAnswerRate: viewAsQuestion.correctAnswerRatePerQuestion,
+                        maxScore: viewAsQuestion.questionMaxScore,
+                        score: viewAsQuestion.questionScore,
+                        state: viewAsQuestion.givenAnswerState,
                         answers: questsionGroup
                             .items
                             .map(x => toResultAnswerDTO(x)),
-                    } as ExamResultQuestionDTO;
+                    });
                 });
 
             return instantiate<ExamResultsDTO>({

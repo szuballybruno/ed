@@ -14,18 +14,19 @@ successful_answer_sessions AS (
 
  	WHERE asev.is_successful
 ),
-max_score_answer_session AS
-(
-    SELECT
-    asv.user_id,
-    asv.exam_version_id,
-    asv.answer_session_id,
-    MAX(asv.answer_session_success_rate)
-    FROM public.answer_session_view asv
+latest_answer_session_data AS (
+	SELECT
+		lasv.user_id,
+		lasv.exam_version_id,
+		lasv.answer_session_id,
+		asv.correct_given_answer_count correct_answer_count,
+		asv.answered_question_count total_question_count,
+		asv.answer_session_success_rate correct_answer_rate,
+		asv.is_successful
+	FROM public.latest_answer_session_view lasv
 
-    WHERE asv.is_completed = true
-
-    GROUP BY asv.user_id, asv.exam_version_id, asv.answer_session_id
+	LEFT JOIN public.answer_session_view asv
+	ON asv.answer_session_id = lasv.answer_session_id
 )
 SELECT
 	u.id user_id,
@@ -56,12 +57,18 @@ SELECT
 		WHERE sas.exam_version_id = ev.id
 		AND sas.user_id = u.id
 	) can_retake,
-	msas.answer_session_id,
-	msas.answer_session_id IS NOT NULL is_completed_previously
+	lasd.answer_session_id,
+	lasd.correct_answer_count,
+	lasd.total_question_count,
+	lasd.correct_answer_rate,
+	lasd.total_question_count IS NOT NULL is_completed_previously
 FROM public.exam ex
 
+LEFT JOIN latest_exam_version_cte levc
+ON levc.exam_id = ex.id
+
 LEFT JOIN public.exam_version ev
-ON ex.id = ev.exam_id
+ON ev.id = levc.version_id
 
 LEFT JOIN public.exam_data ed
 ON ed.id = ev.exam_data_id
@@ -74,9 +81,9 @@ ON lcvv.version_id = mv.course_version_id
 
 CROSS JOIN public.user u
 
-LEFT JOIN max_score_answer_session msas
-ON msas.user_id = u.id
-AND msas.exam_version_id = ev.id
+LEFT JOIN latest_answer_session_data lasd
+ON lasd.user_id = u.id
+AND lasd.exam_version_id = levc.version_id
 
 ORDER BY
 	u.id,

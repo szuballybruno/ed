@@ -123,28 +123,19 @@ export const ExamResultsSlide = (props: {
                     {questionsAnswers
                         .map((question, index) => {
 
-                            const bgColor = (() => {
+                            const displayState = (() => {
 
-                                if (question.correctAnswerRate === 100)
-                                    return 'var(--mildGreen)';
+                                if (question.state === 'CORRECT')
+                                    return { color: 'var(--mildGreen)', text: translatableTexts.exam.correctAnswer };
 
-                                if (question.correctAnswerRate > 0 && question.correctAnswerRate < 100)
-                                    return 'var(--deepOrange)';
+                                if (question.state === 'MIXED')
+                                    return { color: 'var(--deepOrange)', text: 'Részben helyes' };
 
-                                return 'var(--mildRed)';
+                                if (question.state === 'INCORRECT')
+                                    return { color: 'var(--mildRed)', text: translatableTexts.exam.incorrectAnswer };
+
+                                throw new Error('Incorrect state!');
                             })();
-
-                            const correctAnswerRateText = (() => {
-
-                                if (question.correctAnswerRate === 100)
-                                    return translatableTexts.exam.correctAnswer;
-
-                                if (question.correctAnswerRate > 0 && question.correctAnswerRate < 100)
-                                    return 'Részben helyes';
-
-                                return translatableTexts.exam.incorrectAnswer;
-                            })();
-
 
                             return <Accordion
                                 key={index}>
@@ -159,6 +150,9 @@ export const ExamResultsSlide = (props: {
                                         <EpistoFont>
                                             {question.text}
                                         </EpistoFont>
+                                        <EpistoFont>
+                                            ({question.score}/{question.maxScore} pont)
+                                        </EpistoFont>
                                     </Flex>
 
                                     <Flex width='100px'>
@@ -166,16 +160,8 @@ export const ExamResultsSlide = (props: {
                                             style={{
                                                 margin: '0 10px'
                                             }}
-                                            text={correctAnswerRateText}
-                                            color={bgColor} />
-                                        {/*   <EpistoFont
-                                            roundBorders="normal"
-                                            style={{
-                                                padding: '2px 15px',
-                                                backgroundColor: bgColor
-                                            }}> 
-
-                                        </EpistoFont>*/}
+                                            text={displayState.text}
+                                            color={displayState.color} />
                                     </Flex>
                                 </AccordionSummary>
 

@@ -1,7 +1,10 @@
+import { GivenAnswerStateType } from '../types/sharedTypes';
 import { ResultAnswerDTO } from './ResultAnswerDTO';
 
 export type ExamResultQuestionDTO = {
     text: string;
-    correctAnswerRate: number;
+    maxScore: number;
+    score: number;
+    state: GivenAnswerStateType;
     answers: ResultAnswerDTO[];
 }
