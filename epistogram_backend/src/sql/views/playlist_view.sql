@@ -75,6 +75,8 @@ maximum_success_rate AS
         MAX(asv.answer_session_success_rate) maximum_success_rate
     FROM public.answer_session_view asv
 
+    WHERE asv.is_completed = true
+
     GROUP BY asv.user_id, asv.exam_version_id
 ),
 

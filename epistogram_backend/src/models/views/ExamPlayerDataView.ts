@@ -1,7 +1,6 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
-import { Id } from '../../shared/types/versionId';
+import {ViewColumn, ViewEntity} from 'typeorm';
+import {IsDeletedFlag, XViewColumn} from '../../services/XORM/XORMDecorators';
+import {Id} from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -20,6 +19,10 @@ export class ExamPlayerDataView {
     @ViewColumn()
     @XViewColumn()
     examVersionId: Id<'ExamVersion'>;
+
+    @ViewColumn()
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
 
     @IsDeletedFlag('bool')
     @ViewColumn()
@@ -77,18 +80,6 @@ export class ExamPlayerDataView {
     @ViewColumn()
     @XViewColumn()
     canRetake: boolean;
-
-    @ViewColumn()
-    @XViewColumn()
-    correctAnswerCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    totalQuestionCount: number;
-
-    @ViewColumn()
-    @XViewColumn()
-    correctAnswerRate: number;
 
     @ViewColumn()
     @XViewColumn()

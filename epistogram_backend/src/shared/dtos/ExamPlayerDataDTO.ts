@@ -1,6 +1,6 @@
-import { Id } from '../types/versionId';
-import { ExamStatsDTO } from './ExamStatsDTO';
-import { QuestionDTO } from './QuestionDTO';
+import {Id} from '../types/versionId';
+import {ExamStatsDTO} from './ExamStatsDTO';
+import {QuestionDTO} from './QuestionDTO';
 
 export class ExamPlayerDataDTO {
     examVersionId: Id<'ExamVersion'>;
@@ -11,8 +11,6 @@ export class ExamPlayerDataDTO {
     isFinalExam: boolean;
     canTakeAgain: boolean;
     questions: QuestionDTO[];
-    correctAnswerCount: number;
-    totalQuestionCount: number;
     isCompletedPreviously: boolean;
     examStats: ExamStatsDTO | null;
 }

@@ -1,4 +1,4 @@
-WITH 
+WITH
 latest_exam_version_cte AS (
     SELECT
         ev.exam_id,
@@ -14,32 +14,18 @@ successful_answer_sessions AS (
 
  	WHERE asev.is_successful
 ),
-latest_answer_sessions AS (
-	SELECT
-		asv.user_id,
-		asv.exam_version_id,
-		MAX(asv.answer_session_id) asid
-	FROM public.answer_session_view asv
+max_score_answer_session AS
+(
+    SELECT
+    asv.user_id,
+    asv.exam_version_id,
+    asv.answer_session_id,
+    MAX(asv.answer_session_success_rate)
+    FROM public.answer_session_view asv
 
-	WHERE asv.is_completed
+    WHERE asv.is_completed = true
 
-	GROUP BY
-		asv.exam_version_id,
-		asv.user_id
-
-	ORDER BY asv.user_id, asv.exam_version_id
-),
-latest_answer_session_data AS (
-	SELECT
-		las.*,
-		asv.correct_given_answer_count correct_answer_count,
-		asv.answered_question_count total_question_count,
-		asv.answer_session_success_rate correct_answer_rate,
-		asv.is_successful
-	FROM latest_answer_sessions las
-
-	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = las.asid
+    GROUP BY asv.user_id, asv.exam_version_id, asv.answer_session_id
 )
 SELECT
 	u.id user_id,
@@ -70,18 +56,12 @@ SELECT
 		WHERE sas.exam_version_id = ev.id
 		AND sas.user_id = u.id
 	) can_retake,
-	lasd.asid,
-	lasd.correct_answer_count,
-	lasd.total_question_count,
-	lasd.correct_answer_rate,
-	lasd.total_question_count IS NOT NULL is_completed_previously
+	msas.answer_session_id,
+	msas.answer_session_id IS NOT NULL is_completed_previously
 FROM public.exam ex
 
-LEFT JOIN latest_exam_version_cte levc
-ON levc.exam_id = ex.id
-
 LEFT JOIN public.exam_version ev
-ON ev.id = levc.version_id
+ON ex.id = ev.exam_id
 
 LEFT JOIN public.exam_data ed
 ON ed.id = ev.exam_data_id
@@ -94,9 +74,9 @@ ON lcvv.version_id = mv.course_version_id
 
 CROSS JOIN public.user u
 
-LEFT JOIN latest_answer_session_data lasd
-ON lasd.user_id = u.id
-AND lasd.exam_version_id = levc.version_id
+LEFT JOIN max_score_answer_session msas
+ON msas.user_id = u.id
+AND msas.exam_version_id = ev.id
 
 ORDER BY
 	u.id,
