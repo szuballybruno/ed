@@ -14,32 +14,19 @@ successful_answer_sessions AS (
 
  	WHERE asev.is_successful
 ),
-latest_answer_sessions AS (
-	SELECT
-		asv.user_id,
-		asv.exam_version_id,
-		MAX(asv.answer_session_id) asid
-	FROM public.answer_session_view asv
-
-	WHERE asv.is_completed
-
-	GROUP BY
-		asv.exam_version_id,
-		asv.user_id
-
-	ORDER BY asv.user_id, asv.exam_version_id
-),
 latest_answer_session_data AS (
 	SELECT
-		las.*,
+		lasv.user_id,
+		lasv.exam_version_id,
+		lasv.answer_session_id,
 		asv.correct_given_answer_count correct_answer_count,
 		asv.answered_question_count total_question_count,
 		asv.answer_session_success_rate correct_answer_rate,
 		asv.is_successful
-	FROM latest_answer_sessions las
+	FROM public.latest_answer_session_view lasv
 
 	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = las.asid
+	ON asv.answer_session_id = lasv.answer_session_id
 )
 SELECT
 	u.id user_id,
@@ -70,7 +57,7 @@ SELECT
 		WHERE sas.exam_version_id = ev.id
 		AND sas.user_id = u.id
 	) can_retake,
-	lasd.asid,
+	lasd.answer_session_id,
 	lasd.correct_answer_count,
 	lasd.total_question_count,
 	lasd.correct_answer_rate,

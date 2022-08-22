@@ -44,31 +44,16 @@ exam_avg_score_percentage AS
 		ase.user_id,
 		cv.course_id
 ),
-latest_answer_session_cte AS 
-(
-	SELECT 
-		ase.user_id,
-		ase.exam_version_id,
-		ase.video_version_id,
-		MAX(ase.id) answer_session_id
-	FROM public.answer_session ase
-	WHERE ase.exam_version_id IS NOT NULL 
-	OR ase.video_version_id IS NOT NULL
-	GROUP BY
-		ase.user_id,
-		ase.exam_version_id,
-		ase.video_version_id
-),
 final_exam_score_percentage AS
 (
 	SELECT 
-		lasc.user_id,
+		lasv.user_id,
 		lev.course_id,
 		esv.exam_score
-	FROM latest_answer_session_cte lasc
+	FROM public.latest_answer_session_view lasv
 	
 	INNER JOIN public.latest_exam_view lev
-	ON lev.exam_version_id = lasc.exam_version_id
+	ON lev.exam_version_id = lasv.exam_version_id
 	
 	INNER JOIN public.exam_version ev
 	ON ev.id = lev.exam_version_id 

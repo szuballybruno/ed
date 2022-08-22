@@ -1,18 +1,4 @@
 WITH 
-latest_answer_session AS
-(	
-	SELECT
-		ase.user_id,
-		ase.exam_version_id,
-		MAX(ase.id)::int answer_session_id
-	FROM public.answer_session ase
-    
-    WHERE ase.exam_version_id IS NOT NULL
-	
-	GROUP BY 
-        ase.user_id, 
-        ase.exam_version_id
-),
 course_item_light_view AS 
 (
     SELECT 
@@ -119,12 +105,12 @@ items_with_user AS
 	OR cicv.video_version_id = civ.video_version_id)
 	AND cicv.user_id = ucb.user_id
 
-	LEFT JOIN latest_answer_session las
-	ON las.exam_version_id = civ.exam_version_id
-	AND las.user_id = ucb.user_id
+	LEFT JOIN public.latest_answer_session_view lasv
+	ON lasv.exam_version_id = civ.exam_version_id
+	AND lasv.user_id = ucb.user_id
 
 	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = las.answer_session_id
+	ON asv.answer_session_id = lasv.answer_session_id
 	AND asv.user_id = ucb.user_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
