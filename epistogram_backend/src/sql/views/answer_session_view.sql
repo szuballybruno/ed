@@ -72,6 +72,3 @@ ON ev.exam_id = e.id
 
 LEFT JOIN public.course_item_completion_view cicv
 ON cicv.answer_session_id = ase.id
-
-WHERE ase.user_id = 1
-AND ase.exam_version_id = 4
