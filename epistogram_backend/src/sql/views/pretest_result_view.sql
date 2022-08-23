@@ -1,19 +1,24 @@
 SELECT  
-	u.id user_id,
+	lasv.user_id,
+	lasv.answer_session_id,
+	lasv.exam_version_id,
 	cv.course_id,
-	COALESCE(asv.answer_session_success_rate, 0) correct_answer_rate,
-	asv.end_date
-FROM public.user u
+	esv.score_percentage,
+	cic.completion_date
+FROM public.latest_answer_session_view lasv
 
-INNER JOIN public.latest_answer_session_view lasv
-ON lasv.user_id = u.id
-
-LEFT JOIN public.answer_session_view asv
-ON asv.answer_session_id = lasv.answer_session_id
-AND asv.answer_session_type = 'pretest'
-
-LEFT JOIN public.exam_version ev
+INNER JOIN public.exam_version ev
 ON ev.id = lasv.exam_version_id
+
+INNER JOIN public.exam e
+ON e.id = ev.exam_id
+AND e.is_pretest = true
+
+INNER JOIN public.exam_score_view esv
+ON esv.answer_session_id = lasv.answer_session_id
+
+INNER JOIN public.course_item_completion cic
+ON cic.answer_session_id = lasv.answer_session_id
 
 LEFT JOIN public.module_version mv
 ON mv.id = ev.module_version_id

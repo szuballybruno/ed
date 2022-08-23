@@ -1,30 +1,29 @@
 import moment from 'moment';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
 import { CourseItemView } from '../models/views/CourseItemView';
+import { PretestResultView } from '../models/views/PretestResultView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
 import { PlaybackService } from './PlaybackService';
 import { PlaylistService } from './PlaylistService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VideoService } from './VideoService';
-import { AuthorizationService } from './AuthorizationService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { PretestCompletionView } from '../models/views/PretestCompletionView';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { PermissionService } from './PermissionService';
 
 export class PlayerService {
 
@@ -144,12 +143,12 @@ export class PlayerService {
         // check pretest 
         const pcv = await this
             ._ormService
-            .query(PretestCompletionView, { userId, courseId })
+            .query(PretestResultView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
-            .getSingle();
+            .getOneOrNull();
 
-        if (!pcv.isCompleted)
+        if (!pcv)
             throw new ErrorWithCode('Tring to watch course, but "pretest" is not completed yet!', 'forbidden player stage');
 
         return { validItemCode, courseId };

@@ -1,11 +1,19 @@
 
--- UNIQUE
-ALTER TABLE public.course_item_completion 
-DROP CONSTRAINT IF EXISTS course_item_completion_unique;
+-- UNIQUE VIDEO
+ALTER TABLE public.course_item_completion
+DROP CONSTRAINT IF EXISTS course_item_completion_video_unique;
 
 ALTER TABLE public.course_item_completion
-ADD CONSTRAINT course_item_completion_unique
-UNIQUE (exam_version_id, video_version_id, user_id, answer_session_id);
+ADD CONSTRAINT course_item_completion_video_unique
+UNIQUE (video_version_id, user_id, answer_session_id);
+
+-- UNIQUE EXAM
+ALTER TABLE public.course_item_completion
+DROP CONSTRAINT IF EXISTS course_item_completion_exam_unique;
+
+ALTER TABLE public.course_item_completion
+ADD CONSTRAINT course_item_completion_exam_unique
+UNIQUE (exam_version_id, user_id, answer_session_id);
 
 -- CHECK
 -- if exam version id is not null, answer session id has to be provided 

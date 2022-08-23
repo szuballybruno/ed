@@ -111,7 +111,6 @@ import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTrai
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
-import { PretestCompletionView } from '../../models/views/PretestCompletionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
 import { QuestionDataView } from '../../models/views/QuestionDataView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
@@ -311,7 +310,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             VideoVersionView,
             ExamVersionView,
             CourseShopItemListView,
-            PretestCompletionView,
             CourseAllItemsCompletedView,
             ExamScoreView,
             VideoPlayerDataView,

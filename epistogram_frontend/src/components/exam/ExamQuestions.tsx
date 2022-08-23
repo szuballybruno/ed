@@ -181,10 +181,9 @@ export const ExamQuestions = (props: {
         {/* abort dialog */}
         <ExamAbortDialog
             dialogLogic={abortDialog}
-            answerSessionId={answerSessionId}
             answeredQuestionsCount={completedQuestionIds.length}
             handleAbortExam={handleAbortExam}
-            onExamFinished={onExamFinished}
+            handleExamFinished={onExamFinished}
             questions={questions} />
 
         <ExamLayout
