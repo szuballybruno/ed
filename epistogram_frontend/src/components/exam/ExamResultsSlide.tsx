@@ -147,7 +147,7 @@ export const ExamResultsSlide = (props: {
                                     id="panel1a-header">
 
                                     <Flex flex='1'>
-                                        <EpistoFont>
+                                        <EpistoFont margin={{ right: 'px5' }}>
                                             {question.text}
                                         </EpistoFont>
                                         <EpistoFont>
