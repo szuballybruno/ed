@@ -18,5 +18,5 @@ export class PretestResultView {
 
 	@ViewColumn()
 	@XViewColumn()
-	correctAnswerRate: number;
+	scorePercentage: number;
 }

@@ -4,10 +4,7 @@ import {ChangeSet} from '../../src/shared/dtos/changeSet/ChangeSet';
 import {UserPermissionDTO} from '../../src/shared/dtos/role/UserPermissionDTO';
 import {instantiate} from '../../src/shared/logic/sharedLogic';
 import {
-    GetParamByCodeType,
-    GetPermissionScope,
-    permissionCodes,
-    PermissionScopeParamType
+    permissionCodes
 } from '../../src/shared/types/PermissionCodesType';
 import {PermissionCodeType} from '../../src/shared/types/sharedTypes';
 import {Id} from '../../src/shared/types/versionId';

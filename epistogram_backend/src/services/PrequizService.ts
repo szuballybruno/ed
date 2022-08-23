@@ -6,7 +6,6 @@ import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

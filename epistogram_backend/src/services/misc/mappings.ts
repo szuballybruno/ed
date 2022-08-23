@@ -424,7 +424,7 @@ const marray = [
         ) => {
 
             return instantiate<PretestResultDTO>({
-                correctAnswerRate: prv.correctAnswerRate,
+                correctAnswerRate: prv.scorePercentage,
                 firstItemCode: acv.firstItemCode,
                 estimatedCompletionDate: originalPrevisionedCompletionDate,
                 requiredCompletionDate: requiredCompletionDate,

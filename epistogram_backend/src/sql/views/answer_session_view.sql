@@ -37,8 +37,8 @@ SELECT
 	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
-	cicv.course_item_completion_id IS NOT NULL is_completed,
-	cicv.completion_date end_date,
+	cic.id IS NOT NULL is_completed,
+	cic.completion_date end_date,
 	CASE
 		WHEN ase.is_practise
 			THEN 'practise'
@@ -70,5 +70,5 @@ ON ed.id = ev.exam_data_id
 LEFT JOIN public.exam e
 ON ev.exam_id = e.id
 
-LEFT JOIN public.course_item_completion_view cicv
-ON cicv.answer_session_id = ase.id
+LEFT JOIN public.course_item_completion cic
+ON cic.answer_session_id = ase.id

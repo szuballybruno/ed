@@ -9,7 +9,6 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { Id } from '../shared/types/versionId';
 import { AuthorizationService } from './AuthorizationService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class CourseRatingService extends ServiceBase {
 

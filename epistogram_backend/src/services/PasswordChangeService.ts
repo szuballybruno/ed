@@ -3,7 +3,6 @@ import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';

@@ -1,20 +1,5 @@
-WITH
-latest_id AS
-(
-    SELECT
-        MAX(cic.id) id,
-        cic.user_id,
-        cic.video_version_id,
-        cic.exam_version_id
-    FROM public.course_item_completion cic
-
-    GROUP BY
-        cic.user_id,
-        cic.video_version_id,
-        cic.exam_version_id
-)
 SELECT
-    latest_id.id course_item_completion_id,
+    cic.id course_item_completion_id,
     cic.user_id,
     cic.video_version_id,
     vv.video_id,
@@ -25,10 +10,7 @@ SELECT
     cv.id course_version_id,
     cv.course_id,
     ex.is_pretest
-FROM latest_id
-
-LEFT JOIN public.course_item_completion cic
-ON cic.id = latest_id.id
+FROM public.course_item_completion cic
 
 LEFT JOIN public.video_version vv
 ON vv.id = cic.video_version_id

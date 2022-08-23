@@ -6,7 +6,6 @@ import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlaylistService } from './PlaylistService';

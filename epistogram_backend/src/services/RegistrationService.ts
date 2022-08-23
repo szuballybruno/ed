@@ -10,7 +10,6 @@ import { JobTitleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { getFullName, throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthorizationService } from './AuthorizationService';

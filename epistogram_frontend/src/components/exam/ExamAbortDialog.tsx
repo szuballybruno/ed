@@ -1,8 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
-import { useFinishExam } from '../../services/api/examApiService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
-import { Id } from '../../shared/types/versionId';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
@@ -12,40 +10,35 @@ export const ExamAbortDialog = ({
     dialogLogic,
     questions,
     answeredQuestionsCount,
-    answerSessionId,
-    onExamFinished,
+    handleExamFinished,
     handleAbortExam
 }: {
     dialogLogic: EpistoDialogLogicType,
     questions: QuestionDTO[],
     answeredQuestionsCount: number,
-    answerSessionId: Id<'AnswerSession'>,
-    onExamFinished: () => void,
+    handleExamFinished: () => void,
     handleAbortExam: () => void
 }) => {
-
-    const { finishExamAsync: completeExamAsync } = useFinishExam();
 
     const skippedQuestionsCount = questions.length - answeredQuestionsCount;
     const isCompletedProperly = skippedQuestionsCount === 0;
 
     const handleCompleteAsync = useCallback(() => {
 
-        completeExamAsync({ answerSessionId });
-        onExamFinished();
+        handleExamFinished();
         dialogLogic.closeDialog();
-    }, [completeExamAsync, onExamFinished, dialogLogic.closeDialog]);
+    }, [handleExamFinished, dialogLogic]);
 
     const handleCancel = useCallback(() => {
 
         dialogLogic.closeDialog();
-    }, [dialogLogic.closeDialog]);
+    }, [dialogLogic]);
 
     const discardExam = useCallback(() => {
 
         handleAbortExam();
         dialogLogic.closeDialog();
-    }, [handleAbortExam, dialogLogic.closeDialog]);
+    }, [handleAbortExam, dialogLogic]);
 
     return (
         <EpistoDialog
@@ -70,7 +63,7 @@ export const ExamAbortDialog = ({
                         top: 'px20'
                     }}>
 
-                   {!isCompletedProperly && `Átugrott kérdések száma: ${skippedQuestionsCount} db`}
+                    {!isCompletedProperly && `Átugrott kérdések száma: ${skippedQuestionsCount} db`}
                 </EpistoFont>
 
                 {/* buttons */}

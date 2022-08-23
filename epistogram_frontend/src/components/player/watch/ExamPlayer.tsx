@@ -32,7 +32,7 @@ export const ExamPlayer = (props: {
     const showError = useShowErrorDialog();
     const { navigateToCourseRating } = useNavigation();
 
-    const slidesState = usePaging({ items: [1, 2, 3, 4] });
+    const examWorkflowSlides = usePaging({ items: [1, 2, 3, 4] });
 
     const { finishExamAsync } = useFinishExam();
 
@@ -41,7 +41,7 @@ export const ExamPlayer = (props: {
         try {
             await startExamAsync({ answerSessionId });
             setIsExamInProgress(true);
-            slidesState.next();
+            examWorkflowSlides.next();
         }
         catch (e) {
 
@@ -52,12 +52,12 @@ export const ExamPlayer = (props: {
     const handleExamFinished = async () => {
 
         await finishExamAsync({ answerSessionId });
-        slidesState.next();
+        examWorkflowSlides.next();
     };
 
     const handleAbortExam = () => {
 
-        slidesState.setItem(0);
+        examWorkflowSlides.setItem(0);
         setIsExamInProgress(false);
     };
 
@@ -72,7 +72,7 @@ export const ExamPlayer = (props: {
         continueCourse();
     };
 
-    const slides = [
+    const examWorkflowPages = [
         () => <ExamGreetSlide
             exam={exam}
             startExam={handleStartExamAsync} />,
@@ -96,6 +96,6 @@ export const ExamPlayer = (props: {
         flex="1"
         pt='10px'
         pb='100px'
-        slides={slides}
-        index={slidesState.currentIndex} />;
+        slides={examWorkflowPages}
+        index={examWorkflowSlides.currentIndex} />;
 };
