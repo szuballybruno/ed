@@ -25,7 +25,6 @@ import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { AuthorizationService } from './AuthorizationService';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { User } from '../models/entity/User';
 
 export class RoleService extends QueryServiceBase<Role> {

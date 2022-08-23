@@ -4,7 +4,6 @@ import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes
 import { Id } from '../shared/types/versionId';
 import { throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';

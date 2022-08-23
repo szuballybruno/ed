@@ -8,7 +8,6 @@ import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/Funct
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { GivenAnswer } from '../models/entity/GivenAnswer';
 import { Id } from '../shared/types/versionId';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 

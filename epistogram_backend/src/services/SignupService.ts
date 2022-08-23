@@ -1,11 +1,9 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { SignupDataDTO } from '../shared/dtos/SignupDataDTO';
-import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult, ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
@@ -40,23 +38,6 @@ export class SignupService {
             action: async () => {
 
                 const userId = principalId.getId();
-
-                const signupAnswerSession = await this._ormService
-                    .query(AnswerSession, { examVersionId: 1, userId })
-                    .where('examVersionId', '=', 'examVersionId')
-                    .and('userId', '=', 'userId')
-                    .getOneOrNull();
-
-                if (!signupAnswerSession)
-                    await this._ormService
-                        .createAsync(AnswerSession, {
-                            startDate: new Date(Date.now()),
-                            isPractise: false,
-                            examVersionId: Id.create<'ExamVersion'>(1),
-                            videoVersionId: null,
-                            userId: userId
-                        });
-
 
                 await this._sqlFuncService
                     .answerSignupQuestionFn(userId, questionAnswer.questionId, questionAnswer.answerId);

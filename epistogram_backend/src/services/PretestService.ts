@@ -1,23 +1,24 @@
-import {Exam} from '../models/entity/exam/Exam';
-import {ExamVersion} from '../models/entity/exam/ExamVersion';
-import {ModuleVersion} from '../models/entity/module/ModuleVersion';
-import {AvailableCourseView} from '../models/views/AvailableCourseView';
-import {LatestCourseVersionView} from '../models/views/LatestCourseVersionView';
-import {PretestResultView} from '../models/views/PretestResultView';
-import {PretestDataDTO} from '../shared/dtos/PretestDataDTO';
-import {PretestResultDTO} from '../shared/dtos/PretestResultDTO';
-import {Id} from '../shared/types/versionId';
-import {throwNotImplemented} from '../utilities/helpers';
-import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
-import {AuthorizationResult} from '../utilities/XTurboExpress/XTurboExpressTypes';
-import {AuthorizationService} from './AuthorizationService';
-import {ExamService} from './ExamService';
-import {MapperService} from './MapperService';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {PermissionService} from './PermissionService';
-import {QuestionAnswerService} from './QuestionAnswerService';
-import {TempomatService} from './TempomatService';
-import {UserCourseBridgeService} from './UserCourseBridgeService';
+import { Exam } from '../models/entity/exam/Exam';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
+import { AvailableCourseView } from '../models/views/AvailableCourseView';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { PretestResultView } from '../models/views/PretestResultView';
+import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
+import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
+import { Id } from '../shared/types/versionId';
+import { throwNotImplemented } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AuthorizationService } from './AuthorizationService';
+import { ExamService } from './ExamService';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
+import { QuestionAnswerService } from './QuestionAnswerService';
+import { TempomatService } from './TempomatService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class PretestService {
 
@@ -69,10 +70,10 @@ export class PretestService {
         const answerSessionId = await this._questionAnswerService
             .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
 
-        return {
+        return instantiate<PretestDataDTO>({
             answerSessionId,
             exam: pretestExam
-        } as PretestDataDTO;
+        });
     }
 
     /**
@@ -91,7 +92,7 @@ export class PretestService {
                  * Get pretest results view
                  */
                 const pretestResultsView = await this._ormService
-                    .query(PretestResultView, {userId: userId, courseId})
+                    .query(PretestResultView, { userId: userId, courseId })
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
@@ -100,7 +101,7 @@ export class PretestService {
                  * Get course view
                  */
                 const courseView = await this._ormService
-                    .query(AvailableCourseView, {userId: userId, courseId})
+                    .query(AvailableCourseView, { userId: userId, courseId })
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
@@ -135,7 +136,7 @@ export class PretestService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', {courseId});
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
             }
         };
     }
@@ -192,7 +193,7 @@ export class PretestService {
          */
         await this
             ._permissionService
-            .assignPermission(principalId.getId(), 'SET_COURSE_MODE', {courseId});
+            .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
     }
 
     /**
@@ -202,7 +203,7 @@ export class PretestService {
 
         const pretestExam = await this._ormService
             .withResType<ExamVersion>()
-            .query(LatestCourseVersionView, {courseId})
+            .query(LatestCourseVersionView, { courseId })
             .select(ExamVersion)
             .leftJoin(ModuleVersion, (x) => x
                 .on('courseVersionId', '=', 'versionId', LatestCourseVersionView))

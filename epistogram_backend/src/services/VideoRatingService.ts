@@ -2,7 +2,6 @@ import { VideoRating } from '../models/entity/VideoRating';
 import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ControllerActionReturnType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
