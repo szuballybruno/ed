@@ -6,9 +6,9 @@ SELECT
 	ase.id answer_session_id,
 	ed.is_final is_final_exam,
 	qd.question_text question_text,
-	gasv.score question_score,
+	COALESCE(gasv.score, 0) question_score,
 	CASE 
-		WHEN gasv.score = 0 THEN 'INCORRECT' 
+		WHEN gasv.score = 0 OR gasv.score IS NULL THEN 'INCORRECT' 
 		WHEN gasv.score = consts.question_max_score THEN 'CORRECT'
 		ELSE 'MIXED'
 	END given_answer_state,
@@ -17,7 +17,7 @@ SELECT
 	asv.is_successful is_successful_session,
 	ecv.single_successful_session AND asv.is_successful only_successful_session,
 	ga.id given_answer_id,
-	ga.is_correct is_correct,
+	ga.is_correct IS NOT DISTINCT FROM true is_correct,
 	agab.id answer_bridge_id,
 	agab.answer_version_id user_answer_version_id,
 	agab.answer_version_id = av.id IS NOT DISTINCT FROM true is_given_answer,
@@ -45,7 +45,7 @@ ON qv.exam_version_id = ev.id
 LEFT JOIN public.answer_version av
 ON av.question_version_id = qv.id
 
-INNER JOIN public.given_answer ga
+LEFT JOIN public.given_answer ga
 ON ga.question_version_id = qv.id
 AND ga.answer_session_id = ase.id
 
