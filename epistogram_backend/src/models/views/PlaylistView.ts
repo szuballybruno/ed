@@ -79,5 +79,5 @@ export class PlaylistView {
 
     @ViewColumn()
     @XViewColumn()
-    correctAnswerRate: number;
+    scorePercentage: number;
 }

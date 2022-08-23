@@ -1,11 +1,12 @@
-import { Flex } from '@chakra-ui/react';
-import { ReplayCircleFilled } from '@mui/icons-material';
-import { useNavigation } from '../../services/core/navigatior';
-import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
-import { ChipSmall } from '../administration/courses/ChipSmall';
-import { FlexListItem } from '../universal/FlexListItem';
-import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
-import { PlaylistItemTypeIcon } from './PlaylistItemTypeIcon';
+import {Flex} from '@chakra-ui/react';
+import {ReplayCircleFilled} from '@mui/icons-material';
+import {useNavigation} from '../../services/core/navigatior';
+import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
+import {ChipSmall} from '../administration/courses/ChipSmall';
+import {FlexListItem} from '../universal/FlexListItem';
+import {FlexListTitleSubtitle} from '../universal/FlexListTitleSubtitle';
+import {PlaylistItemTypeIcon} from './PlaylistItemTypeIcon';
+import {useEffect, useRef} from 'react';
 
 export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }) => {
 
@@ -18,6 +19,24 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
         type,
         correctAnswerRate
     } = playlistItem;
+
+    const useScroll = () => {
+        const ref = useRef<HTMLDivElement | null>(null);
+
+        const executeScroll = () => ref.current
+            ? ref.current.scrollIntoView() : null;
+
+        return {
+            executeScroll,
+            ref
+        };
+    };
+
+    const {executeScroll, ref} = useScroll();
+
+    useEffect(() => {
+        //executeScroll();
+    }, [executeScroll]);
 
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
@@ -36,6 +55,7 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
 
     return (
         <FlexListItem
+            ref={ref}
             isLocked={isLocked}
             onClick={navigate}
             midContent={<Flex align="center">
@@ -74,7 +94,7 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
                             color: 'var(--intenseOrange)'
                         }} />}
 
-                {(type === 'exam' && correctAnswerRate) 
+                {(type === 'exam' && correctAnswerRate)
                     && <ChipSmall text={correctAnswerRate + '%'} />}
             </Flex>
             }>

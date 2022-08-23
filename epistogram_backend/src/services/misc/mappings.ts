@@ -337,7 +337,7 @@ const marray = [
                             type: viewAsItem.itemType === 'video' ? 'video' : 'exam',
                             shouldRepeatVideo: viewAsItem.isRecommendedForPractise,
                             thumbnailUrl: '',
-                            correctAnswerRate: viewAsItem.correctAnswerRate
+                            correctAnswerRate: viewAsItem.scorePercentage
                         }));
 
                     const moduleState = isCurrentModule
@@ -375,7 +375,7 @@ const marray = [
                 isCompletedPreviously: view.isCompletedPreviously,
                 questions: toQuestionDTO(questions),
                 type: 'exam',
-                examStats: statsView ? toStatsDTO(statsView) : null
+                examStats: statsView ? toStatsDTO(statsView) : null,
             });
         }),
 

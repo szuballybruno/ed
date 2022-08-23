@@ -1,4 +1,33 @@
 WITH 
+highest_percentage_ase_cte AS 
+(
+	SELECT 
+		rns.user_id,
+		rns.exam_id,
+		rns.answer_session_id,
+		rns.exam_score
+	FROM 
+	(
+		SELECT
+			esv.user_id,
+			ev.exam_id,
+			esv.answer_session_id,
+			esv.exam_score,
+			ROW_NUMBER() OVER (
+				PARTITION BY 
+					esv.user_id,
+					ev.exam_id 
+				ORDER BY 
+					esv.exam_score DESC
+			) = 1 is_highest_score
+		FROM public.exam_score_view esv
+
+		LEFT JOIN public.exam_version ev
+		ON ev.id = esv.exam_version_id 
+	) rns 
+	
+	WHERE rns.is_highest_score 
+),
 course_item_light_view AS 
 (
     SELECT 
@@ -56,9 +85,12 @@ latest_course_items AS
 items_with_user AS
 (
 	SELECT 
+		ucb.user_id,
+		ucb.course_id,
 		civ.module_order_index,
 		civ.item_order_index,
 		civ.video_version_id,
+		civ.exam_version_id,
 		civ.item_title,
 		civ.course_version_id,
 		civ.video_id,
@@ -69,24 +101,21 @@ items_with_user AS
 		civ.item_type,
 		civ.item_subtitle,
 		civ.playlist_item_code,
-	
-		ucb.user_id,
-		ucb.course_id,
         ucb.current_item_code = civ.module_code module_is_current,
-		asv.answer_session_success_rate correct_answer_rate,
+		esv.score_percentage,
         uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
     
         -- state
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
 				THEN 'current'
-			WHEN cicv.course_item_completion_id IS NOT NULL
+			WHEN cic.id IS NOT NULL
 				THEN 'completed'
 			WHEN ucb.course_mode = 'advanced' 
 				THEN 'available'
             WHEN civ.item_order_index = 0 AND civ.module_order_index = 1
                 THEN 'available'
-			WHEN LAG(cicv.course_item_completion_id, 1) OVER (
+			WHEN LAG(cic.id, 1) OVER (
                 PARTITION BY civ.course_version_id 
                 ORDER BY module_order_index, item_order_index) IS NOT NULL 
 				THEN 'available'
@@ -99,19 +128,16 @@ items_with_user AS
 	
 	INNER JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
+
+	LEFT JOIN highest_percentage_ase_cte hpac
+	ON hpac.exam_id = civ.exam_id
+	AND hpac.user_id = ucb.user_id
 	
-	LEFT JOIN public.course_item_completion_view cicv
-	ON (cicv.exam_version_id = civ.exam_version_id
-	OR cicv.video_version_id = civ.video_version_id)
-	AND cicv.user_id = ucb.user_id
-
-	LEFT JOIN public.latest_answer_session_view lasv
-	ON lasv.exam_version_id = civ.exam_version_id
-	AND lasv.user_id = ucb.user_id
-
-	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = lasv.answer_session_id
-	AND asv.user_id = ucb.user_id
+	LEFT JOIN public.exam_score_view esv
+	ON esv.answer_session_id = hpac.answer_session_id
+	
+	LEFT JOIN public.course_item_completion cic
+	ON cic.answer_session_id = hpac.answer_session_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id
@@ -119,7 +145,7 @@ items_with_user AS
 )
 SELECT * 
 FROM items_with_user 
-    
+
 ORDER BY
 	user_id,
 	course_id,
