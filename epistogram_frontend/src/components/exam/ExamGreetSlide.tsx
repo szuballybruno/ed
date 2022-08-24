@@ -24,7 +24,7 @@ export const ExamGreetSlide = (props: {
         headerCenterText={exam.title}
         footerButtons={new ArrayBuilder()
             .addIf(exam.canTakeAgain, {
-                title: exam.isCompletedPreviously ? 'Újrakezdés' : translatableTexts.exam.startExam,
+                title: exam.examStats ? 'Újrakezdés' : translatableTexts.exam.startExam,
                 action: startExam
             })
             .getArray()}>
@@ -58,13 +58,13 @@ export const ExamGreetSlide = (props: {
                     maxWidth: '500px'
                 }}>
 
-                {exam.isCompletedPreviously
+                {exam.examStats
                     ? translatableTexts.exam.greetTextRetry
                     : translatableTexts.exam.greetText}
             </EpistoFont>
 
             {/* if previously completed  */}
-            {exam.isCompletedPreviously && <>
+            {exam.examStats && <>
 
                 {/* stats label */}
                 <EpistoFont>

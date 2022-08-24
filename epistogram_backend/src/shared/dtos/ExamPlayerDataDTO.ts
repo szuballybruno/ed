@@ -11,6 +11,5 @@ export class ExamPlayerDataDTO {
     isFinalExam: boolean;
     canTakeAgain: boolean;
     questions: QuestionDTO[];
-    isCompletedPreviously: boolean;
     examStats: ExamStatsDTO | null;
 }

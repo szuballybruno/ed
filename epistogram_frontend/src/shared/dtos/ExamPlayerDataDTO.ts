@@ -13,6 +13,5 @@ export class ExamPlayerDataDTO {
     questions: QuestionDTO[];
     correctAnswerCount: number;
     totalQuestionCount: number;
-    isCompletedPreviously: boolean;
     examStats: ExamStatsDTO | null;
 }
