@@ -38,7 +38,8 @@ grouped_cte AS
 		flat.answer_session_id,
 		COUNT(*)::int question_count,
 		COALESCE(SUM(flat.score), 0)::int exam_score,
-		(COUNT(*) * consts.question_max_score)::int exam_max_score
+		(COUNT(*) * consts.question_max_score)::int exam_max_score,
+		COALESCE(SUM(CASE WHEN flat.score IS NOT NULL THEN 1 ELSE 0 END), 0)::int answered_question_count
 	FROM flat_cte flat
 
 	CROSS JOIN public.constant_values_view consts

@@ -55,4 +55,8 @@ export class ExamResultStatsView {
     @ViewColumn()
     @XViewColumn()
     answeredQuestionCount: number;
+
+    @ViewColumn()
+    @XViewColumn()
+    isHighestScoreSession: boolean;
 }

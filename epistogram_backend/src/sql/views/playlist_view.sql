@@ -1,33 +1,4 @@
 WITH 
-highest_percentage_ase_cte AS 
-(
-	SELECT 
-		rns.user_id,
-		rns.exam_id,
-		rns.answer_session_id,
-		rns.exam_score
-	FROM 
-	(
-		SELECT
-			esv.user_id,
-			ev.exam_id,
-			esv.answer_session_id,
-			esv.exam_score,
-			ROW_NUMBER() OVER (
-				PARTITION BY 
-					esv.user_id,
-					ev.exam_id 
-				ORDER BY 
-					esv.exam_score DESC
-			) = 1 is_highest_score
-		FROM public.exam_score_view esv
-
-		LEFT JOIN public.exam_version ev
-		ON ev.id = esv.exam_version_id 
-	) rns 
-	
-	WHERE rns.is_highest_score 
-),
 course_item_light_view AS 
 (
     SELECT 
@@ -129,15 +100,15 @@ items_with_user AS
 	INNER JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
 
-	LEFT JOIN highest_percentage_ase_cte hpac
-	ON hpac.exam_id = civ.exam_id
-	AND hpac.user_id = ucb.user_id
+	LEFT JOIN public.exam_highest_score_answer_session_view ehsasv
+	ON ehsasv.exam_id = civ.exam_id
+	AND ehsasv.user_id = ucb.user_id
 	
 	LEFT JOIN public.exam_score_view esv
-	ON esv.answer_session_id = hpac.answer_session_id
+	ON esv.answer_session_id = ehsasv.answer_session_id
 	
 	LEFT JOIN public.course_item_completion cic
-	ON cic.answer_session_id = hpac.answer_session_id
+	ON cic.answer_session_id = ehsasv.answer_session_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id

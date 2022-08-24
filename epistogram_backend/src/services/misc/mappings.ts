@@ -372,7 +372,6 @@ const marray = [
                 thumbnailUrl: view.thumbnailUrl,
                 isFinalExam: view.isFinalExam,
                 canTakeAgain: view.canRetake,
-                isCompletedPreviously: view.isCompletedPreviously,
                 questions: toQuestionDTO(questions),
                 type: 'exam',
                 examStats: statsView ? toStatsDTO(statsView) : null,

@@ -1,31 +1,31 @@
-import {AnswerSession} from '../models/entity/AnswerSession';
-import {CourseItemCompletion} from '../models/entity/CourseItemCompletion';
-import {ExamData} from '../models/entity/exam/ExamData';
-import {ExamVersion} from '../models/entity/exam/ExamVersion';
-import {ModuleVersion} from '../models/entity/module/ModuleVersion';
-import {QuestionVersion} from '../models/entity/question/QuestionVersion';
-import {AnswerSessionView} from '../models/views/AnswerSessionView';
-import {ExamPlayerDataView} from '../models/views/ExamPlayerDataView';
-import {ExamResultStatsView} from '../models/views/ExamResultStatsView';
-import {ExamResultView} from '../models/views/ExamResultView';
-import {ExamVersionView} from '../models/views/ExamVersionView';
-import {LatestExamView} from '../models/views/LatestExamView';
-import {QuestionDataView} from '../models/views/QuestionDataView';
-import {AnswerQuestionDTO} from '../shared/dtos/AnswerQuestionDTO';
-import {ExamPlayerDataDTO} from '../shared/dtos/ExamPlayerDataDTO';
-import {ExamResultsDTO} from '../shared/dtos/ExamResultsDTO';
-import {Id} from '../shared/types/versionId';
-import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
-import {AuthorizationService} from './AuthorizationService';
-import {CourseCompletionService} from './CourseCompletionService';
-import {LoggerService} from './LoggerService';
-import {MapperService} from './MapperService';
-import {readItemCode} from './misc/encodeService';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {QuestionAnswerService} from './QuestionAnswerService';
-import {QuestionService} from './QuestionService';
-import {UserCourseBridgeService} from './UserCourseBridgeService';
-import {UserSessionActivityService} from './UserSessionActivityService';
+import { AnswerSession } from '../models/entity/AnswerSession';
+import { CourseItemCompletion } from '../models/entity/CourseItemCompletion';
+import { ExamData } from '../models/entity/exam/ExamData';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
+import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { AnswerSessionView } from '../models/views/AnswerSessionView';
+import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
+import { ExamResultStatsView } from '../models/views/ExamResultStatsView';
+import { ExamResultView } from '../models/views/ExamResultView';
+import { ExamVersionView } from '../models/views/ExamVersionView';
+import { LatestExamView } from '../models/views/LatestExamView';
+import { QuestionDataView } from '../models/views/QuestionDataView';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
+import { ExamResultsDTO } from '../shared/dtos/ExamResultsDTO';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
+import { CourseCompletionService } from './CourseCompletionService';
+import { LoggerService } from './LoggerService';
+import { MapperService } from './MapperService';
+import { readItemCode } from './misc/encodeService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { QuestionAnswerService } from './QuestionAnswerService';
+import { QuestionService } from './QuestionService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { UserSessionActivityService } from './UserSessionActivityService';
 
 export class ExamService {
 
@@ -57,7 +57,7 @@ export class ExamService {
     getExamPlayerDTOAsync = async (userId: Id<'User'>, examId: Id<'Exam'>) => {
 
         const examView = await this._ormService
-            .query(ExamPlayerDataView, {examId, userId})
+            .query(ExamPlayerDataView, { examId, userId })
             .where('examId', '=', 'examId')
             .and('userId', '=', 'userId')
             .getSingle();
@@ -68,11 +68,18 @@ export class ExamService {
         if (questions.length === 0)
             throw new Error('Exam has no questions assigend.');
 
+        /**
+         * Get highest score session stats 
+         * for userId and examVersionId
+         */
         const examResultView = await this._ormService
             .query(ExamResultStatsView, {
-                answerSessionId: examView.answerSessionId,
+                examVersionId: examView.examVersionId,
+                userId: examView.userId
             })
-            .where('answerSessionId', '=', 'answerSessionId')
+            .where('examVersionId', '=', 'examVersionId')
+            .and('userId', '=', 'userId')
+            .and('isHighestScoreSession', '=', 'true')
             .getOneOrNull();
 
         return this._mapperService
@@ -136,7 +143,7 @@ export class ExamService {
          */
         const moduleVersion = await this
             ._ormService
-            .query(ModuleVersion, {examVersionId: ans.examVersionId})
+            .query(ModuleVersion, { examVersionId: ans.examVersionId })
             .select(ModuleVersion)
             .innerJoin(ExamVersion, x => x
                 .on('id', '=', 'examVersionId')
@@ -171,7 +178,7 @@ export class ExamService {
          */
         const questionVersion = await this
             ._ormService
-            .query(QuestionVersion, {questionVersionId})
+            .query(QuestionVersion, { questionVersionId })
             .where('id', '=', 'questionVersionId')
             .getSingle();
 
@@ -222,13 +229,13 @@ export class ExamService {
         const currentItemCode = await this._userCourseBridgeService
             .getCurrentItemCodeOrFailAsync(userId);
 
-        const {itemId, itemType} = readItemCode(currentItemCode);
+        const { itemId, itemType } = readItemCode(currentItemCode);
 
         if (itemType !== 'exam')
             throw new Error('Current item is not an exam!');
 
         const latestExam = await this._ormService
-            .query(LatestExamView, {examId: itemId})
+            .query(LatestExamView, { examId: itemId })
             .where('examId', '=', 'examId')
             .getSingle();
 
@@ -245,6 +252,10 @@ export class ExamService {
             .and('answerSessionId', '=', 'answerSessionId')
             .getMany();
 
+        /**
+         * Get session stats for exactly 
+         * the specified answerSession
+         */
         const examResultStatsView = await this._ormService
             .query(ExamResultStatsView, {
                 answerSessionId,
@@ -265,7 +276,7 @@ export class ExamService {
     private async _getQuestionDataByExamVersionId(examVersionId: Id<'ExamVersion'>) {
 
         const questionData = await this._ormService
-            .query(QuestionDataView, {examVersionId: examVersionId})
+            .query(QuestionDataView, { examVersionId: examVersionId })
             .where('examVersionId', '=', 'examVersionId')
             .getMany();
 
@@ -283,7 +294,7 @@ export class ExamService {
 
         // set user exam progress
         const answerSessionViews = await this._ormService
-            .query(AnswerSessionView, {userId: userId, examVersionId})
+            .query(AnswerSessionView, { userId: userId, examVersionId })
             .where('userId', '=', 'userId')
             .and('examVersionId', '=', 'examVersionId')
             .getMany();
