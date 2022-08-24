@@ -6,9 +6,55 @@ import {ChipSmall} from '../administration/courses/ChipSmall';
 import {FlexListItem} from '../universal/FlexListItem';
 import {FlexListTitleSubtitle} from '../universal/FlexListTitleSubtitle';
 import {PlaylistItemTypeIcon} from './PlaylistItemTypeIcon';
-import {useEffect, useRef} from 'react';
+import {createRef, RefObject, useEffect} from 'react';
 
-export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }) => {
+export const scrollIntoView = (parent, child) => {
+
+    const parentBounding = parent.getBoundingClientRect(),
+        clientBounding = child.getBoundingClientRect();
+
+    const parentBottom = parentBounding.bottom,
+        parentTop = parentBounding.top,
+        clientBottom = clientBounding.bottom,
+        clientTop = clientBounding.top;
+
+    if (parentTop >= clientTop) {
+        scrollTo(parent, -(parentTop - clientTop), 300);
+    } else if (clientBottom > parentBottom) {
+        scrollTo(parent, clientBottom - parentBottom + 300, 300);
+    }
+
+};
+
+function easeInOutQuad(time, startPos, endPos, duration) {
+    time /= duration / 2;
+
+    if (time < 1) return (endPos / 2) * time * time + startPos;
+    time--;
+    return (-endPos / 2) * (time * (time - 2) - 1) + startPos;
+}
+
+const scrollTo = (element: any, to: number, duration: number) => {
+
+    const start = element.scrollTop;
+    let currentTime = 0;
+    const increment = 20;
+
+    const animateScroll = function() {
+        currentTime += increment;
+
+        const val = easeInOutQuad(currentTime, start, to, duration);
+        element.scrollTop = val;
+
+        if (currentTime < duration) {
+            setTimeout(animateScroll, increment);
+        }
+    };
+
+    animateScroll();
+};
+
+export const PlaylistItem = ({ playlistItem, parentRef }: {playlistItem: PlaylistItemDTO, parentRef?: RefObject<HTMLDivElement>}) => {
 
     const {
         title,
@@ -20,26 +66,30 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
         correctAnswerRate
     } = playlistItem;
 
-    const useScroll = () => {
-        const ref = useRef<HTMLDivElement | null>(null);
 
-        const executeScroll = () => ref.current
-            ? ref.current.scrollIntoView() : null;
-
-        return {
-            executeScroll,
-            ref
-        };
-    };
-
-    const {executeScroll, ref} = useScroll();
-
-    useEffect(() => {
-        //executeScroll();
-    }, [executeScroll]);
 
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
+
+    const ref = createRef<HTMLDivElement>();
+
+    useEffect(() => {
+
+        console.log('Effect runs');
+
+        if(ref.current && state === 'current' && parentRef) {
+
+            console.log('scrolling...');
+            console.log(ref.current);
+            console.log(parentRef.current);
+            scrollIntoView(parentRef.current, ref.current);
+            /*ref.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'start'
+            });*/
+        }
+    }, [parentRef]);
 
     const navigate = () => navigateToPlayer(playlistItemCode);
 

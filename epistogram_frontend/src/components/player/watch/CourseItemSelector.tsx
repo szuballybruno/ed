@@ -1,5 +1,5 @@
 import {Divider, Flex} from '@chakra-ui/layout';
-import {useEffect, useRef, useState} from 'react';
+import {RefObject, useEffect, useRef, useState} from 'react';
 import {CourseApiService} from '../../../services/api/courseApiService';
 import {useTempomatMode} from '../../../services/api/tempomatApiService';
 import {useRecommendedItemQuota} from '../../../services/api/userProgressApiService';
@@ -26,10 +26,11 @@ export const CourseItemSelector = (props: {
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
     isPlayerLoaded: boolean,
-    canChangeMode?: boolean
+    canChangeMode?: boolean,
+    parentRef?: RefObject<HTMLDivElement>
 }) => {
 
-    const { currentItemCode, nextItemState: itemState, isPlayerLoaded, mode, refetchPlayerData, courseId, modules, canChangeMode } = props;
+    const { currentItemCode, nextItemState: itemState, isPlayerLoaded, mode, refetchPlayerData, courseId, modules, canChangeMode, parentRef } = props;
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
@@ -247,6 +248,8 @@ export const CourseItemSelector = (props: {
             </EpistoFont>
         </EpistoPopper>
 
-        <Playlist modules={modules}></Playlist>
+        <Playlist
+            modules={modules}
+            parentRef={parentRef}></Playlist>
     </>;
 };

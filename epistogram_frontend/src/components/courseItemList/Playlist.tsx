@@ -3,7 +3,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import {useEffect, useState} from 'react';
+import {RefObject, useEffect, useState} from 'react';
 import {useNavigation} from '../../services/core/navigatior';
 import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
 import {PlaylistModuleDTO} from '../../shared/dtos/PlaylistModuleDTO';
@@ -17,7 +17,8 @@ import {PlaylistItem} from './PlaylistItem';
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const Playlist = (props: {
-    modules: PlaylistModuleDTO[]
+    modules: PlaylistModuleDTO[],
+    parentRef?: RefObject<HTMLDivElement>
 }) => {
 
     // hooks
@@ -25,7 +26,7 @@ export const Playlist = (props: {
     const { navigateToPlayer } = useNavigation();
 
     // data
-    const { modules } = props;
+    const { modules, parentRef } = props;
 
     const isBeginnerMode = modules
         .flatMap(x => x.items)
@@ -147,13 +148,13 @@ export const Playlist = (props: {
 
                         <FlexList
                             id="courseItemListContainer"
-                            p="10px"
-                            height="100%">
+                            p="10px">
 
                             {module
                                 .items
                                 .map((playlistItem, index) => <PlaylistItem
                                     key={index}
+                                    parentRef={parentRef}
                                     playlistItem={playlistItem} />)}
                         </FlexList>
                     </CollapseItem>;

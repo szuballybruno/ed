@@ -1,9 +1,8 @@
 import {Flex, FlexProps} from '@chakra-ui/layout';
 import {Checkbox} from '@mui/material';
-import {MutableRefObject, ReactNode} from 'react';
+import {ForwardedRef, forwardRef, ReactNode} from 'react';
 
-export const FlexListItem = (props: FlexProps & {
-    ref?: MutableRefObject<HTMLDivElement | null>,
+export const FlexListItem = forwardRef((props: FlexProps & {
     onClick?: () => void,
     isLocked?: boolean,
     thumbnailContent?: ReactNode,
@@ -11,7 +10,7 @@ export const FlexListItem = (props: FlexProps & {
     midContent?: ReactNode,
     isChecked?: boolean,
     setIsChecked?: (isChecked: boolean) => void
-}) => {
+}, ref: ForwardedRef<HTMLDivElement>) => {
 
     const {
         onClick,
@@ -21,7 +20,6 @@ export const FlexListItem = (props: FlexProps & {
         midContent,
         isChecked,
         setIsChecked,
-        ref,
         ...css } = props;
 
     return <Flex
@@ -64,4 +62,4 @@ export const FlexListItem = (props: FlexProps & {
 
         {endContent}
     </Flex>;
-};
+});

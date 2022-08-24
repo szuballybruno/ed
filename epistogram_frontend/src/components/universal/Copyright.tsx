@@ -1,7 +1,8 @@
 import React from 'react';
-import { Flex } from '@chakra-ui/react';
+import {Flex} from '@chakra-ui/react';
 
 export const Copyright = () => <Flex
+    background='var(--transparentWhite90)'
     width="100%"
     justify="center"
     py="10px">

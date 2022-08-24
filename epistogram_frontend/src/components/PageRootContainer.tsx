@@ -1,7 +1,7 @@
-import { Flex, FlexProps, Image } from '@chakra-ui/react';
-import React, { ReactNode, useEffect } from 'react';
-import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
-import { EpistoGrid } from './controls/EpistoGrid';
+import {Flex, FlexProps, Image} from '@chakra-ui/react';
+import React, {ReactNode, useEffect} from 'react';
+import {gradientBackgroundGenerator} from '../services/core/gradientBackgroundGenerator';
+import {EpistoGrid} from './controls/EpistoGrid';
 
 export const PageRootContainer = (props: {
     children: ReactNode,

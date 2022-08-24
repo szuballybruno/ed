@@ -1,15 +1,15 @@
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { ContentPane } from '../ContentPane';
-import { PageRootContainer } from '../PageRootContainer';
-import { EpistoRoutes } from '../universal/EpistoRoutes';
-import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';
-import { CourseRatingSubpage } from './courseRating/CourseRatingSubpage';
-import { PrequizGreetingSubpage } from './prequiz/PrequizGreetingSubpage';
-import { PrequizSubpage } from './prequiz/PrequizSubpage';
-import { PretestGreetingSubpage } from './pretest/PretestGreetingSubpage';
-import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
-import { PretestSubpage } from './pretest/PretestSubpage';
-import { WatchSubpage } from './watch/WatchSubpage';
+import {applicationRoutes} from '../../configuration/applicationRoutes';
+import {ContentPane} from '../ContentPane';
+import {PageRootContainer} from '../PageRootContainer';
+import {EpistoRoutes} from '../universal/EpistoRoutes';
+import {CourseOverviewSubpage} from './courseOverview/CourseOverviewSubpage';
+import {CourseRatingSubpage} from './courseRating/CourseRatingSubpage';
+import {PrequizGreetingSubpage} from './prequiz/PrequizGreetingSubpage';
+import {PrequizSubpage} from './prequiz/PrequizSubpage';
+import {PretestGreetingSubpage} from './pretest/PretestGreetingSubpage';
+import {PretestResultsSubpage} from './pretest/PretestResultsSubpage';
+import {PretestSubpage} from './pretest/PretestSubpage';
+import {WatchSubpage} from './watch/WatchSubpage';
 
 export const PlayerPage = () => {
 
@@ -26,7 +26,7 @@ export const PlayerPage = () => {
                 maxHeight='100vh'
                 minHeight='100vh'
                 minWidth='100%'
-                overflowY='hidden'
+                noOverflow
                 isMinimalMode
                 showLogo>
 

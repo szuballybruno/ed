@@ -1,10 +1,10 @@
-import { Flex, FlexProps, Text } from '@chakra-ui/react';
+import {Flex, FlexProps, Text} from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { LinearProgress } from '@mui/material';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LoadingStateType } from '../../models/types';
-import { isArray } from '../../static/frontendHelpers';
-import { EpistoHeader } from '../EpistoHeader';
+import {LinearProgress} from '@mui/material';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {LoadingStateType} from '../../models/types';
+import {isArray} from '../../static/frontendHelpers';
+import {EpistoHeader} from '../EpistoHeader';
 
 type ErrorType = any | any[];
 
@@ -28,7 +28,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
     const renderContent = true;//onlyRenderIfLoaded ? !showOverlay : true;
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // func 
+    // func
     const cancelTimeout = useCallback(() => {
 
         if (timeoutRef.current)
@@ -41,7 +41,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         timeoutRef.current = setTimeout(fn, 1); // temp set to 1
     }, [cancelTimeout]);
 
-    // error 
+    // error
     const getError = useCallback((): ErrorType => {
 
         if (!error)
@@ -55,7 +55,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
 
     const singleError = useMemo(() => getError(), [getError]);
 
-    // state 
+    // state
     const getLoadingState = useCallback((): LoadingStateType => {
 
         if (singleError)
