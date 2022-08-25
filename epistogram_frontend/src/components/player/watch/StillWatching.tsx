@@ -1,8 +1,8 @@
-import { ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked } from '@mui/icons-material';
-import { useState } from 'react';
-import { hasValue } from '../../../static/frontendHelpers';
-import { StillWatchingAnswer } from '../../universal/StillWatchingAnswer';
-import { QuestionnaireLayout } from '../../universal/QuestionnaireLayout';
+import {ChangeHistory, CheckBoxOutlineBlank, RadioButtonUnchecked} from '@mui/icons-material';
+import {useState} from 'react';
+import {hasValue} from '../../../static/frontendHelpers';
+import {StillWatchingAnswer} from '../../universal/StillWatchingAnswer';
+import {QuestionnaireLayout} from '../../universal/QuestionnaireLayout';
 import classes from './stillWatching.module.scss';
 
 export const StillWatching = (props: { onClose: () => void, optionIndex: number }) => {
@@ -31,6 +31,7 @@ export const StillWatching = (props: { onClose: () => void, optionIndex: number 
         buttonWrapperStyles={{
             display: 'flex',
             flexDirection: 'row',
+            zIndex: '5'
         }}
         loadingProps={{ loadingState: 'success' }}
         title={`Kérlek válaszd ki a ${correctOption.displayName}!`}

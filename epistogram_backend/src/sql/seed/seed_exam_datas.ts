@@ -1,5 +1,5 @@
-import { ExamData } from '../../models/entity/exam/ExamData';
-import { getSeedList } from '../../services/sqlServices/SeedService';
+import {ExamData} from '../../models/entity/exam/ExamData';
+import {getSeedList} from '../../services/sqlServices/SeedService';
 
 export const getExamDatasSeedData = () => getSeedList<ExamData>()({
     signup_exam_data: {
@@ -19,16 +19,6 @@ export const getExamDatasSeedData = () => getSeedList<ExamData>()({
         acceptanceThreshold: null,
         thumbnailUrl: null,
         orderIndex: 15,
-        isFinal: false,
-        retakeLimit: null,
-    },
-    exam_data_excel_ism_fuggveny_temazaro: {
-        title: 'Ismerkedés a függvényekkel témazáró',
-        subtitle: '',
-        description: null,
-        acceptanceThreshold: null,
-        thumbnailUrl: null,
-        orderIndex: 25,
         isFinal: false,
         retakeLimit: null,
     },

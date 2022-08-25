@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
-import { NavLink } from 'react-router-dom';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
-import { Environment } from '../../static/Environemnt';
-import { useIsDesktopView } from '../../static/frontendHelpers';
-import { FlexFloat } from '../controls/FlexFloat';
-import { DesktopNavbar } from './DesktopNavbar';
+import React, {memo} from 'react';
+import {NavLink} from 'react-router-dom';
+import {applicationRoutes} from '../../configuration/applicationRoutes';
+import {useCurrentCourseItemCode} from '../../services/api/miscApiService';
+import {Environment} from '../../static/Environemnt';
+import {useIsDesktopView} from '../../static/frontendHelpers';
+import {FlexFloat} from '../controls/FlexFloat';
+import {DesktopNavbar} from './DesktopNavbar';
 import classes from './navbar.module.scss';
 
 const Navbar = memo((props: {
@@ -61,7 +61,7 @@ const Navbar = memo((props: {
         boxShadow="none"
         borderRadius={0}
         bgColor="unset"
-        padding={isLowHeight ? '20px 0 20px 0' : '20px 20px 20px 20px'}>
+        padding={isLowHeight ? '20 0' : '20px'}>
 
         {isDesktop
             ? renderDesktopNavbar()

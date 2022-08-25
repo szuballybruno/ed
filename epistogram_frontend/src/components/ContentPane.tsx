@@ -1,4 +1,4 @@
-import { FlexProps, Flex } from '@chakra-ui/react';
+import {Flex, FlexProps} from '@chakra-ui/react';
 import Navbar from './navbar/Navbar';
 
 export const ContentPane = (props: {

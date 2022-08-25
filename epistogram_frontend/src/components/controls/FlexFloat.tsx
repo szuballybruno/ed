@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import {Flex, FlexProps} from '@chakra-ui/react';
 
 export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: 'normal' | 'rect' }) => {
 
@@ -9,7 +9,8 @@ export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: 'no
         borderRadius={variant === 'rect' ? 'none' : '7px'}
         boxShadow={`0 0 ${elevation ?? 15}px #00000015`}
         bg="white"
-        {...flexProps} >
+        {...flexProps}>
+
         {props.children}
     </Flex>;
 };

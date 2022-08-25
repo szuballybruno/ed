@@ -1,13 +1,23 @@
-import { Flex } from '@chakra-ui/react';
-import { ReplayCircleFilled } from '@mui/icons-material';
-import { useNavigation } from '../../services/core/navigatior';
-import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
-import { ChipSmall } from '../administration/courses/ChipSmall';
-import { FlexListItem } from '../universal/FlexListItem';
-import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
-import { PlaylistItemTypeIcon } from './PlaylistItemTypeIcon';
+import {Flex} from '@chakra-ui/react';
+import {ReplayCircleFilled} from '@mui/icons-material';
+import {useNavigation} from '../../services/core/navigatior';
+import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
+import {ChipSmall} from '../administration/courses/ChipSmall';
+import {FlexListItem} from '../universal/FlexListItem';
+import {FlexListTitleSubtitle} from '../universal/FlexListTitleSubtitle';
+import {PlaylistItemTypeIcon} from './PlaylistItemTypeIcon';
+import {createRef, RefObject, useEffect} from 'react';
+import {scrollIntoView} from '../../helpers/scrollIntoView';
 
-export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }) => {
+export const PlaylistItem = (
+    {
+        playlistItem,
+        parentRef
+    }: {
+        playlistItem: PlaylistItemDTO,
+        parentRef?: RefObject<HTMLDivElement>
+    }
+) => {
 
     const {
         title,
@@ -21,6 +31,16 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
 
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
+
+    const childRef = createRef<HTMLDivElement>();
+
+    useEffect(() => {
+
+        if(childRef.current && state === 'current' && parentRef) {
+
+            scrollIntoView(parentRef.current, childRef.current);
+        }
+    }, []);
 
     const navigate = () => navigateToPlayer(playlistItemCode);
 
@@ -36,6 +56,7 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
 
     return (
         <FlexListItem
+            ref={childRef}
             isLocked={isLocked}
             onClick={navigate}
             midContent={<Flex align="center">
@@ -74,7 +95,7 @@ export const PlaylistItem = ({ playlistItem }: { playlistItem: PlaylistItemDTO }
                             color: 'var(--intenseOrange)'
                         }} />}
 
-                {(type === 'exam' && correctAnswerRate) 
+                {(type === 'exam' && correctAnswerRate)
                     && <ChipSmall text={correctAnswerRate + '%'} />}
             </Flex>
             }>

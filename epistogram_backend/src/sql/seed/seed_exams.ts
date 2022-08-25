@@ -1,5 +1,5 @@
-import { Exam } from '../../models/entity/exam/Exam';
-import { getSeedList } from '../../services/sqlServices/SeedService';
+import {Exam} from '../../models/entity/exam/Exam';
+import {getSeedList} from '../../services/sqlServices/SeedService';
 
 export const getExamSeedData = () => getSeedList<Exam>()({
     signup_exam: {
@@ -10,10 +10,10 @@ export const getExamSeedData = () => getSeedList<Exam>()({
         isPretest: false,
         isSignup: false,
     },
-    exam_ism_fuggv_temazaro: {
-        isPretest: false,
-        isSignup: false,
-    },
+    /*  exam_ism_fuggv_temazaro: {
+          isPretest: false,
+          isSignup: false,
+      },*/
     exam_10: {
         isPretest: false,
         isSignup: false,

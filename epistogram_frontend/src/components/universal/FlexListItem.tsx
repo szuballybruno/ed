@@ -1,8 +1,8 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
-import { Checkbox } from '@mui/material';
-import { ReactNode } from 'react';
+import {Flex, FlexProps} from '@chakra-ui/layout';
+import {Checkbox} from '@mui/material';
+import {ForwardedRef, forwardRef, ReactNode} from 'react';
 
-export const FlexListItem = (props: FlexProps & {
+export const FlexListItem = forwardRef((props: FlexProps & {
     onClick?: () => void,
     isLocked?: boolean,
     thumbnailContent?: ReactNode,
@@ -10,7 +10,7 @@ export const FlexListItem = (props: FlexProps & {
     midContent?: ReactNode,
     isChecked?: boolean,
     setIsChecked?: (isChecked: boolean) => void
-}) => {
+}, ref: ForwardedRef<HTMLDivElement>) => {
 
     const {
         onClick,
@@ -23,6 +23,7 @@ export const FlexListItem = (props: FlexProps & {
         ...css } = props;
 
     return <Flex
+        ref={ref}
         id="flexListItem"
         //className="shadowOnHover"
         cursor={onClick ? 'pointer' : undefined}
@@ -61,4 +62,4 @@ export const FlexListItem = (props: FlexProps & {
 
         {endContent}
     </Flex>;
-};
+});

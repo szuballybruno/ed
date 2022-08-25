@@ -1,23 +1,22 @@
-import { Box, Flex } from '@chakra-ui/react';
-import { useEffect, useMemo, useState } from 'react';
-import { PlayerApiService } from '../../../services/api/PPlayerApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
-import { useStringParam } from '../../../static/locationHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { FlexFloat } from '../../controls/FlexFloat';
-import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { Copyright } from '../../universal/Copyright';
-import { CourseItemSelector } from './CourseItemSelector';
-import { ExamPlayer } from './ExamPlayer';
-import { ModuleView } from './ModuleView';
-import { WatchView } from './WatchView';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { Logger } from '../../../static/Logger';
+import {Box, Flex} from '@chakra-ui/react';
+import {useEffect, useMemo, useRef, useState} from 'react';
+import {PlayerApiService} from '../../../services/api/PPlayerApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {setPageTitle, useIsDesktopView} from '../../../static/frontendHelpers';
+import {useStringParam} from '../../../static/locationHelpers';
+import {translatableTexts} from '../../../static/translatableTexts';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
+import {LoadingFrame} from '../../system/LoadingFrame';
+import {Copyright} from '../../universal/Copyright';
+import {CourseItemSelector} from './CourseItemSelector';
+import {ExamPlayer} from './ExamPlayer';
+import {ModuleView} from './ModuleView';
+import {WatchView} from './WatchView';
+import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
+import {PlayerDataDTO} from '../../../shared/dtos/PlayerDataDTO';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {Logger} from '../../../static/Logger';
 
 export const WatchSubpage = () => {
 
@@ -25,6 +24,7 @@ export const WatchSubpage = () => {
     const { navigate, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+    const parentRef = useRef<HTMLDivElement>(null);
 
     // get player page data
     const {
@@ -150,8 +150,7 @@ export const WatchSubpage = () => {
 
                     <Flex
                         //px="20px"
-                        height='100vh'
-                        mb="50px">
+                        height='calc(100% - 70px)'>
 
                         {/* main column */}
                         <Box
@@ -185,10 +184,12 @@ export const WatchSubpage = () => {
                             {/* MODULE */}
                             {modulePlayerData && <ModuleView module={modulePlayerData}
                                 startModule={handleContinueCourse} />}
+
+                            <Copyright />
                         </Box>
 
                         {/* right sidebar */}
-                        <FlexFloat
+                        <Flex
                             id="courseItemListSidebar"
                             justify="flex-start"
                             zIndex="4"
@@ -199,12 +200,12 @@ export const WatchSubpage = () => {
                             transition="0.5s">
 
                             {isDesktopView && <Flex
+                                ref={parentRef}
                                 direction="column"
                                 id="courseItemSelectorRoot"
                                 overflowY='scroll'
-                                pb="200px"
-                                width="420px"
-                                minWidth="420px">
+                                pb='100px'
+                                flex='1'>
 
                                 <CourseItemSelector
                                     currentItemCode={currentPlaylistItemCode}
@@ -214,13 +215,11 @@ export const WatchSubpage = () => {
                                     modules={modules}
                                     canChangeMode={playerDataWithDefaults.canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
-                                    refetchPlayerData={refetchPlayerData} />
+                                    refetchPlayerData={refetchPlayerData}
+                                    parentRef={parentRef}/>
                             </Flex>}
-                        </FlexFloat>
+                        </Flex>
                     </Flex>
-
-                    <Copyright />
-
                 </LoadingFrame>
             </>
     );
