@@ -49,25 +49,21 @@ export class CompanyService extends QueryServiceBase<Company> {
 
     }
 
-    getCompaniesAdminAsync(principalId: PrincipalId) {
+    /**
+     * Returns the admin companies list  
+     */
+    async getCompaniesAdminAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
-                const companies = await this._ormService
-                    .query(CompanyView, { principalId })
-                    .where('userId', '=', 'principalId')
-                    .getMany();
+        const companies = await this._ormService
+            .query(CompanyView, { principalId })
+            .where('userId', '=', 'principalId')
+            .getMany();
 
-                return this._mapperService
-                    .mapTo(CompanyDTO, [companies]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
-            }
-        };
-
+        return this._mapperService
+            .mapTo(CompanyDTO, [companies]);
     }
 
     getRoleAssignCompaniesAsync(principalId: PrincipalId) {

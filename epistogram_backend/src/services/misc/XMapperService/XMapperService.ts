@@ -9,11 +9,15 @@ export class XMapper<TServices extends any[], TContainer extends ContainerType> 
 
     mapTo<TTarget>(classType: ClassType<TTarget>, params: GetSingleContainerType<TContainer, TTarget>['2']) {
 
-        const w = this._builder
+        const mapping = this
+            ._builder
             .mappings
-            .single(x => x[0].name === classType.name);
+            .firstOrNull(x => x[0].name === classType.name);
 
-        const mappingFn = w[1];
+        if (!mapping)
+            throw new Error(`Mapping is missing for target type: ${classType.name}!`);
+
+        const mappingFn = mapping[1];
 
         return mappingFn(this._services)(...(params as any)) as any as GetSingleContainerType<TContainer, TTarget>['1'];
     }
