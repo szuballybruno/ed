@@ -128,6 +128,8 @@ export class FileService {
                     log(e, { entryType: 'warning' });
                 }
             }
+
+            return { newCDNFilePath };
         }
         catch (e) {
 

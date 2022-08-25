@@ -17,23 +17,33 @@ export class VideoController implements XController<VideoController> {
     @XControllerAction(apiRoutes.video.uploadVideoFileChunks, { isPost: true, isMultipart: true })
     uploadVideoFileChunksAction(params: ActionParams) {
 
-        const getFile = () => params.getSingleFile();
+        const getFile = () => params
+            .getSingleFile();
 
         const body = params
             .getBody<{
-                videoId: number,
+                videoVersionId: Id<'VideoVersion'>,
                 chunkIndex: number,
                 chunksCount: number
             }>();
 
-        const videoId = Id
-            .create<'Video'>(body
-                .getValue(x => x.videoId, 'int'));
+        const videoVersionId = body
+            .getValue(x => x.videoVersionId, 'int');
 
-        const chunksCount = body.getValue(x => x.chunksCount, 'int');
-        const chunkIndex = body.getValue(x => x.chunkIndex, 'int');
+        const chunksCount = body
+            .getValue(x => x.chunksCount, 'int');
 
-        return this._videoService
-            .uploadVideoFileChunksAsync(params.principalId, videoId, chunksCount, chunkIndex, getFile);
+        const chunkIndex = body
+            .getValue(x => x.chunkIndex, 'int');
+
+        return this
+            ._videoService
+            .uploadVideoFileChunksAsync({
+                principalId: params.principalId,
+                videoVersionId,
+                chunksCount,
+                chunkIndex,
+                getFile
+            });
     }
 }

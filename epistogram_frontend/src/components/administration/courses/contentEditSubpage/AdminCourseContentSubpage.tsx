@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 import { CourseApiService } from '../../../../services/api/courseApiService';
+import { useUploadVideoFileAsync } from '../../../../services/api/videoApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
@@ -11,13 +12,14 @@ import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseC
 import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
-import { Logger } from '../../../../static/Logger';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
+import { FileSelector } from '../../../universal/fileSelector/FileSelector';
+import { SelectedFileDataType, useFileSelectorLogic } from '../../../universal/fileSelector/FileSelectorLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { ItemEditDialog } from '../itemEditDialog/ItemEditDialog';
@@ -41,6 +43,8 @@ export const AdminCourseContentSubpage = () => {
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
     const dialogParams = itemEditDialogLogic.params!;
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
+    const { saveVideoFileAsync, saveVideoFileState } = useUploadVideoFileAsync();
+    const [currentVideoVersionId, setCurrentVideoVersionId] = useState<Id<'VideoVersion'>>(-1 as any);
 
     // state
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
@@ -139,13 +143,37 @@ export const AdminCourseContentSubpage = () => {
             .setOriginalItems(courseContentAdminData.items ?? []);
     }, [courseContentAdminData, itemsMutatorFunctions]);
 
-    // 
-    // FUNCS
-    // 
+    /**
+     * Handle upload video file 
+     */
+    const handleUploadVideoFile = useCallback((data: SelectedFileDataType) => {
 
+        saveVideoFileAsync(currentVideoVersionId, data.file);
+    }, [saveVideoFileAsync, currentVideoVersionId]);
+
+    /**
+     * Use video selector logic
+     */
+    const videoFileSelectorLogic = useFileSelectorLogic({ onFileSelected: handleUploadVideoFile, type: 'video' });
+
+    /**
+     * Handle select video file 
+     */
+    const handleSelectVideoFile = useCallback((videoVersionId: Id<'VideoVersion'>) => {
+
+        setCurrentVideoVersionId(videoVersionId);
+        videoFileSelectorLogic.selectFile();
+    }, [videoFileSelectorLogic]);
+
+    /**
+     * Close add popper  
+     */
     const closeAddPopper = () => setIsAddButtonsPopperOpen(false);
 
-    const openDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
+    /**
+     * Open item edit dialog  
+     */
+    const openItemEditDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
 
         const data = row?.data!;
         const isVideo = !!data?.videoVersionId;
@@ -171,6 +199,9 @@ export const AdminCourseContentSubpage = () => {
 
     };
 
+    /**
+     * Add item row  
+     */
     const handleAddRow = (type: 'video' | 'exam') => {
 
         const moduleVersionId = modules[0].versionId;
@@ -231,6 +262,9 @@ export const AdminCourseContentSubpage = () => {
         closeAddPopper();
     };
 
+    /**
+     * Save mutations async 
+     */
     const handleSaveAsync = useCallback(async () => {
 
         try {
@@ -258,18 +292,16 @@ export const AdminCourseContentSubpage = () => {
         }
     }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
 
-    const gridColumns = useGridColumnDefinitions(modules, openDialog, itemsMutatorFunctions);
-
-    //
-    // EFFECTS
-    //
-
-    Logger.logScoped('RENDER', 'Rendering AdminCourseContentSubpage');
+    const gridColumns = useGridColumnDefinitions(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile);
 
     return (
         <CourseAdministartionFrame
             noHeightOverflow
             isAnySelected={isAnySelected}>
+
+            {/* video file selector */}
+            <FileSelector
+                logic={videoFileSelectorLogic} />
 
             {/* Right side content */}
             <AdminSubpageHeader
@@ -287,7 +319,7 @@ export const AdminCourseContentSubpage = () => {
                         title: translatableTexts.misc.add
                     },
                     {
-                        action: () => openDialog('module'),
+                        action: () => openItemEditDialog('module'),
                         icon: <Edit ref={ref} />,
                         title: translatableTexts.administration.courseContentSubpage.editModules
                     },

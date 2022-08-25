@@ -15,7 +15,8 @@ export type LogScopeType =
     'VERSION SAVE' |
     'COINS' |
     'SERVER' | 
-    'ERROR';
+    'ERROR' | 
+    'FILE UPLOAD';
 
 export class GlobalConfiguration {
 
@@ -85,7 +86,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['GENERIC', 'VERSION SAVE'] as LogScopeType[],
+        enabledScopes: ['GENERIC', 'VERSION SAVE', 'FILE UPLOAD'] as LogScopeType[],
     };
 
     practiseQuestions = {

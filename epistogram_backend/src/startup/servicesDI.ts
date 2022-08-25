@@ -1,5 +1,6 @@
 import { CourseCompletionService } from '../services/CourseCompletionService';
 import { CourseProgressService } from '../services/CourseProgressService';
+import { FileSystemService } from '../services/FileSystemService';
 import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { PlaylistService } from '../services/PlaylistService';
@@ -160,8 +161,9 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(CourseCompletionService, [MapperService, ORMConnectionService])
         .addClass(ExamService, [UserCourseBridgeService, ORMConnectionService, UserSessionActivityService, QuestionAnswerService, QuestionService, MapperService, AuthorizationService, LoggerService, CourseCompletionService])
         .addClass(StorageService, [GlobalConfiguration])
+        .addClass(FileSystemService, [])
         .addClass(FileService, [UserService, StorageService, ORMConnectionService, AuthorizationService])
-        .addClass(VideoService, [ORMConnectionService, UserCourseBridgeService, QuestionAnswerService, FileService, QuestionService, UrlService, MapperService, GlobalConfiguration, AuthorizationService])
+        .addClass(VideoService, [ORMConnectionService, QuestionAnswerService, FileService, UrlService, GlobalConfiguration, AuthorizationService, LoggerService, FileSystemService])
         .addClass(ModuleService, [ORMConnectionService, MapperService, CourseItemService, VersionSaveService, FileService, AuthorizationService])
         .addClass(PlaylistService, [UserCourseBridgeService, ORMConnectionService, MapperService])
         .addClass(CourseProgressService, [UserCourseBridgeService, ORMConnectionService, MapperService, PlaylistService])

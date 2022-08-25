@@ -6,6 +6,7 @@ import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseC
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { VersionCode } from '../../../../shared/types/VersionCode1';
+import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
@@ -40,7 +41,8 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 export const useGridColumnDefinitions = (
     modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
-    itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>) => {
+    itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
+    onSelectVideoFile: (videoVersionId: Id<'VideoVersion'>) => void) => {
 
     const TextCellRenderer = (props: {
         children: ReactNode,
@@ -238,7 +240,7 @@ export const useGridColumnDefinitions = (
 
                 return <EpistoButton
                     variant="outlined"
-                    onClick={() => { throw new Error('Not implemented!'); }}>
+                    onClick={() => onSelectVideoFile(row.data.videoVersionId!)}>
 
                     Fájl kiválasztása
                 </EpistoButton >;

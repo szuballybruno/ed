@@ -1,6 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
-import fs from 'fs';
-import { User } from '../models/entity/User';
+import { getVideoDurationInSeconds } from 'get-video-duration';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
@@ -8,47 +7,27 @@ import { LatestVideoView } from '../models/views/LatestVideoView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
 import { Id } from '../shared/types/versionId';
-import { throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
-import { MapperService } from './MapperService';
+import { FileSystemService } from './FileSystemService';
+import { LoggerService } from './LoggerService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
-import { QuestionService } from './QuestionService';
 import { UrlService } from './UrlService';
-import { UserCourseBridgeService } from './UserCourseBridgeService';
 
-export class VideoService extends QueryServiceBase<VideoData> {
-
-    private _userCourseBridgeService: UserCourseBridgeService;
-    private _questionAnswerService: QuestionAnswerService;
-    private _fileService: FileService;
-    private _questionsService: QuestionService;
-    private _assetUrlService: UrlService;
-    private _authorizationService: AuthorizationService;
+export class VideoService {
 
     constructor(
-        ormConnection: ORMConnectionService,
-        userCourseBridgeService: UserCourseBridgeService,
-        questionAnswerService: QuestionAnswerService,
-        fileService: FileService,
-        questionsService: QuestionService,
-        assetUrlService: UrlService,
-        mapperService: MapperService,
+        private _ormService: ORMConnectionService,
+        private _questionAnswerService: QuestionAnswerService,
+        private _fileService: FileService,
+        private _assetUrlService: UrlService,
         private _globalConfig: GlobalConfiguration,
-        authorizationService: AuthorizationService) {
-
-        super(mapperService, ormConnection, VideoData);
-
-        this._questionAnswerService = questionAnswerService;
-        this._userCourseBridgeService = userCourseBridgeService;
-        this._fileService = fileService;
-        this._questionsService = questionsService;
-        this._assetUrlService = assetUrlService;
-        this._authorizationService = authorizationService;
+        private _authorizationService: AuthorizationService,
+        private _loggerService: LoggerService,
+        private _fileSystemService: FileSystemService) {
     }
 
     answerVideoQuestionAsync(
@@ -155,123 +134,193 @@ export class VideoService extends QueryServiceBase<VideoData> {
         return videoPlayerData;
     };
 
-    uploadVideoFileChunksAsync(
+    /**
+     * Upload video file chunk 
+     */
+    async uploadVideoFileChunksAsync({
+        chunkIndex,
+        chunksCount,
+        getFile,
+        principalId,
+        videoVersionId
+    }: {
         principalId: PrincipalId,
-        videoId: Id<'Video'>,
+        videoVersionId: Id<'VideoVersion'>,
         chunkIndex: number,
         chunksCount: number,
-        getFile: () => UploadedFile | undefined) {
+        getFile: () => UploadedFile | undefined
+    }) {
 
-        return {
-            action: async () => {
-                const videoVersion = await this._ormService
-                    .query(LatestVideoView, { videoId })
-                    .getSingle();
+        const { tempFilePath, uploadsTempFolder } = this
+            ._getVideoFilePath(videoVersionId);
 
-                const videoVersionId = videoVersion.videoVersionId;
+        try {
 
-                const tempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
-                const filePath = tempFolder + `\\video_upload_temp_${videoId}.mp4`;
+            const isFirstChunk = chunkIndex === 0;
+            const isLastChunk = chunkIndex + 1 === chunksCount;
 
-                try {
+            this._loggerService
+                .logScoped('FILE UPLOAD', `Recieving file chunk #${chunkIndex}/${chunksCount}. [First chunk: ${isFirstChunk ? 'yes' : 'no'} | Last chunk: ${isLastChunk ? 'yes' : 'no'}]`);
 
-                    if (chunkIndex !== 0 && !fs.existsSync(filePath))
-                        throw new Error('Trying to append file that does not exist!');
+            if (!isFirstChunk && !this._fileSystemService.exists(tempFilePath))
+                throw new Error(`File chunk ${chunkIndex} error. Trying to append file that does not exist!`);
 
-                    const file = getFile();
-                    if (!file)
-                        throw new Error('File chunk data not sent!');
+            const file = getFile();
+            if (!file)
+                throw new Error(`File chunk ${chunkIndex} data not sent!`);
 
-                    console.log('Recieved file chunk: #' + chunkIndex);
+            // create temp folder 
+            if (!this._fileSystemService.exists(uploadsTempFolder))
+                this._fileSystemService.createFolder(uploadsTempFolder);
 
-                    // create temp folder 
-                    if (!fs.existsSync(tempFolder)) {
-                        fs.mkdirSync(tempFolder);
-                    }
+            // create temp file
+            if (isFirstChunk)
+                this._fileSystemService
+                    .writeFile(tempFilePath, file.data);
 
-                    // create & append file
-                    if (chunkIndex === 0) {
+            // append to temp file 
+            else {
 
-                        fs.writeFileSync(filePath, file.data);
-                    }
-                    else {
-
-                        fs.appendFileSync(filePath, file.data);
-                    }
-
-                    // upload is done 
-                    if (chunkIndex + 1 === chunksCount) {
-
-                        console.log(`Video (id: ${videoId}) file upload is done with chunk #${chunkIndex}/${chunksCount}. Uploading to cloud storage...`);
-
-                        // read tmp file 
-                        const fullFile = fs.readFileSync(filePath);
-
-                        // delete tmp file 
-                        fs.rmSync(filePath);
-
-                        // upload to cloud 
-                        await this._uploadVideoFileAsync(videoVersionId, fullFile);
-                    }
-                }
-                catch (e) {
-
-                    fs.unlinkSync(filePath);
-                    throw e;
-                }
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_COURSE_ADMIN', { companyId });
+                this._fileSystemService
+                    .appendFile(tempFilePath, file.data);
             }
-        };
 
+            // upload is done 
+            if (isLastChunk) {
 
+                this._loggerService
+                    .logScoped('FILE UPLOAD', 'Video file data recieved.');
+
+                this._loggerService
+                    .logScoped('FILE UPLOAD', 'Reading buffer to memory.');
+
+                // read tmp file 
+                const fullFile = this._fileSystemService
+                    .readFileAsBuffer(tempFilePath);
+
+                this._loggerService
+                    .logScoped('FILE UPLOAD', 'Deleting temp file from file system.');
+
+                // delete tmp file 
+                this._fileSystemService
+                    .deleteFile(tempFilePath);
+
+                this._loggerService
+                    .logScoped('FILE UPLOAD', 'Uploading to cloud storage...');
+
+                // upload to cloud 
+                await this
+                    ._uploadVideoFileAsync(videoVersionId, fullFile);
+
+                this._loggerService
+                    .logScoped('FILE UPLOAD', 'Video uploaded successfully.');
+            }
+        }
+        catch (e) {
+
+            this._loggerService
+                .logScoped('ERROR', 'An error occured, deleting temp file: ' + tempFilePath);
+
+            this._fileSystemService
+                .deleteFileIfExists(tempFilePath);
+
+            throw e;
+        }
     }
 
+    /**
+     * Upload full video file to CDN  
+     */
     private _uploadVideoFileAsync = async (videoVersionId: Id<'VideoVersion'>, videoFileBuffer: Buffer) => {
 
-        throwNotImplemented();
-        // upload file
-        // const filePath = this._fileService
-        //     .getFilePath('video_file', videoVersionId);
+        /**
+         * Upload video file to CDN
+         */
+        const videoData = await this
+            ._ormService
+            .withResType<VideoData>()
+            .query(VideoVersion, { videoVersionId })
+            .select(VideoData)
+            .leftJoin(VideoData, x => x
+                .on('id', '=', 'videoDataId', VideoVersion))
+            .where('id', '=', 'videoVersionId')
+            .getSingle();
 
-        // const videoData = await this._ormService
-        //     .withResType<VideoData>()
-        //     .query(VideoVersion, { videoVersionId })
-        //     .select(VideoData)
-        //     .leftJoin(VideoData, x => x
-        //         .on('id', '=', 'videoDataId', VideoVersion))
-        //     .where('id', '=', 'videoVersionId')
-        //     .getSingle();
+        const videoFileId = videoData.videoFileId!;
 
-        // await this._fileService
-        //     .uploadAssigendFile2Async({
-        //         entitySignature: VideoFile,
-        //         entityId: videoData.videoFileId,
-        //         fileBuffer: videoFileBuffer,
-        //         fileCode: 'video_file',
-        //         storageFileIdField: 'storageFileId'
-        //     });
+        const { newCDNFilePath } = await this
+            ._fileService
+            .uploadAssigendFileAsync({
+                entitySignature: VideoFile,
+                entityId: videoFileId,
+                fileBuffer: videoFileBuffer,
+                fileCode: 'video_file',
+                storageFileIdField: 'storageFileId'
+            });
 
-        // const videoFile = await getVideoFile()
+        this._loggerService
+            .logScoped('FILE UPLOAD', `Upload successful. CDN file path: ${newCDNFilePath}`);
 
-        // // set video length
-        // const videoFileUrl = this._assetUrlService
-        //     .getAssetUrl(filePath);
-
-        // const lengthSeconds = await getVideoLengthSecondsAsync(videoFileUrl);
-
-        // await this._ormService
-        //     .save(VideoFile, {
-        //         id: videoFile.id,
-        //         lengthSeconds: lengthSeconds
-        //     });
+        /**
+         * Set video file length
+         */
+        await this
+            ._setVideoFileLengthAsync(newCDNFilePath, videoFileId);
     };
+
+    /**
+     * Get video file path 
+     */
+    private _getVideoFilePath(videoVersionId: Id<'VideoVersion'>) {
+
+        const uploadsTempFolder = this._globalConfig.rootDirectory + '\\uploads_temp';
+        const tempFilePath = uploadsTempFolder + `\\video_upload_temp_${videoVersionId}.mp4`;
+
+        return {
+            uploadsTempFolder,
+            tempFilePath
+        };
+    }
+
+    /**
+     * Set video file length 
+     */
+    private async _setVideoFileLengthAsync(cdnFilePath: string, videoFileId: Id<'VideoFile'>) {
+
+        this._loggerService
+            .logScoped('FILE UPLOAD', 'Setting video length...');
+
+        // set video length
+        const videoFileUrl = this
+            ._assetUrlService
+            .getAssetUrl(cdnFilePath);
+
+        const lengthSeconds = await this
+            ._getVideoLengthSecondsAsync(videoFileUrl);
+
+        await this
+            ._ormService
+            .save(VideoFile, {
+                id: videoFileId,
+                lengthSeconds: lengthSeconds
+            });
+
+        this._loggerService
+            .logScoped('FILE UPLOAD', `Video length set: ${lengthSeconds}s`);
+    }
+
+    /**
+     * Get video length 
+     */
+    private async _getVideoLengthSecondsAsync(videoFileUrl: string): Promise<number> {
+
+        try {
+
+            return await getVideoDurationInSeconds(videoFileUrl);
+        }
+        catch (e: any) {
+
+            throw new Error(`Getting video duration error! Msg: ${e.message}`);
+        }
+    }
 }
