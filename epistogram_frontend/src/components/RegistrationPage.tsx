@@ -43,7 +43,7 @@ export const RegistrationPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
@@ -52,7 +52,7 @@ export const RegistrationPage = () => {
 
     useEffect(() => {
         if (!token)
-            navigate(applicationRoutes.loginRoute);
+            navigate2(applicationRoutes.loginRoute);
     }, [token]);
 
     const handleRegistration = async () => {
@@ -72,7 +72,7 @@ export const RegistrationPage = () => {
 
             showNotification(translatableTexts.registrationPage.successfulRegistration);
             await refetchUser();
-            navigate(applicationRoutes.signupRoute);
+            navigate2(applicationRoutes.signupRoute);
         }
         catch (e) {
 

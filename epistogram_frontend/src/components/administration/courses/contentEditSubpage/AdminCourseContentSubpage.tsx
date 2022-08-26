@@ -37,7 +37,7 @@ export const AdminCourseContentSubpage = () => {
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);

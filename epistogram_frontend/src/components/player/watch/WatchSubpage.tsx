@@ -1,27 +1,27 @@
-import {Box, Flex} from '@chakra-ui/react';
-import {useEffect, useMemo, useRef, useState} from 'react';
-import {PlayerApiService} from '../../../services/api/PPlayerApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {setPageTitle, useIsDesktopView} from '../../../static/frontendHelpers';
-import {useStringParam} from '../../../static/locationHelpers';
-import {translatableTexts} from '../../../static/translatableTexts';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
-import {LoadingFrame} from '../../system/LoadingFrame';
-import {Copyright} from '../../universal/Copyright';
-import {CourseItemSelector} from './CourseItemSelector';
-import {ExamPlayer} from './ExamPlayer';
-import {ModuleView} from './ModuleView';
-import {WatchView} from './WatchView';
-import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
-import {PlayerDataDTO} from '../../../shared/dtos/PlayerDataDTO';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {Logger} from '../../../static/Logger';
+import { Box, Flex } from '@chakra-ui/react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { PlayerApiService } from '../../../services/api/PPlayerApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
+import { useStringParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { Copyright } from '../../universal/Copyright';
+import { CourseItemSelector } from './CourseItemSelector';
+import { ExamPlayer } from './ExamPlayer';
+import { ModuleView } from './ModuleView';
+import { WatchView } from './WatchView';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Logger } from '../../../static/Logger';
 
 export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic('warn3');
-    const { navigate, navigateToPlayer } = useNavigation();
+    const { navigate2, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
     const parentRef = useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ export const WatchSubpage = () => {
         // TODO: Create a proper error message: 'Video doesn't exists' with
         //       options to navigate to available courses
         if (playerDataStatus === 'error')
-            return navigate(applicationRoutes.homeRoute);
+            return navigate2(applicationRoutes.homeRoute);
     }, [playerDataStatus]);
 
     // redirect if current item should be locked
@@ -113,7 +113,7 @@ export const WatchSubpage = () => {
 
     const handleContinueCourse = () => {
 
-        Logger.logScoped('PLAYBACK','Continue course, next item code: ' + nextPlaylistItemCode);
+        Logger.logScoped('PLAYBACK', 'Continue course, next item code: ' + nextPlaylistItemCode);
 
         if (nextPlaylistItemCode)
             navigateToPlayer(nextPlaylistItemCode);
@@ -216,7 +216,7 @@ export const WatchSubpage = () => {
                                     canChangeMode={playerDataWithDefaults.canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData}
-                                    parentRef={parentRef}/>
+                                    parentRef={parentRef} />
                             </Flex>}
                         </Flex>
                     </Flex>

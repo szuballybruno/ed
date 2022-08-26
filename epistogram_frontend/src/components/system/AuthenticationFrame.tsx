@@ -44,7 +44,7 @@ const AuthFirewall = (props: PropsWithChildren & {
     const dest = useCurrentUrlPathname();
     const loginRoute = applicationRoutes.loginRoute;
     const signupRoute = applicationRoutes.signupRoute;
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const currentRoute = useGetCurrentAppRoute();
     const { hasPermission } = useAuthorizationContext();
     const isUnauthorized = !!currentRoute.isUnauthorized;
@@ -57,7 +57,7 @@ const AuthFirewall = (props: PropsWithChildren & {
 
             Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
 
-            navigate(loginRoute);
+            navigate2(loginRoute);
         }
     }, [authState]);
 
@@ -76,7 +76,7 @@ const AuthFirewall = (props: PropsWithChildren & {
 
         Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
 
-        navigate(loginRoute, undefined, { dest });
+        navigate2(loginRoute, {}, { dest });
 
         return <div></div>;
     }
@@ -89,7 +89,7 @@ const AuthFirewall = (props: PropsWithChildren & {
         Logger.logScoped('AUTH', `canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
         Logger.logScoped('AUTH', `Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
 
-        navigate(signupRoute, undefined);
+        navigate2(signupRoute);
 
         return <div></div>;
     }

@@ -25,7 +25,7 @@ export const ShopAdminSubpage = () => {
     const { createShopItemAsync, createShopItemState } = useCreateShopItem();
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
     // state 
@@ -46,7 +46,7 @@ export const ShopAdminSubpage = () => {
 
     const handleEdit = (id: Id<'ShopItem'>) => {
 
-        navigate(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id });
+        navigate2(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id });
     };
 
     const handleDelete = (id: Id<'ShopItem'>) => {

@@ -18,7 +18,7 @@ import { Id } from '../../../shared/types/versionId';
 export const EditPersonalityTraitCategorySubpage = () => {
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
     const traitCategoryId = Id
@@ -44,7 +44,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
     const handleEdit = (dailyTipId: Id<'DailyTip'>) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { traitCategoryId, isMax, dailyTipId });
+        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { traitCategoryId, isMax, dailyTipId });
     };
 
     const handleAddTip = async () => {

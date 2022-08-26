@@ -20,7 +20,7 @@ export const ShopAndNotifications = (props: {
 
     const { isLowHeight, isMinimalMode } = props;
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const { isAuthenticated } = useAuthorizationContext();
 
@@ -59,7 +59,7 @@ export const ShopAndNotifications = (props: {
                         height: 40,
                         fontStyle: 'normal',
                     }}
-                    onClick={() => navigate(applicationRoutes.shopRoute)}
+                    onClick={() => navigate2(applicationRoutes.shopRoute)}
                     variant={'plain'}>
 
                     <EpistoFont

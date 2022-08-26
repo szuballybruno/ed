@@ -28,7 +28,7 @@ export const UserContextMenu = (props: {
     const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
     // util 
-    const { navigate, openNewTab } = useNavigation();
+    const { navigate2, openNewTab } = useNavigation();
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
 
@@ -47,7 +47,7 @@ export const UserContextMenu = (props: {
         .add({
             name: applicationRoutes.settingsRoute.title,
             icon: applicationRoutes.settingsRoute.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute),
+            onClick: () => navigate2(applicationRoutes.settingsRoute.preferencesRoute),
         })
         .add({
             name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
@@ -71,7 +71,7 @@ export const UserContextMenu = (props: {
 
             {/* episto coins */}
             <EpistoButton
-                onClick={() => navigate(applicationRoutes.settingsRoute.coinTransactionsRoute)}>
+                onClick={() => navigate2(applicationRoutes.settingsRoute.coinTransactionsRoute)}>
 
                 <EpistoConinInfo height="45px" />
             </EpistoButton>
@@ -83,7 +83,7 @@ export const UserContextMenu = (props: {
             {/* admin menu item */}
             {/* {canAccessAdmin && (
                 <EpistoButton
-                    onClick={() => navigate(applicationRoutes.administrationRoute.homeRoute.overviewRoute)}>
+                    onClick={() => navigate2(applicationRoutes.administrationRoute.homeRoute.overviewRoute)}>
 
                     <Flex className="whall"
                         m="5px"

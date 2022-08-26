@@ -14,6 +14,7 @@ import {ExamLayout} from '../../exam/ExamLayout';
 import {ExamLayoutContent} from '../../exam/ExamLayoutContent';
 import {QuestionAnswer} from '../../exam/QuestionAnswer';
 import {CourseApiService} from '../../../services/api/courseApiService';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 
 export const PrequizSubpage = () => {
 
@@ -33,7 +34,7 @@ export const PrequizSubpage = () => {
             courseId
         });
 
-        navigate2(r => r.playerRoute.pretestGreetingRoute, { courseId });
+        navigate2(applicationRoutes.playerRoute.pretestGreetingRoute, { courseId });
     };
 
     const paging = usePaging({

@@ -25,7 +25,7 @@ import React, {useState} from 'react';
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     useSetBusy(useOverviewPageDTO, status);
 
@@ -67,7 +67,7 @@ const HomePage = () => {
             {/* no current course  */}
             {!pageDTO?.currentCourseProgress && <FlexListItem
                 px="10"
-                onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
+                onClick={() => navigate2(applicationRoutes.availableCoursesRoute)}
                 midContent={<Flex>
 
                     <Flex

@@ -10,7 +10,7 @@ export const ContinueCourseButton = ({
     currentCourseItemCode: string | null,
 }) => {
 
-    const { navigateToPlayer, navigate } = useNavigation();
+    const { navigateToPlayer } = useNavigation();
     const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
 
     if (!currentCourseItemCode)

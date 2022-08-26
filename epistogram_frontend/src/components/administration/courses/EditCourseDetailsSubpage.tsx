@@ -29,7 +29,7 @@ export const EditCourseDetailsSubpage = () => {
         .create<'Course'>(useIntParam('courseId')!);
     const isAnySelected = Id.read(courseId) != -1;
     const showError = useShowErrorDialog();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     // http
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = CourseApiService.useCourseDetailsEditData(courseId);
@@ -123,7 +123,7 @@ export const EditCourseDetailsSubpage = () => {
 
             await deleteCourseAsync({ id: courseId });
             showNotification('Kurzus torolve.');
-            navigate(applicationRoutes.administrationRoute.coursesRoute);
+            navigate2(applicationRoutes.administrationRoute.coursesRoute);
         } catch (e) {
 
             showError(e);

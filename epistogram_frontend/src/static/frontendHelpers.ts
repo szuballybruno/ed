@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../helpers/emptyArray';
-import { ApplicationRoute, LoadingStateType } from '../models/types';
+import { ApplicationRoute, EpistoRoute, LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
@@ -29,7 +29,7 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     return results;
 };
 
-export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void]=> {
+export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void] => {
 
     const [stateValue, stateSetter] = useState(defaultValue);
     const ref = useRef(stateValue);
@@ -362,39 +362,68 @@ export const useIsMatchingCurrentRoute = () => {
 
 export const useGetCurrentAppRoute = () => {
 
+    const currentUrl = useCurrentUrlPathname();
     const isMatching = useIsMatchingCurrentRoute();
-
     const isRouteProp = (x: any) => !!x.route;
 
-    const getMatchingRoutes = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> => {
+    const isMatchingRoute = (route: ApplicationRoute<any>) => {
 
-        // get subroutes 
+        const match = route.route.getAbsolutePath() === '/'
+            ? {
+                isMatchingRouteExactly: true,
+                isMatchingRoute: true
+            }
+            : isMatching(route);
+
+        const didmatch = route.route.isExact()
+            ? match.isMatchingRouteExactly
+            : match.isMatchingRoute;
+
+        // console.log(`Checking route "${route.route.getAbsolutePath()}" isMatching: ${didmatch}`);
+
+        return didmatch;
+    };
+
+    const getMatchingRoute = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> | null => {
+
+        /**
+         * If not matching route, return
+         */
+        if (!isMatchingRoute(appRoute))
+            return null;
+
+        /**
+         * Matching route, and it's not an exact route, 
+         * return the matched route 
+         */
+        if (appRoute.route.isExact())
+            return appRoute;
+
+        /**
+         * get matching subroute
+         */
         const subRoutes = Object
             .values(appRoute)
             .filter(x => isRouteProp(x)) as ApplicationRoute<any>[];
 
-        // exit if no subroutes found
-        if (subRoutes.length === 0)
-            return appRoute;
+        const matchingSubRoute = subRoutes
+            .map(x => getMatchingRoute(x))
+            .firstOrNull(x => !!x);
 
-        // get matching subroute and repeat
-        const matchingRoute = subRoutes
-            .firstOrNull((x: any) => {
-
-                const match = isMatching(x);
-
-                return x.route.isMatchMore()
-                    ? match.isMatchingRoute
-                    : match.isMatchingRouteExactly;
-            });
-
-        if (!matchingRoute)
-            return appRoute;
-
-        return getMatchingRoutes(matchingRoute);
+        return matchingSubRoute;
     };
 
-    return getMatchingRoutes(applicationRoutes as any);
+    const rootRoute: ApplicationRoute<any> = {
+        route: new EpistoRoute('', '/', '*'),
+        title: 'Root',
+        ...applicationRoutes
+    };
+
+    const matchingRoute = getMatchingRoute(rootRoute);
+    if (!matchingRoute)
+        throw new Error(`No route matched "${currentUrl}"`);
+
+    return matchingRoute;
 };
 
 export const useRedirectOnExactMatch = (opts: {
@@ -407,14 +436,14 @@ export const useRedirectOnExactMatch = (opts: {
 
     const isMatching = useIsMatchingCurrentRoute();
     const { isMatchingRouteExactly } = isMatching(route);
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     useEffect(() => {
 
         if (!isMatchingRouteExactly)
             return;
 
-        navigate(redirectRoute, params);
+            navigate2(redirectRoute, params);
     }, [isMatchingRouteExactly]);
 };
 

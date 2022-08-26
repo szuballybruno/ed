@@ -32,7 +32,7 @@ export const AdminSubpageHeader = (props: {
 
     const tabMenuItemsList = (tabMenuItems ?? []);
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
@@ -57,7 +57,7 @@ export const AdminSubpageHeader = (props: {
         }
         else {
 
-            navigate(targetRoute, {
+            navigate2(targetRoute, {
                 userId,
                 courseId,
                 videoId,

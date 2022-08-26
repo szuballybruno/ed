@@ -47,39 +47,31 @@ export class PasswordChangeService {
      * This will request a passowrd change for a user that's not authenticated, 
      * an email will be sent out with the pw change link.
      */
-    requestPasswordChangeAsync(principalId: PrincipalId, email: string) {
+    async requestPasswordChangeAsync(principalId: PrincipalId, email: string) {
 
-        return {
-            action: async () => {
-                const user = await this._userService
-                    .getUserByEmailAsync(email);
+        const user = await this._userService
+            .getUserByEmailAsync(email);
 
-                if (!user)
-                    throw new Error('Can not reset passowrd, user does not exists.');
+        if (!user)
+            throw new Error('Can not reset passowrd, user does not exists.');
 
-                const token = this._tokenService
-                    .createSetNewPasswordToken(user.id);
+        const token = this._tokenService
+            .createSetNewPasswordToken(user.id);
 
-                // save user's reset token in DB, it's only valid this way
-                // some benefits are you can not use the token twice,
-                // since it's going to be removed after it's been used  
-                await this._ormService
-                    .save(User, {
-                        id: user.id,
-                        resetPasswordToken: token
-                    });
+        // save user's reset token in DB, it's only valid this way
+        // some benefits are you can not use the token twice,
+        // since it's going to be removed after it's been used  
+        await this._ormService
+            .save(User, {
+                id: user.id,
+                resetPasswordToken: token
+            });
 
-                const resetUrl = this._urlService
-                    .getFrontendUrl(`/set-new-password?token=${token}`);
+        const resetUrl = this._urlService
+            .getFrontendUrl(`/set-new-password?token=${token}`);
 
-                await this._emailService
-                    .sendSelfPasswordResetMailAsync(user, resetUrl);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this._emailService
+            .sendSelfPasswordResetMailAsync(user, resetUrl);
     }
 
     /**

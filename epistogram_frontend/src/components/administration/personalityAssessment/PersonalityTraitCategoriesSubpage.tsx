@@ -10,6 +10,7 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { Id } from '../../../shared/types/versionId';
 
 export const PersonalityTraitCategoriesSubpage = () => {
 
@@ -17,20 +18,20 @@ export const PersonalityTraitCategoriesSubpage = () => {
     const { personalityTraitCategories, personalityTraitCategoriesState, personalityTraitCategoriesError } = usePersonalityTraitCategories();
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     // state 
 
     // func
 
-    const handleEdit = (traitCategoryId: number, isMax: boolean) => {
+    const handleEdit = (traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute, { traitCategoryId, isMax });
+        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute, { traitCategoryId, isMax });
     };
 
     const rowButtons = [
         {
-            action: (dto: PersonalityTraitCategoryShortDTO) => handleEdit(dto.id, dto.isMax),
+            action: (dto: PersonalityTraitCategoryShortDTO) => handleEdit(dto.id as any, dto.isMax),
             icon: <Edit></Edit>
         }
     ];

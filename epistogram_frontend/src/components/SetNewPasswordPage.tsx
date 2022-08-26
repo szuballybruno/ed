@@ -5,7 +5,7 @@ import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
 import { usePasswordEntryState } from '../static/frontendHelpers';
-import { useStringParam } from '../static/locationHelpers';
+import { useRouteQuery } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
@@ -26,29 +26,23 @@ export const SetNewPasswordPage = () => {
         validate
     } = usePasswordEntryState();
 
-    const token = useStringParam('token')!;
+    const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
+        .getValue(x => x.token, 'string');
 
     const showErrorDialog = useShowErrorDialog();
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const handleSetNewPassword = async () => {
-
-        if (!validate())
-            return;
-
-        if (!token) {
-
-            showErrorDialog('Helytelen url cím. Nincs token megadva. Próbáld újra egy másik linkkel.');
-            return;
-        }
-
         try {
+
+            if (!validate())
+                return;
 
             await setNewPassword(password, passwordCompare, token);
 
             showNotification('Új jelszó sikeresen beállítva!');
-            navigate(applicationRoutes.homeRoute);
+            navigate2(applicationRoutes.homeRoute);
 
         }
         catch (e) {
@@ -76,8 +70,8 @@ export const SetNewPasswordPage = () => {
                 minWidth="400px">
 
                 <EpistoHeader text="Új jelszó megadása"
-mt="30px"
-alignSelf="center">
+                    mt="30px"
+                    alignSelf="center">
 
                 </EpistoHeader>
 

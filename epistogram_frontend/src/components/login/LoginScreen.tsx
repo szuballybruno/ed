@@ -20,7 +20,7 @@ import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 const LoginScreen = () => {
 
     // util
-    const { navigate, navigateToHref } = useNavigation();
+    const { navigate2, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
@@ -94,12 +94,12 @@ const LoginScreen = () => {
                 }
                 else {
 
-                    navigate(applicationRoutes.homeRoute);
+                    navigate2(applicationRoutes.homeRoute);
                 }
             }
             else {
 
-                navigate(applicationRoutes.signupRoute);
+                navigate2(applicationRoutes.signupRoute);
             }
         }
 
@@ -277,7 +277,7 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate(applicationRoutes.registerViaActivationCodeRoute)}
+                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute)}
                                 fontSize="fontSmall"
                                 style={{
                                     color: '--deepBlue',

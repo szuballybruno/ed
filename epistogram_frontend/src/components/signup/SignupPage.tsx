@@ -20,7 +20,7 @@ export const SignupPage = () => {
     const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
     const isInvitedUser = true;
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const handleGoToSummary = () => {
 
@@ -30,7 +30,7 @@ export const SignupPage = () => {
 
     const handleGoToHomePage = () => {
 
-        navigate(applicationRoutes.homeRoute);
+        navigate2(applicationRoutes.homeRoute);
 
         startUserGuide();
     };
