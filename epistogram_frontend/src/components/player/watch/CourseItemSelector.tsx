@@ -1,5 +1,5 @@
 import {Divider, Flex} from '@chakra-ui/layout';
-import {RefObject, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {CourseApiService} from '../../../services/api/courseApiService';
 import {useTempomatMode} from '../../../services/api/tempomatApiService';
 import {useRecommendedItemQuota} from '../../../services/api/userProgressApiService';
@@ -17,6 +17,8 @@ import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
 import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
 import {TempomatSettingsDialog} from '../tempomat/TempomatSettingsDialog';
 import {TempomatTempoInfo} from '../tempomat/TempomatTempoInfo';
+import {KeyboardArrowUp} from '@mui/icons-material';
+import {useScrollIntoView} from '../../system/AutoScrollContext';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -25,12 +27,23 @@ export const CourseItemSelector = (props: {
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
+    isScrolledFromTop?: boolean,
     isPlayerLoaded: boolean,
-    canChangeMode?: boolean,
-    parentRef?: RefObject<HTMLDivElement>
+    canChangeMode?: boolean
 }) => {
 
-    const { currentItemCode, nextItemState: itemState, isPlayerLoaded, mode, refetchPlayerData, courseId, modules, canChangeMode, parentRef } = props;
+    const {
+        currentItemCode,
+        nextItemState: itemState,
+        isPlayerLoaded,
+        mode,
+        refetchPlayerData,
+        courseId,
+        modules,
+        canChangeMode,
+        isScrolledFromTop
+    } = props;
+
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
     const ref = useRef<HTMLButtonElement>(null);
@@ -39,6 +52,7 @@ export const CourseItemSelector = (props: {
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
+    const {scrollToTop} = useScrollIntoView();
 
     // dialog state
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
@@ -248,8 +262,36 @@ export const CourseItemSelector = (props: {
             </EpistoFont>
         </EpistoPopper>
 
+
+        {isScrolledFromTop && <EpistoButton
+            onClick={() => scrollToTop()}
+           style={{
+               padding: '5px 10px',
+               minHeight: '30px',
+               width: '160px',
+               alignSelf: 'center',
+               background: 'var(--epistoTeal)',
+               color: 'white',
+               display: 'flex',
+               zIndex: 100000,
+               alignItems: 'center',
+               position: 'absolute',
+               top: 110,
+               border: '1px solid var(--mildGrey)',
+               borderRadius: '20px'
+           }}>
+
+           <KeyboardArrowUp />
+
+           <EpistoFont
+               fontSize='fontExtraSmall'
+               isUppercase>
+
+                Görgetés felülre
+           </EpistoFont>
+        </EpistoButton>}
+
         <Playlist
-            modules={modules}
-            parentRef={parentRef}></Playlist>
+            modules={modules}></Playlist>
     </>;
 };

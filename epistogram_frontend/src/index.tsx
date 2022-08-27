@@ -1,31 +1,32 @@
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterLuxon} from '@mui/x-date-pickers/AdapterLuxon';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import ReactDOM from 'react-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter } from 'react-router-dom';
-import { XDialogHost } from './components/lib/XDialog/XDialogHost';
-import { AuthenticationFrame } from './components/system/AuthenticationFrame';
-import { ChakraThemeFrame } from './components/system/ChakraThemeFrame';
-import { ErrorDialogFrame } from './components/system/ErrorDialogFrame';
-import { EventListener } from './components/system/EventListener';
-import { InitFrame } from './components/system/InitFrame';
-import { BusyBarFrame } from './components/system/LoadingFrame/BusyBarFrame';
-import { MUISetupFrame } from './components/system/MUISetupFrame';
-import { NotificationsFrame } from './components/system/NotificationsFrame';
-import { PreventMobileFrame } from './components/system/PreventMobileFrame';
-import { TitleSetterFrame } from './components/system/TitleSetterFrame';
-import { UserGuidingFrame } from './components/system/UserGuidingFrame';
-import { UnderMaintanence } from './components/UnderMaintanence';
-import { EpistoRoutes, RenderRoute } from './components/universal/EpistoRoutes';
-import { applicationRoutes } from './configuration/applicationRoutes';
-import { MainRouting } from './MainRouting';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {BrowserRouter} from 'react-router-dom';
+import {XDialogHost} from './components/lib/XDialog/XDialogHost';
+import {AuthenticationFrame} from './components/system/AuthenticationFrame';
+import {ChakraThemeFrame} from './components/system/ChakraThemeFrame';
+import {ErrorDialogFrame} from './components/system/ErrorDialogFrame';
+import {EventListener} from './components/system/EventListener';
+import {InitFrame} from './components/system/InitFrame';
+import {BusyBarFrame} from './components/system/LoadingFrame/BusyBarFrame';
+import {MUISetupFrame} from './components/system/MUISetupFrame';
+import {NotificationsFrame} from './components/system/NotificationsFrame';
+import {PreventMobileFrame} from './components/system/PreventMobileFrame';
+import {TitleSetterFrame} from './components/system/TitleSetterFrame';
+import {UserGuidingFrame} from './components/system/UserGuidingFrame';
+import {UnderMaintanence} from './components/UnderMaintanence';
+import {EpistoRoutes, RenderRoute} from './components/universal/EpistoRoutes';
+import {applicationRoutes} from './configuration/applicationRoutes';
+import {MainRouting} from './MainRouting';
 import './shared/logic/jsExtensions.ts'; // extensions, important
-import { Environment } from './static/Environemnt';
-import { ArrayBuilder } from './static/frontendHelpers';
+import {Environment} from './static/Environemnt';
+import {ArrayBuilder} from './static/frontendHelpers';
 import './styles/globalCssClasses.css';
 import './styles/globalCssTypes';
 import './styles/index.css';
-import { LicenseInfo } from '@mui/x-license-pro';
+import {LicenseInfo} from '@mui/x-license-pro';
+import {AutoScrollFrame} from './components/system/AutoScrollContext';
 
 LicenseInfo.setLicenseKey('YOUR_LICENSE_KEY');
 // set MUI license key
@@ -61,9 +62,11 @@ const app = (
                                                                 <ErrorDialogFrame>
                                                                     <NotificationsFrame>
                                                                         <BusyBarFrame>
-                                                                            <EventListener>
-                                                                                <MainRouting />
-                                                                            </EventListener>
+                                                                            <AutoScrollFrame>
+                                                                                <EventListener>
+                                                                                    <MainRouting />
+                                                                                </EventListener>
+                                                                            </AutoScrollFrame>
                                                                         </BusyBarFrame>
                                                                     </NotificationsFrame>
                                                                 </ErrorDialogFrame>

@@ -6,16 +6,15 @@ import {ChipSmall} from '../administration/courses/ChipSmall';
 import {FlexListItem} from '../universal/FlexListItem';
 import {FlexListTitleSubtitle} from '../universal/FlexListTitleSubtitle';
 import {PlaylistItemTypeIcon} from './PlaylistItemTypeIcon';
-import {createRef, RefObject, useEffect} from 'react';
-import {scrollIntoView} from '../../helpers/scrollIntoView';
+import {useScrollIntoView} from '../system/AutoScrollContext';
+import {useEffect} from 'react';
+//import {useScrollIntoView} from '../system/AutoScrollContext';
 
 export const PlaylistItem = (
     {
-        playlistItem,
-        parentRef
+        playlistItem
     }: {
-        playlistItem: PlaylistItemDTO,
-        parentRef?: RefObject<HTMLDivElement>
+        playlistItem: PlaylistItemDTO
     }
 ) => {
 
@@ -31,16 +30,14 @@ export const PlaylistItem = (
 
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
-
-    const childRef = createRef<HTMLDivElement>();
+    const { scroll, setChild  } = useScrollIntoView();
 
     useEffect(() => {
 
-        if(childRef.current && state === 'current' && parentRef) {
+        if (state === 'current')
+            scroll();
 
-            scrollIntoView(parentRef.current, childRef.current);
-        }
-    }, []);
+    }, [scroll, state]);
 
     const navigate = () => navigateToPlayer(playlistItemCode);
 
@@ -56,7 +53,11 @@ export const PlaylistItem = (
 
     return (
         <FlexListItem
-            ref={childRef}
+            ref={el => {
+
+                if (state === 'current' && el)
+                    setChild(el);
+            }}
             isLocked={isLocked}
             onClick={navigate}
             midContent={<Flex align="center">

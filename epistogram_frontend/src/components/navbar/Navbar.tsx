@@ -61,7 +61,7 @@ const Navbar = memo((props: {
         boxShadow="none"
         borderRadius={0}
         bgColor="unset"
-        padding={isLowHeight ? '20 0' : '20px'}>
+        padding={isLowHeight ? '20px 0' : '20px'}>
 
         {isDesktop
             ? renderDesktopNavbar()
