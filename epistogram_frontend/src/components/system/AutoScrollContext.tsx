@@ -1,5 +1,6 @@
 import {createContext, useCallback, useContext, useState} from 'react';
 import {PropsWithChildren} from '../../static/frontendHelpers';
+import {Logger} from '../../static/Logger';
 
 const easeInOutQuad = (time, startPos, endPos, duration) => {
     time /= duration / 2;
@@ -39,10 +40,19 @@ const scrollIntoView = (parent, child) => {
         clientBottom = clientBounding.bottom,
         clientTop = clientBounding.top;
 
-    if (parentTop >= clientTop) {
-        scrollTo(parent, -(parentTop - clientTop), 300);
+
+    Logger.logScoped('AUTO SCROLL', 'Parent top: ' + parentTop);
+    Logger.logScoped('AUTO SCROLL', 'Client top: ' + clientTop);
+    Logger.logScoped('AUTO SCROLL', 'ScrollTo UP: ' + -(parentTop - clientTop));
+    Logger.logScoped('AUTO SCROLL', 'ScrollTo DOWN: ' + (clientBottom - parentBottom));
+
+    if (parentTop >= clientTop - 100) {
+
+        Logger.logScoped('AUTO SCROLL', 'Parent top is larger or equal to client top, which means scrolling up');
+        scrollTo(parent, -(parentTop - clientTop + 100), 300);
     } else if (clientBottom > parentBottom) {
-        scrollTo(parent, clientBottom - parentBottom + 400, 300);
+        Logger.logScoped('AUTO SCROLL', 'Client bottom is larger than parent bottom, which means scrolling down');
+        scrollTo(parent, clientBottom - parentBottom, 300);
     }
 };
 
