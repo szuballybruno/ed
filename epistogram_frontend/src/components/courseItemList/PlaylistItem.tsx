@@ -30,14 +30,17 @@ export const PlaylistItem = (
 
     const isLocked = state === 'locked';
     const { navigateToPlayer } = useNavigation();
-    const { scroll, setChild  } = useScrollIntoView();
+    const { scroll, setChild, childElement } = useScrollIntoView();
 
     useEffect(() => {
 
-        if (state === 'current')
-            scroll();
+        if (state === 'current') {
 
-    }, [scroll, state]);
+            console.log('Current item in the moment before initiating scroll function: ' + title);
+            scroll();
+        }
+
+    }, [childElement]);
 
     const navigate = () => navigateToPlayer(playlistItemCode);
 

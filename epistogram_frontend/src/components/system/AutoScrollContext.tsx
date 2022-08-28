@@ -40,17 +40,19 @@ const scrollIntoView = (parent, child) => {
         clientBottom = clientBounding.bottom,
         clientTop = clientBounding.top;
 
+    Logger.logScoped('AUTO SCROLL', 'Child element inner text, inside the scrollIntoView function: ' + child.innerText);
 
-    Logger.logScoped('AUTO SCROLL', 'Parent top: ' + parentTop);
-    Logger.logScoped('AUTO SCROLL', 'Client top: ' + clientTop);
-    Logger.logScoped('AUTO SCROLL', 'ScrollTo UP: ' + -(parentTop - clientTop));
-    Logger.logScoped('AUTO SCROLL', 'ScrollTo DOWN: ' + (clientBottom - parentBottom));
+    //Logger.logScoped('AUTO SCROLL', 'Parent top: ' + parentTop);
+    //Logger.logScoped('AUTO SCROLL', 'Client top: ' + clientTop);
+    //Logger.logScoped('AUTO SCROLL', 'ScrollTo UP: ' + -(parentTop - clientTop));
+    //Logger.logScoped('AUTO SCROLL', 'ScrollTo DOWN: ' + (clientBottom - parentBottom));
 
     if (parentTop >= clientTop - 100) {
 
         Logger.logScoped('AUTO SCROLL', 'Parent top is larger or equal to client top, which means scrolling up');
         scrollTo(parent, -(parentTop - clientTop + 100), 300);
     } else if (clientBottom > parentBottom) {
+
         Logger.logScoped('AUTO SCROLL', 'Client bottom is larger than parent bottom, which means scrolling down');
         scrollTo(parent, clientBottom - parentBottom, 300);
     }
@@ -74,23 +76,31 @@ export const useScrollState = () => {
 
     const scroll = useCallback(() => {
 
-        console.log('Scrolling...');
+        Logger.logScoped('AUTO SCROLL', 'Scroll into view initiated...');
 
         if(!parentElement)
             return;
 
+        Logger.logScoped('AUTO SCROLL', 'Parent element is present');
+
         if(!childElement)
             return;
+
+        Logger.logScoped('AUTO SCROLL', 'Child element is present');
+        Logger.logScoped('AUTO SCROLL', 'Scrolling...');
 
         scrollIntoView(parentElement, childElement);
     }, [childElement, parentElement]);
 
     const scrollToTop = () => {
 
-        console.log('Scrolling to top');
+        Logger.logScoped('AUTO SCROLL', 'Scrolling to top initiated...');
 
         if(!parentElement)
             return;
+
+        Logger.logScoped('AUTO SCROLL', 'Parent element is present...');
+        Logger.logScoped('AUTO SCROLL', 'Scrolling...');
 
         parentElement.scrollTo(0, 0);
     };
