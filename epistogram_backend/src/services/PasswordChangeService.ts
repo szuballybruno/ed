@@ -47,13 +47,10 @@ export class PasswordChangeService {
      * This will request a passowrd change for a user that's not authenticated, 
      * an email will be sent out with the pw change link.
      */
-    async requestPasswordChangeAsync(principalId: PrincipalId, email: string) {
+    async requestPasswordChangeAsync(email: string) {
 
         const user = await this._userService
-            .getUserByEmailAsync(email);
-
-        if (!user)
-            throw new Error('Can not reset passowrd, user does not exists.');
+            .getUserByEmailOrFailAsync(email);
 
         const token = this._tokenService
             .createSetNewPasswordToken(user.id);

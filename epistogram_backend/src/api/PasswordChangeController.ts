@@ -53,6 +53,6 @@ export class PasswordChangeController implements XController<PasswordChangeContr
             .getValue(x => x.email, 'string');
 
         return this._passwordChangeService
-            .requestPasswordChangeAsync(params.principalId, email);
+            .requestPasswordChangeAsync(email);
     }
 }
