@@ -1,4 +1,4 @@
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
 import { AnswerSignupQuestionDTO } from '../../shared/dtos/AnswerSignupQuestionDTO';
 import { PersonalityAssessmentDTO } from '../../shared/dtos/PersonalityAssessmentDTO';
@@ -8,7 +8,7 @@ import { usePostDataUnsafe } from '../core/httpClient';
 
 export const usePersonalityData = () => {
 
-    const qr = useReactQuery2<PersonalityAssessmentDTO>(apiRoutes.signup.getUserPersonalityData);
+    const qr = QueryService.useXQuery<PersonalityAssessmentDTO>(apiRoutes.signup.getUserPersonalityData);
 
     return {
         personalityData: qr.data,
@@ -19,7 +19,7 @@ export const usePersonalityData = () => {
 
 export const useSignupData = () => {
 
-    const qr = useReactQuery2<SignupDataDTO>(apiRoutes.signup.getSignupData);
+    const qr = QueryService.useXQuery<SignupDataDTO>(apiRoutes.signup.getSignupData);
 
     return {
         signupData: qr.data,

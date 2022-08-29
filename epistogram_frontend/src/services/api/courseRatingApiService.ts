@@ -2,12 +2,12 @@ import { CourseRatingGroupDTO } from '../../shared/dtos/CourseRatingGroupDTO';
 import { CourseRatingQuestionAnswersDTO } from '../../shared/dtos/CourseRatingQuestionAnswersDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCourseRatingGroups = (courseId: Id<'Course'>) => {
 
-    const qr = useReactQuery2<CourseRatingGroupDTO[]>(apiRoutes.courseRating.getCourseRatingGroups, { courseId });
+    const qr = QueryService.useXQuery<CourseRatingGroupDTO[]>(apiRoutes.courseRating.getCourseRatingGroups, { courseId });
 
     return {
         courseRatingGroups: qr.data ?? [],

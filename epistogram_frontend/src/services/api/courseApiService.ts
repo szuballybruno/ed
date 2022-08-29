@@ -13,12 +13,12 @@ import { Mutation } from '../../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { CourseModeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2, useXQueryArray } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 const usePermissionAssignCourses = (userId: Id<'User'>) => {
 
-    const qr = useReactQuery2<CoursePermissionAssignDTO[]>(apiRoutes.course.getPermissionAssignCourses, { userId });
+    const qr = QueryService.useXQuery<CoursePermissionAssignDTO[]>(apiRoutes.course.getPermissionAssignCourses, { userId });
 
     return {
         permissionAssignCourses: qr.data ?? [],
@@ -27,7 +27,7 @@ const usePermissionAssignCourses = (userId: Id<'User'>) => {
 
 const useAdminCourseList = (searchText: string) => {
 
-    const qr = useReactQuery2<CourseAdminListItemDTO[]>(apiRoutes.course.getAdminCourseList, { searchText });
+    const qr = QueryService.useXQuery<CourseAdminListItemDTO[]>(apiRoutes.course.getAdminCourseList, { searchText });
 
     return {
         courses: qr.data ?? [],
@@ -59,7 +59,7 @@ const useSetRequiredCompletionDate = () => {
 
 const useCourseDetailsEditData = (courseId: Id<'Course'>) => {
 
-    const qr = useReactQuery2<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
+    const qr = QueryService.useXQuery<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
 
     return {
         courseDetailsEditData: qr.data,
@@ -71,7 +71,7 @@ const useCourseDetailsEditData = (courseId: Id<'Course'>) => {
 
 const useCourseContentAdminData = (courseId: Id<'Course'>, isEnabled: boolean, loadDeleted: boolean) => {
 
-    const qr = useReactQuery2<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted }, isEnabled);
+    const qr = QueryService.useXQuery<CourseContentAdminDTO>(apiRoutes.course.getCourseContentEditData, { courseId, loadDeleted }, isEnabled);
 
     return {
         courseContentAdminData: qr.data,
@@ -137,7 +137,7 @@ const useUploadCourseThumbnailAsync = () => {
 
 const useCourseBriefData = (courseId: Id<'Course'> | null) => {
 
-    const qr = useReactQuery2<CourseBriefData>(apiRoutes.course.getCourseBriefData, { courseId }, !!courseId);
+    const qr = QueryService.useXQuery<CourseBriefData>(apiRoutes.course.getCourseBriefData, { courseId }, !!courseId);
 
     return {
         courseBriefData: qr.data,
@@ -148,7 +148,7 @@ const useCourseBriefData = (courseId: Id<'Course'> | null) => {
 
 const useCourseDetails = (courseId: Id<'Course'>) => {
 
-    const qr = useReactQuery2<CourseDetailsDTO>(apiRoutes.course.getCourseDetails, { courseId });
+    const qr = QueryService.useXQuery<CourseDetailsDTO>(apiRoutes.course.getCourseDetails, { courseId });
 
     return {
         courseDetails: qr.data
@@ -163,7 +163,7 @@ const useUserCourses = (
     orderBy: string | null
 ) => {
 
-    const qr = useXQueryArray<AvailableCourseDTO>(apiRoutes.course.getAvailableCourses, {
+    const qr = QueryService.useXQueryArray<AvailableCourseDTO>(apiRoutes.course.getAvailableCourses, {
         searchTerm,
         filterCategoryId,
         isFeatured,

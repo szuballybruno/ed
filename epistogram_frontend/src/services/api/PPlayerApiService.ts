@@ -3,14 +3,14 @@ import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostData } from '../core/httpClient';
 
 export const PlayerApiService = {
 
     usePlayerData: (descriptorCode: string) => {
 
-        const queryResult = useReactQuery2<PlayerDataDTO>(apiRoutes.player.getPlayerData, { descriptorCode });
+        const queryResult = QueryService.useXQuery<PlayerDataDTO>(apiRoutes.player.getPlayerData, { descriptorCode });
 
         return {
             playerData: queryResult.data,

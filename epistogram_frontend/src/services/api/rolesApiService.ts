@@ -7,12 +7,12 @@ import { UserPermissionDTO } from '../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../shared/dtos/role/UserRoleDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2, useXQueryArray } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRolesList = () => {
 
-    const qr = useXQueryArray<RoleAdminListDTO>(apiRoutes.roles.getRoles);
+    const qr = QueryService.useXQueryArray<RoleAdminListDTO>(apiRoutes.roles.getRoles);
 
     return {
         rolesList: qr.data,
@@ -24,7 +24,7 @@ export const useRolesList = () => {
 
 export const useAssignableRoles = (userId: Id<'User'>, companyId: Id<'Company'> | null) => {
 
-    const qr = useXQueryArray<AssignableRoleDTO>(apiRoutes.roles.getAssignableRoles, { companyId, userId }, !!companyId);
+    const qr = QueryService.useXQueryArray<AssignableRoleDTO>(apiRoutes.roles.getAssignableRoles, { companyId, userId }, !!companyId);
 
     return {
         assignableRolesList: qr.data,
@@ -36,7 +36,7 @@ export const useAssignableRoles = (userId: Id<'User'>, companyId: Id<'Company'> 
 
 export const useAssignablePermissions = (userId: Id<'User'>, courseId: Id<'Course'> | null, companyId: Id<'Company'> | null) => {
 
-    const qr = useXQueryArray<AssignablePermissionDTO>(apiRoutes.roles.getAssignablePermissions, { userId, courseId, companyId });
+    const qr = QueryService.useXQueryArray<AssignablePermissionDTO>(apiRoutes.roles.getAssignablePermissions, { userId, courseId, companyId });
 
     return {
         assignablePermissionList: qr.data,
@@ -48,7 +48,7 @@ export const useAssignablePermissions = (userId: Id<'User'>, courseId: Id<'Cours
 
 export const useUserRoles = (userId: Id<'User'>) => {
 
-    const qr = useXQueryArray<UserRoleDTO>(apiRoutes.roles.getUserRoles, { userId });
+    const qr = QueryService.useXQueryArray<UserRoleDTO>(apiRoutes.roles.getUserRoles, { userId });
 
     return {
         userRoles: qr.data,
@@ -60,7 +60,7 @@ export const useUserRoles = (userId: Id<'User'>) => {
 
 export const useUserPermissions = (userId: Id<'User'>) => {
 
-    const qr = useXQueryArray<UserPermissionDTO>(apiRoutes.roles.getUserPermissions, { userId });
+    const qr = QueryService.useXQueryArray<UserPermissionDTO>(apiRoutes.roles.getUserPermissions, { userId });
 
     return {
         userPermissions: qr.data,
@@ -92,7 +92,7 @@ export const useSaveRole = () => {
 
 export const useRoleEditData = (roleId: Id<'Role'>, enabled: boolean) => {
 
-    const qr = useReactQuery2<RoleEditDTO>(apiRoutes.roles.getRoleEditData, { roleId }, enabled);
+    const qr = QueryService.useXQuery<RoleEditDTO>(apiRoutes.roles.getRoleEditData, { roleId }, enabled);
 
     return {
         roleEditData: qr.data,

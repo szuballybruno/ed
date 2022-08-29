@@ -1,16 +1,12 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import quantize from 'quantize';
 import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../configuration/applicationRoutes';
-import { EMPTY_ARRAY } from '../helpers/emptyArray';
-import { ApplicationRoute, EpistoRoute, LoadingStateType } from '../models/types';
-import { httpGetAsync } from '../services/core/httpClient';
+import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
@@ -688,92 +684,6 @@ export const usePasswordEntryState = () => {
 };
 
 export type PropsWithChildren = { children: ReactNode };
-
-export type QueryResult<T> = {
-    state: LoadingStateType;
-    refetch: () => Promise<void>;
-    data: T;
-    error: ErrorWithCode | null;
-}
-
-export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
-
-    const queryValues1 = (queryParams
-        ? Object.values(queryParams)
-        : [])
-        .filter(x => !!x);
-
-    const queryValues = queryValues1.length > 0
-        ? queryValues1
-        : EMPTY_ARRAY;
-
-    const getFunction = useCallback(() => {
-
-        return httpGetAsync(url, queryParams);
-    }, [url, queryParams]);
-
-    const queryingEnabled = isEnabled === false ? false : true;
-
-    const queryResult = useQuery(
-        [url, ...queryValues],
-        getFunction,
-        {
-            retry: false,
-            refetchOnWindowFocus: false,
-            keepPreviousData: true,
-            enabled: queryingEnabled
-        });
-
-    const state = useMemo((): LoadingStateType => {
-
-        if (queryResult.isIdle)
-            return 'idle';
-
-        if (queryResult.isFetching)
-            return 'loading';
-
-        if (queryResult.isError)
-            return 'error';
-
-        return 'success';
-    }, [queryResult.isIdle, queryResult.isFetching, queryResult.isError]);
-
-    const refetch = useCallback(async () => {
-
-        if (!queryingEnabled)
-            return;
-
-        await queryResult.refetch();
-    }, [queryingEnabled, queryResult.refetch]);
-
-    const data = useMemo((): T => {
-
-        return queryResult.data
-            ? queryResult.data
-            : null;
-    }, [queryResult.data]);
-
-    const error = queryResult.error as ErrorWithCode | null;
-
-    return {
-        state,
-        refetch,
-        data,
-        error
-    };
-};
-
-export const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T[]> => {
-
-    const { data, ...qr } = useReactQuery2<T[]>(url, queryParams, isEnabled);
-
-    const empty = useMemo(() => [], []);
-
-    return {
-        ...qr,
-        data: data ?? empty
-    };
-};
 
 export const useEventTrigger = () => {
 

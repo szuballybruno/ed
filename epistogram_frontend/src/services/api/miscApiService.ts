@@ -2,11 +2,11 @@ import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 
 export const useCurrentCourseItemCode = () => {
 
-    const qr = useReactQuery2<string>(apiRoutes.misc.getCurrentCourseItemCode);
+    const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode);
 
     return {
         currentCourseItemCode: qr.data
@@ -15,7 +15,7 @@ export const useCurrentCourseItemCode = () => {
 
 export const useCourseOverviewData = () => {
 
-    const qr = useReactQuery2<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData);
+    const qr = QueryService.useXQuery<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData);
 
     return {
         courseOverviewData: qr.data
@@ -24,7 +24,7 @@ export const useCourseOverviewData = () => {
 
 export const useJobTitles = () => {
 
-    const queryRes = useReactQuery2<JobTitleDTO[]>(apiRoutes.misc.getJobTitles);
+    const queryRes = QueryService.useXQuery<JobTitleDTO[]>(apiRoutes.misc.getJobTitles);
 
     return {
         jobTitles: queryRes.data ?? [],
@@ -35,7 +35,7 @@ export const useJobTitles = () => {
 
 export const useOverviewPageDTO = () => {
 
-    const queryRes = useReactQuery2<OverviewPageDTO>(apiRoutes.misc.getHomePageDTO);
+    const queryRes = QueryService.useXQuery<OverviewPageDTO>(apiRoutes.misc.getHomePageDTO);
 
     return {
         pageDTO: queryRes.data,

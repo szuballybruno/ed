@@ -15,6 +15,7 @@ import { BusyBarFrame } from './components/system/LoadingFrame/BusyBarFrame';
 import { MUISetupFrame } from './components/system/MUISetupFrame';
 import { NotificationsFrame } from './components/system/NotificationsFrame';
 import { PreventMobileFrame } from './components/system/PreventMobileFrame';
+import { QuerySubscriptionFrame } from './components/system/QuerySubscriptionFrame';
 import { TitleSetterFrame } from './components/system/TitleSetterFrame';
 import { UserGuidingFrame } from './components/system/UserGuidingFrame';
 import { MainRouting } from './MainRouting';
@@ -39,25 +40,27 @@ const app = (
                     <LocalizationProvider dateAdapter={AdapterLuxon}>
                         <XDialogHost>
                             <QueryClientProvider client={queryClient}>
-                                <PreventMobileFrame>
-                                    <BrowserRouter>
-                                        <TitleSetterFrame>
-                                            <AuthenticationFrame>
-                                                <ErrorDialogFrame>
-                                                    <NotificationsFrame>
-                                                        <BusyBarFrame>
-                                                            <AutoScrollFrame>
-                                                                <EventListener>
-                                                                    <MainRouting />
-                                                                </EventListener>
-                                                            </AutoScrollFrame>
-                                                        </BusyBarFrame>
-                                                    </NotificationsFrame>
-                                                </ErrorDialogFrame>
-                                            </AuthenticationFrame>
-                                        </TitleSetterFrame>
-                                    </BrowserRouter>
-                                </PreventMobileFrame>
+                                <QuerySubscriptionFrame>
+                                    <PreventMobileFrame>
+                                        <BrowserRouter>
+                                            <TitleSetterFrame>
+                                                <AuthenticationFrame>
+                                                    <ErrorDialogFrame>
+                                                        <NotificationsFrame>
+                                                            <BusyBarFrame>
+                                                                <AutoScrollFrame>
+                                                                    <EventListener>
+                                                                        <MainRouting />
+                                                                    </EventListener>
+                                                                </AutoScrollFrame>
+                                                            </BusyBarFrame>
+                                                        </NotificationsFrame>
+                                                    </ErrorDialogFrame>
+                                                </AuthenticationFrame>
+                                            </TitleSetterFrame>
+                                        </BrowserRouter>
+                                    </PreventMobileFrame>
+                                </QuerySubscriptionFrame>
                             </QueryClientProvider>
                         </XDialogHost>
                     </LocalizationProvider>

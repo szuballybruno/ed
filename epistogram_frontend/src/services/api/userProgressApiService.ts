@@ -3,11 +3,11 @@ import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 
 export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, enabled: boolean) => {
 
-    const qr = useReactQuery2<UserCourseProgressChartDTO | 'NO DATA'>(apiRoutes.userProgress.getUserProgressData, { courseId }, enabled);
+    const qr = QueryService.useXQuery<UserCourseProgressChartDTO | 'NO DATA'>(apiRoutes.userProgress.getUserProgressData, { courseId }, enabled);
 
     return {
         userProgressData: qr.data as UserCourseProgressChartDTO,
@@ -19,7 +19,7 @@ export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, en
 
 export const useRecommendedItemQuota = (courseId?: Id<'Course'>) => {
 
-    const qr = useReactQuery2<RecomendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, !!courseId);
+    const qr = QueryService.useXQuery<RecomendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, !!courseId);
 
     return {
         recommendedItemQuota: qr.data,
@@ -31,7 +31,7 @@ export const useRecommendedItemQuota = (courseId?: Id<'Course'>) => {
 
 export const useActiveCourses = () => {
 
-    const qr = useReactQuery2<UserActiveCourseDTO[]>(apiRoutes.userProgress.getActiveCourses);
+    const qr = QueryService.useXQuery<UserActiveCourseDTO[]>(apiRoutes.userProgress.getActiveCourses);
 
     return {
         activeCourses: qr.data ?? [],

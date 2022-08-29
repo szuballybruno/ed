@@ -5,14 +5,14 @@ import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
 import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
 
 export const UserApiService = {
 
     useUserListQuery: (searchText: string | null) => {
 
-        const queryResult = useReactQuery2<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });
+        const queryResult = QueryService.useXQuery<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });
 
         return {
             users: queryResult.data ?? [],
@@ -44,7 +44,7 @@ export const UserApiService = {
 
     useEditUserData: (editedUserId: Id<'User'> | null) => {
 
-        const queryRes = useReactQuery2<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
+        const queryRes = QueryService.useXQuery<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
 
         return {
             userEditData: queryRes.data,
@@ -56,7 +56,7 @@ export const UserApiService = {
 
     useUserLearningOverviewData: (userId: Id<'User'>) => {
 
-        const queryRes = useReactQuery2<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+        const queryRes = QueryService.useXQuery<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
 
         return {
             userLearningOverviewData: queryRes.data,
@@ -68,7 +68,7 @@ export const UserApiService = {
 
     useBriefUserData: (userId: Id<'User'> | null) => {
 
-        const queryRes = useReactQuery2<BriefUserDataDTO>(apiRoutes.user.getBriefUserData, { userId: userId }, !!userId);
+        const queryRes = QueryService.useXQuery<BriefUserDataDTO>(apiRoutes.user.getBriefUserData, { userId: userId }, !!userId);
 
         return {
             briefUserData: queryRes.data,

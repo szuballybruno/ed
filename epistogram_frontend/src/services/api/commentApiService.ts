@@ -2,7 +2,7 @@ import { CommentCreateDTO } from '../../shared/dtos/CommentCreateDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCreateComment = () => {
@@ -37,7 +37,7 @@ export const useDeleteLike = () => {
 
 export const useComments = (itemCode: string) => {
 
-    const qr = useReactQuery2<CommentListDTO[]>(apiRoutes.comment.getComments, { itemCode });
+    const qr = QueryService.useXQuery<CommentListDTO[]>(apiRoutes.comment.getComments, { itemCode });
 
     return {
         comments: qr.data ?? [],

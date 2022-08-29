@@ -77,8 +77,6 @@ export const useBusyBarContext = () => {
         isError
     };
 
-    Logger.logScoped('BUSY', busyStateOut);
-
     return busyStateOut;
 };
 

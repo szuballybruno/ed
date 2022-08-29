@@ -7,11 +7,11 @@ import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStat
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 
 export const useHomePageStats = () => {
 
-    const queryRes = useReactQuery2<HomePageStatsDTO>(apiRoutes.userStats.getHomePageStats);
+    const queryRes = QueryService.useXQuery<HomePageStatsDTO>(apiRoutes.userStats.getHomePageStats);
 
     return {
         homePageStats: queryRes.data,
@@ -22,7 +22,7 @@ export const useHomePageStats = () => {
 
 export const useUserLearningPageStats = (userId: Id<'User'>) => {
 
-    const queryRes = useReactQuery2<UserLearningPageStatsDTO>(apiRoutes.userStats.getUserLearningPageStats, { userId });
+    const queryRes = QueryService.useXQuery<UserLearningPageStatsDTO>(apiRoutes.userStats.getUserLearningPageStats, { userId });
 
     return {
         userLearningPageStats: queryRes.data,
@@ -33,7 +33,7 @@ export const useUserLearningPageStats = (userId: Id<'User'>) => {
 
 export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<'Course'>) => {
 
-    const queryRes = useReactQuery2<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });
+    const queryRes = QueryService.useXQuery<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });
 
     return {
         userCourseStatsOverviewData: queryRes.data,
@@ -44,7 +44,7 @@ export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<
 
 export const useImproveYourselfPageStats = () => {
 
-    const queryRes = useReactQuery2<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats);
+    const queryRes = QueryService.useXQuery<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats);
 
     return {
         improveYourselfPageStats: queryRes.data,
@@ -55,7 +55,7 @@ export const useImproveYourselfPageStats = () => {
 
 export const useUserCourseStats = (userId: Id<'User'>) => {
 
-    const queryRes = useReactQuery2<UserCourseStatsDTO[]>(apiRoutes.userStats.getUserCourseStats, { userId });
+    const queryRes = QueryService.useXQuery<UserCourseStatsDTO[]>(apiRoutes.userStats.getUserCourseStats, { userId });
 
     return {
         userCourseStats: queryRes.data,
@@ -67,7 +67,7 @@ export const useUserCourseStats = (userId: Id<'User'>) => {
 
 export const useUserVideoStats = (courseId: Id<'Course'>, userId: Id<'User'>) => {
 
-    const queryRes = useReactQuery2<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { courseId, userId });
+    const queryRes = QueryService.useXQuery<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { courseId, userId });
 
     return {
         userVideoStats: queryRes.data,
@@ -78,7 +78,7 @@ export const useUserVideoStats = (courseId: Id<'Course'>, userId: Id<'User'>) =>
 
 export const useUserExamStats = (courseId: Id<'Course'>, userId: Id<'User'>) => {
 
-    const queryRes = useReactQuery2<UserExamStatsDTO[]>(apiRoutes.userStats.getUserExamStats, { courseId, userId });
+    const queryRes = QueryService.useXQuery<UserExamStatsDTO[]>(apiRoutes.userStats.getUserExamStats, { courseId, userId });
 
     return {
         userExamStats: queryRes.data,

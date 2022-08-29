@@ -3,7 +3,7 @@ import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useStartExam = () => {
@@ -40,7 +40,7 @@ export const useSaveExamAnswer = () => {
 
 export const useExamResults = (answerSessionId: Id<'AnswerSession'>) => {
 
-    const qr = useReactQuery2<ExamResultsDTO>(apiRoutes.exam.getExamResults, { answerSessionId });
+    const qr = QueryService.useXQuery<ExamResultsDTO>(apiRoutes.exam.getExamResults, { answerSessionId });
 
     return {
         examResults: qr.data,

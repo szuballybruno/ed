@@ -1,13 +1,13 @@
 import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
 import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 
 export const CourseProgressApiService = {
 
     useCourseProgressData: () => {
 
-        const qr = useReactQuery2<UserCoursesDataDTO>(apiRoutes.courseProgress.getCourseProgressData);
+        const qr = QueryService.useXQuery<UserCoursesDataDTO>(apiRoutes.courseProgress.getCourseProgressData);
 
         return {
             coursesData: qr.data,
@@ -18,7 +18,7 @@ export const CourseProgressApiService = {
 
     useCourseProgressShortDtos: () => {
 
-        const qr = useReactQuery2<CourseProgressShortDTO[]>(apiRoutes.courseProgress.getCourseProgressShort);
+        const qr = QueryService.useXQuery<CourseProgressShortDTO[]>(apiRoutes.courseProgress.getCourseProgressShort);
 
         return {
             courseProgressShortDtos: qr.data ?? [],

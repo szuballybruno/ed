@@ -1,12 +1,15 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
+import { useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
+import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { EpistoFont } from '../controls/EpistoFont';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
@@ -18,9 +21,6 @@ import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { HomePageCourseStats } from './HomePageCourseStats';
 import { HomePageUserStats } from './HomePageUserStats';
 import { PractiseQuestions } from './PractiseQuestions';
-import {EpistoFont} from '../controls/EpistoFont';
-import {Environment} from '../../static/Environemnt';
-import React, {useState} from 'react';
 
 const HomePage = () => {
 
