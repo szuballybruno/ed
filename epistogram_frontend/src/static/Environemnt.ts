@@ -1,4 +1,3 @@
-
 export type LoggingKeysType =
     'ROUTING' |
     'RENDER' |
@@ -7,9 +6,10 @@ export type LoggingKeysType =
     'GRID' |
     'DIALOGS' |
     'WARNING' |
-    'VIDEO_POPUPS' | 
+    'VIDEO_POPUPS' |
     'PLAYBACK' |
-    'FILE UPLOAD';
+    'FILE UPLOAD' |
+    'AUTO SCROLL';
 
 export const Environment = (() => {
 
@@ -24,7 +24,7 @@ export const Environment = (() => {
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'VIDEO_POPUPS', 'MUTATIONS'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'VIDEO_POPUPS', 'MUTATIONS', 'AUTO SCROLL'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 

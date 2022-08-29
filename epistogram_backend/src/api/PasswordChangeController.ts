@@ -18,13 +18,20 @@ export class PasswordChangeController implements XController<PasswordChangeContr
     @XControllerAction(apiRoutes.passwordChange.setNewPassword, { isPost: true, isPublic: true })
     setNewPasswordAction(params: ActionParams) {
 
-        const dto = params.getBody<ChangePasswordDTO>();
-        const password = dto.getValue(x => x.password, 'string');
-        const passwordCompare = dto.getValue(x => x.passwordCompare, 'string');
-        const passwordResetToken = dto.getValue(x => x.passwordResetToken, 'string');
+        const dto = params
+            .getBody<ChangePasswordDTO>();
+
+        const password = dto
+            .getValue(x => x.password, 'string');
+
+        const passwordCompare = dto
+            .getValue(x => x.passwordCompare, 'string');
+
+        const passwordResetToken = dto
+            .getValue(x => x.passwordResetToken, 'string');
 
         return this._passwordChangeService
-            .setNewPasswordAsync(params.principalId, password, passwordCompare, passwordResetToken);
+            .setNewPasswordAsync(password, passwordCompare, passwordResetToken);
     }
 
     @XControllerAction(apiRoutes.passwordChange.requestPasswordChangeAuthenticated, { isPost: true })

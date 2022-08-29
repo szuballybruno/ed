@@ -3,7 +3,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import {RefObject, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigation} from '../../services/core/navigatior';
 import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
 import {PlaylistModuleDTO} from '../../shared/dtos/PlaylistModuleDTO';
@@ -17,8 +17,7 @@ import {PlaylistItem} from './PlaylistItem';
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const Playlist = (props: {
-    modules: PlaylistModuleDTO[],
-    parentRef?: RefObject<HTMLDivElement>
+    modules: PlaylistModuleDTO[]
 }) => {
 
     // hooks
@@ -26,7 +25,7 @@ export const Playlist = (props: {
     const { navigateToPlayer } = useNavigation();
 
     // data
-    const { modules, parentRef } = props;
+    const { modules } = props;
 
     const isBeginnerMode = modules
         .flatMap(x => x.items)
@@ -52,10 +51,12 @@ export const Playlist = (props: {
 
         if (expandedNodeIds.some(x => x === moduleId)) {
 
+            console.log('Set expanded nodes if');
             setExpandedNodeIds(expandedNodeIds.filter(x => x !== moduleId));
         }
         else {
 
+            console.log('Set expanded nodes else');
             setExpandedNodeIds([...expandedNodeIds, moduleId]);
         }
     };
@@ -77,7 +78,7 @@ export const Playlist = (props: {
                 : [currentModule.moduleId]
             : [currentModule.moduleId];
 
-        setExpandedNodeIds(expandedIds);
+        //setExpandedNodeIds(expandedIds);
     }, [isModuleSelected, currentItem, currentModule]);
 
     return (
@@ -100,7 +101,7 @@ export const Playlist = (props: {
 
                     return <CollapseItem
                         key={index}
-                        isOpen={isOpen}
+                        isOpen={true}
                         style={{
                             pointerEvents: isLocked || unclickable ? 'none' : 'all',
                             color: isLocked ? 'gray' : undefined
@@ -154,7 +155,6 @@ export const Playlist = (props: {
                                 .items
                                 .map((playlistItem, index) => <PlaylistItem
                                     key={index}
-                                    parentRef={parentRef}
                                     playlistItem={playlistItem} />)}
                         </FlexList>
                     </CollapseItem>;

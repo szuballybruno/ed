@@ -1,22 +1,24 @@
-import { Box, Flex } from '@chakra-ui/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { PlayerApiService } from '../../../services/api/PPlayerApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
-import { useStringParam } from '../../../static/locationHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { Copyright } from '../../universal/Copyright';
-import { CourseItemSelector } from './CourseItemSelector';
-import { ExamPlayer } from './ExamPlayer';
-import { ModuleView } from './ModuleView';
-import { WatchView } from './WatchView';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { Logger } from '../../../static/Logger';
+import {Box, Flex} from '@chakra-ui/react';
+import {useEffect, useMemo, useState} from 'react';
+import {PlayerApiService} from '../../../services/api/PPlayerApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {setPageTitle, useIsDesktopView} from '../../../static/frontendHelpers';
+import {useStringParam} from '../../../static/locationHelpers';
+import {translatableTexts} from '../../../static/translatableTexts';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
+import {LoadingFrame} from '../../system/LoadingFrame';
+import {Copyright} from '../../universal/Copyright';
+import {CourseItemSelector} from './CourseItemSelector';
+import {ExamPlayer} from './ExamPlayer';
+import {ModuleView} from './ModuleView';
+import {WatchView} from './WatchView';
+import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
+import {PlayerDataDTO} from '../../../shared/dtos/PlayerDataDTO';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {Logger} from '../../../static/Logger';
+import {useScrollIntoView} from '../../system/AutoScrollContext';
+import {EpistoButton} from '../../controls/EpistoButton';
 
 export const WatchSubpage = () => {
 
@@ -24,7 +26,8 @@ export const WatchSubpage = () => {
     const { navigate2, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
-    const parentRef = useRef<HTMLDivElement>(null);
+    const [isScrolledFromTop, setIsScrolledFromTop] = useState(false);
+    const {setParent, scroll, parentElement} = useScrollIntoView();
 
     // get player page data
     const {
@@ -58,6 +61,27 @@ export const WatchSubpage = () => {
     const title = videoPlayerData?.title || examPlayerData?.title || modulePlayerData?.name;
     const isPlayerLoaded = playerDataStatus === 'success';
     const isDeleted = playerDataError?.code === 'deleted';
+
+    const handleIsScrolledFromTop = () => {
+
+        if (!parentElement)
+            return;
+
+        const position = parentElement.scrollTop;
+
+        Logger.log('Parentelement' + parentElement.getBoundingClientRect());
+
+        setIsScrolledFromTop(position > 50);
+    };
+
+    useEffect(() => {
+
+        if (!parentElement)
+            return;
+
+        parentElement.addEventListener('scroll', handleIsScrolledFromTop);
+    }, [parentElement]);
+
 
     // logs playerDataStatus if change happens
     useEffect(() => {
@@ -118,6 +142,7 @@ export const WatchSubpage = () => {
         if (nextPlaylistItemCode)
             navigateToPlayer(nextPlaylistItemCode);
 
+        scroll();
     };
 
     return (
@@ -147,6 +172,20 @@ export const WatchSubpage = () => {
                     height='100vh'
                     direction="column"
                     error={[playerDataError]}>
+
+
+                    <EpistoButton
+                        onClick={() => {
+                            scroll();
+                        }}
+                        style={{
+                            position: 'fixed',
+                            top: 20,
+                            left: '50%',
+                            zIndex: 100000000
+                        }}>
+                        Scroll
+                    </EpistoButton>
 
                     <Flex
                         //px="20px"
@@ -200,7 +239,7 @@ export const WatchSubpage = () => {
                             transition="0.5s">
 
                             {isDesktopView && <Flex
-                                ref={parentRef}
+                                ref={setParent}
                                 direction="column"
                                 id="courseItemSelectorRoot"
                                 overflowY='scroll'
@@ -213,10 +252,10 @@ export const WatchSubpage = () => {
                                     courseId={courseId!}
                                     mode={courseMode}
                                     modules={modules}
+                                    isScrolledFromTop={isScrolledFromTop}
                                     canChangeMode={playerDataWithDefaults.canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
-                                    refetchPlayerData={refetchPlayerData}
-                                    parentRef={parentRef} />
+                                    refetchPlayerData={refetchPlayerData}/>
                             </Flex>}
                         </Flex>
                     </Flex>

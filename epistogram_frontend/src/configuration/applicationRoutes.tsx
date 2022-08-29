@@ -127,6 +127,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         setNewPasswordRoute: {
             title: translatableTexts.routeTitles.setNewPassword,
             route: new EpistoRoute('/', 'set-new-password'),
+            isUnauthorized: true
         },
 
         registerViaActivationCodeRoute: {

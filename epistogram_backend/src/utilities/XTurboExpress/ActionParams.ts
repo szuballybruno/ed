@@ -37,14 +37,22 @@ export class ActionParams<
     TResponse extends ITurboResponse = ITurboResponse> {
 
     isMultipart: boolean;
-    principalId: PrincipalId;
+    private _principalId: PrincipalId;
+
+    get principalId() {
+
+        if (this._principalId.getId() === -1 as any)
+            throw new Error(`Using principal's id on a route that's marked as 'public' is prohibited. Route: ${this.req.path}`);
+
+        return this._principalId;
+    }
 
     constructor(
         public req: TRequest,
         public res: TResponse,
         userId: Id<'User'>) {
 
-        this.principalId = new PrincipalId(Id.read(userId));
+        this._principalId = new PrincipalId(Id.read(userId));
         this.isMultipart = !!this.req.body.document;
     }
 

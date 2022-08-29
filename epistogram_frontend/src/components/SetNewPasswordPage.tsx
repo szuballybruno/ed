@@ -33,6 +33,8 @@ export const SetNewPasswordPage = () => {
 
     const { navigate2 } = useNavigation();
 
+    console.log(password);
+
     const handleSetNewPassword = async () => {
         try {
 
@@ -79,6 +81,7 @@ export const SetNewPasswordPage = () => {
                     style={{ margin: '20px' }}
                     variant="standard"
                     type="password"
+                    autoComplete="new-password"
                     error={!!passwordError}
                     helperText={passwordError}
                     onChange={x => setPassword(x.currentTarget.value)}
@@ -87,6 +90,7 @@ export const SetNewPasswordPage = () => {
                 <TextField
                     style={{ margin: '0 20px 20px 20px' }}
                     variant="standard"
+                    autoComplete="new-password"
                     type="password"
                     error={!!passwordCompareError}
                     helperText={passwordCompareError}
@@ -102,5 +106,5 @@ export const SetNewPasswordPage = () => {
                 </EpistoButton>
             </LoadingFrame>
         </ContentPane>
-    </PageRootContainer>;
+    </PageRootContainer >;
 };

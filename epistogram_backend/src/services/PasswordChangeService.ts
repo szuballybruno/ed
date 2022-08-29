@@ -118,49 +118,39 @@ export class PasswordChangeService {
     /**
      * This will set a new password for the user.
      */
-    setNewPasswordAsync(
-        principalId: PrincipalId,
+    async setNewPasswordAsync(
         password: string,
         passwordCompare: string,
         passwordResetToken: string) {
 
-        return {
-            action: async () => {
+        // verify new password with compare password 
+        if (validatePassowrd(password, passwordCompare))
+            throw new ErrorWithCode('Password is invalid.', 'bad request');
 
-                // verify new password with compare password 
-                if (validatePassowrd(password, passwordCompare))
-                    throw new ErrorWithCode('Password is invalid.', 'bad request');
+        // verify token
+        const tokenPayload = this._tokenService
+            .verifySetNewPasswordToken(passwordResetToken);
 
-                // verify token
-                const tokenPayload = this._tokenService
-                    .verifySetNewPasswordToken(passwordResetToken);
+        const userId = tokenPayload.userId;
 
-                const userId = tokenPayload.userId;
+        // get user 
+        const user = await this._userService
+            .getUserById(userId);
 
-                // get user 
-                const user = await this._userService
-                    .getUserById(userId);
+        // verify user reset password token
+        if (user.resetPasswordToken !== passwordResetToken)
+            throw new ErrorWithCode('Wrong token.', 'bad request');
 
-                // verify user reset password token
-                if (user.resetPasswordToken !== passwordResetToken)
-                    throw new ErrorWithCode('Wrong token.', 'bad request');
+        // hash new password
+        const hashedPassword = await this._hashService
+            .hashPasswordAsync(password);
 
-                // hash new password
-                const hashedPassword = await this._hashService
-                    .hashPasswordAsync(password);
-
-                // save new values 
-                await this._ormService
-                    .save(User, {
-                        id: user.id,
-                        resetPasswordToken: null,
-                        password: hashedPassword
-                    } as User);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        // save new values 
+        await this._ormService
+            .save(User, {
+                id: user.id,
+                resetPasswordToken: null,
+                password: hashedPassword
+            } as User);
     }
 }
