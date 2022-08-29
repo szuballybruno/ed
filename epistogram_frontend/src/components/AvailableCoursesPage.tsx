@@ -16,7 +16,7 @@ import { EpistoFont } from './controls/EpistoFont';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { LeftPane } from './LeftPane';
 import { PageRootContainer } from './PageRootContainer';
-import { LoadingFrame } from './system/LoadingFrame';
+import { useSetBusy } from './system/LoadingFrame/BusyBarContext';
 import CourseTile from './universal/CourseTile';
 import { EpistoSearch } from './universal/EpistoSearch';
 
@@ -34,6 +34,8 @@ const AvailableCoursesPage = () => {
     const showError = useShowErrorDialog();
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+
+    useSetBusy(CourseApiService.useUserCourses, coursesState, coursesError);
 
     const clearFilters = () => {
         setFilterCategoryId(null);
@@ -223,54 +225,48 @@ const AvailableCoursesPage = () => {
                     </Select>
                 </Flex>
 
-                {/* courses */}
-                <LoadingFrame
-                    loadingState={[coursesState]}
-                    error={[coursesError]}>
+                <Box id="scrollContainer"
+                    className="whall">
 
-                    <Box id="scrollContainer"
-                        className="whall">
+                    <EpistoGrid auto="fill"
+                        gap="15"
+                        minColumnWidth="250px">
 
-                        <EpistoGrid auto="fill"
-                            gap="15"
-                            minColumnWidth="250px">
+                        {courses
+                            .map((course, index) => {
 
-                            {courses
-                                .map((course, index) => {
+                                return <GridItem
+                                    key={index}
+                                    className="roundBorders"
+                                    background="var(--transparentWhite70)">
 
-                                    return <GridItem
-                                        key={index}
-                                        className="roundBorders"
-                                        background="var(--transparentWhite70)">
+                                    <CourseTile
+                                        course={course}
+                                        key={index}>
 
-                                        <CourseTile
-                                            course={course}
-                                            key={index}>
+                                        <Flex mb="10px">
 
-                                            <Flex mb="10px">
+                                            {/* details */}
+                                            <EpistoButton
+                                                onClick={() => navigateToDetailsPage(course)}
+                                                style={{ flex: '1' }}>
+                                                {translatableTexts.availableCourses.courseDataSheet}
+                                            </EpistoButton>
 
-                                                {/* details */}
-                                                <EpistoButton
-                                                    onClick={() => navigateToDetailsPage(course)}
-                                                    style={{ flex: '1' }}>
-                                                    {translatableTexts.availableCourses.courseDataSheet}
-                                                </EpistoButton>
+                                            {/* start course */}
+                                            <EpistoButton
+                                                onClick={() => handlePlayCourse(course)}
+                                                variant="colored"
+                                                style={{ flex: '1' }}>
 
-                                                {/* start course */}
-                                                <EpistoButton
-                                                    onClick={() => handlePlayCourse(course)}
-                                                    variant="colored"
-                                                    style={{ flex: '1' }}>
-
-                                                    {translatableTexts.availableCourses.startCourse}
-                                                </EpistoButton>
-                                            </Flex>
-                                        </CourseTile>
-                                    </GridItem>;
-                                })}
-                        </EpistoGrid>
-                    </Box>
-                </LoadingFrame>
+                                                {translatableTexts.availableCourses.startCourse}
+                                            </EpistoButton>
+                                        </Flex>
+                                    </CourseTile>
+                                </GridItem>;
+                            })}
+                    </EpistoGrid>
+                </Box>
             </Flex>
         </ContentPane>
     </PageRootContainer >;

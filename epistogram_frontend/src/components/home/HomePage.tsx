@@ -27,7 +27,7 @@ const HomePage = () => {
     const { pageDTO, status, error } = useOverviewPageDTO();
     const { navigate2 } = useNavigation();
 
-    useSetBusy(useOverviewPageDTO, status);
+    useSetBusy(useOverviewPageDTO, status, error);
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
     const [coinsAcquired, setCoinsAcquired] = useState(false);
